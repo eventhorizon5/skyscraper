@@ -3731,3 +3731,21 @@ int SBS::GetWallCount()
 	//return total number of registered walls
 	return WallArray.GetSize();
 }
+
+void SBS::AddPolygonHandle(WallPolygon* handle)
+{
+	//add wall polygon to internal array
+	PolyArray.Push(handle);
+}
+
+void SBS::DeletePolygonHandle(WallPolygon* handle)
+{
+	//delete wall polygon from internal array
+	PolyArray.Delete(handle);
+}
+
+int SBS::GetPolygonCount()
+{
+	//return total number of registered walls
+	return PolyArray.GetSize();
+}

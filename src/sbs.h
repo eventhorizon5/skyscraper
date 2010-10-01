@@ -303,7 +303,12 @@ public:
 	void RemoveSound(Sound *sound);
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
+	void AddWallHandle(WallObject* handle);
+	void DeleteWallHandle(WallObject* handle);
+	void AddPolygonHandle(WallPolygon* handle);
+	void DeletePolygonHandle(WallPolygon* handle);
 	int GetWallCount();
+	int GetPolygonCount();
 
 	//in mesh.cpp
 	void DumpVertices(WallObject* wallobject);
@@ -324,8 +329,6 @@ public:
 	int ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add);
 	int FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMaterialWrapper *material);
 	void DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted_indices);
-	void AddWallHandle(WallObject* handle);
-	void DeleteWallHandle(WallObject* handle);
 
 	//Meshes
 	csRef<iMeshWrapper> Buildings; //building mesh
@@ -453,6 +456,7 @@ private:
 
 	//wall array
 	csArray<WallObject*> WallArray;
+	csArray<WallPolygon*> PolyArray;
 
 	//generic sound objects
 	csArray<Sound*> sounds;

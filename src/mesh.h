@@ -42,6 +42,8 @@ public:
 	iMaterialWrapper* material; //polygon materials
 	csString name; //polygon names
 
+	WallPolygon();
+	~WallPolygon();
 	void GetTextureMapping(csMatrix3 &t_matrix, csVector3 &t_vector);
 	iGeneralMeshSubMesh* GetSubMesh();
 };
