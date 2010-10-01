@@ -31,6 +31,7 @@
 #include "floorindicator.h"
 #include "directional.h"
 #include "sound.h"
+#include "light.h"
 
 class SBSIMPEXP Floor
 {
@@ -60,6 +61,7 @@ public:
 	csRefArray<iGeneralMeshSubMesh> level_submeshes;
 	csRefArray<iGeneralMeshSubMesh> interfloor_submeshes;
 	csRefArray<iGeneralMeshSubMesh> columnframe_submeshes;
+	Light *light;
 
 	//functions
 	Floor(int number);

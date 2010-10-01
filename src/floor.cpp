@@ -73,11 +73,18 @@ Floor::Floor(int number)
 	Altitude = 0;
 	Height = 0;
 	InterfloorHeight = 0;
+
+	//create test light
+	//light = new Light("test", 0, csVector3(0, number, 0), 0, 0, 10, 255, 0, 0, 255, 0, 0, false, false);
 }
 
 Floor::~Floor()
 {
 	//Destructor
+
+	if (light)
+		delete light;
+	light = 0;
 
 	//delete call buttons
 	for (int i = 0; i < CallButtonArray.GetSize(); i++)
@@ -346,13 +353,17 @@ void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, boo
 
 	for (int i = 0; i < level_walls.GetSize(); i++)
 	{
-		sbs->Cut(level_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+		bool reset = true;
+		if (i > 0)
+			reset = false;
+
+		sbs->Cut(level_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, reset);
 	}
 	if (fast == false)
 	{
 		for (int i = 0; i < interfloor_walls.GetSize(); i++)
 		{
-			sbs->Cut(interfloor_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring);
+			sbs->Cut(interfloor_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, false);
 		}
 	}
 }

@@ -460,10 +460,17 @@ bool Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csV
 	float base = sbs->GetFloor(floor)->GetBase();
 
 	for (int i = 0; i < stairs_walls[floor - startfloor].GetSize(); i++)
-	if (relative == true)
-		sbs->Cut(stairs_walls[floor - startfloor][i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
-	else
-		sbs->Cut(stairs_walls[floor - startfloor][i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+	{
+		bool reset = true;
+		if (i > 0)
+			reset = false;
+
+		if (relative == true)
+			sbs->Cut(stairs_walls[floor - startfloor][i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+		else
+			sbs->Cut(stairs_walls[floor - startfloor][i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+	}
+
 	return true;
 }
 

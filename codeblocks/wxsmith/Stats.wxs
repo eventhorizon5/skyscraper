@@ -110,6 +110,22 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT24" variable="StaticText24" member="yes">
+											<label>Walls:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_TEXTCTRL2" variable="tWalls" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText10" member="yes">
 											<label>InStairwell:</label>
 										</object>
@@ -209,7 +225,7 @@
 										<object class="wxStaticText" name="ID_STATICTEXT23" variable="StaticText23" member="yes">
 											<label>SBS Version:</label>
 										</object>
-										<flag>wxLEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>

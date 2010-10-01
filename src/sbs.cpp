@@ -2566,11 +2566,6 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 	int index = 0;
 	if (wall1a == true && wall2a == true)
 	{
-		//convert values to local
-		wall_extents_x = ToLocal(wall_extents_x);
-		wall_extents_y = ToLocal(wall_extents_y);
-		wall_extents_z = ToLocal(wall_extents_z);
-
 		wall1a = false;
 		wall1b = false;
 		wall2a = false;
@@ -3737,4 +3732,10 @@ void SBS::DeleteGeometry()
 	//delete geometry buffers in all wall objects
 	for (int i = 0; i < WallArray.GetSize(); i++)
 		WallArray[i]->DeleteGeometry();
+}
+
+int SBS::GetWallCount()
+{
+	//return total number of registered walls
+	return WallArray.GetSize();
 }

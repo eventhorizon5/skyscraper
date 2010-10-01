@@ -321,10 +321,14 @@ bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVe
 
 	for (int i = 0; i < shaft_walls[floor - startfloor].GetSize(); i++)
 	{
+		bool reset = true;
+		if (i > 0)
+			reset = false;
+
 		if (relative == true)
-			sbs->Cut(shaft_walls[floor - startfloor][i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+			sbs->Cut(shaft_walls[floor - startfloor][i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 		else
-			sbs->Cut(shaft_walls[floor - startfloor][i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring);
+			sbs->Cut(shaft_walls[floor - startfloor][i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 	}
 	return true;
 }

@@ -303,6 +303,7 @@ public:
 	void RemoveSound(Sound *sound);
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
+	int GetWallCount();
 
 	//in mesh.cpp
 	void DumpVertices(WallObject* wallobject);
@@ -312,7 +313,7 @@ public:
 	csVector3 GetPoint(csArray<WallObject*> &wallarray, const char *polyname, const csVector3 &start, const csVector3 &end);
 	void EnableMesh(csRef<iMeshWrapper> mesh, bool value);
 	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
-	void Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "");
+	void Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
 	csVector3 GetWallExtents(csArray<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
 	csRef<iMeshWrapper> CreateMesh(const char *name);
