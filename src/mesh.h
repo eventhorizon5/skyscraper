@@ -32,8 +32,8 @@ public:
 	csRefArray<iGeneralMeshSubMesh> *submeshes;
 	csRef<iRenderBuffer> triangles;
 
-	//array set holding original polygon geometry
-	csArray<CS::Geometry::csContour3> geometry;
+	//array holding index extents, to get original geometry
+	csArray<csVector2> index_extents;
 
 	//texture mapping matrix and vector
 	csMatrix3 t_matrix;

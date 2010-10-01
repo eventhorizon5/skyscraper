@@ -1712,7 +1712,6 @@ int SBS::CreateSky(const char *filenamebase)
 	sbs->ResetTextureMapping();
 	delete wall;
 
-	DeleteGeometry();
 	return firstidx;
 }
 
@@ -3725,13 +3724,6 @@ void SBS::DeleteWallHandle(WallObject* handle)
 {
 	//delete wall handle from internal array
 	WallArray.Delete(handle);
-}
-
-void SBS::DeleteGeometry()
-{
-	//delete geometry buffers in all wall objects
-	for (int i = 0; i < WallArray.GetSize(); i++)
-		WallArray[i]->DeleteGeometry();
 }
 
 int SBS::GetWallCount()

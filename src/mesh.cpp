@@ -121,8 +121,11 @@ csVector3 SBS::GetPoint(csArray<WallObject*> &wallarray, const char *polyname, c
 		csVector3 isect;
 		float dist;
 		csPoly3D original;
-		for (int i = 0; i < wallarray[index]->GetHandle(index2)->geometry[0].GetSize(); i++)
-			original.AddVertex(wallarray[index]->GetHandle(index2)->geometry[0][i]);
+		csArray<CS::Geometry::csContour3> origpolys;
+		wallarray[index]->GetGeometry(index2, origpolys, true);
+
+		for (int i = 0; i < origpolys[0].GetSize(); i++)
+			original.AddVertex(origpolys[0][i]);
 
 		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), original.ComputePlane(), isect, dist);
 		return ToLocal(isect);
@@ -247,24 +250,23 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 		if (ignorecheck == true)
 			continue;
 
-		//skip if wall's geometry has been purged
-		if (wall->purged == true)
-			continue;
-
-		//get name and vertex array
+		//get name
 		csString name = wall->GetHandle(i)->name;
-		csArray<CS::Geometry::csContour3>* origpolys = &wall->GetHandle(i)->geometry;
+
+		//get original vertices
+		csArray<CS::Geometry::csContour3> origpolys;
 		csArray<CS::Geometry::csContour3> newpolys;
+		wall->GetGeometry(i, origpolys);
 
 		//skip empty meshes
-		if (!origpolys)
+		if (origpolys.GetSize() == 0)
 			continue;
 
 		//cut all polygons within range
-		for (int j = 0; j < origpolys->GetSize(); j++)
+		for (int j = 0; j < origpolys.GetSize(); j++)
 		{
 			//skip null geometry
-			if (origpolys->Get(j).GetSize() == 0)
+			if (origpolys[j].GetSize() == 0)
 				continue;
 
 			temppoly.MakeEmpty();
@@ -277,8 +279,8 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			bool polycheck2 = false;
 
 			//copy source polygon vertices
-			for (int k = 0; k < origpolys->Get(j).GetSize(); k++)
-				temppoly.AddVertex(origpolys->Get(j)[k]);
+			for (int k = 0; k < origpolys[j].GetSize(); k++)
+				temppoly.AddVertex(origpolys[j][k]);
 
 			//make sure the polygon is not outside the cut area
 			if (temppoly.ClassifyX(start.x) != CS_POL_FRONT &&
@@ -499,7 +501,7 @@ void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, b
 			else
 			{
 				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
-				newpolys.Push(origpolys->Get(j));
+				newpolys.Push(origpolys[j]);
 			}
 		}
 
@@ -571,9 +573,12 @@ csVector3 SBS::GetWallExtents(csArray<WallObject*> &wallarray, const char *name,
 
 		if (index >= 0)
 		{
+			csArray<CS::Geometry::csContour3> origpolys;
+			wallarray[index]->GetGeometry(index2, origpolys, true);
+
 			csPoly3D original, tmp1, tmp2;
-			for (int i = 0; i < wallarray[index]->GetHandle(index2)->geometry[0].GetSize(); i++)
-				original.AddVertex(wallarray[index]->GetHandle(index2)->geometry[0][i]);
+			for (int i = 0; i < origpolys[0].GetSize(); i++)
+				original.AddVertex(origpolys[0][i]);
 
 			//if given altitude is outside of polygon's range, return 0
 			csVector2 yextents = GetExtents(original, 2);
@@ -676,7 +681,7 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 	return mesh;
 }
 
-csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector)
+csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector, csArray<csVector2> &mesh_indices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -736,10 +741,10 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 		csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
 		return 0;
 
-	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, false);
+	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
 }
 
-csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, bool convert_vertices)
+csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<csVector2> &mesh_indices, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -795,15 +800,24 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	mesh_texels.SetSize(size);
 	mesh_normals.SetSize(size);
 
+	//get number of existing vertices
+	int count = state->GetVertexCount();
+
 	//populate vertices, normals, and texels for mesh data
 	int k = 0;
+
 	for (int i = 0; i < trimesh.GetSize(); i++)
 	{
+		int min = count + k;
+
 		for (int j = 0; j < trimesh[i].GetVertexCount(); j++)
 		{
 			mesh_normals[k] = mesh_vertices[k] = trimesh[i].GetVertices()[j];
 			mesh_normals[k].Normalize();
 			mesh_texels[k] = mapper.Map(mesh_vertices[k], mesh_normals[k], k);
+
+			state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
+			//state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(0, 0, 0)); //for lighted
 
 			int a = k - 1;
 			if (a == -1)
@@ -814,20 +828,15 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 
 			k++;
 		}
+
+		int max = count + k - 1;
+		mesh_indices.Push(csVector2(min, max));
 	}
 
 	//delete texel array
 	if (table)
 		delete table;
 	table = 0;
-
-	//get number of existing vertices before adding any
-	int count = state->GetVertexCount();
-
-	//add vertices to mesh, from the vertex, texel, and normal arrays
-	for (int i = 0; i < mesh_vertices.GetSize(); i++)
-		state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(1, 1, 1));
-		//state->AddVertex(mesh_vertices[i], mesh_texels[i], mesh_normals[i], csColor4(0, 0, 0)); //for lighted
 
 	//delete arrays
 	mesh_vertices.DeleteAll();
@@ -1262,6 +1271,7 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 
 			int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
 
+			//reindex triangle indices
 			for (int k = 0; k < indices->GetElementCount(); k++)
 			{
 				for (int m = deleted2.GetSize() - 1; m >= 0; m--)
@@ -1271,6 +1281,20 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 				}
 			}
 			indices->Release();
+
+			//reindex extents, used for getting original geometry
+			for (int k = deleted2.GetSize() - 1; k >= 0; k--)
+			{
+				for (int m = 0; m < wallarray[i]->handles[j].index_extents.GetSize(); m++)
+				{
+					csVector2 extents = wallarray[i]->handles[j].index_extents[m];
+					if (deleted2[k] < extents.x)
+						extents.x--;
+					if (deleted2[k] < extents.y)
+						extents.y--;
+					wallarray[i]->handles[j].index_extents[m] = extents;
+				}
+			}
 		}
 	}
 }
