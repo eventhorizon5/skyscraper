@@ -102,7 +102,7 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_TEXTCTRL1" variable="tObjects" member="yes">
+										<object class="wxTextCtrl" name="ID_tObjects" variable="tObjects" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
@@ -118,7 +118,23 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_TEXTCTRL2" variable="tWalls" member="yes">
+										<object class="wxTextCtrl" name="ID_tWalls" variable="tWalls" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT25" variable="StaticText25" member="yes">
+											<label>Polygons:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tPolygons" variable="tPolygons" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
