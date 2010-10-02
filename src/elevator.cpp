@@ -175,7 +175,7 @@ Elevator::Elevator(int number)
 	Elevator_movable = ElevatorMesh->GetMovable();
 
 	//create test light
-	//AddLight("test", 0, csVector3(0, 5, 0), 0, 0, 10, 255, 0, 0, 255, 0, 0, 0, 0, 0);
+	//AddLight("test", 1, csVector3(0, 5, 0), csVector3(0, 0, 1), 0, 10, 255, 0, 0, 255, 0, 0, 0, 0, 0);
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -1749,7 +1749,7 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
-		MoveLights(movement, true, false, true);
+		MoveLights(csVector3(0, Destination, 0), true, false, true);
 		for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 		{
 			if (FloorIndicatorArray[i])
