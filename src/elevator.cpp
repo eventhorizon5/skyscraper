@@ -174,13 +174,24 @@ Elevator::Elevator(int number)
 	Elevator_state = scfQueryInterface<iGeneralFactoryState>(ElevatorMesh->GetFactory()->GetMeshObjectFactory());
 	Elevator_movable = ElevatorMesh->GetMovable();
 
+	//create test light
+	//AddLight("test", 0, csVector3(0, 5, 0), 0, 0, 10, 255, 0, 0, 255, 0, 0, 0, 0, 0);
+
 	if (sbs->Verbose)
 		Report("elevator object created");
 }
 
 Elevator::~Elevator()
 {
-	//delete timer
+	//delete lights
+	for (int i = 0; i < lights.GetSize(); i++)
+	{
+		if (lights[i])
+			delete lights[i];
+		lights[i] = 0;
+	}
+
+	//delete timers
 	if (sbs->Verbose)
 		Report("deleting timers");
 
@@ -1456,6 +1467,7 @@ void Elevator::MoveElevatorToFloor()
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
 	MoveDoors(0, movement, true, true, true);
+	MoveLights(movement, true, true, true);
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -1737,6 +1749,7 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
+		MoveLights(movement, true, false, true);
 		for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 		{
 			if (FloorIndicatorArray[i])
@@ -4110,4 +4123,20 @@ void Elevator::EnableNudgeMode(bool value, int number)
 		for (int i = 0; i < DoorArray.GetSize(); i++)
 			DoorArray[number]->EnableNudgeMode(value);
 	}
+}
+
+Light* Elevator::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+{
+	//add a global light
+
+	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, true, true);
+	lights.Push(light);
+	return light;
+}
+
+void Elevator::MoveLights(csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+{
+	//move lights
+	for (int i = 0; i < lights.GetSize(); i++)
+		lights[i]->Move(position, relative_x, relative_y, relative_z);
 }

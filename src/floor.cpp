@@ -73,18 +73,19 @@ Floor::Floor(int number)
 	Altitude = 0;
 	Height = 0;
 	InterfloorHeight = 0;
-
-	//create test light
-	//light = new Light("test", 0, csVector3(0, number, 0), 0, 0, 10, 255, 0, 0, 255, 0, 0, false, false);
 }
 
 Floor::~Floor()
 {
 	//Destructor
 
-	if (light)
-		delete light;
-	light = 0;
+	//delete lights
+	for (int i = 0; i < lights.GetSize(); i++)
+	{
+		if (lights[i])
+			delete lights[i];
+		lights[i] = 0;
+	}
 
 	//delete call buttons
 	for (int i = 0; i < CallButtonArray.GetSize(); i++)
@@ -962,4 +963,13 @@ void Floor::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 	sounds.Delete(sound);
+}
+
+Light* Floor::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable)
+{
+	//add a global light
+
+	Light* light = new Light(name, type, position + csVector3(0, GetBase(), 0), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, dynamic_color, movable);
+	lights.Push(light);
+	return light;
 }

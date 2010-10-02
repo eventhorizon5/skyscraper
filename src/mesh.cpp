@@ -1301,12 +1301,10 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 
 WallPolygon::WallPolygon()
 {
-	//register in SBS on creation
-	sbs->AddPolygonHandle(this);
+	sbs->PolygonCount++;
 }
 
 WallPolygon::~WallPolygon()
 {
-	if (sbs->FastDelete == false)
-		sbs->DeletePolygonHandle(this);
+	sbs->PolygonCount--;
 }

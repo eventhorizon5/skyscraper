@@ -41,7 +41,7 @@ WallObject::WallObject(csRef<iMeshWrapper> wrapper, csRefArray<iGeneralMeshSubMe
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)
 		Number = proxy->GetNumber();
-	sbs->AddWallHandle(this);
+	sbs->WallCount++;
 }
 
 WallObject::~WallObject()
@@ -51,8 +51,7 @@ WallObject::~WallObject()
 	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
 		parent_array->Delete(this);
 
-	if (sbs->FastDelete == false)
-		sbs->DeleteWallHandle(this);
+	sbs->WallCount--;
 	handles.DeleteAll();
 }
 

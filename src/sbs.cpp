@@ -161,6 +161,8 @@ SBS::SBS()
 	ObjectCount = 0;
 	FastDelete = false;
 	Skybox_object = 0;
+	WallCount = 0;
+	PolygonCount = 0;
 }
 
 SBS::~SBS()
@@ -170,6 +172,14 @@ SBS::~SBS()
 	Report("Deleting SBS objects...");
 
 	FastDelete = true;
+
+	//delete lights
+	for (int i = 0; i < lights.GetSize(); i++)
+	{
+		if (lights[i])
+			delete lights[i];
+		lights[i] = 0;
+	}
 
 	//delete camera object
 	if (camera)
@@ -890,13 +900,6 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	textureinfo.Push(info);
 
 	return true;
-}
-
-void SBS::AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b)
-{
-	csRef<iLightList> ll = area->GetLights();
-	csRef<iLight> light = engine->CreateLight(name, csVector3(ToRemote(x), ToRemote(y), ToRemote(z)), radius, csColor(r, g, b));
-	ll->Add(light);
 }
 
 int SBS::AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
@@ -3714,38 +3717,45 @@ bool SBS::FileExists(const char *filename, bool relative)
 	return false;
 }
 
-void SBS::AddWallHandle(WallObject* handle)
-{
-	//add wall handle to internal array
-	WallArray.Push(handle);
-}
-
-void SBS::DeleteWallHandle(WallObject* handle)
-{
-	//delete wall handle from internal array
-	WallArray.Delete(handle);
-}
-
 int SBS::GetWallCount()
 {
 	//return total number of registered walls
-	return WallArray.GetSize();
-}
-
-void SBS::AddPolygonHandle(WallPolygon* handle)
-{
-	//add wall polygon to internal array
-	PolyArray.Push(handle);
-}
-
-void SBS::DeletePolygonHandle(WallPolygon* handle)
-{
-	//delete wall polygon from internal array
-	PolyArray.Delete(handle);
+	return WallCount;
 }
 
 int SBS::GetPolygonCount()
 {
 	//return total number of registered walls
-	return PolyArray.GetSize();
+	return PolygonCount;
+}
+
+void SBS::AddLightHandle(Light* handle)
+{
+	dynlights.Push(handle);
+}
+
+void SBS::DeleteLightHandle(Light* handle)
+{
+	dynlights.Delete(handle);
+}
+
+void SBS::Prepare()
+{
+	//prepare objects for run
+	
+	//prepare dynamic lights
+	for (int i = 0; i < dynlights.GetSize(); i++)
+		dynlights[i]->Prepare();
+
+	//prepare CS objects
+	engine->Prepare();
+}
+
+Light* SBS::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable)
+{
+	//add a global light
+
+	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, dynamic_color, movable);
+	lights.Push(light);
+	return light;
 }

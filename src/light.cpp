@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Light::Light(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, bool dynamic_color, bool movable)
+Light::Light(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable)
 {
 	//creates a light object
 
@@ -55,10 +55,7 @@ Light::Light(const char *name, int type, csVector3 position, csVector3 direction
 	if (movable == true)
 		light_type = CS_LIGHT_DYNAMICTYPE_DYNAMIC;
 
-	light = sbs->engine->CreateLight(name, sbs->ToRemote(position), radius, csColor(color_r, color_g, color_b), light_type);
-
-	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
-	light->SetCutoffDistance(sbs->ToRemote(max_distance));
+	light = sbs->engine->CreateLight(name, sbs->ToRemote(position), sbs->ToRemote(radius), csColor(color_r, color_g, color_b), light_type);
 
 	if (type == 0)
 		light->SetType(CS_LIGHT_POINTLIGHT);
@@ -67,26 +64,74 @@ Light::Light(const char *name, int type, csVector3 position, csVector3 direction
 	if (type == 2)
 		light->SetType(CS_LIGHT_SPOTLIGHT);
 
+	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
+	light->SetCutoffDistance(sbs->ToRemote(max_distance));
+
+	if (type == 1)
+		light->SetDirectionalCutoffRadius(directional_cutoff_radius);
+	if (type == 2)
+		light->SetSpotLightFalloff(spot_falloff_inner, spot_falloff_outer);
+
+	if (light_type == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
+		sbs->AddLightHandle(this);
+
 	//add light to world
 	sbs->area->GetLights()->Add(light);
-
-	//setup dynamic light
-	if (light_type == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
-		light->Setup();
 }
 
 Light::~Light()
 {
 	if (sbs->FastDelete == false)
+	{
 		sbs->area->GetLights()->Remove(light);
+		sbs->DeleteLightHandle(this);
+	}
 }
 
-void Light::SetDirectionalCutoffRadius(float radius)
+void Light::Prepare()
 {
-	light->SetDirectionalCutoffRadius(radius);
+	//prepare light for use
+	//this only needs to be done for dynamic lights
+
+	if (light->GetDynamicType() == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
+		light->Setup();
 }
 
-void Light::SetSpotLightFalloff(float inner, float outer)
+void Light::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
-	light->SetSpotLightFalloff(inner, outer);
+	//move light - this can only be done on movable lights
+	if (light->GetDynamicType() == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
+	{
+		csVector3 pos;
+		if (relative_x == false)
+			pos.x = sbs->ToRemote(position.x);
+		else
+			pos.x = light->GetCenter().x + sbs->ToRemote(position.x);
+		if (relative_y == false)
+			pos.y = sbs->ToRemote(position.y);
+		else
+			pos.y = light->GetCenter().y + sbs->ToRemote(position.y);
+		if (relative_z == false)
+			pos.z = sbs->ToRemote(position.z);
+		else
+			pos.z = light->GetCenter().z + sbs->ToRemote(position.z);
+		light->SetCenter(pos);
+		Prepare();
+	}
+}
+
+csVector3 Light::GetPosition()
+{
+	return sbs->ToLocal(light->GetCenter());
+}
+
+void Light::SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b)
+{
+	//set color of light
+
+	if (light->GetDynamicType() == CS_LIGHT_DYNAMICTYPE_STATIC)
+		return;
+
+	light->SetColor(csColor(color_r, color_g, color_b));
+	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
 }

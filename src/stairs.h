@@ -67,6 +67,7 @@ public:
 	void Report(const char *message);
 	bool ReportError(const char *message);
 	void RemoveDoor(Door *door);
+	Light* AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
 
 private:
 	csRefArray<iMeshWrapper> StairArray; //stairwell array
@@ -87,6 +88,9 @@ private:
 
 	int lastfloor;
 	bool lastfloorset;
+
+	//lights
+	csArray<csArray<Light*> > lights;
 
 	//cache objects for IsInStairwell()
 	csVector3 lastposition;

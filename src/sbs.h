@@ -50,6 +50,7 @@
 #include <iutil/objreg.h>
 #include <csgeom/triangulate3d.h>
 
+#include "light.h"
 #include "mesh.h"
 #include "wall.h"
 #include "floor.h"
@@ -170,6 +171,8 @@ public:
 	bool FastDelete; //used internally for quick object deletion
 	csString LastError; //most recent error message, from ReportError()
 	csString LastNotification; //most recent notification message, from Report()
+	int WallCount; //wall object count
+	int PolygonCount; //wall polygon object count
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -186,7 +189,6 @@ public:
 	bool Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char* rootdirectory, const char* directory_char);
 	bool Start();
 	int CreateSky(const char *filenamebase);
-	void AddLight(const char *name, float x, float y, float z, float radius, float r, float g, float b);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
@@ -303,12 +305,12 @@ public:
 	void RemoveSound(Sound *sound);
 	const char* VerifyFile(const char *filename);
 	bool FileExists(const char *filename, bool relative = false);
-	void AddWallHandle(WallObject* handle);
-	void DeleteWallHandle(WallObject* handle);
-	void AddPolygonHandle(WallPolygon* handle);
-	void DeletePolygonHandle(WallPolygon* handle);
 	int GetWallCount();
 	int GetPolygonCount();
+	void AddLightHandle(Light* handle);
+	void DeleteLightHandle(Light* handle);
+	void Prepare();
+	Light* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
 
 	//in mesh.cpp
 	void DumpVertices(WallObject* wallobject);
@@ -454,9 +456,11 @@ private:
 	//floor auto area array
 	csArray<AutoArea> FloorAutoArea;
 
-	//wall array
-	csArray<WallObject*> WallArray;
-	csArray<WallPolygon*> PolyArray;
+	//dynamic lights
+	csArray<Light*> dynlights;
+
+	//global lights
+	csArray<Light*> lights;
 
 	//generic sound objects
 	csArray<Sound*> sounds;

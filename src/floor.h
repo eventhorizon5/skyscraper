@@ -61,7 +61,6 @@ public:
 	csRefArray<iGeneralMeshSubMesh> level_submeshes;
 	csRefArray<iGeneralMeshSubMesh> interfloor_submeshes;
 	csRefArray<iGeneralMeshSubMesh> columnframe_submeshes;
-	Light *light;
 
 	//functions
 	Floor(int number);
@@ -108,6 +107,7 @@ public:
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
 	void RemoveDoor(Door *door);
 	void RemoveSound(Sound *sound);
+	Light* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
 
 private:
 	char intbuffer[65];
@@ -118,6 +118,9 @@ private:
 
 	//doors
 	csArray<Door*> DoorArray; //pointer array to door objects
+
+	//lights
+	csArray<Light*> lights;
 
 	//directional indicators
 	csArray<DirectionalIndicator*> DirIndicatorArray;

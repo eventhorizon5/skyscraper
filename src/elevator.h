@@ -255,6 +255,8 @@ public:
 	bool DoorExists(int number);
 	bool IsNudgeModeActive(int number = 0);
 	void EnableNudgeMode(bool value, int number = 0);
+	Light* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	void MoveLights(csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 
 private:
 
@@ -333,6 +335,9 @@ private:
 
 	//standard door array
 	csArray<Door*> StdDoorArray; //pointer array to standard door objects
+
+	//light array
+	csArray<Light*> lights;
 
 	//elevator misc internals
 	bool ElevatorIsRunning;

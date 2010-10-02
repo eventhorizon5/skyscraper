@@ -97,7 +97,7 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 	processor->LoadBuilding();
 	delete processor;
 	processor = 0;
-	skyscraper->Prepare();
+	Simcore->Prepare();
 	Simcore->RecreateColliders = false;
 }
 

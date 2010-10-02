@@ -119,7 +119,6 @@ public:
 	bool SelectBuilding();
 	bool Start();
 	void AllowResize(bool value);
-	void Prepare();
 	void Unload();
 	void Quit();
 

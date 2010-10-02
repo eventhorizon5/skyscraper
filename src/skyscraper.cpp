@@ -1195,7 +1195,7 @@ bool Skyscraper::Start()
 	Simcore->CreateSky(Simcore->SkyName);
 
 	//have CS process textures, bounding boxes and lighting
-	Prepare();
+	Simcore->Prepare();
 
 	//start simulation
 	if (!Simcore->Start())
@@ -1249,12 +1249,6 @@ void Skyscraper::AllowResize(bool value)
 	else
 		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE);
 	window->Refresh();
-}
-
-void Skyscraper::Prepare()
-{
-	//prepare CS engine objects
-	engine->Prepare();
 }
 
 void Skyscraper::Unload()
