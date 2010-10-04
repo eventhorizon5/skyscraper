@@ -179,8 +179,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		sbs->ReindexSubMesh(state, *handles[index].submeshes, handles[index].triangles, handles[index].material, handles[index].name, false);
 
 		//delete related mesh vertices
-		if (sbs->confman->GetBool("Skyscraper.SBS.RemoveWallGeometry", true) == true)
-			sbs->DeleteVertices(*parent_array, handles[index].triangles);
+		sbs->DeleteVertices(*parent_array, handles[index].triangles);
 
 		//delete polygon
 		handles.DeleteIndex(index);
