@@ -51,7 +51,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	object->SetName("Floor Indicator " + buffer);
 	buffer.Insert(0, "(" + buffer2 + ")FloorIndicator ");
 	buffer.Trim();
-	FloorIndicatorMesh = sbs->CreateMesh(buffer);
+	FloorIndicatorMesh = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	FloorIndicator_movable = FloorIndicatorMesh->GetMovable();
 
 	csString texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;

@@ -61,20 +61,20 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
 	buffer.Trim();
 	object->SetName("Directional Indicator " + buffer2 + ":" + buffer3);
-	DirectionalMeshBack = sbs->CreateMesh(buffer);
+	DirectionalMeshBack = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Single == false)
 	{
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
-		DirectionalMeshUp = sbs->CreateMesh(buffer);
+		DirectionalMeshUp = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
-		DirectionalMeshDown = sbs->CreateMesh(buffer);
+		DirectionalMeshDown = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 	else
 	{
 		buffer = "(" + buffer4 + ")Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
-		DirectionalMesh = sbs->CreateMesh(buffer);
+		DirectionalMesh = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 
 	sbs->ResetTextureMapping(true);

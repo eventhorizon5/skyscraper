@@ -311,6 +311,8 @@ bool SBS::Start()
 	EnableLandscape(true);
 	EnableExternal(true);
 	EnableSkybox(true);
+	
+	//area->SetLightCulling(true);
 
 	//turn off floors
 	for (int i = 0; i < TotalFloors(); i++)

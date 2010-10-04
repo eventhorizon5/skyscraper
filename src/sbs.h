@@ -323,7 +323,7 @@ public:
 	void Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
 	csVector3 GetWallExtents(csArray<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
-	csRef<iMeshWrapper> CreateMesh(const char *name);
+	csRef<iMeshWrapper> CreateMesh(const char *name, float max_render_distance = 0);
 	csRef<iRenderBuffer> PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<csVector2> &mesh_indices);
 	csRef<iRenderBuffer> PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<csVector2> &mesh_indices, bool convert_vertices = true);
 	bool ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3);

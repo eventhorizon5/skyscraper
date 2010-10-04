@@ -55,7 +55,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 	current_position = 1;
 
 	//create object mesh
-	ControlMesh = sbs->CreateMesh(Name);
+	ControlMesh = sbs->CreateMesh(Name, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Direction == "front")
 		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, width, 0, height, voffset, 1, 1);

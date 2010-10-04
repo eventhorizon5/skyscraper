@@ -654,7 +654,7 @@ csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
 	return csVector3(0, 0, 0);
 }
 
-csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
+csRef<iMeshWrapper> SBS::CreateMesh(const char *name, float max_render_distance)
 {
 	//create a new mesh wrapper and factory
 	csString factname = name;
@@ -671,6 +671,10 @@ csRef<iMeshWrapper> SBS::CreateMesh(const char *name)
 
 	//create a default material (otherwise the system complains if a mesh is used without a material)
 	mesh->GetMeshObject()->SetMaterialWrapper(engine->GetMaterialList()->FindByName("Default"));
+
+	//set maximum render distance
+	if (max_render_distance > 0)
+		mesh->SetMaximumRenderDistance(ToRemote(max_render_distance));
 
 	/*csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 	state->SetLighting(false);
