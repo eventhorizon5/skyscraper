@@ -77,7 +77,8 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const cs
 	bool result;
 	iMaterialWrapper* material = sbs->GetTextureMaterial(texture, result, name2);
 
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2);
+	csPlane3 plane = csPoly3D::ComputePlane(array[0]);
+	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2, plane);
 	return &handles[index];
 }
 
@@ -100,7 +101,8 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, csVec
 	bool result;
 	iMaterialWrapper* material = sbs->GetTextureMaterial(texture, result, name2);
 
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2);
+	csPlane3 plane = csPoly3D::ComputePlane(array[0]);
+	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2, plane);
 	return &handles[index];
 }
 
@@ -113,11 +115,13 @@ WallPolygon* WallObject::AddPolygon(const char *name, csRef<iMaterialWrapper> ma
 
 	if (!triangles)
 		return 0;
-	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2);
+
+	csPlane3 plane = csPoly3D::ComputePlane(vertices[0]);
+	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2, plane);
 	return &handles[index];
 }
 
-int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<csVector2> &index_extents, csMatrix3 &tex_matrix, csVector3 &tex_vector, iMaterialWrapper* material, const char *name)
+int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<csVector2> &index_extents, csMatrix3 &tex_matrix, csVector3 &tex_vector, iMaterialWrapper* material, const char *name, csPlane3 &plane)
 {
 	//create a polygon handle
 	int i = handles.GetSize();
@@ -128,6 +132,7 @@ int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<csVector2> 
 	handles[i].t_vector = tex_vector;
 	handles[i].material = material;
 	handles[i].name = name;
+	handles[i].plane = plane;
 
 	//copy triangle data into new buffer (this prevents active buffers from being stored into the handle)
 	int *data = (int*)triangles->Lock(CS_BUF_LOCK_NORMAL);
@@ -230,19 +235,10 @@ int WallObject::FindPolygon(const char *name)
 
 void WallObject::GetGeometry(int index, csArray<CS::Geometry::csContour3> &vertices, bool firstonly)
 {
+	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
+
 	if (index < 0 || index >= handles.GetSize())
 		return;
 
-	vertices.SetSize(handles[index].index_extents.GetSize());
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(meshwrapper->GetFactory()->GetMeshObjectFactory());
-
-	for (int i = 0; i < handles[index].index_extents.GetSize(); i++)
-	{
-		int min = handles[index].index_extents[i].x;
-		int max = handles[index].index_extents[i].y;
-		for (int j = min; j <= max; j++)
-			vertices[i].Push(sbs->ToLocal(state->GetVertices()[j]));
-		if (firstonly == true)
-			return;
-	}
+	handles[index].GetGeometry(meshwrapper, vertices, firstonly);
 }

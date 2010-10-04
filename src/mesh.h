@@ -31,6 +31,7 @@ class SBSIMPEXP WallPolygon
 public:
 	csRefArray<iGeneralMeshSubMesh> *submeshes;
 	csRef<iRenderBuffer> triangles;
+	csPlane3 plane;
 
 	//array holding index extents, to get original geometry
 	csArray<csVector2> index_extents;
@@ -46,6 +47,8 @@ public:
 	~WallPolygon();
 	void GetTextureMapping(csMatrix3 &t_matrix, csVector3 &t_vector);
 	iGeneralMeshSubMesh* GetSubMesh();
+	void GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<CS::Geometry::csContour3> &vertices, bool firstonly);
+	bool PointInside(csRef<iMeshWrapper> meshwrapper, csVector3 point, bool plane_check = true);
 };
 
 #endif
