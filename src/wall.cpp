@@ -131,8 +131,8 @@ int WallObject::CreateHandle(csRef<iRenderBuffer> triangles, csArray<csVector2> 
 	handles[i].t_matrix = tex_matrix;
 	handles[i].t_vector = tex_vector;
 	handles[i].material = material;
-	handles[i].name = name;
 	handles[i].plane = plane;
+	SetPolygonName(i, name);
 
 	//copy triangle data into new buffer (this prevents active buffers from being stored into the handle)
 	int *data = (int*)triangles->Lock(CS_BUF_LOCK_NORMAL);
@@ -241,4 +241,27 @@ void WallObject::GetGeometry(int index, csArray<CS::Geometry::csContour3> &verti
 		return;
 
 	handles[index].GetGeometry(meshwrapper, vertices, firstonly);
+}
+
+void WallObject::SetPolygonName(int index, const char *name)
+{
+		if (index < 0 || index >= handles.GetSize())
+			return;
+
+		//set polygon name
+        csString name_modified = name;
+
+        //strip off object ID from name if it exists
+        if (name_modified.Find("(") == 0)
+                name_modified.DeleteAt(0, name_modified.Find(")") + 1);
+
+        //construct name
+        csString newname = "(";
+        csString num;
+        num = Number;
+        newname.Append(num + ")");
+        newname.Append(name_modified);
+
+        //set polygon name
+        handles[index].name = newname;
 }

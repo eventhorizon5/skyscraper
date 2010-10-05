@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - 3D Mesh Functions
+	Scalable Building Simulator - Mesh and Polygon Classes
 	The Skyscraper Project - Version 1.8 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -25,6 +25,25 @@
 
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
+
+class SBSIMPEXP MeshObject
+{
+public:
+	Object *object; //SBS object
+	csString name; //mesh name
+
+	MeshObject(Object* parent, const char *name, float max_render_distance = 0);
+	~MeshObject();
+	void Enable(bool value);
+
+	csRef<iMeshWrapper> MeshWrapper; //building mesh
+	csRef<iGeneralFactoryState> State; //factory state
+	csRefArray<iGeneralMeshSubMesh> Submeshes;
+	csArray<WallObject*> Walls;
+
+private:
+	bool enabled;
+};
 
 class SBSIMPEXP WallPolygon
 {

@@ -47,19 +47,19 @@ Floor::Floor(int number)
 	object->SetName("Floor " + buffer);
 	buffer.Insert(0, "Level ");
 	buffer.Trim();
-	Level = sbs->CreateMesh(buffer);
+	Level = new MeshObject(this, buffer);
 
 	//Create interfloor mesh
 	buffer = Number;
 	buffer.Insert(0, "Interfloor ");
 	buffer.Trim();
-	Interfloor = sbs->CreateMesh(buffer);
+	Interfloor = new MeshObject(this, buffer);
 
 	//Create columnframe mesh
 	buffer = Number;
 	buffer.Insert(0, "ColumnFrame ");
 	buffer.Trim();
-	ColumnFrame = sbs->CreateMesh(buffer);
+	ColumnFrame = new MeshObject(this, buffer);
 
 	//set enabled flag
 	IsEnabled = true;

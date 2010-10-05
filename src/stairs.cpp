@@ -52,7 +52,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	lastcheckresult = false;
 	checkfirstrun = true;
 
-	csString buffer, buffer2, buffer3;
+	csString buffer, buffer2, buffer3, buffer4;
 
 	buffer = number;
 	object->SetName("Stairwell " + buffer);
@@ -68,6 +68,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		buffer2 = number;
 		buffer3 = i;
 		buffer = "Stairwell " + buffer2 + ":" + buffer3;
+		buffer4 = object->GetNumber();
+		buffer.Insert(0, "(" + buffer4 + ")");
 		buffer.Trim();
 		csRef<iMeshWrapper> tmpmesh;
 		tmpmesh = sbs->CreateMesh(buffer);

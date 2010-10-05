@@ -70,7 +70,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	lastcheckresult = false;
 	checkfirstrun = true;
 
-	csString buffer, buffer2, buffer3;
+	csString buffer, buffer2, buffer3, buffer4;
 
 	buffer = number;
 	object->SetName("Shaft " + buffer);
@@ -87,6 +87,8 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 		buffer2 = number;
 		buffer3 = i;
 		buffer = "Shaft " + buffer2 + ":" + buffer3;
+		buffer4 = object->GetNumber();
+		buffer.Insert(0, "(" + buffer4 + ")");
 		buffer.Trim();
 		csRef<iMeshWrapper> tmpmesh;
 		tmpmesh = sbs->CreateMesh(buffer);

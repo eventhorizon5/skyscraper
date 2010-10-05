@@ -45,6 +45,7 @@ public:
 	WallPolygon* GetHandle(int index);
 	int FindPolygon(const char *name);
 	void GetGeometry(int index, csArray<CS::Geometry::csContour3> &vertices, bool firstonly = false);
+	void SetPolygonName(int index, const char *name);
 
 	//mesh wrapper
 	csRef<iMeshWrapper> meshwrapper;

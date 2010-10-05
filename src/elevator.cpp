@@ -42,7 +42,7 @@ Elevator::Elevator(int number)
 	object = new Object();
 	object->SetValues(this, sbs->object, "Elevator", "", false);
 
-	csString buffer;
+	csString buffer, buffer2;
 
 	//set elevator number
 	Number = number;
@@ -170,6 +170,8 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "Elevator ");
 	buffer.Trim();
 	object->SetName(buffer);
+	buffer2 = object->GetNumber();
+	buffer.Insert(0, "(" + buffer2 + ")");
 	ElevatorMesh = sbs->CreateMesh(buffer);
 	Elevator_state = scfQueryInterface<iGeneralFactoryState>(ElevatorMesh->GetFactory()->GetMeshObjectFactory());
 	Elevator_movable = ElevatorMesh->GetMovable();

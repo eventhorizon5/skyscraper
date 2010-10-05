@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - 3D Mesh Functions
+	Scalable Building Simulator - Mesh and Polygon Classes
 	The Skyscraper Project - Version 1.8 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -131,26 +131,6 @@ csVector3 SBS::GetPoint(csArray<WallObject*> &wallarray, const char *polyname, c
 		return ToLocal(isect);
 	}
 	return 0;
-}
-
-void SBS::EnableMesh(csRef<iMeshWrapper> mesh, bool value)
-{
-	//enables or disables a mesh
-	if (mesh)
-	{
-		if (value == true)
-		{
-			mesh->GetFlags().Reset(CS_ENTITY_INVISIBLEMESH);
-			mesh->GetFlags().Reset(CS_ENTITY_NOSHADOWS);
-			mesh->GetFlags().Reset(CS_ENTITY_NOHITBEAM);
-		}
-		else
-		{
-			mesh->GetFlags().Set(CS_ENTITY_INVISIBLEMESH);
-			mesh->GetFlags().Set(CS_ENTITY_NOSHADOWS);
-			mesh->GetFlags().Set(CS_ENTITY_NOHITBEAM);
-		}
-	}
 }
 
 iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
@@ -652,37 +632,6 @@ csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
 			return csVector3(0, 0, -1);
 	}
 	return csVector3(0, 0, 0);
-}
-
-csRef<iMeshWrapper> SBS::CreateMesh(const char *name, float max_render_distance)
-{
-	//create a new mesh wrapper and factory
-	csString factname = name;
-	factname.Append(" factory");
-
-	//create mesh wrapper and factory
-	csRef<iMeshWrapper> mesh = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(engine, area, name, factname);
-
-	//set zbuf mode to "USE" by default
-	mesh->SetZBufMode(CS_ZBUF_USE);
-
-	//set render priority to "object" by default
-	mesh->SetRenderPriority(engine->GetObjectRenderPriority());
-
-	//create a default material (otherwise the system complains if a mesh is used without a material)
-	mesh->GetMeshObject()->SetMaterialWrapper(engine->GetMaterialList()->FindByName("Default"));
-
-	//set maximum render distance
-	if (max_render_distance > 0)
-		mesh->SetMaximumRenderDistance(ToRemote(max_render_distance));
-
-	/*csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
-	state->SetLighting(false);
-	state->SetShadowCasting(false);
-	state->SetShadowReceiving(false);
-	state->SetManualColors(false);*/
-
-	return mesh;
 }
 
 csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector, csArray<csVector2> &mesh_indices)
@@ -1360,4 +1309,85 @@ bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, csVector3 point, 
 	}*/
 
 	return true;
+}
+
+MeshObject::MeshObject(Object* parent, const char *name, float max_render_distance)
+{
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, parent, "Mesh", name, false);
+
+	enabled = true;
+	//create a new mesh wrapper and factory
+	csString factname = name;
+	factname.Append(" factory");
+
+	csString buffer;
+	csString Name = name;
+	buffer = object->GetNumber();
+	Name.Insert(0, "(" + buffer + ")");
+
+	//create mesh wrapper and factory
+	MeshWrapper = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(engine, area, Name, factname);
+
+	//set zbuf mode to "USE" by default
+	MeshWrapper->SetZBufMode(CS_ZBUF_USE);
+
+	//set render priority to "object" by default
+	MeshWrapper->SetRenderPriority(engine->GetObjectRenderPriority());
+
+	//create a default material (otherwise the system complains if a mesh is used without a material)
+	MeshWrapper->GetMeshObject()->SetMaterialWrapper(engine->GetMaterialList()->FindByName("Default"));
+
+	//set maximum render distance
+	if (max_render_distance > 0)
+		MeshWrapper->SetMaximumRenderDistance(ToRemote(max_render_distance));
+
+	State = scfQueryInterface<iGeneralFactoryState>(MeshWrapper->GetFactory()->GetMeshObjectFactory());
+	/*state->SetLighting(false);
+	state->SetShadowCasting(false);
+	state->SetShadowReceiving(false);
+	state->SetManualColors(false);*/
+}
+
+MeshObject::~MeshObject()
+{
+	//delete wall objects
+	for (int i = 0; i < Walls.GetSize(); i++)
+	{
+		if (Walls[i])
+		{
+			Walls[i]->parent_deleting = true;
+			delete Walls[i];
+		}
+		Walls[i] = 0;
+	}
+
+	if (sbs->FastDelete == false)
+		sbs->engine->WantToDie(MeshWrapper);
+
+	MeshWrapper = 0;
+	delete object;
+}
+
+void MeshObject::Enable(bool value)
+{
+	//enables or disables the mesh
+
+	if (value == enabled)
+		return false;
+
+	if (value == true)
+	{
+		MeshWrapper->GetFlags().Reset(CS_ENTITY_INVISIBLEMESH);
+		MeshWrapper->GetFlags().Reset(CS_ENTITY_NOSHADOWS);
+		MeshWrapper->GetFlags().Reset(CS_ENTITY_NOHITBEAM);
+	}
+	else
+	{
+		MeshWrapper->GetFlags().Set(CS_ENTITY_INVISIBLEMESH);
+		MeshWrapper->GetFlags().Set(CS_ENTITY_NOSHADOWS);
+		MeshWrapper->GetFlags().Set(CS_ENTITY_NOHITBEAM);
+	}
+	enabled = value;
 }

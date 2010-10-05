@@ -37,9 +37,9 @@ class SBSIMPEXP Floor
 {
 public:
 	Object *object; //SBS object
-	csRef<iMeshWrapper> Level; //level mesh
-	csRef<iMeshWrapper> Interfloor; //interfloor mesh
-	csRef<iMeshWrapper> ColumnFrame; //columnframe mesh
+	MeshObject *Level; //level mesh
+	MeshObject *Interfloor; //interfloor mesh
+	MeshObject *ColumnFrame; //columnframe mesh
 
 	int Number; //floor number
 	csString Name; //floor name
@@ -55,12 +55,6 @@ public:
 	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
 	csArray<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	csArray<int> Group; //floor group
-	csArray<WallObject*> level_walls;
-	csArray<WallObject*> interfloor_walls;
-	csArray<WallObject*> columnframe_walls;
-	csRefArray<iGeneralMeshSubMesh> level_submeshes;
-	csRefArray<iGeneralMeshSubMesh> interfloor_submeshes;
-	csRefArray<iGeneralMeshSubMesh> columnframe_submeshes;
 
 	//functions
 	Floor(int number);
