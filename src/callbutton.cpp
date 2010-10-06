@@ -57,20 +57,19 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	ProcessedDown = false;
 
 	//create object mesh
-	csString buffer, buffer2, buffer3, buffer4;
-	buffer4 = object->GetNumber();
+	csString buffer, buffer2, buffer3;
 	buffer2 = floornum;
 	buffer3 = number;
-	buffer = "(" + buffer4 + ")Call Panel " + buffer2 + ":" + buffer3;
+	buffer = "Call Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
-	object->SetName("Call Panel " + buffer2 + ":" + buffer3);
-	CallButtonBackMesh = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	object->SetName(buffer);
+	CallButtonBackMesh = new MeshObject(object, buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Up";
-	CallButtonMeshUp = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Up";
+	CallButtonMeshUp = new MeshObject(object, buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	buffer = "(" + buffer4 + ")Call Button " + buffer2 + ":" + buffer3 + ":Down";
-	CallButtonMeshDown = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Down";
+	CallButtonMeshDown = new MeshObject(object, buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
 	floor = floornum;
@@ -103,7 +102,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 				x2 = CenterX - (BackWidth / 2);
 				x1 = CenterX + (BackWidth / 2);
 			}
-			sbs->AddGenWall(CallButtonBackMesh, BackTexture, x1, CenterZ, x2, CenterZ, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+			sbs->AddGenWall(CallButtonBackMesh->MeshWrapper, BackTexture, x1, CenterZ, x2, CenterZ, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 		if (Direction == "left" || Direction == "right")
@@ -120,7 +119,7 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 				z1 = CenterZ - (BackWidth / 2);
 				z2 = CenterZ + (BackWidth / 2);
 			}
-			sbs->AddGenWall(CallButtonBackMesh, BackTexture, CenterX, z1, CenterX, z2, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
+			sbs->AddGenWall(CallButtonBackMesh->MeshWrapper, BackTexture, CenterX, z1, CenterX, z2, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
 			sbs->ResetWalls();
 		}
 	}
@@ -151,15 +150,15 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
-			sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
-			sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
+			sbs->AddGenWall(CallButtonMeshUp->MeshWrapper, UpButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
+			sbs->AddGenWall(CallButtonMeshDown->MeshWrapper, DownButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
 		}
 		else
 		{
 			if (floornum < topfloor)
-				sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddGenWall(CallButtonMeshUp->MeshWrapper, UpButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
 			if (floornum > bottomfloor)
-				sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddGenWall(CallButtonMeshDown->MeshWrapper, DownButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
 		}
 
 		sbs->ResetWalls();
@@ -182,15 +181,15 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 		}
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
-			sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
-			sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
+			sbs->AddGenWall(CallButtonMeshUp->MeshWrapper, UpButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
+			sbs->AddGenWall(CallButtonMeshDown->MeshWrapper, DownButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
 		}
 		else
 		{
 			if (floornum < topfloor)
-				sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddGenWall(CallButtonMeshUp->MeshWrapper, UpButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
 			if (floornum > bottomfloor)
-				sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddGenWall(CallButtonMeshDown->MeshWrapper, DownButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
 		}
 
 		sbs->ResetWalls();
@@ -200,22 +199,25 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 
 CallButton::~CallButton()
 {
+	if (CallButtonMeshDown)
+		delete CallButtonMeshDown;
+	CallButtonMeshDown = 0;
+	if (CallButtonMeshUp)
+		delete CallButtonMeshUp;
+	CallButtonMeshUp = 0;
+	if (CallButtonBackMesh)
+		delete CallButtonBackMesh;
+	CallButtonBackMesh = 0;
+
+	//unregister with parent floor object
 	if (sbs->FastDelete == false)
 	{
-		sbs->engine->WantToDie(CallButtonMeshDown);
-		sbs->engine->WantToDie(CallButtonMeshUp);
-		sbs->engine->WantToDie(CallButtonBackMesh);
-
-		//unregister with parent floor object
 		if (object->parent_deleting == false)
 			sbs->GetFloor(floor)->RemoveCallButton(this);
 
 		sbs->UnregisterCallButtonCallback(this);
 	}
 
-	CallButtonMeshDown = 0;
-	CallButtonMeshUp = 0;
-	CallButtonBackMesh = 0;
 	delete object;
 }
 
@@ -225,9 +227,9 @@ void CallButton::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	sbs->EnableMesh(CallButtonBackMesh, value);
-	sbs->EnableMesh(CallButtonMeshUp, value);
-	sbs->EnableMesh(CallButtonMeshDown, value);
+	CallButtonBackMesh->Enable(value);
+	CallButtonMeshUp->Enable(value);
+	CallButtonMeshDown->Enable(value);
 	IsEnabled = value;
 
 	if (sbs->Verbose)
@@ -329,34 +331,34 @@ void CallButton::SetLights(int up, int down)
 		if (sbs->Verbose)
 			Report("SetLights: turning on up light");
 
-		sbs->ChangeTexture(CallButtonMeshUp, UpTextureLit);
+		CallButtonMeshUp->ChangeTexture(UpTextureLit);
 	}
 	if (up == 2 && CallButtonMeshUp)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off up light");
 
-		sbs->ChangeTexture(CallButtonMeshUp, UpTexture);
+		CallButtonMeshUp->ChangeTexture(UpTexture);
 	}
 	if (down == 1 && CallButtonMeshDown)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning on down light");
 
-		sbs->ChangeTexture(CallButtonMeshDown, DownTextureLit);
+		CallButtonMeshDown->ChangeTexture(DownTextureLit);
 	}
 	if (down == 2 && CallButtonMeshDown)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off down light");
 
-		sbs->ChangeTexture(CallButtonMeshDown, DownTexture);
+		CallButtonMeshDown->ChangeTexture(DownTexture);
 	}
 
-	if (up > 0 && !CallButtonMeshUp && sbs->Verbose)
+	/*if (up > 0 && !CallButtonMeshUp && sbs->Verbose)
 		Report("SetLights: cannot change up light status");
 	if (down > 0 && !CallButtonMeshDown && sbs->Verbose)
-		Report("SetLights: cannot change down light status");
+		Report("SetLights: cannot change down light status");*/
 }
 
 bool CallButton::ServicesElevator(int elevator)

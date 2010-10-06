@@ -47,19 +47,19 @@ Floor::Floor(int number)
 	object->SetName("Floor " + buffer);
 	buffer.Insert(0, "Level ");
 	buffer.Trim();
-	Level = new MeshObject(this, buffer);
+	Level = new MeshObject(object, buffer);
 
 	//Create interfloor mesh
 	buffer = Number;
 	buffer.Insert(0, "Interfloor ");
 	buffer.Trim();
-	Interfloor = new MeshObject(this, buffer);
+	Interfloor = new MeshObject(object, buffer);
 
 	//Create columnframe mesh
 	buffer = Number;
 	buffer.Insert(0, "ColumnFrame ");
 	buffer.Trim();
-	ColumnFrame = new MeshObject(this, buffer);
+	ColumnFrame = new MeshObject(object, buffer);
 
 	//set enabled flag
 	IsEnabled = true;
@@ -145,49 +145,26 @@ Floor::~Floor()
 	}
 	sounds.DeleteAll();
 
-	//delete wall objects
-	for (int i = 0; i < level_walls.GetSize(); i++)
-	{
-		if (level_walls[i])
-		{
-			level_walls[i]->parent_deleting = true;
-			delete level_walls[i];
-		}
-		level_walls[i] = 0;
-	}
-	for (int i = 0; i < interfloor_walls.GetSize(); i++)
-	{
-		if (interfloor_walls[i])
-		{
-			interfloor_walls[i]->parent_deleting = true;
-			delete interfloor_walls[i];
-		}
-		interfloor_walls[i] = 0;
-	}
-	for (int i = 0; i < columnframe_walls.GetSize(); i++)
-	{
-		if (columnframe_walls[i])
-		{
-			columnframe_walls[i]->parent_deleting = true;
-			delete columnframe_walls[i];
-		}
-		columnframe_walls[i] = 0;
-	}
+	//delete meshes
+	if (Level)
+		delete Level;
+	Level = 0;
 
+	if (Interfloor)
+		delete Interfloor;
+	Interfloor = 0;
+
+	if (ColumnFrame)
+		delete ColumnFrame;
+	ColumnFrame = 0;
+
+	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->engine->WantToDie(ColumnFrame);
-		sbs->engine->WantToDie(Interfloor);
-		sbs->engine->WantToDie(Level);
-
-		//unregister from parent
 		if (object->parent_deleting == false)
 			sbs->RemoveFloor(this);
 	}
 
-	ColumnFrame = 0;
-	Interfloor = 0;
-	Level = 0;
 	delete object;
 }
 
@@ -207,12 +184,12 @@ WallObject* Floor::AddFloor(const char *name, const char *texture, float thickne
 
 	if (isexternal == false)
 	{
-		wall = sbs->CreateWallObject(level_walls, Level, level_submeshes, this->object, name);
+		wall = Level->CreateWallObject(this->object, name);
 		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
 	}
 	else
 	{
-		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, sbs->External_submeshes, this->object, name);
+		wall = sbs->External->CreateWallObject(this->object, name);
 		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
 	return wall;
@@ -222,7 +199,7 @@ WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, flo
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
-	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, interfloor_submeshes, this->object, name);
+	WallObject *wall = Interfloor->CreateWallObject(this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	return wall;
 }
@@ -234,12 +211,12 @@ WallObject* Floor::AddWall(const char *name, const char *texture, float thicknes
 	WallObject *wall;
 	if (isexternal == false)
 	{
-		wall = sbs->CreateWallObject(level_walls, Level, level_submeshes, this->object, name);
+		wall = Level->CreateWallObject(this->object, name);
 		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
 	}
 	else
 	{
-		wall = sbs->CreateWallObject(sbs->External_walls, sbs->External, sbs->External_submeshes, this->object, name);
+		wall = sbs->External->CreateWallObject(this->object, name);
 		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
 	return wall;
@@ -249,7 +226,7 @@ WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, floa
 {
 	//Adds an interfloor wall with the specified dimensions
 
-	WallObject *wall = sbs->CreateWallObject(interfloor_walls, Interfloor, interfloor_submeshes, this->object, name);
+	WallObject *wall = Interfloor->CreateWallObject(this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	return wall;
 }
@@ -261,8 +238,8 @@ void Floor::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	sbs->EnableMesh(Level, value);
-	sbs->EnableMesh(Interfloor, value);
+	Level->Enable(value);
+	Interfloor->Enable(value);
 	IsEnabled = value;
 
 	EnableColumnFrame(value);
@@ -352,19 +329,19 @@ void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, boo
 	//Y values are relative to the floor's altitude
 	//if fast is specified, skips the interfloor scan
 
-	for (int i = 0; i < level_walls.GetSize(); i++)
+	for (int i = 0; i < Level->Walls.GetSize(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
 			reset = false;
 
-		sbs->Cut(level_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, reset);
+		sbs->Cut(Level->Walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, reset);
 	}
 	if (fast == false)
 	{
-		for (int i = 0; i < interfloor_walls.GetSize(); i++)
+		for (int i = 0; i < Interfloor->Walls.GetSize(); i++)
 		{
-			sbs->Cut(interfloor_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, false);
+			sbs->Cut(Interfloor->Walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, false);
 		}
 	}
 }
@@ -396,8 +373,8 @@ void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, 
 	}
 
 	//cut external
-	for (int i = 0; i < sbs->External_walls.GetSize(); i++)
-		sbs->Cut(sbs->External_walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0));
+	for (int i = 0; i < sbs->External->Walls.GetSize(); i++)
+		sbs->Cut(sbs->External->Walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0));
 }
 
 void Floor::AddGroupFloor(int number)
@@ -538,7 +515,7 @@ bool Floor::CalculateAltitude()
 void Floor::EnableColumnFrame(bool value)
 {
 	//enable/disable columnframe mesh
-	sbs->EnableMesh(ColumnFrame, value);
+	ColumnFrame->Enable(value);
 	IsColumnFrameEnabled = value;
 }
 
@@ -546,7 +523,7 @@ WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1
 {
 	//create columnframe wall box
 
-	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, columnframe_submeshes, this->object, name);
+	WallObject *wall = ColumnFrame->CreateWallObject(this->object, name);
 	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
@@ -555,7 +532,7 @@ WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float C
 {
 	//create columnframe wall box from a central location
 
-	WallObject *wall = sbs->CreateWallObject(columnframe_walls, ColumnFrame, columnframe_submeshes, this->object, name);
+	WallObject *wall = ColumnFrame->CreateWallObject(this->object, name);
 	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }

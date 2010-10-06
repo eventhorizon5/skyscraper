@@ -57,7 +57,6 @@ class ScriptProcessor
 	int RangeL;
 	int RangeH;
 	long RangeStart;
-	iMeshWrapper *tmpMesh;
 	WallObject *wall;
 	char intbuffer[65];
 	csString buffer;

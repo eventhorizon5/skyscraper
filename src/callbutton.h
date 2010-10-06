@@ -53,9 +53,9 @@ public:
 	bool ReportError(const char *message);
 
 private:
-	csRef<iMeshWrapper> CallButtonBackMesh; //call button mesh object
-	csRef<iMeshWrapper> CallButtonMeshUp; //call button mesh object
-	csRef<iMeshWrapper> CallButtonMeshDown; //call button mesh object
+	MeshObject* CallButtonBackMesh; //call button mesh object
+	MeshObject* CallButtonMeshUp; //call button mesh object
+	MeshObject* CallButtonMeshDown; //call button mesh object
 
 	csString UpTexture, UpTextureLit;
 	csString DownTexture, DownTextureLit;

@@ -41,7 +41,6 @@ public:
 	csVector2 cutend; //cut ending vector
 	bool InsideStairwell; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
-	csArray<csArray<WallObject*> > stairs_walls;
 
 	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
@@ -68,11 +67,11 @@ public:
 	bool ReportError(const char *message);
 	void RemoveDoor(Door *door);
 	Light* AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
+	MeshObject* GetMeshObject(int floor);
 
 private:
-	csRefArray<iMeshWrapper> StairArray; //stairwell array
-		csArray<csRefArray<iGeneralMeshSubMesh> > stairs_submeshes;
-	csRefArray<iMeshWrapper> StairDoorArray; //stair door array
+	csArray<MeshObject*> StairArray; //stairwell array
+	csArray<MeshObject*> StairDoorArray; //stair door array
 	csArray<bool> EnableArray;
 
 	struct DoorMap

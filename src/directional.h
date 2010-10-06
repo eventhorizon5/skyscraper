@@ -57,11 +57,10 @@ public:
 	csVector3 GetPosition();
 
 private:
-	csRef<iMeshWrapper> DirectionalMeshBack; //indicator mesh back object
-		csRefArray<iGeneralMeshSubMesh> DirectionalMeshBack_submeshes;
-	csRef<iMeshWrapper> DirectionalMeshUp; //indicator mesh up object
-	csRef<iMeshWrapper> DirectionalMeshDown; //indicator mesh down object
-	csRef<iMeshWrapper> DirectionalMesh; //indicator mesh single object
+	MeshObject* DirectionalMeshBack; //indicator mesh back object
+	MeshObject* DirectionalMeshUp; //indicator mesh up object
+	MeshObject* DirectionalMeshDown; //indicator mesh down object
+	MeshObject* DirectionalMesh; //indicator mesh single object
 };
 
 #endif

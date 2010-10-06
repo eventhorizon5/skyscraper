@@ -703,12 +703,12 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
-	sbs->AddWallMain(wrapper->object, door->mesh, door->mesh_submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh->MeshWrapper, door->mesh->Submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	sbs->AddWallMain(wrapper->object, door->mesh, door->mesh_submeshes, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh->MeshWrapper, door->mesh->Submeshes, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
 	//store extents
@@ -829,7 +829,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->state->GetVertices(), wrapper->doors[i]->state->GetVertexCount(), j);
+			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->mesh->State->GetVertices(), wrapper->doors[i]->mesh->State->GetVertexCount(), j);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 
@@ -903,7 +903,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		}
 
 		//create doorway walls
-		WallObject *wall = sbs->CreateWallObject(floorobj->level_walls, floorobj->Level, floorobj->level_submeshes, floorobj->object, "Connection Walls");
+		WallObject *wall = floorobj->Level->CreateWallObject(floorobj->object, "Connection Walls");
 		sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 		sbs->ResetWalls();
@@ -916,7 +916,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	if (ShaftDoor == false)
 	{
 		WallObject *wall;
-		wall = sbs->CreateWallObject(elev->elevator_walls, elev->ElevatorMesh, elev->Elevator_submeshes, elev->object, false);
+		wall = elev->ElevatorMesh->CreateWallObject(elev->object, false);
 		name1 = "DoorF1";
 		name2 = "DoorF2";
 		sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true, false);
@@ -926,7 +926,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		WallObject *wall;
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		wall = sbs->CreateWallObject(shaft->shaft_walls[floor - shaft->startfloor], shaft->GetMeshWrapper(floor), shaft->shaft_submeshes[floor - shaft->startfloor], shaft->object, false);
+		wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, false);
 		name1 = "ShaftDoorF1";
 		name2 = "ShaftDoorF2";
 		x1 += elev->Origin.x;
@@ -1237,17 +1237,17 @@ void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative
 		if (relative_x == false)
 			pos.x = sbs->ToRemote(position.x);
 		else
-			pos.x = Doors->doors[i]->movable->GetPosition().x + sbs->ToRemote(position.x);
+			pos.x = Doors->doors[i]->mesh->Movable->GetPosition().x + sbs->ToRemote(position.x);
 		if (relative_y == false)
 			pos.y = sbs->ToRemote(position.y);
 		else
-			pos.y = Doors->doors[i]->movable->GetPosition().y + sbs->ToRemote(position.y);
+			pos.y = Doors->doors[i]->mesh->Movable->GetPosition().y + sbs->ToRemote(position.y);
 		if (relative_z == false)
 			pos.z = sbs->ToRemote(position.z);
 		else
-			pos.z = Doors->doors[i]->movable->GetPosition().z + sbs->ToRemote(position.z);
-		Doors->doors[i]->movable->SetPosition(pos);
-		Doors->doors[i]->movable->UpdateMove();
+			pos.z = Doors->doors[i]->mesh->Movable->GetPosition().z + sbs->ToRemote(position.z);
+		Doors->doors[i]->mesh->Movable->SetPosition(pos);
+		Doors->doors[i]->mesh->Movable->UpdateMove();
 	}
 }
 
@@ -1313,9 +1313,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	parent = wrapper->parent;
 
 	//create object mesh
-	mesh = sbs->CreateMesh(doorname);
-	state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
-	movable = mesh->GetMovable();
+	mesh = new MeshObject(wrapper->object, doorname);
 	
 	csString direction_check = Direction;
 	direction_check.Downcase().Trim();
@@ -1347,11 +1345,8 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 
 ElevatorDoor::DoorObject::~DoorObject()
 {
-	//clear references
-	movable = 0;
-	state = 0;
-	if (sbs->FastDelete == false)
-		sbs->engine->WantToDie(mesh);
+	if (mesh)
+		delete mesh;
 	mesh = 0;
 }
 
@@ -1394,10 +1389,10 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 
 	//move object to positions
 	if (IsShaftDoor == false)
-		doors[index]->movable->SetPosition(sbs->ToRemote(parent->elev->Origin));
+		doors[index]->mesh->Movable->SetPosition(sbs->ToRemote(parent->elev->Origin));
 	else
-		doors[index]->movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, 0, parent->elev->Origin.z)));
-	doors[index]->movable->UpdateMove();
+		doors[index]->mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, 0, parent->elev->Origin.z)));
+	doors[index]->mesh->Movable->UpdateMove();
 
 	return doors[index];
 }
@@ -1410,7 +1405,7 @@ void ElevatorDoor::DoorWrapper::Enable(bool value)
 		return;
 
 	for (int i = 0; i < doors.GetSize(); i++)
-		sbs->EnableMesh(doors[i]->mesh, value);
+		doors[i]->mesh->Enable(value);
 	Enabled = value;
 }
 
@@ -1438,18 +1433,18 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	{
 		if (parent->DoorDirection == false)
 		{
-			tempposition = sbs->ToLocal(movable->GetPosition().z) + wrapper->Shift;
+			tempposition = sbs->ToLocal(mesh->Movable->GetPosition().z) + wrapper->Shift;
 			temporigin = wrapper->Origin.z + wrapper->Shift;
 		}
 		else
 		{
-			tempposition = sbs->ToLocal(movable->GetPosition().x) + wrapper->Shift;
+			tempposition = sbs->ToLocal(mesh->Movable->GetPosition().x) + wrapper->Shift;
 			temporigin = wrapper->Origin.x + wrapper->Shift;
 		}
 	}
 	else
 	{
-		tempposition = sbs->ToLocal(movable->GetPosition().y);
+		tempposition = sbs->ToLocal(mesh->Movable->GetPosition().y);
 		if (wrapper->IsShaftDoor == false)
 			temporigin = parent->elev->GetPosition().y;
 		else
@@ -1703,17 +1698,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float width = fabs(extents_max.z - extents_min.z);
 				if (direction == 2)
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset))));
+					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset))));
 				else
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset))));
+					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset))));
 			}
 			else
 			{
 				float width = fabs(extents_max.x - extents_min.x);
 				if (direction == 2)
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
+					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
 				else
-					movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
+					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
 			}
 		}
 		else
@@ -1721,16 +1716,16 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			float mainheight = wrapper->Height / 2;
 			float height = fabs(extents_max.y - extents_min.y);
 			if (direction == 0)
-				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
+				mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
 			else
-				movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
+				mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
 		}
 	}
 	else
 	{
-		movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z)));
+		mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z)));
 	}
-	movable->UpdateMove();
+	mesh->Movable->UpdateMove();
 
 	//the door is open or closed now
 	is_open = open;
@@ -1750,34 +1745,34 @@ void ElevatorDoor::DoorObject::Move()
 
 		//up movement
 		if (direction == 0)
-			movable->MovePosition(csVector3(0, sbs->ToRemote(active_speed * sbs->delta), 0));
+			mesh->Movable->MovePosition(csVector3(0, sbs->ToRemote(active_speed * sbs->delta), 0));
 
 		//down movement
 		if (direction == 1)
-			movable->MovePosition(csVector3(0, sbs->ToRemote(-active_speed * sbs->delta), 0));
+			mesh->Movable->MovePosition(csVector3(0, sbs->ToRemote(-active_speed * sbs->delta), 0));
 
 		if (parent->DoorDirection == false)
 		{
 			//left movement
 			if (direction == 2)
-				movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-active_speed * sbs->delta)));
+				mesh->Movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-active_speed * sbs->delta)));
 
 			//right movement
 			if (direction == 3)
-				movable->MovePosition(csVector3(0, 0, sbs->ToRemote(active_speed * sbs->delta)));
+				mesh->Movable->MovePosition(csVector3(0, 0, sbs->ToRemote(active_speed * sbs->delta)));
 		}
 		else
 		{
 			//left movement
 			if (direction == 2)
-				movable->MovePosition(csVector3(sbs->ToRemote(-active_speed * sbs->delta), 0, 0));
+				mesh->Movable->MovePosition(csVector3(sbs->ToRemote(-active_speed * sbs->delta), 0, 0));
 
 			//right movement
 			if (direction == 3)
-				movable->MovePosition(csVector3(sbs->ToRemote(active_speed * sbs->delta), 0, 0));
+				mesh->Movable->MovePosition(csVector3(sbs->ToRemote(active_speed * sbs->delta), 0, 0));
 		}
 
-		movable->UpdateMove();
+		mesh->Movable->UpdateMove();
 }
 
 void ElevatorDoor::DoorWrapper::MoveDoors(bool open, bool manual)

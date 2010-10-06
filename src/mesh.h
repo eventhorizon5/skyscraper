@@ -26,6 +26,8 @@
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
 
+class WallObject;
+
 class SBSIMPEXP MeshObject
 {
 public:
@@ -35,11 +37,14 @@ public:
 	MeshObject(Object* parent, const char *name, float max_render_distance = 0);
 	~MeshObject();
 	void Enable(bool value);
-
+	WallObject* CreateWallObject(Object *parent, const char *name);
+	iMaterialWrapper* ChangeTexture(const char *texture, bool matcheck = true);
+	
 	csRef<iMeshWrapper> MeshWrapper; //building mesh
 	csRef<iGeneralFactoryState> State; //factory state
 	csRefArray<iGeneralMeshSubMesh> Submeshes;
 	csArray<WallObject*> Walls;
+	csRef<iMovable> Movable;
 
 private:
 	bool enabled;

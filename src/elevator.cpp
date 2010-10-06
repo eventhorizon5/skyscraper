@@ -42,7 +42,7 @@ Elevator::Elevator(int number)
 	object = new Object();
 	object->SetValues(this, sbs->object, "Elevator", "", false);
 
-	csString buffer, buffer2;
+	csString buffer;
 
 	//set elevator number
 	Number = number;
@@ -170,11 +170,7 @@ Elevator::Elevator(int number)
 	buffer.Insert(0, "Elevator ");
 	buffer.Trim();
 	object->SetName(buffer);
-	buffer2 = object->GetNumber();
-	buffer.Insert(0, "(" + buffer2 + ")");
-	ElevatorMesh = sbs->CreateMesh(buffer);
-	Elevator_state = scfQueryInterface<iGeneralFactoryState>(ElevatorMesh->GetFactory()->GetMeshObjectFactory());
-	Elevator_movable = ElevatorMesh->GetMovable();
+	ElevatorMesh = new MeshObject(object, buffer);
 
 	//create test light
 	//AddLight("test", 1, csVector3(0, 5, 0), csVector3(0, 0, 1), 0, 10, 255, 0, 0, 255, 0, 0, 0, 0, 0);
@@ -377,17 +373,16 @@ Elevator::~Elevator()
 		elevator_walls[i] = 0;
 	}
 
-	Elevator_movable = 0;
-	Elevator_state = 0;
+	if (ElevatorMesh)
+		delete ElevatorMesh;
+	ElevatorMesh = 0;
+
+	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->engine->WantToDie(ElevatorMesh);
-
-		//unregister from parent
 		if (object->parent_deleting == false)
 			sbs->RemoveElevator(this);
 	}
-	ElevatorMesh = 0;
 	delete object;
 }
 
@@ -497,8 +492,8 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//move objects to positions
 	if (sbs->Verbose)
 		Report("moving elevator to origin position");
-	Elevator_movable->SetPosition(sbs->ToRemote(Origin));
-	Elevator_movable->UpdateMove();
+	ElevatorMesh->Movable->SetPosition(sbs->ToRemote(Origin));
+	ElevatorMesh->Movable->UpdateMove();
 
 	//create sound objects
 	if (sbs->Verbose)
@@ -1029,10 +1024,10 @@ void Elevator::MonitorLoop()
 	//make sure height value is set
 	if (Height == 0)
 	{
-		for (int i = 0; i < Elevator_state->GetVertexCount(); i++)
+		for (int i = 0; i < ElevatorMesh->State->GetVertexCount(); i++)
 		{
-			if (sbs->ToLocal(Elevator_state->GetVertices()[i].y) > Height)
-				Height = sbs->ToLocal(Elevator_state->GetVertices()[i].y);
+			if (sbs->ToLocal(ElevatorMesh->State->GetVertices()[i].y) > Height)
+				Height = sbs->ToLocal(ElevatorMesh->State->GetVertices()[i].y);
 		}
 	}
 
@@ -1463,8 +1458,8 @@ void Elevator::MoveElevatorToFloor()
 	//move elevator objects and camera
 	movement.y = ElevatorRate * sbs->delta;
 
-	Elevator_movable->MovePosition(csVector3(0, sbs->ToRemote(movement.y), 0));
-	Elevator_movable->UpdateMove();
+	ElevatorMesh->Movable->MovePosition(csVector3(0, sbs->ToRemote(movement.y), 0));
+	ElevatorMesh->Movable->UpdateMove();
 	elevposition = GetPosition();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
@@ -1746,8 +1741,8 @@ void Elevator::MoveElevatorToFloor()
 		//move elevator objects
 		if (sbs->Verbose)
 			Report("setting elevator to floor altitude");
-		Elevator_movable->SetPosition(sbs->ToRemote(csVector3(elevposition.x, Destination, elevposition.z)));
-		Elevator_movable->UpdateMove();
+		ElevatorMesh->Movable->SetPosition(sbs->ToRemote(csVector3(elevposition.x, Destination, elevposition.z)));
+		ElevatorMesh->Movable->UpdateMove();
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
@@ -1931,7 +1926,7 @@ WallObject* Elevator::AddWall(const char *name, const char *texture, float thick
 {
 	//Adds a wall with the specified dimensions
 
-	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, Elevator_submeshes, this->object, name);
+	WallObject *wall = ElevatorMesh->CreateWallObject(this->object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
@@ -1940,7 +1935,7 @@ WallObject* Elevator::AddFloor(const char *name, const char *texture, float thic
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	WallObject *wall = sbs->CreateWallObject(elevator_walls, ElevatorMesh, Elevator_submeshes, this->object, name);
+	WallObject *wall = ElevatorMesh->CreateWallObject(this->object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
@@ -1959,7 +1954,7 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 const csVector3 Elevator::GetPosition()
 {
 	//returns the elevator's position
-	return sbs->ToLocal(Elevator_movable->GetPosition());
+	return sbs->ToLocal(ElevatorMesh->Movable->GetPosition());
 }
 
 void Elevator::DumpQueues()
@@ -1990,7 +1985,7 @@ void Elevator::Enabled(bool value)
 			Report("disabling elevator");
 	}
 
-	sbs->EnableMesh(ElevatorMesh, value);
+	ElevatorMesh->Enable(value);
 	EnableDoors(value);
 	IsEnabled = value;
 }
@@ -2036,7 +2031,7 @@ void Elevator::EnableObjects(bool value)
 
 bool Elevator::IsElevator(csRef<iMeshWrapper> test)
 {
-	if (test == ElevatorMesh)
+	if (test == ElevatorMesh->MeshWrapper)
 		return true;
 
 	return false;
@@ -2045,7 +2040,7 @@ bool Elevator::IsElevator(csRef<iMeshWrapper> test)
 csHitBeamResult Elevator::HitBeam(const csVector3 &start, const csVector3 &end)
 {
 	//passes info onto HitBeam function
-	return ElevatorMesh->HitBeam(sbs->ToRemote(start), sbs->ToRemote(end));
+	return ElevatorMesh->MeshWrapper->HitBeam(sbs->ToRemote(start), sbs->ToRemote(end));
 }
 
 bool Elevator::IsInElevator(const csVector3 &position)

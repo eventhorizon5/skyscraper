@@ -49,8 +49,6 @@ public:
 	csArray<int> ShowFloorsList; //list of floors to enable while inside the shaft/elevator
 	csArray<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
-	csArray<csArray<WallObject*> > shaft_walls;
-	csArray<csRefArray<iGeneralMeshSubMesh> > shaft_submeshes;
 
 	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
@@ -71,14 +69,13 @@ public:
 	bool IsValidFloor(int floor);
 	void AddElevator(int number);
 	void RemoveElevator(int number);
-	csRef<iMeshWrapper> GetMeshWrapper(int floor);
+	MeshObject* GetMeshObject(int floor);
 	void Report(const char *message);
 	bool ReportError(const char *message);
 	Light* AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
 
 private:
-	csRefArray<iMeshWrapper> ShaftArray; //shaft mesh array
-
+	csArray<MeshObject*> ShaftArray; //shaft mesh array
 	csArray<bool> EnableArray;
 	bool EnableCheck;
 

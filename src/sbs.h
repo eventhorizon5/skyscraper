@@ -188,7 +188,7 @@ public:
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
 	bool Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char* rootdirectory, const char* directory_char);
 	bool Start();
-	int CreateSky(const char *filenamebase);
+	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
@@ -209,7 +209,6 @@ public:
 	void ListAltitudes();
 	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	iMaterialWrapper* ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck = true);
 	iMaterialWrapper* GetTextureMaterial(const char *texture, bool &result, const char *polygon_name = 0);
 	bool NewElevator(int number);
 	bool NewFloor(int number);
@@ -289,8 +288,7 @@ public:
 	void GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, csVector3 &v2, csVector3 &v3);
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	csVector2 CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th);
-	WallObject* CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *parent, const char *name);
-	WallObject* GetWallObject(csArray<WallObject*> &wallarray, int polygon_index);
+	//WallObject* GetWallObject(csArray<WallObject*> &wallarray, int polygon_index);
 	csString TruncateNumber(double value, int decimals);
 	csString TruncateNumber(float value, int decimals);
 	csString TruncateNumber(const char *number, int decimals);
@@ -328,6 +326,12 @@ public:
 	int ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add);
 	int FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMaterialWrapper *material);
 	void DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted_indices);
+
+	//Meshes
+	MeshObject* Buildings;
+	MeshObject* External;
+	MeshObject* Landscape;
+	MeshObject* SkyBox;
 
 private:
 

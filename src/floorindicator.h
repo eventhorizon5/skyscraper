@@ -45,8 +45,7 @@ public:
 	void Update(const char *value);
 
 private:
-	csRef<iMeshWrapper> FloorIndicatorMesh; //indicator mesh object
-	csRef<iMovable> FloorIndicator_movable;
+	MeshObject* FloorIndicatorMesh; //indicator mesh object
 };
 
 #endif

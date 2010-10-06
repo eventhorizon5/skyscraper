@@ -68,7 +68,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	buffer = "Button Panel " + buffer2 + ":" + buffer3;
 	buffer.Trim();
 	object->SetName(buffer);
-	ButtonPanelMesh = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ButtonPanelMesh = new MeshObject(object, buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//move
 	SetToElevatorAltitude();
@@ -112,14 +112,16 @@ ButtonPanel::~ButtonPanel()
 		controls[i] = 0;
 	}
 	//delete panel
+	if (ButtonPanelMesh)
+		delete ButtonPanelMesh;
+	ButtonPanelMesh = 0;
+
+	//unregister with parent floor object
 	if (sbs->FastDelete == false)
 	{
-		sbs->engine->WantToDie(ButtonPanelMesh);
-		//unregister with parent floor object
 		if (object->parent_deleting == false)
 			sbs->GetElevator(elevator)->RemovePanel(this);
 	}
-	ButtonPanelMesh = 0;
 	delete object;
 }
 
@@ -414,8 +416,8 @@ void ButtonPanel::Press(int index)
 void ButtonPanel::Move(const csVector3 &position)
 {
 	//relative movement
-	ButtonPanelMesh->GetMovable()->MovePosition(sbs->ToRemote(position));
-	ButtonPanelMesh->GetMovable()->UpdateMove();
+	ButtonPanelMesh->Movable->MovePosition(sbs->ToRemote(position));
+	ButtonPanelMesh->Movable->UpdateMove();
 
 	//move controls
 	for (int i = 0; i < controls.GetSize(); i++)
@@ -426,10 +428,10 @@ void ButtonPanel::Move(const csVector3 &position)
 
 void ButtonPanel::SetToElevatorAltitude()
 {
-	csVector3 pos = sbs->ToLocal(ButtonPanelMesh->GetMovable()->GetPosition());
+	csVector3 pos = sbs->ToLocal(ButtonPanelMesh->Movable->GetPosition());
 	csVector3 pos_new = csVector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
-	ButtonPanelMesh->GetMovable()->SetPosition(sbs->ToRemote(pos_new));
-	ButtonPanelMesh->GetMovable()->UpdateMove();
+	ButtonPanelMesh->Movable->SetPosition(sbs->ToRemote(pos_new));
+	ButtonPanelMesh->Movable->UpdateMove();
 
 	//move controls
 	for (int i = 0; i < controls.GetSize(); i++)
@@ -445,7 +447,7 @@ void ButtonPanel::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	sbs->EnableMesh(ButtonPanelMesh, value);
+	ButtonPanelMesh->Enable(value);
 
 	for (int i = 0; i < controls.GetSize(); i++)
 	{
@@ -458,7 +460,7 @@ int ButtonPanel::AddWall(const char *name, const char *texture, float thickness,
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(object, ButtonPanelMesh, ButtonPanel_submeshes, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
+	return sbs->AddWallMain(object, ButtonPanelMesh->MeshWrapper, ButtonPanelMesh->Submeshes, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
 }
 
 Control* ButtonPanel::GetControl(int index)

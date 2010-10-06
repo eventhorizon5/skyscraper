@@ -1328,22 +1328,24 @@ MeshObject::MeshObject(Object* parent, const char *name, float max_render_distan
 	Name.Insert(0, "(" + buffer + ")");
 
 	//create mesh wrapper and factory
-	MeshWrapper = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(engine, area, Name, factname);
+	MeshWrapper = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, factname);
 
 	//set zbuf mode to "USE" by default
 	MeshWrapper->SetZBufMode(CS_ZBUF_USE);
 
 	//set render priority to "object" by default
-	MeshWrapper->SetRenderPriority(engine->GetObjectRenderPriority());
+	MeshWrapper->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	//create a default material (otherwise the system complains if a mesh is used without a material)
-	MeshWrapper->GetMeshObject()->SetMaterialWrapper(engine->GetMaterialList()->FindByName("Default"));
+	MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
 	//set maximum render distance
 	if (max_render_distance > 0)
-		MeshWrapper->SetMaximumRenderDistance(ToRemote(max_render_distance));
+		MeshWrapper->SetMaximumRenderDistance(sbs->ToRemote(max_render_distance));
 
 	State = scfQueryInterface<iGeneralFactoryState>(MeshWrapper->GetFactory()->GetMeshObjectFactory());
+	Movable = MeshWrapper->GetMovable();
+
 	/*state->SetLighting(false);
 	state->SetShadowCasting(false);
 	state->SetShadowReceiving(false);
@@ -1375,7 +1377,7 @@ void MeshObject::Enable(bool value)
 	//enables or disables the mesh
 
 	if (value == enabled)
-		return false;
+		return;
 
 	if (value == true)
 	{
@@ -1390,4 +1392,47 @@ void MeshObject::Enable(bool value)
 		MeshWrapper->GetFlags().Set(CS_ENTITY_NOHITBEAM);
 	}
 	enabled = value;
+}
+
+WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
+{
+	//create a new wall object in the given array
+
+	Walls.SetSize(Walls.GetSize() + 1);
+	Walls[Walls.GetSize() - 1] = new WallObject(MeshWrapper, Submeshes);
+	Walls[Walls.GetSize() - 1]->name = name;
+	Walls[Walls.GetSize() - 1]->parent_array = &Walls;
+	Walls[Walls.GetSize() - 1]->SetValues(Walls[Walls.GetSize() - 1], parent, "Wall", name, false);
+	return Walls[Walls.GetSize() - 1];
+}
+
+iMaterialWrapper* MeshObject::ChangeTexture(const char *texture, bool matcheck)
+{
+	//changes a texture
+	//if matcheck is true, exit if old and new textures are the same
+
+	//exit if mesh pointer's invalid
+	if (!MeshWrapper)
+		return 0;
+
+	//get new material
+	csRef<iMaterialWrapper> newmat = sbs->engine->GetMaterialList()->FindByName(texture);
+
+	//exit if old and new materials are the same
+	if (matcheck == true)
+	{
+		if (MeshWrapper->GetMeshObject()->GetMaterialWrapper() == newmat)
+			return 0;
+	}
+
+	//set material if valid
+	if (newmat)
+	{
+		MeshWrapper->GetMeshObject()->SetMaterialWrapper(newmat);
+		return newmat;
+	}
+	else //otherwise report error
+		sbs->ReportError("ChangeTexture: Invalid texture '" + csString(texture) + "'");
+
+	return 0;
 }

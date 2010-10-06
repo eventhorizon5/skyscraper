@@ -45,37 +45,35 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	elev = elevator;
 	Prefix = texture_prefix;
 
-	csString buffer, buffer2;
-	buffer2 = object->GetNumber();
+	csString buffer;
 	buffer = elevator;
 	object->SetName("Floor Indicator " + buffer);
-	buffer.Insert(0, "(" + buffer2 + ")FloorIndicator ");
 	buffer.Trim();
-	FloorIndicatorMesh = sbs->CreateMesh(buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
-	FloorIndicator_movable = FloorIndicatorMesh->GetMovable();
+	FloorIndicatorMesh = new MeshObject(object, buffer, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	csString texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
 	csString tmpdirection = direction;
 	tmpdirection.Downcase();
 
 	if (tmpdirection == "front")
-		sbs->AddGenWall(FloorIndicatorMesh, texture, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
 	if (tmpdirection == "back")
-		sbs->AddGenWall(FloorIndicatorMesh, texture, CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, altitude, 1, 1);
 	if (tmpdirection == "left")
-		sbs->AddGenWall(FloorIndicatorMesh, texture, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, altitude, 1, 1);
 	if (tmpdirection == "right")
-		sbs->AddGenWall(FloorIndicatorMesh, texture, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, altitude, 1, 1);
 }
 
 FloorIndicator::~FloorIndicator()
 {
-	FloorIndicator_movable = 0;
+	if (FloorIndicatorMesh)
+		delete FloorIndicatorMesh;
+	FloorIndicatorMesh = 0;
+
+	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->engine->WantToDie(FloorIndicatorMesh);
-
-		//unregister from parent
 		if (object->parent_deleting == false)
 		{
 			if (csString(object->GetParent()->GetType()) == "Elevator")
@@ -84,7 +82,6 @@ FloorIndicator::~FloorIndicator()
 				((Floor*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
 		}
 	}
-	FloorIndicatorMesh = 0;
 	delete object;
 }
 
@@ -95,22 +92,22 @@ void FloorIndicator::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	sbs->EnableMesh(FloorIndicatorMesh, value);
+	FloorIndicatorMesh->Enable(value);
 	IsEnabled = value;
 }
 
 void FloorIndicator::SetPosition(csVector3 position)
 {
 	//set position of indicator
-	FloorIndicator_movable->SetPosition(sbs->ToRemote(position));
-	FloorIndicator_movable->UpdateMove();
+	FloorIndicatorMesh->Movable->SetPosition(sbs->ToRemote(position));
+	FloorIndicatorMesh->Movable->UpdateMove();
 }
 
 void FloorIndicator::MovePosition(csVector3 position)
 {
 	//move indicator by a relative amount
-	FloorIndicator_movable->MovePosition(sbs->ToRemote(position));
-	FloorIndicator_movable->UpdateMove();
+	FloorIndicatorMesh->Movable->MovePosition(sbs->ToRemote(position));
+	FloorIndicatorMesh->Movable->UpdateMove();
 }
 
 void FloorIndicator::Update(const char *value)
@@ -121,11 +118,11 @@ void FloorIndicator::Update(const char *value)
 	texture = value;
 	texture.Insert(0, Prefix);
 
-	sbs->ChangeTexture(FloorIndicatorMesh, texture.GetData());
+	FloorIndicatorMesh->ChangeTexture(texture);
 }
 
 csVector3 FloorIndicator::GetPosition()
 {
 	//return current position of the indicator
-	return sbs->ToLocal(FloorIndicator_movable->GetPosition());
+	return sbs->ToLocal(FloorIndicatorMesh->Movable->GetPosition());
 }

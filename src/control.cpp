@@ -55,16 +55,16 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 	current_position = 1;
 
 	//create object mesh
-	ControlMesh = sbs->CreateMesh(Name, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(object, Name, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Direction == "front")
-		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
 	if (Direction == "back")
-		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, -width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, -width, 0, height, voffset, 1, 1);
 	if (Direction == "left")
-		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, 0, -width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, 0, -width, height, voffset, 1, 1);
 	if (Direction == "right")
-		sbs->AddGenWall(ControlMesh, textures[0], 0, 0, 0, width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, 0, width, height, voffset, 1, 1);
 
 	//create sound object
 	sound = new Sound(this->object, "Control", true);
@@ -81,11 +81,13 @@ Control::~Control()
 	}
 	sound = 0;
 
+	if (ControlMesh)
+		delete ControlMesh;
+	ControlMesh = 0;
+
+	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->engine->WantToDie(ControlMesh);
-
-		//unregister from parent
 		if (object->parent_deleting == false)
 		{
 			if (csString(object->GetParent()->GetType()) == "ButtonPanel")
@@ -93,7 +95,6 @@ Control::~Control()
 		}
 	}
 
-	ControlMesh = 0;
 	delete object;
 }
 
@@ -104,22 +105,22 @@ void Control::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	sbs->EnableMesh(ControlMesh, value);
+	ControlMesh->Enable(value);
 	IsEnabled = value;
 }
 
 csVector3 Control::GetPosition()
 {
 	//return current position
-	return sbs->ToLocal(ControlMesh->GetMovable()->GetPosition());
+	return sbs->ToLocal(ControlMesh->Movable->GetPosition());
 }
 
 void Control::SetPosition(const csVector3 &position)
 {
 	//set control position
 	sound->SetPosition(position);
-	ControlMesh->GetMovable()->SetPosition(sbs->ToRemote(position));
-	ControlMesh->GetMovable()->UpdateMove();
+	ControlMesh->Movable->SetPosition(sbs->ToRemote(position));
+	ControlMesh->Movable->UpdateMove();
 }
 
 void Control::SetPositionY(float position)
@@ -133,8 +134,8 @@ void Control::SetPositionY(float position)
 void Control::Move(const csVector3 &position)
 {
 	//relative movement
-	ControlMesh->GetMovable()->MovePosition(sbs->ToRemote(position));
-	ControlMesh->GetMovable()->UpdateMove();
+	ControlMesh->Movable->MovePosition(sbs->ToRemote(position));
+	ControlMesh->Movable->UpdateMove();
 
 	//move sound
 	sound->SetPosition(GetPosition());
@@ -149,7 +150,7 @@ bool Control::SetSelectPosition(int position)
 
 	current_position = position;
 
-	if (sbs->ChangeTexture(ControlMesh, TextureArray[position - 1]))
+	if (ControlMesh->ChangeTexture(TextureArray[position - 1]))
 		return true;
 	return false;
 }

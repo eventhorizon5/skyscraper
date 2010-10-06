@@ -56,9 +56,7 @@ public:
 	csVector3 GetPosition();
 
 private:
-	csRef<iMeshWrapper> DoorMesh; //door mesh
-	csRefArray<iGeneralMeshSubMesh> Door_submeshes;
-	csRef<iMovable> DoorMesh_movable;
+	MeshObject* DoorMesh; //door mesh
 
 	//sound object
 	Sound *sound;

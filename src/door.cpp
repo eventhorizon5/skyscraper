@@ -111,10 +111,9 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = sbs->CreateMesh(Name);
-	DoorMesh_movable = DoorMesh->GetMovable();
-	DoorMesh_movable->SetPosition(sbs->ToRemote(origin));
-	DoorMesh_movable->UpdateMove();
+	DoorMesh = new MeshObject(object, Name);
+	DoorMesh->Movable->SetPosition(sbs->ToRemote(origin));
+	DoorMesh->Movable->UpdateMove();
 
 	//create sound object
 	sound = new Sound(object, "DoorSound", true);
@@ -127,7 +126,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		sbs->SetTextureFlip(0, 1, 0, 0, 0, 0); //flip texture on rear side of door
 	if (Direction == 3 || Direction == 4 || Direction == 7 || Direction == 8)
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
-	sbs->AddWallMain(object, DoorMesh, Door_submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
+	sbs->AddWallMain(object, DoorMesh->MeshWrapper, DoorMesh->Submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
 
@@ -146,12 +145,14 @@ Door::~Door()
 		delete sound;
 	}
 	sound = 0;
-	DoorMesh_movable = 0;
+
+	if (DoorMesh)
+		delete DoorMesh;
+	DoorMesh = 0;
+
+	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		sbs->engine->WantToDie(DoorMesh);
-
-		//unregister from parent
 		if (object->parent_deleting == false)
 		{
 			if (csString(object->GetParent()->GetType()) == "Elevator")
@@ -163,7 +164,6 @@ Door::~Door()
 		}
 		sbs->UnregisterDoorCallback(this);
 	}
-	DoorMesh = 0;
 	delete object;
 }
 
@@ -207,7 +207,7 @@ void Door::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	sbs->EnableMesh(DoorMesh, value);
+	DoorMesh->Enable(value);
 	IsEnabled = value;
 }
 
@@ -250,8 +250,8 @@ void Door::MoveDoor()
 
 	csMatrix3 rot = csYRotMatrix3(DegreesToRadians(rotation));
 	csOrthoTransform ot (rot, sbs->ToRemote(origin));
-	DoorMesh_movable->SetTransform(ot);
-	DoorMesh_movable->UpdateMove();
+	DoorMesh->Movable->SetTransform(ot);
+	DoorMesh->Movable->UpdateMove();
 }
 
 void Door::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
@@ -262,17 +262,17 @@ void Door::Move(const csVector3 position, bool relative_x, bool relative_y, bool
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(position.x);
 	else
-		pos.x = DoorMesh_movable->GetPosition().x + sbs->ToRemote(position.x);
+		pos.x = DoorMesh->Movable->GetPosition().x + sbs->ToRemote(position.x);
 	if (relative_y == false)
 		pos.y = sbs->ToRemote(position.y);
 	else
-		pos.y = DoorMesh_movable->GetPosition().y + sbs->ToRemote(position.y);
+		pos.y = DoorMesh->Movable->GetPosition().y + sbs->ToRemote(position.y);
 	if (relative_z == false)
 		pos.z = sbs->ToRemote(position.z);
 	else
-		pos.z = DoorMesh_movable->GetPosition().z + sbs->ToRemote(position.z);
-	DoorMesh_movable->SetPosition(pos);
-	DoorMesh_movable->UpdateMove();
+		pos.z = DoorMesh->Movable->GetPosition().z + sbs->ToRemote(position.z);
+	DoorMesh->Movable->SetPosition(pos);
+	DoorMesh->Movable->UpdateMove();
 	origin = GetPosition();
 
 }
@@ -281,5 +281,5 @@ csVector3 Door::GetPosition()
 {
 	//return the door's position
 
-	return sbs->ToLocal(DoorMesh_movable->GetPosition());
+	return sbs->ToLocal(DoorMesh->Movable->GetPosition());
 }

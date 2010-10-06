@@ -122,10 +122,7 @@ public:
 	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 
-	csRef<iMeshWrapper> ElevatorMesh; //elevator mesh object
-		csRefArray<iGeneralMeshSubMesh> Elevator_submeshes;
-		csRef<iGeneralFactoryState> Elevator_state;
-		csRef<iMovable> Elevator_movable;
+	MeshObject* ElevatorMesh; //elevator mesh object
 
 	//functions
 	Elevator(int number);

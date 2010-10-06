@@ -59,7 +59,7 @@ public:
 	int FindActionPosition(const char *name);
 
 private:
-	csRef<iMeshWrapper> ControlMesh; //control mesh object
+	MeshObject* ControlMesh; //control mesh object
 	int current_position; //current control position
 	csArray<csString> TextureArray; //selection texture array
 	csArray<csString> Actions; //button actions

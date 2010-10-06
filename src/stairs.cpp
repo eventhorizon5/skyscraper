@@ -52,15 +52,13 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	lastcheckresult = false;
 	checkfirstrun = true;
 
-	csString buffer, buffer2, buffer3, buffer4;
+	csString buffer, buffer2, buffer3;
 
 	buffer = number;
 	object->SetName("Stairwell " + buffer);
 
 	StairArray.SetSize(endfloor - startfloor + 1);
 	EnableArray.SetSize(endfloor - startfloor + 1);
-	stairs_walls.SetSize(endfloor - startfloor + 1);
-	stairs_submeshes.SetSize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -68,12 +66,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		buffer2 = number;
 		buffer3 = i;
 		buffer = "Stairwell " + buffer2 + ":" + buffer3;
-		buffer4 = object->GetNumber();
-		buffer.Insert(0, "(" + buffer4 + ")");
 		buffer.Trim();
-		csRef<iMeshWrapper> tmpmesh;
-		tmpmesh = sbs->CreateMesh(buffer);
-		StairArray[i - startfloor] = tmpmesh;
+		StairArray[i - startfloor] = new MeshObject(object, buffer);
 		EnableArray[i - startfloor] = true;
 	}
 }
@@ -103,31 +97,17 @@ Stairs::~Stairs()
 	}
 	DoorArray.DeleteAll();
 
-	//delete wall objects
-	for (int i = 0; i < stairs_walls.GetSize(); i++)
-	{
-		for (int j = 0; j < stairs_walls[i].GetSize(); j++)
-		{
-			if (stairs_walls[i][j])
-			{
-				stairs_walls[i][j]->parent_deleting = true;
-				delete stairs_walls[i][j];
-			}
-			stairs_walls[i][j] = 0;
-		}
-	}
-
 	//delete mesh array objects
 	for (int i = 0; i < StairArray.GetSize(); i++)
 	{
-		if (sbs->FastDelete == false)
-			sbs->engine->WantToDie(StairArray[i]);
+		if (StairArray[i])
+			delete StairArray[i];
 		StairArray[i] = 0;
 	}
 	for (int i = 0; i < StairDoorArray.GetSize(); i++)
 	{
-		if (sbs->FastDelete == false)
-			sbs->engine->WantToDie(StairDoorArray[i]);
+		if (StairDoorArray[i])
+			delete StairDoorArray[i];
 		StairDoorArray[i] = 0;
 	}
 	StairArray.DeleteAll();
@@ -153,7 +133,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	}
 
 	//create wall object
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
 
 	csString buffer, buffer2, buffer3;
 	csString Direction = direction;
@@ -187,12 +167,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.GetData(), texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.GetData(), texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 		if (Direction == "left")
@@ -203,12 +183,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.GetData(), texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.GetData(), texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 		if (Direction == "back")
@@ -219,12 +199,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.GetData(), texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.GetData(), texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 		if (Direction == "front")
@@ -235,12 +215,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.GetData(), texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.GetData(), texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 	}
@@ -259,7 +239,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 		return 0;
 	}
 
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -278,7 +258,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 		return 0;
 	}
 
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -294,7 +274,7 @@ void Stairs::Enabled(int floor, bool value)
 
 	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
 	{
-		sbs->EnableMesh(StairArray[floor - startfloor], value);
+		GetMeshObject(floor)->Enable(value);
 		EnableArray[floor - startfloor] = value;
 
 		//enable/disable door
@@ -345,10 +325,10 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 		csVector3 endposition;
 		endposition.Set(position.x, position.y - floorptr->FullHeight(), position.z);
 		if (floor > startfloor)
-			hit = StairArray[(floor - 1) - startfloor]->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
+			hit = GetMeshObject(floor - 1)->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
 		if (floor >= startfloor && floor <= endfloor)
 		{
-			hittmp = StairArray[floor - startfloor]->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
+			hittmp = GetMeshObject(floor)->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
 			if (hittmp == true)
 				hit = true;
 		}
@@ -405,7 +385,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	}
 
 	//create doorway walls
-	WallObject *wall = sbs->CreateWallObject(stairs_walls[floor - startfloor], StairArray[floor - startfloor], stairs_submeshes[floor - startfloor], object, "Connection Walls");
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, "Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.SetSize(DoorArray.GetSize() + 1);
@@ -448,12 +428,12 @@ void Stairs::CutFloors(bool relative, const csVector2 &start, const csVector2 &e
 	//cut external
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight() + endvoffset;
-	for (int i = 0; i < sbs->External_walls.GetSize(); i++)
+	for (int i = 0; i < sbs->External->Walls.GetSize(); i++)
 	{
 		if (relative == true)
-			sbs->Cut(sbs->External_walls[i], csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
 		else
-			sbs->Cut(sbs->External_walls[i], csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
 	}
 }
 
@@ -472,16 +452,16 @@ bool Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csV
 
 	float base = sbs->GetFloor(floor)->GetBase();
 
-	for (int i = 0; i < stairs_walls[floor - startfloor].GetSize(); i++)
+	for (int i = 0; i < GetMeshObject(floor)->Walls.GetSize(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(stairs_walls[floor - startfloor][i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 		else
-			sbs->Cut(stairs_walls[floor - startfloor][i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 	}
 
 	return true;
@@ -645,4 +625,14 @@ Light* Stairs::AddLight(int floor, const char *name, int type, csVector3 positio
 	Light* light = new Light(name, type, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, dynamic_color, movable);
 	lights[floor - startfloor].Push(light);
 	return light;
+}
+
+MeshObject* Stairs::GetMeshObject(int floor)
+{
+	//returns the mesh object for the specified floor
+
+	if (!IsValidFloor(floor))
+		return 0;
+
+	return StairArray[floor - startfloor];
 }

@@ -160,7 +160,6 @@ SBS::SBS()
 	DefaultMapper = 0;
 	ObjectCount = 0;
 	FastDelete = false;
-	Skybox_object = 0;
 	WallCount = 0;
 	PolygonCount = 0;
 }
@@ -236,36 +235,24 @@ SBS::~SBS()
 	sounds.DeleteAll();
 
 	//delete wall objects
-	for (int i = 0; i < Buildings_walls.GetSize(); i++)
-	{
-		if (Buildings_walls[i])
-			delete Buildings_walls[i];
-		Buildings_walls[i] = 0;
-	}
-	for (int i = 0; i < External_walls.GetSize(); i++)
-	{
-		if (External_walls[i])
-			delete External_walls[i];
-		External_walls[i] = 0;
-	}
-	for (int i = 0; i < Landscape_walls.GetSize(); i++)
-	{
-		if (Landscape_walls[i])
-			delete Landscape_walls[i];
-		Landscape_walls[i] = 0;
-	}
-
+	if (SkyBox)
+		delete SkyBox;
 	SkyBox = 0;
+
+	if (Landscape)
+		delete Landscape;
 	Landscape = 0;
+
+	if (External)
+		delete External;
 	External = 0;
+
+	if (Buildings)
+		delete Buildings;
 	Buildings = 0;
 
 	//remove referenced sounds
 	sndmanager->RemoveSounds();
-
-	if (Skybox_object)
-		delete Skybox_object;
-	delete object;
 
 	//remove all engine objects
 	Report("Deleting CS engine objects...");
@@ -1526,9 +1513,9 @@ int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *te
 void SBS::InitMeshes()
 {
 	//create object meshes
-	Buildings = CreateMesh("Buildings");
-	External = CreateMesh("External");
-	Landscape = CreateMesh("Landscape");
+	Buildings = new MeshObject(this->object, "Buildings");
+	External = new MeshObject(this->object, "External");
+	Landscape = new MeshObject(this->object, "Landscape");
 }
 
 int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
@@ -1615,38 +1602,34 @@ int SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *t
 void SBS::EnableBuildings(bool value)
 {
 	//turns buildings on/off
-	EnableMesh(Buildings, value);
+	Buildings->Enable(value);
 	IsBuildingsEnabled = value;
 }
 
 void SBS::EnableLandscape(bool value)
 {
 	//turns landscape on/off
-	EnableMesh(Landscape, value);
+	Landscape->Enable(value);
 	IsLandscapeEnabled = value;
 }
 
 void SBS::EnableExternal(bool value)
 {
 	//turns external on/off
-	EnableMesh(External, value);
+	External->Enable(value);
 	IsExternalEnabled = value;
 }
 
 void SBS::EnableSkybox(bool value)
 {
 	//turns skybox on/off
-	EnableMesh(SkyBox, value);
+	SkyBox->Enable(value);
 	IsSkyboxEnabled = value;
 }
 
-int SBS::CreateSky(const char *filenamebase)
+void SBS::CreateSky(const char *filenamebase)
 {
 	//create skybox
-
-	//set up SBS object
-	Skybox_object = new Object();
-	Skybox_object->SetValues(0, this->object, "Skybox", "Skybox", false);
 
 	csString file = filenamebase;
 	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
@@ -1659,18 +1642,16 @@ int SBS::CreateSky(const char *filenamebase)
 	LoadTexture("/root/sky/front.jpg", "SkyFront", 1, 1);
 	LoadTexture("/root/sky/back.jpg", "SkyBack", 1, 1);
 
-	SkyBox = CreateMesh("SkyBox");
-	SkyBox->SetZBufMode(CS_ZBUF_NONE);
-	SkyBox->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
+	SkyBox = new MeshObject(this->object, "SkyBox");
+	SkyBox->MeshWrapper->SetZBufMode(CS_ZBUF_NONE);
+	SkyBox->MeshWrapper->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = confman->GetInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
 	sbs->ResetTextureMapping(true);
-	WallObject *wall = new WallObject(SkyBox, Skybox_submeshes, object, true);
+	WallObject *wall = new WallObject(SkyBox->MeshWrapper, SkyBox->Submeshes, SkyBox->object, true);
 
 	csBox3 box (csVector3(-skysize, -skysize, -skysize), csVector3(skysize, skysize, skysize));
-	//int firstidx = wall->AddQuad( //front
-	int firstidx = 0;
 	wall->AddQuad( //front
 		"SkyFront",
 		"SkyFront",
@@ -1716,8 +1697,6 @@ int SBS::CreateSky(const char *filenamebase)
 
 	sbs->ResetTextureMapping();
 	delete wall;
-
-	return firstidx;
 }
 
 int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
@@ -1875,37 +1854,6 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	StairsArray[StairsArray.GetSize() - 1].number = number;
 	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
 	return StairsArray[StairsArray.GetSize() - 1].object->object;
-}
-
-iMaterialWrapper* SBS::ChangeTexture(iMeshWrapper *mesh, const char *texture, bool matcheck)
-{
-	//changes a texture
-	//if matcheck is true, exit if old and new textures are the same
-
-	//exit if mesh pointer's invalid
-	if (!mesh)
-		return 0;
-
-	//get new material
-	csRef<iMaterialWrapper> newmat = engine->GetMaterialList()->FindByName(texture);
-
-	//exit if old and new materials are the same
-	if (matcheck == true)
-	{
-		if (mesh->GetMeshObject()->GetMaterialWrapper() == newmat)
-			return 0;
-	}
-
-	//set material if valid
-	if (newmat)
-	{
-		mesh->GetMeshObject()->SetMaterialWrapper(newmat);
-		return newmat;
-	}
-	else //otherwise report error
-		ReportError("ChangeTexture: Invalid texture '" + csString(texture) + "'");
-
-	return 0;
 }
 
 bool SBS::NewElevator(int number)
@@ -2708,11 +2656,11 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 
 	WallObject *wall;
 	if (mesh.CompareNoCase("external") == true)
-		wall = CreateWallObject(External_walls, External, External_submeshes, this->object, name);
+		wall = External->CreateWallObject(this->object, name);
 	if (mesh.CompareNoCase("buildings") == true)
-		wall = CreateWallObject(Buildings_walls, Buildings, Buildings_submeshes, this->object, name);
+		wall = Buildings->CreateWallObject(this->object, name);
 	if (mesh.CompareNoCase("landscape") == true)
-		wall = CreateWallObject(Landscape_walls, Landscape, Landscape_submeshes, this->object, name);
+		wall = Landscape->CreateWallObject(this->object, name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
 	return wall;
@@ -2729,11 +2677,11 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 
 	WallObject *wall;
 	if (mesh.CompareNoCase("external") == true)
-		wall = CreateWallObject(External_walls, External, External_submeshes, this->object, name);
+		wall = External->CreateWallObject(this->object, name);
 	if (mesh.CompareNoCase("buildings") == true)
-		wall = CreateWallObject(Buildings_walls, Buildings, Buildings_submeshes, this->object, name);
+		wall = Buildings->CreateWallObject(this->object, name);
 	if (mesh.CompareNoCase("landscape") == true)
-		wall = CreateWallObject(Landscape_walls, Landscape, Landscape_submeshes, this->object, name);
+		wall = Landscape->CreateWallObject(this->object, name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, true);
 	return wall;
@@ -2770,7 +2718,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 		maxz = z1;
 	}
 
-	WallObject *wall = CreateWallObject(Landscape_walls, Landscape, Landscape_submeshes, this->object, name);
+	WallObject *wall = Landscape->CreateWallObject(this->object, name);
 
 	//create polygon tiles
 	for (float i = minx; i < maxx; i += tile_x)
@@ -3362,31 +3310,19 @@ csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, cs
 	return csVector2(tw2, th2);
 }
 
-WallObject* SBS::CreateWallObject(csArray<WallObject*> &array, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *parent, const char *name)
-{
-	//create a new polygon object in the given array
-
-	array.SetSize(array.GetSize() + 1);
-	array[array.GetSize() - 1] = new WallObject(mesh, submeshes);
-	array[array.GetSize() - 1]->name = name;
-	array[array.GetSize() - 1]->parent_array = &array;
-	array[array.GetSize() - 1]->SetValues(array[array.GetSize() - 1], parent, "Wall", name, false);
-	return array[array.GetSize() - 1];
-}
-
-WallObject* SBS::GetWallObject(csArray<WallObject*> &wallarray, int polygon_index)
+/*WallObject* SBS::GetWallObject(csArray<WallObject*> &wallarray, int polygon_index)
 {
 	//returns the wall object that contains the specified polygon index
-	/*for (int i = 0; i < wallarray.GetSize(); i++)
+	for (int i = 0; i < wallarray.GetSize(); i++)
 	{
 		for (int j = 0; j < wallarray[i]->handles.GetSize(); j++)
 		{
 			if (wallarray[i]->handles[j] == polygon_index)
 				return wallarray[i];
 		}
-	}*/
+	}
 	return 0;
-}
+}*/
 
 csString SBS::TruncateNumber(double value, int decimals)
 {

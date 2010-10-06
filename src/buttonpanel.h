@@ -64,8 +64,7 @@ public:
 	void RemoveControl(Control *control);
 
 private:
-	csRef<iMeshWrapper> ButtonPanelMesh; //button panel mesh object
-	csRefArray<iGeneralMeshSubMesh> ButtonPanel_submeshes;
+	MeshObject* ButtonPanelMesh; //button panel mesh object
 
 	csArray<Control*> controls; //control objects
 
