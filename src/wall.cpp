@@ -265,3 +265,19 @@ void WallObject::SetPolygonName(int index, const char *name)
         //set polygon name
         handles[index].name = newname;
 }
+
+bool WallObject::IsPointOnWall(const csVector3 &point)
+{
+	//check through polygons to see if the specified point is on this wall object
+
+	bool checkplane = false;
+	for (int i = 0; i < handles.GetSize(); i++)
+	{
+		if (i == 0)
+			checkplane = true;
+		bool check = handles[i].PointInside(meshwrapper, point, checkplane);
+		if (check == true)
+			return true;
+	}
+	return false;
+}

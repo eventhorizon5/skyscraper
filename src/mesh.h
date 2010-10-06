@@ -39,6 +39,7 @@ public:
 	void Enable(bool value);
 	WallObject* CreateWallObject(Object *parent, const char *name);
 	iMaterialWrapper* ChangeTexture(const char *texture, bool matcheck = true);
+	int FindWall(const csVector3 &point);
 	
 	csRef<iMeshWrapper> MeshWrapper; //building mesh
 	csRef<iGeneralFactoryState> State; //factory state
@@ -72,7 +73,7 @@ public:
 	void GetTextureMapping(csMatrix3 &t_matrix, csVector3 &t_vector);
 	iGeneralMeshSubMesh* GetSubMesh();
 	void GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<CS::Geometry::csContour3> &vertices, bool firstonly);
-	bool PointInside(csRef<iMeshWrapper> meshwrapper, csVector3 point, bool plane_check = true);
+	bool PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &point, bool plane_check = true);
 };
 
 #endif

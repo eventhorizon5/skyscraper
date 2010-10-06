@@ -3697,3 +3697,24 @@ Light* SBS::AddLight(const char *name, int type, csVector3 position, csVector3 d
 	lights.Push(light);
 	return light;
 }
+
+void SBS::AddMeshHandle(MeshObject* handle)
+{
+	meshes.Push(handle);
+}
+
+void SBS::DeleteMeshHandle(MeshObject* handle)
+{
+	meshes.Delete(handle);
+}
+
+MeshObject* SBS::FindMeshObject(csRef<iMeshWrapper> meshwrapper)
+{
+	//find a mesh object by searching for matching wrapper
+	for (int i = 0; i < meshes.GetSize(); i++)
+	{
+		if (meshes[i]->MeshWrapper == meshwrapper)
+			return meshes[i];
+	}
+	return 0;
+}

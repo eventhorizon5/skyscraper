@@ -1280,13 +1280,14 @@ void WallPolygon::GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<CS::Geome
 	}
 }
 
-bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, csVector3 point, bool plane_check)
+bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &point, bool plane_check)
 {
 	//check if point is on the polygon's plane
 	if (plane_check == true)
 	{
 		float dot = plane.D() + plane.A() * point.x + plane.B() * point.y + plane.C() * point.z;
-		if (ABS(dot) >= EPSILON) return false;
+		if (ABS(dot) >= EPSILON)
+			return false;
 	}
 
 	//get original geometry
@@ -1294,21 +1295,25 @@ bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, csVector3 point, 
 	GetGeometry(meshwrapper, vertices, false);
 
 	//check if the point is on the same side of all polygon edges
-	/*int i, i1;
-	bool neg = false, pos = false;
-	i1 = polygon_data.num_vertices - 1;
-	for (i = 0; i < polygon_data.num_vertices; i++)
+	for (int j = 0; j < vertices.GetSize(); j++)
 	{
-	float ar = csMath3::Direction3 (v, Vobj (i1), Vobj (i));
-	if (ar < 0)
-	  neg = true;
-	else if (ar > 0)
-	  pos = true;
-	if (neg && pos) return false;
-	i1 = i;
-	}*/
-
-	return true;
+		int i, i1;
+		bool neg = false, pos = false;
+		i1 = vertices[j].GetSize() - 1;
+		for (i = 0; i < vertices[j].GetSize(); i++)
+		{
+			float direction = csMath3::Direction3(point, vertices[j][i1], vertices[j][i]);
+			if (direction < 0)
+				neg = true;
+			else if (direction > 0)
+				pos = true;
+			if (neg && pos)
+				return false;
+			i1 = i;
+		}
+		return true;
+	}
+	return false;
 }
 
 MeshObject::MeshObject(Object* parent, const char *name, float max_render_distance)
@@ -1346,6 +1351,8 @@ MeshObject::MeshObject(Object* parent, const char *name, float max_render_distan
 	State = scfQueryInterface<iGeneralFactoryState>(MeshWrapper->GetFactory()->GetMeshObjectFactory());
 	Movable = MeshWrapper->GetMovable();
 
+	sbs->AddMeshHandle(this);
+
 	/*state->SetLighting(false);
 	state->SetShadowCasting(false);
 	state->SetShadowReceiving(false);
@@ -1366,7 +1373,10 @@ MeshObject::~MeshObject()
 	}
 
 	if (sbs->FastDelete == false)
+	{
+		sbs->DeleteMeshHandle(this);
 		sbs->engine->WantToDie(MeshWrapper);
+	}
 
 	MeshWrapper = 0;
 	delete object;
@@ -1435,4 +1445,16 @@ iMaterialWrapper* MeshObject::ChangeTexture(const char *texture, bool matcheck)
 		sbs->ReportError("ChangeTexture: Invalid texture '" + csString(texture) + "'");
 
 	return 0;
+}
+
+int MeshObject::FindWall(const csVector3 &point)
+{
+	//find a wall from a 3D point
+
+	for (int i = 0; i < Walls.GetSize(); i++)
+	{
+		if (Walls[i]->IsPointOnWall(point) == true)
+			return i;
+	}
+	return -1;
 }

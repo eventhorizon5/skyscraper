@@ -471,11 +471,18 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	HitPosition = sbs->ToLocal(result.isect);
 
 	//get wall name
-	iGeneralMeshSubMesh* submesh = 0;
-	/*csRef<iGeneralMeshSubMesh> submesh = sbs->FindSubMesh(result.mesh, result.polygon_idx);
-	if (submesh)
-		polyname = submesh->GetName();
-	else*/
+	WallObject* wall = 0;
+	MeshObject* meshobject = sbs->FindMeshObject(result.mesh);
+	if (!meshobject)
+		return;
+
+	int num = meshobject->FindWall(result.isect);
+	if (num > -1)
+		wall = meshobject->Walls[num];
+
+	if (wall)
+		polyname = wall->GetName();
+	else
 		polyname = "";
 
 	//get object number
@@ -506,13 +513,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//show result
-	if (submesh)
+	if (wall)
 		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
 	else
 		sbs->Report("Clicked on object " + number + ": " + meshname);
 
-	//delete object if ctrl is pressed
-	if (submesh && ctrl == true && object_number > 0)
+	//delete wall if ctrl is pressed
+	if (wall && ctrl == true && object_number > 0)
 	{
 		if (obj)
 		{

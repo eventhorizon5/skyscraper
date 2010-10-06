@@ -307,8 +307,11 @@ public:
 	int GetPolygonCount();
 	void AddLightHandle(Light* handle);
 	void DeleteLightHandle(Light* handle);
+	void AddMeshHandle(MeshObject* handle);
+	void DeleteMeshHandle(MeshObject* handle);
 	void Prepare();
 	Light* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
+	MeshObject* FindMeshObject(csRef<iMeshWrapper> meshwrapper);
 
 	void DumpVertices(WallObject* wallobject);
 	csVector2 GetExtents(csPoly3D &varray, int coord);
@@ -449,6 +452,9 @@ private:
 	//generic sound objects
 	csArray<Sound*> sounds;
 	int soundcount;
+
+	//meshes
+	csArray<MeshObject*> meshes;
 
 	int ObjectCount; //number of simulator objects
 };
