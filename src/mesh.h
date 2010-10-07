@@ -73,6 +73,7 @@ public:
 	void GetTextureMapping(csMatrix3 &t_matrix, csVector3 &t_vector);
 	iGeneralMeshSubMesh* GetSubMesh();
 	void GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<CS::Geometry::csContour3> &vertices, bool firstonly);
+	void GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<csPoly3D> &vertices, bool firstonly);
 	bool PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &point, bool plane_check = true);
 };
 

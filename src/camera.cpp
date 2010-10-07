@@ -488,10 +488,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//get object number
 	csString number;
 	object_number = 0;
-	if (polyname.Find("(") == 0)
+	if (wall)
 	{
+		object_number = wall->GetNumber();
 		int index = polyname.Find(")");
-		object_number = atoi(polyname.Slice(1, index - 1));
 		polyname.DeleteAt(0, index + 1);
 	}
 	if (meshname.Find("(") == 0)

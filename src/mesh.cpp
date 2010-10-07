@@ -1280,39 +1280,37 @@ void WallPolygon::GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<CS::Geome
 	}
 }
 
+void WallPolygon::GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<csPoly3D> &vertices, bool firstonly)
+{
+	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
+
+	vertices.SetSize(index_extents.GetSize());
+	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(meshwrapper->GetFactory()->GetMeshObjectFactory());
+
+	for (int i = 0; i < index_extents.GetSize(); i++)
+	{
+		int min = index_extents[i].x;
+		int max = index_extents[i].y;
+		for (int j = min; j <= max; j++)
+			vertices[i].AddVertex(sbs->ToLocal(state->GetVertices()[j]));
+		if (firstonly == true)
+			return;
+	}
+}
+
 bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &point, bool plane_check)
 {
-	//check if point is on the polygon's plane
-	if (plane_check == true)
-	{
-		float dot = plane.D() + plane.A() * point.x + plane.B() * point.y + plane.C() * point.z;
-		if (ABS(dot) >= EPSILON)
-			return false;
-	}
+	//check if a point is inside the polygon
 
-	//get original geometry
-	csArray<CS::Geometry::csContour3> vertices;
+	csArray<csPoly3D> vertices;
 	GetGeometry(meshwrapper, vertices, false);
 
-	//check if the point is on the same side of all polygon edges
-	for (int j = 0; j < vertices.GetSize(); j++)
+	for (int i = 0; i < vertices.GetSize(); i++)
 	{
-		int i, i1;
-		bool neg = false, pos = false;
-		i1 = vertices[j].GetSize() - 1;
-		for (i = 0; i < vertices[j].GetSize(); i++)
-		{
-			float direction = csMath3::Direction3(point, vertices[j][i1], vertices[j][i]);
-			if (direction < 0)
-				neg = true;
-			else if (direction > 0)
-				pos = true;
-			if (neg && pos)
-				return false;
-			i1 = i;
-		}
-		return true;
+		if (vertices[i].In(point))
+			return true;
 	}
+
 	return false;
 }
 
