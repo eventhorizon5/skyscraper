@@ -93,8 +93,10 @@ void Light::Prepare()
 	//prepare light for use
 	//this only needs to be done for dynamic lights
 
+#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
 	if (light->GetDynamicType() == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
 		light->Setup();
+#endif
 }
 
 void Light::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
