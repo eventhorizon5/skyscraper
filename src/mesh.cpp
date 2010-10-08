@@ -655,11 +655,11 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 		csRef<iStringSet> strset = csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset");
 		csRef<iShaderManager> shadermgr = csQueryRegistry<iShaderManager> (object_reg);
 		iMaterial* mat = material->GetMaterial();
-		csStringID t = strset->Request("ambient");
-		iShader* sh = shadermgr->GetShader("ambient");
-		mat->SetShader(t, sh);
-		t = strset->Request("diffuse");
-		sh = shadermgr->GetShader("light");
+		//csStringID t = strset->Request("ambient");
+		csStringID t = strset->Request("diffuse");
+		//iShader* sh = shadermgr->GetShader("fullbright");
+		//iShader* sh = shadermgr->GetShader("ambient");
+		iShader* sh = shadermgr->GetShader("light");
 		mat->SetShader(t, sh);
 	}
 
@@ -1359,15 +1359,15 @@ MeshObject::MeshObject(Object* parent, const char *name, float max_render_distan
 	if (max_render_distance > 0)
 		MeshWrapper->SetMaximumRenderDistance(sbs->ToRemote(max_render_distance));
 
-	State = scfQueryInterface<iGeneralFactoryState>(MeshWrapper->GetFactory()->GetMeshObjectFactory());
+	State = scfQueryInterface<iGeneralFactoryState> (MeshWrapper->GetFactory()->GetMeshObjectFactory());
 	Movable = MeshWrapper->GetMovable();
 
 	sbs->AddMeshHandle(this);
 
-	/*state->SetLighting(false);
-	state->SetShadowCasting(false);
-	state->SetShadowReceiving(false);
-	state->SetManualColors(false);*/
+	//State->SetLighting(false);
+	//State->SetShadowCasting(false);
+	State->SetShadowReceiving(true);
+	//State->SetManualColors(false);
 }
 
 MeshObject::~MeshObject()
