@@ -162,6 +162,7 @@ SBS::SBS()
 	FastDelete = false;
 	WallCount = 0;
 	PolygonCount = 0;
+	Shaders = false;
 }
 
 SBS::~SBS()

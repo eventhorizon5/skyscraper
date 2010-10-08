@@ -35,6 +35,7 @@ public:
 
 	csString Name;
 	int Type;
+	csVector3 Origin;
 
 	//functions
 	Light(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);

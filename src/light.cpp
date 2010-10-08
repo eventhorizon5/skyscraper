@@ -48,6 +48,7 @@ Light::Light(const char *name, int type, csVector3 position, csVector3 direction
 	
 	Type = type;
 	Name = name;
+	Origin = position;
 
 	csLightDynamicType light_type = CS_LIGHT_DYNAMICTYPE_STATIC;
 	if (dynamic_color == true)
@@ -106,18 +107,18 @@ void Light::Move(const csVector3 position, bool relative_x, bool relative_y, boo
 	{
 		csVector3 pos;
 		if (relative_x == false)
-			pos.x = sbs->ToRemote(position.x);
+			pos.x = sbs->ToRemote(Origin.x + position.x);
 		else
 			pos.x = light->GetCenter().x + sbs->ToRemote(position.x);
 		if (relative_y == false)
-			pos.y = sbs->ToRemote(position.y);
+			pos.y = sbs->ToRemote(Origin.y + position.y);
 		else
 			pos.y = light->GetCenter().y + sbs->ToRemote(position.y);
 		if (relative_z == false)
-			pos.z = sbs->ToRemote(position.z);
+			pos.z = sbs->ToRemote(Origin.z + position.z);
 		else
 			pos.z = light->GetCenter().z + sbs->ToRemote(position.z);
-		light->SetCenter(pos);
+		light->GetMovable()->SetPosition(pos);
 		Prepare();
 	}
 }

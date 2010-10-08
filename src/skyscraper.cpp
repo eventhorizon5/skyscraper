@@ -97,6 +97,7 @@ bool Skyscraper::OnInit(void)
 	Shutdown = false;
 	PositionOverride = false;
 	Reload = false;
+	Shaders = false;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -463,6 +464,7 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		ReportError("Failed to locate sound manager");
 		DisableSound = true;
 	}
+
 #if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
 	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
 #endif
@@ -498,9 +500,36 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 
 	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 
+	csString renderLoop;
+	if (confman->GetBool("Skyscraper.Frontend.Shaders", false) == true)
+	{
+		renderLoop = "diffuse";
+		Shaders = true;
+	}
+	if (confman->GetBool("Skyscraper.Frontend.ShaderShadows", false) == true && Shaders == true)
+		renderLoop = "shadowed";
+
 	// Open the main system. This will open all the previously loaded plug-ins.
 	if (!csInitializer::OpenApplication (object_reg))
 		return ReportError ("Error opening system!");
+
+	shaderman = csQueryRegistry<iShaderManager> (object_reg);
+	if (!shaderman)	return ReportError("Failed to locate shader manager");
+
+	if (!loader->LoadShader("/shader/light.xml"))
+		return false;
+	if (!loader->LoadShader("/shader/light_bumpmap.xml"))
+		return false;
+	if (!loader->LoadShader("/shader/ambient.xml"))
+		return false;
+	//if (!loader->LoadShader("/shader/reflectsphere.xml"))
+		//return false;
+	//if (!loader->LoadShader("/shader/parallax/parallax.xml"))
+		//return false;
+	//if (!loader->LoadShader("/shader/parallaxAtt/parallaxAtt.xml"))
+		//return false;
+	//if (!loader->LoadShader("/shader/specular/light_spec_bumpmap.xml"))
+		//return false;
 
 	//initialize frame printer
 	printer.AttachNew(new FramePrinter(object_reg));
@@ -521,6 +550,18 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	canvas->SetSize(canvas_width, canvas_height);
 #endif
 
+	if (!renderLoop.IsEmpty ())
+	{
+		iRenderLoopManager* rloopmgr = engine->GetRenderLoopManager();
+		csString rl = "/shader/std_rloop_";
+		rl += renderLoop;
+		rl += ".xml";
+		csRef<iRenderLoop> rloop = rloopmgr->Load(rl);
+		if (!rloop)
+			return ReportError("Bad renderloop '%s'", (const char*)renderLoop);
+		if (!engine->SetCurrentDefaultRenderloop (rloop))
+			return ReportError ("Couldn't set renderloop in engine!");
+	}
 	return true;
 }
 
@@ -1149,6 +1190,7 @@ bool Skyscraper::Start()
 
 	//initialize SBS
 	Simcore->Initialize(iSCF::SCF, object_reg, view, root_dir, dir_char);
+	Simcore->Shaders = Shaders;
 
 	//load building data file
 	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");

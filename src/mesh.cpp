@@ -650,6 +650,19 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	if (th == 0)
 		th = 1;
 
+	if (Shaders == true)
+	{
+		csRef<iStringSet> strset = csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset");
+		csRef<iShaderManager> shadermgr = csQueryRegistry<iShaderManager> (object_reg);
+		iMaterial* mat = material->GetMaterial();
+		csStringID t = strset->Request("ambient");
+		iShader* sh = shadermgr->GetShader("ambient");
+		mat->SetShader(t, sh);
+		t = strset->Request("diffuse");
+		sh = shadermgr->GetShader("light");
+		mat->SetShader(t, sh);
+	}
+
 	//get autosize information
 	csVector2 xextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 1);
 	csVector2 yextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 2);
@@ -769,8 +782,8 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 			mesh_normals[k].Normalize();
 			mesh_texels[k] = mapper.Map(mesh_vertices[k], mesh_normals[k], k);
 
-			state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
-			//state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(0, 0, 0)); //for lighted
+			//state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
+			state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(0, 0, 0)); //for lighted
 
 			int a = k - 1;
 			if (a == -1)

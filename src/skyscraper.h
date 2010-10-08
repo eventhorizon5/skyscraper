@@ -70,6 +70,7 @@ public:
 	csRef<iImage> image;
 	csRef<iConfigManager> confman;
 	csRef<iWxWindow> wxwin;
+	csRef<iShaderManager> shaderman;
 
 	//sound system
 	csRef<iSndSysRenderer> sndrenderer;
@@ -95,6 +96,7 @@ public:
 	bool PositionOverride;
 	csVector3 override_position;
 	csVector3 override_rotation;
+	bool Shaders;
 
 	csTicks elapsed_time, current_time;
 

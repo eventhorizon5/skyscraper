@@ -173,6 +173,7 @@ public:
 	csString LastNotification; //most recent notification message, from Report()
 	int WallCount; //wall object count
 	int PolygonCount; //wall polygon object count
+	bool Shaders; //true if shaders are enabled
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

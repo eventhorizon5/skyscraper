@@ -172,9 +172,6 @@ Elevator::Elevator(int number)
 	object->SetName(buffer);
 	ElevatorMesh = new MeshObject(object, buffer);
 
-	//create test light
-	//AddLight("test", 1, csVector3(0, 5, 0), csVector3(0, 0, 1), 0, 10, 255, 0, 0, 255, 0, 0, 0, 0, 0);
-
 	if (sbs->Verbose)
 		Report("elevator object created");
 }
@@ -525,6 +522,9 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	//set elevator's floor
 	ElevatorFloor = floor;
+
+	//create test light
+	AddLight("test", 1, csVector3(0, 5, 0), csVector3(0, 0, 1), 0, 10, 255, 0, 0, 255, 0, 0, 0, 0, 0);
 
 	Created = true;
 
@@ -4126,7 +4126,7 @@ Light* Elevator::AddLight(const char *name, int type, csVector3 position, csVect
 {
 	//add a global light
 
-	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, true, true);
+	Light* light = new Light(name, type, position + Origin, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, true, true);
 	lights.Push(light);
 	return light;
 }
