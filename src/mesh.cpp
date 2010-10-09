@@ -782,8 +782,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 			mesh_normals[k].Normalize();
 			mesh_texels[k] = mapper.Map(mesh_vertices[k], mesh_normals[k], k);
 
-			//state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
-			state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(0, 0, 0)); //for lighted
+			state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
 
 			int a = k - 1;
 			if (a == -1)

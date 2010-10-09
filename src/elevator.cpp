@@ -524,7 +524,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	ElevatorFloor = floor;
 
 	//create test light
-	AddLight("test", 0, csVector3(0, 2, -15), csVector3(90, 0, 0), 50, 0, 255, 0, 0, 255, 255, 255, 0, 0, 0);
+	//AddLight("test", 0, csVector3(0, 2, -15), csVector3(90, 0, 0), 50, 0, 255, 0, 0, 255, 255, 255, 0, 0, 0);
 
 	Created = true;
 
@@ -1034,8 +1034,6 @@ void Elevator::MonitorLoop()
 	//set random lobby level if not set
 	if (RandomLobbySet == false)
 		SetRandomLobby(GetBottomFloor());
-
-	lights[0]->Rotate(csVector3(0, 1, 0), 1);
 
 	//perform first-run tasks
 	if (FirstRun == true && Running == true)

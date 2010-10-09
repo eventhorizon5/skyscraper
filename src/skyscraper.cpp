@@ -524,14 +524,14 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		return false;
 	if (!loader->LoadShader("/shader/fullbright.xml"))
 		return false;
-	//if (!loader->LoadShader("/shader/reflectsphere.xml"))
-		//return false;
-	//if (!loader->LoadShader("/shader/parallax/parallax.xml"))
-		//return false;
-	//if (!loader->LoadShader("/shader/parallaxAtt/parallaxAtt.xml"))
-		//return false;
-	//if (!loader->LoadShader("/shader/specular/light_spec_bumpmap.xml"))
-		//return false;
+	if (!loader->LoadShader("/shader/reflectsphere.xml"))
+		return false;
+	if (!loader->LoadShader("/shader/parallax/parallax.xml"))
+		return false;
+	if (!loader->LoadShader("/shader/parallaxAtt/parallaxAtt.xml"))
+		return false;
+	if (!loader->LoadShader("/shader/specular/light_spec_bumpmap.xml"))
+		return false;
 
 	//initialize frame printer
 	printer.AttachNew(new FramePrinter(object_reg));
