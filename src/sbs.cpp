@@ -31,6 +31,7 @@
 #include <wx/wx.h>
 #include <wx/variant.h>
 #include <crystalspace.h>
+#include <csver.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -3670,31 +3671,27 @@ int SBS::GetPolygonCount()
 
 void SBS::AddLightHandle(Light* handle)
 {
-	dynlights.Push(handle);
+	all_lights.Push(handle);
 }
 
 void SBS::DeleteLightHandle(Light* handle)
 {
-	dynlights.Delete(handle);
+	all_lights.Delete(handle);
 }
 
 void SBS::Prepare()
 {
 	//prepare objects for run
 	
-	//prepare dynamic lights
-	for (int i = 0; i < dynlights.GetSize(); i++)
-		dynlights[i]->Prepare();
-
 	//prepare CS objects
 	engine->Prepare();
 }
 
-Light* SBS::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable)
+Light* SBS::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
-	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, dynamic_color, movable);
+	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
 	lights.Push(light);
 	return light;
 }

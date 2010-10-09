@@ -461,7 +461,7 @@ bool Shaft::ReportError(const char *message)
 	return sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
-Light* Shaft::AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable)
+Light* Shaft::AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
@@ -469,7 +469,7 @@ Light* Shaft::AddLight(int floor, const char *name, int type, csVector3 position
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(name, type, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer, dynamic_color, movable);
+	Light* light = new Light(name, type, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
 	lights[floor - startfloor].Push(light);
 	return light;
 }

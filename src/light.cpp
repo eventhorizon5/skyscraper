@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <csver.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -30,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Light::Light(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable)
+Light::Light(const char *name, int type, csVector3 position, csVector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//creates a light object
 
@@ -43,20 +44,11 @@ Light::Light(const char *name, int type, csVector3 position, csVector3 direction
 	//if directional light is used, position is ignored
 	//if spotlight is used, radius is ignored
 
-	//dynamic_color determines if the light's color can change during runtime
-	//movable determines if the light can move - if this is true, dynamic_color will be forced as true
-	
 	Type = type;
 	Name = name;
 	Origin = position;
 
-	csLightDynamicType light_type = CS_LIGHT_DYNAMICTYPE_STATIC;
-	if (dynamic_color == true)
-		light_type = CS_LIGHT_DYNAMICTYPE_PSEUDO;
-	if (movable == true)
-		light_type = CS_LIGHT_DYNAMICTYPE_DYNAMIC;
-
-	light = sbs->engine->CreateLight(name, sbs->ToRemote(position), sbs->ToRemote(radius), csColor(color_r, color_g, color_b), light_type);
+	light = sbs->engine->CreateLight(name, sbs->ToRemote(position), sbs->ToRemote(radius), csColor(color_r, color_g, color_b), CS_LIGHT_DYNAMICTYPE_DYNAMIC);
 
 	if (type == 0)
 		light->SetType(CS_LIGHT_POINTLIGHT);
@@ -66,15 +58,15 @@ Light::Light(const char *name, int type, csVector3 position, csVector3 direction
 		light->SetType(CS_LIGHT_SPOTLIGHT);
 
 	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
-	light->SetCutoffDistance(sbs->ToRemote(max_distance));
 
 	if (type == 1)
 		light->SetDirectionalCutoffRadius(directional_cutoff_radius);
 	if (type == 2)
 		light->SetSpotLightFalloff(spot_falloff_inner, spot_falloff_outer);
 
-	if (light_type == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
-		sbs->AddLightHandle(this);
+	sbs->AddLightHandle(this);
+
+	SetRotation(rotation);
 
 	//add light to world
 	sbs->area->GetLights()->Add(light);
@@ -95,46 +87,67 @@ void Light::Prepare()
 	//this only needs to be done for dynamic lights
 
 #if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
-	if (light->GetDynamicType() == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
-		light->Setup();
+	//light->Setup();
 #endif
 }
 
 void Light::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move light - this can only be done on movable lights
-	if (light->GetDynamicType() == CS_LIGHT_DYNAMICTYPE_DYNAMIC)
-	{
-		csVector3 pos;
-		if (relative_x == false)
-			pos.x = sbs->ToRemote(Origin.x + position.x);
-		else
-			pos.x = light->GetCenter().x + sbs->ToRemote(position.x);
-		if (relative_y == false)
-			pos.y = sbs->ToRemote(Origin.y + position.y);
-		else
-			pos.y = light->GetCenter().y + sbs->ToRemote(position.y);
-		if (relative_z == false)
-			pos.z = sbs->ToRemote(Origin.z + position.z);
-		else
-			pos.z = light->GetCenter().z + sbs->ToRemote(position.z);
-		light->GetMovable()->SetPosition(pos);
-		Prepare();
-	}
+	csVector3 pos;
+	if (relative_x == false)
+		pos.x = sbs->ToRemote(Origin.x + position.x);
+	else
+		pos.x = light->GetCenter().x + sbs->ToRemote(position.x);
+	if (relative_y == false)
+		pos.y = sbs->ToRemote(Origin.y + position.y);
+	else
+		pos.y = light->GetCenter().y + sbs->ToRemote(position.y);
+	if (relative_z == false)
+		pos.z = sbs->ToRemote(Origin.z + position.z);
+	else
+		pos.z = light->GetCenter().z + sbs->ToRemote(position.z);
+	light->GetMovable()->SetPosition(pos);
+	light->GetMovable()->UpdateMove();
+	//Prepare();
 }
 
 csVector3 Light::GetPosition()
 {
-	return sbs->ToLocal(light->GetCenter());
+	return sbs->ToLocal(light->GetMovable()->GetPosition());
 }
 
 void Light::SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b)
 {
 	//set color of light
 
-	if (light->GetDynamicType() == CS_LIGHT_DYNAMICTYPE_STATIC)
-		return;
-
 	light->SetColor(csColor(color_r, color_g, color_b));
 	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
+}
+
+void Light::SetRotation(csVector3 rotation)
+{
+	//rotate light
+	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
+	csOrthoTransform ot (rot, light->GetMovable()->GetTransform().GetOrigin());
+	light->GetMovable()->SetTransform(ot);
+	rotX = rotation.x;
+	rotY = rotation.y;
+	rotZ = rotation.z;
+	light->GetMovable()->UpdateMove();
+	//Prepare();
+}
+
+void Light::Rotate(csVector3 rotation, float speed)
+{
+	//rotates light in a relative amount
+	rotX += rotation.x * speed;
+	rotY += rotation.y * speed;
+	rotZ += rotation.z * speed;
+	SetRotation(csVector3(rotX, rotY, rotZ));
+}
+
+csVector3 Light::GetRotation()
+{
+	return csVector3(rotX, rotY, rotZ);
 }

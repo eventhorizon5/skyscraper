@@ -311,7 +311,7 @@ public:
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
 	void Prepare();
-	Light* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
+	Light* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
 	MeshObject* FindMeshObject(csRef<iMeshWrapper> meshwrapper);
 
 	void DumpVertices(WallObject* wallobject);
@@ -444,8 +444,8 @@ private:
 	//floor auto area array
 	csArray<AutoArea> FloorAutoArea;
 
-	//dynamic lights
-	csArray<Light*> dynlights;
+	//all lights
+	csArray<Light*> all_lights;
 
 	//global lights
 	csArray<Light*> lights;

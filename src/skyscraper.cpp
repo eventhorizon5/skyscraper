@@ -564,8 +564,6 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 		if (!engine->SetCurrentDefaultRenderloop (rloop))
 			return ReportError ("Couldn't set renderloop in engine!");
 	}
-	else
-		engine->SetLightingCacheMode(0);
 
 	return true;
 }

@@ -38,16 +38,20 @@ public:
 	csVector3 Origin;
 
 	//functions
-	Light(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer, bool dynamic_color, bool movable);
+	Light(const char *name, int type, csVector3 position, csVector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
 	~Light();
 	void Prepare();
 	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
 	csVector3 GetPosition();
 	void SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b);
+	void SetRotation(csVector3 rotation);
+	void Rotate(csVector3 rotation, float speed);
+	csVector3 GetRotation();
 
 private:
 
 	csRef<iLight> light;
+	float rotX, rotY, rotZ;
 };
 
 #endif
