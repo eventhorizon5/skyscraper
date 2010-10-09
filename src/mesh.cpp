@@ -650,7 +650,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	if (th == 0)
 		th = 1;
 
-	if (Shaders == true)
+	/*if (Shaders == true)
 	{
 		csRef<iStringSet> strset = csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset");
 		csRef<iShaderManager> shadermgr = csQueryRegistry<iShaderManager> (object_reg);
@@ -661,7 +661,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 		//iShader* sh = shadermgr->GetShader("ambient");
 		iShader* sh = shadermgr->GetShader("light");
 		mat->SetShader(t, sh);
-	}
+	}*/
 
 	//get autosize information
 	csVector2 xextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 1);

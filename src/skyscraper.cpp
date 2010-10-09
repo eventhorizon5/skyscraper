@@ -540,7 +540,8 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 	equeue = csQueryRegistry<iEventQueue> (object_reg);
 
 	//enable ambient light
-	engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
+	//engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
+	engine->SetAmbientLight(csColor(1, 1, 1));
 
 	//set up viewport
 	view = csPtr<iView>(new csView (engine, g3d));
