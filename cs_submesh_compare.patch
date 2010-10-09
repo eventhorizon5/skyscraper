@@ -1,6 +1,5 @@
-diff -urN CS.old/plugins/mesh/genmesh/object/submeshes.cpp CS/plugins/mesh/genmesh/object/submeshes.cpp
---- CS.old/plugins/mesh/genmesh/object/submeshes.cpp	2010-08-31 18:31:58.000000000 -0500
-+++ CS/plugins/mesh/genmesh/object/submeshes.cpp	2010-08-31 18:32:46.000000000 -0500
+--- CS/plugins/mesh/genmesh/object/submeshes.cpp	2008-05-27 17:35:08.000000000 -0500
++++ CS.new/plugins/mesh/genmesh/object/submeshes.cpp	2010-10-08 21:36:27.788247594 -0500
 @@ -165,11 +165,11 @@
    static int SubmeshSubmeshCompare (SubMesh* const& A, 
                                      SubMesh* const& B)
@@ -18,3 +17,11 @@ diff -urN CS.old/plugins/mesh/genmesh/object/submeshes.cpp CS/plugins/mesh/genme
    }
  
    iGeneralMeshSubMesh* SubMeshesContainer::AddSubMesh (
+@@ -217,6 +217,7 @@
+       csArrayCmp<SubMesh*, SubMesh*> (subMesh, &SubmeshSubmeshCompare));
+     if (idx == csArrayItemNotFound) return;
+     subMeshes.DeleteIndex (idx);
++    changeNum++;
+ 
+     if (subMeshes.GetSize() == 0)
+       subMeshes.Push (defaultSubmesh);
