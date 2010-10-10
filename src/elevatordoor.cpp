@@ -1227,7 +1227,7 @@ void ElevatorDoor::Loop()
 		MoveDoors(false, true);
 }
 
-void ElevatorDoor::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void ElevatorDoor::Move(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//moves doors
 
@@ -1273,7 +1273,7 @@ int ElevatorDoor::GetWhichDoors()
 	return WhichDoors;
 }
 
-void ElevatorDoor::MoveSound(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void ElevatorDoor::MoveSound(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move sound
 	csVector3 pos;

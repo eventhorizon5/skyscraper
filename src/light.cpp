@@ -91,7 +91,7 @@ void Light::Prepare()
 #endif
 }
 
-void Light::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void Light::Move(const csVector3& position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move light - this can only be done on movable lights
 	csVector3 pos;
@@ -125,7 +125,7 @@ void Light::SetColor(float color_r, float color_g, float color_b, float spec_col
 	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
 }
 
-void Light::SetRotation(csVector3 rotation)
+void Light::SetRotation(const csVector3& rotation)
 {
 	//rotate light
 	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
@@ -138,7 +138,7 @@ void Light::SetRotation(csVector3 rotation)
 	//Prepare();
 }
 
-void Light::Rotate(csVector3 rotation, float speed)
+void Light::Rotate(const csVector3& rotation, float speed)
 {
 	//rotates light in a relative amount
 	rotX += rotation.x * speed;

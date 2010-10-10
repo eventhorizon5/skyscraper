@@ -277,11 +277,11 @@ public:
 	void IncrementSoundCount();
 	void DecrementSoundCount();
 	float ToLocal(float remote_value);
-	csVector2 ToLocal(csVector2 remote_value);
-	csVector3 ToLocal(csVector3 remote_value);
+	csVector2 ToLocal(const csVector2& remote_value);
+	csVector3 ToLocal(const csVector3& remote_value);
 	float ToRemote(float local_value);
-	csVector2 ToRemote(csVector2 local_value);
-	csVector3 ToRemote(csVector3 local_value);
+	csVector2 ToRemote(const csVector2& local_value);
+	csVector3 ToRemote(const csVector3& local_value);
 	int GetObjectCount();
 	Object* GetObject(int number);
 	int RegisterObject(Object *object);
@@ -320,7 +320,7 @@ public:
 	csVector2 GetExtents(csRef<iMeshWrapper> mesh, int coord);
 	csVector3 GetPoint(csArray<WallObject*> &wallarray, const char *polyname, const csVector3 &start, const csVector3 &end);
 	iMeshWrapper* AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
-	void Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
+	void Cut(WallObject *wall, const csVector3& start, const csVector3& end, bool cutwalls, bool cutfloors, const csVector3& mesh_origin, const csVector3& object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
 	csVector3 GetWallExtents(csArray<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	csVector3 GetPolygonDirection(csPoly3D &polygon);
 	csRef<iRenderBuffer> PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<csVector2> &mesh_indices);

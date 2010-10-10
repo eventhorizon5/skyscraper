@@ -366,7 +366,7 @@ void DirectionalIndicator::SetLights(int up, int down)
 	}
 }
 
-void DirectionalIndicator::SetPosition(csVector3 position)
+void DirectionalIndicator::SetPosition(const csVector3& position)
 {
 	//set position of indicator objects
 
@@ -393,7 +393,7 @@ void DirectionalIndicator::SetPosition(csVector3 position)
 	}
 }
 
-void DirectionalIndicator::Move(csVector3 position)
+void DirectionalIndicator::Move(const csVector3& position)
 {
 	//move indicator objects
 

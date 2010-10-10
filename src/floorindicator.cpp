@@ -96,14 +96,14 @@ void FloorIndicator::Enabled(bool value)
 	IsEnabled = value;
 }
 
-void FloorIndicator::SetPosition(csVector3 position)
+void FloorIndicator::SetPosition(const csVector3& position)
 {
 	//set position of indicator
 	FloorIndicatorMesh->Movable->SetPosition(sbs->ToRemote(position));
 	FloorIndicatorMesh->Movable->UpdateMove();
 }
 
-void FloorIndicator::MovePosition(csVector3 position)
+void FloorIndicator::MovePosition(const csVector3& position)
 {
 	//move indicator by a relative amount
 	FloorIndicatorMesh->Movable->MovePosition(sbs->ToRemote(position));

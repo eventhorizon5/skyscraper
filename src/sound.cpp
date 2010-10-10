@@ -81,7 +81,7 @@ Sound::~Sound()
 	delete object;
 }
 
-void Sound::SetPosition(csVector3 position)
+void Sound::SetPosition(const csVector3& position)
 {
 	//set position of sound object
 	Position = position;

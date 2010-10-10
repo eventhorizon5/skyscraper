@@ -40,8 +40,8 @@ public:
 	~FloorIndicator();
 	void Enabled(bool value);
 	csVector3 GetPosition();
-	void SetPosition(csVector3 position);
-	void MovePosition(csVector3 position);
+	void SetPosition(const csVector3 &position);
+	void MovePosition(const csVector3 &position);
 	void Update(const char *value);
 
 private:

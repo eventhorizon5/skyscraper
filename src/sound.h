@@ -39,7 +39,7 @@ public:
 
 	Sound(Object *parent, const char *name, bool permanent);
 	~Sound();
-	void SetPosition(csVector3 position);
+	void SetPosition(const csVector3& position);
 	void SetPositionY(float position);
 	csVector3 GetPosition();
 	void SetVolume(float value);

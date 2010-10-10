@@ -3194,13 +3194,13 @@ float SBS::ToLocal(float remote_value)
 	return remote_value * UnitScale;
 }
 
-csVector2 SBS::ToLocal(csVector2 remote_value)
+csVector2 SBS::ToLocal(const csVector2& remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
 	return remote_value * UnitScale;
 }
 
-csVector3 SBS::ToLocal(csVector3 remote_value)
+csVector3 SBS::ToLocal(const csVector3& remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
 	return remote_value * UnitScale;
@@ -3212,13 +3212,13 @@ float SBS::ToRemote(float local_value)
 	return local_value / UnitScale;
 }
 
-csVector2 SBS::ToRemote(csVector2 local_value)
+csVector2 SBS::ToRemote(const csVector2& local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
 	return local_value / UnitScale;
 }
 
-csVector3 SBS::ToRemote(csVector3 local_value)
+csVector3 SBS::ToRemote(const csVector3& local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
 	return local_value / UnitScale;

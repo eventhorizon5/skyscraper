@@ -132,8 +132,8 @@ public:
 	Object* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th);
 	void Chime(int floor, bool direction);
 	void Loop();
-	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
-	void MoveSound(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void Move(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveSound(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
 	bool IsEnabled();
 	bool GetDoorsOpen();

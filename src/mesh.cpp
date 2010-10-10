@@ -186,7 +186,7 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 }
 
 
-void SBS::Cut(WallObject *wall, csVector3 start, csVector3 end, bool cutwalls, bool cutfloors, csVector3 mesh_origin, csVector3 object_origin, int checkwallnumber, const char *checkstring, bool reset_check)
+void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bool cutwalls, bool cutfloors, const csVector3& mesh_origin, const csVector3& object_origin, int checkwallnumber, const char *checkstring, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
