@@ -164,6 +164,10 @@ SBS::SBS()
 	WallCount = 0;
 	PolygonCount = 0;
 	Shaders = false;
+	SkyBox = 0;
+	Landscape = 0;
+	External = 0;
+	Buildings = 0;
 }
 
 SBS::~SBS()
