@@ -31,7 +31,6 @@
 #include <wx/wx.h>
 #include <wx/variant.h>
 #include <crystalspace.h>
-#include <csver.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -582,10 +581,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		return ReportError("Error loading texture");
 
 	//if texture has an alpha map, force binary alpha
-#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
-	if (wrapper->GetTextureHandle()->GetAlphaMap() == true)
+	if (wrapper->GetTextureHandle()->GetAlphaType() == csAlphaMode::alphaSmooth)
 		wrapper->GetTextureHandle()->SetAlphaType(csAlphaMode::alphaBinary);
-#endif
 
 	TextureInfo info;
 	info.name = name;
@@ -649,10 +646,8 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		return ReportError("LoadTextureCropped: Error registering texture '" + Name + "'");
 
 	//if texture has an alpha map, force binary alpha
-#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
-	if (handle->GetAlphaMap() == true)
+	if (handle->GetAlphaType() == csAlphaMode::alphaSmooth)
 		handle->SetAlphaType(csAlphaMode::alphaBinary);
-#endif
 
 	//create texture wrapper
 	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
@@ -870,10 +865,8 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		return ReportError("AddTextureOverlay: Error registering texture '" + Name + "'");
 
 	//if texture has an alpha map, force binary alpha
-#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
-	if (handle->GetAlphaMap() == true)
+	if (handle->GetAlphaType() == csAlphaMode::alphaSmooth)
 		handle->SetAlphaType(csAlphaMode::alphaBinary);
-#endif
 
 	//create texture wrapper
 	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
