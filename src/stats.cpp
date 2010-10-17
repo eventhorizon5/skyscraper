@@ -38,8 +38,6 @@ extern Skyscraper *skyscraper;
 //(*IdInit(Stats)
 const long Stats::ID_STATICTEXT1 = wxNewId();
 const long Stats::ID_tMeshes = wxNewId();
-const long Stats::ID_STATICTEXT2 = wxNewId();
-const long Stats::ID_tFactories = wxNewId();
 const long Stats::ID_STATICTEXT3 = wxNewId();
 const long Stats::ID_tTextures = wxNewId();
 const long Stats::ID_STATICTEXT4 = wxNewId();
@@ -66,6 +64,8 @@ const long Stats::ID_STATICTEXT20 = wxNewId();
 const long Stats::ID_tFrontendVersion = wxNewId();
 const long Stats::ID_STATICTEXT23 = wxNewId();
 const long Stats::ID_tSBSVersion = wxNewId();
+const long Stats::ID_STATICTEXT26 = wxNewId();
+const long Stats::ID_tPlatform = wxNewId();
 const long Stats::ID_STATICTEXT18 = wxNewId();
 const long Stats::ID_tName = wxNewId();
 const long Stats::ID_STATICTEXT17 = wxNewId();
@@ -113,10 +113,6 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText1, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tMeshes = new wxTextCtrl(this, ID_tMeshes, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tMeshes"));
 	FlexGridSizer2->Add(tMeshes, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Factories:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-	FlexGridSizer2->Add(StaticText2, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	tFactories = new wxTextCtrl(this, ID_tFactories, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tFactories"));
-	FlexGridSizer2->Add(tFactories, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Textures:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer2->Add(StaticText3, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tTextures = new wxTextCtrl(this, ID_tTextures, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tTextures"));
@@ -169,6 +165,10 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText23, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tSBSVersion = new wxTextCtrl(this, ID_tSBSVersion, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tSBSVersion"));
 	FlexGridSizer2->Add(tSBSVersion, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText26 = new wxStaticText(this, ID_STATICTEXT26, _("Platform:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT26"));
+	FlexGridSizer2->Add(StaticText26, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	tPlatform = new wxTextCtrl(this, ID_tPlatform, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPlatform"));
+	FlexGridSizer2->Add(tPlatform, 1, wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Building Information"));
@@ -241,34 +241,34 @@ void Stats::On_bOK_Click(wxCommandEvent& event)
 
 void Stats::OnInit()
 {
-	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());
-	tFactories->SetValue(wxVariant(Simcore->GetMeshFactoryCount()).GetString());
-	tTextures->SetValue(wxVariant(Simcore->GetTextureCount()).GetString());
-	tMaterials->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
-	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
 	tFrontendVersion->SetValue(wxString::FromAscii(skyscraper->version_frontend));
 	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version));
+	tPlatform->SetValue(wxString::FromAscii(skyscraper->Platform));
 
 	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.GetData()));
 	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner.GetData()));
 	tLocation->SetValue(wxString::FromAscii(Simcore->BuildingLocation.GetData()));
 	tDescription->SetValue(wxString::FromAscii(Simcore->BuildingDescription.GetData()));
 	tVersion->SetValue(wxString::FromAscii(Simcore->BuildingVersion.GetData()));
-	tFloors->SetValue(wxVariant(Simcore->Floors).GetString());
-	tBasements->SetValue(wxVariant(Simcore->Basements).GetString());
-	tElevators->SetValue(wxVariant(Simcore->Elevators()).GetString());
-	tShafts->SetValue(wxVariant(Simcore->Shafts()).GetString());
-	tStairs->SetValue(wxVariant(Simcore->StairsNum()).GetString());
-	tObjects->SetValue(wxVariant(Simcore->GetObjectCount()).GetString());
-	tWalls->SetValue(wxVariant(Simcore->GetWallCount()).GetString());
-	tPolygons->SetValue(wxVariant(Simcore->GetPolygonCount()).GetString());
 }
 
 void Stats::Loop()
 {
+	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());
+	tTextures->SetValue(wxVariant(Simcore->GetTextureCount()).GetString());
+	tMaterials->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
+	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
 	tInStairwell->SetValue(wxString::FromAscii(BoolToString(Simcore->InStairwell)));
 	tInElevator->SetValue(wxString::FromAscii(BoolToString(Simcore->InElevator)));
 	tInShaft->SetValue(wxString::FromAscii(BoolToString(Simcore->InShaft)));
 	tRunningTime->SetValue(TruncateNumber(Simcore->running_time, 2));
 	tStartTime->SetValue(TruncateNumber(Simcore->start_time, 2));
+	tObjects->SetValue(wxVariant(Simcore->GetObjectCount()).GetString());
+	tWalls->SetValue(wxVariant(Simcore->GetWallCount()).GetString());
+	tPolygons->SetValue(wxVariant(Simcore->GetPolygonCount()).GetString());
+	tFloors->SetValue(wxVariant(Simcore->Floors).GetString());
+	tBasements->SetValue(wxVariant(Simcore->Basements).GetString());
+	tElevators->SetValue(wxVariant(Simcore->Elevators()).GetString());
+	tShafts->SetValue(wxVariant(Simcore->Shafts()).GetString());
+	tStairs->SetValue(wxVariant(Simcore->StairsNum()).GetString());
 }

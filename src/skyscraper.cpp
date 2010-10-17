@@ -500,6 +500,8 @@ bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderO
 
 	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 
+	Platform = CS_PLATFORM_NAME;
+
 	csString renderLoop;
 	if (confman->GetBool("Skyscraper.Frontend.Shaders", false) == true)
 	{

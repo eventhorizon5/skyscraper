@@ -50,14 +50,15 @@ class Stats: public wxDialog
 		wxButton* bOK;
 		wxTextCtrl* tBasements;
 		wxTextCtrl* tSBSVersion;
+		wxTextCtrl* tPlatform;
 		wxTextCtrl* tMaterials;
 		wxStaticText* StaticText13;
-		wxStaticText* StaticText2;
 		wxStaticText* StaticText14;
 		wxTextCtrl* tElevators;
 		wxTextCtrl* tObjects;
 		wxStaticText* StaticText6;
 		wxTextCtrl* tDescription;
+		wxStaticText* StaticText26;
 		wxStaticText* StaticText19;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText11;
@@ -90,7 +91,6 @@ class Stats: public wxDialog
 		wxTextCtrl* tFrontendVersion;
 		wxTextCtrl* tMeshes;
 		wxStaticText* StaticText16;
-		wxTextCtrl* tFactories;
 		wxTextCtrl* tInElevator;
 		//*)
 		void Loop();
@@ -100,8 +100,6 @@ class Stats: public wxDialog
 		//(*Identifiers(Stats)
 		static const long ID_STATICTEXT1;
 		static const long ID_tMeshes;
-		static const long ID_STATICTEXT2;
-		static const long ID_tFactories;
 		static const long ID_STATICTEXT3;
 		static const long ID_tTextures;
 		static const long ID_STATICTEXT4;
@@ -128,6 +126,8 @@ class Stats: public wxDialog
 		static const long ID_tFrontendVersion;
 		static const long ID_STATICTEXT23;
 		static const long ID_tSBSVersion;
+		static const long ID_STATICTEXT26;
+		static const long ID_tPlatform;
 		static const long ID_STATICTEXT18;
 		static const long ID_tName;
 		static const long ID_STATICTEXT17;

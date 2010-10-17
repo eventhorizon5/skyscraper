@@ -123,7 +123,8 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 
 	if (skyscraper)
 	{
-		twindow->tMain->WriteText("\nSimulator State Dump\n--------------------------\n");
+		twindow->tMain->WriteText(wxT("\nSimulator State Dump\n--------------------------\n"));
+		twindow->tMain->WriteText(wxString("Platform: " + skyscraper->Platform + "\n"));
 		twindow->tMain->WriteText(wxString("Frontend version: " + skyscraper->version_frontend + "\n"));
 	}
 
@@ -132,7 +133,7 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 		twindow->tMain->WriteText(wxString(Simcore->DumpState()));
 
 	//print instructions
-	twindow->tMain->WriteText("\n--------------------------\n");
+	twindow->tMain->WriteText(wxT("\n--------------------------\n"));
 	twindow->tMain->WriteText(wxString("Copy and paste the above information (select it and press CTRL-C)\nand either post it to the Skyscraper forum at http://forum.skyscrapersim.com\nor email to ryan@skyscrapersim.com\n\nPress OK to close Skyscraper\n"));
 	twindow->ShowModal();
 
