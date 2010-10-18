@@ -44,6 +44,10 @@ Light::Light(const char *name, int type, csVector3 position, csVector3 rotation,
 	//if directional light is used, position is ignored
 	//if spotlight is used, radius is ignored
 
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, sbs->object, "Light", "", false);
+
 	Type = type;
 	Name = name;
 	Origin = position;
@@ -79,6 +83,7 @@ Light::~Light()
 		sbs->area->GetLights()->Remove(light);
 		sbs->DeleteLightHandle(this);
 	}
+	delete object;
 }
 
 void Light::Prepare()

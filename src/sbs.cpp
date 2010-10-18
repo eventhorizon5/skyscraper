@@ -1365,7 +1365,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 
 	csString NewName;
 	int firstidx = 0;
-	int tmpidx = 0;
+	//int tmpidx = 0;
 
 	//swap values if the first is greater than the second
 	if (x1 > x2)

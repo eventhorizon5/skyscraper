@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Light Class
+	Scalable Building Simulator - Model Class
 	The Skyscraper Project - Version 1.8 Alpha
 	Copyright (C)2004-2010 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -23,36 +23,33 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_LIGHT_H
-#define _SBS_LIGHT_H
+#ifndef _SBS_MODEL_H
+#define _SBS_MODEL_H
 
 #include <csutil/csstring.h>
-#include <iengine/light.h>
 
-class SBSIMPEXP Light
+class SBSIMPEXP Model
 {
 public:
-
 	Object *object; //SBS object
 	csString Name;
-	int Type;
 	csVector3 Origin;
 
 	//functions
-	Light(const char *name, int type, csVector3 position, csVector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
-	~Light();
-	void Prepare();
+	Model(const char *name, const char *filename, csVector3 &position, csVector3 &rotation);
+	~Model();
 	void Move(const csVector3& position, bool relative_x, bool relative_y, bool relative_z);
 	csVector3 GetPosition();
-	void SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b);
-	void SetRotation(const csVector3& rotation);
 	void Rotate(const csVector3& rotation, float speed);
+	void SetRotation(const csVector3& rotation);
 	csVector3 GetRotation();
 
 private:
 
-	csRef<iLight> light;
+	csRef<iMeshWrapper> mesh;
+	csRef<iGeneralFactoryState> state;
 	float rotX, rotY, rotZ;
+
 };
 
 #endif
