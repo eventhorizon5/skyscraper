@@ -846,6 +846,9 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int 
 
 	image = 0;
 
+	if (!filename)
+		return;
+
 	//preload stored image data
 	if (button)
 	{

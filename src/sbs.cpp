@@ -716,36 +716,22 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	wrapper->GetTextureHandle()->GetOriginalDimensions(width, height);
 
 	//create new empty texture
-	csRef<iTextureHandle> th = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "argb8", CS_TEXTURE_3D);
-	if (!th)
+	//the first one needs mipmaps off since otherwise the FinishDraw() below will hardware-generate mipmaps,
+	//causing corruption on some machines, which we don't want
+	csRef<iTextureHandle> handle = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "argb8", CS_TEXTURE_3D | CS_TEXTURE_NOMIPMAPS);
+	if (!handle)
 	{
 		ReportError("AddTextToTexture: Error creating texture '" + Name + "'");
-		th = 0;
+		handle = 0;
 		return false;
 	}
 
 	//force binary alpha on texture
-	th->SetAlphaType(csAlphaMode::alphaBinary);
+	handle->SetAlphaType(csAlphaMode::alphaBinary);
 
 	//get new texture dimensions, if it was resized
-	th->GetOriginalDimensions(width, height);
+	handle->GetOriginalDimensions(width, height);
 
-	//create a texture wrapper for the new texture
-	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(th);
-	if (!tex)
-	{
-		ReportError("AddTextToTexture: Error creating texture wrapper for '" + Name + "'");
-		th = 0;
-		return false;
-	}
-	
-	//set texture name
-	tex->QueryObject()->SetName(name);
-
-	//create material
-	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
-	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
-	
 	//add texture multipliers for new texture
 	TextureInfo info;
 	info.name = name;
@@ -765,13 +751,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (y2 == -1)
 		y2 = height;
 
-	iTextureHandle *handle = tex->GetTextureHandle();
-	if (!handle)
-	{
-		ReportError("AddTextToTexture: No texture handle available for '" + Name + "'");
-		return false;
-	}
-
 	//set graphics rendering to the texture image
 	g3d->SetRenderTarget(handle);
 	if (!g3d->ValidateRenderTargets())
@@ -779,7 +758,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
 	//clear buffer with alpha mask and enable double buffering
-	if (confman->GetBool("Skyscraper.SBS.TextNoClear", false) == true)
+	if (confman->GetBool("Skyscraper.SBS.TextClear", true) == true)
 		g2d->ClearAll(g2d->FindRGB(0, 0, 0, 0));
 
 	//draw original image onto backbuffer
@@ -811,6 +790,34 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//finish with buffer
 	g3d->FinishDraw();
 
+	//copy image into mipmap-enabled texture handle
+	csRef<iImage> image = handle->Dump();
+	csRef<iTextureHandle> handle2 = g3d->GetTextureManager()->RegisterTexture(image, CS_TEXTURE_3D);
+	if (!handle2)
+	{
+		ReportError("AddTextToTexture: Error creating final texture for '" + Name + "'");
+		handle = 0;
+		return false;
+	}
+	handle2->SetAlphaType(csAlphaMode::alphaBinary);
+
+	//create a texture wrapper for the 2nd new texture (mipmapped one)
+	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(handle2);
+	if (!tex)
+	{
+		ReportError("AddTextToTexture: Error creating texture wrapper for '" + Name + "'");
+		handle = 0;
+		handle2 = 0;
+		return false;
+	}
+	
+	//set texture name
+	tex->QueryObject()->SetName(name);
+
+	//create material
+	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
+	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+	
 	return true;
 }
 

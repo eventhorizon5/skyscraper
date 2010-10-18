@@ -230,22 +230,32 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 DebugPanel::~DebugPanel()
 {
 	//delete timer;
-	timer->Stop();
-	delete timer;
+	if (timer)
+	{
+		timer->Stop();
+		delete timer;
+	}
 	timer = 0;
-	mc->Destroy();
+	if (mc)
+		mc->Destroy();
 	mc = 0;
-	ee->Destroy();
+	if (ee)
+		ee->Destroy();
 	ee = 0;
-	cc->Destroy();
+	if (cc)
+		cc->Destroy();
 	cc = 0;
-	kd->Destroy();
+	if (kd)
+		kd->Destroy();
 	kd = 0;
-	stats->Destroy();
+	if (stats)
+		stats->Destroy();
 	stats = 0;
-	console->Destroy();
+	if (console)
+		console->Destroy();
 	console = 0;
-	objectinfo->Destroy();
+	if (objectinfo)
+		objectinfo->Destroy();
 	objectinfo = 0;
 	dpanel = 0; //clear external pointer
 }
@@ -277,12 +287,20 @@ void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
 {
-	mc->Show();
+	if (mc)
+	{
+		mc->CenterOnScreen();
+		mc->Show();
+	}
 }
 
 void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 {
-	ee->Show();
+	if (ee)
+	{
+		ee->CenterOnScreen();
+		ee->Show();
+	}
 }
 
 void DebugPanel::OnInit()
@@ -312,44 +330,62 @@ void DebugPanel::OnInit()
 
 void DebugPanel::Timer::Notify()
 {
-	dp->t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
-	dp->t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
-	dp->t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID) + wxT(")"));
-	dp->t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName()));
-	dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
-	dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh));
-	dp->t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
-
-	if (Simcore->Elevators() > 0)
+	if (dp)
 	{
-		dp->bEditElevator->Enable(true);
-		dp->t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
-		dp->t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
-	}
-	else
-		dp->bEditElevator->Enable(false);
+		dp->t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
+		dp->t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
+		dp->t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID) + wxT(")"));
+		dp->t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName()));
+		dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
+		dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh));
+		dp->t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
 
-	if (ee->IsShown() == true)
-		ee->Loop();
-
-	if (mc->IsShown() == true && Simcore->GetFloor(Simcore->camera->CurrentFloor))
-	{
-		mc->chkFloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsEnabled);
-		mc->chkColumnFrame->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsColumnFrameEnabled);
-		mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
-		mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
-		mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
-		mc->chkExternal->SetValue(Simcore->IsExternalEnabled);
+		if (Simcore->Elevators() > 0)
+		{
+			dp->bEditElevator->Enable(true);
+			dp->t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
+			dp->t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
+		}
+		else
+			dp->bEditElevator->Enable(false);
 	}
 
-	if (cc->IsShown() == true)
-		cc->Loop();
+	if (ee)
+	{
+		if (ee->IsShown() == true)
+			ee->Loop();
+	}
 
-	if (stats->IsShown() == true)
-		stats->Loop();
+	if (mc)
+	{
+		if (mc->IsShown() == true && Simcore->GetFloor(Simcore->camera->CurrentFloor))
+		{
+			mc->chkFloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsEnabled);
+			mc->chkColumnFrame->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsColumnFrameEnabled);
+			mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
+			mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
+			mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
+			mc->chkExternal->SetValue(Simcore->IsExternalEnabled);
+		}
+	}
 
-	if (objectinfo->IsShown() == true)
-		objectinfo->Loop();
+	if (cc)
+	{
+		if (cc->IsShown() == true)
+			cc->Loop();
+	}
+
+	if (stats)
+	{
+		if (stats->IsShown() == true)
+			stats->Loop();
+	}
+
+	if (objectinfo)
+	{
+		if (objectinfo->IsShown() == true)
+			objectinfo->Loop();
+	}
 }
 
 wxString TruncateNumber(double value, int decimals)
@@ -383,24 +419,38 @@ void DebugPanel::On_chkAutoStairs_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
 {
-	cc->Show();
+	if (cc)
+	{
+		cc->CenterOnScreen();
+		cc->Show();
+	}
 }
 
 void DebugPanel::On_bControlReference_Click(wxCommandEvent& event)
 {
-	kd->CenterOnScreen();
-	kd->Show();
+	if (kd)
+	{
+		kd->CenterOnScreen();
+		kd->Show();
+	}
 }
 
 void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 {
-	stats->CenterOnScreen();
-	stats->Show();
+	if (stats)
+	{
+		stats->CenterOnScreen();
+		stats->Show();
+	}
 }
 
 void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 {
-	console->Show();
+	if (console)
+	{
+		console->CenterOnScreen();
+		console->Show();
+	}
 }
 
 void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
@@ -410,8 +460,12 @@ void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 {
-	objectinfo->PopulateTree();
-	objectinfo->Show();
+	if (objectinfo)
+	{
+		objectinfo->PopulateTree();
+		objectinfo->CenterOnScreen();
+		objectinfo->Show();
+	}
 }
 
 void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
@@ -420,7 +474,8 @@ void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
 	{
 		for (int i = 1; i <= Simcore->Elevators(); i++)
 		{
-			Simcore->GetElevator(i)->RandomActivity = chkRandom->GetValue();
+			if (Simcore->GetElevator(i))
+				Simcore->GetElevator(i)->RandomActivity = chkRandom->GetValue();
 		}
 	}
 }
