@@ -262,6 +262,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\model.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\object.cpp"
 				>
 			</File>
@@ -345,6 +349,10 @@
 			</File>
 			<File
 				RelativePath="..\src\mesh.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\model.h"
 				>
 			</File>
 			<File
