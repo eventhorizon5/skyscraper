@@ -1350,15 +1350,19 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	else
 	{
 		//load mesh object from file
-		iBase* result;
-		if (!sbs->loader->Load (filename, result))
-			csPrintf("Error\n");
+		csRef<iRegion> result;
+		sbs->loader->LoadLibraryFile (filename, result);
+
+		if (!result)
+			return;
 		csRef<iMeshFactoryWrapper> factory = scfQueryInterface<iMeshFactoryWrapper>(result);
+		csPrintf("Loaded factory\n");
 		if (!factory)
 			return;
 
 		//create mesh wrapper and factory
 		MeshWrapper = sbs->engine->CreateMeshWrapper(factory, name, sbs->area);
+		csPrintf("Model file %s loaded\n", filename);
 	}
 
 	//set zbuf mode to "USE" by default
