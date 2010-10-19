@@ -34,12 +34,13 @@ public:
 	Object *object; //SBS object
 	csString name; //mesh name
 
-	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0);
+	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1);
 	~MeshObject();
 	void Enable(bool value);
 	WallObject* CreateWallObject(Object *parent, const char *name);
 	iMaterialWrapper* ChangeTexture(const char *texture, bool matcheck = true);
 	int FindWall(const csVector3 &point);
+	void RescaleVertices(float multiplier);
 	
 	csRef<iMeshWrapper> MeshWrapper; //building mesh
 	csRef<iGeneralFactoryState> State; //factory state
@@ -49,6 +50,7 @@ public:
 
 private:
 	bool enabled;
+	csRef<iRegion> region;
 };
 
 class SBSIMPEXP WallPolygon

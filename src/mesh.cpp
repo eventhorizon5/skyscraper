@@ -1326,7 +1326,7 @@ bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &
 	return false;
 }
 
-MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance)
+MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier)
 {
 	//set up SBS object
 	object = new Object();
@@ -1350,13 +1350,33 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	else
 	{
 		//load mesh object from file
-		csRef<iRegion> result;
-		sbs->loader->LoadLibraryFile (filename, result);
+		region = sbs->engine->CreateRegion(name);
+		csLoadResult rc = sbs->loader->Load(filename, region, false, true);
 
-		if (!result)
+		if (!rc.success)
 			return;
-		csRef<iMeshFactoryWrapper> factory = scfQueryInterface<iMeshFactoryWrapper>(result);
-		csPrintf("Loaded factory\n");
+
+		csRef<iMeshFactoryWrapper> factory;
+		if (rc.result == 0)
+		{
+			// Library file. Find the last factory in our region.
+			iMeshFactoryList* factories = sbs->engine->GetMeshFactories();
+			int i;
+			for (i = factories->GetCount() - 1 ; i >= 0 ; --i)
+			{
+				iMeshFactoryWrapper* f = factories->Get(i);
+				if (region->IsInRegion (f->QueryObject()))
+				{
+					factory = f;
+					break;
+				}
+			}
+		}
+		else
+		{
+			factory = scfQueryInterface<iMeshFactoryWrapper> (rc.result);
+		}
+
 		if (!factory)
 			return;
 
@@ -1380,6 +1400,10 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	State = scfQueryInterface<iGeneralFactoryState> (MeshWrapper->GetFactory()->GetMeshObjectFactory());
 	Movable = MeshWrapper->GetMovable();
+
+	//rescale if a loaded object
+	if (filename)
+		RescaleVertices(scale_multiplier);
 
 	sbs->AddMeshHandle(this);
 
@@ -1487,4 +1511,22 @@ int MeshObject::FindWall(const csVector3 &point)
 			return i;
 	}
 	return -1;
+}
+
+void MeshObject::RescaleVertices(float multiplier)
+{
+	//rescale all mesh vertices to the default SBS value (using ToRemote()), times the given multiplier
+
+	//set up new vertex array
+	csDirtyAccessArray<csVector3> mesh_vertices;
+
+	//multiply vertices
+	for (int i = 0; i < State->GetVertexCount(); i++)
+		mesh_vertices.Push(State->GetVertices()[i]);
+
+	//refill mesh with multiplied vertex data
+	for (int i = 0; i < mesh_vertices.GetSize(); i++)
+		State->GetVertices()[i] = sbs->ToRemote(mesh_vertices[i] * multiplier);
+
+	mesh_vertices.DeleteAll();
 }
