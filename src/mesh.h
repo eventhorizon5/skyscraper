@@ -34,7 +34,7 @@ public:
 	Object *object; //SBS object
 	csString name; //mesh name
 
-	MeshObject(Object* parent, const char *name, float max_render_distance = 0);
+	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0);
 	~MeshObject();
 	void Enable(bool value);
 	WallObject* CreateWallObject(Object *parent, const char *name);

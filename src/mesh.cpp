@@ -1326,7 +1326,7 @@ bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &
 	return false;
 }
 
-MeshObject::MeshObject(Object* parent, const char *name, float max_render_distance)
+MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance)
 {
 	//set up SBS object
 	object = new Object();
@@ -1342,8 +1342,24 @@ MeshObject::MeshObject(Object* parent, const char *name, float max_render_distan
 	buffer = object->GetNumber();
 	Name.Insert(0, "(" + buffer + ")");
 
-	//create mesh wrapper and factory
-	MeshWrapper = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, factname);
+	if (!filename)
+	{
+		//create mesh wrapper and factory
+		MeshWrapper = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, factname);
+	}
+	else
+	{
+		//load mesh object from file
+		iBase* result;
+		if (!sbs->loader->Load (filename, result))
+			csPrintf("Error\n");
+		csRef<iMeshFactoryWrapper> factory = scfQueryInterface<iMeshFactoryWrapper>(result);
+		if (!factory)
+			return;
+
+		//create mesh wrapper and factory
+		MeshWrapper = sbs->engine->CreateMeshWrapper(factory, name, sbs->area);
+	}
 
 	//set zbuf mode to "USE" by default
 	MeshWrapper->SetZBufMode(CS_ZBUF_USE);

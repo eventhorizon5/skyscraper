@@ -46,8 +46,7 @@ public:
 
 private:
 
-	csRef<iMeshWrapper> mesh;
-	csRef<iGeneralFactoryState> state;
+	MeshObject* mesh;
 	float rotX, rotY, rotZ;
 
 };

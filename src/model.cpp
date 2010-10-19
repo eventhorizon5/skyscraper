@@ -38,16 +38,14 @@ Model::Model(const char *name, const char *filename, csVector3 &position, csVect
 	object = new Object();
 	object->SetValues(this, sbs->object, "Model", "", false);
 
-	iBase* result;
-	if (!sbs->loader->Load (filename, result))
-		csPrintf("Error\n");
-	csRef<iMeshFactoryWrapper> factory = scfQueryInterface<iMeshFactoryWrapper>(result);
-	if (!factory)
-		return;
+	mesh = new MeshObject(object, name, filename);
 }
 
 Model::~Model()
 {
+	if (mesh)
+		delete mesh;
+	mesh = 0;
 	delete object;
 }
 
@@ -58,34 +56,34 @@ void Model::Move(const csVector3& position, bool relative_x, bool relative_y, bo
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(Origin.x + position.x);
 	else
-		pos.x = mesh->GetMovable()->GetPosition().x + sbs->ToRemote(position.x);
+		pos.x = mesh->Movable->GetPosition().x + sbs->ToRemote(position.x);
 	if (relative_y == false)
 		pos.y = sbs->ToRemote(Origin.y + position.y);
 	else
-		pos.y = mesh->GetMovable()->GetPosition().y + sbs->ToRemote(position.y);
+		pos.y = mesh->Movable->GetPosition().y + sbs->ToRemote(position.y);
 	if (relative_z == false)
 		pos.z = sbs->ToRemote(Origin.z + position.z);
 	else
-		pos.z = mesh->GetMovable()->GetPosition().z + sbs->ToRemote(position.z);
-	mesh->GetMovable()->SetPosition(pos);
-	mesh->GetMovable()->UpdateMove();
+		pos.z = mesh->Movable->GetPosition().z + sbs->ToRemote(position.z);
+	mesh->Movable->SetPosition(pos);
+	mesh->Movable->UpdateMove();
 }
 
 csVector3 Model::GetPosition()
 {
-	return sbs->ToLocal(mesh->GetMovable()->GetPosition());
+	return sbs->ToLocal(mesh->Movable->GetPosition());
 }
 
 void Model::SetRotation(const csVector3& rotation)
 {
 	//rotate light
 	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
-	csOrthoTransform ot (rot, mesh->GetMovable()->GetTransform().GetOrigin());
-	mesh->GetMovable()->SetTransform(ot);
+	csOrthoTransform ot (rot, mesh->Movable->GetTransform().GetOrigin());
+	mesh->Movable->SetTransform(ot);
 	rotX = rotation.x;
 	rotY = rotation.y;
 	rotZ = rotation.z;
-	mesh->GetMovable()->UpdateMove();
+	mesh->Movable->UpdateMove();
 }
 
 void Model::Rotate(const csVector3& rotation, float speed)
