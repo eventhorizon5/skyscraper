@@ -43,6 +43,11 @@ public:
 	int FindWall(const csVector3 &point);
 	void RescaleVertices(float multiplier);
 	bool LoadColladaFile(const char *filename, const char *name);
+	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z, csVector3 origin = 0);
+	csVector3 GetPosition();
+	void Rotate(const csVector3 rotation, float speed);
+	void SetRotation(const csVector3 rotation);
+	csVector3 GetRotation();
 	
 	csRef<iMeshWrapper> MeshWrapper; //building mesh
 	csRef<iGeneralFactoryState> State; //factory state
@@ -53,6 +58,7 @@ public:
 private:
 	bool enabled;
 	csRef<iCollection> collection;
+	float rotX, rotY, rotZ;
 };
 
 class SBSIMPEXP WallPolygon

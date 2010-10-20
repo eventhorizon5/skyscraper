@@ -60,53 +60,27 @@ Model::~Model()
 
 void Model::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
-	//move light - this can only be done on movable lights
-	csVector3 pos;
-	if (relative_x == false)
-		pos.x = sbs->ToRemote(Origin.x + position.x);
-	else
-		pos.x = mesh->Movable->GetPosition().x + sbs->ToRemote(position.x);
-	if (relative_y == false)
-		pos.y = sbs->ToRemote(Origin.y + position.y);
-	else
-		pos.y = mesh->Movable->GetPosition().y + sbs->ToRemote(position.y);
-	if (relative_z == false)
-		pos.z = sbs->ToRemote(Origin.z + position.z);
-	else
-		pos.z = mesh->Movable->GetPosition().z + sbs->ToRemote(position.z);
-	mesh->Movable->SetPosition(pos);
-	mesh->Movable->UpdateMove();
+	mesh->Move(position, relative_x, relative_y, relative_z, Origin);
 }
 
 csVector3 Model::GetPosition()
 {
-	return sbs->ToLocal(mesh->Movable->GetPosition());
+	return mesh->GetPosition();
 }
 
 void Model::SetRotation(const csVector3 rotation)
 {
-	//rotate light
-	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
-	csOrthoTransform ot (rot, mesh->Movable->GetTransform().GetOrigin());
-	mesh->Movable->SetTransform(ot);
-	rotX = rotation.x;
-	rotY = rotation.y;
-	rotZ = rotation.z;
-	mesh->Movable->UpdateMove();
+	mesh->SetRotation(rotation);
 }
 
 void Model::Rotate(const csVector3 rotation, float speed)
 {
-	//rotates light in a relative amount
-	rotX += rotation.x * speed;
-	rotY += rotation.y * speed;
-	rotZ += rotation.z * speed;
-	SetRotation(csVector3(rotX, rotY, rotZ));
+	mesh->Rotate(rotation, speed);
 }
 
 csVector3 Model::GetRotation()
 {
-	return csVector3(rotX, rotY, rotZ);
+	return mesh->GetRotation();
 }
 
 void Model::Enable(bool value)

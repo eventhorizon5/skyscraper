@@ -112,15 +112,14 @@ void Control::Enabled(bool value)
 csVector3 Control::GetPosition()
 {
 	//return current position
-	return sbs->ToLocal(ControlMesh->Movable->GetPosition());
+	return ControlMesh->GetPosition();
 }
 
 void Control::SetPosition(const csVector3 &position)
 {
 	//set control position
 	sound->SetPosition(position);
-	ControlMesh->Movable->SetPosition(sbs->ToRemote(position));
-	ControlMesh->Movable->UpdateMove();
+	ControlMesh->Move(position, false, false, false);
 }
 
 void Control::SetPositionY(float position)
@@ -134,8 +133,7 @@ void Control::SetPositionY(float position)
 void Control::Move(const csVector3 &position)
 {
 	//relative movement
-	ControlMesh->Movable->MovePosition(sbs->ToRemote(position));
-	ControlMesh->Movable->UpdateMove();
+	ControlMesh->Move(position, true, true, true);
 
 	//move sound
 	sound->SetPosition(GetPosition());

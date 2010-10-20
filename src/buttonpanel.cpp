@@ -416,8 +416,7 @@ void ButtonPanel::Press(int index)
 void ButtonPanel::Move(const csVector3 &position)
 {
 	//relative movement
-	ButtonPanelMesh->Movable->MovePosition(sbs->ToRemote(position));
-	ButtonPanelMesh->Movable->UpdateMove();
+	ButtonPanelMesh->Move(position, true, true, true);
 
 	//move controls
 	for (int i = 0; i < controls.GetSize(); i++)

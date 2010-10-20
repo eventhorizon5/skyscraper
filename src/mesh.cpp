@@ -1568,3 +1568,54 @@ bool MeshObject::IsEnabled()
 {
 	return enabled;
 }
+
+void MeshObject::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z, csVector3 origin)
+{
+	//move light - this can only be done on movable lights
+	csVector3 pos;
+	if (relative_x == false)
+		pos.x = sbs->ToRemote(origin.x + position.x);
+	else
+		pos.x = Movable->GetPosition().x + sbs->ToRemote(position.x);
+	if (relative_y == false)
+		pos.y = sbs->ToRemote(origin.y + position.y);
+	else
+		pos.y = Movable->GetPosition().y + sbs->ToRemote(position.y);
+	if (relative_z == false)
+		pos.z = sbs->ToRemote(origin.z + position.z);
+	else
+		pos.z = Movable->GetPosition().z + sbs->ToRemote(position.z);
+	Movable->SetPosition(pos);
+	Movable->UpdateMove();
+}
+
+csVector3 MeshObject::GetPosition()
+{
+	return sbs->ToLocal(Movable->GetPosition());
+}
+
+void MeshObject::SetRotation(const csVector3 rotation)
+{
+	//rotate light
+	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
+	csOrthoTransform ot (rot, Movable->GetTransform().GetOrigin());
+	Movable->SetTransform(ot);
+	rotX = rotation.x;
+	rotY = rotation.y;
+	rotZ = rotation.z;
+	Movable->UpdateMove();
+}
+
+void MeshObject::Rotate(const csVector3 rotation, float speed)
+{
+	//rotates light in a relative amount
+	rotX += rotation.x * speed;
+	rotY += rotation.y * speed;
+	rotZ += rotation.z * speed;
+	SetRotation(csVector3(rotX, rotY, rotZ));
+}
+
+csVector3 MeshObject::GetRotation()
+{
+	return csVector3(rotX, rotY, rotZ);
+}

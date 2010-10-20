@@ -370,58 +370,32 @@ void DirectionalIndicator::SetPosition(const csVector3& position)
 {
 	//set position of indicator objects
 
-	csVector3 positionnew = sbs->ToRemote(position);
 	if (DirectionalMeshBack)
-	{
-		DirectionalMeshBack->Movable->SetPosition(positionnew);
-		DirectionalMeshBack->Movable->UpdateMove();
-	}
+		DirectionalMeshBack->Move(position, false, false, false);
 	if (DirectionalMeshUp)
-	{
-		DirectionalMeshUp->Movable->SetPosition(positionnew);
-		DirectionalMeshUp->Movable->UpdateMove();
-	}
+		DirectionalMeshUp->Move(position, false, false, false);
 	if (DirectionalMeshDown)
-	{
-		DirectionalMeshDown->Movable->SetPosition(positionnew);
-		DirectionalMeshDown->Movable->UpdateMove();
-	}
+		DirectionalMeshDown->Move(position, false, false, false);
 	if (DirectionalMesh)
-	{
-		DirectionalMesh->Movable->SetPosition(positionnew);
-		DirectionalMesh->Movable->UpdateMove();
-	}
+		DirectionalMesh->Move(position, false, false, false);
 }
 
 void DirectionalIndicator::Move(const csVector3& position)
 {
 	//move indicator objects
 
-	csVector3 positionnew = sbs->ToRemote(position);
 	if (DirectionalMeshBack)
-	{
-		DirectionalMeshBack->Movable->MovePosition(positionnew);
-		DirectionalMeshBack->Movable->UpdateMove();
-	}
+		DirectionalMeshBack->Move(position, true, true, true);
 	if (DirectionalMeshUp)
-	{
-		DirectionalMeshUp->Movable->MovePosition(positionnew);
-		DirectionalMeshUp->Movable->UpdateMove();
-	}
+		DirectionalMeshUp->Move(position, true, true, true);
 	if (DirectionalMeshDown)
-	{
-		DirectionalMeshDown->Movable->MovePosition(positionnew);
-		DirectionalMeshDown->Movable->UpdateMove();
-	}
+		DirectionalMeshDown->Move(position, true, true, true);
 	if (DirectionalMesh)
-	{
-		DirectionalMesh->Movable->MovePosition(positionnew);
-		DirectionalMesh->Movable->UpdateMove();
-	}
+		DirectionalMesh->Move(position, true, true, true);
 }
 
 csVector3 DirectionalIndicator::GetPosition()
 {
 	//return indicator position
-	return sbs->ToLocal(DirectionalMeshBack->Movable->GetPosition());
+	return DirectionalMeshBack->GetPosition();
 }

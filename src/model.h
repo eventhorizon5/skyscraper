@@ -44,15 +44,12 @@ public:
 	void Rotate(const csVector3 rotation, float speed);
 	void SetRotation(const csVector3 rotation);
 	csVector3 GetRotation();
-	void Enabled(bool value);
 	bool IsEnabled();
 	void Enable(bool value);
 
 private:
 
 	MeshObject* mesh;
-	float rotX, rotY, rotZ;
-
 };
 
 #endif

@@ -258,21 +258,7 @@ void Door::Move(const csVector3 position, bool relative_x, bool relative_y, bool
 {
 	//moves door
 
-	csVector3 pos;
-	if (relative_x == false)
-		pos.x = sbs->ToRemote(position.x);
-	else
-		pos.x = DoorMesh->Movable->GetPosition().x + sbs->ToRemote(position.x);
-	if (relative_y == false)
-		pos.y = sbs->ToRemote(position.y);
-	else
-		pos.y = DoorMesh->Movable->GetPosition().y + sbs->ToRemote(position.y);
-	if (relative_z == false)
-		pos.z = sbs->ToRemote(position.z);
-	else
-		pos.z = DoorMesh->Movable->GetPosition().z + sbs->ToRemote(position.z);
-	DoorMesh->Movable->SetPosition(pos);
-	DoorMesh->Movable->UpdateMove();
+	DoorMesh->Move(position, relative_x, relative_y, relative_z);
 	origin = GetPosition();
 
 }
@@ -281,5 +267,5 @@ csVector3 Door::GetPosition()
 {
 	//return the door's position
 
-	return sbs->ToLocal(DoorMesh->Movable->GetPosition());
+	return DoorMesh->GetPosition();
 }

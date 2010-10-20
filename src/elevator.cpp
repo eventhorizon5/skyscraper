@@ -1466,8 +1466,7 @@ void Elevator::MoveElevatorToFloor()
 	//move elevator objects and camera
 	movement.y = ElevatorRate * sbs->delta;
 
-	ElevatorMesh->Movable->MovePosition(csVector3(0, sbs->ToRemote(movement.y), 0));
-	ElevatorMesh->Movable->UpdateMove();
+	ElevatorMesh->Move(csVector3(0, movement.y, 0), true, true, true);
 	elevposition = GetPosition();
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
@@ -1750,8 +1749,7 @@ void Elevator::MoveElevatorToFloor()
 		//move elevator objects
 		if (sbs->Verbose)
 			Report("setting elevator to floor altitude");
-		ElevatorMesh->Movable->SetPosition(sbs->ToRemote(csVector3(elevposition.x, Destination, elevposition.z)));
-		ElevatorMesh->Movable->UpdateMove();
+		ElevatorMesh->Move(csVector3(elevposition.x, Destination, elevposition.z), false, false, false);
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
@@ -1964,7 +1962,7 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 const csVector3 Elevator::GetPosition()
 {
 	//returns the elevator's position
-	return sbs->ToLocal(ElevatorMesh->Movable->GetPosition());
+	return ElevatorMesh->GetPosition();
 }
 
 void Elevator::DumpQueues()
