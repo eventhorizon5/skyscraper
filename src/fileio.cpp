@@ -2149,6 +2149,37 @@ int ScriptProcessor::ProcCommands()
 			StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), csVector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])))); 
 		tempdata.DeleteAll();
 	}
+
+	//AddModel command
+	if (LineData.Slice(0, 8).CompareNoCase("addmodel") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 9; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
+		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
+
+		//create model
+		StoreCommand(Simcore->AddModel(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])), atof(tempdata[8]), atof(tempdata[9])));
+		tempdata.DeleteAll();
+	}
+
 	return 0;
 }
 
@@ -3286,6 +3317,104 @@ int ScriptProcessor::ProcFloors()
 		tempdata.DeleteAll();
 	}
 
+	//AddModel command
+	if (LineData.Slice(0, 8).CompareNoCase("addmodel") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 9; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
+		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
+
+		//create model
+		StoreCommand(floor->AddModel(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])), atof(tempdata[8]), atof(tempdata[9])));
+		tempdata.DeleteAll();
+	}
+
+	//AddStairsModel command
+	if (LineData.Slice(0, 14).CompareNoCase("addstairsmodel") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(15).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 10; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
+		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
+
+		//create model
+		if (Simcore->GetStairs(atoi(tempdata[0])))
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csVector3(atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])), atof(tempdata[9]), atof(tempdata[10])));
+		else
+			return ScriptError("Invalid stairwell");
+
+		tempdata.DeleteAll();
+	}
+
+	//AddShaftModel command
+	if (LineData.Slice(0, 13).CompareNoCase("addshaftmodel") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(14).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 11 || tempdata.GetSize() > 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 10; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
+		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
+
+		//create model
+		if (Simcore->GetShaft(atoi(tempdata[0])))
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], csVector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), csVector3(atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])), atof(tempdata[9]), atof(tempdata[10])));
+		else
+			return ScriptError("Invalid shaft");
+
+		tempdata.DeleteAll();
+	}
+
 	//Cut command
 	if (LineData.Slice(0, 4).CompareNoCase("cut ") == true)
 	{
@@ -3313,7 +3442,7 @@ int ScriptProcessor::ProcFloors()
 		tempdata.DeleteAll();
 	}
 
-	//Cut command
+	//CutAll command
 	if (LineData.Slice(0, 6).CompareNoCase("cutall") == true)
 	{
 		//get data
@@ -5054,6 +5183,36 @@ int ScriptProcessor::ProcElevators()
 			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 		else
 			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], csString(tempdata[2]).CompareNoCase("true"), tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+		tempdata.DeleteAll();
+	}
+
+	//AddModel command
+	if (LineData.Slice(0, 8).CompareNoCase("addmodel") == true)
+	{
+		//get data
+		tempdata.SplitString(LineData.Slice(9).GetData(), ",");
+
+		//calculate inline math
+		for (temp3 = 0; temp3 < tempdata.GetSize(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3]);
+			tempdata.Put(temp3, buffer);
+		}
+		if (tempdata.GetSize() < 10 || tempdata.GetSize() > 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 9; i++)
+		{
+			if (!IsNumeric(csString(tempdata[i]).Trim().GetData()))
+				return ScriptError("Invalid value: " + csString(tempdata[i]));
+		}
+
+		//check to see if file exists
+		CheckFile(csString("data/") + tempdata[1], true);
+
+		//create model
+		StoreCommand(elev->AddModel(tempdata[0], tempdata[1], csVector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), csVector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])), atof(tempdata[8]), atof(tempdata[9])));
 		tempdata.DeleteAll();
 	}
 

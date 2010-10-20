@@ -30,19 +30,22 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Model::Model(const char *name, const char *filename, csVector3 &position, csVector3 &rotation)
+Model::Model(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
 {
 	//loads a 3D model into the simulation
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Model", "", false);
+	object->SetValues(this, sbs->object, "Model", name, false);
 
-	mesh = new MeshObject(object, name, filename);
+	mesh = new MeshObject(object, name, filename, max_render_distance, scale_multiplier);
+	sbs->AddModelHandle(this);
 }
 
 Model::~Model()
 {
+	if (sbs->FastDelete == false)
+		sbs->DeleteModelHandle(this);
 	if (mesh)
 		delete mesh;
 	mesh = 0;
@@ -98,4 +101,14 @@ void Model::Rotate(const csVector3& rotation, float speed)
 csVector3 Model::GetRotation()
 {
 	return csVector3(rotX, rotY, rotZ);
+}
+
+void Model::Enable(bool value)
+{
+	mesh->Enable(value);	
+}
+
+bool Model::IsEnabled()
+{
+	return mesh->IsEnabled();
 }

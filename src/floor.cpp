@@ -79,6 +79,14 @@ Floor::~Floor()
 {
 	//Destructor
 
+	//delete models
+	for (int i = 0; i < ModelArray.GetSize(); i++)
+	{
+		if (ModelArray[i])
+			delete ModelArray[i];
+		ModelArray[i] = 0;
+	}
+
 	//delete lights
 	for (int i = 0; i < lights.GetSize(); i++)
 	{
@@ -243,6 +251,13 @@ void Floor::Enabled(bool value)
 	IsEnabled = value;
 
 	EnableColumnFrame(value);
+
+	//models
+	for (size_t i = 0; i < ModelArray.GetSize(); i++)
+	{
+		if (ModelArray[i])
+			ModelArray[i]->Enable(value);
+	}
 
 	//call buttons
 	for (size_t i = 0; i < CallButtonArray.GetSize(); i++)
@@ -942,11 +957,19 @@ void Floor::RemoveSound(Sound *sound)
 	sounds.Delete(sound);
 }
 
-Light* Floor::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Floor::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
-	//add a global light
+	//add a light
 
 	Light* light = new Light(name, type, position + csVector3(0, GetBase(), 0), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
 	lights.Push(light);
-	return light;
+	return light->object;
+}
+
+Object* Floor::AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+{
+	//add a model
+	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier);
+	ModelArray.Push(model);
+	return model->object;
 }

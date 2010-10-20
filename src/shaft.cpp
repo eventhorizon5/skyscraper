@@ -78,6 +78,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	ShaftArray.SetSize(endfloor - startfloor + 1);
 	EnableArray.SetSize(endfloor - startfloor + 1);
 	lights.SetSize(endfloor - startfloor + 1);
+	ModelArray.SetSize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -94,6 +95,17 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 Shaft::~Shaft()
 {
 	//destructor
+
+	//delete models
+	for (int i = 0; i < ModelArray.GetSize(); i++)
+	{
+		for (int j = 0; j < ModelArray[i].GetSize(); j++)
+		{
+			if (ModelArray[i][j])
+				delete ModelArray[i][j];
+			ModelArray[i][j] = 0;
+		}
+	}
 
 	//delete lights
 	for (int i = 0; i < lights.GetSize(); i++)
@@ -171,6 +183,13 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 		{
 			GetMeshObject(floor)->Enable(value);
 			EnableArray[floor - startfloor] = true;
+
+			//models
+			for (size_t i = 0; i < ModelArray[floor - startfloor].GetSize(); i++)
+			{
+				if (ModelArray[floor - startfloor][i])
+					ModelArray[floor - startfloor][i]->Enable(true);
+			}
 		}
 		else
 		{
@@ -179,6 +198,13 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 			{
 				GetMeshObject(floor)->Enable(value);
 				EnableArray[floor - startfloor] = false;
+
+				//models
+				for (size_t i = 0; i < ModelArray[floor - startfloor].GetSize(); i++)
+				{
+					if (ModelArray[floor - startfloor][i])
+						ModelArray[floor - startfloor][i]->Enable(false);
+				}
 			}
 			else
 				return;
@@ -461,7 +487,7 @@ bool Shaft::ReportError(const char *message)
 	return sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
-Light* Shaft::AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Shaft::AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
@@ -471,5 +497,18 @@ Light* Shaft::AddLight(int floor, const char *name, int type, csVector3 position
 
 	Light* light = new Light(name, type, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
 	lights[floor - startfloor].Push(light);
-	return light;
+	return light->object;
+}
+
+Object* Shaft::AddModel(int floor, const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+{
+	//add a model
+
+	//exit if floor is invalid
+	if (!IsValidFloor(floor))
+		return 0;
+
+	Model* model = new Model(name, filename, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier);
+	ModelArray[floor - startfloor].Push(model);
+	return model->object;
 }

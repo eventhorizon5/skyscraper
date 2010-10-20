@@ -1349,41 +1349,13 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	}
 	else
 	{
-		//load mesh object from file
-		region = sbs->engine->CreateRegion(name);
-		csLoadResult rc = sbs->loader->Load(filename, region, false, true);
-
-		if (!rc.success)
-			return;
-
-		csRef<iMeshFactoryWrapper> factory;
-		if (rc.result == 0)
-		{
-			// Library file. Find the last factory in our region.
-			iMeshFactoryList* factories = sbs->engine->GetMeshFactories();
-			int i;
-			for (i = factories->GetCount() - 1 ; i >= 0 ; --i)
-			{
-				iMeshFactoryWrapper* f = factories->Get(i);
-				if (region->IsInRegion (f->QueryObject()))
-				{
-					factory = f;
-					break;
-				}
-			}
-		}
-		else
-		{
-			factory = scfQueryInterface<iMeshFactoryWrapper> (rc.result);
-		}
-
-		if (!factory)
-			return;
-
-		//create mesh wrapper and factory
-		MeshWrapper = sbs->engine->CreateMeshWrapper(factory, name, sbs->area);
-		csPrintf("Model file %s loaded\n", filename);
+		//load mesh object from collada file
+		LoadColladaFile(filename, name);
 	}
+
+	//exit if mesh wrapper wasn't created
+	if (!MeshWrapper)
+		return;
 
 	//set zbuf mode to "USE" by default
 	MeshWrapper->SetZBufMode(CS_ZBUF_USE);
@@ -1392,7 +1364,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	MeshWrapper->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	//create a default material (otherwise the system complains if a mesh is used without a material)
-	MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
+	if (!MeshWrapper->GetMeshObject()->GetMaterialWrapper())
+		MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
 	//set maximum render distance
 	if (max_render_distance > 0)
@@ -1401,7 +1374,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	State = scfQueryInterface<iGeneralFactoryState> (MeshWrapper->GetFactory()->GetMeshObjectFactory());
 	Movable = MeshWrapper->GetMovable();
 
-	//rescale if a loaded object
+	//rescale if a loaded model
 	if (filename)
 		RescaleVertices(scale_multiplier);
 
@@ -1529,4 +1502,68 @@ void MeshObject::RescaleVertices(float multiplier)
 		State->GetVertices()[i] = sbs->ToRemote(mesh_vertices[i] * multiplier);
 
 	mesh_vertices.DeleteAll();
+}
+
+bool MeshObject::LoadColladaFile(const char *filename, const char *name)
+{
+	//load a collada file into a new mesh, by converting to native Crystal Space format
+
+	csString File = filename;
+	sbs->Report("Loading Collada model file " + File);
+	File.Insert(0, "/root/");
+
+	#define COLLADA_VERSION "1.4.1"
+	csRef<iColladaConvertor> collada = csQueryRegistryOrLoad<iColladaConvertor>(sbs->object_reg, "crystalspace.utilities.colladaconvertor");
+	if(!collada)
+	{
+		csPrintf("Collada plugin failed to load\n");
+		return false;
+	}
+	collada->SetOutputFiletype(CS_LIBRARY_FILE);
+	if (collada->Load(File) != 0)
+		return sbs->ReportError("LoadColladaFile: Error loading collada file");
+
+	if (collada->Convert() != 0)
+		return sbs->ReportError("LoadColladaFile: Error converting collada file");
+	csRef<iDocument> doc = collada->GetCrystalDocument();
+
+	region = sbs->engine->CreateRegion(name);
+	csLoadResult rc = sbs->loader->Load(doc->GetRoot(), region, false, true);
+
+	if (!rc.success)
+		return sbs->ReportError("LoadColladaFile: Error parsing model");
+
+	csRef<iMeshFactoryWrapper> factory;
+	if (rc.result == 0)
+	{
+		// Library file. Find the last factory in our region.
+		iMeshFactoryList* factories = sbs->engine->GetMeshFactories();
+		int i;
+		for (i = factories->GetCount() - 1 ; i >= 0 ; --i)
+		{
+			iMeshFactoryWrapper* f = factories->Get(i);
+			if (region->IsInRegion (f->QueryObject()))
+			{
+				factory = f;
+				break;
+			}
+		}
+	}
+	else
+	{
+		factory = scfQueryInterface<iMeshFactoryWrapper> (rc.result);
+	}
+
+	if (!factory)
+		return sbs->ReportError("LoadColladaFile: Error creating mesh factory");
+
+	//create mesh wrapper and factory
+	MeshWrapper = sbs->engine->CreateMeshWrapper(factory, name, sbs->area);
+	sbs->Report("Model file loaded");
+	return true;
+}
+
+bool MeshObject::IsEnabled()
+{
+	return enabled;
 }

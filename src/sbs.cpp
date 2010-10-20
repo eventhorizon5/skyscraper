@@ -35,6 +35,7 @@
 #include "sbs.h"
 #include "unix.h"
 #include "revsbs.h"
+#include "model.h"
 
 #ifdef _WIN32
 	CS_IMPLEMENT_FOREIGN_DLL
@@ -176,6 +177,14 @@ SBS::~SBS()
 	Report("Deleting SBS objects...");
 
 	FastDelete = true;
+
+	//delete models
+	for (int i = 0; i < ModelArray.GetSize(); i++)
+	{
+		if (ModelArray[i])
+			delete ModelArray[i];
+		ModelArray[i] = 0;
+	}
 
 	//delete lights
 	for (int i = 0; i < lights.GetSize(); i++)
@@ -3683,6 +3692,16 @@ void SBS::DeleteLightHandle(Light* handle)
 	all_lights.Delete(handle);
 }
 
+void SBS::AddModelHandle(Model* handle)
+{
+	all_models.Push(handle);
+}
+
+void SBS::DeleteModelHandle(Model* handle)
+{
+	all_models.Delete(handle);
+}
+
 void SBS::Prepare()
 {
 	//prepare objects for run
@@ -3691,13 +3710,13 @@ void SBS::Prepare()
 	engine->Prepare();
 }
 
-Light* SBS::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* SBS::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
 	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
 	lights.Push(light);
-	return light;
+	return light->object;
 }
 
 void SBS::AddMeshHandle(MeshObject* handle)
@@ -3719,4 +3738,12 @@ MeshObject* SBS::FindMeshObject(csRef<iMeshWrapper> meshwrapper)
 			return meshes[i];
 	}
 	return 0;
+}
+
+Object* SBS::AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+{
+	//add a model
+	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier);
+	ModelArray.Push(model);
+	return model->object;
 }

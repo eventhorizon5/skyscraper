@@ -178,6 +178,14 @@ Elevator::Elevator(int number)
 
 Elevator::~Elevator()
 {
+	//delete models
+	for (int i = 0; i < ModelArray.GetSize(); i++)
+	{
+		if (ModelArray[i])
+			delete ModelArray[i];
+		ModelArray[i] = 0;
+	}
+
 	//delete lights
 	for (int i = 0; i < lights.GetSize(); i++)
 	{
@@ -1465,6 +1473,7 @@ void Elevator::MoveElevatorToFloor()
 		sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
 	MoveDoors(0, movement, true, true, true);
 	MoveLights(movement, true, true, true);
+	MoveModels(movement, true, true, true);
 	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -1747,6 +1756,7 @@ void Elevator::MoveElevatorToFloor()
 			sbs->camera->SetPosition(csVector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 		MoveDoors(0, csVector3(0, Destination, 0), true, false, true);
 		MoveLights(csVector3(0, Destination, 0), true, false, true);
+		MoveModels(csVector3(0, Destination, 0), true, false, true);
 		for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
 		{
 			if (FloorIndicatorArray[i])
@@ -2011,6 +2021,13 @@ void Elevator::EnableObjects(bool value)
 
 	//interior directional indicators
 	//EnableDirectionalIndicators(value);
+
+	//models
+	for (size_t i = 0; i < ModelArray.GetSize(); i++)
+	{
+		if (ModelArray[i])
+			ModelArray[i]->Enable(value);
+	}
 
 	//panels
 	for (int i = 0; i < PanelArray.GetSize(); i++)
@@ -4122,18 +4139,33 @@ void Elevator::EnableNudgeMode(bool value, int number)
 	}
 }
 
-Light* Elevator::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Elevator::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
 	Light* light = new Light(name, type, position + Origin, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
 	lights.Push(light);
-	return light;
+	return light->object;
 }
 
-void Elevator::MoveLights(csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void Elevator::MoveLights(csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move lights
 	for (int i = 0; i < lights.GetSize(); i++)
 		lights[i]->Move(position, relative_x, relative_y, relative_z);
+}
+
+Object* Elevator::AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+{
+	//add a model
+	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier);
+	ModelArray.Push(model);
+	return model->object;
+}
+
+void Elevator::MoveModels(csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
+{
+	//move models
+	for (int i = 0; i < ModelArray.GetSize(); i++)
+		ModelArray[i]->Move(position, relative_x, relative_y, relative_z);
 }

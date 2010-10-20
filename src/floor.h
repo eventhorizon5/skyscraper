@@ -31,7 +31,6 @@
 #include "floorindicator.h"
 #include "directional.h"
 #include "sound.h"
-#include "light.h"
 
 class SBSIMPEXP Floor
 {
@@ -101,7 +100,8 @@ public:
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
 	void RemoveDoor(Door *door);
 	void RemoveSound(Sound *sound);
-	Light* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	Object* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	Object* AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance = 0, float scale_multiplier = 1);
 
 private:
 	char intbuffer[65];
@@ -118,6 +118,9 @@ private:
 
 	//directional indicators
 	csArray<DirectionalIndicator*> DirIndicatorArray;
+
+	//Models
+	csArray<Model*> ModelArray;
 };
 
 #endif

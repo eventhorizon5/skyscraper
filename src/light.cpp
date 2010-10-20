@@ -46,7 +46,7 @@ Light::Light(const char *name, int type, csVector3 position, csVector3 rotation,
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Light", "", false);
+	object->SetValues(this, sbs->object, "Light", name, false);
 
 	Type = type;
 	Name = name;
