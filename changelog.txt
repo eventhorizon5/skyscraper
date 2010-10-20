@@ -3,7 +3,8 @@ Version 1.8 (2.0 Alpha 8)
 -new internal mesh system
 -new horizon distance setting
 -added render distance limits for small objects
--added lighting system
+-added lighting system (not currently enabled)
+-added support for loading Collada models
 
 Version 1.7 (2.0 Alpha 7)
 -------------------------

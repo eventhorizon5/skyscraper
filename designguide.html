@@ -727,9 +727,45 @@
     shaft door.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">FinishShaftDoor<em> 
     elevator, number</em></font></p>
-  <p align="left">This command is almost identical to the FinishDoors command (in the elevator section below -
-    see that for more information) except that it's used for finishing a shaft door.</p>
-  <p align="left">&nbsp;</p>
+  <p align="left">This command is almost identical to the FinishDoors command 
+    (in the elevator section below - see that for more information) except that 
+    it's used for finishing a shaft door.</p>
+  <p align="left"><strong>26. AddModel</strong> - adds a Collada 3D model to the 
+    floor. The model's textures must be loaded separately, and must match the 
+    material names set in the model file.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddModel<em> name, 
+    filename, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ, MaxRenderDistance, 
+    ScaleMultiplier</em><em><br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"> AddModel 
+    MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1</font></p>
+  <p align="left">The CenterY value is relative to the current floor's base. MaxRenderDistance 
+    determines the maximum distance in feet that the object will be shown. ScaleMultiplier 
+    allows you to change the size of the object during the load - for example, 
+    set to 2 to double the size. Models are in the Collada open exchange format 
+    (are converted to Crystal Space native library format during load), and most 
+    current 3D modelling programs can export to this format. Make sure you create 
+    a triangulated object, since &quot;polylist&quot; types don't load.</p>
+  <p align="left"><strong>27. AddStairsModel</strong> - adds a Collada 3D model 
+    to the specified stairwell, on the current floor. See the AddModel command 
+    above for parameter information.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsModel<em> 
+    number, name, filename, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ, 
+    MaxRenderDistance, ScaleMultiplier</em><em><br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"> AddModel 
+    1, MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1</font></p>
+  <p align="left">The CenterY value is relative to the current floor's altitude. 
+  </p>
+  <p align="left"><strong>28. AddShaftModel</strong> - adds a Collada 3D model 
+    to the specified shaft, on the current floor. See the AddModel command above 
+    for parameter information.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddStairsModel<em> 
+    number, name, filename, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ, 
+    MaxRenderDistance, ScaleMultiplier</em><em><br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"> AddModel 
+    1, MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1</font></p>
+  <p align="left">The CenterY value is relative to the current floor's altitude. 
+  </p>
+  <p align="left"><strong></strong></p>
   <p align="left"><strong><font size="+1"><a name="Elevator"></a>6. The <em>Elevator</em> 
     Section</font></strong></p>
   <p align="left">The <em>Elevator</em> section allows you to create elevators 
@@ -1346,6 +1382,22 @@
     6 - faces front, opens back<br>
     7 - faces back, opens back<br>
     8 - faces back, opens front</p>
+  <p align="left"><strong>20. AddModel</strong> - adds a Collada 3D model to the 
+    floor. The model's textures must be loaded separately, and must match the 
+    material names set in the model file.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">AddModel<em> name, 
+    filename, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ, MaxRenderDistance, 
+    ScaleMultiplier</em><em><br>
+    </em></font>Example:<font size="2" face="Courier New, Courier, mono"> AddModel 
+    MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1</font></p>
+  <p align="left">The Center values are relative to the elevator's central origin. 
+    MaxRenderDistance determines the maximum distance in feet that the object 
+    will be shown. ScaleMultiplier allows you to change the size of the object 
+    during the load - for example, set to 2 to double the size. Models are in 
+    the Collada open exchange format (are converted to Crystal Space native library 
+    format during load), and most current 3D modelling programs can export to 
+    this format. Make sure you create a triangulated object, since &quot;polylist&quot; 
+    types don't load.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1"><a name="GlobalCommands" id="GlobalCommands"></a>8. 
     Global Commands/Functions</font></strong></p>

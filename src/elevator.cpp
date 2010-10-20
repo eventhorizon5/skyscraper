@@ -4158,7 +4158,7 @@ void Elevator::MoveLights(csVector3 &position, bool relative_x, bool relative_y,
 Object* Elevator::AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
-	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier);
+	Model* model = new Model(name, filename, position + Origin, rotation, max_render_distance, scale_multiplier);
 	ModelArray.Push(model);
 	return model->object;
 }
