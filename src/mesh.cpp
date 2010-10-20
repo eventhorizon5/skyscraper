@@ -1508,12 +1508,10 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 {
 	//load a collada file into a new mesh, by converting to native Crystal Space format
 
-	csString File = filename;
+	//first verify the filename
+	csString File = sbs->VerifyFile(filename);;
 	sbs->Report("Loading Collada model file " + File);
 	File.Insert(0, "/root/data/");
-
-	//first verify the filename
-	File = sbs->VerifyFile(filename);
 
 	#define COLLADA_VERSION "1.4.1"
 	csRef<iColladaConvertor> collada = csQueryRegistryOrLoad<iColladaConvertor>(sbs->object_reg, "crystalspace.utilities.colladaconvertor");

@@ -43,6 +43,9 @@ Model::Model(const char *name, const char *filename, csVector3 &position, csVect
 	if (!mesh->MeshWrapper)
 		load_error = true;
 	sbs->AddModelHandle(this);
+
+	Move(position, false, false, false);
+	SetRotation(rotation);
 }
 
 Model::~Model()
