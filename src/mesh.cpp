@@ -1530,8 +1530,8 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 		return sbs->ReportError("LoadColladaFile: Error converting collada file");
 	csRef<iDocument> doc = collada->GetCrystalDocument();
 
-	region = sbs->engine->CreateRegion(name);
-	csLoadResult rc = sbs->loader->Load(doc->GetRoot(), region, false, true);
+	collection = sbs->engine->CreateCollection(name);
+	csLoadResult rc = sbs->loader->Load(doc->GetRoot(), collection, false, true);
 
 	if (!rc.success)
 		return sbs->ReportError("LoadColladaFile: Error parsing model");
@@ -1545,7 +1545,7 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 		for (i = factories->GetCount() - 1 ; i >= 0 ; --i)
 		{
 			iMeshFactoryWrapper* f = factories->Get(i);
-			if (region->IsInRegion (f->QueryObject()))
+			if (collection->IsParentOf(f->QueryObject()))
 			{
 				factory = f;
 				break;

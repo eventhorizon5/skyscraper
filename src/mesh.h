@@ -52,7 +52,7 @@ public:
 
 private:
 	bool enabled;
-	csRef<iRegion> region;
+	csRef<iCollection> collection;
 };
 
 class SBSIMPEXP WallPolygon
