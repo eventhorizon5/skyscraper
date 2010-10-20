@@ -38,6 +38,9 @@ class ScriptProcessor
 	bool LoadDataFile(const char *filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const char *text);
 	bool ReportMissingFiles();
+	int SplitData(const char *string, int start, bool calc = true);
+	int SplitAfterEquals(const char *string, bool calc = true);
+	csString GetAfterEquals(const char *string);
 
 	private:
 	int line; //line number
