@@ -4148,14 +4148,14 @@ Object* Elevator::AddLight(const char *name, int type, csVector3 position, csVec
 	return light->object;
 }
 
-void Elevator::MoveLights(csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
+void Elevator::MoveLights(csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move lights
 	for (int i = 0; i < lights.GetSize(); i++)
 		lights[i]->Move(position, relative_x, relative_y, relative_z);
 }
 
-Object* Elevator::AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+Object* Elevator::AddModel(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 	Model* model = new Model(name, filename, position + Origin, rotation, max_render_distance, scale_multiplier);
@@ -4168,7 +4168,7 @@ Object* Elevator::AddModel(const char *name, const char *filename, csVector3 &po
 	return model->object;
 }
 
-void Elevator::MoveModels(csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
+void Elevator::MoveModels(csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move models
 	for (int i = 0; i < ModelArray.GetSize(); i++)

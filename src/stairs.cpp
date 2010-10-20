@@ -656,7 +656,7 @@ MeshObject* Stairs::GetMeshObject(int floor)
 	return StairArray[floor - startfloor];
 }
 
-Object* Stairs::AddModel(int floor, const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+Object* Stairs::AddModel(int floor, const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 

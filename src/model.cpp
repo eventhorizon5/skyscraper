@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Model::Model(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+Model::Model(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//loads a 3D model into the simulation
 
@@ -58,7 +58,7 @@ Model::~Model()
 	delete object;
 }
 
-void Model::Move(const csVector3& position, bool relative_x, bool relative_y, bool relative_z)
+void Model::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move light - this can only be done on movable lights
 	csVector3 pos;
@@ -83,7 +83,7 @@ csVector3 Model::GetPosition()
 	return sbs->ToLocal(mesh->Movable->GetPosition());
 }
 
-void Model::SetRotation(const csVector3& rotation)
+void Model::SetRotation(const csVector3 rotation)
 {
 	//rotate light
 	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
@@ -95,7 +95,7 @@ void Model::SetRotation(const csVector3& rotation)
 	mesh->Movable->UpdateMove();
 }
 
-void Model::Rotate(const csVector3& rotation, float speed)
+void Model::Rotate(const csVector3 rotation, float speed)
 {
 	//rotates light in a relative amount
 	rotX += rotation.x * speed;

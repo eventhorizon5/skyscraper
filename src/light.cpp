@@ -96,7 +96,7 @@ void Light::Prepare()
 #endif
 }
 
-void Light::Move(const csVector3& position, bool relative_x, bool relative_y, bool relative_z)
+void Light::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move light - this can only be done on movable lights
 	csVector3 pos;

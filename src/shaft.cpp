@@ -500,7 +500,7 @@ Object* Shaft::AddLight(int floor, const char *name, int type, csVector3 positio
 	return light->object;
 }
 
-Object* Shaft::AddModel(int floor, const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+Object* Shaft::AddModel(int floor, const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 

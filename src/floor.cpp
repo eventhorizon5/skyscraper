@@ -966,7 +966,7 @@ Object* Floor::AddLight(const char *name, int type, csVector3 position, csVector
 	return light->object;
 }
 
-Object* Floor::AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+Object* Floor::AddModel(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 	Model* model = new Model(name, filename, position + csVector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier);

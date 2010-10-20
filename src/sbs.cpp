@@ -3740,7 +3740,7 @@ MeshObject* SBS::FindMeshObject(csRef<iMeshWrapper> meshwrapper)
 	return 0;
 }
 
-Object* SBS::AddModel(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance, float scale_multiplier)
+Object* SBS::AddModel(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier);
