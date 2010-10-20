@@ -2009,6 +2009,9 @@ int ScriptProcessor::ProcCommands()
 	//AddModel command
 	if (LineData.Slice(0, 8).CompareNoCase("addmodel") == true)
 	{
+		if (Section == 2)
+			return 0;
+
 		//get data
 		int params = SplitData(LineData, 9);
 
@@ -5087,7 +5090,7 @@ bool ScriptProcessor::FunctionProc()
 			int location2 = location + functions[i].name.Length() + 1;
 			int end_loc = LineData.Find(")", location);
 			csString newdata = LineData.Slice(location2, end_loc - location2);
-			//tempdata.SplitString(LineData.Slice(location2, end_loc - location2), ",");
+			tempdata.DeleteAll();
 			tempdata.SplitString(newdata, ",");
 
 			//calculate inline math
@@ -5103,8 +5106,6 @@ bool ScriptProcessor::FunctionProc()
 			//switch to function line
 			FunctionCallLineData = LineData;
 			line = functions[i].line;
-
-			tempdata.DeleteAll();
 			return true;
 		}
 	}
