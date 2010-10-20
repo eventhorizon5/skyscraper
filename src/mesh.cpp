@@ -1517,7 +1517,7 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 	csRef<iColladaConvertor> collada = csQueryRegistryOrLoad<iColladaConvertor>(sbs->object_reg, "crystalspace.utilities.colladaconvertor");
 	if(!collada)
 	{
-		csPrintf("Collada plugin failed to load\n");
+		printf("Collada plugin failed to load\n");
 		return false;
 	}
 	collada->SetOutputFiletype(CS_LIBRARY_FILE);

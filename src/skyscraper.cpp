@@ -164,7 +164,7 @@ int Skyscraper::OnExit()
 	skyscraper = 0;
 
 	//cleanup
-	csPrintf ("Cleaning up...\n");
+	printf("Cleaning up...\n");
 
 	return 0;
 }
@@ -215,7 +215,7 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 
 void MainScreen::OnShow(wxShowEvent& event)
 {
-	//csPrintf("got show %d\n", (int)event.GetShow());
+	//printf("got show %d\n", (int)event.GetShow());
 }
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
@@ -833,8 +833,8 @@ void Skyscraper::Report (const char* msg, ...)
 		rep->ReportNotify("skyscraper", message);
 	else
 	{
-		csPrintf(message);
-		csPrintf("\n");
+		printf(message);
+		printf("\n");
 		fflush(stdout);
 	}
 }
@@ -848,8 +848,8 @@ bool Skyscraper::ReportError (const char* msg, ...)
 		rep->ReportError("skyscraper", message);
 	else
 	{
-		csPrintf(message);
-		csPrintf("\n");
+		printf(message);
+		printf("\n");
 		fflush(stdout);
 	}
 	return false;

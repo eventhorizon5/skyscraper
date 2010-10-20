@@ -395,11 +395,11 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_
 
 void SBS::PrintBanner()
 {
-	csPrintf("\n Scalable Building Simulator " + version + " " + version_state + "\n");
-	csPrintf(" Copyright (C)2004-2010 Ryan Thoryk\n");
-	csPrintf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
-	csPrintf(" software, and you are welcome to redistribute it under certain\n");
-	csPrintf(" conditions. For details, see the file gpl.txt\n\n");
+	printf("\n Scalable Building Simulator " + version + " " + version_state + "\n");
+	printf(" Copyright (C)2004-2010 Ryan Thoryk\n");
+	printf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
+	printf(" software, and you are welcome to redistribute it under certain\n");
+	printf(" conditions. For details, see the file gpl.txt\n\n");
 }
 
 void SBS::MainLoop()
@@ -566,11 +566,11 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 	Mount("signs-sans_cond_bold.zip", "/root/signs/sans_cond_bold");
 
 	//load default textures
-	csPrintf("Loading default textures...");
+	printf("Loading default textures...");
 	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
 	LoadTexture("/root/data/gray2-sm.jpg", "ConnectionWall", 1, 1);
 	LoadTexture("/root/data/metal1-sm.jpg", "Connection", 1, 1);
-	csPrintf("Done\n");
+	printf("Done\n");
 
 	//create camera object
 	camera = new Camera();
@@ -1344,8 +1344,8 @@ void SBS::Report (const char* msg, ...)
 		rep->ReportNotify("sbs", message);
 	else
 	{
-		csPrintf(message);
-		csPrintf("\n");
+		printf(message);
+		printf("\n");
 		fflush (stdout);
 	}
 	LastNotification = message;
@@ -1360,8 +1360,8 @@ bool SBS::ReportError (const char* msg, ...)
 		rep->ReportError("sbs", message);
 	else
 	{
-		csPrintf(message);
-		csPrintf("\n");
+		printf(message);
+		printf("\n");
 		fflush (stdout);
 	}
 	LastError = message;
