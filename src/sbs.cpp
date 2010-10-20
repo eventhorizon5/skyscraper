@@ -3744,6 +3744,11 @@ Object* SBS::AddModel(const char *name, const char *filename, csVector3 &positio
 {
 	//add a model
 	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier);
+	if (model->load_error == true)
+	{
+		delete model;
+		return 0;
+	}
 	ModelArray.Push(model);
 	return model->object;
 }

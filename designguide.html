@@ -739,12 +739,13 @@
     </em></font>Example:<font size="2" face="Courier New, Courier, mono"> AddModel 
     MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1</font></p>
   <p align="left">The CenterY value is relative to the current floor's base. MaxRenderDistance 
-    determines the maximum distance in feet that the object will be shown. ScaleMultiplier 
-    allows you to change the size of the object during the load - for example, 
-    set to 2 to double the size. Models are in the Collada open exchange format 
-    (are converted to Crystal Space native library format during load), and most 
-    current 3D modelling programs can export to this format. Make sure you create 
-    a triangulated object, since &quot;polylist&quot; types don't load.</p>
+    determines the maximum distance in feet that the object will be shown (0 means 
+    unlimited). ScaleMultiplier allows you to change the size of the object during 
+    the load - for example, set to 2 to double the size. Models are in the Collada 
+    open exchange format (are converted to Crystal Space native library format 
+    during load), and most current 3D modelling programs can export to this format. 
+    Make sure you create a triangulated object, since &quot;polylist&quot; types 
+    don't load.</p>
   <p align="left"><strong>27. AddStairsModel</strong> - adds a Collada 3D model 
     to the specified stairwell, on the current floor. See the AddModel command 
     above for parameter information.<br>
@@ -1392,12 +1393,12 @@
     MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1</font></p>
   <p align="left">The Center values are relative to the elevator's central origin. 
     MaxRenderDistance determines the maximum distance in feet that the object 
-    will be shown. ScaleMultiplier allows you to change the size of the object 
-    during the load - for example, set to 2 to double the size. Models are in 
-    the Collada open exchange format (are converted to Crystal Space native library 
-    format during load), and most current 3D modelling programs can export to 
-    this format. Make sure you create a triangulated object, since &quot;polylist&quot; 
-    types don't load.</p>
+    will be shown (0 means unlimited). ScaleMultiplier allows you to change the 
+    size of the object during the load - for example, set to 2 to double the size. 
+    Models are in the Collada open exchange format (are converted to Crystal Space 
+    native library format during load), and most current 3D modelling programs 
+    can export to this format. Make sure you create a triangulated object, since 
+    &quot;polylist&quot; types don't load.</p>
   <p align="left">&nbsp;</p>
   <p align="left"><strong><font size="+1"><a name="GlobalCommands" id="GlobalCommands"></a>8. 
     Global Commands/Functions</font></strong></p>

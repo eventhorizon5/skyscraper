@@ -4159,6 +4159,11 @@ Object* Elevator::AddModel(const char *name, const char *filename, csVector3 &po
 {
 	//add a model
 	Model* model = new Model(name, filename, position + Origin, rotation, max_render_distance, scale_multiplier);
+	if (model->load_error == true)
+	{
+		delete model;
+		return 0;
+	}
 	ModelArray.Push(model);
 	return model->object;
 }

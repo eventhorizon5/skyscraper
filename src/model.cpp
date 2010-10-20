@@ -38,7 +38,10 @@ Model::Model(const char *name, const char *filename, csVector3 &position, csVect
 	object = new Object();
 	object->SetValues(this, sbs->object, "Model", name, false);
 
+	load_error = false;
 	mesh = new MeshObject(object, name, filename, max_render_distance, scale_multiplier);
+	if (!mesh->MeshWrapper)
+		load_error = true;
 	sbs->AddModelHandle(this);
 }
 

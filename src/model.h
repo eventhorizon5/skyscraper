@@ -34,6 +34,7 @@ public:
 	Object *object; //SBS object
 	csString Name;
 	csVector3 Origin;
+	bool load_error;
 
 	//functions
 	Model(const char *name, const char *filename, csVector3 &position, csVector3 &rotation, float max_render_distance = 0, float scale_multiplier = 1);

@@ -665,6 +665,11 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, csVe
 		return 0;
 
 	Model* model = new Model(name, filename, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier);
+	if (model->load_error == true)
+	{
+		delete model;
+		return 0;
+	}
 	ModelArray[floor - startfloor].Push(model);
 	return model->object;
 }
