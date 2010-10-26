@@ -22,20 +22,21 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#define CS_IMPLEMENT_PLATFORM_APPLICATION
-#define CS_NO_MALLOC_OVERRIDE
-
-#include <wx/wx.h>
-#include <crystalspace.h>
-#include <csver.h>
+#include "wx/wxprec.h"
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
 #include "revmain.h"
 
-CS_IMPLEMENT_APPLICATION
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
+//IMPLEMENT_CLASS(Skyscraper, wxApp)
+//BEGIN_EVENT_TABLE(Skyscraper, wxApp)
+//END_EVENT_TABLE()
+
 
 BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_SHOW(MainScreen::OnShow)
@@ -49,7 +50,6 @@ SBS *Simcore;
 Skyscraper *skyscraper;
 DebugPanel *dpanel;
 MainScreen *window;
-iObjectRegistry* object_reg;
 
 #ifdef CS_PLATFORM_WIN32
 #include "uexception.h"
@@ -68,9 +68,6 @@ int main (int argc, char* argv[])
 
 	//main wxWidgets entry point
 	wxEntry(argc, argv);
-
-	csInitializer::DestroyApplication (object_reg);
-	object_reg = 0;
 
 	return 0;
 }
@@ -98,23 +95,20 @@ bool Skyscraper::OnInit(void)
 	PositionOverride = false;
 	Reload = false;
 	Shaders = false;
+	mRoot = 0;
+	mRenderWindow = 0;
+	mViewport = 0;
+	mSceneMgr = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
 	//AllowResize(false);
 	window->ShowWindow();
+	window->CenterOnScreen();
 
-	//start and initialize CS
-	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-	char** csargv;
-	csargv = (char**)cs_malloc(sizeof(char*) * argc);
-	for (int i = 0; i < argc; i++)
-		csargv[i] = strdup(wxString(argv[i]).mb_str().data());
-	if (!Initialize(argc, csargv, window->panel))
-	#else
-	if (!Initialize(argc, argv, window->panel))
-	#endif
-		return ReportError("Error initializing Crystal Space");
+	//start and initialize OGRE
+	if (!Initialize(window->panel))
+		return ReportError("Error initializing OGRE");
 
 	//autoload a building file if specified
 	BuildingFile = confman->GetStr("Skyscraper.Frontend.AutoLoad");
@@ -359,16 +353,46 @@ bool Skyscraper::HandleEvent(iEvent& Event)
 	return false;
 }
 
-static bool SkyscraperEventHandler(iEvent& Event)
+bool Skyscraper::Initialize(wxPanel* RenderObject)
 {
-	if (skyscraper)
-		return skyscraper->HandleEvent(Event);
-	else
-		return false;
-}
+	mRoot = Ogre::Root::getSingletonPtr();
+	if(!mRoot)
+		mRoot = new Ogre::Root();
+	
+	if(!mRoot->getRenderSystem())
+	{
+		//if no render systems are loaded, try to load previous config
+		if(!mRoot->restoreConfig())
+		{
+			//show dialog if load failed
+			if(!mRoot->showConfigDialog())
+				OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "No RenderSystem chosen", "wxOgre::createOgreRenderWindow");
+		}
+	}
 
-bool Skyscraper::Initialize(int argc, const char* const argv[], wxPanel* RenderObject)
-{
+	mRoot->initialise(false);
+	mRenderWindow = CreateRenderWindow();
+
+	//load resources
+	ConfigFile cf;
+        cf.load("resources.cfg");
+        ConfigFile::SectionIterator seci = cf.getSectionIterator();
+
+        Ogre::String secName, typeName, archName;
+        while(seci.hasMoreElements()){
+                secName = seci.peekNextKey();
+                ConfigFile::SettingsMultiMap *settings = seci.getNext();
+                ConfigFile::SettingsMultiMap::iterator i;
+                for(i = settings->begin(); i != settings->end(); ++i){
+                        typeName = i->first;
+                        archName = i->second;
+                        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+                }
+        }
+	
+	//create scene manager
+	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
+
 	object_reg = csInitializer::CreateEnvironment(argc, argv);
 	if (!object_reg) return false;
 
@@ -1332,3 +1356,29 @@ void Skyscraper::Quit()
 	}
 	wxGetApp().Exit();
 }
+
+Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const Ogre::String& windowName)
+{
+	_enterMainThreadMutex();
+
+	Ogre::String name = windowName;
+	if (windowName.empty())
+		name = Ogre::String("wxOgreRenderWindow");
+
+	int width, height;
+	GetClientSize(&width, &height);
+
+	Ogre::NameValuePairList params;
+	if (miscParams)
+		params = *miscParams;
+
+	params["externalWindowHandle"] = getOgreHandle();
+
+	//create the render window
+	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	mRenderWindow->setActive(true);
+	
+	_leaveMainThreadMutex();
+	return mRenderWindow;
+}
+

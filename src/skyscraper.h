@@ -26,63 +26,26 @@
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
-#include <iutil/csinput.h>
-#include <ivaria/conout.h>
-#include <igraphic/imageio.h>
-#include <iutil/cmdline.h>
-#include <ivaria/stdrep.h>
-#include <iutil/eventq.h>
-#include <iutil/event.h>
-#include <csutil/eventnames.h>
-#include <ivaria/bugplug.h>
-#include <csutil/common_handlers.h>
-#include "ivideo/wxwin.h"
 #include "fileio.h"
 
 int main (int argc, char* argv[]);
-static bool SkyscraperEventHandler(iEvent& Event);
 
 class Skyscraper : public wxApp
 {
 public:
 
-	//CS Engine data
-	csRef<iEngine> engine;
-	csRef<iLoader> loader;
-	csRef<iGraphics3D> g3d;
-	csRef<iGraphics2D> g2d;
-	csRef<iKeyboardDriver> kbd;
-	csRef<iVirtualClock> vc;
-	csRef<iView> view;
-	csRef<iConsoleOutput> console;
-	csRef<iFont> font;
-	csRef<iVFS> vfs;
-	csRef<iImageIO> imageio;
-	csRef<iCommandLineParser> cmdline;
-	csRef<iStringSet> strings;
-	csRef<iStandardReporterListener> stdrep;
-	csRef<iEventQueue> equeue;
-	csRef<iBugPlug> bugplug;
-	csRef<iCollideSystem> collision_sys;
-	csRef<iMouseDriver> mouse;
-	csRef<iReporter> rep;
-	csRef<FramePrinter> printer;
-	csRef<iImage> image;
-	csRef<iConfigManager> confman;
-	csRef<iWxWindow> wxwin;
-	csRef<iShaderManager> shaderman;
+	//OGRE engine data
+	Ogre::Root* mRoot;
+	Ogre::RenderWindow* mRenderWindow;
+	Ogre::Viewport* mViewport;
+	Ogre::SceneManager* mSceneMgr;
 
-	//sound system
-	csRef<iSndSysRenderer> sndrenderer;
-	csRef<iSndSysLoader> sndloader;
-	csRef<iSndSysManager> sndmanager;
+	Ogre::String version;
+	Ogre::String version_rev;
+	Ogre::String version_state;
+	Ogre::String version_frontend;
 
-	csString version;
-	csString version_rev;
-	csString version_state;
-	csString version_frontend;
-
-	csString Platform;
+	Ogre::String Platform;
 
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code
@@ -96,27 +59,28 @@ public:
 	bool Shutdown;
 	bool Reload;
 	bool PositionOverride;
-	csVector3 override_position;
-	csVector3 override_rotation;
+	Ogre::Vector3 override_position;
+	Ogre::Vector3 override_rotation;
 	bool Shaders;
 
-	csTicks elapsed_time, current_time;
+	int elapsed_time, current_time;
 
 	void PushFrame();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
 	void DrawBackground();
 
-	csString BuildingFile;
+	Ogre::String BuildingFile;
 
 	//engine related stuff
+	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const Ogre::String& windowName = Ogre::String(""))
 	void Render();
 	void GetInput();
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
 	void SetupFrame();
 	bool HandleEvent(iEvent& Event);
-	bool Initialize(int argc, const char* const argv[], wxPanel* RenderObject);
+	bool Initialize(wxPanel* RenderObject);
 	void GetMenuInput();
 	void StartSound();
 	void StopSound();
@@ -127,26 +91,20 @@ public:
 	void Quit();
 
 private:
-	csEventID FocusGained;
-	csEventID FocusLost;
-	csEventID KeyboardDown;
-
 	//mouse status
 	bool MouseDown;
 
 	//app directory
-	csString root_dir;
-	csString dir_char;
-
-	CS_DECLARE_EVENT_SHORTCUTS;
+	Ogre::String root_dir;
+	Ogre::String dir_char;
 
 	//canvas data
 	int canvas_width, canvas_height;
 	wxPanel* canvas;
 
 	//sound data
-	csRef<iSndSysStream> sndstream;
-	csRef<iSndSysSource> sndsource;
+	//csRef<iSndSysStream> sndstream;
+	//csRef<iSndSysSource> sndsource;
 
 	//script processor
 	ScriptProcessor* processor;
@@ -158,11 +116,11 @@ private:
 		int y;
 		int size_x;
 		int size_y;
-		csString filename;
+		Ogre::String filename;
 		csRef<iImage> button_image;
-		csString filename_selected;
+		Ogre::String filename_selected;
 		csRef<iImage> selected_image;
-		csString filename_pressed;
+		Ogre::String filename_pressed;
 		csRef<iImage> pressed_image;
 		int offset_x;
 		int offset_y;
