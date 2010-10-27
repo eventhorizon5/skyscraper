@@ -37,7 +37,7 @@ Floor::Floor(int number)
 	object = new Object();
 	object->SetValues(this, sbs->object, "Floor", "", false);
 
-	csString buffer;
+	Ogre::String buffer;
 
 	//Set floor's object number
 	Number = number;
@@ -46,19 +46,19 @@ Floor::Floor(int number)
 	buffer = Number;
 	object->SetName("Floor " + buffer);
 	buffer.Insert(0, "Level ");
-	buffer.Trim();
+	TrimString(buffer);
 	Level = new MeshObject(object, buffer);
 
 	//Create interfloor mesh
 	buffer = Number;
 	buffer.Insert(0, "Interfloor ");
-	buffer.Trim();
+	TrimString(buffer);
 	Interfloor = new MeshObject(object, buffer);
 
 	//Create columnframe mesh
 	buffer = Number;
 	buffer.Insert(0, "ColumnFrame ");
-	buffer.Trim();
+	TrimString(buffer);
 	ColumnFrame = new MeshObject(object, buffer);
 
 	//set enabled flag
@@ -80,7 +80,7 @@ Floor::~Floor()
 	//Destructor
 
 	//delete models
-	for (int i = 0; i < ModelArray.GetSize(); i++)
+	for (int i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 			delete ModelArray[i];
@@ -88,7 +88,7 @@ Floor::~Floor()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.GetSize(); i++)
+	for (int i = 0; i < lights.size(); i++)
 	{
 		if (lights[i])
 			delete lights[i];
@@ -96,7 +96,7 @@ Floor::~Floor()
 	}
 
 	//delete call buttons
-	for (int i = 0; i < CallButtonArray.GetSize(); i++)
+	for (int i = 0; i < CallButtonArray.size(); i++)
 	{
 		if (CallButtonArray[i])
 		{
@@ -105,10 +105,10 @@ Floor::~Floor()
 		}
 		CallButtonArray[i] = 0;
 	}
-	CallButtonArray.DeleteAll();
+	CallButtonArray.clear();
 
 	//delete doors
-	for (int i = 0; i < DoorArray.GetSize(); i++)
+	for (int i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i])
 		{
@@ -117,10 +117,10 @@ Floor::~Floor()
 		}
 		DoorArray[i] = 0;
 	}
-	DoorArray.DeleteAll();
+	DoorArray.clear();
 
 	//delete floor indicators
-	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	for (int i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 		{
@@ -128,10 +128,10 @@ Floor::~Floor()
 			delete FloorIndicatorArray[i];
 		}
 	}
-	FloorIndicatorArray.DeleteAll();
+	FloorIndicatorArray.clear();
 
 	//delete directional indicators
-	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	for (int i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 		{
@@ -139,10 +139,10 @@ Floor::~Floor()
 			delete DirIndicatorArray[i];
 		}
 	}
-	DirIndicatorArray.DeleteAll();
+	DirIndicatorArray.clear();
 
 	//delete sounds
-	for (int i = 0; i < sounds.GetSize(); i++)
+	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -151,7 +151,7 @@ Floor::~Floor()
 		}
 		sounds[i] = 0;
 	}
-	sounds.DeleteAll();
+	sounds.clear();
 
 	//delete meshes
 	if (Level)
@@ -180,8 +180,8 @@ void Floor::SetCameraFloor()
 {
 	//Moves camera to specified floor (sets altitude to the floor's base plus DefaultAltitude)
 
-	csVector3 camlocation = sbs->camera->GetPosition();
-	sbs->camera->SetPosition(csVector3(camlocation.x, GetBase() + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
+	Ogre::Vector3 camlocation = sbs->camera->GetPosition();
+	sbs->camera->SetPosition(Ogre::Vector3(camlocation.x, GetBase() + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
 }
 
 WallObject* Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th, bool isexternal)
@@ -253,28 +253,28 @@ void Floor::Enabled(bool value)
 	EnableColumnFrame(value);
 
 	//models
-	for (size_t i = 0; i < ModelArray.GetSize(); i++)
+	for (size_t i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 			ModelArray[i]->Enable(value);
 	}
 
 	//call buttons
-	for (size_t i = 0; i < CallButtonArray.GetSize(); i++)
+	for (size_t i = 0; i < CallButtonArray.size(); i++)
 	{
 		if (CallButtonArray[i])
 			CallButtonArray[i]->Enabled(value);
 	}
 
 	//doors
-	for (size_t i = 0; i < DoorArray.GetSize(); i++)
+	for (size_t i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i])
 			DoorArray[i]->Enabled(value);
 	}
 
 	//turn on/off directional indicators
-	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	for (int i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->Enabled(value);
@@ -282,7 +282,7 @@ void Floor::Enabled(bool value)
 	UpdateDirectionalIndicators();
 
 	//floor indicators
-	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	for (int i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
@@ -291,7 +291,7 @@ void Floor::Enabled(bool value)
 	UpdateFloorIndicators();
 
 	//sounds
-	for (int i = 0; i < sounds.GetSize(); i++)
+	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -309,13 +309,13 @@ float Floor::FullHeight()
 	return InterfloorHeight + Height;
 }
 
-Object* Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+Object* Floor::AddCallButtons(std::vector<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//adds call buttons
 
 	//check if any of the elevators serve the current floor
 	bool check = false;
-	for (int i = 0; i < elevators.GetSize(); i++)
+	for (int i = 0; i < elevators.size(); i++)
 	{
 		if (sbs->GetElevator(elevators[i]))
 		{
@@ -332,36 +332,36 @@ Object* Floor::AddCallButtons(csArray<int> &elevators, const char *BackTexture, 
 		return 0;
 
 	//create call button
-	CallButtonArray.SetSize(CallButtonArray.GetSize() + 1);
-	int Current = CallButtonArray.GetSize() - 1;
+	CallButtonArray.resize(CallButtonArray.size() + 1);
+	int Current = CallButtonArray.size() - 1;
 	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	return CallButtonArray[Current]->object;
 }
 
-void Floor::Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring)
+void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring)
 {
 	//caller to SBS cut function
 	//Y values are relative to the floor's altitude
 	//if fast is specified, skips the interfloor scan
 
-	for (int i = 0; i < Level->Walls.GetSize(); i++)
+	for (int i = 0; i < Level->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
 			reset = false;
 
-		sbs->Cut(Level->Walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, reset);
+		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, checkstring, reset);
 	}
 	if (fast == false)
 	{
-		for (int i = 0; i < Interfloor->Walls.GetSize(); i++)
+		for (int i = 0; i < Interfloor->Walls.size(); i++)
 		{
-			sbs->Cut(Interfloor->Walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0), checkwallnumber, checkstring, false);
+			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, checkstring, false);
 		}
 	}
 }
 
-void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors)
+void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors)
 {
 	//cuts all objects related to this floor (floor, interfloor, shafts, stairs and external)
 	//Y values are relative to the floor's altitude
@@ -375,7 +375,7 @@ void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, 
 		if (cutwalls == true)
 			sbs->GetShaft(i)->CutWall(false, Number, start, end);
 		if (cutfloors == true)
-			sbs->GetShaft(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+			sbs->GetShaft(i)->CutFloors(false, Ogre::Vector2(start.x, start.z), Ogre::Vector2(end.x, end.z), Altitude, Altitude + FullHeight());
 	}
 
 	//cut stairs
@@ -384,12 +384,12 @@ void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, 
 		if (cutwalls == true)
 			sbs->GetStairs(i)->CutWall(false, Number, start, end);
 		if (cutfloors == true)
-			sbs->GetStairs(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+			sbs->GetStairs(i)->CutFloors(false, Ogre::Vector2(start.x, start.z), Ogre::Vector2(end.x, end.z), Altitude, Altitude + FullHeight());
 	}
 
 	//cut external
-	for (int i = 0; i < sbs->External->Walls.GetSize(); i++)
-		sbs->Cut(sbs->External->Walls[i], csVector3(start.x, Altitude + start.y, start.z), csVector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, csVector3(0, 0, 0), csVector3(0, 0, 0));
+	for (int i = 0; i < sbs->External->Walls.size(); i++)
+		sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 }
 
 void Floor::AddGroupFloor(int number)
@@ -398,7 +398,7 @@ void Floor::AddGroupFloor(int number)
 	//Groups are used to enable multiple floors at the same time when
 	//a user arrives at a floor
 
-	if (Group.Find(number) == csArrayItemNotFound)
+	if (Group.find(number) == -1)
 		Group.InsertSorted(number);
 }
 
@@ -406,17 +406,23 @@ void Floor::RemoveGroupFloor(int number)
 {
 	//removes a floor number from the group list
 
-	if (Group.Find(number) != csArrayItemNotFound)
-		Group.Delete(number);
+	if (Group.find(number) != -1)
+	{
+		for (int i = 0; i < Group.size(); i++)
+		{
+			if (Group[i] == number)
+				Group.erase(i);
+		}
+	}
 }
 
 void Floor::EnableGroup(bool value)
 {
 	//enable floors grouped with this floor
 
-	if (Group.GetSize() > 0)
+	if (Group.size() > 0)
 	{
-		for (size_t i = 0; i < Group.GetSize(); i++)
+		for (size_t i = 0; i < Group.size(); i++)
 		{
 			//check if floor exists
 			if (sbs->GetFloor(Group[i]))
@@ -444,9 +450,9 @@ bool Floor::IsInGroup(int floor)
 {
 	//return true if the specified floor is in the group listing
 
-	if (Group.GetSize() > 0)
+	if (Group.size() > 0)
 	{
-		for (size_t i = 0; i < Group.GetSize(); i++)
+		for (size_t i = 0; i < Group.size(); i++)
 		{
 			if (Group[i] == floor)
 				return true;
@@ -484,15 +490,15 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 
 	//cut area
 	if (direction < 5)
-		CutAll(csVector3(x1 - 1, GetBase(true) + voffset, z1), csVector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
+		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
 	else
-		CutAll(csVector3(x1, GetBase(true) + voffset, z1 - 1), csVector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
+		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
-	DoorArray.SetSize(DoorArray.GetSize() + 1);
-	csString floornum = _itoa(Number, intbuffer, 10);
-	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
-	return DoorArray[DoorArray.GetSize() - 1]->object;
+	DoorArray.resize(DoorArray.size() + 1);
+	Ogre::String floornum = _itoa(Number, intbuffer, 10);
+	Ogre::String num = _itoa(DoorArray.size() - 1, intbuffer, 10);
+	DoorArray[DoorArray.size() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	return DoorArray[DoorArray.size() - 1]->object;
 }
 
 bool Floor::CalculateAltitude()
@@ -556,8 +562,8 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 {
 	//Creates a floor indicator at the specified location
 
-	int size = FloorIndicatorArray.GetSize();
-	FloorIndicatorArray.SetSize(size + 1);
+	int size = FloorIndicatorArray.size();
+	FloorIndicatorArray.resize(size + 1);
 
 	if (relative == false)
 	{
@@ -581,8 +587,8 @@ void Floor::UpdateFloorIndicators(int elevator)
 {
 	//changes the number texture on the floor indicators to the specified elevator's current floor
 
-	csString value;
-	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	Ogre::String value;
+	for (int i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 		{
@@ -593,7 +599,7 @@ void Floor::UpdateFloorIndicators(int elevator)
 					value = elev->GetFloorSkipText();
 				else
 					value = sbs->GetFloor(elev->GetFloor())->ID;
-				value.Trim();
+				TrimString(value);
 				FloorIndicatorArray[i]->Update(value);
 			}
 		}
@@ -604,8 +610,8 @@ void Floor::UpdateFloorIndicators()
 {
 	//changes the number texture on the floor indicators
 
-	csString value;
-	for (int i = 0; i < FloorIndicatorArray.GetSize(); i++)
+	Ogre::String value;
+	for (int i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 		{
@@ -614,7 +620,7 @@ void Floor::UpdateFloorIndicators()
 				value = elevator->GetFloorSkipText();
 			else
 				value = sbs->GetFloor(elevator->GetFloor())->ID;
-			value.Trim();
+			TrimString(value);
 			FloorIndicatorArray[i]->Update(value);
 		}
 	}
@@ -626,16 +632,16 @@ void Floor::Loop()
 
 }
 
-csArray<int> Floor::GetCallButtons(int elevator)
+std::vector<int> Floor::GetCallButtons(int elevator)
 {
 	//get numbers of call buttons that service the specified elevator
 	
-	csArray<int> buttons;
-	for (int i = 0; i < CallButtonArray.GetSize(); i++)
+	std::vector<int> buttons;
+	for (int i = 0; i < CallButtonArray.size(); i++)
 	{
 		//put button number onto the array if it serves the elevator
 		if (CallButtonArray[i]->ServicesElevator(elevator) == true)
-			buttons.Push(i);
+			buttons.push_back(i);
 	}
 	return buttons;
 }
@@ -681,7 +687,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	}
 
 	//perform a cut in the area
-	CutAll(csVector3(x1, GetBase(true) + voffset, z1), csVector3(x2, GetBase(true) + voffset + height, z2), true, false);
+	CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2), true, false);
 
 	//create walls
 	sbs->DrawWalls(false, true, false, false, false, false);
@@ -703,15 +709,15 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	sbs->ResetWalls();
 }
 
-Object* Floor::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, Ogre::Vector3 direction)
 {
 	//create a looping sound object
-	sounds.SetSize(sounds.GetSize() + 1);
-	Sound *sound = sounds[sounds.GetSize() - 1];
+	sounds.resize(sounds.size() + 1);
+	Sound *sound = sounds[sounds.size() - 1];
 	sound = new Sound(this->object, name, false);
 
 	//set parameters and play sound
-	sound->SetPosition(csVector3(position.x, GetBase() + position.y, position.z));
+	sound->SetPosition(Ogre::Vector3(position.x, GetBase() + position.y, position.z));
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
@@ -729,13 +735,13 @@ Object* Floor::AddSound(const char *name, const char *filename, csVector3 positi
 void Floor::Report(const char *message)
 {
 	//general reporting function
-	sbs->Report("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+	sbs->Report("Floor " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
 bool Floor::ReportError(const char *message)
 {
 	//general reporting function
-	return sbs->ReportError("Floor " + csString(_itoa(Number, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Floor " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
 float Floor::GetBase(bool relative)
@@ -789,8 +795,8 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 			return 0;
 	}
 
-	int index = DirIndicatorArray.GetSize();
-	DirIndicatorArray.SetSize(index + 1);
+	int index = DirIndicatorArray.size();
+	DirIndicatorArray.resize(index + 1);
 	DirIndicatorArray[index] = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	return DirIndicatorArray[index]->object;
 }
@@ -799,7 +805,7 @@ void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 {
 	//set light status of all standard (non active-direction) directional indicators associated with the given elevator
 
-	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	for (int i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == false)
 		{
@@ -813,7 +819,7 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 {
 	//updates the active-direction indicators associated with the given elevator
 
-	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	for (int i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 		{
@@ -844,8 +850,8 @@ void Floor::UpdateDirectionalIndicators()
 {
 	//updates all active-direction indicators
 
-	csString value;
-	for (int i = 0; i < DirIndicatorArray.GetSize(); i++)
+	Ogre::String value;
+	for (int i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 		{
@@ -875,50 +881,50 @@ void Floor::UpdateDirectionalIndicators()
 void Floor::OpenDoor(int number)
 {
 	//open door
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number])
 			DoorArray[number]->Open();
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 }
 
 void Floor::CloseDoor(int number)
 {
 	//close door
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number])
 			DoorArray[number]->Close();
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 }
 
 bool Floor::IsDoorOpen(int number)
 {
 	//check to see if door is open
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number])
 			return DoorArray[number]->IsOpen();
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
 bool Floor::IsDoorMoving(int number)
 {
 	//check to see if door is moving
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number])
 			return DoorArray[number]->IsMoving;
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
@@ -926,55 +932,75 @@ void Floor::RemoveCallButton(CallButton *callbutton)
 {
 	//remove a call button object from the array
 	//this does not delete the object
-	CallButtonArray.Delete(callbutton);
+	for (int i = 0; i < CallButtonArray.size(); i++)
+	{
+		if (CallButtonArray[i] == callbutton)
+			CallButtonArray.erase(i);
+	}
 }
 
 void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
 {
 	//remove a floor indicator from the array
 	//this does not delete the object
-	FloorIndicatorArray.Delete(indicator);
+	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i] == indicator)
+			FloorIndicatorArray.erase(i);
+	}
 }
 
 void Floor::RemoveDirectionalIndicator(DirectionalIndicator *indicator)
 {
 	//remove a directional indicator from the array
 	//this does not delete the object
-	DirIndicatorArray.Delete(indicator);
+	for (int i = 0; i < DirIndicatorArray.size(); i++)
+	{
+		if (DirIndicatorArray[i] == indicator)
+			DirIndicatorArray.erase(i);
+	}
 }
 
 void Floor::RemoveDoor(Door *door)
 {
 	//remove a door from the array
 	//this does not delete the object
-	DoorArray.Delete(door);
+	for (int i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i] == door)
+			DoorArray.erase(i);
+	}
 }
 
 void Floor::RemoveSound(Sound *sound)
 {
 	//remove a sound from the array
 	//this does not delete the object
-	sounds.Delete(sound);
+	for (int i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i] == sound)
+			sounds.erase(i);
+	}
 }
 
-Object* Floor::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a light
 
-	Light* light = new Light(name, type, position + csVector3(0, GetBase(), 0), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
-	lights.Push(light);
+	Light* light = new Light(name, type, position + Ogre::Vector3(0, GetBase(), 0), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
+	lights.push_back(light);
 	return light->object;
 }
 
-Object* Floor::AddModel(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
+Object* Floor::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
-	Model* model = new Model(name, filename, position + csVector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier);
+	Model* model = new Model(name, filename, position + Ogre::Vector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
-	ModelArray.Push(model);
+	ModelArray.push_back(model);
 	return model->object;
 }

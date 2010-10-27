@@ -32,59 +32,58 @@ class SBSIMPEXP MeshObject
 {
 public:
 	Object *object; //SBS object
-	csString name; //mesh name
+	Ogre::String name; //mesh name
 
 	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1);
 	~MeshObject();
 	void Enable(bool value);
 	bool IsEnabled();
 	WallObject* CreateWallObject(Object *parent, const char *name);
-	iMaterialWrapper* ChangeTexture(const char *texture, bool matcheck = true);
-	int FindWall(const csVector3 &point);
+	Ogre::Material* ChangeTexture(const char *texture, bool matcheck = true);
+	int FindWall(const Ogre::Vector3 &point);
 	void RescaleVertices(float multiplier);
 	bool LoadColladaFile(const char *filename, const char *name);
-	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z, csVector3 origin = 0);
-	csVector3 GetPosition();
-	void Rotate(const csVector3 rotation, float speed);
-	void SetRotation(const csVector3 rotation);
-	csVector3 GetRotation();
+	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin = Ogre::Vector3(0, 0, 0));
+	Ogre::Vector3 GetPosition();
+	void Rotate(const Ogre::Vector3 rotation, float speed);
+	void SetRotation(const Ogre::Vector3 rotation);
+	Ogre::Vector3 GetRotation();
 	
-	csRef<iMeshWrapper> MeshWrapper; //building mesh
-	csRef<iGeneralFactoryState> State; //factory state
-	csRefArray<iGeneralMeshSubMesh> Submeshes;
-	csArray<WallObject*> Walls;
-	csRef<iMovable> Movable;
+	Ogre::Mesh MeshWrapper; //building mesh
+	Ogre::Mesh* State; //factory state
+	std::vector<Ogre::SubMesh> Submeshes;
+	std::vector<WallObject*> Walls;
+	Ogre::Entity *Movable;
 
 private:
 	bool enabled;
-	csRef<iCollection> collection;
+	//csRef<iCollection> collection;
 	float rotX, rotY, rotZ;
 };
 
 class SBSIMPEXP WallPolygon
 {
 public:
-	csRefArray<iGeneralMeshSubMesh> *submeshes;
-	csRef<iRenderBuffer> triangles;
-	csPlane3 plane;
+	std::vector<Ogre::SubMesh> *submeshes;
+	Ogre::HardwareIndexBuffer* triangles;
+	Ogre::Plane plane;
 
 	//array holding index extents, to get original geometry
-	csArray<csVector2> index_extents;
+	std::vector<Ogre::Vector2> index_extents;
 
 	//texture mapping matrix and vector
-	csMatrix3 t_matrix;
-	csVector3 t_vector;
+	Ogre::Matrix3 t_matrix;
+	Ogre::Vector3 t_vector;
 
-	iMaterialWrapper* material; //polygon materials
-	csString name; //polygon names
+	Ogre::Material* material; //polygon materials
+	Ogre::String name; //polygon names
 
 	WallPolygon();
 	~WallPolygon();
-	void GetTextureMapping(csMatrix3 &t_matrix, csVector3 &t_vector);
-	iGeneralMeshSubMesh* GetSubMesh();
-	void GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<CS::Geometry::csContour3> &vertices, bool firstonly);
-	void GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<csPoly3D> &vertices, bool firstonly);
-	bool PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &point, bool plane_check = true);
+	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
+	Ogre::SubMesh* GetSubMesh();
+	void GetGeometry(Ogre::Mesh meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly);
+	bool PointInside(Ogre::Mesh meshwrapper, const Ogre::Vector3 &point, bool plane_check = true);
 };
 
 #endif

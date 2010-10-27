@@ -40,13 +40,13 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	//first set default values
 	PositionOffset = 0;
 	Position = 0;
-	Volume = sbs->confman->GetFloat("Skyscraper.SBS.Sound.Volume", 1.0);
-	MaxDistance = sbs->confman->GetFloat("Skyscraper.SBS.Sound.MaxDistance", -1.0);
-	MinDistance = sbs->confman->GetFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
+	Volume = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
+	MaxDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", -1.0);
+	MinDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
 	Direction = 0;
 	DirectionalRadiation = 0;
-	SoundLoop = sbs->confman->GetBool("Skyscraper.SBS.Sound.Loop", false);
-	Speed = sbs->confman->GetInt("Skyscraper.SBS.Sound.Speed", 100);
+	SoundLoop = sbs->GetConfigBool("Skyscraper.SBS.Sound.Loop", false);
+	Speed = sbs->GetConfigInt("Skyscraper.SBS.Sound.Speed", 100);
 	Name = name;
 	sbs->IncrementSoundCount();
 }
@@ -56,32 +56,32 @@ Sound::~Sound()
 	if (sbs->DisableSound == false)
 	{
 		Stop();
-		sbs->sndrenderer->RemoveSource(sndsource);
+		/*sbs->sndrenderer->RemoveSource(sndsource);
 		sbs->sndrenderer->RemoveStream(sndstream);
-		sbs->sndmanager->RemoveSound(sndwrapper);
+		sbs->sndmanager->RemoveSound(sndwrapper);*/
 		sbs->DecrementSoundCount();
 	}
 
 	//unregister from parent
 	if (object->parent_deleting == false)
 	{
-		if (csString(object->GetParent()->GetType()) == "Elevator")
+		if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
 			((Elevator*)object->GetParent()->GetRawObject())->RemoveSound(this);
-		if (csString(object->GetParent()->GetType()) == "Floor")
+		if (Ogre::String(object->GetParent()->GetType()) == "Floor")
 			((Floor*)object->GetParent()->GetRawObject())->RemoveSound(this);
-		if (csString(object->GetParent()->GetType()) == "SBS")
+		if (Ogre::String(object->GetParent()->GetType()) == "SBS")
 			sbs->RemoveSound(this);
 	}
 
 	//destructor
-	directional = 0;
+	/*directional = 0;
 	sndsource3d = 0;
 	sndsource = 0;
-	sndstream = 0;
+	sndstream = 0;*/
 	delete object;
 }
 
-void Sound::SetPosition(const csVector3& position)
+void Sound::SetPosition(const Ogre::Vector3& position)
 {
 	//set position of sound object
 	Position = position;
@@ -96,13 +96,13 @@ void Sound::SetPositionY(float position)
 	SetPosition(Position);
 }
 
-csVector3 Sound::GetPosition()
+Ogre::Vector3 Sound::GetPosition()
 {
 	//get position of sound object
 	if (sndsource3d)
 		return sndsource3d->GetPosition();
 	else
-		return csVector3(0, 0, 0);
+		return Ogre::Vector3(0, 0, 0);
 }
 
 void Sound::SetVolume(float value)
@@ -153,14 +153,14 @@ float Sound::GetMaximumDistance()
 		return 0;
 }
 
-void Sound::SetDirection(csVector3 direction)
+void Sound::SetDirection(Ogre::Vector3 direction)
 {
 	Direction = direction;
 	if (directional)
 		directional->SetDirection(Direction);
 }
 
-csVector3 Sound::GetDirection()
+Ogre::Vector3 Sound::GetDirection()
 {
 	if (directional)
 		return directional->GetDirection();
@@ -279,7 +279,7 @@ void Sound::Reset()
 void Sound::Load(const char *filename, bool force)
 {
 	//exit if filename is the same
-	csString filename_new = filename;
+	Ogre::String filename_new = filename;
 	if (filename_new == Filename && force == false)
 		return;
 
@@ -308,11 +308,11 @@ void Sound::Load(const char *filename, bool force)
 
 	//load new sound
 	Filename = filename;
-	csString full_filename1 = "/root/data/";
-	full_filename1.Append(filename);
-	csString full_filename = sbs->VerifyFile(full_filename1);
+	Ogre::String full_filename1 = "/root/data/";
+	full_filename1.append(filename);
+	Ogre::String full_filename = sbs->VerifyFile(full_filename1);
 
-	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(full_filename.GetData());
+	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(full_filename);
 	if (!sndbuffer)
 	{
 		sbs->ReportError("Can't load file '" + Filename + "'");

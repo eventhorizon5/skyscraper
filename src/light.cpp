@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Light::Light(const char *name, int type, csVector3 position, csVector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Light::Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//creates a light object
 
@@ -96,10 +96,10 @@ void Light::Prepare()
 #endif
 }
 
-void Light::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void Light::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move light - this can only be done on movable lights
-	csVector3 pos;
+	Ogre::Vector3 pos;
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(Origin.x + position.x);
 	else
@@ -117,7 +117,7 @@ void Light::Move(const csVector3 position, bool relative_x, bool relative_y, boo
 	//Prepare();
 }
 
-csVector3 Light::GetPosition()
+Ogre::Vector3 Light::GetPosition()
 {
 	return sbs->ToLocal(light->GetMovable()->GetPosition());
 }
@@ -130,10 +130,10 @@ void Light::SetColor(float color_r, float color_g, float color_b, float spec_col
 	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
 }
 
-void Light::SetRotation(const csVector3& rotation)
+void Light::SetRotation(const Ogre::Vector3& rotation)
 {
 	//rotate light
-	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
+	Ogre::Matrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
 	csOrthoTransform ot (rot, light->GetMovable()->GetTransform().GetOrigin());
 	light->GetMovable()->SetTransform(ot);
 	rotX = rotation.x;
@@ -143,16 +143,16 @@ void Light::SetRotation(const csVector3& rotation)
 	//Prepare();
 }
 
-void Light::Rotate(const csVector3& rotation, float speed)
+void Light::Rotate(const Ogre::Vector3& rotation, float speed)
 {
 	//rotates light in a relative amount
 	rotX += rotation.x * speed;
 	rotY += rotation.y * speed;
 	rotZ += rotation.z * speed;
-	SetRotation(csVector3(rotX, rotY, rotZ));
+	SetRotation(Ogre::Vector3(rotX, rotY, rotZ));
 }
 
-csVector3 Light::GetRotation()
+Ogre::Vector3 Light::GetRotation()
 {
-	return csVector3(rotX, rotY, rotZ);
+	return Ogre::Vector3(rotX, rotY, rotZ);
 }

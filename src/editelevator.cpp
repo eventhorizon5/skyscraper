@@ -1074,7 +1074,7 @@ void editelevator::Loop()
 void editelevator::SetMainValues()
 {
 	//set changeable values
-	txtName->SetValue(wxString::FromAscii(elevator->Name.GetData()));
+	txtName->SetValue(wxString::FromAscii(elevator->Name));
 	if (door)
 	{
 		txtDoorTimer->SetValue(wxVariant((int)door->DoorTimer).GetString());

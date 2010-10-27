@@ -26,7 +26,6 @@
 #ifndef _SBS_GLOBALS_H
 #define _SBS_GLOBALS_H
 
-#include "cssysdef.h"
 #include "wx/platform.h"
 
 //DLL Exporting
@@ -59,6 +58,10 @@ SBSIMPEXP float RadiansToDegrees(float radians);
 SBSIMPEXP float DegreesToRadians(float degrees);
 SBSIMPEXP float Min3(float a, float b, float c);
 SBSIMPEXP float Max3(float a, float b, float c);
+SBSIMPEXP const char* SetCaseCopy(const char *string, bool uppercase);
+SBSIMPEXP void SetCase(std::string &string, bool uppercase);
+SBSIMPEXP int FindWithCase(const char *string, bool uppercase, const char *key, int offset);
+SBSIMPEXP void TrimString(std::string &string);
 
 const double pi = 3.14159265;
 

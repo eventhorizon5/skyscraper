@@ -37,15 +37,15 @@ void SBS::DumpVertices(WallObject* wallobject)
 	//dumps a list of vertices from a mesh object to the console/logfile
 
 	Report("--- Polygon Vertex Dump ---\n");
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(wallobject->meshwrapper->GetFactory()->GetMeshObjectFactory());
-	for (int i = 0; i < state->GetVertexCount(); i++)
+	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(wallobject->meshwrapper->GetFactory()->GetMeshObjectFactory());
+	for (int i = 0; i < state->getVertexCount(); i++)
 	{
-		csVector3 vertex = state->GetVertices()[i];
-		Report(csString(_itoa(i, intbuffer, 10)) + ": " + csString(_gcvt(vertex.x, 6, buffer)) + ", " + csString(_gcvt(vertex.y, 6, buffer)) + ", " + csString(_gcvt(vertex.z, 6, buffer)));
+		Ogre::Vector3 vertex = state->GetVertices()[i];
+		Report(Ogre::String(_itoa(i, intbuffer, 10)) + ": " + Ogre::String(_gcvt(vertex.x, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.y, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.z, 6, buffer)));
 	}
 }
 
-csVector2 SBS::GetExtents(const csVector3 *varray, int count, int coord)
+Ogre::Vector2 SBS::GetExtents(const Ogre::Vector3 *varray, int count, int coord)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
@@ -59,7 +59,7 @@ csVector2 SBS::GetExtents(const csVector3 *varray, int count, int coord)
 
 	//return 0,0 if coord value is out of range
 	if (coord < 1 || coord > 3)
-		return csVector2(0, 0);
+		return Ogre::Vector2(0, 0);
 
 	for (i = 0; i < count; i++)
 	{
@@ -84,28 +84,28 @@ csVector2 SBS::GetExtents(const csVector3 *varray, int count, int coord)
 		}
 	}
 
-	return csVector2(esmall, ebig);
+	return Ogre::Vector2(esmall, ebig);
 }
 
-csVector2 SBS::GetExtents(csPoly3D &varray, int coord)
+Ogre::Vector2 SBS::GetExtents(Ogre::Polygon &varray, int coord)
 {
-	return GetExtents(varray.GetVertices(), varray.GetVertexCount(), coord);
+	return GetExtents(varray.GetVertices(), varray.getVertexCount(), coord);
 }
 
-csVector2 SBS::GetExtents(csRef<iMeshWrapper> mesh, int coord)
+Ogre::Vector2 SBS::GetExtents(Ogre::Mesh mesh, int coord)
 {
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
-	return GetExtents(state->GetVertices(), state->GetVertexCount(), coord);
+	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
+	return GetExtents(state->GetVertices(), state->getVertexCount(), coord);
 }
 
-csVector3 SBS::GetPoint(csArray<WallObject*> &wallarray, const char *polyname, const csVector3 &start, const csVector3 &end)
+Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//do a line intersection with a specified mesh, and return
 	//the intersection point
 
 	int index = -1;
 	int index2 = -1;
-	for (int i = 0; i < wallarray.GetSize(); i++)
+	for (int i = 0; i < wallarray.size(); i++)
 	{
 		index2 = wallarray[i]->FindPolygon(polyname);
 		if (index2 > -1)
@@ -118,14 +118,14 @@ csVector3 SBS::GetPoint(csArray<WallObject*> &wallarray, const char *polyname, c
 	if (index >= 0)
 	{
 		//do a plane intersection with a line
-		csVector3 isect;
+		Ogre::Vector3 isect;
 		float dist;
-		csPoly3D original;
-		csArray<CS::Geometry::csContour3> origpolys;
+		Ogre::Polygon original;
+		std::vector<Ogre::Polygon> origpolys;
 		wallarray[index]->GetGeometry(index2, origpolys, true);
 
-		for (int i = 0; i < origpolys[0].GetSize(); i++)
-			original.AddVertex(origpolys[0][i]);
+		for (int i = 0; i < origpolys[0].size(); i++)
+			original.insertVertex(origpolys[0][i]);
 
 		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), original.ComputePlane(), isect, dist);
 		return ToLocal(isect);
@@ -133,14 +133,14 @@ csVector3 SBS::GetPoint(csArray<WallObject*> &wallarray, const char *polyname, c
 	return 0;
 }
 
-iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
+Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
 {
 	//add a simple wall in a general mesh (currently only used for objects that change textures)
 
 	//get texture
-	csString texname = texture;
+	Ogre::String texname = texture;
 	bool result;
-	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
+	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
 	if (!result)
 		texname = "Default";
 
@@ -152,7 +152,7 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	float tw2 = tw, th2 = th;
 
 	float mw, mh;
-	if (GetTextureTiling(texname.GetData(), mw, mh))
+	if (GetTextureTiling(texname, mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
@@ -161,13 +161,13 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 	}
 
 	//create texture mapping table
-	csVector2 table[] = {csVector2(tw2, th2), csVector2(0, th2), csVector2(tw2, 0), csVector2(0, 0)};
+	Ogre::Vector2 table[] = {Ogre::Vector2(tw2, th2), Ogre::Vector2(0, th2), Ogre::Vector2(tw2, 0), Ogre::Vector2(0, 0)};
 
 	//create a quad, map the texture, and append to the mesh
-	CS::Geometry::TesselatedQuad wall (csVector3(ToRemote(x2), ToRemote(altitude), ToRemote(z2)), csVector3(ToRemote(x1), ToRemote(altitude), ToRemote(z1)), csVector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(z2)));
+	CS::Geometry::TesselatedQuad wall (Ogre::Vector3(ToRemote(x2), ToRemote(altitude), ToRemote(z2)), Ogre::Vector3(ToRemote(x1), ToRemote(altitude), ToRemote(z1)), Ogre::Vector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(z2)));
 	CS::Geometry::TableTextureMapper mapper(table);
 	wall.SetMapper(&mapper);
-	wall.Append(mesh->GetFactory());
+	wall.append(mesh->GetFactory());
 
 	//set lighting factor
 	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
@@ -186,7 +186,7 @@ iMeshWrapper* SBS::AddGenWall(csRef<iMeshWrapper> mesh, const char *texture, flo
 }
 
 
-void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bool cutwalls, bool cutfloors, const csVector3& mesh_origin, const csVector3& object_origin, int checkwallnumber, const char *checkstring, bool reset_check)
+void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3& end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber, const char *checkstring, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
 	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
@@ -195,8 +195,8 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 	if (cutwalls == false && cutfloors == false)
 		return;
 
-	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
-	csArray<WallPolygon*> ignore_list;
+	Ogre::Polygon temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	std::vector<WallPolygon*> ignore_list;
 
 	bool polycheck = false;
 
@@ -219,7 +219,7 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 	{
 		//skip created submeshes
 		bool ignorecheck = false;
-		for (int j = 0; j < ignore_list.GetSize(); j++)
+		for (int j = 0; j < ignore_list.size(); j++)
 		{
 			if (ignore_list[j] == wall->GetHandle(i))
 			{
@@ -231,22 +231,22 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 			continue;
 
 		//get name
-		csString name = wall->GetHandle(i)->name;
+		Ogre::String name = wall->GetHandle(i)->name;
 
 		//get original vertices
-		csArray<CS::Geometry::csContour3> origpolys;
-		csArray<CS::Geometry::csContour3> newpolys;
+		std::vector<Ogre::Polygon> origpolys;
+		std::vector<Ogre::Polygon> newpolys;
 		wall->GetGeometry(i, origpolys);
 
 		//skip empty meshes
-		if (origpolys.GetSize() == 0)
+		if (origpolys.size() == 0)
 			continue;
 
 		//cut all polygons within range
-		for (int j = 0; j < origpolys.GetSize(); j++)
+		for (int j = 0; j < origpolys.size(); j++)
 		{
 			//skip null geometry
-			if (origpolys[j].GetSize() == 0)
+			if (origpolys[j].size() == 0)
 				continue;
 
 			temppoly.MakeEmpty();
@@ -255,12 +255,12 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 			temppoly4.MakeEmpty();
 			temppoly5.MakeEmpty();
 			worker.MakeEmpty();
-			csVector2 extentsx, extentsy, extentsz;
+			Ogre::Vector2 extentsx, extentsy, extentsz;
 			bool polycheck2 = false;
 
 			//copy source polygon vertices
-			for (int k = 0; k < origpolys[j].GetSize(); k++)
-				temppoly.AddVertex(origpolys[j][k]);
+			for (int k = 0; k < origpolys[j].size(); k++)
+				temppoly.insertVertex(origpolys[j][k]);
 
 			//make sure the polygon is not outside the cut area
 			if (temppoly.ClassifyX(start.x) != CS_POL_FRONT &&
@@ -293,7 +293,7 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 							worker.MakeEmpty();
 
 							//get right side
-							if (temppoly2.GetVertexCount() > 0)
+							if (temppoly2.getVertexCount() > 0)
 								worker = temppoly2;
 							else
 								worker = temppoly;
@@ -301,23 +301,23 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 							worker.MakeEmpty();
 
 							//get lower
-							if (temppoly3.GetVertexCount() > 0)
+							if (temppoly3.getVertexCount() > 0)
 								worker = temppoly3;
-							else if (temppoly2.GetVertexCount() > 0)
+							else if (temppoly2.getVertexCount() > 0)
 								worker = temppoly2;
-							else if (temppoly.GetVertexCount() > 0)
+							else if (temppoly.getVertexCount() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
 							worker.MakeEmpty();
 
 							//get upper
-							if (temppoly4.GetVertexCount() > 0)
+							if (temppoly4.getVertexCount() > 0)
 								worker = temppoly4;
-							else if (temppoly3.GetVertexCount() > 0)
+							else if (temppoly3.getVertexCount() > 0)
 								worker = temppoly3;
-							else if (temppoly2.GetVertexCount() > 0)
+							else if (temppoly2.getVertexCount() > 0)
 								worker = temppoly2;
-							else if (temppoly.GetVertexCount() > 0)
+							else if (temppoly.getVertexCount() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
 							worker.MakeEmpty();
@@ -332,7 +332,7 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 							worker.MakeEmpty();
 
 							//get right side
-							if (temppoly2.GetVertexCount() > 0)
+							if (temppoly2.getVertexCount() > 0)
 								worker = temppoly2;
 							else
 								worker = temppoly;
@@ -340,23 +340,23 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 							worker.MakeEmpty();
 
 							//get lower
-							if (temppoly3.GetVertexCount() > 0)
+							if (temppoly3.getVertexCount() > 0)
 								worker = temppoly3;
-							else if (temppoly2.GetVertexCount() > 0)
+							else if (temppoly2.getVertexCount() > 0)
 								worker = temppoly2;
-							else if (temppoly.GetVertexCount() > 0)
+							else if (temppoly.getVertexCount() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
 							worker.MakeEmpty();
 
 							//get upper
-							if (temppoly4.GetVertexCount() > 0)
+							if (temppoly4.getVertexCount() > 0)
 								worker = temppoly4;
-							else if (temppoly3.GetVertexCount() > 0)
+							else if (temppoly3.getVertexCount() > 0)
 								worker = temppoly3;
-							else if (temppoly2.GetVertexCount() > 0)
+							else if (temppoly2.getVertexCount() > 0)
 								worker = temppoly2;
-							else if (temppoly.GetVertexCount() > 0)
+							else if (temppoly.getVertexCount() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
 							worker.MakeEmpty();
@@ -366,7 +366,7 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 						//store extents of temppoly5 for door sides if needed
 						if (checkwallnumber > 0 && checkwallnumber < 3)
 						{
-							if (name.Find(checkstring) >= 0)
+							if (name.find(checkstring) >= 0)
 							{
 								float extent;
 								if (checkwallnumber == 2 && (wall2a == false || wall2b == false))
@@ -410,7 +410,7 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 					worker.MakeEmpty();
 
 					//get right side
-					if (temppoly2.GetVertexCount() > 0)
+					if (temppoly2.getVertexCount() > 0)
 						worker = temppoly2;
 					else
 						worker = temppoly;
@@ -418,23 +418,23 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 					worker.MakeEmpty();
 
 					//get lower
-					if (temppoly3.GetVertexCount() > 0)
+					if (temppoly3.getVertexCount() > 0)
 						worker = temppoly3;
-					else if (temppoly2.GetVertexCount() > 0)
+					else if (temppoly2.getVertexCount() > 0)
 						worker = temppoly2;
-					else if (temppoly.GetVertexCount() > 0)
+					else if (temppoly.getVertexCount() > 0)
 						worker = temppoly;
 					worker.SplitWithPlaneZ(temppoly3, temppoly4, start.z);
 					worker.MakeEmpty();
 
 					//get upper
-					if (temppoly4.GetVertexCount() > 0)
+					if (temppoly4.getVertexCount() > 0)
 						worker = temppoly4;
-					else if (temppoly3.GetVertexCount() > 0)
+					else if (temppoly3.getVertexCount() > 0)
 						worker = temppoly3;
-					else if (temppoly2.GetVertexCount() > 0)
+					else if (temppoly2.getVertexCount() > 0)
 						worker = temppoly2;
-					else if (temppoly.GetVertexCount() > 0)
+					else if (temppoly.getVertexCount() > 0)
 						worker = temppoly;
 					worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
 					worker.MakeEmpty();
@@ -447,29 +447,29 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 				//create split polygons
 				if (polycheck2 == true)
 				{
-					if (temppoly.GetVertexCount() > 2)
+					if (temppoly.getVertexCount() > 2)
 					{
-						newpolys.SetSize(newpolys.GetSize() + 1);
-						for (int k = 0; k < temppoly.GetVertexCount(); k++)
-							newpolys[newpolys.GetSize() - 1].Push(temppoly[k]);
+						newpolys.resize(newpolys.size() + 1);
+						for (int k = 0; k < temppoly.getVertexCount(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly[k]);
 					}
-					if (temppoly2.GetVertexCount() > 2)
+					if (temppoly2.getVertexCount() > 2)
 					{
-						newpolys.SetSize(newpolys.GetSize() + 1);
-						for (int k = 0; k < temppoly2.GetVertexCount(); k++)
-							newpolys[newpolys.GetSize() - 1].Push(temppoly2[k]);
+						newpolys.resize(newpolys.size() + 1);
+						for (int k = 0; k < temppoly2.getVertexCount(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
 					}
-					if (temppoly3.GetVertexCount() > 2)
+					if (temppoly3.getVertexCount() > 2)
 					{
-						newpolys.SetSize(newpolys.GetSize() + 1);
-						for (int k = 0; k < temppoly3.GetVertexCount(); k++)
-							newpolys[newpolys.GetSize() - 1].Push(temppoly3[k]);
+						newpolys.resize(newpolys.size() + 1);
+						for (int k = 0; k < temppoly3.getVertexCount(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
 					}
-					if (temppoly4.GetVertexCount() > 2)
+					if (temppoly4.getVertexCount() > 2)
 					{
-						newpolys.SetSize(newpolys.GetSize() + 1);
-						for (int k = 0; k < temppoly4.GetVertexCount(); k++)
-							newpolys[newpolys.GetSize() - 1].Push(temppoly4[k]);
+						newpolys.resize(newpolys.size() + 1);
+						for (int k = 0; k < temppoly4.getVertexCount(); k++)
+							newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
 					}
 
 					temppoly.MakeEmpty();
@@ -481,17 +481,17 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 			else
 			{
 				//otherwise put original polygon into array (will only be used if the related submesh is recreated)
-				newpolys.Push(origpolys[j]);
+				newpolys.push_back(origpolys[j]);
 			}
 		}
 
 		//create new polygon
-		if (polycheck == true && newpolys.GetSize() > 0)
+		if (polycheck == true && newpolys.size() > 0)
 		{
 			//get texture data from original polygon
-			iMaterialWrapper *oldmat = wall->GetHandle(i)->material;
-			csVector3 oldvector;
-			csMatrix3 mapping;
+			Ogre::Material *oldmat = wall->GetHandle(i)->material;
+			Ogre::Vector3 oldvector;
+			Ogre::Matrix3 mapping;
 			wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
 
 			//delete original polygon
@@ -500,7 +500,7 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 			//create new polygon
 			WallPolygon* handle = 0;
 			handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
-			ignore_list.Push(handle);
+			ignore_list.push_back(handle);
 
 			//reset search position
 			i--;
@@ -516,12 +516,12 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 	}
 }
 
-csVector3 SBS::GetWallExtents(csArray<WallObject*> &wallarray, const char *name, float altitude, bool get_max)
+Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude, bool get_max)
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
 
-	csString newname;
-	csString name2 = name;
+	Ogre::String newname;
+	Ogre::String name2 = name;
 	for (int i = 0; i < 6; i++)
 	{
 		if (i == 0)
@@ -541,7 +541,7 @@ csVector3 SBS::GetWallExtents(csArray<WallObject*> &wallarray, const char *name,
 
 		int index = -1;
 		int index2 = -1;
-		for (int j = 0; j < wallarray.GetSize(); j++)
+		for (int j = 0; j < wallarray.size(); j++)
 		{
 			index2 = wallarray[j]->FindPolygon(newname);
 			if (index2 > -1)
@@ -553,15 +553,15 @@ csVector3 SBS::GetWallExtents(csArray<WallObject*> &wallarray, const char *name,
 
 		if (index >= 0)
 		{
-			csArray<CS::Geometry::csContour3> origpolys;
+			std::vector<Ogre::Polygon> origpolys;
 			wallarray[index]->GetGeometry(index2, origpolys, true);
 
-			csPoly3D original, tmp1, tmp2;
-			for (int i = 0; i < origpolys[0].GetSize(); i++)
-				original.AddVertex(origpolys[0][i]);
+			Ogre::Polygon original, tmp1, tmp2;
+			for (int i = 0; i < origpolys[0].size(); i++)
+				original.insertVertex(origpolys[0][i]);
 
 			//if given altitude is outside of polygon's range, return 0
-			csVector2 yextents = GetExtents(original, 2);
+			Ogre::Vector2 yextents = GetExtents(original, 2);
 			float tmpaltitude = altitude;
 			if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
 				return 0;
@@ -572,7 +572,7 @@ csVector3 SBS::GetWallExtents(csArray<WallObject*> &wallarray, const char *name,
 			//get lower part of upper
 			tmp2.SplitWithPlaneY(original, tmp1, tmpaltitude + 0.001);
 
-			csVector3 result;
+			Ogre::Vector3 result;
 			if (get_max == false)
 			{
 				//get minimum extents
@@ -592,14 +592,14 @@ csVector3 SBS::GetWallExtents(csArray<WallObject*> &wallarray, const char *name,
 	return 0;
 }
 
-csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
+Ogre::Vector3 SBS::GetPolygonDirection(Ogre::Polygon &polygon)
 {
 	//returns the direction the polygon faces, in a 3D vector
 	//for example, <-1, 0, 0> means that the wall faces left.
 
 	//get largest normal
 
-	csVector3 normal = polygon.ComputeNormal();
+	Ogre::Vector3 normal = polygon.ComputeNormal();
 
 	int largest_normal = 0; //x
 
@@ -611,37 +611,37 @@ csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
 	if (largest_normal == 0)
 	{
 		if (normal.x < 0)
-			return csVector3(1, 0, 0);
+			return Ogre::Vector3(1, 0, 0);
 		else
-			return csVector3(-1, 0, 0);
+			return Ogre::Vector3(-1, 0, 0);
 	}
 
 	if (largest_normal == 1)
 	{
 		if (normal.y < 0)
-			return csVector3(0, 1, 0);
+			return Ogre::Vector3(0, 1, 0);
 		else
-			return csVector3(0, -1, 0);
+			return Ogre::Vector3(0, -1, 0);
 	}
 
 	if (largest_normal == 2)
 	{
 		if (normal.z < 0)
-			return csVector3(0, 0, 1);
+			return Ogre::Vector3(0, 0, 1);
 		else
-			return csVector3(0, 0, -1);
+			return Ogre::Vector3(0, 0, -1);
 	}
-	return csVector3(0, 0, 0);
+	return Ogre::Vector3(0, 0, 0);
 }
 
-csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, CS::Geometry::csContour3 &vertices, float tw, float th, bool autosize, csMatrix3 &t_matrix, csVector3 &t_vector, csArray<csVector2> &mesh_indices)
+Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, Ogre::Polygon &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
 	//get texture material
-	csString texname = texture;
+	Ogre::String texname = texture;
 	bool result;
-	csRef<iMaterialWrapper> material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
+	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
 	if (!result)
 		texname = "Default";
 
@@ -655,8 +655,8 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 		csRef<iStringSet> strset = csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset");
 		csRef<iShaderManager> shadermgr = csQueryRegistry<iShaderManager> (object_reg);
 		iMaterial* mat = material->GetMaterial();
-		//csStringID t = strset->Request("ambient");
-		csStringID t = strset->Request("diffuse");
+		//Ogre::StringID t = strset->Request("ambient");
+		Ogre::StringID t = strset->Request("diffuse");
 		//iShader* sh = shadermgr->GetShader("fullbright");
 		//iShader* sh = shadermgr->GetShader("ambient");
 		iShader* sh = shadermgr->GetShader("light");
@@ -664,11 +664,11 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	}*/
 
 	//get autosize information
-	csVector2 xextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 1);
-	csVector2 yextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 2);
-	csVector2 zextents = GetExtents(vertices.GetArray(), vertices.GetSize(), 3);
+	Ogre::Vector2 xextents = GetExtents(vertices.GetArray(), vertices.size(), 1);
+	Ogre::Vector2 yextents = GetExtents(vertices.GetArray(), vertices.size(), 2);
+	Ogre::Vector2 zextents = GetExtents(vertices.GetArray(), vertices.size(), 3);
 
-	csVector2 sizing;
+	Ogre::Vector2 sizing;
 	sizing.x = tw;
 	sizing.y = th;
 
@@ -678,7 +678,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	//get texture tiling information
 	float tw2 = sizing.x, th2 = sizing.y;
 	float mw, mh;
-	if (GetTextureTiling(texname.GetData(), mw, mh))
+	if (GetTextureTiling(texname, mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
@@ -689,100 +689,100 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	//create texture mapping table
 	//convert to remote positioning
 
-	csArray<CS::Geometry::csContour3> vertices2;
-	vertices2.SetSize(1);
+	std::vector<Ogre::Polygon> vertices2;
+	vertices2.resize(1);
 
-	for (int i = 0; i < vertices.GetSize(); i++)
-		vertices2[0].Push(ToRemote(vertices[i]));
+	for (int i = 0; i < vertices.size(); i++)
+		vertices2[0].push_back(ToRemote(vertices[i]));
 
 	//texture mapping
-	csVector3 v1, v2, v3;
+	Ogre::Vector3 v1, v2, v3;
 	GetTextureMapping(vertices2[0], v1, v2, v3);
 	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
 		v1,
-		csVector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
+		Ogre::Vector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
 		v2,
-		csVector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
+		Ogre::Vector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
 		v3,
-		csVector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
+		Ogre::Vector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
 		return 0;
 
 	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
 }
 
-csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<csVector2> &mesh_indices, bool convert_vertices)
+Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<Ogre::Polygon> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
 	//get genmesh factory state
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
+	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 
 	//convert to remote positioning
 
-	csArray<CS::Geometry::csContour3> vertices2;
+	std::vector<Ogre::Polygon> vertices2;
 	if (convert_vertices == true)
 	{
-		vertices2.SetSize(vertices.GetSize());
-		for (int i = 0; i < vertices.GetSize(); i++)
+		vertices2.resize(vertices.size());
+		for (int i = 0; i < vertices.size(); i++)
 		{
-			for (int j = 0; j < vertices[i].GetSize(); j++)
-				vertices2[i].Push(ToRemote(vertices[i][j]));
+			for (int j = 0; j < vertices[i].size(); j++)
+				vertices2[i].push_back(ToRemote(vertices[i][j]));
 		}
 	}
 	else
 		vertices2 = vertices;
 
 	//texture mapping
-	csVector2 *table = GetTexels(tex_matrix, tex_vector, vertices2);
+	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2);
 	CS::Geometry::TableTextureMapper mapper(table);
 
 	//triangulate mesh
-	csArray<csTriangleMesh> trimesh;
-	trimesh.SetSize(vertices2.GetSize());
+	std::vector<csTriangleMesh> trimesh;
+	trimesh.resize(vertices2.size());
 
-	for (int i = 0; i < trimesh.GetSize(); i++)
+	for (int i = 0; i < trimesh.size(); i++)
 	{
 		//first fill triangle mesh with polygon's vertices
-		for (int j = 0; j < vertices2[i].GetSize(); j++)
-			trimesh[i].AddVertex(vertices2[i][j]);
+		for (int j = 0; j < vertices2[i].size(); j++)
+			trimesh[i].insertVertex(vertices2[i][j]);
 
 		//then do a (very) simple triangulation
 		//this method is used because it works with non-planar polygons, and the main
 		//Crystal Space triangulation system requires planar polygons
-		for (int j = 2; j < vertices2[i].GetSize(); j++)
+		for (int j = 2; j < vertices2[i].size(); j++)
 			trimesh[i].AddTriangle(0, j - 1, j);
 	}
 
 	//set up geometry arrays
-	csDirtyAccessArray<csVector3> mesh_vertices;
-	csDirtyAccessArray<csVector2> mesh_texels;
-	csDirtyAccessArray<csVector3> mesh_normals;
+	csDirtyAccessArray<Ogre::Vector3> mesh_vertices;
+	csDirtyAccessArray<Ogre::Vector2> mesh_texels;
+	csDirtyAccessArray<Ogre::Vector3> mesh_normals;
 
 	//initialize geometry arrays
 	int size = 0;
-	for (int i = 0; i < trimesh.GetSize(); i++)
-		size += trimesh[i].GetVertexCount();
-	mesh_vertices.SetSize(size);
-	mesh_texels.SetSize(size);
-	mesh_normals.SetSize(size);
+	for (int i = 0; i < trimesh.size(); i++)
+		size += trimesh[i].getVertexCount();
+	mesh_vertices.resize(size);
+	mesh_texels.resize(size);
+	mesh_normals.resize(size);
 
 	//get number of existing vertices
-	int count = state->GetVertexCount();
+	int count = state->getVertexCount();
 
 	//populate vertices, normals, and texels for mesh data
 	int k = 0;
 
-	for (int i = 0; i < trimesh.GetSize(); i++)
+	for (int i = 0; i < trimesh.size(); i++)
 	{
 		int min = count + k;
 
-		for (int j = 0; j < trimesh[i].GetVertexCount(); j++)
+		for (int j = 0; j < trimesh[i].getVertexCount(); j++)
 		{
 			mesh_normals[k] = mesh_vertices[k] = trimesh[i].GetVertices()[j];
 			mesh_normals[k].Normalize();
 			mesh_texels[k] = mapper.Map(mesh_vertices[k], mesh_normals[k], k);
 
-			state->AddVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
+			state->insertVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
 
 			int a = k - 1;
 			if (a == -1)
@@ -795,7 +795,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 		}
 
 		int max = count + k - 1;
-		mesh_indices.Push(csVector2(min, max));
+		mesh_indices.push_back(Ogre::Vector2(min, max));
 	}
 
 	//delete texel array
@@ -804,22 +804,22 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	table = 0;
 
 	//delete arrays
-	mesh_vertices.DeleteAll();
-	mesh_texels.DeleteAll();
-	mesh_normals.DeleteAll();
+	mesh_vertices.clear();
+	mesh_texels.clear();
+	mesh_normals.clear();
 
 	//set up triangle buffer
 	int tricount = 0;
-	for (int i = 0; i < trimesh.GetSize(); i++)
+	for (int i = 0; i < trimesh.size(); i++)
 		tricount += trimesh[i].GetTriangleCount();
 
-	csRef<iRenderBuffer> buffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, count, count + size - 1);
+	Ogre::HardwareIndexBuffer* buffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, count, count + size - 1);
 	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
 
 	//add triangles to mesh
 	int location = 0;
 	int location2 = 0;
-	for (int i = 0; i < trimesh.GetSize(); i++)
+	for (int i = 0; i < trimesh.size(); i++)
 	{
 		for (int j = 0; j < trimesh[i].GetTriangleCount(); j++)
 		{
@@ -830,7 +830,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 			triangleData[location] = tri; //add triangle to submesh buffer
 			location++;
 		}
-		location2 += trimesh[i].GetVertexCount();
+		location2 += trimesh[i].getVertexCount();
 	}
 
 	//finish with submesh buffer
@@ -852,7 +852,7 @@ csRef<iRenderBuffer> SBS::PolyMesh(csRef<iMeshWrapper> mesh, csRefArray<iGeneral
 	return buffer;
 }
 
-bool SBS::ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geometry::csContour3 &vertices, const csVector3 &p1, const csVector2 &uv1, const csVector3 &p2, const csVector2 &uv2, const csVector3 &p3, const csVector2 &uv3)
+bool SBS::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, Ogre::Polygon &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
 {
 	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
 	//given an array of vertices, this returns the texture transformation matrix and vector
@@ -897,26 +897,26 @@ bool SBS::ComputeTextureMap(csMatrix3 &t_matrix, csVector3 &t_vector, CS::Geomet
 	else
 		m.Invert();
 
-	csVector2 pl;
-	csVector3 po, pu, pv;
+	Ogre::Vector2 pl;
+	Ogre::Vector3 po, pu, pv;
 
 	// For (0,0) and Po
-	pl = m * (csVector2(0, 0) - uv1);
+	pl = m * (Ogre::Vector2(0, 0) - uv1);
 	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 
 	// For (1,0) and Pu
-	pl = m * (csVector2(1, 0) - uv1);
+	pl = m * (Ogre::Vector2(1, 0) - uv1);
 	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 
 	// For (0,1) and Pv
-	pl = m * (csVector2(0, 1) - uv1);
+	pl = m * (Ogre::Vector2(0, 1) - uv1);
 	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 
 	ComputeTextureSpace(t_matrix, t_vector, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
 	return true;
 }
 
-bool SBS::ComputeTextureSpace(csMatrix3 &m, csVector3 &v, const csVector3 &v_orig, const csVector3 &v1, float len1, const csVector3 &v2, float len2)
+bool SBS::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
 {
 	//from CS textrans.cpp
 	
@@ -926,9 +926,9 @@ bool SBS::ComputeTextureSpace(csMatrix3 &m, csVector3 &v, const csVector3 &v_ori
 	d = csSquaredDist::PointPoint(v_orig, v2);
 	float invl2 = (d) ? csQisqrt (d) : 0;
 
-	csVector3 v_u = (v1 - v_orig) * len1 * invl1;
-	csVector3 v_v = (v2 - v_orig) * len2 * invl2;
-	csVector3 v_w = v_u % v_v;
+	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
+	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
+	Ogre::Vector3 v_w = v_u % v_v;
 
 	m.m11 = v_u.x;
 	m.m12 = v_v.x;
@@ -954,7 +954,7 @@ bool SBS::ComputeTextureSpace(csMatrix3 &m, csVector3 &v, const csVector3 &v_ori
 	return true;
 }
 
-csVector2* SBS::GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<CS::Geometry::csContour3> &vertices)
+Ogre::Vector2* SBS::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Polygon> &vertices)
 {
 	//return texel array for specified texture transformation matrix and vector
 
@@ -962,16 +962,16 @@ csVector2* SBS::GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<
 
 	//create array for texel map
 	int texel_count = 0;
-	for (int i = 0; i < vertices.GetSize(); i++)
-		texel_count += vertices[i].GetSize();
-	csVector2 *texels = new csVector2[texel_count];
+	for (int i = 0; i < vertices.size(); i++)
+		texel_count += vertices[i].size();
+	Ogre::Vector2 *texels = new Ogre::Vector2[texel_count];
 
 	//transform matrix into texel map
 	int index = 0;
-	csVector3 texel_temp;
-	for (int i = 0; i < vertices.GetSize(); i++)
+	Ogre::Vector3 texel_temp;
+	for (int i = 0; i < vertices.size(); i++)
 	{
-		for (int j = 0; j < vertices[i].GetSize(); j++)
+		for (int j = 0; j < vertices[i].size(); j++)
 		{
 			texel_temp = transform.Other2This(vertices[i][j]);
 			texels[index].x = texel_temp.x;
@@ -982,7 +982,7 @@ csVector2* SBS::GetTexels(csMatrix3 &tex_matrix, csVector3 &tex_vector, csArray<
 	return texels;
 }
 
-int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubMesh> &submeshes, csRef<iRenderBuffer> indices, iMaterialWrapper* material, const char *name, bool add)
+int SBS::ReindexSubMesh(Ogre::Mesh* state, std::vector<Ogre::SubMesh> &submeshes, Ogre::HardwareIndexBuffer* indices, Ogre::Material* material, const char *name, bool add)
 {
 	//adds or removes triangle indices to a submesh in the list with a matching material
 	//if append is true, adds indices; otherwise removes them
@@ -993,14 +993,14 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 	//create submesh if it doesn't exist, and exit
 	if (index == -1)
 	{
-		csRef<iGeneralMeshSubMesh> newsubmesh = state->AddSubMesh(indices, material, name);
-		return submeshes.Push(newsubmesh);
+		Ogre::SubMesh newsubmesh = state->AddSubMesh(indices, material, name);
+		return submeshes.push_back(newsubmesh);
 	}
 
-	csRef<iGeneralMeshSubMesh> submesh = submeshes[index];
+	Ogre::SubMesh submesh = submeshes[index];
 
 	//set up buffer to original triangle indices
-	iRenderBuffer *buffer = submesh->GetIndices();
+	Ogre::HardwareIndexBuffer *buffer = submesh->GetIndices();
 
 	//get triangle counts
 	int buffercount = buffer->GetElementCount() / 3;
@@ -1018,7 +1018,7 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 	{
 		buffer = 0;
 		state->DeleteSubMesh(submesh);
-		submeshes.DeleteIndex(index);
+		submeshes.erase(index);
 		return -1;
 	}
 
@@ -1035,7 +1035,7 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 		rangeend = indices->GetRangeEnd();
 
 	//set up new buffer for modified indices
-	csRef<iRenderBuffer> newbuffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, rangestart, rangeend);
+	Ogre::HardwareIndexBuffer* newbuffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, rangestart, rangeend);
 
 	if (add == true)
 	{
@@ -1097,20 +1097,20 @@ int SBS::ReindexSubMesh(iGeneralFactoryState* state, csRefArray<iGeneralMeshSubM
 
 	//delete old submesh
 	state->DeleteSubMesh(submesh);
-	submeshes.DeleteIndex(index);
+	submeshes.erase(index);
 
 	//create submesh
-	csRef<iGeneralMeshSubMesh> newsubmesh = state->AddSubMesh(newbuffer, material, name);
-	index = submeshes.Push(newsubmesh);
+	Ogre::SubMesh newsubmesh = state->AddSubMesh(newbuffer, material, name);
+	index = submeshes.push_back(newsubmesh);
 	return index;
 }
 
-int SBS::FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMaterialWrapper *material)
+int SBS::FindMatchingSubMesh(std::vector<Ogre::SubMesh> &submeshes, Ogre::Material *material)
 {
 	//find a submesh with a matching material
 	//returns array index
 
-	for (int i = 0; i < submeshes.GetSize(); i++)
+	for (int i = 0; i < submeshes.size(); i++)
 	{
 		if (submeshes[i]->GetMaterial() == material)
 			return i;
@@ -1118,21 +1118,21 @@ int SBS::FindMatchingSubMesh(csRefArray<iGeneralMeshSubMesh> &submeshes, iMateri
 	return -1;
 }
 
-void WallPolygon::GetTextureMapping(csMatrix3 &tm, csVector3 &tv)
+void WallPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 {
 	//return texture mapping matrix and vector
 	tm = t_matrix;
 	tv = t_vector;
 }
 
-iGeneralMeshSubMesh* WallPolygon::GetSubMesh()
+Ogre::SubMesh* WallPolygon::GetSubMesh()
 {
 	//return the submesh this polygon is in
 	int index = sbs->FindMatchingSubMesh(*submeshes, material);
 	return submeshes->Get(index);
 }
 
-void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted_indices)
+void SBS::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
@@ -1140,54 +1140,54 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 	//also, all wall objects in wall arrays must have the same mesh state
 
 	//exit if wall array is empty
-	if (wallarray.GetSize() == 0)
+	if (wallarray.size() == 0)
 		return;
 
 	//get integer array of triangle indices
-	csArray<int> indices;
+	std::vector<int> indices;
 	int* buffer2 = (int*)deleted_indices->Lock(CS_BUF_LOCK_NORMAL);
 	for (int i = 0; i < deleted_indices->GetElementCount(); i++)
-		indices.Push(buffer2[i]);
+		indices.push_back(buffer2[i]);
 	deleted_indices->Release();
 
 	iGeneralFactoryState *state = wallarray[0]->state;
 
 	//set up new geometry arrays
-	csDirtyAccessArray<csVector3> mesh_vertices;
-	csDirtyAccessArray<csVector2> mesh_texels;
-	csDirtyAccessArray<csVector3> mesh_normals;
+	csDirtyAccessArray<Ogre::Vector3> mesh_vertices;
+	csDirtyAccessArray<Ogre::Vector2> mesh_texels;
+	csDirtyAccessArray<Ogre::Vector3> mesh_normals;
 	csDirtyAccessArray<csColor4> mesh_colors;
 
 	//copy mesh data
-	for (int i = 0; i < state->GetVertexCount(); i++)
+	for (int i = 0; i < state->getVertexCount(); i++)
 	{
-		mesh_vertices.Push(state->GetVertices()[i]);
-		mesh_texels.Push(state->GetTexels()[i]);
-		mesh_normals.Push(state->GetNormals()[i]);
-		mesh_colors.Push(state->GetColors()[i]);
+		mesh_vertices.push_back(state->GetVertices()[i]);
+		mesh_texels.push_back(state->GetTexels()[i]);
+		mesh_normals.push_back(state->GetNormals()[i]);
+		mesh_colors.push_back(state->GetColors()[i]);
 	}
 
 	//construct new sorted and compressed index array
-	csArray<int> deleted2;
-	for (int i = 0; i < indices.GetSize(); i++)
+	std::vector<int> deleted2;
+	for (int i = 0; i < indices.size(); i++)
 		deleted2.PushSmart(indices[i]);
 	deleted2.Sort();
 
-	indices.DeleteAll();
+	indices.clear();
 
 	//delete specified vertices
-	for (int i = deleted2.GetSize() - 1; i >= 0; i--)
+	for (int i = deleted2.size() - 1; i >= 0; i--)
 	{
 		int index = deleted2[i];
-		mesh_vertices.DeleteIndex(index);
-		mesh_texels.DeleteIndex(index);
-		mesh_normals.DeleteIndex(index);
-		mesh_colors.DeleteIndex(index);
+		mesh_vertices.erase(index);
+		mesh_texels.erase(index);
+		mesh_normals.erase(index);
+		mesh_colors.erase(index);
 	}
 
 	//refill original mesh data
-	state->SetVertexCount(mesh_vertices.GetSize());
-	for (int i = 0; i < mesh_vertices.GetSize(); i++)
+	state->SetVertexCount(mesh_vertices.size());
+	for (int i = 0; i < mesh_vertices.size(); i++)
 	{
 		state->GetVertices()[i] = mesh_vertices[i];
 		state->GetTexels()[i] = mesh_texels[i];
@@ -1195,15 +1195,15 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 		state->GetColors()[i] = mesh_colors[i];
 	}
 
-	mesh_vertices.DeleteAll();
-	mesh_texels.DeleteAll();
-	mesh_normals.DeleteAll();
-	mesh_colors.DeleteAll();
+	mesh_vertices.clear();
+	mesh_texels.clear();
+	mesh_normals.clear();
+	mesh_colors.clear();
 
 	//reindex triangle indices in all submeshes
 	for (int i = 0; i < state->GetSubMeshCount(); i++)
 	{
-		iRenderBuffer *indices = state->GetSubMesh(i)->GetIndices();
+		Ogre::HardwareIndexBuffer *indices = state->GetSubMesh(i)->GetIndices();
 
 		if (!indices)
 			continue;
@@ -1212,7 +1212,7 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 
 		for (int j = 0; j < indices->GetElementCount(); j++)
 		{
-			for (int k = deleted2.GetSize() - 1; k >= 0; k--)
+			for (int k = deleted2.size() - 1; k >= 0; k--)
 			{
 				if (indices2[j] >= deleted2[k])
 					indices2[j]--;
@@ -1222,14 +1222,14 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 	}
 
 	//reindex triangle indices in all wall objects
-	for (int i = 0; i < wallarray.GetSize(); i++)
+	for (int i = 0; i < wallarray.size(); i++)
 	{
 		if (!wallarray[i])
 			continue;
 
-		for (int j = 0; j < wallarray[i]->handles.GetSize(); j++)
+		for (int j = 0; j < wallarray[i]->handles.size(); j++)
 		{
-			csRef<iRenderBuffer> indices = wallarray[i]->handles[j].triangles;
+			Ogre::HardwareIndexBuffer* indices = wallarray[i]->handles[j].triangles;
 
 			if (!indices)
 				continue;
@@ -1239,7 +1239,7 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 			//reindex triangle indices
 			for (int k = 0; k < indices->GetElementCount(); k++)
 			{
-				for (int m = deleted2.GetSize() - 1; m >= 0; m--)
+				for (int m = deleted2.size() - 1; m >= 0; m--)
 				{
 					if (indices2[k] >= deleted2[m])
 						indices2[k]--;
@@ -1248,11 +1248,11 @@ void SBS::DeleteVertices(csArray<WallObject*> &wallarray, iRenderBuffer *deleted
 			indices->Release();
 
 			//reindex extents, used for getting original geometry
-			for (int k = deleted2.GetSize() - 1; k >= 0; k--)
+			for (int k = deleted2.size() - 1; k >= 0; k--)
 			{
-				for (int m = 0; m < wallarray[i]->handles[j].index_extents.GetSize(); m++)
+				for (int m = 0; m < wallarray[i]->handles[j].index_extents.size(); m++)
 				{
-					csVector2 extents = wallarray[i]->handles[j].index_extents[m];
+					Ogre::Vector2 extents = wallarray[i]->handles[j].index_extents[m];
 					if (deleted2[k] < extents.x)
 						extents.x--;
 					if (deleted2[k] < extents.y)
@@ -1274,50 +1274,32 @@ WallPolygon::~WallPolygon()
 	sbs->PolygonCount--;
 }
 
-void WallPolygon::GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<CS::Geometry::csContour3> &vertices, bool firstonly)
+void WallPolygon::GetGeometry(Ogre::Mesh meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
-	vertices.SetSize(index_extents.GetSize());
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(meshwrapper->GetFactory()->GetMeshObjectFactory());
+	vertices.resize(index_extents.size());
+	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(meshwrapper->GetFactory()->GetMeshObjectFactory());
 
-	for (int i = 0; i < index_extents.GetSize(); i++)
+	for (int i = 0; i < index_extents.size(); i++)
 	{
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
 		for (int j = min; j <= max; j++)
-			vertices[i].Push(sbs->ToLocal(state->GetVertices()[j]));
+			vertices[i].insertVertex(sbs->ToLocal(state->GetVertices()[j]));
 		if (firstonly == true)
 			return;
 	}
 }
 
-void WallPolygon::GetGeometry(csRef<iMeshWrapper> meshwrapper, csArray<csPoly3D> &vertices, bool firstonly)
-{
-	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
-
-	vertices.SetSize(index_extents.GetSize());
-	csRef<iGeneralFactoryState> state = scfQueryInterface<iGeneralFactoryState>(meshwrapper->GetFactory()->GetMeshObjectFactory());
-
-	for (int i = 0; i < index_extents.GetSize(); i++)
-	{
-		int min = index_extents[i].x;
-		int max = index_extents[i].y;
-		for (int j = min; j <= max; j++)
-			vertices[i].AddVertex(sbs->ToLocal(state->GetVertices()[j]));
-		if (firstonly == true)
-			return;
-	}
-}
-
-bool WallPolygon::PointInside(csRef<iMeshWrapper> meshwrapper, const csVector3 &point, bool plane_check)
+bool WallPolygon::PointInside(Ogre::Mesh meshwrapper, const Ogre::Vector3 &point, bool plane_check)
 {
 	//check if a point is inside the polygon
 
-	csArray<csPoly3D> vertices;
+	std::vector<Ogre::Polygon> vertices;
 	GetGeometry(meshwrapper, vertices, false);
 
-	for (int i = 0; i < vertices.GetSize(); i++)
+	for (int i = 0; i < vertices.size(); i++)
 	{
 		if (vertices[i].In(point))
 			return true;
@@ -1334,11 +1316,11 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	enabled = true;
 	//create a new mesh wrapper and factory
-	csString factname = name;
-	factname.Append(" factory");
+	Ogre::String factname = name;
+	factname.append(" factory");
 
-	csString buffer;
-	csString Name = name;
+	Ogre::String buffer;
+	Ogre::String Name = name;
 	buffer = object->GetNumber();
 	Name.Insert(0, "(" + buffer + ")");
 
@@ -1389,7 +1371,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 MeshObject::~MeshObject()
 {
 	//delete wall objects
-	for (int i = 0; i < Walls.GetSize(); i++)
+	for (int i = 0; i < Walls.size(); i++)
 	{
 		if (Walls[i])
 		{
@@ -1435,15 +1417,15 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 {
 	//create a new wall object in the given array
 
-	Walls.SetSize(Walls.GetSize() + 1);
-	Walls[Walls.GetSize() - 1] = new WallObject(MeshWrapper, Submeshes);
-	Walls[Walls.GetSize() - 1]->name = name;
-	Walls[Walls.GetSize() - 1]->parent_array = &Walls;
-	Walls[Walls.GetSize() - 1]->SetValues(Walls[Walls.GetSize() - 1], parent, "Wall", name, false);
-	return Walls[Walls.GetSize() - 1];
+	Walls.resize(Walls.size() + 1);
+	Walls[Walls.size() - 1] = new WallObject(MeshWrapper, Submeshes);
+	Walls[Walls.size() - 1]->name = name;
+	Walls[Walls.size() - 1]->parent_array = &Walls;
+	Walls[Walls.size() - 1]->SetValues(Walls[Walls.size() - 1], parent, "Wall", name, false);
+	return Walls[Walls.size() - 1];
 }
 
-iMaterialWrapper* MeshObject::ChangeTexture(const char *texture, bool matcheck)
+Ogre::Material* MeshObject::ChangeTexture(const char *texture, bool matcheck)
 {
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
@@ -1453,7 +1435,7 @@ iMaterialWrapper* MeshObject::ChangeTexture(const char *texture, bool matcheck)
 		return 0;
 
 	//get new material
-	csRef<iMaterialWrapper> newmat = sbs->engine->GetMaterialList()->FindByName(texture);
+	Ogre::Material* newmat = sbs->engine->GetMaterialList()->FindByName(texture);
 
 	//exit if old and new materials are the same
 	if (matcheck == true)
@@ -1469,16 +1451,16 @@ iMaterialWrapper* MeshObject::ChangeTexture(const char *texture, bool matcheck)
 		return newmat;
 	}
 	else //otherwise report error
-		sbs->ReportError("ChangeTexture: Invalid texture '" + csString(texture) + "'");
+		sbs->ReportError("ChangeTexture: Invalid texture '" + Ogre::String(texture) + "'");
 
 	return 0;
 }
 
-int MeshObject::FindWall(const csVector3 &point)
+int MeshObject::FindWall(const Ogre::Vector3 &point)
 {
 	//find a wall from a 3D point
 
-	for (int i = 0; i < Walls.GetSize(); i++)
+	for (int i = 0; i < Walls.size(); i++)
 	{
 		if (Walls[i]->IsPointOnWall(point) == true)
 			return i;
@@ -1491,17 +1473,17 @@ void MeshObject::RescaleVertices(float multiplier)
 	//rescale all mesh vertices to the default SBS value (using ToRemote()), times the given multiplier
 
 	//set up new vertex array
-	csDirtyAccessArray<csVector3> mesh_vertices;
+	csDirtyAccessArray<Ogre::Vector3> mesh_vertices;
 
 	//multiply vertices
-	for (int i = 0; i < State->GetVertexCount(); i++)
-		mesh_vertices.Push(State->GetVertices()[i]);
+	for (int i = 0; i < State->getVertexCount(); i++)
+		mesh_vertices.push_back(State->GetVertices()[i]);
 
 	//refill mesh with multiplied vertex data
-	for (int i = 0; i < mesh_vertices.GetSize(); i++)
+	for (int i = 0; i < mesh_vertices.size(); i++)
 		State->GetVertices()[i] = sbs->ToRemote(mesh_vertices[i] * multiplier);
 
-	mesh_vertices.DeleteAll();
+	mesh_vertices.clear();
 }
 
 bool MeshObject::LoadColladaFile(const char *filename, const char *name)
@@ -1509,7 +1491,7 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 	//load a collada file into a new mesh, by converting to native Crystal Space format
 
 	//first verify the filename
-	csString File = sbs->VerifyFile(filename);;
+	/*Ogre::String File = sbs->VerifyFile(filename);;
 	sbs->Report("Loading Collada model file " + File);
 	File.Insert(0, "/root/data/");
 
@@ -1560,7 +1542,7 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 
 	//create mesh wrapper and factory
 	MeshWrapper = sbs->engine->CreateMeshWrapper(factory, name, sbs->area);
-	sbs->Report("Model file loaded");
+	sbs->Report("Model file loaded");*/
 	return true;
 }
 
@@ -1569,10 +1551,10 @@ bool MeshObject::IsEnabled()
 	return enabled;
 }
 
-void MeshObject::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z, csVector3 origin)
+void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin)
 {
 	//move light - this can only be done on movable lights
-	csVector3 pos;
+	Ogre::Vector3 pos;
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(origin.x + position.x);
 	else
@@ -1589,15 +1571,15 @@ void MeshObject::Move(const csVector3 position, bool relative_x, bool relative_y
 	Movable->UpdateMove();
 }
 
-csVector3 MeshObject::GetPosition()
+Ogre::Vector3 MeshObject::GetPosition()
 {
 	return sbs->ToLocal(Movable->GetPosition());
 }
 
-void MeshObject::SetRotation(const csVector3 rotation)
+void MeshObject::SetRotation(const Ogre::Vector3 rotation)
 {
 	//rotate light
-	csMatrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
+	Ogre::Matrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
 	csOrthoTransform ot (rot, Movable->GetTransform().GetOrigin());
 	Movable->SetTransform(ot);
 	rotX = rotation.x;
@@ -1606,16 +1588,16 @@ void MeshObject::SetRotation(const csVector3 rotation)
 	Movable->UpdateMove();
 }
 
-void MeshObject::Rotate(const csVector3 rotation, float speed)
+void MeshObject::Rotate(const Ogre::Vector3 rotation, float speed)
 {
 	//rotates light in a relative amount
 	rotX += rotation.x * speed;
 	rotY += rotation.y * speed;
 	rotZ += rotation.z * speed;
-	SetRotation(csVector3(rotX, rotY, rotZ));
+	SetRotation(Ogre::Vector3(rotX, rotY, rotZ));
 }
 
-csVector3 MeshObject::GetRotation()
+Ogre::Vector3 MeshObject::GetRotation()
 {
-	return csVector3(rotX, rotY, rotZ);
+	return Ogre::Vector3(rotX, rotY, rotZ);
 }

@@ -40,46 +40,46 @@ class ScriptProcessor
 	bool ReportMissingFiles();
 	int SplitData(const char *string, int start, bool calc = true);
 	int SplitAfterEquals(const char *string, bool calc = true);
-	csString GetAfterEquals(const char *string);
+	Ogre::String GetAfterEquals(const char *string);
 
 	private:
 	int line; //line number
-	csString LineData; //line text
+	Ogre::String LineData; //line text
 	int Current; //current range iteration
 	int Section; //current section number
-	csString Context; //section context
+	Ogre::String Context; //section context
 	int temp1;
-	csString temp2;
+	Ogre::String temp2;
 	int temp3;
 	int temp4;
 	int temp5;
-	csString temp6;
-	csStringArray tempdata;
-	csArray<int> callbutton_elevators;
+	Ogre::String temp6;
+	Ogre::StringArray tempdata;
+	std::vector<int> callbutton_elevators;
 	int FloorCheck;
 	int RangeL;
 	int RangeH;
 	long RangeStart;
 	WallObject *wall;
 	char intbuffer[65];
-	csString buffer;
+	Ogre::String buffer;
 	int startpos;
 	bool getfloordata;
 	bool setshaftdoors;
-	csArray<csString> BuildingData;
-	csArray<csString> UserVariable;
-	csVector3 MinExtent;
-	csVector3 MaxExtent;
+	std::vector<Ogre::String> BuildingData;
+	std::vector<Ogre::String> UserVariable;
+	Ogre::Vector3 MinExtent;
+	Ogre::Vector3 MaxExtent;
 	bool InFunction;
 	int FunctionCallLine;
-	csString FunctionCallLineData;
-	csArray<csString> FunctionParams;
+	Ogre::String FunctionCallLineData;
+	std::vector<Ogre::String> FunctionParams;
 	bool ReplaceLine;
-	csArray<csString> nonexistent_files;
+	std::vector<Ogre::String> nonexistent_files;
 
 	int ScriptError(const char *message);
 	int ScriptError();
-	csString Calc(const char *expression);
+	Ogre::String Calc(const char *expression);
 	bool IfProc(const char *expression);
 	void StoreCommand(Object *object);
 	int ProcCommands();
@@ -92,20 +92,20 @@ class ScriptProcessor
 
 	struct FunctionInfo
 	{
-		csString name;
+		Ogre::String name;
 		int line;
 	};
 
-	csArray<FunctionInfo> functions; //stored functions
+	std::vector<FunctionInfo> functions; //stored functions
 
 	struct IncludeInfo
 	{
-		csString filename;
+		Ogre::String filename;
 		int start_line;
 		int end_line;
 	};
 
-	csArray<IncludeInfo> includes; //stored include mappings
+	std::vector<IncludeInfo> includes; //stored include mappings
 };
 
 #endif

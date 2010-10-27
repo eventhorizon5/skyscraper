@@ -26,30 +26,26 @@
 #ifndef _SBS_SOUND_H
 #define _SBS_SOUND_H
 
-#include <isndsys/ss_stream.h>
-#include <isndsys/ss_source.h>
-#include <isndsys/ss_manager.h>
-
 class SBSIMPEXP Sound
 {
 public:
 
 	Object *object; //SBS object
-	csVector3 PositionOffset; //optional position offset, used only by other objects
+	Ogre::Vector3 PositionOffset; //optional position offset, used only by other objects
 
 	Sound(Object *parent, const char *name, bool permanent);
 	~Sound();
-	void SetPosition(const csVector3& position);
+	void SetPosition(const Ogre::Vector3& position);
 	void SetPositionY(float position);
-	csVector3 GetPosition();
+	Ogre::Vector3 GetPosition();
 	void SetVolume(float value);
 	float GetVolume();
 	void SetMinimumDistance(float distance);
 	float GetMinimumDistance();
 	void SetMaximumDistance(float distance);
 	float GetMaximumDistance();
-	void SetDirection(csVector3 direction);
-	csVector3 GetDirection();
+	void SetDirection(Ogre::Vector3 direction);
+	Ogre::Vector3 GetDirection();
 	void SetDirectionalRadiation(float rad);
 	float GetDirectionalRadiation();
 	void Loop(bool value);
@@ -69,25 +65,25 @@ public:
 private:
 
 	//sound data
-	csRef<iSndSysStream> sndstream;
+	//csRef<iSndSysStream> sndstream;
 
 	//sound source
-	csRef<iSndSysSource> sndsource;
+	/*csRef<iSndSysSource> sndsource;
 	csRef<iSndSysSource3D> sndsource3d;
 	csRef<iSndSysSource3DDirectionalSimple> directional;
-	csRef<iSndSysWrapper> sndwrapper;
+	csRef<iSndSysWrapper> sndwrapper;*/
 
 	// sound parameters
-	csVector3 Position;
+	Ogre::Vector3 Position;
 	float Volume;
 	float MaxDistance;
 	float MinDistance;
-	csVector3 Direction;
+	Ogre::Vector3 Direction;
 	float DirectionalRadiation;
 	bool SoundLoop;
 	int Speed;
-	csString Filename;
-	csString Name;
+	Ogre::String Filename;
+	Ogre::String Name;
 
 };
 

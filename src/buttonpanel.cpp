@@ -62,13 +62,13 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	Origin.y = voffset - (Height / 2);
 
 	//create mesh
-	csString buffer, buffer2, buffer3;
+	Ogre::String buffer, buffer2, buffer3;
 	buffer2 = elevator;
 	buffer3 = index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3;
-	buffer.Trim();
+	TrimString(buffer);
 	object->SetName(buffer);
-	ButtonPanelMesh = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ButtonPanelMesh = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//move
 	SetToElevatorAltitude();
@@ -102,7 +102,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 ButtonPanel::~ButtonPanel()
 {
 	//delete controls
-	for (int i = 0; i < controls.GetSize(); i++)
+	for (int i = 0; i < controls.size(); i++)
 	{
 		if (controls[i])
 		{
@@ -139,29 +139,29 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	//stop = Emergency Stop
 	//alarm = Alarm
 
-	csArray<csString> textures, names;
-	csString newtype = type;
-	newtype.Downcase();
+	std::vector<Ogre::String> textures, names;
+	Ogre::String newtype = type;
+	SetCase(newtype, false);
 
 	//switch 'stop' to 'estop' for compatibility
 	if (newtype == "stop")
 		newtype = "estop";
 
 	int positions = 1;
-	textures.Push(texture);
-	textures.Push(texture_lit);
+	textures.push_back(texture);
+	textures.push_back(texture_lit);
 	if (IsNumeric(newtype) == true)
 	{
-		names.Push("off");
-		names.Push(newtype);
+		names.push_back("off");
+		names.push_back(newtype);
 	}
 	else
-		names.Push(newtype);
+		names.push_back(newtype);
 	AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 
 }
 
-void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> action_names, csArray<csString> &textures)
+void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<Ogre::String> action_names, std::vector<Ogre::String> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -242,17 +242,17 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	}
 
 	//create control object
-	controls.SetSize(controls.GetSize() + 1);
-	int control_index = controls.GetSize() - 1;
-	csString buffer, buffer2, buffer3, buffer4;
+	controls.resize(controls.size() + 1);
+	int control_index = controls.size() - 1;
+	Ogre::String buffer, buffer2, buffer3, buffer4;
 	buffer2 = elevator;
 	buffer3 = Index;
 	buffer4 = control_index;
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
-	buffer.Trim();
+	TrimString(buffer);
 	controls[control_index] = new Control(this->object, buffer, sound, action_names, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
-	controls[control_index]->SetPosition(csVector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
+	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }
 
 void ButtonPanel::DeleteButton(int row, int column)
@@ -270,14 +270,14 @@ void ButtonPanel::Press(int index)
 	Elevator *elev = sbs->GetElevator(elevator);
 
 	//exit if index is invalid
-	if (index < 0 || index > controls.GetSize() - 1)
+	if (index < 0 || index > controls.size() - 1)
 		return;
 
 	//play button sound
 	controls[index]->PlaySound();
 
 	//get action name of next position state
-	csString name = controls[index]->GetPositionAction(controls[index]->GetNextSelectPosition());
+	Ogre::String name = controls[index]->GetPositionAction(controls[index]->GetNextSelectPosition());
 
 	if (IsNumeric(name) == true)
 	{
@@ -328,7 +328,7 @@ void ButtonPanel::Press(int index)
 		return;
 	}
 
-	name.Downcase();
+	SetCase(name, false);
 	//exit without changing position if floor button is currently selected
 	if (name == "off" && IsNumeric(controls[index]->GetSelectPositionAction()) == true)
 		return;
@@ -342,15 +342,15 @@ void ButtonPanel::Press(int index)
 	if (name.StartsWith("open", false) == true && elev->Direction == 0)
 	{
 		int number = 0;
-		if (name.Length() > 4)
-			number = atoi(name.Slice(4, name.Length() - 4));
+		if (name.length() > 4)
+			number = atoi(name.substr(4, name.length() - 4));
 		elev->OpenDoors(number);
 	}
 	if (name.StartsWith("close", false) == true && elev->Direction == 0)
 	{
 		int number = 0;
-		if (name.Length() > 5)
-			number = atoi(name.Slice(5, name.Length() - 5));
+		if (name.length() > 5)
+			number = atoi(name.substr(5, name.length() - 5));
 		elev->CloseDoors(number);
 	}
 	if (name == "cancel" && elev->FireServicePhase2 == 1)
@@ -407,19 +407,19 @@ void ButtonPanel::Press(int index)
 	if (name.StartsWith("hold", false) == true && elev->Direction == 0)
 	{
 		int number = 0;
-		if (name.Length() > 4)
-			number = atoi(name.Slice(4, name.Length() - 4));
+		if (name.length() > 4)
+			number = atoi(name.substr(4, name.length() - 4));
 		elev->HoldDoors(number);
 	}
 }
 
-void ButtonPanel::Move(const csVector3 &position)
+void ButtonPanel::Move(const Ogre::Vector3 &position)
 {
 	//relative movement
 	ButtonPanelMesh->Move(position, true, true, true);
 
 	//move controls
-	for (int i = 0; i < controls.GetSize(); i++)
+	for (int i = 0; i < controls.size(); i++)
 	{
 		controls[i]->Move(position);
 	}
@@ -427,13 +427,13 @@ void ButtonPanel::Move(const csVector3 &position)
 
 void ButtonPanel::SetToElevatorAltitude()
 {
-	csVector3 pos = sbs->ToLocal(ButtonPanelMesh->Movable->GetPosition());
-	csVector3 pos_new = csVector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
+	Ogre::Vector3 pos = sbs->ToLocal(ButtonPanelMesh->Movable->GetPosition());
+	Ogre::Vector3 pos_new = Ogre::Vector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
 	ButtonPanelMesh->Movable->SetPosition(sbs->ToRemote(pos_new));
 	ButtonPanelMesh->Movable->UpdateMove();
 
 	//move controls
-	for (int i = 0; i < controls.GetSize(); i++)
+	for (int i = 0; i < controls.size(); i++)
 	{
 		controls[i]->SetPositionY(pos_new.y);
 	}
@@ -448,7 +448,7 @@ void ButtonPanel::Enabled(bool value)
 
 	ButtonPanelMesh->Enable(value);
 
-	for (int i = 0; i < controls.GetSize(); i++)
+	for (int i = 0; i < controls.size(); i++)
 	{
 		controls[i]->Enabled(value);
 	}
@@ -472,9 +472,9 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 {
 	//change light status for all buttons that call the specified floor
 
-	csString floornum;
+	Ogre::String floornum;
 	floornum = floor;
-	for (int i = 0; i < controls.GetSize(); i++)
+	for (int i = 0; i < controls.size(); i++)
 	{
 		int index = controls[i]->FindActionPosition(floornum);
 		int index2 = controls[i]->FindActionPosition("off");
@@ -492,12 +492,12 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 {
 	//return the index number of a floor button
 
-	csString floornum;
+	Ogre::String floornum;
 	floornum = floor;
 
-	if (controls.GetSize() > 0)
+	if (controls.size() > 0)
 	{
-		for (int i = 0; i < controls.GetSize(); i++)
+		for (int i = 0; i < controls.size(); i++)
 		{
 			if (controls[i]->FindActionPosition(floornum))
 				return i;
@@ -509,5 +509,12 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 void ButtonPanel::RemoveControl(Control *control)
 {
 	//remove a control from the array (does not delete the object)
-	controls.Delete(control);
+	for (int i = 0; i < controls.size(); i++)
+	{
+		if (controls[i]->object == control)
+		{
+			controls.erase(i);
+			return;
+		}
+	}
 }

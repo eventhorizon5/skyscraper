@@ -41,19 +41,19 @@ public:
 	MeshObject *ColumnFrame; //columnframe mesh
 
 	int Number; //floor number
-	csString Name; //floor name
-	csString ID;
-	csString FloorType;
-	csString Description;
-	csString IndicatorTexture; //elevator indicator texture name
+	Ogre::String Name; //floor name
+	Ogre::String ID;
+	Ogre::String FloorType;
+	Ogre::String Description;
+	Ogre::String IndicatorTexture; //elevator indicator texture name
 	float Altitude; //floor altitude
 	float Height; //floor height (not including interfloor height)
 	float InterfloorHeight; //height of interfloor area
 	bool IsEnabled; //is floor enabled?
 	bool IsColumnFrameEnabled; //is columnframe enabled?
-	csArray<CallButton*> CallButtonArray; //pointer array to call button objects
-	csArray<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
-	csArray<int> Group; //floor group
+	std::vector<CallButton*> CallButtonArray; //pointer array to call button objects
+	std::vector<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
+	std::vector<int> Group; //floor group
 
 	//functions
 	Floor(int number);
@@ -65,9 +65,9 @@ public:
 	WallObject* AddInterfloorWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float voffset1, float voffset2, float tw, float th);
 	void Enabled(bool value);
 	float FullHeight();
-	Object* AddCallButtons(csArray<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void Cut(const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber = 0, const char *checkstring = "");
-	void CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, bool cutfloors);
+	Object* AddCallButtons(std::vector<int> &elevators, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	void Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber = 0, const char *checkstring = "");
+	void CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors);
 	void AddGroupFloor(int number);
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
@@ -85,9 +85,9 @@ public:
 	Object* AddDirectionalIndicator(int elevator, bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	void SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight);
 	void Loop();
-	csArray<int> GetCallButtons(int elevator);
+	std::vector<int> GetCallButtons(int elevator);
 	void AddFillerWalls(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th);
-	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
+	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	void Report(const char *message);
 	bool ReportError(const char *message);
 	float GetBase(bool relative = false);
@@ -100,27 +100,27 @@ public:
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
 	void RemoveDoor(Door *door);
 	void RemoveSound(Sound *sound);
-	Object* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
-	Object* AddModel(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
+	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	Object* AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
 
 private:
 	char intbuffer[65];
 	char buffer[20];
 
 	//sound objects
-	csArray<Sound*> sounds;
+	std::vector<Sound*> sounds;
 
 	//doors
-	csArray<Door*> DoorArray; //pointer array to door objects
+	std::vector<Door*> DoorArray; //pointer array to door objects
 
 	//lights
-	csArray<Light*> lights;
+	std::vector<Light*> lights;
 
 	//directional indicators
-	csArray<DirectionalIndicator*> DirIndicatorArray;
+	std::vector<DirectionalIndicator*> DirIndicatorArray;
 
 	//Models
-	csArray<Model*> ModelArray;
+	std::vector<Model*> ModelArray;
 };
 
 #endif

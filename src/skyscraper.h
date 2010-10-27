@@ -110,25 +110,25 @@ private:
 	ScriptProcessor* processor;
 
 	//button locations
-	struct buttondata
+	/*struct buttondata
 	{
 		int x;
 		int y;
 		int size_x;
 		int size_y;
 		Ogre::String filename;
-		csRef<iImage> button_image;
+		Ogre::Image* button_image;
 		Ogre::String filename_selected;
-		csRef<iImage> selected_image;
+		Ogre::Image* selected_image;
 		Ogre::String filename_pressed;
-		csRef<iImage> pressed_image;
+		Ogre::Image* pressed_image;
 		int offset_x;
 		int offset_y;
 		bool drawn_selected, drawn_pressed;
 	};
-	buttondata button1, button2, button3, button4, button5;
+	buttondata button1, button2, button3, button4, button5;*/
 
-	csRef<iImage> background_image; //background image
+	//Ogre::Image* background_image; //background image
 
 	void DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
 	void Click(int index);

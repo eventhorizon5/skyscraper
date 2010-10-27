@@ -31,16 +31,16 @@ class SBSIMPEXP CallButton
 public:
 
 	Object *object; //SBS object
-	csArray<int> Elevators; //elevators this call button set is assigned to
+	std::vector<int> Elevators; //elevators this call button set is assigned to
 	int floor; //floor this call button set is on
 	int Number; //call button index number (on the specified floor)
-	csString Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
+	Ogre::String Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled;
 	bool UpStatus; //status of up light
 	bool DownStatus; //status of down light
 
 	//functions
-	CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	CallButton(std::vector<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~CallButton();
 	void Enabled(bool value);
 	void Call(bool direction); //true is up, false is down
@@ -57,8 +57,8 @@ private:
 	MeshObject* CallButtonMeshUp; //call button mesh object
 	MeshObject* CallButtonMeshDown; //call button mesh object
 
-	csString UpTexture, UpTextureLit;
-	csString DownTexture, DownTextureLit;
+	Ogre::String UpTexture, UpTextureLit;
+	Ogre::String DownTexture, DownTextureLit;
 
 	bool ProcessedUp;
 	bool ProcessedDown;

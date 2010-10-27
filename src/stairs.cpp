@@ -52,14 +52,14 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	lastcheckresult = false;
 	checkfirstrun = true;
 
-	csString buffer, buffer2, buffer3;
+	Ogre::String buffer, buffer2, buffer3;
 
 	buffer = number;
 	object->SetName("Stairwell " + buffer);
 
-	StairArray.SetSize(endfloor - startfloor + 1);
-	EnableArray.SetSize(endfloor - startfloor + 1);
-	ModelArray.SetSize(endfloor - startfloor + 1);
+	StairArray.resize(endfloor - startfloor + 1);
+	EnableArray.resize(endfloor - startfloor + 1);
+	ModelArray.resize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -67,7 +67,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		buffer2 = number;
 		buffer3 = i;
 		buffer = "Stairwell " + buffer2 + ":" + buffer3;
-		buffer.Trim();
+		TrimString(buffer);
 		StairArray[i - startfloor] = new MeshObject(object, buffer);
 		EnableArray[i - startfloor] = true;
 	}
@@ -76,9 +76,9 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 Stairs::~Stairs()
 {
 	//delete models
-	for (int i = 0; i < ModelArray.GetSize(); i++)
+	for (int i = 0; i < ModelArray.size(); i++)
 	{
-		for (int j = 0; j < ModelArray[i].GetSize(); j++)
+		for (int j = 0; j < ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j])
 				delete ModelArray[i][j];
@@ -87,9 +87,9 @@ Stairs::~Stairs()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.GetSize(); i++)
+	for (int i = 0; i < lights.size(); i++)
 	{
-		for (int j = 0; j < lights[i].GetSize(); j++)
+		for (int j = 0; j < lights[i].size(); j++)
 		{
 			if (lights[i][j])
 				delete lights[i][j];
@@ -98,7 +98,7 @@ Stairs::~Stairs()
 	}
 
 	//delete doors
-	for (int i = 0; i < DoorArray.GetSize(); i++)
+	for (int i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i].object)
 		{
@@ -107,23 +107,23 @@ Stairs::~Stairs()
 		}
 		DoorArray[i].object = 0;
 	}
-	DoorArray.DeleteAll();
+	DoorArray.clear();
 
 	//delete mesh array objects
-	for (int i = 0; i < StairArray.GetSize(); i++)
+	for (int i = 0; i < StairArray.size(); i++)
 	{
 		if (StairArray[i])
 			delete StairArray[i];
 		StairArray[i] = 0;
 	}
-	for (int i = 0; i < StairDoorArray.GetSize(); i++)
+	for (int i = 0; i < StairDoorArray.size(); i++)
 	{
 		if (StairDoorArray[i])
 			delete StairDoorArray[i];
 		StairDoorArray[i] = 0;
 	}
-	StairArray.DeleteAll();
-	StairDoorArray.DeleteAll();
+	StairArray.clear();
+	StairDoorArray.clear();
 
 	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)
@@ -140,18 +140,18 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddStairs: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddStairs: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
 	//create wall object
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
 
-	csString buffer, buffer2, buffer3;
-	csString Direction = direction;
-	Direction.Downcase();
+	Ogre::String buffer, buffer2, buffer3;
+	Ogre::String Direction = direction;
+	SetCase(Direction, false);
 	buffer3 = name;
-	buffer3.Trim();
+	TrimString(buffer3);
 
 	sbs->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
@@ -247,7 +247,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -266,7 +266,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddFloor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddFloor: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -290,7 +290,7 @@ void Stairs::Enabled(int floor, bool value)
 		EnableArray[floor - startfloor] = value;
 
 		//models
-		for (size_t i = 0; i < ModelArray[floor - startfloor].GetSize(); i++)
+		for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
 		{
 			if (ModelArray[floor - startfloor][i])
 				ModelArray[floor - startfloor][i]->Enable(value);
@@ -312,7 +312,7 @@ void Stairs::EnableWholeStairwell(bool value)
 	IsEnabled = value;
 }
 
-bool Stairs::IsInStairwell(const csVector3 &position)
+bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 {
 	//determine if user is in the stairwell
 
@@ -341,7 +341,7 @@ bool Stairs::IsInStairwell(const csVector3 &position)
 	if (position.y > bottom && position.y < top)
 	{
 		//check both the current floor and floor below
-		csVector3 endposition;
+		Ogre::Vector3 endposition;
 		endposition.Set(position.x, position.y - floorptr->FullHeight(), position.z);
 		if (floor > startfloor)
 			hit = GetMeshObject(floor - 1)->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
@@ -369,7 +369,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddDoor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddDoor: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -394,33 +394,33 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	//cut area
 	if (direction < 5)
 	{
-		CutWall(1, floor, csVector3(x1 - 0.5, voffset, z1), csVector3(x2 + 0.5, voffset + height, z2), 1, "Stairs");
-		floorptr->Cut(csVector3(origin.x + x1 - 0.5, floorptr->GetBase(true) + voffset, origin.z + z1), csVector3(origin.x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, origin.z + z2), true, false, true, 2, "Stairs");
+		CutWall(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), 1, "Stairs");
+		floorptr->Cut(Ogre::Vector3(origin.x + x1 - 0.5, floorptr->GetBase(true) + voffset, origin.z + z1), Ogre::Vector3(origin.x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, origin.z + z2), true, false, true, 2, "Stairs");
 	}
 	else
 	{
-		CutWall(1, floor, csVector3(x1, voffset, z1 - 0.5), csVector3(x2, voffset + height, z2 + 0.5), 1, "Stairs");
-		floorptr->Cut(csVector3(origin.x + x1, floorptr->GetBase(true) + voffset, origin.z + z1 - 0.5), csVector3(origin.x + x2, floorptr->GetBase(true) + voffset + height, origin.z + z2 + 0.5), true, false, true, 2, "Stairs");
+		CutWall(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), 1, "Stairs");
+		floorptr->Cut(Ogre::Vector3(origin.x + x1, floorptr->GetBase(true) + voffset, origin.z + z1 - 0.5), Ogre::Vector3(origin.x + x2, floorptr->GetBase(true) + voffset + height, origin.z + z2 + 0.5), true, false, true, 2, "Stairs");
 	}
 
 	//create doorway walls
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, "Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
-	DoorArray.SetSize(DoorArray.GetSize() + 1);
-	DoorArray[DoorArray.GetSize() - 1].floornumber = floor;
-	csString stairsnum = _itoa(StairsNum, intbuffer, 10);
-	csString num = _itoa(DoorArray.GetSize() - 1, intbuffer, 10);
-	DoorArray[DoorArray.GetSize() - 1].object = new Door(this->object, "Stairwell " + stairsnum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray.resize(DoorArray.size() + 1);
+	DoorArray[DoorArray.size() - 1].floornumber = floor;
+	Ogre::String stairsnum = _itoa(StairsNum, intbuffer, 10);
+	Ogre::String num = _itoa(DoorArray.size() - 1, intbuffer, 10);
+	DoorArray[DoorArray.size() - 1].object = new Door(this->object, "Stairwell " + stairsnum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
-	return DoorArray[DoorArray.GetSize() - 1].object->object;
+	return DoorArray[DoorArray.size() - 1].object->object;
 }
 
-void Stairs::CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset)
+void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + "...");
+	sbs->Report("Cutting for stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + "...");
 
 	float voffset1, voffset2;
 	cutstart = start;
@@ -438,25 +438,25 @@ void Stairs::CutFloors(bool relative, const csVector2 &start, const csVector2 &e
 			voffset2 = endvoffset;
 
 		if (relative == true)
-			floorptr->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+			floorptr->Cut(Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
 		else
-			floorptr->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
+			floorptr->Cut(Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, false);
 		floorptr = 0;
 	}
 
 	//cut external
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight() + endvoffset;
-	for (int i = 0; i < sbs->External->Walls.GetSize(); i++)
+	for (int i = 0; i < sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
-			sbs->Cut(sbs->External->Walls[i], csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 		else
-			sbs->Cut(sbs->External->Walls[i], csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 	}
 }
 
-bool Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)
+bool Stairs::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, int checkwallnumber, const char *checkstring)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude + interfloor
@@ -465,22 +465,22 @@ bool Stairs::CutWall(bool relative, int floor, const csVector3 &start, const csV
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			ReportError("CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+			ReportError("CutWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 
 	float base = sbs->GetFloor(floor)->GetBase();
 
-	for (int i = 0; i < GetMeshObject(floor)->Walls.GetSize(); i++)
+	for (int i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(origin.x + start.x, base + start.y, origin.z + start.z), Ogre::Vector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, base + start.y, start.z), Ogre::Vector3(end.x, base + end.y, end.z), true, false, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 	}
 
 	return true;
@@ -530,7 +530,7 @@ void Stairs::EnableDoor(int floor, bool value)
 {
 	//turn on door(s) on the specified floor
 
-	for (int i = 0; i < DoorArray.GetSize(); i++)
+	for (int i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i].floornumber == floor && DoorArray[i].object)
 			DoorArray[i].object->Enabled(value);
@@ -540,37 +540,37 @@ void Stairs::EnableDoor(int floor, bool value)
 void Stairs::OpenDoor(int number)
 {
 	//open door
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			DoorArray[number].object->Open();
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 }
 
 void Stairs::CloseDoor(int number)
 {
 	//close door
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			DoorArray[number].object->Close();
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 }
 
 bool Stairs::IsDoorOpen(int number)
 {
 	//check to see if door is open
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			return DoorArray[number].object->IsOpen();
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
@@ -598,42 +598,42 @@ bool Stairs::IsValidFloor(int floor)
 bool Stairs::IsDoorMoving(int number)
 {
 	//check to see if door is moving
-	if (number < DoorArray.GetSize())
+	if (number < DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			return DoorArray[number].object->IsMoving;
 	}
 	else
-		Report("Invalid door " + csString(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
 void Stairs::Report(const char *message)
 {
 	//general reporting function
-	sbs->Report("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+	sbs->Report("Stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }
 
 bool Stairs::ReportError(const char *message)
 {
 	//general reporting function
-	return sbs->ReportError("Stairwell " + csString(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }
 
 void Stairs::RemoveDoor(Door *door)
 {
 	//remove a door from the array (this does not delete the object)
-	for (int i = 0; i < DoorArray.GetSize(); i++)
+	for (int i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i].object == door)
 		{
-			DoorArray.DeleteIndex(i);
+			DoorArray.erase(i);
 			return;
 		}
 	}
 }
 
-Object* Stairs::AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
@@ -641,8 +641,8 @@ Object* Stairs::AddLight(int floor, const char *name, int type, csVector3 positi
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(name, type, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
-	lights[floor - startfloor].Push(light);
+	Light* light = new Light(name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
+	lights[floor - startfloor].push_back(light);
 	return light->object;
 }
 
@@ -656,7 +656,7 @@ MeshObject* Stairs::GetMeshObject(int floor)
 	return StairArray[floor - startfloor];
 }
 
-Object* Stairs::AddModel(int floor, const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
+Object* Stairs::AddModel(int floor, const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 
@@ -664,12 +664,12 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, csVe
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(name, filename, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier);
+	Model* model = new Model(name, filename, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
-	ModelArray[floor - startfloor].Push(model);
+	ModelArray[floor - startfloor].push_back(model);
 	return model->object;
 }

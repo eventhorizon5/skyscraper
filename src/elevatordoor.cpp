@@ -38,7 +38,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	object = new Object();
 	object->SetValues(this, elevator->object, "ElevatorDoor", "", false);
 
-	csString buffer;
+	Ogre::String buffer;
 	buffer = number;
 	object->SetName("Elevator Door " + buffer);
 
@@ -46,28 +46,28 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	Number = number + 1;
 	elev = elevator;
 	OpenDoor = 0;
-	OpenSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3);
+	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3);
 	WhichDoors = 0;
 	ShaftDoorFloor = 0;
-	DoorTimer = sbs->confman->GetInt("Skyscraper.SBS.Elevator.Door.Timer", 5000);
+	DoorTimer = sbs->GetConfigInt("Skyscraper.SBS.Elevator.Door.Timer", 5000);
 	DoorIsRunning = false;
 	index = 0;
 	previous_open = false;
 	door_changed = false;
 	quick_close = false;
-	OpenSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.OpenSound", "elevatoropen.wav");
-	CloseSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.CloseSound", "elevatorclose.wav");
-	UpChimeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.UpChimeSound", "chime1-up.wav");
-	DownChimeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.DownChimeSound", "chime1-down.wav");
-	NudgeSound = sbs->confman->GetStr("Skyscraper.SBS.Elevator.Door.NudgeSound", "buzz.wav");
+	OpenSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.OpenSound", "elevatoropen.wav");
+	CloseSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.CloseSound", "elevatorclose.wav");
+	UpChimeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.UpChimeSound", "chime1-up.wav");
+	DownChimeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.DownChimeSound", "chime1-down.wav");
+	NudgeSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.NudgeSound", "buzz.wav");
 	doors_stopped = false;
 	ShaftDoorThickness = 0;
 	ShaftDoorOrigin = 0;
 	nudge_enabled = false;
-	ManualSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2);
-	SlowSpeed = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5);
-	QuickClose = sbs->confman->GetInt("Skyscraper.SBS.Elevator.Door.QuickClose", 3000);
-	NudgeTimer = sbs->confman->GetFloat("Skyscraper.SBS.Elevator.Door.NudgeTimer", 30);
+	ManualSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2);
+	SlowSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5);
+	QuickClose = sbs->GetConfigInt("Skyscraper.SBS.Elevator.Door.QuickClose", 3000);
+	NudgeTimer = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.NudgeTimer", 30);
 	nudgesound_loaded = false;
 	chimesound_loaded = 0;
 
@@ -79,8 +79,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	nudgetimer = new Timer(this, elev, 1);
 
 	//create shaft door objects
-	ShaftDoors.SetSize(elev->ServicedFloors.GetSize());
-	for (int i = 0; i < ShaftDoors.GetSize(); i++)
+	ShaftDoors.resize(elev->ServicedFloors.size());
+	for (int i = 0; i < ShaftDoors.size(); i++)
 		ShaftDoors[i] = new DoorWrapper(this, true);
 
 	//create sound object
@@ -94,7 +94,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 ElevatorDoor::~ElevatorDoor()
 {
 	//delete shaft door objects
-	for (int i = 0; i < ShaftDoors.GetSize(); i++)
+	for (int i = 0; i < ShaftDoors.size(); i++)
 	{
 		if (ShaftDoors[i])
 		{
@@ -193,7 +193,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	csString doornumber;
+	Ogre::String doornumber;
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
@@ -203,14 +203,14 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; doors manually stopped");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; doors manually stopped");
 		return;
 	}
 
 	//exit if in nudge mode
 	if (GetNudgeStatus() == true)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; nudge mode enabled");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; nudge mode enabled");
 		return;
 	}
 
@@ -221,7 +221,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//don't open doors if emergency stop is enabled
 	if (elev->OnFloor == false && whichdoors != 3 && manual == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; emergency stop enabled");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; emergency stop enabled");
 		return;
 	}
 
@@ -231,18 +231,18 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//reset timer if not in a service mode
 		if (elev->InServiceMode() == false)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already open; resetting timer");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already open; resetting timer");
 			ResetDoorTimer();
 		}
 		else
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already open");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already open");
 		return;
 	}
 
 	//exit if doors are manually opening
 	if (OpenDoor == 2 && DoorIsRunning == true)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
 		return;
 	}
 
@@ -256,23 +256,23 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == true)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + " already open on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + " already open on floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": opening shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": opening shaft doors" + doornumber + " on floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually opening shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": manually opening shaft doors" + doornumber + " on floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": opening doors" + doornumber);
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": opening doors" + doornumber);
 	else
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually opening doors" + doornumber);
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": manually opening doors" + doornumber);
 
 	if (manual == false)
 		OpenDoor = 1;
@@ -294,10 +294,10 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//if opening both doors, exit if shaft doors don't exist
-	int index = ManualFloors.Find(floor);
+	int index = ManualFloors.find(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors on " + csString(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors on " + Ogre::String(_itoa(floor, intbuffer, 10)));
 		OpenDoor = 0;
 		return;
 	}
@@ -316,7 +316,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	csString doornumber;
+	Ogre::String doornumber;
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
@@ -326,28 +326,28 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + "; doors manually stopped");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + "; doors manually stopped");
 		return;
 	}
 
 	//do not close doors while fire service mode 1 is on and the elevator is waiting at the parking floor
 	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
 		return;
 	}
 
 	//do not close doors while fire service mode 2 is set to hold
 	if (manual == false && elev->FireServicePhase2 == 2)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
 		return;
 	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (OpenDoor != 0 && manual == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": will close doors" + doornumber + " in quick-close mode");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": will close doors" + doornumber + " in quick-close mode");
 		quick_close = true;
 		return;
 	}
@@ -355,14 +355,14 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//check if elevator doors are already closed
 	if (Doors->Open == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already closed");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already closed");
 		return;
 	}
 
 	//exit if doors are manually closing
 	if (OpenDoor == -2 && DoorIsRunning == true)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
 		return;
 	}
 
@@ -376,23 +376,23 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + "already closed on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + "already closed on floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": closing shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": closing shaft doors" + doornumber + " on floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually closing shaft doors" + doornumber + " on floor " + csString(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": manually closing shaft doors" + doornumber + " on floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": closing doors" + doornumber);
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": closing doors" + doornumber);
 	else
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": manually closing doors" + doornumber);
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": manually closing doors" + doornumber);
 
 	if (manual == false)
 		OpenDoor = -1;
@@ -407,10 +407,10 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		floor = elev->GetFloor();
 
 	//if closing both doors, exit if shaft doors don't exist
-	int index = ManualFloors.Find(floor);
+	int index = ManualFloors.find(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors on " + csString(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors on " + Ogre::String(_itoa(floor, intbuffer, 10)));
 		OpenDoor = 0;
 		return;
 	}
@@ -430,7 +430,7 @@ void ElevatorDoor::StopDoors()
 	//stops doors that are currently moving; can only be used for manual/emergency movements
 	//this basically just resets the door internals
 
-	csString doornumber;
+	Ogre::String doornumber;
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
@@ -440,9 +440,9 @@ void ElevatorDoor::StopDoors()
 	if (OpenDoor == -2 || OpenDoor == 2)
 	{
 		if (WhichDoors == 3)
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": stopping shaft doors" + doornumber + " on floor " + csString(_itoa(ShaftDoorFloor, intbuffer, 10)) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": stopping shaft doors" + doornumber + " on floor " + Ogre::String(_itoa(ShaftDoorFloor, intbuffer, 10)) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
 		else
-			sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": stopping doors" + doornumber);
+			sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": stopping doors" + doornumber);
 
 		if (WhichDoors == 1 || WhichDoors == 2)
 			Doors->StopDoors();
@@ -456,9 +456,9 @@ void ElevatorDoor::StopDoors()
 		doors_stopped = true;
 	}
 	else if (OpenDoor != 0)
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": can only stop doors" + doornumber + " in manual/emergency mode");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": can only stop doors" + doornumber + " in manual/emergency mode");
 	else
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": cannot stop doors" + doornumber + "; no doors moving");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": cannot stop doors" + doornumber + "; no doors moving");
 }
 
 void ElevatorDoor::MoveDoors(bool open, bool manual)
@@ -497,8 +497,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		DoorIsRunning = true;
 		door_changed = false;
 
-		index = elev->ServicedFloors.Find(ShaftDoorFloor);
-		int index2 = ManualFloors.Find(ShaftDoorFloor);
+		index = elev->ServicedFloors.find(ShaftDoorFloor);
+		int index2 = ManualFloors.find(ShaftDoorFloor);
 		if (ShaftDoorsExist(ShaftDoorFloor) == false && index2 == -1)
 		{
 			if (WhichDoors != 2)
@@ -516,13 +516,13 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			if (open == true)
 			{
 				//play elevator opening sound
-				doorsound->Load(OpenSound.GetData());
+				doorsound->Load(OpenSound);
 				doorsound->Play();
 			}
 			else
 			{
 				//play elevator closing sound
-				doorsound->Load(CloseSound.GetData());
+				doorsound->Load(CloseSound);
 				doorsound->Play();
 			}
 		}
@@ -543,7 +543,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		//reset finished states
 		if (elevdoors == true)
 		{
-			for (int i = 0; i < Doors->doors.GetSize(); i++)
+			for (int i = 0; i < Doors->doors.size(); i++)
 			{
 				Doors->doors[i]->finished = false;
 			}
@@ -551,7 +551,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 		if (shaftdoors == true)
 		{
-			for (int i = 0; i < ShaftDoors[index]->doors.GetSize(); i++)
+			for (int i = 0; i < ShaftDoors[index]->doors.size(); i++)
 			{
 				ShaftDoors[index]->doors[i]->finished = false;
 			}
@@ -566,7 +566,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//perform door movement and get open state of each door
 	if (elevdoors == true)
 	{
-		for (int i = 0; i < Doors->doors.GetSize(); i++)
+		for (int i = 0; i < Doors->doors.size(); i++)
 		{
 			Doors->doors[i]->MoveDoors(open, manual);
 		}
@@ -574,7 +574,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	if (shaftdoors == true)
 	{
-		for (int i = 0; i < ShaftDoors[index]->doors.GetSize(); i++)
+		for (int i = 0; i < ShaftDoors[index]->doors.size(); i++)
 		{
 			ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
 		}
@@ -742,15 +742,15 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 {
 	//adds an elevator door component; remake of AddDoors command
 
-	csString elevnumber, doornumber, Name, buffer;
+	Ogre::String elevnumber, doornumber, Name, buffer;
 	elevnumber = elev->Number;
-	elevnumber.Trim();
+	TrimString(elevnumber);
 	doornumber = Number;
-	doornumber.Trim();
+	TrimString(doornumber);
 	Name = name;
-	Name.Trim();
+	TrimString(Name);
 	buffer = "ElevatorDoor " + elevnumber + ":" + doornumber + ":" + Name;
-	buffer.Trim();
+	TrimString(buffer);
 
 	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors->object;
@@ -764,16 +764,16 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	if (!elev->IsServicedFloor(floor))
 		return 0;
 
-	int index = elev->ServicedFloors.Find(floor);
-	csString elevnumber, floornumber, doornumber, Name, buffer;
+	int index = elev->ServicedFloors.find(floor);
+	Ogre::String elevnumber, floornumber, doornumber, Name, buffer;
 	elevnumber = elev->Number;
-	elevnumber.Trim();
+	TrimString(elevnumber);
 	floornumber = floor;
-	floornumber.Trim();
+	TrimString(floornumber);
 	doornumber = Number;
-	doornumber.Trim();
+	TrimString(doornumber);
 	Name = name;
-	Name.Trim();
+	TrimString(Name);
 	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
 
 	Floor *floorobj = sbs->GetFloor(floor);
@@ -786,20 +786,20 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 {
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
-	csString elevnumber, floornumber, doornumber, Name, buffer;
+	Ogre::String elevnumber, floornumber, doornumber, Name, buffer;
 	elevnumber = elev->Number;
-	elevnumber.Trim();
+	TrimString(elevnumber);
 	doornumber = Number;
-	doornumber.Trim();
+	TrimString(doornumber);
 	Name = name;
-	Name.Trim();
+	TrimString(Name);
 
 	//create doors
-	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
+	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 	{
 		int floor = elev->ServicedFloors[i];
 		floornumber = floor;
-		floornumber.Trim();
+		TrimString(floornumber);
 		buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
 		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
@@ -812,12 +812,12 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	//add floor to manual shaft door list if wrapper doesn't exist and exit
 	if (!wrapper && ShaftDoor == true)
 	{
-		ManualFloors.Push(floor);
+		ManualFloors.push_back(floor);
 		return 0;
 	}
 
 	//set door parameters
-	wrapper->Origin = csVector3(elev->Origin.x, voffset, elev->Origin.z);
+	wrapper->Origin = Ogre::Vector3(elev->Origin.x, voffset, elev->Origin.z);
 
 	if (ShaftDoor == false)
 		wrapper->Origin.y += elev->Origin.y;
@@ -825,11 +825,11 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	//get full width and height of doors
 	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
 	bool firstrun = true;
-	for (int i = 0; i < wrapper->doors.GetSize(); i++)
+	for (int i = 0; i < wrapper->doors.size(); i++)
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			csVector2 extents = sbs->GetExtents(wrapper->doors[i]->mesh->State->GetVertices(), wrapper->doors[i]->mesh->State->GetVertexCount(), j);
+			Ogre::Vector2 extents = sbs->GetExtents(wrapper->doors[i]->mesh->State->GetVertices(), wrapper->doors[i]->mesh->State->getVertexCount(), j);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 
@@ -891,15 +891,15 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		//cut shaft and floor walls
 		if (DoorDirection == false)
 		{
-			if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), 1, "Shaft"))
+			if (!shaft->CutWall(false, floor, Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), 1, "Shaft"))
 				return 0;
-			floorobj->Cut(csVector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), csVector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, true, 2, "Shaft");
+			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, true, 2, "Shaft");
 		}
 		else
 		{
-			if (!shaft->CutWall(false, floor, csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), 1, "Shaft"))
+			if (!shaft->CutWall(false, floor, Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), 1, "Shaft"))
 				return 0;
-			floorobj->Cut(csVector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), csVector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
+			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
 		}
 
 		//create doorway walls
@@ -912,7 +912,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 
 	//create connection pieces
 	sbs->ResetTextureMapping(true);
-	csString name1, name2;
+	Ogre::String name1, name2;
 	if (ShaftDoor == false)
 	{
 		WallObject *wall;
@@ -942,11 +942,11 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	//relocate sound object
 	if (ShaftDoor == false)
 	{
-		doorsound->SetPosition(csVector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
+		doorsound->SetPosition(Ogre::Vector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
 		nudgesound->SetPosition(doorsound->GetPosition());
 	}
 	else
-		chime->SetPosition(csVector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
+		chime->SetPosition(Ogre::Vector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
 
 	return wrapper->object;
 }
@@ -962,7 +962,7 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 {
 	//finish shaft door on a specified floor
 
-	csString floornum;
+	Ogre::String floornum;
 	floornum = floor;
 
 	//exit if floor is not serviced by the elevator
@@ -982,10 +982,10 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 
 	DoorWrapper *wrapper;
 
-	int index = elev->ServicedFloors.Find(floor) > -1;
+	int index = elev->ServicedFloors.find(floor) > -1;
 
 	if (index > -1)
-		wrapper = ShaftDoors[elev->ServicedFloors.Find(floor)];
+		wrapper = ShaftDoors[elev->ServicedFloors.find(floor)];
 	else
 		wrapper = 0;
 
@@ -996,7 +996,7 @@ bool ElevatorDoor::FinishShaftDoors()
 {
 	//finish all shaft doors
 
-	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
+	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 		FinishShaftDoor(elev->ServicedFloors[i]);
 	return true;
 }
@@ -1007,11 +1007,11 @@ bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttextu
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
 
 	//set door parameters
-	ShaftDoorOrigin = csVector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
+	ShaftDoorOrigin = Ogre::Vector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
 	ShaftDoorThickness = thickness;
 
 	//create doors
-	for (size_t i = 0; i < elev->ServicedFloors.GetSize(); i++)
+	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 	{
 		if (!AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, tw, th))
 			return false;
@@ -1032,7 +1032,7 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	int index = elev->ServicedFloors.Find(floor);
+	int index = elev->ServicedFloors.find(floor);
 
 	//set up coordinates
 	if (DoorDirection == false)
@@ -1058,7 +1058,7 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 		z4 = ShaftDoorOrigin.z - elev->Origin.z;
 	}
 
-	csString buffer, buffer2, buffer3, buffer4, buffer5;
+	Ogre::String buffer, buffer2, buffer3, buffer4, buffer5;
 
 	//create doors
 
@@ -1084,7 +1084,7 @@ void ElevatorDoor::SetShaftDoors(float thickness, float CenterX, float CenterZ)
 	//the Center values are relative offsets from the associated elevator's center
 
 	ShaftDoorThickness = thickness;
-	ShaftDoorOrigin = csVector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
+	ShaftDoorOrigin = Ogre::Vector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
 }
 
 void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
@@ -1100,8 +1100,8 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	//exit if elevator doesn't service the requested floor
-	size_t index = elev->ServicedFloors.Find(floor);
-	if (index == csArrayItemNotFound)
+	size_t index = elev->ServicedFloors.find(floor);
+	if (index == -1)
 		return;
 
 	//exit if the specified floor has no shaft doors
@@ -1154,7 +1154,7 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 {
 	//returns the internal door state
 	if (ShaftDoorsExist(floor))
-		return ShaftDoors[elev->ServicedFloors.Find(floor)]->Open;
+		return ShaftDoors[elev->ServicedFloors.find(floor)]->Open;
 	return false;
 }
 
@@ -1227,13 +1227,13 @@ void ElevatorDoor::Loop()
 		MoveDoors(false, true);
 }
 
-void ElevatorDoor::Move(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
+void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//moves doors
 
-	for (int i = 0; i < Doors->doors.GetSize(); i++)
+	for (int i = 0; i < Doors->doors.size(); i++)
 	{
-		csVector3 pos;
+		Ogre::Vector3 pos;
 		if (relative_x == false)
 			pos.x = sbs->ToRemote(position.x);
 		else
@@ -1273,10 +1273,10 @@ int ElevatorDoor::GetWhichDoors()
 	return WhichDoors;
 }
 
-void ElevatorDoor::MoveSound(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z)
+void ElevatorDoor::MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move sound
-	csVector3 pos;
+	Ogre::Vector3 pos;
 	if (relative_x == false)
 		pos.x = position.x;
 	else
@@ -1297,10 +1297,10 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
-	int index = elev->ServicedFloors.Find(floor);
+	int index = elev->ServicedFloors.find(floor);
 	if (index != -1)
 	{
-		if (ShaftDoors[index]->doors.GetSize() > 0)
+		if (ShaftDoors[index]->doors.size() > 0)
 			return true;
 	}
 	return false;
@@ -1315,8 +1315,9 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	//create object mesh
 	mesh = new MeshObject(wrapper->object, doorname);
 	
-	csString direction_check = Direction;
-	direction_check.Downcase().Trim();
+	Ogre::String direction_check = Direction;
+	SetCase(direction_check, false);
+	TrimString(direction_check);
 
 	//set direction value from strings
 	direction = 0;
@@ -1368,7 +1369,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()
 {
-	for (int i = 0; i < doors.GetSize(); i++)
+	for (int i = 0; i < doors.size(); i++)
 	{
 		if (doors[i])
 			delete doors[i];
@@ -1383,15 +1384,15 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 {
 	//initialize a door component
 	
-	doors.SetSize(doors.GetSize() + 1);
-	int index = doors.GetSize() - 1;
+	doors.resize(doors.size() + 1);
+	int index = doors.size() - 1;
 	doors[index] = new DoorObject(doorname, this, direction, speed);
 
 	//move object to positions
 	if (IsShaftDoor == false)
 		doors[index]->mesh->Movable->SetPosition(sbs->ToRemote(parent->elev->Origin));
 	else
-		doors[index]->mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, 0, parent->elev->Origin.z)));
+		doors[index]->mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x, 0, parent->elev->Origin.z)));
 	doors[index]->mesh->Movable->UpdateMove();
 
 	return doors[index];
@@ -1404,7 +1405,7 @@ void ElevatorDoor::DoorWrapper::Enable(bool value)
 	if (value == Enabled)
 		return;
 
-	for (int i = 0; i < doors.GetSize(); i++)
+	for (int i = 0; i < doors.size(); i++)
 		doors[i]->mesh->Enable(value);
 	Enabled = value;
 }
@@ -1470,7 +1471,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		old_difference = tempposition - temporigin;
 
 	//debug - show current section as function is running
-	//sbs->Report("Door section: " + csString(_itoa(door_section, parent->intbuffer, 10)));
+	//sbs->Report("Door section: " + Ogre::String(_itoa(door_section, parent->intbuffer, 10)));
 
 	if (parent->door_changed == false && door_section == 0)
 	{
@@ -1679,7 +1680,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//report on what section preceded the finishing code (should be 4)
-	//sbs->Report("Door section: " + csString(_itoa(door_section, parent->intbuffer, 10)));
+	//sbs->Report("Door section: " + Ogre::String(_itoa(door_section, parent->intbuffer, 10)));
 
 	//place doors in positions (fixes any overrun errors)
 	float ypos;
@@ -1698,17 +1699,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float width = fabs(extents_max.z - extents_min.z);
 				if (direction == 2)
-					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset))));
+					mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset))));
 				else
-					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset))));
+					mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset))));
 			}
 			else
 			{
 				float width = fabs(extents_max.x - extents_min.x);
 				if (direction == 2)
-					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
+					mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
 				else
-					mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
+					mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z)));
 			}
 		}
 		else
@@ -1716,14 +1717,14 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			float mainheight = wrapper->Height / 2;
 			float height = fabs(extents_max.y - extents_min.y);
 			if (direction == 0)
-				mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
+				mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
 			else
-				mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
+				mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z)));
 		}
 	}
 	else
 	{
-		mesh->Movable->SetPosition(sbs->ToRemote(csVector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z)));
+		mesh->Movable->SetPosition(sbs->ToRemote(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z)));
 	}
 	mesh->Movable->UpdateMove();
 
@@ -1745,31 +1746,31 @@ void ElevatorDoor::DoorObject::Move()
 
 		//up movement
 		if (direction == 0)
-			mesh->Movable->MovePosition(csVector3(0, sbs->ToRemote(active_speed * sbs->delta), 0));
+			mesh->Movable->MovePosition(Ogre::Vector3(0, sbs->ToRemote(active_speed * sbs->delta), 0));
 
 		//down movement
 		if (direction == 1)
-			mesh->Movable->MovePosition(csVector3(0, sbs->ToRemote(-active_speed * sbs->delta), 0));
+			mesh->Movable->MovePosition(Ogre::Vector3(0, sbs->ToRemote(-active_speed * sbs->delta), 0));
 
 		if (parent->DoorDirection == false)
 		{
 			//left movement
 			if (direction == 2)
-				mesh->Movable->MovePosition(csVector3(0, 0, sbs->ToRemote(-active_speed * sbs->delta)));
+				mesh->Movable->MovePosition(Ogre::Vector3(0, 0, sbs->ToRemote(-active_speed * sbs->delta)));
 
 			//right movement
 			if (direction == 3)
-				mesh->Movable->MovePosition(csVector3(0, 0, sbs->ToRemote(active_speed * sbs->delta)));
+				mesh->Movable->MovePosition(Ogre::Vector3(0, 0, sbs->ToRemote(active_speed * sbs->delta)));
 		}
 		else
 		{
 			//left movement
 			if (direction == 2)
-				mesh->Movable->MovePosition(csVector3(sbs->ToRemote(-active_speed * sbs->delta), 0, 0));
+				mesh->Movable->MovePosition(Ogre::Vector3(sbs->ToRemote(-active_speed * sbs->delta), 0, 0));
 
 			//right movement
 			if (direction == 3)
-				mesh->Movable->MovePosition(csVector3(sbs->ToRemote(active_speed * sbs->delta), 0, 0));
+				mesh->Movable->MovePosition(Ogre::Vector3(sbs->ToRemote(active_speed * sbs->delta), 0, 0));
 		}
 
 		mesh->Movable->UpdateMove();
@@ -1778,7 +1779,7 @@ void ElevatorDoor::DoorObject::Move()
 void ElevatorDoor::DoorWrapper::MoveDoors(bool open, bool manual)
 {
 	//calls per-door move function
-	for (int i = 0; i < doors.GetSize(); i++)
+	for (int i = 0; i < doors.size(); i++)
 		doors[i]->MoveDoors(open, manual);
 }
 
@@ -1786,7 +1787,7 @@ bool ElevatorDoor::DoorWrapper::CheckDoorsOpen()
 {
 	//checks to see if doors are open or closed, and returns true if the status changed
 
-	for (int i = 0; i < doors.GetSize(); i++)
+	for (int i = 0; i < doors.size(); i++)
 	{
 		//exit if the status is the same on any door
 		if (doors[i]->is_open == Open)
@@ -1802,7 +1803,7 @@ bool ElevatorDoor::DoorWrapper::IsFinished()
 {
 	//checks to see if all of the doors are finished
 
-	for (int i = 0; i < doors.GetSize(); i++)
+	for (int i = 0; i < doors.size(); i++)
 	{
 		//exit if any door is not finished
 		if (doors[i]->finished == false)
@@ -1815,7 +1816,7 @@ void ElevatorDoor::DoorWrapper::StopDoors()
 {
 	//stop all doors
 
-	for (int i = 0; i < doors.GetSize(); i++)
+	for (int i = 0; i < doors.size(); i++)
 	{
 		doors[i]->active_speed = 0;
 		doors[i]->door_section = 0;
@@ -1832,7 +1833,7 @@ void ElevatorDoor::Hold()
 {
 	//hold door (basically turn off timer)
 
-	csString doornumber;
+	Ogre::String doornumber;
         if (elev->NumDoors > 1)
         {
                 doornumber = " ";
@@ -1843,7 +1844,7 @@ void ElevatorDoor::Hold()
 	if (GetNudgeStatus() == true)
 		return;
 
-	sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + ": holding doors" + doornumber);
+	sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + ": holding doors" + doornumber);
 
 	nudgetimer->Stop();
 	timer->Stop();
@@ -1853,7 +1854,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 {
 	//enable or disable nudge mode
 
-	csString doornumber;
+	Ogre::String doornumber;
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
@@ -1864,7 +1865,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	{
 		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
 			return;
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode activated");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)
 			nudgesound->Load(NudgeSound);
@@ -1875,7 +1876,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	}
 	else if (nudge_enabled == true)
 	{
-		sbs->Report("Elevator " + csString(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode disabled");
+		sbs->Report("Elevator " + Ogre::String(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode disabled");
 		nudge_enabled = false;
 		nudgesound->Stop();
 	}

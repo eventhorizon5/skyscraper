@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <algorithm>
 #include <string>
 #include <ctype.h>
 #include <stdlib.h>
@@ -154,4 +155,40 @@ float Max3(float a, float b, float c)
 	if (b >= a && b >= c)
 		return b;
 	return c;
+}
+
+const char* SetCaseCopy(const char *string, bool uppercase)
+{
+	//change case of a string
+	std::string newstring = string;
+	SetCase(newstring, uppercase);
+	return newstring.c_str();
+}
+
+void SetCase(std::string &string, bool uppercase);
+{
+	//change case of a string
+	if (uppercase == true)
+		std::transform(string.begin(), string.end(), string.begin(), ::toupper);
+	else
+		std::transform(string.begin(), string.end(), string.begin(), ::tolower);
+}
+
+int FindWithCase(const char *string, bool uppercase, const char *key, int offset)
+{
+	//change case of a string, and return location of search key
+	std::string newstring = SetCase(string, uppercase);
+	newstring.find(newstring, offset);
+	int loc = newstring.find(newstring, offset);
+	if (loc == std::string::npos)
+		return -1;
+	else
+		return loc;
+}
+
+void TrimString(std::string &string)
+{
+	//trim whitespace from string
+	std::string::iterator end_pos = std::remove(string.begin(), string.end(), ' ');
+	string.erase(end_pos, string.end());
 }

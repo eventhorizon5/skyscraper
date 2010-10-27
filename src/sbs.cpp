@@ -23,30 +23,21 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifdef _WIN32
-	#define CS_IMPLEMENT_PLATFORM_APPLICATION
-	#define CS_NO_MALLOC_OVERRIDE
-#endif
-
 #include <wx/wx.h>
 #include <wx/variant.h>
-#include <crystalspace.h>
+#include <ogre.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
 #include "revsbs.h"
 #include "model.h"
 
-#ifdef _WIN32
-	CS_IMPLEMENT_FOREIGN_DLL
-#endif
-
 SBS *sbs; //self reference
 
 SBS::SBS()
 {
 	sbs = this;
-	version = "0.8.0." + csString(SVN_REVSTR);
+	version = "0.8.0." + Ogre::String(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//set up SBS object
@@ -57,7 +48,7 @@ SBS::SBS()
 	PrintBanner();
 
 	//Pause for 2 seconds
-	csSleep(2000);
+	sleep(2000);
 
 	//initialize other variables
 	BuildingName = "";
@@ -119,23 +110,23 @@ SBS::SBS()
 	sideposflip = 0;
 	topflip = 0;
 	bottomflip = 0;
-	widthscale.SetSize(6);
-	heightscale.SetSize(6);
+	widthscale.resize(6);
+	heightscale.resize(6);
 	remaining_delta = 0;
 	start_time = 0;
 	running_time = 0;
 	InShaft = false;
 	DisableSound = false;
-	MapIndex.SetSize(3);
-	MapUV.SetSize(3);
-	OldMapIndex.SetSize(3);
-	OldMapUV.SetSize(3);
-	MapVerts1.SetSize(3);
-	MapVerts2.SetSize(3);
-	MapVerts3.SetSize(3);
-	OldMapVerts1.SetSize(3);
-	OldMapVerts2.SetSize(3);
-	OldMapVerts3.SetSize(3);
+	MapIndex.resize(3);
+	MapUV.resize(3);
+	OldMapIndex.resize(3);
+	OldMapUV.resize(3);
+	MapVerts1.resize(3);
+	MapVerts2.resize(3);
+	MapVerts3.resize(3);
+	OldMapVerts1.resize(3);
+	OldMapVerts2.resize(3);
+	OldMapVerts3.resize(3);
 	MapMethod = 0;
 	OldMapMethod = 0;
 	RevX = false;
@@ -179,7 +170,7 @@ SBS::~SBS()
 	FastDelete = true;
 
 	//delete models
-	for (int i = 0; i < ModelArray.GetSize(); i++)
+	for (int i = 0; i < ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 			delete ModelArray[i];
@@ -187,7 +178,7 @@ SBS::~SBS()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.GetSize(); i++)
+	for (int i = 0; i < lights.size(); i++)
 	{
 		if (lights[i])
 			delete lights[i];
@@ -200,53 +191,53 @@ SBS::~SBS()
 	camera = 0;
 
 	//delete callbacks
-	doorcallbacks.DeleteAll();
-	buttoncallbacks.DeleteAll();
+	doorcallbacks.clear();
+	buttoncallbacks.clear();
 
 	//delete floors
-	for (int i = 0; i < FloorArray.GetSize(); i++)
+	for (int i = 0; i < FloorArray.size(); i++)
 	{
 		if (FloorArray[i].object)
 			delete FloorArray[i].object;
 		FloorArray[i].object = 0;
 	}
-	FloorArray.DeleteAll();
+	FloorArray.clear();
 
 	//delete elevators
-	for (int i = 0; i < ElevatorArray.GetSize(); i++)
+	for (int i = 0; i < ElevatorArray.size(); i++)
 	{
 		if (ElevatorArray[i].object)
 			delete ElevatorArray[i].object;
 		ElevatorArray[i].object = 0;
 	}
-	ElevatorArray.DeleteAll();
+	ElevatorArray.clear();
 
 	//delete shafts
-	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (int i = 0; i < ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i].object)
 			delete ShaftArray[i].object;
 		ShaftArray[i].object = 0;
 	}
-	ShaftArray.DeleteAll();
+	ShaftArray.clear();
 
 	//delete stairs
-	for (int i = 0; i < StairsArray.GetSize(); i++)
+	for (int i = 0; i < StairsArray.size(); i++)
 	{
 		if (StairsArray[i].object)
 			delete StairsArray[i].object;
 		StairsArray[i].object = 0;
 	}
-	StairsArray.DeleteAll();
+	StairsArray.clear();
 
 	//delete sounds
-	for (int i = 0; i < sounds.GetSize(); i++)
+	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
 			delete sounds[i];
 		sounds[i] = 0;
 	}
-	sounds.DeleteAll();
+	sounds.clear();
 
 	//delete wall objects
 	if (SkyBox)
@@ -266,13 +257,13 @@ SBS::~SBS()
 	Buildings = 0;
 
 	//remove referenced sounds
-	sndmanager->RemoveSounds();
+	//sndmanager->RemoveSounds();
 
 	//remove all engine objects
-	Report("Deleting CS engine objects...");
-	engine->DeleteAll();
+	//Report("Deleting CS engine objects...");
+	//engine->clear();
 
-	ObjectArray.DeleteAll();
+	ObjectArray.clear();
 
 	//clear self reference
 	sbs = 0;
@@ -285,7 +276,7 @@ bool SBS::Start()
 	//Post-init startup code goes here, before the runloop
 
 	//initialize mesh colliders
-	csColliderHelper::InitializeCollisionWrappers(collision_sys, engine);
+	//csColliderHelper::InitializeCollisionWrappers(collision_sys, engine);
 
 	//initialize camera/actor
 	camera->CreateColliders();
@@ -298,13 +289,13 @@ bool SBS::Start()
 	//set sound listener object to initial position
 	if (DisableSound == false)
 	{
-		if (sndrenderer->GetListener())
+		/*if (sndrenderer->GetListener())
 			SetListenerLocation(camera->GetPosition());
 		else
 		{
 			ReportError("Sound listener object not available. Sound support disabled");
 			DisableSound = true;
-		}
+		}*/
 	}
 
 	//turn on main objects
@@ -346,7 +337,7 @@ bool SBS::Start()
 	//init elevators
 	for (int i = 0; i < Elevators(); i++)
 	{
-		bool enable_elevators = sbs->confman->GetBool("Skyscraper.SBS.Elevator.IsEnabled", true);
+		bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 		if (ElevatorArray[i].object)
 		{
 			//turn on shaft doors
@@ -479,85 +470,40 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char* rootdirectory, const char* directory_char)
+bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, const char* rootdirectory, const char* directory_char)
 {
-	//initialize CS references
-#ifdef _WIN32
-	iSCF::SCF = scf;
-#endif
-	object_reg = objreg;
-	engine = csQueryRegistry<iEngine> (object_reg);
-	if (!engine)
-		return ReportError("No engine plugin found");
-	g3d = csQueryRegistry<iGraphics3D> (object_reg);
-	if (!g3d)
-		return ReportError("No 3D renderer plugin found");
-	g2d = csQueryRegistry<iGraphics2D> (object_reg);
-	if (!g2d)
-		return ReportError("No 2D plugin found");
-	loader = csQueryRegistry<iLoader> (object_reg);
-	if (!loader)
-		return ReportError("No loader plugin found");
-	vc = csQueryRegistry<iVirtualClock> (object_reg);
-	if (!vc)
-		return ReportError("No virtual clock plugin found");
-	vfs = csQueryRegistry<iVFS> (object_reg);
-	if (!vfs)
-		return ReportError("No VFS plugin found");
-	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
-	if (!collision_sys)
-		return ReportError("No collision plugin found");
-	rep = csQueryRegistry<iReporter> (object_reg);
-	if (!rep)
-		return ReportError("No reporter plugin found");
-	sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
-	if (!sndrenderer)
-		ReportError("No sound renderer plugin found");
-	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
-	if (!sndloader)
-		ReportError("No sound loader plugin found");
-	sndmanager = csQueryRegistry<iSndSysManager> (object_reg);
-	if (!sndmanager)
-		return ReportError("No sound manager plugin found");
-	confman = csQueryRegistry<iConfigManager> (object_reg);
-	if (!confman)
-		return ReportError("No configuration manager plugin found");
-	this->view = view;
-	if (!this->view)
-		return ReportError("No iView object available");
+	mRoot = Ogre::Root::getSingletonPtr();
 
 	//create default sector
+	/*
 	area = engine->CreateSector("area");
 	if (!area)
-		return ReportError("No iSector object available");
+		return ReportError("No iSector object available");*/
 
 	root_dir = rootdirectory;
 	dir_char = directory_char;
 
-	//load SBS configuration file
-	//confman->AddDomain("/root/data/config/sbs.cfg", vfs, confman->ConfigPriorityApplication);
-
 	//load default values from config file
-	SkyName = confman->GetStr("Skyscraper.SBS.SkyName", "noon");
-	AutoShafts = confman->GetBool("Skyscraper.SBS.AutoShafts", true);
-	AutoStairs = confman->GetBool("Skyscraper.SBS.AutoStairs", true);
-	ShowFullShafts = confman->GetBool("Skyscraper.SBS.ShowFullShafts", false);
-	ShowFullStairs = confman->GetBool("Skyscraper.SBS.ShowFullStairs", false);
-	ShaftDisplayRange = confman->GetInt("Skyscraper.SBS.ShaftDisplayRange", 3);
-	StairsDisplayRange = confman->GetInt("Skyscraper.SBS.StairsDisplayRange", 5);
-	ShaftOutsideDisplayRange = confman->GetInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
-	StairsOutsideDisplayRange = confman->GetInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
-	FloorDisplayRange = confman->GetInt("Skyscraper.SBS.FloorDisplayRange", 3);
-	ProcessElevators = confman->GetBool("Skyscraper.SBS.ProcessElevators", true);
-	DisableSound = confman->GetBool("Skyscraper.SBS.DisableSound", false);
-	UnitScale = confman->GetFloat("Skyscraper.SBS.UnitScale", 5);
-	Verbose = confman->GetBool("Skyscraper.SBS.Verbose", true);
-	DefaultMapper = confman->GetInt("Skyscraper.SBS.TextureMapper", 0);
+	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
+	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
+	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
+	ShowFullShafts = GetConfigBool("Skyscraper.SBS.ShowFullShafts", false);
+	ShowFullStairs = GetConfigBool("Skyscraper.SBS.ShowFullStairs", false);
+	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
+	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
+	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
+	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
+	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
+	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
+	DisableSound = GetConfigBool("Skyscraper.SBS.DisableSound", false);
+	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
+	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", true);
+	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	ResetTextureMapping(true); //set default texture map values
 
 	//disable sound if renderer or loader are not available
-	if (!sndrenderer || !sndloader)
-		DisableSound = true;
+	//if (!sndrenderer || !sndloader)
+		//DisableSound = true;
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "/root/signs/sans");
@@ -581,10 +527,10 @@ bool SBS::Initialize(iSCF* scf, iObjectRegistry* objreg, iView* view, const char
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//first verify the filename
-	csString filename2 = VerifyFile(filename);
+	Ogre::String filename2 = VerifyFile(filename);
 
 	// Load a texture
-	csRef<iTextureWrapper> wrapper = loader->LoadTexture(name, filename2, CS_TEXTURE_3D, 0, true, true, false);
+	Ogre::Texture* wrapper = loader->LoadTexture(name, filename2, CS_TEXTURE_3D, 0, true, true, false);
 
 	if (!wrapper)
 		return ReportError("Error loading texture");
@@ -599,7 +545,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
-	textureinfo.Push(info);
+	textureinfo.push_back(info);
 	return true;
 }
 
@@ -607,7 +553,7 @@ bool SBS::UnloadTexture(const char *name)
 {
 	//unloads a texture
 
-	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(name);
+	Ogre::Texture* wrapper = engine->GetTextureList()->FindByName(name);
 	if (!wrapper)
 		return false;
 	if (!engine->GetTextureList()->Remove(wrapper))
@@ -619,12 +565,12 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 {
 	//loads only a portion of the specified texture
 
-	iTextureManager *tm = g3d->GetTextureManager();
-	csString Name = name;
-	csString Filename = filename;
+	Ogre::TextureManager *tm = g3d->GetTextureManager();
+	Ogre::String Name = name;
+	Ogre::String Filename = filename;
 
 	//load image
-	csRef<iImage> image = loader->LoadImage(filename, tm->GetTextureFormat());
+	Ogre::Image* image = loader->LoadImage(filename, tm->GetTextureFormat());
 
 	if (!image)
 		return ReportError("LoadTextureCropped: Error loading image '" + Filename + "'");
@@ -645,7 +591,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		return ReportError("LoadTextureCropped: invalid size for '" + Filename + "'");
 
 	//crop image
-	csRef<iImage> cropped_image = csImageManipulate::Crop(image, x, y, width, height);
+	Ogre::Image* cropped_image = csImageManipulate::Crop(image, x, y, width, height);
 	if (!cropped_image)
 		return ReportError("LoadTextureCropped: Error cropping image '" + Filename + "'");
 
@@ -659,12 +605,12 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		handle->SetAlphaType(csAlphaMode::alphaBinary);
 
 	//create texture wrapper
-	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
+	Ogre::Texture* wrapper = engine->GetTextureList()->NewTexture(handle);
 	wrapper->QueryObject()->SetName(name);
 
 	//create material
-	csRef<iMaterial> material (engine->CreateBaseMaterial(wrapper));
-	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+	Ogre::Material* material (engine->CreateBaseMaterial(wrapper));
+	Ogre::Material* matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
 
 	wrapper->SetImageFile(cropped_image);
 
@@ -675,7 +621,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
-	textureinfo.Push(info);
+	textureinfo.push_back(info);
 
 	return true;
 }
@@ -690,17 +636,17 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
-	csString hAlign = h_align;
-	csString vAlign = v_align;
-	csString Name = name;
-	csString Origname = origname;
+	Ogre::String hAlign = h_align;
+	Ogre::String vAlign = v_align;
+	Ogre::String Name = name;
+	Ogre::String Origname = origname;
 
-	csString font_filename2 = VerifyFile(font_filename);
-	csString relative_filename = font_filename2;
+	Ogre::String font_filename2 = VerifyFile(font_filename);
+	Ogre::String relative_filename = font_filename2;
 	relative_filename.ReplaceAll("/root/", "");
 
 	//load font
-	csRef<iFont> font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
+	Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
 	if (!font)
 	{
 		ReportError("AddTextToTexture: Invalid font '" + relative_filename + "'");
@@ -708,7 +654,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	}
 
 	//get original texture
-	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->FindByName(origname);
+	Ogre::Texture* wrapper = engine->GetTextureList()->FindByName(origname);
 	if (!wrapper)
 	{
 		ReportError("AddTextToTexture: Invalid original texture '" + Origname + "'");
@@ -747,7 +693,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
-	textureinfo.Push(info);
+	textureinfo.push_back(info);
 
 	//set default values if specified
 	if (x1 == -1)
@@ -766,7 +712,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
 
 	//clear buffer with alpha mask and enable double buffering
-	if (confman->GetBool("Skyscraper.SBS.TextClear", true) == true)
+	if (GetConfigBool("Skyscraper.SBS.TextClear", true) == true)
 		g2d->Clear(g2d->FindRGB(0, 0, 0, 0));
 
 	//draw original image onto backbuffer
@@ -799,7 +745,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	g3d->FinishDraw();
 
 	//copy image into mipmap-enabled texture handle
-	csRef<iImage> image = handle->Dump();
+	Ogre::Image* image = handle->Dump();
 	csRef<iTextureHandle> handle2 = g3d->GetTextureManager()->RegisterTexture(image, CS_TEXTURE_3D);
 	if (!handle2)
 	{
@@ -810,7 +756,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	handle2->SetAlphaType(csAlphaMode::alphaBinary);
 
 	//create a texture wrapper for the 2nd new texture (mipmapped one)
-	csRef<iTextureWrapper> tex = engine->GetTextureList()->NewTexture(handle2);
+	Ogre::Texture* tex = engine->GetTextureList()->NewTexture(handle2);
 	if (!tex)
 	{
 		ReportError("AddTextToTexture: Error creating texture wrapper for '" + Name + "'");
@@ -823,8 +769,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	tex->QueryObject()->SetName(name);
 
 	//create material
-	csRef<iMaterial> material (engine->CreateBaseMaterial(tex));
-	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+	Ogre::Material* material (engine->CreateBaseMaterial(tex));
+	Ogre::Material* matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
 	
 	return true;
 }
@@ -834,12 +780,12 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
-	csString Name = name;
-	csString Origname = orig_texture;
-	csString Overlay = overlay_texture;
+	Ogre::String Name = name;
+	Ogre::String Origname = orig_texture;
+	Ogre::String Overlay = overlay_texture;
 
 	//get original texture
-	csRef<iImage> image1 = engine->GetTextureList()->FindByName(orig_texture)->GetImageFile();
+	Ogre::Image* image1 = engine->GetTextureList()->FindByName(orig_texture)->GetImageFile();
 	if (!image1)
 	{
 		ReportError("AddTextureOverlay: Invalid original texture '" + Origname + "'");
@@ -847,7 +793,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	}
 
 	//get overlay texture
-	csRef<iImage> image2 = engine->GetTextureList()->FindByName(overlay_texture)->GetImageFile();
+	Ogre::Image* image2 = engine->GetTextureList()->FindByName(overlay_texture)->GetImageFile();
 	if (!image2)
 	{
 		ReportError("AddTextureOverlay: Invalid overlay texture '" + Overlay + "'");
@@ -885,12 +831,12 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		handle->SetAlphaType(csAlphaMode::alphaBinary);
 
 	//create texture wrapper
-	csRef<iTextureWrapper> wrapper = engine->GetTextureList()->NewTexture(handle);
+	Ogre::Texture* wrapper = engine->GetTextureList()->NewTexture(handle);
 	wrapper->QueryObject()->SetName(name);
 
 	//create material
-	csRef<iMaterial> material (engine->CreateBaseMaterial(wrapper));
-	csRef<iMaterialWrapper> matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+	Ogre::Material* material (engine->CreateBaseMaterial(wrapper));
+	Ogre::Material* matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
 
 	wrapper->SetImageFile(imagemem);
 
@@ -901,12 +847,12 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
-	textureinfo.Push(info);
+	textureinfo.push_back(info);
 
 	return true;
 }
 
-int SBS::AddWallMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddWallMain(Object *parent, Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
@@ -944,15 +890,15 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	}
 
 	//Adds a wall with the specified dimensions
-	csVector3 v1 (x1, altitude1 + height_in1, z1); //left top
-	csVector3 v2 (x2, altitude2 + height_in2, z2); //right top
-	csVector3 v3 (x2, altitude2, z2); //right base
-	csVector3 v4 (x1, altitude1, z1); //left base
+	Ogre::Vector3 v1 (x1, altitude1 + height_in1, z1); //left top
+	Ogre::Vector3 v2 (x2, altitude2 + height_in2, z2); //right top
+	Ogre::Vector3 v3 (x2, altitude2, z2); //right base
+	Ogre::Vector3 v4 (x1, altitude1, z1); //left base
 
-	csVector3 v5 = v1;
-	csVector3 v6 = v2;
-	csVector3 v7 = v3;
-	csVector3 v8 = v4;
+	Ogre::Vector3 v5 = v1;
+	Ogre::Vector3 v6 = v2;
+	Ogre::Vector3 v7 = v3;
+	Ogre::Vector3 v8 = v4;
 
 	//expand to specified thickness
 	if (axis == 1)
@@ -1021,7 +967,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	}
 
 	//create polygons and set names
-	csString NewName, texture2 = texture;
+	Ogre::String NewName, texture2 = texture;
 	float tw2 = tw, th2 = th;
 
 	if (FlipTexture == true)
@@ -1039,7 +985,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
-			NewName.Append(":front");
+			NewName.append(":front");
 		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //front wall
 	}
 
@@ -1054,7 +1000,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 			texture2 = mainpostex;
 
 		NewName = name;
-		NewName.Append(":back");
+		NewName.append(":back");
 		wallobject->AddQuad(NewName, texture2, v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
 
@@ -1069,7 +1015,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 			texture2 = sidenegtex;
 
 		NewName = name;
-		NewName.Append(":left");
+		NewName.append(":left");
 		if (axis == 1)
 			wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //left wall
 		else
@@ -1087,7 +1033,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 			texture2 = sidepostex;
 
 		NewName = name;
-		NewName.Append(":right");
+		NewName.append(":right");
 		if (axis == 1)
 			wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //right wall
 		else
@@ -1105,7 +1051,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 			texture2 = toptex;
 
 		NewName = name;
-		NewName.Append(":top");
+		NewName.append(":top");
 		wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //top wall
 	}
 
@@ -1120,7 +1066,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 			texture2 = bottomtex;
 
 		NewName = name;
-		NewName.Append(":bottom");
+		NewName.append(":bottom");
 		wallobject->AddQuad(NewName, texture2, v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
 	}
 
@@ -1134,7 +1080,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	return 0;
 }
 
-int SBS::AddFloorMain(Object *parent, csRef<iMeshWrapper> mesh, csRefArray<iGeneralMeshSubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddFloorMain(Object *parent, Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, autosize);
@@ -1175,7 +1121,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 		altitude2 = temp;
 	}
 
-	csVector3 v1, v2, v3, v4;
+	Ogre::Vector3 v1, v2, v3, v4;
 
 	if (ReverseAxisValue == false)
 	{
@@ -1192,10 +1138,10 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 		v4.Set(x2, altitude2, z1); //bottom right
 	}
 
-	csVector3 v5 = v1;
-	csVector3 v6 = v2;
-	csVector3 v7 = v3;
-	csVector3 v8 = v4;
+	Ogre::Vector3 v5 = v1;
+	Ogre::Vector3 v6 = v2;
+	Ogre::Vector3 v7 = v3;
+	Ogre::Vector3 v8 = v4;
 
 	//expand to specified thickness
 	if (floor_orientation == 0)
@@ -1228,7 +1174,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	}
 
 	//create polygons and set names
-	csString NewName, texture2 = texture;
+	Ogre::String NewName, texture2 = texture;
 	float tw2 = tw, th2 = th;
 
 	if (FlipTexture == true)
@@ -1246,7 +1192,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
-			NewName.Append(":front");
+			NewName.append(":front");
 		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //bottom wall
 	}
 
@@ -1261,7 +1207,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 			texture2 = mainpostex;
 
 		NewName = name;
-		NewName.Append(":back");
+		NewName.append(":back");
 		wallobject->AddQuad(NewName, texture2, v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
 
@@ -1276,7 +1222,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 			texture2 = sidenegtex;
 
 		NewName = name;
-		NewName.Append(":left");
+		NewName.append(":left");
 		wallobject->AddQuad(NewName, texture2, v8, v5, v1, v4, tw2, th2, autosize); //left wall
 	}
 
@@ -1291,7 +1237,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 			texture2 = sidepostex;
 
 		NewName = name;
-		NewName.Append(":right");
+		NewName.append(":right");
 		wallobject->AddQuad(NewName, texture2, v6, v7, v3, v2, tw2, th2, autosize); //right wall
 	}
 
@@ -1306,7 +1252,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 			texture2 = toptex;
 
 		NewName = name;
-		NewName.Append(":top");
+		NewName.append(":top");
 		wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //front wall
 	}
 
@@ -1321,7 +1267,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 			texture2 = bottomtex;
 
 		NewName = name;
-		NewName.Append(":bottom");
+		NewName.append(":bottom");
 		wallobject->AddQuad(NewName, texture2, v7, v8, v4, v3, tw2, th2, autosize); //back wall
 	}
 
@@ -1337,33 +1283,25 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 void SBS::Report (const char* msg, ...)
 {
-	csString message = msg;
-	message.ReplaceAll("%", "%%"); //allow percent signs
+	Ogre::String message = msg;
+	//message.ReplaceAll("%", "%%"); //allow percent signs
 
-	if (rep)
-		rep->ReportNotify("sbs", message);
-	else
-	{
-		printf(message);
-		printf("\n");
-		fflush (stdout);
-	}
+	printf(message);
+	printf("\n");
+	fflush (stdout);
+
 	LastNotification = message;
 }
 
 bool SBS::ReportError (const char* msg, ...)
 {
-	csString message = msg;
-	message.ReplaceAll("%", "%%"); //allow percent signs
+	Ogre::String message = msg;
+	//message.ReplaceAll("%", "%%"); //allow percent signs
 
-	if (rep)
-		rep->ReportError("sbs", message);
-	else
-	{
-		printf(message);
-		printf("\n");
-		fflush (stdout);
-	}
+	printf(message);
+	printf("\n");
+	fflush (stdout);
+
 	LastError = message;
 	return false;
 }
@@ -1372,7 +1310,8 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 {
 	//create 4 walls
 
-	csString NewName;
+	/*
+	Ogre::String NewName;
 	int firstidx = 0;
 	//int tmpidx = 0;
 
@@ -1395,9 +1334,9 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		//generate a box visible from the inside
 
 		NewName = name;
-		NewName.Append(":inside");
+		NewName.append(":inside");
 
-		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+		csBox3 box (Ogre::Vector3(x1, voffset, z1), Ogre::Vector3(x2, voffset + height_in, z2));
 		wallobject->AddQuad( //front
 			NewName,
 			texture,
@@ -1451,9 +1390,9 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 	if (outside == true)
 	{
 		NewName = name;
-		NewName.Append(":outside");
+		NewName.append(":outside");
 
-		csBox3 box (csVector3(x1, voffset, z1), csVector3(x2, voffset + height_in, z2));
+		csBox3 box (Ogre::Vector3(x1, voffset, z1), Ogre::Vector3(x2, voffset + height_in, z2));
 		wallobject->AddQuad( //front
 			NewName,
 			texture,
@@ -1506,6 +1445,8 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		}
 	}
 	return firstidx;
+	*/
+	return 0;
 }
 
 int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
@@ -1533,29 +1474,29 @@ void SBS::InitMeshes()
 	Landscape = new MeshObject(this->object, "Landscape");
 }
 
-int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, csPoly3D &varray, float tw, float th)
+int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, Ogre::Polygon &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
 	int num;
-	csPoly3D varray1 = varray;
-	csPoly3D varray2;
+	Ogre::Polygon varray1 = varray;
+	Ogre::Polygon varray2;
 
 	//get number of stored vertices
-	num = varray.GetVertexCount();
+	num = varray.getVertexCount();
 
 	//create a second array with reversed vertices
 	for (int i = num - 1; i >= 0; i--)
-		varray2.AddVertex(varray1[i]);
+		varray2.insertVertex(varray1[i]);
 
 	//create 2 polygons (front and back) from the vertex array
 
 	//get polygon native direction
-	csVector3 direction = GetPolygonDirection(varray1);
+	Ogre::Vector3 direction = GetPolygonDirection(varray1);
 
 	//if the polygon is facing right, down or to the back, reverse faces
 	//to keep the vertices clockwise
-	csPoly3D tmppoly;
+	Ogre::Polygon tmppoly;
 	if (direction.x == 1 || direction.y == -1 || direction.z == 1)
 	{
 		tmppoly = varray1;
@@ -1577,16 +1518,16 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	//add the polygons
 	if (DrawMainN == true)
 	{
-		csString NewName;
+		Ogre::String NewName;
 		NewName = name;
-		NewName.Append(":0");
+		NewName.append(":0");
 		wallobject->AddPolygon(NewName, texture, varray1.GetVertices(), num, tw2, th2, true);
 	}
 	if (DrawMainP == true)
 	{
-		csString NewName;
+		Ogre::String NewName;
 		NewName = name;
-		NewName.Append(":1");
+		NewName.append(":1");
 		wallobject->AddPolygon(NewName, texture, varray2.GetVertices(), num, tw2, th2, true);
 	}
 
@@ -1603,12 +1544,12 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 int SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
-	csPoly3D varray;
+	Ogre::Polygon varray;
 
 	//set up temporary vertex array
-	varray.AddVertex(x1, y1, z1);
-	varray.AddVertex(x2, y2, z2);
-	varray.AddVertex(x3, y3, z3);
+	varray.insertVertex(x1, y1, z1);
+	varray.insertVertex(x2, y2, z2);
+	varray.insertVertex(x3, y3, z3);
 
 	//pass data on to AddCustomWall function
 	return AddCustomWall(wallobject, name, texture, varray, tw, th);
@@ -1646,7 +1587,8 @@ void SBS::CreateSky(const char *filenamebase)
 {
 	//create skybox
 
-	csString file = filenamebase;
+	/*
+	Ogre::String file = filenamebase;
 	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
 
 	//load textures
@@ -1662,11 +1604,11 @@ void SBS::CreateSky(const char *filenamebase)
 	SkyBox->MeshWrapper->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
-	float skysize = confman->GetInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
+	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
 	sbs->ResetTextureMapping(true);
 	WallObject *wall = new WallObject(SkyBox->MeshWrapper, SkyBox->Submeshes, SkyBox->object, true);
 
-	csBox3 box (csVector3(-skysize, -skysize, -skysize), csVector3(skysize, skysize, skysize));
+	csBox3 box (Ogre::Vector3(-skysize, -skysize, -skysize), Ogre::Vector3(skysize, skysize, skysize));
 	wall->AddQuad( //front
 		"SkyFront",
 		"SkyFront",
@@ -1712,6 +1654,7 @@ void SBS::CreateSky(const char *filenamebase)
 
 	sbs->ResetTextureMapping();
 	delete wall;
+	*/
 }
 
 int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
@@ -1794,18 +1737,18 @@ void SBS::ListAltitudes()
 
 	Report("--- Floor Altitudes ---\n");
 	for (int i = -Basements; i < Floors; i++)
-		Report(csString(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + csString(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + csString(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
+		Report(Ogre::String(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + Ogre::String(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + Ogre::String(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
 }
 
 Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
-	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
+	for (size_t i = 0; i < ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i].number == number)
 		{
-			csString num;
+			Ogre::String num;
 			num = number;
 			ReportError("Shaft " + num + " already exists");
 			return 0;
@@ -1815,34 +1758,34 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 	//verify floor range
 	if (IsValidFloor(_startfloor) == false)
 	{
-		csString num;
+		Ogre::String num;
 		num = _startfloor;
 		ReportError("CreateShaft: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		csString num;
+		Ogre::String num;
 		num = _endfloor;
 		ReportError("CreateShaft: Invalid ending floor " + num);
 		return 0;
 	}
 
-	ShaftArray.SetSize(ShaftArray.GetSize() + 1);
-	ShaftArray[ShaftArray.GetSize() - 1].number = number;
-	ShaftArray[ShaftArray.GetSize() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
-	return ShaftArray[ShaftArray.GetSize() - 1].object->object;
+	ShaftArray.resize(ShaftArray.size() + 1);
+	ShaftArray[ShaftArray.size() - 1].number = number;
+	ShaftArray[ShaftArray.size() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
+	return ShaftArray[ShaftArray.size() - 1].object->object;
 }
 
 Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a stairwell object
 
-	for (size_t i = 0; i < StairsArray.GetSize(); i++)
+	for (size_t i = 0; i < StairsArray.size(); i++)
 	{
 		if (StairsArray[i].number == number)
 		{
-			csString num;
+			Ogre::String num;
 			num = number;
 			ReportError("Stairwell " + num + " already exists");
 			return 0;
@@ -1852,46 +1795,46 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	//verify floor range
 	if (IsValidFloor(_startfloor) == false)
 	{
-		csString num;
+		Ogre::String num;
 		num = _startfloor;
 		ReportError("CreateStairwell: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		csString num;
+		Ogre::String num;
 		num = _endfloor;
 		ReportError("CreateStairwell: Invalid ending floor " + num);
 		return 0;
 	}
 
-	StairsArray.SetSize(StairsArray.GetSize() + 1);
-	StairsArray[StairsArray.GetSize() - 1].number = number;
-	StairsArray[StairsArray.GetSize() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
-	return StairsArray[StairsArray.GetSize() - 1].object->object;
+	StairsArray.resize(StairsArray.size() + 1);
+	StairsArray[StairsArray.size() - 1].number = number;
+	StairsArray[StairsArray.size() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
+	return StairsArray[StairsArray.size() - 1].object->object;
 }
 
 bool SBS::NewElevator(int number)
 {
 	//create a new elevator object
-	for (size_t i = 0; i < ElevatorArray.GetSize(); i++)
+	for (size_t i = 0; i < ElevatorArray.size(); i++)
 		if (ElevatorArray[i].number == number)
 			return false;
-	ElevatorArray.SetSize(ElevatorArray.GetSize() + 1);
-	ElevatorArray[ElevatorArray.GetSize() - 1].number = number;
-	ElevatorArray[ElevatorArray.GetSize() - 1].object = new Elevator(number);
+	ElevatorArray.resize(ElevatorArray.size() + 1);
+	ElevatorArray[ElevatorArray.size() - 1].number = number;
+	ElevatorArray[ElevatorArray.size() - 1].object = new Elevator(number);
 	return true;
 }
 
 bool SBS::NewFloor(int number)
 {
 	//create a new floor object
-	for (size_t i = 0; i < FloorArray.GetSize(); i++)
+	for (size_t i = 0; i < FloorArray.size(); i++)
 		if (FloorArray[i].number == number)
 			return false;
-	FloorArray.SetSize(FloorArray.GetSize() + 1);
-	FloorArray[FloorArray.GetSize() - 1].number = number;
-	FloorArray[FloorArray.GetSize() - 1].object = new Floor(number);
+	FloorArray.resize(FloorArray.size() + 1);
+	FloorArray[FloorArray.size() - 1].number = number;
+	FloorArray[FloorArray.size() - 1].object = new Floor(number);
 
 	if (number < 0)
 		Basements++;
@@ -1903,35 +1846,35 @@ bool SBS::NewFloor(int number)
 int SBS::Elevators()
 {
 	//return the number of elevators
-	return ElevatorArray.GetSize();
+	return ElevatorArray.size();
 }
 
 int SBS::TotalFloors()
 {
 	//return the number of floors
-	return FloorArray.GetSize();
+	return FloorArray.size();
 }
 
 int SBS::Shafts()
 {
 	//return the number of shafts
-	return ShaftArray.GetSize();
+	return ShaftArray.size();
 }
 
 int SBS::StairsNum()
 {
 	//return the number of stairs
-	return StairsArray.GetSize();
+	return StairsArray.size();
 }
 
 Floor* SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
-	if (FloorArray.GetSize() > 0)
+	if (FloorArray.size() > 0)
 	{
 		//quick prediction
-		if (Basements + number <= FloorArray.GetSize() - 1)
+		if (Basements + number <= FloorArray.size() - 1)
 		{
 			FloorMap floor = FloorArray[Basements + number];
 			if (floor.number == number)
@@ -1943,7 +1886,7 @@ Floor* SBS::GetFloor(int number)
 			}
 			else if (number < 0)
 			{
-				if (-(number + 1) <= FloorArray.GetSize() - 1)
+				if (-(number + 1) <= FloorArray.size() - 1)
 				{
 					floor = FloorArray[-(number + 1)];
 					if (floor.number == number)
@@ -1958,7 +1901,7 @@ Floor* SBS::GetFloor(int number)
 		}
 	}
 
-	for (size_t i = 0; i < FloorArray.GetSize(); i++)
+	for (size_t i = 0; i < FloorArray.size(); i++)
 		if (FloorArray[i].number == number)
 			return FloorArray[i].object;
 	return 0;
@@ -1971,7 +1914,7 @@ Elevator* SBS::GetElevator(int number)
 	if (number < 1 || number > Elevators())
 		return 0;
 
-	if (ElevatorArray.GetSize() > number - 1)
+	if (ElevatorArray.size() > number - 1)
 	{
 		//quick prediction
 		if (ElevatorArray[number - 1].number == number)
@@ -1983,7 +1926,7 @@ Elevator* SBS::GetElevator(int number)
 		}
 	}
 
-	for (size_t i = 0; i < ElevatorArray.GetSize(); i++)
+	for (size_t i = 0; i < ElevatorArray.size(); i++)
 		if (ElevatorArray[i].number == number)
 			return ElevatorArray[i].object;
 	return 0;
@@ -1996,7 +1939,7 @@ Shaft* SBS::GetShaft(int number)
 	if (number < 1 || number > Shafts())
 		return 0;
 
-	if (ShaftArray.GetSize() > number - 1)
+	if (ShaftArray.size() > number - 1)
 	{
 		//quick prediction
 		if (ShaftArray[number - 1].number == number)
@@ -2008,7 +1951,7 @@ Shaft* SBS::GetShaft(int number)
 		}
 	}
 
-	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
+	for (size_t i = 0; i < ShaftArray.size(); i++)
 		if (ShaftArray[i].number == number)
 			return ShaftArray[i].object;
 	return 0;
@@ -2021,7 +1964,7 @@ Stairs* SBS::GetStairs(int number)
 	if (number < 1 || number > StairsNum())
 		return 0;
 
-	if (StairsArray.GetSize() > number - 1)
+	if (StairsArray.size() > number - 1)
 	{
 		//quick prediction
 		if (StairsArray[number - 1].number == number)
@@ -2033,7 +1976,7 @@ Stairs* SBS::GetStairs(int number)
 		}
 	}
 
-	for (size_t i = 0; i < StairsArray.GetSize(); i++)
+	for (size_t i = 0; i < StairsArray.size(); i++)
 		if (StairsArray[i].number == number)
 			return StairsArray[i].object;
 	return 0;
@@ -2047,8 +1990,8 @@ bool SBS::SetWallOrientation(const char *direction)
 	//the parameter is used to determine the location of the wall's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
 
-	csString temp = direction;
-	temp.Downcase();
+	Ogre::String temp = direction;
+	SetCase(temp, false);
 
 	if (temp == "left")
 		wall_orientation = 0;
@@ -2077,8 +2020,8 @@ bool SBS::SetFloorOrientation(const char *direction)
 	//the parameter is used to determine the location of the floor's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
 
-	csString temp = direction;
-	temp.Downcase();
+	Ogre::String temp = direction;
+	SetCase(temp, false);
 
 	if (temp == "bottom")
 		floor_orientation = 0;
@@ -2144,14 +2087,14 @@ void SBS::SetPlanarMapping(bool flat, bool X, bool Y, bool Z)
 	RevX = X;
 	RevY = Y;
 	RevZ = Z;
-	MapUV[0] = csVector2(0, 0);
-	MapUV[1] = csVector2(1, 0);
-	MapUV[2] = csVector2(1, 1);
+	MapUV[0] = Ogre::Vector2(0, 0);
+	MapUV[1] = Ogre::Vector2(1, 0);
+	MapUV[2] = Ogre::Vector2(1, 1);
 	PlanarFlat = flat;
 	MapMethod = 0;
 }
 
-void SBS::SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVector2 uv2, int vertindex3, csVector2 uv3)
+void SBS::SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, Ogre::Vector2 uv2, int vertindex3, Ogre::Vector2 uv3)
 {
 	//Manually sets UV texture mapping.  Use ResetTextureMapping to return to default values
 
@@ -2167,7 +2110,7 @@ void SBS::SetTextureMapping(int vertindex1, csVector2 uv1, int vertindex2, csVec
 	MapMethod = 1;
 }
 
-void SBS::SetTextureMapping2(csString x1, csString y1, csString z1, csVector2 uv1, csString x2, csString y2, csString z2, csVector2 uv2, csString x3, csString y3, csString z3, csVector2 uv3)
+void SBS::SetTextureMapping2(Ogre::String x1, Ogre::String y1, Ogre::String z1, Ogre::Vector2 uv1, Ogre::String x2, Ogre::String y2, Ogre::String z2, Ogre::Vector2 uv2, Ogre::String x3, Ogre::String y3, Ogre::String z3, Ogre::Vector2 uv3)
 {
 	//Manually sets UV texture mapping (advanced version)
 	//Use ResetTextureMapping to return to default values
@@ -2218,7 +2161,7 @@ void SBS::BackupMapping()
 	OldMapMethod = MapMethod;
 }
 
-void SBS::GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, csVector3 &v2, csVector3 &v3)
+void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3)
 {
 	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
@@ -2227,18 +2170,18 @@ void SBS::GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, c
 	{
 		//planar method
 
-		csVector2 x, y, z;
-		csPoly3D varray1, varray2;
+		Ogre::Vector2 x, y, z;
+		Ogre::Polygon varray1, varray2;
 		bool rev_x = false, rev_z = false;
 
 		//copy vertices into polygon object
-		for (int i = 0; i < vertices.GetSize(); i++)
-			varray1.AddVertex(vertices[i]);
+		for (int i = 0; i < vertices.size(); i++)
+			varray1.insertVertex(vertices[i]);
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		csPlane3 plane = varray1.ComputePlane();
-		csVector3 normal = varray1.ComputeNormal();
+		Ogre::Plane plane = varray1.ComputePlane();
+		Ogre::Vector3 normal = varray1.ComputeNormal();
 		int projDimension = 0; //x; faces left/right
 
 		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
@@ -2249,10 +2192,10 @@ void SBS::GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, c
 		size_t selX = CS::Math::NextModulo3(projDimension);
 		size_t selY = CS::Math::NextModulo3(selX);
 
-		for (int i = 0; i < varray1.GetVertexCount(); i++)
+		for (int i = 0; i < varray1.getVertexCount(); i++)
 		{
-			csVector3 tmpvertex = *varray1.GetVertex(i);
-			varray2.AddVertex(tmpvertex[selX], tmpvertex[selY], 0);
+			Ogre::Vector3 tmpvertex = *varray1.GetVertex(i);
+			varray2.insertVertex(tmpvertex[selX], tmpvertex[selY], 0);
 		}
 
 		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.z < -0.999)
@@ -2262,7 +2205,7 @@ void SBS::GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, c
 			rev_z = true;
 
 		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
-		csVector2 a, b;
+		Ogre::Vector2 a, b;
 		a = GetExtents(varray2, 1);
 		b = GetExtents(varray2, 2);
 
@@ -2393,7 +2336,7 @@ void SBS::GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, c
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				csString string;
+				Ogre::String string;
 				if (j == 0)
 					string = MapVerts1[i];
 				if (j == 1)
@@ -2401,36 +2344,36 @@ void SBS::GetTextureMapping(CS::Geometry::csContour3 &vertices, csVector3 &v1, c
 				if (j == 2)
 					string = MapVerts3[i];
 
-				string.Downcase();
+				SetCase(string, false);
 
 				//find X component
-				int location = string.Find("x");
+				int location = string.find("x");
 				if (location >= 0)
 				{
-					csString number = string.GetAt(location + 1);
-					if (atoi(number) < vertices.GetSize())
+					Ogre::String number = string.at(location + 1);
+					if (atoi(number) < vertices.size())
 						string.ReplaceAll("x" + number, _gcvt(vertices[atoi(number)].x, 12, buffer));
 					else
 						string.ReplaceAll("x" + number, "0"); //number value out of bounds
 				}
 
 				//find Y component
-				location = string.Find("y");
+				location = string.find("y");
 				if (location >= 0)
 				{
-					csString number = string.GetAt(location + 1);
-					if (atoi(number) < vertices.GetSize())
+					Ogre::String number = string.at(location + 1);
+					if (atoi(number) < vertices.size())
 						string.ReplaceAll("y" + number, _gcvt(vertices[atoi(number)].y, 12, buffer));
 					else
 						string.ReplaceAll("y" + number, "0"); //number value out of bounds
 				}
 
 				//find Z component
-				location = string.Find("z");
+				location = string.find("z");
 				if (location >= 0)
 				{
-					csString number = string.GetAt(location + 1);
-					if (atoi(number) < vertices.GetSize())
+					Ogre::String number = string.at(location + 1);
+					if (atoi(number) < vertices.size())
 						string.ReplaceAll("z" + number, _gcvt(vertices[atoi(number)].z, 12, buffer));
 					else
 						string.ReplaceAll("z" + number, "0"); //number value out of bounds
@@ -2477,9 +2420,9 @@ void SBS::ResetTextureMapping(bool todefaults)
 		if (DefaultMapper == 0)
 			SetPlanarMapping(false, false, false, false);
 		if (DefaultMapper == 1)
-			SetTextureMapping(0, csVector2(0, 0), 1, csVector2(1, 0), 2, csVector2(1, 1));
+			SetTextureMapping(0, Ogre::Vector2(0, 0), 1, Ogre::Vector2(1, 0), 2, Ogre::Vector2(1, 1));
 		if (DefaultMapper == 2)
-			SetTextureMapping2("x0", "y0", "z0", csVector2(0, 0), "x1", "y1", "z1", csVector2(1, 0), "x2", "y2", "z2", csVector2(1, 1));
+			SetTextureMapping2("x0", "y0", "z0", Ogre::Vector2(0, 0), "x1", "y1", "z1", Ogre::Vector2(1, 0), "x2", "y2", "z2", Ogre::Vector2(1, 1));
 	}
 	else
 	{
@@ -2582,14 +2525,14 @@ bool SBS::GetReverseAxis()
 	return ReverseAxisValue;
 }
 
-void SBS::SetListenerLocation(const csVector3 &location)
+void SBS::SetListenerLocation(const Ogre::Vector3 &location)
 {
 	//set position of sound listener object
 	if (DisableSound == false)
 		sndrenderer->GetListener()->SetPosition(location);
 }
 
-void SBS::SetListenerDirection(const csVector3 &front, const csVector3 &top)
+void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
 {
 	//set direction of sound listener object
 	if (DisableSound == false)
@@ -2628,17 +2571,17 @@ void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const cha
 {
 	//set override textures and enable override
 	mainnegtex = mainneg;
-	mainnegtex.Trim();
+	TrimString(mainnegtex);
 	mainpostex = mainpos;
-	mainpostex.Trim();
+	TrimString(mainpostex);
 	sidenegtex = sideneg;
-	sidenegtex.Trim();
+	TrimString(sidenegtex);
 	sidepostex = sidepos;
-	sidepostex.Trim();
+	TrimString(sidepostex);
 	toptex = top;
-	toptex.Trim();
+	TrimString(toptex);
 	bottomtex = bottom;
-	bottomtex.Trim();
+	TrimString(bottomtex);
 	TextureOverride = true;
 }
 
@@ -2666,8 +2609,8 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 	//external, landscape, or buildings
 
 	//Adds a wall with the specified dimensions
-	csString mesh = meshname;
-	mesh.Trim();
+	Ogre::String mesh = meshname;
+	TrimString(mesh);
 
 	WallObject *wall;
 	if (mesh.CompareNoCase("external") == true)
@@ -2687,8 +2630,8 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 	//external, landscape, or buildings
 
 	//Adds a floor with the specified dimensions and vertical offset
-	csString mesh = meshname;
-	mesh.Trim();
+	Ogre::String mesh = meshname;
+	TrimString(mesh);
 
 	WallObject *wall;
 	if (mesh.CompareNoCase("external") == true)
@@ -2707,7 +2650,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
 	//this does not support thickness
 
-	csVector3 v1, v2, v3, v4;
+	Ogre::Vector3 v1, v2, v3, v4;
 
 	float minx, minz, maxx, maxz;
 
@@ -2797,7 +2740,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 				//if a shaft is specified, only show the floor if it is in the related shaft's ShowFloorsList array
 				if (GetShaft(shaftnumber)->ShowFloors == true)
 				{
-					if (GetShaft(shaftnumber)->ShowFloorsList.Find(i) != -1 && value == true)
+					if (GetShaft(shaftnumber)->ShowFloorsList.find(i) != -1 && value == true)
 					{
 						GetFloor(i)->Enabled(true);
 						if (enablegroups == true)
@@ -2825,12 +2768,12 @@ bool SBS::RegisterDoorCallback(Door *door)
 {
 	//register a door object for callbacks (used for door movement)
 
-	int index = doorcallbacks.Find(door);
+	int index = doorcallbacks.find(door);
 
-	if (index == csArrayItemNotFound)
+	if (index == -1)
 	{
 		//if door isn't already in the array, add it
-		doorcallbacks.Push(door);
+		doorcallbacks.push_back(door);
 	}
 	else
 	{
@@ -2843,14 +2786,18 @@ bool SBS::RegisterDoorCallback(Door *door)
 
 bool SBS::UnregisterDoorCallback(Door *door)
 {
-	int index = doorcallbacks.Find(door);
+	int index = doorcallbacks.find(door);
 
-	if (index != csArrayItemNotFound && doorcallbacks[index])
+	if (index != -1 && doorcallbacks[index])
 	{
 		//unregister existing door callback
 		if (doorcallbacks[index]->IsMoving == false)
 		{
-			doorcallbacks.Delete(door);
+			for (int i = 0; i < doorcallbacks.size(); i++)
+			{
+				if (doorcallbacks[i] == door)
+					doorcallbacks.erase(i);
+			}
 			return true;
 		}
 		else
@@ -2867,12 +2814,12 @@ bool SBS::RegisterCallButtonCallback(CallButton *button)
 {
 	//register a door object for callbacks (used for door movement)
 
-	int index = buttoncallbacks.Find(button);
+	int index = buttoncallbacks.find(button);
 
-	if (index == csArrayItemNotFound)
+	if (index == -1)
 	{
 		//if call button isn't already in the array, add it
-		buttoncallbacks.Push(button);
+		buttoncallbacks.push_back(button);
 	}
 	else
 		return false;
@@ -2881,12 +2828,16 @@ bool SBS::RegisterCallButtonCallback(CallButton *button)
 
 bool SBS::UnregisterCallButtonCallback(CallButton *button)
 {
-	int index = buttoncallbacks.Find(button);
+	int index = buttoncallbacks.find(button);
 
-	if (index != csArrayItemNotFound && buttoncallbacks[index])
+	if (index != -1 && buttoncallbacks[index])
 	{
 		//unregister existing call button callback
-		buttoncallbacks.Delete(button);
+		for (int i = 0; i < buttoncallbacks.size(); i++)
+		{
+			if (buttoncallbacks[i] == button)
+				buttoncallbacks.erase(i);
+		}
 	}
 	else
 		return false;
@@ -2936,20 +2887,20 @@ void SBS::ProcessTextureFlip(float tw, float th)
 	}
 }
 
-iMaterialWrapper* SBS::GetTextureMaterial(const char *texture, bool &result, const char *polygon_name)
+Ogre::Material* SBS::GetTextureMaterial(const char *texture, bool &result, const char *polygon_name)
 {
 	//perform a lookup on a texture, and return as a material
 	//returns false in &result if texture load failed, and if default material was used instead
-	iMaterialWrapper *material = engine->GetMaterialList()->FindByName(texture);
+	Ogre::Material *material = engine->GetMaterialList()->FindByName(texture);
 
 	if (!material)
 	{
 		//if material's not found, display a warning and use a default material
-		csString message;
+		Ogre::String message;
 		if (polygon_name)
-			message = "Texture '" + csString(texture) + "' not found for polygon '" + csString(polygon_name) + "'; using default material";
+			message = "Texture '" + Ogre::String(texture) + "' not found for polygon '" + Ogre::String(polygon_name) + "'; using default material";
 		else
-			message = "Texture '" + csString(texture) + "' not found; using default material";
+			message = "Texture '" + Ogre::String(texture) + "' not found; using default material";
 		ReportError(message);
 		//set to default material
 		material = engine->GetMaterialList()->FindByName("Default");
@@ -2963,7 +2914,7 @@ iMaterialWrapper* SBS::GetTextureMaterial(const char *texture, bool &result, con
 bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
 {
 	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < textureinfo.GetSize(); i++)
+	for (int i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == texture)
 		{
@@ -2978,7 +2929,7 @@ bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
 bool SBS::GetTextureForce(const char *texture, bool &enable_force, bool &force_mode)
 {
 	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < textureinfo.GetSize(); i++)
+	for (int i = 0; i < textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == texture)
 		{
@@ -2997,14 +2948,14 @@ void SBS::ProcessCallButtons()
 	//the up and down sections need to be processed separately due to the removal of callbacks
 	//during the run of each
 
-	for (int i = 0; i < buttoncallbacks.GetSize(); i++)
+	for (int i = 0; i < buttoncallbacks.size(); i++)
 	{
 		//process up calls
 		if (buttoncallbacks[i])
 			buttoncallbacks[i]->Loop(true);
 	}
 
-	for (int i = 0; i < buttoncallbacks.GetSize(); i++)
+	for (int i = 0; i < buttoncallbacks.size(); i++)
 	{
 		//process down calls
 		if (buttoncallbacks[i])
@@ -3015,7 +2966,7 @@ void SBS::ProcessCallButtons()
 void SBS::ProcessDoors()
 {
 	//process all registered doors
-	for (int i = 0; i < doorcallbacks.GetSize(); i++)
+	for (int i = 0; i < doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i])
 		{
@@ -3030,21 +2981,21 @@ void SBS::ProcessDoors()
 int SBS::GetDoorCallbackCount()
 {
 	//return the number of registered door callbacks
-	return doorcallbacks.GetSize();
+	return doorcallbacks.size();
 }
 
 int SBS::GetCallButtonCallbackCount()
 {
 	//return the number of registered call button callbacks
-	return buttoncallbacks.GetSize();
+	return buttoncallbacks.size();
 }
 
 bool SBS::Mount(const char *filename, const char *path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	csString file = filename;
-	csString Path = path;
+	Ogre::String file = filename;
+	Ogre::String Path = path;
 
 	Report("Mounting " + file + " as path " + Path);
 	bool status = vfs->Mount(path, root_dir + "data" + dir_char + file);
@@ -3061,7 +3012,7 @@ void SBS::FreeTextureImages()
 		engine->GetTextureList()->Get(i)->SetImageFile(0);
 }
 
-void SBS::AddFloorAutoArea(csVector3 start, csVector3 end)
+void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
 {
 	//adds an auto area that enables/disables floors
 
@@ -3069,17 +3020,17 @@ void SBS::AddFloorAutoArea(csVector3 start, csVector3 end)
 	newarea.box = csBox3(start, end);
 	newarea.inside = false;
 	newarea.camerafloor = 0;
-	FloorAutoArea.Push(newarea);
+	FloorAutoArea.push_back(newarea);
 }
 
 void SBS::CheckAutoAreas()
 {
 	//check all automatic areas
 	
-	csVector3 position = camera->GetPosition();
+	Ogre::Vector3 position = camera->GetPosition();
 	int floor = camera->CurrentFloor;
 
-	for (int i = 0; i < FloorAutoArea.GetSize(); i++)
+	for (int i = 0; i < FloorAutoArea.size(); i++)
 	{
 		//reset inside value if floor changed
 		if (FloorAutoArea[i].camerafloor != floor)
@@ -3148,13 +3099,13 @@ int SBS::GetMeshFactoryCount()
 	return engine->GetMeshFactories()->GetCount();
 }
 
-void SBS::CreateColliders(csRef<iMeshWrapper> mesh)
+void SBS::CreateColliders(Ogre::Mesh mesh)
 {
 	//create colliders for the given mesh
 	csColliderHelper::InitializeCollisionWrapper(collision_sys, mesh);
 }
 
-void SBS::DeleteColliders(csRef<iMeshWrapper> mesh)
+void SBS::DeleteColliders(Ogre::Mesh mesh)
 {
 	//delete colliders for the given mesh
 	csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
@@ -3162,11 +3113,11 @@ void SBS::DeleteColliders(csRef<iMeshWrapper> mesh)
 		engine->RemoveObject(collider);
 }
 
-Object* SBS::AddSound(const char *name, const char *filename, csVector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, csVector3 direction)
+Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, Ogre::Vector3 direction)
 {
 	//create a looping sound object
-	sounds.SetSize(sounds.GetSize() + 1);
-	Sound *sound = sounds[sounds.GetSize() - 1];
+	sounds.resize(sounds.size() + 1);
+	Sound *sound = sounds[sounds.size() - 1];
 	sound = new Sound(this->object, name, false);
 
 	//set parameters and play sound
@@ -3207,13 +3158,13 @@ float SBS::ToLocal(float remote_value)
 	return remote_value * UnitScale;
 }
 
-csVector2 SBS::ToLocal(const csVector2& remote_value)
+Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
 	return remote_value * UnitScale;
 }
 
-csVector3 SBS::ToLocal(const csVector3& remote_value)
+Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
 	return remote_value * UnitScale;
@@ -3225,13 +3176,13 @@ float SBS::ToRemote(float local_value)
 	return local_value / UnitScale;
 }
 
-csVector2 SBS::ToRemote(const csVector2& local_value)
+Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
 	return local_value / UnitScale;
 }
 
-csVector3 SBS::ToRemote(const csVector3& local_value)
+Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
 	return local_value / UnitScale;
@@ -3246,7 +3197,7 @@ int SBS::GetObjectCount()
 Object* SBS::GetObject(int number)
 {
 	//return object pointer from global array
-	if (number >= 0 && number < ObjectArray.GetSize())
+	if (number >= 0 && number < ObjectArray.size())
 		return ObjectArray[number];
 	else
 		return 0;
@@ -3256,7 +3207,7 @@ int SBS::RegisterObject(Object *object)
 {
 	//add object to global array
 	ObjectCount++;
-	return ObjectArray.Push(object);
+	return ObjectArray.push_back(object);
 }
 
 bool SBS::UnregisterObject(int number)
@@ -3265,7 +3216,7 @@ bool SBS::UnregisterObject(int number)
 	//note - this doesn't delete the objects
 	ObjectCount--;
 
-	if (number < ObjectArray.GetSize())
+	if (number < ObjectArray.size())
 	{
 		if (ObjectArray[number])
 		{
@@ -3279,7 +3230,7 @@ bool SBS::UnregisterObject(int number)
 	return false;
 }
 
-csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, csVector2 z, float tw, float th)
+Ogre::Vector2 SBS::CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::Vector2 y, Ogre::Vector2 z, float tw, float th)
 {
 	//calculate autosizing based on polygon extents
 
@@ -3322,15 +3273,15 @@ csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, cs
 	}
 
 	//return results
-	return csVector2(tw2, th2);
+	return Ogre::Vector2(tw2, th2);
 }
 
-/*WallObject* SBS::GetWallObject(csArray<WallObject*> &wallarray, int polygon_index)
+/*WallObject* SBS::GetWallObject(std::vector<WallObject*> &wallarray, int polygon_index)
 {
 	//returns the wall object that contains the specified polygon index
-	for (int i = 0; i < wallarray.GetSize(); i++)
+	for (int i = 0; i < wallarray.size(); i++)
 	{
-		for (int j = 0; j < wallarray[i]->handles.GetSize(); j++)
+		for (int j = 0; j < wallarray[i]->handles.size(); j++)
 		{
 			if (wallarray[i]->handles[j] == polygon_index)
 				return wallarray[i];
@@ -3339,46 +3290,30 @@ csVector2 SBS::CalculateSizing(const char *texture, csVector2 x, csVector2 y, cs
 	return 0;
 }*/
 
-csString SBS::TruncateNumber(double value, int decimals)
+Ogre::String SBS::TruncateNumber(double value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
-	csString number, dec;
-	dec = decimals;
-	dec.Trim();
-	number = value;
 
-	//format number if it's a float
-	if ((int)value != value)
-		number.Format("%." + dec + "f", value);
-
-	return number;
+	return Ogre::StringConverter::toString(number, decimals);
 }
 
-csString SBS::TruncateNumber(float value, int decimals)
+Ogre::String SBS::TruncateNumber(float value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
-	csString number, dec;
-	dec = decimals;
-	dec.Trim();
-	number = value;
-
-	//format number if it's a float
-	if ((int)value != value)
-		number.Format("%." + dec + "f", value);
-
-	return number;
+	
+	return Ogre::StringConverter::toString(number, decimals);
 }
 
-csString SBS::TruncateNumber(const char *value, int decimals)
+Ogre::String SBS::TruncateNumber(const char *value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
-	csString number = value;
+	Ogre::String number = value;
 	
 	if (decimals < 1)
 		return number;
-	number.Truncate(number.Find(".") + decimals + 1);
-	if (number.GetAt(number.Length() - 1) == '.')
-		number = number.Slice(0, number.Length() - 1); //strip of extra decimal point if even
+	number.erase(number.find(".") + decimals + 1);
+	if (number.at(number.length() - 1) == '.')
+		number = number.substr(0, number.length() - 1); //strip of extra decimal point if even
 	return number;
 }
 
@@ -3391,59 +3326,59 @@ bool SBS::IsValidFloor(int floor)
 	return false;
 }
 
-csString SBS::DumpState()
+Ogre::String SBS::DumpState()
 {
 	//dump basic simulator state to a character array
 
-	csString output = "SBS version: " + version + "\n";
-	output.Append("Building Name: " + BuildingName + "\n");
-	output.Append("Building Filename: " + BuildingFilename + "\n");
-	output.Append("Building Version: " + BuildingVersion + "\n");
-	output.Append("InStairwell: ");
-	output.Append(wxString::FromAscii(BoolToString(InStairwell)).ToAscii());
-	output.Append("\n");
-	output.Append("InElevator: ");
-	output.Append(wxString::FromAscii(BoolToString(InElevator)).ToAscii());
-	output.Append("\n");
-	output.Append("InShaft: ");
-	output.Append(wxString::FromAscii(BoolToString(InShaft)).ToAscii());
-	output.Append("\n");
-	output.Append("ElevatorNumber: ");
-	output.Append(wxVariant((int)ElevatorNumber).GetString().ToAscii());
-	output.Append("\n");
-	output.Append("ElevatorSync: ");
-	output.Append(wxString::FromAscii(BoolToString(ElevatorSync)).ToAscii());
-	output.Append("\n");
-	output.Append("Running Time: ");
-	output.Append(TruncateNumber(running_time, 2));
-	output.Append("\n");
-	output.Append("BuildingsEnabled: ");
-	output.Append(wxString::FromAscii(BoolToString(IsBuildingsEnabled)).ToAscii());
-	output.Append("\n");
-	output.Append("ExternalEnabled: ");
-	output.Append(wxString::FromAscii(BoolToString(IsExternalEnabled)).ToAscii());
-	output.Append("\n");
-	output.Append("LandscapeEnabled: ");
-	output.Append(wxString::FromAscii(BoolToString(IsLandscapeEnabled)).ToAscii());
-	output.Append("\n");
-	output.Append("SkyboxEnabled: ");
-	output.Append(wxString::FromAscii(BoolToString(IsSkyboxEnabled)).ToAscii());
-	output.Append("\n");
-	output.Append("Verbose: ");
-	output.Append(wxString::FromAscii(BoolToString(Verbose)).ToAscii());
-	output.Append("\n");
-	output.Append("InterfloorOnTop: ");
-	output.Append(wxString::FromAscii(BoolToString(InterfloorOnTop)).ToAscii());
-	output.Append("\n");
-	output.Append("Object Count: ");
-	output.Append(wxVariant((int)ObjectCount).GetString().ToAscii());
-	output.Append("\n");
+	Ogre::String output = "SBS version: " + version + "\n";
+	output.append("Building Name: " + BuildingName + "\n");
+	output.append("Building Filename: " + BuildingFilename + "\n");
+	output.append("Building Version: " + BuildingVersion + "\n");
+	output.append("InStairwell: ");
+	output.append(wxString::FromAscii(BoolToString(InStairwell)).ToAscii());
+	output.append("\n");
+	output.append("InElevator: ");
+	output.append(wxString::FromAscii(BoolToString(InElevator)).ToAscii());
+	output.append("\n");
+	output.append("InShaft: ");
+	output.append(wxString::FromAscii(BoolToString(InShaft)).ToAscii());
+	output.append("\n");
+	output.append("ElevatorNumber: ");
+	output.append(wxVariant((int)ElevatorNumber).GetString().ToAscii());
+	output.append("\n");
+	output.append("ElevatorSync: ");
+	output.append(wxString::FromAscii(BoolToString(ElevatorSync)).ToAscii());
+	output.append("\n");
+	output.append("Running Time: ");
+	output.append(TruncateNumber(running_time, 2));
+	output.append("\n");
+	output.append("BuildingsEnabled: ");
+	output.append(wxString::FromAscii(BoolToString(IsBuildingsEnabled)).ToAscii());
+	output.append("\n");
+	output.append("ExternalEnabled: ");
+	output.append(wxString::FromAscii(BoolToString(IsExternalEnabled)).ToAscii());
+	output.append("\n");
+	output.append("LandscapeEnabled: ");
+	output.append(wxString::FromAscii(BoolToString(IsLandscapeEnabled)).ToAscii());
+	output.append("\n");
+	output.append("SkyboxEnabled: ");
+	output.append(wxString::FromAscii(BoolToString(IsSkyboxEnabled)).ToAscii());
+	output.append("\n");
+	output.append("Verbose: ");
+	output.append(wxString::FromAscii(BoolToString(Verbose)).ToAscii());
+	output.append("\n");
+	output.append("InterfloorOnTop: ");
+	output.append(wxString::FromAscii(BoolToString(InterfloorOnTop)).ToAscii());
+	output.append("\n");
+	output.append("Object Count: ");
+	output.append(wxVariant((int)ObjectCount).GetString().ToAscii());
+	output.append("\n");
 	if (camera)
 	{
-		output.Append("Camera Floor: ");
-		output.Append(wxVariant((int)camera->CurrentFloor).GetString().ToAscii());
-		output.Append("\n");
-		output.Append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2) + ", " + TruncateNumber(camera->GetPosition().y, 2) + ", " + TruncateNumber(camera->GetPosition().z, 2) + "\n");
+		output.append("Camera Floor: ");
+		output.append(wxVariant((int)camera->CurrentFloor).GetString().ToAscii());
+		output.append("\n");
+		output.append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2) + ", " + TruncateNumber(camera->GetPosition().y, 2) + ", " + TruncateNumber(camera->GetPosition().z, 2) + "\n");
 	}
 
 	return output;
@@ -3454,7 +3389,7 @@ bool SBS::DeleteObject(Object *object)
 	//object deletion routine
 	//this should be called to delete a simulator object during runtime
 
-	csString number;
+	Ogre::String number;
 	number = object->GetNumber();
 	bool deleted = false;
 
@@ -3477,18 +3412,16 @@ bool SBS::DeleteObject(Object *object)
 		return false;
 	}
 
-	csString type = object->GetType();
+	Ogre::String type = object->GetType();
 
 	//perform standard delete based on object type
 	if (type == "Floor")
 	{
-		//FloorArray.Delete((Floor*)object->GetRawObject());
 		delete (Floor*)object->GetRawObject();
 		deleted = true;
 	}
 	if (type == "Elevator")
 	{
-		//ElevatorArray.Delete((Elevator*)object->GetRawObject());
 		delete (Elevator*)object->GetRawObject();
 		deleted = true;
 	}
@@ -3524,7 +3457,6 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "Shaft")
 	{
-		//ShaftArray.Delete((Shaft*)object->GetRawObject());
 		delete (Shaft*)object->GetRawObject();
 		deleted = true;
 	}
@@ -3535,7 +3467,6 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "Stairs")
 	{
-		//StairsArray.Delete((Stairs*)object->GetRawObject());
 		delete (Stairs*)object->GetRawObject();
 		deleted = true;
 	}
@@ -3565,11 +3496,11 @@ bool SBS::DeleteObject(int object)
 void SBS::RemoveFloor(Floor *floor)
 {
 	//remove a floor (does not delete the object)
-	for (int i = 0; i < FloorArray.GetSize(); i++)
+	for (int i = 0; i < FloorArray.size(); i++)
 	{
 		if (FloorArray[i].object == floor)
 		{
-			FloorArray.DeleteIndex(i);
+			FloorArray.erase(i);
 			return;
 		}
 	}
@@ -3578,11 +3509,11 @@ void SBS::RemoveFloor(Floor *floor)
 void SBS::RemoveElevator(Elevator *elevator)
 {
 	//remove an elevator (does not delete the object)
-	for (int i = 0; i < ElevatorArray.GetSize(); i++)
+	for (int i = 0; i < ElevatorArray.size(); i++)
 	{
 		if (ElevatorArray[i].object == elevator)
 		{
-			ElevatorArray.DeleteIndex(i);
+			ElevatorArray.erase(i);
 			return;
 		}
 	}
@@ -3591,11 +3522,11 @@ void SBS::RemoveElevator(Elevator *elevator)
 void SBS::RemoveShaft(Shaft *shaft)
 {
 	//remove a shaft (does not delete the object)
-	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (int i = 0; i < ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i].object == shaft)
 		{
-			ShaftArray.DeleteIndex(i);
+			ShaftArray.erase(i);
 			return;
 		}
 	}
@@ -3604,11 +3535,11 @@ void SBS::RemoveShaft(Shaft *shaft)
 void SBS::RemoveStairs(Stairs *stairs)
 {
 	//remove a stairs object (does not delete the object)
-	for (int i = 0; i < StairsArray.GetSize(); i++)
+	for (int i = 0; i < StairsArray.size(); i++)
 	{
 		if (StairsArray[i].object == stairs)
 		{
-			StairsArray.DeleteIndex(i);
+			StairsArray.erase(i);
 			return;
 		}
 	}
@@ -3618,7 +3549,15 @@ void SBS::RemoveSound(Sound *sound)
 {
 	//remove a sound from the array
 	//this does not delete the object
-	sounds.Delete(sound);
+
+	for (int i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i] == sound)
+		{
+			sounds.erase(i);
+			return;
+		}
+	}
 }
 
 const char* SBS::VerifyFile(const char *filename)
@@ -3629,27 +3568,28 @@ const char* SBS::VerifyFile(const char *filename)
 	//case (fixes case-sensitivity issues mainly on Linux)
 	//returns the original string if not found
 
-	csString file = filename;
+	/*Ogre::String file = filename;
 	if (vfs->Exists(filename))
 		return filename;
 
-	csString directory;
+	Ogre::String directory;
 	int loc1 = file.FindLast("/");
 	int loc2 = file.FindLast("\\");
 	int loc = loc1;
 	if (loc2 > 0)
 		loc = loc2;
 
-	directory = file.Slice(0, loc + 1);
+	directory = file.substr(0, loc + 1);
 
 	csRef<iStringArray> array = vfs->FindFiles(directory);
-	for (int i = 0; i < array->GetSize(); i++)
+	for (int i = 0; i < array->size(); i++)
 	{
-		csString check = array->Get(i);
+		Ogre::String check = array->Get(i);
 		if (check.CompareNoCase(filename) == true)
 			return check;
 	}
-	return filename;
+	return filename;*/
+	return 0;
 }
 
 bool SBS::FileExists(const char *filename, bool relative)
@@ -3657,17 +3597,17 @@ bool SBS::FileExists(const char *filename, bool relative)
 	//check to see if the specified file exists
 	//the name must begin with the "/root/" suffix if relative is false
 
-	csString file = filename;
+	/*Ogre::String file = filename;
 
 	if (relative == true)
 		file.Insert(0, "/root/");
 
 	if (vfs->Exists(filename))
 		return true;
-	csString verify = VerifyFile(filename);
+	Ogre::String verify = VerifyFile(filename);
 	if (verify != file)
 		return true;
-	return false;
+	return false;*/
 }
 
 int SBS::GetWallCount()
@@ -3684,22 +3624,30 @@ int SBS::GetPolygonCount()
 
 void SBS::AddLightHandle(Light* handle)
 {
-	all_lights.Push(handle);
+	all_lights.push_back(handle);
 }
 
 void SBS::DeleteLightHandle(Light* handle)
 {
-	all_lights.Delete(handle);
+	for (int i = 0; i < all_lights.size(); i++)
+	{
+		if (all_lights[i] == handle)
+			all_lights.erase(i);
+	}
 }
 
 void SBS::AddModelHandle(Model* handle)
 {
-	all_models.Push(handle);
+	all_models.push_back(handle);
 }
 
 void SBS::DeleteModelHandle(Model* handle)
 {
-	all_models.Delete(handle);
+	for (int i = 0; i < all_models.size(); i++)
+	{
+		if (all_models[i] == handle)
+			all_models.erase(i);
+	}
 }
 
 void SBS::Prepare()
@@ -3710,29 +3658,33 @@ void SBS::Prepare()
 	engine->Prepare();
 }
 
-Object* SBS::AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
 	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
-	lights.Push(light);
+	lights.push_back(light);
 	return light->object;
 }
 
 void SBS::AddMeshHandle(MeshObject* handle)
 {
-	meshes.Push(handle);
+	meshes.push_back(handle);
 }
 
 void SBS::DeleteMeshHandle(MeshObject* handle)
 {
-	meshes.Delete(handle);
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		if (meshes[i] == handle)
+			meshes.erase(i);
+	}
 }
 
-MeshObject* SBS::FindMeshObject(csRef<iMeshWrapper> meshwrapper)
+MeshObject* SBS::FindMeshObject(Ogre::Mesh meshwrapper)
 {
 	//find a mesh object by searching for matching wrapper
-	for (int i = 0; i < meshes.GetSize(); i++)
+	for (int i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i]->MeshWrapper == meshwrapper)
 			return meshes[i];
@@ -3740,7 +3692,7 @@ MeshObject* SBS::FindMeshObject(csRef<iMeshWrapper> meshwrapper)
 	return 0;
 }
 
-Object* SBS::AddModel(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
+Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier);
@@ -3749,6 +3701,31 @@ Object* SBS::AddModel(const char *name, const char *filename, csVector3 position
 		delete model;
 		return 0;
 	}
-	ModelArray.Push(model);
+	ModelArray.push_back(model);
 	return model->object;
+}
+
+int SBS::GetConfigInt(const char *key, int default)
+{
+	Ogre::ConfigFile file;
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
+	return Ogre::StringConverter::parseInt(result);
+}
+
+const char* SBS::GetConfigString(const char *key, const char *default)
+{
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
+	return result;
+}
+
+bool SBS::GetConfigBool(const char *key, bool default)
+{
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
+	return Ogre::StringConverter::parseBool(result);
+}
+
+float SBS::GetConfigFloat(const char *key, float default)
+{
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
+	return Ogre::StringConverter::parseReal(result);
 }

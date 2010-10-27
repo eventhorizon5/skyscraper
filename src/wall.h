@@ -31,39 +31,39 @@ class SBSIMPEXP WallObject : public Object
 public:
 
 	//functions
-	WallObject(csRef<iMeshWrapper> wrapper, csRefArray<iGeneralMeshSubMesh> &submeshes, Object *proxy = 0, bool temporary = false);
+	WallObject(Ogre::Mesh wrapper, std::vector<Ogre::SubMesh> &submeshes, Object *proxy = 0, bool temporary = false);
 	~WallObject();
-	WallPolygon* AddQuad(const char *name, const char *texture, const csVector3 &v1, const csVector3 &v2, const csVector3 &v3, const csVector3 &v4, float tw, float th, bool autosize);
-	WallPolygon* AddPolygon(const char *name, const char *texture, csVector3 *vertices, int num, float tw, float th, bool autosize);
-	WallPolygon* AddPolygon(const char *name, csRef<iMaterialWrapper> material, csArray<CS::Geometry::csContour3> &vertices, csMatrix3 &tex_matrix, csVector3 &tex_vector);
-	int CreateHandle(csRef<iRenderBuffer> triangles, csArray<csVector2> &index_extents, csMatrix3 &tex_matrix, csVector3 &tex_vector, iMaterialWrapper* material, const char *name, csPlane3 &plane);
+	WallPolygon* AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize);
+	WallPolygon* AddPolygon(const char *name, const char *texture, Ogre::Vector3 *vertices, int num, float tw, float th, bool autosize);
+	WallPolygon* AddPolygon(const char *name, Ogre::Material* material, std::vector<Ogre::Polygon> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector);
+	int CreateHandle(Ogre::HardwareIndexBuffer* triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::Material* material, const char *name, Ogre::Plane &plane);
 	void DeletePolygons();
 	void DeletePolygon(int index, bool recreate_colliders);
-	void DeleteVertices(csArray<int> &deleted_indices);
-	csString ProcessName(const char *name);
+	void DeleteVertices(std::vector<int> &deleted_indices);
+	Ogre::String ProcessName(const char *name);
 	int GetHandleCount();
 	WallPolygon* GetHandle(int index);
 	int FindPolygon(const char *name);
-	void GetGeometry(int index, csArray<CS::Geometry::csContour3> &vertices, bool firstonly = false);
+	void GetGeometry(int index, std::vector<Ogre::Polygon> &vertices, bool firstonly = false);
 	void SetPolygonName(int index, const char *name);
-	bool IsPointOnWall(const csVector3 &point);
+	bool IsPointOnWall(const Ogre::Vector3 &point);
 
 	//mesh wrapper
-	csRef<iMeshWrapper> meshwrapper;
+	Ogre::Mesh meshwrapper;
 
 	//mesh factory state
-	csRef<iGeneralFactoryState> state;
+	Ogre::Mesh* state;
 
 	//name
-	csString name;
+	Ogre::String name;
 
 	//parent array
-	csArray<WallObject*> *parent_array;
+	std::vector<WallObject*> *parent_array;
 
 	//parent submesh array
-	csRefArray<iGeneralMeshSubMesh> *submesh_array;
+	std::vector<Ogre::SubMesh> *submesh_array;
 
-	csArray<WallPolygon> handles;
+	std::vector<WallPolygon> handles;
 };
 
 #endif

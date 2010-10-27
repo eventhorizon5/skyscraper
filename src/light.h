@@ -26,32 +26,29 @@
 #ifndef _SBS_LIGHT_H
 #define _SBS_LIGHT_H
 
-#include <csutil/csstring.h>
-#include <iengine/light.h>
-
 class SBSIMPEXP Light
 {
 public:
 
 	Object *object; //SBS object
-	csString Name;
+	Ogre::String Name;
 	int Type;
-	csVector3 Origin;
+	Ogre::Vector3 Origin;
 
 	//functions
-	Light(const char *name, int type, csVector3 position, csVector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
 	~Light();
 	void Prepare();
-	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
-	csVector3 GetPosition();
+	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
+	Ogre::Vector3 GetPosition();
 	void SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b);
-	void SetRotation(const csVector3& rotation);
-	void Rotate(const csVector3& rotation, float speed);
-	csVector3 GetRotation();
+	void SetRotation(const Ogre::Vector3& rotation);
+	void Rotate(const Ogre::Vector3& rotation, float speed);
+	Ogre::Vector3 GetRotation();
 
 private:
 
-	csRef<iLight> light;
+	Ogre::Light* light;
 	float rotX, rotY, rotZ;
 };
 

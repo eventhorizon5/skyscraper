@@ -32,18 +32,18 @@ class SBSIMPEXP Control
 {
 public:
 	Object *object; //SBS object
-	csString Name;
-	csString Direction;
+	Ogre::String Name;
+	Ogre::String Direction;
 	bool IsEnabled;
 
 	//functions
-	Control(Object *parent, const char *name, const char *sound, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset);
+	Control(Object *parent, const char *name, const char *sound, std::vector<Ogre::String> &action_names, std::vector<Ogre::String> &textures, const char *direction, float width, float height, float voffset);
 	~Control();
 	void Enabled(bool value);
-	csVector3 GetPosition();
-	void SetPosition(const csVector3 &position);
+	Ogre::Vector3 GetPosition();
+	void SetPosition(const Ogre::Vector3 &position);
 	void SetPositionY(float position);
-	void Move(const csVector3 &position);
+	void Move(const Ogre::Vector3 &position);
 	bool SetSelectPosition(int position);
 	bool ChangeSelectPosition(int position);
 	bool NextSelectPosition(bool check_state = true);
@@ -61,8 +61,8 @@ public:
 private:
 	MeshObject* ControlMesh; //control mesh object
 	int current_position; //current control position
-	csArray<csString> TextureArray; //selection texture array
-	csArray<csString> Actions; //button actions
+	std::vector<Ogre::String> TextureArray; //selection texture array
+	std::vector<Ogre::String> Actions; //button actions
 
 	Sound *sound; //sound object
 

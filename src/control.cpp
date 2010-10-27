@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, const char *sound_file, csArray<csString> &action_names, csArray<csString> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, const char *name, const char *sound_file, std::vector<Ogre::String> &action_names, std::vector<Ogre::String> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 
@@ -45,7 +45,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 	object = new Object();
 	object->SetValues(this, parent, "Control", name, false);
 
-	csString objnum;
+	Ogre::String objnum;
 	objnum = object->GetNumber();
 	Name = "(" + objnum + ")" + name;
 	Actions = action_names;
@@ -55,7 +55,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 	current_position = 1;
 
 	//create object mesh
-	ControlMesh = new MeshObject(object, name, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(object, name, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Direction == "front")
 		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
@@ -73,7 +73,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, csArr
 
 Control::~Control()
 {
-	TextureArray.DeleteAll();
+	TextureArray.clear();
 	if (sound)
 	{
 		sound->object->parent_deleting = true;
@@ -90,7 +90,7 @@ Control::~Control()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (csString(object->GetParent()->GetType()) == "ButtonPanel")
+			if (Ogre::String(object->GetParent()->GetType()) == "ButtonPanel")
 				((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
 		}
 	}
@@ -109,13 +109,13 @@ void Control::Enabled(bool value)
 	IsEnabled = value;
 }
 
-csVector3 Control::GetPosition()
+Ogre::Vector3 Control::GetPosition()
 {
 	//return current position
 	return ControlMesh->GetPosition();
 }
 
-void Control::SetPosition(const csVector3 &position)
+void Control::SetPosition(const Ogre::Vector3 &position)
 {
 	//set control position
 	sound->SetPosition(position);
@@ -125,12 +125,12 @@ void Control::SetPosition(const csVector3 &position)
 void Control::SetPositionY(float position)
 {
 	//set control position
-	csVector3 pos = GetPosition();
+	Ogre::Vector3 pos = GetPosition();
 	pos.y = position;
 	SetPosition(pos);
 }
 
-void Control::Move(const csVector3 &position)
+void Control::Move(const Ogre::Vector3 &position)
 {
 	//relative movement
 	ControlMesh->Move(position, true, true, true);
@@ -245,7 +245,7 @@ void Control::SetTexture(int position, const char *texture)
 int Control::GetPositions()
 {
 	//return number of available positions, based on size of Actions array
-	return Actions.GetSize();
+	return Actions.size();
 }
 
 int Control::FindActionPosition(const char *name)
@@ -255,7 +255,7 @@ int Control::FindActionPosition(const char *name)
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (csString(GetPositionAction(i)) == csString(name))
+		if (Ogre::String(GetPositionAction(i)) == Ogre::String(name))
 			return i;
 	}
 

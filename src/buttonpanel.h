@@ -35,8 +35,8 @@ public:
 	Object *object; //SBS object
 	int elevator;
 	int Index; //index number of panel
-	csString Direction;
-	csVector3 Origin;
+	Ogre::String Direction;
+	Ogre::Vector3 Origin;
 	float Width;
 	float Height;
 	float ButtonWidth;
@@ -51,10 +51,10 @@ public:
 	ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th);
 	~ButtonPanel();
 	void AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset = 0, float voffset = 0);
-	void AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, csArray<csString> action_names, csArray<csString> &textures);
+	void AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<Ogre::String> action_names, std::vector<Ogre::String> &textures);
 	void DeleteButton(int row, int column);
 	void Press(int index);
-	void Move(const csVector3 &position);
+	void Move(const Ogre::Vector3 &position);
 	void SetToElevatorAltitude();
 	void Enabled(bool value);
 	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
@@ -66,7 +66,7 @@ public:
 private:
 	MeshObject* ButtonPanelMesh; //button panel mesh object
 
-	csArray<Control*> controls; //control objects
+	std::vector<Control*> controls; //control objects
 
 };
 

@@ -33,15 +33,15 @@ public:
 	Object *object; //SBS object
 	int elev; //elevator this indicator is assigned to
 	bool IsEnabled;
-	csString Prefix; //texture name prefix
+	Ogre::String Prefix; //texture name prefix
 
 	//functions
 	FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude);
 	~FloorIndicator();
 	void Enabled(bool value);
-	csVector3 GetPosition();
-	void SetPosition(const csVector3 &position);
-	void MovePosition(const csVector3 &position);
+	Ogre::Vector3 GetPosition();
+	void SetPosition(const Ogre::Vector3 &position);
+	void MovePosition(const Ogre::Vector3 &position);
 	void Update(const char *value);
 
 private:

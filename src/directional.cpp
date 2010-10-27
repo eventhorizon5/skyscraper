@@ -57,26 +57,26 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	DirectionalMesh = 0;
 
 	//create object mesh
-	csString buffer, buffer2, buffer3;
+	Ogre::String buffer, buffer2, buffer3;
 	buffer2 = elevator;
 	buffer3 = floor;
 	buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
-	buffer.Trim();
+	TrimString(buffer);
 	object->SetName("Directional Indicator " + buffer2 + ":" + buffer3);
-	DirectionalMeshBack = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	DirectionalMeshBack = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Single == false)
 	{
 		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
-		DirectionalMeshUp = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMeshUp = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
-		DirectionalMeshDown = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMeshDown = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 	else
 	{
 		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
-		DirectionalMesh = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMesh = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 
 	sbs->ResetTextureMapping(true);
@@ -272,9 +272,9 @@ DirectionalIndicator::~DirectionalIndicator()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (csString(object->GetParent()->GetType()) == "Elevator")
+			if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
 				((Elevator*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
-			if (csString(object->GetParent()->GetType()) == "Floor")
+			if (Ogre::String(object->GetParent()->GetType()) == "Floor")
 				((Floor*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
 		}
 	}
@@ -366,7 +366,7 @@ void DirectionalIndicator::SetLights(int up, int down)
 	}
 }
 
-void DirectionalIndicator::SetPosition(const csVector3& position)
+void DirectionalIndicator::SetPosition(const Ogre::Vector3& position)
 {
 	//set position of indicator objects
 
@@ -380,7 +380,7 @@ void DirectionalIndicator::SetPosition(const csVector3& position)
 		DirectionalMesh->Move(position, false, false, false);
 }
 
-void DirectionalIndicator::Move(const csVector3& position)
+void DirectionalIndicator::Move(const Ogre::Vector3& position)
 {
 	//move indicator objects
 
@@ -394,7 +394,7 @@ void DirectionalIndicator::Move(const csVector3& position)
 		DirectionalMesh->Move(position, true, true, true);
 }
 
-csVector3 DirectionalIndicator::GetPosition()
+Ogre::Vector3 DirectionalIndicator::GetPosition()
 {
 	//return indicator position
 	return DirectionalMeshBack->GetPosition();

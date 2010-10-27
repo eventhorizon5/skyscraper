@@ -45,15 +45,15 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	elev = elevator;
 	Prefix = texture_prefix;
 
-	csString buffer;
+	Ogre::String buffer;
 	buffer = elevator;
 	object->SetName("Floor Indicator " + buffer);
-	buffer.Trim();
-	FloorIndicatorMesh = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	TrimString(buffer);
+	FloorIndicatorMesh = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	csString texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
-	csString tmpdirection = direction;
-	tmpdirection.Downcase();
+	Ogre::String texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
+	Ogre::String tmpdirection = direction;
+	SetCase(tmpdirection, false);
 
 	if (tmpdirection == "front")
 		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
@@ -76,9 +76,9 @@ FloorIndicator::~FloorIndicator()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (csString(object->GetParent()->GetType()) == "Elevator")
+			if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
 				((Elevator*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
-			if (csString(object->GetParent()->GetType()) == "Floor")
+			if (Ogre::String(object->GetParent()->GetType()) == "Floor")
 				((Floor*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
 		}
 	}
@@ -96,13 +96,13 @@ void FloorIndicator::Enabled(bool value)
 	IsEnabled = value;
 }
 
-void FloorIndicator::SetPosition(const csVector3& position)
+void FloorIndicator::SetPosition(const Ogre::Vector3& position)
 {
 	//set position of indicator
 	FloorIndicatorMesh->Move(position, false, false, false);
 }
 
-void FloorIndicator::MovePosition(const csVector3& position)
+void FloorIndicator::MovePosition(const Ogre::Vector3& position)
 {
 	//move indicator by a relative amount
 	FloorIndicatorMesh->Move(position, true, true, true);
@@ -112,14 +112,14 @@ void FloorIndicator::Update(const char *value)
 {
 	//update display with a new texture value, such as a floor number
 
-	csString texture;
+	Ogre::String texture;
 	texture = value;
 	texture.Insert(0, Prefix);
 
 	FloorIndicatorMesh->ChangeTexture(texture);
 }
 
-csVector3 FloorIndicator::GetPosition()
+Ogre::Vector3 FloorIndicator::GetPosition()
 {
 	//return current position of the indicator
 	return FloorIndicatorMesh->GetPosition();

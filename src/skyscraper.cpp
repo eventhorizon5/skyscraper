@@ -27,6 +27,7 @@
 #include "wx/wx.h"
 #endif
 #include "globals.h"
+#include "ogre.h"
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
@@ -51,7 +52,7 @@ Skyscraper *skyscraper;
 DebugPanel *dpanel;
 MainScreen *window;
 
-#ifdef CS_PLATFORM_WIN32
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "uexception.h"
 #endif
 
@@ -61,7 +62,7 @@ MainScreen *window;
 
 int main (int argc, char* argv[])
 {
-#ifdef CS_PLATFORM_WIN32
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//initialize top-level exception handler
 	InitUnhandledExceptionFilter();
 #endif
@@ -139,14 +140,14 @@ int Skyscraper::OnExit()
 {
 	//clean up
 
+	//cleanup
+	printf("Cleaning up...\n");
+
 	UnloadSim();
 
-	//delete frame printer object
-	printer.Invalidate();
-
 	//cleanup sound
-	if (sndsource)
-		StopSound();
+	//if (sndsource)
+		//StopSound();
 
 	//delete wx canvas
 	if (canvas)
@@ -157,10 +158,9 @@ int Skyscraper::OnExit()
 	window = 0;
 	skyscraper = 0;
 
-	//cleanup
-	printf("Cleaning up...\n");
-
-	return 0;
+	delete mRoot;
+	return wxApp::OnExit();
+	//return 0;
 }
 
 void Skyscraper::UnloadSim()
@@ -183,7 +183,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	this->Center();
 	wxString title;
 	title = wxT("Skyscraper 1.8 Alpha");
-	//title = wxT("Skyscraper " + skyscraper->version.GetData() + " " + skyscraper->version_state.GetData());
+	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	this->SetTitle(title);
 	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 }
@@ -214,7 +214,7 @@ void MainScreen::OnShow(wxShowEvent& event)
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-	panel->SetSize(this->GetClientSize());
+	panel->resize(this->GetClientSize());
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
@@ -284,14 +284,14 @@ void Skyscraper::SetupFrame()
 	}
 
 	//resize canvas if needed
-	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
+	if (canvas->size().GetWidth() != canvas_width || canvas->size().GetHeight() != canvas_height)
 	{
 		//update canvas size values
-		canvas_width = canvas->GetSize().GetWidth();
-		canvas_height = canvas->GetSize().GetHeight();
+		canvas_width = canvas->size().GetWidth();
+		canvas_height = canvas->size().GetHeight();
 
 		//resize viewport
-		wxwin->GetWindow()->SetSize(canvas->GetSize());
+		wxwin->GetWindow()->resize(canvas->size());
 	}
 
 	RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
@@ -375,24 +375,30 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 
 	//load resources
 	ConfigFile cf;
-        cf.load("resources.cfg");
-        ConfigFile::SectionIterator seci = cf.getSectionIterator();
+	cf.load("resources.cfg");
+	ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
-        Ogre::String secName, typeName, archName;
-        while(seci.hasMoreElements()){
-                secName = seci.peekNextKey();
-                ConfigFile::SettingsMultiMap *settings = seci.getNext();
-                ConfigFile::SettingsMultiMap::iterator i;
-                for(i = settings->begin(); i != settings->end(); ++i){
-                        typeName = i->first;
-                        archName = i->second;
-                        Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
-                }
-        }
+	Ogre::String secName, typeName, archName;
+	while(seci.hasMoreElements())
+	{
+		secName = seci.peekNextKey();
+		ConfigFile::SettingsMultiMap *settings = seci.getNext();
+		ConfigFile::SettingsMultiMap::iterator i;
+		for(i = settings->begin(); i != settings->end(); ++i)
+		{
+				typeName = i->first;
+				archName = i->second;
+				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+		}
+	}
 	
 	//create scene manager
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
 
+	mSceneMgr->setAmbientLight( ColourValue( 0, 0, 0 ) );
+	mSceneMgr->setShadowTechnique( SHADOWTYPE_STENCIL_ADDITIVE );
+
+	/*
 	object_reg = csInitializer::CreateEnvironment(argc, argv);
 	if (!object_reg) return false;
 
@@ -402,7 +408,7 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 		return ReportError("Error loading the VFS plugin");
 	
 	//mount app's directory in VFS
-        #ifndef CS_PLATFORM_WIN32
+        #ifndef OGRE_PLATFORM_WIN32
                 dir_char = "/";
         #else
                 dir_char = "\\";
@@ -519,14 +525,15 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	if(!wxwin) return ReportError("Canvas is no iWxWindow plugin!");
 	wxwin->SetParent(RenderObject);
 	canvas = RenderObject;
-	canvas_width = canvas->GetSize().GetWidth();
-	canvas_height = canvas->GetSize().GetHeight();
+	canvas_width = canvas->size().GetWidth();
+	canvas_height = canvas->size().GetHeight();
 
 	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
+	*/
 
-	Platform = CS_PLATFORM_NAME;
+	Platform = OGRE_PLATFORM;
 
-	csString renderLoop;
+	Ogre::String renderLoop;
 	if (confman->GetBool("Skyscraper.Frontend.Shaders", false) == true)
 	{
 		renderLoop = "diffuse";
@@ -535,6 +542,7 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	if (confman->GetBool("Skyscraper.Frontend.ShaderShadows", false) == true && Shaders == true)
 		renderLoop = "shadowed";
 
+	/*
 	// Open the main system. This will open all the previously loaded plug-ins.
 	if (!csInitializer::OpenApplication (object_reg))
 		return ReportError ("Error opening system!");
@@ -574,15 +582,15 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
 
 	//workaround for a canvas quirk on Mac
-#ifdef CS_PLATFORM_MACOSX
-	canvas->SetSize(canvas_width, canvas_height + 1);
-	canvas->SetSize(canvas_width, canvas_height);
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	canvas->resize(canvas_width, canvas_height + 1);
+	canvas->resize(canvas_width, canvas_height);
 #endif
 
 	if (!renderLoop.IsEmpty ())
 	{
 		iRenderLoopManager* rloopmgr = engine->GetRenderLoopManager();
-		csString rl = "/shader/std_rloop_";
+		Ogre::String rl = "/shader/std_rloop_";
 		rl += renderLoop;
 		rl += ".xml";
 		csRef<iRenderLoop> rloop = rloopmgr->Load(rl);
@@ -591,7 +599,7 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 		if (!engine->SetCurrentDefaultRenderloop (rloop))
 			return ReportError ("Couldn't set renderloop in engine!");
 	}
-
+	*/
 	return true;
 }
 
@@ -603,7 +611,7 @@ void Skyscraper::GetInput()
 
 	static bool wireframe;
 	static bool wait, waitcheck;
-	static csTicks old_time;
+	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
 	// First get elapsed time from the virtual clock.
@@ -637,14 +645,14 @@ void Skyscraper::GetInput()
 	old_mouse_y = Simcore->mouse_y;
 
 	//get mouse pointer coordinates
-	Simcore->mouse_x = mouse->GetLastX();
-	Simcore->mouse_y = mouse->GetLastY();
+	//Simcore->mouse_x = mouse->GetLastX();
+	//Simcore->mouse_y = mouse->GetLastY();
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
-	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
+	/*if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
 		canvas->WarpPointer(g2d->GetWidth() / 2, g2d->GetHeight() / 2);
-		csVector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)), 0);
+		Ogre::Vector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)), 0);
 		Simcore->camera->Rotate(rotational, 1);
 	}
 
@@ -661,7 +669,7 @@ void Skyscraper::GetInput()
 	{
 		MouseDown = false;
 		Simcore->camera->MouseDown = MouseDown;
-	}
+	}*/
 
 	if (wxGetKeyState(WXK_ESCAPE))
 	{
@@ -783,14 +791,14 @@ void Skyscraper::GetInput()
 			//enable/disable wireframe mode
 			if (wireframe == false)
 			{
-				bugplug->ExecCommand("edges");
-				bugplug->ExecCommand("clear");
+				//bugplug->ExecCommand("edges");
+				//bugplug->ExecCommand("clear");
 				Simcore->EnableSkybox(false);
 				wireframe = true;
 			}
 			else
 			{
-				bugplug->ExecCommand("edges");
+				//bugplug->ExecCommand("edges");
 				Simcore->EnableSkybox(true);
 				wireframe = false;
 			}
@@ -798,7 +806,7 @@ void Skyscraper::GetInput()
 		}
 		if (wxGetKeyState(WXK_F11) && wait == false)
 		{
-			bugplug->ExecCommand("scrshot");
+			//bugplug->ExecCommand("scrshot");
 			wait = true;
 		}
 		if (wxGetKeyState(WXK_F12) && !dpanel)
@@ -850,53 +858,44 @@ void Skyscraper::GetInput()
 
 void Skyscraper::Report (const char* msg, ...)
 {
-	csString message = msg;
-	message.ReplaceAll("%", "%%"); //allow percent signs
+	Ogre::String message = msg;
+	//message.ReplaceAll("%", "%%"); //allow percent signs
 
-	if (rep)
-		rep->ReportNotify("skyscraper", message);
-	else
-	{
-		printf(message);
-		printf("\n");
-		fflush(stdout);
-	}
+	printf(message);
+	printf("\n");
+	fflush(stdout);
 }
 
 bool Skyscraper::ReportError (const char* msg, ...)
 {
-	csString message = msg;
-	message.ReplaceAll("%", "%%"); //allow percent signs
+	Ogre::String message = msg;
+	//message.ReplaceAll("%", "%%"); //allow percent signs
 
-	if (rep)
-		rep->ReportError("skyscraper", message);
-	else
-	{
-		printf(message);
-		printf("\n");
-		fflush(stdout);
-	}
+	printf(message);
+	printf("\n");
+	fflush(stdout);
+
 	return false;
 }
 
 void Skyscraper::PushFrame()
 {
-	if (!equeue)
+	/*if (!equeue)
 		return ;
 
 	if (vc)
 		vc->Advance();
 
-	equeue->Process();
+	equeue->Process();*/
 }
 
 void Skyscraper::DrawBackground()
 {
 	//draw menu background
 
-	int w = g2d->GetWidth();
-	int h = g2d->GetHeight();
-	if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
+	int w = mRenderWindow->getWidth();
+	int h = mRenderWindow->getHeight();
+	/*if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
 		return;
 	g2d->Clear(0);
 	g2d->SetClipRect(0, 0, w, h);
@@ -911,15 +910,16 @@ void Skyscraper::DrawBackground()
 		DrawImage("/root/data/button_simple.png", &button4, 0, 130, true, "/root/data/button_simple_selected.png", "/root/data/button_simple_pressed.png");
 		DrawImage("/root/data/button_other.png", &button5, 0, 180, true, "/root/data/button_other_selected.png", "/root/data/button_other_pressed.png");
 		DrewButtons = true;
-	}
+	}*/
 }
 
 void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected, const char *filename_pressed)
 {
 	int w2, h2;
-	int w = g2d->GetWidth();
-	int h = g2d->GetHeight();
+	int w = mRenderWindow->getWidth();
+	int h = mRenderWindow->getHeight();
 
+	/*
 	image = 0;
 
 	if (!filename)
@@ -1002,7 +1002,7 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int 
 		//draw image data
 		g2d->Blit(x, y, w2, h2, (unsigned char*)image->GetImageData());
 	}
-	image = 0;
+	image = 0;*/
 }
 
 void Skyscraper::GetMenuInput()
@@ -1013,6 +1013,7 @@ void Skyscraper::GetMenuInput()
 	if (Starting == true)
 		return;
 
+	/*
 	//get mouse coordinates
 	int mouse_x = mouse->GetLastX();
 	int mouse_y = mouse->GetLastY();
@@ -1068,7 +1069,7 @@ void Skyscraper::GetMenuInput()
         		button->drawn_pressed = false;
         	}
         }
-	}
+	}*/
 
 }
 
@@ -1100,7 +1101,7 @@ void Skyscraper::StartSound()
 {
 	//load and start background music
 
-	if (DisableSound == true)
+	/*if (DisableSound == true)
 		return;
 
 	if (confman->GetBool("Skyscraper.Frontend.IntroMusic", true) == false)
@@ -1109,8 +1110,8 @@ void Skyscraper::StartSound()
 		return;
 	}
 
-	csString filename = confman->GetStr("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
-	csString filename_full = "/root/data/" + filename;
+	Ogre::String filename = confman->GetStr("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
+	Ogre::String filename_full = "/root/data/" + filename;
 
 	//load new sound
 	csRef<iDataBuffer> sndbuffer = vfs->ReadFile(filename_full);
@@ -1143,13 +1144,13 @@ void Skyscraper::StartSound()
 
 	sndstream->SetLoopState(true);
 	sndsource->SetVolume(1.0f);
-	sndstream->Unpause();
+	sndstream->Unpause();*/
 }
 
 void Skyscraper::StopSound()
 {
 	//stop and unload sound
-	if (sndstream)
+	/*if (sndstream)
 		sndstream->Pause();
 	if (sndrenderer)
 	{
@@ -1157,7 +1158,7 @@ void Skyscraper::StopSound()
 		sndrenderer->RemoveStream(sndstream);
 	}
 	sndsource = 0;
-	sndstream = 0;
+	sndstream = 0;*/
 }
 
 bool Skyscraper::SelectBuilding()
@@ -1199,22 +1200,22 @@ bool Skyscraper::Start()
 	//start simulator
 
 	//clear screen
-	g2d->Clear(0);
+	/*g2d->Clear(0);
 	g2d->FinishDraw();
 	g2d->Print(0);
-	g2d->ClearAll(0);
+	g2d->ClearAll(0);*/
 
 	//resize main window
 	window->SetBackgroundColour(*wxBLACK);
-	window->SetSize(confman->GetInt("Skyscraper.Frontend.ScreenWidth", 640), confman->GetInt("Skyscraper.Frontend.ScreenHeight", 480));
+	//window->resize(confman->GetInt("Skyscraper.Frontend.ScreenWidth", 640), confman->GetInt("Skyscraper.Frontend.ScreenHeight", 480));
 	window->Center();
 
 	//switch to fullscreen mode if specified
-	if (confman->GetBool("Skyscraper.Frontend.FullScreen", false) == true)
+	/*if (confman->GetBool("Skyscraper.Frontend.FullScreen", false) == true)
 	{
 		FullScreen = true;
 		window->ShowFullScreen(FullScreen);
-	}
+	}*/
 
 	Starting = true;
 
@@ -1222,7 +1223,7 @@ bool Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(iSCF::SCF, object_reg, view, root_dir, dir_char);
+	Simcore->Initialize(mRenderWindow, root_dir, dir_char);
 	Simcore->Shaders = Shaders;
 
 	//load building data file
@@ -1230,7 +1231,7 @@ bool Skyscraper::Start()
 	Simcore->BuildingFilename = BuildingFile;
 
 	//Pause for 1 second
-	csSleep(1000);
+	sleep(1000);
 
 	if (Reload == false)
 		BuildingFile.Insert(0, "buildings/");

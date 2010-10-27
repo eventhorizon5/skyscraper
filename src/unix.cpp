@@ -27,7 +27,7 @@
 #include <algorithm>
 #include "unix.h"
 
-#ifndef CS_PLATFORM_WIN32
+#ifndef OGRE_PLATFORM_WIN32
 
 using namespace std;
 

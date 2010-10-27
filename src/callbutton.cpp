@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a set of call buttons
 
@@ -41,8 +41,8 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	object->SetValues(this, sbs->GetFloor(floornum)->object, "CallButton", "", false);
 
 	IsEnabled = true;
-	Elevators.SetSize(elevators.GetSize());
-	for (size_t i = 0; i < elevators.GetSize(); i++)
+	Elevators.resize(elevators.size());
+	for (size_t i = 0; i < elevators.size(); i++)
 		Elevators[i] = elevators[i];
 
 	//save texture names
@@ -57,26 +57,26 @@ CallButton::CallButton(csArray<int> &elevators, int floornum, int number, const 
 	ProcessedDown = false;
 
 	//create object mesh
-	csString buffer, buffer2, buffer3;
+	Ogre::String buffer, buffer2, buffer3;
 	buffer2 = floornum;
 	buffer3 = number;
 	buffer = "Call Panel " + buffer2 + ":" + buffer3;
-	buffer.Trim();
+	TrimString(buffer);
 	object->SetName(buffer);
-	CallButtonBackMesh = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonBackMesh = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Up";
-	CallButtonMeshUp = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshUp = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Down";
-	CallButtonMeshDown = new MeshObject(object, buffer, 0, sbs->confman->GetFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshDown = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
 	floor = floornum;
 	Number = number;
 	Direction = direction;
-	Direction.Downcase();
-	Direction.Trim();
+	SetCase(Direction, false);
+	TrimString(Direction);
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -260,9 +260,9 @@ void CallButton::Call(bool direction)
 		Report("Call: finding grouped call buttons");
 
 	//this call will return at least this call button
-	csArray<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
+	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
 
-	for (int i = 0; i < buttons.GetSize(); i++)
+	for (int i = 0; i < buttons.size(); i++)
 	{
 		if (direction == true)
 		{
@@ -364,12 +364,12 @@ void CallButton::SetLights(int up, int down)
 bool CallButton::ServicesElevator(int elevator)
 {
 	//return true if this call button services the specified elevator
-	for (int i = 0; i < Elevators.GetSize(); i++)
+	for (int i = 0; i < Elevators.size(); i++)
 	{
 		if (Elevators[i] == elevator)
 		{
 			if (sbs->Verbose)
-				Report("Services elevator " + csString(_itoa(elevator, intbuffer, 10)));
+				Report("Services elevator " + Ogre::String(_itoa(elevator, intbuffer, 10)));
 			return true;
 		}
 	}
@@ -400,20 +400,20 @@ void CallButton::Loop(bool direction)
 	else
 		tmpdirection = -1;
 
-	if (Elevators.GetSize() > 1)
+	if (Elevators.size() > 1)
 	{
 		//search through elevator list if call button serves more than 1 elevator
 		if (sbs->Verbose)
 			Report("Finding nearest available elevator...");
 
 		//check each elevator associated with this call button to find the closest available one
-		for (size_t i = 0; i < Elevators.GetSize(); i++)
+		for (size_t i = 0; i < Elevators.size(); i++)
 		{
 			Elevator *elevator = sbs->GetElevator(Elevators[i]);
 			int current = elevator->GetFloor();
 
 			if (sbs->Verbose)
-				Report("Checking elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
+				Report("Checking elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10)));
 
 			//if elevator is running
 			if (elevator->IsRunning() == true)
@@ -497,7 +497,7 @@ void CallButton::Loop(bool direction)
 		return;
 
 	if (sbs->Verbose)
-		Report("Using elevator " + csString(_itoa(elevator->Number, intbuffer, 10)));
+		Report("Using elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10)));
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false && elevator->IsMoving == false)
@@ -506,10 +506,10 @@ void CallButton::Loop(bool direction)
 			Report("Elevator active on current floor - opening");
 
 		//this call will return at least this call button
-		csArray<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
+		std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
 
 		//turn off all button lights in the group
-		for (int i = 0; i < buttons.GetSize(); i++)
+		for (int i = 0; i < buttons.size(); i++)
 		{
 			if (direction == true)
 				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->UpLight(false);
@@ -552,12 +552,12 @@ void CallButton::Loop(bool direction)
 void CallButton::Report(const char *message)
 {
 	//general reporting function
-	sbs->Report("Call button " + csString(_itoa(floor, intbuffer, 10)) + ":" + csString(_itoa(Number, intbuffer, 10)) + " - " + message);
+	sbs->Report("Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message);
 
 }
 
 bool CallButton::ReportError(const char *message)
 {
 	//general reporting function
-	return sbs->ReportError("Call button " + csString(_itoa(floor, intbuffer, 10)) + ":" + csString(_itoa(Number, intbuffer, 10)) + " - " + message);
+	return sbs->ReportError("Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message);
 }

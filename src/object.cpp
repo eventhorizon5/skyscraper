@@ -114,13 +114,13 @@ void Object::SetName(const char *name)
 void Object::AddChild(Object *object)
 {
 	//add a child object to the internal array
-	children.Push(object);
+	children.push_back(object);
 }
 
 Object* Object::GetChild(int index)
 {
 	//return pointer to child object from an array index
-	if (index < children.GetSize())
+	if (index < children.size())
 		return children[index];
 	else
 		return 0;
@@ -129,5 +129,5 @@ Object* Object::GetChild(int index)
 int Object::GetChildrenCount()
 {
 	//return number of child objects
-	return children.GetSize();
+	return children.size();
 }

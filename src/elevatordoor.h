@@ -48,7 +48,7 @@ public:
 		float speed;
 		float active_speed;
 		float openchange;
-		csString name;
+		Ogre::String name;
 		DoorWrapper *wrapper; //associated wrapper
 		ElevatorDoor *parent;
 		float marker1;
@@ -59,8 +59,8 @@ public:
 		bool accelerating;
 		bool is_open;
 		bool finished;
-		csVector3 extents_min;
-		csVector3 extents_max;
+		Ogre::Vector3 extents_min;
+		Ogre::Vector3 extents_max;
 		bool sign_changed;
 		float old_difference;
 		float offset;
@@ -81,11 +81,11 @@ public:
 		void StopDoors();
 
 		Object *object;
-		csArray<DoorObject*> doors;
-		csString name;
+		std::vector<DoorObject*> doors;
+		Ogre::String name;
 		bool Open;
 		bool Enabled;
-		csVector3 Origin;
+		Ogre::Vector3 Origin;
 		float Width;
 		float Height;
 		float Thickness;
@@ -102,14 +102,14 @@ public:
 	int DoorTimer; //door autoclose timer value, in milliseconds
 	int QuickClose; //door quick close autotimer value, in milliseconds
 	float NudgeTimer; //wait time in seconds before enabling nudge mode
-	csString OpenSound; //door open sound
-	csString CloseSound; //door close sound
-	csString UpChimeSound; //elevator up chime sound
-	csString DownChimeSound; //elevator down chime sound
-	csString NudgeSound; //nudge mode sound
+	Ogre::String OpenSound; //door open sound
+	Ogre::String CloseSound; //door close sound
+	Ogre::String UpChimeSound; //elevator up chime sound
+	Ogre::String DownChimeSound; //elevator down chime sound
+	Ogre::String NudgeSound; //nudge mode sound
 	int OpenDoor; //1=open doors, -1=close doors
 	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
-	csVector3 ShaftDoorOrigin; //shaft door origin (deprecated)
+	Ogre::Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)
 	float ManualSpeed; //manual speed multiplier
 	float SlowSpeed; //slow speed multiplier, mainly for nudge mode
 
@@ -132,8 +132,8 @@ public:
 	Object* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th);
 	void Chime(int floor, bool direction);
 	void Loop();
-	void Move(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z);
-	void MoveSound(const csVector3 &position, bool relative_x, bool relative_y, bool relative_z);
+	void Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
 	void Enabled(bool value);
 	bool IsEnabled();
 	bool GetDoorsOpen();
@@ -161,8 +161,8 @@ private:
 	//Internal door simulation data
 	int WhichDoors;
 	int ShaftDoorFloor;
-	csArray<DoorWrapper*> ShaftDoors; //shaft doors
-	csArray<int> ManualFloors; //list of floors that use manual shaft doors
+	std::vector<DoorWrapper*> ShaftDoors; //shaft doors
+	std::vector<int> ManualFloors; //list of floors that use manual shaft doors
 
 	void MoveDoors(bool open, bool manual);
 

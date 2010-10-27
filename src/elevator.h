@@ -41,7 +41,7 @@ class SBSIMPEXP Elevator
 public:
 	Object *object; //SBS object
 	int Number; //elevator number
-	csString Name; //elevator name
+	Ogre::String Name; //elevator name
 	int NumDoors; //number of elevator doors
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
@@ -55,32 +55,32 @@ public:
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
 	float DecelJerk;
 	int OriginFloor; //elevator starting floor
-	csVector3 Origin; //3D elevator origin vector
+	Ogre::Vector3 Origin; //3D elevator origin vector
 	double TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
 	double ElevatorRate;
-	csArray<int> ServicedFloors; //list of floors this elevator services
+	std::vector<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
 	bool IsMoving; //is elevator moving?
-	csString CarStartSound; //elevator start/speedup sound
-	csString CarMoveSound; //elevator move sound
-	csString CarStopSound; //elevator stop/slowdown sound
-	csString CarIdleSound; //elevator idle/fan sound
-	csString MotorStartSound; //motor start/speedup sound
-	csString MotorRunSound; //motor move sound
-	csString MotorStopSound; //motor stop/slowdown sound
-	csString MotorIdleSound; //motor idle sound
-	csString AlarmSound; //alarm sound (loop)
-	csString AlarmSoundStop; //alarm stopping sound
-	csString BeepSound; //floor beep sound (played when changing floors)
-	csString FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
-	csString UpMessageSound; //sound to play with message of elevator's direction if going up
-	csString DownMessageSound; //sound to play with message of elevator's direction if going down
-	csString Music; //elevator music sound to play
+	Ogre::String CarStartSound; //elevator start/speedup sound
+	Ogre::String CarMoveSound; //elevator move sound
+	Ogre::String CarStopSound; //elevator stop/slowdown sound
+	Ogre::String CarIdleSound; //elevator idle/fan sound
+	Ogre::String MotorStartSound; //motor start/speedup sound
+	Ogre::String MotorRunSound; //motor move sound
+	Ogre::String MotorStopSound; //motor stop/slowdown sound
+	Ogre::String MotorIdleSound; //motor idle sound
+	Ogre::String AlarmSound; //alarm sound (loop)
+	Ogre::String AlarmSoundStop; //alarm stopping sound
+	Ogre::String BeepSound; //floor beep sound (played when changing floors)
+	Ogre::String FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
+	Ogre::String UpMessageSound; //sound to play with message of elevator's direction if going up
+	Ogre::String DownMessageSound; //sound to play with message of elevator's direction if going down
+	Ogre::String Music; //elevator music sound to play
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -98,9 +98,9 @@ public:
 	bool UseFloorBeeps; //true if floor beeps should be used
 	bool UseFloorSounds; //true if floor sounds should be used
 	bool UseMessageSounds; //true if direction message sounds should be used
-	csVector3 MotorPosition; //position of motor sound emitter
+	Ogre::Vector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
-	csArray<WallObject*> elevator_walls;
+	std::vector<WallObject*> elevator_walls;
 	float CameraOffset; //camera vertical offset for movement
 	int ParkingFloor; //floor to automatically park the elevator on when idle
 	float ParkingDelay; //time to wait in idle mode before parking
@@ -117,7 +117,7 @@ public:
 	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
 	bool Notified; //true if arrival notification has been performed
 	bool Parking; //is elevator parking?
-	csVector3 MusicPosition; //music emitter position, relative of elevator center
+	Ogre::Vector3 MusicPosition; //music emitter position, relative of elevator center
 	bool MusicOn; //music enabled status
 	float DepartureDelay; //delay in seconds between door closure and elevator departure
 	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
@@ -138,7 +138,7 @@ public:
 	void ProcessCallQueue();
 	int GetFloor();
 	void MonitorLoop();
-	const csVector3 GetPosition();
+	const Ogre::Vector3 GetPosition();
 	WallObject* AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	WallObject* AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	Object* AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
@@ -146,9 +146,9 @@ public:
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
-	bool IsElevator(csRef<iMeshWrapper> test);
-	bool IsInElevator(const csVector3 &position);
-	csHitBeamResult HitBeam(const csVector3 &start, const csVector3 &end);
+	bool IsElevator(Ogre::Mesh test);
+	bool IsInElevator(const Ogre::Vector3 &position);
+	//csHitBeamResult HitBeam(const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	float GetElevatorStart();
 	float GetDestination();
 	float GetStoppingDistance();
@@ -203,8 +203,8 @@ public:
 	int AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th);
 	Object* AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th);
 	void Chime(int number, int floor, bool direction);
-	void MoveDoors(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
-	void MoveDoorSound(int number, const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveDoors(int number, const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void MoveDoorSound(int number, const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void EnableDoors(bool value);
 	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
 	bool AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
@@ -215,7 +215,7 @@ public:
 	void SetFloorSound(const char *prefix);
 	void SetMessageSound(bool direction, const char *filename);
 	void SetMusic(const char *filename);
-	Object* AddSound(const char *name, const char *filename, csVector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, csVector3 direction = 0);
+	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
@@ -253,10 +253,10 @@ public:
 	bool DoorExists(int number);
 	bool IsNudgeModeActive(int number = 0);
 	void EnableNudgeMode(bool value, int number = 0);
-	Object* AddLight(const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
-	void MoveLights(csVector3 position, bool relative_x, bool relative_y, bool relative_z);
-	Object* AddModel(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
-	void MoveModels(csVector3 position, bool relative_x, bool relative_y, bool relative_z);
+	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	void MoveLights(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
+	Object* AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
+	void MoveModels(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 
 private:
 
@@ -285,8 +285,8 @@ private:
 	Timer *departure_delay;
 
 	//Internal elevator simulation data
-	csArray<int> UpQueue; //up call queue
-	csArray<int> DownQueue; //down call queue
+	std::vector<int> UpQueue; //up call queue
+	std::vector<int> DownQueue; //down call queue
 	float ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	float Destination; //elevator destination Y value
@@ -317,51 +317,51 @@ private:
 	Sound *alarm;
 	Sound *floorbeep;
 	Sound *floorsound;
-	csArray<Sound*> sounds; //generic sounds
+	std::vector<Sound*> sounds; //generic sounds
 	Sound *messagesnd;
 	Sound *musicsound;
 
 	//interior directional indicators
-	csArray<DirectionalIndicator*> DirIndicatorArray;
+	std::vector<DirectionalIndicator*> DirIndicatorArray;
 
 	//doors and shaft doors
-	csArray<ElevatorDoor*> DoorArray;
+	std::vector<ElevatorDoor*> DoorArray;
 
 	//floor indicators
-	csArray<FloorIndicator*> FloorIndicatorArray;
+	std::vector<FloorIndicator*> FloorIndicatorArray;
 
 	//button panel array
-	csArray<ButtonPanel*> PanelArray; //elevator button panel objects
+	std::vector<ButtonPanel*> PanelArray; //elevator button panel objects
 
 	//standard door array
-	csArray<Door*> StdDoorArray; //pointer array to standard door objects
+	std::vector<Door*> StdDoorArray; //pointer array to standard door objects
 
 	//light array
-	csArray<Light*> lights;
+	std::vector<Light*> lights;
 
 	//Models
-	csArray<Model*> ModelArray;
+	std::vector<Model*> ModelArray;
 
 	//elevator misc internals
 	bool ElevatorIsRunning;
 	int oldfloor;
 	int lastfloor;
 	bool lastfloorset;
-	csString FloorSkipText;
+	Ogre::String FloorSkipText;
 	bool RecallSet;
 	bool RecallAltSet;
 	bool ACPFloorSet;
 	bool RecallUnavailable; //true if recall floor is unavailable (alarm has been triggered on that floor)
 	ElevatorDoor* lastdoor_result;
 	int lastdoor_number;
-	csVector3 elevposition;
+	Ogre::Vector3 elevposition;
 	double tmpDecelJerk;
 	bool FinishedMove;
 	bool RandomLobbySet;
 	bool SoundsQueued;
 
 	//cache objects for IsInElevator()
-	csVector3 lastposition;
+	Ogre::Vector3 lastposition;
 	bool lastcheckresult;
 	bool checkfirstrun;
 };

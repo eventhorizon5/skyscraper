@@ -394,7 +394,7 @@ wxString TruncateNumber(double value, int decimals)
 	wxString number = wxVariant(value).GetString();
 	if (decimals < 1)
 		return number;
-	return number.Truncate(number.find('.') + decimals + 1);
+	return number.erase(number.find('.') + decimals + 1);
 }
 
 wxString TruncateNumber(float value, int decimals)
@@ -403,7 +403,7 @@ wxString TruncateNumber(float value, int decimals)
 	wxString number = wxVariant(value).GetString();
 	if (decimals < 1)
 		return number;
-	return number.Truncate(number.find('.') + decimals + 1);
+	return number.erase(number.find('.') + decimals + 1);
 }
 
 void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)

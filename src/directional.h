@@ -33,12 +33,12 @@ public:
 	Object *object; //SBS object
 	int elevator_num; //elevator this indicator is assigned to
 	int floor_num; //floor the indicator is on
-	csString Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
+	Ogre::String Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled; //true if indicator is currently enabled
-	csString UpTextureUnlit; //unlit up texture
-	csString UpTextureLit; //lit up texture
-	csString DownTextureUnlit; //unlit down texture
-	csString DownTextureLit; //lit down texture
+	Ogre::String UpTextureUnlit; //unlit up texture
+	Ogre::String UpTextureLit; //lit up texture
+	Ogre::String DownTextureUnlit; //unlit down texture
+	Ogre::String DownTextureLit; //lit down texture
 	bool UpStatus; //status of up light
 	bool DownStatus; //status of down light
 	bool Single; //is this a single-light indicator?
@@ -52,9 +52,9 @@ public:
 	void UpLight(bool value);
 	void DownLight(bool value);
 	void SetLights(int up, int down);
-	void SetPosition(const csVector3& position);
-	void Move(const csVector3& position);
-	csVector3 GetPosition();
+	void SetPosition(const Ogre::Vector3& position);
+	void Move(const Ogre::Vector3& position);
+	Ogre::Vector3 GetPosition();
 
 private:
 	MeshObject* DirectionalMeshBack; //indicator mesh back object

@@ -245,11 +245,11 @@ void Stats::OnInit()
 	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version));
 	tPlatform->SetValue(wxString::FromAscii(skyscraper->Platform));
 
-	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.GetData()));
-	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner.GetData()));
-	tLocation->SetValue(wxString::FromAscii(Simcore->BuildingLocation.GetData()));
-	tDescription->SetValue(wxString::FromAscii(Simcore->BuildingDescription.GetData()));
-	tVersion->SetValue(wxString::FromAscii(Simcore->BuildingVersion.GetData()));
+	tName->SetValue(wxString::FromAscii(Simcore->BuildingName));
+	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner));
+	tLocation->SetValue(wxString::FromAscii(Simcore->BuildingLocation));
+	tDescription->SetValue(wxString::FromAscii(Simcore->BuildingDescription));
+	tVersion->SetValue(wxString::FromAscii(Simcore->BuildingVersion));
 }
 
 void Stats::Loop()

@@ -46,51 +46,51 @@ Camera::Camera()
 	StartFloor = 0;
 	StartPositionX = 0;
 	StartPositionZ = 0;
-	StartDirection = csVector3(0, 0, 0);
-	StartRotation = csVector3(0, 0, 0);
+	StartDirection = Ogre::Vector3(0, 0, 0);
+	StartRotation = Ogre::Vector3(0, 0, 0);
 	FloorTemp = 0;
 	velocity.Set(0, 0, 0);
 	desired_velocity.Set(0, 0, 0);
 	angle_velocity.Set(0, 0, 0);
 	desired_angle_velocity.Set(0, 0, 0);
-	cfg_jumpspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.JumpSpeed", 0.08);
-	cfg_walk_accelerate = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
-	cfg_walk_maxspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
-	cfg_walk_maxspeed_mult = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0);
-	cfg_walk_maxspeed_multreal = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_MultReal", 1.0);
-	cfg_walk_brake = sbs->confman->GetFloat("Skyscraper.SBS.Camera.WalkBrake", 0.040);
-	cfg_rotate_accelerate = sbs->confman->GetFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005);
-	cfg_rotate_maxspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015);
-	cfg_rotate_brake = sbs->confman->GetFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015);
-	cfg_look_accelerate = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LookAccelerate", 0.028);
-	cfg_body_height = sbs->confman->GetFloat("Skyscraper.SBS.Camera.BodyHeight", 2.7);
-	cfg_body_width = sbs->confman->GetFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64);
-	cfg_body_depth = sbs->confman->GetFloat("Skyscraper.SBS.Camera.BodyDepth", 1.64);
-	cfg_legs_height = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsHeight", 2.3);
-	cfg_legs_width = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
-	cfg_legs_depth = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LegsDepth", 1.312);
-	cfg_lookspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0);
-	cfg_turnspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0);
-	cfg_spinspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0);
-	cfg_floatspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FloatSpeed", 140.0);
-	cfg_stepspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.StepSpeed", 140.0);
-	cfg_strafespeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.StrafeSpeed", 140.0);
-	cfg_speed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.Speed", 1.0);
-	cfg_speedfast = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0);
-	cfg_speedslow = sbs->confman->GetFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
-	cfg_zoomspeed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
+	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 0.08);
+	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
+	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
+	cfg_walk_maxspeed_mult = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0);
+	cfg_walk_maxspeed_multreal = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_MultReal", 1.0);
+	cfg_walk_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkBrake", 0.040);
+	cfg_rotate_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005);
+	cfg_rotate_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015);
+	cfg_rotate_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015);
+	cfg_look_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookAccelerate", 0.028);
+	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 2.7);
+	cfg_body_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64);
+	cfg_body_depth = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyDepth", 1.64);
+	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 2.3);
+	cfg_legs_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
+	cfg_legs_depth = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsDepth", 1.312);
+	cfg_lookspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0);
+	cfg_turnspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0);
+	cfg_spinspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0);
+	cfg_floatspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FloatSpeed", 140.0);
+	cfg_stepspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StepSpeed", 140.0);
+	cfg_strafespeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StrafeSpeed", 140.0);
+	cfg_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.Speed", 1.0);
+	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0);
+	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
+	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
 	speed = 1;
-	EnableCollisions = sbs->confman->GetBool("Skyscraper.SBS.Camera.EnableCollisions", true);
-	GravityStatus = sbs->confman->GetBool("Skyscraper.SBS.Camera.GravityStatus", true);
-	SetGravity(sbs->confman->GetFloat("Skyscraper.SBS.Camera.Gravity", 32.1719)); // 9.806 m/s/s
+	EnableCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true);
+	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
+	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719)); // 9.806 m/s/s
 	lastfloor = 0;
 	lastfloorset = false;
 	MouseDown = false;
-	ReportCollisions = sbs->confman->GetBool("Skyscraper.SBS.Camera.ReportCollisions", false);
-	Freelook = sbs->confman->GetBool("Skyscraper.SBS.Camera.Freelook", false);
-	Freelook_speed = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
-	FOV = sbs->confman->GetFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
-	ResetOnGround = sbs->confman->GetBool("Skyscraper.SBS.Camera.ResetOnGround", false);
+	ReportCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.ReportCollisions", false);
+	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
+	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
+	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
+	ResetOnGround = sbs->GetConfigBool("Skyscraper.SBS.Camera.ResetOnGround", false);
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
@@ -103,19 +103,19 @@ Camera::~Camera()
 	delete object;
 }
 
-void Camera::SetPosition(const csVector3 &vector)
+void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
 	MainCamera->GetTransform().SetOrigin(sbs->ToRemote(vector));
 }
 
-void Camera::SetDirection(const csVector3 &vector)
+void Camera::SetDirection(const Ogre::Vector3 &vector)
 {
 	//sets the camera's direction to an absolute position
-	MainCamera->GetTransform().LookAt(vector, csVector3(0, 1, 0));
+	MainCamera->GetTransform().LookAt(vector, Ogre::Vector3(0, 1, 0));
 }
 
-void Camera::SetRotation(csVector3 vector)
+void Camera::SetRotation(Ogre::Vector3 vector)
 {
 	//sets the camera's rotation in degrees
 
@@ -134,7 +134,7 @@ void Camera::SetRotation(csVector3 vector)
 		vector.z += 360;
 
 	//convert to radians
-	csVector3 rot;
+	Ogre::Vector3 rot;
 	rot.x = DegreesToRadians(vector.x);
 	rot.y = DegreesToRadians(vector.y);
 	rot.z = DegreesToRadians(vector.z);
@@ -142,7 +142,7 @@ void Camera::SetRotation(csVector3 vector)
 	collider_actor.SetRotation(rot);
 }
 
-csVector3 Camera::GetPosition()
+Ogre::Vector3 Camera::GetPosition()
 {
 	//returns the camera's current position
 	if (MainCamera)
@@ -151,14 +151,14 @@ csVector3 Camera::GetPosition()
 		return 0;
 }
 
-void Camera::GetDirection(csVector3 &front, csVector3 &top)
+void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 {
 	//returns the camera's current direction in front and top vectors
 	front = MainCamera->GetTransform().GetT2O().Col3();
 	top = MainCamera->GetTransform().GetT2O().Col2();
 }
 
-csVector3 Camera::GetRotation()
+Ogre::Vector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
 	float x = RadiansToDegrees(collider_actor.GetRotation().x);
@@ -179,7 +179,7 @@ csVector3 Camera::GetRotation()
 	if (z < 0)
 		z = 360 + (z - (360 * int(z / 360)));
 
-	return csVector3(x, y, z);
+	return Ogre::Vector3(x, y, z);
 }
 
 void Camera::UpdateCameraFloor()
@@ -202,37 +202,37 @@ void Camera::UpdateCameraFloor()
 		CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
 }
 
-bool Camera::Move(const csVector3 &vector, float speed)
+bool Camera::Move(const Ogre::Vector3 &vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	SetPosition(csVector3(GetPosition().x + (vector.x * speed), GetPosition().y + (vector.y * speed), GetPosition().z + (vector.z * speed)));
+	SetPosition(Ogre::Vector3(GetPosition().x + (vector.x * speed), GetPosition().y + (vector.y * speed), GetPosition().z + (vector.z * speed)));
 	return true;
 }
 
-void Camera::Rotate(const csVector3 &vector, float speed)
+void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount
-	csVector3 rot = GetRotation() + (vector * speed);
+	Ogre::Vector3 rot = GetRotation() + (vector * speed);
 
 	SetRotation(rot);
 }
 
-void Camera::SetStartDirection(const csVector3 &vector)
+void Camera::SetStartDirection(const Ogre::Vector3 &vector)
 {
 	StartDirection = vector;
 }
 
-csVector3 Camera::GetStartDirection()
+Ogre::Vector3 Camera::GetStartDirection()
 {
 	return StartDirection;
 }
 
-void Camera::SetStartRotation(const csVector3 &vector)
+void Camera::SetStartRotation(const Ogre::Vector3 &vector)
 {
 	StartRotation = vector;
 }
 
-csVector3 Camera::GetStartRotation()
+Ogre::Vector3 Camera::GetStartRotation()
 {
 	return StartRotation;
 }
@@ -240,7 +240,7 @@ csVector3 Camera::GetStartRotation()
 void Camera::SetToStartPosition()
 {
 	if (sbs->GetFloor(StartFloor))
-		SetPosition(csVector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + GetHeight(), StartPositionZ));
+		SetPosition(Ogre::Vector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + GetHeight(), StartPositionZ));
 }
 
 void Camera::SetToStartDirection()
@@ -346,7 +346,7 @@ void Camera::CheckShaft()
 
 				if (shaft->ShowOutside == true)
 				{
-					if (shaft->ShowOutsideList.Find(CurrentFloor) != -1)
+					if (shaft->ShowOutsideList.find(CurrentFloor) != -1)
 					{
 						sbs->EnableSkybox(true);
 						sbs->EnableBuildings(true);
@@ -443,21 +443,21 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	// Setup a 2D vector with our mouse position.  We invert the y
 	// (based on vertical screen dimension) because CS assumes y=0
 	// is down for 3D calculations.
-	csVector2 v2d (sbs->mouse_x, MainCamera->GetShiftY() * 2 - sbs->mouse_y);
+	Ogre::Vector2 v2d (sbs->mouse_x, MainCamera->GetShiftY() * 2 - sbs->mouse_y);
 
 	// We calculate the inverse perspective of this 2D point at
 	// z=100.  This results in a 3D position in camera space at
 	// z=100 that directly corresponds to the 2D position we
 	// clicked on.  We use z=100 to ensure that we will at least
 	// hit all objects that are before that distance.
-	csVector3 v3d = MainCamera->InvPerspective(v2d, 100);
+	Ogre::Vector3 v3d = MainCamera->InvPerspective(v2d, 100);
 
 	// We are going to cast a beam in the current sector of the
 	// camera from our camera position in the direction of the
 	// 'v3d' point.  First we transform the v3d camera space
 	// location to world space.
-	csVector3 startbeam = MainCamera->GetTransform().GetOrigin();
-	csVector3 endbeam = MainCamera->GetTransform().This2Other(v3d);
+	Ogre::Vector3 startbeam = MainCamera->GetTransform().GetOrigin();
+	Ogre::Vector3 endbeam = MainCamera->GetTransform().This2Other(v3d);
 
 	// Now do the actual intersection.
 	csSectorHitBeamResult result = sbs->area->HitBeam(startbeam, endbeam, true);
@@ -486,19 +486,19 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		polyname = "";
 
 	//get object number
-	csString number;
+	Ogre::String number;
 	object_number = 0;
 	if (wall)
 	{
 		object_number = wall->GetNumber();
-		int index = polyname.Find(")");
+		int index = polyname.find(")");
 		polyname.DeleteAt(0, index + 1);
 	}
-	if (meshname.Find("(") == 0)
+	if (meshname.find("(") == 0)
 	{
-		int index = meshname.Find(")");
+		int index = meshname.find(")");
 		if (object_number == 0)
-			object_number = atoi(meshname.Slice(1, index - 1));
+			object_number = atoi(meshname.substr(1, index - 1));
 		meshname.DeleteAt(0, index + 1);
 	}
 	number = object_number;
@@ -523,7 +523,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	{
 		if (obj)
 		{
-			if (csString(obj->GetType()) == "Wall")
+			if (Ogre::String(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
 			else
 				sbs->Report("Cannot delete object " + number);
@@ -532,16 +532,16 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check call buttons
-	if (meshname.Find("Call Button") != -1)
+	if (meshname.find("Call Button") != -1)
 	{
 		//user clicked on a call button
-		int index = meshname.Find(":");
-		int index2 = meshname.Find(":", index + 1);
-		int floor = atoi(meshname.Slice(12, index - 12));
-		int number = atoi(meshname.Slice(index + 1, index2 - index - 1));
+		int index = meshname.find(":");
+		int index2 = meshname.find(":", index + 1);
+		int floor = atoi(meshname.substr(12, index - 12));
+		int number = atoi(meshname.substr(index + 1, index2 - index - 1));
 		CallButton *buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
-		csString direction = meshname.Slice(index2 + 1);
-		direction.Trim();
+		Ogre::String direction = meshname.substr(index2 + 1);
+		TrimString(direction);
 
 		if (shift == false)
 		{
@@ -562,28 +562,28 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check elevator buttons
-	if (meshname.Find("Button Panel") != -1 && meshname.Find("Control") != -1)
+	if (meshname.find("Button Panel") != -1 && meshname.find("Control") != -1)
 	{
 		//user clicked on an elevator button
-		int index = meshname.Find(":");
-		int index2 = meshname.Find("Control");
-		int elevator = atoi(meshname.Slice(13, index - 13));
-		int panel_number = atoi(meshname.Slice(index + 1, meshname.Find(" ", index) - index - 1));
-		int control_number = atoi(meshname.Slice(index2 + 8));
+		int index = meshname.find(":");
+		int index2 = meshname.find("Control");
+		int elevator = atoi(meshname.substr(13, index - 13));
+		int panel_number = atoi(meshname.substr(index + 1, meshname.find(" ", index) - index - 1));
+		int control_number = atoi(meshname.substr(index2 + 8));
 
 		//press button
 		sbs->GetElevator(elevator)->GetPanel(panel_number)->Press(control_number);
 	}
 
 	//check shaft doors
-	if (meshname.Find("Shaft Door") != -1 && shift == true)
+	if (meshname.find("Shaft Door") != -1 && shift == true)
 	{
 		//user clicked on a shaft door
-		int elevator = atoi(meshname.Slice(9, meshname.Find(":") - 9));
-		int index = meshname.Find("Shaft Door");
-		int index2 = meshname.Find(":", index);
-		int number = atoi(meshname.Slice(index + 10, index2 - (index + 10)));
-		int floor = atoi(meshname.Slice(index2 + 1, meshname.Length() - index2 - 2));
+		int elevator = atoi(meshname.substr(9, meshname.find(":") - 9));
+		int index = meshname.find("Shaft Door");
+		int index2 = meshname.find(":", index);
+		int number = atoi(meshname.substr(index + 10, index2 - (index + 10)));
+		int floor = atoi(meshname.substr(index2 + 1, meshname.length() - index2 - 2));
 		if (sbs->GetElevator(elevator)->AreShaftDoorsOpen(number, floor) == false)
 			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 3, floor);
 		else
@@ -591,11 +591,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check elevator doors
-	if (meshname.Find("ElevatorDoor") != -1 && shift == true)
+	if (meshname.find("ElevatorDoor") != -1 && shift == true)
 	{
 		//user clicked on an elevator door
-		int elevator = atoi(meshname.Slice(13, meshname.Find(":") - 13));
-		int number = atoi(meshname.Slice(meshname.Find(":") + 1, meshname.Length() - meshname.Find(":") - 1));
+		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13));
+		int number = atoi(meshname.substr(meshname.find(":") + 1, meshname.length() - meshname.find(":") - 1));
 		if (sbs->GetElevator(elevator)->AreDoorsOpen(number) == false)
 			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 2);
 		else
@@ -603,14 +603,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check doors
-	if (meshname.Find(":Door") != -1)
+	if (meshname.find(":Door") != -1)
 	{
 		//user clicked on a door
-		if (meshname.Slice(0, 5) == "Floor")
+		if (meshname.substr(0, 5) == "Floor")
 		{
-			int marker = meshname.Find(":");
-			int floornumber = atoi(meshname.Slice(5, marker - 5));
-			int doornumber = atoi(meshname.Slice(marker + 5));
+			int marker = meshname.find(":");
+			int floornumber = atoi(meshname.substr(5, marker - 5));
+			int doornumber = atoi(meshname.substr(marker + 5));
 			Floor *floor = sbs->GetFloor(floornumber);
 			if (floor->IsDoorOpen(doornumber) == false)
 			{
@@ -627,11 +627,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					floor->OpenDoor(doornumber);
 			}
 		}
-		if (meshname.Slice(0, 9) == "Stairwell")
+		if (meshname.substr(0, 9) == "Stairwell")
 		{
-			int marker = meshname.Find(":");
-			int stairsnumber = atoi(meshname.Slice(9, marker - 9));
-			int doornumber = atoi(meshname.Slice(marker + 5));
+			int marker = meshname.find(":");
+			int stairsnumber = atoi(meshname.substr(9, marker - 9));
+			int doornumber = atoi(meshname.substr(marker + 5));
 			Stairs *stairs = sbs->GetStairs(stairsnumber);
 			if (stairs->IsDoorOpen(doornumber) == false)
 			{
@@ -648,11 +648,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					stairs->OpenDoor(doornumber);
 			}
 		}
-		if (meshname.Slice(0, 8) == "Elevator" && meshname.Find("Shaft Door") == -1 && meshname.Find("ElevatorDoor") == -1)
+		if (meshname.substr(0, 8) == "Elevator" && meshname.find("Shaft Door") == -1 && meshname.find("ElevatorDoor") == -1)
 		{
-			int marker = meshname.Find(":");
-			int elevnumber = atoi(meshname.Slice(8, marker - 8));
-			int doornumber = atoi(meshname.Slice(marker + 5));
+			int marker = meshname.find(":");
+			int elevnumber = atoi(meshname.substr(8, marker - 8));
+			int doornumber = atoi(meshname.substr(marker + 5));
 			Elevator *elevator = sbs->GetElevator(elevnumber);
 			if (elevator->IsDoorOpen(doornumber) == false)
 			{
@@ -676,14 +676,14 @@ const char* Camera::GetClickedMeshName()
 {
 	//return name of last clicked mesh
 
-	return meshname.GetData();
+	return meshname;
 }
 
 const char* Camera::GetClickedPolyName()
 {
 	//return name of last clicked polygon
 
-	return polyname.GetData();
+	return polyname;
 }
 
 int Camera::GetClickedObjectNumber()
@@ -716,9 +716,9 @@ void Camera::CreateColliders()
 
 	collider_actor.SetCollideSystem(sbs->collision_sys);
 	collider_actor.SetEngine(sbs->engine);
-	csVector3 legs (cfg_legs_width, cfg_legs_height, cfg_legs_depth);
-	csVector3 body (cfg_body_width, cfg_body_height, cfg_body_depth);
-	csVector3 shift (0, -(cfg_legs_height + cfg_body_height), 0);
+	Ogre::Vector3 legs (cfg_legs_width, cfg_legs_height, cfg_legs_depth);
+	Ogre::Vector3 body (cfg_body_width, cfg_body_height, cfg_body_depth);
+	Ogre::Vector3 shift (0, -(cfg_legs_height + cfg_body_height), 0);
 	collider_actor.InitializeColliders (MainCamera, sbs->ToRemote(legs), sbs->ToRemote(body), sbs->ToRemote(shift));
 	collider_actor.SetCamera(MainCamera, true);
 	EnableGravity(GravityStatus);
@@ -753,8 +753,8 @@ void Camera::Loop()
 			while (iterator.HasNext())
 			{
 				//get mesh name
-				csString mesh = iterator.Next()->QueryObject()->GetName();
-				int index = mesh.Find(")");
+				Ogre::String mesh = iterator.Next()->QueryObject()->GetName();
+				int index = mesh.find(")");
 				mesh.DeleteAt(0, index + 1);
 				LastHitMesh = mesh;
 
@@ -763,14 +763,14 @@ void Camera::Loop()
 					sbs->Report(mesh);
 
 				//check shaft doors
-				if (mesh.Find("Shaft Door") != -1)
+				if (mesh.find("Shaft Door") != -1)
 				{
 					//user hit a shaft door
-					int elevator = atoi(mesh.Slice(9, mesh.Find(":") - 9));
-					int index = mesh.Find("Shaft Door");
-					int index2 = mesh.Find(":", index);
-					int number = atoi(mesh.Slice(index + 10, index2 - (index + 10)));
-					//int floor = atoi(mesh.Slice(index2 + 1, mesh.Length() - index2 - 2));
+					int elevator = atoi(mesh.substr(9, mesh.find(":") - 9));
+					int index = mesh.find("Shaft Door");
+					int index2 = mesh.find(":", index);
+					int number = atoi(mesh.substr(index + 10, index2 - (index + 10)));
+					//int floor = atoi(mesh.substr(index2 + 1, mesh.length() - index2 - 2));
 					Elevator *tmpelevator = sbs->GetElevator(elevator);
 					int whichdoors = tmpelevator->GetDoor(number)->GetWhichDoors();
 					if (tmpelevator->GetDoor(number)->OpenDoor == -1 && whichdoors == 1)
@@ -779,11 +779,11 @@ void Camera::Loop()
 				}
 
 				//check elevator doors
-				if (mesh.Find("ElevatorDoor") != -1)
+				if (mesh.find("ElevatorDoor") != -1)
 				{
 					//user hit an elevator door
-					int elevator = atoi(mesh.Slice(13, mesh.Find(":") - 13));
-					int number = atoi(mesh.Slice(mesh.Find(":") + 1, mesh.Length() - mesh.Find(":") - 1));
+					int elevator = atoi(mesh.substr(13, mesh.find(":") - 13));
+					int number = atoi(mesh.substr(mesh.find(":") + 1, mesh.length() - mesh.find(":") - 1));
 					Elevator *tmpelevator = sbs->GetElevator(elevator);
 					int whichdoors = tmpelevator->GetDoor(number)->GetWhichDoors();
 					if (tmpelevator->GetDoor(number)->OpenDoor == -1 && whichdoors == 1)
@@ -800,7 +800,7 @@ void Camera::Loop()
 	sbs->SetListenerLocation(GetPosition());
 
 	//set direction of listener to camera's direction
-	csVector3 front, top;
+	Ogre::Vector3 front, top;
 	GetDirection(front, top);
 	sbs->SetListenerDirection(front, top);
 }

@@ -66,7 +66,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
-		Speed = sbs->confman->GetFloat("Skyscraper.SBS.DoorSpeed", 75.0);
+		Speed = sbs->GetConfigFloat("Skyscraper.SBS.DoorSpeed", 75.0);
 
 	if (Speed <= 0)
 		Speed = 75;
@@ -74,7 +74,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
 	if (Direction == 1 || Direction == 2)
 	{
-		origin = csVector3(CenterX, altitude, CenterZ - (width / 2)); //front
+		origin = Ogre::Vector3(CenterX, altitude, CenterZ - (width / 2)); //front
 		x1 = 0;
 		x2 = 0;
 		z1 = 0;
@@ -82,7 +82,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 3 || Direction == 4)
 	{
-		origin = csVector3(CenterX, altitude, CenterZ + (width / 2)); //back
+		origin = Ogre::Vector3(CenterX, altitude, CenterZ + (width / 2)); //back
 		x1 = 0;
 		x2 = 0;
 		z1 = -width;
@@ -90,7 +90,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 5 || Direction == 6)
 	{
-		origin = csVector3(CenterX + (width / 2), altitude, CenterZ); //right
+		origin = Ogre::Vector3(CenterX + (width / 2), altitude, CenterZ); //right
 		x1 = -width;
 		x2 = 0;
 		z1 = 0;
@@ -98,7 +98,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 7 || Direction == 8)
 	{
-		origin = csVector3(CenterX - (width / 2), altitude, CenterZ); //left
+		origin = Ogre::Vector3(CenterX - (width / 2), altitude, CenterZ); //left
 		x1 = 0;
 		x2 = width;
 		z1 = 0;
@@ -155,11 +155,11 @@ Door::~Door()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (csString(object->GetParent()->GetType()) == "Elevator")
+			if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
 				((Elevator*)object->GetParent()->GetRawObject())->RemoveDoor(this);
-			if (csString(object->GetParent()->GetType()) == "Floor")
+			if (Ogre::String(object->GetParent()->GetType()) == "Floor")
 				((Floor*)object->GetParent()->GetRawObject())->RemoveDoor(this);
-			if (csString(object->GetParent()->GetType()) == "Stairs")
+			if (Ogre::String(object->GetParent()->GetType()) == "Stairs")
 				((Stairs*)object->GetParent()->GetRawObject())->RemoveDoor(this);
 		}
 		sbs->UnregisterDoorCallback(this);
@@ -248,13 +248,13 @@ void Door::MoveDoor()
 		rotation = 0;
 	}
 
-	csMatrix3 rot = csYRotMatrix3(DegreesToRadians(rotation));
+	Ogre::Matrix3 rot = csYRotMatrix3(DegreesToRadians(rotation));
 	csOrthoTransform ot (rot, sbs->ToRemote(origin));
 	DoorMesh->Movable->SetTransform(ot);
 	DoorMesh->Movable->UpdateMove();
 }
 
-void Door::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//moves door
 
@@ -263,7 +263,7 @@ void Door::Move(const csVector3 position, bool relative_x, bool relative_y, bool
 
 }
 
-csVector3 Door::GetPosition()
+Ogre::Vector3 Door::GetPosition()
 {
 	//return the door's position
 

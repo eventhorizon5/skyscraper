@@ -260,7 +260,7 @@ class CameraControl: public wxDialog
 		wxTextCtrl* txtMouseDown;
 		wxTextCtrl* txtSpeed;
 		//*)
-		csVector3 hold_vector;
+		Ogre::Vector3 hold_vector;
 
 	private:
 

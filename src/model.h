@@ -26,24 +26,22 @@
 #ifndef _SBS_MODEL_H
 #define _SBS_MODEL_H
 
-#include <csutil/csstring.h>
-
 class SBSIMPEXP Model
 {
 public:
 	Object *object; //SBS object
-	csString Name;
-	csVector3 Origin;
+	Ogre::String Name;
+	Ogre::Vector3 Origin;
 	bool load_error;
 
 	//functions
-	Model(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
+	Model(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
 	~Model();
-	void Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z);
-	csVector3 GetPosition();
-	void Rotate(const csVector3 rotation, float speed);
-	void SetRotation(const csVector3 rotation);
-	csVector3 GetRotation();
+	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
+	Ogre::Vector3 GetPosition();
+	void Rotate(const Ogre::Vector3 rotation, float speed);
+	void SetRotation(const Ogre::Vector3 rotation);
+	Ogre::Vector3 GetRotation();
 	bool IsEnabled();
 	void Enable(bool value);
 

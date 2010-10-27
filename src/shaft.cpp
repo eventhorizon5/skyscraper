@@ -56,7 +56,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	if (endfloor > sbs->Floors - 1)
 		return;
 
-	origin = csVector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
+	origin = Ogre::Vector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
 	IsEnabled = true;
 	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
@@ -70,15 +70,15 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	lastcheckresult = false;
 	checkfirstrun = true;
 
-	csString buffer, buffer2, buffer3;
+	Ogre::String buffer, buffer2, buffer3;
 
 	buffer = number;
 	object->SetName("Shaft " + buffer);
 
-	ShaftArray.SetSize(endfloor - startfloor + 1);
-	EnableArray.SetSize(endfloor - startfloor + 1);
-	lights.SetSize(endfloor - startfloor + 1);
-	ModelArray.SetSize(endfloor - startfloor + 1);
+	ShaftArray.resize(endfloor - startfloor + 1);
+	EnableArray.resize(endfloor - startfloor + 1);
+	lights.resize(endfloor - startfloor + 1);
+	ModelArray.resize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -86,7 +86,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 		buffer2 = number;
 		buffer3 = i;
 		buffer = "Shaft " + buffer2 + ":" + buffer3;
-		buffer.Trim();
+		TrimString(buffer);
 		ShaftArray[i - startfloor] = new MeshObject(object, buffer);
 		EnableArray[i - startfloor] = true;
 	}
@@ -97,9 +97,9 @@ Shaft::~Shaft()
 	//destructor
 
 	//delete models
-	for (int i = 0; i < ModelArray.GetSize(); i++)
+	for (int i = 0; i < ModelArray.size(); i++)
 	{
-		for (int j = 0; j < ModelArray[i].GetSize(); j++)
+		for (int j = 0; j < ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j])
 				delete ModelArray[i][j];
@@ -108,9 +108,9 @@ Shaft::~Shaft()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.GetSize(); i++)
+	for (int i = 0; i < lights.size(); i++)
 	{
-		for (int j = 0; j < lights[i].GetSize(); j++)
+		for (int j = 0; j < lights[i].size(); j++)
 		{
 			if (lights[i][j])
 				delete lights[i][j];
@@ -119,13 +119,13 @@ Shaft::~Shaft()
 	}
 
 	//delete mesh array objects
-	for (int i = 0; i < ShaftArray.GetSize(); i++)
+	for (int i = 0; i < ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i])
 			delete ShaftArray[i];
 		ShaftArray[i] = 0;
 	}
-	ShaftArray.DeleteAll();
+	ShaftArray.clear();
 
 	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)
@@ -139,7 +139,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -153,7 +153,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + " - AddFloor: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		sbs->ReportError("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + " - AddFloor: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -185,7 +185,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 			EnableArray[floor - startfloor] = true;
 
 			//models
-			for (size_t i = 0; i < ModelArray[floor - startfloor].GetSize(); i++)
+			for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
 			{
 				if (ModelArray[floor - startfloor][i])
 					ModelArray[floor - startfloor][i]->Enable(true);
@@ -200,7 +200,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 				EnableArray[floor - startfloor] = false;
 
 				//models
-				for (size_t i = 0; i < ModelArray[floor - startfloor].GetSize(); i++)
+				for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
 				{
 					if (ModelArray[floor - startfloor][i])
 						ModelArray[floor - startfloor][i]->Enable(false);
@@ -214,10 +214,10 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 
 		if (EnableShaftDoors == true)
 		{
-			for (size_t i = 0; i < elevators.GetSize(); i++)
+			for (size_t i = 0; i < elevators.size(); i++)
 			{
 				Elevator *elevator = sbs->GetElevator(elevators[i]);
-				for(size_t j = 0; j < elevator->ServicedFloors.GetSize(); j++)
+				for(size_t j = 0; j < elevator->ServicedFloors.size(); j++)
 				{
 					if (elevator->ServicedFloors[j] == floor)
 						elevator->ShaftDoorsEnabled(0, elevator->ServicedFloors[j], value);
@@ -227,9 +227,9 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 	}
 }
 
-bool Shaft::IsShaft(csRef<iMeshWrapper> test)
+bool Shaft::IsShaft(Ogre::Mesh test)
 {
-	for (size_t i = 0; i < ShaftArray.GetSize(); i++)
+	for (size_t i = 0; i < ShaftArray.size(); i++)
 	{
 		if (test == ShaftArray[i]->MeshWrapper)
 			return true;
@@ -258,7 +258,7 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 		EnableCheck = true;
 }
 
-bool Shaft::IsInShaft(const csVector3 &position)
+bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 {
 	//if last position is the same as new, return previous result
 	if (position == lastposition && checkfirstrun == false)
@@ -268,7 +268,7 @@ bool Shaft::IsInShaft(const csVector3 &position)
 
 	if (position.y > bottom && position.y < top)
 	{
-		csHitBeamResult result = ShaftArray[0]->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(csVector3(position.x, position.y - (top - bottom), position.z)));
+		csHitBeamResult result = ShaftArray[0]->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(Ogre::Vector3(position.x, position.y - (top - bottom), position.z)));
 
 		//cache values
 		lastcheckresult = result.hit;
@@ -284,11 +284,11 @@ bool Shaft::IsInShaft(const csVector3 &position)
 	return false;
 }
 
-void Shaft::CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset)
+void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset)
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + "...");
+	sbs->Report("Cutting for shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + "...");
 
 	float voffset1, voffset2;
 	cutstart = start;
@@ -306,9 +306,9 @@ void Shaft::CutFloors(bool relative, const csVector2 &start, const csVector2 &en
 			voffset2 = endvoffset;
 
 		if (relative == true)
-			floorptr->Cut(csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+			floorptr->Cut(Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
 		else
-			floorptr->Cut(csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, false);
+			floorptr->Cut(Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, false);
 		floorptr = 0;
 	}
 
@@ -316,16 +316,16 @@ void Shaft::CutFloors(bool relative, const csVector2 &start, const csVector2 &en
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight() + endvoffset;
 
-	for (int i = 0; i < sbs->External->Walls.GetSize(); i++)
+	for (int i = 0; i < sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
-			sbs->Cut(sbs->External->Walls[i], csVector3(origin.x + start.x, voffset1, origin.z + start.y), csVector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 		else
-			sbs->Cut(sbs->External->Walls[i], csVector3(start.x, voffset1, start.y), csVector3(end.x, voffset2, end.y), false, true, csVector3(0, 0, 0), csVector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 	}
 }
 
-bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber, const char *checkstring)
+bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, int checkwallnumber, const char *checkstring)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude
@@ -333,22 +333,22 @@ bool Shaft::CutWall(bool relative, int floor, const csVector3 &start, const csVe
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("CutWall: Floor " + csString(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("CutWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 
 	float base = sbs->GetFloor(floor)->Altitude;
 
-	for (int i = 0; i < GetMeshObject(floor)->Walls.GetSize(); i++)
+	for (int i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], csVector3(origin.x + start.x, base + start.y, origin.z + start.z), csVector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(origin.x + start.x, base + start.y, origin.z + start.z), Ogre::Vector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], csVector3(start.x, base + start.y, start.z), csVector3(end.x, base + end.y, end.z), true, false, csVector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, base + start.y, start.z), Ogre::Vector3(end.x, base + end.y, end.z), true, false, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 	}
 	return true;
 }
@@ -412,7 +412,7 @@ void Shaft::AddShowFloor(int floor)
 {
 	//adds a floor number to the ShowFloors array
 
-	if (ShowFloorsList.Find(floor) == csArrayItemNotFound)
+	if (ShowFloorsList.find(floor) == -1)
 		ShowFloorsList.InsertSorted(floor);
 }
 
@@ -420,15 +420,21 @@ void Shaft::RemoveShowFloor(int floor)
 {
 	//removes a floor number from the ShowFloors array
 
-	if (ShowFloorsList.Find(floor) != csArrayItemNotFound)
-		ShowFloorsList.Delete(floor);
+	if (ShowFloorsList.find(floor) != -1)
+	{
+		for (int i = 0; i < ShowFloorsList.size(); i++)
+		{
+			if (ShowFloorsList[i] == floor)
+				ShowFloorsList.erase(i);
+		}
+	}
 }
 
 void Shaft::AddShowOutside(int floor)
 {
 	//adds a floor number to the ShowFloors array
 
-	if (ShowOutsideList.Find(floor) == csArrayItemNotFound)
+	if (ShowOutsideList.find(floor) == -1)
 		ShowOutsideList.InsertSorted(floor);
 }
 
@@ -436,8 +442,14 @@ void Shaft::RemoveShowOutside(int floor)
 {
 	//removes a floor number from the ShowFloors array
 
-	if (ShowOutsideList.Find(floor) != csArrayItemNotFound)
-		ShowOutsideList.Delete(floor);
+	if (ShowOutsideList.find(floor) != -1)
+	{
+		for (int i = 0; i < ShowOutsideList.size(); i++)
+		{
+			if (ShowOutsideList[i] == floor)
+				ShowOutsideList.erase(i);
+		}
+	}
 }
 
 bool Shaft::IsValidFloor(int floor)
@@ -462,7 +474,11 @@ void Shaft::AddElevator(int number)
 void Shaft::RemoveElevator(int number)
 {
 	//remove specified elevator from list
-	elevators.Delete(number);
+	for (int i = 0; i < elevators.size(); i++)
+	{
+		if (elevators[i] == number)
+			elevators.erase(i);
+	}
 }
 
 MeshObject* Shaft::GetMeshObject(int floor)
@@ -478,16 +494,16 @@ MeshObject* Shaft::GetMeshObject(int floor)
 void Shaft::Report(const char *message)
 {
 	//general reporting function
-	sbs->Report("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+	sbs->Report("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
 bool Shaft::ReportError(const char *message)
 {
 	//general reporting function
-	return sbs->ReportError("Shaft " + csString(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
-Object* Shaft::AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Shaft::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
 {
 	//add a global light
 
@@ -495,12 +511,12 @@ Object* Shaft::AddLight(int floor, const char *name, int type, csVector3 positio
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(name, type, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
-	lights[floor - startfloor].Push(light);
+	Light* light = new Light(name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
+	lights[floor - startfloor].push_back(light);
 	return light->object;
 }
 
-Object* Shaft::AddModel(int floor, const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
+Object* Shaft::AddModel(int floor, const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model
 
@@ -508,12 +524,12 @@ Object* Shaft::AddModel(int floor, const char *name, const char *filename, csVec
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(name, filename, position + csVector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier);
+	Model* model = new Model(name, filename, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
-	ModelArray[floor - startfloor].Push(model);
+	ModelArray[floor - startfloor].push_back(model);
 	return model->object;
 }

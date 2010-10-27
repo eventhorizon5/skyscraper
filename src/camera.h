@@ -26,15 +26,12 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
-#include <iengine/camera.h>
-#include <iengine/movable.h>
-
 class SBSIMPEXP Camera
 {
 public:
 	Object *object; //SBS object
 	int CurrentFloor; //floor camera's on
-	csString CurrentFloorID; //indicator ID of camera's current floor
+	Ogre::String CurrentFloorID; //indicator ID of camera's current floor
 	int StartFloor; //Starting floor
 	float StartPositionX; //starting position on X axis
 	float StartPositionZ; //starting position on Z axis
@@ -64,35 +61,35 @@ public:
 	float cfg_speedfast; //camera fast speed multiplier
 	float cfg_speedslow; //camera slow speed multiplier
 	float cfg_zoomspeed; //camera zoom speed
-	csVector3 desired_velocity;
-	csVector3 velocity;
-	csVector3 desired_angle_velocity;
-	csVector3 angle_velocity;
+	Ogre::Vector3 desired_velocity;
+	Ogre::Vector3 velocity;
+	Ogre::Vector3 desired_angle_velocity;
+	Ogre::Vector3 angle_velocity;
 	float speed; //movement speed base
 	bool EnableCollisions; //enable collision detection
 	bool MouseDown; //mouse status
 	bool ReportCollisions; //if true, print collisions on console
-	csString LastHitMesh; //name of last hit mesh
+	Ogre::String LastHitMesh; //name of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	float Freelook_speed; //freelook speed
-	csVector3 HitPosition; //last hit position
+	Ogre::Vector3 HitPosition; //last hit position
 
 	//functions
 	Camera();
 	~Camera();
-	void SetPosition(const csVector3 &vector);
-	void SetDirection(const csVector3 &vector);
-	void SetRotation(csVector3 vector);
-	csVector3 GetPosition();
-	void GetDirection(csVector3 &front, csVector3 &top);
-	csVector3 GetRotation();
+	void SetPosition(const Ogre::Vector3 &vector);
+	void SetDirection(const Ogre::Vector3 &vector);
+	void SetRotation(Ogre::Vector3 vector);
+	Ogre::Vector3 GetPosition();
+	void GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top);
+	Ogre::Vector3 GetRotation();
 	void UpdateCameraFloor();
-	bool Move(const csVector3 &vector, float speed);
-	void Rotate(const csVector3 &vector, float speed);
-	void SetStartDirection(const csVector3 &vector);
-	csVector3 GetStartDirection();
-	void SetStartRotation(const csVector3 &vector);
-	csVector3 GetStartRotation();
+	bool Move(const Ogre::Vector3 &vector, float speed);
+	void Rotate(const Ogre::Vector3 &vector, float speed);
+	void SetStartDirection(const Ogre::Vector3 &vector);
+	Ogre::Vector3 GetStartDirection();
+	void SetStartRotation(const Ogre::Vector3 &vector);
+	Ogre::Vector3 GetStartRotation();
 	void SetToStartPosition();
 	void SetToStartDirection();
 	void SetToStartRotation();
@@ -126,15 +123,15 @@ public:
 	float GetHeight();
 
 private:
-	csRef<iCamera> MainCamera; //main first-person view camera
-	csVector3 StartDirection; //direction camera faces on start
-	csVector3 StartRotation; //camera's startup rotation
-	csString meshname; //last clicked mesh name
-	csString polyname; //last clicked polygon name
+	Ogre::Camera* MainCamera; //main first-person view camera
+	Ogre::Vector3 StartDirection; //direction camera faces on start
+	Ogre::Vector3 StartRotation; //camera's startup rotation
+	Ogre::String meshname; //last clicked mesh name
+	Ogre::String polyname; //last clicked polygon name
 	int object_number; //last clicked object number
 	int object_line; //script line number of last clicked object
-	csString object_cmd; //original script command of last clicked object
-	csString object_cmd_processed; //processed script command of last clicked object
+	Ogre::String object_cmd; //original script command of last clicked object
+	Ogre::String object_cmd_processed; //processed script command of last clicked object
 	char intbuffer[65];
 	char buffer[20];
 	int FloorTemp; //previous floor check value
@@ -146,7 +143,7 @@ private:
 	bool ResetOnGround;
 
 	//collision
-	csColliderActor collider_actor;
+	//csColliderActor collider_actor;
 };
 
 #endif

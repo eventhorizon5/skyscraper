@@ -36,9 +36,9 @@ public:
 	int StairsNum; //number
 	int startfloor; //starting floor
 	int endfloor; //ending floor
-	csVector3 origin; //origin vector
-	csVector2 cutstart; //cut starting vector
-	csVector2 cutend; //cut ending vector
+	Ogre::Vector3 origin; //origin vector
+	Ogre::Vector2 cutstart; //cut starting vector
+	Ogre::Vector2 cutend; //cut ending vector
 	bool InsideStairwell; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
 
@@ -51,10 +51,10 @@ public:
 	int AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th);
 	void Enabled(int floor, bool value);
 	void EnableWholeStairwell(bool value);
-	bool IsInStairwell(const csVector3 &position);
+	bool IsInStairwell(const Ogre::Vector3 &position);
 	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-	void CutFloors(bool relative, const csVector2 &start, const csVector2 &end, float startvoffset, float endvoffset);
-	bool CutWall(bool relative, int floor, const csVector3 &start, const csVector3 &end, int checkwallnumber = 0, const char *checkstring = "");
+	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset);
+	bool CutWall(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
 	void EnableDoor(int floor, bool value);
 	void OpenDoor(int number);
@@ -66,14 +66,14 @@ public:
 	void Report(const char *message);
 	bool ReportError(const char *message);
 	void RemoveDoor(Door *door);
-	Object* AddLight(int floor, const char *name, int type, csVector3 position, csVector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	Object* AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
 	MeshObject* GetMeshObject(int floor);
-	Object* AddModel(int floor, const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
+	Object* AddModel(int floor, const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
 
 private:
-	csArray<MeshObject*> StairArray; //stairwell array
-	csArray<MeshObject*> StairDoorArray; //stair door array
-	csArray<bool> EnableArray;
+	std::vector<MeshObject*> StairArray; //stairwell array
+	std::vector<MeshObject*> StairDoorArray; //stair door array
+	std::vector<bool> EnableArray;
 
 	struct DoorMap
 	{
@@ -81,7 +81,7 @@ private:
 		Door *object; //door object reference
 	};
 
-	csArray<DoorMap> DoorArray; //door object array
+	std::vector<DoorMap> DoorArray; //door object array
 
 	char intbuffer[65];
 	char buffer[20];
@@ -90,13 +90,13 @@ private:
 	bool lastfloorset;
 
 	//lights
-	csArray<csArray<Light*> > lights;
+	std::vector<std::vector<Light*> > lights;
 
 	//Models
-	csArray<csArray<Model*> > ModelArray;
+	std::vector<std::vector<Model*> > ModelArray;
 
 	//cache objects for IsInStairwell()
-	csVector3 lastposition;
+	Ogre::Vector3 lastposition;
 	bool lastcheckresult;
 	bool checkfirstrun;
 };

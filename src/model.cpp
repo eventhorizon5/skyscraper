@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Model::Model(const char *name, const char *filename, csVector3 position, csVector3 rotation, float max_render_distance, float scale_multiplier)
+Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//loads a 3D model into the simulation
 
@@ -58,27 +58,27 @@ Model::~Model()
 	delete object;
 }
 
-void Model::Move(const csVector3 position, bool relative_x, bool relative_y, bool relative_z)
+void Model::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	mesh->Move(position, relative_x, relative_y, relative_z, Origin);
 }
 
-csVector3 Model::GetPosition()
+Ogre::Vector3 Model::GetPosition()
 {
 	return mesh->GetPosition();
 }
 
-void Model::SetRotation(const csVector3 rotation)
+void Model::SetRotation(const Ogre::Vector3 rotation)
 {
 	mesh->SetRotation(rotation);
 }
 
-void Model::Rotate(const csVector3 rotation, float speed)
+void Model::Rotate(const Ogre::Vector3 rotation, float speed)
 {
 	mesh->Rotate(rotation, speed);
 }
 
-csVector3 Model::GetRotation()
+Ogre::Vector3 Model::GetRotation()
 {
 	return mesh->GetRotation();
 }
