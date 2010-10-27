@@ -75,7 +75,7 @@ class ScriptProcessor
 	bool ReplaceLine;
 	std::vector<Ogre::String> nonexistent_files;
 
-	int ScriptError(const char *message);
+	int ScriptError(std::string message);
 	int ScriptError();
 	Ogre::String Calc(const char *expression);
 	bool IfProc(const char *expression);

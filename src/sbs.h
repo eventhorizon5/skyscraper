@@ -26,7 +26,7 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include <ogre.h>
+#include <Ogre.h>
 
 #include "light.h"
 #include "mesh.h"
@@ -77,6 +77,7 @@ public:
 	float delta;
 
 	Ogre::Root* mRoot;
+	Ogre::SceneManager* mSceneManager;
 
 	//SBS version
 	Ogre::String version;
@@ -145,19 +146,19 @@ public:
 	//public functions
 	SBS();
 	~SBS();
-	void Report (const char* msg, ...);
-	bool ReportError (const char* msg, ...);
+	void Report(std::string message);
+	bool ReportError(std::string message);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
-	bool Initialize(Ogre::RenderWindow* mRenderWindow, const char* rootdirectory, const char* directory_char);
+	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, const char* rootdirectory, const char* directory_char);
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	int AddWallMain(Object *parent, Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
+	int AddWallMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	int AddFloorMain(Object *parent, Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
+	int AddFloorMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	void CalculateFrameRate();
 	void MainLoop();
 	int CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
@@ -234,8 +235,8 @@ public:
 	int GetTextureCount();
 	int GetMaterialCount();
 	int GetMeshFactoryCount();
-	void CreateColliders(Ogre::Mesh mesh);
-	void DeleteColliders(Ogre::Mesh mesh);
+	void CreateColliders(Ogre::Mesh* mesh);
+	void DeleteColliders(Ogre::Mesh* mesh);
 	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	int GetSoundCount();
 	void IncrementSoundCount();
@@ -278,28 +279,28 @@ public:
 	void DeleteModelHandle(Model* handle);
 	void Prepare();
 	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
-	MeshObject* FindMeshObject(Ogre::Mesh meshwrapper);
+	MeshObject* FindMeshObject(Ogre::Mesh* meshwrapper);
 	Object* AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
 	void DumpVertices(WallObject* wallobject);
 	Ogre::Vector2 GetExtents(Ogre::Polygon &varray, int coord);
 	Ogre::Vector2 GetExtents(const Ogre::Vector3 *varray, int count, int coord);
-	Ogre::Vector2 GetExtents(Ogre::Mesh mesh, int coord);
+	Ogre::Vector2 GetExtents(Ogre::Mesh* mesh, int coord);
 	Ogre::Vector3 GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	Ogre::Mesh* AddGenWall(Ogre::Mesh mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
+	Ogre::Mesh** AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 	void Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3& end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
 	Ogre::Vector3 GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	Ogre::Vector3 GetPolygonDirection(Ogre::Polygon &polygon);
-	Ogre::HardwareIndexBuffer* PolyMesh(Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, Ogre::Polygon &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices);
-	Ogre::HardwareIndexBuffer* PolyMesh(Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<Ogre::Polygon> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices = true);
+	Ogre::HardwareIndexBuffer* PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, Ogre::Polygon &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices);
+	Ogre::HardwareIndexBuffer* PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<Ogre::Polygon> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, Ogre::Polygon &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Polygon> &vertices);
 	int ReindexSubMesh(Ogre::Mesh* state, std::vector<Ogre::SubMesh> &submeshes, Ogre::HardwareIndexBuffer* indices, Ogre::Material* material, const char *name, bool add);
 	int FindMatchingSubMesh(std::vector<Ogre::SubMesh> &submeshes, Ogre::Material *material);
 	void DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices);
-	int GetConfigInt(const char *key, int default);
-	const char *GetConfigString(const char *key, const char *default);
-	bool GetConfigBool(const char *key, bool default);
-	float GetConfigFloat(const char *key, float default);
+	int GetConfigInt(const char *key, int default_value);
+	const char *GetConfigString(const char *key, const char *default_value);
+	bool GetConfigBool(const char *key, bool default_value);
+	float GetConfigFloat(const char *key, float default_value);
 
 	//Meshes
 	MeshObject* Buildings;

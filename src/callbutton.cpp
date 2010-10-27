@@ -62,14 +62,14 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	buffer3 = number;
 	buffer = "Call Panel " + buffer2 + ":" + buffer3;
 	TrimString(buffer);
-	object->SetName(buffer);
-	CallButtonBackMesh = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	object->SetName(buffer.c_str());
+	CallButtonBackMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Up";
-	CallButtonMeshUp = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshUp = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Down";
-	CallButtonMeshDown = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshDown = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
 	floor = floornum;
@@ -331,28 +331,28 @@ void CallButton::SetLights(int up, int down)
 		if (sbs->Verbose)
 			Report("SetLights: turning on up light");
 
-		CallButtonMeshUp->ChangeTexture(UpTextureLit);
+		CallButtonMeshUp->ChangeTexture(UpTextureLit.c_str());
 	}
 	if (up == 2 && CallButtonMeshUp)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off up light");
 
-		CallButtonMeshUp->ChangeTexture(UpTexture);
+		CallButtonMeshUp->ChangeTexture(UpTexture.c_str());
 	}
 	if (down == 1 && CallButtonMeshDown)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning on down light");
 
-		CallButtonMeshDown->ChangeTexture(DownTextureLit);
+		CallButtonMeshDown->ChangeTexture(DownTextureLit.c_str());
 	}
 	if (down == 2 && CallButtonMeshDown)
 	{
 		if (sbs->Verbose)
 			Report("SetLights: turning off down light");
 
-		CallButtonMeshDown->ChangeTexture(DownTexture);
+		CallButtonMeshDown->ChangeTexture(DownTexture.c_str());
 	}
 
 	/*if (up > 0 && !CallButtonMeshUp && sbs->Verbose)
@@ -369,7 +369,7 @@ bool CallButton::ServicesElevator(int elevator)
 		if (Elevators[i] == elevator)
 		{
 			if (sbs->Verbose)
-				Report("Services elevator " + Ogre::String(_itoa(elevator, intbuffer, 10)));
+				Report(Ogre::String("Services elevator " + Ogre::String(_itoa(elevator, intbuffer, 10))).c_str());
 			return true;
 		}
 	}
@@ -413,7 +413,7 @@ void CallButton::Loop(bool direction)
 			int current = elevator->GetFloor();
 
 			if (sbs->Verbose)
-				Report("Checking elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10)));
+				Report(Ogre::String("Checking elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10))).c_str());
 
 			//if elevator is running
 			if (elevator->IsRunning() == true)
@@ -497,7 +497,7 @@ void CallButton::Loop(bool direction)
 		return;
 
 	if (sbs->Verbose)
-		Report("Using elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10)));
+		Report(Ogre::String("Using elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10))).c_str());
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false && elevator->IsMoving == false)
@@ -552,12 +552,14 @@ void CallButton::Loop(bool direction)
 void CallButton::Report(const char *message)
 {
 	//general reporting function
-	sbs->Report("Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message);
+	Ogre::String msg = "Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message;
+	sbs->Report(msg.c_str());
 
 }
 
 bool CallButton::ReportError(const char *message)
 {
 	//general reporting function
-	return sbs->ReportError("Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message);
+	Ogre::String msg = "Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message;
+	return sbs->ReportError(msg.c_str());
 }

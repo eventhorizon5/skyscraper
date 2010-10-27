@@ -30,8 +30,6 @@
 #include "shaft.h"
 #include "unix.h"
 
-#include <iengine/movable.h>
-#include <csutil/randomgen.h>
 #include <time.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
@@ -169,8 +167,8 @@ Elevator::Elevator(int number)
 	buffer = Number;
 	buffer.insert(0, "Elevator ");
 	TrimString(buffer);
-	object->SetName(buffer);
-	ElevatorMesh = new MeshObject(object, buffer);
+	object->SetName(buffer.c_str());
+	ElevatorMesh = new MeshObject(object, buffer.c_str());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -444,14 +442,14 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	{
 		Ogre::String num;
 		num = AssignedShaft;
-		ReportError("Shaft " + num + " doesn't exist");
+		ReportError(Ogre::String("Shaft " + num + " doesn't exist").c_str());
 		return 0;
 	}
 	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
 	{
 		Ogre::String num;
 		num = floor;
-		ReportError("Invalid starting floor " + num);
+		ReportError(Ogre::String("Invalid starting floor " + num).c_str());
 		return 0;
 	}
 
@@ -497,8 +495,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//move objects to positions
 	if (sbs->Verbose)
 		Report("moving elevator to origin position");
-	ElevatorMesh->Movable->SetPosition(sbs->ToRemote(Origin));
-	ElevatorMesh->Movable->UpdateMove();
+	ElevatorMesh->Move(Origin, false, false, false);
 
 	//create sound objects
 	if (sbs->Verbose)
@@ -507,7 +504,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	mainsound->SetPosition(Origin);
 	idlesound = new Sound(this->object, "Idle", true);
 	idlesound->SetPosition(Origin);
-	idlesound->Load(CarIdleSound);
+	idlesound->Load(CarIdleSound.c_str());
 	motorsound = new Sound(this->object, "Motor", true);
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft if location not specified, or to location
@@ -526,7 +523,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	messagesnd->SetPosition(Origin);
 	musicsound = new Sound(this->object, "Music Sound", true);
 	musicsound->SetPosition(Origin + MusicPosition);
-	musicsound->Load(Music);
+	musicsound->Load(Music.c_str());
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -572,7 +569,14 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 
 	if (direction == 1)
 	{
-		if (UpQueue.find(floor) != -1)
+		int loc = -1;
+		for (int i = 0; i < UpQueue.size(); i++)
+		{
+			if (UpQueue[i] == floor)
+				loc = i;
+		}
+
+		if (loc != -1)
 		{
 			//exit if entry already exits
 			Report("route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
@@ -585,7 +589,14 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	}
 	else
 	{
-		if (DownQueue.find(floor) != -1)
+		int loc = -1;
+		for (int i = 0; i < DownQueue.size(); i++)
+		{
+			if (DownQueue[i] == floor)
+				loc = i;
+		}
+
+		if (loc != -1)
 		{
 			//exit if entry already exits
 			Report("route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
@@ -636,7 +647,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 		for (int i = 0; i < UpQueue.size(); i++)
 		{
 			if (UpQueue[i] == floor)
-				UpQueue.erase(i);
+				UpQueue.erase(UpQueue.begin() + i);
 		}
 		Report("deleting route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
 	}
@@ -646,7 +657,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 		for (int i = 0; i < DownQueue.size(); i++)
 		{
 			if (DownQueue[i] == floor)
-				DownQueue.erase(i);
+				DownQueue.erase(DownQueue.begin() + i);
 		}
 		Report("deleting route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
 	}
@@ -677,7 +688,7 @@ void Elevator::CancelLastRoute()
 		return;
 	}
 
-	Report("cancelling last route");
+	Report("canceling last route");
 	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
@@ -692,7 +703,7 @@ void Elevator::Alarm()
 		//ring alarm
 		AlarmActive = true;
 		Report("alarm on");
-		alarm->Load(AlarmSound);
+		alarm->Load(AlarmSound.c_str());
 		alarm->Loop(true);
 		alarm->Play();
 	}
@@ -701,7 +712,7 @@ void Elevator::Alarm()
 		//stop alarm
 		AlarmActive = false;
 		alarm->Stop();
-		alarm->Load(AlarmSoundStop);
+		alarm->Load(AlarmSoundStop.c_str());
 		alarm->Loop(false);
 		alarm->Play();
 		Report("alarm off");
@@ -1129,7 +1140,7 @@ void Elevator::MonitorLoop()
 					if (sbs->Verbose)
 						Report("playing music");
 
-					if (MusicPosition == 0 && Height > 0)
+					if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
 						MusicPosition = Ogre::Vector3(0, Height, 0); //set default music position to elevator height
 
 					musicsound->SetPosition(GetPosition() + MusicPosition);
@@ -1205,7 +1216,7 @@ void Elevator::MoveElevatorToFloor()
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
-	Ogre::Vector3 movement = 0;
+	Ogre::Vector3 movement = Ogre::Vector3(0, 0, 0);
 
 	//wait until doors are fully closed if WaitForDoors is true
 	if (WaitForDoors == true)
@@ -1342,10 +1353,20 @@ void Elevator::MoveElevatorToFloor()
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
 			}
-			else if (sbs->GetShaft(AssignedShaft)->ShowFloorsList.find(sbs->camera->CurrentFloor) == -1)
+			else
 			{
-				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
-				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
+				int loc = -1;
+				for (int i = 0; i < sbs->GetShaft(AssignedShaft)->ShowFloorsList.size(); i++)
+				{
+					if (sbs->GetShaft(AssignedShaft)->ShowFloorsList[i] == sbs->camera->CurrentFloor)
+						loc = i;
+				}
+
+				if (loc == -1)
+				{
+					sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
+					sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
+				}
 			}
 
 			//Turn off sky, buildings, and landscape
@@ -1356,12 +1377,21 @@ void Elevator::MoveElevatorToFloor()
 				sbs->EnableLandscape(false);
 				sbs->EnableExternal(false);
 			}
-			else if (sbs->GetShaft(AssignedShaft)->ShowOutsideList.find(sbs->camera->CurrentFloor) == -1)
+			else
 			{
-				sbs->EnableSkybox(false);
-				sbs->EnableBuildings(false);
-				sbs->EnableLandscape(false);
-				sbs->EnableExternal(false);
+				int loc = -1;
+				for (int i = 0; i < sbs->GetShaft(AssignedShaft)->ShowOutsideList.size(); i++)
+				{
+					if (sbs->GetShaft(AssignedShaft)->ShowOutsideList[i] == sbs->camera->CurrentFloor)
+						loc = i;
+				}
+				if (loc == -1)
+				{
+					sbs->EnableSkybox(false);
+					sbs->EnableBuildings(false);
+					sbs->EnableLandscape(false);
+					sbs->EnableExternal(false);
+				}
 			}
 		}
 
@@ -1406,11 +1436,11 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->Verbose)
 			Report("playing starting sounds");
 		mainsound->Stop();
-		mainsound->Load(CarStartSound);
+		mainsound->Load(CarStartSound.c_str());
 		mainsound->Loop(false);
 		mainsound->Play();
 		motorsound->Stop();
-		motorsound->Load(MotorStartSound);
+		motorsound->Load(MotorStartSound.c_str());
 		motorsound->Loop(false);
 		motorsound->Play();
 	}
@@ -1433,7 +1463,7 @@ void Elevator::MoveElevatorToFloor()
 		//play stopping sounds
 		if (sbs->Verbose)
 			Report("playing stopping sounds");
-		mainsound->Load(CarStopSound);
+		mainsound->Load(CarStopSound.c_str());
 		mainsound->Loop(false);
 		bool adjust = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 		//set play position to current percent of the total speed
@@ -1442,7 +1472,7 @@ void Elevator::MoveElevatorToFloor()
 		else
 			mainsound->Reset();
 		mainsound->Play(false);
-		motorsound->Load(MotorStopSound);
+		motorsound->Load(MotorStopSound.c_str());
 		motorsound->Loop(false);
 		if (adjust == true)
 			motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
@@ -1451,22 +1481,22 @@ void Elevator::MoveElevatorToFloor()
 		motorsound->Play(false);
 	}
 
-	if (mainsound->IsPlaying() == false && Brakes == false && CarMoveSound.IsEmpty() == false)
+	if (mainsound->IsPlaying() == false && Brakes == false && CarMoveSound.empty() == false)
 	{
 		//Movement sound
 		if (sbs->Verbose)
 			Report("playing car movement sound");
-		mainsound->Load(CarMoveSound);
+		mainsound->Load(CarMoveSound.c_str());
 		mainsound->Loop(true);
 		mainsound->Play();
 	}
 
-	if (motorsound->IsPlaying() == false && Brakes == false && MotorRunSound.IsEmpty() == false)
+	if (motorsound->IsPlaying() == false && Brakes == false && MotorRunSound.empty() == false)
 	{
 		//Motor sound
 		if (sbs->Verbose)
 			Report("playing motor run sound");
-		motorsound->Load(MotorRunSound);
+		motorsound->Load(MotorRunSound.c_str());
 		motorsound->Loop(true);
 		motorsound->Play();
 	}
@@ -1640,7 +1670,7 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("playing stopping sounds");
 			bool adjust = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
-			mainsound->Load(CarStopSound);
+			mainsound->Load(CarStopSound.c_str());
 			mainsound->Loop(false);
 			//set play position to current percent of the total speed
 			if (adjust == true)
@@ -1648,7 +1678,7 @@ void Elevator::MoveElevatorToFloor()
 			else
 				mainsound->Reset();
 			mainsound->Play(false);
-			motorsound->Load(MotorStopSound);
+			motorsound->Load(MotorStopSound.c_str());
 			motorsound->Loop(false);
 			if (adjust == true)
 				motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
@@ -2052,7 +2082,7 @@ void Elevator::EnableObjects(bool value)
 	}
 }
 
-bool Elevator::IsElevator(Ogre::Mesh test)
+bool Elevator::IsElevator(Ogre::Mesh* test)
 {
 	if (test == ElevatorMesh->MeshWrapper)
 		return true;
@@ -2182,7 +2212,7 @@ void Elevator::RemoveServicedFloor(int number)
 		for (int i = 0; i < ServicedFloors.size(); i++)
 		{
 			if (ServicedFloors[i] == number)
-				ServicedFloors.erase(i);
+				ServicedFloors.erase(ServicedFloors.begin() + i);
 		}
 	}
 }
@@ -2221,7 +2251,7 @@ void Elevator::UpdateFloorIndicators()
 	for (int i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Update(value);
+			FloorIndicatorArray[i]->Update(value.c_str());
 	}
 }
 
@@ -2249,13 +2279,20 @@ void Elevator::SetFloorSkipText(const char *id)
 const char* Elevator::GetFloorSkipText()
 {
 	//get the floor skip text
-	return FloorSkipText;
+	return FloorSkipText.c_str();
 }
 
 bool Elevator::IsServicedFloor(int floor)
 {
 	//returns true if floor is in serviced floor list, otherwise false
-	if (ServicedFloors.find(floor) == -1)
+
+	int index = -1;
+	for (int i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (ServicedFloors[i] == floor)
+			index = i;
+	}
+	if (index == -1)
 	{
 		if (sbs->Verbose)
 			Report("Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " is not a serviced floor");
@@ -3110,7 +3147,13 @@ Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, c
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
-	int index = ServicedFloors.find(floor);
+	int index = -1;
+	for (int i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (ServicedFloors[i] == floor)
+			index = i;
+	}
+
 	if (index != -1 && GetDoor(number))
 		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
 	else
@@ -3427,9 +3470,9 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
-				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, voffset, voffset, 1, 1, false);
+				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture.c_str(), 0, x - (width / 2), z, x + (width / 2), z, height, height, voffset, voffset, 1, 1, false);
 			else
-				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, voffset, voffset, 1, 1, false);
+				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture.c_str(), 0, x, z - (width / 2), x, z + (width / 2), height, height, voffset, voffset, 1, 1, false);
 			sbs->ResetWalls();
 		}
 	}
@@ -3605,14 +3648,14 @@ bool Elevator::BeyondDecelMarker(int direction, float destination)
 	return false;
 }
 
-void Elevator::Report(const char *message)
+void Elevator::Report(Ogre::String message)
 {
 	//general reporting function
 	sbs->Report("Elevator " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
 
 }
 
-bool Elevator::ReportError(const char *message)
+bool Elevator::ReportError(Ogre::String message)
 {
 	//general reporting function
 	return sbs->ReportError("Elevator " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
@@ -3633,7 +3676,12 @@ Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name,
 {
 	//adds a single elevator shaft door component on the specified floor
 
-	int index = ServicedFloors.find(floor);
+	int index = -1;
+	for (int i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (ServicedFloors[i] == floor)
+			index = i;
+	}
 	if (index != -1 && GetDoor(number))
 		return GetDoor(number)->AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
@@ -3663,7 +3711,13 @@ Object* Elevator::FinishDoors(int number)
 Object* Elevator::FinishShaftDoor(int number, int floor)
 {
 	//finishes a single shaft door
-	int index = ServicedFloors.find(floor);
+
+	int index = -1;
+	for (int i = 0; i < ServicedFloors.size(); i++)
+	{
+		if (ServicedFloors[i] == floor)
+			index = i;
+	}
 	if (index != -1 && GetDoor(number))
 		return GetDoor(number)->FinishShaftDoor(floor);
 	else
@@ -3788,10 +3842,21 @@ bool Elevator::IsQueued(int floor)
 {
 	//return true if the given floor is in either queue
 	
-	int index = UpQueue.find(floor);
+	int index = -1;
+	for (int i = 0; i < UpQueue.size(); i++)
+	{
+		if (UpQueue[i] == floor)
+			index = i;
+	}
 	if (index > -1)
 		return true;
-	index = DownQueue.find(floor);
+
+	index = -1;
+	for (int i = 0; i < DownQueue.size(); i++)
+	{
+		if (DownQueue[i] == floor)
+			index = i;
+	}
 	if (index > -1)
 		return true;
 	return false;
@@ -3858,7 +3923,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 	StdDoorArray.resize(StdDoorArray.size() + 1);
 	Ogre::String elevnum = _itoa(Number, intbuffer, 10);
 	Ogre::String num = _itoa(StdDoorArray.size() - 1, intbuffer, 10);
-	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, "Elevator " + elevnum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, Ogre::String("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.size() - 1]->object;
 }
 
@@ -3918,7 +3983,7 @@ void Elevator::RemovePanel(ButtonPanel* panel)
 	for (int i = 0; i < PanelArray.size(); i++)
 	{
 		if (PanelArray[i] == panel)
-			PanelArray.erase(i);
+			PanelArray.erase(PanelArray.begin() + i);
 	}
 }
 
@@ -3928,7 +3993,7 @@ void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 	for (int i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i] == indicator)
-			DirIndicatorArray.erase(i);
+			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
 	}
 }
 
@@ -3938,7 +4003,7 @@ void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 	for (int i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i] == door)
-			DoorArray.erase(i);
+			DoorArray.erase(DoorArray.begin() + i);
 	}
 }
 
@@ -3948,7 +4013,7 @@ void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 	for (int i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i] == indicator)
-			FloorIndicatorArray.erase(i);
+			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
 	}
 }
 
@@ -3958,7 +4023,7 @@ void Elevator::RemoveDoor(Door* door)
 	for (int i = 0; i < StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i] == door)
-			StdDoorArray.erase(i);
+			StdDoorArray.erase(StdDoorArray.begin() + i);
 	}
 }
 
@@ -3968,7 +4033,7 @@ void Elevator::RemoveSound(Sound *sound)
 	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
-			sounds.erase(i);
+			sounds.erase(sounds.begin() + i);
 	}
 }
 
@@ -4054,10 +4119,10 @@ bool Elevator::PlayFloorBeep()
 
 	Ogre::String newsound = BeepSound;
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", Ogre::String(_itoa(GetFloor(), intbuffer, 10)));
+	ReplaceAll(newsound, "*", _itoa(GetFloor(), intbuffer, 10));
 	TrimString(newsound);
 	floorbeep->Stop();
-	floorbeep->Load(newsound);
+	floorbeep->Load(newsound.c_str());
 	floorbeep->Loop(false);
 	floorbeep->Play();
 	return true;
@@ -4075,10 +4140,10 @@ bool Elevator::PlayFloorSound()
 
 	Ogre::String newsound = FloorSound;
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", Ogre::String(_itoa(GotoFloor, intbuffer, 10)));
+	ReplaceAll(newsound, "*", _itoa(GotoFloor, intbuffer, 10));
 	TrimString(newsound);
 	floorsound->Stop();
-	floorsound->Load(newsound);
+	floorsound->Load(newsound.c_str());
 	floorsound->Loop(false);
 	floorsound->Play();
 	return true;
@@ -4114,10 +4179,10 @@ bool Elevator::PlayMessageSound(bool direction)
 	}
 
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", Ogre::String(_itoa(GetFloor(), intbuffer, 10)));
+	ReplaceAll(newsound, "*", _itoa(GetFloor(), intbuffer, 10));
 	TrimString(newsound);
 	messagesnd->Stop();
-	messagesnd->Load(newsound);
+	messagesnd->Load(newsound.c_str());
 	messagesnd->Loop(false);
 	messagesnd->Play();
 	return true;

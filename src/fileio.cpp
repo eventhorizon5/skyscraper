@@ -332,7 +332,7 @@ breakpoint:
 			TrimString(includefile);
 
 			//delete current line
-			BuildingData.erase(line);
+			BuildingData.erase(BuildingData.begin() + line);
 
 			//insert file at current line
 			LoadDataFile(includefile.c_str(), true, line);
@@ -937,7 +937,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 		return false;
 }
 
-int ScriptProcessor::ScriptError(const char *message)
+int ScriptProcessor::ScriptError(std::string message)
 {
 	//first see if the current line is from an included file
 
@@ -968,7 +968,7 @@ int ScriptProcessor::ScriptError(const char *message)
 	char intbuffer[65];
 	Ogre::String error;
 	if (isinclude == false)
-		error = "Script error on line " + Ogre::String(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + Ogre::String(message) + "\nSection: " + Ogre::String(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		error = "Script error on line " + Ogre::String(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + Ogre::String(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 	else
 		error = "Script error in included file " + includefile + " on line " + Ogre::String(_itoa(linenum, intbuffer, 10)) + ": " + Ogre::String(message) + "\nSection: " + Ogre::String(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 

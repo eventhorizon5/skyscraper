@@ -31,7 +31,7 @@ class SBSIMPEXP WallObject : public Object
 public:
 
 	//functions
-	WallObject(Ogre::Mesh wrapper, std::vector<Ogre::SubMesh> &submeshes, Object *proxy = 0, bool temporary = false);
+	WallObject(Ogre::Mesh* wrapper, std::vector<Ogre::SubMesh> &submeshes, Object *proxy = 0, bool temporary = false);
 	~WallObject();
 	WallPolygon* AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize);
 	WallPolygon* AddPolygon(const char *name, const char *texture, Ogre::Vector3 *vertices, int num, float tw, float th, bool autosize);
@@ -49,10 +49,7 @@ public:
 	bool IsPointOnWall(const Ogre::Vector3 &point);
 
 	//mesh wrapper
-	Ogre::Mesh meshwrapper;
-
-	//mesh factory state
-	Ogre::Mesh* state;
+	Ogre::Mesh* meshwrapper;
 
 	//name
 	Ogre::String name;

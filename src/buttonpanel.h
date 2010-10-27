@@ -51,7 +51,7 @@ public:
 	ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th);
 	~ButtonPanel();
 	void AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset = 0, float voffset = 0);
-	void AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<Ogre::String> action_names, std::vector<Ogre::String> &textures);
+	void AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<Ogre::String> &action_names, std::vector<Ogre::String> &textures);
 	void DeleteButton(int row, int column);
 	void Press(int index);
 	void Move(const Ogre::Vector3 &position);

@@ -29,8 +29,6 @@
 #include "camera.h"
 #include "unix.h"
 
-#include <iengine/movable.h>
-
 extern SBS *sbs; //external pointer to the SBS engine
 
 Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
@@ -111,9 +109,8 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(object, Name);
-	DoorMesh->Movable->SetPosition(sbs->ToRemote(origin));
-	DoorMesh->Movable->UpdateMove();
+	DoorMesh = new MeshObject(object, Name.c_str());
+	DoorMesh->Move(origin, false, false, false);
 
 	//create sound object
 	sound = new Sound(object, "DoorSound", true);
@@ -169,14 +166,14 @@ Door::~Door()
 
 void Door::Open(bool playsound)
 {
-	sbs->Report("Opening door " + Name);
+	sbs->Report(Ogre::String("Opening door " + Name).c_str());
 	if (!sbs->RegisterDoorCallback(this))
 		return;
 	if (IsMoving == false)
 		OpenDoor = true;
 	if (playsound == true)
 	{
-		sound->Load(OpenSound);
+		sound->Load(OpenSound.c_str());
 		sound->Play();
 	}
 	IsMoving = true;
@@ -184,14 +181,14 @@ void Door::Open(bool playsound)
 
 void Door::Close(bool playsound)
 {
-	sbs->Report("Closing door " + Name);
+	sbs->Report(Ogre::String("Closing door " + Name).c_str());
 	if (!sbs->RegisterDoorCallback(this))
 		return;
 	if (IsMoving == false)
 		OpenDoor = false;
 	if (playsound == true)
 	{
-		sound->Load(CloseSound);
+		sound->Load(CloseSound.c_str());
 		sound->Play();
 	}
 	IsMoving = true;
@@ -248,10 +245,7 @@ void Door::MoveDoor()
 		rotation = 0;
 	}
 
-	Ogre::Matrix3 rot = csYRotMatrix3(DegreesToRadians(rotation));
-	csOrthoTransform ot (rot, sbs->ToRemote(origin));
-	DoorMesh->Movable->SetTransform(ot);
-	DoorMesh->Movable->UpdateMove();
+	DoorMesh->Rotate(Ogre::Vector3(0, rotation, 0), 1);
 }
 
 void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)

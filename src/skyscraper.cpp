@@ -27,7 +27,7 @@
 #include "wx/wx.h"
 #endif
 #include "globals.h"
-#include "ogre.h"
+#include "Ogre.h"
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
@@ -408,7 +408,7 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 		return ReportError("Error loading the VFS plugin");
 	
 	//mount app's directory in VFS
-        #ifndef OGRE_PLATFORM_WIN32
+	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
                 dir_char = "/";
         #else
                 dir_char = "\\";
@@ -637,8 +637,8 @@ void Skyscraper::GetInput()
 	//float speed = elapsed_time / 1000.0f;
 
 	//fix for the camera velocities due to the non-event driven key system
-	Simcore->camera->desired_velocity.Set(0, 0, 0);
-	Simcore->camera->desired_angle_velocity.Set(0, 0, 0);
+	Simcore->camera->desired_velocity = Ogre::Vector3(0, 0, 0);
+	Simcore->camera->desired_angle_velocity = Ogre::Vector3(0, 0, 0);
 
 	//get old mouse coordinates
 	old_mouse_x = Simcore->mouse_x;
@@ -856,22 +856,20 @@ void Skyscraper::GetInput()
 	}
 }
 
-void Skyscraper::Report (const char* msg, ...)
+void Skyscraper::Report(std::string message, ...)
 {
-	Ogre::String message = msg;
 	ReplaceAll(message, "%", "%%"); //allow percent signs
 
-	printf(message);
+	printf(message.c_str());
 	printf("\n");
 	fflush(stdout);
 }
 
-bool Skyscraper::ReportError (const char* msg, ...)
+bool Skyscraper::ReportError(std::string message, ...)
 {
-	Ogre::String message = msg;
 	ReplaceAll(message, "%", "%%"); //allow percent signs
 
-	printf(message);
+	printf(message.c_str());
 	printf("\n");
 	fflush(stdout);
 

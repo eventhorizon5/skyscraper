@@ -92,7 +92,7 @@ Ogre::Vector2 SBS::GetExtents(Ogre::Polygon &varray, int coord)
 	return GetExtents(varray.GetVertices(), varray.getVertexCount(), coord);
 }
 
-Ogre::Vector2 SBS::GetExtents(Ogre::Mesh mesh, int coord)
+Ogre::Vector2 SBS::GetExtents(Ogre::Mesh* mesh, int coord)
 {
 	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 	return GetExtents(state->GetVertices(), state->getVertexCount(), coord);
@@ -133,7 +133,7 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 	return 0;
 }
 
-Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
+Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
 {
 	//add a simple wall in a general mesh (currently only used for objects that change textures)
 
@@ -634,7 +634,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(Ogre::Polygon &polygon)
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, Ogre::Polygon &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
+Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, Ogre::Polygon &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -710,7 +710,7 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh mesh, std::vector<Ogre::SubM
 	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
 }
 
-Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<Ogre::Polygon> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
+Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<Ogre::Polygon> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1018,7 +1018,7 @@ int SBS::ReindexSubMesh(Ogre::Mesh* state, std::vector<Ogre::SubMesh> &submeshes
 	{
 		buffer = 0;
 		state->DeleteSubMesh(submesh);
-		submeshes.erase(index);
+		submeshes.erase(submeshes.begin() + index);
 		return -1;
 	}
 
@@ -1097,7 +1097,7 @@ int SBS::ReindexSubMesh(Ogre::Mesh* state, std::vector<Ogre::SubMesh> &submeshes
 
 	//delete old submesh
 	state->DeleteSubMesh(submesh);
-	submeshes.erase(index);
+	submeshes.erase(submeshes.begin() + index);
 
 	//create submesh
 	Ogre::SubMesh newsubmesh = state->AddSubMesh(newbuffer, material, name);
@@ -1179,10 +1179,10 @@ void SBS::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareInde
 	for (int i = deleted2.size() - 1; i >= 0; i--)
 	{
 		int index = deleted2[i];
-		mesh_vertices.erase(index);
-		mesh_texels.erase(index);
-		mesh_normals.erase(index);
-		mesh_colors.erase(index);
+		mesh_vertices.erase(mesh_vertices.begin() + index);
+		mesh_texels.erase(mesh_texels.begin() + index);
+		mesh_normals.erase(mesh_normals.begin() + index);
+		mesh_colors.erase(mesh_colors.begin() + index);
 	}
 
 	//refill original mesh data
@@ -1274,7 +1274,7 @@ WallPolygon::~WallPolygon()
 	sbs->PolygonCount--;
 }
 
-void WallPolygon::GetGeometry(Ogre::Mesh meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly)
+void WallPolygon::GetGeometry(Ogre::Mesh* meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -1292,7 +1292,7 @@ void WallPolygon::GetGeometry(Ogre::Mesh meshwrapper, std::vector<Ogre::Polygon>
 	}
 }
 
-bool WallPolygon::PointInside(Ogre::Mesh meshwrapper, const Ogre::Vector3 &point, bool plane_check)
+bool WallPolygon::PointInside(Ogre::Mesh* meshwrapper, const Ogre::Vector3 &point, bool plane_check)
 {
 	//check if a point is inside the polygon
 

@@ -27,15 +27,13 @@
 #include "sbs.h"
 #include "wall.h"
 #include "unix.h"
-#include <csgfx/renderbuffer.h>
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-WallObject::WallObject(Ogre::Mesh wrapper, std::vector<Ogre::SubMesh> &submeshes, Object *proxy, bool temporary) : Object(temporary)
+WallObject::WallObject(Ogre::Mesh* wrapper, std::vector<Ogre::SubMesh> &submeshes, Object *proxy, bool temporary) : Object(temporary)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
-	state = scfQueryInterface<iGeneralFactoryState>(wrapper->GetFactory()->GetMeshObjectFactory());
 	submesh_array = &submeshes;
 
 	//if proxy object is set, set object's number as proxy object's number
@@ -50,10 +48,10 @@ WallObject::~WallObject()
 
 	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
 	{
-		for (int i = 0; i < parent_array.size(); i++)
+		for (int i = 0; i < parent_array->size(); i++)
 		{
-			if (parent_array[i] == this)
-				parent_array.erase(i);
+			if (parent_array->at(i) == this)
+				parent_array->erase(parent_array->begin() + i);
 		}
 	}
 
@@ -75,16 +73,16 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2, texture, array[0], tw, th, autosize, tm, tv, index_extents);
+	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
 
 	if (!triangles)
 		return 0;
 
 	bool result;
-	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name2);
+	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name2.c_str());
 
 	Ogre::Plane plane = Ogre::Polygon::ComputePlane(array[0]);
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2, plane);
+	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
@@ -99,16 +97,16 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, Ogre:
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2, texture, array[0], tw, th, autosize, tm, tv, index_extents);
+	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
 
 	if (!triangles)
 		return 0;
 
 	bool result;
-	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name2);
+	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name2.c_str());
 
 	Ogre::Plane plane = Ogre::Polygon::ComputePlane(array[0]);
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2, plane);
+	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
@@ -117,13 +115,13 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::Material* material, 
 	//add a set of polygons, providing the original material and texture mapping
 	Ogre::String name2 = ProcessName(name);
 	std::vector<Ogre::Vector2> index_extents;
-	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2, material, vertices, tex_matrix, tex_vector, index_extents);
+	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents);
 
 	if (!triangles)
 		return 0;
 
 	Ogre::Plane plane = Ogre::Polygon::ComputePlane(vertices[0]);
-	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2, plane);
+	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
@@ -157,7 +155,7 @@ Ogre::String WallObject::ProcessName(const char *name)
 
 	//strip off object ID from name if it exists
 	if (name_modified.find("(") == 0)
-		name_modified.DeleteAt(0, name_modified.find(")") + 1);
+		name_modified.erase(0, name_modified.find(")") + 1);
 
 	//construct name
 	Ogre::String newname = "(";
@@ -193,7 +191,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		sbs->DeleteVertices(*parent_array, handles[index].triangles);
 
 		//delete polygon
-		handles.erase(index);
+		handles.erase(handles.begin() + index);
 
 		//reprocess mesh
 		state->Invalidate();
@@ -231,7 +229,7 @@ int WallObject::FindPolygon(const char *name)
 		{
 			//strip object number
 			int loc = tmpname.find(")");
-			tmpname.DeleteAt(0, loc + 1);
+			tmpname.erase(0, loc + 1);
 		}
 		if (name2 == tmpname)
 			return i;
@@ -259,7 +257,7 @@ void WallObject::SetPolygonName(int index, const char *name)
 
         //strip off object ID from name if it exists
         if (name_modified.find("(") == 0)
-                name_modified.DeleteAt(0, name_modified.find(")") + 1);
+                name_modified.erase(0, name_modified.find(")") + 1);
 
         //construct name
         Ogre::String newname = "(";

@@ -78,8 +78,8 @@ public:
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const Ogre::String& windowName = Ogre::String(""));
 	void Render();
 	void GetInput();
-	void Report (const char* msg, ...);
-	bool ReportError (const char* msg, ...);
+	void Report(std::string message, ...);
+	bool ReportError(std::string message, ...);
 	void SetupFrame();
 	bool HandleEvent();
 	bool Initialize(wxPanel* RenderObject);

@@ -27,7 +27,7 @@
 #include <algorithm>
 #include "unix.h"
 
-#ifndef OGRE_PLATFORM_WIN32
+#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
 
 using namespace std;
 
@@ -66,3 +66,4 @@ const char* StrRev(char* szT)
 }
 
 #endif
+

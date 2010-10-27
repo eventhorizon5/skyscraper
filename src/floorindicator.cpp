@@ -29,8 +29,6 @@
 #include "elevator.h"
 #include "floor.h"
 
-#include <iengine/movable.h>
-
 extern SBS *sbs; //external pointer to the SBS engine
 
 FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
@@ -47,22 +45,22 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 
 	Ogre::String buffer;
 	buffer = elevator;
-	object->SetName("Floor Indicator " + buffer);
+	object->SetName(Ogre::String("Floor Indicator " + buffer).c_str());
 	TrimString(buffer);
-	FloorIndicatorMesh = new MeshObject(object, buffer, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	FloorIndicatorMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	Ogre::String texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
 	Ogre::String tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
 	if (tmpdirection == "front")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
 	if (tmpdirection == "back")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, altitude, 1, 1);
 	if (tmpdirection == "left")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, altitude, 1, 1);
 	if (tmpdirection == "right")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture, CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, altitude, 1, 1);
 }
 
 FloorIndicator::~FloorIndicator()
@@ -116,7 +114,7 @@ void FloorIndicator::Update(const char *value)
 	texture = value;
 	texture.insert(0, Prefix);
 
-	FloorIndicatorMesh->ChangeTexture(texture);
+	FloorIndicatorMesh->ChangeTexture(texture.c_str());
 }
 
 Ogre::Vector3 FloorIndicator::GetPosition()

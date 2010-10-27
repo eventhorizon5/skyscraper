@@ -241,15 +241,15 @@ void Stats::On_bOK_Click(wxCommandEvent& event)
 
 void Stats::OnInit()
 {
-	tFrontendVersion->SetValue(wxString::FromAscii(skyscraper->version_frontend));
-	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version));
-	tPlatform->SetValue(wxString::FromAscii(skyscraper->Platform));
+	tFrontendVersion->SetValue(wxString::FromAscii(skyscraper->version_frontend.c_str()));
+	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version.c_str()));
+	tPlatform->SetValue(wxString::FromAscii(skyscraper->Platform.c_str()));
 
-	tName->SetValue(wxString::FromAscii(Simcore->BuildingName));
-	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner));
-	tLocation->SetValue(wxString::FromAscii(Simcore->BuildingLocation));
-	tDescription->SetValue(wxString::FromAscii(Simcore->BuildingDescription));
-	tVersion->SetValue(wxString::FromAscii(Simcore->BuildingVersion));
+	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.c_str()));
+	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner.c_str()));
+	tLocation->SetValue(wxString::FromAscii(Simcore->BuildingLocation.c_str()));
+	tDescription->SetValue(wxString::FromAscii(Simcore->BuildingDescription.c_str()));
+	tVersion->SetValue(wxString::FromAscii(Simcore->BuildingVersion.c_str()));
 }
 
 void Stats::Loop()

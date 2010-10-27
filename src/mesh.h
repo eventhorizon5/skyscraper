@@ -49,8 +49,7 @@ public:
 	void SetRotation(const Ogre::Vector3 rotation);
 	Ogre::Vector3 GetRotation();
 	
-	Ogre::Mesh MeshWrapper; //building mesh
-	Ogre::Mesh* State; //factory state
+	Ogre::Mesh* MeshWrapper; //building mesh
 	std::vector<Ogre::SubMesh> Submeshes;
 	std::vector<WallObject*> Walls;
 	Ogre::Entity *Movable;
@@ -82,8 +81,8 @@ public:
 	~WallPolygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();
-	void GetGeometry(Ogre::Mesh meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly);
-	bool PointInside(Ogre::Mesh meshwrapper, const Ogre::Vector3 &point, bool plane_check = true);
+	void GetGeometry(Ogre::Mesh* meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly);
+	bool PointInside(Ogre::Mesh* meshwrapper, const Ogre::Vector3 &point, bool plane_check = true);
 };
 
 #endif

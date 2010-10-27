@@ -90,7 +90,7 @@ void* Object::GetRawObject()
 const char* Object::GetType()
 {
 	//return object type string
-	return Type;
+	return Type.c_str();
 }
 
 int Object::GetNumber()
@@ -102,7 +102,7 @@ int Object::GetNumber()
 const char* Object::GetName()
 {
 	//return object name
-	return Name;
+	return Name.c_str();
 }
 
 void Object::SetName(const char *name)

@@ -28,8 +28,6 @@
 #include "control.h"
 #include "unix.h"
 
-#include <iengine/movable.h>
-
 extern SBS *sbs; //external pointer to the SBS engine
 
 Control::Control(Object *parent, const char *name, const char *sound_file, std::vector<Ogre::String> &action_names, std::vector<Ogre::String> &textures, const char *direction, float width, float height, float voffset)
@@ -58,13 +56,13 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	ControlMesh = new MeshObject(object, name, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Direction == "front")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, width, 0, height, voffset, 1, 1);
 	if (Direction == "back")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, -width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, -width, 0, height, voffset, 1, 1);
 	if (Direction == "left")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, 0, -width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, 0, -width, height, voffset, 1, 1);
 	if (Direction == "right")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0], 0, 0, 0, width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, 0, width, height, voffset, 1, 1);
 
 	//create sound object
 	sound = new Sound(this->object, "Control", true);
@@ -148,7 +146,7 @@ bool Control::SetSelectPosition(int position)
 
 	current_position = position;
 
-	if (ControlMesh->ChangeTexture(TextureArray[position - 1]))
+	if (ControlMesh->ChangeTexture(TextureArray[position - 1].c_str()))
 		return true;
 	return false;
 }
@@ -223,7 +221,7 @@ int Control::GetSelectPosition()
 const char* Control::GetPositionAction(int position)
 {
 	//return action name associated with the specified selection position
-	return Actions[position - 1];
+	return Actions[position - 1].c_str();
 }
 
 const char* Control::GetSelectPositionAction()

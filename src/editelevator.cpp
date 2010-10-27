@@ -1019,7 +1019,7 @@ void editelevator::Loop()
 	int floor_temp = sFloor->GetThumbPosition() - Simcore->Basements;
 	wxString floor_name;
 	if (Simcore->GetFloor(floor_temp))
-		floor_name = wxString::FromAscii(Simcore->GetFloor(floor_temp)->ID);
+		floor_name = wxString::FromAscii(Simcore->GetFloor(floor_temp)->ID.c_str());
 	tFloor->SetLabel(wxT("Floor ") + wxVariant((long)floor_temp).GetString() + wxT(" (" + floor_name) + wxT(")"));
 	tDoor->SetLabel(wxT("Door " + wxVariant((long)sDoor->GetThumbPosition()).GetString() + wxT(" (0 = all)")));
 	txtBrakes->SetValue(wxString::FromAscii(BoolToString(elevator->GetBrakeStatus())));
@@ -1074,7 +1074,7 @@ void editelevator::Loop()
 void editelevator::SetMainValues()
 {
 	//set changeable values
-	txtName->SetValue(wxString::FromAscii(elevator->Name));
+	txtName->SetValue(wxString::FromAscii(elevator->Name.c_str()));
 	if (door)
 	{
 		txtDoorTimer->SetValue(wxVariant((int)door->DoorTimer).GetString());

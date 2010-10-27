@@ -55,7 +55,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	Ogre::String buffer, buffer2, buffer3;
 
 	buffer = number;
-	object->SetName("Stairwell " + buffer);
+	object->SetName(Ogre::String("Stairwell " + buffer).c_str());
 
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -68,7 +68,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 		buffer3 = i;
 		buffer = "Stairwell " + buffer2 + ":" + buffer3;
 		TrimString(buffer);
-		StairArray[i - startfloor] = new MeshObject(object, buffer);
+		StairArray[i - startfloor] = new MeshObject(object, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
 }
@@ -179,12 +179,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer.c_str(), texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer.c_str(), texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 		if (Direction == "left")
@@ -195,12 +195,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer.c_str(), texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer.c_str(), texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 		if (Direction == "back")
@@ -211,12 +211,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer.c_str(), texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer.c_str(), texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 		if (Direction == "front")
@@ -227,12 +227,12 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer, texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer.c_str(), texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = buffer3 + " " + buffer2 + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), tw, th);
+				AddFloor(wall, floor, buffer.c_str(), texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), tw, th);
 			}
 		}
 	}
@@ -341,8 +341,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	if (position.y > bottom && position.y < top)
 	{
 		//check both the current floor and floor below
-		Ogre::Vector3 endposition;
-		endposition.Set(position.x, position.y - floorptr->FullHeight(), position.z);
+		Ogre::Vector3 endposition = Ogre::Vector3(position.x, position.y - floorptr->FullHeight(), position.z);
 		if (floor > startfloor)
 			hit = GetMeshObject(floor - 1)->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
 		if (floor >= startfloor && floor <= endfloor)
@@ -411,7 +410,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	Ogre::String stairsnum = _itoa(StairsNum, intbuffer, 10);
 	Ogre::String num = _itoa(DoorArray.size() - 1, intbuffer, 10);
-	DoorArray[DoorArray.size() - 1].object = new Door(this->object, "Stairwell " + stairsnum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(this->object, Ogre::String("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }
@@ -608,13 +607,13 @@ bool Stairs::IsDoorMoving(int number)
 	return false;
 }
 
-void Stairs::Report(const char *message)
+void Stairs::Report(std::string message)
 {
 	//general reporting function
 	sbs->Report("Stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }
 
-bool Stairs::ReportError(const char *message)
+bool Stairs::ReportError(std::string message)
 {
 	//general reporting function
 	return sbs->ReportError("Stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
@@ -627,7 +626,7 @@ void Stairs::RemoveDoor(Door *door)
 	{
 		if (DoorArray[i].object == door)
 		{
-			DoorArray.erase(i);
+			DoorArray.erase(DoorArray.begin() + i);
 			return;
 		}
 	}

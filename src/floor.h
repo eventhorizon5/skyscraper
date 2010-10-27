@@ -88,8 +88,8 @@ public:
 	std::vector<int> GetCallButtons(int elevator);
 	void AddFillerWalls(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th);
 	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
-	void Report(const char *message);
-	bool ReportError(const char *message);
+	void Report(std::string message);
+	bool ReportError(std::string message);
 	float GetBase(bool relative = false);
 	void OpenDoor(int number);
 	void CloseDoor(int number);

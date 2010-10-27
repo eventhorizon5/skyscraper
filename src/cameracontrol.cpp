@@ -430,8 +430,8 @@ void CameraControl::Loop()
 	Simcore->camera->GetDirection(direction_front, direction_top);
 	txtDirectionFront->SetValue(TruncateNumber(direction_front.x, 2) + wxT(", ") + TruncateNumber(direction_front.y, 2) + wxT(", ") + TruncateNumber(direction_front.z, 2));
 	txtDirectionTop->SetValue(TruncateNumber(direction_top.x, 2) + wxT(", ") + TruncateNumber(direction_top.y, 2) + wxT(", ") + TruncateNumber(direction_top.z, 2));
-	txtCurrentFloor->SetValue(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID) + wxT(")"));
-	txtLastMesh->SetValue(wxString::FromAscii(Simcore->camera->LastHitMesh));
+	txtCurrentFloor->SetValue(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID.c_str()) + wxT(")"));
+	txtLastMesh->SetValue(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
 	txtDesiredVel->SetValue(TruncateNumber(Simcore->camera->desired_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_velocity.z, 2));
 	txtVelocity->SetValue(TruncateNumber(Simcore->camera->velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->velocity.z, 2));
 	txtDesiredAngle->SetValue(TruncateNumber(Simcore->camera->desired_angle_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.z, 2));

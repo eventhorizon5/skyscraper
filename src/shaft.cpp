@@ -73,7 +73,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	Ogre::String buffer, buffer2, buffer3;
 
 	buffer = number;
-	object->SetName("Shaft " + buffer);
+	object->SetName(Ogre::String("Shaft " + buffer).c_str());
 
 	ShaftArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -87,7 +87,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 		buffer3 = i;
 		buffer = "Shaft " + buffer2 + ":" + buffer3;
 		TrimString(buffer);
-		ShaftArray[i - startfloor] = new MeshObject(object, buffer);
+		ShaftArray[i - startfloor] = new MeshObject(object, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
 }
@@ -227,7 +227,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 	}
 }
 
-bool Shaft::IsShaft(Ogre::Mesh test)
+bool Shaft::IsShaft(Ogre::Mesh* test)
 {
 	for (size_t i = 0; i < ShaftArray.size(); i++)
 	{
@@ -412,7 +412,13 @@ void Shaft::AddShowFloor(int floor)
 {
 	//adds a floor number to the ShowFloors array
 
-	if (ShowFloorsList.find(floor) == -1)
+	int index = -1;
+	for (int i = 0; i < ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			index = i;
+	}
+	if (index == -1)
 		ShowFloorsList.InsertSorted(floor);
 }
 
@@ -420,12 +426,18 @@ void Shaft::RemoveShowFloor(int floor)
 {
 	//removes a floor number from the ShowFloors array
 
-	if (ShowFloorsList.find(floor) != -1)
+	int index = -1;
+	for (int i = 0; i < ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			index = i;
+	}
+	if (index != -1)
 	{
 		for (int i = 0; i < ShowFloorsList.size(); i++)
 		{
 			if (ShowFloorsList[i] == floor)
-				ShowFloorsList.erase(i);
+				ShowFloorsList.erase(ShowFloorsList.begin() + i);
 		}
 	}
 }
@@ -434,7 +446,13 @@ void Shaft::AddShowOutside(int floor)
 {
 	//adds a floor number to the ShowFloors array
 
-	if (ShowOutsideList.find(floor) == -1)
+	int index = -1;
+	for (int i = 0; i < ShowOutsideList.size(); i++)
+	{
+		if (ShowOutsideList[i] == floor)
+			index = i;
+	}
+	if (index == -1)
 		ShowOutsideList.InsertSorted(floor);
 }
 
@@ -442,12 +460,18 @@ void Shaft::RemoveShowOutside(int floor)
 {
 	//removes a floor number from the ShowFloors array
 
-	if (ShowOutsideList.find(floor) != -1)
+	int index = -1;
+	for (int i = 0; i < ShowOutsideList.size(); i++)
+	{
+		if (ShowOutsideList[i] == floor)
+			index = i;
+	}
+	if (index != -1)
 	{
 		for (int i = 0; i < ShowOutsideList.size(); i++)
 		{
 			if (ShowOutsideList[i] == floor)
-				ShowOutsideList.erase(i);
+				ShowOutsideList.erase(ShowOutsideList.begin() + i);
 		}
 	}
 }
@@ -477,7 +501,7 @@ void Shaft::RemoveElevator(int number)
 	for (int i = 0; i < elevators.size(); i++)
 	{
 		if (elevators[i] == number)
-			elevators.erase(i);
+			elevators.erase(elevators.begin() + i);
 	}
 }
 
@@ -491,13 +515,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 	return ShaftArray[floor - startfloor];
 }
 
-void Shaft::Report(const char *message)
+void Shaft::Report(std::string message)
 {
 	//general reporting function
 	sbs->Report("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
-bool Shaft::ReportError(const char *message)
+bool Shaft::ReportError(std::string message)
 {
 	//general reporting function
 	return sbs->ReportError("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);

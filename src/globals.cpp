@@ -169,7 +169,7 @@ std::string SetCaseCopy(std::string string, bool uppercase)
 {
 	//change case of a string
 	SetCase(string, uppercase);
-	return newstring;
+	return string;
 }
 
 void SetCase(std::string &string, bool uppercase)
@@ -210,5 +210,24 @@ void ReplaceAll(std::string &string, const char *original, const char *replaceme
 	{
 		string.replace(position, 100, replacement);
 		position = string.find(original, position + 1);
+	}
+}
+bool StartsWith(std::string &string, const char *check_string, bool ignore_case)
+{
+	//check if a string starts with the contents of "check_string"
+
+	if (ignore_case == true)
+	{
+		int result = FindWithCase(string.c_str(), false, check_string, 0);
+		if (result == 0)
+			return true;
+		return false;
+	}
+	else
+	{
+		int result = string.find(check_string, 0);
+		if (result >= 0 && result != std::string::npos)
+			return true;
+		return false;
 	}
 }

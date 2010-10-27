@@ -334,10 +334,10 @@ void DebugPanel::Timer::Notify()
 	{
 		dp->t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 		dp->t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
-		dp->t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID) + wxT(")"));
+		dp->t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID.c_str()) + wxT(")"));
 		dp->t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName()));
 		dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
-		dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh));
+		dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
 		dp->t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
 
 		if (Simcore->Elevators() > 0)

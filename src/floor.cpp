@@ -44,22 +44,22 @@ Floor::Floor(int number)
 
 	//Create primary level mesh
 	buffer = Number;
-	object->SetName("Floor " + buffer);
+	object->SetName(Ogre::String("Floor " + buffer).c_str());
 	buffer.insert(0, "Level ");
 	TrimString(buffer);
-	Level = new MeshObject(object, buffer);
+	Level = new MeshObject(object, buffer.c_str());
 
 	//Create interfloor mesh
 	buffer = Number;
 	buffer.insert(0, "Interfloor ");
 	TrimString(buffer);
-	Interfloor = new MeshObject(object, buffer);
+	Interfloor = new MeshObject(object, buffer.c_str());
 
 	//Create columnframe mesh
 	buffer = Number;
 	buffer.insert(0, "ColumnFrame ");
 	TrimString(buffer);
-	ColumnFrame = new MeshObject(object, buffer);
+	ColumnFrame = new MeshObject(object, buffer.c_str());
 
 	//set enabled flag
 	IsEnabled = true;
@@ -398,7 +398,13 @@ void Floor::AddGroupFloor(int number)
 	//Groups are used to enable multiple floors at the same time when
 	//a user arrives at a floor
 
-	if (Group.find(number) == -1)
+	int index = -1;
+	for (int i = 0; i < Group.size(); i++)
+	{
+		if (Group[i] == number)
+			index = i;
+	}
+	if (index == -1)
 		Group.InsertSorted(number);
 }
 
@@ -406,12 +412,18 @@ void Floor::RemoveGroupFloor(int number)
 {
 	//removes a floor number from the group list
 
-	if (Group.find(number) != -1)
+	int index = -1;
+	for (int i = 0; i < Group.size(); i++)
+	{
+		if (Group[i] == number)
+			index = i;
+	}
+	if (index != -1)
 	{
 		for (int i = 0; i < Group.size(); i++)
 		{
 			if (Group[i] == number)
-				Group.erase(i);
+				Group.erase(Group.begin() + i);
 		}
 	}
 }
@@ -497,7 +509,7 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 	DoorArray.resize(DoorArray.size() + 1);
 	Ogre::String floornum = _itoa(Number, intbuffer, 10);
 	Ogre::String num = _itoa(DoorArray.size() - 1, intbuffer, 10);
-	DoorArray[DoorArray.size() - 1] = new Door(this->object, "Floor " + floornum + ":Door " + num, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	DoorArray[DoorArray.size() - 1] = new Door(this->object, Ogre::String("Floor " + floornum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
 	return DoorArray[DoorArray.size() - 1]->object;
 }
 
@@ -600,7 +612,7 @@ void Floor::UpdateFloorIndicators(int elevator)
 				else
 					value = sbs->GetFloor(elev->GetFloor())->ID;
 				TrimString(value);
-				FloorIndicatorArray[i]->Update(value);
+				FloorIndicatorArray[i]->Update(value.c_str());
 			}
 		}
 	}
@@ -621,7 +633,7 @@ void Floor::UpdateFloorIndicators()
 			else
 				value = sbs->GetFloor(elevator->GetFloor())->ID;
 			TrimString(value);
-			FloorIndicatorArray[i]->Update(value);
+			FloorIndicatorArray[i]->Update(value.c_str());
 		}
 	}
 }
@@ -732,13 +744,13 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	return sound->object;
 }
 
-void Floor::Report(const char *message)
+void Floor::Report(std::string message)
 {
 	//general reporting function
 	sbs->Report("Floor " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
-bool Floor::ReportError(const char *message)
+bool Floor::ReportError(std::string message)
 {
 	//general reporting function
 	return sbs->ReportError("Floor " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
@@ -935,7 +947,7 @@ void Floor::RemoveCallButton(CallButton *callbutton)
 	for (int i = 0; i < CallButtonArray.size(); i++)
 	{
 		if (CallButtonArray[i] == callbutton)
-			CallButtonArray.erase(i);
+			CallButtonArray.erase(CallButtonArray.begin() + i);
 	}
 }
 
@@ -946,7 +958,7 @@ void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
 	for (int i = 0; i < FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i] == indicator)
-			FloorIndicatorArray.erase(i);
+			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
 	}
 }
 
@@ -957,7 +969,7 @@ void Floor::RemoveDirectionalIndicator(DirectionalIndicator *indicator)
 	for (int i = 0; i < DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i] == indicator)
-			DirIndicatorArray.erase(i);
+			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
 	}
 }
 
@@ -968,7 +980,7 @@ void Floor::RemoveDoor(Door *door)
 	for (int i = 0; i < DoorArray.size(); i++)
 	{
 		if (DoorArray[i] == door)
-			DoorArray.erase(i);
+			DoorArray.erase(DoorArray.begin() + i);
 	}
 }
 
@@ -979,7 +991,7 @@ void Floor::RemoveSound(Sound *sound)
 	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
-			sounds.erase(i);
+			sounds.erase(sounds.begin() + i);
 	}
 }
 

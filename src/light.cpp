@@ -23,7 +23,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <csver.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -52,7 +51,7 @@ Light::Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 r
 	Name = name;
 	Origin = position;
 
-	light = sbs->engine->CreateLight(name, sbs->ToRemote(position), sbs->ToRemote(radius), csColor(color_r, color_g, color_b), CS_LIGHT_DYNAMICTYPE_DYNAMIC);
+	/*light = sbs->engine->CreateLight(name, sbs->ToRemote(position), sbs->ToRemote(radius), csColor(color_r, color_g, color_b), CS_LIGHT_DYNAMICTYPE_DYNAMIC);
 
 	if (type == 0)
 		light->SetType(CS_LIGHT_POINTLIGHT);
@@ -66,21 +65,21 @@ Light::Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 r
 	if (type == 1)
 		light->SetDirectionalCutoffRadius(directional_cutoff_radius);
 	if (type == 2)
-		light->SetSpotLightFalloff(spot_falloff_inner, spot_falloff_outer);
+		light->SetSpotLightFalloff(spot_falloff_inner, spot_falloff_outer);*/
 
 	sbs->AddLightHandle(this);
 
 	SetRotation(rotation);
 
 	//add light to world
-	sbs->area->GetLights()->Add(light);
+	//sbs->area->GetLights()->Add(light);
 }
 
 Light::~Light()
 {
 	if (sbs->FastDelete == false)
 	{
-		sbs->area->GetLights()->Remove(light);
+		//sbs->area->GetLights()->Remove(light);
 		sbs->DeleteLightHandle(this);
 	}
 	delete object;
@@ -89,17 +88,12 @@ Light::~Light()
 void Light::Prepare()
 {
 	//prepare light for use
-	//this only needs to be done for dynamic lights
-
-#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
-	//light->Setup();
-#endif
 }
 
 void Light::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move light - this can only be done on movable lights
-	Ogre::Vector3 pos;
+	/*Ogre::Vector3 pos;
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(Origin.x + position.x);
 	else
@@ -113,34 +107,33 @@ void Light::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y,
 	else
 		pos.z = light->GetCenter().z + sbs->ToRemote(position.z);
 	light->GetMovable()->SetPosition(pos);
-	light->GetMovable()->UpdateMove();
-	//Prepare();
+	light->GetMovable()->UpdateMove();*/
 }
 
 Ogre::Vector3 Light::GetPosition()
 {
-	return sbs->ToLocal(light->GetMovable()->GetPosition());
+	//return sbs->ToLocal(light->GetMovable()->GetPosition());
+	return Ogre::Vector3(0, 0, 0);
 }
 
 void Light::SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b)
 {
 	//set color of light
 
-	light->SetColor(csColor(color_r, color_g, color_b));
-	light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
+	//light->SetColor(csColor(color_r, color_g, color_b));
+	//light->SetSpecularColor(csColor(spec_color_r, spec_color_g, spec_color_b));
 }
 
 void Light::SetRotation(const Ogre::Vector3& rotation)
 {
 	//rotate light
-	Ogre::Matrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
+	/*Ogre::Matrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
 	csOrthoTransform ot (rot, light->GetMovable()->GetTransform().GetOrigin());
 	light->GetMovable()->SetTransform(ot);
 	rotX = rotation.x;
 	rotY = rotation.y;
 	rotZ = rotation.z;
-	light->GetMovable()->UpdateMove();
-	//Prepare();
+	light->GetMovable()->UpdateMove();*/
 }
 
 void Light::Rotate(const Ogre::Vector3& rotation, float speed)

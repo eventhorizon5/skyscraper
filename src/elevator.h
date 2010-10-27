@@ -146,7 +146,7 @@ public:
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
-	bool IsElevator(Ogre::Mesh test);
+	bool IsElevator(Ogre::Mesh* test);
 	bool IsInElevator(const Ogre::Vector3 &position);
 	//csHitBeamResult HitBeam(const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	float GetElevatorStart();
@@ -219,8 +219,8 @@ public:
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
-	void Report(const char *message);
-	bool ReportError(const char *message);
+	void Report(Ogre::String message);
+	bool ReportError(Ogre::String message);
 	Object* AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	Object* AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	void AddShaftDoorsComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);

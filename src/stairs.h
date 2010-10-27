@@ -63,8 +63,8 @@ public:
 	bool IsEnabledFloor(int floor);
 	bool IsValidFloor(int floor);
 	bool IsDoorMoving(int number);
-	void Report(const char *message);
-	bool ReportError(const char *message);
+	void Report(std::string message);
+	bool ReportError(std::string message);
 	void RemoveDoor(Door *door);
 	Object* AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
 	MeshObject* GetMeshObject(int floor);

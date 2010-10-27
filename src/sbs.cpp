@@ -25,7 +25,7 @@
 
 #include <wx/wx.h>
 #include <wx/variant.h>
-#include <ogre.h>
+#include <Ogre.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -386,11 +386,11 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_
 
 void SBS::PrintBanner()
 {
-	printf("\n Scalable Building Simulator " + version + " " + version_state + "\n");
-	printf(" Copyright (C)2004-2010 Ryan Thoryk\n");
-	printf(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
-	printf(" software, and you are welcome to redistribute it under certain\n");
-	printf(" conditions. For details, see the file gpl.txt\n\n");
+	Report("\n Scalable Building Simulator " + version + " " + version_state + "\n");
+	Report(" Copyright (C)2004-2010 Ryan Thoryk\n");
+	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
+	Report(" software, and you are welcome to redistribute it under certain\n");
+	Report(" conditions. For details, see the file gpl.txt\n\n");
 }
 
 void SBS::MainLoop()
@@ -470,9 +470,10 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, const char* rootdirectory, const char* directory_char)
+bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, const char* rootdirectory, const char* directory_char)
 {
 	mRoot = Ogre::Root::getSingletonPtr();
+	this->mSceneManager = mSceneManager;
 
 	//create default sector
 	/*
@@ -852,7 +853,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	return true;
 }
 
-int SBS::AddWallMain(Object *parent, Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddWallMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
@@ -986,7 +987,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.append(":front");
-		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //front wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v1, v2, v3, v4, tw2, th2, autosize); //front wall
 	}
 
 	if (DrawMainP == true)
@@ -1001,7 +1002,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 
 		NewName = name;
 		NewName.append(":back");
-		wallobject->AddQuad(NewName, texture2, v6, v5, v8, v7, tw2, th2, autosize); //back wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
 
 	if (DrawSideN == true)
@@ -1017,9 +1018,9 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		NewName = name;
 		NewName.append(":left");
 		if (axis == 1)
-			wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //left wall
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //left wall
 		else
-			wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //left wall
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //left wall
 	}
 
 	if (DrawSideP == true)
@@ -1035,9 +1036,9 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		NewName = name;
 		NewName.append(":right");
 		if (axis == 1)
-			wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //right wall
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //right wall
 		else
-			wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //right wall
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //right wall
 	}
 
 	if (DrawTop == true)
@@ -1052,7 +1053,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 
 		NewName = name;
 		NewName.append(":top");
-		wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //top wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //top wall
 	}
 
 	if (DrawBottom == true)
@@ -1067,7 +1068,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 
 		NewName = name;
 		NewName.append(":bottom");
-		wallobject->AddQuad(NewName, texture2, v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
 	}
 
 	//recreate colliders if specified
@@ -1080,7 +1081,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	return 0;
 }
 
-int SBS::AddFloorMain(Object *parent, Ogre::Mesh mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddFloorMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, autosize);
@@ -1125,17 +1126,17 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 	if (ReverseAxisValue == false)
 	{
-		v1.Set(x1, altitude1, z1); //bottom left
-		v2.Set(x2, altitude1, z1); //bottom right
-		v3.Set(x2, altitude2, z2); //top right
-		v4.Set(x1, altitude2, z2); //top left
+		v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
+		v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
+		v3 = Ogre::Vector3(x2, altitude2, z2); //top right
+		v4 = Ogre::Vector3(x1, altitude2, z2); //top left
 	}
 	else
 	{
-		v1.Set(x1, altitude1, z1); //bottom left
-		v2.Set(x1, altitude1, z2); //top left
-		v3.Set(x2, altitude2, z2); //top right
-		v4.Set(x2, altitude2, z1); //bottom right
+		v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
+		v2 = Ogre::Vector3(x1, altitude1, z2); //top left
+		v3 = Ogre::Vector3(x2, altitude2, z2); //top right
+		v4 = Ogre::Vector3(x2, altitude2, z1); //bottom right
 	}
 
 	Ogre::Vector3 v5 = v1;
@@ -1193,7 +1194,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.append(":front");
-		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //bottom wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v1, v2, v3, v4, tw2, th2, autosize); //bottom wall
 	}
 
 	if (DrawMainP == true)
@@ -1208,7 +1209,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 		NewName = name;
 		NewName.append(":back");
-		wallobject->AddQuad(NewName, texture2, v8, v7, v6, v5, tw2, th2, autosize); //top wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
 
 	if (DrawSideN == true)
@@ -1223,7 +1224,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 		NewName = name;
 		NewName.append(":left");
-		wallobject->AddQuad(NewName, texture2, v8, v5, v1, v4, tw2, th2, autosize); //left wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v5, v1, v4, tw2, th2, autosize); //left wall
 	}
 
 	if (DrawSideP == true)
@@ -1238,7 +1239,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 		NewName = name;
 		NewName.append(":right");
-		wallobject->AddQuad(NewName, texture2, v6, v7, v3, v2, tw2, th2, autosize); //right wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v7, v3, v2, tw2, th2, autosize); //right wall
 	}
 
 	if (DrawTop == true)
@@ -1253,7 +1254,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 		NewName = name;
 		NewName.append(":top");
-		wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //front wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //front wall
 	}
 
 	if (DrawBottom == true)
@@ -1268,7 +1269,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 		NewName = name;
 		NewName.append(":bottom");
-		wallobject->AddQuad(NewName, texture2, v7, v8, v4, v3, tw2, th2, autosize); //back wall
+		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v7, v8, v4, v3, tw2, th2, autosize); //back wall
 	}
 
 	//recreate colliders if specified
@@ -1281,24 +1282,22 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	return 0;
 }
 
-void SBS::Report (const char* msg, ...)
+void SBS::Report(std::string message)
 {
-	Ogre::String message = msg;
 	ReplaceAll(message, "%", "%%"); //allow percent signs
 
-	printf(message);
+	printf(message.c_str());
 	printf("\n");
 	fflush (stdout);
 
 	LastNotification = message;
 }
 
-bool SBS::ReportError (const char* msg, ...)
+bool SBS::ReportError(std::string message)
 {
-	Ogre::String message = msg;
 	ReplaceAll(message, "%", "%%"); //allow percent signs
 
-	printf(message);
+	printf(message.c_str());
 	printf("\n");
 	fflush (stdout);
 
@@ -2350,7 +2349,7 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 				int location = string.find("x");
 				if (location >= 0)
 				{
-					Ogre::String number = string.at(location + 1);
+					Ogre::String number = string.substr(location + 1);
 					if (atoi(number) < vertices.size())
 						ReplaceAll(string, "x" + number, _gcvt(vertices[atoi(number)].x, 12, buffer));
 					else
@@ -2796,7 +2795,7 @@ bool SBS::UnregisterDoorCallback(Door *door)
 			for (int i = 0; i < doorcallbacks.size(); i++)
 			{
 				if (doorcallbacks[i] == door)
-					doorcallbacks.erase(i);
+					doorcallbacks.erase(doorcallbacks.begin() + i);
 			}
 			return true;
 		}
@@ -2836,7 +2835,7 @@ bool SBS::UnregisterCallButtonCallback(CallButton *button)
 		for (int i = 0; i < buttoncallbacks.size(); i++)
 		{
 			if (buttoncallbacks[i] == button)
-				buttoncallbacks.erase(i);
+				buttoncallbacks.erase(buttoncallbacks.begin() + i);
 		}
 	}
 	else
@@ -3099,13 +3098,13 @@ int SBS::GetMeshFactoryCount()
 	return engine->GetMeshFactories()->GetCount();
 }
 
-void SBS::CreateColliders(Ogre::Mesh mesh)
+void SBS::CreateColliders(Ogre::Mesh* mesh)
 {
 	//create colliders for the given mesh
 	csColliderHelper::InitializeCollisionWrapper(collision_sys, mesh);
 }
 
-void SBS::DeleteColliders(Ogre::Mesh mesh)
+void SBS::DeleteColliders(Ogre::Mesh* mesh)
 {
 	//delete colliders for the given mesh
 	csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
@@ -3500,7 +3499,7 @@ void SBS::RemoveFloor(Floor *floor)
 	{
 		if (FloorArray[i].object == floor)
 		{
-			FloorArray.erase(i);
+			FloorArray.erase(FloorArray.begin() + i);
 			return;
 		}
 	}
@@ -3513,7 +3512,7 @@ void SBS::RemoveElevator(Elevator *elevator)
 	{
 		if (ElevatorArray[i].object == elevator)
 		{
-			ElevatorArray.erase(i);
+			ElevatorArray.erase(ElevatorArray.begin() + i);
 			return;
 		}
 	}
@@ -3526,7 +3525,7 @@ void SBS::RemoveShaft(Shaft *shaft)
 	{
 		if (ShaftArray[i].object == shaft)
 		{
-			ShaftArray.erase(i);
+			ShaftArray.erase(ShaftArray.begin() + i);
 			return;
 		}
 	}
@@ -3539,7 +3538,7 @@ void SBS::RemoveStairs(Stairs *stairs)
 	{
 		if (StairsArray[i].object == stairs)
 		{
-			StairsArray.erase(i);
+			StairsArray.erase(StairsArray.begin() + i);
 			return;
 		}
 	}
@@ -3554,7 +3553,7 @@ void SBS::RemoveSound(Sound *sound)
 	{
 		if (sounds[i] == sound)
 		{
-			sounds.erase(i);
+			sounds.erase(sounds.begin() + i);
 			return;
 		}
 	}
@@ -3632,7 +3631,7 @@ void SBS::DeleteLightHandle(Light* handle)
 	for (int i = 0; i < all_lights.size(); i++)
 	{
 		if (all_lights[i] == handle)
-			all_lights.erase(i);
+			all_lights.erase(all_lights.begin() + i);
 	}
 }
 
@@ -3646,7 +3645,7 @@ void SBS::DeleteModelHandle(Model* handle)
 	for (int i = 0; i < all_models.size(); i++)
 	{
 		if (all_models[i] == handle)
-			all_models.erase(i);
+			all_models.erase(all_models.begin() + i);
 	}
 }
 
@@ -3677,11 +3676,11 @@ void SBS::DeleteMeshHandle(MeshObject* handle)
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i] == handle)
-			meshes.erase(i);
+			meshes.erase(meshes.begin() + i);
 	}
 }
 
-MeshObject* SBS::FindMeshObject(Ogre::Mesh meshwrapper)
+MeshObject* SBS::FindMeshObject(Ogre::Mesh* meshwrapper)
 {
 	//find a mesh object by searching for matching wrapper
 	for (int i = 0; i < meshes.size(); i++)
@@ -3705,27 +3704,27 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 	return model->object;
 }
 
-int SBS::GetConfigInt(const char *key, int default)
+int SBS::GetConfigInt(const char *key, int default_value)
 {
 	Ogre::ConfigFile file;
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
-const char* SBS::GetConfigString(const char *key, const char *default)
+const char* SBS::GetConfigString(const char *key, const char *default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
-	return result;
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
+	return result.c_str();
 }
 
-bool SBS::GetConfigBool(const char *key, bool default)
+bool SBS::GetConfigBool(const char *key, bool default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
-float SBS::GetConfigFloat(const char *key, float default)
+float SBS::GetConfigFloat(const char *key, float default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default));
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }

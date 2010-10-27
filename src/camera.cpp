@@ -38,8 +38,7 @@ Camera::Camera()
 	object = new Object();
 	object->SetValues(this, sbs->object, "Camera", "Camera", true);
 
-	MainCamera = sbs->view->GetCamera();
-	MainCamera->SetSector(sbs->area);
+	MainCamera = sbs->mSceneManager->createCamera("MainCamera");
 
 	//init variables
 	CurrentFloor = 0;
@@ -49,10 +48,10 @@ Camera::Camera()
 	StartDirection = Ogre::Vector3(0, 0, 0);
 	StartRotation = Ogre::Vector3(0, 0, 0);
 	FloorTemp = 0;
-	velocity.Set(0, 0, 0);
-	desired_velocity.Set(0, 0, 0);
-	angle_velocity.Set(0, 0, 0);
-	desired_angle_velocity.Set(0, 0, 0);
+	velocity = Ogre::Vector3(0, 0, 0);
+	desired_velocity = Ogre::Vector3(0, 0, 0);
+	angle_velocity = Ogre::Vector3(0, 0, 0);
+	desired_angle_velocity = Ogre::Vector3(0, 0, 0);
 	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 0.08);
 	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
 	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
@@ -99,20 +98,20 @@ Camera::Camera()
 Camera::~Camera()
 {
 	//Destructor
-	MainCamera = 0;
+	//MainCamera = 0;
 	delete object;
 }
 
 void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
-	MainCamera->GetTransform().SetOrigin(sbs->ToRemote(vector));
+	MainCamera->setPosition(sbs->ToRemote(vector));
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)
 {
 	//sets the camera's direction to an absolute position
-	MainCamera->GetTransform().LookAt(vector, Ogre::Vector3(0, 1, 0));
+	MainCamera->lookAt(vector);
 }
 
 void Camera::SetRotation(Ogre::Vector3 vector)
@@ -146,16 +145,16 @@ Ogre::Vector3 Camera::GetPosition()
 {
 	//returns the camera's current position
 	if (MainCamera)
-		return sbs->ToLocal(MainCamera->GetTransform().GetOrigin());
+		return sbs->ToLocal(MainCamera->getPosition());
 	else
-		return 0;
+		return Ogre::Vector3(0, 0, 0);
 }
 
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 {
 	//returns the camera's current direction in front and top vectors
-	front = MainCamera->GetTransform().GetT2O().Col3();
-	top = MainCamera->GetTransform().GetT2O().Col2();
+	//front = MainCamera->GetTransform().GetT2O().Col3();
+	//top = MainCamera->GetTransform().GetT2O().Col2();
 }
 
 Ogre::Vector3 Camera::GetRotation()
@@ -346,7 +345,14 @@ void Camera::CheckShaft()
 
 				if (shaft->ShowOutside == true)
 				{
-					if (shaft->ShowOutsideList.find(CurrentFloor) != -1)
+					int loc = -1;
+					for (int i = 0; i < shaft->ShowOutsideList.size(); i++)
+					{
+						if (shaft->ShowOutsideList[i] == CurrentFloor)
+							loc = i;
+					}
+
+					if (loc != -1)
 					{
 						sbs->EnableSkybox(true);
 						sbs->EnableBuildings(true);
@@ -437,6 +443,7 @@ void Camera::CheckStairwell()
 
 void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 {
+	/*
 	//some code and comments from the CrystalSpace manual
 	//this returns the mesh that the user clicks on
 
@@ -669,21 +676,21 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					elevator->OpenDoor(doornumber);
 			}
 		}
-	}
+	}*/
 }
 
 const char* Camera::GetClickedMeshName()
 {
 	//return name of last clicked mesh
 
-	return meshname;
+	return meshname.c_str();
 }
 
 const char* Camera::GetClickedPolyName()
 {
 	//return name of last clicked polygon
 
-	return polyname;
+	return polyname.c_str();
 }
 
 int Camera::GetClickedObjectNumber()
@@ -701,13 +708,13 @@ int Camera::GetClickedObjectLine()
 const char *Camera::GetClickedObjectCommand()
 {
 	//return command line of last clicked object
-	return object_cmd;
+	return object_cmd.c_str();
 }
 
 const char *Camera::GetClickedObjectCommandP()
 {
 	//return processed command line of last clicked object
-	return object_cmd_processed;
+	return object_cmd_processed.c_str();
 }
 
 void Camera::CreateColliders()
@@ -742,7 +749,7 @@ void Camera::Loop()
 	collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
 
 	//get list of hit meshes and put them into the 'hitlist' array
-	if (EnableCollisions == true)
+	/*if (EnableCollisions == true)
 	{
 		if (collider_actor.CheckHitMeshes())
 		{
@@ -794,7 +801,7 @@ void Camera::Loop()
 		}
 		else
 			collider_actor.EnableHitMeshes(true); //tell collider to report on hit meshes if currently off
-	}
+	}*/
 
 	//sync sound listener object to camera position
 	sbs->SetListenerLocation(GetPosition());
@@ -914,13 +921,14 @@ bool Camera::GetGravityStatus()
 void Camera::SetFOVAngle(float angle)
 {
 	//set camera FOV angle
-	if (angle > 0 && angle < 179.63)
-		MainCamera->SetFOVAngle(angle, sbs->g2d->GetWidth());
+	//if (angle > 0 && angle < 179.63)
+		//MainCamera->SetFOVAngle(angle, sbs->g2d->GetWidth());
 }
 
 float Camera::GetFOVAngle()
 {
-	return MainCamera->GetFOVAngle();
+	//return MainCamera->GetFOVAngle();
+	return 0;
 }
 
 void Camera::SetToDefaultFOV()
