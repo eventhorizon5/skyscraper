@@ -165,7 +165,14 @@ const char* SetCaseCopy(const char *string, bool uppercase)
 	return newstring.c_str();
 }
 
-void SetCase(std::string &string, bool uppercase);
+std::string SetCaseCopy(std::string string, bool uppercase)
+{
+	//change case of a string
+	SetCase(string, uppercase);
+	return newstring;
+}
+
+void SetCase(std::string &string, bool uppercase)
 {
 	//change case of a string
 	if (uppercase == true)
@@ -177,7 +184,7 @@ void SetCase(std::string &string, bool uppercase);
 int FindWithCase(const char *string, bool uppercase, const char *key, int offset)
 {
 	//change case of a string, and return location of search key
-	std::string newstring = SetCase(string, uppercase);
+	std::string newstring = SetCaseCopy(string, uppercase);
 	newstring.find(newstring, offset);
 	int loc = newstring.find(newstring, offset);
 	if (loc == std::string::npos)
@@ -191,4 +198,17 @@ void TrimString(std::string &string)
 	//trim whitespace from string
 	std::string::iterator end_pos = std::remove(string.begin(), string.end(), ' ');
 	string.erase(end_pos, string.end());
+}
+
+void ReplaceAll(std::string &string, const char *original, const char *replacement)
+{
+	//replace all occurances of "original" with "replacement"
+
+	int position = string.find(original);
+
+	while (position != std::string::npos)
+	{
+		string.replace(position, 100, replacement);
+		position = string.find(original, position + 1);
+	}
 }

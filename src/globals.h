@@ -59,9 +59,11 @@ SBSIMPEXP float DegreesToRadians(float degrees);
 SBSIMPEXP float Min3(float a, float b, float c);
 SBSIMPEXP float Max3(float a, float b, float c);
 SBSIMPEXP const char* SetCaseCopy(const char *string, bool uppercase);
+SBSIMPEXP std::string SetCaseCopy(std::string string, bool uppercase);
 SBSIMPEXP void SetCase(std::string &string, bool uppercase);
 SBSIMPEXP int FindWithCase(const char *string, bool uppercase, const char *key, int offset);
 SBSIMPEXP void TrimString(std::string &string);
+SBSIMPEXP void ReplaceAll(std::string &string, const char *original, const char *replacement);
 
 const double pi = 3.14159265;
 

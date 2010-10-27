@@ -167,7 +167,7 @@ Elevator::Elevator(int number)
 
 	//create object meshes
 	buffer = Number;
-	buffer.Insert(0, "Elevator ");
+	buffer.insert(0, "Elevator ");
 	TrimString(buffer);
 	object->SetName(buffer);
 	ElevatorMesh = new MeshObject(object, buffer);
@@ -4054,7 +4054,7 @@ bool Elevator::PlayFloorBeep()
 
 	Ogre::String newsound = BeepSound;
 	//change the asterisk into the current floor number
-	newsound.ReplaceAll("*", Ogre::String(_itoa(GetFloor(), intbuffer, 10)));
+	ReplaceAll(newsound, "*", Ogre::String(_itoa(GetFloor(), intbuffer, 10)));
 	TrimString(newsound);
 	floorbeep->Stop();
 	floorbeep->Load(newsound);
@@ -4075,7 +4075,7 @@ bool Elevator::PlayFloorSound()
 
 	Ogre::String newsound = FloorSound;
 	//change the asterisk into the current floor number
-	newsound.ReplaceAll("*", Ogre::String(_itoa(GotoFloor, intbuffer, 10)));
+	ReplaceAll(newsound, "*", Ogre::String(_itoa(GotoFloor, intbuffer, 10)));
 	TrimString(newsound);
 	floorsound->Stop();
 	floorsound->Load(newsound);
@@ -4114,7 +4114,7 @@ bool Elevator::PlayMessageSound(bool direction)
 	}
 
 	//change the asterisk into the current floor number
-	newsound.ReplaceAll("*", Ogre::String(_itoa(GetFloor(), intbuffer, 10)));
+	ReplaceAll(newsound, "*", Ogre::String(_itoa(GetFloor(), intbuffer, 10)));
 	TrimString(newsound);
 	messagesnd->Stop();
 	messagesnd->Load(newsound);

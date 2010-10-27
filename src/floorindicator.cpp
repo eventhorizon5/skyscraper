@@ -114,7 +114,7 @@ void FloorIndicator::Update(const char *value)
 
 	Ogre::String texture;
 	texture = value;
-	texture.Insert(0, Prefix);
+	texture.insert(0, Prefix);
 
 	FloorIndicatorMesh->ChangeTexture(texture);
 }

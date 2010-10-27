@@ -643,7 +643,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	Ogre::String font_filename2 = VerifyFile(font_filename);
 	Ogre::String relative_filename = font_filename2;
-	relative_filename.ReplaceAll("/root/", "");
+	ReplaceAll(relative_filename, "/root/", "");
 
 	//load font
 	Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
@@ -1284,7 +1284,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 void SBS::Report (const char* msg, ...)
 {
 	Ogre::String message = msg;
-	//message.ReplaceAll("%", "%%"); //allow percent signs
+	ReplaceAll(message, "%", "%%"); //allow percent signs
 
 	printf(message);
 	printf("\n");
@@ -1296,7 +1296,7 @@ void SBS::Report (const char* msg, ...)
 bool SBS::ReportError (const char* msg, ...)
 {
 	Ogre::String message = msg;
-	//message.ReplaceAll("%", "%%"); //allow percent signs
+	ReplaceAll(message, "%", "%%"); //allow percent signs
 
 	printf(message);
 	printf("\n");
@@ -2352,9 +2352,9 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 				{
 					Ogre::String number = string.at(location + 1);
 					if (atoi(number) < vertices.size())
-						string.ReplaceAll("x" + number, _gcvt(vertices[atoi(number)].x, 12, buffer));
+						ReplaceAll(string, "x" + number, _gcvt(vertices[atoi(number)].x, 12, buffer));
 					else
-						string.ReplaceAll("x" + number, "0"); //number value out of bounds
+						ReplaceAll(string, "x" + number, "0"); //number value out of bounds
 				}
 
 				//find Y component
@@ -2363,9 +2363,9 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 				{
 					Ogre::String number = string.at(location + 1);
 					if (atoi(number) < vertices.size())
-						string.ReplaceAll("y" + number, _gcvt(vertices[atoi(number)].y, 12, buffer));
+						ReplaceAll(string, "y" + number, _gcvt(vertices[atoi(number)].y, 12, buffer));
 					else
-						string.ReplaceAll("y" + number, "0"); //number value out of bounds
+						ReplaceAll(string, "y" + number, "0"); //number value out of bounds
 				}
 
 				//find Z component
@@ -2374,9 +2374,9 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 				{
 					Ogre::String number = string.at(location + 1);
 					if (atoi(number) < vertices.size())
-						string.ReplaceAll("z" + number, _gcvt(vertices[atoi(number)].z, 12, buffer));
+						ReplaceAll(string, "z" + number, _gcvt(vertices[atoi(number)].z, 12, buffer));
 					else
-						string.ReplaceAll("z" + number, "0"); //number value out of bounds
+						ReplaceAll(string, "z" + number, "0"); //number value out of bounds
 				}
 
 				//store values
@@ -3600,7 +3600,7 @@ bool SBS::FileExists(const char *filename, bool relative)
 	/*Ogre::String file = filename;
 
 	if (relative == true)
-		file.Insert(0, "/root/");
+		file.insert(0, "/root/");
 
 	if (vfs->Exists(filename))
 		return true;

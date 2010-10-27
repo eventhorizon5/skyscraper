@@ -1322,7 +1322,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	Ogre::String buffer;
 	Ogre::String Name = name;
 	buffer = object->GetNumber();
-	Name.Insert(0, "(" + buffer + ")");
+	Name.insert(0, "(" + buffer + ")");
 
 	if (!filename)
 	{
@@ -1493,7 +1493,7 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 	//first verify the filename
 	/*Ogre::String File = sbs->VerifyFile(filename);;
 	sbs->Report("Loading Collada model file " + File);
-	File.Insert(0, "/root/data/");
+	File.insert(0, "/root/data/");
 
 	#define COLLADA_VERSION "1.4.1"
 	csRef<iColladaConvertor> collada = csQueryRegistryOrLoad<iColladaConvertor>(sbs->object_reg, "crystalspace.utilities.colladaconvertor");

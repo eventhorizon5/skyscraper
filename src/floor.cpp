@@ -45,19 +45,19 @@ Floor::Floor(int number)
 	//Create primary level mesh
 	buffer = Number;
 	object->SetName("Floor " + buffer);
-	buffer.Insert(0, "Level ");
+	buffer.insert(0, "Level ");
 	TrimString(buffer);
 	Level = new MeshObject(object, buffer);
 
 	//Create interfloor mesh
 	buffer = Number;
-	buffer.Insert(0, "Interfloor ");
+	buffer.insert(0, "Interfloor ");
 	TrimString(buffer);
 	Interfloor = new MeshObject(object, buffer);
 
 	//Create columnframe mesh
 	buffer = Number;
-	buffer.Insert(0, "ColumnFrame ");
+	buffer.insert(0, "ColumnFrame ");
 	TrimString(buffer);
 	ColumnFrame = new MeshObject(object, buffer);
 

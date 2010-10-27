@@ -36,8 +36,6 @@
 #include "unix.h"
 #include "textwindow.h"
 
-#include <csutil/filereadhelper.h>
-
 extern SBS *Simcore;
 extern Skyscraper *skyscraper;
 
@@ -123,14 +121,14 @@ bool ScriptProcessor::LoadBuilding()
 			for (int i = 0; i < FunctionParams.size(); i++)
 			{
 				Ogre::String num = _itoa(i + 1, intbuffer, 10);
-				LineData.ReplaceAll("%param" + num + "%", FunctionParams[i]);
+				ReplaceAll(LineData, "%param" + num + "%", FunctionParams[i]);
 			}
 		}
 
 		//////////////////////
 		//Section information
 		//////////////////////
-		if (LineData.CompareNoCase("<globals>") == true)
+		if (SetCaseCopy(LineData, false) == "<globals>")
 		{
 			if (Section > 0)
 			{
@@ -142,7 +140,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing globals...");
 			goto Nextline;
 		}
-		if (LineData.CompareNoCase("<endglobals>") == true)
+		if (SetCaseCopy(LineData, false) == "<endglobals>")
 		{
 			if (Section != 1)
 			{
@@ -155,7 +153,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished globals");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 7).CompareNoCase("<floors") == true)
+		if (SetCaseCopy(LineData.substr(0, 7), false) == "<floors")
 		{
 			if (Section > 0)
 			{
@@ -163,7 +161,7 @@ bool ScriptProcessor::LoadBuilding()
 				return false;
 			}
 			Section = 2;
-			temp3 = Ogre::String(LineData).Downcase().find("to", 0);
+			temp3 = SetCaseCopy(LineData, false).find("to", 0);
 			if (temp3 < 0)
 			{
 				ScriptError("Syntax error");
@@ -186,7 +184,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing floors " + Ogre::String(_itoa(RangeL, intbuffer, 10)) + " to " + Ogre::String(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 7).CompareNoCase("<floor ") == true)
+		if (SetCaseCopy(LineData.substr(0, 7), false) == "<floor ")
 		{
 			if (Section > 0)
 			{
@@ -207,7 +205,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing floor " + Ogre::String(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (LineData.CompareNoCase("<endfloor>") == true && RangeL == RangeH)
+		if (SetCaseCopy(LineData, false) == "<endfloor>" && RangeL == RangeH)
 		{
 			if (Section != 2)
 			{
@@ -219,7 +217,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished floor");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 10).CompareNoCase("<elevators") == true)
+		if (SetCaseCopy(LineData.substr(0, 10), false) == "<elevators")
 		{
 			if (Section > 0)
 			{
@@ -227,7 +225,7 @@ bool ScriptProcessor::LoadBuilding()
 				return false;
 			}
 			Section = 4;
-			temp3 = Ogre::String(LineData).Downcase().find("to", 10);
+			temp3 = SetCaseCopy(LineData, false).find("to", 10);
 			if (temp3 < 0)
 			{
 				ScriptError("Syntax error");
@@ -248,7 +246,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing elevators " + Ogre::String(_itoa(RangeL, intbuffer, 10)) + " to " + Ogre::String(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 10).CompareNoCase("<elevator ") == true)
+		if (SetCaseCopy(LineData.substr(0, 10), false) == "<elevator ")
 		{
 			if (Section > 0)
 			{
@@ -274,7 +272,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing elevator " + Ogre::String(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (LineData.CompareNoCase("<endelevator>") == true && RangeL == RangeH)
+		if (SetCaseCopy(LineData, false) == "<endelevator>" && RangeL == RangeH)
 		{
 			if (Section != 4)
 			{
@@ -286,7 +284,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished elevator");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 10).CompareNoCase("<textures>") == true)
+		if (SetCaseCopy(LineData.substr(0, 10), false) == "<textures>")
 		{
 			if (Section > 0)
 			{
@@ -298,7 +296,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing textures...");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 13).CompareNoCase("<endtextures>") == true)
+		if (SetCaseCopy(LineData.substr(0, 13), false) == "<endtextures>")
 		{
 			if (Section != 5)
 			{
@@ -311,21 +309,21 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished textures");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 5).CompareNoCase("<end>") == true)
+		if (SetCaseCopy(LineData.substr(0, 5), false) == "<end>")
 		{
 			Section = 0;
 			Context = "None";
 			skyscraper->Report("Exiting building script");
 			break; //exit data file parser
 		}
-		if (LineData.substr(0, 7).CompareNoCase("<break>") == true)
+		if (SetCaseCopy(LineData.substr(0, 7), false) == "<break>")
 		{
 			//breakpoint function for debugging scripts
 breakpoint:
 			skyscraper->Report("Script breakpoint reached");
 			goto Nextline;
 		}
-		if (LineData.substr(0, 8).CompareNoCase("<include") == true)
+		if (SetCaseCopy(LineData.substr(0, 8), false) == "<include")
 		{
 			//include another file at the current script location
 
@@ -337,13 +335,13 @@ breakpoint:
 			BuildingData.erase(line);
 
 			//insert file at current line
-			LoadDataFile(includefile, true, line);
+			LoadDataFile(includefile.c_str(), true, line);
 
 			skyscraper->Report("Inserted file " + includefile);
 			line--;
 			goto Nextline;
 		}
-		if (LineData.substr(0, 9).CompareNoCase("<function") == true && Section == 0)
+		if (SetCaseCopy(LineData.substr(0, 9), false) == "<function" && Section == 0)
 		{
 			//define a function (only available outside sections)
 
@@ -360,7 +358,7 @@ breakpoint:
 			//skip to end of function
 			for (int i = line + 1; i < BuildingData.size(); i++)
 			{
-				if (BuildingData[i].substr(0, 13).CompareNoCase("<endfunction>") == true)
+				if (SetCaseCopy(BuildingData[i].substr(0, 13), false) == "<endfunction>")
 				{
 					line = i;
 					break;
@@ -370,7 +368,7 @@ breakpoint:
 			skyscraper->Report("Defined function " + function);
 			goto Nextline;
 		}
-		if (LineData.substr(0, 13).CompareNoCase("<endfunction>") == true && InFunction == true)
+		if (SetCaseCopy(LineData.substr(0, 13), false) == "<endfunction>" && InFunction == true)
 		{
 			//end function and return to original line
 			InFunction = false;
@@ -408,16 +406,16 @@ breakpoint:
 				Ogre::String str = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
 				TrimString(str);
 				temp2 = str;
-				if (IsNumeric(temp2) == true)
+				if (IsNumeric(temp2.c_str()) == true)
 				{
-					temp4 = atoi(temp2);
+					temp4 = atoi(temp2.c_str());
 					if (temp4 < 0 || temp4 > UserVariable.size() - 1)
 					{
 						ScriptError("Invalid variable number");
 						return false;
 					}
 					//replace all occurrences of the variable with it's value
-					LineData.ReplaceAll("%" + temp2 + "%", UserVariable[temp4]);
+					ReplaceAll(LineData, "%" + temp2 + "%", UserVariable[temp4]);
 					startpos = temp1;
 				}
 				else
@@ -431,7 +429,7 @@ breakpoint:
 		//Floor object conversion
 		//////////////////////////
 checkfloors:
-		temp5 = Ogre::String(LineData).Downcase().find("floor(", 0);
+		temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
 		while (temp5 > -1)
 		{
 			temp1 = LineData.find("(", temp5);
@@ -449,11 +447,11 @@ checkfloors:
 			}
 			else
 				getfloordata = false;
-			Ogre::String tempdata = Calc(LineData.substr(temp1 + 1, temp3 - temp1 - 1));
+			Ogre::String tempdata = Calc(LineData.substr(temp1 + 1, temp3 - temp1 - 1).c_str());
 			TrimString(tempdata);
 			LineData = LineData.substr(0, temp1 + 1) + tempdata + LineData.substr(temp3);
 
-			if (!IsNumeric(tempdata, temp4))
+			if (!IsNumeric(tempdata.c_str(), temp4))
 			{
 				ScriptError("Invalid floor " + tempdata);
 				return false;
@@ -469,7 +467,7 @@ checkfloors:
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").fullheight";
 			buffer = LineData;
-			buffer.Downcase();
+			SetCase(buffer, false);
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
@@ -482,7 +480,7 @@ checkfloors:
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").height";
 			buffer = LineData;
-			buffer.Downcase();
+			SetCase(buffer, false);
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
@@ -495,7 +493,7 @@ checkfloors:
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").altitude";
 			buffer = LineData;
-			buffer.Downcase();
+			SetCase(buffer, false);
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
@@ -508,7 +506,7 @@ checkfloors:
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").interfloorheight";
 			buffer = LineData;
-			buffer.Downcase();
+			SetCase(buffer, false);
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
@@ -516,13 +514,13 @@ checkfloors:
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
-			temp5 = Ogre::String(LineData).Downcase().find("floor(", 0);
+			temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
 			//base parameter
 			buffer = temp4;
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").base";
 			buffer = LineData;
-			buffer.Downcase();
+			SetCase(buffer, false);
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
@@ -530,14 +528,14 @@ checkfloors:
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
-			temp5 = Ogre::String(LineData).Downcase().find("floor(", 0);
+			temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
 		}
 
 		//Extent variables
-		LineData.ReplaceAll("%minx%", _gcvt(MinExtent.x, 12, buffer2));
-		LineData.ReplaceAll("%minz%", _gcvt(MinExtent.z, 12, buffer2));
-		LineData.ReplaceAll("%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
-		LineData.ReplaceAll("%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
+		ReplaceAll(LineData, "%minx%", _gcvt(MinExtent.x, 12, buffer2));
+		ReplaceAll(LineData, "%minz%", _gcvt(MinExtent.z, 12, buffer2));
+		ReplaceAll(LineData, "%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
+		ReplaceAll(LineData, "%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
 
 		//Global commands
 		returncode = ProcCommands();
@@ -645,12 +643,12 @@ Nextline:
 bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert_line)
 {
 	//loads a building data file into the runtime buffer
-	bool streamnotfinished = true;
+	/*bool streamnotfinished = true;
 	char buffer[1000];
 	int location = insert_line;
 	Ogre::String Filename = filename;
 
-	Filename.Insert(0, "/root/");
+	Filename.insert(0, "/root/");
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
@@ -658,11 +656,11 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 			return false;
 
 	//make sure file exists
-	if (Simcore->FileExists(Filename) == false)
+	if (Simcore->FileExists(Filename.c_str()) == false)
 		return false;
 
 	//load file
-	csRef<iFile> file (Simcore->vfs->Open(Filename, VFS_FILE_READ));
+	Ogre::File file (Simcore->vfs->Open(Filename, VFS_FILE_READ));
 
 	//exit if an error occurred while loading
 	if (!file)
@@ -689,7 +687,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 		else
 		{
 			//otherwise insert data into building array
-			BuildingData.Insert(location, buffer);
+			BuildingData.insert(location, buffer);
 			location++;
 		}
 	}
@@ -704,13 +702,13 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 		includes.push_back(info);
 	}
 	
-	return true;
+	return true;*/
 }
 
 bool ScriptProcessor::LoadFromText(const char *text)
 {
 	//loads building commands from a string
-	Ogre::StringArray textarray;
+	Ogre::vector<Ogre::String> textarray;
 	textarray.SplitString(text, "\n");
 
 	//clear building data
@@ -736,7 +734,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 	bool check;
 
 	//first remove all whitespace from the string
-	tmpcalc.ReplaceAll(" ", "");
+	ReplaceAll(tmpcalc, " ", "");
 
 	//first check for bad and/or character sets
 	if (int(tmpcalc.find("&&")) >= 0 || int(tmpcalc.find("||")) >= 0 || int(tmpcalc.find("==")) >= 0 || int(tmpcalc.find("!=")) >= 0)
@@ -770,7 +768,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 			{
 				//call function recursively
 				Ogre::String newdata;
-				if (IfProc(tmpcalc.substr(start + 1, end - start - 1)) == true)
+				if (IfProc(tmpcalc.substr(start + 1, end - start - 1).c_str()) == true)
 					newdata = "true";
 				else
 					newdata = "false";
@@ -841,7 +839,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 		if (operators > 1)
 		{
 			Ogre::String newdata;
-			if (IfProc(tmpcalc.substr(start, end - start)) == true)
+			if (IfProc(tmpcalc.substr(start, end - start).c_str()) == true)
 				newdata = "true";
 			else
 				newdata = "false";
@@ -888,9 +886,9 @@ bool ScriptProcessor::IfProc(const char *expression)
 	{
 		one = tmpcalc.substr(0, temp1);
 		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			if(atof(one) < atof(two))
+			if(atof(one.c_str()) < atof(two.c_str()))
 				return true;
 			else
 				return false;
@@ -903,9 +901,9 @@ bool ScriptProcessor::IfProc(const char *expression)
 	{
 		one = tmpcalc.substr(0, temp1);
 		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			if(atof(one) > atof(two))
+			if(atof(one.c_str()) > atof(two.c_str()))
 				return true;
 			else
 				return false;
@@ -974,7 +972,7 @@ int ScriptProcessor::ScriptError(const char *message)
 	else
 		error = "Script error in included file " + includefile + " on line " + Ogre::String(_itoa(linenum, intbuffer, 10)) + ": " + Ogre::String(message) + "\nSection: " + Ogre::String(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 
-	skyscraper->ReportError(error);
+	skyscraper->ReportError(error.c_str());
 
 	//show error dialog
 	wxMessageDialog *dialog = new wxMessageDialog(skyscraper->wxwin->GetWindow(), wxString::FromAscii(error), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
@@ -1020,7 +1018,7 @@ bool ScriptProcessor::ReportMissingFiles()
 		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
 		for (int i = 0; i < nonexistent_files.size(); i++)
 		{
-			message.Append(wxString::FromAscii(nonexistent_files[i]));
+			message.Append(wxString::FromAscii(nonexistent_files[i].c_str()));
 			message.Append(wxT("\n"));
 		}
 		twindow->tMain->WriteText(message);
@@ -1043,17 +1041,17 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Print command
-	if (LineData.substr(0, 5).CompareNoCase("print") == true && Section != 2 && Section != 4)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "print" && Section != 2 && Section != 4)
 	{
 		//calculate inline math
-		buffer = Calc(LineData.substr(6));
+		buffer = Calc(LineData.substr(6).c_str());
 
 		//print line
-		skyscraper->Report(buffer);
+		skyscraper->Report(buffer.c_str());
 	}
 
 	//AddTriangleWall command
-	if (LineData.substr(0, 15).CompareNoCase("addtrianglewall") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "addtrianglewall")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1073,45 +1071,45 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 3; i <= 13; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		if (Section == 2)
 		{
-			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[4]);
+			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[4].c_str());
 			 tempdata.Put(4, buffer);
-			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7]);
+			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7].c_str());
 			 tempdata.Put(7, buffer);
 		}
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		MeshObject* tmpMesh;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1120,11 +1118,11 @@ int ScriptProcessor::ProcCommands()
 		StoreCommand(wall);
 
 		//create triangle wall
-		Simcore->AddTriangleWall(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]));
+		Simcore->AddTriangleWall(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 	}
 
 	//AddWall command
-	if (LineData.substr(0, 7).CompareNoCase("addwall") == true && Section != 2 && Section != 4)
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall" && Section != 2 && Section != 4)
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -1135,7 +1133,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 3; i <= 13; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -1144,7 +1142,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddFloor
-	if (LineData.substr(0, 9).CompareNoCase("addfloor ") == true && Section != 2 && Section != 4)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor " && Section != 2 && Section != 4)
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1155,7 +1153,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 3; i <= 11; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -1164,7 +1162,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddGround
-	if (LineData.substr(0, 9).CompareNoCase("addground") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "addground")
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -1175,7 +1173,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 2; i <= 8; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -1184,7 +1182,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Cut command
-	if (LineData.substr(0, 4).CompareNoCase("cut ") == true && Section != 2 && Section != 4)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "cut " && Section != 2 && Section != 4)
 	{
 		//get data
 		int params = SplitData(LineData, 4);
@@ -1195,12 +1193,12 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 1; i <= 6; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		std::vector<WallObject*> *wallarray;
 
 		if (buffer == "external")
@@ -1214,11 +1212,11 @@ int ScriptProcessor::ProcCommands()
 
 		//perform cut
 		for (int i = 0; i < wallarray->size(); i++)
-			Simcore->Cut(wallarray->Get(i), Ogre::Vector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), Ogre::Vector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), Ogre::String(tempdata[7]).CompareNoCase("true"), Ogre::String(tempdata[8]).CompareNoCase("true"), Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
+			Simcore->Cut(wallarray->Get(i), Ogre::Vector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), Ogre::Vector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 	}
 
 	//Set command
-	if (LineData.substr(0, 4).CompareNoCase("set ") == true && Section != 2 && Section != 4)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "set " && Section != 2 && Section != 4)
 	{
 		temp1 = LineData.find("=", 0);
 		temp3 = atoi(LineData.substr(4, temp1 - 5));
@@ -1235,7 +1233,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CreateWallBox2 command
-	if (LineData.substr(0, 14).CompareNoCase("createwallbox2") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "createwallbox2")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1255,7 +1253,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 3; i <= 10; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -1265,7 +1263,7 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(8, buffer);
 		}
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		MeshObject* tmpMesh;
 
 		if (buffer == "floor")
@@ -1299,11 +1297,11 @@ int ScriptProcessor::ProcCommands()
 
 		StoreCommand(wall);
 
-		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::String(tempdata[11]).CompareNoCase("true"), Ogre::String(tempdata[12]).CompareNoCase("true"), Ogre::String(tempdata[13]).CompareNoCase("true"), Ogre::String(tempdata[14]).CompareNoCase("true"));
+		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 	}
 
 	//CreateWallBox command
-	if (LineData.substr(0, 14).CompareNoCase("createwallbox ") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "createwallbox ")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1323,7 +1321,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 3; i <= 10; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -1333,7 +1331,7 @@ int ScriptProcessor::ProcCommands()
 			tempdata.Put(8, buffer);
 		}
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		MeshObject* tmpMesh;
 
 		if (buffer == "floor")
@@ -1367,11 +1365,11 @@ int ScriptProcessor::ProcCommands()
 
 		StoreCommand(wall);
 
-		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::String(tempdata[11]).CompareNoCase("true"), Ogre::String(tempdata[12]).CompareNoCase("true"), Ogre::String(tempdata[13]).CompareNoCase("true"), Ogre::String(tempdata[14]).CompareNoCase("true"));
+		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 	}
 
 	//AddCustomWall command
-	if (LineData.substr(0, 14).CompareNoCase("addcustomwall ") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "addcustomwall ")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1388,12 +1386,12 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 3; i < params - 2; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		MeshObject* tmpMesh;
 
 		if (buffer == "floor")
@@ -1435,7 +1433,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddShaft command
-	if (LineData.substr(0, 9).CompareNoCase("addshaft ") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "addshaft ")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1446,7 +1444,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -1463,7 +1461,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShaftCut command
-	if (LineData.substr(0, 9).CompareNoCase("shaftcut ") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "shaftcut ")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -1474,7 +1472,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 6; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -1487,7 +1485,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShaftShowFloors command
-	if (LineData.substr(0, 15).CompareNoCase("shaftshowfloors") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "shaftshowfloors")
 	{
 		//get shaft number
 		int loc = LineData.find("=");
@@ -1546,7 +1544,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShaftShowOutside command
-	if (LineData.substr(0, 16).CompareNoCase("shaftshowoutside") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "shaftshowoutside")
 	{
 		//get shaft number
 		int loc = LineData.find("=");
@@ -1555,7 +1553,7 @@ int ScriptProcessor::ProcCommands()
 		int shaftnum;
 		Ogre::String str = LineData.substr(16, loc - 17);
 		TrimString(str);
-		if (!IsNumeric(str, shaftnum))
+		if (!IsNumeric(str.c_str(), shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
 			return ScriptError("Invalid shaft number");
@@ -1602,7 +1600,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShowFullShaft command
-	if (LineData.substr(0, 13).CompareNoCase("showfullshaft") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "showfullshaft")
 	{
 		//get shaft number
 		int loc = LineData.find("=");
@@ -1619,11 +1617,11 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->GetShaft(shaftnum)->ShowFullShaft = Ogre::String(temp2).CompareNoCase("true");
+		Simcore->GetShaft(shaftnum)->ShowFullShaft = Ogre::StringConverter::parseBool(temp2);
 	}
 
 	//CreateStairwell command
-	if (LineData.substr(0, 15).CompareNoCase("createstairwell") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "createstairwell")
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -1648,7 +1646,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CutStairwell command
-	if (LineData.substr(0, 13).CompareNoCase("cutstairwell ") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "cutstairwell ")
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -1673,7 +1671,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//WallOrientation command
-	if (LineData.substr(0, 15).CompareNoCase("wallorientation") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "wallorientation")
 	{
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
@@ -1683,7 +1681,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//FloorOrientation command
-	if (LineData.substr(0, 16).CompareNoCase("floororientation") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "floororientation")
 	{
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
@@ -1693,7 +1691,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//DrawWalls command
-	if (LineData.substr(0, 9).CompareNoCase("drawwalls") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "drawwalls")
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params == -1)
@@ -1701,16 +1699,16 @@ int ScriptProcessor::ProcCommands()
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->DrawWalls(Ogre::String(tempdata[0]).CompareNoCase("true"),
-					Ogre::String(tempdata[1]).CompareNoCase("true"),
-					Ogre::String(tempdata[2]).CompareNoCase("true"),
-					Ogre::String(tempdata[3]).CompareNoCase("true"),
-					Ogre::String(tempdata[4]).CompareNoCase("true"),
-					Ogre::String(tempdata[5]).CompareNoCase("true"));
+		Simcore->DrawWalls(Ogre::StringConverter::parseBool(tempdata[0]),
+					Ogre::StringConverter::parseBool(tempdata[1]),
+					Ogre::StringConverter::parseBool(tempdata[2]),
+					Ogre::StringConverter::parseBool(tempdata[3]),
+					Ogre::StringConverter::parseBool(tempdata[4]),
+					Ogre::StringConverter::parseBool(tempdata[5]));
 	}
 
 	//SetTextureMapping command
-	if (LineData.substr(0, 18).CompareNoCase("settexturemapping ") == true)
+	if (SetCaseCopy(LineData.substr(0, 18), false) == "settexturemapping ")
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -1733,7 +1731,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetTextureMapping2 command
-	if (LineData.substr(0, 18).CompareNoCase("settexturemapping2") == true)
+	if (SetCaseCopy(LineData.substr(0, 18), false) == "settexturemapping2")
 	{
 		//get data
 		int params = SplitData(LineData, 19);
@@ -1760,7 +1758,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ResetTextureMapping command
-	if (LineData.substr(0, 19).CompareNoCase("resettexturemapping") == true)
+	if (SetCaseCopy(LineData.substr(0, 19), false) == "resettexturemapping")
 	{
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
@@ -1769,11 +1767,11 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->ResetTextureMapping(temp2.CompareNoCase("true"));
+		Simcore->ResetTextureMapping(Ogre::StringConverter::parseBool(temp2));
 	}
 
 	//SetPlanarMapping command
-	if (LineData.substr(0, 16).CompareNoCase("setplanarmapping") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "setplanarmapping")
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -1781,25 +1779,25 @@ int ScriptProcessor::ProcCommands()
 		if (params != 4)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->SetPlanarMapping(Ogre::String(tempdata[0]).CompareNoCase("true"),
-					Ogre::String(tempdata[1]).CompareNoCase("true"),
-					Ogre::String(tempdata[2]).CompareNoCase("true"),
-					Ogre::String(tempdata[3]).CompareNoCase("true"));
+		Simcore->SetPlanarMapping(Ogre::StringConverter::parseBool(tempdata[0]),
+					Ogre::StringConverter::parseBool(tempdata[1]),
+					Ogre::StringConverter::parseBool(tempdata[2]),
+					Ogre::StringConverter::parseBool(tempdata[3]));
 	}
 
 	//ReverseAxis command
-	if (LineData.substr(0, 11).CompareNoCase("reverseaxis") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "reverseaxis")
 	{
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
 			return ScriptError("Syntax Error");
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->ReverseAxis(temp2.CompareNoCase("true"));
+		Simcore->ReverseAxis(Ogre::StringConverter::parseBool(temp2));
 	}
 
 	//Intersection points
-	temp5 = Ogre::String(LineData).Downcase().find("isect(", 0);
+	temp5 = SetCaseCopy(LineData, false).find("isect(", 0);
 	while (temp5 > -1)
 	{
 		if (Section == 2 && getfloordata == false)
@@ -1835,7 +1833,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		std::vector<WallObject*> *wall_array;
 		if (buffer == "floor")
 			wall_array = &Simcore->GetFloor(Current)->Level->Walls;
@@ -1857,7 +1855,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//GetWallExtents command
-	if (LineData.substr(0, 14).CompareNoCase("getwallextents") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "getwallextents")
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -1872,7 +1870,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid value: " + Ogre::String(tempdata[2]));
 
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		std::vector<WallObject*> *wall_array;
 		if (buffer == "floor")
 			wall_array = &Simcore->GetFloor(Current)->Level->Walls;
@@ -1892,7 +1890,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//GetWallExtents function
-	temp5 = Ogre::String(LineData).Downcase().find("getwallextents(", 0);
+	temp5 = SetCaseCopy(LineData, false).find("getwallextents(", 0);
 	while (temp5 > -1)
 	{
 		if (Section == 2 && getfloordata == false)
@@ -1925,7 +1923,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid value: " + Ogre::String(tempdata[2]));
 
 		buffer = tempdata[0];
-		buffer.Downcase();
+		SetCase(buffer, false);
 		std::vector<WallObject*> *wall_array;
 		if (buffer == "floor")
 			wall_array = &Simcore->GetFloor(Current)->Level->Walls;
@@ -1940,14 +1938,14 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		Ogre::Vector3 result = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), Ogre::String(tempdata[3]).CompareNoCase("true"));
+		Ogre::Vector3 result = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]));
 
 		buffer = Ogre::String(LineData).substr(0, temp5) + Ogre::String(wxVariant(result.x).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(result.y).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(result.z).GetString().ToAscii()) + Ogre::String(LineData).substr(temp4 + 1);
 		LineData = buffer;
 	}
 
 	//SetAutoSize command
-	if (LineData.substr(0, 11).CompareNoCase("setautosize") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "setautosize")
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params == -1)
@@ -1955,12 +1953,12 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->SetAutoSize(Ogre::String(tempdata[0]).CompareNoCase("true"),
-					Ogre::String(tempdata[1]).CompareNoCase("true"));
+		Simcore->SetAutoSize(Ogre::StringConverter::parseBool(tempdata[0]),
+					Ogre::StringConverter::parseBool(tempdata[1]));
 	}
 
 	//TextureOverride command
-	if (LineData.substr(0, 15).CompareNoCase("textureoverride") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "textureoverride")
 	{
 		int params = SplitData(LineData, 16, false);
 
@@ -1972,7 +1970,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//TextureFlip command
-	if (LineData.substr(0, 11).CompareNoCase("textureflip") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "textureflip")
 	{
 		int params = SplitData(LineData, 12, false);
 
@@ -1993,7 +1991,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Mount command
-	if (LineData.substr(0, 5).CompareNoCase("mount") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "mount")
 	{
 		//get data
 		int params = SplitData(LineData, 6, false);
@@ -2002,7 +2000,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Incorrect number of parameters");
 
 		buffer = tempdata[1];
-		buffer.Insert(0, "/root/");
+		buffer.insert(0, "/root/");
 		if (!Simcore->Mount(tempdata[0], buffer))
 			return ScriptError();
 
@@ -2010,7 +2008,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddFloorAutoArea command
-	if (LineData.substr(0, 16).CompareNoCase("addfloorautoarea") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "addfloorautoarea")
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -2021,7 +2019,7 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			if (!IsNumeric(tempdata[i]))
+			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
@@ -2030,7 +2028,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddSound
-	if (LineData.substr(0, 8).CompareNoCase("addsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -2047,7 +2045,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			for (int i = 2; i <= 4; i++)
 			{
-				if (!IsNumeric(tempdata[i]))
+				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -2055,7 +2053,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			for (int i = 2; i <= 12; i++)
 			{
-				if (!IsNumeric(tempdata[i]))
+				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -2070,7 +2068,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddModel command
-	if (LineData.substr(0, 8).CompareNoCase("addmodel") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
 	{
 		if (Section == 2)
 			return 0;
@@ -2108,27 +2106,27 @@ int ScriptProcessor::ProcGlobals()
 	temp2 = GetAfterEquals(LineData);
 
 	//store variable values
-	if (LineData.substr(0, 4).CompareNoCase("name") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
 		Simcore->BuildingName = temp2;
-	if (LineData.substr(0, 8).CompareNoCase("designer") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "designer")
 		Simcore->BuildingDesigner = temp2;
-	if (LineData.substr(0, 8).CompareNoCase("location") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "location")
 		Simcore->BuildingLocation = temp2;
-	if (LineData.substr(0, 11).CompareNoCase("description") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "description")
 		Simcore->BuildingDescription = temp2;
-	if (LineData.substr(0, 7).CompareNoCase("version") == true)
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "version")
 		Simcore->BuildingVersion = temp2;
-	if (LineData.substr(0, 3).CompareNoCase("sky") == true)
+	if (SetCaseCopy(LineData.substr(0, 3), false) == "sky")
 		Simcore->SkyName = temp2;
-	if (LineData.substr(0, 11).CompareNoCase("camerafloor") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "camerafloor")
 	{
 		int data;
-		if (!IsNumeric(temp2, data))
+		if (!IsNumeric(temp2.c_str(), data))
 			return ScriptError("Invalid floor");
 
 		Simcore->camera->StartFloor = data;
 	}
-	if (LineData.substr(0, 14).CompareNoCase("cameraposition") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "cameraposition")
 	{
 		float x, z;
 		Ogre::String str1 = temp2.substr(0, temp2.find(",", 0));
@@ -2141,7 +2139,7 @@ int ScriptProcessor::ProcGlobals()
 		Simcore->camera->StartPositionX  = x;
 		Simcore->camera->StartPositionZ  = z;
 	}
-	if (LineData.substr(0, 15).CompareNoCase("cameradirection") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "cameradirection")
 	{
 		temp3 = temp2.find(",", 0);
 		temp4 = temp2.find(",", temp3 + 1);
@@ -2157,7 +2155,7 @@ int ScriptProcessor::ProcGlobals()
 
 		Simcore->camera->SetStartDirection(Ogre::Vector3(x, y, z));
 	}
-	if (LineData.substr(0, 14).CompareNoCase("camerarotation") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "camerarotation")
 	{
 		temp3 = temp2.find(",", 0);
 		temp4 = temp2.find(",", temp3 + 1);
@@ -2173,9 +2171,9 @@ int ScriptProcessor::ProcGlobals()
 
 		Simcore->camera->SetStartRotation(Ogre::Vector3(x, y, z));
 	}
-	if (LineData.substr(0, 15).CompareNoCase("interfloorontop") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "interfloorontop")
 	{
-		Simcore->InterfloorOnTop = Ogre::String(temp2).CompareNoCase("true");
+		Simcore->InterfloorOnTop = Ogre::StringConverter::parseBool(temp2));
 	}
 	return 0;
 }
@@ -2196,21 +2194,21 @@ int ScriptProcessor::ProcFloors()
 
 	//replace variables with actual values
 	buffer = Current;
-	LineData.ReplaceAll("%floor%", buffer);
+	ReplaceAll(LineData, "%floor%", buffer);
 	buffer = floor->Height;
-	LineData.ReplaceAll("%height%", buffer);
+	ReplaceAll(LineData, "%height%", buffer);
 	buffer = floor->FullHeight();
-	LineData.ReplaceAll("%fullheight%", buffer);
+	ReplaceAll(LineData, "%fullheight%", buffer);
 	buffer = floor->InterfloorHeight;
-	LineData.ReplaceAll("%interfloorheight%", buffer);
+	ReplaceAll(LineData, "%interfloorheight%", buffer);
 	buffer = floor->GetBase();
-	LineData.ReplaceAll("%base%", buffer);
+	ReplaceAll(LineData, "%base%", buffer);
 
 	if (getfloordata == true)
 		return sCheckFloors;
 
 	//IF statement
-	if (LineData.substr(0, 2).CompareNoCase("if") == true)
+	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
 	{
 		temp1 = LineData.find("[", 0);
 		temp3 = LineData.find("]", 0);
@@ -2239,7 +2237,7 @@ int ScriptProcessor::ProcFloors()
 	temp2 = GetAfterEquals(LineData);
 
 	//parameters
-	if (LineData.substr(0, 6).CompareNoCase("height") == true)
+	if (SetCaseCopy(LineData.substr(0, 6), false) == "height")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -2252,7 +2250,7 @@ int ScriptProcessor::ProcFloors()
 		else
 			FloorCheck = 3;
 	}
-	if (LineData.substr(0, 16).CompareNoCase("interfloorheight") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "interfloorheight")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -2265,7 +2263,7 @@ int ScriptProcessor::ProcFloors()
 		else
 			FloorCheck = 3;
 	}
-	if (LineData.substr(0, 8).CompareNoCase("altitude") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "altitude")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -2274,37 +2272,37 @@ int ScriptProcessor::ProcFloors()
 		if (!IsNumeric(str.c_str(), floor->Altitude))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 2).CompareNoCase("id") == true)
+	if (SetCaseCopy(LineData.substr(0, 2), false) == "id")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->ID = Calc(temp2);
 	}
-	if (LineData.substr(0, 4).CompareNoCase("name") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->Name = Calc(temp2);
 	}
-	if (LineData.substr(0, 4).CompareNoCase("type") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "type")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->FloorType = temp2;
 	}
-	if (LineData.substr(0, 11).CompareNoCase("description") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "description")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->Description = temp2;
 	}
-	if (LineData.substr(0, 16).CompareNoCase("indicatortexture") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "indicatortexture")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->IndicatorTexture = Calc(temp2);
 	}
-	if (LineData.substr(0, 5).CompareNoCase("group") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "group")
 	{
 		//copy string listing of group floors into array
 
@@ -2324,7 +2322,7 @@ int ScriptProcessor::ProcFloors()
 				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
-				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(tmpstring.substr(str2.c_str(), end))
+				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(tmpstring.substr(str2.c_str(), end).c_str())
 					return ScriptError("Invalid value");
 				if (end < start)
 				{
@@ -2357,7 +2355,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Print command
-	if (LineData.substr(0, 5).CompareNoCase("print") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "print")
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(6));
@@ -2367,7 +2365,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Exit command
-	if (LineData.substr(0, 4).CompareNoCase("exit") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "exit")
 	{
 		if (RangeL != RangeH)
 			LineData = "<endfloors>";
@@ -2376,11 +2374,11 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Break command
-	if (LineData.substr(0, 7).CompareNoCase("<break>") == true)
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "<break>")
 		return sBreak;
 
 	//AddFloor command
-	if (LineData.substr(0, 9).CompareNoCase("addfloor ") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor ")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -2398,11 +2396,11 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create floor
-		StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::String(tempdata[11]).CompareNoCase("true")));
+		StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11])));
 	}
 
 	//AddShaftFloor command
-	if (LineData.substr(0, 13).CompareNoCase("addshaftfloor") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftfloor")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -2429,7 +2427,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsFloor command
-	if (LineData.substr(0, 14).CompareNoCase("addstairsfloor") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsfloor")
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -2456,7 +2454,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddInterFloorFloor command
-	if (LineData.substr(0, 18).CompareNoCase("addinterfloorfloor") == true)
+	if (SetCaseCopy(LineData.substr(0, 18), false) == "addinterfloorfloor")
 	{
 		//get data
 		int params = SplitData(LineData, 19);
@@ -2478,7 +2476,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddWall command
-	if (LineData.substr(0, 7).CompareNoCase("addwall") == true)
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -2496,11 +2494,11 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create wall
-		StoreCommand(floor->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), Ogre::String(tempdata[13]).CompareNoCase("true")));
+		StoreCommand(floor->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
 	}
 
 	//AddShaftWall command
-	if (LineData.substr(0, 12).CompareNoCase("addshaftwall") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "addshaftwall")
 	{
 		//get data
 		int params = SplitData(LineData, 13);
@@ -2527,7 +2525,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsWall command
-	if (LineData.substr(0, 13).CompareNoCase("addstairswall") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "addstairswall")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -2554,7 +2552,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddInterFloorWall command
-	if (LineData.substr(0, 17).CompareNoCase("addinterfloorwall") == true)
+	if (SetCaseCopy(LineData.substr(0, 17), false) == "addinterfloorwall")
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -2576,7 +2574,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//ColumnWallBox command
-	if (LineData.substr(0, 14).CompareNoCase("columnwallbox ") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "columnwallbox ")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -2593,11 +2591,11 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::String(tempdata[10]).CompareNoCase("true"), Ogre::String(tempdata[11]).CompareNoCase("true"), Ogre::String(tempdata[12]).CompareNoCase("true"), Ogre::String(tempdata[13]).CompareNoCase("true")));
+		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
 	}
 
 	//ColumnWallBox2 command
-	if (LineData.substr(0, 14).CompareNoCase("columnwallbox2") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "columnwallbox2")
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -2614,11 +2612,11 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::String(tempdata[10]).CompareNoCase("true"), Ogre::String(tempdata[11]).CompareNoCase("true"), Ogre::String(tempdata[12]).CompareNoCase("true"), Ogre::String(tempdata[13]).CompareNoCase("true")));
+		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
 	}
 
 	//Set command
-	if (LineData.substr(0, 4).CompareNoCase("set ") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "set ")
 	{
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
@@ -2639,7 +2637,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//CallButtonElevators command
-	if (LineData.substr(0, 19).CompareNoCase("callbuttonelevators") == true)
+	if (SetCaseCopy(LineData.substr(0, 19), false) == "callbuttonelevators")
 	{
 		//construct array containing floor numbers
 		int params = SplitAfterEquals(LineData, false);
@@ -2663,7 +2661,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//CreateCallButtons command
-	if (LineData.substr(0, 17).CompareNoCase("createcallbuttons") == true)
+	if (SetCaseCopy(LineData.substr(0, 17), false) == "createcallbuttons")
 	{
 		if (callbutton_elevators.size() == 0)
 			return ScriptError("No elevators specified");
@@ -2707,13 +2705,13 @@ int ScriptProcessor::ProcFloors()
 
 		//create call button
 		if (compatibility == true)
-			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), Ogre::String(tempdata[9]).CompareNoCase("true"), atof(tempdata[10]), atof(tempdata[11])));
+			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
 		else
-			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), Ogre::String(tempdata[11]).CompareNoCase("true"), atof(tempdata[12]), atof(tempdata[13])));
+			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 	}
 
 	//AddStairs command
-	if (LineData.substr(0, 10).CompareNoCase("addstairs ") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "addstairs ")
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -2740,7 +2738,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddDoor command
-	if (LineData.substr(0, 8).CompareNoCase("adddoor ") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoor ")
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -2810,11 +2808,11 @@ int ScriptProcessor::ProcFloors()
 		if (compat == 3)
 			StoreCommand(floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 		if (compat == 0)
-			StoreCommand(floor->AddDoor(tempdata[0], tempdata[1], Ogre::String(tempdata[2]).CompareNoCase("true"), tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+			StoreCommand(floor->AddDoor(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 	}
 
 	//AddStairsDoor command
-	if (LineData.substr(0, 14).CompareNoCase("addstairsdoor ") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsdoor ")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -2897,14 +2895,14 @@ int ScriptProcessor::ProcFloors()
 			if (compat == 3)
 				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], false, tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 			if (compat == 0)
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], Ogre::String(tempdata[3]).CompareNoCase("true"), tempdata[4], atof(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14])));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], atof(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14])));
 		}
 		else
 			return ScriptError("Invalid stairwell");
 	}
 
 	//AddDirectionalIndicator command
-	if (LineData.substr(0, 23).CompareNoCase("adddirectionalindicator") == true)
+	if (SetCaseCopy(LineData.substr(0, 23), false) == "adddirectionalindicator")
 	{
 		//get data
 		int params = SplitData(LineData, 24);
@@ -2953,13 +2951,13 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid elevator");
 
 		if (compatibility == true)
-			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), Ogre::String(tempdata[1]).CompareNoCase("true"), false, Ogre::String(tempdata[2]).CompareNoCase("true"), Ogre::String(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), Ogre::String(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17])));
+			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), false, Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
 		else
-			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), Ogre::String(tempdata[1]).CompareNoCase("true"), Ogre::String(tempdata[2]).CompareNoCase("true"), Ogre::String(tempdata[3]).CompareNoCase("true"), Ogre::String(tempdata[4]).CompareNoCase("true"), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), tempdata[13], atof(tempdata[14]), atof(tempdata[15]), Ogre::String(tempdata[16]).CompareNoCase("true"), atof(tempdata[17]), atof(tempdata[18])));
+			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::StringConverter::parseBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), tempdata[13], atof(tempdata[14]), atof(tempdata[15]), Ogre::StringConverter::parseBool(tempdata[16]), atof(tempdata[17]), atof(tempdata[18])));
 	}
 
 	//AddShaftDoor command
-	if (LineData.substr(0, 13).CompareNoCase("addshaftdoor ") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftdoor ")
 	{
 		//exit if the SetShaftDoors command was never used
 		if (setshaftdoors == false)
@@ -3011,7 +3009,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddFloorIndicator command
-	if (LineData.substr(0, 17).CompareNoCase("addfloorindicator") == true)
+	if (SetCaseCopy(LineData.substr(0, 17), false) == "addfloorindicator")
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -3050,13 +3048,13 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		if (compat == false)
-			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), Ogre::String(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])));
+			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])));
 		else
-			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), Ogre::String(tempdata[1]).CompareNoCase("true"), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
 	}
 
 	//AddFillerWalls command
-	if (LineData.substr(0, 14).CompareNoCase("addfillerwalls") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "addfillerwalls")
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -3075,11 +3073,11 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		floor->AddFillerWalls(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), Ogre::String(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9]));
+		floor->AddFillerWalls(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
 	}
 
 	//AddSound
-	if (LineData.substr(0, 8).CompareNoCase("addsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -3096,7 +3094,7 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 2; i <= 4; i++)
 			{
-				if (!IsNumeric(tempdata[i]))
+				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -3104,7 +3102,7 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 2; i <= 12; i++)
 			{
-				if (!IsNumeric(tempdata[i]))
+				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -3119,7 +3117,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftDoorComponent command
-	if (LineData.substr(0, 21).CompareNoCase("addshaftdoorcomponent") == true)
+	if (SetCaseCopy(LineData.substr(0, 21), false) == "addshaftdoorcomponent")
 	{
 		//get data
 		int params = SplitData(LineData, 22);
@@ -3148,7 +3146,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//FinishShaftDoor command
-	if (LineData.substr(0, 16).CompareNoCase("finishshaftdoor ") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "finishshaftdoor ")
 	{
 		//get data
 		int params = SplitData(LineData, 16);
@@ -3173,7 +3171,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddModel command
-	if (LineData.substr(0, 8).CompareNoCase("addmodel") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -3198,7 +3196,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsModel command
-	if (LineData.substr(0, 14).CompareNoCase("addstairsmodel") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsmodel")
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -3226,7 +3224,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftModel command
-	if (LineData.substr(0, 13).CompareNoCase("addshaftmodel") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftmodel")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -3254,7 +3252,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Cut command
-	if (LineData.substr(0, 4).CompareNoCase("cut ") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "cut ")
 	{
 		//get data
 		int params = SplitData(LineData, 4);
@@ -3272,11 +3270,11 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//perform cut on floor
-		Simcore->GetFloor(Current)->Cut(Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::String(tempdata[6]).CompareNoCase("true"), Ogre::String(tempdata[7]).CompareNoCase("true"), false);
+		Simcore->GetFloor(Current)->Cut(Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), false);
 	}
 
 	//CutAll command
-	if (LineData.substr(0, 6).CompareNoCase("cutall") == true)
+	if (SetCaseCopy(LineData.substr(0, 6), false) == "cutall")
 	{
 		//get data
 		int params = SplitData(LineData, 7);
@@ -3294,11 +3292,11 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//perform cut on all objects related to the current floor
-		Simcore->GetFloor(Current)->CutAll(Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::String(tempdata[6]).CompareNoCase("true"), Ogre::String(tempdata[7]).CompareNoCase("true"));
+		Simcore->GetFloor(Current)->CutAll(Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]));
 	}
 
 	//handle floor range
-	if (RangeL != RangeH && LineData.substr(0, 9).CompareNoCase("<endfloor") == true)
+	if (RangeL != RangeH && SetCaseCopy(LineData.substr(0, 9), false) == "<endfloor")
 	{
 		if (RangeL < RangeH)
 		{
@@ -3347,10 +3345,10 @@ int ScriptProcessor::ProcElevators()
 
 	//replace variables with actual values
 	buffer = Current;
-	LineData.ReplaceAll("%elevator%", buffer);
+	ReplaceAll(LineData, "%elevator%", buffer);
 
 	//IF statement
-	if (LineData.substr(0, 2).CompareNoCase("if") == true)
+	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
 	{
 		temp1 = LineData.find("[", 0);
 		temp3 = LineData.find("]", 0);
@@ -3381,35 +3379,35 @@ int ScriptProcessor::ProcElevators()
 	Elevator *elev = Simcore->GetElevator(Current);
 
 	//parameters
-	if (LineData.substr(0, 4).CompareNoCase("name") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		TrimString(temp2);
 		elev->Name = temp2;
 	}
-	if (LineData.substr(0, 5).CompareNoCase("speed") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "speed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2, elev->ElevatorSpeed))
+		if (!IsNumeric(temp2.c_str(), elev->ElevatorSpeed))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 12).CompareNoCase("acceleration") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "acceleration")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2, elev->Acceleration))
+		if (!IsNumeric(temp2.c_str(), elev->Acceleration))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 12).CompareNoCase("deceleration") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "deceleration")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2, elev->Deceleration))
+		if (!IsNumeric(temp2.c_str(), elev->Deceleration))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 9).CompareNoCase("openspeed") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "openspeed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3421,31 +3419,31 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2, elev->GetDoor(temp3)->OpenSpeed))
+		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->OpenSpeed))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 5).CompareNoCase("doors") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "doors")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2, elev->NumDoors))
+		if (!IsNumeric(temp2.c_str(), elev->NumDoors))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 9).CompareNoCase("acceljerk") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "acceljerk")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2, elev->AccelJerk))
+		if (!IsNumeric(temp2.c_str(), elev->AccelJerk))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 9).CompareNoCase("deceljerk") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "deceljerk")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2, elev->DecelJerk))
+		if (!IsNumeric(temp2.c_str(), elev->DecelJerk))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 14).CompareNoCase("servicedfloors") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "servicedfloors")
 	{
 		//copy string listing of serviced floors into array
 		int params = SplitAfterEquals(LineData, false);
@@ -3491,59 +3489,14 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 	}
-	if (LineData.substr(0, 13).CompareNoCase("assignedshaft") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "assignedshaft")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2, elev->AssignedShaft))
+		if (!IsNumeric(temp2.c_str(), elev->AssignedShaft))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 9).CompareNoCase("doortimer") == true)
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(9, LineData.find("=", 0) - 9);
-		TrimString(str);
-		if (!IsNumeric(str.c_str(), temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2, elev->GetDoor(temp3)->DoorTimer))
-			return ScriptError("Invalid value");
-	}
-	if (LineData.substr(0, 10).CompareNoCase("quickclose") == true)
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
-		TrimString(str);
-		if (!IsNumeric(str.c_str(), temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2, elev->GetDoor(temp3)->QuickClose))
-			return ScriptError("Invalid value");
-	}
-	if (LineData.substr(0, 10).CompareNoCase("nudgetimer") == true)
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		if (elev->Created == false)
-			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
-		TrimString(str);
-		if (!IsNumeric(str.c_str(), temp3))
-			return ScriptError("No door specified");
-		if (temp3 == 0 || temp3 > elev->NumDoors)
-			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2, elev->GetDoor(temp3)->NudgeTimer))
-			return ScriptError("Invalid value");
-	}
-	if (LineData.substr(0, 9).CompareNoCase("slowspeed") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "doortimer")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3555,10 +3508,55 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2, elev->GetDoor(temp3)->SlowSpeed))
+		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->DoorTimer))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 11).CompareNoCase("manualspeed") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "quickclose")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
+		TrimString(str);
+		if (!IsNumeric(str.c_str(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->QuickClose))
+			return ScriptError("Invalid value");
+	}
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "nudgetimer")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
+		TrimString(str);
+		if (!IsNumeric(str.c_str(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->NudgeTimer))
+			return ScriptError("Invalid value");
+	}
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "slowspeed")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+		Ogre::String str = LineData.substr(9, LineData.find("=", 0) - 9);
+		TrimString(str);
+		if (!IsNumeric(str.c_str(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->SlowSpeed))
+			return ScriptError("Invalid value");
+	}
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "manualspeed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3570,10 +3568,10 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2, elev->GetDoor(temp3)->ManualSpeed))
+		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->ManualSpeed))
 			return ScriptError("Invalid value");
 	}
-	if (LineData.substr(0, 9).CompareNoCase("opensound") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "opensound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3591,7 +3589,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->OpenSound = temp2;
 	}
-	if (LineData.substr(0, 10).CompareNoCase("closesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "closesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3609,7 +3607,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
 	}
-	if (LineData.substr(0, 10).CompareNoCase("nudgesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "nudgesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3627,7 +3625,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->NudgeSound = temp2;
 	}
-	if (LineData.substr(0, 10).CompareNoCase("startsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "startsound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -3643,7 +3641,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (LineData.substr(0, 9).CompareNoCase("movesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "movesound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -3659,7 +3657,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (LineData.substr(0, 9).CompareNoCase("stopsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "stopsound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -3675,7 +3673,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (LineData.substr(0, 9).CompareNoCase("idlesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "idlesound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -3691,7 +3689,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (LineData.substr(0, 13).CompareNoCase("carstartsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "carstartsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3701,7 +3699,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarStartSound = temp2;
 	}
-	if (LineData.substr(0, 12).CompareNoCase("carmovesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "carmovesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3711,7 +3709,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarMoveSound = temp2;
 	}
-	if (LineData.substr(0, 12).CompareNoCase("carstopsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "carstopsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3721,7 +3719,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarStopSound = temp2;
 	}
-	if (LineData.substr(0, 12).CompareNoCase("caridlesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "caridlesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3731,7 +3729,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarIdleSound = temp2;
 	}
-	if (LineData.substr(0, 15).CompareNoCase("motorstartsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "motorstartsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3741,7 +3739,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorStartSound = temp2;
 	}
-	if (LineData.substr(0, 13).CompareNoCase("motorrunsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "motorrunsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3751,7 +3749,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorRunSound = temp2;
 	}
-	if (LineData.substr(0, 14).CompareNoCase("motorstopsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "motorstopsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3761,7 +3759,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorStopSound = temp2;
 	}
-	if (LineData.substr(0, 10).CompareNoCase("chimesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "chimesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3780,7 +3778,7 @@ int ScriptProcessor::ProcElevators()
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
-	if (LineData.substr(0, 12).CompareNoCase("upchimesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "upchimesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3798,7 +3796,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 	}
-	if (LineData.substr(0, 14).CompareNoCase("downchimesound") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "downchimesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3816,7 +3814,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
-	if (LineData.substr(0, 10).CompareNoCase("alarmsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "alarmsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3826,7 +3824,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->AlarmSound = temp2;
 	}
-	if (LineData.substr(0, 14).CompareNoCase("alarmsoundstop") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "alarmsoundstop")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3836,7 +3834,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->AlarmSoundStop = temp2;
 	}
-	if (LineData.substr(0, 9).CompareNoCase("beepsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "beepsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3846,7 +3844,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetBeepSound(temp2);
 	}
-	if (LineData.substr(0, 10).CompareNoCase("floorsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "floorsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3856,7 +3854,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetFloorSound(temp2);
 	}
-	if (LineData.substr(0, 9).CompareNoCase("upmessage") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "upmessage")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3866,7 +3864,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetMessageSound(true, temp2);
 	}
-	if (LineData.substr(0, 11).CompareNoCase("downmessage") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "downmessage")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3876,7 +3874,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetMessageSound(false, temp2);
 	}
-	if (LineData.substr(0, 5).CompareNoCase("music") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "music")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3886,40 +3884,40 @@ int ScriptProcessor::ProcElevators()
 
 		elev->Music = temp2;
 	}
-	if (LineData.substr(0, 13).CompareNoCase("floorskiptext") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "floorskiptext")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->SetFloorSkipText(temp2);
 	}
-	if (LineData.substr(0, 11).CompareNoCase("recallfloor") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "recallfloor")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		int floortemp;
-		if (!IsNumeric(temp2, floortemp))
+		if (!IsNumeric(temp2.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetRecallFloor(floortemp);
 	}
-	if (LineData.substr(0, 20).CompareNoCase("alternaterecallfloor") == true)
+	if (SetCaseCopy(LineData.substr(0, 20), false) == "alternaterecallfloor")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		int floortemp;
-		if (!IsNumeric(temp2, floortemp))
+		if (!IsNumeric(temp2.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetAlternateRecallFloor(floortemp);
 	}
-	if (LineData.substr(0, 8).CompareNoCase("acpfloor") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "acpfloor")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		int floortemp;
-		if (!IsNumeric(temp2, floortemp))
+		if (!IsNumeric(temp2.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetACPFloor(floortemp);
 	}
-	if (LineData.substr(0, 13).CompareNoCase("motorposition") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "motorposition")
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params == -1)
@@ -3938,43 +3936,43 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorPosition = Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
 	}
-	if (LineData.substr(0, 11).CompareNoCase("queueresets") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "queueresets")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->QueueResets = Ogre::String(temp2).CompareNoCase("true");
+		elev->QueueResets = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (LineData.substr(0, 3).CompareNoCase("acp") == true)
+	if (SetCaseCopy(LineData.substr(0, 3), false) == "acp")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->ACP = Ogre::String(temp2).CompareNoCase("true");
+		elev->ACP = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (LineData.substr(0, 6).CompareNoCase("uppeak") == true)
+	if (SetCaseCopy(LineData.substr(0, 6), false) == "uppeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->UpPeak = Ogre::String(temp2).CompareNoCase("true");
+		elev->UpPeak = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (LineData.substr(0, 8).CompareNoCase("downpeak") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "downpeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->DownPeak = Ogre::String(temp2).CompareNoCase("true");
+		elev->DownPeak = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (LineData.substr(0, 18).CompareNoCase("independentservice") == true)
+	if (SetCaseCopy(LineData.substr(0, 18), false) == "independentservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->IndependentService = Ogre::String(temp2).CompareNoCase("true");
+		elev->IndependentService = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (LineData.substr(0, 17).CompareNoCase("inspectionservice") == true)
+	if (SetCaseCopy(LineData.substr(0, 17), false) == "inspectionservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->InspectionService = Ogre::String(temp2).CompareNoCase("true");
+		elev->InspectionService = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (LineData.substr(0, 7).CompareNoCase("parking") == true)
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "parking")
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params == -1)
@@ -3994,61 +3992,61 @@ int ScriptProcessor::ProcElevators()
 		elev->ParkingFloor = atoi(tempdata[0]);
 		elev->ParkingDelay = atof(tempdata[1]);
 	}
-	if (LineData.substr(0, 13).CompareNoCase("levelingspeed") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "levelingspeed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float leveling;
-		if (!IsNumeric(temp2, leveling))
+		if (!IsNumeric(temp2.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingSpeed = leveling;
 	}
-	if (LineData.substr(0, 14).CompareNoCase("levelingoffset") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "levelingoffset")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float leveling;
-		if (!IsNumeric(temp2, leveling))
+		if (!IsNumeric(temp2.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOffset = leveling;
 	}
-	if (LineData.substr(0, 12).CompareNoCase("levelingopen") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "levelingopen")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float leveling;
-		if (!IsNumeric(temp2, leveling))
+		if (!IsNumeric(temp2.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOpen = leveling;
 	}
-	if (LineData.substr(0, 11).CompareNoCase("notifyearly") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "notifyearly")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float notify;
-		if (!IsNumeric(temp2, notify))
+		if (!IsNumeric(temp2.c_str(), notify))
 			return ScriptError("Invalid value");
 		elev->NotifyEarly = notify;
 	}
-	if (LineData.substr(0, 14).CompareNoCase("departuredelay") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "departuredelay")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float delay;
-		if (!IsNumeric(temp2, delay))
+		if (!IsNumeric(temp2.c_str(), delay))
 			return ScriptError("Invalid value");
 		elev->DepartureDelay = delay;
 	}
-	if (LineData.substr(0, 12).CompareNoCase("arrivaldelay") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "arrivaldelay")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float delay;
-		if (!IsNumeric(temp2, delay))
+		if (!IsNumeric(temp2.c_str(), delay))
 			return ScriptError("Invalid value");
 		elev->ArrivalDelay = delay;
 	}
-	if (LineData.substr(0, 13).CompareNoCase("musicposition") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "musicposition")
 	{
 		int params = SplitAfterEquals(LineData);
 		if (params == -1)
@@ -4069,7 +4067,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//Print command
-	if (LineData.substr(0, 5).CompareNoCase("print") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "print")
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(6));
@@ -4078,11 +4076,11 @@ int ScriptProcessor::ProcElevators()
 		skyscraper->Report(buffer);
 	}
 
-	if (LineData.substr(0, 7).CompareNoCase("<break>") == true)
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "<break>")
 		return sBreak;
 
 	//CreateElevator command
-	if (LineData.substr(0, 14).CompareNoCase("createelevator") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "createelevator")
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -4099,14 +4097,14 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Object *object = elev->CreateElevator(Ogre::String(tempdata[0]).CompareNoCase("true"), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]));
+		Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]));
 		if (!object)
 			return ScriptError();
 		StoreCommand(object);
 	}
 
 	//AddFloor command
-	if (LineData.substr(0, 9).CompareNoCase("addfloor ") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor ")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -4128,7 +4126,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddWall command
-	if (LineData.substr(0, 7).CompareNoCase("addwall") == true)
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -4150,7 +4148,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDoors command
-	if (LineData.substr(0, 8).CompareNoCase("adddoors") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoors")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -4193,13 +4191,13 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), Ogre::String(tempdata[8]).CompareNoCase("true"), atof(tempdata[9]), atof(tempdata[10])));
+			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
 		else
-			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), Ogre::String(tempdata[7]).CompareNoCase("true"), atof(tempdata[8]), atof(tempdata[9])));
+			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8]), atof(tempdata[9])));
 	}
 
 	//SetShaftDoors command
-	if (LineData.substr(0, 13).CompareNoCase("setshaftdoors") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "setshaftdoors")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -4221,7 +4219,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddShaftDoors command
-	if (LineData.substr(0, 14).CompareNoCase("addshaftdoors ") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "addshaftdoors ")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -4270,7 +4268,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//CreatePanel command
-	if (LineData.substr(0, 11).CompareNoCase("createpanel") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "createpanel")
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -4293,7 +4291,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorButton command
-	if (LineData.substr(0, 14).CompareNoCase("addfloorbutton") == true)
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "addfloorbutton")
 	{
 		//get data
 		int params = SplitData(LineData, 15);
@@ -4400,7 +4398,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddControlButton command
-	if (LineData.substr(0, 16).CompareNoCase("addcontrolbutton") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "addcontrolbutton")
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -4506,7 +4504,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddButton command
-	if (LineData.substr(0, 10).CompareNoCase("addbutton ") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "addbutton ")
 	{
 		//get data
 		int params = SplitData(LineData, 10);
@@ -4544,7 +4542,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddControl command
-	if (LineData.substr(0, 11).CompareNoCase("addcontrol ") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "addcontrol ")
 	{
 		//get data
 		int params = SplitData(LineData, 11);
@@ -4589,7 +4587,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorIndicator command
-	if (LineData.substr(0, 17).CompareNoCase("addfloorindicator") == true)
+	if (SetCaseCopy(LineData.substr(0, 17), false) == "addfloorindicator")
 	{
 		//get data
 		int params = SplitData(LineData, 18);
@@ -4630,7 +4628,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDirectionalIndicators command
-	if (LineData.substr(0, 24).CompareNoCase("adddirectionalindicators") == true)
+	if (SetCaseCopy(LineData.substr(0, 24), false) == "adddirectionalindicators")
 	{
 		//get data
 		int params = SplitData(LineData, 25);
@@ -4668,13 +4666,13 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			elev->AddDirectionalIndicators(Ogre::String(tempdata[0]).CompareNoCase("true"), Ogre::String(tempdata[1]).CompareNoCase("true"), Ogre::String(tempdata[2]).CompareNoCase("true"), Ogre::String(tempdata[3]).CompareNoCase("true"), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), Ogre::String(tempdata[15]).CompareNoCase("true"), atof(tempdata[16]), atof(tempdata[17]));
+			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16]), atof(tempdata[17]));
 		else
-			elev->AddDirectionalIndicators(Ogre::String(tempdata[0]).CompareNoCase("true"), false, Ogre::String(tempdata[1]).CompareNoCase("true"), Ogre::String(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), Ogre::String(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16]));
+			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), false, Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
 	}
 
 	//AddFloorSigns command
-	if (LineData.substr(0, 13).CompareNoCase("addfloorsigns") == true)
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "addfloorsigns")
 	{
 		//get data
 		int params = SplitData(LineData, 14);
@@ -4725,18 +4723,18 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			bool result;
-			result = elev->AddFloorSigns(atoi(tempdata[0]), Ogre::String(tempdata[1]).CompareNoCase("true"), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+			result = elev->AddFloorSigns(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
 			if (result == false)
 				return ScriptError();
 		}
 		else if (compat == 1)
-			elev->AddFloorSigns(0, Ogre::String(tempdata[0]).CompareNoCase("true"), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
 		else if (compat == 2)
-			elev->AddFloorSigns(0, Ogre::String(tempdata[0]).CompareNoCase("true"), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 	}
 
 	//AddSound
-	if (LineData.substr(0, 8).CompareNoCase("addsound") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -4753,7 +4751,7 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 2; i <= 4; i++)
 			{
-				if (!IsNumeric(tempdata[i]))
+				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4761,7 +4759,7 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 2; i <= 12; i++)
 			{
-				if (!IsNumeric(tempdata[i]))
+				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4776,7 +4774,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDoorComponent command
-	if (LineData.substr(0, 16).CompareNoCase("adddoorcomponent") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "adddoorcomponent")
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -4801,7 +4799,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddShaftDoorsComponent command
-	if (LineData.substr(0, 22).CompareNoCase("addshaftdoorscomponent") == true)
+	if (SetCaseCopy(LineData.substr(0, 22), false) == "addshaftdoorscomponent")
 	{
 		//get data
 		int params = SplitData(LineData, 23);
@@ -4826,7 +4824,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//FinishDoors command
-	if (LineData.substr(0, 11).CompareNoCase("finishdoors") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "finishdoors")
 	{
 		//get data
 		int params = SplitData(LineData, 12);
@@ -4844,7 +4842,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//FinishShaftDoors command
-	if (LineData.substr(0, 16).CompareNoCase("finishshaftdoors") == true)
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "finishshaftdoors")
 	{
 		//get data
 		int params = SplitData(LineData, 17);
@@ -4866,7 +4864,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDirectionalIndicator command
-	if (LineData.substr(0, 24).CompareNoCase("adddirectionalindicator ") == true)
+	if (SetCaseCopy(LineData.substr(0, 24), false) == "adddirectionalindicator ")
 	{
 		//get data
 		int params = SplitData(LineData, 24);
@@ -4885,11 +4883,11 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(elev->AddDirectionalIndicator(Ogre::String(tempdata[0]).CompareNoCase("true"), Ogre::String(tempdata[1]).CompareNoCase("true"), Ogre::String(tempdata[2]).CompareNoCase("true"), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), Ogre::String(tempdata[14]).CompareNoCase("true"), atof(tempdata[15]), atof(tempdata[16])));
+		StoreCommand(elev->AddDirectionalIndicator(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
 	}
 
 	//AddDoor command
-	if (LineData.substr(0, 8).CompareNoCase("adddoor ") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoor ")
 	{
 		//get data
 		int params = SplitData(LineData, 8);
@@ -4942,11 +4940,11 @@ int ScriptProcessor::ProcElevators()
 		else if (compat == 2)
 			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
 		else
-			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], Ogre::String(tempdata[2]).CompareNoCase("true"), tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
 	}
 
 	//AddModel command
-	if (LineData.substr(0, 8).CompareNoCase("addmodel") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
 	{
 		//get data
 		int params = SplitData(LineData, 9);
@@ -4971,7 +4969,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//Set command
-	if (LineData.substr(0, 4).CompareNoCase("set ") == true)
+	if (SetCaseCopy(LineData.substr(0, 4), false) == "set ")
 	{
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
@@ -4994,7 +4992,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//handle elevator range
-	if (RangeL != RangeH && LineData.substr(0, 12).CompareNoCase("<endelevator") == true)
+	if (RangeL != RangeH && SetCaseCopy(LineData.substr(0, 12), false) == "<endelevator")
 	{
 		if (Current < RangeH)
 		{
@@ -5018,7 +5016,7 @@ int ScriptProcessor::ProcTextures()
 {
 	//Process Textures
 
-	if (LineData.substr(0, 5).CompareNoCase("load ") == true)
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "load ")
 	{
 		//get data
 		int params = SplitData(LineData, 5, false);
@@ -5035,14 +5033,14 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[0];
-		buffer.Insert(0, "/root/");
+		buffer.insert(0, "/root/");
 		CheckFile(buffer);
 		if (params == 4)
 			Simcore->LoadTexture(buffer, tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
 		else
-			Simcore->LoadTexture(buffer, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), true, Ogre::String(tempdata[4]).CompareNoCase("true"));
+			Simcore->LoadTexture(buffer, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), true, Ogre::StringConverter::parseBool(tempdata[4]));
 	}
-	if (LineData.substr(0, 9).CompareNoCase("loadrange") == true)
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "loadrange")
 	{
 		//get data
 		int params = SplitData(LineData, 9, false);
@@ -5067,17 +5065,17 @@ int ScriptProcessor::ProcTextures()
 			temp2 = tempdata[2];
 			buffer = Current;
 			TrimString(buffer);
-			temp2.ReplaceAll("%number%", buffer);
+			ReplaceAll(temp2, "%number%", buffer);
 			temp6 = tempdata[3];
-			temp6.ReplaceAll("%number%", buffer);
+			ReplaceAll(temp6, "%number%", buffer);
 			CheckFile(temp2, true);
 			if (params == 6)
 				Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]));
 			else
-				Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]), true, Ogre::String(tempdata[6]).CompareNoCase("true"));
+				Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]), true, Ogre::StringConverter::parseBool(tempdata[6]));
 		}
 	}
-	if (LineData.substr(0, 8).CompareNoCase("addtext ") == true)
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "addtext ")
 	{
 		//get data
 		int params = SplitData(LineData, 8, false);
@@ -5099,14 +5097,14 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[2];
-		buffer.Insert(0, "/root/data/fonts/");
+		buffer.insert(0, "/root/data/fonts/");
 		CheckFile(buffer);
 		if (params == 14)
 			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]));
 		else
-			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]), true, Ogre::String(tempdata[14]).CompareNoCase("true"));
+			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]), true, Ogre::StringConverter::parseBool(tempdata[14]));
 	}
-	if (LineData.substr(0, 12).CompareNoCase("addtextrange") == true)
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "addtextrange")
 	{
 		//get data
 		int params = SplitData(LineData, 13, false);
@@ -5137,21 +5135,21 @@ int ScriptProcessor::ProcTextures()
 			buffer = Current;
 			TrimString(buffer);
 			LineData = temp6;
-			LineData.ReplaceAll("%number%", buffer);
+			ReplaceAll(LineData, "%number%", buffer);
 		
 			//get data
 			int params = SplitData(LineData, 13, false);
 
 			buffer = tempdata[4];
-			buffer.Insert(0, "/root/data/fonts/");
+			buffer.insert(0, "/root/data/fonts/");
 			CheckFile(buffer);
 			if (params == 16)
 				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]));
 			else
-				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]), true, Ogre::String(tempdata[16]).CompareNoCase("true"));
+				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]), true, Ogre::StringConverter::parseBool(tempdata[16]));
 		}
 	}
-	if (LineData.substr(0, 11).CompareNoCase("loadcropped") == true)
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "loadcropped")
 	{
 		//get data
 		int params = SplitData(LineData, 12, false);
@@ -5168,14 +5166,14 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[0];
-		buffer.Insert(0, "/root/");
+		buffer.insert(0, "/root/");
 		CheckFile(buffer);
 		if (params == 8)
 			Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
 		else
-			Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), Ogre::String(tempdata[8]).CompareNoCase("true"));
+			Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]));
 	}
-	if (LineData.substr(0, 10).CompareNoCase("addoverlay") == true)
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "addoverlay")
 	{
 		//get data
 		int params = SplitData(LineData, 11, false);
@@ -5194,7 +5192,7 @@ int ScriptProcessor::ProcTextures()
 		if (params == 9)
 			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
 		else
-			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), true, Ogre::String(tempdata[9]).CompareNoCase("true"));
+			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), true, Ogre::StringConverter::parseBool(tempdata[9]));
 	}
 	return 0;
 }
@@ -5212,7 +5210,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 	int start, end;
 
 	//first remove all whitespace from the string
-	tmpcalc.ReplaceAll(" ", "");
+	ReplaceAll(tmpcalc, " ", "");
 
 	//find parenthesis
 	do
@@ -5306,7 +5304,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 	{
 		one = tmpcalc.substr(0, temp1);
 		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
 			float tmpnum = atof(one) + atof(two);
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
@@ -5318,7 +5316,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 	{
 		one = tmpcalc.substr(0, temp1);
 		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
 			float tmpnum = atof(one) - atof(two);
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
@@ -5330,7 +5328,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 	{
 		one = tmpcalc.substr(0, temp1);
 		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
 			float tmpnum = atof(one) / atof(two);
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
@@ -5342,7 +5340,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 	{
 		one = tmpcalc.substr(0, temp1);
 		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one) == true && IsNumeric(two) == true)
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
 			float tmpnum = atof(one) * atof(two);
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
@@ -5435,11 +5433,11 @@ void ScriptProcessor::CheckFile(const char *filename, bool relative)
 			return;
 	}
 
-	file.ReplaceAll("\\", "/");
+	ReplaceAll(file, "\\", "/");
 
 	if (Simcore->FileExists(file, relative) == false)
 	{
-		file.ReplaceAll("/root/", "");
+		ReplaceAll(file, "/root/", "");
 		nonexistent_files.PushSmart(file);
 	}
 }

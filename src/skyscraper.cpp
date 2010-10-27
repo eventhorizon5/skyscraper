@@ -340,7 +340,7 @@ void Skyscraper::SetupFrame()
 	}
 }
 
-bool Skyscraper::HandleEvent(iEvent& Event)
+bool Skyscraper::HandleEvent()
 {
 	//Event handler
 	if (Event.Name == Frame)
@@ -859,7 +859,7 @@ void Skyscraper::GetInput()
 void Skyscraper::Report (const char* msg, ...)
 {
 	Ogre::String message = msg;
-	//message.ReplaceAll("%", "%%"); //allow percent signs
+	ReplaceAll(message, "%", "%%"); //allow percent signs
 
 	printf(message);
 	printf("\n");
@@ -869,7 +869,7 @@ void Skyscraper::Report (const char* msg, ...)
 bool Skyscraper::ReportError (const char* msg, ...)
 {
 	Ogre::String message = msg;
-	//message.ReplaceAll("%", "%%"); //allow percent signs
+	ReplaceAll(message, "%", "%%"); //allow percent signs
 
 	printf(message);
 	printf("\n");
@@ -1234,7 +1234,7 @@ bool Skyscraper::Start()
 	sleep(1000);
 
 	if (Reload == false)
-		BuildingFile.Insert(0, "buildings/");
+		BuildingFile.insert(0, "buildings/");
 
 	//load script processor object and load building
 	bool loaderror = false;

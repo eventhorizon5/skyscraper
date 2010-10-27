@@ -26,6 +26,8 @@
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
+#include <wx/panel.h>
+#include <wx/frame.h>
 #include "fileio.h"
 
 int main (int argc, char* argv[]);
@@ -73,13 +75,13 @@ public:
 	Ogre::String BuildingFile;
 
 	//engine related stuff
-	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const Ogre::String& windowName = Ogre::String(""))
+	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const Ogre::String& windowName = Ogre::String(""));
 	void Render();
 	void GetInput();
 	void Report (const char* msg, ...);
 	bool ReportError (const char* msg, ...);
 	void SetupFrame();
-	bool HandleEvent(iEvent& Event);
+	bool HandleEvent();
 	bool Initialize(wxPanel* RenderObject);
 	void GetMenuInput();
 	void StartSound();
@@ -110,7 +112,7 @@ private:
 	ScriptProcessor* processor;
 
 	//button locations
-	/*struct buttondata
+	struct buttondata
 	{
 		int x;
 		int y;
@@ -126,7 +128,7 @@ private:
 		int offset_y;
 		bool drawn_selected, drawn_pressed;
 	};
-	buttondata button1, button2, button3, button4, button5;*/
+	buttondata button1, button2, button3, button4, button5;
 
 	//Ogre::Image* background_image; //background image
 

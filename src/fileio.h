@@ -25,8 +25,6 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 
-#include <csutil/stringarray.h>
-
 class ScriptProcessor;
 
 class ScriptProcessor
@@ -54,7 +52,7 @@ class ScriptProcessor
 	int temp4;
 	int temp5;
 	Ogre::String temp6;
-	Ogre::StringArray tempdata;
+	std::vector<Ogre::String> tempdata;
 	std::vector<int> callbutton_elevators;
 	int FloorCheck;
 	int RangeL;
