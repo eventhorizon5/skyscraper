@@ -23,7 +23,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <crystalspace.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -37,7 +36,6 @@ void SBS::DumpVertices(WallObject* wallobject)
 	//dumps a list of vertices from a mesh object to the console/logfile
 
 	Report("--- Polygon Vertex Dump ---\n");
-	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(wallobject->meshwrapper->GetFactory()->GetMeshObjectFactory());
 	for (int i = 0; i < state->getVertexCount(); i++)
 	{
 		Ogre::Vector3 vertex = state->GetVertices()[i];
@@ -94,7 +92,6 @@ Ogre::Vector2 SBS::GetExtents(Ogre::Polygon &varray, int coord)
 
 Ogre::Vector2 SBS::GetExtents(Ogre::Mesh* mesh, int coord)
 {
-	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
 	return GetExtents(state->GetVertices(), state->getVertexCount(), coord);
 }
 
@@ -130,7 +127,7 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), original.ComputePlane(), isect, dist);
 		return ToLocal(isect);
 	}
-	return 0;
+	return Ogre::Vector3(0, 0, 0);
 }
 
 Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
@@ -140,7 +137,7 @@ Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, flo
 	//get texture
 	Ogre::String texname = texture;
 	bool result;
-	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
+	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName());
 	if (!result)
 		texname = "Default";
 
@@ -152,7 +149,7 @@ Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, flo
 	float tw2 = tw, th2 = th;
 
 	float mw, mh;
-	if (GetTextureTiling(texname, mw, mh))
+	if (GetTextureTiling(texname.c_str(), mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
@@ -170,7 +167,7 @@ Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, flo
 	wall.append(mesh->GetFactory());
 
 	//set lighting factor
-	mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
+	//mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
 
 	//set texture
 	mesh->GetMeshObject()->SetMaterialWrapper(material);
@@ -589,7 +586,7 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 			return result;
 		}
 	}
-	return 0;
+	return Ogre::Vector3(0, 0, 0);
 }
 
 Ogre::Vector3 SBS::GetPolygonDirection(Ogre::Polygon &polygon)
@@ -641,7 +638,7 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	//get texture material
 	Ogre::String texname = texture;
 	bool result;
-	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->QueryObject()->GetName());
+	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName());
 	if (!result)
 		texname = "Default";
 

@@ -121,7 +121,7 @@ bool ScriptProcessor::LoadBuilding()
 			for (int i = 0; i < FunctionParams.size(); i++)
 			{
 				Ogre::String num = _itoa(i + 1, intbuffer, 10);
-				ReplaceAll(LineData, "%param" + num + "%", FunctionParams[i]);
+				ReplaceAll(LineData, Ogre::String("%param" + num + "%").c_str(), FunctionParams[i].c_str());
 			}
 		}
 
@@ -415,7 +415,7 @@ breakpoint:
 						return false;
 					}
 					//replace all occurrences of the variable with it's value
-					ReplaceAll(LineData, "%" + temp2 + "%", UserVariable[temp4]);
+					ReplaceAll(LineData, Ogre::String("%" + temp2 + "%").c_str(), UserVariable[temp4].c_str());
 					startpos = temp1;
 				}
 				else
@@ -708,7 +708,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 bool ScriptProcessor::LoadFromText(const char *text)
 {
 	//loads building commands from a string
-	Ogre::vector<Ogre::String> textarray;
+	std::vector<Ogre::String> textarray;
 	textarray.SplitString(text, "\n");
 
 	//clear building data
@@ -988,7 +988,7 @@ int ScriptProcessor::ScriptError()
 	//return automatic error message from contents of the simulator engine's LastError string
 
 	Ogre::String message = Simcore->LastError;
-	int loc = message.FindLast(":");
+	int loc = message.find_last_of(":");
 
 	Ogre::String result = message.substr(loc + 1);
 	TrimString(result);
@@ -1002,7 +1002,7 @@ bool ScriptProcessor::ReportMissingFiles()
 
 	if (nonexistent_files.size() > 0)
 	{
-		nonexistent_files.Sort();
+		sort(nonexistent_files.begin(), nonexistent_files.end());
 		for (int i = 0; i < nonexistent_files.size(); i++)
 			Simcore->Report(nonexistent_files[i]);
 
@@ -1063,7 +1063,7 @@ int ScriptProcessor::ProcCommands()
 			getfloordata = false;
 
 		//get data
-		int params = SplitData(LineData, 16);
+		int params = SplitData(LineData.c_str(), 16);
 
 		if (params < 14 || params > 14)
 			return ScriptError("Incorrect number of parameters");
@@ -1077,9 +1077,9 @@ int ScriptProcessor::ProcCommands()
 		if (Section == 2)
 		{
 			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[4].c_str());
-			 tempdata.Put(4, buffer);
+			 tempdata.insert(tempdata.begin() + 4, buffer);
 			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7].c_str());
-			 tempdata.Put(7, buffer);
+			 tempdata.insert(tempdata.begin() + 7, buffer);
 		}
 		buffer = tempdata[0];
 		SetCase(buffer, false);
@@ -1125,7 +1125,7 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall" && Section != 2 && Section != 4)
 	{
 		//get data
-		int params = SplitData(LineData, 8);
+		int params = SplitData(LineData.c_str(), 8);
 
 		if (params < 14 || params > 14)
 			return ScriptError("Incorrect number of parameters");
@@ -1138,14 +1138,14 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create wall
-		StoreCommand(Simcore->AddWall(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+		StoreCommand(Simcore->AddWall(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 	}
 
 	//AddFloor
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor " && Section != 2 && Section != 4)
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params < 12 || params > 12)
 			return ScriptError("Incorrect number of parameters");
@@ -1158,14 +1158,14 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create floor
-		StoreCommand(Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
+		StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 	}
 
 	//AddGround
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "addground")
 	{
 		//get data
-		int params = SplitData(LineData, 10);
+		int params = SplitData(LineData.c_str(), 10);
 
 		if (params < 9 || params > 9)
 			return ScriptError("Incorrect number of parameters");
@@ -1178,14 +1178,14 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create tiled ground
-		StoreCommand(Simcore->AddGround(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8])));
+		StoreCommand(Simcore->AddGround(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str())));
 	}
 
 	//Cut command
 	if (SetCaseCopy(LineData.substr(0, 4), false) == "cut " && Section != 2 && Section != 4)
 	{
 		//get data
-		int params = SplitData(LineData, 4);
+		int params = SplitData(LineData.c_str(), 4);
 
 		if (params != 9)
 			return ScriptError("Incorrect number of parameters");
@@ -1212,22 +1212,22 @@ int ScriptProcessor::ProcCommands()
 
 		//perform cut
 		for (int i = 0; i < wallarray->size(); i++)
-			Simcore->Cut(wallarray->Get(i), Ogre::Vector3(atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3])), Ogre::Vector3(atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
+			Simcore->Cut(wallarray->at(i), Ogre::Vector3(atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str())), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 	}
 
 	//Set command
 	if (SetCaseCopy(LineData.substr(0, 4), false) == "set " && Section != 2 && Section != 4)
 	{
 		temp1 = LineData.find("=", 0);
-		temp3 = atoi(LineData.substr(4, temp1 - 5));
+		temp3 = atoi(LineData.substr(4, temp1 - 5).c_str());
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
 		if (temp3 < 0 || temp3 > UserVariable.size() - 1)
 			return ScriptError("Invalid variable number");
 
-		UserVariable[temp3] = Calc(temp2);
+		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + Ogre::String(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
@@ -1245,7 +1245,7 @@ int ScriptProcessor::ProcCommands()
 			getfloordata = false;
 
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -1259,8 +1259,8 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8]);
-			tempdata.Put(8, buffer);
+			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str());
+			tempdata.insert(tempdata.begin() + 8, buffer);
 		}
 		buffer = tempdata[0];
 		SetCase(buffer, false);
@@ -1269,35 +1269,35 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
 
 		StoreCommand(wall);
 
-		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		Simcore->CreateWallBox2(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 	}
 
 	//CreateWallBox command
@@ -1313,7 +1313,7 @@ int ScriptProcessor::ProcCommands()
 			getfloordata = false;
 
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -1327,8 +1327,8 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8]);
-			tempdata.Put(8, buffer);
+			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str());
+			tempdata.insert(tempdata.begin() + 8, buffer);
 		}
 		buffer = tempdata[0];
 		SetCase(buffer, false);
@@ -1337,35 +1337,35 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
 
 		StoreCommand(wall);
 
-		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		Simcore->CreateWallBox(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 	}
 
 	//AddCustomWall command
@@ -1381,7 +1381,7 @@ int ScriptProcessor::ProcCommands()
 			getfloordata = false;
 
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		//check numeric values
 		for (int i = 3; i < params - 2; i++)
@@ -1397,46 +1397,46 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1]);
+			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
 
 		Ogre::Polygon varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.insertVertex(atof(tempdata[temp3]), atof(tempdata[temp3 + 1]), atof(tempdata[temp3 + 2]));
+			varray.insertVertex(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()), atof(tempdata[temp3 + 2].c_str()));
 
 		StoreCommand(wall);
 
-		Simcore->AddCustomWall(wall, tempdata[1], tempdata[2], varray, atof(tempdata[params - 2]), atof(tempdata[params - 1]));
+		Simcore->AddCustomWall(wall, tempdata[1].c_str(), tempdata[2].c_str(), varray, atof(tempdata[params - 2].c_str()), atof(tempdata[params - 1].c_str()));
 	}
 
 	//AddShaft command
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "addshaft ")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
@@ -1448,12 +1448,12 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		if (atoi(tempdata[4]) < -Simcore->Basements)
+		if (atoi(tempdata[4].c_str()) < -Simcore->Basements)
 			return ScriptError("Invalid starting floor");
-		if (atoi(tempdata[5]) > Simcore->Floors - 1)
+		if (atoi(tempdata[5].c_str()) > Simcore->Floors - 1)
 			return ScriptError("Invalid ending floor");
 
-		Object *object = Simcore->CreateShaft(atoi(tempdata[0]), atoi(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+		Object *object = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atoi(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
 		if (!object)
 			return ScriptError();
 
@@ -1464,7 +1464,7 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "shaftcut ")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 7)
 			return ScriptError("Incorrect number of parameters");
@@ -1477,11 +1477,11 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check for existence of shaft
-		int shaftnum = atoi(tempdata[0]);
+		int shaftnum = atoi(tempdata[0].c_str());
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
 			return ScriptError("Invalid shaft " + Ogre::String(tempdata[0]));
 
-		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 	}
 
 	//ShaftShowFloors command
@@ -1494,7 +1494,7 @@ int ScriptProcessor::ProcCommands()
 		int shaftnum;
 		Ogre::String str = LineData.substr(15, loc - 16);
 		TrimString(str);
-		if (!IsNumeric(str.c_str, shaftnum))
+		if (!IsNumeric(str.c_str(), shaftnum))
 			return ScriptError("Invalid shaft number");
 
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
@@ -1502,7 +1502,7 @@ int ScriptProcessor::ProcCommands()
 
 		Simcore->GetShaft(shaftnum)->ShowFloors = true;
 
-		int params = SplitAfterEquals(LineData, false);
+		int params = SplitAfterEquals(LineData.c_str(), false);
 		if (params == -1)
 			return ScriptError("Syntax Error");
 
@@ -1518,7 +1518,7 @@ int ScriptProcessor::ProcCommands()
 				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
-				if (!IsNumeric(str1.c_str, start) || !IsNumeric(str2.c_str, end))
+				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
 					return ScriptError("Invalid value");
 
 				if (end < start)
@@ -1536,7 +1536,7 @@ int ScriptProcessor::ProcCommands()
 				int showfloor;
 				Ogre::String str = tempdata[line];
 				TrimString(str);
-				if (!IsNumeric(str.c_str, showfloor))
+				if (!IsNumeric(str.c_str(), showfloor))
 					return ScriptError("Invalid value");
 				Simcore->GetShaft(shaftnum)->AddShowFloor(showfloor);
 			}
@@ -1559,7 +1559,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid shaft number");
 		Simcore->GetShaft(shaftnum)->ShowOutside = true;
 
-		int params = SplitAfterEquals(LineData, false);
+		int params = SplitAfterEquals(LineData.c_str(), false);
 		if (params == -1)
 			return ScriptError("Syntax Error");
 
@@ -1575,7 +1575,7 @@ int ScriptProcessor::ProcCommands()
 				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
-				if (!IsNumeric(str1.c_str, start) || !IsNumeric(str2.c_str, end))
+				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
 					return ScriptError("Invalid value");
 				if (end < start)
 				{
@@ -1592,7 +1592,7 @@ int ScriptProcessor::ProcCommands()
 				int showfloor;
 				Ogre::String str = tempdata[line];
 				TrimString(str);
-				if (!IsNumeric(str.c_str, showfloor))
+				if (!IsNumeric(str.c_str(), showfloor))
 					return ScriptError("Invalid value");
 				Simcore->GetShaft(shaftnum)->AddShowOutside(showfloor);
 			}
@@ -1609,13 +1609,13 @@ int ScriptProcessor::ProcCommands()
 		int shaftnum;
 		Ogre::String str = LineData.substr(13, loc - 14);
 		TrimString(str);
-		if (!IsNumeric(str.c_str, shaftnum))
+		if (!IsNumeric(str.c_str(), shaftnum))
 			return ScriptError("Invalid shaft number");
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
 			return ScriptError("Invalid shaft number");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
 		Simcore->GetShaft(shaftnum)->ShowFullShaft = Ogre::StringConverter::parseBool(temp2);
 	}
@@ -1624,7 +1624,7 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 15), false) == "createstairwell")
 	{
 		//get data
-		int params = SplitData(LineData, 16);
+		int params = SplitData(LineData.c_str(), 16);
 
 		if (params != 5)
 			return ScriptError("Incorrect number of parameters");
@@ -1638,7 +1638,7 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Object *object = Simcore->CreateStairwell(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]));
+		Object *object = Simcore->CreateStairwell(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
 		if (!object)
 			return ScriptError();
 
@@ -1649,7 +1649,7 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "cutstairwell ")
 	{
 		//get data
-		int params = SplitData(LineData, 13);
+		int params = SplitData(LineData.c_str(), 13);
 
 		if (params != 7)
 			return ScriptError("Incorrect number of parameters");
@@ -1663,20 +1663,20 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		int stairwell = atoi(tempdata[0]);
+		int stairwell = atoi(tempdata[0].c_str());
 		if (!Simcore->GetStairs(stairwell))
 			return ScriptError("Invalid stairwell");
 
-		Simcore->GetStairs(stairwell)->CutFloors(true, Ogre::Vector2(atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector2(atof(tempdata[3]), atof(tempdata[4])), atof(tempdata[5]), atof(tempdata[6]));
+		Simcore->GetStairs(stairwell)->CutFloors(true, Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 	}
 
 	//WallOrientation command
 	if (SetCaseCopy(LineData.substr(0, 15), false) == "wallorientation")
 	{
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
-		if (!Simcore->SetWallOrientation(temp2))
+		if (!Simcore->SetWallOrientation(temp2.c_str()))
 			return ScriptError();
 	}
 
@@ -1684,16 +1684,16 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "floororientation")
 	{
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
-		if (!Simcore->SetFloorOrientation(temp2))
+		if (!Simcore->SetFloorOrientation(temp2.c_str()))
 			return ScriptError();
 	}
 
 	//DrawWalls command
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "drawwalls")
 	{
-		int params = SplitAfterEquals(LineData);
+		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
 			return ScriptError("Syntax Error");
 		if (params != 6)
@@ -1711,7 +1711,7 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 18), false) == "settexturemapping ")
 	{
 		//get data
-		int params = SplitData(LineData, 18);
+		int params = SplitData(LineData.c_str(), 18);
 
 		if (params != 9)
 			return ScriptError("Incorrect number of parameters");
@@ -1725,16 +1725,16 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Simcore->SetTextureMapping(atoi(tempdata[0]), Ogre::Vector2(atof(tempdata[1]), atof(tempdata[2])),
-									atoi(tempdata[3]), Ogre::Vector2(atof(tempdata[4]), atof(tempdata[5])),
-									atoi(tempdata[6]), Ogre::Vector2(atof(tempdata[7]), atof(tempdata[8])));
+		Simcore->SetTextureMapping(atoi(tempdata[0].c_str()), Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())),
+									atoi(tempdata[3].c_str()), Ogre::Vector2(atof(tempdata[4].c_str()), atof(tempdata[5].c_str())),
+									atoi(tempdata[6].c_str()), Ogre::Vector2(atof(tempdata[7].c_str()), atof(tempdata[8].c_str())));
 	}
 
 	//SetTextureMapping2 command
 	if (SetCaseCopy(LineData.substr(0, 18), false) == "settexturemapping2")
 	{
 		//get data
-		int params = SplitData(LineData, 19);
+		int params = SplitData(LineData.c_str(), 19);
 
 		if (params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -1752,9 +1752,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Simcore->SetTextureMapping2(tempdata[0], tempdata[1], tempdata[2], Ogre::Vector2(atof(tempdata[3]), atof(tempdata[4])),
-									tempdata[5], tempdata[6], tempdata[7], Ogre::Vector2(atof(tempdata[8]), atof(tempdata[9])),
-									tempdata[10], tempdata[11], tempdata[12], Ogre::Vector2(atof(tempdata[13]), atof(tempdata[14])));
+		Simcore->SetTextureMapping2(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())),
+									tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), Ogre::Vector2(atof(tempdata[8].c_str()), atof(tempdata[9].c_str())),
+									tempdata[10].c_str(), tempdata[11].c_str(), tempdata[12].c_str(), Ogre::Vector2(atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
 	}
 
 	//ResetTextureMapping command
@@ -1765,7 +1765,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Syntax Error");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
 		Simcore->ResetTextureMapping(Ogre::StringConverter::parseBool(temp2));
 	}
@@ -1774,7 +1774,7 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "setplanarmapping")
 	{
 		//get data
-		int params = SplitData(LineData, 17);
+		int params = SplitData(LineData.c_str(), 17);
 
 		if (params != 4)
 			return ScriptError("Incorrect number of parameters");
@@ -1791,7 +1791,7 @@ int ScriptProcessor::ProcCommands()
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
 			return ScriptError("Syntax Error");
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
 		Simcore->ReverseAxis(Ogre::StringConverter::parseBool(temp2));
 	}
@@ -1817,8 +1817,8 @@ int ScriptProcessor::ProcCommands()
 		tempdata.SplitString(LineData.substr(temp1 + 1, temp4 - temp1 - 1), ",");
 		for (temp3 = 0; temp3 < tempdata.size(); temp3++)
 		{
-			buffer = Calc(tempdata[temp3]);
-			tempdata.Put(temp3, buffer);
+			buffer = Calc(tempdata[temp3].c_str());
+			tempdata.insert(tempdata.begin() + temp3, buffer);
 		}
 		if (tempdata.size() < 8 || tempdata.size() > 8)
 			return ScriptError("Incorrect number of parameters");
@@ -1848,7 +1848,7 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		Ogre::Vector3 isect = Simcore->GetPoint(*wall_array, tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), Ogre::Vector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+		Ogre::Vector3 isect = Simcore->GetPoint(*wall_array, tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())));
 
 		buffer = Ogre::String(LineData).substr(0, temp5) + Ogre::String(wxVariant(isect.x).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(isect.y).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(isect.z).GetString().ToAscii()) + Ogre::String(LineData).substr(temp4 + 1);
 		LineData = buffer;
@@ -1858,13 +1858,13 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "getwallextents")
 	{
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params != 3)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		Ogre::String str = tempdata[i];
+		Ogre::String str = tempdata[2];
 		TrimString(str);
 		if (!IsNumeric(str.c_str()))
 			return ScriptError("Invalid value: " + Ogre::String(tempdata[2]));
@@ -1885,8 +1885,8 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		MinExtent = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), false);
-		MaxExtent = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), true);
+		MinExtent = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), false);
+		MaxExtent = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), true);
 	}
 
 	//GetWallExtents function
@@ -1910,14 +1910,14 @@ int ScriptProcessor::ProcCommands()
 		tempdata.SplitString(LineData.substr(temp1 + 1, temp4 - temp1 - 1), ",");
 		for (temp3 = 0; temp3 < tempdata.size(); temp3++)
 		{
-			buffer = Calc(tempdata[temp3]);
-			tempdata.Put(temp3, buffer);
+			buffer = Calc(tempdata[temp3].c_str());
+			tempdata.insert(tempdata.begin() + temp3, buffer);
 		}
 		if (tempdata.size() < 4 || tempdata.size() > 4)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		Ogre::String str = tempdata[i];
+		Ogre::String str = tempdata[2];
 		TrimString(str);
 		if (!IsNumeric(str.c_str()))
 			return ScriptError("Invalid value: " + Ogre::String(tempdata[2]));
@@ -1938,7 +1938,7 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		Ogre::Vector3 result = Simcore->GetWallExtents(*wall_array, tempdata[1], atof(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]));
+		Ogre::Vector3 result = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), Ogre::StringConverter::parseBool(tempdata[3]));
 
 		buffer = Ogre::String(LineData).substr(0, temp5) + Ogre::String(wxVariant(result.x).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(result.y).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(result.z).GetString().ToAscii()) + Ogre::String(LineData).substr(temp4 + 1);
 		LineData = buffer;
@@ -1947,7 +1947,7 @@ int ScriptProcessor::ProcCommands()
 	//SetAutoSize command
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "setautosize")
 	{
-		int params = SplitAfterEquals(LineData);
+		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
 			return ScriptError("Syntax Error");
 		if (params != 2)
@@ -1960,19 +1960,19 @@ int ScriptProcessor::ProcCommands()
 	//TextureOverride command
 	if (SetCaseCopy(LineData.substr(0, 15), false) == "textureoverride")
 	{
-		int params = SplitData(LineData, 16, false);
+		int params = SplitData(LineData.c_str(), 16, false);
 
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->SetTextureOverride(tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5]);
+		Simcore->SetTextureOverride(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str());
 		return sNextLine;
 	}
 
 	//TextureFlip command
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "textureflip")
 	{
-		int params = SplitData(LineData, 12, false);
+		int params = SplitData(LineData.c_str(), 12, false);
 
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
@@ -1986,7 +1986,7 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Simcore->SetTextureFlip(atoi(tempdata[0]), atoi(tempdata[1]), atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]));
+		Simcore->SetTextureFlip(atoi(tempdata[0].c_str()), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
 		return sNextLine;
 	}
 
@@ -1994,14 +1994,14 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 5), false) == "mount")
 	{
 		//get data
-		int params = SplitData(LineData, 6, false);
+		int params = SplitData(LineData.c_str(), 6, false);
 
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
 		buffer = tempdata[1];
 		buffer.insert(0, "/root/");
-		if (!Simcore->Mount(tempdata[0], buffer))
+		if (!Simcore->Mount(tempdata[0].c_str(), buffer.c_str()))
 			return ScriptError();
 
 		return sNextLine;
@@ -2011,7 +2011,7 @@ int ScriptProcessor::ProcCommands()
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "addfloorautoarea")
 	{
 		//get data
-		int params = SplitData(LineData, 17);
+		int params = SplitData(LineData.c_str(), 17);
 
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
@@ -2024,14 +2024,14 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create floor auto area
-		Simcore->AddFloorAutoArea(Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])));
+		Simcore->AddFloorAutoArea(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())));
 	}
 
 	//AddSound
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 5 && params != 13)
 			return ScriptError("Incorrect number of parameters");
@@ -2059,12 +2059,12 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		if (partial == true)
-			StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
+			StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
 		else
-			StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::Vector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])))); 
+			StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())))); 
 	}
 
 	//AddModel command
@@ -2074,7 +2074,7 @@ int ScriptProcessor::ProcCommands()
 			return 0;
 
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
@@ -2089,10 +2089,10 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		//create model
-		StoreCommand(Simcore->AddModel(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), Ogre::Vector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])), atof(tempdata[8]), atof(tempdata[9])));
+		StoreCommand(Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
 	}
 
 	return 0;
@@ -2103,7 +2103,7 @@ int ScriptProcessor::ProcGlobals()
 	//process global parameters
 
 	//get text after equal sign
-	temp2 = GetAfterEquals(LineData);
+	temp2 = GetAfterEquals(LineData.c_str());
 
 	//store variable values
 	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
@@ -2173,7 +2173,7 @@ int ScriptProcessor::ProcGlobals()
 	}
 	if (SetCaseCopy(LineData.substr(0, 15), false) == "interfloorontop")
 	{
-		Simcore->InterfloorOnTop = Ogre::StringConverter::parseBool(temp2));
+		Simcore->InterfloorOnTop = Ogre::StringConverter::parseBool(temp2);
 	}
 	return 0;
 }
@@ -2194,15 +2194,15 @@ int ScriptProcessor::ProcFloors()
 
 	//replace variables with actual values
 	buffer = Current;
-	ReplaceAll(LineData, "%floor%", buffer);
+	ReplaceAll(LineData, "%floor%", buffer.c_str());
 	buffer = floor->Height;
-	ReplaceAll(LineData, "%height%", buffer);
+	ReplaceAll(LineData, "%height%", buffer.c_str());
 	buffer = floor->FullHeight();
-	ReplaceAll(LineData, "%fullheight%", buffer);
+	ReplaceAll(LineData, "%fullheight%", buffer.c_str());
 	buffer = floor->InterfloorHeight;
-	ReplaceAll(LineData, "%interfloorheight%", buffer);
+	ReplaceAll(LineData, "%interfloorheight%", buffer.c_str());
 	buffer = floor->GetBase();
-	ReplaceAll(LineData, "%base%", buffer);
+	ReplaceAll(LineData, "%base%", buffer.c_str());
 
 	if (getfloordata == true)
 		return sCheckFloors;
@@ -2217,7 +2217,7 @@ int ScriptProcessor::ProcFloors()
 		else
 			temp2 = "";
 		TrimString(temp2);
-		if (IfProc(temp2) == true)
+		if (IfProc(temp2.c_str()) == true)
 		{
 			//trim off IF statement
 			LineData = LineData.substr(temp3 + 1);
@@ -2234,14 +2234,14 @@ int ScriptProcessor::ProcFloors()
 
 	//get text after equal sign
 	int temp2check = LineData.find("=", 0);
-	temp2 = GetAfterEquals(LineData);
+	temp2 = GetAfterEquals(LineData.c_str());
 
 	//parameters
 	if (SetCaseCopy(LineData.substr(0, 6), false) == "height")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		Ogre::String str = Calc(temp2);
+		Ogre::String str = Calc(temp2.c_str());
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->Height))
 			return ScriptError("Invalid value");
@@ -2254,7 +2254,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		Ogre::String str = Calc(temp2);
+		Ogre::String str = Calc(temp2.c_str());
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->InterfloorHeight))
 			return ScriptError("Invalid value");
@@ -2267,7 +2267,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		Ogre::String str = Calc(temp2);
+		Ogre::String str = Calc(temp2.c_str());
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->Altitude))
 			return ScriptError("Invalid value");
@@ -2276,13 +2276,13 @@ int ScriptProcessor::ProcFloors()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		floor->ID = Calc(temp2);
+		floor->ID = Calc(temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		floor->Name = Calc(temp2);
+		floor->Name = Calc(temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 4), false) == "type")
 	{
@@ -2300,13 +2300,13 @@ int ScriptProcessor::ProcFloors()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		floor->IndicatorTexture = Calc(temp2);
+		floor->IndicatorTexture = Calc(temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 5), false) == "group")
 	{
 		//copy string listing of group floors into array
 
-		int params = SplitAfterEquals(LineData, false);
+		int params = SplitAfterEquals(LineData.c_str(), false);
 		if (params == -1)
 			return ScriptError("Syntax Error");
 
@@ -2322,7 +2322,7 @@ int ScriptProcessor::ProcFloors()
 				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
-				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(tmpstring.substr(str2.c_str(), end).c_str())
+				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
 					return ScriptError("Invalid value");
 				if (end < start)
 				{
@@ -2358,7 +2358,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 5), false) == "print")
 	{
 		//calculate inline math
-		buffer = Calc(LineData.substr(6));
+		buffer = Calc(LineData.substr(6).c_str());
 
 		//print line
 		skyscraper->Report(buffer);
@@ -2381,7 +2381,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor ")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
@@ -2391,19 +2391,19 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create floor
-		StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11])));
+		StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11])));
 	}
 
 	//AddShaftFloor command
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftfloor")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
@@ -2415,13 +2415,13 @@ int ScriptProcessor::ProcFloors()
 				i = 3; //skip non-numeric parameters
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create floor
-		if (Simcore->GetShaft(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
+		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 		else
 			return ScriptError("Invalid shaft");
 	}
@@ -2430,7 +2430,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsfloor")
 	{
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params != 12)
 			return ScriptError("Incorrect number of parameters");
@@ -2442,13 +2442,13 @@ int ScriptProcessor::ProcFloors()
 				i = 3; //skip non-numeric parameters
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create floor
-		if (Simcore->GetStairs(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
+		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 		else
 			return ScriptError("Invalid stairwell");
 	}
@@ -2457,7 +2457,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 18), false) == "addinterfloorfloor")
 	{
 		//get data
-		int params = SplitData(LineData, 19);
+		int params = SplitData(LineData.c_str(), 19);
 
 		if (params != 11)
 			return ScriptError("Incorrect number of parameters");
@@ -2467,19 +2467,19 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create floor
-		StoreCommand(floor->AddInterfloorFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
+		StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str())));
 	}
 
 	//AddWall command
 	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall")
 	{
 		//get data
-		int params = SplitData(LineData, 8);
+		int params = SplitData(LineData.c_str(), 8);
 
 		if (params != 14)
 			return ScriptError("Incorrect number of parameters");
@@ -2489,19 +2489,19 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create wall
-		StoreCommand(floor->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		StoreCommand(floor->AddWall(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), Ogre::StringConverter::parseBool(tempdata[13])));
 	}
 
 	//AddShaftWall command
 	if (SetCaseCopy(LineData.substr(0, 12), false) == "addshaftwall")
 	{
 		//get data
-		int params = SplitData(LineData, 13);
+		int params = SplitData(LineData.c_str(), 13);
 
 		if (params != 14)
 			return ScriptError("Incorrect number of parameters");
@@ -2513,13 +2513,13 @@ int ScriptProcessor::ProcFloors()
 				i = 3; //skip non-numeric parameters
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create wall
-		if (Simcore->GetShaft(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddWall(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 		else
 			return ScriptError("Invalid shaft");
 	}
@@ -2528,7 +2528,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "addstairswall")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params != 14)
 			return ScriptError("Incorrect number of parameters");
@@ -2540,13 +2540,13 @@ int ScriptProcessor::ProcFloors()
 				i = 3; //skip non-numeric parameters
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create wall
-		if (Simcore->GetStairs(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddWall(Current, tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddWall(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 		else
 			return ScriptError("Invalid stairwell");
 	}
@@ -2555,7 +2555,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 17), false) == "addinterfloorwall")
 	{
 		//get data
-		int params = SplitData(LineData, 18);
+		int params = SplitData(LineData.c_str(), 18);
 
 		if (params != 13)
 			return ScriptError("Incorrect number of parameters");
@@ -2565,19 +2565,19 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create wall
-		StoreCommand(floor->AddInterfloorWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+		StoreCommand(floor->AddInterfloorWall(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 	}
 
 	//ColumnWallBox command
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "columnwallbox ")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params != 14)
 			return ScriptError("Incorrect number of parameters");
@@ -2587,18 +2587,18 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		StoreCommand(floor->ColumnWallBox(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
 	}
 
 	//ColumnWallBox2 command
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "columnwallbox2")
 	{
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params != 14)
 			return ScriptError("Incorrect number of parameters");
@@ -2608,11 +2608,11 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		StoreCommand(floor->ColumnWallBox2(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
 	}
 
 	//Set command
@@ -2627,11 +2627,11 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid variable number");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
 		if (temp3 < 0 || temp3 > UserVariable.size() - 1)
 			return ScriptError("Invalid variable number");
-		UserVariable[temp3] = Calc(temp2);
+		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + Ogre::String(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
@@ -2640,7 +2640,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 19), false) == "callbuttonelevators")
 	{
 		//construct array containing floor numbers
-		int params = SplitAfterEquals(LineData, false);
+		int params = SplitAfterEquals(LineData.c_str(), false);
 		if (params == -1)
 			return ScriptError("Syntax Error");
 
@@ -2667,7 +2667,7 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("No elevators specified");
 
 		//get data
-		int params = SplitData(LineData, 18);
+		int params = SplitData(LineData.c_str(), 18);
 
 		bool compatibility = false;
 		if (params == 12)
@@ -2682,7 +2682,7 @@ int ScriptProcessor::ProcFloors()
 					i++;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -2698,23 +2698,23 @@ int ScriptProcessor::ProcFloors()
 					i++;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
 		//create call button
 		if (compatibility == true)
-			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
+			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 		else
-			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), tempdata[8], atof(tempdata[9]), atof(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+			StoreCommand(floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 	}
 
 	//AddStairs command
 	if (SetCaseCopy(LineData.substr(0, 10), false) == "addstairs ")
 	{
 		//get data
-		int params = SplitData(LineData, 10);
+		int params = SplitData(LineData.c_str(), 10);
 
 		if (params != 13)
 			return ScriptError("Incorrect number of parameters");
@@ -2726,13 +2726,13 @@ int ScriptProcessor::ProcFloors()
 				i = 4; //skip non-numeric parameters
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create stairs
-		if (Simcore->GetStairs(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddStairs(Current, tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atoi(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddStairs(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atoi(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 		else
 			return ScriptError("Invalid stairwell");
 	}
@@ -2741,7 +2741,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoor ")
 	{
 		//get data
-		int params = SplitData(LineData, 8);
+		int params = SplitData(LineData.c_str(), 8);
 
 		if (params < 10 || params > 14)
 			return ScriptError("Incorrect number of parameters");
@@ -2755,7 +2755,7 @@ int ScriptProcessor::ProcFloors()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 1;
@@ -2766,7 +2766,7 @@ int ScriptProcessor::ProcFloors()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 2;
@@ -2777,7 +2777,7 @@ int ScriptProcessor::ProcFloors()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 3;
@@ -2788,7 +2788,7 @@ int ScriptProcessor::ProcFloors()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -2796,26 +2796,26 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(Ogre::String("data/") + tempdata[0], true);
-			CheckFile(Ogre::String("data/") + tempdata[1], true);
+			CheckFile(Ogre::String("data/" + tempdata[0]).c_str(), true);
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 		}
 
 		//create door
 		if (compat == 1)
-			StoreCommand(floor->AddDoor("", "", false, tempdata[0], atof(tempdata[1]), atoi(tempdata[2]), 0, atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9])));
+			StoreCommand(floor->AddDoor("", "", false, tempdata[0].c_str(), atof(tempdata[1].c_str()), atoi(tempdata[2].c_str()), 0, atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
 		if (compat == 2)
-			StoreCommand(floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), 0, atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
+			StoreCommand(floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), 0, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 		if (compat == 3)
-			StoreCommand(floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+			StoreCommand(floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 		if (compat == 0)
-			StoreCommand(floor->AddDoor(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+			StoreCommand(floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 	}
 
 	//AddStairsDoor command
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsdoor ")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params < 11 || params > 15)
 			return ScriptError("Incorrect number of parameters");
@@ -2831,7 +2831,7 @@ int ScriptProcessor::ProcFloors()
 					i = 2; //skip non-numeric parameters
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 1;
@@ -2845,7 +2845,7 @@ int ScriptProcessor::ProcFloors()
 					i = 4; //skip non-numeric parameters
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 2;
@@ -2859,7 +2859,7 @@ int ScriptProcessor::ProcFloors()
 					i = 4; //skip non-numeric parameters
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 3;
@@ -2873,7 +2873,7 @@ int ScriptProcessor::ProcFloors()
 					i = 5; //skip non-numeric parameters
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -2881,21 +2881,21 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(Ogre::String("data/") + tempdata[1], true);
-			CheckFile(Ogre::String("data/") + tempdata[2], true);
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+			CheckFile(Ogre::String("data/" + tempdata[2]).c_str(), true);
 		}
 
 		//create door
-		if (Simcore->GetStairs(atoi(tempdata[0])))
+		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
 			if (compat == 1)
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, "", "", false, tempdata[1], atof(tempdata[2]), atoi(tempdata[3]), 0, atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, "", "", false, tempdata[1].c_str(), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), 0, atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str())));
 			if (compat == 2)
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], false, tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), 0, atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), 0, atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 			if (compat == 3)
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], false, tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 			if (compat == 0)
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], atof(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14])));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
 		}
 		else
 			return ScriptError("Invalid stairwell");
@@ -2905,7 +2905,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 23), false) == "adddirectionalindicator")
 	{
 		//get data
-		int params = SplitData(LineData, 24);
+		int params = SplitData(LineData.c_str(), 24);
 
 		if (params < 18 || params > 19)
 			return ScriptError("Incorrect number of parameters");
@@ -2925,7 +2925,7 @@ int ScriptProcessor::ProcFloors()
 					i = 16;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compatibility = true;
@@ -2942,18 +2942,18 @@ int ScriptProcessor::ProcFloors()
 					i = 17;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
-		if (!Simcore->GetElevator(atoi(tempdata[0])))
+		if (!Simcore->GetElevator(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid elevator");
 
 		if (compatibility == true)
-			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), false, Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
+			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), false, Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), tempdata[12].c_str(), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16].c_str()), atof(tempdata[17].c_str())));
 		else
-			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::StringConverter::parseBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), tempdata[13], atof(tempdata[14]), atof(tempdata[15]), Ogre::StringConverter::parseBool(tempdata[16]), atof(tempdata[17]), atof(tempdata[18])));
+			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::StringConverter::parseBool(tempdata[4]), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), tempdata[9].c_str(), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), tempdata[13].c_str(), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), Ogre::StringConverter::parseBool(tempdata[16]), atof(tempdata[17].c_str()), atof(tempdata[18].c_str())));
 	}
 
 	//AddShaftDoor command
@@ -2964,7 +2964,7 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("SetShaftDoors must be used before AddShaftDoor");
 
 		//get data
-		int params = SplitData(LineData, 13);
+		int params = SplitData(LineData.c_str(), 13);
 
 		if (params < 5 || params > 6)
 			return ScriptError("Incorrect number of parameters");
@@ -2982,7 +2982,7 @@ int ScriptProcessor::ProcFloors()
 					i = 4;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -2994,25 +2994,25 @@ int ScriptProcessor::ProcFloors()
 					i = 3;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
-		if (!Simcore->GetElevator(atoi(tempdata[0])))
+		if (!Simcore->GetElevator(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid elevator");
 
 		if (compat == false)
-			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5])));
+			StoreCommand(Simcore->GetElevator(atoi(tempdata[0].c_str()))->AddShaftDoor(Current, atoi(tempdata[1].c_str()), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())));
 		else
-			StoreCommand(Simcore->GetElevator(atoi(tempdata[0]))->AddShaftDoor(Current, atoi(tempdata[1]), tempdata[2], tempdata[2], atof(tempdata[3]), atof(tempdata[4])));
+			StoreCommand(Simcore->GetElevator(atoi(tempdata[0].c_str()))->AddShaftDoor(Current, atoi(tempdata[1].c_str()), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())));
 	}
 
 	//AddFloorIndicator command
 	if (SetCaseCopy(LineData.substr(0, 17), false) == "addfloorindicator")
 	{
 		//get data
-		int params = SplitData(LineData, 18);
+		int params = SplitData(LineData.c_str(), 18);
 
 		if (params < 8 || params > 9)
 			return ScriptError("Incorrect number of parameters");
@@ -3030,7 +3030,7 @@ int ScriptProcessor::ProcFloors()
 					i = 4;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -3042,22 +3042,22 @@ int ScriptProcessor::ProcFloors()
 					i = 3;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
 		if (compat == false)
-			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])));
+			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())));
 		else
-			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), "Button", tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])));
+			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), "Button", tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())));
 	}
 
 	//AddFillerWalls command
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "addfillerwalls")
 	{
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
@@ -3069,18 +3069,18 @@ int ScriptProcessor::ProcFloors()
 				i = 8;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		floor->AddFillerWalls(tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]));
+		floor->AddFillerWalls(tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()));
 	}
 
 	//AddSound
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 5 && params != 13)
 			return ScriptError("Incorrect number of parameters");
@@ -3108,19 +3108,19 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		if (partial == true)
-			StoreCommand(floor->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
+			StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
 		else
-			StoreCommand(floor->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::Vector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])))); 
+			StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())))); 
 	}
 
 	//AddShaftDoorComponent command
 	if (SetCaseCopy(LineData.substr(0, 21), false) == "addshaftdoorcomponent")
 	{
 		//get data
-		int params = SplitData(LineData, 22);
+		int params = SplitData(LineData.c_str(), 22);
 
 		if (params != 18)
 			return ScriptError("Incorrect number of parameters");
@@ -3134,22 +3134,22 @@ int ScriptProcessor::ProcFloors()
 				i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0]));
+		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
-		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
+		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1].c_str()), Current, tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()), atof(tempdata[17].c_str())));
 	}
 
 	//FinishShaftDoor command
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "finishshaftdoor ")
 	{
 		//get data
-		int params = SplitData(LineData, 16);
+		int params = SplitData(LineData.c_str(), 16);
 
 		if (params < 2)
 			return ScriptError("Incorrect number of parameters");
@@ -3159,22 +3159,22 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0]));
+		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
-		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1]), Current));
+		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current));
 	}
 
 	//AddModel command
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
@@ -3184,22 +3184,22 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		//create model
-		StoreCommand(floor->AddModel(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), Ogre::Vector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])), atof(tempdata[8]), atof(tempdata[9])));
+		StoreCommand(floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
 	}
 
 	//AddStairsModel command
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params != 11)
 			return ScriptError("Incorrect number of parameters");
@@ -3209,16 +3209,16 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		//create model
-		if (Simcore->GetStairs(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetStairs(atoi(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::Vector3(atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])), atof(tempdata[9]), atof(tempdata[10])));
+		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str())));
 		else
 			return ScriptError("Invalid stairwell");
 	}
@@ -3227,7 +3227,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params != 11)
 			return ScriptError("Incorrect number of parameters");
@@ -3237,16 +3237,16 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		//create model
-		if (Simcore->GetShaft(atoi(tempdata[0])))
-			StoreCommand(Simcore->GetShaft(atoi(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::Vector3(atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8])), atof(tempdata[9]), atof(tempdata[10])));
+		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str())));
 		else
 			return ScriptError("Invalid shaft");
 	}
@@ -3255,7 +3255,7 @@ int ScriptProcessor::ProcFloors()
 	if (SetCaseCopy(LineData.substr(0, 4), false) == "cut ")
 	{
 		//get data
-		int params = SplitData(LineData, 4);
+		int params = SplitData(LineData.c_str(), 4);
 
 		if (params != 8)
 			return ScriptError("Incorrect number of parameters");
@@ -3265,19 +3265,19 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//perform cut on floor
-		Simcore->GetFloor(Current)->Cut(Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), false);
+		Simcore->GetFloor(Current)->Cut(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), false);
 	}
 
 	//CutAll command
 	if (SetCaseCopy(LineData.substr(0, 6), false) == "cutall")
 	{
 		//get data
-		int params = SplitData(LineData, 7);
+		int params = SplitData(LineData.c_str(), 7);
 
 		if (params != 8)
 			return ScriptError("Incorrect number of parameters");
@@ -3287,12 +3287,12 @@ int ScriptProcessor::ProcFloors()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//perform cut on all objects related to the current floor
-		Simcore->GetFloor(Current)->CutAll(Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2])), Ogre::Vector3(atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]));
+		Simcore->GetFloor(Current)->CutAll(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]));
 	}
 
 	//handle floor range
@@ -3345,7 +3345,7 @@ int ScriptProcessor::ProcElevators()
 
 	//replace variables with actual values
 	buffer = Current;
-	ReplaceAll(LineData, "%elevator%", buffer);
+	ReplaceAll(LineData, "%elevator%", buffer.c_str());
 
 	//IF statement
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
@@ -3357,7 +3357,7 @@ int ScriptProcessor::ProcElevators()
 		else
 			temp2 = "";
 		TrimString(temp2);
-		if (IfProc(temp2) == true)
+		if (IfProc(temp2.c_str()) == true)
 		{
 			Ogre::String str = LineData.substr(temp3 + 1);
 			TrimString(str);
@@ -3374,7 +3374,7 @@ int ScriptProcessor::ProcElevators()
 
 	//get text after equal sign
 	int temp2check = LineData.find("=", 0);
-	temp2 = GetAfterEquals(LineData);
+	temp2 = GetAfterEquals(LineData.c_str());
 
 	Elevator *elev = Simcore->GetElevator(Current);
 
@@ -3446,7 +3446,7 @@ int ScriptProcessor::ProcElevators()
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "servicedfloors")
 	{
 		//copy string listing of serviced floors into array
-		int params = SplitAfterEquals(LineData, false);
+		int params = SplitAfterEquals(LineData.c_str(), false);
 		if (params == -1)
 			return ScriptError("Syntax Error");
 
@@ -3585,7 +3585,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->GetDoor(temp3)->OpenSound = temp2;
 	}
@@ -3603,7 +3603,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
 	}
@@ -3621,7 +3621,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->GetDoor(temp3)->NudgeSound = temp2;
 	}
@@ -3632,7 +3632,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarStartSound = temp2;
 		//turn off motor sounds
@@ -3648,7 +3648,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarMoveSound = temp2;
 		//turn off motor sounds
@@ -3664,7 +3664,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarStopSound = temp2;
 		//turn off motor sounds
@@ -3680,7 +3680,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarIdleSound = temp2;
 		//turn off motor sounds
@@ -3695,7 +3695,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarStartSound = temp2;
 	}
@@ -3705,7 +3705,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarMoveSound = temp2;
 	}
@@ -3715,7 +3715,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarStopSound = temp2;
 	}
@@ -3725,7 +3725,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->CarIdleSound = temp2;
 	}
@@ -3735,7 +3735,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->MotorStartSound = temp2;
 	}
@@ -3745,7 +3745,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->MotorRunSound = temp2;
 	}
@@ -3755,7 +3755,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->MotorStopSound = temp2;
 	}
@@ -3773,7 +3773,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
@@ -3792,7 +3792,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 	}
@@ -3810,7 +3810,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
@@ -3820,7 +3820,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->AlarmSound = temp2;
 	}
@@ -3830,7 +3830,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->AlarmSoundStop = temp2;
 	}
@@ -3840,9 +3840,9 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
-		elev->SetBeepSound(temp2);
+		elev->SetBeepSound(temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 10), false) == "floorsound")
 	{
@@ -3850,9 +3850,9 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
-		elev->SetFloorSound(temp2);
+		elev->SetFloorSound(temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "upmessage")
 	{
@@ -3860,9 +3860,9 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
-		elev->SetMessageSound(true, temp2);
+		elev->SetMessageSound(true, temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "downmessage")
 	{
@@ -3870,9 +3870,9 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
-		elev->SetMessageSound(false, temp2);
+		elev->SetMessageSound(false, temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 5), false) == "music")
 	{
@@ -3880,7 +3880,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + temp2, true);
+		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
 
 		elev->Music = temp2;
 	}
@@ -3888,7 +3888,7 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->SetFloorSkipText(temp2);
+		elev->SetFloorSkipText(temp2.c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "recallfloor")
 	{
@@ -3919,7 +3919,7 @@ int ScriptProcessor::ProcElevators()
 	}
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "motorposition")
 	{
-		int params = SplitAfterEquals(LineData);
+		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
 			return ScriptError("Syntax Error");
 		if (params != 3)
@@ -3930,11 +3930,11 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		elev->MotorPosition = Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
+		elev->MotorPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "queueresets")
 	{
@@ -3974,7 +3974,7 @@ int ScriptProcessor::ProcElevators()
 	}
 	if (SetCaseCopy(LineData.substr(0, 7), false) == "parking")
 	{
-		int params = SplitAfterEquals(LineData);
+		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
 			return ScriptError("Syntax Error");
 		if (params != 2)
@@ -3985,12 +3985,12 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		elev->ParkingFloor = atoi(tempdata[0]);
-		elev->ParkingDelay = atof(tempdata[1]);
+		elev->ParkingFloor = atoi(tempdata[0].c_str());
+		elev->ParkingDelay = atof(tempdata[1].c_str());
 	}
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "levelingspeed")
 	{
@@ -4048,7 +4048,7 @@ int ScriptProcessor::ProcElevators()
 	}
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "musicposition")
 	{
-		int params = SplitAfterEquals(LineData);
+		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
 			return ScriptError("Syntax Error");
 		if (params != 3)
@@ -4059,18 +4059,18 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		elev->MusicPosition = Ogre::Vector3(atof(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]));
+		elev->MusicPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
 
 	//Print command
 	if (SetCaseCopy(LineData.substr(0, 5), false) == "print")
 	{
 		//calculate inline math
-		buffer = Calc(LineData.substr(6));
+		buffer = Calc(LineData.substr(6).c_str());
 
 		//print line
 		skyscraper->Report(buffer);
@@ -4083,7 +4083,7 @@ int ScriptProcessor::ProcElevators()
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "createelevator")
 	{
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params != 4)
 			return ScriptError("Incorrect number of parameters");
@@ -4093,11 +4093,11 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atoi(tempdata[3]));
+		Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()));
 		if (!object)
 			return ScriptError();
 		StoreCommand(object);
@@ -4107,7 +4107,7 @@ int ScriptProcessor::ProcElevators()
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor ")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 11)
 			return ScriptError("Incorrect number of parameters");
@@ -4117,19 +4117,19 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create floor
-		StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
+		StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str())));
 	}
 
 	//AddWall command
 	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall")
 	{
 		//get data
-		int params = SplitData(LineData, 8);
+		int params = SplitData(LineData.c_str(), 8);
 
 		if (params != 13)
 			return ScriptError("Incorrect number of parameters");
@@ -4139,19 +4139,19 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//create wall
-		StoreCommand(elev->AddWall(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+		StoreCommand(elev->AddWall(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 	}
 
 	//AddDoors command
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoors")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params < 10 || params > 11)
 			return ScriptError("Incorrect number of parameters");
@@ -4171,7 +4171,7 @@ int ScriptProcessor::ProcElevators()
 					i = 9;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4185,22 +4185,22 @@ int ScriptProcessor::ProcElevators()
 					i = 8;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), atof(tempdata[9]), atof(tempdata[10])));
+			StoreCommand(elev->AddDoors(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]), atof(tempdata[9].c_str()), atof(tempdata[10].c_str())));
 		else
-			StoreCommand(elev->AddDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8]), atof(tempdata[9])));
+			StoreCommand(elev->AddDoors(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
 	}
 
 	//SetShaftDoors command
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "setshaftdoors")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params != 4)
 			return ScriptError("Incorrect number of parameters");
@@ -4210,11 +4210,11 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		elev->SetShaftDoors(atoi(tempdata[0]), atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]));
+		elev->SetShaftDoors(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		setshaftdoors = true;
 	}
 
@@ -4222,7 +4222,7 @@ int ScriptProcessor::ProcElevators()
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "addshaftdoors ")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params < 7 || params > 8)
 			return ScriptError("Incorrect number of parameters");
@@ -4240,7 +4240,7 @@ int ScriptProcessor::ProcElevators()
 					i = 3;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4252,16 +4252,16 @@ int ScriptProcessor::ProcElevators()
 					i = 2;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 		
 		bool result;
 		if (compat == false)
-			result = elev->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+			result = elev->AddShaftDoors(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 		else
-			result = elev->AddShaftDoors(atoi(tempdata[0]), tempdata[1], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+			result = elev->AddShaftDoors(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 
 		if (result == false)
 			return ScriptError();
@@ -4271,7 +4271,7 @@ int ScriptProcessor::ProcElevators()
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "createpanel")
 	{
 		//get data
-		int params = SplitData(LineData, 12);
+		int params = SplitData(LineData.c_str(), 12);
 
 		if (params != 13)
 			return ScriptError("Incorrect number of parameters");
@@ -4283,18 +4283,18 @@ int ScriptProcessor::ProcElevators()
 				i = 4;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(elev->CreateButtonPanel(tempdata[0], atoi(tempdata[1]), atoi(tempdata[2]), tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+		StoreCommand(elev->CreateButtonPanel(tempdata[0].c_str(), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 	}
 
 	//AddFloorButton command
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "addfloorbutton")
 	{
 		//get data
-		int params = SplitData(LineData, 15);
+		int params = SplitData(LineData.c_str(), 15);
 
 		if (params < 7 || params > 11)
 			return ScriptError("Incorrect number of parameters");
@@ -4312,7 +4312,7 @@ int ScriptProcessor::ProcElevators()
 					i = 2;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 1;
@@ -4332,11 +4332,11 @@ int ScriptProcessor::ProcElevators()
 
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 						return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 				}
-				hoffset = atof(tempdata[7]);
-				voffset = atof(tempdata[8]);
+				hoffset = atof(tempdata[7].c_str());
+				voffset = atof(tempdata[8].c_str());
 				compat = 1;
 			}
 		}
@@ -4352,13 +4352,13 @@ int ScriptProcessor::ProcElevators()
 					i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			if (params == 10)
 			{
-				hoffset = atof(tempdata[8]);
-				voffset = atof(tempdata[9]);
+				hoffset = atof(tempdata[8].c_str());
+				voffset = atof(tempdata[9].c_str());
 			}
 			compat = 2;
 		}
@@ -4373,35 +4373,35 @@ int ScriptProcessor::ProcElevators()
 					i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			if (params == 11)
 			{
-				hoffset = atof(tempdata[9]);
-				voffset = atof(tempdata[10]);
+				hoffset = atof(tempdata[9].c_str());
+				voffset = atof(tempdata[10].c_str());
 			}
 		}
 
-		if (!elev->GetPanel(atoi(tempdata[0])))
+		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid panel number");
 
 		if (compat == 0)
 		{
-			CheckFile(Ogre::String("data/") + tempdata[1], true);
-			elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
-			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), hoffset, voffset);
 		if (compat == 2)
-			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), hoffset, voffset);
 	}
 
 	//AddControlButton command
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "addcontrolbutton")
 	{
 		//get data
-		int params = SplitData(LineData, 17);
+		int params = SplitData(LineData.c_str(), 17);
 
 		if (params < 7 || params > 11)
 			return ScriptError("Incorrect number of parameters");
@@ -4419,7 +4419,7 @@ int ScriptProcessor::ProcElevators()
 					i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 1;
@@ -4438,11 +4438,11 @@ int ScriptProcessor::ProcElevators()
 						i++;
 					Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 						return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 				}
-				hoffset = atof(tempdata[7]);
-				voffset = atof(tempdata[8]);
+				hoffset = atof(tempdata[7].c_str());
+				voffset = atof(tempdata[8].c_str());
 				compat = 1;
 			}
 		}
@@ -4458,13 +4458,13 @@ int ScriptProcessor::ProcElevators()
 					i++;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			if (params == 10)
 			{
-				hoffset = atof(tempdata[8]);
-				voffset = atof(tempdata[9]);
+				hoffset = atof(tempdata[8].c_str());
+				voffset = atof(tempdata[9].c_str());
 			}
 			compat = 2;
 		}
@@ -4479,35 +4479,35 @@ int ScriptProcessor::ProcElevators()
 					i++;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			if (params == 11)
 			{
-				hoffset = atof(tempdata[9]);
-				voffset = atof(tempdata[10]);
+				hoffset = atof(tempdata[9].c_str());
+				voffset = atof(tempdata[10].c_str());
 			}
 		}
 
-		if (!elev->GetPanel(atoi(tempdata[0])))
+		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid panel number");
 
 		if (compat == 0)
 		{
-			CheckFile(Ogre::String("data/") + tempdata[1], true);
-			elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
-			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), tempdata[4], atof(tempdata[5]), atof(tempdata[6]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), hoffset, voffset);
 		if (compat == 2)
-			elev->GetPanel(atoi(tempdata[0]))->AddButton("", tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), hoffset, voffset);
+			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), hoffset, voffset);
 	}
 
 	//AddButton command
 	if (SetCaseCopy(LineData.substr(0, 10), false) == "addbutton ")
 	{
 		//get data
-		int params = SplitData(LineData, 10);
+		int params = SplitData(LineData.c_str(), 10);
 
 		if (params < 9 || params > 11)
 			return ScriptError("Incorrect number of parameters");
@@ -4523,29 +4523,29 @@ int ScriptProcessor::ProcElevators()
 				i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		if (params == 11)
 		{
-			hoffset = atof(tempdata[9]);
-			voffset = atof(tempdata[10]);
+			hoffset = atof(tempdata[9].c_str());
+			voffset = atof(tempdata[10].c_str());
 		}
 
-		if (!elev->GetPanel(atoi(tempdata[0])))
+		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid panel number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
-		elev->GetPanel(atoi(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], atoi(tempdata[4]), atoi(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), hoffset, voffset);
+		elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 	}
 
 	//AddControl command
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "addcontrol ")
 	{
 		//get data
-		int params = SplitData(LineData, 11);
+		int params = SplitData(LineData.c_str(), 11);
 
 		if (params < 10)
 			return ScriptError("Incorrect number of parameters");
@@ -4557,11 +4557,11 @@ int ScriptProcessor::ProcElevators()
 				i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		if (!elev->GetPanel(atoi(tempdata[0])))
+		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid panel number");
 
 		std::vector<Ogre::String> action_array, tex_array;
@@ -4581,16 +4581,16 @@ int ScriptProcessor::ProcElevators()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
-		elev->GetPanel(atoi(tempdata[0]))->AddControl(tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), action_array, tex_array);
+		elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 	}
 
 	//AddFloorIndicator command
 	if (SetCaseCopy(LineData.substr(0, 17), false) == "addfloorindicator")
 	{
 		//get data
-		int params = SplitData(LineData, 18);
+		int params = SplitData(LineData.c_str(), 18);
 
 		if (params < 6 || params > 7)
 			return ScriptError("Incorrect number of parameters");
@@ -4606,7 +4606,7 @@ int ScriptProcessor::ProcElevators()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4616,22 +4616,22 @@ int ScriptProcessor::ProcElevators()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddFloorIndicator(tempdata[0], tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6])));
+			StoreCommand(elev->AddFloorIndicator(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())));
 		else
-			StoreCommand(elev->AddFloorIndicator("Button", tempdata[0], atof(tempdata[1]), atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5])));
+			StoreCommand(elev->AddFloorIndicator("Button", tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())));
 	}
 
 	//AddDirectionalIndicators command
 	if (SetCaseCopy(LineData.substr(0, 24), false) == "adddirectionalindicators")
 	{
 		//get data
-		int params = SplitData(LineData, 25);
+		int params = SplitData(LineData.c_str(), 25);
 
 		if (params < 17 || params > 18)
 			return ScriptError("Incorrect number of parameters");
@@ -4646,7 +4646,7 @@ int ScriptProcessor::ProcElevators()
 					i++;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = true;
@@ -4660,22 +4660,22 @@ int ScriptProcessor::ProcElevators()
 					i++;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
 		if (compat == false)
-			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), tempdata[12], atof(tempdata[13]), atof(tempdata[14]), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16]), atof(tempdata[17]));
+			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), tempdata[12].c_str(), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16].c_str()), atof(tempdata[17].c_str()));
 		else
-			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), false, Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
+			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), false, Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), tempdata[11].c_str(), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()));
 	}
 
 	//AddFloorSigns command
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "addfloorsigns")
 	{
 		//get data
-		int params = SplitData(LineData, 14);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params < 7 || params > 9)
 			return ScriptError("Incorrect number of parameters");
@@ -4695,7 +4695,7 @@ int ScriptProcessor::ProcElevators()
 					i = 4;
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4705,7 +4705,7 @@ int ScriptProcessor::ProcElevators()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4715,7 +4715,7 @@ int ScriptProcessor::ProcElevators()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
@@ -4723,21 +4723,21 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			bool result;
-			result = elev->AddFloorSigns(atoi(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2], tempdata[3], atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+			result = elev->AddFloorSigns(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
 			if (result == false)
 				return ScriptError();
 		}
 		else if (compat == 1)
-			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), "Button", tempdata[1], atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]));
+			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), "Button", tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 		else if (compat == 2)
-			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), tempdata[1], tempdata[2], atof(tempdata[3]), atof(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 	}
 
 	//AddSound
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 5 && params != 13)
 			return ScriptError("Incorrect number of parameters");
@@ -4765,19 +4765,19 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		if (partial == true)
-			StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4]))));
+			StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
 		else
-			StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), Ogre::Vector3(atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])))); 
+			StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())))); 
 	}
 
 	//AddDoorComponent command
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "adddoorcomponent")
 	{
 		//get data
-		int params = SplitData(LineData, 17);
+		int params = SplitData(LineData.c_str(), 17);
 
 		if (params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -4791,18 +4791,18 @@ int ScriptProcessor::ProcElevators()
 				i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
+		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str())));
 	}
 
 	//AddShaftDoorsComponent command
 	if (SetCaseCopy(LineData.substr(0, 22), false) == "addshaftdoorscomponent")
 	{
 		//get data
-		int params = SplitData(LineData, 23);
+		int params = SplitData(LineData.c_str(), 23);
 
 		if (params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -4816,18 +4816,18 @@ int ScriptProcessor::ProcElevators()
 				i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
+		elev->AddShaftDoorsComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()));
 	}
 
 	//FinishDoors command
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "finishdoors")
 	{
 		//get data
-		int params = SplitData(LineData, 12);
+		int params = SplitData(LineData.c_str(), 12);
 
 		if (params < 1)
 			return ScriptError("Incorrect number of parameters");
@@ -4838,14 +4838,14 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(str.c_str()))
 			return ScriptError("Invalid value: " + Ogre::String(tempdata[0]));
 
-		StoreCommand(elev->FinishDoors(atoi(tempdata[0])));
+		StoreCommand(elev->FinishDoors(atoi(tempdata[0].c_str())));
 	}
 
 	//FinishShaftDoors command
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "finishshaftdoors")
 	{
 		//get data
-		int params = SplitData(LineData, 17);
+		int params = SplitData(LineData.c_str(), 17);
 
 		if (params < 1)
 			return ScriptError("Incorrect number of parameters");
@@ -4857,7 +4857,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value: " + Ogre::String(tempdata[0]));
 
 		bool result;
-		result = elev->FinishShaftDoors(atoi(tempdata[0]));
+		result = elev->FinishShaftDoors(atoi(tempdata[0].c_str()));
 
 		if (result == false)
 			return ScriptError();
@@ -4867,7 +4867,7 @@ int ScriptProcessor::ProcElevators()
 	if (SetCaseCopy(LineData.substr(0, 24), false) == "adddirectionalindicator ")
 	{
 		//get data
-		int params = SplitData(LineData, 24);
+		int params = SplitData(LineData.c_str(), 24);
 
 		if (params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -4879,18 +4879,18 @@ int ScriptProcessor::ProcElevators()
 				i++;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
-		StoreCommand(elev->AddDirectionalIndicator(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), tempdata[11], atof(tempdata[12]), atof(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
+		StoreCommand(elev->AddDirectionalIndicator(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), tempdata[11].c_str(), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15].c_str()), atof(tempdata[16].c_str())));
 	}
 
 	//AddDoor command
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoor ")
 	{
 		//get data
-		int params = SplitData(LineData, 8);
+		int params = SplitData(LineData.c_str(), 8);
 
 		if (params < 12 || params > 14)
 			return ScriptError("Incorrect number of parameters");
@@ -4904,7 +4904,7 @@ int ScriptProcessor::ProcElevators()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 1;
@@ -4915,7 +4915,7 @@ int ScriptProcessor::ProcElevators()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 			compat = 2;
@@ -4926,28 +4926,28 @@ int ScriptProcessor::ProcElevators()
 			{
 				Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 			}
 		}
 
-		CheckFile(Ogre::String("data/") + tempdata[0], true);
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[0]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		//create door
 		if (compat == 1)
-			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), 0, atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11])));
+			StoreCommand(elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), 0, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 		else if (compat == 2)
-			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], atof(tempdata[3]), atoi(tempdata[4]), atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12])));
+			StoreCommand(elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 		else
-			StoreCommand(elev->AddDoor(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], atof(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13])));
+			StoreCommand(elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 	}
 
 	//AddModel command
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData, 9);
+		int params = SplitData(LineData.c_str(), 9);
 
 		if (params != 10)
 			return ScriptError("Incorrect number of parameters");
@@ -4957,15 +4957,15 @@ int ScriptProcessor::ProcElevators()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/") + tempdata[1], true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
 
 		//create model
-		StoreCommand(elev->AddModel(tempdata[0], tempdata[1], Ogre::Vector3(atof(tempdata[2]), atof(tempdata[3]), atof(tempdata[4])), Ogre::Vector3(atof(tempdata[5]), atof(tempdata[6]), atof(tempdata[7])), atof(tempdata[8]), atof(tempdata[9])));
+		StoreCommand(elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
 	}
 
 	//Set command
@@ -4981,12 +4981,12 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid variable number");
 
 		//get text after equal sign
-		temp2 = GetAfterEquals(LineData);
+		temp2 = GetAfterEquals(LineData.c_str());
 
 		if (temp3 < 0 || temp3 > UserVariable.size() - 1)
 			return ScriptError("Invalid variable number");
 
-		UserVariable[temp3] = Calc(temp2);
+		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + Ogre::String(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
@@ -5019,7 +5019,7 @@ int ScriptProcessor::ProcTextures()
 	if (SetCaseCopy(LineData.substr(0, 5), false) == "load ")
 	{
 		//get data
-		int params = SplitData(LineData, 5, false);
+		int params = SplitData(LineData.c_str(), 5, false);
 
 		if (params < 4 || params > 5)
 			return ScriptError("Incorrect number of parameters");
@@ -5029,21 +5029,21 @@ int ScriptProcessor::ProcTextures()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[0];
 		buffer.insert(0, "/root/");
-		CheckFile(buffer);
+		CheckFile(buffer.c_str());
 		if (params == 4)
-			Simcore->LoadTexture(buffer, tempdata[1], atof(tempdata[2]), atof(tempdata[3]));
+			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		else
-			Simcore->LoadTexture(buffer, tempdata[1], atof(tempdata[2]), atof(tempdata[3]), true, Ogre::StringConverter::parseBool(tempdata[4]));
+			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 	}
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "loadrange")
 	{
 		//get data
-		int params = SplitData(LineData, 9, false);
+		int params = SplitData(LineData.c_str(), 9, false);
 
 		if (params < 6 || params > 7)
 			return ScriptError("Incorrect number of parameters");
@@ -5055,30 +5055,30 @@ int ScriptProcessor::ProcTextures()
 				i = 4;
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
-		RangeL = atoi(tempdata[0]);
-		RangeH = atoi(tempdata[1]);
+		RangeL = atoi(tempdata[0].c_str());
+		RangeH = atoi(tempdata[1].c_str());
 		for (Current = RangeL; Current <= RangeH; Current++)
 		{
 			temp2 = tempdata[2];
 			buffer = Current;
 			TrimString(buffer);
-			ReplaceAll(temp2, "%number%", buffer);
+			ReplaceAll(temp2, "%number%", buffer.c_str());
 			temp6 = tempdata[3];
-			ReplaceAll(temp6, "%number%", buffer);
-			CheckFile(temp2, true);
+			ReplaceAll(temp6, "%number%", buffer.c_str());
+			CheckFile(temp2.c_str(), true);
 			if (params == 6)
-				Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]));
+				Simcore->LoadTexture(Ogre::String("/root/" + temp2).c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()));
 			else
-				Simcore->LoadTexture("/root/" + temp2, temp6, atof(tempdata[4]), atof(tempdata[5]), true, Ogre::StringConverter::parseBool(tempdata[6]));
+				Simcore->LoadTexture(Ogre::String("/root/" + temp2).c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), true, Ogre::StringConverter::parseBool(tempdata[6]));
 		}
 	}
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addtext ")
 	{
 		//get data
-		int params = SplitData(LineData, 8, false);
+		int params = SplitData(LineData.c_str(), 8, false);
 
 		if (params < 14 || params > 15)
 			return ScriptError("Incorrect number of parameters");
@@ -5093,21 +5093,21 @@ int ScriptProcessor::ProcTextures()
 
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[2];
 		buffer.insert(0, "/root/data/fonts/");
-		CheckFile(buffer);
+		CheckFile(buffer.c_str());
 		if (params == 14)
-			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]));
+			Simcore->AddTextToTexture(tempdata[0].c_str(), tempdata[1].c_str(), buffer.c_str(), atof(tempdata[3].c_str()), tempdata[4].c_str(), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), tempdata[9].c_str(), tempdata[10].c_str(), atoi(tempdata[11].c_str()), atoi(tempdata[12].c_str()), atoi(tempdata[13].c_str()));
 		else
-			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, atof(tempdata[3]), tempdata[4], atoi(tempdata[5]), atoi(tempdata[6]), atoi(tempdata[7]), atoi(tempdata[8]), tempdata[9], tempdata[10], atoi(tempdata[11]), atoi(tempdata[12]), atoi(tempdata[13]), true, Ogre::StringConverter::parseBool(tempdata[14]));
+			Simcore->AddTextToTexture(tempdata[0].c_str(), tempdata[1].c_str(), buffer.c_str(), atof(tempdata[3].c_str()), tempdata[4].c_str(), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), tempdata[9].c_str(), tempdata[10].c_str(), atoi(tempdata[11].c_str()), atoi(tempdata[12].c_str()), atoi(tempdata[13].c_str()), true, Ogre::StringConverter::parseBool(tempdata[14]));
 	}
 	if (SetCaseCopy(LineData.substr(0, 12), false) == "addtextrange")
 	{
 		//get data
-		int params = SplitData(LineData, 13, false);
+		int params = SplitData(LineData.c_str(), 13, false);
 
 		if (params < 16 || params > 17)
 			return ScriptError("Incorrect number of parameters");
@@ -5124,35 +5124,35 @@ int ScriptProcessor::ProcTextures()
 
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
-		RangeL = atoi(tempdata[0]);
-		RangeH = atoi(tempdata[1]);
+		RangeL = atoi(tempdata[0].c_str());
+		RangeH = atoi(tempdata[1].c_str());
 		temp6 = LineData;
 		for (Current = RangeL; Current <= RangeH; Current++)
 		{
 			buffer = Current;
 			TrimString(buffer);
 			LineData = temp6;
-			ReplaceAll(LineData, "%number%", buffer);
+			ReplaceAll(LineData, "%number%", buffer.c_str());
 		
 			//get data
-			int params = SplitData(LineData, 13, false);
+			int params = SplitData(LineData.c_str(), 13, false);
 
 			buffer = tempdata[4];
 			buffer.insert(0, "/root/data/fonts/");
-			CheckFile(buffer);
+			CheckFile(buffer.c_str());
 			if (params == 16)
-				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]));
+				Simcore->AddTextToTexture(tempdata[2].c_str(), tempdata[3].c_str(), buffer.c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), atoi(tempdata[9].c_str()), atoi(tempdata[10].c_str()), tempdata[11].c_str(), tempdata[12].c_str(), atoi(tempdata[13].c_str()), atoi(tempdata[14].c_str()), atoi(tempdata[15].c_str()));
 			else
-				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, atof(tempdata[5]), tempdata[6], atoi(tempdata[7]), atoi(tempdata[8]), atoi(tempdata[9]), atoi(tempdata[10]), tempdata[11], tempdata[12], atoi(tempdata[13]), atoi(tempdata[14]), atoi(tempdata[15]), true, Ogre::StringConverter::parseBool(tempdata[16]));
+				Simcore->AddTextToTexture(tempdata[2].c_str(), tempdata[3].c_str(), buffer.c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), atoi(tempdata[9].c_str()), atoi(tempdata[10].c_str()), tempdata[11].c_str(), tempdata[12].c_str(), atoi(tempdata[13].c_str()), atoi(tempdata[14].c_str()), atoi(tempdata[15].c_str()), true, Ogre::StringConverter::parseBool(tempdata[16]));
 		}
 	}
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "loadcropped")
 	{
 		//get data
-		int params = SplitData(LineData, 12, false);
+		int params = SplitData(LineData.c_str(), 12, false);
 
 		if (params < 8 || params > 9)
 			return ScriptError("Incorrect number of parameters");
@@ -5162,21 +5162,21 @@ int ScriptProcessor::ProcTextures()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[0];
 		buffer.insert(0, "/root/");
-		CheckFile(buffer);
+		CheckFile(buffer.c_str());
 		if (params == 8)
-			Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]));
+			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 		else
-			Simcore->LoadTextureCropped(buffer, tempdata[1], atoi(tempdata[2]), atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atof(tempdata[6]), atof(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]));
+			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]));
 	}
 	if (SetCaseCopy(LineData.substr(0, 10), false) == "addoverlay")
 	{
 		//get data
-		int params = SplitData(LineData, 11, false);
+		int params = SplitData(LineData.c_str(), 11, false);
 
 		if (params < 9 || params > 10)
 			return ScriptError("Incorrect number of parameters");
@@ -5186,13 +5186,13 @@ int ScriptProcessor::ProcTextures()
 		{
 			Ogre::String str = tempdata[i];
 			TrimString(str);
-			if (!IsNumeric(str.c_str())
+			if (!IsNumeric(str.c_str()))
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		if (params == 9)
-			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]));
+			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
 		else
-			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], atoi(tempdata[3]), atoi(tempdata[4]), atoi(tempdata[5]), atoi(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), true, Ogre::StringConverter::parseBool(tempdata[9]));
+			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), true, Ogre::StringConverter::parseBool(tempdata[9]));
 	}
 	return 0;
 }
@@ -5237,7 +5237,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 			{
 				//call function recursively
 				Ogre::String newdata;
-				newdata = Calc(tmpcalc.substr(start + 1, end - start - 1));
+				newdata = Calc(tmpcalc.substr(start + 1, end - start - 1).c_str());
 				//construct new string
 				one = tmpcalc.substr(0, start);
 				if (end < tmpcalc.length() - 1)
@@ -5285,7 +5285,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 		if (operators > 1)
 		{
 			Ogre::String newdata;
-			newdata = Calc(tmpcalc.substr(0, end));
+			newdata = Calc(tmpcalc.substr(0, end).c_str());
 			//construct new string
 			two = tmpcalc.substr(end);
 			tmpcalc = newdata + two;
@@ -5306,7 +5306,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one) + atof(two);
+			float tmpnum = atof(one.c_str()) + atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
 		}
@@ -5318,7 +5318,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one) - atof(two);
+			float tmpnum = atof(one.c_str()) - atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
 		}
@@ -5330,7 +5330,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one) / atof(two);
+			float tmpnum = atof(one.c_str()) / atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
 		}
@@ -5342,7 +5342,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one) * atof(two);
+			float tmpnum = atof(one.c_str()) * atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
 		}
@@ -5393,7 +5393,7 @@ bool ScriptProcessor::FunctionProc()
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.size(); temp3++)
 			{
-				buffer = Calc(tempdata[temp3]);
+				buffer = Calc(tempdata[temp3].c_str());
 				TrimString(buffer);
 				FunctionParams.push_back(buffer);
 			}
@@ -5420,13 +5420,13 @@ void ScriptProcessor::CheckFile(const char *filename, bool relative)
 	if (file == "")
 		return;
 
-	int loc = file.FindLast("/");
+	int loc = file.find_last_of("/");
 	if (loc > 0)
 	{
 		if (file.length() == loc + 1)
 			return;
 	}
-	loc = file.FindLast("\\");
+	loc = file.find_last_of("\\");
 	if (loc > 0)
 	{
 		if (file.length() == loc + 1)
@@ -5435,10 +5435,10 @@ void ScriptProcessor::CheckFile(const char *filename, bool relative)
 
 	ReplaceAll(file, "\\", "/");
 
-	if (Simcore->FileExists(file, relative) == false)
+	if (Simcore->FileExists(file.c_str(), relative) == false)
 	{
 		ReplaceAll(file, "/root/", "");
-		nonexistent_files.PushSmart(file);
+		nonexistent_files.push_back(file);
 	}
 }
 
@@ -5455,11 +5455,11 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 	for (int i = 0; i < tempdata.size(); i++)
 	{
 		if (calc == true)
-			stringbuffer = Calc(tempdata[i]);
+			stringbuffer = Calc(tempdata[i].c_str());
 		else
 			stringbuffer = tempdata[i];
 		TrimString(stringbuffer);
-		tempdata.Put(i, stringbuffer);
+		tempdata.insert(tempdata.begin() + i, stringbuffer);
 	}
 	return tempdata.size();
 }
@@ -5478,16 +5478,16 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 	TrimString(temp);
 
 	tempdata.clear();
-	tempdata.SplitString(temp, ",");
+	tempdata.SplitString(temp.c_str(), ",");
 	for (int i = 0; i < tempdata.size(); i++)
 	{
 		Ogre::String buffer;
 		if (calc == true)
-			buffer = Calc(tempdata[i]);
+			buffer = Calc(tempdata[i].c_str());
 		else
 			buffer = tempdata[i];
 		TrimString(buffer);
-		tempdata.Put(i, buffer);
+		tempdata.insert(tempdata.begin() + i, buffer);
 	}
 	return tempdata.size();
 }

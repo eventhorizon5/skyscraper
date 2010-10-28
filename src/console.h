@@ -26,6 +26,7 @@
 #define CONSOLE_H
 
 //(*Headers(Console)
+#include <wx/app.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
 #include <wx/button.h>

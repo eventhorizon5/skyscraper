@@ -607,7 +607,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 
 	//create texture wrapper
 	Ogre::Texture* wrapper = engine->GetTextureList()->NewTexture(handle);
-	wrapper->QueryObject()->SetName(name);
+	wrapper->setName(name);
 
 	//create material
 	Ogre::Material* material (engine->CreateBaseMaterial(wrapper));
@@ -767,7 +767,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	}
 	
 	//set texture name
-	tex->QueryObject()->SetName(name);
+	tex->setName(name);
 
 	//create material
 	Ogre::Material* material (engine->CreateBaseMaterial(tex));
@@ -833,7 +833,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 
 	//create texture wrapper
 	Ogre::Texture* wrapper = engine->GetTextureList()->NewTexture(handle);
-	wrapper->QueryObject()->SetName(name);
+	wrapper->setName(name);
 
 	//create material
 	Ogre::Material* material (engine->CreateBaseMaterial(wrapper));
@@ -3572,8 +3572,8 @@ const char* SBS::VerifyFile(const char *filename)
 		return filename;
 
 	Ogre::String directory;
-	int loc1 = file.FindLast("/");
-	int loc2 = file.FindLast("\\");
+	int loc1 = file.find_last_of("/");
+	int loc2 = file.find_last_of("\\");
 	int loc = loc1;
 	if (loc2 > 0)
 		loc = loc2;

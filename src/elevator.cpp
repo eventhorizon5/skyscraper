@@ -582,7 +582,10 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 			Report("route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
 			return;
 		}
-		UpQueue.InsertSorted(floor);
+
+		UpQueue.push_back(floor);
+		std::sort(UpQueue.begin(), UpQueue.end());
+
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
 		Report("adding route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
@@ -602,7 +605,10 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 			Report("route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
 			return;
 		}
-		DownQueue.InsertSorted(floor);
+		
+		DownQueue.push_back(floor);
+		std::sort(DownQueue.begin(), DownQueue.end());
+		
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
 		Report("adding route to floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
@@ -2199,7 +2205,10 @@ bool Elevator::AddServicedFloor(int number)
 	}
 
 	if (IsServicedFloor(number) == false)
-		ServicedFloors.InsertSorted(number);
+	{
+		ServicedFloors.push_back(number);
+		std::sort(ServicedFloors.begin(), ServicedFloors.end());
+	}
 	return true;
 }
 
@@ -3763,6 +3772,7 @@ void Elevator::Timer::Notify()
 	{
 		//random call timer
 		
+		/*
 		csRandomGen rnd_main(time(0) + elevator->Number);
 		csRandomGen rnd_floor(csGetTicks() + elevator->Number);
 
@@ -3781,6 +3791,7 @@ void Elevator::Timer::Notify()
 		//if probability number matched, press selected floor button
 		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
 			elevator->SelectFloor(floor);
+		*/
 	}
 	else if (type > 1)
 	{

@@ -268,13 +268,13 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 
 	if (position.y > bottom && position.y < top)
 	{
-		csHitBeamResult result = ShaftArray[0]->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(Ogre::Vector3(position.x, position.y - (top - bottom), position.z)));
+		/*csHitBeamResult result = ShaftArray[0]->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(Ogre::Vector3(position.x, position.y - (top - bottom), position.z)));
 
 		//cache values
 		lastcheckresult = result.hit;
 		lastposition = position;
 		
-		return result.hit;
+		return result.hit;*/
 	}
 	
 	//cache values
@@ -419,7 +419,10 @@ void Shaft::AddShowFloor(int floor)
 			index = i;
 	}
 	if (index == -1)
-		ShowFloorsList.InsertSorted(floor);
+	{
+		ShowFloorsList.push_back(floor);
+		std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
+	}
 }
 
 void Shaft::RemoveShowFloor(int floor)
@@ -453,7 +456,10 @@ void Shaft::AddShowOutside(int floor)
 			index = i;
 	}
 	if (index == -1)
-		ShowOutsideList.InsertSorted(floor);
+	{
+		ShowOutsideList.push_back(floor);
+		std::sort(ShowOutsideList.begin(), ShowOutsideList.end());
+	}
 }
 
 void Shaft::RemoveShowOutside(int floor)
@@ -492,7 +498,8 @@ bool Shaft::IsValidFloor(int floor)
 void Shaft::AddElevator(int number)
 {
 	//add specified elevator to list
-	elevators.InsertSorted(number);
+	elevators.push_back(number);
+	std::sort(elevators.begin(), elevators.end());
 }
 
 void Shaft::RemoveElevator(int number)

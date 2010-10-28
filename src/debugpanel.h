@@ -32,6 +32,7 @@
 #endif
 
 //(*Headers(DebugPanel)
+#include <wx/app.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>

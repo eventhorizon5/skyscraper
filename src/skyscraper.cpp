@@ -214,7 +214,7 @@ void MainScreen::OnShow(wxShowEvent& event)
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-	panel->resize(this->GetClientSize());
+	//panel->resize(this->GetClientSize());
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
@@ -250,7 +250,7 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 
 void Skyscraper::Render()
 {
-	if (skyscraper->StartupRunning == false)
+	/*if (skyscraper->StartupRunning == false)
 	{
 		// Tell 3D driver we're going to display 3D things.
 		if (Simcore->IsSkyboxEnabled == false)
@@ -268,7 +268,7 @@ void Skyscraper::Render()
 	}
 
 	// Tell the camera to render into the frame buffer.
-	view->Draw();
+	view->Draw();*/
 }
 
 void Skyscraper::SetupFrame()
@@ -284,14 +284,14 @@ void Skyscraper::SetupFrame()
 	}
 
 	//resize canvas if needed
-	if (canvas->size().GetWidth() != canvas_width || canvas->size().GetHeight() != canvas_height)
+	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
 	{
 		//update canvas size values
-		canvas_width = canvas->size().GetWidth();
-		canvas_height = canvas->size().GetHeight();
+		canvas_width = canvas->GetSize().GetWidth();
+		canvas_height = canvas->GetSize().GetHeight();
 
 		//resize viewport
-		wxwin->GetWindow()->resize(canvas->size());
+		//wxwin->GetWindow()->resize(canvas->size());
 	}
 
 	RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
@@ -335,7 +335,7 @@ void Skyscraper::SetupFrame()
 		Starting = false;
 		Pause = false;
 		UnloadSim();
-		mouse->Reset();
+		//mouse->Reset();
 		Start();
 	}
 }
@@ -343,14 +343,14 @@ void Skyscraper::SetupFrame()
 bool Skyscraper::HandleEvent()
 {
 	//Event handler
-	if (Event.Name == Frame)
-	{
+	//if (Event.Name == Frame)
+	//{
 		if (IsRunning == true)
 			Simcore->CalculateFrameRate();
 		SetupFrame();
 		return true;
-	}
-	return false;
+	//}
+	//return false;
 }
 
 bool Skyscraper::Initialize(wxPanel* RenderObject)
@@ -374,16 +374,16 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	mRenderWindow = CreateRenderWindow();
 
 	//load resources
-	ConfigFile cf;
+	Ogre::ConfigFile cf;
 	cf.load("resources.cfg");
-	ConfigFile::SectionIterator seci = cf.getSectionIterator();
+	Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
 	Ogre::String secName, typeName, archName;
 	while(seci.hasMoreElements())
 	{
 		secName = seci.peekNextKey();
-		ConfigFile::SettingsMultiMap *settings = seci.getNext();
-		ConfigFile::SettingsMultiMap::iterator i;
+		Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
+		Ogre::ConfigFile::SettingsMultiMap::iterator i;
 		for(i = settings->begin(); i != settings->end(); ++i)
 		{
 				typeName = i->first;
@@ -395,8 +395,8 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	//create scene manager
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
 
-	mSceneMgr->setAmbientLight( ColourValue( 0, 0, 0 ) );
-	mSceneMgr->setShadowTechnique( SHADOWTYPE_STENCIL_ADDITIVE );
+	mSceneMgr->setAmbientLight(Ogre::ColourValue( 0, 0, 0 ));
+	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
 	/*
 	object_reg = csInitializer::CreateEnvironment(argc, argv);
@@ -1221,7 +1221,7 @@ bool Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(mRenderWindow, root_dir, dir_char);
+	Simcore->Initialize(mRenderWindow, mSceneMgr, root_dir, dir_char);
 	Simcore->Shaders = Shaders;
 
 	//load building data file
@@ -1229,7 +1229,7 @@ bool Skyscraper::Start()
 	Simcore->BuildingFilename = BuildingFile;
 
 	//Pause for 1 second
-	sleep(1000);
+	//sleep(1000);
 
 	if (Reload == false)
 		BuildingFile.insert(0, "buildings/");
@@ -1237,7 +1237,7 @@ bool Skyscraper::Start()
 	//load script processor object and load building
 	bool loaderror = false;
 	processor = new ScriptProcessor();
-	if (!processor->LoadDataFile(BuildingFile))
+	if (!processor->LoadDataFile(BuildingFile.c_str()))
 	{
 		loaderror = true;
 		ReportError("Error loading building file\n");
@@ -1266,7 +1266,7 @@ bool Skyscraper::Start()
 	}
 
 	//the sky needs to be created before Prepare() is called
-	Simcore->CreateSky(Simcore->SkyName);
+	Simcore->CreateSky(Simcore->SkyName.c_str());
 
 	//have CS process textures, bounding boxes and lighting
 	Simcore->Prepare();
@@ -1275,9 +1275,9 @@ bool Skyscraper::Start()
 	if (!Simcore->Start())
 		return ReportError("Error starting simulator\n");
 
-	g2d->Clear(0);
-	g2d->FinishDraw();
-	g2d->Print(0);
+	//g2d->Clear(0);
+	//g2d->FinishDraw();
+	//g2d->Print(0);
 
 	//set to saved position if reloading building
 	if (PositionOverride == true)
@@ -1335,14 +1335,14 @@ void Skyscraper::Unload()
 	UnloadSim();
 
 	//cleanup sound
-	if (sndsource)
-		StopSound();
+	//if (sndsource)
+		//StopSound();
 
 	//return to main menu
 	DrawBackground();
 	StartSound();
 	StartupRunning = true;
-	mouse->Reset();
+	//mouse->Reset();
 }
 
 void Skyscraper::Quit()
@@ -1358,8 +1358,6 @@ void Skyscraper::Quit()
 
 Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const Ogre::String& windowName)
 {
-	_enterMainThreadMutex();
-
 	Ogre::String name = windowName;
 	if (windowName.empty())
 		name = Ogre::String("wxOgreRenderWindow");
@@ -1377,7 +1375,6 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 	mRenderWindow->setActive(true);
 	
-	_leaveMainThreadMutex();
 	return mRenderWindow;
 }
 

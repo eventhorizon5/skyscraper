@@ -185,7 +185,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	if (index > -1 && index < handles.size())
 	{
 		//delete triangles
-		sbs->ReindexSubMesh(state, *handles[index].submeshes, handles[index].triangles, handles[index].material, handles[index].name, false);
+		sbs->ReindexSubMesh(meshwrapper, *handles[index].submeshes, handles[index].triangles, handles[index].material, handles[index].name, false);
 
 		//delete related mesh vertices
 		sbs->DeleteVertices(*parent_array, handles[index].triangles);
@@ -194,7 +194,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		handles.erase(handles.begin() + index);
 
 		//reprocess mesh
-		state->Invalidate();
+		//state->Invalidate();
 
 		//recreate colliders if specified
 		if (recreate_colliders == true)

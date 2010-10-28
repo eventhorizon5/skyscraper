@@ -405,7 +405,10 @@ void Floor::AddGroupFloor(int number)
 			index = i;
 	}
 	if (index == -1)
-		Group.InsertSorted(number);
+	{
+		Group.push_back(number);
+		std::sort(Group.begin(), Group.end());
+	}
 }
 
 void Floor::RemoveGroupFloor(int number)

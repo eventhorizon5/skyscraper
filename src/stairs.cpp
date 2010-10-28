@@ -338,7 +338,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 
 	Floor *floorptr = sbs->GetFloor(floor);
 
-	if (position.y > bottom && position.y < top)
+	/*if (position.y > bottom && position.y < top)
 	{
 		//check both the current floor and floor below
 		Ogre::Vector3 endposition = Ogre::Vector3(position.x, position.y - floorptr->FullHeight(), position.z);
@@ -350,7 +350,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 			if (hittmp == true)
 				hit = true;
 		}
-	}
+	}*/
 	floorptr = 0;
 
 	//cache values

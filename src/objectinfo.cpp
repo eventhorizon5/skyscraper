@@ -217,9 +217,9 @@ void ObjectInfo::Loop()
 		tName->SetValue(wxString::FromAscii(object->GetName()));
 		tType->SetValue(wxString::FromAscii(object->GetType()));
 		tLineNum->SetValue(wxVariant(object->linenum).GetString());
-		tScriptCommand->SetValue(wxString::FromAscii(object->command));
-		tScriptCommand2->SetValue(wxString::FromAscii(object->command_processed));
-		tContext->SetValue(wxString::FromAscii(object->context));
+		tScriptCommand->SetValue(wxString::FromAscii(object->command.c_str()));
+		tScriptCommand2->SetValue(wxString::FromAscii(object->command_processed.c_str()));
+		tContext->SetValue(wxString::FromAscii(object->context.c_str()));
 		tPermanent->SetValue(wxString::FromAscii(BoolToString(object->IsPermanent())));
 
 		Object *parent = object->GetParent();
