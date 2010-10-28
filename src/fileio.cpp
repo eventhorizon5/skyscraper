@@ -1423,9 +1423,9 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		Ogre::Polygon varray;
+		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.insertVertex(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()), atof(tempdata[temp3 + 2].c_str()));
+			varray.push_back(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()), atof(tempdata[temp3 + 2].c_str()));
 
 		StoreCommand(wall);
 

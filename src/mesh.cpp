@@ -36,9 +36,9 @@ void SBS::DumpVertices(WallObject* wallobject)
 	//dumps a list of vertices from a mesh object to the console/logfile
 
 	Report("--- Polygon Vertex Dump ---\n");
-	for (int i = 0; i < state->getVertexCount(); i++)
+	for (int i = 0; i < mesh->getVertexCount(); i++)
 	{
-		Ogre::Vector3 vertex = state->GetVertices()[i];
+		Ogre::Vector3 vertex = mesh->GetVertices()[i];
 		Report(Ogre::String(_itoa(i, intbuffer, 10)) + ": " + Ogre::String(_gcvt(vertex.x, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.y, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.z, 6, buffer)));
 	}
 }
@@ -85,14 +85,14 @@ Ogre::Vector2 SBS::GetExtents(const Ogre::Vector3 *varray, int count, int coord)
 	return Ogre::Vector2(esmall, ebig);
 }
 
-Ogre::Vector2 SBS::GetExtents(Ogre::Polygon &varray, int coord)
+Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord)
 {
-	return GetExtents(varray.GetVertices(), varray.getVertexCount(), coord);
+	return GetExtents(varray, coord);
 }
 
 Ogre::Vector2 SBS::GetExtents(Ogre::Mesh* mesh, int coord)
 {
-	return GetExtents(state->GetVertices(), state->getVertexCount(), coord);
+	return GetExtents(mesh->GetVertices(), mesh->getVertexCount(), coord);
 }
 
 Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
@@ -117,14 +117,14 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 		//do a plane intersection with a line
 		Ogre::Vector3 isect;
 		float dist;
-		Ogre::Polygon original;
-		std::vector<Ogre::Polygon> origpolys;
+		std::vector<Ogre::Vector3> original;
+		std::vector<std::vector<Ogre::Vector3> > origpolys;
 		wallarray[index]->GetGeometry(index2, origpolys, true);
 
 		for (int i = 0; i < origpolys[0].size(); i++)
-			original.insertVertex(origpolys[0][i]);
+			original.push_back(origpolys[0][i]);
 
-		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), original.ComputePlane(), isect, dist);
+		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), Ogre::Plane(original[0], original[1], original[2]), isect, dist);
 		return ToLocal(isect);
 	}
 	return Ogre::Vector3(0, 0, 0);
@@ -137,7 +137,7 @@ Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, flo
 	//get texture
 	Ogre::String texname = texture;
 	bool result;
-	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName());
+	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName().c_str());
 	if (!result)
 		texname = "Default";
 
@@ -192,7 +192,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	if (cutwalls == false && cutfloors == false)
 		return;
 
-	Ogre::Polygon temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
+	std::vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 	std::vector<WallPolygon*> ignore_list;
 
 	bool polycheck = false;
@@ -231,8 +231,8 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 		Ogre::String name = wall->GetHandle(i)->name;
 
 		//get original vertices
-		std::vector<Ogre::Polygon> origpolys;
-		std::vector<Ogre::Polygon> newpolys;
+		std::vector<std::vector<Ogre::Vector3> > origpolys;
+		std::vector<std::vector<Ogre::Vector3> > newpolys;
 		wall->GetGeometry(i, origpolys);
 
 		//skip empty meshes
@@ -246,18 +246,18 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 			if (origpolys[j].size() == 0)
 				continue;
 
-			temppoly.MakeEmpty();
-			temppoly2.MakeEmpty();
-			temppoly3.MakeEmpty();
-			temppoly4.MakeEmpty();
-			temppoly5.MakeEmpty();
-			worker.MakeEmpty();
+			temppoly.clear();
+			temppoly2.clear();
+			temppoly3.clear();
+			temppoly4.clear();
+			temppoly5.clear();
+			worker.clear();
 			Ogre::Vector2 extentsx, extentsy, extentsz;
 			bool polycheck2 = false;
 
 			//copy source polygon vertices
 			for (int k = 0; k < origpolys[j].size(); k++)
-				temppoly.insertVertex(origpolys[j][k]);
+				temppoly.push_back(origpolys[j][k]);
 
 			//make sure the polygon is not outside the cut area
 			if (temppoly.ClassifyX(start.x) != CS_POL_FRONT &&
@@ -287,37 +287,37 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 							//get left side
 							worker = temppoly;
 							worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
-							worker.MakeEmpty();
+							worker.clear();
 
 							//get right side
-							if (temppoly2.getVertexCount() > 0)
+							if (temppoly2.size() > 0)
 								worker = temppoly2;
 							else
 								worker = temppoly;
 							worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
-							worker.MakeEmpty();
+							worker.clear();
 
 							//get lower
-							if (temppoly3.getVertexCount() > 0)
+							if (temppoly3.size() > 0)
 								worker = temppoly3;
-							else if (temppoly2.getVertexCount() > 0)
+							else if (temppoly2.size() > 0)
 								worker = temppoly2;
-							else if (temppoly.getVertexCount() > 0)
+							else if (temppoly.size() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-							worker.MakeEmpty();
+							worker.clear();
 
 							//get upper
-							if (temppoly4.getVertexCount() > 0)
+							if (temppoly4.size() > 0)
 								worker = temppoly4;
-							else if (temppoly3.getVertexCount() > 0)
+							else if (temppoly3.size() > 0)
 								worker = temppoly3;
-							else if (temppoly2.getVertexCount() > 0)
+							else if (temppoly2.size() > 0)
 								worker = temppoly2;
-							else if (temppoly.getVertexCount() > 0)
+							else if (temppoly.size() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-							worker.MakeEmpty();
+							worker.clear();
 						}
 						else
 						{
@@ -326,37 +326,37 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 							//get left side
 							worker = temppoly;
 							worker.SplitWithPlaneZ(temppoly, temppoly2, start.z);
-							worker.MakeEmpty();
+							worker.clear();
 
 							//get right side
-							if (temppoly2.getVertexCount() > 0)
+							if (temppoly2.size() > 0)
 								worker = temppoly2;
 							else
 								worker = temppoly;
 							worker.SplitWithPlaneZ(temppoly3, temppoly2, end.z);
-							worker.MakeEmpty();
+							worker.clear();
 
 							//get lower
-							if (temppoly3.getVertexCount() > 0)
+							if (temppoly3.size() > 0)
 								worker = temppoly3;
-							else if (temppoly2.getVertexCount() > 0)
+							else if (temppoly2.size() > 0)
 								worker = temppoly2;
-							else if (temppoly.getVertexCount() > 0)
+							else if (temppoly.size() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly3, temppoly4, start.y);
-							worker.MakeEmpty();
+							worker.clear();
 
 							//get upper
-							if (temppoly4.getVertexCount() > 0)
+							if (temppoly4.size() > 0)
 								worker = temppoly4;
-							else if (temppoly3.getVertexCount() > 0)
+							else if (temppoly3.size() > 0)
 								worker = temppoly3;
-							else if (temppoly2.getVertexCount() > 0)
+							else if (temppoly2.size() > 0)
 								worker = temppoly2;
-							else if (temppoly.getVertexCount() > 0)
+							else if (temppoly.size() > 0)
 								worker = temppoly;
 							worker.SplitWithPlaneY(temppoly5, temppoly4, end.y);
-							worker.MakeEmpty();
+							worker.clear();
 						}
 						polycheck = true;
 						polycheck2 = true;
@@ -404,38 +404,38 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 					//get left side
 					worker = temppoly;
 					worker.SplitWithPlaneX(temppoly, temppoly2, start.x);
-					worker.MakeEmpty();
+					worker.clear();
 
 					//get right side
-					if (temppoly2.getVertexCount() > 0)
+					if (temppoly2.size() > 0)
 						worker = temppoly2;
 					else
 						worker = temppoly;
 					worker.SplitWithPlaneX(temppoly3, temppoly2, end.x);
-					worker.MakeEmpty();
+					worker.clear();
 
 					//get lower
-					if (temppoly3.getVertexCount() > 0)
+					if (temppoly3.size() > 0)
 						worker = temppoly3;
-					else if (temppoly2.getVertexCount() > 0)
+					else if (temppoly2.size() > 0)
 						worker = temppoly2;
-					else if (temppoly.getVertexCount() > 0)
+					else if (temppoly.size() > 0)
 						worker = temppoly;
 					worker.SplitWithPlaneZ(temppoly3, temppoly4, start.z);
-					worker.MakeEmpty();
+					worker.clear();
 
 					//get upper
-					if (temppoly4.getVertexCount() > 0)
+					if (temppoly4.size() > 0)
 						worker = temppoly4;
-					else if (temppoly3.getVertexCount() > 0)
+					else if (temppoly3.size() > 0)
 						worker = temppoly3;
-					else if (temppoly2.getVertexCount() > 0)
+					else if (temppoly2.size() > 0)
 						worker = temppoly2;
-					else if (temppoly.getVertexCount() > 0)
+					else if (temppoly.size() > 0)
 						worker = temppoly;
 					worker.SplitWithPlaneZ(temppoly5, temppoly4, end.z);
-					worker.MakeEmpty();
-					temppoly5.MakeEmpty();
+					worker.clear();
+					temppoly5.clear();
 
 					polycheck = true;
 					polycheck2 = true;
@@ -444,35 +444,35 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 				//create split polygons
 				if (polycheck2 == true)
 				{
-					if (temppoly.getVertexCount() > 2)
+					if (temppoly.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						for (int k = 0; k < temppoly.getVertexCount(); k++)
+						for (int k = 0; k < temppoly.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly[k]);
 					}
-					if (temppoly2.getVertexCount() > 2)
+					if (temppoly2.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						for (int k = 0; k < temppoly2.getVertexCount(); k++)
+						for (int k = 0; k < temppoly2.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
 					}
-					if (temppoly3.getVertexCount() > 2)
+					if (temppoly3.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						for (int k = 0; k < temppoly3.getVertexCount(); k++)
+						for (int k = 0; k < temppoly3.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
 					}
-					if (temppoly4.getVertexCount() > 2)
+					if (temppoly4.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						for (int k = 0; k < temppoly4.getVertexCount(); k++)
+						for (int k = 0; k < temppoly4.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
 					}
 
-					temppoly.MakeEmpty();
-					temppoly2.MakeEmpty();
-					temppoly3.MakeEmpty();
-					temppoly4.MakeEmpty();
+					temppoly.clear();
+					temppoly2.clear();
+					temppoly3.clear();
+					temppoly4.clear();
 				}
 			}
 			else
@@ -496,7 +496,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 
 			//create new polygon
 			WallPolygon* handle = 0;
-			handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
+			handle = wall->AddPolygon(name.c_str(), oldmat, newpolys, mapping, oldvector);
 			ignore_list.push_back(handle);
 
 			//reset search position
@@ -540,7 +540,7 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 		int index2 = -1;
 		for (int j = 0; j < wallarray.size(); j++)
 		{
-			index2 = wallarray[j]->FindPolygon(newname);
+			index2 = wallarray[j]->FindPolygon(newname.c_str());
 			if (index2 > -1)
 			{
 				index = j;
@@ -550,18 +550,18 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 
 		if (index >= 0)
 		{
-			std::vector<Ogre::Polygon> origpolys;
+			std::vector<std::vector<Ogre::Vector3> > origpolys;
 			wallarray[index]->GetGeometry(index2, origpolys, true);
 
-			Ogre::Polygon original, tmp1, tmp2;
+			std::vector<Ogre::Vector3> original, tmp1, tmp2;
 			for (int i = 0; i < origpolys[0].size(); i++)
-				original.insertVertex(origpolys[0][i]);
+				original.push_back(origpolys[0][i]);
 
 			//if given altitude is outside of polygon's range, return 0
 			Ogre::Vector2 yextents = GetExtents(original, 2);
 			float tmpaltitude = altitude;
 			if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
-				return 0;
+				return Ogre::Vector3(0, 0, 0);
 
 			//get upper
 			original.SplitWithPlaneY(tmp1, tmp2, tmpaltitude - 0.001);
@@ -589,7 +589,7 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::Vector3 SBS::GetPolygonDirection(Ogre::Polygon &polygon)
+Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 {
 	//returns the direction the polygon faces, in a 3D vector
 	//for example, <-1, 0, 0> means that the wall faces left.
@@ -631,14 +631,14 @@ Ogre::Vector3 SBS::GetPolygonDirection(Ogre::Polygon &polygon)
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, Ogre::Polygon &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
+Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
 	//get texture material
 	Ogre::String texname = texture;
 	bool result;
-	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName());
+	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName().c_str());
 	if (!result)
 		texname = "Default";
 
@@ -661,9 +661,9 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	}*/
 
 	//get autosize information
-	Ogre::Vector2 xextents = GetExtents(vertices.GetArray(), vertices.size(), 1);
-	Ogre::Vector2 yextents = GetExtents(vertices.GetArray(), vertices.size(), 2);
-	Ogre::Vector2 zextents = GetExtents(vertices.GetArray(), vertices.size(), 3);
+	Ogre::Vector2 xextents = GetExtents(vertices, 1);
+	Ogre::Vector2 yextents = GetExtents(vertices, 2);
+	Ogre::Vector2 zextents = GetExtents(vertices, 3);
 
 	Ogre::Vector2 sizing;
 	sizing.x = tw;
@@ -675,7 +675,7 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	//get texture tiling information
 	float tw2 = sizing.x, th2 = sizing.y;
 	float mw, mh;
-	if (GetTextureTiling(texname, mw, mh))
+	if (GetTextureTiling(texname.c_str(), mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
@@ -686,7 +686,7 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	//create texture mapping table
 	//convert to remote positioning
 
-	std::vector<Ogre::Polygon> vertices2;
+	std::vector<std::vector<Ogre::Vector3> > vertices2;
 	vertices2.resize(1);
 
 	for (int i = 0; i < vertices.size(); i++)
@@ -707,16 +707,13 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
 }
 
-Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<Ogre::Polygon> &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
+Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
-	//get genmesh factory state
-	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(mesh->GetFactory()->GetMeshObjectFactory());
+		//convert to remote positioning
 
-	//convert to remote positioning
-
-	std::vector<Ogre::Polygon> vertices2;
+	std::vector<std::vector<Ogre::Vector3> > vertices2;
 	if (convert_vertices == true)
 	{
 		vertices2.resize(vertices.size());
@@ -741,7 +738,7 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	{
 		//first fill triangle mesh with polygon's vertices
 		for (int j = 0; j < vertices2[i].size(); j++)
-			trimesh[i].insertVertex(vertices2[i][j]);
+			trimesh[i].push_back(vertices2[i][j]);
 
 		//then do a (very) simple triangulation
 		//this method is used because it works with non-planar polygons, and the main
@@ -751,9 +748,9 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	}
 
 	//set up geometry arrays
-	csDirtyAccessArray<Ogre::Vector3> mesh_vertices;
-	csDirtyAccessArray<Ogre::Vector2> mesh_texels;
-	csDirtyAccessArray<Ogre::Vector3> mesh_normals;
+	std::vector<Ogre::Vector3> mesh_vertices;
+	std::vector<Ogre::Vector2> mesh_texels;
+	std::vector<Ogre::Vector3> mesh_normals;
 
 	//initialize geometry arrays
 	int size = 0;
@@ -779,7 +776,7 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 			mesh_normals[k].Normalize();
 			mesh_texels[k] = mapper.Map(mesh_vertices[k], mesh_normals[k], k);
 
-			state->insertVertex(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
+			state->push_back(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
 
 			int a = k - 1;
 			if (a == -1)
@@ -849,7 +846,7 @@ Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::Sub
 	return buffer;
 }
 
-bool SBS::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, Ogre::Polygon &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
+bool SBS::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
 {
 	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
 	//given an array of vertices, this returns the texture transformation matrix and vector
@@ -951,7 +948,7 @@ bool SBS::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Ve
 	return true;
 }
 
-Ogre::Vector2* SBS::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Polygon> &vertices)
+Ogre::Vector2* SBS::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices)
 {
 	//return texel array for specified texture transformation matrix and vector
 
@@ -1126,7 +1123,7 @@ Ogre::SubMesh* WallPolygon::GetSubMesh()
 {
 	//return the submesh this polygon is in
 	int index = sbs->FindMatchingSubMesh(*submeshes, material);
-	return submeshes->Get(index);
+	return submeshes->at(index);
 }
 
 void SBS::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices)
@@ -1147,13 +1144,11 @@ void SBS::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareInde
 		indices.push_back(buffer2[i]);
 	deleted_indices->Release();
 
-	iGeneralFactoryState *state = wallarray[0]->state;
-
 	//set up new geometry arrays
-	csDirtyAccessArray<Ogre::Vector3> mesh_vertices;
-	csDirtyAccessArray<Ogre::Vector2> mesh_texels;
-	csDirtyAccessArray<Ogre::Vector3> mesh_normals;
-	csDirtyAccessArray<csColor4> mesh_colors;
+	std::vector<Ogre::Vector3> mesh_vertices;
+	std::vector<Ogre::Vector2> mesh_texels;
+	std::vector<Ogre::Vector3> mesh_normals;
+	std::vector<csColor4> mesh_colors;
 
 	//copy mesh data
 	for (int i = 0; i < state->getVertexCount(); i++)
@@ -1167,8 +1162,8 @@ void SBS::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareInde
 	//construct new sorted and compressed index array
 	std::vector<int> deleted2;
 	for (int i = 0; i < indices.size(); i++)
-		deleted2.PushSmart(indices[i]);
-	deleted2.Sort();
+		deleted2.push_back(indices[i]);
+	sort(deleted2);
 
 	indices.clear();
 
@@ -1271,19 +1266,18 @@ WallPolygon::~WallPolygon()
 	sbs->PolygonCount--;
 }
 
-void WallPolygon::GetGeometry(Ogre::Mesh* meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly)
+void WallPolygon::GetGeometry(Ogre::Mesh* meshwrapper, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
 	vertices.resize(index_extents.size());
-	Ogre::Mesh* state = scfQueryInterface<iGeneralFactoryState>(meshwrapper->GetFactory()->GetMeshObjectFactory());
 
 	for (int i = 0; i < index_extents.size(); i++)
 	{
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
 		for (int j = min; j <= max; j++)
-			vertices[i].insertVertex(sbs->ToLocal(state->GetVertices()[j]));
+			vertices[i].push_back(sbs->ToLocal(state->GetVertices()[j]));
 		if (firstonly == true)
 			return;
 	}
@@ -1293,7 +1287,7 @@ bool WallPolygon::PointInside(Ogre::Mesh* meshwrapper, const Ogre::Vector3 &poin
 {
 	//check if a point is inside the polygon
 
-	std::vector<Ogre::Polygon> vertices;
+	std::vector<std::vector<Ogre::Vector3> > vertices;
 	GetGeometry(meshwrapper, vertices, false);
 
 	for (int i = 0; i < vertices.size(); i++)
@@ -1349,9 +1343,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	//set maximum render distance
 	if (max_render_distance > 0)
 		MeshWrapper->SetMaximumRenderDistance(sbs->ToRemote(max_render_distance));
-
-	State = scfQueryInterface<iGeneralFactoryState> (MeshWrapper->GetFactory()->GetMeshObjectFactory());
-	Movable = MeshWrapper->GetMovable();
 
 	//rescale if a loaded model
 	if (filename)
@@ -1470,7 +1461,7 @@ void MeshObject::RescaleVertices(float multiplier)
 	//rescale all mesh vertices to the default SBS value (using ToRemote()), times the given multiplier
 
 	//set up new vertex array
-	csDirtyAccessArray<Ogre::Vector3> mesh_vertices;
+	std::vector<Ogre::Vector3> mesh_vertices;
 
 	//multiply vertices
 	for (int i = 0; i < State->getVertexCount(); i++)

@@ -48,7 +48,7 @@ SBS::SBS()
 	PrintBanner();
 
 	//Pause for 2 seconds
-	sleep(2000);
+	//sleep(2000);
 
 	//initialize other variables
 	BuildingName = "";
@@ -1473,20 +1473,20 @@ void SBS::InitMeshes()
 	Landscape = new MeshObject(this->object, "Landscape");
 }
 
-int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, Ogre::Polygon &varray, float tw, float th)
+int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
 	int num;
-	Ogre::Polygon varray1 = varray;
-	Ogre::Polygon varray2;
+	std::vector<Ogre::Vector3> varray1 = varray;
+	std::vector<Ogre::Vector3> varray2;
 
 	//get number of stored vertices
-	num = varray.getVertexCount();
+	num = varray.size();
 
 	//create a second array with reversed vertices
 	for (int i = num - 1; i >= 0; i--)
-		varray2.insertVertex(varray1[i]);
+		varray2.push_back(varray1[i]);
 
 	//create 2 polygons (front and back) from the vertex array
 
@@ -1495,7 +1495,7 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 
 	//if the polygon is facing right, down or to the back, reverse faces
 	//to keep the vertices clockwise
-	Ogre::Polygon tmppoly;
+	std::vector<Ogre::Vector3> tmppoly;
 	if (direction.x == 1 || direction.y == -1 || direction.z == 1)
 	{
 		tmppoly = varray1;
@@ -1520,14 +1520,14 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 		Ogre::String NewName;
 		NewName = name;
 		NewName.append(":0");
-		wallobject->AddPolygon(NewName, texture, varray1.GetVertices(), num, tw2, th2, true);
+		wallobject->AddPolygon(NewName, texture, varray1, num, tw2, th2, true);
 	}
 	if (DrawMainP == true)
 	{
 		Ogre::String NewName;
 		NewName = name;
 		NewName.append(":1");
-		wallobject->AddPolygon(NewName, texture, varray2.GetVertices(), num, tw2, th2, true);
+		wallobject->AddPolygon(NewName, texture, varray2, num, tw2, th2, true);
 	}
 
 	//recreate colliders if specified
@@ -1543,12 +1543,12 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 int SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
-	Ogre::Polygon varray;
+	std::vector<Ogre::Vector3> varray;
 
 	//set up temporary vertex array
-	varray.insertVertex(x1, y1, z1);
-	varray.insertVertex(x2, y2, z2);
-	varray.insertVertex(x3, y3, z3);
+	varray.push_back(Ogre::Vector3(x1, y1, z1));
+	varray.push_back(Ogre::Vector3(x2, y2, z2));
+	varray.push_back(Ogre::Vector3(x3, y3, z3));
 
 	//pass data on to AddCustomWall function
 	return AddCustomWall(wallobject, name, texture, varray, tw, th);
@@ -2160,7 +2160,7 @@ void SBS::BackupMapping()
 	OldMapMethod = MapMethod;
 }
 
-void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3)
+void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3)
 {
 	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
@@ -2170,16 +2170,16 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 		//planar method
 
 		Ogre::Vector2 x, y, z;
-		Ogre::Polygon varray1, varray2;
+		std::vector<Ogre::Vector3> varray1, varray2;
 		bool rev_x = false, rev_z = false;
 
 		//copy vertices into polygon object
 		for (int i = 0; i < vertices.size(); i++)
-			varray1.insertVertex(vertices[i]);
+			varray1.push_back(vertices[i]);
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Ogre::Plane plane = varray1.ComputePlane();
+		Ogre::Plane plane = Ogre::Plane(varray1[0], varray1[1], varray1[2]);
 		Ogre::Vector3 normal = varray1.ComputeNormal();
 		int projDimension = 0; //x; faces left/right
 
@@ -2191,10 +2191,10 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 		size_t selX = CS::Math::NextModulo3(projDimension);
 		size_t selY = CS::Math::NextModulo3(selX);
 
-		for (int i = 0; i < varray1.getVertexCount(); i++)
+		for (int i = 0; i < varray1.size(); i++)
 		{
-			Ogre::Vector3 tmpvertex = *varray1.GetVertex(i);
-			varray2.insertVertex(tmpvertex[selX], tmpvertex[selY], 0);
+			Ogre::Vector3 tmpvertex = *varray1.at(i);
+			varray2.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
 		}
 
 		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.z < -0.999)
@@ -2351,9 +2351,9 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 				{
 					Ogre::String number = string.substr(location + 1);
 					if (atoi(number) < vertices.size())
-						ReplaceAll(string, "x" + number, _gcvt(vertices[atoi(number)].x, 12, buffer));
+						ReplaceAll(string, Ogre::String("x" + number).c_str(), _gcvt(vertices[atoi(number)].x, 12, buffer.c_str()));
 					else
-						ReplaceAll(string, "x" + number, "0"); //number value out of bounds
+						ReplaceAll(string, Ogre::String("x" + number).c_str(), "0"); //number value out of bounds
 				}
 
 				//find Y component
@@ -2362,9 +2362,9 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 				{
 					Ogre::String number = string.at(location + 1);
 					if (atoi(number) < vertices.size())
-						ReplaceAll(string, "y" + number, _gcvt(vertices[atoi(number)].y, 12, buffer));
+						ReplaceAll(string, Ogre::String("y" + number).c_str(), _gcvt(vertices[atoi(number)].y, 12, buffer.c_str()));
 					else
-						ReplaceAll(string, "y" + number, "0"); //number value out of bounds
+						ReplaceAll(string, Ogre::String("y" + number).c_str(), "0"); //number value out of bounds
 				}
 
 				//find Z component
@@ -2373,38 +2373,38 @@ void SBS::GetTextureMapping(Ogre::Polygon &vertices, Ogre::Vector3 &v1, Ogre::Ve
 				{
 					Ogre::String number = string.at(location + 1);
 					if (atoi(number) < vertices.size())
-						ReplaceAll(string, "z" + number, _gcvt(vertices[atoi(number)].z, 12, buffer));
+						ReplaceAll(string, Ogre::String("z" + number).c_str(), _gcvt(vertices[atoi(number)].z, 12, buffer.c_str()));
 					else
-						ReplaceAll(string, "z" + number, "0"); //number value out of bounds
+						ReplaceAll(string, Ogre::String("z" + number).c_str(), "0"); //number value out of bounds
 				}
 
 				//store values
 				if (i == 0)
 				{
 					if (j == 0)
-						v1.x = atof(string);
+						v1.x = atof(string.c_str());
 					if (j == 1)
-						v2.x = atof(string);
+						v2.x = atof(string.c_str());
 					if (j == 2)
-						v3.x = atof(string);
+						v3.x = atof(string.c_str());
 				}
 				if (i == 1)
 				{
 					if (j == 0)
-						v1.y = atof(string);
+						v1.y = atof(string.c_str());
 					if (j == 1)
-						v2.y = atof(string);
+						v2.y = atof(string.c_str());
 					if (j == 2)
-						v3.y = atof(string);
+						v3.y = atof(string.c_str());
 				}
 				if (i == 2)
 				{
 					if (j == 0)
-						v1.z = atof(string);
+						v1.z = atof(string.c_str());
 					if (j == 1)
-						v2.z = atof(string);
+						v2.z = atof(string.c_str());
 					if (j == 2)
-						v3.z = atof(string);
+						v3.z = atof(string.c_str());
 				}
 			}
 		}
@@ -2527,42 +2527,42 @@ bool SBS::GetReverseAxis()
 void SBS::SetListenerLocation(const Ogre::Vector3 &location)
 {
 	//set position of sound listener object
-	if (DisableSound == false)
-		sndrenderer->GetListener()->SetPosition(location);
+	//if (DisableSound == false)
+		//sndrenderer->GetListener()->SetPosition(location);
 }
 
 void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
 {
 	//set direction of sound listener object
-	if (DisableSound == false)
-		sndrenderer->GetListener()->SetDirection(front, top);
+	//if (DisableSound == false)
+		//sndrenderer->GetListener()->SetDirection(front, top);
 }
 
 void SBS::SetListenerDistanceFactor(float factor)
 {
-	if (DisableSound == false)
-		sndrenderer->GetListener()->SetDistanceFactor(factor);
+	//if (DisableSound == false)
+		//sndrenderer->GetListener()->SetDistanceFactor(factor);
 }
 
 float SBS::GetListenerDistanceFactor()
 {
-	if (DisableSound == false)
+	/*if (DisableSound == false)
 		return sndrenderer->GetListener()->GetDistanceFactor();
-	else
+	else*/
 		return 0;
 }
 
 void SBS::SetListenerRollOffFactor(float factor)
 {
-	if (DisableSound == false)
-		sndrenderer->GetListener()->SetRollOffFactor(factor);
+	//if (DisableSound == false)
+		//sndrenderer->GetListener()->SetRollOffFactor(factor);
 }
 
 float SBS::GetListenerRollOffFactor()
 {
-	if (DisableSound == false)
+	/*if (DisableSound == false)
 		return sndrenderer->GetListener()->GetRollOffFactor();
-	else
+	else*/
 		return 0;
 }
 
@@ -2610,13 +2610,14 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 	//Adds a wall with the specified dimensions
 	Ogre::String mesh = meshname;
 	TrimString(mesh);
+	SetCase(mesh, false);
 
 	WallObject *wall;
-	if (mesh.CompareNoCase("external") == true)
+	if (mesh == "external")
 		wall = External->CreateWallObject(this->object, name);
-	if (mesh.CompareNoCase("buildings") == true)
+	if (mesh == "buildings")
 		wall = Buildings->CreateWallObject(this->object, name);
-	if (mesh.CompareNoCase("landscape") == true)
+	if (mesh == "landscape")
 		wall = Landscape->CreateWallObject(this->object, name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
@@ -2631,13 +2632,14 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 	//Adds a floor with the specified dimensions and vertical offset
 	Ogre::String mesh = meshname;
 	TrimString(mesh);
+	SetCase(mesh, false);
 
 	WallObject *wall;
-	if (mesh.CompareNoCase("external") == true)
+	if (mesh == "external")
 		wall = External->CreateWallObject(this->object, name);
-	if (mesh.CompareNoCase("buildings") == true)
+	if (mesh == "buildings")
 		wall = Buildings->CreateWallObject(this->object, name);
-	if (mesh.CompareNoCase("landscape") == true)
+	if (mesh == "landscape")
 		wall = Landscape->CreateWallObject(this->object, name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, true);
@@ -2739,7 +2741,13 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 				//if a shaft is specified, only show the floor if it is in the related shaft's ShowFloorsList array
 				if (GetShaft(shaftnumber)->ShowFloors == true)
 				{
-					if (GetShaft(shaftnumber)->ShowFloorsList.find(i) != -1 && value == true)
+					int index = -1;
+					for (int j = 0; j < ShowFloorsList.size(); j++)
+					{
+						if (ShowFloorsList[j] == i)
+							index = j;
+					}
+					if (index != -1 && value == true)
 					{
 						GetFloor(i)->Enabled(true);
 						if (enablegroups == true)
@@ -2767,7 +2775,12 @@ bool SBS::RegisterDoorCallback(Door *door)
 {
 	//register a door object for callbacks (used for door movement)
 
-	int index = doorcallbacks.find(door);
+	int index = -1;
+	for (int i = 0; i < doorcallbacks.size(); i++)
+	{
+		if (doorcallbacks[i] == door)
+			index = i;
+	}
 
 	if (index == -1)
 	{
@@ -2785,7 +2798,12 @@ bool SBS::RegisterDoorCallback(Door *door)
 
 bool SBS::UnregisterDoorCallback(Door *door)
 {
-	int index = doorcallbacks.find(door);
+	int index = -1;
+	for (int i = 0; i < doorcallbacks.size(); i++)
+	{
+		if (doorcallbacks[i] == door)
+			index = i;
+	}
 
 	if (index != -1 && doorcallbacks[index])
 	{
@@ -2813,7 +2831,12 @@ bool SBS::RegisterCallButtonCallback(CallButton *button)
 {
 	//register a door object for callbacks (used for door movement)
 
-	int index = buttoncallbacks.find(button);
+	int index = -1;
+	for (int i = 0; i < buttoncallbacks.size(); i++)
+	{
+		if (buttoncallbacks[i] == button)
+			index = i;
+	}
 
 	if (index == -1)
 	{
@@ -2827,7 +2850,12 @@ bool SBS::RegisterCallButtonCallback(CallButton *button)
 
 bool SBS::UnregisterCallButtonCallback(CallButton *button)
 {
-	int index = buttoncallbacks.find(button);
+	int index = -1;
+	for (int i = 0; i < buttoncallbacks.size(); i++)
+	{
+		if (buttoncallbacks[i] == button)
+			index = i;
+	}
 
 	if (index != -1 && buttoncallbacks[index])
 	{

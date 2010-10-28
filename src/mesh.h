@@ -81,7 +81,7 @@ public:
 	~WallPolygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();
-	void GetGeometry(Ogre::Mesh* meshwrapper, std::vector<Ogre::Polygon> &vertices, bool firstonly);
+	void GetGeometry(Ogre::Mesh* meshwrapper, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly);
 	bool PointInside(Ogre::Mesh* meshwrapper, const Ogre::Vector3 &point, bool plane_check = true);
 };
 
