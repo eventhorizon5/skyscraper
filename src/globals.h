@@ -27,6 +27,7 @@
 #define _SBS_GLOBALS_H
 
 #include <string>
+#include <vector>
 #include "wx/platform.h"
 
 //DLL Exporting
@@ -66,6 +67,7 @@ SBSIMPEXP int FindWithCase(const char *string, bool uppercase, const char *key, 
 SBSIMPEXP void TrimString(std::string &string);
 SBSIMPEXP void ReplaceAll(std::string &string, const char *original, const char *replacement);
 SBSIMPEXP bool StartsWith(std::string &string, const char *check_string, bool ignore_case = false);
+SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const char *original_string, char separator);
 
 const double pi = 3.14159265;
 

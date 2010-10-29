@@ -22,7 +22,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <wx/app.h>
 #include <wx/variant.h>
+#include <wx/msgdlg.h>
 #include "globals.h"
 #include "sbs.h"
 #include <stdlib.h>
@@ -701,15 +703,15 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 		info.end_line = location - 1;
 		includes.push_back(info);
 	}
-	
-	return true;*/
+	*/
+	return true;
 }
 
 bool ScriptProcessor::LoadFromText(const char *text)
 {
 	//loads building commands from a string
 	std::vector<Ogre::String> textarray;
-	textarray.SplitString(text, "\n");
+	SplitString(textarray, text, '\n');
 
 	//clear building data
 	BuildingData.clear();
@@ -975,7 +977,7 @@ int ScriptProcessor::ScriptError(std::string message)
 	skyscraper->ReportError(error.c_str());
 
 	//show error dialog
-	wxMessageDialog *dialog = new wxMessageDialog(skyscraper->wxwin->GetWindow(), wxString::FromAscii(error), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
 	dialog->ShowModal();
 
 	delete dialog;
@@ -1425,7 +1427,7 @@ int ScriptProcessor::ProcCommands()
 
 		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.push_back(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()), atof(tempdata[temp3 + 2].c_str()));
+			varray.push_back(Ogre::Vector3(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()), atof(tempdata[temp3 + 2].c_str())));
 
 		StoreCommand(wall);
 
@@ -1813,8 +1815,8 @@ int ScriptProcessor::ProcCommands()
 		temp4 = LineData.find(")", 0);
 		if (temp1 < 0 || temp4 < 0)
 			return ScriptError("Syntax error");
-		tempdata.clear();
-		tempdata.SplitString(LineData.substr(temp1 + 1, temp4 - temp1 - 1), ",");
+
+		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1).c_str(), ',');
 		for (temp3 = 0; temp3 < tempdata.size(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3].c_str());
@@ -1906,8 +1908,8 @@ int ScriptProcessor::ProcCommands()
 		temp4 = LineData.find(")", 0);
 		if (temp1 < 0 || temp4 < 0)
 			return ScriptError("Syntax error");
-		tempdata.clear();
-		tempdata.SplitString(LineData.substr(temp1 + 1, temp4 - temp1 - 1), ",");
+		
+		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1).c_str(), ',');
 		for (temp3 = 0; temp3 < tempdata.size(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3].c_str());
@@ -5387,8 +5389,7 @@ bool ScriptProcessor::FunctionProc()
 			int location2 = location + functions[i].name.length() + 1;
 			int end_loc = LineData.find(")", location);
 			Ogre::String newdata = LineData.substr(location2, end_loc - location2);
-			tempdata.clear();
-			tempdata.SplitString(newdata, ",");
+			SplitString(tempdata, newdata.c_str(), ',');
 
 			//calculate inline math
 			for (temp3 = 0; temp3 < tempdata.size(); temp3++)
@@ -5450,8 +5451,7 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 
 	Ogre::String data = string;
 	Ogre::String stringbuffer;
-	tempdata.clear();
-	tempdata.SplitString(data.substr(start), ",");
+	SplitString(tempdata, data.substr(start).c_str(), ',');
 	for (int i = 0; i < tempdata.size(); i++)
 	{
 		if (calc == true)
@@ -5477,8 +5477,7 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 	Ogre::String temp = data.substr(loc + 1);
 	TrimString(temp);
 
-	tempdata.clear();
-	tempdata.SplitString(temp.c_str(), ",");
+	SplitString(tempdata, temp.c_str(), ',');
 	for (int i = 0; i < tempdata.size(); i++)
 	{
 		Ogre::String buffer;

@@ -24,7 +24,6 @@
 */
 
 #include <algorithm>
-#include <string>
 #include <ctype.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -230,4 +229,28 @@ bool StartsWith(std::string &string, const char *check_string, bool ignore_case)
 			return true;
 		return false;
 	}
+}
+
+void SplitString(std::vector<std::string> &dest_array, const char *original_string, char separator)
+{
+	//split a string into an array of strings, divided by "separator"
+
+    int startpos = 0;
+    int endpos = 0;
+
+	dest_array.clear();
+	std::string original = original_string;
+
+    endpos = original.find_first_of(separator, startpos);
+    while (endpos != -1)
+    {       
+        dest_array.push_back(original.substr(startpos, endpos - startpos)); //add to vector
+        startpos = endpos + 1; //jump past separator
+        endpos = original.find_first_of(separator, startpos); //find next
+        if(endpos == -1)
+        {
+            //lastone, so no 2nd param required to go to end of string
+            dest_array.push_back(original.substr(startpos));
+        }
+    }
 }
