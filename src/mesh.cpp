@@ -631,487 +631,6 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
-{
-	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
-
-	//get texture material
-	Ogre::String texname = texture;
-	bool result;
-	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName().c_str());
-	if (!result)
-		texname = "Default";
-
-	if (tw == 0)
-		tw = 1;
-	if (th == 0)
-		th = 1;
-
-	/*if (Shaders == true)
-	{
-		csRef<iStringSet> strset = csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset");
-		csRef<iShaderManager> shadermgr = csQueryRegistry<iShaderManager> (object_reg);
-		iMaterial* mat = material->GetMaterial();
-		//Ogre::StringID t = strset->Request("ambient");
-		Ogre::StringID t = strset->Request("diffuse");
-		//iShader* sh = shadermgr->GetShader("fullbright");
-		//iShader* sh = shadermgr->GetShader("ambient");
-		iShader* sh = shadermgr->GetShader("light");
-		mat->SetShader(t, sh);
-	}*/
-
-	//get autosize information
-	Ogre::Vector2 xextents = GetExtents(vertices, 1);
-	Ogre::Vector2 yextents = GetExtents(vertices, 2);
-	Ogre::Vector2 zextents = GetExtents(vertices, 3);
-
-	Ogre::Vector2 sizing;
-	sizing.x = tw;
-	sizing.y = th;
-
-	if (autosize == true)
-		sizing = sbs->CalculateSizing(texture, xextents, yextents, zextents, tw, th);
-
-	//get texture tiling information
-	float tw2 = sizing.x, th2 = sizing.y;
-	float mw, mh;
-	if (GetTextureTiling(texname.c_str(), mw, mh))
-	{
-		//multiply the tiling parameters (tw and th) by
-		//the stored multipliers for that texture
-		tw2 = sizing.x * mw;
-		th2 = sizing.y * mh;
-	}
-
-	//create texture mapping table
-	//convert to remote positioning
-
-	std::vector<std::vector<Ogre::Vector3> > vertices2;
-	vertices2.resize(1);
-
-	for (int i = 0; i < vertices.size(); i++)
-		vertices2[0].push_back(ToRemote(vertices[i]));
-
-	//texture mapping
-	Ogre::Vector3 v1, v2, v3;
-	GetTextureMapping(vertices2[0], v1, v2, v3);
-	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
-		v1,
-		Ogre::Vector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
-		v2,
-		Ogre::Vector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
-		v3,
-		Ogre::Vector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
-		return 0;
-
-	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
-}
-
-Ogre::HardwareIndexBuffer* SBS::PolyMesh(Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
-{
-	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
-
-		//convert to remote positioning
-
-	std::vector<std::vector<Ogre::Vector3> > vertices2;
-	if (convert_vertices == true)
-	{
-		vertices2.resize(vertices.size());
-		for (int i = 0; i < vertices.size(); i++)
-		{
-			for (int j = 0; j < vertices[i].size(); j++)
-				vertices2[i].push_back(ToRemote(vertices[i][j]));
-		}
-	}
-	else
-		vertices2 = vertices;
-
-	//texture mapping
-	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2);
-	CS::Geometry::TableTextureMapper mapper(table);
-
-	//triangulate mesh
-	std::vector<csTriangleMesh> trimesh;
-	trimesh.resize(vertices2.size());
-
-	for (int i = 0; i < trimesh.size(); i++)
-	{
-		//first fill triangle mesh with polygon's vertices
-		for (int j = 0; j < vertices2[i].size(); j++)
-			trimesh[i].push_back(vertices2[i][j]);
-
-		//then do a (very) simple triangulation
-		//this method is used because it works with non-planar polygons, and the main
-		//Crystal Space triangulation system requires planar polygons
-		for (int j = 2; j < vertices2[i].size(); j++)
-			trimesh[i].AddTriangle(0, j - 1, j);
-	}
-
-	//set up geometry arrays
-	std::vector<Ogre::Vector3> mesh_vertices;
-	std::vector<Ogre::Vector2> mesh_texels;
-	std::vector<Ogre::Vector3> mesh_normals;
-
-	//initialize geometry arrays
-	int size = 0;
-	for (int i = 0; i < trimesh.size(); i++)
-		size += trimesh[i].getVertexCount();
-	mesh_vertices.resize(size);
-	mesh_texels.resize(size);
-	mesh_normals.resize(size);
-
-	//get number of existing vertices
-	int count = state->getVertexCount();
-
-	//populate vertices, normals, and texels for mesh data
-	int k = 0;
-
-	for (int i = 0; i < trimesh.size(); i++)
-	{
-		int min = count + k;
-
-		for (int j = 0; j < trimesh[i].getVertexCount(); j++)
-		{
-			mesh_normals[k] = mesh_vertices[k] = trimesh[i].GetVertices()[j];
-			mesh_normals[k].Normalize();
-			mesh_texels[k] = mapper.Map(mesh_vertices[k], mesh_normals[k], k);
-
-			state->push_back(mesh_vertices[k], mesh_texels[k], mesh_normals[k], csColor4(1, 1, 1));
-
-			int a = k - 1;
-			if (a == -1)
-			a = size - 1;
-			int c = k + 1;
-			if (c == size)
-			c = 0;
-
-			k++;
-		}
-
-		int max = count + k - 1;
-		mesh_indices.push_back(Ogre::Vector2(min, max));
-	}
-
-	//delete texel array
-	if (table)
-		delete table;
-	table = 0;
-
-	//delete arrays
-	mesh_vertices.clear();
-	mesh_texels.clear();
-	mesh_normals.clear();
-
-	//set up triangle buffer
-	int tricount = 0;
-	for (int i = 0; i < trimesh.size(); i++)
-		tricount += trimesh[i].GetTriangleCount();
-
-	Ogre::HardwareIndexBuffer* buffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, count, count + size - 1);
-	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-
-	//add triangles to mesh
-	int location = 0;
-	int location2 = 0;
-	for (int i = 0; i < trimesh.size(); i++)
-	{
-		for (int j = 0; j < trimesh[i].GetTriangleCount(); j++)
-		{
-			csTriangle tri = trimesh[i].GetTriangle(j);
-			tri.a += count + location2;
-			tri.b += count + location2;
-			tri.c += count + location2;
-			triangleData[location] = tri; //add triangle to submesh buffer
-			location++;
-		}
-		location2 += trimesh[i].getVertexCount();
-	}
-
-	//finish with submesh buffer
-	buffer->Release();
-
-	//reprocess mesh
-	state->Invalidate();
-
-	//create submesh and set material
-	ReindexSubMesh(state, submeshes, buffer, material, name, true);
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		DeleteColliders(mesh);
-		CreateColliders(mesh);
-	}
-
-	return buffer;
-}
-
-bool SBS::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
-{
-	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
-	//given an array of vertices, this returns the texture transformation matrix and vector
-
-	//original description:
-	// Some explanation. We have three points for
-	// which we know the uv coordinates. This gives:
-	//     P1 -> UV1
-	//     P2 -> UV2
-	//     P3 -> UV3
-	// P1, P2, and P3 are on the same plane so we can write:
-	//     P = P1 + lambda * (P2-P1) + mu * (P3-P1)
-	// For the same lambda and mu we can write:
-	//     UV = UV1 + lambda * (UV2-UV1) + mu * (UV3-UV1)
-	// What we want is Po, Pu, and Pv (also on the same
-	// plane) so that the following uv coordinates apply:
-	//     Po -> 0,0
-	//     Pu -> 1,0
-	//     Pv -> 0,1
-	// The UV equation can be written as follows:
-	//     U = U1 + lambda * (U2-U1) + mu * (U3-U1)
-	//     V = V1 + lambda * (V2-V1) + mu * (V3-V1)
-	// This is a matrix equation (2x2 matrix):
-	//     UV = UV1 + M * PL
-	// We have UV in this case and we need PL so we
-	// need to invert this equation:
-	//     (1/M) * (UV - UV1) = PL
-
-	csMatrix2 m (uv2.x - uv1.x, uv3.x - uv1.x, uv2.y - uv1.y, uv3.y - uv1.y);
-	float det = m.Determinant();
-
-	if (ABS(det) < 0.0001f)
-	{
-		ReportError("Warning: bad UV coordinates");
-
-		/*if (!((p1-p2) < SMALL_EPSILON))
-			SetTextureSpace(p1, p2, 1);
-		else if (!((p1-p3) < SMALL_EPSILON))
-			SetTextureSpace(p1, p3, 1);*/
-		return false;
-	}
-	else
-		m.Invert();
-
-	Ogre::Vector2 pl;
-	Ogre::Vector3 po, pu, pv;
-
-	// For (0,0) and Po
-	pl = m * (Ogre::Vector2(0, 0) - uv1);
-	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
-
-	// For (1,0) and Pu
-	pl = m * (Ogre::Vector2(1, 0) - uv1);
-	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
-
-	// For (0,1) and Pv
-	pl = m * (Ogre::Vector2(0, 1) - uv1);
-	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
-
-	ComputeTextureSpace(t_matrix, t_vector, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
-	return true;
-}
-
-bool SBS::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
-{
-	//from CS textrans.cpp
-	
-	float d = csSquaredDist::PointPoint(v_orig, v1);
-	float invl1 = csQisqrt(d);
-
-	d = csSquaredDist::PointPoint(v_orig, v2);
-	float invl2 = (d) ? csQisqrt (d) : 0;
-
-	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
-	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
-	Ogre::Vector3 v_w = v_u % v_v;
-
-	m.m11 = v_u.x;
-	m.m12 = v_v.x;
-	m.m13 = v_w.x;
-	m.m21 = v_u.y;
-	m.m22 = v_v.y;
-	m.m23 = v_w.y;
-	m.m31 = v_u.z;
-	m.m32 = v_v.z;
-	m.m33 = v_w.z;
-
-	v = v_orig;
-
-	float det = m.Determinant ();
-	if (ABS (det) < SMALL_EPSILON)
-	{
-		m.Identity();
-		return false;
-	}
-	else
-		m.Invert ();
-
-	return true;
-}
-
-Ogre::Vector2* SBS::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices)
-{
-	//return texel array for specified texture transformation matrix and vector
-
-	csTransform transform(tex_matrix, tex_vector);
-
-	//create array for texel map
-	int texel_count = 0;
-	for (int i = 0; i < vertices.size(); i++)
-		texel_count += vertices[i].size();
-	Ogre::Vector2 *texels = new Ogre::Vector2[texel_count];
-
-	//transform matrix into texel map
-	int index = 0;
-	Ogre::Vector3 texel_temp;
-	for (int i = 0; i < vertices.size(); i++)
-	{
-		for (int j = 0; j < vertices[i].size(); j++)
-		{
-			texel_temp = transform.Other2This(vertices[i][j]);
-			texels[index].x = texel_temp.x;
-			texels[index].y = texel_temp.y;
-			index++;
-		}
-	}
-	return texels;
-}
-
-int SBS::ReindexSubMesh(Ogre::Mesh* state, std::vector<Ogre::SubMesh> &submeshes, Ogre::HardwareIndexBuffer* indices, Ogre::Material* material, const char *name, bool add)
-{
-	//adds or removes triangle indices to a submesh in the list with a matching material
-	//if append is true, adds indices; otherwise removes them
-
-	//first get related submesh
-	int index = FindMatchingSubMesh(submeshes, material);
-
-	//create submesh if it doesn't exist, and exit
-	if (index == -1)
-	{
-		Ogre::SubMesh newsubmesh = state->AddSubMesh(indices, material, name);
-		return submeshes.push_back(newsubmesh);
-	}
-
-	Ogre::SubMesh submesh = submeshes[index];
-
-	//set up buffer to original triangle indices
-	Ogre::HardwareIndexBuffer *buffer = submesh->GetIndices();
-
-	//get triangle counts
-	int buffercount = buffer->GetElementCount() / 3;
-	int indicescount = indices->GetElementCount() / 3;
-
-	//get new triangle count
-	int tricount;
-	if (add == true)
-		tricount = buffercount + indicescount;
-	else
-		tricount = buffercount - indicescount;
-
-	//delete submesh and exit if it's going to be emptied
-	if (tricount <= 0)
-	{
-		buffer = 0;
-		state->DeleteSubMesh(submesh);
-		submeshes.erase(submeshes.begin() + index);
-		return -1;
-	}
-
-	//get index range limits
-	int rangestart = 0, rangeend = 0;
-	if (buffer->GetRangeStart() < indices->GetRangeStart())
-		rangestart = buffer->GetRangeStart();
-	else
-		rangestart = indices->GetRangeStart();
-
-	if (buffer->GetRangeEnd() > indices->GetRangeEnd())
-		rangeend = buffer->GetRangeEnd();
-	else
-		rangeend = indices->GetRangeEnd();
-
-	//set up new buffer for modified indices
-	Ogre::HardwareIndexBuffer* newbuffer = csRenderBuffer::CreateIndexRenderBuffer(tricount * 3, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, rangestart, rangeend);
-
-	if (add == true)
-	{
-		//copy old triangle indices into new buffer
-		int *triangleData = (int*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-		newbuffer->CopyInto(triangleData, buffer->GetElementCount());
-		buffer->Release();
-	}
-	
-	//set up buffer for old data
-	csTriangle *triangleData = (csTriangle*)buffer->Lock(CS_BUF_LOCK_NORMAL);
-
-	//set up triangle buffer for new data
-	csTriangle *newtriangleData = (csTriangle*)newbuffer->Lock(CS_BUF_LOCK_NORMAL);
-
-	//set up buffer with triangle indices to add/remove
-	csTriangle *triangleData2 = (csTriangle*)indices->Lock(CS_BUF_LOCK_NORMAL);
-
-	if (add == true)
-	{
-		//add triangles
-
-		//append new triangle indices into new buffer
-		for (int i = 0; i < indicescount; i++)
-			newtriangleData[i + buffercount] = triangleData2[i];
-	}
-	else
-	{
-		//remove triangles
-
-		int newindex = 0;
-		bool skip = false;
-		for (int i = 0; i < buffercount; i++)
-		{
-			for (int j = 0; j < indicescount; j++)
-			{
-				if (triangleData[i].a == triangleData2[j].a && triangleData[i].b == triangleData2[j].b && triangleData[i].c == triangleData2[j].c)
-				{
-					//skip matching data
-					skip = true;
-					break;
-				}
-			}
-			if (skip == false)
-			{
-				if (newindex > tricount - 1)
-					break; //removal match not found - this shouldn't happen
-				newtriangleData[newindex] = triangleData[i]; //fill new buffer with non-matching triangles
-				newindex++;
-			}
-			skip = false;
-		}
-	}
-
-	//release buffers
-	buffer->Release();
-	indices->Release();
-	newbuffer->Release();
-
-	//delete old submesh
-	state->DeleteSubMesh(submesh);
-	submeshes.erase(submeshes.begin() + index);
-
-	//create submesh
-	Ogre::SubMesh newsubmesh = state->AddSubMesh(newbuffer, material, name);
-	index = submeshes.push_back(newsubmesh);
-	return index;
-}
-
-int SBS::FindMatchingSubMesh(std::vector<Ogre::SubMesh> &submeshes, Ogre::Material *material)
-{
-	//find a submesh with a matching material
-	//returns array index
-
-	for (int i = 0; i < submeshes.size(); i++)
-	{
-		if (submeshes[i]->GetMaterial() == material)
-			return i;
-	}
-	return -1;
-}
-
 void WallPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 {
 	//return texture mapping matrix and vector
@@ -1124,136 +643,6 @@ Ogre::SubMesh* WallPolygon::GetSubMesh()
 	//return the submesh this polygon is in
 	int index = sbs->FindMatchingSubMesh(*submeshes, material);
 	return submeshes->at(index);
-}
-
-void SBS::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices)
-{
-	//delete related mesh vertices using provided index array
-	//then reindex all mesh triangle indices in all submeshes.
-	//this should be done after a polygon is deleted
-	//also, all wall objects in wall arrays must have the same mesh state
-
-	//exit if wall array is empty
-	if (wallarray.size() == 0)
-		return;
-
-	//get integer array of triangle indices
-	std::vector<int> indices;
-	int* buffer2 = (int*)deleted_indices->Lock(CS_BUF_LOCK_NORMAL);
-	for (int i = 0; i < deleted_indices->GetElementCount(); i++)
-		indices.push_back(buffer2[i]);
-	deleted_indices->Release();
-
-	//set up new geometry arrays
-	std::vector<Ogre::Vector3> mesh_vertices;
-	std::vector<Ogre::Vector2> mesh_texels;
-	std::vector<Ogre::Vector3> mesh_normals;
-	std::vector<csColor4> mesh_colors;
-
-	//copy mesh data
-	for (int i = 0; i < state->getVertexCount(); i++)
-	{
-		mesh_vertices.push_back(state->GetVertices()[i]);
-		mesh_texels.push_back(state->GetTexels()[i]);
-		mesh_normals.push_back(state->GetNormals()[i]);
-		mesh_colors.push_back(state->GetColors()[i]);
-	}
-
-	//construct new sorted and compressed index array
-	std::vector<int> deleted2;
-	for (int i = 0; i < indices.size(); i++)
-		deleted2.push_back(indices[i]);
-	sort(deleted2);
-
-	indices.clear();
-
-	//delete specified vertices
-	for (int i = deleted2.size() - 1; i >= 0; i--)
-	{
-		int index = deleted2[i];
-		mesh_vertices.erase(mesh_vertices.begin() + index);
-		mesh_texels.erase(mesh_texels.begin() + index);
-		mesh_normals.erase(mesh_normals.begin() + index);
-		mesh_colors.erase(mesh_colors.begin() + index);
-	}
-
-	//refill original mesh data
-	state->SetVertexCount(mesh_vertices.size());
-	for (int i = 0; i < mesh_vertices.size(); i++)
-	{
-		state->GetVertices()[i] = mesh_vertices[i];
-		state->GetTexels()[i] = mesh_texels[i];
-		state->GetNormals()[i] = mesh_normals[i];
-		state->GetColors()[i] = mesh_colors[i];
-	}
-
-	mesh_vertices.clear();
-	mesh_texels.clear();
-	mesh_normals.clear();
-	mesh_colors.clear();
-
-	//reindex triangle indices in all submeshes
-	for (int i = 0; i < state->GetSubMeshCount(); i++)
-	{
-		Ogre::HardwareIndexBuffer *indices = state->GetSubMesh(i)->GetIndices();
-
-		if (!indices)
-			continue;
-
-		int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
-
-		for (int j = 0; j < indices->GetElementCount(); j++)
-		{
-			for (int k = deleted2.size() - 1; k >= 0; k--)
-			{
-				if (indices2[j] >= deleted2[k])
-					indices2[j]--;
-			}
-		}
-		indices->Release();
-	}
-
-	//reindex triangle indices in all wall objects
-	for (int i = 0; i < wallarray.size(); i++)
-	{
-		if (!wallarray[i])
-			continue;
-
-		for (int j = 0; j < wallarray[i]->handles.size(); j++)
-		{
-			Ogre::HardwareIndexBuffer* indices = wallarray[i]->handles[j].triangles;
-
-			if (!indices)
-				continue;
-
-			int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
-
-			//reindex triangle indices
-			for (int k = 0; k < indices->GetElementCount(); k++)
-			{
-				for (int m = deleted2.size() - 1; m >= 0; m--)
-				{
-					if (indices2[k] >= deleted2[m])
-						indices2[k]--;
-				}
-			}
-			indices->Release();
-
-			//reindex extents, used for getting original geometry
-			for (int k = deleted2.size() - 1; k >= 0; k--)
-			{
-				for (int m = 0; m < wallarray[i]->handles[j].index_extents.size(); m++)
-				{
-					Ogre::Vector2 extents = wallarray[i]->handles[j].index_extents[m];
-					if (deleted2[k] < extents.x)
-						extents.x--;
-					if (deleted2[k] < extents.y)
-						extents.y--;
-					wallarray[i]->handles[j].index_extents[m] = extents;
-				}
-			}
-		}
-	}
 }
 
 WallPolygon::WallPolygon()
@@ -1306,9 +695,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	object->SetValues(this, parent, "Mesh", name, false);
 
 	enabled = true;
-	//create a new mesh wrapper and factory
-	Ogre::String factname = name;
-	factname.append(" factory");
 
 	Ogre::String buffer;
 	Ogre::String Name = name;
@@ -1317,8 +703,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	if (!filename)
 	{
-		//create mesh wrapper and factory
-		MeshWrapper = CS::Geometry::GeneralMeshBuilder::CreateFactoryAndMesh(sbs->engine, sbs->area, Name, factname);
+		//create mesh
+		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	}
 	else
 	{
@@ -1331,18 +717,18 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 		return;
 
 	//set zbuf mode to "USE" by default
-	MeshWrapper->SetZBufMode(CS_ZBUF_USE);
+	//MeshWrapper->SetZBufMode(CS_ZBUF_USE);
 
 	//set render priority to "object" by default
-	MeshWrapper->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
+	//MeshWrapper->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
 	//create a default material (otherwise the system complains if a mesh is used without a material)
-	if (!MeshWrapper->GetMeshObject()->GetMaterialWrapper())
-		MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
+	//if (!MeshWrapper->GetMeshObject()->GetMaterialWrapper())
+		//MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
 	//set maximum render distance
-	if (max_render_distance > 0)
-		MeshWrapper->SetMaximumRenderDistance(sbs->ToRemote(max_render_distance));
+	//if (max_render_distance > 0)
+		//MeshWrapper->SetMaximumRenderDistance(sbs->ToRemote(max_render_distance));
 
 	//rescale if a loaded model
 	if (filename)
@@ -1352,7 +738,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	//State->SetLighting(false);
 	//State->SetShadowCasting(false);
-	State->SetShadowReceiving(true);
+	//State->SetShadowReceiving(true);
 	//State->SetManualColors(false);
 }
 
@@ -1372,7 +758,9 @@ MeshObject::~MeshObject()
 	if (sbs->FastDelete == false)
 	{
 		sbs->DeleteMeshHandle(this);
-		sbs->engine->WantToDie(MeshWrapper);
+		MeshWrapper->
+		//sbs->engine->WantToDie(MeshWrapper);
+		delete MeshWrapper;
 	}
 
 	MeshWrapper = 0;
@@ -1386,7 +774,7 @@ void MeshObject::Enable(bool value)
 	if (value == enabled)
 		return;
 
-	if (value == true)
+	/*if (value == true)
 	{
 		MeshWrapper->GetFlags().Reset(CS_ENTITY_INVISIBLEMESH);
 		MeshWrapper->GetFlags().Reset(CS_ENTITY_NOSHADOWS);
@@ -1397,7 +785,7 @@ void MeshObject::Enable(bool value)
 		MeshWrapper->GetFlags().Set(CS_ENTITY_INVISIBLEMESH);
 		MeshWrapper->GetFlags().Set(CS_ENTITY_NOSHADOWS);
 		MeshWrapper->GetFlags().Set(CS_ENTITY_NOHITBEAM);
-	}
+	}*/
 	enabled = value;
 }
 
@@ -1406,7 +794,7 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 	//create a new wall object in the given array
 
 	Walls.resize(Walls.size() + 1);
-	Walls[Walls.size() - 1] = new WallObject(MeshWrapper, Submeshes);
+	Walls[Walls.size() - 1] = new WallObject(this, Submeshes);
 	Walls[Walls.size() - 1]->name = name;
 	Walls[Walls.size() - 1]->parent_array = &Walls;
 	Walls[Walls.size() - 1]->SetValues(Walls[Walls.size() - 1], parent, "Wall", name, false);
@@ -1588,4 +976,625 @@ void MeshObject::Rotate(const Ogre::Vector3 rotation, float speed)
 Ogre::Vector3 MeshObject::GetRotation()
 {
 	return Ogre::Vector3(rotX, rotY, rotZ);
+}
+
+void MeshObject::AddVertex(Geometry &vertex_geom)
+{
+	//add a vertex to the mesh
+	MeshGeometry.push_back(vertex_geom);
+}
+
+void MeshObject::RemoveVertex(int index)
+{
+	//remove a vertex from the mesh
+
+	if (index < 0 || index >= MeshGeometry.size())
+		return;
+
+	MeshGeometry.erase(MeshGeometry.begin() + index);
+
+	//TODO: reindex triangles here
+}
+
+void MeshObject::AddTriangle(int submesh, Ogre::Vector3 &triangle)
+{
+	//add a triangle to the mesh
+	Triangles[submesh].triangles.push_back(triangle);
+}
+
+void MeshObject::RemoveTriangle(int submesh, int index)
+{
+	//remove a triangle from the mesh
+
+	if (index < 0 || index >= Triangles[submesh].triangles.size())
+		return;
+
+	Triangles[submesh].triangles.erase(Triangles[submesh].triangles.begin() + index);
+}
+
+std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
+{
+	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
+
+	//get texture material
+	Ogre::String texname = texture;
+	bool result;
+	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName().c_str());
+	if (!result)
+		texname = "Default";
+
+	if (tw == 0)
+		tw = 1;
+	if (th == 0)
+		th = 1;
+
+	/*if (Shaders == true)
+	{
+		csRef<iStringSet> strset = csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset");
+		csRef<iShaderManager> shadermgr = csQueryRegistry<iShaderManager> (object_reg);
+		iMaterial* mat = material->GetMaterial();
+		//Ogre::StringID t = strset->Request("ambient");
+		Ogre::StringID t = strset->Request("diffuse");
+		//iShader* sh = shadermgr->GetShader("fullbright");
+		//iShader* sh = shadermgr->GetShader("ambient");
+		iShader* sh = shadermgr->GetShader("light");
+		mat->SetShader(t, sh);
+	}*/
+
+	//get autosize information
+	Ogre::Vector2 xextents = GetExtents(vertices, 1);
+	Ogre::Vector2 yextents = GetExtents(vertices, 2);
+	Ogre::Vector2 zextents = GetExtents(vertices, 3);
+
+	Ogre::Vector2 sizing;
+	sizing.x = tw;
+	sizing.y = th;
+
+	if (autosize == true)
+		sizing = sbs->CalculateSizing(texture, xextents, yextents, zextents, tw, th);
+
+	//get texture tiling information
+	float tw2 = sizing.x, th2 = sizing.y;
+	float mw, mh;
+	if (GetTextureTiling(texname.c_str(), mw, mh))
+	{
+		//multiply the tiling parameters (tw and th) by
+		//the stored multipliers for that texture
+		tw2 = sizing.x * mw;
+		th2 = sizing.y * mh;
+	}
+
+	//convert to remote positioning
+	std::vector<std::vector<Ogre::Vector3> > vertices2;
+	vertices2.resize(1);
+
+	for (int i = 0; i < vertices.size(); i++)
+		vertices2[0].push_back(ToRemote(vertices[i]));
+
+	//texture mapping
+	Ogre::Vector3 v1, v2, v3;
+	GetTextureMapping(vertices2[0], v1, v2, v3);
+	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
+		v1,
+		Ogre::Vector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
+		v2,
+		Ogre::Vector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
+		v3,
+		Ogre::Vector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
+		return 0;
+
+	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
+}
+
+std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
+{
+	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
+
+	//convert to remote positioning
+	std::vector<std::vector<Ogre::Vector3> > vertices2;
+	if (convert_vertices == true)
+	{
+		vertices2.resize(vertices.size());
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			for (int j = 0; j < vertices[i].size(); j++)
+				vertices2[i].push_back(ToRemote(vertices[i][j]));
+		}
+	}
+	else
+		vertices2 = vertices;
+
+	//texture mapping
+	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2);
+
+	//triangulate mesh
+	struct TriangleMesh
+	{
+		std::vector<Ogre::Vector3> triangles; //triangles have a, b and c components (each a vertex index)
+		std::vector<Ogre::Vector3> vertices; //vertices have x, y and z components
+	};
+
+	std::vector<TriangleMesh> trimesh;
+	trimesh.resize(vertices2.size());
+
+	for (int i = 0; i < trimesh.size(); i++)
+	{
+		//first fill triangle mesh with polygon's vertices
+		for (int j = 0; j < vertices2[i].size(); j++)
+			trimesh[i].vertices.push_back(vertices2[i][j]);
+
+		//then do a (very) simple triangulation
+		//this method also works (sort of) with non-planar polygons
+		for (int j = 2; j < vertices2[i].size(); j++)
+			trimesh[i].triangles.push_back(Ogre::Vector3(0, j - 1, j));
+	}
+
+	//set up geometry array
+	std::vector<Geometry> mesh_geometry;
+
+	//initialize geometry arrays
+	int size = 0;
+	for (int i = 0; i < trimesh.size(); i++)
+		size += trimesh[i].vertices.size();
+	mesh_geometry.resize(size);
+
+	//get number of existing vertices
+	int count = MeshGeometry.size();
+
+	//populate vertices, normals, and texels for mesh data
+	int k = 0;
+
+	for (int i = 0; i < trimesh.size(); i++)
+	{
+		for (int j = 0; j < trimesh[i].vertices.size(); j++)
+		{
+			mesh_geometry[k].normal = mesh_geometry[k].vertex = trimesh[i].vertices[j];
+			mesh_geometry[k].normal.normalise();
+			mesh_geometry[k].texel = table[k];
+
+			//add geometry to mesh	
+			AddVertex(mesh_geometry[k]);
+			k++;
+		}
+	}
+
+	//delete texel array
+	if (table)
+		delete table;
+	table = 0;
+
+	//delete geometry array
+	mesh_geometry.clear();
+
+	//add triangles to single array, to be passed to the submesh
+	std::vector<Ogre::Vector3> triangles;
+
+	int location = 0;
+	for (int i = 0; i < trimesh.size(); i++)
+	{
+		for (int j = 0; j < trimesh[i].triangles.size(); j++)
+		{
+			Ogre::Vector3 tri = trimesh[i].triangles[j];
+			tri.x += count + location;
+			tri.y += count + location;
+			tri.z += count + location;
+			triangles.push_back(tri);
+		}
+		location += trimesh[i].vertices.size();
+	}
+
+	//create submesh and set material
+	ProcessSubMesh(triangles, material, name, true);
+
+	//recreate colliders if specified
+	if (RecreateColliders == true)
+	{
+		DeleteColliders(mesh);
+		CreateColliders(mesh);
+	}
+
+	return triangles;
+}
+
+bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
+{
+	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
+	//given an array of vertices, this returns the texture transformation matrix and vector
+
+	//original description:
+	// Some explanation. We have three points for
+	// which we know the uv coordinates. This gives:
+	//     P1 -> UV1
+	//     P2 -> UV2
+	//     P3 -> UV3
+	// P1, P2, and P3 are on the same plane so we can write:
+	//     P = P1 + lambda * (P2-P1) + mu * (P3-P1)
+	// For the same lambda and mu we can write:
+	//     UV = UV1 + lambda * (UV2-UV1) + mu * (UV3-UV1)
+	// What we want is Po, Pu, and Pv (also on the same
+	// plane) so that the following uv coordinates apply:
+	//     Po -> 0,0
+	//     Pu -> 1,0
+	//     Pv -> 0,1
+	// The UV equation can be written as follows:
+	//     U = U1 + lambda * (U2-U1) + mu * (U3-U1)
+	//     V = V1 + lambda * (V2-V1) + mu * (V3-V1)
+	// This is a matrix equation (2x2 matrix):
+	//     UV = UV1 + M * PL
+	// We have UV in this case and we need PL so we
+	// need to invert this equation:
+	//     (1/M) * (UV - UV1) = PL
+
+	csMatrix2 m (uv2.x - uv1.x, uv3.x - uv1.x, uv2.y - uv1.y, uv3.y - uv1.y);
+	float det = m.Determinant();
+
+	if (ABS(det) < 0.0001f)
+	{
+		ReportError("Warning: bad UV coordinates");
+
+		/*if (!((p1-p2) < SMALL_EPSILON))
+			SetTextureSpace(p1, p2, 1);
+		else if (!((p1-p3) < SMALL_EPSILON))
+			SetTextureSpace(p1, p3, 1);*/
+		return false;
+	}
+	else
+		m.Invert();
+
+	Ogre::Vector2 pl;
+	Ogre::Vector3 po, pu, pv;
+
+	// For (0,0) and Po
+	pl = m * (Ogre::Vector2(0, 0) - uv1);
+	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+
+	// For (1,0) and Pu
+	pl = m * (Ogre::Vector2(1, 0) - uv1);
+	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+
+	// For (0,1) and Pv
+	pl = m * (Ogre::Vector2(0, 1) - uv1);
+	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+
+	ComputeTextureSpace(t_matrix, t_vector, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
+	return true;
+}
+
+bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
+{
+	//from CS textrans.cpp
+	
+	float d = csSquaredDist::PointPoint(v_orig, v1);
+	float invl1 = csQisqrt(d);
+
+	d = csSquaredDist::PointPoint(v_orig, v2);
+	float invl2 = (d) ? csQisqrt (d) : 0;
+
+	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
+	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
+	Ogre::Vector3 v_w = v_u % v_v;
+
+	m.m11 = v_u.x;
+	m.m12 = v_v.x;
+	m.m13 = v_w.x;
+	m.m21 = v_u.y;
+	m.m22 = v_v.y;
+	m.m23 = v_w.y;
+	m.m31 = v_u.z;
+	m.m32 = v_v.z;
+	m.m33 = v_w.z;
+
+	v = v_orig;
+
+	float det = m.Determinant ();
+	if (ABS (det) < SMALL_EPSILON)
+	{
+		m.Identity();
+		return false;
+	}
+	else
+		m.Invert ();
+
+	return true;
+}
+
+Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices)
+{
+	//return texel array for specified texture transformation matrix and vector
+
+	csTransform transform(tex_matrix, tex_vector);
+
+	//create array for texel map
+	int texel_count = 0;
+	for (int i = 0; i < vertices.size(); i++)
+		texel_count += vertices[i].size();
+	Ogre::Vector2 *texels = new Ogre::Vector2[texel_count];
+
+	//transform matrix into texel map
+	int index = 0;
+	Ogre::Vector3 texel_temp;
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		for (int j = 0; j < vertices[i].size(); j++)
+		{
+			texel_temp = transform.Other2This(vertices[i][j]);
+			texels[index].x = texel_temp.x;
+			texels[index].y = texel_temp.y;
+			index++;
+		}
+	}
+	return texels;
+}
+
+int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Material* material, const char *name, bool add)
+{
+	//processes submeshes for new or removed geometry
+	//(uploads vertex and index arrays to graphics card, and applies material)
+
+	//arrays must be populated correctly before this function is called
+
+	//first get related submesh
+	int index = FindMatchingSubMesh(material);
+
+	bool createnew = false;
+
+	//get existing submesh pointer
+	if (index == -1)
+		createnew = true;
+	else
+		Ogre::SubMesh *submesh = submeshes[index];
+
+	//delete submesh and exit if it's going to be emptied
+	if (tricount <= 0 && createnew == false)
+	{
+		MeshWrapper->DeleteSubMesh(submesh);
+		Submeshes.erase(Submeshes.begin() + index);
+		return -1;
+	}
+
+	//add triangles
+	if (add == true)
+	{
+		for (int i = 0; i < indices->size(); i++)
+			AddTriangle(index, indices[i]);
+	}
+	else
+	{
+		//remove triangles
+		for (int i = 0; i < Triangles[index].triangles.size(); i++)
+		{
+			for (int j = 0; j < indices->size(); j++)
+			{
+				if (Triangles[index].triangles[i].x == indices[j].x && Triangles[index].triangles[i].y == indices[j].y && Triangles[index].triangles[i].z == indices[j].z)
+				{
+					//delete match
+					RemoveTriangle(index, i);
+					break;
+				}
+			}
+		}
+	}
+
+	//set up vertex buffer
+	Ogre::VertexData* data = new Ogre::VertexData();
+	MeshWrapper->sharedVertexData = data;
+	data->vertexCount = MeshGeometry.size();
+	Ogre::VertexDeclaration* decl = data->vertexDeclaration;
+
+	//set up vertex data elements
+	size_t offset = 0;
+	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_POSITION); //vertices
+	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL); //normals
+	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
+	//decl->addElement(0, offset, Ogre::VET_COLOUR, Ogre::VES_DIFFUSE); //diffuse colors
+	//offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
+	//decl->addElement(0, offset, Ogre::VET_COLOUR, Ogre::VES_SPECULAR); //specular colors
+	//offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
+	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
+	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT2);
+
+	//create vertex hardware buffer
+	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), MeshGeometry.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+
+	//populate buffer with vertex geometry
+	float *data = (float*)(vbuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
+	int loc = 0;
+	for (size_t i = 0; i < MeshGeometry.size(); i++)
+	{
+		data[loc + 0] = MeshGeometry[i].vertex.x;
+		data[loc + 1] = MeshGeometry[i].vertex.y;
+		data[loc + 2] = MeshGeometry[i].vertex.z;
+		data[loc + 3] = MeshGeometry[i].normal.x;
+		data[loc + 4] = MeshGeometry[i].normal.y;
+		data[loc + 5] = MeshGeometry[i].normal.z;
+		data[loc + 6] = MeshGeometry[i].texel.x;
+		data[loc + 7] = MeshGeometry[i].texel.y;
+		loc += 8;
+	}
+	vbuffer->unlock();
+	
+	//bind vertex data to mesh
+	Ogre::VertexBufferBinding* bind = data->vertexBufferBinding;
+	bind->setBinding(0, vbuffer);
+
+	//create index hardware buffer
+	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, Triangles.size() * 3, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+
+	//populate buffer with triangle indices
+	unsigned int *data2 = (unsigned int*)(ibuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
+	loc = 0;
+	for (size_t i = 0; i < Triangles.size(); i++)
+	{
+		data2[loc + 0] = Triangles[index].triangles[i].x;
+		data2[loc + 1] = Triangles[index].triangles[i].y;
+		data2[loc + 2] = Triangles[index].triangles[i].z;
+		loc += 3;
+	}
+	ibuffer->unlock();
+
+	if (createnew == false)
+	{
+		//delete old submesh
+		MeshWrapper->DeleteSubMesh(submesh);
+		Submeshes.erase(Submeshes.begin() + index);
+	}
+
+	//create submesh
+	Ogre::SubMesh* newsubmesh = MeshWrapper->createSubMesh(name);
+	Submeshes.push_back(newsubmesh);
+	index = Submeshes.size() - 1;
+
+	//bind index data to submesh
+	newsubmesh->indexData->indexBuffer = ibuffer;
+	newsubmesh->indexData->indexCount = Triangles.size() * 3;
+	newsubmesh->indexData->indexStart = 0;
+
+	//TODO - bind material
+	//Ogre::SubMesh newsubmesh = MeshWrapper->AddSubMesh(newbuffer, material, name);
+
+	return index;
+}
+
+int MeshObject::FindMatchingSubMesh(Ogre::Material *material)
+{
+	//find a submesh with a matching material
+	//returns array index
+
+	for (int i = 0; i < Submeshes.size(); i++)
+	{
+		if (Submeshes[i]->GetMaterial() == material)
+			return i;
+	}
+	return -1;
+}
+
+void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices)
+{
+	//delete related mesh vertices using provided index array
+	//then reindex all mesh triangle indices in all submeshes.
+	//this should be done after a polygon is deleted
+	//also, all wall objects in wall arrays must have the same mesh state
+
+	//exit if wall array is empty
+	if (wallarray.size() == 0)
+		return;
+
+	//get integer array of triangle indices
+	std::vector<int> indices;
+	int* buffer2 = (int*)deleted_indices->Lock(CS_BUF_LOCK_NORMAL);
+	for (int i = 0; i < deleted_indices->GetElementCount(); i++)
+		indices.push_back(buffer2[i]);
+	deleted_indices->Release();
+
+	//set up new geometry arrays
+	std::vector<Ogre::Vector3> mesh_vertices;
+	std::vector<Ogre::Vector2> mesh_texels;
+	std::vector<Ogre::Vector3> mesh_normals;
+	std::vector<csColor4> mesh_colors;
+
+	//copy mesh data
+	for (int i = 0; i < state->getVertexCount(); i++)
+	{
+		mesh_vertices.push_back(state->GetVertices()[i]);
+		mesh_texels.push_back(state->GetTexels()[i]);
+		mesh_normals.push_back(state->GetNormals()[i]);
+		mesh_colors.push_back(state->GetColors()[i]);
+	}
+
+	//construct new sorted and compressed index array
+	std::vector<int> deleted2;
+	for (int i = 0; i < indices.size(); i++)
+		deleted2.push_back(indices[i]);
+	sort(deleted2);
+
+	indices.clear();
+
+	//delete specified vertices
+	for (int i = deleted2.size() - 1; i >= 0; i--)
+	{
+		int index = deleted2[i];
+		mesh_vertices.erase(mesh_vertices.begin() + index);
+		mesh_texels.erase(mesh_texels.begin() + index);
+		mesh_normals.erase(mesh_normals.begin() + index);
+		mesh_colors.erase(mesh_colors.begin() + index);
+	}
+
+	//refill original mesh data
+	state->SetVertexCount(mesh_vertices.size());
+	for (int i = 0; i < mesh_vertices.size(); i++)
+	{
+		state->GetVertices()[i] = mesh_vertices[i];
+		state->GetTexels()[i] = mesh_texels[i];
+		state->GetNormals()[i] = mesh_normals[i];
+		state->GetColors()[i] = mesh_colors[i];
+	}
+
+	mesh_vertices.clear();
+	mesh_texels.clear();
+	mesh_normals.clear();
+	mesh_colors.clear();
+
+	//reindex triangle indices in all submeshes
+	for (int i = 0; i < state->GetSubMeshCount(); i++)
+	{
+		Ogre::HardwareIndexBuffer *indices = state->GetSubMesh(i)->GetIndices();
+
+		if (!indices)
+			continue;
+
+		int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
+
+		for (int j = 0; j < indices->GetElementCount(); j++)
+		{
+			for (int k = deleted2.size() - 1; k >= 0; k--)
+			{
+				if (indices2[j] >= deleted2[k])
+					indices2[j]--;
+			}
+		}
+		indices->Release();
+	}
+
+	//reindex triangle indices in all wall objects
+	for (int i = 0; i < wallarray.size(); i++)
+	{
+		if (!wallarray[i])
+			continue;
+
+		for (int j = 0; j < wallarray[i]->handles.size(); j++)
+		{
+			Ogre::HardwareIndexBuffer* indices = wallarray[i]->handles[j].triangles;
+
+			if (!indices)
+				continue;
+
+			int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
+
+			//reindex triangle indices
+			for (int k = 0; k < indices->GetElementCount(); k++)
+			{
+				for (int m = deleted2.size() - 1; m >= 0; m--)
+				{
+					if (indices2[k] >= deleted2[m])
+						indices2[k]--;
+				}
+			}
+			indices->Release();
+
+			//reindex extents, used for getting original geometry
+			for (int k = deleted2.size() - 1; k >= 0; k--)
+			{
+				for (int m = 0; m < wallarray[i]->handles[j].index_extents.size(); m++)
+				{
+					Ogre::Vector2 extents = wallarray[i]->handles[j].index_extents[m];
+					if (deleted2[k] < extents.x)
+						extents.x--;
+					if (deleted2[k] < extents.y)
+						extents.y--;
+					wallarray[i]->handles[j].index_extents[m] = extents;
+				}
+			}
+		}
+	}
 }

@@ -34,6 +34,21 @@ public:
 	Object *object; //SBS object
 	Ogre::String name; //mesh name
 
+	//define geometry type
+	struct Geometry
+	{
+		//basic 3D geometry
+		Ogre::Vector3 vertex;
+		Ogre::Vector2 texel;
+		Ogre::Vector3 normal;
+	};
+	struct TriangleIndices
+	{
+		//per-submesh triangle indices
+		std::vector<Ogre::Vector3> triangles; //triangle data, in A B C values
+		Ogre::IndexData *databuffer; //used to find the related submesh
+	};
+
 	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1);
 	~MeshObject();
 	void Enable(bool value);
@@ -48,9 +63,22 @@ public:
 	void Rotate(const Ogre::Vector3 rotation, float speed);
 	void SetRotation(const Ogre::Vector3 rotation);
 	Ogre::Vector3 GetRotation();
+	void AddVertex(Geometry &vertex_geom);
+	void RemoveVertex(int index);
+	void AddTriangle(int submesh, Ogre::Vector3 &triangle);
+	void RemoveTriangle(int submesh, int index);
+	std::vector<Ogre::Vector3>* PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices);
+	std::vector<Ogre::Vector3>* PolyMesh(const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices = true);
+	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
+	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices);
+	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Material* material, const char *name, bool add);
+	int FindMatchingSubMesh(Ogre::Material *material);
+	void DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices);
 	
-	Ogre::Mesh* MeshWrapper; //building mesh
-	std::vector<Ogre::SubMesh> Submeshes;
+	Ogre::Mesh* MeshWrapper; //mesh
+	std::vector<Geometry> MeshGeometry;
+	std::vector<TriangleIndices> Triangles;
+	std::vector<Ogre::SubMesh*> Submeshes;
 	std::vector<WallObject*> Walls;
 	Ogre::Entity *Movable;
 
@@ -58,12 +86,13 @@ private:
 	bool enabled;
 	//csRef<iCollection> collection;
 	float rotX, rotY, rotZ;
+	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);
 };
 
 class SBSIMPEXP WallPolygon
 {
 public:
-	std::vector<Ogre::SubMesh> *submeshes;
+	std::vector<Ogre::SubMesh*> *submeshes;
 	Ogre::HardwareIndexBuffer* triangles;
 	Ogre::Plane plane;
 

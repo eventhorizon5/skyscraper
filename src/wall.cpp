@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-WallObject::WallObject(Ogre::Mesh* wrapper, std::vector<Ogre::SubMesh> &submeshes, Object *proxy, bool temporary) : Object(temporary)
+WallObject::WallObject(MeshObject* wrapper, std::vector<Ogre::SubMesh*> &submeshes, Object *proxy, bool temporary) : Object(temporary)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
@@ -191,7 +191,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	if (index > -1 && index < handles.size())
 	{
 		//delete triangles
-		sbs->ReindexSubMesh(meshwrapper, *handles[index].submeshes, handles[index].triangles, handles[index].material, handles[index].name.c_str(), false);
+		sbs->ProcessSubMesh(meshwrapper, *handles[index].submeshes, handles[index].triangles, handles[index].material, handles[index].name.c_str(), false);
 
 		//delete related mesh vertices
 		sbs->DeleteVertices(*parent_array, handles[index].triangles);

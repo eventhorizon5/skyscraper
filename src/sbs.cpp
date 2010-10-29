@@ -853,7 +853,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	return true;
 }
 
-int SBS::AddWallMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddWallMain(Object *parent, MeshObject* mesh, std::vector<Ogre::SubMesh*> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
@@ -1081,7 +1081,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	return 0;
 }
 
-int SBS::AddFloorMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddFloorMain(Object *parent, MeshObject* mesh, std::vector<Ogre::SubMesh*> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, submeshes, parent, true);
 	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, autosize);
