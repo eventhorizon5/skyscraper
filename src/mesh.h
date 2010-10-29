@@ -93,7 +93,7 @@ class SBSIMPEXP WallPolygon
 {
 public:
 	std::vector<Ogre::SubMesh*> *submeshes;
-	Ogre::HardwareIndexBuffer* triangles;
+	std::vector<Ogre::Vector3> triangles;
 	Ogre::Plane plane;
 
 	//array holding index extents, to get original geometry

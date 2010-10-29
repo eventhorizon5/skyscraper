@@ -1586,7 +1586,7 @@ void SBS::CreateSky(const char *filenamebase)
 {
 	//create skybox
 
-	/*
+
 	Ogre::String file = filenamebase;
 	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
 
@@ -1607,53 +1607,51 @@ void SBS::CreateSky(const char *filenamebase)
 	sbs->ResetTextureMapping(true);
 	WallObject *wall = new WallObject(SkyBox->MeshWrapper, SkyBox->Submeshes, SkyBox->object, true);
 
-	csBox3 box (Ogre::Vector3(-skysize, -skysize, -skysize), Ogre::Vector3(skysize, skysize, skysize));
 	wall->AddQuad( //front
 		"SkyFront",
 		"SkyFront",
-		box.GetCorner(CS_BOX_CORNER_xyz),
-		box.GetCorner(CS_BOX_CORNER_Xyz),
-		box.GetCorner(CS_BOX_CORNER_XYz),
-		box.GetCorner(CS_BOX_CORNER_xYz), 1, 1, false);
+		Ogre::Vector3(-skysize, -skysize, -skysize),
+		Ogre::Vector3(skysize, -skysize, -skysize),
+		Ogre::Vector3(skysize, skysize, -skysize),
+		Ogre::Vector3(-skysize, skysize, -skysize), 1, 1, false);
 	wall->AddQuad( //right
 		"SkyRight",
 		"SkyRight",
-		box.GetCorner(CS_BOX_CORNER_Xyz),
-		box.GetCorner(CS_BOX_CORNER_XyZ),
-		box.GetCorner(CS_BOX_CORNER_XYZ),
-		box.GetCorner(CS_BOX_CORNER_XYz), 1, 1, false);
+		Ogre::Vector3(skysize, -skysize, -skysize),
+		Ogre::Vector3(skysize, -skysize, skysize),
+		Ogre::Vector3(skysize, skysize, skysize),
+		Ogre::Vector3(skysize, skysize, -skysize), 1, 1, false);
 	wall->AddQuad( //back
 		"SkyBack",
 		"SkyBack",
-		box.GetCorner(CS_BOX_CORNER_XyZ),
-		box.GetCorner(CS_BOX_CORNER_xyZ),
-		box.GetCorner(CS_BOX_CORNER_xYZ),
-		box.GetCorner(CS_BOX_CORNER_XYZ), 1, 1, false);
+		Ogre::Vector3(skysize, -skysize, skysize),
+		Ogre::Vector3(-skysize, -skysize, skysize),
+		Ogre::Vector3(-skysize, skysize, skysize),
+		Ogre::Vector3(skysize, skysize, skysize), 1, 1, false);
 	wall->AddQuad( //left
 		"SkyLeft",
 		"SkyLeft",
-		box.GetCorner(CS_BOX_CORNER_xyZ),
-		box.GetCorner(CS_BOX_CORNER_xyz),
-		box.GetCorner(CS_BOX_CORNER_xYz),
-		box.GetCorner(CS_BOX_CORNER_xYZ), 1, 1, false);
+		Ogre::Vector3(-skysize, -skysize, skysize),
+		Ogre::Vector3(-skysize, -skysize, -skysize),
+		Ogre::Vector3(-skysize, skysize, -skysize),
+		Ogre::Vector3(-skysize, skysize, skysize), 1, 1, false);
 	wall->AddQuad( //bottom
 		"SkyBottom",
 		"SkyBottom",
-		box.GetCorner(CS_BOX_CORNER_xyZ),
-		box.GetCorner(CS_BOX_CORNER_XyZ),
-		box.GetCorner(CS_BOX_CORNER_Xyz),
-		box.GetCorner(CS_BOX_CORNER_xyz), 1, 1, false);
+		Ogre::Vector3(-skysize, -skysize, skysize),
+		Ogre::Vector3(skysize, -skysize, skysize),
+		Ogre::Vector3(skysize, -skysize, -skysize),
+		Ogre::Vector3(-skysize, -skysize, -skysize), 1, 1, false);
 	wall->AddQuad( //top
 		"SkyTop",
 		"SkyTop",
-		box.GetCorner(CS_BOX_CORNER_xYz),
-		box.GetCorner(CS_BOX_CORNER_XYz),
-		box.GetCorner(CS_BOX_CORNER_XYZ),
-		box.GetCorner(CS_BOX_CORNER_xYZ), 1, 1, false);
+		Ogre::Vector3(-skysize, skysize, -skysize),
+		Ogre::Vector3(skysize, skysize, -skysize),
+		Ogre::Vector3(skysize,skysize, -skysize),
+		Ogre::Vector3(-skysize, skysize, skysize), 1, 1, false);
 
 	sbs->ResetTextureMapping();
 	delete wall;
-	*/
 }
 
 int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)

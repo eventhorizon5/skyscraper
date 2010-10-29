@@ -36,18 +36,18 @@ void SBS::DumpVertices(WallObject* wallobject)
 	//dumps a list of vertices from a mesh object to the console/logfile
 
 	Report("--- Polygon Vertex Dump ---\n");
-	for (int i = 0; i < mesh->getVertexCount(); i++)
+	/*for (int i = 0; i < mesh->getVertexCount(); i++)
 	{
 		Ogre::Vector3 vertex = mesh->GetVertices()[i];
 		Report(Ogre::String(_itoa(i, intbuffer, 10)) + ": " + Ogre::String(_gcvt(vertex.x, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.y, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.z, 6, buffer)));
-	}
+	}*/
 }
 
-Ogre::Vector2 SBS::GetExtents(const Ogre::Vector3 *varray, int count, int coord)
+Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
-	//first parameter must be a vertex array object
+	//first parameter must be a vertex array
 	//second must be either 1 (for x), 2 (for y) or 3 (for z)
 
 	float esmall = 0;
@@ -59,7 +59,7 @@ Ogre::Vector2 SBS::GetExtents(const Ogre::Vector3 *varray, int count, int coord)
 	if (coord < 1 || coord > 3)
 		return Ogre::Vector2(0, 0);
 
-	for (i = 0; i < count; i++)
+	for (i = 0; i < varray.size(); i++)
 	{
 		if (coord == 1)
 			tempnum = varray[i].x;
@@ -85,15 +85,10 @@ Ogre::Vector2 SBS::GetExtents(const Ogre::Vector3 *varray, int count, int coord)
 	return Ogre::Vector2(esmall, ebig);
 }
 
-Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord)
+/*Ogre::Vector2 SBS::GetExtents(Ogre::Mesh* mesh, int coord)
 {
-	return GetExtents(varray, coord);
-}
-
-Ogre::Vector2 SBS::GetExtents(Ogre::Mesh* mesh, int coord)
-{
-	return GetExtents(mesh->GetVertices(), mesh->getVertexCount(), coord);
-}
+	return GetExtents(mesh->GetVertices(), coord);
+}*/
 
 Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
@@ -758,8 +753,7 @@ MeshObject::~MeshObject()
 	if (sbs->FastDelete == false)
 	{
 		sbs->DeleteMeshHandle(this);
-		MeshWrapper->
-		//sbs->engine->WantToDie(MeshWrapper);
+		sbs->engine->WantToDie(MeshWrapper);
 		delete MeshWrapper;
 	}
 

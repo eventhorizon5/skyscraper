@@ -30,11 +30,10 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-WallObject::WallObject(MeshObject* wrapper, std::vector<Ogre::SubMesh*> &submeshes, Object *proxy, bool temporary) : Object(temporary)
+WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Object(temporary)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
-	submesh_array = &submeshes;
 
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)
@@ -73,7 +72,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
+	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
 
 	if (!triangles)
 		return 0;
@@ -84,7 +83,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
 
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
+	int index = CreateHandle(*triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
@@ -99,7 +98,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, Ogre:
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
+	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
 
 	if (!triangles)
 		return 0;
@@ -110,7 +109,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, Ogre:
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
 
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
+	int index = CreateHandle(*triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
@@ -119,7 +118,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::Material* material, 
 	//add a set of polygons, providing the original material and texture mapping
 	Ogre::String name2 = ProcessName(name);
 	std::vector<Ogre::Vector2> index_extents;
-	Ogre::HardwareIndexBuffer* triangles = sbs->PolyMesh(meshwrapper, *submesh_array, name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents);
+	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents);
 
 	if (!triangles)
 		return 0;
@@ -127,11 +126,11 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::Material* material, 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(vertices[0][0], vertices[0][1], vertices[0][2]);
 
-	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
+	int index = CreateHandle(*triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
-int WallObject::CreateHandle(Ogre::HardwareIndexBuffer* triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::Material* material, const char *name, Ogre::Plane &plane)
+int WallObject::CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::Material* material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 	int i = handles.size();
@@ -142,14 +141,8 @@ int WallObject::CreateHandle(Ogre::HardwareIndexBuffer* triangles, std::vector<O
 	handles[i].t_vector = tex_vector;
 	handles[i].material = material;
 	handles[i].plane = plane;
+	handles[i].triangles = &triangles;
 	SetPolygonName(i, name);
-
-	//copy triangle data into new buffer (this prevents active buffers from being stored into the handle)
-	int *data = (int*)triangles->Lock(CS_BUF_LOCK_NORMAL);
-	int size = triangles->GetElementCount();
-	handles[i].triangles = csRenderBuffer::CreateIndexRenderBuffer(size, CS_BUF_STATIC, CS_BUFCOMP_UNSIGNED_INT, triangles->GetRangeStart(), triangles->GetRangeEnd());
-	handles[i].triangles->CopyInto(data, size);
-	triangles->Release();
 
 	return i;
 }
@@ -191,10 +184,10 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	if (index > -1 && index < handles.size())
 	{
 		//delete triangles
-		sbs->ProcessSubMesh(meshwrapper, *handles[index].submeshes, handles[index].triangles, handles[index].material, handles[index].name.c_str(), false);
+		meshwrapper->ProcessSubMesh(handles[index].triangles, handles[index].material, handles[index].name.c_str(), false);
 
 		//delete related mesh vertices
-		sbs->DeleteVertices(*parent_array, handles[index].triangles);
+		meshwrapper->DeleteVertices(*parent_array, handles[index].triangles);
 
 		//delete polygon
 		handles.erase(handles.begin() + index);
