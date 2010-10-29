@@ -119,8 +119,9 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 		for (int i = 0; i < origpolys[0].size(); i++)
 			original.push_back(origpolys[0][i]);
 
-		csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), Ogre::Plane(original[0], original[1], original[2]), isect, dist);
-		return ToLocal(isect);
+		//TODO: Fix for OGRE
+		//csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), Ogre::Plane(original[0], original[1], original[2]), isect, dist);
+		//return ToLocal(isect);
 	}
 	return Ogre::Vector3(0, 0, 0);
 }
@@ -156,16 +157,16 @@ Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, flo
 	Ogre::Vector2 table[] = {Ogre::Vector2(tw2, th2), Ogre::Vector2(0, th2), Ogre::Vector2(tw2, 0), Ogre::Vector2(0, 0)};
 
 	//create a quad, map the texture, and append to the mesh
-	CS::Geometry::TesselatedQuad wall (Ogre::Vector3(ToRemote(x2), ToRemote(altitude), ToRemote(z2)), Ogre::Vector3(ToRemote(x1), ToRemote(altitude), ToRemote(z1)), Ogre::Vector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(z2)));
+	/*CS::Geometry::TesselatedQuad wall (Ogre::Vector3(ToRemote(x2), ToRemote(altitude), ToRemote(z2)), Ogre::Vector3(ToRemote(x1), ToRemote(altitude), ToRemote(z1)), Ogre::Vector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(z2)));
 	CS::Geometry::TableTextureMapper mapper(table);
 	wall.SetMapper(&mapper);
-	wall.append(mesh->GetFactory());
+	wall.append(mesh->GetFactory());*/
 
 	//set lighting factor
 	//mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
 
 	//set texture
-	mesh->GetMeshObject()->SetMaterialWrapper(material);
+	//mesh->GetMeshObject()->SetMaterialWrapper(material);
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
@@ -1192,108 +1193,6 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Materia
 	}
 
 	return triangles;
-}
-
-bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
-{
-	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
-	//given an array of vertices, this returns the texture transformation matrix and vector
-
-	//original description:
-	// Some explanation. We have three points for
-	// which we know the uv coordinates. This gives:
-	//     P1 -> UV1
-	//     P2 -> UV2
-	//     P3 -> UV3
-	// P1, P2, and P3 are on the same plane so we can write:
-	//     P = P1 + lambda * (P2-P1) + mu * (P3-P1)
-	// For the same lambda and mu we can write:
-	//     UV = UV1 + lambda * (UV2-UV1) + mu * (UV3-UV1)
-	// What we want is Po, Pu, and Pv (also on the same
-	// plane) so that the following uv coordinates apply:
-	//     Po -> 0,0
-	//     Pu -> 1,0
-	//     Pv -> 0,1
-	// The UV equation can be written as follows:
-	//     U = U1 + lambda * (U2-U1) + mu * (U3-U1)
-	//     V = V1 + lambda * (V2-V1) + mu * (V3-V1)
-	// This is a matrix equation (2x2 matrix):
-	//     UV = UV1 + M * PL
-	// We have UV in this case and we need PL so we
-	// need to invert this equation:
-	//     (1/M) * (UV - UV1) = PL
-
-	csMatrix2 m (uv2.x - uv1.x, uv3.x - uv1.x, uv2.y - uv1.y, uv3.y - uv1.y);
-	float det = m.Determinant();
-
-	if (ABS(det) < 0.0001f)
-	{
-		ReportError("Warning: bad UV coordinates");
-
-		/*if (!((p1-p2) < SMALL_EPSILON))
-			SetTextureSpace(p1, p2, 1);
-		else if (!((p1-p3) < SMALL_EPSILON))
-			SetTextureSpace(p1, p3, 1);*/
-		return false;
-	}
-	else
-		m.Invert();
-
-	Ogre::Vector2 pl;
-	Ogre::Vector3 po, pu, pv;
-
-	// For (0,0) and Po
-	pl = m * (Ogre::Vector2(0, 0) - uv1);
-	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
-
-	// For (1,0) and Pu
-	pl = m * (Ogre::Vector2(1, 0) - uv1);
-	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
-
-	// For (0,1) and Pv
-	pl = m * (Ogre::Vector2(0, 1) - uv1);
-	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
-
-	ComputeTextureSpace(t_matrix, t_vector, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
-	return true;
-}
-
-bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
-{
-	//from CS textrans.cpp
-	
-	float d = csSquaredDist::PointPoint(v_orig, v1);
-	float invl1 = csQisqrt(d);
-
-	d = csSquaredDist::PointPoint(v_orig, v2);
-	float invl2 = (d) ? csQisqrt (d) : 0;
-
-	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
-	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
-	Ogre::Vector3 v_w = v_u % v_v;
-
-	m.m11 = v_u.x;
-	m.m12 = v_v.x;
-	m.m13 = v_w.x;
-	m.m21 = v_u.y;
-	m.m22 = v_v.y;
-	m.m23 = v_w.y;
-	m.m31 = v_u.z;
-	m.m32 = v_v.z;
-	m.m33 = v_w.z;
-
-	v = v_orig;
-
-	float det = m.Determinant ();
-	if (ABS (det) < SMALL_EPSILON)
-	{
-		m.Identity();
-		return false;
-	}
-	else
-		m.Invert ();
-
-	return true;
 }
 
 Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices)
