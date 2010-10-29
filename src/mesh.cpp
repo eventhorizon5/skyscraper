@@ -1186,6 +1186,10 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Materia
 	//create submesh and set material
 	ProcessSubMesh(triangles, material, name, true);
 
+	//MeshWrapper->_setBounds(Ogre::AxisAlignedBox(xMin, yMin, zMin, xMax, yMax, zMax));
+	//MeshWrapper->_setBoundingSphereRadius(std::max(xMax - xMin, std::max(yMax - yMin, zMax - zMin)) / 2.0f);
+	MeshWrapper->load();
+
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
