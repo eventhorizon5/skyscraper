@@ -286,6 +286,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\texmap.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\unix.cpp"
 				>
 			</File>
