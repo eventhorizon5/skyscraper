@@ -74,6 +74,8 @@ public:
 	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Material* material, const char *name, bool add);
 	int FindMatchingSubMesh(Ogre::Material *material);
 	void DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices);
+	int Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value);
+	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value);
 	
 	Ogre::Mesh* MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;

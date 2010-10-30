@@ -3,7 +3,7 @@
 /*
 	This code was originally part of Crystal Space
     Copyright (C) 1998-2001 by Jorrit Tyberghein
-	OGRE port and SBS modifications Copyright (C)2010 Ryan Thoryk
+	Modifications Copyright (C)2010 Ryan Thoryk
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -20,11 +20,17 @@
     Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <math.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
+
+#undef EPSILON
+#define EPSILON 0.001f
+#undef SMALL_EPSILON
+#define SMALL_EPSILON 0.000001f
 
 bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
 {
@@ -55,38 +61,62 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	// need to invert this equation:
 	//     (1/M) * (UV - UV1) = PL
 
-	csMatrix2 m (uv2.x - uv1.x, uv3.x - uv1.x, uv2.y - uv1.y, uv3.y - uv1.y);
-	float det = m.Determinant();
+	//set up 2D matrix
+	float m11, m12, m21, m22;
+	m11 = uv2.x - uv1.x;
+	m12 = uv3.x - uv1.x;
+	m21 = uv2.y - uv1.y;
+	m22 = uv3.y - uv1.y;
+	
+	//compute determinant of matrix
+	float det = m11 * m22 - m12 * m21;
 
-	if (ABS(det) < 0.0001f)
+	if (abs(det) < SMALL_EPSILON)
 	{
-		ReportError("Warning: bad UV coordinates");
-
-		/*if (!((p1-p2) < SMALL_EPSILON))
-			SetTextureSpace(p1, p2, 1);
-		else if (!((p1-p3) < SMALL_EPSILON))
-			SetTextureSpace(p1, p3, 1);*/
+		sbs->ReportError("Warning: bad UV coordinates");
 		return false;
 	}
 	else
-		m.Invert();
+	{
+		//invert matrix
+		float inv_det = 1 / (m11 * m22 - m12 * m21);
+		float tmp1, tmp2, tmp3, tmp4;
+		tmp1 = m11;
+		tmp2 = m12;
+		tmp3 = m21;
+		tmp4 = m22;
+
+		m11 = tmp4 * inv_det;
+		m12 = -tmp2 * inv_det;
+		m21 = -tmp3 * inv_det;
+		m22 = tmp1 * inv_det;
+	}
 
 	Ogre::Vector2 pl;
 	Ogre::Vector3 po, pu, pv;
 
 	// For (0,0) and Po
-	pl = m * (Ogre::Vector2(0, 0) - uv1);
+	Ogre::Vector2 v = Ogre::Vector2(0, 0) - uv1;
+	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 
 	// For (1,0) and Pu
-	pl = m * (Ogre::Vector2(1, 0) - uv1);
+	v = Ogre::Vector2(1, 0) - uv1;
+	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 
 	// For (0,1) and Pv
-	pl = m * (Ogre::Vector2(0, 1) - uv1);
+	v = Ogre::Vector2(0, 1) - uv1;
+	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
 
-	ComputeTextureSpace(t_matrix, t_vector, po, pu, (pu - po).Norm(), pv, (pv - po).Norm());
+	//compute norms of vectors
+	Ogre::Vector3 len1 = pu - po;
+	Ogre::Vector3 len2 = pv - po;
+	float len1f = sqrtf(len1.x * len1.x + len1.y * len1.y + len1.z * len1.z);
+	float len2f = sqrtf(len2.x * len2.x + len2.y * len2.y + len2.z * len2.z);
+
+	ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
 	return true;
 }
 
@@ -94,36 +124,165 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 {
 	//originally from Crystal Space's libs/csgeom/textrans.cpp file
 	
-	float d = csSquaredDist::PointPoint(v_orig, v1);
-	float invl1 = csQisqrt(d);
+	float d = v_orig.squaredDistance(v1);
+	//get inverse square of d
+	float invl1 = 1 / sqrtf(d);
 
-	d = csSquaredDist::PointPoint(v_orig, v2);
-	float invl2 = (d) ? csQisqrt (d) : 0;
+	d = v_orig.squaredDistance(v2);
+	//get inverse square of d
+	float invl2 = (d) ? 1 / sqrtf(d) : 0;
 
 	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
 	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
 	Ogre::Vector3 v_w = v_u % v_v;
 
-	m.m11 = v_u.x;
-	m.m12 = v_v.x;
-	m.m13 = v_w.x;
-	m.m21 = v_u.y;
-	m.m22 = v_v.y;
-	m.m23 = v_w.y;
-	m.m31 = v_u.z;
-	m.m32 = v_v.z;
-	m.m33 = v_w.z;
+	m.GetColumn(1).x = v_u.x;
+	m.GetColumn(1).y = v_v.x;
+	m.GetColumn(1).z = v_w.x;
+	m.GetColumn(2).x = v_u.y;
+	m.GetColumn(2).y = v_v.y;
+	m.GetColumn(2).z = v_w.y;
+	m.GetColumn(3).x = v_u.z;
+	m.GetColumn(3).y = v_v.z;
+	m.GetColumn(3).z = v_w.z;
 
 	v = v_orig;
 
-	float det = m.Determinant ();
-	if (ABS (det) < SMALL_EPSILON)
+	float det = m.Determinant();
+	if (abs(det) < SMALL_EPSILON)
 	{
-		m.Identity();
+		m = m.IDENTITY;
 		return false;
 	}
 	else
-		m.Invert ();
+		m = m.Inverse();
 
 	return true;
+}
+
+int MeshObject::Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value)
+{
+	//from Crystal Space libs/csgeom/poly3d.cpp
+	//axis is 0 for X, 1 for Y, 2 for Z
+
+	//return codes:
+	//0 - polygon is on same plane
+	//1 - polygon is in front of plane
+	//2 - polygon is in back of plane
+	//3 - polygon intersects with plane
+
+	int i;
+	int front = 0, back = 0;
+
+	for (i = 0; i < vertices.size(); i++)
+	{
+		float loc = 0;
+		if (axis == 0)
+			loc = vertices[i].x - value;
+		if (axis == 1)
+			loc = vertices[i].y - value;
+		if (axis == 2)
+			loc = vertices[i].z - value;
+
+		if (loc < -EPSILON)
+			front++;
+		else if (loc > EPSILON)
+			back++;
+	}
+
+	if (back == 0 && front == 0)
+		return 0; //polygon is on same plane
+	if (back == 0)
+		return 1; //polygon is in front of plane
+	if (front == 0)
+		return 2; //polygon is in back of plane
+	return 3; //polygon intersects with plane
+}
+
+void MeshObject::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value)
+{
+	//from Crystal Space libs/csgeom/poly3d.cpp
+	//axis is 0 for X, 1 for Y, 2 for Z
+	//splits the "orig" polygon on the desired plane into two resulting polygons
+
+	poly1.clear();
+	poly2.clear();
+
+	Ogre::Vector3 ptB;
+	float sideA, sideB;
+	Ogre::Vector3 ptA = orig[orig.size() - 1];
+
+	if (axis == 0)
+		sideA = ptA.x - value;
+	if (axis == 1)
+		sideA = ptA.y - value;
+	if (axis == 2)
+		sideA = ptA.z - value;
+
+	if (abs(sideA) < SMALL_EPSILON)
+		sideA = 0;
+
+	int i;
+	for (i = -1; ++i < (int)orig.size();)
+	{
+		ptB = orig[i];
+		if (axis == 0)
+			sideB = ptB.x - value;
+		if (axis == 1)
+			sideB = ptB.y - value;
+		if (axis == 2)
+			sideB = ptB.z - value;
+		
+		if (abs(sideB) < SMALL_EPSILON)
+			sideB = 0;
+
+		if (sideB > 0)
+		{
+			if (sideA < 0)
+			{
+				// Compute the intersection point of the line
+				// from point A to point B with the partition
+				// plane. This is a simple ray-plane intersection.
+
+				Ogre::Vector3 v = ptB;
+				v -= ptA;
+
+				float sect = -(ptA.x - x) / v.x;
+				v *= sect;
+				v += ptA;
+				poly1.push_back(v);
+				poly2.push_back(v);
+			}
+
+			poly2.push_back(ptB);
+		}
+		else if (sideB < 0)
+		{
+			if (sideA > 0)
+			{
+				// Compute the intersection point of the line
+				// from point A to point B with the partition
+				// plane. This is a simple ray-plane intersection.
+				
+				Ogre::Vector3 v = ptB;
+				v -= ptA;
+
+				float sect = -(ptA.x - x) / v.x;
+				v *= sect;
+				v += ptA;
+				poly1.push_back(v);
+				poly2.push_back(v);
+			}
+
+			poly1.push_back(ptB);
+		}
+		else
+		{
+			poly1.push_back(ptB);
+			poly2.push_back(ptB);
+		}
+
+		ptA = ptB;
+		sideA = sideB;
+	}
 }
