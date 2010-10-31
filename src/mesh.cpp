@@ -85,10 +85,47 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord)
 	return Ogre::Vector2(esmall, ebig);
 }
 
-/*Ogre::Vector2 SBS::GetExtents(Ogre::Mesh* mesh, int coord)
+Ogre::Vector2 SBS::GetExtents(MeshObject* mesh, int coord)
 {
-	return GetExtents(mesh->GetVertices(), coord);
-}*/
+	//returns the smallest and largest values from a specified coordinate type
+	//(x, y, or z) from a vertex array (polygon).
+	//first parameter must be a mesh object
+	//second must be either 1 (for x), 2 (for y) or 3 (for z)
+
+	float esmall = 0;
+	float ebig = 0;
+	float tempnum = 0;
+	int i = 0;
+
+	//return 0,0 if coord value is out of range
+	if (coord < 1 || coord > 3)
+		return Ogre::Vector2(0, 0);
+
+	for (i = 0; i < mesh->MeshGeometry.size(); i++)
+	{
+		if (coord == 1)
+			tempnum = mesh->MeshGeometry[i].vertex.x;
+		if (coord == 2)
+			tempnum = mesh->MeshGeometry[i].vertex.y;
+		if (coord == 3)
+			tempnum = mesh->MeshGeometry[i].vertex.z;
+
+		if (i == 0)
+		{
+			esmall = tempnum;
+			ebig = tempnum;
+		}
+		else
+		{
+			if (tempnum < esmall)
+				esmall = tempnum;
+			if (tempnum > ebig)
+				ebig = tempnum;
+		}
+	}
+
+	return Ogre::Vector2(esmall, ebig);
+}
 
 Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
@@ -504,8 +541,8 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		DeleteColliders(wall->meshwrapper);
-		CreateColliders(wall->meshwrapper);
+		//DeleteColliders(wall->meshwrapper);
+		//CreateColliders(wall->meshwrapper);
 	}
 }
 
@@ -637,8 +674,8 @@ void WallPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 Ogre::SubMesh* WallPolygon::GetSubMesh()
 {
 	//return the submesh this polygon is in
-	int index = sbs->FindMatchingSubMesh(*submeshes, material);
-	return submeshes->at(index);
+	int index = mesh->FindMatchingSubMesh(material);
+	return mesh->Submeshes[index];
 }
 
 WallPolygon::WallPolygon()
@@ -754,7 +791,7 @@ MeshObject::~MeshObject()
 	if (sbs->FastDelete == false)
 	{
 		sbs->DeleteMeshHandle(this);
-		sbs->engine->WantToDie(MeshWrapper);
+		//sbs->engine->WantToDie(MeshWrapper);
 		delete MeshWrapper;
 	}
 
@@ -789,7 +826,7 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 	//create a new wall object in the given array
 
 	Walls.resize(Walls.size() + 1);
-	Walls[Walls.size() - 1] = new WallObject(this, Submeshes);
+	Walls[Walls.size() - 1] = new WallObject(this);
 	Walls[Walls.size() - 1]->name = name;
 	Walls[Walls.size() - 1]->parent_array = &Walls;
 	Walls[Walls.size() - 1]->SetValues(Walls[Walls.size() - 1], parent, "Wall", name, false);
@@ -1005,7 +1042,7 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 	//get texture material
 	Ogre::String texname = texture;
 	bool result;
-	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName().c_str());
+	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name);
 	if (!result)
 		texname = "Default";
 
@@ -1028,9 +1065,9 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 	}*/
 
 	//get autosize information
-	Ogre::Vector2 xextents = GetExtents(vertices, 1);
-	Ogre::Vector2 yextents = GetExtents(vertices, 2);
-	Ogre::Vector2 zextents = GetExtents(vertices, 3);
+	Ogre::Vector2 xextents = sbs->GetExtents(vertices, 1);
+	Ogre::Vector2 yextents = sbs->GetExtents(vertices, 2);
+	Ogre::Vector2 zextents = sbs->GetExtents(vertices, 3);
 
 	Ogre::Vector2 sizing;
 	sizing.x = tw;
@@ -1042,7 +1079,7 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 	//get texture tiling information
 	float tw2 = sizing.x, th2 = sizing.y;
 	float mw, mh;
-	if (GetTextureTiling(texname.c_str(), mw, mh))
+	if (sbs->GetTextureTiling(texname.c_str(), mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
@@ -1055,21 +1092,21 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 	vertices2.resize(1);
 
 	for (int i = 0; i < vertices.size(); i++)
-		vertices2[0].push_back(ToRemote(vertices[i]));
+		vertices2[0].push_back(sbs->ToRemote(vertices[i]));
 
 	//texture mapping
 	Ogre::Vector3 v1, v2, v3;
-	GetTextureMapping(vertices2[0], v1, v2, v3);
+	sbs->GetTextureMapping(vertices2[0], v1, v2, v3);
 	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
 		v1,
-		Ogre::Vector2 (MapUV[0].x * tw2, MapUV[0].y * th2),
+		Ogre::Vector2 (sbs->MapUV[0].x * tw2, sbs->MapUV[0].y * th2),
 		v2,
 		Ogre::Vector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
 		v3,
 		Ogre::Vector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
 		return 0;
 
-	return PolyMesh(mesh, submeshes, name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
+	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
 }
 
 std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
@@ -1084,7 +1121,7 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Materia
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			for (int j = 0; j < vertices[i].size(); j++)
-				vertices2[i].push_back(ToRemote(vertices[i][j]));
+				vertices2[i].push_back(sbs->ToRemote(vertices[i][j]));
 		}
 	}
 	else
@@ -1094,12 +1131,6 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Materia
 	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2);
 
 	//triangulate mesh
-	struct TriangleMesh
-	{
-		std::vector<Ogre::Vector3> triangles; //triangles have a, b and c components (each a vertex index)
-		std::vector<Ogre::Vector3> vertices; //vertices have x, y and z components
-	};
-
 	std::vector<TriangleMesh> trimesh;
 	trimesh.resize(vertices2.size());
 
@@ -1223,17 +1254,17 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
-
+	Ogre::SubMesh *submesh = 0;
 	bool createnew = false;
 
 	//get existing submesh pointer
 	if (index == -1)
 		createnew = true;
 	else
-		Ogre::SubMesh *submesh = submeshes[index];
+		submesh = submeshes[index];
 
 	//delete submesh and exit if it's going to be emptied
-	if (tricount <= 0 && createnew == false)
+	if (Triangles[index].triangles.size() - indices.size() <= 0 && createnew == false)
 	{
 		MeshWrapper->DeleteSubMesh(submesh);
 		Submeshes.erase(Submeshes.begin() + index);
@@ -1429,11 +1460,11 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 			//reindex triangle indices
 
 			std::vector<int> elements;
-			for (int i = 0; i < wallarray[i]->handles[j].triangles.size(); i++)
+			for (int k = 0; k < wallarray[i]->handles[j].triangles.size(); k++)
 			{
-				elements.push_back(wallarray[i]->handles[j].triangles[i].x);
-				elements.push_back(wallarray[i]->handles[j].triangles[i].y);
-				elements.push_back(wallarray[i]->handles[j].triangles[i].z);
+				elements.push_back(wallarray[i]->handles[j].triangles[k].x);
+				elements.push_back(wallarray[i]->handles[j].triangles[k].y);
+				elements.push_back(wallarray[i]->handles[j].triangles[k].z);
 			}
 			for (int e = 0; e < elements.size(); e++)
 			{

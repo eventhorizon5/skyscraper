@@ -156,9 +156,9 @@ public:
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	int AddWallMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh*> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
+	int AddWallMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	int AddFloorMain(Object *parent, Ogre::Mesh* mesh, std::vector<Ogre::SubMesh*> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
+	int AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	void CalculateFrameRate();
 	void MainLoop();
 	int CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
@@ -298,6 +298,8 @@ public:
 	Ogre::Vector3 ComputeNormal(std::vector<Ogre::Vector3> &vertices);
 	bool InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v);
 	int WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2);
+	Ogre::Vector2 GetExtents(MeshObject* mesh, int coord);
+	bool InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -403,7 +405,8 @@ private:
 	//auto area structure
 	struct AutoArea
 	{
-		Ogre::Box box;
+		Ogre::Vector3 start;
+		Ogre::Vector3 end;
 		bool inside;
 		int camerafloor;
 	};

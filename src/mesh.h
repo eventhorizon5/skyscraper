@@ -73,7 +73,7 @@ public:
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices);
 	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Material* material, const char *name, bool add);
 	int FindMatchingSubMesh(Ogre::Material *material);
-	void DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices);
+	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<Ogre::Vector3> &deleted_indices);
 	
 	Ogre::Mesh* MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;
@@ -87,12 +87,18 @@ private:
 	//csRef<iCollection> collection;
 	float rotX, rotY, rotZ;
 	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);
+
+	struct TriangleMesh
+	{
+		std::vector<Ogre::Vector3> triangles; //triangles have a, b and c components (each a vertex index)
+		std::vector<Ogre::Vector3> vertices; //vertices have x, y and z components
+	};
 };
 
 class SBSIMPEXP WallPolygon
 {
 public:
-	std::vector<Ogre::SubMesh*> *submeshes;
+	MeshObject* mesh;
 	std::vector<Ogre::Vector3> triangles;
 	Ogre::Plane plane;
 

@@ -537,8 +537,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		return ReportError("Error loading texture");
 
 	//if texture has an alpha map, force binary alpha
-	if (wrapper->GetTextureHandle()->GetAlphaType() == csAlphaMode::alphaSmooth)
-		wrapper->GetTextureHandle()->SetAlphaType(csAlphaMode::alphaBinary);
+	//if (wrapper->GetTextureHandle()->GetAlphaType() == csAlphaMode::alphaSmooth)
+		//wrapper->GetTextureHandle()->SetAlphaType(csAlphaMode::alphaBinary);
 
 	TextureInfo info;
 	info.name = name;
@@ -566,7 +566,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 {
 	//loads only a portion of the specified texture
 
-	Ogre::TextureManager *tm = g3d->GetTextureManager();
+/*	Ogre::TextureManager *tm = g3d->GetTextureManager();
 	Ogre::String Name = name;
 	Ogre::String Filename = filename;
 
@@ -623,7 +623,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
 	textureinfo.push_back(info);
-
+*/
 	return true;
 }
 
@@ -637,7 +637,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
-	Ogre::String hAlign = h_align;
+/*	Ogre::String hAlign = h_align;
 	Ogre::String vAlign = v_align;
 	Ogre::String Name = name;
 	Ogre::String Origname = origname;
@@ -772,7 +772,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//create material
 	Ogre::Material* material (engine->CreateBaseMaterial(tex));
 	Ogre::Material* matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
-	
+*/
 	return true;
 }
 
@@ -781,7 +781,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
-	Ogre::String Name = name;
+	/*Ogre::String Name = name;
 	Ogre::String Origname = orig_texture;
 	Ogre::String Overlay = overlay_texture;
 
@@ -849,13 +849,13 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
 	textureinfo.push_back(info);
-
+*/
 	return true;
 }
 
-int SBS::AddWallMain(Object *parent, MeshObject* mesh, std::vector<Ogre::SubMesh*> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddWallMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
-	WallObject *object = new WallObject(mesh, submeshes, parent, true);
+	WallObject *object = new WallObject(mesh, parent, true);
 	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
@@ -1074,16 +1074,16 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		DeleteColliders(wallobject->meshwrapper);
-		CreateColliders(wallobject->meshwrapper);
+		//DeleteColliders(wallobject->meshwrapper);
+		//CreateColliders(wallobject->meshwrapper);
 	}
 
 	return 0;
 }
 
-int SBS::AddFloorMain(Object *parent, MeshObject* mesh, std::vector<Ogre::SubMesh*> &submeshes, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
-	WallObject *object = new WallObject(mesh, submeshes, parent, true);
+	WallObject *object = new WallObject(mesh, parent, true);
 	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
@@ -1275,8 +1275,8 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		DeleteColliders(wallobject->meshwrapper);
-		CreateColliders(wallobject->meshwrapper);
+		//DeleteColliders(wallobject->meshwrapper);
+		//CreateColliders(wallobject->meshwrapper);
 	}
 
 	return 0;
@@ -1520,21 +1520,21 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 		Ogre::String NewName;
 		NewName = name;
 		NewName.append(":0");
-		wallobject->AddPolygon(NewName, texture, varray1, num, tw2, th2, true);
+		wallobject->AddPolygon(NewName.c_str(), texture, varray1, num, tw2, th2, true);
 	}
 	if (DrawMainP == true)
 	{
 		Ogre::String NewName;
 		NewName = name;
 		NewName.append(":1");
-		wallobject->AddPolygon(NewName, texture, varray2, num, tw2, th2, true);
+		wallobject->AddPolygon(NewName.c_str(), texture, varray2, num, tw2, th2, true);
 	}
 
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		DeleteColliders(wallobject->meshwrapper);
-		CreateColliders(wallobject->meshwrapper);
+		//DeleteColliders(wallobject->meshwrapper);
+		//CreateColliders(wallobject->meshwrapper);
 	}
 
 	return 0;
@@ -1588,7 +1588,7 @@ void SBS::CreateSky(const char *filenamebase)
 
 
 	Ogre::String file = filenamebase;
-	vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
+	//vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
 
 	//load textures
 	LoadTexture("/root/sky/up.jpg", "SkyTop", 1, -1);
@@ -1599,13 +1599,13 @@ void SBS::CreateSky(const char *filenamebase)
 	LoadTexture("/root/sky/back.jpg", "SkyBack", 1, 1);
 
 	SkyBox = new MeshObject(this->object, "SkyBox");
-	SkyBox->MeshWrapper->SetZBufMode(CS_ZBUF_NONE);
-	SkyBox->MeshWrapper->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
+	//SkyBox->MeshWrapper->SetZBufMode(CS_ZBUF_NONE);
+	//SkyBox->MeshWrapper->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
 	sbs->ResetTextureMapping(true);
-	WallObject *wall = new WallObject(SkyBox->MeshWrapper, SkyBox->Submeshes, SkyBox->object, true);
+	WallObject *wall = new WallObject(SkyBox, SkyBox->object, true);
 
 	wall->AddQuad( //front
 		"SkyFront",
@@ -2178,7 +2178,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
 		Ogre::Plane plane = Ogre::Plane(varray1[0], varray1[1], varray1[2]);
-		Ogre::Vector3 normal = varray1.ComputeNormal();
+		Ogre::Vector3 plane_orig = Ogre::Vector3(varray1[0], varray1[1], varray1[2]);
+		Ogre::Vector3 normal = ComputeNormal(varray1);
 		int projDimension = 0; //x; faces left/right
 
 		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
@@ -2191,7 +2192,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 
 		for (int i = 0; i < varray1.size(); i++)
 		{
-			Ogre::Vector3 tmpvertex = *varray1.at(i);
+			Ogre::Vector3 tmpvertex = *varray1[i];
 			varray2.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
 		}
 
@@ -2292,27 +2293,27 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//use the plane equation to get the coordinate values of the dropped dimension
 		if (projDimension == 0)
 		{
-			v1.x = -((plane.B() * v1.y) + (plane.C() * v1.z) + plane.D()) / plane.A(); //get X
-			v2.x = -((plane.B() * v2.y) + (plane.C() * v2.z) + plane.D()) / plane.A(); //get X
-			v3.x = -((plane.B() * v3.y) + (plane.C() * v3.z) + plane.D()) / plane.A(); //get X
+			v1.x = -((plane_orig.y * v1.y) + (plane_orig.z * v1.z) + plane.d) / plane_orig.x; //get X
+			v2.x = -((plane_orig.y * v2.y) + (plane_orig.z * v2.z) + plane.d) / plane_orig.x; //get X
+			v3.x = -((plane_orig.y * v3.y) + (plane_orig.z * v3.z) + plane.d) / plane_orig.x; //get X
 
 			if (PlanarFlat == true)
 				v3.x = v2.x;
 		}
 		if (projDimension == 1)
 		{
-			v1.y = -((plane.A() * v1.x) + (plane.C() * v1.z) + plane.D()) / plane.B(); //get Y
-			v2.y = -((plane.A() * v2.x) + (plane.C() * v2.z) + plane.D()) / plane.B(); //get Y
-			v3.y = -((plane.A() * v3.x) + (plane.C() * v3.z) + plane.D()) / plane.B(); //get Y
+			v1.y = -((plane_orig.x * v1.x) + (plane_orig.z * v1.z) + plane.d) / plane_orig.y; //get Y
+			v2.y = -((plane_orig.x * v2.x) + (plane_orig.z * v2.z) + plane.d) / plane_orig.y; //get Y
+			v3.y = -((plane_orig.x * v3.x) + (plane_orig.z * v3.z) + plane.d) / plane_orig.y; //get Y
 
 			if (PlanarFlat == true)
 				v3.y = v2.y;
 		}
 		if (projDimension == 2)
 		{
-			v1.z = -((plane.A() * v1.x) + (plane.B() * v1.y) + plane.D()) / plane.C(); //get Z
-			v2.z = -((plane.A() * v2.x) + (plane.B() * v2.y) + plane.D()) / plane.C(); //get Z
-			v3.z = -((plane.A() * v3.x) + (plane.B() * v3.y) + plane.D()) / plane.C(); //get Z
+			v1.z = -((plane_orig.x * v1.x) + (plane_orig.y * v1.y) + plane.d) / plane_orig.z; //get Z
+			v2.z = -((plane_orig.x * v2.x) + (plane_orig.y * v2.y) + plane.d) / plane_orig.z; //get Z
+			v3.z = -((plane_orig.x * v3.x) + (plane_orig.y * v3.y) + plane.d) / plane_orig.z; //get Z
 
 			if (PlanarFlat == true)
 				v3.z = v2.z;
@@ -2348,8 +2349,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					Ogre::String number = string.substr(location + 1);
-					if (atoi(number) < vertices.size())
-						ReplaceAll(string, Ogre::String("x" + number).c_str(), _gcvt(vertices[atoi(number)].x, 12, buffer.c_str()));
+					if (atoi(number.c_str()) < vertices.size())
+						ReplaceAll(string, Ogre::String("x" + number).c_str(), _gcvt(vertices[atoi(number)].x, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("x" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -2359,8 +2360,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					Ogre::String number = string.at(location + 1);
-					if (atoi(number) < vertices.size())
-						ReplaceAll(string, Ogre::String("y" + number).c_str(), _gcvt(vertices[atoi(number)].y, 12, buffer.c_str()));
+					if (atoi(number.c_str()) < vertices.size())
+						ReplaceAll(string, Ogre::String("y" + number).c_str(), _gcvt(vertices[atoi(number)].y, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("y" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -2370,8 +2371,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					Ogre::String number = string.at(location + 1);
-					if (atoi(number) < vertices.size())
-						ReplaceAll(string, Ogre::String("z" + number).c_str(), _gcvt(vertices[atoi(number)].z, 12, buffer.c_str()));
+					if (atoi(number.c_str()) < vertices.size())
+						ReplaceAll(string, Ogre::String("z" + number).c_str(), _gcvt(vertices[atoi(number)].z, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("z" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -2740,9 +2741,9 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 				if (GetShaft(shaftnumber)->ShowFloors == true)
 				{
 					int index = -1;
-					for (int j = 0; j < ShowFloorsList.size(); j++)
+					for (int j = 0; j < GetShaft(shaftnumber)->ShowFloorsList.size(); j++)
 					{
-						if (ShowFloorsList[j] == i)
+						if (GetShaft(shaftnumber)->ShowFloorsList[j] == i)
 							index = j;
 					}
 					if (index != -1 && value == true)
@@ -3019,22 +3020,23 @@ bool SBS::Mount(const char *filename, const char *path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	Ogre::String file = filename;
+	/*Ogre::String file = filename;
 	Ogre::String Path = path;
 
 	Report("Mounting " + file + " as path " + Path);
 	bool status = vfs->Mount(path, root_dir + "data" + dir_char + file);
 	if (status == false)
 		ReportError("Error mounting file " + file);
-	return status;
+	return status;*/
+	return true;
 }
 
 void SBS::FreeTextureImages()
 {
 	//unload images in all texture wrappers
 
-	for (int i = 0; i < engine->GetTextureList()->GetCount(); i++)
-		engine->GetTextureList()->Get(i)->SetImageFile(0);
+	//for (int i = 0; i < engine->GetTextureList()->GetCount(); i++)
+		//engine->GetTextureList()->Get(i)->SetImageFile(0);
 }
 
 void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
@@ -3042,7 +3044,8 @@ void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
 	//adds an auto area that enables/disables floors
 
 	AutoArea newarea;
-	newarea.box = csBox3(start, end);
+	newarea.start = start;
+	newarea.end = end;
 	newarea.inside = false;
 	newarea.camerafloor = 0;
 	FloorAutoArea.push_back(newarea);
@@ -3061,7 +3064,7 @@ void SBS::CheckAutoAreas()
 		if (FloorAutoArea[i].camerafloor != floor)
 			FloorAutoArea[i].inside = false;
 
-		if (FloorAutoArea[i].box.In(position) == true && FloorAutoArea[i].inside == false)
+		if (InBox(FloorAutoArea[i].start, FlooAutoArea[i].end, position) == true && FloorAutoArea[i].inside == false)
 		{
 			//user moved into box; enable floors
 			FloorAutoArea[i].inside = true;
@@ -3079,7 +3082,7 @@ void SBS::CheckAutoAreas()
 				GetFloor(floor + 1)->EnableGroup(true);
 			}
 		}
-		if (FloorAutoArea[i].box.In(position) == false && FloorAutoArea[i].inside == true)
+		if (InBox(FloorAutoArea[i].start, FlooAutoArea[i].end, position) == false && FloorAutoArea[i].inside == true)
 		{
 			//user moved out of box; disable floors except current
 			FloorAutoArea[i].inside = false;
@@ -3103,39 +3106,43 @@ void SBS::CheckAutoAreas()
 int SBS::GetMeshCount()
 {
 	//return total number of mesh objects
-	return engine->GetMeshes()->GetCount();
+	//return engine->GetMeshes()->GetCount();
+	return 0;
 }
 
 int SBS::GetTextureCount()
 {
 	//return total number of textures
-	return engine->GetTextureList()->GetCount();
+	//return engine->GetTextureList()->GetCount();
+	return 0;
 }
 
 int SBS::GetMaterialCount()
 {
 	//return total number of materials
-	return engine->GetMaterialList()->GetCount();
+	//return engine->GetMaterialList()->GetCount();
+	return 0;
 }
 
 int SBS::GetMeshFactoryCount()
 {
 	//return total number of mesh factories
-	return engine->GetMeshFactories()->GetCount();
+	//return engine->GetMeshFactories()->GetCount();
+	return 0;
 }
 
 void SBS::CreateColliders(Ogre::Mesh* mesh)
 {
 	//create colliders for the given mesh
-	csColliderHelper::InitializeCollisionWrapper(collision_sys, mesh);
+	//csColliderHelper::InitializeCollisionWrapper(collision_sys, mesh);
 }
 
 void SBS::DeleteColliders(Ogre::Mesh* mesh)
 {
 	//delete colliders for the given mesh
-	csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
+	/*csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
 	if (collider)
-		engine->RemoveObject(collider);
+		engine->RemoveObject(collider);*/
 }
 
 Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, Ogre::Vector3 direction)
@@ -3232,7 +3239,8 @@ int SBS::RegisterObject(Object *object)
 {
 	//add object to global array
 	ObjectCount++;
-	return ObjectArray.push_back(object);
+	ObjectArray.push_back(object);
+	return ObjectArray.size() - 1;
 }
 
 bool SBS::UnregisterObject(int number)
@@ -3319,14 +3327,14 @@ Ogre::String SBS::TruncateNumber(double value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 
-	return Ogre::StringConverter::toString(number, decimals);
+	return Ogre::StringConverter::toString(value, decimals);
 }
 
 Ogre::String SBS::TruncateNumber(float value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 	
-	return Ogre::StringConverter::toString(number, decimals);
+	return Ogre::StringConverter::toString(value, decimals);
 }
 
 Ogre::String SBS::TruncateNumber(const char *value, int decimals)
@@ -3505,7 +3513,7 @@ bool SBS::DeleteObject(Object *object)
 
 	if (deleted == true)
 	{
-		engine->Prepare();
+		//engine->Prepare();
 		sbs->Report("Deleted object " + number);
 		return true;
 	}
@@ -3680,7 +3688,7 @@ void SBS::Prepare()
 	//prepare objects for run
 	
 	//prepare CS objects
-	engine->Prepare();
+	//engine->Prepare();
 }
 
 Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
@@ -3733,24 +3741,36 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 int SBS::GetConfigInt(const char *key, int default_value)
 {
 	Ogre::ConfigFile file;
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	Ogre::String result = file.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
 const char* SBS::GetConfigString(const char *key, const char *default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	Ogre::ConfigFile file;
+	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return result.c_str();
 }
 
 bool SBS::GetConfigBool(const char *key, bool default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	Ogre::ConfigFile file;
+	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
 float SBS::GetConfigFloat(const char *key, float default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	Ogre::ConfigFile file;
+	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
+}
+
+bool SBS::InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test)
+{
+	//determine if a point (test) is inside the box defines by start and end vertices
+
+	if (test.x > start.x && test.y > start.y && test.z > start.z && test.x < end.x && test.y < end.y && test.z < end.z)
+		return true;
+	return false;
 }

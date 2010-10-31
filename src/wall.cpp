@@ -135,13 +135,13 @@ int WallObject::CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<
 	//create a polygon handle
 	int i = handles.size();
 	handles.resize(handles.size() + 1);
-	handles[i].submeshes = submesh_array;
+	handles[i].mesh = meshwrapper;
 	handles[i].index_extents = index_extents;
 	handles[i].t_matrix = tex_matrix;
 	handles[i].t_vector = tex_vector;
 	handles[i].material = material;
 	handles[i].plane = plane;
-	handles[i].triangles = &triangles;
+	handles[i].triangles = triangles;
 	SetPolygonName(i, name);
 
 	return i;
@@ -173,8 +173,8 @@ void WallObject::DeletePolygons()
 		DeletePolygon(i, false);
 
 	//recreate colliders
-	sbs->DeleteColliders(meshwrapper);
-	sbs->CreateColliders(meshwrapper);
+	//sbs->DeleteColliders(meshwrapper);
+	//sbs->CreateColliders(meshwrapper);
 }
 
 void WallObject::DeletePolygon(int index, bool recreate_colliders)
@@ -198,8 +198,8 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		//recreate colliders if specified
 		if (recreate_colliders == true)
 		{
-			sbs->DeleteColliders(meshwrapper);
-			sbs->CreateColliders(meshwrapper);
+			//sbs->DeleteColliders(meshwrapper);
+			//sbs->CreateColliders(meshwrapper);
 		}
 	}
 }
