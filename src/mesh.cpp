@@ -256,12 +256,12 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 				temppoly.push_back(origpolys[j][k]);
 
 			//make sure the polygon is not outside the cut area
-			if (wall->meshwrapper->Classify(0, temppoly, start.x) != 1 &&
-					wall->meshwrapper->Classify(0, temppoly, end.x) != 2 &&
-					wall->meshwrapper->Classify(1, temppoly, start.y) != 1 &&
-					wall->meshwrapper->Classify(1, temppoly, end.y) != 2 &&
-					wall->meshwrapper->Classify(2, temppoly, start.z) != 1 &&
-					wall->meshwrapper->Classify(2, temppoly, end.z) != 2)
+			if (sbs->Classify(0, temppoly, start.x) != 1 &&
+					sbs->Classify(0, temppoly, end.x) != 2 &&
+					sbs->Classify(1, temppoly, start.y) != 1 &&
+					sbs->Classify(1, temppoly, end.y) != 2 &&
+					sbs->Classify(2, temppoly, start.z) != 1 &&
+					sbs->Classify(2, temppoly, end.z) != 2)
 			{
 				if (Verbose)
 					Report("Cutting polygon " + name);
@@ -282,7 +282,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 
 							//get left side
 							worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+							sbs->SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
 							worker.clear();
 
 							//get right side
@@ -290,7 +290,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else
 								worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+							sbs->SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
 							worker.clear();
 
 							//get lower
@@ -300,7 +300,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							sbs->SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
 							worker.clear();
 
 							//get upper
@@ -312,7 +312,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							sbs->SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
 							worker.clear();
 						}
 						else
@@ -321,7 +321,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 
 							//get left side
 							worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
+							sbs->SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
 							worker.clear();
 
 							//get right side
@@ -329,7 +329,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else
 								worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
+							sbs->SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
 							worker.clear();
 
 							//get lower
@@ -339,7 +339,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							sbs->SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
 							worker.clear();
 
 							//get upper
@@ -351,7 +351,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							wall->meshwrapper->SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							sbs->SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
 							worker.clear();
 						}
 						polycheck = true;
@@ -399,7 +399,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 
 					//get left side
 					worker = temppoly;
-					wall->meshwrapper->SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+					sbs->SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
 					worker.clear();
 
 					//get right side
@@ -407,7 +407,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 						worker = temppoly2;
 					else
 						worker = temppoly;
-					wall->meshwrapper->SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+					sbs->SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
 					worker.clear();
 
 					//get lower
@@ -417,7 +417,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 						worker = temppoly2;
 					else if (temppoly.size() > 0)
 						worker = temppoly;
-					wall->meshwrapper->SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
+					sbs->SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
 					worker.clear();
 
 					//get upper
@@ -429,7 +429,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 						worker = temppoly2;
 					else if (temppoly.size() > 0)
 						worker = temppoly;
-					wall->meshwrapper->SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
+					sbs->SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
 					worker.clear();
 					temppoly5.clear();
 
@@ -560,10 +560,10 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 				return Ogre::Vector3(0, 0, 0);
 
 			//get upper
-			original.SplitWithPlaneY(tmp1, tmp2, tmpaltitude - 0.001);
+			sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001);
 
 			//get lower part of upper
-			tmp2.SplitWithPlaneY(original, tmp1, tmpaltitude + 0.001);
+			sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001);
 
 			Ogre::Vector3 result;
 			if (get_max == false)
@@ -592,7 +592,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 
 	//get largest normal
 
-	Ogre::Vector3 normal = polygon.ComputeNormal();
+	Ogre::Vector3 normal = sbs->ComputeNormal(polygon);
 
 	int largest_normal = 0; //x
 
@@ -651,7 +651,7 @@ WallPolygon::~WallPolygon()
 	sbs->PolygonCount--;
 }
 
-void WallPolygon::GetGeometry(Ogre::Mesh* meshwrapper, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly)
+void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -662,22 +662,22 @@ void WallPolygon::GetGeometry(Ogre::Mesh* meshwrapper, std::vector<std::vector<O
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
 		for (int j = min; j <= max; j++)
-			vertices[i].push_back(sbs->ToLocal(state->GetVertices()[j]));
+			vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex));
 		if (firstonly == true)
 			return;
 	}
 }
 
-bool WallPolygon::PointInside(Ogre::Mesh* meshwrapper, const Ogre::Vector3 &point, bool plane_check)
+bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check)
 {
 	//check if a point is inside the polygon
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(meshwrapper, vertices, false);
+	GetGeometry(mesh, vertices, false);
 
 	for (int i = 0; i < vertices.size(); i++)
 	{
-		if (vertices[i].In(point))
+		if (sbs->InPolygon(vertices[i], point))
 			return true;
 	}
 
@@ -843,18 +843,9 @@ void MeshObject::RescaleVertices(float multiplier)
 {
 	//rescale all mesh vertices to the default SBS value (using ToRemote()), times the given multiplier
 
-	//set up new vertex array
-	std::vector<Ogre::Vector3> mesh_vertices;
-
-	//multiply vertices
-	for (int i = 0; i < State->getVertexCount(); i++)
-		mesh_vertices.push_back(State->GetVertices()[i]);
-
-	//refill mesh with multiplied vertex data
-	for (int i = 0; i < mesh_vertices.size(); i++)
-		State->GetVertices()[i] = sbs->ToRemote(mesh_vertices[i] * multiplier);
-
-	mesh_vertices.clear();
+	//multiply vertex data
+	for (int i = 0; i < MeshGeometry.size(); i++)
+		MeshGeometry[i].vertex *= multiplier;
 }
 
 bool MeshObject::LoadColladaFile(const char *filename, const char *name)
@@ -1366,7 +1357,7 @@ int MeshObject::FindMatchingSubMesh(Ogre::Material *material)
 	return -1;
 }
 
-void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices)
+void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<Ogre::Vector3> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
@@ -1377,81 +1368,55 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::Hardw
 	if (wallarray.size() == 0)
 		return;
 
-	//get integer array of triangle indices
-	std::vector<int> indices;
-	int* buffer2 = (int*)deleted_indices->Lock(CS_BUF_LOCK_NORMAL);
-	for (int i = 0; i < deleted_indices->GetElementCount(); i++)
-		indices.push_back(buffer2[i]);
-	deleted_indices->Release();
-
-	//set up new geometry arrays
-	std::vector<Ogre::Vector3> mesh_vertices;
-	std::vector<Ogre::Vector2> mesh_texels;
-	std::vector<Ogre::Vector3> mesh_normals;
-	std::vector<csColor4> mesh_colors;
-
-	//copy mesh data
-	for (int i = 0; i < state->getVertexCount(); i++)
-	{
-		mesh_vertices.push_back(state->GetVertices()[i]);
-		mesh_texels.push_back(state->GetTexels()[i]);
-		mesh_normals.push_back(state->GetNormals()[i]);
-		mesh_colors.push_back(state->GetColors()[i]);
-	}
-
 	//construct new sorted and compressed index array
-	std::vector<int> deleted2;
-	for (int i = 0; i < indices.size(); i++)
-		deleted2.push_back(indices[i]);
-	sort(deleted2);
-
-	indices.clear();
+	std::vector<int> deleted;
+	for (int i = 0; i < deleted_indices.size(); i++)
+	{
+		deleted.push_back(deleted_indices[i].x);
+		deleted.push_back(deleted_indices[i].y);
+		deleted.push_back(deleted_indices[i].z);
+	}
+	sort(deleted);
 
 	//delete specified vertices
-	for (int i = deleted2.size() - 1; i >= 0; i--)
+	for (int i = deleted.size() - 1; i >= 0; i--)
 	{
-		int index = deleted2[i];
-		mesh_vertices.erase(mesh_vertices.begin() + index);
-		mesh_texels.erase(mesh_texels.begin() + index);
-		mesh_normals.erase(mesh_normals.begin() + index);
-		mesh_colors.erase(mesh_colors.begin() + index);
+		MeshGeometry.erase(MeshGeometry.begin() + deleted[i]);
 	}
 
-	//refill original mesh data
-	state->SetVertexCount(mesh_vertices.size());
-	for (int i = 0; i < mesh_vertices.size(); i++)
-	{
-		state->GetVertices()[i] = mesh_vertices[i];
-		state->GetTexels()[i] = mesh_texels[i];
-		state->GetNormals()[i] = mesh_normals[i];
-		state->GetColors()[i] = mesh_colors[i];
-	}
-
-	mesh_vertices.clear();
-	mesh_texels.clear();
-	mesh_normals.clear();
-	mesh_colors.clear();
+	//TODO - need to reconstruct vertex hardware buffer here
 
 	//reindex triangle indices in all submeshes
-	for (int i = 0; i < state->GetSubMeshCount(); i++)
+	for (int submesh = 0; submesh < Triangles.size(); submesh++)
 	{
-		Ogre::HardwareIndexBuffer *indices = state->GetSubMesh(i)->GetIndices();
-
-		if (!indices)
-			continue;
-
-		int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
-
-		for (int j = 0; j < indices->GetElementCount(); j++)
+		std::vector<int> elements;
+		for (int i = 0; i < Triangles[submesh].triangles.size(); i++)
 		{
-			for (int k = deleted2.size() - 1; k >= 0; k--)
+			elements.push_back(Triangles[submesh].triangles[i].x);
+			elements.push_back(Triangles[submesh].triangles[i].y);
+			elements.push_back(Triangles[submesh].triangles[i].z);
+		}
+		for (int e = 0; e < elements.size(); e++)
+		{
+			for (int i = deleted.size() - 1; i >= 0; i--)
 			{
-				if (indices2[j] >= deleted2[k])
-					indices2[j]--;
+				if (elements[e] >= deleted[i])
+					elements[e]--;
 			}
 		}
-		indices->Release();
+		int element = 0;
+		int size = Triangles[submesh].triangles.size();
+		Triangles[submesh].triangles.clear();
+
+		for (int i = 0; i < size; i++)
+		{
+			Triangles[submesh].triangles.push_back(Ogre::Vector3(elements[element], elements[element + 1], elements[element + 2]));
+			element++;
+		}
+		elements.clear();
 	}
+
+	//TODO - need to reconstruct triangle hardware buffer here
 
 	//reindex triangle indices in all wall objects
 	for (int i = 0; i < wallarray.size(); i++)
@@ -1461,33 +1426,43 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::Hardw
 
 		for (int j = 0; j < wallarray[i]->handles.size(); j++)
 		{
-			Ogre::HardwareIndexBuffer* indices = wallarray[i]->handles[j].triangles;
-
-			if (!indices)
-				continue;
-
-			int* indices2 = (int*)indices->Lock(CS_BUF_LOCK_NORMAL);
-
 			//reindex triangle indices
-			for (int k = 0; k < indices->GetElementCount(); k++)
+
+			std::vector<int> elements;
+			for (int i = 0; i < wallarray[i]->handles[j].triangles.size(); i++)
 			{
-				for (int m = deleted2.size() - 1; m >= 0; m--)
+				elements.push_back(wallarray[i]->handles[j].triangles[i].x);
+				elements.push_back(wallarray[i]->handles[j].triangles[i].y);
+				elements.push_back(wallarray[i]->handles[j].triangles[i].z);
+			}
+			for (int e = 0; e < elements.size(); e++)
+			{
+				for (int i = deleted.size() - 1; i >= 0; i--)
 				{
-					if (indices2[k] >= deleted2[m])
-						indices2[k]--;
+					if (elements[e] >= deleted[i])
+						elements[e]--;
 				}
 			}
-			indices->Release();
+			int element = 0;
+			int size = wallarray[i]->handles[j].triangles.size();
+			wallarray[i]->handles[j].triangles.clear();
+
+			for (int i = 0; i < size; i++)
+			{
+				wallarray[i]->handles[j].triangles.push_back(Ogre::Vector3(elements[element], elements[element + 1], elements[element + 2]));
+				element++;
+			}
+			elements.clear();
 
 			//reindex extents, used for getting original geometry
-			for (int k = deleted2.size() - 1; k >= 0; k--)
+			for (int k = deleted.size() - 1; k >= 0; k--)
 			{
 				for (int m = 0; m < wallarray[i]->handles[j].index_extents.size(); m++)
 				{
 					Ogre::Vector2 extents = wallarray[i]->handles[j].index_extents[m];
-					if (deleted2[k] < extents.x)
+					if (deleted[k] < extents.x)
 						extents.x--;
-					if (deleted2[k] < extents.y)
+					if (deleted[k] < extents.y)
 						extents.y--;
 					wallarray[i]->handles[j].index_extents[m] = extents;
 				}

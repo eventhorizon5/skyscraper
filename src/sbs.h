@@ -293,6 +293,11 @@ public:
 	const char *GetConfigString(const char *key, const char *default_value);
 	bool GetConfigBool(const char *key, bool default_value);
 	float GetConfigFloat(const char *key, float default_value);
+	int Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value);
+	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value);
+	Ogre::Vector3 ComputeNormal(std::vector<Ogre::Vector3> &vertices);
+	bool InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v);
+	int WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2);
 
 	//Meshes
 	MeshObject* Buildings;

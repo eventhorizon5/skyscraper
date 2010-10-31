@@ -2,7 +2,7 @@
 
 /*
 	This code was originally part of Crystal Space
-    Copyright (C) 1998-2001 by Jorrit Tyberghein
+    Copyright (C) 1998-2005 by Jorrit Tyberghein
 	Modifications Copyright (C)2010 Ryan Thoryk
 
     This library is free software; you can redistribute it and/or
@@ -160,7 +160,7 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 	return true;
 }
 
-int MeshObject::Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value)
+int SBS::Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//axis is 0 for X, 1 for Y, 2 for Z
@@ -199,7 +199,7 @@ int MeshObject::Classify(int axis, std::vector<Ogre::Vector3> &vertices, float v
 	return 3; //polygon intersects with plane
 }
 
-void MeshObject::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value)
+void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//axis is 0 for X, 1 for Y, 2 for Z
@@ -285,4 +285,83 @@ void MeshObject::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std:
 		ptA = ptB;
 		sideA = sideB;
 	}
+}
+
+Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices)
+{
+	//from Crystal Space libs/csgeom/poly3d.cpp
+	//calculate polygon normal
+
+	float ayz = 0;
+	float azx = 0;
+	float axy = 0;
+	size_t i, i1;
+	float x1, y1, z1, x, y, z;
+
+	i1 = num - 1;
+	x1 = vertices[i1].x;
+	y1 = vertices[i1].y;
+	z1 = vertices[i1].z;
+	for (i = 0; i < vertices.size(); i++)
+	{
+		x = vertices[i].x;
+		y = vertices[i].y;
+		z = vertices[i].z;
+		ayz += (z1 + z) * (y - y1);
+		azx += (x1 + x) * (z - z1);
+		axy += (y1 + y) * (x - x1);
+		x1 = x;
+		y1 = y;
+		z1 = z;
+	}
+
+	float sqd = ayz * ayz + azx * azx + axy * axy;
+	float invd;
+	if (sqd < SMALL_EPSILON)
+		invd = 1.0f / SMALL_EPSILON;
+	else
+		invd = 1.0f / sqrtf(sqd);
+	return Ogre::Vector3(ayz * invd, azx * invd, axy * invd);
+}
+
+bool SBS::InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v)
+{
+	//from Crystal Space libs/csgeom/poly3d.cpp
+	//determine if the point 'v' is inside the given polygon
+
+	int i, i1;
+	i1 = poly.size() - 1;
+	for (i = 0; i < poly.size(); i++)
+	{
+		if (WhichSide3D(v, poly[i1], poly[i]) < 0)
+			return false;
+		i1 = i;
+	}
+
+	return true;
+}
+
+int SBS::WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2)
+{
+	//from Crystal Space include/csgeom/math3d.h
+
+	/**
+	   * Tests which side of a plane the given 3D point is on.
+	   * \return -1 if point p is left of plane '0-v1-v2',
+	   *         1 if point p is right of plane '0-v1-v2',
+	   *      or 0 if point p lies on plane '0-v1-v2'.
+	   * Plane '0-v1-v2' is the plane passing through points <0,0,0>, v1, and v2.
+	   *<p>
+	   * Warning: the result of this function when 'p' is exactly on the plane
+	   * 0-v1-v2 is undefined. It should return 0 but it will not often do that
+	   * due to numerical inaccuracies. So you should probably test for this
+	   * case separately.
+	   */
+
+	float s = p.x * (v1.y * v2.z - v1.z * v2.y) + p.y * (v1.z * v2.x - v1.x * v2.z) + p.z * (v1.x * v2.y - v1.y * v2.x);
+	if (s < 0)
+		return 1;
+	else if (s > 0)
+		return -1;
+	else return 0;
 }

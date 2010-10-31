@@ -74,8 +74,6 @@ public:
 	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Material* material, const char *name, bool add);
 	int FindMatchingSubMesh(Ogre::Material *material);
 	void DeleteVertices(std::vector<WallObject*> &wallarray, Ogre::HardwareIndexBuffer *deleted_indices);
-	int Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value);
-	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value);
 	
 	Ogre::Mesh* MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;
@@ -112,8 +110,8 @@ public:
 	~WallPolygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();
-	void GetGeometry(Ogre::Mesh* meshwrapper, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly);
-	bool PointInside(Ogre::Mesh* meshwrapper, const Ogre::Vector3 &point, bool plane_check = true);
+	void GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly);
+	bool PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check = true);
 };
 
 #endif
