@@ -1057,10 +1057,10 @@ void Elevator::MonitorLoop()
 	//make sure height value is set
 	if (Height == 0)
 	{
-		for (int i = 0; i < ElevatorMesh->State->getVertexCount(); i++)
+		for (int i = 0; i < ElevatorMesh->MeshGeometry.size(); i++)
 		{
-			if (sbs->ToLocal(ElevatorMesh->State->GetVertices()[i].y) > Height)
-				Height = sbs->ToLocal(ElevatorMesh->State->GetVertices()[i].y);
+			if (sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y) > Height)
+				Height = sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y);
 		}
 	}
 

@@ -3733,24 +3733,24 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 int SBS::GetConfigInt(const char *key, int default_value)
 {
 	Ogre::ConfigFile file;
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
 const char* SBS::GetConfigString(const char *key, const char *default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return result.c_str();
 }
 
 bool SBS::GetConfigBool(const char *key, bool default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
 float SBS::GetConfigFloat(const char *key, float default_value)
 {
-	Ogre::String result = Ogre::ConfigFile::getSetting(key, , Ogre::StringConverter::toString(default_value));
+	Ogre::String result = Ogre::ConfigFile::getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }
