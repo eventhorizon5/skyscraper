@@ -4320,7 +4320,7 @@ int ScriptProcessor::ProcElevators()
 		int slength, parameters;
 
 		//get number of action & texture parameters
-		slength = parameters;
+		slength = tempdata.GetSize();
 		parameters = slength - 8; //strip off main parameters
 
 		//action & texture parameter number needs to be even
