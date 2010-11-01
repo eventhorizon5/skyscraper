@@ -721,12 +721,12 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
-	sbs->AddWallMain(wrapper->object, door->mesh->MeshWrapper, door->mesh->Submeshes, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	sbs->AddWallMain(wrapper->object, door->mesh->MeshWrapper, door->mesh->Submeshes, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
+	sbs->AddWallMain(wrapper->object, door->mesh, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
 	//store extents

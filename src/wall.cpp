@@ -87,18 +87,14 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	return &handles[index];
 }
 
-WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, Ogre::Vector3 *vertices, int num, float tw, float th, bool autosize)
+WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
 {
 	//create a generic polygon
-	std::vector<std::vector<Ogre::Vector3> > array;
-	array.resize(1);
-	for (int i = 0; i < num; i++)
-		array[0].push_back(vertices[i]);
 	Ogre::String name2 = ProcessName(name);
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
+	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents);
 
 	if (!triangles)
 		return 0;
@@ -107,7 +103,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, Ogre:
 	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name2.c_str());
 
 	//compute plane from first 3 vertices
-	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
+	Ogre::Plane plane(vertices[0], vertices[1], vertices[2]);
 
 	int index = CreateHandle(*triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];

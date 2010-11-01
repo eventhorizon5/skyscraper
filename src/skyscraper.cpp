@@ -680,7 +680,7 @@ void Skyscraper::GetInput()
 
 	if (wxGetKeyState(WXK_F2) && wait == false)
 	{
-		Report(wxVariant(Simcore->FPS).GetString().ToAscii());
+		//Report(wxVariant(Simcore->FPS).GetString().ToAscii());
 		wait = true;
 	}
 
@@ -1221,7 +1221,7 @@ bool Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(mRenderWindow, mSceneMgr, root_dir, dir_char);
+	Simcore->Initialize(mRenderWindow, mSceneMgr, root_dir.c_str(), dir_char.c_str());
 	Simcore->Shaders = Shaders;
 
 	//load building data file

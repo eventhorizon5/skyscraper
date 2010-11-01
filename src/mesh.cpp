@@ -1101,9 +1101,9 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 		v1,
 		Ogre::Vector2 (sbs->MapUV[0].x * tw2, sbs->MapUV[0].y * th2),
 		v2,
-		Ogre::Vector2 (MapUV[1].x * tw2, MapUV[1].y * th2),
+		Ogre::Vector2 (sbs->MapUV[1].x * tw2, sbs->MapUV[1].y * th2),
 		v3,
-		Ogre::Vector2 (MapUV[2].x * tw2, MapUV[2].y * th2)))
+		Ogre::Vector2 (sbs->MapUV[2].x * tw2, sbs->MapUV[2].y * th2)))
 		return 0;
 
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
@@ -1208,13 +1208,13 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Materia
 	MeshWrapper->load();
 
 	//recreate colliders if specified
-	if (RecreateColliders == true)
+	if (sbs->RecreateColliders == true)
 	{
-		DeleteColliders(mesh);
-		CreateColliders(mesh);
+		//DeleteColliders(mesh);
+		//CreateColliders(mesh);
 	}
 
-	return triangles;
+	return &triangles;
 }
 
 Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices)
@@ -1261,7 +1261,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 	if (index == -1)
 		createnew = true;
 	else
-		submesh = submeshes[index];
+		submesh = Submeshes[index];
 
 	//delete submesh and exit if it's going to be emptied
 	if (Triangles[index].triangles.size() - indices.size() <= 0 && createnew == false)
@@ -1274,7 +1274,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 	//add triangles
 	if (add == true)
 	{
-		for (int i = 0; i < indices->size(); i++)
+		for (int i = 0; i < indices.size(); i++)
 			AddTriangle(index, indices[i]);
 	}
 	else
@@ -1282,7 +1282,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 		//remove triangles
 		for (int i = 0; i < Triangles[index].triangles.size(); i++)
 		{
-			for (int j = 0; j < indices->size(); j++)
+			for (int j = 0; j < indices.size(); j++)
 			{
 				if (Triangles[index].triangles[i].x == indices[j].x && Triangles[index].triangles[i].y == indices[j].y && Triangles[index].triangles[i].z == indices[j].z)
 				{
@@ -1317,18 +1317,18 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), MeshGeometry.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 	//populate buffer with vertex geometry
-	float *data = (float*)(vbuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
+	float *vdata = (float*)(vbuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
 	int loc = 0;
 	for (size_t i = 0; i < MeshGeometry.size(); i++)
 	{
-		data[loc + 0] = MeshGeometry[i].vertex.x;
-		data[loc + 1] = MeshGeometry[i].vertex.y;
-		data[loc + 2] = MeshGeometry[i].vertex.z;
-		data[loc + 3] = MeshGeometry[i].normal.x;
-		data[loc + 4] = MeshGeometry[i].normal.y;
-		data[loc + 5] = MeshGeometry[i].normal.z;
-		data[loc + 6] = MeshGeometry[i].texel.x;
-		data[loc + 7] = MeshGeometry[i].texel.y;
+		vdata[loc + 0] = MeshGeometry[i].vertex.x;
+		vdata[loc + 1] = MeshGeometry[i].vertex.y;
+		vdata[loc + 2] = MeshGeometry[i].vertex.z;
+		vdata[loc + 3] = MeshGeometry[i].normal.x;
+		vdata[loc + 4] = MeshGeometry[i].normal.y;
+		vdata[loc + 5] = MeshGeometry[i].normal.z;
+		vdata[loc + 6] = MeshGeometry[i].texel.x;
+		vdata[loc + 7] = MeshGeometry[i].texel.y;
 		loc += 8;
 	}
 	vbuffer->unlock();
@@ -1478,9 +1478,9 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 			int size = wallarray[i]->handles[j].triangles.size();
 			wallarray[i]->handles[j].triangles.clear();
 
-			for (int i = 0; i < size; i++)
+			for (int ii = 0; ii < size; ii++)
 			{
-				wallarray[i]->handles[j].triangles.push_back(Ogre::Vector3(elements[element], elements[element + 1], elements[element + 2]));
+				wallarray[ii]->handles[j].triangles.push_back(Ogre::Vector3(elements[element], elements[element + 1], elements[element + 2]));
 				element++;
 			}
 			elements.clear();

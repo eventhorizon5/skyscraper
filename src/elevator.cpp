@@ -2096,18 +2096,18 @@ bool Elevator::IsElevator(Ogre::Mesh* test)
 	return false;
 }
 
-csHitBeamResult Elevator::HitBeam(const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+/*csHitBeamResult Elevator::HitBeam(const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//passes info onto HitBeam function
 	return ElevatorMesh->MeshWrapper->HitBeam(sbs->ToRemote(start), sbs->ToRemote(end));
-}
+}*/
 
 bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 {
 	//determine if the given 3D position is inside the elevator
 
 	//if last position is the same as new, return previous result
-	if (position == lastposition && checkfirstrun == false)
+/*	if (position == lastposition && checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;
@@ -2149,7 +2149,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 	lastcheckresult = false;
 	lastposition = position;
 
-	return false;
+*/	return false;
 }
 
 float Elevator::GetElevatorStart()

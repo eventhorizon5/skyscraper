@@ -1520,14 +1520,14 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 		Ogre::String NewName;
 		NewName = name;
 		NewName.append(":0");
-		wallobject->AddPolygon(NewName.c_str(), texture, varray1, num, tw2, th2, true);
+		wallobject->AddPolygon(NewName.c_str(), texture, varray1, tw2, th2, true);
 	}
 	if (DrawMainP == true)
 	{
 		Ogre::String NewName;
 		NewName = name;
 		NewName.append(":1");
-		wallobject->AddPolygon(NewName.c_str(), texture, varray2, num, tw2, th2, true);
+		wallobject->AddPolygon(NewName.c_str(), texture, varray2, tw2, th2, true);
 	}
 
 	//recreate colliders if specified
@@ -2178,8 +2178,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
 		Ogre::Plane plane = Ogre::Plane(varray1[0], varray1[1], varray1[2]);
-		Ogre::Vector3 plane_orig = Ogre::Vector3(varray1[0], varray1[1], varray1[2]);
-		Ogre::Vector3 normal = ComputeNormal(varray1);
+		Ogre::Vector3 normal = plane.normal;
 		int projDimension = 0; //x; faces left/right
 
 		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
@@ -2192,7 +2191,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 
 		for (int i = 0; i < varray1.size(); i++)
 		{
-			Ogre::Vector3 tmpvertex = *varray1[i];
+			Ogre::Vector3 tmpvertex = varray1[i];
 			varray2.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
 		}
 
@@ -2293,27 +2292,27 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//use the plane equation to get the coordinate values of the dropped dimension
 		if (projDimension == 0)
 		{
-			v1.x = -((plane_orig.y * v1.y) + (plane_orig.z * v1.z) + plane.d) / plane_orig.x; //get X
-			v2.x = -((plane_orig.y * v2.y) + (plane_orig.z * v2.z) + plane.d) / plane_orig.x; //get X
-			v3.x = -((plane_orig.y * v3.y) + (plane_orig.z * v3.z) + plane.d) / plane_orig.x; //get X
+			v1.x = -((normal.y * v1.y) + (normal.z * v1.z) + plane.d) / normal.x; //get X
+			v2.x = -((normal.y * v2.y) + (normal.z * v2.z) + plane.d) / normal.x; //get X
+			v3.x = -((normal.y * v3.y) + (normal.z * v3.z) + plane.d) / normal.x; //get X
 
 			if (PlanarFlat == true)
 				v3.x = v2.x;
 		}
 		if (projDimension == 1)
 		{
-			v1.y = -((plane_orig.x * v1.x) + (plane_orig.z * v1.z) + plane.d) / plane_orig.y; //get Y
-			v2.y = -((plane_orig.x * v2.x) + (plane_orig.z * v2.z) + plane.d) / plane_orig.y; //get Y
-			v3.y = -((plane_orig.x * v3.x) + (plane_orig.z * v3.z) + plane.d) / plane_orig.y; //get Y
+			v1.y = -((normal.x * v1.x) + (normal.z * v1.z) + plane.d) / normal.y; //get Y
+			v2.y = -((normal.x * v2.x) + (normal.z * v2.z) + plane.d) / normal.y; //get Y
+			v3.y = -((normal.x * v3.x) + (normal.z * v3.z) + plane.d) / normal.y; //get Y
 
 			if (PlanarFlat == true)
 				v3.y = v2.y;
 		}
 		if (projDimension == 2)
 		{
-			v1.z = -((plane_orig.x * v1.x) + (plane_orig.y * v1.y) + plane.d) / plane_orig.z; //get Z
-			v2.z = -((plane_orig.x * v2.x) + (plane_orig.y * v2.y) + plane.d) / plane_orig.z; //get Z
-			v3.z = -((plane_orig.x * v3.x) + (plane_orig.y * v3.y) + plane.d) / plane_orig.z; //get Z
+			v1.z = -((normal.x * v1.x) + (normal.y * v1.y) + plane.d) / normal.z; //get Z
+			v2.z = -((normal.x * v2.x) + (normal.y * v2.y) + plane.d) / normal.z; //get Z
+			v3.z = -((normal.x * v3.x) + (normal.y * v3.y) + plane.d) / normal.z; //get Z
 
 			if (PlanarFlat == true)
 				v3.z = v2.z;
@@ -2350,7 +2349,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					Ogre::String number = string.substr(location + 1);
 					if (atoi(number.c_str()) < vertices.size())
-						ReplaceAll(string, Ogre::String("x" + number).c_str(), _gcvt(vertices[atoi(number)].x, 12, buffer));
+						ReplaceAll(string, Ogre::String("x" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].x, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("x" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -2359,9 +2358,9 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				location = string.find("y");
 				if (location >= 0)
 				{
-					Ogre::String number = string.at(location + 1);
+					Ogre::String number = string.substr(location + 1);
 					if (atoi(number.c_str()) < vertices.size())
-						ReplaceAll(string, Ogre::String("y" + number).c_str(), _gcvt(vertices[atoi(number)].y, 12, buffer));
+						ReplaceAll(string, Ogre::String("y" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].y, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("y" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -2370,9 +2369,9 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				location = string.find("z");
 				if (location >= 0)
 				{
-					Ogre::String number = string.at(location + 1);
+					Ogre::String number = string.substr(location + 1);
 					if (atoi(number.c_str()) < vertices.size())
-						ReplaceAll(string, Ogre::String("z" + number).c_str(), _gcvt(vertices[atoi(number)].z, 12, buffer));
+						ReplaceAll(string, Ogre::String("z" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].z, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("z" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -3064,7 +3063,7 @@ void SBS::CheckAutoAreas()
 		if (FloorAutoArea[i].camerafloor != floor)
 			FloorAutoArea[i].inside = false;
 
-		if (InBox(FloorAutoArea[i].start, FlooAutoArea[i].end, position) == true && FloorAutoArea[i].inside == false)
+		if (InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == true && FloorAutoArea[i].inside == false)
 		{
 			//user moved into box; enable floors
 			FloorAutoArea[i].inside = true;
@@ -3082,7 +3081,7 @@ void SBS::CheckAutoAreas()
 				GetFloor(floor + 1)->EnableGroup(true);
 			}
 		}
-		if (InBox(FloorAutoArea[i].start, FlooAutoArea[i].end, position) == false && FloorAutoArea[i].inside == true)
+		if (InBox(FloorAutoArea[i].start, FloorAutoArea[i].end, position) == false && FloorAutoArea[i].inside == true)
 		{
 			//user moved out of box; disable floors except current
 			FloorAutoArea[i].inside = false;
@@ -3323,12 +3322,12 @@ Ogre::Vector2 SBS::CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::V
 	return 0;
 }*/
 
-Ogre::String SBS::TruncateNumber(double value, int decimals)
+/*Ogre::String SBS::TruncateNumber(double value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 
 	return Ogre::StringConverter::toString(value, decimals);
-}
+}*/
 
 Ogre::String SBS::TruncateNumber(float value, int decimals)
 {
@@ -3740,28 +3739,28 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 
 int SBS::GetConfigInt(const char *key, int default_value)
 {
-	Ogre::ConfigFile file;
-	Ogre::String result = file.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	Ogre::ConfigFile* file;
+	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
 const char* SBS::GetConfigString(const char *key, const char *default_value)
 {
-	Ogre::ConfigFile file;
+	Ogre::ConfigFile* file;
 	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return result.c_str();
 }
 
 bool SBS::GetConfigBool(const char *key, bool default_value)
 {
-	Ogre::ConfigFile file;
+	Ogre::ConfigFile* file;
 	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
 float SBS::GetConfigFloat(const char *key, float default_value)
 {
-	Ogre::ConfigFile file;
+	Ogre::ConfigFile* file;
 	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }

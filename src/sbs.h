@@ -69,6 +69,7 @@ struct SBSIMPEXP StairsMap
 //SBS class
 class SBSIMPEXP SBS
 {
+	friend class MeshObject;
 public:
 
 	Object *object; //SBS object
@@ -255,7 +256,7 @@ public:
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	Ogre::Vector2 CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::Vector2 y, Ogre::Vector2 z, float tw, float th);
 	//WallObject* GetWallObject(std::vector<WallObject*> &wallarray, int polygon_index);
-	Ogre::String TruncateNumber(double value, int decimals);
+	//Ogre::String TruncateNumber(double value, int decimals);
 	Ogre::String TruncateNumber(float value, int decimals);
 	Ogre::String TruncateNumber(const char *number, int decimals);
 	bool IsValidFloor(int floor);
