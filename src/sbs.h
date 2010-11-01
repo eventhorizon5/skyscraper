@@ -176,7 +176,7 @@ public:
 	void ListAltitudes();
 	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	Ogre::String SBS::GetTextureMaterial(const char *name, bool &result, const char *polygon_name = 0);
+	Ogre::String GetTextureMaterial(const char *name, bool &result, const char *polygon_name = 0);
 	bool NewElevator(int number);
 	bool NewFloor(int number);
 	int Elevators();
