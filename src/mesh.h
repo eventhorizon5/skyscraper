@@ -67,8 +67,8 @@ public:
 	void RemoveVertex(int index);
 	void AddTriangle(int submesh, Ogre::Vector3 &triangle);
 	void RemoveTriangle(int submesh, int index);
-	std::vector<Ogre::Vector3>* PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices);
-	std::vector<Ogre::Vector3>* PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices = true);
+	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles);
+	bool PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices);
 	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String &material, const char *name, bool add);
@@ -80,7 +80,8 @@ public:
 	std::vector<TriangleIndices> Triangles;
 	std::vector<Ogre::SubMesh*> Submeshes;
 	std::vector<WallObject*> Walls;
-	Ogre::MovableObject *Movable;
+	Ogre::Entity *Movable;
+	Ogre::SceneNode *SceneNode;
 
 private:
 	bool enabled;

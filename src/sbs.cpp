@@ -563,7 +563,7 @@ bool SBS::UnloadTexture(const char *name)
 	Ogre::TexturePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name);
 	if (!wrapper.isNull())
 		return false;
-	Ogre::TextureManager::getSingleton().remove(wrapper);
+	Ogre::TextureManager::getSingleton().remove(name);
 	return true;
 }
 
@@ -2191,8 +2191,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		else if (fabsf (normal.z) > fabsf (normal.x))
 			projDimension = 2; //z biggest; faces front/back
 
-		size_t selX = CS::Math::NextModulo3(projDimension);
-		size_t selY = CS::Math::NextModulo3(selX);
+		size_t selX = (1 << projDimension) & 0x3;
+		size_t selY = (1 << selX) & 0x3;
 
 		for (int i = 0; i < varray1.size(); i++)
 		{
@@ -2925,7 +2925,7 @@ Ogre::String SBS::GetTextureMaterial(const char *name, bool &result, const char 
 
 	Ogre::String final_material = name;
 
-	if (!material)
+	if (!material.get())
 	{
 		//if material's not found, display a warning and use a default material
 		Ogre::String message;

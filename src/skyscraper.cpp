@@ -1377,4 +1377,3 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	
 	return mRenderWindow;
 }
-

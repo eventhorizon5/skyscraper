@@ -72,9 +72,10 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents);
+	std::vector<Ogre::Vector3> triangles;
+	meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents, triangles);
 
-	if (!triangles)
+	if (triangles.size() == 0)
 		return 0;
 
 	bool result;
@@ -83,7 +84,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
 
-	int index = CreateHandle(*triangles, index_extents, tm, tv, material, name2.c_str(), plane);
+	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
@@ -94,9 +95,10 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents);
+	std::vector<Ogre::Vector3> triangles;
+	meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles);
 
-	if (!triangles)
+	if (triangles.size() == 0)
 		return 0;
 
 	bool result;
@@ -105,7 +107,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(vertices[0], vertices[1], vertices[2]);
 
-	int index = CreateHandle(*triangles, index_extents, tm, tv, material, name2.c_str(), plane);
+	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
 }
 
@@ -114,15 +116,16 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::String material, std
 	//add a set of polygons, providing the original material and texture mapping
 	Ogre::String name2 = ProcessName(name);
 	std::vector<Ogre::Vector2> index_extents;
-	std::vector<Ogre::Vector3> *triangles = meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents);
+	std::vector<Ogre::Vector3> triangles;
+	meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles);
 
-	if (!triangles)
+	if (triangles.size() == 0)
 		return 0;
 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(vertices[0][0], vertices[0][1], vertices[0][2]);
 
-	int index = CreateHandle(*triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
+	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
 	return &handles[index];
 }
 

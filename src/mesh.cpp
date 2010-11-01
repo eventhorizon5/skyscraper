@@ -735,7 +735,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	if (!filename)
 	{
 		//create mesh
-		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(Name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
 	}
 	else
 	{
@@ -765,6 +765,11 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	if (filename)
 		RescaleVertices(scale_multiplier);
 
+	//create movable
+	Movable = sbs->mSceneManager->createEntity(Name, Name);
+	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode();
+	SceneNode->attachObject(Movable);
+
 	sbs->AddMeshHandle(this);
 
 	//State->SetLighting(false);
@@ -785,6 +790,8 @@ MeshObject::~MeshObject()
 		}
 		Walls[i] = 0;
 	}
+
+	SceneNode->detachObject(Movable);
 
 	if (sbs->FastDelete == false)
 	{
@@ -950,34 +957,34 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(origin.x + position.x);
 	else
-		pos.x = Movable->GetPosition().x + sbs->ToRemote(position.x);
+		pos.x = SceneNode->getPosition().x + sbs->ToRemote(position.x);
 	if (relative_y == false)
 		pos.y = sbs->ToRemote(origin.y + position.y);
 	else
-		pos.y = Movable->GetPosition().y + sbs->ToRemote(position.y);
+		pos.y = SceneNode->getPosition().y + sbs->ToRemote(position.y);
 	if (relative_z == false)
 		pos.z = sbs->ToRemote(origin.z + position.z);
 	else
-		pos.z = Movable->GetPosition().z + sbs->ToRemote(position.z);
-	Movable->SetPosition(pos);
-	Movable->UpdateMove();
+		pos.z = SceneNode->getPosition().z + sbs->ToRemote(position.z);
+	SceneNode->setPosition(pos);
 }
 
 Ogre::Vector3 MeshObject::GetPosition()
 {
-	return sbs->ToLocal(Movable->GetPosition());
+	return sbs->ToLocal(SceneNode->getPosition());
 }
 
 void MeshObject::SetRotation(const Ogre::Vector3 rotation)
 {
 	//rotate light
-	Ogre::Matrix3 rot = csXRotMatrix3(rotation.x) * csYRotMatrix3(rotation.y) * csZRotMatrix3(rotation.z);
-	csOrthoTransform ot (rot, Movable->GetTransform().GetOrigin());
-	Movable->SetTransform(ot);
+	Ogre::Quaternion x(Ogre::Degree(rotation.x), Ogre::Vector3::UNIT_X);
+	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::UNIT_Y);
+	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
+	Ogre::Quaternion rot = x * y * z;
+	SceneNode->setOrientation(rot);
 	rotX = rotation.x;
 	rotY = rotation.y;
 	rotZ = rotation.z;
-	Movable->UpdateMove();
 }
 
 void MeshObject::Rotate(const Ogre::Vector3 rotation, float speed)
@@ -1028,7 +1035,7 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 	Triangles[submesh].triangles.erase(Triangles[submesh].triangles.begin() + index);
 }
 
-std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices)
+bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1097,12 +1104,12 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 		Ogre::Vector2 (sbs->MapUV[1].x * tw2, sbs->MapUV[1].y * th2),
 		v3,
 		Ogre::Vector2 (sbs->MapUV[2].x * tw2, sbs->MapUV[2].y * th2)))
-		return 0;
+		return false;
 
-	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
+	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, false);
 }
 
-std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
+bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1177,8 +1184,6 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::String 
 	mesh_geometry.clear();
 
 	//add triangles to single array, to be passed to the submesh
-	std::vector<Ogre::Vector3> triangles;
-
 	int location = 0;
 	for (int i = 0; i < trimesh.size(); i++)
 	{
@@ -1207,14 +1212,12 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::String 
 		//CreateColliders(mesh);
 	}
 
-	return &triangles;
+	return true;
 }
 
 Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices)
 {
 	//return texel array for specified texture transformation matrix and vector
-
-	csTransform transform(tex_matrix, tex_vector);
 
 	//create array for texel map
 	int texel_count = 0;
@@ -1229,7 +1232,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	{
 		for (int j = 0; j < vertices[i].size(); j++)
 		{
-			texel_temp = transform.Other2This(vertices[i][j]);
+			texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
 			texels[index].x = texel_temp.x;
 			texels[index].y = texel_temp.y;
 			index++;
@@ -1364,8 +1367,6 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 
 	//bind material
 	newsubmesh->setMaterialName(material);
-
-	//Ogre::SubMesh newsubmesh = MeshWrapper->AddSubMesh(newbuffer, material, name);
 
 	return index;
 }

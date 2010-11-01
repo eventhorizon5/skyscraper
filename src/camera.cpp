@@ -132,13 +132,11 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	if (vector.z < 0)
 		vector.z += 360;
 
-	//convert to radians
-	Ogre::Vector3 rot;
-	rot.x = DegreesToRadians(vector.x);
-	rot.y = DegreesToRadians(vector.y);
-	rot.z = DegreesToRadians(vector.z);
-
-	collider_actor.SetRotation(rot);
+	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
+	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::UNIT_Y);
+	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
+	Ogre::Quaternion rot = x * y * z;
+	MainCamera->setOrientation(rot);
 }
 
 Ogre::Vector3 Camera::GetPosition()
@@ -160,25 +158,26 @@ void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 Ogre::Vector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
-	float x = RadiansToDegrees(collider_actor.GetRotation().x);
-	float y = RadiansToDegrees(collider_actor.GetRotation().y);
-	float z = RadiansToDegrees(collider_actor.GetRotation().z);
+	Ogre::Vector3 rot;
+	rot.x = RadiansToDegrees(MainCamera->getDirection().x);
+	rot.y = RadiansToDegrees(MainCamera->getDirection().y);
+	rot.z = RadiansToDegrees(MainCamera->getDirection().z);
 
 	//keep values within the 0-360 range
-	if (x > 360)
-		x -= 360 * int(x / 360);
-	if (x < 0)
-		x = 360 + (x - (360 * int(x / 360)));
-	if (y > 360)
-		y -= 360 * int(y / 360);
-	if (y < 0)
-		y = 360 + (y - (360 * int(y / 360)));
-	if (z > 360)
-		z -= 360 * int(z / 360);
-	if (z < 0)
-		z = 360 + (z - (360 * int(z / 360)));
+	if (rot.x > 360)
+		rot.x -= 360 * int(rot.x / 360);
+	if (rot.x < 0)
+		rot.x = 360 + (rot.x - (360 * int(rot.x / 360)));
+	if (rot.y > 360)
+		rot.y -= 360 * int(rot.y / 360);
+	if (rot.y < 0)
+		rot.y = 360 + (rot.y - (360 * int(rot.y / 360)));
+	if (rot.z > 360)
+		rot.z -= 360 * int(rot.z / 360);
+	if (rot.z < 0)
+		rot.z = 360 + (rot.z - (360 * int(rot.z / 360)));
 
-	return Ogre::Vector3(x, y, z);
+	return rot;
 }
 
 void Camera::UpdateCameraFloor()
@@ -721,32 +720,32 @@ void Camera::CreateColliders()
 {
 	// Define the player bounding box.
 
-	collider_actor.SetCollideSystem(sbs->collision_sys);
+	/*collider_actor.SetCollideSystem(sbs->collision_sys);
 	collider_actor.SetEngine(sbs->engine);
 	Ogre::Vector3 legs (cfg_legs_width, cfg_legs_height, cfg_legs_depth);
 	Ogre::Vector3 body (cfg_body_width, cfg_body_height, cfg_body_depth);
 	Ogre::Vector3 shift (0, -(cfg_legs_height + cfg_body_height), 0);
 	collider_actor.InitializeColliders (MainCamera, sbs->ToRemote(legs), sbs->ToRemote(body), sbs->ToRemote(shift));
 	collider_actor.SetCamera(MainCamera, true);
-	EnableGravity(GravityStatus);
+	EnableGravity(GravityStatus);*/
 }
 
 void Camera::Loop()
 {
 	//set collision detection status
-	collider_actor.SetCD(EnableCollisions);
+	//collider_actor.SetCD(EnableCollisions);
 
 	//set on ground status to false, to force checking of moving object intersections
 	//disabled by default due to the massive performance hit it causes
-	if (ResetOnGround == true)
-		collider_actor.SetOnGround(false);
+	//if (ResetOnGround == true)
+		//collider_actor.SetOnGround(false);
 
 	//calculate acceleration
-	InterpolateMovement();
+	//InterpolateMovement();
 
 	//general movement
-	float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
-	collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
+	//float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
+	//collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
 
 	//get list of hit meshes and put them into the 'hitlist' array
 	/*if (EnableCollisions == true)
@@ -896,7 +895,7 @@ void Camera::InterpolateMovement()
 void Camera::SetGravity(float gravity)
 {
 	Gravity = gravity;
-	collider_actor.SetGravity(sbs->ToRemote(Gravity));
+	//collider_actor.SetGravity(sbs->ToRemote(Gravity));
 }
 
 float Camera::GetGravity()
@@ -906,10 +905,10 @@ float Camera::GetGravity()
 
 void Camera::EnableGravity(bool value)
 {
-	if (value == true)
+	/*if (value == true)
 		collider_actor.SetGravity(sbs->ToRemote(Gravity));
 	else
-		collider_actor.SetGravity(0.0f);
+		collider_actor.SetGravity(0.0f);*/
 	GravityStatus = value;
 }
 
