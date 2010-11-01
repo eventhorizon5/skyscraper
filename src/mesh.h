@@ -54,7 +54,7 @@ public:
 	void Enable(bool value);
 	bool IsEnabled();
 	WallObject* CreateWallObject(Object *parent, const char *name);
-	Ogre::Material* ChangeTexture(const char *texture, bool matcheck = true);
+	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true);
 	int FindWall(const Ogre::Vector3 &point);
 	void RescaleVertices(float multiplier);
 	bool LoadColladaFile(const char *filename, const char *name);
@@ -68,19 +68,19 @@ public:
 	void AddTriangle(int submesh, Ogre::Vector3 &triangle);
 	void RemoveTriangle(int submesh, int index);
 	std::vector<Ogre::Vector3>* PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices);
-	std::vector<Ogre::Vector3>* PolyMesh(const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices = true);
+	std::vector<Ogre::Vector3>* PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices);
-	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Material* material, const char *name, bool add);
-	int FindMatchingSubMesh(Ogre::Material *material);
+	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String &material, const char *name, bool add);
+	int FindMatchingSubMesh(Ogre::String material);
 	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<Ogre::Vector3> &deleted_indices);
 	
-	Ogre::Mesh* MeshWrapper; //mesh
+	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;
 	std::vector<TriangleIndices> Triangles;
 	std::vector<Ogre::SubMesh*> Submeshes;
 	std::vector<WallObject*> Walls;
-	Ogre::Entity *Movable;
+	Ogre::MovableObject *Movable;
 
 private:
 	bool enabled;
@@ -109,7 +109,7 @@ public:
 	Ogre::Matrix3 t_matrix;
 	Ogre::Vector3 t_vector;
 
-	Ogre::Material* material; //polygon materials
+	Ogre::String material; //polygon material
 	Ogre::String name; //polygon names
 
 	WallPolygon();

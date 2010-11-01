@@ -40,7 +40,7 @@ Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogr
 
 	load_error = false;
 	mesh = new MeshObject(object, name, filename, max_render_distance, scale_multiplier);
-	if (!mesh->MeshWrapper)
+	if (!mesh->MeshWrapper.get())
 		load_error = true;
 	sbs->AddModelHandle(this);
 

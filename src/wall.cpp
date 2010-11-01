@@ -78,7 +78,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 		return 0;
 
 	bool result;
-	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name2.c_str());
+	Ogre::String material = sbs->GetTextureMaterial(texture, result, name2.c_str());
 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
@@ -100,7 +100,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 		return 0;
 
 	bool result;
-	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name2.c_str());
+	Ogre::String material = sbs->GetTextureMaterial(texture, result, name2.c_str());
 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(vertices[0], vertices[1], vertices[2]);
@@ -109,7 +109,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	return &handles[index];
 }
 
-WallPolygon* WallObject::AddPolygon(const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+WallPolygon* WallObject::AddPolygon(const char *name, Ogre::String material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 	Ogre::String name2 = ProcessName(name);
@@ -126,7 +126,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::Material* material, 
 	return &handles[index];
 }
 
-int WallObject::CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::Material* material, const char *name, Ogre::Plane &plane)
+int WallObject::CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::String material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 	int i = handles.size();

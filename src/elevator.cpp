@@ -2088,7 +2088,7 @@ void Elevator::EnableObjects(bool value)
 	}
 }
 
-bool Elevator::IsElevator(Ogre::Mesh* test)
+bool Elevator::IsElevator(Ogre::MeshPtr test)
 {
 	if (test == ElevatorMesh->MeshWrapper)
 		return true;
@@ -4205,7 +4205,7 @@ bool Elevator::DoorExists(int number)
 	//if number is 0, return true if any door exists
 
 	if (number > 0)
-		return (GetDoor(number));
+		return (GetDoor(number) > 0);
 
 	if (number == 0)
 	{

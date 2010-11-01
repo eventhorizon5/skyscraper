@@ -530,11 +530,17 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	//first verify the filename
 	Ogre::String filename2 = VerifyFile(filename);
 
-	// Load a texture
-	Ogre::Texture* wrapper = loader->LoadTexture(name, filename2, CS_TEXTURE_3D, 0, true, true, false);
+	// Load the texture
+	Ogre::TexturePtr mTex = Ogre::TextureManager::getSingleton().load(filename, "General");
 
-	if (!wrapper)
+	if (mTex.isNull())
 		return ReportError("Error loading texture");
+
+	//create a new material
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(name, "General", true);
+
+	//bind texture to material
+	mMat->getTechnique(0)->getPass(0)->createTextureUnitState()->setTextureName(mTex->getName());
 
 	//if texture has an alpha map, force binary alpha
 	//if (wrapper->GetTextureHandle()->GetAlphaType() == csAlphaMode::alphaSmooth)
@@ -554,11 +560,10 @@ bool SBS::UnloadTexture(const char *name)
 {
 	//unloads a texture
 
-	Ogre::Texture* wrapper = engine->GetTextureList()->FindByName(name);
-	if (!wrapper)
+	Ogre::TexturePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name);
+	if (!wrapper.isNull())
 		return false;
-	if (!engine->GetTextureList()->Remove(wrapper))
-		return false;
+	Ogre::TextureManager::getSingleton().remove(wrapper);
 	return true;
 }
 
@@ -1074,8 +1079,8 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wallobject->meshwrapper);
-		//CreateColliders(wallobject->meshwrapper);
+		//DeleteColliders(wallobject);
+		//CreateColliders(wallobject);
 	}
 
 	return 0;
@@ -1275,8 +1280,8 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wallobject->meshwrapper);
-		//CreateColliders(wallobject->meshwrapper);
+		//DeleteColliders(wallobject);
+		//CreateColliders(wallobject);
 	}
 
 	return 0;
@@ -1533,8 +1538,8 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wallobject->meshwrapper);
-		//CreateColliders(wallobject->meshwrapper);
+		//DeleteColliders(wallobject);
+		//CreateColliders(wallobject);
 	}
 
 	return 0;
@@ -2912,28 +2917,31 @@ void SBS::ProcessTextureFlip(float tw, float th)
 	}
 }
 
-Ogre::Material* SBS::GetTextureMaterial(const char *texture, bool &result, const char *polygon_name)
+Ogre::String SBS::GetTextureMaterial(const char *name, bool &result, const char *polygon_name)
 {
-	//perform a lookup on a texture, and return as a material
+	//perform a lookup on a texture, and return material name if it exists, or "Default" if not
 	//returns false in &result if texture load failed, and if default material was used instead
-	Ogre::Material *material = engine->GetMaterialList()->FindByName(texture);
+	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(name);
+
+	Ogre::String final_material = name;
 
 	if (!material)
 	{
 		//if material's not found, display a warning and use a default material
 		Ogre::String message;
 		if (polygon_name)
-			message = "Texture '" + Ogre::String(texture) + "' not found for polygon '" + Ogre::String(polygon_name) + "'; using default material";
+			message = "Texture '" + Ogre::String(name) + "' not found for polygon '" + Ogre::String(polygon_name) + "'; using default material";
 		else
-			message = "Texture '" + Ogre::String(texture) + "' not found; using default material";
+			message = "Texture '" + Ogre::String(name) + "' not found; using default material";
 		ReportError(message);
+
 		//set to default material
-		material = engine->GetMaterialList()->FindByName("Default");
+		final_material = "Default";
 		result = false;
 	}
 	else
 		result = true;
-	return material;
+	return final_material;
 }
 
 bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
@@ -3130,13 +3138,13 @@ int SBS::GetMeshFactoryCount()
 	return 0;
 }
 
-void SBS::CreateColliders(Ogre::Mesh* mesh)
+void SBS::CreateColliders(MeshObject* mesh)
 {
 	//create colliders for the given mesh
 	//csColliderHelper::InitializeCollisionWrapper(collision_sys, mesh);
 }
 
-void SBS::DeleteColliders(Ogre::Mesh* mesh)
+void SBS::DeleteColliders(MeshObject* mesh)
 {
 	//delete colliders for the given mesh
 	/*csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
@@ -3713,7 +3721,7 @@ void SBS::DeleteMeshHandle(MeshObject* handle)
 	}
 }
 
-MeshObject* SBS::FindMeshObject(Ogre::Mesh* meshwrapper)
+MeshObject* SBS::FindMeshObject(Ogre::MeshPtr meshwrapper)
 {
 	//find a mesh object by searching for matching wrapper
 	for (int i = 0; i < meshes.size(); i++)

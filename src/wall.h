@@ -35,8 +35,8 @@ public:
 	~WallObject();
 	WallPolygon* AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize);
 	WallPolygon* AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize);
-	WallPolygon* AddPolygon(const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector);
-	int CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::Material* material, const char *name, Ogre::Plane &plane);
+	WallPolygon* AddPolygon(const char *name, Ogre::String material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector);
+	int CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::String material, const char *name, Ogre::Plane &plane);
 	void DeletePolygons();
 	void DeletePolygon(int index, bool recreate_colliders);
 	void DeleteVertices(std::vector<int> &deleted_indices);

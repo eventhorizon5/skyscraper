@@ -146,7 +146,7 @@ public:
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
-	bool IsElevator(Ogre::Mesh* test);
+	bool IsElevator(Ogre::MeshPtr test);
 	bool IsInElevator(const Ogre::Vector3 &position);
 	//csHitBeamResult HitBeam(const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	float GetElevatorStart();

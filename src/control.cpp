@@ -56,13 +56,13 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	ControlMesh = new MeshObject(object, name, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Direction == "front")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0].c_str(), 0, 0, width, 0, height, voffset, 1, 1);
 	if (Direction == "back")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, -width, 0, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0].c_str(), 0, 0, -width, 0, height, voffset, 1, 1);
 	if (Direction == "left")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, 0, -width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0].c_str(), 0, 0, 0, -width, height, voffset, 1, 1);
 	if (Direction == "right")
-		sbs->AddGenWall(ControlMesh->MeshWrapper, textures[0].c_str(), 0, 0, 0, width, height, voffset, 1, 1);
+		sbs->AddGenWall(ControlMesh, textures[0].c_str(), 0, 0, 0, width, height, voffset, 1, 1);
 
 	//create sound object
 	sound = new Sound(this->object, "Control", true);
@@ -146,7 +146,7 @@ bool Control::SetSelectPosition(int position)
 
 	current_position = position;
 
-	if (ControlMesh->ChangeTexture(TextureArray[position - 1].c_str()))
+	if (ControlMesh->ChangeTexture(TextureArray[position - 1].c_str()).get())
 		return true;
 	return false;
 }
@@ -243,7 +243,7 @@ void Control::SetTexture(int position, const char *texture)
 int Control::GetPositions()
 {
 	//return number of available positions, based on size of Actions array
-	return Actions.size();
+	return (int)Actions.size();
 }
 
 int Control::FindActionPosition(const char *name)

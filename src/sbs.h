@@ -176,7 +176,7 @@ public:
 	void ListAltitudes();
 	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	Ogre::Material* GetTextureMaterial(const char *texture, bool &result, const char *polygon_name = 0);
+	Ogre::String SBS::GetTextureMaterial(const char *name, bool &result, const char *polygon_name = 0);
 	bool NewElevator(int number);
 	bool NewFloor(int number);
 	int Elevators();
@@ -236,8 +236,8 @@ public:
 	int GetTextureCount();
 	int GetMaterialCount();
 	int GetMeshFactoryCount();
-	void CreateColliders(Ogre::Mesh* mesh);
-	void DeleteColliders(Ogre::Mesh* mesh);
+	void CreateColliders(MeshObject* mesh);
+	void DeleteColliders(MeshObject* mesh);
 	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	int GetSoundCount();
 	void IncrementSoundCount();
@@ -280,13 +280,13 @@ public:
 	void DeleteModelHandle(Model* handle);
 	void Prepare();
 	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
-	MeshObject* FindMeshObject(Ogre::Mesh* meshwrapper);
+	MeshObject* FindMeshObject(Ogre::MeshPtr meshwrapper);
 	Object* AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
 	void DumpVertices(WallObject* wallobject);
 	Ogre::Vector2 GetExtents(std::vector<Ogre::Vector3> &varray, int coord);
-	//Ogre::Vector2 GetExtents(Ogre::Mesh* mesh, int coord);
+	//Ogre::Vector2 GetExtents(MeshObject* mesh, int coord);
 	Ogre::Vector3 GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	Ogre::Mesh* AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
+	void AddGenWall(MeshObject* mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 	void Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3& end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
 	Ogre::Vector3 GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);

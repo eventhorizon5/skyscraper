@@ -163,14 +163,14 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
+void SBS::AddGenWall(MeshObject *mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
 {
 	//add a simple wall in a general mesh (currently only used for objects that change textures)
 
 	//get texture
 	Ogre::String texname = texture;
 	bool result;
-	Ogre::Material* material = GetTextureMaterial(texture, result, mesh->getName().c_str());
+	Ogre::String material = GetTextureMaterial(texture, result, mesh->MeshWrapper->getName().c_str());
 	if (!result)
 		texname = "Default";
 
@@ -211,8 +211,6 @@ Ogre::Mesh* SBS::AddGenWall(Ogre::Mesh* mesh, const char *texture, float x1, flo
 		DeleteColliders(mesh);
 		CreateColliders(mesh);
 	}
-
-	return mesh;
 }
 
 
@@ -519,7 +517,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 		if (polycheck == true && newpolys.size() > 0)
 		{
 			//get texture data from original polygon
-			Ogre::Material *oldmat = wall->GetHandle(i)->material;
+			Ogre::String oldmat = wall->GetHandle(i)->material;
 			Ogre::Vector3 oldvector;
 			Ogre::Matrix3 mapping;
 			wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
@@ -541,8 +539,8 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wall->meshwrapper);
-		//CreateColliders(wall->meshwrapper);
+		//DeleteColliders(wall);
+		//CreateColliders(wall);
 	}
 }
 
@@ -746,7 +744,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	}
 
 	//exit if mesh wrapper wasn't created
-	if (!MeshWrapper)
+	if (!MeshWrapper.get())
 		return;
 
 	//set zbuf mode to "USE" by default
@@ -792,10 +790,9 @@ MeshObject::~MeshObject()
 	{
 		sbs->DeleteMeshHandle(this);
 		//sbs->engine->WantToDie(MeshWrapper);
-		delete MeshWrapper;
+		MeshWrapper.setNull();
 	}
 
-	MeshWrapper = 0;
 	delete object;
 }
 
@@ -833,35 +830,31 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 	return Walls[Walls.size() - 1];
 }
 
-Ogre::Material* MeshObject::ChangeTexture(const char *texture, bool matcheck)
+Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck)
 {
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
-	//exit if mesh pointer's invalid
-	if (!MeshWrapper)
-		return 0;
-
-	//get new material
-	Ogre::Material* newmat = sbs->engine->GetMaterialList()->FindByName(texture);
-
 	//exit if old and new materials are the same
 	if (matcheck == true)
 	{
-		if (MeshWrapper->GetMeshObject()->GetMaterialWrapper() == newmat)
-			return 0;
+		if (MeshWrapper->getSubMesh(0)->getMaterialName() == Ogre::String(texture))
+			return Ogre::MaterialPtr(0);
 	}
 
+	//get new material
+	Ogre::MaterialPtr newmat = Ogre::MaterialManager::getSingleton().getByName(texture);
+
 	//set material if valid
-	if (newmat)
+	if (newmat.get())
 	{
-		MeshWrapper->GetMeshObject()->SetMaterialWrapper(newmat);
+		MeshWrapper->getSubMesh(0)->setMaterialName(texture);
 		return newmat;
 	}
 	else //otherwise report error
 		sbs->ReportError("ChangeTexture: Invalid texture '" + Ogre::String(texture) + "'");
 
-	return 0;
+	return Ogre::MaterialPtr(0);
 }
 
 int MeshObject::FindWall(const Ogre::Vector3 &point)
@@ -1042,7 +1035,7 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 	//get texture material
 	Ogre::String texname = texture;
 	bool result;
-	Ogre::Material* material = sbs->GetTextureMaterial(texture, result, name);
+	Ogre::String material = sbs->GetTextureMaterial(texture, result, name);
 	if (!result)
 		texname = "Default";
 
@@ -1109,7 +1102,7 @@ std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, const char *t
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, false);
 }
 
-std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::Material* material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
+std::vector<Ogre::Vector3>* MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1245,7 +1238,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	return texels;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Material* material, const char *name, bool add)
+int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String &material, const char *name, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//(uploads vertex and index arrays to graphics card, and applies material)
@@ -1266,7 +1259,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 	//delete submesh and exit if it's going to be emptied
 	if (Triangles[index].triangles.size() - indices.size() <= 0 && createnew == false)
 	{
-		MeshWrapper->DeleteSubMesh(submesh);
+		MeshWrapper->destroySubMesh(index);
 		Submeshes.erase(Submeshes.begin() + index);
 		return -1;
 	}
@@ -1355,7 +1348,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 	if (createnew == false)
 	{
 		//delete old submesh
-		MeshWrapper->DeleteSubMesh(submesh);
+		MeshWrapper->destroySubMesh(index);
 		Submeshes.erase(Submeshes.begin() + index);
 	}
 
@@ -1369,20 +1362,22 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::Materi
 	newsubmesh->indexData->indexCount = Triangles.size() * 3;
 	newsubmesh->indexData->indexStart = 0;
 
-	//TODO - bind material
+	//bind material
+	newsubmesh->setMaterialName(material);
+
 	//Ogre::SubMesh newsubmesh = MeshWrapper->AddSubMesh(newbuffer, material, name);
 
 	return index;
 }
 
-int MeshObject::FindMatchingSubMesh(Ogre::Material *material)
+int MeshObject::FindMatchingSubMesh(Ogre::String material)
 {
 	//find a submesh with a matching material
 	//returns array index
 
 	for (int i = 0; i < Submeshes.size(); i++)
 	{
-		if (Submeshes[i]->GetMaterial() == material)
+		if (Submeshes[i]->getMaterialName() == material)
 			return i;
 	}
 	return -1;
@@ -1407,7 +1402,7 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 		deleted.push_back(deleted_indices[i].y);
 		deleted.push_back(deleted_indices[i].z);
 	}
-	sort(deleted);
+	sort(deleted.begin(), deleted.end());
 
 	//delete specified vertices
 	for (int i = deleted.size() - 1; i >= 0; i--)

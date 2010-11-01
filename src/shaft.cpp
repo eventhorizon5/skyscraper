@@ -227,7 +227,7 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 	}
 }
 
-bool Shaft::IsShaft(Ogre::Mesh* test)
+bool Shaft::IsShaft(Ogre::MeshPtr test)
 {
 	for (size_t i = 0; i < ShaftArray.size(); i++)
 	{

@@ -54,13 +54,13 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	SetCase(tmpdirection, false);
 
 	if (tmpdirection == "front")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
 	if (tmpdirection == "back")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, altitude, 1, 1);
 	if (tmpdirection == "left")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, altitude, 1, 1);
 	if (tmpdirection == "right")
-		sbs->AddGenWall(FloorIndicatorMesh->MeshWrapper, texture.c_str(), CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, altitude, 1, 1);
+		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, altitude, 1, 1);
 }
 
 FloorIndicator::~FloorIndicator()

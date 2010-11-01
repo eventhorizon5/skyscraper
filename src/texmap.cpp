@@ -134,17 +134,17 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 
 	Ogre::Vector3 v_u = (v1 - v_orig) * len1 * invl1;
 	Ogre::Vector3 v_v = (v2 - v_orig) * len2 * invl2;
-	Ogre::Vector3 v_w = v_u % v_v;
+	Ogre::Vector3 v_w = v_u.crossProduct(v_v);
 
-	m.GetColumn(1).x = v_u.x;
-	m.GetColumn(1).y = v_v.x;
-	m.GetColumn(1).z = v_w.x;
-	m.GetColumn(2).x = v_u.y;
-	m.GetColumn(2).y = v_v.y;
-	m.GetColumn(2).z = v_w.y;
-	m.GetColumn(3).x = v_u.z;
-	m.GetColumn(3).y = v_v.z;
-	m.GetColumn(3).z = v_w.z;
+	m[0][0] = v_u.x;
+	m[0][1] = v_v.x;
+	m[0][2] = v_w.x;
+	m[1][0] = v_u.y;
+	m[1][1] = v_v.y;
+	m[1][2] = v_w.y;
+	m[2][0] = v_u.z;
+	m[2][1] = v_v.z;
+	m[2][2] = v_w.z;
 
 	v = v_orig;
 
@@ -247,7 +247,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 				Ogre::Vector3 v = ptB;
 				v -= ptA;
 
-				float sect = -(ptA.x - x) / v.x;
+				float sect = -(ptA.x - value) / v.x;
 				v *= sect;
 				v += ptA;
 				poly1.push_back(v);
@@ -267,7 +267,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 				Ogre::Vector3 v = ptB;
 				v -= ptA;
 
-				float sect = -(ptA.x - x) / v.x;
+				float sect = -(ptA.x - value) / v.x;
 				v *= sect;
 				v += ptA;
 				poly1.push_back(v);
@@ -298,7 +298,7 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices)
 	size_t i, i1;
 	float x1, y1, z1, x, y, z;
 
-	i1 = num - 1;
+	i1 = vertices.size() - 1;
 	x1 = vertices[i1].x;
 	y1 = vertices[i1].y;
 	z1 = vertices[i1].z;
