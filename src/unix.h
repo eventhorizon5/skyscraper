@@ -23,13 +23,15 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgrePlatform.h>
+
 #if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
 
 #define	_itoa itoa
 #define	__strrev strrev
 #define	_gcvt gcvt
 
-const char* itoa(int value, char*  str, int radix);
+const char* itoa(int value, char* str, int radix);
 const char* strrev(char* szT);
 const char* StrRev(char* szT);
 

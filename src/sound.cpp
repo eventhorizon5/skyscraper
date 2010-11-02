@@ -308,7 +308,7 @@ void Sound::Load(const char *filename, bool force)
 
 	//load new sound
 	Filename = filename;
-	Ogre::String full_filename1 = "/root/data/";
+	Ogre::String full_filename1 = "data/";
 	full_filename1.append(filename);
 	Ogre::String full_filename = sbs->VerifyFile(full_filename1);
 

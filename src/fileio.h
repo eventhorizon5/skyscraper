@@ -86,7 +86,7 @@ class ScriptProcessor
 	int ProcElevators();
 	int ProcTextures();
 	bool FunctionProc();
-	void CheckFile(const char *filename, bool relative = false);
+	void CheckFile(const char *filename);
 
 	struct FunctionInfo
 	{

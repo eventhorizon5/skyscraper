@@ -39,6 +39,8 @@ Camera::Camera(Ogre::Camera *camera)
 	object->SetValues(this, sbs->object, "Camera", "Camera", true);
 
 	MainCamera = camera;
+	//MainCamera->setNearClipDistance(1.5f);
+	//MainCamera->setFarClipDistance(3000.0f);
 
 	//init variables
 	CurrentFloor = 0;

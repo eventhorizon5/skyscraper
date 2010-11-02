@@ -391,11 +391,11 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_
 
 void SBS::PrintBanner()
 {
-	Report("\n Scalable Building Simulator " + version + " " + version_state + "\n");
-	Report(" Copyright (C)2004-2010 Ryan Thoryk\n");
-	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free\n");
-	Report(" software, and you are welcome to redistribute it under certain\n");
-	Report(" conditions. For details, see the file gpl.txt\n\n");
+	Report("\n Scalable Building Simulator " + version + " " + version_state);
+	Report(" Copyright (C)2004-2010 Ryan Thoryk");
+	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
+	Report(" software, and you are welcome to redistribute it under certain");
+	Report(" conditions. For details, see the file gpl.txt\n");
 }
 
 void SBS::MainLoop()
@@ -512,16 +512,16 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 		//DisableSound = true;
 
 	//mount sign texture packs
-	Mount("signs-sans.zip", "/root/signs/sans");
-	Mount("signs-sans_bold.zip", "/root/signs/sans_bold");
-	Mount("signs-sans_cond.zip", "/root/signs/sans_cond");
-	Mount("signs-sans_cond_bold.zip", "/root/signs/sans_cond_bold");
+	Mount("signs-sans.zip", "signs/sans");
+	Mount("signs-sans_bold.zip", "signs/sans_bold");
+	Mount("signs-sans_cond.zip", "signs/sans_cond");
+	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
 
 	//load default textures
 	printf("Loading default textures...");
-	LoadTexture("/root/data/brick1.jpg", "Default", 1, 1);
-	LoadTexture("/root/data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	LoadTexture("/root/data/metal1-sm.jpg", "Connection", 1, 1);
+	LoadTexture("data/brick1.jpg", "Default", 1, 1);
+	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	printf("Done\n");
 
 	//create camera object
@@ -533,16 +533,16 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//first verify the filename
-	Ogre::String filename2 = VerifyFile(filename);
+	//Ogre::String filename2 = VerifyFile(filename);
 
 	// Load the texture
-	Ogre::TexturePtr mTex = Ogre::TextureManager::getSingleton().load(filename, "General");
+	Ogre::TexturePtr mTex = Ogre::TextureManager::getSingleton().load(filename, "General", Ogre::TEX_TYPE_2D, Ogre::MIP_DEFAULT, 1.0f, false);
 
 	if (mTex.isNull())
 		return ReportError("Error loading texture");
 
 	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(name, "General", true);
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(name, "General");
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState()->setTextureName(mTex->getName());
@@ -550,6 +550,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	//if texture has an alpha map, force binary alpha
 	//if (wrapper->GetTextureHandle()->GetAlphaType() == csAlphaMode::alphaSmooth)
 		//wrapper->GetTextureHandle()->SetAlphaType(csAlphaMode::alphaBinary);
+
+	Report("Loaded texture " + Ogre::String(filename));
 
 	TextureInfo info;
 	info.name = name;
@@ -654,7 +656,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	Ogre::String font_filename2 = VerifyFile(font_filename);
 	Ogre::String relative_filename = font_filename2;
-	ReplaceAll(relative_filename, "/root/", "");
 
 	//load font
 	Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
@@ -1596,7 +1597,7 @@ void SBS::CreateSky(const char *filenamebase)
 {
 	//create skybox
 
-
+	return;
 	Ogre::String file = filenamebase;
 	//vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
 
@@ -3637,15 +3638,11 @@ const char* SBS::VerifyFile(const char *filename)
 	return 0;
 }
 
-bool SBS::FileExists(const char *filename, bool relative)
+bool SBS::FileExists(const char *filename)
 {
 	//check to see if the specified file exists
-	//the name must begin with the "/root/" suffix if relative is false
 
 	/*Ogre::String file = filename;
-
-	if (relative == true)
-		file.insert(0, "/root/");
 
 	if (vfs->Exists(filename))
 		return true;

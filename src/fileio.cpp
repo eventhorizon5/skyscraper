@@ -27,6 +27,7 @@
 #include <wx/msgdlg.h>
 #include "globals.h"
 #include "sbs.h"
+#include <OgreFileSystem.h>
 #include <stdlib.h>
 #include "fileio.h"
 #include "skyscraper.h"
@@ -645,12 +646,8 @@ Nextline:
 bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert_line)
 {
 	//loads a building data file into the runtime buffer
-	/*bool streamnotfinished = true;
-	char buffer[1000];
 	int location = insert_line;
 	Ogre::String Filename = filename;
-
-	Filename.insert(0, "/root/");
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
@@ -658,38 +655,34 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 			return false;
 
 	//make sure file exists
-	if (Simcore->FileExists(Filename.c_str()) == false)
-		return false;
+	//if (Simcore->FileExists(Filename.c_str()) == false)
+		//return false;
+
+	Simcore->Report(Filename);
 
 	//load file
-	Ogre::File file (Simcore->vfs->Open(Filename, VFS_FILE_READ));
+	Ogre::FileSystemArchive filesystem("","FileSystem");
+	Ogre::DataStreamPtr filedata = filesystem.open(filename, true);
 
 	//exit if an error occurred while loading
-	if (!file)
+	if(filedata.isNull())
 		return false;
 
-	csFileReadHelper file_r(file);
+	Ogre::DataStreamPtr file(OGRE_NEW Ogre::MemoryDataStream(filename, filedata));
 
 	//clear array
 	if (insert == false)
 		BuildingData.clear();
 
-	while (streamnotfinished == true)
+	while (file->eof() == false)
 	{
-		//clear buffer
-		for (int i = 0; i < 1000; i++)
-			buffer[i] = ' ';
-
-		//read each line into the buffer
-		streamnotfinished = file_r.GetString(buffer, 1000, true);
-
-		//push buffer onto the tail end of the BuildingData array
+		//push next line of data onto the tail end of the BuildingData array
 		if (insert == false)
-			BuildingData.push_back(buffer);
+			BuildingData.push_back(file->getLine(true));
 		else
 		{
 			//otherwise insert data into building array
-			BuildingData.insert(location, buffer);
+			BuildingData.insert(BuildingData.begin() + location, file->getLine(true));
 			location++;
 		}
 	}
@@ -703,7 +696,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 		info.end_line = location - 1;
 		includes.push_back(info);
 	}
-	*/
+
 	return true;
 }
 
@@ -2002,7 +1995,6 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Incorrect number of parameters");
 
 		buffer = tempdata[1];
-		buffer.insert(0, "/root/");
 		if (!Simcore->Mount(tempdata[0].c_str(), buffer.c_str()))
 			return ScriptError();
 
@@ -2061,7 +2053,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		if (partial == true)
 			StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
@@ -2091,7 +2083,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		//create model
 		StoreCommand(Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
@@ -2798,8 +2790,8 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[0]).c_str(), true);
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+			CheckFile(Ogre::String("data/" + tempdata[0]).c_str());
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 		}
 
 		//create door
@@ -2883,8 +2875,8 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
-			CheckFile(Ogre::String("data/" + tempdata[2]).c_str(), true);
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+			CheckFile(Ogre::String("data/" + tempdata[2]).c_str());
 		}
 
 		//create door
@@ -3110,7 +3102,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		if (partial == true)
 			StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
@@ -3191,7 +3183,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		//create model
 		StoreCommand(floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
@@ -3216,7 +3208,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		//create model
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
@@ -3244,7 +3236,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		//create model
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
@@ -3587,7 +3579,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->OpenSound = temp2;
 	}
@@ -3605,7 +3597,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
 	}
@@ -3623,7 +3615,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->NudgeSound = temp2;
 	}
@@ -3634,7 +3626,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarStartSound = temp2;
 		//turn off motor sounds
@@ -3650,7 +3642,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarMoveSound = temp2;
 		//turn off motor sounds
@@ -3666,7 +3658,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarStopSound = temp2;
 		//turn off motor sounds
@@ -3682,7 +3674,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarIdleSound = temp2;
 		//turn off motor sounds
@@ -3697,7 +3689,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarStartSound = temp2;
 	}
@@ -3707,7 +3699,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarMoveSound = temp2;
 	}
@@ -3717,7 +3709,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarStopSound = temp2;
 	}
@@ -3727,7 +3719,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->CarIdleSound = temp2;
 	}
@@ -3737,7 +3729,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->MotorStartSound = temp2;
 	}
@@ -3747,7 +3739,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->MotorRunSound = temp2;
 	}
@@ -3757,7 +3749,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->MotorStopSound = temp2;
 	}
@@ -3775,7 +3767,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
@@ -3794,7 +3786,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 	}
@@ -3812,7 +3804,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
@@ -3822,7 +3814,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->AlarmSound = temp2;
 	}
@@ -3832,7 +3824,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->AlarmSoundStop = temp2;
 	}
@@ -3842,7 +3834,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->SetBeepSound(temp2.c_str());
 	}
@@ -3852,7 +3844,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->SetFloorSound(temp2.c_str());
 	}
@@ -3862,7 +3854,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->SetMessageSound(true, temp2.c_str());
 	}
@@ -3872,7 +3864,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->SetMessageSound(false, temp2.c_str());
 	}
@@ -3882,7 +3874,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str(), true);
+		CheckFile(Ogre::String("data/" + temp2).c_str());
 
 		elev->Music = temp2;
 	}
@@ -4390,7 +4382,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (compat == 0)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
@@ -4496,7 +4488,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (compat == 0)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
@@ -4538,7 +4530,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid panel number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 	}
@@ -4583,7 +4575,7 @@ int ScriptProcessor::ProcElevators()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 	}
@@ -4767,7 +4759,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		if (partial == true)
 			StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
@@ -4933,8 +4925,8 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		CheckFile(Ogre::String("data/" + tempdata[0]).c_str(), true);
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[0]).c_str());
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		//create door
 		if (compat == 1)
@@ -4964,7 +4956,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str(), true);
+		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
 
 		//create model
 		StoreCommand(elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
@@ -5035,7 +5027,6 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[0];
-		buffer.insert(0, "/root/");
 		CheckFile(buffer.c_str());
 		if (params == 4)
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
@@ -5070,11 +5061,11 @@ int ScriptProcessor::ProcTextures()
 			ReplaceAll(temp2, "%number%", buffer.c_str());
 			temp6 = tempdata[3];
 			ReplaceAll(temp6, "%number%", buffer.c_str());
-			CheckFile(temp2.c_str(), true);
+			CheckFile(temp2.c_str());
 			if (params == 6)
-				Simcore->LoadTexture(Ogre::String("/root/" + temp2).c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()));
+				Simcore->LoadTexture(temp2.c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()));
 			else
-				Simcore->LoadTexture(Ogre::String("/root/" + temp2).c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), true, Ogre::StringConverter::parseBool(tempdata[6]));
+				Simcore->LoadTexture(temp2.c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), true, Ogre::StringConverter::parseBool(tempdata[6]));
 		}
 	}
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addtext ")
@@ -5099,7 +5090,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[2];
-		buffer.insert(0, "/root/data/fonts/");
+		buffer.insert(0, "data/fonts/");
 		CheckFile(buffer.c_str());
 		if (params == 14)
 			Simcore->AddTextToTexture(tempdata[0].c_str(), tempdata[1].c_str(), buffer.c_str(), atof(tempdata[3].c_str()), tempdata[4].c_str(), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), tempdata[9].c_str(), tempdata[10].c_str(), atoi(tempdata[11].c_str()), atoi(tempdata[12].c_str()), atoi(tempdata[13].c_str()));
@@ -5143,7 +5134,7 @@ int ScriptProcessor::ProcTextures()
 			int params = SplitData(LineData.c_str(), 13, false);
 
 			buffer = tempdata[4];
-			buffer.insert(0, "/root/data/fonts/");
+			buffer.insert(0, "data/fonts/");
 			CheckFile(buffer.c_str());
 			if (params == 16)
 				Simcore->AddTextToTexture(tempdata[2].c_str(), tempdata[3].c_str(), buffer.c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), atoi(tempdata[9].c_str()), atoi(tempdata[10].c_str()), tempdata[11].c_str(), tempdata[12].c_str(), atoi(tempdata[13].c_str()), atoi(tempdata[14].c_str()), atoi(tempdata[15].c_str()));
@@ -5168,7 +5159,6 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[0];
-		buffer.insert(0, "/root/");
 		CheckFile(buffer.c_str());
 		if (params == 8)
 			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
@@ -5411,7 +5401,7 @@ bool ScriptProcessor::FunctionProc()
 	return false;
 }
 
-void ScriptProcessor::CheckFile(const char *filename, bool relative)
+void ScriptProcessor::CheckFile(const char *filename)
 {
 	//check to see if the specified file exists.
 	//if not, add to nonexistent_files array
@@ -5436,11 +5426,8 @@ void ScriptProcessor::CheckFile(const char *filename, bool relative)
 
 	ReplaceAll(file, "\\", "/");
 
-	if (Simcore->FileExists(file.c_str(), relative) == false)
-	{
-		ReplaceAll(file, "/root/", "");
+	if (Simcore->FileExists(file.c_str()) == false)
 		nonexistent_files.push_back(file);
-	}
 }
 
 int ScriptProcessor::SplitData(const char *string, int start, bool calc)
@@ -5452,14 +5439,14 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 	Ogre::String data = string;
 	Ogre::String stringbuffer;
 	SplitString(tempdata, data.substr(start).c_str(), ',');
-	for (int i = 0; i < (int)tempdata.size(); i++)
+	if (calc == true)
 	{
-		if (calc == true)
+		for (int i = 0; i < (int)tempdata.size(); i++)
+		{
 			stringbuffer = Calc(tempdata[i].c_str());
-		else
-			stringbuffer = tempdata[i];
-		TrimString(stringbuffer);
-		tempdata.insert(tempdata.begin() + i, stringbuffer);
+			TrimString(stringbuffer);
+			tempdata[i] = stringbuffer;
+		}
 	}
 	return (int)tempdata.size();
 }

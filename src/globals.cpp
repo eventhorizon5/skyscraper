@@ -28,6 +28,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <OgreString.h>
 #include "globals.h"
 
 bool IsEven(int Number)
@@ -195,8 +196,7 @@ int FindWithCase(const char *string, bool uppercase, const char *key, int offset
 void TrimString(std::string &string)
 {
 	//trim whitespace from string
-	std::string::iterator end_pos = std::remove(string.begin(), string.end(), ' ');
-	string.erase(end_pos, string.end());
+	Ogre::StringUtil::trim(string, true, true);
 }
 
 void ReplaceAll(std::string &string, const char *original, const char *replacement)

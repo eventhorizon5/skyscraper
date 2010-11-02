@@ -33,6 +33,19 @@
 #include "debugpanel.h"
 #include "revmain.h"
 
+#if defined(__WXGTK__)
+   // NOTE: Find the GTK install config with `pkg-config --cflags gtk+-2.0`
+   #include "gtk/gtk.h"
+   #include "gdk/gdk.h"
+   #include "gdk/gdkx.h"
+   #include "wx/gtk/win_gtk.h"
+   #include "GL/glx.h"
+#endif
+
+#if defined(__WXMAC__)
+#include <Carbon/Carbon.h>
+#endif
+
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
 //IMPLEMENT_CLASS(Skyscraper, wxApp)
 //BEGIN_EVENT_TABLE(Skyscraper, wxApp)
@@ -82,7 +95,7 @@ bool Skyscraper::OnInit(void)
 	skyscraper = this;
 	MouseDown = false;
 	RenderOnly = false;
-	InputOnly = false;
+	//InputOnly = false;
 	canvas_width = 0;
 	canvas_height = 0;
 	IsRunning = false;
@@ -310,6 +323,9 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 		}
 	}
 	
+	//add app's directory to resource manager
+	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
+
 	//create scene manager
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
 
@@ -833,7 +849,7 @@ void Skyscraper::Loop()
 	//InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);
 
 	Simcore->RenderOnly = RenderOnly;
-	Simcore->InputOnly = InputOnly;
+	//Simcore->InputOnly = this->InputOnly;
 
 	//run SBS main loop
 	Simcore->MainLoop();
@@ -886,15 +902,15 @@ void Skyscraper::DrawBackground()
 	g2d->Clear(0);
 	g2d->SetClipRect(0, 0, w, h);
 
-	DrawImage("/root/data/menu.png", 0, 0, 1, false);
+	DrawImage("data/menu.png", 0, 0, 1, false);
 
 	if (DrewButtons == false)
 	{
-		DrawImage("/root/data/button_triton.png", &button1, 0, -20, true, "/root/data/button_triton_selected.png", "/root/data/button_triton_pressed.png");
-		DrawImage("/root/data/button_searstower.png", &button2, 0, 30, true, "/root/data/button_searstower_selected.png", "/root/data/button_searstower_pressed.png");
-		DrawImage("/root/data/button_glasstower.png", &button3, 0, 80, true, "/root/data/button_glasstower_selected.png", "/root/data/button_glasstower_pressed.png");
-		DrawImage("/root/data/button_simple.png", &button4, 0, 130, true, "/root/data/button_simple_selected.png", "/root/data/button_simple_pressed.png");
-		DrawImage("/root/data/button_other.png", &button5, 0, 180, true, "/root/data/button_other_selected.png", "/root/data/button_other_pressed.png");
+		DrawImage("data/button_triton.png", &button1, 0, -20, true, "/root/data/button_triton_selected.png", "/root/data/button_triton_pressed.png");
+		DrawImage("data/button_searstower.png", &button2, 0, 30, true, "/root/data/button_searstower_selected.png", "/root/data/button_searstower_pressed.png");
+		DrawImage("data/button_glasstower.png", &button3, 0, 80, true, "/root/data/button_glasstower_selected.png", "/root/data/button_glasstower_pressed.png");
+		DrawImage("data/button_simple.png", &button4, 0, 130, true, "/root/data/button_simple_selected.png", "/root/data/button_simple_pressed.png");
+		DrawImage("data/button_other.png", &button5, 0, 180, true, "/root/data/button_other_selected.png", "/root/data/button_other_pressed.png");
 		DrewButtons = true;
 	}*/
 }
@@ -1097,7 +1113,7 @@ void Skyscraper::StartSound()
 	}
 
 	Ogre::String filename = confman->GetStr("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
-	Ogre::String filename_full = "/root/data/" + filename;
+	Ogre::String filename_full = "data/" + filename;
 
 	//load new sound
 	csRef<iDataBuffer> sndbuffer = vfs->ReadFile(filename_full);
