@@ -203,13 +203,8 @@ void ReplaceAll(std::string &string, const char *original, const char *replaceme
 {
 	//replace all occurances of "original" with "replacement"
 
-	int position = string.find(original);
-
-	while (position != std::string::npos)
-	{
-		string.replace(position, 100, replacement);
-		position = string.find(original, position + 1);
-	}
+	Ogre::String newstring = Ogre::StringUtil::replaceAll(string, original, replacement);
+	string = newstring;
 }
 bool StartsWith(std::string &string, const char *check_string, bool ignore_case)
 {

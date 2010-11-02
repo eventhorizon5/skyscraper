@@ -1255,16 +1255,27 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 
 	//get existing submesh pointer
 	if (index == -1)
+	{
 		createnew = true;
+		
+		//create submesh
+		submesh = MeshWrapper->createSubMesh(name);
+		Submeshes.push_back(submesh);
+		index = (int)Submeshes.size() - 1;
+		Triangles.resize(Triangles.size() + 1);
+	}
 	else
 		submesh = Submeshes[index];
 
 	//delete submesh and exit if it's going to be emptied
-	if (Triangles[index].triangles.size() - indices.size() <= 0 && createnew == false)
+	if (createnew == false)
 	{
-		MeshWrapper->destroySubMesh(index);
-		Submeshes.erase(Submeshes.begin() + index);
-		return -1;
+		if (Triangles[index].triangles.size() - indices.size() <= 0)
+		{
+			MeshWrapper->destroySubMesh(index);
+			Submeshes.erase(Submeshes.begin() + index);
+			return -1;
+		}
 	}
 
 	//add triangles
@@ -1353,20 +1364,21 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 		//delete old submesh
 		MeshWrapper->destroySubMesh(index);
 		Submeshes.erase(Submeshes.begin() + index);
+
+		//create new submesh
+		submesh = MeshWrapper->createSubMesh(name);
+		Submeshes.push_back(submesh);
+		index = (int)Submeshes.size() - 1;
+		Triangles.resize(Triangles.size() + 1);
 	}
 
-	//create submesh
-	Ogre::SubMesh* newsubmesh = MeshWrapper->createSubMesh(name);
-	Submeshes.push_back(newsubmesh);
-	index = (int)Submeshes.size() - 1;
-
 	//bind index data to submesh
-	newsubmesh->indexData->indexBuffer = ibuffer;
-	newsubmesh->indexData->indexCount = Triangles.size() * 3;
-	newsubmesh->indexData->indexStart = 0;
+	submesh->indexData->indexBuffer = ibuffer;
+	submesh->indexData->indexCount = Triangles.size() * 3;
+	submesh->indexData->indexStart = 0;
 
 	//bind material
-	newsubmesh->setMaterialName(material);
+	submesh->setMaterialName(material);
 
 	return index;
 }
