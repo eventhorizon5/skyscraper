@@ -262,7 +262,7 @@ void CallButton::Call(bool direction)
 	//this call will return at least this call button
 	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
 
-	for (int i = 0; i < buttons.size(); i++)
+	for (int i = 0; i < (int)buttons.size(); i++)
 	{
 		if (direction == true)
 		{
@@ -364,7 +364,7 @@ void CallButton::SetLights(int up, int down)
 bool CallButton::ServicesElevator(int elevator)
 {
 	//return true if this call button services the specified elevator
-	for (int i = 0; i < Elevators.size(); i++)
+	for (int i = 0; i < (int)Elevators.size(); i++)
 	{
 		if (Elevators[i] == elevator)
 		{
@@ -407,7 +407,7 @@ void CallButton::Loop(bool direction)
 			Report("Finding nearest available elevator...");
 
 		//check each elevator associated with this call button to find the closest available one
-		for (size_t i = 0; i < Elevators.size(); i++)
+		for (int i = 0; i < (int)Elevators.size(); i++)
 		{
 			Elevator *elevator = sbs->GetElevator(Elevators[i]);
 			int current = elevator->GetFloor();
@@ -509,7 +509,7 @@ void CallButton::Loop(bool direction)
 		std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
 
 		//turn off all button lights in the group
-		for (int i = 0; i < buttons.size(); i++)
+		for (int i = 0; i < (int)buttons.size(); i++)
 		{
 			if (direction == true)
 				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->UpLight(false);

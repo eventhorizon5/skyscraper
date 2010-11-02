@@ -102,7 +102,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 ButtonPanel::~ButtonPanel()
 {
 	//delete controls
-	for (int i = 0; i < controls.size(); i++)
+	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		if (controls[i])
 		{
@@ -243,7 +243,7 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 
 	//create control object
 	controls.resize(controls.size() + 1);
-	int control_index = controls.size() - 1;
+	int control_index = (int)controls.size() - 1;
 	Ogre::String buffer, buffer2, buffer3, buffer4;
 	buffer2 = elevator;
 	buffer3 = Index;
@@ -270,7 +270,7 @@ void ButtonPanel::Press(int index)
 	Elevator *elev = sbs->GetElevator(elevator);
 
 	//exit if index is invalid
-	if (index < 0 || index > controls.size() - 1)
+	if (index < 0 || index > (int)controls.size() - 1)
 		return;
 
 	//play button sound
@@ -419,7 +419,7 @@ void ButtonPanel::Move(const Ogre::Vector3 &position)
 	ButtonPanelMesh->Move(position, true, true, true);
 
 	//move controls
-	for (int i = 0; i < controls.size(); i++)
+	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		controls[i]->Move(position);
 	}
@@ -432,7 +432,7 @@ void ButtonPanel::SetToElevatorAltitude()
 	ButtonPanelMesh->Move(pos_new, false, false, false);
 
 	//move controls
-	for (int i = 0; i < controls.size(); i++)
+	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		controls[i]->SetPositionY(pos_new.y);
 	}
@@ -447,7 +447,7 @@ void ButtonPanel::Enabled(bool value)
 
 	ButtonPanelMesh->Enable(value);
 
-	for (int i = 0; i < controls.size(); i++)
+	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		controls[i]->Enabled(value);
 	}
@@ -473,7 +473,7 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 
 	Ogre::String floornum;
 	floornum = floor;
-	for (int i = 0; i < controls.size(); i++)
+	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		int index = controls[i]->FindActionPosition(floornum.c_str());
 		int index2 = controls[i]->FindActionPosition("off");
@@ -496,7 +496,7 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 
 	if (controls.size() > 0)
 	{
-		for (int i = 0; i < controls.size(); i++)
+		for (int i = 0; i < (int)controls.size(); i++)
 		{
 			if (controls[i]->FindActionPosition(floornum.c_str()))
 				return i;
@@ -508,7 +508,7 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 void ButtonPanel::RemoveControl(Control *control)
 {
 	//remove a control from the array (does not delete the object)
-	for (int i = 0; i < controls.size(); i++)
+	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		if (controls[i] == control)
 		{

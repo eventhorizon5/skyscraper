@@ -120,7 +120,7 @@ void Object::AddChild(Object *object)
 Object* Object::GetChild(int index)
 {
 	//return pointer to child object from an array index
-	if (index < children.size())
+	if (index < (int)children.size())
 		return children[index];
 	else
 		return 0;
@@ -129,5 +129,5 @@ Object* Object::GetChild(int index)
 int Object::GetChildrenCount()
 {
 	//return number of child objects
-	return children.size();
+	return (int)children.size();
 }

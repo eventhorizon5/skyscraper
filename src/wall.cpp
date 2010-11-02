@@ -47,7 +47,7 @@ WallObject::~WallObject()
 
 	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
 	{
-		for (int i = 0; i < parent_array->size(); i++)
+		for (int i = 0; i < (int)parent_array->size(); i++)
 		{
 			if (parent_array->at(i) == this)
 				parent_array->erase(parent_array->begin() + i);
@@ -132,7 +132,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::String material, std
 int WallObject::CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::String material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
-	int i = handles.size();
+	int i = (int)handles.size();
 	handles.resize(handles.size() + 1);
 	handles[i].mesh = meshwrapper;
 	handles[i].index_extents = index_extents;
@@ -168,7 +168,7 @@ void WallObject::DeletePolygons()
 {
 	//delete polygons and handles
 	
-	for (int i = 0; i < handles.size(); i++)
+	for (int i = 0; i < (int)handles.size(); i++)
 		DeletePolygon(i, false);
 
 	//recreate colliders
@@ -180,7 +180,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 {
 	//delete a single polygon
 
-	if (index > -1 && index < handles.size())
+	if (index > -1 && index < (int)handles.size())
 	{
 		//delete triangles
 		meshwrapper->ProcessSubMesh(handles[index].triangles, handles[index].material, handles[index].name.c_str(), false);
@@ -205,12 +205,12 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 
 int WallObject::GetHandleCount()
 {
-	return handles.size();
+	return (int)handles.size();
 }
 
 WallPolygon* WallObject::GetHandle(int index)
 {
-	if (index > -1 && index < handles.size())
+	if (index > -1 && index < (int)handles.size())
 		return &handles[index];
 	return 0;
 }
@@ -220,7 +220,7 @@ int WallObject::FindPolygon(const char *name)
 	//find a polygon object by name
 
 	Ogre::String name2 = name;
-	for (int i = 0; i < handles.size(); i++)
+	for (int i = 0; i < (int)handles.size(); i++)
 	{
 		Ogre::String tmpname = handles[i].name;
 		if (tmpname.find("(") == 0)
@@ -239,7 +239,7 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
-	if (index < 0 || index >= handles.size())
+	if (index < 0 || index >= (int)handles.size())
 		return;
 
 	handles[index].GetGeometry(meshwrapper, vertices, firstonly);
@@ -247,7 +247,7 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 
 void WallObject::SetPolygonName(int index, const char *name)
 {
-		if (index < 0 || index >= handles.size())
+		if (index < 0 || index >= (int)handles.size())
 			return;
 
 		//set polygon name
@@ -273,7 +273,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point)
 	//check through polygons to see if the specified point is on this wall object
 
 	bool checkplane = false;
-	for (int i = 0; i < handles.size(); i++)
+	for (int i = 0; i < (int)handles.size(); i++)
 	{
 		if (i == 0)
 			checkplane = true;

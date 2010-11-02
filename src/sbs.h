@@ -74,7 +74,6 @@ public:
 
 	Object *object; //SBS object
 
-	unsigned int elapsed_time;
 	float delta;
 
 	Ogre::Root* mRoot;
@@ -301,6 +300,9 @@ public:
 	int WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2);
 	Ogre::Vector2 GetExtents(MeshObject* mesh, int coord);
 	bool InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test);
+	void AdvanceClock();
+	unsigned int GetRunTime();
+	unsigned int GetElapsedTime();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -435,6 +437,11 @@ private:
 	std::vector<Model*> all_models;
 
 	int ObjectCount; //number of simulator objects
+
+	//internal clock
+	unsigned int current_time;
+	unsigned int current_virtual_time;
+	unsigned int elapsed_time;
 };
 
 #endif

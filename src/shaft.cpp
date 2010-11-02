@@ -97,9 +97,9 @@ Shaft::~Shaft()
 	//destructor
 
 	//delete models
-	for (int i = 0; i < ModelArray.size(); i++)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
-		for (int j = 0; j < ModelArray[i].size(); j++)
+		for (int j = 0; j < (int)ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j])
 				delete ModelArray[i][j];
@@ -108,9 +108,9 @@ Shaft::~Shaft()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.size(); i++)
+	for (int i = 0; i < (int)lights.size(); i++)
 	{
-		for (int j = 0; j < lights[i].size(); j++)
+		for (int j = 0; j < (int)lights[i].size(); j++)
 		{
 			if (lights[i][j])
 				delete lights[i][j];
@@ -119,7 +119,7 @@ Shaft::~Shaft()
 	}
 
 	//delete mesh array objects
-	for (int i = 0; i < ShaftArray.size(); i++)
+	for (int i = 0; i < (int)ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i])
 			delete ShaftArray[i];
@@ -316,7 +316,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight() + endvoffset;
 
-	for (int i = 0; i < sbs->External->Walls.size(); i++)
+	for (int i = 0; i < (int)sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
 			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
@@ -339,7 +339,7 @@ bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const 
 
 	float base = sbs->GetFloor(floor)->Altitude;
 
-	for (int i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
+	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
@@ -413,7 +413,7 @@ void Shaft::AddShowFloor(int floor)
 	//adds a floor number to the ShowFloors array
 
 	int index = -1;
-	for (int i = 0; i < ShowFloorsList.size(); i++)
+	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
 			index = i;
@@ -430,14 +430,14 @@ void Shaft::RemoveShowFloor(int floor)
 	//removes a floor number from the ShowFloors array
 
 	int index = -1;
-	for (int i = 0; i < ShowFloorsList.size(); i++)
+	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
 			index = i;
 	}
 	if (index != -1)
 	{
-		for (int i = 0; i < ShowFloorsList.size(); i++)
+		for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 		{
 			if (ShowFloorsList[i] == floor)
 				ShowFloorsList.erase(ShowFloorsList.begin() + i);
@@ -450,7 +450,7 @@ void Shaft::AddShowOutside(int floor)
 	//adds a floor number to the ShowFloors array
 
 	int index = -1;
-	for (int i = 0; i < ShowOutsideList.size(); i++)
+	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
 	{
 		if (ShowOutsideList[i] == floor)
 			index = i;
@@ -467,14 +467,14 @@ void Shaft::RemoveShowOutside(int floor)
 	//removes a floor number from the ShowFloors array
 
 	int index = -1;
-	for (int i = 0; i < ShowOutsideList.size(); i++)
+	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
 	{
 		if (ShowOutsideList[i] == floor)
 			index = i;
 	}
 	if (index != -1)
 	{
-		for (int i = 0; i < ShowOutsideList.size(); i++)
+		for (int i = 0; i < (int)ShowOutsideList.size(); i++)
 		{
 			if (ShowOutsideList[i] == floor)
 				ShowOutsideList.erase(ShowOutsideList.begin() + i);
@@ -505,7 +505,7 @@ void Shaft::AddElevator(int number)
 void Shaft::RemoveElevator(int number)
 {
 	//remove specified elevator from list
-	for (int i = 0; i < elevators.size(); i++)
+	for (int i = 0; i < (int)elevators.size(); i++)
 	{
 		if (elevators[i] == number)
 			elevators.erase(elevators.begin() + i);

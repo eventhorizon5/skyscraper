@@ -177,7 +177,7 @@ Elevator::Elevator(int number)
 Elevator::~Elevator()
 {
 	//delete models
-	for (int i = 0; i < ModelArray.size(); i++)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 			delete ModelArray[i];
@@ -185,7 +185,7 @@ Elevator::~Elevator()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.size(); i++)
+	for (int i = 0; i < (int)lights.size(); i++)
 	{
 		if (lights[i])
 			delete lights[i];
@@ -228,7 +228,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting interior directional indicators");
 
-	for (int i = 0; i < DirIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 		{
@@ -244,7 +244,7 @@ Elevator::~Elevator()
 
 	if (DoorArray.size() > 0)
 	{
-		for (int i = 0; i < DoorArray.size(); i++)
+		for (int i = 0; i < (int)DoorArray.size(); i++)
 		{
 			if (DoorArray[i])
 			{
@@ -258,7 +258,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting floor indicators");
 
-	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 		{
@@ -272,7 +272,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting button panels");
 
-	for (int i = 0; i < PanelArray.size(); i++)
+	for (int i = 0; i < (int)PanelArray.size(); i++)
 	{
 		if (PanelArray[i])
 		{
@@ -287,7 +287,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting standard doors");
 
-	for (int i = 0; i < StdDoorArray.size(); i++)
+	for (int i = 0; i < (int)StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i])
 		{
@@ -354,7 +354,7 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting sounds");
 
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -366,7 +366,7 @@ Elevator::~Elevator()
 	sounds.clear();
 
 	//delete wall objects
-	for (int i = 0; i < elevator_walls.size(); i++)
+	for (int i = 0; i < (int)elevator_walls.size(); i++)
 	{
 		if (elevator_walls[i])
 		{
@@ -570,7 +570,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	if (direction == 1)
 	{
 		int loc = -1;
-		for (int i = 0; i < UpQueue.size(); i++)
+		for (int i = 0; i < (int)UpQueue.size(); i++)
 		{
 			if (UpQueue[i] == floor)
 				loc = i;
@@ -593,7 +593,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	else
 	{
 		int loc = -1;
-		for (int i = 0; i < DownQueue.size(); i++)
+		for (int i = 0; i < (int)DownQueue.size(); i++)
 		{
 			if (DownQueue[i] == floor)
 				loc = i;
@@ -619,7 +619,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	{
 		if (sbs->Verbose)
 			Report("AddRoute: turning on button lights for floor " + Ogre::String(_itoa(floor, intbuffer, 10)));
-		for (int i = 0; i < PanelArray.size(); i++)
+		for (int i = 0; i < (int)PanelArray.size(); i++)
 			PanelArray[i]->ChangeLight(floor, true);
 	}
 
@@ -650,7 +650,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 	if (direction == 1)
 	{
 		//delete floor entry from up queue
-		for (int i = 0; i < UpQueue.size(); i++)
+		for (int i = 0; i < (int)UpQueue.size(); i++)
 		{
 			if (UpQueue[i] == floor)
 				UpQueue.erase(UpQueue.begin() + i);
@@ -660,7 +660,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 	else
 	{
 		//delete floor entry from down queue
-		for (int i = 0; i < DownQueue.size(); i++)
+		for (int i = 0; i < (int)DownQueue.size(); i++)
 		{
 			if (DownQueue[i] == floor)
 				DownQueue.erase(DownQueue.begin() + i);
@@ -671,7 +671,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 	//turn off button lights
 	if (sbs->Verbose)
 		Report("DeleteRoute: turning off button lights for floor " + Ogre::String(_itoa(floor, intbuffer, 10)));
-	for (int i = 0; i < PanelArray.size(); i++)
+	for (int i = 0; i < (int)PanelArray.size(); i++)
 		PanelArray[i]->ChangeLight(floor, false);
 }
 
@@ -859,7 +859,7 @@ void Elevator::ProcessCallQueue()
 	if (QueuePositionDirection == 1)
 	{
 		//search through up queue
-		for (int i = 0; i < UpQueue.size(); i++)
+		for (int i = 0; i < (int)UpQueue.size(); i++)
 		{
 			//if the queued floor number is a higher floor, dispatch the elevator to that floor
 			if (UpQueue[i] >= ElevatorFloor)
@@ -947,7 +947,7 @@ void Elevator::ProcessCallQueue()
 	else if (QueuePositionDirection == -1)
 	{
 		//search through down queue (search order is reversed since calls need to be processed in decending order)
-		for (int i = DownQueue.size() - 1; i >= 0; i--)
+		for (int i = (int)DownQueue.size() - 1; i >= 0; i--)
 		{
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
 			if (DownQueue[i] <= ElevatorFloor)
@@ -1057,7 +1057,7 @@ void Elevator::MonitorLoop()
 	//make sure height value is set
 	if (Height == 0)
 	{
-		for (int i = 0; i < ElevatorMesh->MeshGeometry.size(); i++)
+		for (int i = 0; i < (int)ElevatorMesh->MeshGeometry.size(); i++)
 		{
 			if (sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y) > Height)
 				Height = sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y);
@@ -1362,7 +1362,7 @@ void Elevator::MoveElevatorToFloor()
 			else
 			{
 				int loc = -1;
-				for (int i = 0; i < sbs->GetShaft(AssignedShaft)->ShowFloorsList.size(); i++)
+				for (int i = 0; i < (int)sbs->GetShaft(AssignedShaft)->ShowFloorsList.size(); i++)
 				{
 					if (sbs->GetShaft(AssignedShaft)->ShowFloorsList[i] == sbs->camera->CurrentFloor)
 						loc = i;
@@ -1386,7 +1386,7 @@ void Elevator::MoveElevatorToFloor()
 			else
 			{
 				int loc = -1;
-				for (int i = 0; i < sbs->GetShaft(AssignedShaft)->ShowOutsideList.size(); i++)
+				for (int i = 0; i < (int)sbs->GetShaft(AssignedShaft)->ShowOutsideList.size(); i++)
 				{
 					if (sbs->GetShaft(AssignedShaft)->ShowOutsideList[i] == sbs->camera->CurrentFloor)
 						loc = i;
@@ -1517,22 +1517,22 @@ void Elevator::MoveElevatorToFloor()
 	MoveDoors(0, movement, true, true, true);
 	MoveLights(movement, true, true, true);
 	MoveModels(movement, true, true, true);
-	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->MovePosition(movement);
 	}
-	for (int i = 0; i < PanelArray.size(); i++)
+	for (int i = 0; i < (int)PanelArray.size(); i++)
 	{
 		if (PanelArray[i])
 			PanelArray[i]->Move(movement);
 	}
-	for (int i = 0; i < DirIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->Move(movement);
 	}
-	for (int i = 0; i < StdDoorArray.size(); i++)
+	for (int i = 0; i < (int)StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i])
 			StdDoorArray[i]->Move(movement, true, true, true);
@@ -1547,7 +1547,7 @@ void Elevator::MoveElevatorToFloor()
 	floorsound->SetPosition(elevposition);
 	messagesnd->SetPosition(elevposition);
 	musicsound->SetPosition(elevposition + MusicPosition);
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
 			sounds[i]->SetPositionY(elevposition.y + sounds[i]->PositionOffset.y);
@@ -1799,22 +1799,22 @@ void Elevator::MoveElevatorToFloor()
 		MoveDoors(0, Ogre::Vector3(0, Destination, 0), true, false, true);
 		MoveLights(Ogre::Vector3(0, Destination, 0), true, false, true);
 		MoveModels(Ogre::Vector3(0, Destination, 0), true, false, true);
-		for (int i = 0; i < FloorIndicatorArray.size(); i++)
+		for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 		{
 			if (FloorIndicatorArray[i])
 				FloorIndicatorArray[i]->SetPosition(Ogre::Vector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
 		}
-		for (int i = 0; i < PanelArray.size(); i++)
+		for (int i = 0; i < (int)PanelArray.size(); i++)
 		{
 			if (PanelArray[i])
 				PanelArray[i]->SetToElevatorAltitude();
 		}
-		for (int i = 0; i < DirIndicatorArray.size(); i++)
+		for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 		{
 			if (DirIndicatorArray[i])
 				DirIndicatorArray[i]->SetPosition(Ogre::Vector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
 		}
-		for (int i = 0; i < StdDoorArray.size(); i++)
+		for (int i = 0; i < (int)StdDoorArray.size(); i++)
 		{
 			if (StdDoorArray[i])
 				StdDoorArray[i]->Move(Ogre::Vector3(0, GetPosition().y, 0), true, false, true);
@@ -1829,7 +1829,7 @@ void Elevator::MoveElevatorToFloor()
 		floorsound->SetPosition(GetPosition());
 		messagesnd->SetPosition(GetPosition());
 		musicsound->SetPosition(GetPosition() + MusicPosition);
-		for (int i = 0; i < sounds.size(); i++)
+		for (int i = 0; i < (int)sounds.size(); i++)
 		{
 			if (sounds[i])
 				sounds[i]->SetPositionY(GetPosition().y + sounds[i]->PositionOffset.y);
@@ -1996,7 +1996,7 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 {
 	//Creates a floor indicator at the specified location
 
-	int size = FloorIndicatorArray.size();
+	int size = (int)FloorIndicatorArray.size();
 	FloorIndicatorArray.resize(size + 1);
 	FloorIndicatorArray[size] = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray[size]->SetPosition(Origin);
@@ -2015,10 +2015,10 @@ void Elevator::DumpQueues()
 
 	sbs->Report("--- Elevator " + Ogre::String(_itoa(Number, intbuffer, 10)) + " Queues ---\n");
 	sbs->Report("Up:");
-	for (size_t i = 0; i < UpQueue.size(); i++)
+	for (int i = 0; i < (int)UpQueue.size(); i++)
 		sbs->Report(Ogre::String(_itoa(i, intbuffer, 10)) + " - " + Ogre::String(_itoa(UpQueue[i], intbuffer, 10)));
 	sbs->Report("Down:");
-	for (size_t i = 0; i < DownQueue.size(); i++)
+	for (int i = 0; i < (int)DownQueue.size(); i++)
 		sbs->Report(Ogre::String(_itoa(i, intbuffer, 10)) + " - " + Ogre::String(_itoa(DownQueue[i], intbuffer, 10)));
 }
 
@@ -2065,18 +2065,18 @@ void Elevator::EnableObjects(bool value)
 	//EnableDirectionalIndicators(value);
 
 	//models
-	for (size_t i = 0; i < ModelArray.size(); i++)
+	for (size_t i = 0; i < (int)ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 			ModelArray[i]->Enable(value);
 	}
 
 	//panels
-	for (int i = 0; i < PanelArray.size(); i++)
+	for (int i = 0; i < (int)PanelArray.size(); i++)
 		PanelArray[i]->Enabled(value);
 
 	//sounds
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -2187,7 +2187,7 @@ void Elevator::DumpServicedFloors()
 	//dump serviced floors list
 
 	sbs->Report("--- Elevator " + Ogre::String(_itoa(Number, intbuffer, 10)) + "'s Serviced Floors ---\n");
-	for (size_t i = 0; i < ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 		sbs->Report(Ogre::String(_itoa(i, intbuffer, 10)) + " - " + Ogre::String(_itoa(ServicedFloors[i], intbuffer, 10)));
 }
 
@@ -2218,7 +2218,7 @@ void Elevator::RemoveServicedFloor(int number)
 		Report("removing serviced floor " + Ogre::String(_itoa(number, intbuffer, 10)));
 	if (IsServicedFloor(number) == true)
 	{
-		for (int i = 0; i < ServicedFloors.size(); i++)
+		for (int i = 0; i < (int)ServicedFloors.size(); i++)
 		{
 			if (ServicedFloors[i] == number)
 				ServicedFloors.erase(ServicedFloors.begin() + i);
@@ -2230,7 +2230,7 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 {
 	//create a new button panel object and store the pointer
 
-	int index = PanelArray.size();
+	int index = (int)PanelArray.size();
 	Ogre::String number;
 	number = index + 1;
 	TrimString(number);
@@ -2257,7 +2257,7 @@ void Elevator::UpdateFloorIndicators()
 		value = sbs->GetFloor(GetFloor())->ID;
 	TrimString(value);
 
-	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Update(value.c_str());
@@ -2296,7 +2296,7 @@ bool Elevator::IsServicedFloor(int floor)
 	//returns true if floor is in serviced floor list, otherwise false
 
 	int index = -1;
-	for (int i = 0; i < ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
 		if (ServicedFloors[i] == floor)
 			index = i;
@@ -2919,7 +2919,7 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	float x = Origin.x + CenterX;
 	float z = Origin.z + CenterZ;
 
-	int index = DirIndicatorArray.size();
+	int index = (int)DirIndicatorArray.size();
 	DirIndicatorArray.resize(index + 1);
 	DirIndicatorArray[index] = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray[index]->SetPosition(Ogre::Vector3(DirIndicatorArray[index]->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), DirIndicatorArray[index]->GetPosition().z));
@@ -2930,7 +2930,7 @@ void Elevator::SetDirectionalIndicators(bool UpLight, bool DownLight)
 {
 	//set light status of interior directional indicators
 
-	for (int i = 0; i < DirIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 		{
@@ -2947,7 +2947,7 @@ void Elevator::UpdateDirectionalIndicators()
 {
 	//updates all interior active direction indicators
 
-	for (int i = 0; i < DirIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 		{
@@ -2985,7 +2985,7 @@ void Elevator::EnableDirectionalIndicators(bool value)
 			Report("disabling interior directional indicators");
 	}
 
-	for (int i = 0; i < DirIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->Enabled(value);
@@ -3000,7 +3000,7 @@ ElevatorDoor* Elevator::GetDoor(int number)
 	if (lastdoor_number == number)
 		return lastdoor_result;
 
-	if (number > 0 && number <= DoorArray.size())
+	if (number > 0 && number <= (int)DoorArray.size())
 	{
 		if (DoorArray[number - 1])
 		{
@@ -3157,7 +3157,7 @@ Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, c
 	//by the SetShaftDoors command.
 
 	int index = -1;
-	for (int i = 0; i < ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
 		if (ServicedFloors[i] == floor)
 			index = i;
@@ -3461,7 +3461,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	sbs->GetAutoSize(autosize_x, autosize_y);
 	sbs->SetAutoSize(false, false);
 
-	for (int i = 0; i < ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
 		if (door_number != 0)
@@ -3500,10 +3500,10 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 
 	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
 
-	for (int i = 0; i < buttons.size(); i++)
+	for (int i = 0; i < (int)buttons.size(); i++)
 	{
 		CallButton *button = 0;
-		if (sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
+		if ((int)sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
 			button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
 		if (button)
 		{
@@ -3544,9 +3544,9 @@ void Elevator::ResetQueue(bool up, bool down)
 	//turn off button lights
 	if (sbs->Verbose)
 		Report("QueueReset: turning off button lights for queue reset");
-	for (int i = 0; i < ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
-		for (int j = 0; j < PanelArray.size(); j++)
+		for (int j = 0; j < (int)PanelArray.size(); j++)
 			PanelArray[j]->ChangeLight(ServicedFloors[i], false);
 	}
 }
@@ -3686,7 +3686,7 @@ Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name,
 	//adds a single elevator shaft door component on the specified floor
 
 	int index = -1;
-	for (int i = 0; i < ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
 		if (ServicedFloors[i] == floor)
 			index = i;
@@ -3722,7 +3722,7 @@ Object* Elevator::FinishShaftDoor(int number, int floor)
 	//finishes a single shaft door
 
 	int index = -1;
-	for (int i = 0; i < ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
 		if (ServicedFloors[i] == floor)
 			index = i;
@@ -3804,7 +3804,7 @@ ButtonPanel* Elevator::GetPanel(int index)
 {
 	//get a button panel object
 
-	if (index > PanelArray.size() || index < 1)
+	if (index > (int)PanelArray.size() || index < 1)
 		return 0;
 
 	return PanelArray[index - 1];
@@ -3837,7 +3837,7 @@ void Elevator::SelectFloor(int floor)
 
 	if (PanelArray.size() > 0)
 	{
-		for (int i = 0; i < PanelArray.size(); i++)
+		for (int i = 0; i < (int)PanelArray.size(); i++)
 		{
 			index = PanelArray[i]->GetFloorButtonIndex(floor);
 			if (index >= 0)
@@ -3854,7 +3854,7 @@ bool Elevator::IsQueued(int floor)
 	//return true if the given floor is in either queue
 	
 	int index = -1;
-	for (int i = 0; i < UpQueue.size(); i++)
+	for (int i = 0; i < (int)UpQueue.size(); i++)
 	{
 		if (UpQueue[i] == floor)
 			index = i;
@@ -3863,7 +3863,7 @@ bool Elevator::IsQueued(int floor)
 		return true;
 
 	index = -1;
-	for (int i = 0; i < DownQueue.size(); i++)
+	for (int i = 0; i < (int)DownQueue.size(); i++)
 	{
 		if (DownQueue[i] == floor)
 			index = i;
@@ -3933,7 +3933,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 
 	StdDoorArray.resize(StdDoorArray.size() + 1);
 	Ogre::String elevnum = _itoa(Number, intbuffer, 10);
-	Ogre::String num = _itoa(StdDoorArray.size() - 1, intbuffer, 10);
+	Ogre::String num = _itoa((int)StdDoorArray.size() - 1, intbuffer, 10);
 	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, Ogre::String("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.size() - 1]->object;
 }
@@ -3941,7 +3941,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 void Elevator::OpenDoor(int number)
 {
 	//open door
-	if (number < StdDoorArray.size())
+	if (number < (int)StdDoorArray.size())
 	{
 		if (StdDoorArray[number])
 			StdDoorArray[number]->Open();
@@ -3953,7 +3953,7 @@ void Elevator::OpenDoor(int number)
 void Elevator::CloseDoor(int number)
 {
 	//close door
-	if (number < StdDoorArray.size())
+	if (number < (int)StdDoorArray.size())
 	{
 		if (StdDoorArray[number])
 			StdDoorArray[number]->Close();
@@ -3965,7 +3965,7 @@ void Elevator::CloseDoor(int number)
 bool Elevator::IsDoorOpen(int number)
 {
 	//check to see if door is open
-	if (number < StdDoorArray.size())
+	if (number < (int)StdDoorArray.size())
 	{
 		if (StdDoorArray[number])
 			return StdDoorArray[number]->IsOpen();
@@ -3978,7 +3978,7 @@ bool Elevator::IsDoorOpen(int number)
 bool Elevator::IsDoorMoving(int number)
 {
 	//check to see if door is moving
-	if (number < StdDoorArray.size())
+	if (number < (int)StdDoorArray.size())
 	{
 		if (StdDoorArray[number])
 			return StdDoorArray[number]->IsMoving;
@@ -3991,7 +3991,7 @@ bool Elevator::IsDoorMoving(int number)
 void Elevator::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)
-	for (int i = 0; i < PanelArray.size(); i++)
+	for (int i = 0; i < (int)PanelArray.size(); i++)
 	{
 		if (PanelArray[i] == panel)
 			PanelArray.erase(PanelArray.begin() + i);
@@ -4001,7 +4001,7 @@ void Elevator::RemovePanel(ButtonPanel* panel)
 void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 {
 	//remove a directional indicator reference (does not delete the object itself)
-	for (int i = 0; i < DirIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i] == indicator)
 			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
@@ -4011,7 +4011,7 @@ void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 {
 	//remove an elevator door reference (does not delete the object itself)
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
 		if (DoorArray[i] == door)
 			DoorArray.erase(DoorArray.begin() + i);
@@ -4021,7 +4021,7 @@ void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 {
 	//remove a floor indicator reference (does not delete the object itself)
-	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i] == indicator)
 			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
@@ -4031,7 +4031,7 @@ void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 void Elevator::RemoveDoor(Door* door)
 {
 	//remove a door reference (does not delete the object itself)
-	for (int i = 0; i < StdDoorArray.size(); i++)
+	for (int i = 0; i < (int)StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i] == door)
 			StdDoorArray.erase(StdDoorArray.begin() + i);
@@ -4041,7 +4041,7 @@ void Elevator::RemoveDoor(Door* door)
 void Elevator::RemoveSound(Sound *sound)
 {
 	//remove a sound reference (does not delete the object itself)
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
 			sounds.erase(sounds.begin() + i);
@@ -4209,7 +4209,7 @@ bool Elevator::DoorExists(int number)
 
 	if (number == 0)
 	{
-		for (int i = 0; i < DoorArray.size(); i++)
+		for (int i = 0; i < (int)DoorArray.size(); i++)
 		{
 			if (GetDoor(i))
 				return true;
@@ -4222,14 +4222,14 @@ bool Elevator::IsNudgeModeActive(int number)
 {
 	//checks doors and returns true if any (or the specified door) have nudge mode active
 
-	if (number > 0 && number < DoorArray.size())
+	if (number > 0 && number < (int)DoorArray.size())
 	{
 		if (DoorArray[number])
 			return DoorArray[number]->GetNudgeStatus();
 	}
 	else if (number == 0)
 	{
-		for (int i = 0; i < DoorArray.size(); i++)
+		for (int i = 0; i < (int)DoorArray.size(); i++)
 		{
 			if (DoorArray[number]->GetNudgeStatus() == true)
 				return true;
@@ -4242,14 +4242,14 @@ void Elevator::EnableNudgeMode(bool value, int number)
 {
 	//enables nudge mode on all doors or the specified door
 
-	if (number > 0 && number < DoorArray.size())
+	if (number > 0 && number < (int)DoorArray.size())
 	{
 		if (DoorArray[number])
 			DoorArray[number]->EnableNudgeMode(value);
 	}
 	else if (number == 0)
 	{
-		for (int i = 0; i < DoorArray.size(); i++)
+		for (int i = 0; i < (int)DoorArray.size(); i++)
 			DoorArray[number]->EnableNudgeMode(value);
 	}
 }
@@ -4266,7 +4266,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 void Elevator::MoveLights(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move lights
-	for (int i = 0; i < lights.size(); i++)
+	for (int i = 0; i < (int)lights.size(); i++)
 		lights[i]->Move(position, relative_x, relative_y, relative_z);
 }
 
@@ -4286,6 +4286,6 @@ Object* Elevator::AddModel(const char *name, const char *filename, Ogre::Vector3
 void Elevator::MoveModels(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move models
-	for (int i = 0; i < ModelArray.size(); i++)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
 		ModelArray[i]->Move(position, relative_x, relative_y, relative_z);
 }

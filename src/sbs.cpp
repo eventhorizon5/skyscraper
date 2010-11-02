@@ -25,6 +25,8 @@
 
 #include <wx/wx.h>
 #include <wx/variant.h>
+#include <time.h>
+#include <sys/timeb.h>
 #include <Ogre.h>
 #include "globals.h"
 #include "sbs.h"
@@ -159,6 +161,9 @@ SBS::SBS()
 	Landscape = 0;
 	External = 0;
 	Buildings = 0;
+	current_time = 0;
+	current_virtual_time = 0;
+	elapsed_time = 0;
 }
 
 SBS::~SBS()
@@ -170,7 +175,7 @@ SBS::~SBS()
 	FastDelete = true;
 
 	//delete models
-	for (int i = 0; i < ModelArray.size(); i++)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
 			delete ModelArray[i];
@@ -178,7 +183,7 @@ SBS::~SBS()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.size(); i++)
+	for (int i = 0; i < (int)lights.size(); i++)
 	{
 		if (lights[i])
 			delete lights[i];
@@ -195,7 +200,7 @@ SBS::~SBS()
 	buttoncallbacks.clear();
 
 	//delete floors
-	for (int i = 0; i < FloorArray.size(); i++)
+	for (int i = 0; i < (int)FloorArray.size(); i++)
 	{
 		if (FloorArray[i].object)
 			delete FloorArray[i].object;
@@ -204,7 +209,7 @@ SBS::~SBS()
 	FloorArray.clear();
 
 	//delete elevators
-	for (int i = 0; i < ElevatorArray.size(); i++)
+	for (int i = 0; i < (int)ElevatorArray.size(); i++)
 	{
 		if (ElevatorArray[i].object)
 			delete ElevatorArray[i].object;
@@ -213,7 +218,7 @@ SBS::~SBS()
 	ElevatorArray.clear();
 
 	//delete shafts
-	for (int i = 0; i < ShaftArray.size(); i++)
+	for (int i = 0; i < (int)ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i].object)
 			delete ShaftArray[i].object;
@@ -222,7 +227,7 @@ SBS::~SBS()
 	ShaftArray.clear();
 
 	//delete stairs
-	for (int i = 0; i < StairsArray.size(); i++)
+	for (int i = 0; i < (int)StairsArray.size(); i++)
 	{
 		if (StairsArray[i].object)
 			delete StairsArray[i].object;
@@ -231,7 +236,7 @@ SBS::~SBS()
 	StairsArray.clear();
 
 	//delete sounds
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
 			delete sounds[i];
@@ -399,12 +404,12 @@ void SBS::MainLoop()
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
-	float elapsed = remaining_delta + (vc->GetElapsedTicks() / 1000.0);
+	float elapsed = remaining_delta + (GetElapsedTime() / 1000.0);
 
 	//calculate start and running time
 	if (start_time == 0)
-		start_time = vc->GetCurrentTicks() / 1000.0;
-	running_time = (vc->GetCurrentTicks() / 1000.0) - start_time;
+		start_time = GetRunTime() / 1000.0;
+	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
@@ -457,7 +462,7 @@ void SBS::MainLoop()
 void SBS::CalculateFrameRate()
 {
 	// First get elapsed time from the virtual clock.
-	elapsed_time = vc->GetElapsedTicks ();
+	elapsed_time = GetElapsedTime();
 
 	//calculate frame rate
 	fps_tottime += elapsed_time;
@@ -1487,7 +1492,7 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	std::vector<Ogre::Vector3> varray2;
 
 	//get number of stored vertices
-	num = varray.size();
+	num = (int)varray.size();
 
 	//create a second array with reversed vertices
 	for (int i = num - 1; i >= 0; i--)
@@ -1848,25 +1853,25 @@ bool SBS::NewFloor(int number)
 int SBS::Elevators()
 {
 	//return the number of elevators
-	return ElevatorArray.size();
+	return (int)ElevatorArray.size();
 }
 
 int SBS::TotalFloors()
 {
 	//return the number of floors
-	return FloorArray.size();
+	return (int)FloorArray.size();
 }
 
 int SBS::Shafts()
 {
 	//return the number of shafts
-	return ShaftArray.size();
+	return (int)ShaftArray.size();
 }
 
 int SBS::StairsNum()
 {
 	//return the number of stairs
-	return StairsArray.size();
+	return (int)StairsArray.size();
 }
 
 Floor* SBS::GetFloor(int number)
@@ -1876,7 +1881,7 @@ Floor* SBS::GetFloor(int number)
 	if (FloorArray.size() > 0)
 	{
 		//quick prediction
-		if (Basements + number <= FloorArray.size() - 1)
+		if (Basements + number <= (int)FloorArray.size() - 1)
 		{
 			FloorMap floor = FloorArray[Basements + number];
 			if (floor.number == number)
@@ -1888,7 +1893,7 @@ Floor* SBS::GetFloor(int number)
 			}
 			else if (number < 0)
 			{
-				if (-(number + 1) <= FloorArray.size() - 1)
+				if (-(number + 1) <= (int)FloorArray.size() - 1)
 				{
 					floor = FloorArray[-(number + 1)];
 					if (floor.number == number)
@@ -1903,7 +1908,7 @@ Floor* SBS::GetFloor(int number)
 		}
 	}
 
-	for (size_t i = 0; i < FloorArray.size(); i++)
+	for (size_t i = 0; i < (int)FloorArray.size(); i++)
 		if (FloorArray[i].number == number)
 			return FloorArray[i].object;
 	return 0;
@@ -1916,7 +1921,7 @@ Elevator* SBS::GetElevator(int number)
 	if (number < 1 || number > Elevators())
 		return 0;
 
-	if (ElevatorArray.size() > number - 1)
+	if ((int)ElevatorArray.size() > number - 1)
 	{
 		//quick prediction
 		if (ElevatorArray[number - 1].number == number)
@@ -1941,7 +1946,7 @@ Shaft* SBS::GetShaft(int number)
 	if (number < 1 || number > Shafts())
 		return 0;
 
-	if (ShaftArray.size() > number - 1)
+	if ((int)ShaftArray.size() > number - 1)
 	{
 		//quick prediction
 		if (ShaftArray[number - 1].number == number)
@@ -1966,7 +1971,7 @@ Stairs* SBS::GetStairs(int number)
 	if (number < 1 || number > StairsNum())
 		return 0;
 
-	if (StairsArray.size() > number - 1)
+	if ((int)StairsArray.size() > number - 1)
 	{
 		//quick prediction
 		if (StairsArray[number - 1].number == number)
@@ -2177,7 +2182,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		bool rev_x = false, rev_z = false;
 
 		//copy vertices into polygon object
-		for (int i = 0; i < vertices.size(); i++)
+		for (int i = 0; i < (int)vertices.size(); i++)
 			varray1.push_back(vertices[i]);
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
@@ -2194,7 +2199,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		size_t selX = (1 << projDimension) & 0x3;
 		size_t selY = (1 << selX) & 0x3;
 
-		for (int i = 0; i < varray1.size(); i++)
+		for (int i = 0; i < (int)varray1.size(); i++)
 		{
 			Ogre::Vector3 tmpvertex = varray1[i];
 			varray2.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
@@ -2353,7 +2358,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					Ogre::String number = string.substr(location + 1);
-					if (atoi(number.c_str()) < vertices.size())
+					if (atoi(number.c_str()) < (int)vertices.size())
 						ReplaceAll(string, Ogre::String("x" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].x, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("x" + number).c_str(), "0"); //number value out of bounds
@@ -2364,7 +2369,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					Ogre::String number = string.substr(location + 1);
-					if (atoi(number.c_str()) < vertices.size())
+					if (atoi(number.c_str()) < (int)vertices.size())
 						ReplaceAll(string, Ogre::String("y" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].y, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("y" + number).c_str(), "0"); //number value out of bounds
@@ -2375,7 +2380,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					Ogre::String number = string.substr(location + 1);
-					if (atoi(number.c_str()) < vertices.size())
+					if (atoi(number.c_str()) < (int)vertices.size())
 						ReplaceAll(string, Ogre::String("z" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].z, 12, buffer));
 					else
 						ReplaceAll(string, Ogre::String("z" + number).c_str(), "0"); //number value out of bounds
@@ -2745,7 +2750,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 				if (GetShaft(shaftnumber)->ShowFloors == true)
 				{
 					int index = -1;
-					for (int j = 0; j < GetShaft(shaftnumber)->ShowFloorsList.size(); j++)
+					for (int j = 0; j < (int)GetShaft(shaftnumber)->ShowFloorsList.size(); j++)
 					{
 						if (GetShaft(shaftnumber)->ShowFloorsList[j] == i)
 							index = j;
@@ -2779,7 +2784,7 @@ bool SBS::RegisterDoorCallback(Door *door)
 	//register a door object for callbacks (used for door movement)
 
 	int index = -1;
-	for (int i = 0; i < doorcallbacks.size(); i++)
+	for (int i = 0; i < (int)doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i] == door)
 			index = i;
@@ -2802,7 +2807,7 @@ bool SBS::RegisterDoorCallback(Door *door)
 bool SBS::UnregisterDoorCallback(Door *door)
 {
 	int index = -1;
-	for (int i = 0; i < doorcallbacks.size(); i++)
+	for (int i = 0; i < (int)doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i] == door)
 			index = i;
@@ -2813,7 +2818,7 @@ bool SBS::UnregisterDoorCallback(Door *door)
 		//unregister existing door callback
 		if (doorcallbacks[index]->IsMoving == false)
 		{
-			for (int i = 0; i < doorcallbacks.size(); i++)
+			for (int i = 0; i < (int)doorcallbacks.size(); i++)
 			{
 				if (doorcallbacks[i] == door)
 					doorcallbacks.erase(doorcallbacks.begin() + i);
@@ -2835,7 +2840,7 @@ bool SBS::RegisterCallButtonCallback(CallButton *button)
 	//register a door object for callbacks (used for door movement)
 
 	int index = -1;
-	for (int i = 0; i < buttoncallbacks.size(); i++)
+	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
 		if (buttoncallbacks[i] == button)
 			index = i;
@@ -2854,7 +2859,7 @@ bool SBS::RegisterCallButtonCallback(CallButton *button)
 bool SBS::UnregisterCallButtonCallback(CallButton *button)
 {
 	int index = -1;
-	for (int i = 0; i < buttoncallbacks.size(); i++)
+	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
 		if (buttoncallbacks[i] == button)
 			index = i;
@@ -2863,7 +2868,7 @@ bool SBS::UnregisterCallButtonCallback(CallButton *button)
 	if (index != -1 && buttoncallbacks[index])
 	{
 		//unregister existing call button callback
-		for (int i = 0; i < buttoncallbacks.size(); i++)
+		for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 		{
 			if (buttoncallbacks[i] == button)
 				buttoncallbacks.erase(buttoncallbacks.begin() + i);
@@ -2947,7 +2952,7 @@ Ogre::String SBS::GetTextureMaterial(const char *name, bool &result, const char 
 bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
 {
 	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == texture)
 		{
@@ -2962,7 +2967,7 @@ bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
 bool SBS::GetTextureForce(const char *texture, bool &enable_force, bool &force_mode)
 {
 	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == texture)
 		{
@@ -2981,14 +2986,14 @@ void SBS::ProcessCallButtons()
 	//the up and down sections need to be processed separately due to the removal of callbacks
 	//during the run of each
 
-	for (int i = 0; i < buttoncallbacks.size(); i++)
+	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
 		//process up calls
 		if (buttoncallbacks[i])
 			buttoncallbacks[i]->Loop(true);
 	}
 
-	for (int i = 0; i < buttoncallbacks.size(); i++)
+	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
 		//process down calls
 		if (buttoncallbacks[i])
@@ -2999,7 +3004,7 @@ void SBS::ProcessCallButtons()
 void SBS::ProcessDoors()
 {
 	//process all registered doors
-	for (int i = 0; i < doorcallbacks.size(); i++)
+	for (int i = 0; i < (int)doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i])
 		{
@@ -3014,13 +3019,13 @@ void SBS::ProcessDoors()
 int SBS::GetDoorCallbackCount()
 {
 	//return the number of registered door callbacks
-	return doorcallbacks.size();
+	return (int)doorcallbacks.size();
 }
 
 int SBS::GetCallButtonCallbackCount()
 {
 	//return the number of registered call button callbacks
-	return buttoncallbacks.size();
+	return (int)buttoncallbacks.size();
 }
 
 bool SBS::Mount(const char *filename, const char *path)
@@ -3065,7 +3070,7 @@ void SBS::CheckAutoAreas()
 	Ogre::Vector3 position = camera->GetPosition();
 	int floor = camera->CurrentFloor;
 
-	for (int i = 0; i < FloorAutoArea.size(); i++)
+	for (int i = 0; i < (int)FloorAutoArea.size(); i++)
 	{
 		//reset inside value if floor changed
 		if (FloorAutoArea[i].camerafloor != floor)
@@ -3236,7 +3241,7 @@ int SBS::GetObjectCount()
 Object* SBS::GetObject(int number)
 {
 	//return object pointer from global array
-	if (number >= 0 && number < ObjectArray.size())
+	if (number >= 0 && number < (int)ObjectArray.size())
 		return ObjectArray[number];
 	else
 		return 0;
@@ -3247,7 +3252,7 @@ int SBS::RegisterObject(Object *object)
 	//add object to global array
 	ObjectCount++;
 	ObjectArray.push_back(object);
-	return ObjectArray.size() - 1;
+	return (int)ObjectArray.size() - 1;
 }
 
 bool SBS::UnregisterObject(int number)
@@ -3256,7 +3261,7 @@ bool SBS::UnregisterObject(int number)
 	//note - this doesn't delete the objects
 	ObjectCount--;
 
-	if (number < ObjectArray.size())
+	if (number < (int)ObjectArray.size())
 	{
 		if (ObjectArray[number])
 		{
@@ -3536,7 +3541,7 @@ bool SBS::DeleteObject(int object)
 void SBS::RemoveFloor(Floor *floor)
 {
 	//remove a floor (does not delete the object)
-	for (int i = 0; i < FloorArray.size(); i++)
+	for (int i = 0; i < (int)FloorArray.size(); i++)
 	{
 		if (FloorArray[i].object == floor)
 		{
@@ -3549,7 +3554,7 @@ void SBS::RemoveFloor(Floor *floor)
 void SBS::RemoveElevator(Elevator *elevator)
 {
 	//remove an elevator (does not delete the object)
-	for (int i = 0; i < ElevatorArray.size(); i++)
+	for (int i = 0; i < (int)ElevatorArray.size(); i++)
 	{
 		if (ElevatorArray[i].object == elevator)
 		{
@@ -3562,7 +3567,7 @@ void SBS::RemoveElevator(Elevator *elevator)
 void SBS::RemoveShaft(Shaft *shaft)
 {
 	//remove a shaft (does not delete the object)
-	for (int i = 0; i < ShaftArray.size(); i++)
+	for (int i = 0; i < (int)ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i].object == shaft)
 		{
@@ -3575,7 +3580,7 @@ void SBS::RemoveShaft(Shaft *shaft)
 void SBS::RemoveStairs(Stairs *stairs)
 {
 	//remove a stairs object (does not delete the object)
-	for (int i = 0; i < StairsArray.size(); i++)
+	for (int i = 0; i < (int)StairsArray.size(); i++)
 	{
 		if (StairsArray[i].object == stairs)
 		{
@@ -3590,7 +3595,7 @@ void SBS::RemoveSound(Sound *sound)
 	//remove a sound from the array
 	//this does not delete the object
 
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
 		{
@@ -3646,8 +3651,8 @@ bool SBS::FileExists(const char *filename, bool relative)
 		return true;
 	Ogre::String verify = VerifyFile(filename);
 	if (verify != file)
-		return true;
-	return false;*/
+		return true;*/
+	return false;
 }
 
 int SBS::GetWallCount()
@@ -3669,7 +3674,7 @@ void SBS::AddLightHandle(Light* handle)
 
 void SBS::DeleteLightHandle(Light* handle)
 {
-	for (int i = 0; i < all_lights.size(); i++)
+	for (int i = 0; i < (int)all_lights.size(); i++)
 	{
 		if (all_lights[i] == handle)
 			all_lights.erase(all_lights.begin() + i);
@@ -3683,7 +3688,7 @@ void SBS::AddModelHandle(Model* handle)
 
 void SBS::DeleteModelHandle(Model* handle)
 {
-	for (int i = 0; i < all_models.size(); i++)
+	for (int i = 0; i < (int)all_models.size(); i++)
 	{
 		if (all_models[i] == handle)
 			all_models.erase(all_models.begin() + i);
@@ -3714,7 +3719,7 @@ void SBS::AddMeshHandle(MeshObject* handle)
 
 void SBS::DeleteMeshHandle(MeshObject* handle)
 {
-	for (int i = 0; i < meshes.size(); i++)
+	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		if (meshes[i] == handle)
 			meshes.erase(meshes.begin() + i);
@@ -3724,7 +3729,7 @@ void SBS::DeleteMeshHandle(MeshObject* handle)
 MeshObject* SBS::FindMeshObject(Ogre::MeshPtr meshwrapper)
 {
 	//find a mesh object by searching for matching wrapper
-	for (int i = 0; i < meshes.size(); i++)
+	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		if (meshes[i]->MeshWrapper == meshwrapper)
 			return meshes[i];
@@ -3780,4 +3785,32 @@ bool SBS::InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test)
 	if (test.x > start.x && test.y > start.y && test.z > start.z && test.x < end.x && test.y < end.y && test.z < end.z)
 		return true;
 	return false;
+}
+
+void SBS::AdvanceClock()
+{
+	//advance the clock
+
+	unsigned int last = current_time;
+
+	//get current time
+	timeb t;
+	ftime(&t);
+	current_time = t.time * 1000 + t.millitm;
+
+	if (current_time < last)
+		elapsed_time = current_time + (unsigned int (-1) - last) + 1;
+	else
+		elapsed_time = current_time - last;
+	current_virtual_time += elapsed_time;
+}
+
+unsigned int SBS::GetRunTime()
+{
+	return current_virtual_time;
+}
+
+unsigned int SBS::GetElapsedTime()
+{
+	return elapsed_time;
 }

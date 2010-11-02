@@ -78,7 +78,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 
 	//create shaft door objects
 	ShaftDoors.resize(elev->ServicedFloors.size());
-	for (int i = 0; i < ShaftDoors.size(); i++)
+	for (int i = 0; i < (int)ShaftDoors.size(); i++)
 		ShaftDoors[i] = new DoorWrapper(this, true);
 
 	//create sound object
@@ -92,7 +92,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 ElevatorDoor::~ElevatorDoor()
 {
 	//delete shaft door objects
-	for (int i = 0; i < ShaftDoors.size(); i++)
+	for (int i = 0; i < (int)ShaftDoors.size(); i++)
 	{
 		if (ShaftDoors[i])
 		{
@@ -293,7 +293,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 
 	//if opening both doors, exit if shaft doors don't exist
 	int index = -1;
-	for (int i = 0; i < ManualFloors.size(); i++)
+	for (int i = 0; i < (int)ManualFloors.size(); i++)
 	{
 		if (ManualFloors[i] == floor)
 			index = i;
@@ -411,7 +411,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 
 	//if closing both doors, exit if shaft doors don't exist
 	int index = -1;
-	for (int i = 0; i < ManualFloors.size(); i++)
+	for (int i = 0; i < (int)ManualFloors.size(); i++)
 	{
 		if (ManualFloors[i] == floor)
 			index = i;
@@ -506,13 +506,13 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		door_changed = false;
 
 		index = -1;
-		for (int i = 0; i < elev->ServicedFloors.size(); i++)
+		for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
 		{
 			if (elev->ServicedFloors[i] == ShaftDoorFloor)
 				index = i;
 		}
 		int index2 = -1;
-		for (int i = 0; i < ManualFloors.size(); i++)
+		for (int i = 0; i < (int)ManualFloors.size(); i++)
 		{
 			if (ManualFloors[i] == ShaftDoorFloor)
 				index2 = i;
@@ -561,7 +561,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		//reset finished states
 		if (elevdoors == true)
 		{
-			for (int i = 0; i < Doors->doors.size(); i++)
+			for (int i = 0; i < (int)Doors->doors.size(); i++)
 			{
 				Doors->doors[i]->finished = false;
 			}
@@ -569,7 +569,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 		if (shaftdoors == true)
 		{
-			for (int i = 0; i < ShaftDoors[index]->doors.size(); i++)
+			for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
 			{
 				ShaftDoors[index]->doors[i]->finished = false;
 			}
@@ -584,7 +584,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//perform door movement and get open state of each door
 	if (elevdoors == true)
 	{
-		for (int i = 0; i < Doors->doors.size(); i++)
+		for (int i = 0; i < (int)Doors->doors.size(); i++)
 		{
 			Doors->doors[i]->MoveDoors(open, manual);
 		}
@@ -592,7 +592,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	if (shaftdoors == true)
 	{
-		for (int i = 0; i < ShaftDoors[index]->doors.size(); i++)
+		for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
 		{
 			ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
 		}
@@ -783,7 +783,7 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 		return 0;
 
 	int index = -1;
-	for (int i = 0; i < elev->ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
 	{
 		if (elev->ServicedFloors[i] == floor)
 			index = i;
@@ -847,7 +847,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	//get full width and height of doors
 	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
 	bool firstrun = true;
-	for (int i = 0; i < wrapper->doors.size(); i++)
+	for (int i = 0; i < (int)wrapper->doors.size(); i++)
 	{
 		for (int j = 1; j <= 3; j++)
 		{
@@ -1005,7 +1005,7 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 	DoorWrapper *wrapper;
 
 	int index = -1;
-	for (int i = 0; i < elev->ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
 	{
 		if (elev->ServicedFloors[i] == floor)
 			index = i;
@@ -1023,7 +1023,7 @@ bool ElevatorDoor::FinishShaftDoors()
 {
 	//finish all shaft doors
 
-	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
+	for (size_t i = 0; i < (int)elev->ServicedFloors.size(); i++)
 		FinishShaftDoor(elev->ServicedFloors[i]);
 	return true;
 }
@@ -1060,7 +1060,7 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
 	int index = -1;
-	for (int i = 0; i < elev->ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
 	{
 		if (elev->ServicedFloors[i] == floor)
 			index = i;
@@ -1133,7 +1133,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 
 	//exit if elevator doesn't service the requested floor
 	int index = -1;
-	for (int i = 0; i < elev->ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
 	{
 		if (elev->ServicedFloors[i] == floor)
 			index = i;
@@ -1194,7 +1194,7 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	if (ShaftDoorsExist(floor))
 	{
 		int index = -1;
-		for (int i = 0; i < elev->ServicedFloors.size(); i++)
+		for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
 		{
 			if (elev->ServicedFloors[i] == floor)
 				index = i;
@@ -1277,7 +1277,7 @@ void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool rel
 {
 	//moves doors
 
-	for (int i = 0; i < Doors->doors.size(); i++)
+	for (int i = 0; i < (int)Doors->doors.size(); i++)
 	{
 		Doors->doors[i]->mesh->Move(position, relative_x, relative_y, relative_z);
 	}
@@ -1330,7 +1330,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	//return true if shaft doors have been created for this door on the specified floor
 
 	int index = -1;
-	for (int i = 0; i < elev->ServicedFloors.size(); i++)
+	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
 	{
 		if (elev->ServicedFloors[i] == floor)
 			index = i;
@@ -1406,7 +1406,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()
 {
-	for (int i = 0; i < doors.size(); i++)
+	for (int i = 0; i < (int)doors.size(); i++)
 	{
 		if (doors[i])
 			delete doors[i];
@@ -1422,7 +1422,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 	//initialize a door component
 	
 	doors.resize(doors.size() + 1);
-	int index = doors.size() - 1;
+	int index = (int)doors.size() - 1;
 	doors[index] = new DoorObject(doorname, this, direction, speed);
 
 	//move object to positions
@@ -1441,7 +1441,7 @@ void ElevatorDoor::DoorWrapper::Enable(bool value)
 	if (value == Enabled)
 		return;
 
-	for (int i = 0; i < doors.size(); i++)
+	for (int i = 0; i < (int)doors.size(); i++)
 		doors[i]->mesh->Enable(value);
 	Enabled = value;
 }
@@ -1810,7 +1810,7 @@ void ElevatorDoor::DoorObject::Move()
 void ElevatorDoor::DoorWrapper::MoveDoors(bool open, bool manual)
 {
 	//calls per-door move function
-	for (int i = 0; i < doors.size(); i++)
+	for (int i = 0; i < (int)doors.size(); i++)
 		doors[i]->MoveDoors(open, manual);
 }
 
@@ -1818,7 +1818,7 @@ bool ElevatorDoor::DoorWrapper::CheckDoorsOpen()
 {
 	//checks to see if doors are open or closed, and returns true if the status changed
 
-	for (int i = 0; i < doors.size(); i++)
+	for (int i = 0; i < (int)doors.size(); i++)
 	{
 		//exit if the status is the same on any door
 		if (doors[i]->is_open == Open)
@@ -1834,7 +1834,7 @@ bool ElevatorDoor::DoorWrapper::IsFinished()
 {
 	//checks to see if all of the doors are finished
 
-	for (int i = 0; i < doors.size(); i++)
+	for (int i = 0; i < (int)doors.size(); i++)
 	{
 		//exit if any door is not finished
 		if (doors[i]->finished == false)
@@ -1847,7 +1847,7 @@ void ElevatorDoor::DoorWrapper::StopDoors()
 {
 	//stop all doors
 
-	for (int i = 0; i < doors.size(); i++)
+	for (int i = 0; i < (int)doors.size(); i++)
 	{
 		doors[i]->active_speed = 0;
 		doors[i]->door_section = 0;

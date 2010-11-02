@@ -90,7 +90,7 @@ bool ScriptProcessor::LoadBuilding()
 	ReplaceLine = false;
 	nonexistent_files.clear();
 
-	while (line < BuildingData.size() - 1)
+	while (line < (int)BuildingData.size() - 1)
 	{
 		if (Simcore->GetFloor(0) == 0)
 			TrimString(LineData);
@@ -120,7 +120,7 @@ bool ScriptProcessor::LoadBuilding()
 		//function parameter variables
 		if (InFunction == true)
 		{
-			for (int i = 0; i < FunctionParams.size(); i++)
+			for (int i = 0; i < (int)FunctionParams.size(); i++)
 			{
 				Ogre::String num = _itoa(i + 1, intbuffer, 10);
 				ReplaceAll(LineData, Ogre::String("%param" + num + "%").c_str(), FunctionParams[i].c_str());
@@ -358,7 +358,7 @@ breakpoint:
 			functions.push_back(info);
 
 			//skip to end of function
-			for (int i = line + 1; i < BuildingData.size(); i++)
+			for (int i = line + 1; i < (int)BuildingData.size(); i++)
 			{
 				if (SetCaseCopy(BuildingData[i].substr(0, 13), false) == "<endfunction>")
 				{
@@ -388,7 +388,7 @@ breakpoint:
 			if (temp1 >= startpos)
 			{
 				temp3 = LineData.find("%", temp1 + 1);
-				if (temp3 >= LineData.length())
+				if (temp3 >= (int)LineData.length())
 				{
 					temp1 = 0;
 					temp3 = 0;
@@ -411,7 +411,7 @@ breakpoint:
 				if (IsNumeric(temp2.c_str()) == true)
 				{
 					temp4 = atoi(temp2.c_str());
-					if (temp4 < 0 || temp4 > UserVariable.size() - 1)
+					if (temp4 < 0 || temp4 > (int)UserVariable.size() - 1)
 					{
 						ScriptError("Invalid variable number");
 						return false;
@@ -717,7 +717,7 @@ bool ScriptProcessor::LoadFromText(const char *text)
 	BuildingData.clear();
 
 	//feed each line of text into the script array
-	for (int i = 0; i < textarray.size(); i++)
+	for (int i = 0; i < (int)textarray.size(); i++)
 	{
 		BuildingData.push_back(textarray[i]);
 	}
@@ -754,7 +754,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 			//find matching parenthesis
 			int match = 1;
 			int end = -1;
-			for (int i = start + 1; i < tmpcalc.length(); i++)
+			for (int i = start + 1; i < (int)tmpcalc.length(); i++)
 			{
 				if (tmpcalc.at(i) == '(')
 					match++;
@@ -776,7 +776,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 					newdata = "false";
 				//construct new string
 				one = tmpcalc.substr(0, start);
-				if (end < tmpcalc.length() - 1)
+				if (end < (int)tmpcalc.length() - 1)
 					two = tmpcalc.substr(end + 1);
 				else
 					two = "";
@@ -801,7 +801,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 		start = 0;
 		end = 0;
 		check = false;
-		for (int i = 1; i < tmpcalc.length(); i++)
+		for (int i = 1; i < (int)tmpcalc.length(); i++)
 		{
 			if (tmpcalc.at(i) == '=' || tmpcalc.at(i) == '!' || tmpcalc.at(i) == '<' || tmpcalc.at(i) == '>')
 			{
@@ -828,7 +828,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 				{
 					operators = 1;
 					start = i + 1;
-					end = tmpcalc.length();
+					end = (int)tmpcalc.length();
 				}
 			}
 		}
@@ -948,7 +948,7 @@ int ScriptProcessor::ScriptError(std::string message)
 	bool isinclude = false;
 	Ogre::String includefile;
 
-	for (int i = 0; i < includes.size(); i++)
+	for (int i = 0; i < (int)includes.size(); i++)
 	{
 		if (linenum < includes[i].start_line)
 			break;
@@ -1005,7 +1005,7 @@ bool ScriptProcessor::ReportMissingFiles()
 	if (nonexistent_files.size() > 0)
 	{
 		sort(nonexistent_files.begin(), nonexistent_files.end());
-		for (int i = 0; i < nonexistent_files.size(); i++)
+		for (int i = 0; i < (int)nonexistent_files.size(); i++)
 			Simcore->Report(nonexistent_files[i]);
 
 		//create text window
@@ -1018,7 +1018,7 @@ bool ScriptProcessor::ReportMissingFiles()
 		twindow->Show(true);
 		wxString message;
 		message = wxT("Skyscraper was unable to load the following files.\nThis will result in texture and/or sound problems:\n\n");
-		for (int i = 0; i < nonexistent_files.size(); i++)
+		for (int i = 0; i < (int)nonexistent_files.size(); i++)
 		{
 			message.Append(wxString::FromAscii(nonexistent_files[i].c_str()));
 			message.Append(wxT("\n"));
@@ -1213,7 +1213,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid object");
 
 		//perform cut
-		for (int i = 0; i < wallarray->size(); i++)
+		for (int i = 0; i < (int)wallarray->size(); i++)
 			Simcore->Cut(wallarray->at(i), Ogre::Vector3(atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str())), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
 	}
 
@@ -1817,7 +1817,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Syntax error");
 
 		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1).c_str(), ',');
-		for (temp3 = 0; temp3 < tempdata.size(); temp3++)
+		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3].c_str());
 			tempdata.insert(tempdata.begin() + temp3, buffer);
@@ -1910,7 +1910,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Syntax error");
 		
 		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1).c_str(), ',');
-		for (temp3 = 0; temp3 < tempdata.size(); temp3++)
+		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3].c_str());
 			tempdata.insert(tempdata.begin() + temp3, buffer);
@@ -2631,7 +2631,7 @@ int ScriptProcessor::ProcFloors()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData.c_str());
 
-		if (temp3 < 0 || temp3 > UserVariable.size() - 1)
+		if (temp3 < 0 || temp3 > (int)UserVariable.size() - 1)
 			return ScriptError("Invalid variable number");
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
@@ -4570,7 +4570,7 @@ int ScriptProcessor::ProcElevators()
 		int slength, parameters;
 
 		//get number of action & texture parameters
-		slength = tempdata.size();
+		slength = (int)tempdata.size();
 		parameters = slength - 8; //strip off main parameters
 
 		//action & texture parameter number needs to be even
@@ -4985,7 +4985,7 @@ int ScriptProcessor::ProcElevators()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData.c_str());
 
-		if (temp3 < 0 || temp3 > UserVariable.size() - 1)
+		if (temp3 < 0 || temp3 > (int)UserVariable.size() - 1)
 			return ScriptError("Invalid variable number");
 
 		UserVariable[temp3] = Calc(temp2.c_str());
@@ -5223,7 +5223,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 			//find matching parenthesis
 			int match = 1;
 			int end = -1;
-			for (int i = start + 1; i < tmpcalc.length(); i++)
+			for (int i = start + 1; i < (int)tmpcalc.length(); i++)
 			{
 				if (tmpcalc.at(i) == '(')
 					match++;
@@ -5242,7 +5242,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 				newdata = Calc(tmpcalc.substr(start + 1, end - start - 1).c_str());
 				//construct new string
 				one = tmpcalc.substr(0, start);
-				if (end < tmpcalc.length() - 1)
+				if (end < (int)tmpcalc.length() - 1)
 					two = tmpcalc.substr(end + 1);
 				else
 					two = "";
@@ -5264,7 +5264,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 	{
 		operators = 0;
 		end = 0;
-		for (int i = 1; i < tmpcalc.length(); i++)
+		for (int i = 1; i < (int)tmpcalc.length(); i++)
 		{
 			if (tmpcalc.at(i) == '+' || tmpcalc.at(i) == '/' || tmpcalc.at(i) == '*')
 			{
@@ -5279,7 +5279,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 					end = i;
 			}
 		}
-		if (end >= tmpcalc.length() - 1 && operators > 0)
+		if (end >= (int)tmpcalc.length() - 1 && operators > 0)
 		{
 			skyscraper->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 			return "false";
@@ -5374,7 +5374,7 @@ void ScriptProcessor::StoreCommand(Object *object)
 bool ScriptProcessor::FunctionProc()
 {
 	//process functions
-	for (int i = 0; i < functions.size(); i++)
+	for (int i = 0; i < (int)functions.size(); i++)
 	{
 		int location = LineData.find(functions[i].name + "(");
 		if (location >= 0)
@@ -5386,13 +5386,13 @@ bool ScriptProcessor::FunctionProc()
 			FunctionCallLine = line;
 
 			//get function parameters
-			int location2 = location + functions[i].name.length() + 1;
+			int location2 = location + (int)functions[i].name.length() + 1;
 			int end_loc = LineData.find(")", location);
 			Ogre::String newdata = LineData.substr(location2, end_loc - location2);
 			SplitString(tempdata, newdata.c_str(), ',');
 
 			//calculate inline math
-			for (temp3 = 0; temp3 < tempdata.size(); temp3++)
+			for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3].c_str());
 				TrimString(buffer);
@@ -5452,7 +5452,7 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 	Ogre::String data = string;
 	Ogre::String stringbuffer;
 	SplitString(tempdata, data.substr(start).c_str(), ',');
-	for (int i = 0; i < tempdata.size(); i++)
+	for (int i = 0; i < (int)tempdata.size(); i++)
 	{
 		if (calc == true)
 			stringbuffer = Calc(tempdata[i].c_str());
@@ -5461,7 +5461,7 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 		TrimString(stringbuffer);
 		tempdata.insert(tempdata.begin() + i, stringbuffer);
 	}
-	return tempdata.size();
+	return (int)tempdata.size();
 }
 
 int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
@@ -5478,7 +5478,7 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 	TrimString(temp);
 
 	SplitString(tempdata, temp.c_str(), ',');
-	for (int i = 0; i < tempdata.size(); i++)
+	for (int i = 0; i < (int)tempdata.size(); i++)
 	{
 		Ogre::String buffer;
 		if (calc == true)
@@ -5488,7 +5488,7 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 		TrimString(buffer);
 		tempdata.insert(tempdata.begin() + i, buffer);
 	}
-	return tempdata.size();
+	return (int)tempdata.size();
 }
 
 Ogre::String ScriptProcessor::GetAfterEquals(const char *string)

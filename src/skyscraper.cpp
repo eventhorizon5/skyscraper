@@ -243,7 +243,7 @@ void MainScreen::ShowWindow()
 void MainScreen::OnIdle(wxIdleEvent& event)
 {
 	if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true)
-		skyscraper->PushFrame(); //run simulator loop
+		skyscraper->Loop(); //run simulator loop
 	if (skyscraper->Pause == false)
 		event.RequestMore(); //request more idles
 }
@@ -269,88 +269,6 @@ void Skyscraper::Render()
 
 	// Tell the camera to render into the frame buffer.
 	view->Draw();*/
-}
-
-void Skyscraper::SetupFrame()
-{
-	//Main simulator loop
-
-	//main menu routine
-	if (IsRunning == false)
-	{
-		DrawBackground();
-		GetMenuInput();
-		return;
-	}
-
-	//resize canvas if needed
-	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
-	{
-		//update canvas size values
-		canvas_width = canvas->GetSize().GetWidth();
-		canvas_height = canvas->GetSize().GetHeight();
-
-		//resize viewport
-		//wxwin->GetWindow()->resize(canvas->size());
-	}
-
-	RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
-	InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);
-
-	Simcore->RenderOnly = RenderOnly;
-	Simcore->InputOnly = InputOnly;
-
-	//run SBS main loop
-	Simcore->MainLoop();
-
-	//get input
-	if (RenderOnly == false)
-		GetInput();
-
-	//process camera loop
-	Simcore->camera->Loop();
-
-	//render graphics
-	Render();
-
-	//exit if shutdown request received
-	if (Shutdown == true)
-	{
-		Shutdown = false;
-		//if showmenu is true, unload simulator and return to main menu
-		if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			Unload();
-		//otherwise exit app
-		else
-			Quit();
-	}
-
-	//reload building if requested
-	if (Reload == true)
-	{
-		PositionOverride = true;
-		override_position = Simcore->camera->GetPosition();
-		override_rotation = Simcore->camera->GetRotation();
-		IsRunning = false;
-		Starting = false;
-		Pause = false;
-		UnloadSim();
-		//mouse->Reset();
-		Start();
-	}
-}
-
-bool Skyscraper::HandleEvent()
-{
-	//Event handler
-	//if (Event.Name == Frame)
-	//{
-		if (IsRunning == true)
-			Simcore->CalculateFrameRate();
-		SetupFrame();
-		return true;
-	//}
-	//return false;
 }
 
 bool Skyscraper::Initialize(wxPanel* RenderObject)
@@ -615,8 +533,8 @@ void Skyscraper::GetInput()
 	static int old_mouse_x, old_mouse_y;
 
 	// First get elapsed time from the virtual clock.
-	elapsed_time = vc->GetElapsedTicks ();
-	current_time = vc->GetCurrentTicks ();
+	elapsed_time = Simcore->GetElapsedTime();
+	current_time = Simcore->GetRunTime();
 
 	//speed limit certain keys
 	if (wait == true)
@@ -876,15 +794,80 @@ bool Skyscraper::ReportError(std::string message, ...)
 	return false;
 }
 
-void Skyscraper::PushFrame()
+void Skyscraper::Loop()
 {
-	/*if (!equeue)
-		return ;
+	//Main simulator loop
 
-	if (vc)
-		vc->Advance();
+	//main menu routine
+	if (IsRunning == false)
+	{
+		DrawBackground();
+		GetMenuInput();
+		return;
+	}
 
-	equeue->Process();*/
+	if (!Simcore)
+		return;
+
+	Simcore->AdvanceClock();
+	if (IsRunning == true)
+		Simcore->CalculateFrameRate();
+
+	//resize canvas if needed
+	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
+	{
+		//update canvas size values
+		canvas_width = canvas->GetSize().GetWidth();
+		canvas_height = canvas->GetSize().GetHeight();
+
+		//resize viewport
+		//wxwin->GetWindow()->resize(canvas->size());
+	}
+
+	RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
+	InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);
+
+	Simcore->RenderOnly = RenderOnly;
+	Simcore->InputOnly = InputOnly;
+
+	//run SBS main loop
+	Simcore->MainLoop();
+
+	//get input
+	if (RenderOnly == false)
+		GetInput();
+
+	//process camera loop
+	Simcore->camera->Loop();
+
+	//render graphics
+	Render();
+
+	//exit if shutdown request received
+	if (Shutdown == true)
+	{
+		Shutdown = false;
+		//if showmenu is true, unload simulator and return to main menu
+		if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
+			Unload();
+		//otherwise exit app
+		else
+			Quit();
+	}
+
+	//reload building if requested
+	if (Reload == true)
+	{
+		PositionOverride = true;
+		override_position = Simcore->camera->GetPosition();
+		override_rotation = Simcore->camera->GetRotation();
+		IsRunning = false;
+		Starting = false;
+		Pause = false;
+		UnloadSim();
+		//mouse->Reset();
+		Start();
+	}
 }
 
 void Skyscraper::DrawBackground()

@@ -174,7 +174,7 @@ int SBS::Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value)
 	int i;
 	int front = 0, back = 0;
 
-	for (i = 0; i < vertices.size(); i++)
+	for (i = 0; i < (int)vertices.size(); i++)
 	{
 		float loc = 0;
 		if (axis == 0)
@@ -330,8 +330,8 @@ bool SBS::InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v)
 	//determine if the point 'v' is inside the given polygon
 
 	int i, i1;
-	i1 = poly.size() - 1;
-	for (i = 0; i < poly.size(); i++)
+	i1 = (int)poly.size() - 1;
+	for (i = 0; i < (int)poly.size(); i++)
 	{
 		if (WhichSide3D(v, poly[i1], poly[i]) < 0)
 			return false;

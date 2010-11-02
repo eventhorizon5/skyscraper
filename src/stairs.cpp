@@ -76,9 +76,9 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 Stairs::~Stairs()
 {
 	//delete models
-	for (int i = 0; i < ModelArray.size(); i++)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
-		for (int j = 0; j < ModelArray[i].size(); j++)
+		for (int j = 0; j < (int)ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j])
 				delete ModelArray[i][j];
@@ -87,9 +87,9 @@ Stairs::~Stairs()
 	}
 
 	//delete lights
-	for (int i = 0; i < lights.size(); i++)
+	for (int i = 0; i < (int)lights.size(); i++)
 	{
-		for (int j = 0; j < lights[i].size(); j++)
+		for (int j = 0; j < (int)lights[i].size(); j++)
 		{
 			if (lights[i][j])
 				delete lights[i][j];
@@ -98,7 +98,7 @@ Stairs::~Stairs()
 	}
 
 	//delete doors
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
 		if (DoorArray[i].object)
 		{
@@ -110,13 +110,13 @@ Stairs::~Stairs()
 	DoorArray.clear();
 
 	//delete mesh array objects
-	for (int i = 0; i < StairArray.size(); i++)
+	for (int i = 0; i < (int)StairArray.size(); i++)
 	{
 		if (StairArray[i])
 			delete StairArray[i];
 		StairArray[i] = 0;
 	}
-	for (int i = 0; i < StairDoorArray.size(); i++)
+	for (int i = 0; i < (int)StairDoorArray.size(); i++)
 	{
 		if (StairDoorArray[i])
 			delete StairDoorArray[i];
@@ -409,7 +409,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	Ogre::String stairsnum = _itoa(StairsNum, intbuffer, 10);
-	Ogre::String num = _itoa(DoorArray.size() - 1, intbuffer, 10);
+	Ogre::String num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
 	DoorArray[DoorArray.size() - 1].object = new Door(this->object, Ogre::String("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
@@ -446,7 +446,7 @@ void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Ve
 	//cut external
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
 	voffset2 = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight() + endvoffset;
-	for (int i = 0; i < sbs->External->Walls.size(); i++)
+	for (int i = 0; i < (int)sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
 			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
@@ -470,7 +470,7 @@ bool Stairs::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const
 
 	float base = sbs->GetFloor(floor)->GetBase();
 
-	for (int i = 0; i < GetMeshObject(floor)->Walls.size(); i++)
+	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
 		if (i > 0)
@@ -529,7 +529,7 @@ void Stairs::EnableDoor(int floor, bool value)
 {
 	//turn on door(s) on the specified floor
 
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
 		if (DoorArray[i].floornumber == floor && DoorArray[i].object)
 			DoorArray[i].object->Enabled(value);
@@ -539,7 +539,7 @@ void Stairs::EnableDoor(int floor, bool value)
 void Stairs::OpenDoor(int number)
 {
 	//open door
-	if (number < DoorArray.size())
+	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			DoorArray[number].object->Open();
@@ -551,7 +551,7 @@ void Stairs::OpenDoor(int number)
 void Stairs::CloseDoor(int number)
 {
 	//close door
-	if (number < DoorArray.size())
+	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			DoorArray[number].object->Close();
@@ -563,7 +563,7 @@ void Stairs::CloseDoor(int number)
 bool Stairs::IsDoorOpen(int number)
 {
 	//check to see if door is open
-	if (number < DoorArray.size())
+	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			return DoorArray[number].object->IsOpen();
@@ -597,7 +597,7 @@ bool Stairs::IsValidFloor(int floor)
 bool Stairs::IsDoorMoving(int number)
 {
 	//check to see if door is moving
-	if (number < DoorArray.size())
+	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number].object)
 			return DoorArray[number].object->IsMoving;
@@ -622,7 +622,7 @@ bool Stairs::ReportError(std::string message)
 void Stairs::RemoveDoor(Door *door)
 {
 	//remove a door from the array (this does not delete the object)
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
 		if (DoorArray[i].object == door)
 		{

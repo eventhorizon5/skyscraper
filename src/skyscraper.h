@@ -65,9 +65,9 @@ public:
 	Ogre::Vector3 override_rotation;
 	bool Shaders;
 
-	int elapsed_time, current_time;
+	unsigned int elapsed_time, current_time;
 
-	void PushFrame();
+	void Loop();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
 	void DrawBackground();
@@ -80,8 +80,6 @@ public:
 	void GetInput();
 	void Report(std::string message, ...);
 	bool ReportError(std::string message, ...);
-	void SetupFrame();
-	bool HandleEvent();
 	bool Initialize(wxPanel* RenderObject);
 	void GetMenuInput();
 	void StartSound();

@@ -345,7 +345,7 @@ void Camera::CheckShaft()
 				if (shaft->ShowOutside == true)
 				{
 					int loc = -1;
-					for (int i = 0; i < shaft->ShowOutsideList.size(); i++)
+					for (int i = 0; i < (int)shaft->ShowOutsideList.size(); i++)
 					{
 						if (shaft->ShowOutsideList[i] == CurrentFloor)
 							loc = i;
@@ -856,7 +856,7 @@ void Camera::Spin(float speed)
 void Camera::InterpolateMovement()
 {
 	//calculate acceleration
-	float elapsed = sbs->vc->GetElapsedTicks() / 1000.0f;
+	float elapsed = sbs->GetElapsedTime() / 1000.0f;
 	elapsed *= 1700.0f;
 
 	for (size_t i = 0; i < 3; i++)
