@@ -41,6 +41,7 @@ public:
 	Ogre::RenderWindow* mRenderWindow;
 	Ogre::Viewport* mViewport;
 	Ogre::SceneManager* mSceneMgr;
+	Ogre::Camera* mCamera;
 
 	Ogre::String version;
 	Ogre::String version_rev;
@@ -76,6 +77,8 @@ public:
 
 	//engine related stuff
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const Ogre::String& windowName = Ogre::String(""));
+	void destroyRenderWindow();
+	const Ogre::String getOgreHandle() const;
 	void Render();
 	void GetInput();
 	void Report(std::string message, ...);

@@ -475,7 +475,7 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, const char* rootdirectory, const char* directory_char)
+bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char)
 {
 	mRoot = Ogre::Root::getSingletonPtr();
 	this->mSceneManager = mSceneManager;
@@ -525,7 +525,7 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	printf("Done\n");
 
 	//create camera object
-	camera = new Camera();
+	this->camera = new Camera(camera);
 	
 	return true;
 }
@@ -3752,30 +3752,34 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 
 int SBS::GetConfigInt(const char *key, int default_value)
 {
-	Ogre::ConfigFile* file;
-	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return Ogre::StringConverter::parseInt(result);
+	//Ogre::ConfigFile* file;
+	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	//return Ogre::StringConverter::parseInt(result);
+	return default_value;
 }
 
 const char* SBS::GetConfigString(const char *key, const char *default_value)
 {
-	Ogre::ConfigFile* file;
-	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return result.c_str();
+	//Ogre::ConfigFile* file;
+	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	//return result.c_str();
+	return default_value;
 }
 
 bool SBS::GetConfigBool(const char *key, bool default_value)
 {
-	Ogre::ConfigFile* file;
-	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return Ogre::StringConverter::parseBool(result);
+	//Ogre::ConfigFile* file;
+	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	//return Ogre::StringConverter::parseBool(result);
+	return default_value;
 }
 
 float SBS::GetConfigFloat(const char *key, float default_value)
 {
-	Ogre::ConfigFile* file;
-	Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return Ogre::StringConverter::parseReal(result);
+	//Ogre::ConfigFile* file;
+	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	//return Ogre::StringConverter::parseReal(result);
+	return default_value;
 }
 
 bool SBS::InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test)

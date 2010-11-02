@@ -75,7 +75,7 @@ public:
 	Ogre::Vector3 HitPosition; //last hit position
 
 	//functions
-	Camera();
+	Camera(Ogre::Camera *camera);
 	~Camera();
 	void SetPosition(const Ogre::Vector3 &vector);
 	void SetDirection(const Ogre::Vector3 &vector);

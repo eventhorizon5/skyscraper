@@ -152,7 +152,7 @@ public:
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
-	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, const char* rootdirectory, const char* directory_char);
+	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char);
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);

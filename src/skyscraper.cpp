@@ -112,12 +112,12 @@ bool Skyscraper::OnInit(void)
 		return ReportError("Error initializing OGRE");
 
 	//autoload a building file if specified
-	BuildingFile = confman->GetStr("Skyscraper.Frontend.AutoLoad");
-	if (BuildingFile != "")
-		return Start();
+	//BuildingFile = confman->GetStr("Skyscraper.Frontend.AutoLoad");
+	//if (BuildingFile != "")
+		//return Start();
 
 	//show menu
-	if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
+	/*if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
 	{
 		//draw background
 		DrawBackground();
@@ -125,13 +125,13 @@ bool Skyscraper::OnInit(void)
 		StartSound();
 	}
 	else
-	{
+	{*/
 		//or show building selection window if ShowMenu is false
 		if (SelectBuilding() == true)
 			return Start();
 		else
 			return false;
-	}
+	//}
 
 	return true;
 }
@@ -316,6 +316,11 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	mSceneMgr->setAmbientLight(Ogre::ColourValue( 0, 0, 0 ));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
+	mCamera = mSceneMgr->createCamera("Main Camera");
+	mViewport = mRenderWindow->addViewport(mCamera);
+	mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
+	mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
+
 	/*
 	object_reg = csInitializer::CreateEnvironment(argc, argv);
 	if (!object_reg) return false;
@@ -451,14 +456,14 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 
 	Platform = OGRE_PLATFORM;
 
-	Ogre::String renderLoop;
+	/*Ogre::String renderLoop;
 	if (confman->GetBool("Skyscraper.Frontend.Shaders", false) == true)
 	{
 		renderLoop = "diffuse";
 		Shaders = true;
 	}
 	if (confman->GetBool("Skyscraper.Frontend.ShaderShadows", false) == true && Shaders == true)
-		renderLoop = "shadowed";
+		renderLoop = "shadowed";*/
 
 	/*
 	// Open the main system. This will open all the previously loaded plug-ins.
@@ -732,7 +737,7 @@ void Skyscraper::GetInput()
 			//show control panel if closed
 			dpanel = new DebugPanel(NULL, -1);
 			dpanel->Show(true);
-			dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
+			//dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
 		}
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
@@ -824,8 +829,8 @@ void Skyscraper::Loop()
 		//wxwin->GetWindow()->resize(canvas->size());
 	}
 
-	RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
-	InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);
+	//RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
+	//InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);
 
 	Simcore->RenderOnly = RenderOnly;
 	Simcore->InputOnly = InputOnly;
@@ -848,10 +853,10 @@ void Skyscraper::Loop()
 	{
 		Shutdown = false;
 		//if showmenu is true, unload simulator and return to main menu
-		if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			Unload();
+		//if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
+			//Unload();
 		//otherwise exit app
-		else
+		//else
 			Quit();
 	}
 
@@ -1204,7 +1209,7 @@ bool Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(mRenderWindow, mSceneMgr, root_dir.c_str(), dir_char.c_str());
+	Simcore->Initialize(mRenderWindow, mSceneMgr, mCamera, root_dir.c_str(), dir_char.c_str());
 	Simcore->Shaders = Shaders;
 
 	//load building data file
@@ -1271,12 +1276,12 @@ bool Skyscraper::Start()
 	}
 
 	//load control panel
-	if (confman->GetBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+	//if (confman->GetBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
 	{
 		dpanel = new DebugPanel(NULL, -1);
 		dpanel->Show(true);
-		dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
-	}
+		//dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
+	//}
 
 	window->Raise();
 
@@ -1295,6 +1300,7 @@ bool Skyscraper::Start()
 	StartupRunning = false;
 	Reload = false;
 	return true;
+	}
 }
 
 void Skyscraper::AllowResize(bool value)
@@ -1346,7 +1352,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 		name = Ogre::String("wxOgreRenderWindow");
 
 	int width, height;
-	GetClientSize(&width, &height);
+	window->GetClientSize(&width, &height);
 
 	Ogre::NameValuePairList params;
 	if (miscParams)
@@ -1359,4 +1365,76 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	mRenderWindow->setActive(true);
 	
 	return mRenderWindow;
+}
+
+void Skyscraper::destroyRenderWindow()
+{
+   if (mRenderWindow)
+      Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
+
+   mRenderWindow = 0;
+
+#if defined(__WXMAC__)
+   DisposeWindow(i_carbonWin);
+#endif
+}
+
+const Ogre::String Skyscraper::getOgreHandle() const
+{
+#if defined(__WXMSW__)
+   // Handle for Windows systems
+   return Ogre::StringConverter::toString((size_t)((HWND)window->GetHandle()));
+#elif defined(__WXGTK__)
+   // Handle for GTK-based systems
+
+   // wxWidgets uses several internal GtkWidgets, the GetHandle method
+   // returns a different one than this, but wxWidgets's GLCanvas uses this
+   // one to interact with GLX, so we do the same.
+   // NOTE: this method relies on implementation details in wxGTK and could
+   //      change without any notification from the developers.
+   GtkWidget* privHandle = window->m_wxwindow;
+
+   // prevents flickering
+   gtk_widget_set_double_buffered(privHandle, false);
+
+   gtk_widget_realize(privHandle);
+
+   // grab the window object
+   GdkWindow* gdkWin = GTK_PIZZA(privHandle)->bin_window;
+   Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
+   Window wid = GDK_WINDOW_XWINDOW(gdkWin);
+
+   // screen (returns "display.screen")
+   std::string screenStr = DisplayString(display);
+   screenStr = screenStr.substr(screenStr.find(".") + 1, screenStr.size());
+
+   std::stringstream handleStream;
+   handleStream << (unsigned long)display << ':' << screenStr << ':' << wid;
+
+   // retrieve XVisualInfo
+   // NOTE: '-lGL' linker flag must be specified.
+   int attrlist[] = { GLX_RGBA, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, None };
+   XVisualInfo* vi = glXChooseVisual(display, DefaultScreen(display), attrlist);
+   handleStream << ':' << (unsigned long)vi;
+
+   return Ogre::String(handleStream.str());
+
+#elif defined(__WXMAC__)
+   Rect rect;
+   wxPoint position;
+   wxSize size;
+   position = GetScreenPosition();
+   size      = GetSize();
+   rect.left   = position.x;
+   rect.top   = position.y;
+   rect.right   = position.x + size.GetWidth();
+   rect.bottom   = position.y + size.GetHeight();
+
+   CreateNewWindow(kFloatingWindowClass, kWindowNoTitleBarAttribute, &rect, &i_carbonWin);
+   ShowWindow(i_carbonWin);
+   return Ogre::StringConverter::toString((unsigned long)(HIViewGetRoot(i_carbonWin)));
+
+#else
+   #error Not supported on this platform!
+#endif
 }

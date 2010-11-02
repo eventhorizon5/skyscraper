@@ -32,13 +32,13 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Camera::Camera()
+Camera::Camera(Ogre::Camera *camera)
 {
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, sbs->object, "Camera", "Camera", true);
 
-	MainCamera = sbs->mSceneManager->createCamera("MainCamera");
+	MainCamera = camera;
 
 	//init variables
 	CurrentFloor = 0;
