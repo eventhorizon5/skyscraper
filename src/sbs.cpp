@@ -3803,7 +3803,7 @@ void SBS::AdvanceClock()
 	current_time = t.time * 1000 + t.millitm;
 
 	if (current_time < last)
-		elapsed_time = current_time + (unsigned int (-1) - last) + 1;
+		elapsed_time = current_time + ((unsigned int)-1 - last) + 1;
 	else
 		elapsed_time = current_time - last;
 	current_virtual_time += elapsed_time;
