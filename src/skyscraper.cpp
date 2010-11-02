@@ -470,7 +470,7 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
 	*/
 
-	Platform = OGRE_PLATFORM;
+	//Platform = OGRE_PLATFORM;
 
 	/*Ogre::String renderLoop;
 	if (confman->GetBool("Skyscraper.Frontend.Shaders", false) == true)

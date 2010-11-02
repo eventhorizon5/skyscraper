@@ -729,7 +729,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	Ogre::String buffer;
 	Ogre::String Name = name;
-	buffer = object->GetNumber();
+	buffer = Ogre::StringConverter::toString(object->GetNumber());
 	Name.insert(0, "(" + buffer + ")");
 
 	if (!filename)

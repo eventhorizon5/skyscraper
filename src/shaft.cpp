@@ -72,7 +72,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 
 	Ogre::String buffer, buffer2, buffer3;
 
-	buffer = number;
+	buffer = Ogre::StringConverter::toString(number);
 	object->SetName(Ogre::String("Shaft " + buffer).c_str());
 
 	ShaftArray.resize(endfloor - startfloor + 1);
@@ -83,8 +83,8 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create shaft meshes
-		buffer2 = number;
-		buffer3 = i;
+		buffer2 = Ogre::StringConverter::toString(number);
+		buffer3 = Ogre::StringConverter::toString(i);
 		buffer = "Shaft " + buffer2 + ":" + buffer3;
 		TrimString(buffer);
 		ShaftArray[i - startfloor] = new MeshObject(object, buffer.c_str());

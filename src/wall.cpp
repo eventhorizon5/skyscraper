@@ -157,8 +157,7 @@ Ogre::String WallObject::ProcessName(const char *name)
 
 	//construct name
 	Ogre::String newname = "(";
-	Ogre::String num;
-	num = Number;
+	Ogre::String num = Ogre::StringConverter::toString(Number);
 	newname.append(num + ")");
 	newname.append(name_modified);
 	return newname;
@@ -259,8 +258,7 @@ void WallObject::SetPolygonName(int index, const char *name)
 
         //construct name
         Ogre::String newname = "(";
-        Ogre::String num;
-        num = Number;
+        Ogre::String num = Ogre::StringConverter::toString(Number);
         newname.append(num + ")");
         newname.append(name_modified);
 

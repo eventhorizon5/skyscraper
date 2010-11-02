@@ -54,7 +54,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 
 	Ogre::String buffer, buffer2, buffer3;
 
-	buffer = number;
+	buffer = Ogre::StringConverter::toString(number);
 	object->SetName(Ogre::String("Stairwell " + buffer).c_str());
 
 	StairArray.resize(endfloor - startfloor + 1);
@@ -64,8 +64,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create stairwell meshes
-		buffer2 = number;
-		buffer3 = i;
+		buffer2 = Ogre::StringConverter::toString(number);
+		buffer3 = Ogre::StringConverter::toString(i);
 		buffer = "Stairwell " + buffer2 + ":" + buffer3;
 		TrimString(buffer);
 		StairArray[i - startfloor] = new MeshObject(object, buffer.c_str());
@@ -162,7 +162,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	for (int i = 1; i <= num_stairs; i++)
 	{
 		float pos = 0;
-		buffer2 = i;
+		buffer2 = Ogre::StringConverter::toString(i);
 		float thickness = 0;
 		if (i < num_stairs - 1)
 			thickness = treadsize * 2;

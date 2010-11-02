@@ -58,8 +58,8 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 	//create object mesh
 	Ogre::String buffer, buffer2, buffer3;
-	buffer2 = floornum;
-	buffer3 = number;
+	buffer2 = Ogre::StringConverter::toString(floornum);
+	buffer3 = Ogre::StringConverter::toString(number);
 	buffer = "Call Panel " + buffer2 + ":" + buffer3;
 	TrimString(buffer);
 	object->SetName(buffer.c_str());

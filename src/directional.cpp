@@ -58,8 +58,8 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 
 	//create object mesh
 	Ogre::String buffer, buffer2, buffer3;
-	buffer2 = elevator;
-	buffer3 = floor;
+	buffer2 = Ogre::StringConverter::toString(elevator);
+	buffer3 = Ogre::StringConverter::toString(floor);
 	buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
 	TrimString(buffer);
 	object->SetName(Ogre::String("Directional Indicator " + buffer2 + ":" + buffer3).c_str());

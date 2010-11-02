@@ -164,7 +164,7 @@ Elevator::Elevator(int number)
 	departure_delay = new Timer(this,3);
 
 	//create object meshes
-	buffer = Number;
+	buffer = Ogre::StringConverter::toString(Number);
 	buffer.insert(0, "Elevator ");
 	TrimString(buffer);
 	object->SetName(buffer.c_str());
@@ -440,15 +440,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	if (!sbs->GetShaft(AssignedShaft))
 	{
-		Ogre::String num;
-		num = AssignedShaft;
+		Ogre::String num = Ogre::StringConverter::toString(AssignedShaft);
 		ReportError(Ogre::String("Shaft " + num + " doesn't exist").c_str());
 		return 0;
 	}
 	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
 	{
-		Ogre::String num;
-		num = floor;
+		Ogre::String num = Ogre::StringConverter::toString(floor);
 		ReportError(Ogre::String("Invalid starting floor " + num).c_str());
 		return 0;
 	}
@@ -2199,8 +2197,7 @@ bool Elevator::AddServicedFloor(int number)
 	//check if floor is outside valid floor range
 	if (sbs->IsValidFloor(number) == false)
 	{
-		Ogre::String floor;
-		floor = number;
+		Ogre::String floor = Ogre::StringConverter::toString(number);
 		return ReportError("AddServicedFloor: Invalid floor " + floor);
 	}
 
@@ -2231,8 +2228,7 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 	//create a new button panel object and store the pointer
 
 	int index = (int)PanelArray.size();
-	Ogre::String number;
-	number = index + 1;
+	Ogre::String number = Ogre::StringConverter::toString(index + 1);
 	TrimString(number);
 	PanelArray.resize(index + 1);
 
@@ -3450,8 +3446,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	{
 		if (DoorExists(door_number) == false)
 		{
-			Ogre::String doornum;
-			doornum = door_number;
+			Ogre::String doornum = Ogre::StringConverter::toString(door_number);
 			ReportError("AddFloorSigns: door " + doornum + " does not exist");
 			return false;
 		}

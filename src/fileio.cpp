@@ -466,7 +466,7 @@ checkfloors:
 			}
 
 			//fullheight parameter
-			buffer = temp4;
+			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").fullheight";
 			buffer = LineData;
@@ -474,12 +474,12 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Simcore->GetFloor(temp4)->FullHeight();
+				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->FullHeight());
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 			//height parameter
-			buffer = temp4;
+			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").height";
 			buffer = LineData;
@@ -487,12 +487,12 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Simcore->GetFloor(temp4)->Height;
+				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->Height);
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 			//altitude parameter
-			buffer = temp4;
+			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").altitude";
 			buffer = LineData;
@@ -500,12 +500,12 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Simcore->GetFloor(temp4)->Altitude;
+				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->Altitude);
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 			//interfloorheight parameter
-			buffer = temp4;
+			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").interfloorheight";
 			buffer = LineData;
@@ -513,13 +513,13 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Simcore->GetFloor(temp4)->InterfloorHeight;
+				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->InterfloorHeight);
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 			temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
 			//base parameter
-			buffer = temp4;
+			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").base";
 			buffer = LineData;
@@ -527,7 +527,7 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Simcore->GetFloor(temp4)->GetBase();
+				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->GetBase());
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
@@ -1071,9 +1071,9 @@ int ScriptProcessor::ProcCommands()
 		}
 		if (Section == 2)
 		{
-			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[4].c_str());
+			buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[4].c_str())));
 			 tempdata.insert(tempdata.begin() + 4, buffer);
-			 buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7].c_str());
+			 buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7].c_str())));
 			 tempdata.insert(tempdata.begin() + 7, buffer);
 		}
 		buffer = tempdata[0];
@@ -1254,7 +1254,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str());
+			buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str())));
 			tempdata.insert(tempdata.begin() + 8, buffer);
 		}
 		buffer = tempdata[0];
@@ -1322,7 +1322,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			buffer = Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str());
+			buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str())));
 			tempdata.insert(tempdata.begin() + 8, buffer);
 		}
 		buffer = tempdata[0];
@@ -2182,20 +2182,20 @@ int ScriptProcessor::ProcFloors()
 	if (!floor)
 	{
 		Ogre::String floornum;
-		floornum = Current;
+		floornum = Ogre::StringConverter::toString(Current);
 		return ScriptError("Invalid floor " + floornum);
 	}
 
 	//replace variables with actual values
-	buffer = Current;
+	buffer = Ogre::StringConverter::toString(Current);
 	ReplaceAll(LineData, "%floor%", buffer.c_str());
-	buffer = floor->Height;
+	buffer = Ogre::StringConverter::toString(floor->Height);
 	ReplaceAll(LineData, "%height%", buffer.c_str());
-	buffer = floor->FullHeight();
+	buffer = Ogre::StringConverter::toString(floor->FullHeight());
 	ReplaceAll(LineData, "%fullheight%", buffer.c_str());
-	buffer = floor->InterfloorHeight;
+	buffer = Ogre::StringConverter::toString(floor->InterfloorHeight);
 	ReplaceAll(LineData, "%interfloorheight%", buffer.c_str());
-	buffer = floor->GetBase();
+	buffer = Ogre::StringConverter::toString(floor->GetBase());
 	ReplaceAll(LineData, "%base%", buffer.c_str());
 
 	if (getfloordata == true)
@@ -3338,7 +3338,7 @@ int ScriptProcessor::ProcElevators()
 	Simcore->NewElevator(Current);
 
 	//replace variables with actual values
-	buffer = Current;
+	buffer = Ogre::StringConverter::toString(Current);
 	ReplaceAll(LineData, "%elevator%", buffer.c_str());
 
 	//IF statement
@@ -5056,7 +5056,7 @@ int ScriptProcessor::ProcTextures()
 		for (Current = RangeL; Current <= RangeH; Current++)
 		{
 			temp2 = tempdata[2];
-			buffer = Current;
+			buffer = Ogre::StringConverter::toString(Current);
 			TrimString(buffer);
 			ReplaceAll(temp2, "%number%", buffer.c_str());
 			temp6 = tempdata[3];
@@ -5125,7 +5125,7 @@ int ScriptProcessor::ProcTextures()
 		temp6 = LineData;
 		for (Current = RangeL; Current <= RangeH; Current++)
 		{
-			buffer = Current;
+			buffer = Ogre::StringConverter::toString(Current);
 			TrimString(buffer);
 			LineData = temp6;
 			ReplaceAll(LineData, "%number%", buffer.c_str());
@@ -5353,7 +5353,7 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->linenum = line + 1;
 		object->context = Context;
 		Ogre::String current;
-		current = Current;
+		current = Ogre::StringConverter::toString(Current);
 		if (Section == 2)
 			object->context = "Floor " + current;
 		if (Section == 4)

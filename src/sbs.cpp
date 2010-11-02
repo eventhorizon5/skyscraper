@@ -1756,8 +1756,7 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 	{
 		if (ShaftArray[i].number == number)
 		{
-			Ogre::String num;
-			num = number;
+			Ogre::String num = Ogre::StringConverter::toString(number);
 			ReportError("Shaft " + num + " already exists");
 			return 0;
 		}
@@ -1766,15 +1765,13 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 	//verify floor range
 	if (IsValidFloor(_startfloor) == false)
 	{
-		Ogre::String num;
-		num = _startfloor;
+		Ogre::String num = Ogre::StringConverter::toString(_startfloor);
 		ReportError("CreateShaft: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		Ogre::String num;
-		num = _endfloor;
+		Ogre::String num = Ogre::StringConverter::toString(_endfloor);
 		ReportError("CreateShaft: Invalid ending floor " + num);
 		return 0;
 	}
@@ -1793,8 +1790,7 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	{
 		if (StairsArray[i].number == number)
 		{
-			Ogre::String num;
-			num = number;
+			Ogre::String num = Ogre::StringConverter::toString(number);
 			ReportError("Stairwell " + num + " already exists");
 			return 0;
 		}
@@ -1803,15 +1799,13 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	//verify floor range
 	if (IsValidFloor(_startfloor) == false)
 	{
-		Ogre::String num;
-		num = _startfloor;
+		Ogre::String num = Ogre::StringConverter::toString(_startfloor);
 		ReportError("CreateStairwell: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		Ogre::String num;
-		num = _endfloor;
+		Ogre::String num = Ogre::StringConverter::toString(_endfloor);
 		ReportError("CreateStairwell: Invalid ending floor " + num);
 		return 0;
 	}
@@ -3435,8 +3429,7 @@ bool SBS::DeleteObject(Object *object)
 	//object deletion routine
 	//this should be called to delete a simulator object during runtime
 
-	Ogre::String number;
-	number = object->GetNumber();
+	Ogre::String number = Ogre::StringConverter::toString(object->GetNumber());
 	bool deleted = false;
 
 	if (!object)

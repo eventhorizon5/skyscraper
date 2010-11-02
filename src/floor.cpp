@@ -43,20 +43,20 @@ Floor::Floor(int number)
 	Number = number;
 
 	//Create primary level mesh
-	buffer = Number;
+	buffer = Ogre::StringConverter::toString(Number);
 	object->SetName(Ogre::String("Floor " + buffer).c_str());
 	buffer.insert(0, "Level ");
 	TrimString(buffer);
 	Level = new MeshObject(object, buffer.c_str());
 
 	//Create interfloor mesh
-	buffer = Number;
+	buffer = Ogre::StringConverter::toString(Number);
 	buffer.insert(0, "Interfloor ");
 	TrimString(buffer);
 	Interfloor = new MeshObject(object, buffer.c_str());
 
 	//Create columnframe mesh
-	buffer = Number;
+	buffer = Ogre::StringConverter::toString(Number);
 	buffer.insert(0, "ColumnFrame ");
 	TrimString(buffer);
 	ColumnFrame = new MeshObject(object, buffer.c_str());

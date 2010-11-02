@@ -36,8 +36,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	object = new Object();
 	object->SetValues(this, elevator->object, "ElevatorDoor", "", false);
 
-	Ogre::String buffer;
-	buffer = number;
+	Ogre::String buffer = Ogre::StringConverter::toString(number);
 	object->SetName(Ogre::String("Elevator Door " + buffer).c_str());
 
 	//create a new elevator door
@@ -761,9 +760,9 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 	//adds an elevator door component; remake of AddDoors command
 
 	Ogre::String elevnumber, doornumber, Name, buffer;
-	elevnumber = elev->Number;
+	elevnumber = Ogre::StringConverter::toString(elev->Number);
 	TrimString(elevnumber);
-	doornumber = Number;
+	doornumber = Ogre::StringConverter::toString(Number);
 	TrimString(doornumber);
 	Name = name;
 	TrimString(Name);
@@ -789,11 +788,11 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 			index = i;
 	}
 	Ogre::String elevnumber, floornumber, doornumber, Name, buffer;
-	elevnumber = elev->Number;
+	elevnumber = Ogre::StringConverter::toString(elev->Number);
 	TrimString(elevnumber);
-	floornumber = floor;
+	floornumber = Ogre::StringConverter::toString(floor);
 	TrimString(floornumber);
-	doornumber = Number;
+	doornumber = Ogre::StringConverter::toString(Number);
 	TrimString(doornumber);
 	Name = name;
 	TrimString(Name);
@@ -810,9 +809,9 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
 	Ogre::String elevnumber, floornumber, doornumber, Name;
-	elevnumber = elev->Number;
+	elevnumber = Ogre::StringConverter::toString(elev->Number);
 	TrimString(elevnumber);
-	doornumber = Number;
+	doornumber = Ogre::StringConverter::toString(Number);
 	TrimString(doornumber);
 	Name = name;
 	TrimString(Name);
@@ -821,7 +820,7 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 	{
 		int floor = elev->ServicedFloors[i];
-		floornumber = floor;
+		floornumber = Ogre::StringConverter::toString(floor);
 		TrimString(floornumber);
 		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
@@ -984,8 +983,7 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 {
 	//finish shaft door on a specified floor
 
-	Ogre::String floornum;
-	floornum = floor;
+	Ogre::String floornum = Ogre::StringConverter::toString(floor);
 
 	//exit if floor is not serviced by the elevator
 	if (!elev->IsServicedFloor(floor))

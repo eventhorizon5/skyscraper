@@ -43,8 +43,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	object = new Object();
 	object->SetValues(this, parent, "Control", name, false);
 
-	Ogre::String objnum;
-	objnum = object->GetNumber();
+	Ogre::String objnum = Ogre::StringConverter::toString(object->GetNumber());
 	Name = "(" + objnum + ")" + name;
 	Actions = action_names;
 	Direction = direction;

@@ -63,8 +63,8 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 
 	//create mesh
 	Ogre::String buffer, buffer2, buffer3;
-	buffer2 = elevator;
-	buffer3 = index;
+	buffer2 = Ogre::StringConverter::toString(elevator);
+	buffer3 = Ogre::StringConverter::toString(index);
 	buffer = "Button Panel " + buffer2 + ":" + buffer3;
 	TrimString(buffer);
 	object->SetName(buffer.c_str());
@@ -245,9 +245,9 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	controls.resize(controls.size() + 1);
 	int control_index = (int)controls.size() - 1;
 	Ogre::String buffer, buffer2, buffer3, buffer4;
-	buffer2 = elevator;
-	buffer3 = Index;
-	buffer4 = control_index;
+	buffer2 = Ogre::StringConverter::toString(elevator);
+	buffer3 = Ogre::StringConverter::toString(Index);
+	buffer4 = Ogre::StringConverter::toString(control_index);
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	TrimString(buffer);
 	controls[control_index] = new Control(this->object, buffer.c_str(), sound, action_names, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
@@ -471,8 +471,7 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 {
 	//change light status for all buttons that call the specified floor
 
-	Ogre::String floornum;
-	floornum = floor;
+	Ogre::String floornum = Ogre::StringConverter::toString(floor);
 	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		int index = controls[i]->FindActionPosition(floornum.c_str());
@@ -491,8 +490,7 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 {
 	//return the index number of a floor button
 
-	Ogre::String floornum;
-	floornum = floor;
+	Ogre::String floornum = Ogre::StringConverter::toString(floor);
 
 	if (controls.size() > 0)
 	{
