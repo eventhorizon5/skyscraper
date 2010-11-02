@@ -5154,13 +5154,13 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 	csString stringbuffer;
 	tempdata.DeleteAll();
 	tempdata.SplitString(data.Slice(start).GetData(), ",");
-	for (int i = 0; i < tempdata.GetSize(); i++)
+	if (calc == true)
 	{
-		if (calc == true)
+		for (int i = 0; i < tempdata.GetSize(); i++)
+		{
 			stringbuffer = Calc(tempdata[i]);
-		else
-			stringbuffer = tempdata[i];
-		tempdata.Put(i, stringbuffer.Trim());
+			tempdata[i] = stringbuffer;
+		}
 	}
 	return tempdata.GetSize();
 }
