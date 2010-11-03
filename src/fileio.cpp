@@ -5090,6 +5090,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[2];
+		TrimString(buffer);
 		buffer.insert(0, "data/fonts/");
 		CheckFile(buffer.c_str());
 		if (params == 14)
@@ -5134,6 +5135,7 @@ int ScriptProcessor::ProcTextures()
 			int params = SplitData(LineData.c_str(), 13, false);
 
 			buffer = tempdata[4];
+			TrimString(buffer);
 			buffer.insert(0, "data/fonts/");
 			CheckFile(buffer.c_str());
 			if (params == 16)
@@ -5159,6 +5161,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
 		}
 		buffer = tempdata[0];
+		TrimString(buffer);
 		CheckFile(buffer.c_str());
 		if (params == 8)
 			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
