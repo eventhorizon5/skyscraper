@@ -267,7 +267,7 @@ public:
 	void RemoveShaft(Shaft *shaft);
 	void RemoveStairs(Stairs *stairs);
 	void RemoveSound(Sound *sound);
-	const char* VerifyFile(const char *filename);
+	std::string VerifyFile(const char *filename);
 	bool FileExists(const char *filename);
 	int GetWallCount();
 	int GetPolygonCount();

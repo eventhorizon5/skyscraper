@@ -28,6 +28,7 @@
 #include <time.h>
 #include <sys/timeb.h>
 #include <Ogre.h>
+#include <OgreFileSystem.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -533,7 +534,7 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//first verify the filename
-	//Ogre::String filename2 = VerifyFile(filename);
+	Ogre::String filename2 = VerifyFile(filename);
 
 	// Load the texture
 	Ogre::TexturePtr mTex = Ogre::TextureManager::getSingleton().load(filename, "General", Ogre::TEX_TYPE_2D, Ogre::MIP_DEFAULT, 1.0f, false);
@@ -542,7 +543,9 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		return ReportError("Error loading texture");
 
 	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(name, "General");
+	Ogre::String matname = name;
+	TrimString(matname);
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState()->setTextureName(mTex->getName());
@@ -1589,7 +1592,7 @@ void SBS::EnableExternal(bool value)
 void SBS::EnableSkybox(bool value)
 {
 	//turns skybox on/off
-	SkyBox->Enable(value);
+	//SkyBox->Enable(value);
 	IsSkyboxEnabled = value;
 }
 
@@ -3599,19 +3602,21 @@ void SBS::RemoveSound(Sound *sound)
 	}
 }
 
-const char* SBS::VerifyFile(const char *filename)
+std::string SBS::VerifyFile(const char *filename)
 {
 	//verify a filename
-	//if it does, return the same filename
+	//if it exists, return the same filename
 	//otherwise search the related folder and find a matching filename with a different
 	//case (fixes case-sensitivity issues mainly on Linux)
 	//returns the original string if not found
 
-	/*Ogre::String file = filename;
-	if (vfs->Exists(filename))
-		return filename;
+	Ogre::String file = filename;
+	TrimString(file);
+	Ogre::FileSystemArchive filesystem("","FileSystem");
+	if (filesystem.exists(file))
+		return file;
 
-	Ogre::String directory;
+	/*Ogre::String directory;
 	int loc1 = file.find_last_of("/");
 	int loc2 = file.find_last_of("\\");
 	int loc = loc1;
@@ -3628,20 +3633,23 @@ const char* SBS::VerifyFile(const char *filename)
 			return check;
 	}
 	return filename;*/
-	return 0;
+	return file;
 }
 
 bool SBS::FileExists(const char *filename)
 {
 	//check to see if the specified file exists
 
-	/*Ogre::String file = filename;
+	Ogre::String file = filename;
+	TrimString(file);
 
-	if (vfs->Exists(filename))
+	Ogre::FileSystemArchive filesystem("","FileSystem");
+	if (filesystem.exists(file))
 		return true;
-	Ogre::String verify = VerifyFile(filename);
+
+	Ogre::String verify = VerifyFile(file.c_str());
 	if (verify != file)
-		return true;*/
+		return true;
 	return false;
 }
 

@@ -937,7 +937,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	if (ShaftDoor == false)
 	{
 		WallObject *wall;
-		wall = elev->ElevatorMesh->CreateWallObject(elev->object, false);
+		wall = elev->ElevatorMesh->CreateWallObject(elev->object, "Connection");
 		name1 = "DoorF1";
 		name2 = "DoorF2";
 		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true, false);
@@ -947,7 +947,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		WallObject *wall;
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, false);
+		wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, "Connection");
 		name1 = "ShaftDoorF1";
 		name2 = "ShaftDoorF2";
 		x1 += elev->Origin.x;

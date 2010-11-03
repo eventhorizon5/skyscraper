@@ -113,6 +113,7 @@ bool Skyscraper::OnInit(void)
 	mRenderWindow = 0;
 	mViewport = 0;
 	mSceneMgr = 0;
+	canvas = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -759,10 +760,10 @@ void Skyscraper::GetInput()
 		{
 			//enable/disable freelook mode
 			Simcore->camera->Freelook = !Simcore->camera->Freelook;
-			if (Simcore->camera->Freelook == true)
-				canvas->SetCursor(wxCURSOR_BLANK);
-			else
-				canvas->SetCursor(wxNullCursor);
+			//if (Simcore->camera->Freelook == true)
+				//canvas->SetCursor(wxCURSOR_BLANK);
+			//else
+				//canvas->SetCursor(wxNullCursor);
 			wait = true;
 		}
 		if (wxGetKeyState(WXK_F10) && wait == false)
@@ -835,7 +836,7 @@ void Skyscraper::Loop()
 		Simcore->CalculateFrameRate();
 
 	//resize canvas if needed
-	if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
+	/*if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
 	{
 		//update canvas size values
 		canvas_width = canvas->GetSize().GetWidth();
@@ -843,7 +844,7 @@ void Skyscraper::Loop()
 
 		//resize viewport
 		//wxwin->GetWindow()->resize(canvas->size());
-	}
+	}*/
 
 	//RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
 	//InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);

@@ -392,18 +392,22 @@ wxString TruncateNumber(double value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 	wxString number = wxVariant(value).GetString();
-	if (decimals < 1)
-		return number;
-	return number.erase(number.find('.') + decimals + 1);
+	//if ((int)value == value)
+		return number; //exit if value is an integer
+	//if (decimals < 1)
+		//return number;
+	//return number.erase(number.find('.') + decimals + 1);
 }
 
 wxString TruncateNumber(float value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 	wxString number = wxVariant(value).GetString();
-	if (decimals < 1)
-		return number;
-	return number.erase(number.find('.') + decimals + 1);
+	//if ((int)value == value)
+		return number; //exit if value is an integer
+	//if (decimals < 1)
+		//return number;
+	//return number.erase(number.find('.') + decimals + 1);
 }
 
 void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)

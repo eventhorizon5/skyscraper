@@ -655,8 +655,8 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 			return false;
 
 	//make sure file exists
-	//if (Simcore->FileExists(Filename.c_str()) == false)
-		//return false;
+	if (Simcore->FileExists(Filename.c_str()) == false)
+		return false;
 
 	Simcore->Report(Filename);
 
@@ -5465,15 +5465,14 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 	TrimString(temp);
 
 	SplitString(tempdata, temp.c_str(), ',');
-	for (int i = 0; i < (int)tempdata.size(); i++)
+	if (calc == true)
 	{
-		Ogre::String buffer;
-		if (calc == true)
-			buffer = Calc(tempdata[i].c_str());
-		else
-			buffer = tempdata[i];
-		TrimString(buffer);
-		tempdata.insert(tempdata.begin() + i, buffer);
+		for (int i = 0; i < (int)tempdata.size(); i++)
+		{
+			Ogre::String buffer = Calc(tempdata[i].c_str());
+			TrimString(buffer);
+			tempdata[i] = buffer;
+		}
 	}
 	return (int)tempdata.size();
 }

@@ -237,6 +237,9 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
 	std::string original = original_string;
 
     endpos = original.find_first_of(separator, startpos);
+	if (endpos == -1)
+		dest_array.push_back(original.substr(startpos, endpos - startpos));
+
     while (endpos != -1)
     {       
         dest_array.push_back(original.substr(startpos, endpos - startpos)); //add to vector
@@ -244,7 +247,7 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
         endpos = original.find_first_of(separator, startpos); //find next
         if(endpos == -1)
         {
-            //lastone, so no 2nd param required to go to end of string
+            //last one, so no 2nd param required to go to end of string
             dest_array.push_back(original.substr(startpos));
         }
     }

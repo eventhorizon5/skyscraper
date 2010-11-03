@@ -829,12 +829,12 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 {
 	//create a new wall object in the given array
 
-	Walls.resize(Walls.size() + 1);
-	Walls[Walls.size() - 1] = new WallObject(this);
-	Walls[Walls.size() - 1]->name = name;
-	Walls[Walls.size() - 1]->parent_array = &Walls;
-	Walls[Walls.size() - 1]->SetValues(Walls[Walls.size() - 1], parent, "Wall", name, false);
-	return Walls[Walls.size() - 1];
+	WallObject *wall = new WallObject(this);
+	wall->name = name;
+	wall->parent_array = &Walls;
+	wall->SetValues(wall, parent, "Wall", name, false);
+	Walls.push_back(wall);
+	return wall;
 }
 
 Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck)
@@ -1345,12 +1345,12 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 	bind->setBinding(0, vbuffer);
 
 	//create index hardware buffer
-	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, Triangles.size() * 3, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, Triangles[index].triangles.size() * 3, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 	//populate buffer with triangle indices
 	unsigned int *data2 = (unsigned int*)(ibuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
 	loc = 0;
-	for (size_t i = 0; i < Triangles.size(); i++)
+	for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
 	{
 		data2[loc + 0] = Triangles[index].triangles[i].x;
 		data2[loc + 1] = Triangles[index].triangles[i].y;
