@@ -843,9 +843,9 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck)
 	//if matcheck is true, exit if old and new textures are the same
 
 	//exit if old and new materials are the same
-	if (matcheck == true)
+	/*if (matcheck == true)
 	{
-		if (MeshWrapper->getSubMesh(0)->getMaterialName() == Ogre::String(texture))
+		if (MeshWrapper->getSubMesh(name)->getMaterialName() == Ogre::String(texture))
 			return Ogre::MaterialPtr(0);
 	}
 
@@ -855,12 +855,12 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck)
 	//set material if valid
 	if (newmat.get())
 	{
-		MeshWrapper->getSubMesh(0)->setMaterialName(texture);
+		MeshWrapper->getSubMesh(name)->setMaterialName(texture);
 		return newmat;
 	}
 	else //otherwise report error
 		sbs->ReportError("ChangeTexture: Invalid texture '" + Ogre::String(texture) + "'");
-
+*/
 	return Ogre::MaterialPtr(0);
 }
 

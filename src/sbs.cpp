@@ -3799,6 +3799,8 @@ void SBS::AdvanceClock()
 	timeb t;
 	ftime(&t);
 	current_time = t.time * 1000 + t.millitm;
+	if (last == 0)
+		last = current_time;
 
 	if (current_time < last)
 		elapsed_time = current_time + ((unsigned int)-1 - last) + 1;
