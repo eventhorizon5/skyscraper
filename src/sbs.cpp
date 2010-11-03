@@ -519,11 +519,11 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
 
 	//load default textures
-	printf("Loading default textures...");
+	Report("Loading default textures...");
 	LoadTexture("data/brick1.jpg", "Default", 1, 1);
 	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
 	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
-	printf("Done\n");
+	Report("Done");
 
 	//create camera object
 	this->camera = new Camera(camera);

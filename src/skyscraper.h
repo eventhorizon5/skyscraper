@@ -83,7 +83,7 @@ public:
 	void GetInput();
 	void Report(std::string message, ...);
 	bool ReportError(std::string message, ...);
-	bool Initialize(wxPanel* RenderObject);
+	bool Initialize();
 	void GetMenuInput();
 	void StartSound();
 	void StopSound();
@@ -151,7 +151,8 @@ public:
 	void OnClose(wxCloseEvent& event);
 	void ShowWindow();
 	void OnIdle(wxIdleEvent& event);
-	wxPanel *panel;
+	void OnPaint(wxPaintEvent& event);
+	//wxPanel *panel;
 
 	DECLARE_EVENT_TABLE()
 

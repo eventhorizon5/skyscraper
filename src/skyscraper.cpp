@@ -58,6 +58,7 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_SIZE(MainScreen::OnSize)
   EVT_CLOSE(MainScreen::OnClose)
   EVT_IDLE(MainScreen::OnIdle)
+  EVT_PAINT(MainScreen::OnPaint)
 END_EVENT_TABLE()
 
 SBS *Simcore;
@@ -122,7 +123,7 @@ bool Skyscraper::OnInit(void)
 	window->CenterOnScreen();
 
 	//start and initialize OGRE
-	if (!Initialize(window->panel))
+	if (!Initialize())
 		return ReportError("Error initializing OGRE");
 
 	//autoload a building file if specified
@@ -199,7 +200,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	title = wxT("Skyscraper 1.8 Alpha");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	this->SetTitle(title);
-	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
+	//panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 }
 
 MainScreen::~MainScreen()
@@ -251,7 +252,7 @@ void MainScreen::OnClose(wxCloseEvent& event)
 void MainScreen::ShowWindow()
 {
 	Show(true);
-	panel->Show(true);
+	//panel->Show(true);
 }
 
 void MainScreen::OnIdle(wxIdleEvent& event)
@@ -260,6 +261,14 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 		skyscraper->Loop(); //run simulator loop
 	if (skyscraper->Pause == false)
 		event.RequestMore(); //request more idles
+}
+
+void MainScreen::OnPaint(wxPaintEvent& event)
+{
+	wxPaintDC dc(this);
+
+	if (skyscraper->mRenderWindow)
+		skyscraper->mRenderWindow->update();
 }
 
 void Skyscraper::Render()
@@ -279,13 +288,13 @@ void Skyscraper::Render()
 			if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER))
 				return;
 		}
-	}
+	}*/
 
-	// Tell the camera to render into the frame buffer.
-	view->Draw();*/
+	// Render to the frame buffer
+	mRoot->renderOneFrame();
 }
 
-bool Skyscraper::Initialize(wxPanel* RenderObject)
+bool Skyscraper::Initialize()
 {
 	mRoot = Ogre::Root::getSingletonPtr();
 	if(!mRoot)
@@ -330,7 +339,8 @@ bool Skyscraper::Initialize(wxPanel* RenderObject)
 	//create scene manager
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
 
-	mSceneMgr->setAmbientLight(Ogre::ColourValue( 0, 0, 0 ));
+	//set ambient light
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
 	mCamera = mSceneMgr->createCamera("Main Camera");
@@ -1368,6 +1378,9 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	if (windowName.empty())
 		name = Ogre::String("wxOgreRenderWindow");
 
+	//do not clear background
+	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+
 	int width, height;
 	window->GetClientSize(&width, &height);
 
@@ -1386,10 +1399,13 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 
 void Skyscraper::destroyRenderWindow()
 {
-   if (mRenderWindow)
-      Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
+	if (mRenderWindow)
+	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
 
-   mRenderWindow = 0;
+	mRenderWindow = 0;
+
+	//restore background
+	window->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
 #if defined(__WXMAC__)
    DisposeWindow(i_carbonWin);
