@@ -347,7 +347,7 @@ bool Skyscraper::Initialize()
 
 	mCamera = mSceneMgr->createCamera("Main Camera");
 	mViewport = mRenderWindow->addViewport(mCamera);
-	mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
+	//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 	mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
 
 	/*
