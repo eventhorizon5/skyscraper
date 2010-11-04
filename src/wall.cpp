@@ -72,7 +72,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	std::vector<Ogre::Vector3> triangles;
+	std::vector<TriangleType> triangles;
 	meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents, triangles);
 
 	if (triangles.size() == 0)
@@ -95,7 +95,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
-	std::vector<Ogre::Vector3> triangles;
+	std::vector<TriangleType> triangles;
 	meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles);
 
 	if (triangles.size() == 0)
@@ -116,7 +116,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::String material, std
 	//add a set of polygons, providing the original material and texture mapping
 	Ogre::String name2 = ProcessName(name);
 	std::vector<Ogre::Vector2> index_extents;
-	std::vector<Ogre::Vector3> triangles;
+	std::vector<TriangleType> triangles;
 	meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles);
 
 	if (triangles.size() == 0)
@@ -129,7 +129,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::String material, std
 	return &handles[index];
 }
 
-int WallObject::CreateHandle(std::vector<Ogre::Vector3> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::String material, const char *name, Ogre::Plane &plane)
+int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::String material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 	int i = (int)handles.size();

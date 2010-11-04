@@ -267,8 +267,8 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 {
 	wxPaintDC dc(this);
 
-	if (skyscraper->mRenderWindow)
-		skyscraper->mRenderWindow->update(false);
+	//if (skyscraper->mRenderWindow)
+		//skyscraper->mRenderWindow->update(true);
 }
 
 void Skyscraper::Render()
@@ -290,7 +290,8 @@ void Skyscraper::Render()
 		}
 	}*/
 
-	//mRenderWindow->update(false);
+	if (skyscraper->mRenderWindow)
+		skyscraper->mRenderWindow->update(true);
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
@@ -343,7 +344,7 @@ bool Skyscraper::Initialize()
 
 	//set ambient light
 	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
-	mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
 	mCamera = mSceneMgr->createCamera("Main Camera");
 	mViewport = mRenderWindow->addViewport(mCamera);

@@ -28,6 +28,17 @@
 
 class WallObject;
 
+struct TriangleType
+{
+	unsigned int x, y, z;
+	TriangleType(unsigned int a, unsigned int b, unsigned int c)
+	{
+		x = a;
+		y = b;
+		z = c;
+	}
+};
+
 class SBSIMPEXP MeshObject
 {
 public:
@@ -45,7 +56,7 @@ public:
 	struct TriangleIndices
 	{
 		//per-submesh triangle indices
-		std::vector<Ogre::Vector3> triangles; //triangle data, in A B C values
+		std::vector<TriangleType> triangles; //triangle data, in A B C values
 		Ogre::IndexData *databuffer; //used to find the related submesh
 	};
 
@@ -65,15 +76,15 @@ public:
 	Ogre::Vector3 GetRotation();
 	void AddVertex(Geometry &vertex_geom);
 	void RemoveVertex(int index);
-	void AddTriangle(int submesh, Ogre::Vector3 &triangle);
+	void AddTriangle(int submesh, TriangleType &triangle);
 	void RemoveTriangle(int submesh, int index);
-	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles);
-	bool PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles, bool convert_vertices = true);
+	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles);
+	bool PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices);
-	int ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String &material, const char *name, bool add);
+	int ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String &material, const char *name, bool add);
 	int FindMatchingSubMesh(Ogre::String material);
-	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<Ogre::Vector3> &deleted_indices);
+	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<TriangleType> &deleted_indices);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;
@@ -91,7 +102,7 @@ private:
 
 	struct TriangleMesh
 	{
-		std::vector<Ogre::Vector3> triangles; //triangles have a, b and c components (each a vertex index)
+		std::vector<TriangleType> triangles; //triangles have a, b and c components (each a vertex index)
 		std::vector<Ogre::Vector3> vertices; //vertices have x, y and z components
 	};
 };
@@ -100,7 +111,7 @@ class SBSIMPEXP WallPolygon
 {
 public:
 	MeshObject* mesh;
-	std::vector<Ogre::Vector3> triangles;
+	std::vector<TriangleType> triangles;
 	Ogre::Plane plane;
 
 	//array holding index extents, to get original geometry

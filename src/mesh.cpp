@@ -1019,7 +1019,7 @@ void MeshObject::RemoveVertex(int index)
 	//TODO: reindex triangles here
 }
 
-void MeshObject::AddTriangle(int submesh, Ogre::Vector3 &triangle)
+void MeshObject::AddTriangle(int submesh, TriangleType &triangle)
 {
 	//add a triangle to the mesh
 	Triangles[submesh].triangles.push_back(triangle);
@@ -1035,7 +1035,7 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 	Triangles[submesh].triangles.erase(Triangles[submesh].triangles.begin() + index);
 }
 
-bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles)
+bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1109,7 +1109,7 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, false);
 }
 
-bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<Ogre::Vector3> &triangles, bool convert_vertices)
+bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1143,7 +1143,7 @@ bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<
 		//then do a (very) simple triangulation
 		//this method also works (sort of) with non-planar polygons
 		for (int j = 2; j < (int)vertices2[i].size(); j++)
-			trimesh[i].triangles.push_back(Ogre::Vector3(0, j - 1, j));
+			trimesh[i].triangles.push_back(TriangleType(0, j - 1, j));
 	}
 
 	//set up geometry array
@@ -1189,7 +1189,7 @@ bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<
 	{
 		for (int j = 0; j < (int)trimesh[i].triangles.size(); j++)
 		{
-			Ogre::Vector3 tri = trimesh[i].triangles[j];
+			TriangleType tri = trimesh[i].triangles[j];
 			tri.x += count + location;
 			tri.y += count + location;
 			tri.z += count + location;
@@ -1241,7 +1241,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	return texels;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String &material, const char *name, bool add)
+int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String &material, const char *name, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//(uploads vertex and index arrays to graphics card, and applies material)
@@ -1280,6 +1280,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 		{
 			MeshWrapper->destroySubMesh(index);
 			Submeshes.erase(Submeshes.begin() + index);
+			Triangles.erase(Triangles.begin() + index);
 			return -1;
 		}
 	}
@@ -1321,10 +1322,6 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL); //normals
 	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
-	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT2);
-
-	//create vertex hardware buffer
-	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), MeshGeometry.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 	//populate buffer with vertex geometry
 	for (size_t i = 0; i < MeshGeometry.size(); i++)
@@ -1340,22 +1337,24 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 		box.merge(MeshGeometry[i].vertex);
 		radius = std::max(radius, MeshGeometry[i].vertex.length());
 	}
-	vbuffer->writeData(0, vbuffer->getSizeInBytes(), &mVertexElements[0], true);
-	
+	//create vertex hardware buffer
+	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), mVertexElements.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	vbuffer->writeData(0, vbuffer->getSizeInBytes(), &mVertexElements, false);
+
 	//bind vertex data to mesh
 	data->vertexBufferBinding->setBinding(0, vbuffer);
 
-	//create index hardware buffer
-	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, Triangles[index].triangles.size() * 3, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-
-	//populate buffer with triangle indices
+	//create array of triangle indices
 	for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
 	{
 		mIndices.push_back(Triangles[index].triangles[i].x);
 		mIndices.push_back(Triangles[index].triangles[i].y);
 		mIndices.push_back(Triangles[index].triangles[i].z);
 	}
-	ibuffer->writeData(0, ibuffer->getSizeInBytes(), &mIndices[0], true);
+
+	//create index hardware buffer
+	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, mIndices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	ibuffer->writeData(0, ibuffer->getSizeInBytes(), &mIndices, false);
 
 	if (createnew == false)
 	{
@@ -1374,12 +1373,12 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 	}
 
 	//bind index data to submesh
-	submesh->indexData->indexCount = Triangles[index].triangles.size() * 3;
+	submesh->indexData->indexCount = mIndices.size();
 	submesh->indexData->indexBuffer = ibuffer;
 	submesh->indexData->indexStart = 0;
 
 	//bind material
-	//submesh->setMaterialName(material);
+	//submesh->setMaterialName("Default");
 
 	MeshWrapper->_setBounds(box);
 	MeshWrapper->_setBoundingSphereRadius(radius);
@@ -1400,7 +1399,7 @@ int MeshObject::FindMatchingSubMesh(Ogre::String material)
 	return -1;
 }
 
-void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<Ogre::Vector3> &deleted_indices)
+void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<TriangleType> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
@@ -1453,8 +1452,8 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 
 		for (int i = 0; i < size; i++)
 		{
-			Triangles[submesh].triangles.push_back(Ogre::Vector3(elements[element], elements[element + 1], elements[element + 2]));
-			element++;
+			Triangles[submesh].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+			element += 3;
 		}
 		elements.clear();
 	}
@@ -1492,8 +1491,8 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 
 			for (int ii = 0; ii < size; ii++)
 			{
-				wallarray[ii]->handles[j].triangles.push_back(Ogre::Vector3(elements[element], elements[element + 1], elements[element + 2]));
-				element++;
+				wallarray[ii]->handles[j].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+				element += 3;
 			}
 			elements.clear();
 
