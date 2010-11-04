@@ -766,7 +766,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 		RescaleVertices(scale_multiplier);
 
 	//create movable
-	Movable = sbs->mSceneManager->createEntity(Name, Name);
+	Movable = sbs->mSceneManager->createEntity(Name, MeshWrapper->getName());
 	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode();
 	SceneNode->attachObject(Movable);
 
@@ -1248,6 +1248,11 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 
 	//arrays must be populated correctly before this function is called
 
+	float radius = 0;
+	Ogre::AxisAlignedBox box;
+	std::vector<float> mVertexElements;
+	std::vector<unsigned int> mIndices;
+
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
 	Ogre::SubMesh *submesh = 0;
@@ -1260,6 +1265,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 		
 		//create submesh
 		submesh = MeshWrapper->createSubMesh(name);
+		submesh->useSharedVertices = true;
 		Submeshes.push_back(submesh);
 		index = (int)Submeshes.size() - 1;
 		Triangles.resize(Triangles.size() + 1);
@@ -1302,6 +1308,7 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 	}
 
 	//set up vertex buffer
+	OGRE_DELETE MeshWrapper->sharedVertexData;
 	Ogre::VertexData* data = new Ogre::VertexData();
 	MeshWrapper->sharedVertexData = data;
 	data->vertexCount = MeshGeometry.size();
@@ -1313,10 +1320,6 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 	decl->addElement(0, offset, Ogre::VET_FLOAT3, Ogre::VES_NORMAL); //normals
 	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
-	//decl->addElement(0, offset, Ogre::VET_COLOUR, Ogre::VES_DIFFUSE); //diffuse colors
-	//offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
-	//decl->addElement(0, offset, Ogre::VET_COLOUR, Ogre::VES_SPECULAR); //specular colors
-	//offset += Ogre::VertexElement::getTypeSize(Ogre::VET_COLOUR);
 	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
 	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT2);
 
@@ -1324,62 +1327,63 @@ int MeshObject::ProcessSubMesh(std::vector<Ogre::Vector3> &indices, Ogre::String
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), MeshGeometry.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 	//populate buffer with vertex geometry
-	float *vdata = (float*)(vbuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
-	int loc = 0;
 	for (size_t i = 0; i < MeshGeometry.size(); i++)
 	{
-		vdata[loc + 0] = MeshGeometry[i].vertex.x;
-		vdata[loc + 1] = MeshGeometry[i].vertex.y;
-		vdata[loc + 2] = MeshGeometry[i].vertex.z;
-		vdata[loc + 3] = MeshGeometry[i].normal.x;
-		vdata[loc + 4] = MeshGeometry[i].normal.y;
-		vdata[loc + 5] = MeshGeometry[i].normal.z;
-		vdata[loc + 6] = MeshGeometry[i].texel.x;
-		vdata[loc + 7] = MeshGeometry[i].texel.y;
-		loc += 8;
+		mVertexElements.push_back(MeshGeometry[i].vertex.x);
+		mVertexElements.push_back(MeshGeometry[i].vertex.y);
+		mVertexElements.push_back(MeshGeometry[i].vertex.z);
+		mVertexElements.push_back(MeshGeometry[i].normal.x);
+		mVertexElements.push_back(MeshGeometry[i].normal.y);
+		mVertexElements.push_back(MeshGeometry[i].normal.z);
+		mVertexElements.push_back(MeshGeometry[i].texel.x);
+		mVertexElements.push_back(MeshGeometry[i].texel.y);
+		box.merge(MeshGeometry[i].vertex);
+		radius = std::max(radius, MeshGeometry[i].vertex.length());
 	}
-	vbuffer->unlock();
+	vbuffer->writeData(0, vbuffer->getSizeInBytes(), &mVertexElements[0], true);
 	
 	//bind vertex data to mesh
-	Ogre::VertexBufferBinding* bind = data->vertexBufferBinding;
-	bind->setBinding(0, vbuffer);
+	data->vertexBufferBinding->setBinding(0, vbuffer);
 
 	//create index hardware buffer
 	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, Triangles[index].triangles.size() * 3, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 
 	//populate buffer with triangle indices
-	unsigned int *data2 = (unsigned int*)(ibuffer->lock(Ogre::HardwareBuffer::HBL_NORMAL));
-	loc = 0;
 	for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
 	{
-		data2[loc + 0] = Triangles[index].triangles[i].x;
-		data2[loc + 1] = Triangles[index].triangles[i].y;
-		data2[loc + 2] = Triangles[index].triangles[i].z;
-		loc += 3;
+		mIndices.push_back(Triangles[index].triangles[i].x);
+		mIndices.push_back(Triangles[index].triangles[i].y);
+		mIndices.push_back(Triangles[index].triangles[i].z);
 	}
-	ibuffer->unlock();
+	ibuffer->writeData(0, ibuffer->getSizeInBytes(), &mIndices[0], true);
 
 	if (createnew == false)
 	{
 		//delete old submesh
+		TriangleIndices tris = Triangles[index];
 		MeshWrapper->destroySubMesh(index);
 		Submeshes.erase(Submeshes.begin() + index);
+		Triangles.erase(Triangles.begin() + index);
 
 		//create new submesh
 		submesh = MeshWrapper->createSubMesh(name);
+		submesh->useSharedVertices = true;
 		Submeshes.push_back(submesh);
+		Triangles.push_back(tris);
 		index = (int)Submeshes.size() - 1;
-		Triangles.resize(Triangles.size() + 1);
 	}
 
 	//bind index data to submesh
+	submesh->indexData->indexCount = Triangles[index].triangles.size() * 3;
 	submesh->indexData->indexBuffer = ibuffer;
-	submesh->indexData->indexCount = Triangles.size() * 3;
 	submesh->indexData->indexStart = 0;
 
 	//bind material
-	submesh->setMaterialName(material);
+	//submesh->setMaterialName(material);
 
+	MeshWrapper->_setBounds(box);
+	MeshWrapper->_setBoundingSphereRadius(radius);
+	MeshWrapper->reload();
 	return index;
 }
 

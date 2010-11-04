@@ -268,7 +268,7 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 	wxPaintDC dc(this);
 
 	if (skyscraper->mRenderWindow)
-		skyscraper->mRenderWindow->update();
+		skyscraper->mRenderWindow->update(false);
 }
 
 void Skyscraper::Render()
@@ -289,6 +289,8 @@ void Skyscraper::Render()
 				return;
 		}
 	}*/
+
+	//mRenderWindow->update(false);
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
@@ -1304,7 +1306,7 @@ bool Skyscraper::Start()
 
 	//load control panel
 	//if (confman->GetBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
-	{
+	//{
 		dpanel = new DebugPanel(NULL, -1);
 		dpanel->Show(true);
 		//dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
@@ -1327,7 +1329,6 @@ bool Skyscraper::Start()
 	StartupRunning = false;
 	Reload = false;
 	return true;
-	}
 }
 
 void Skyscraper::AllowResize(bool value)
@@ -1405,7 +1406,7 @@ void Skyscraper::destroyRenderWindow()
 	mRenderWindow = 0;
 
 	//restore background
-	window->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+	//window->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
 #if defined(__WXMAC__)
    DisposeWindow(i_carbonWin);
