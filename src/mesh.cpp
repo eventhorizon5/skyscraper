@@ -1250,8 +1250,6 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 
 	float radius = 0;
 	Ogre::AxisAlignedBox box;
-	std::vector<float> mVertexElements;
-	std::vector<unsigned int> mIndices;
 
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
@@ -1323,38 +1321,50 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
 
-	//populate buffer with vertex geometry
+	//set up data arrays
+	unsigned int vsize = MeshGeometry.size();
+	unsigned int isize = Triangles[index].triangles.size() * 3;
+	float *mVertexElements = new float[vsize * 8];
+	unsigned int *mIndices = new unsigned int[isize];
+
+	//populate array with vertex geometry
+	unsigned int loc = 0;
 	for (size_t i = 0; i < MeshGeometry.size(); i++)
 	{
-		mVertexElements.push_back(MeshGeometry[i].vertex.x);
-		mVertexElements.push_back(MeshGeometry[i].vertex.y);
-		mVertexElements.push_back(MeshGeometry[i].vertex.z);
-		mVertexElements.push_back(MeshGeometry[i].normal.x);
-		mVertexElements.push_back(MeshGeometry[i].normal.y);
-		mVertexElements.push_back(MeshGeometry[i].normal.z);
-		mVertexElements.push_back(MeshGeometry[i].texel.x);
-		mVertexElements.push_back(MeshGeometry[i].texel.y);
+		mVertexElements[loc] = MeshGeometry[i].vertex.x;
+		mVertexElements[loc + 1] = MeshGeometry[i].vertex.y;
+		mVertexElements[loc + 2] = MeshGeometry[i].vertex.z;
+		mVertexElements[loc + 3] = MeshGeometry[i].normal.x;
+		mVertexElements[loc + 4] = MeshGeometry[i].normal.y;
+		mVertexElements[loc + 5] = MeshGeometry[i].normal.z;
+		mVertexElements[loc + 6] = MeshGeometry[i].texel.x;
+		mVertexElements[loc + 7] = MeshGeometry[i].texel.y;
 		box.merge(MeshGeometry[i].vertex);
 		radius = std::max(radius, MeshGeometry[i].vertex.length());
+		loc += 8;
 	}
 	//create vertex hardware buffer
-	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), mVertexElements.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-	vbuffer->writeData(0, vbuffer->getSizeInBytes(), &mVertexElements, false);
+	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vsize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
+	delete mVertexElements;
 
 	//bind vertex data to mesh
 	data->vertexBufferBinding->setBinding(0, vbuffer);
 
 	//create array of triangle indices
+	loc = 0;
 	for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
 	{
-		mIndices.push_back(Triangles[index].triangles[i].x);
-		mIndices.push_back(Triangles[index].triangles[i].y);
-		mIndices.push_back(Triangles[index].triangles[i].z);
+		mIndices[loc] = Triangles[index].triangles[i].x;
+		mIndices[loc + 1] = Triangles[index].triangles[i].y;
+		mIndices[loc + 2] = Triangles[index].triangles[i].z;
+		loc += 3;
 	}
 
 	//create index hardware buffer
-	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, mIndices.size(), Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-	ibuffer->writeData(0, ibuffer->getSizeInBytes(), &mIndices, false);
+	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+	ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
+	delete mIndices;
 
 	if (createnew == false)
 	{
@@ -1373,16 +1383,15 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 	}
 
 	//bind index data to submesh
-	submesh->indexData->indexCount = mIndices.size();
+	submesh->indexData->indexCount = isize;
 	submesh->indexData->indexBuffer = ibuffer;
 	submesh->indexData->indexStart = 0;
 
 	//bind material
-	//submesh->setMaterialName("Default");
+	submesh->setMaterialName(material);
 
 	MeshWrapper->_setBounds(box);
 	MeshWrapper->_setBoundingSphereRadius(radius);
-	MeshWrapper->reload();
 	return index;
 }
 
