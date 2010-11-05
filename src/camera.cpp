@@ -41,6 +41,8 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
 	MainCamera->setFarClipDistance(3000.0f);
+	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
+	CameraNode->attachObject(MainCamera);
 
 	//init variables
 	CurrentFloor = 0;
@@ -107,13 +109,13 @@ Camera::~Camera()
 void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
-	MainCamera->setPosition(sbs->ToRemote(vector));
+	CameraNode->setPosition(sbs->ToRemote(vector));
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)
 {
 	//sets the camera's direction to an absolute position
-	//MainCamera->lookAt(vector);
+	//CameraNode->lookAt(vector);
 }
 
 void Camera::SetRotation(Ogre::Vector3 vector)
@@ -138,14 +140,14 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
-	MainCamera->setOrientation(rot);
+	CameraNode->setOrientation(rot);
 }
 
 Ogre::Vector3 Camera::GetPosition()
 {
 	//returns the camera's current position
 	if (MainCamera)
-		return sbs->ToLocal(MainCamera->getPosition());
+		return sbs->ToLocal(CameraNode->getPosition());
 	else
 		return Ogre::Vector3(0, 0, 0);
 }
@@ -153,8 +155,8 @@ Ogre::Vector3 Camera::GetPosition()
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 {
 	//returns the camera's current direction in front and top vectors
-	//front = MainCamera->GetTransform().GetT2O().Col3();
-	//top = MainCamera->GetTransform().GetT2O().Col2();
+	//front = CameraNode->GetTransform().GetT2O().Col3();
+	//top = CameraNode->GetTransform().GetT2O().Col2();
 }
 
 Ogre::Vector3 Camera::GetRotation()
@@ -840,14 +842,14 @@ void Camera::Jump()
 void Camera::Look(float speed)
 {
 	//look up/down by rotating camera on X axis
-	MainCamera->pitch(Ogre::Degree(0.05 * speed));
+	CameraNode->pitch(Ogre::Degree(0.05 * speed));
 	desired_angle_velocity.x = cfg_lookspeed * speed * cfg_rotate_maxspeed;
 }
 
 void Camera::Turn(float speed)
 {
 	//turn camera by rotating on Y axis
-	MainCamera->yaw(Ogre::Degree(0.05 * -speed));
+	CameraNode->yaw(Ogre::Degree(0.05 * -speed));
 	desired_angle_velocity.y = cfg_turnspeed * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
@@ -925,7 +927,7 @@ void Camera::SetFOVAngle(float angle)
 {
 	//set camera FOV angle
 	//if (angle > 0 && angle < 179.63)
-		//MainCamera->SetFOVAngle(angle, sbs->g2d->GetWidth());
+		//CameraNode->SetFOVAngle(angle, sbs->g2d->GetWidth());
 }
 
 float Camera::GetFOVAngle()
