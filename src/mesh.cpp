@@ -1366,20 +1366,10 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 	ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
 	delete mIndices;
 
-	if (createnew == false)
+	if (submesh->indexData)
 	{
-		//delete old submesh
-		TriangleIndices tris = Triangles[index];
-		MeshWrapper->destroySubMesh(index);
-		Submeshes.erase(Submeshes.begin() + index);
-		Triangles.erase(Triangles.begin() + index);
-
-		//create new submesh
-		submesh = MeshWrapper->createSubMesh(name);
-		submesh->useSharedVertices = true;
-		Submeshes.push_back(submesh);
-		Triangles.push_back(tris);
-		index = (int)Submeshes.size() - 1;
+		delete submesh->indexData;
+		submesh->indexData = new Ogre::IndexData();
 	}
 
 	//bind index data to submesh
