@@ -39,8 +39,8 @@ Camera::Camera(Ogre::Camera *camera)
 	object->SetValues(this, sbs->object, "Camera", "Camera", true);
 
 	MainCamera = camera;
-	MainCamera->setNearClipDistance(0.1);
-	MainCamera->setFarClipDistance(100.0f);
+	MainCamera->setNearClipDistance(0.1f);
+	MainCamera->setFarClipDistance(3000.0f);
 
 	//init variables
 	CurrentFloor = 0;
@@ -113,13 +113,13 @@ void Camera::SetPosition(const Ogre::Vector3 &vector)
 void Camera::SetDirection(const Ogre::Vector3 &vector)
 {
 	//sets the camera's direction to an absolute position
-	MainCamera->lookAt(vector);
+	//MainCamera->lookAt(vector);
 }
 
 void Camera::SetRotation(Ogre::Vector3 vector)
 {
 	//sets the camera's rotation in degrees
-
+	return;
 	//keep rotation within 360 degree boundaries
 	if (vector.x > 360)
 		vector.x -= 360;
@@ -840,12 +840,14 @@ void Camera::Jump()
 void Camera::Look(float speed)
 {
 	//look up/down by rotating camera on X axis
+	MainCamera->pitch(Ogre::Degree(0.05 * speed));
 	desired_angle_velocity.x = cfg_lookspeed * speed * cfg_rotate_maxspeed;
 }
 
 void Camera::Turn(float speed)
 {
 	//turn camera by rotating on Y axis
+	MainCamera->yaw(Ogre::Degree(0.05 * -speed));
 	desired_angle_velocity.y = cfg_turnspeed * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
