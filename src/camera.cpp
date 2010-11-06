@@ -121,7 +121,7 @@ void Camera::SetDirection(const Ogre::Vector3 &vector)
 void Camera::SetRotation(Ogre::Vector3 vector)
 {
 	//sets the camera's rotation in degrees
-	return;
+	//return;
 	//keep rotation within 360 degree boundaries
 	if (vector.x > 360)
 		vector.x -= 360;
@@ -138,7 +138,7 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 
 	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
 	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
+	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::NEGATIVE_UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
 	CameraNode->setOrientation(rot);
 }
@@ -165,7 +165,7 @@ Ogre::Vector3 Camera::GetRotation()
 	Ogre::Vector3 rot;
 	rot.x = RadiansToDegrees(MainCamera->getDirection().x);
 	rot.y = RadiansToDegrees(MainCamera->getDirection().y);
-	rot.z = RadiansToDegrees(MainCamera->getDirection().z);
+	rot.z = RadiansToDegrees(-MainCamera->getDirection().z);
 
 	//keep values within the 0-360 range
 	if (rot.x > 360)

@@ -194,7 +194,7 @@ void SBS::AddGenWall(MeshObject *mesh, const char *texture, float x1, float z1, 
 	Ogre::Vector2 table[] = {Ogre::Vector2(tw2, th2), Ogre::Vector2(0, th2), Ogre::Vector2(tw2, 0), Ogre::Vector2(0, 0)};
 
 	//create a quad, map the texture, and append to the mesh
-	/*CS::Geometry::TesselatedQuad wall (Ogre::Vector3(ToRemote(x2), ToRemote(altitude), ToRemote(z2)), Ogre::Vector3(ToRemote(x1), ToRemote(altitude), ToRemote(z1)), Ogre::Vector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(z2)));
+	/*CS::Geometry::TesselatedQuad wall (Ogre::Vector3(ToRemote(x2), ToRemote(altitude), ToRemote(-z2)), Ogre::Vector3(ToRemote(x1), ToRemote(altitude), ToRemote(-z1)), Ogre::Vector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(-z2)));
 	CS::Geometry::TableTextureMapper mapper(table);
 	wall.SetMapper(&mapper);
 	wall.append(mesh->GetFactory());*/
@@ -952,7 +952,6 @@ bool MeshObject::IsEnabled()
 
 void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin)
 {
-	//move light - this can only be done on movable lights
 	Ogre::Vector3 pos;
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(origin.x + position.x);
@@ -963,9 +962,9 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 	else
 		pos.y = SceneNode->getPosition().y + sbs->ToRemote(position.y);
 	if (relative_z == false)
-		pos.z = sbs->ToRemote(origin.z + position.z);
+		pos.z = sbs->ToRemote(-(origin.z + position.z));
 	else
-		pos.z = SceneNode->getPosition().z + sbs->ToRemote(position.z);
+		pos.z = SceneNode->getPosition().z + sbs->ToRemote(-position.z);
 	SceneNode->setPosition(pos);
 }
 
@@ -1272,7 +1271,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 		submesh = Submeshes[index];
 
 	//delete submesh and exit if it's going to be emptied
-	if (createnew == false)
+	/*if (createnew == false)
 	{
 		if (Triangles[index].triangles.size() - indices.size() <= 0)
 		{
@@ -1281,7 +1280,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 			Triangles.erase(Triangles.begin() + index);
 			return -1;
 		}
-	}
+	}*/
 
 	//add triangles
 	if (add == true)

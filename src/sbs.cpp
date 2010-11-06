@@ -3197,37 +3197,57 @@ void SBS::DecrementSoundCount()
 float SBS::ToLocal(float remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+
+	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
+	//this means that all Z values that use this function must be inverted.
+
 	return remote_value * UnitScale;
 }
 
 Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+
+	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
+	//this means that all Z values that use this function must be inverted.
+
 	return remote_value * UnitScale;
 }
 
 Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
-	return remote_value * UnitScale;
+	//also convert Z value to OGRE's right-hand coordinate system
+
+	return remote_value * UnitScale * Ogre::Vector3::NEGATIVE_UNIT_Z;
 }
 
 float SBS::ToRemote(float local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+
+	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
+	//this means that all Z values that use this function must be inverted.
+
 	return local_value / UnitScale;
 }
 
 Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+
+	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
+	//this means that all Z values that use this function must be inverted.
+
 	return local_value / UnitScale;
 }
 
 Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
-	return local_value / UnitScale;
+	//also convert Z value to OGRE's right-hand coordinate system
+	
+	return (local_value / UnitScale) * Ogre::Vector3::NEGATIVE_UNIT_Z;
 }
 
 int SBS::GetObjectCount()
