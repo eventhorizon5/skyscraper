@@ -537,10 +537,19 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	Ogre::String filename2 = VerifyFile(filename);
 
 	// Load the texture
-	Ogre::TexturePtr mTex = Ogre::TextureManager::getSingleton().load(filename, "General", Ogre::TEX_TYPE_2D, Ogre::MIP_DEFAULT, 1.0f, false);
+	Ogre::String path = GetMountPath(filename2.c_str(), filename2);
+	Ogre::TexturePtr mTex;
+	try
+	{
+		mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, Ogre::MIP_DEFAULT, 1.0f, false);
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+	}
 
 	if (mTex.isNull())
-		return ReportError("Error loading texture");
+		return ReportError("Error loading texture" + filename2);
 
 	//create a new material
 	Ogre::String matname = name;
@@ -564,7 +573,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	Report("Loaded texture " + Ogre::String(filename));
 
 	TextureInfo info;
-	info.name = name;
+	info.name = matname;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
@@ -1607,17 +1616,16 @@ void SBS::CreateSky(const char *filenamebase)
 {
 	//create skybox
 
-	return;
 	Ogre::String file = filenamebase;
-	//vfs->Mount("/root/sky", root_dir + "data" + dir_char + "sky-" + file + ".zip");
+	Mount(Ogre::String("data/sky-" + file + ".zip").c_str(), "sky");
 
 	//load textures
-	LoadTexture("/root/sky/up.jpg", "SkyTop", 1, -1);
-	LoadTexture("/root/sky/down.jpg", "SkyBottom", -1, 1);
-	LoadTexture("/root/sky/left.jpg", "SkyLeft", 1, 1);
-	LoadTexture("/root/sky/right.jpg", "SkyRight", 1, 1);
-	LoadTexture("/root/sky/front.jpg", "SkyFront", 1, 1);
-	LoadTexture("/root/sky/back.jpg", "SkyBack", 1, 1);
+	LoadTexture("sky/up.jpg", "SkyTop", 1, -1);
+	LoadTexture("sky/down.jpg", "SkyBottom", -1, 1);
+	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1);
+	LoadTexture("sky/right.jpg", "SkyRight", 1, 1);
+	LoadTexture("sky/front.jpg", "SkyFront", 1, 1);
+	LoadTexture("sky/back.jpg", "SkyBack", 1, 1);
 
 	SkyBox = new MeshObject(this->object, "SkyBox");
 	//SkyBox->MeshWrapper->SetZBufMode(CS_ZBUF_NONE);
@@ -3037,14 +3045,19 @@ bool SBS::Mount(const char *filename, const char *path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	/*Ogre::String file = filename;
+	Ogre::String file = VerifyFile(filename);
 	Ogre::String Path = path;
 
 	Report("Mounting " + file + " as path " + Path);
-	bool status = vfs->Mount(path, root_dir + "data" + dir_char + file);
-	if (status == false)
-		ReportError("Error mounting file " + file);
-	return status;*/
+	try
+	{
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", Path, true);
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportError("Error mounting file " + file + "\n" + e.getDescription());
+	}
+
 	return true;
 }
 
@@ -3851,4 +3864,28 @@ unsigned int SBS::GetRunTime()
 unsigned int SBS::GetElapsedTime()
 {
 	return elapsed_time;
+}
+
+std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
+{
+	//get mountpoint (resource group) path of given file
+	//if not found, return "General"
+	
+	std::string file = filename;
+	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
+
+	for (int i = 0; i < list.size(); i++)
+	{
+		if (StartsWith(file + "/", list[i].c_str()) == true)
+		{
+			newfilename = file.substr(list[i].size() + 1);
+			return list[i];
+		}
+		if (StartsWith(file + "\\", list[i].c_str()) == true)
+		{
+			newfilename = file.substr(list[i].size() + 1);
+			return list[i];
+		}
+	}
+	return "General";
 }

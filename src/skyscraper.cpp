@@ -338,12 +338,12 @@ bool Skyscraper::Initialize()
 	
 	//add app's directory to resource manager
 	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
-
+	
 	//create scene manager
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
 
 	//set ambient light
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+	mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0, 1.0, 1.0));
 	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
 
 	mCamera = mSceneMgr->createCamera("Main Camera");
@@ -351,6 +351,7 @@ bool Skyscraper::Initialize()
 	//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 	mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
 
+	//old CS code for reference
 	/*
 	object_reg = csInitializer::CreateEnvironment(argc, argv);
 	if (!object_reg) return false;

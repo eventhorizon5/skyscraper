@@ -810,18 +810,15 @@ void MeshObject::Enable(bool value)
 	if (value == enabled)
 		return;
 
-	/*if (value == true)
-	{
-		MeshWrapper->GetFlags().Reset(CS_ENTITY_INVISIBLEMESH);
-		MeshWrapper->GetFlags().Reset(CS_ENTITY_NOSHADOWS);
-		MeshWrapper->GetFlags().Reset(CS_ENTITY_NOHITBEAM);
-	}
+	//2 methods for this - either disable, or detach from scenegraph. Trying detach method for now
+	if (value == false)
+		SceneNode->detachObject(Movable);
 	else
-	{
-		MeshWrapper->GetFlags().Set(CS_ENTITY_INVISIBLEMESH);
-		MeshWrapper->GetFlags().Set(CS_ENTITY_NOSHADOWS);
-		MeshWrapper->GetFlags().Set(CS_ENTITY_NOHITBEAM);
-	}*/
+		SceneNode->attachObject(Movable);
+
+	//set visibility flag instead
+	//Movable->setVisible(value);
+
 	enabled = value;
 }
 

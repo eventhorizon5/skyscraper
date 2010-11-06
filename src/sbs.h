@@ -303,6 +303,7 @@ public:
 	void AdvanceClock();
 	unsigned int GetRunTime();
 	unsigned int GetElapsedTime();
+	std::string GetMountPath(const char *filename, std::string &newfilename);
 
 	//Meshes
 	MeshObject* Buildings;
