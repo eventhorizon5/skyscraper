@@ -43,6 +43,8 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera->setFarClipDistance(3000.0f);
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
+	//MainCamera->setPolygonMode(Ogre::PolygonMode::PM_POINTS);
+	//MainCamera->setPolygonMode(Ogre::PolygonMode::PM_WIREFRAME);
 
 	//init variables
 	CurrentFloor = 0;

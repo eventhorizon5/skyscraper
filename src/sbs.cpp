@@ -550,6 +550,13 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState()->setTextureName(mTex->getName());
 
+	//show both sides of material
+	//mMat->getTechnique(0)->getPass(0)->setCullingMode(Ogre::CULL_NONE);
+	//mMat->getTechnique(0)->getPass(0)->setManualCullingMode(Ogre::MANUAL_CULL_NONE);
+
+	//show only clockwise side of material
+	mMat->getTechnique(0)->getPass(0)->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+
 	//if texture has an alpha map, force binary alpha
 	//if (wrapper->GetTextureHandle()->GetAlphaType() == csAlphaMode::alphaSmooth)
 		//wrapper->GetTextureHandle()->SetAlphaType(csAlphaMode::alphaBinary);
@@ -3219,7 +3226,11 @@ Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value)
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
 	//also convert Z value to OGRE's right-hand coordinate system
 
-	return remote_value * UnitScale * Ogre::Vector3::NEGATIVE_UNIT_Z;
+	Ogre::Vector3 newvalue;
+	newvalue.x = remote_value.x;
+	newvalue.y = remote_value.y;
+	newvalue.z = -remote_value.z; //flip z value for OGRE's right-hand coordinate system
+	return newvalue * UnitScale;
 }
 
 float SBS::ToRemote(float local_value)
@@ -3245,9 +3256,12 @@ Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
-	//also convert Z value to OGRE's right-hand coordinate system
 	
-	return (local_value / UnitScale) * Ogre::Vector3::NEGATIVE_UNIT_Z;
+	Ogre::Vector3 newvalue;
+	newvalue.x = local_value.x;
+	newvalue.y = local_value.y;
+	newvalue.z = -local_value.z; //flip z value for OGRE's right-hand coordinate system
+	return (newvalue / UnitScale);
 }
 
 int SBS::GetObjectCount()
