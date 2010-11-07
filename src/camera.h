@@ -121,6 +121,7 @@ public:
 	float GetFOVAngle();
 	void SetToDefaultFOV();
 	float GetHeight();
+	void SetViewMode(int mode);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

@@ -800,14 +800,10 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	}
 
 	//get new material
-	Ogre::MaterialPtr newmat;
-	try
+	Ogre::MaterialPtr newmat = Ogre::MaterialManager::getSingleton().getByName(tex, path);
+	if (!newmat.get())
 	{
-		newmat = Ogre::MaterialManager::getSingleton().getByName(tex, path);
-	}
-	catch (Ogre::Exception &e)
-	{
-		sbs->ReportError("ChangeTexture: Invalid texture '" + tex + "'\n" + e.getDescription());
+		sbs->ReportError("ChangeTexture: Invalid texture '" + tex + "'");
 		return Ogre::MaterialPtr(0);
 	}
 
@@ -1152,8 +1148,6 @@ bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<
 	//create submesh and set material
 	ProcessSubMesh(triangles, material, name, true);
 
-	//MeshWrapper->_setBounds(Ogre::AxisAlignedBox(xMin, yMin, zMin, xMax, yMax, zMax));
-	//MeshWrapper->_setBoundingSphereRadius(std::max(xMax - xMin, std::max(yMax - yMin, zMax - zMin)) / 2.0f);
 	MeshWrapper->load();
 
 	//recreate colliders if specified
@@ -1223,7 +1217,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 		submesh = Submeshes[index];
 
 	//delete submesh and exit if it's going to be emptied
-	/*if (createnew == false)
+	if (createnew == false && add == false)
 	{
 		if (Triangles[index].triangles.size() - indices.size() <= 0)
 		{
@@ -1232,7 +1226,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 			Triangles.erase(Triangles.begin() + index);
 			return -1;
 		}
-	}*/
+	}
 
 	//add triangles
 	if (add == true)

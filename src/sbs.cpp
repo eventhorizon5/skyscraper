@@ -1608,8 +1608,14 @@ void SBS::EnableExternal(bool value)
 void SBS::EnableSkybox(bool value)
 {
 	//turns skybox on/off
-	//SkyBox->Enable(value);
+	SkyBox->Enable(value);
 	IsSkyboxEnabled = value;
+
+	//disable vertical sync if skybox is on, for improved performance
+	if (value == false)
+		mRoot->getRenderSystem()->setWaitForVerticalBlank(true); //enable vsync
+	else
+		mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
 }
 
 void SBS::CreateSky(const char *filenamebase)
@@ -2700,6 +2706,8 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 
 	WallObject *wall = Landscape->CreateWallObject(this->object, name);
 
+	Report("Creating ground...");
+
 	//create polygon tiles
 	for (float i = minx; i < maxx; i += tile_x)
 	{
@@ -2720,6 +2728,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, 1, 1, false);
 		}
 	}
+	Report("Finished ground");
 	return wall;
 }
 
@@ -3057,7 +3066,6 @@ bool SBS::Mount(const char *filename, const char *path)
 	{
 		return ReportError("Error mounting file " + file + "\n" + e.getDescription());
 	}
-
 	return true;
 }
 

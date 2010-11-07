@@ -43,8 +43,6 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera->setFarClipDistance(0.0f);
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
-	//MainCamera->setPolygonMode(Ogre::PolygonMode::PM_POINTS);
-	//MainCamera->setPolygonMode(Ogre::PolygonMode::PM_WIREFRAME);
 
 	//init variables
 	CurrentFloor = 0;
@@ -948,4 +946,19 @@ float Camera::GetHeight()
 {
 	//return camera's height
 	return cfg_body_height + cfg_legs_height;
+}
+
+void Camera::SetViewMode(int mode)
+{
+	//set view mode of camera:
+	//0 - solid polygons (normal)
+	//1 - wireframe mode
+	//2 - point mode
+
+	if (mode == 0)
+		MainCamera->setPolygonMode(Ogre::PolygonMode::PM_SOLID);
+	if (mode == 1)
+		MainCamera->setPolygonMode(Ogre::PolygonMode::PM_WIREFRAME);
+	if (mode == 2)
+		MainCamera->setPolygonMode(Ogre::PolygonMode::PM_POINTS);
 }

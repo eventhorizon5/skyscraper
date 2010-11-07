@@ -273,22 +273,13 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 
 void Skyscraper::Render()
 {
-	/*if (skyscraper->StartupRunning == false)
+	if (skyscraper->StartupRunning == false)
 	{
 		// Tell 3D driver we're going to display 3D things.
-		if (Simcore->IsSkyboxEnabled == false)
-		{
-			//clear screen if the skybox is off. This will keep the background black - otherwise it'll streak.
-			if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN))
-				return;
-		}
-		else
-		{
-			//if the skybox is on, don't clear the screen, for improved performance
-			if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER))
-				return;
-		}
-	}*/
+
+		//if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN))
+			//return;
+	}
 
 	if (skyscraper->mRenderWindow)
 		skyscraper->mRenderWindow->update(true);
@@ -316,6 +307,7 @@ bool Skyscraper::Initialize()
 
 	mRoot->initialise(false);
 	mRenderWindow = CreateRenderWindow();
+	mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
 
 	//load resources
 	Ogre::ConfigFile cf;
@@ -563,7 +555,7 @@ void Skyscraper::GetInput()
 	if (window->IsActive() == false)
 		return;
 
-	static bool wireframe;
+	static int wireframe;
 	static bool wait, waitcheck;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
@@ -634,7 +626,7 @@ void Skyscraper::GetInput()
 
 	if (wxGetKeyState(WXK_F2) && wait == false)
 	{
-		//Report(wxVariant(Simcore->FPS).GetString().ToAscii());
+		Report(wxVariant(Simcore->FPS).GetString().ToAscii());
 		wait = true;
 	}
 
@@ -654,8 +646,6 @@ void Skyscraper::GetInput()
 			Reload = true;
 			return;
 		}
-		if (wxGetKeyState((wxKeyCode)'d')) //exit if bugplug key is pressed
-			return;
 		Simcore->camera->speed = speed_slow;
 	}
 	else if (wxGetKeyState(WXK_SHIFT))
@@ -684,13 +674,13 @@ void Skyscraper::GetInput()
 			if (Simcore->camera->GetGravityStatus() == false)
 			{
 				Simcore->camera->EnableGravity(true);
-	                        Simcore->camera->EnableCollisions = true;
+					Simcore->camera->EnableCollisions = true;
 				Report("Gravity and collision detection on");
 			}
 			else
 			{
 				Simcore->camera->EnableGravity(false);
-                                Simcore->camera->EnableCollisions = false;
+					Simcore->camera->EnableCollisions = false;
 				Report("Gravity and collision detection off");
 			}
 			wait = true;
@@ -743,18 +733,22 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_F4) && wait == false)
 		{
 			//enable/disable wireframe mode
-			if (wireframe == false)
+			if (wireframe == 0)
 			{
-				//bugplug->ExecCommand("edges");
-				//bugplug->ExecCommand("clear");
 				Simcore->EnableSkybox(false);
-				wireframe = true;
+				Simcore->camera->SetViewMode(1);
+				wireframe = 1;
 			}
-			else
+			else if (wireframe == 1)
 			{
-				//bugplug->ExecCommand("edges");
+				Simcore->camera->SetViewMode(2);
+				wireframe = 2;
+			}
+			else if (wireframe == 2)
+			{
 				Simcore->EnableSkybox(true);
-				wireframe = false;
+				Simcore->camera->SetViewMode(0);
+				wireframe = 0;
 			}
 			wait = true;
 		}
@@ -774,10 +768,10 @@ void Skyscraper::GetInput()
 		{
 			//enable/disable freelook mode
 			Simcore->camera->Freelook = !Simcore->camera->Freelook;
-			//if (Simcore->camera->Freelook == true)
-				//canvas->SetCursor(wxCURSOR_BLANK);
-			//else
-				//canvas->SetCursor(wxNullCursor);
+			if (Simcore->camera->Freelook == true)
+				canvas->SetCursor(wxCURSOR_BLANK);
+			else
+				canvas->SetCursor(wxNullCursor);
 			wait = true;
 		}
 		if (wxGetKeyState(WXK_F10) && wait == false)
