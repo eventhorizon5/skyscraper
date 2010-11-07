@@ -65,7 +65,7 @@ public:
 	void Enable(bool value);
 	bool IsEnabled();
 	WallObject* CreateWallObject(Object *parent, const char *name);
-	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true);
+	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
 	int FindWall(const Ogre::Vector3 &point);
 	void RescaleVertices(float multiplier);
 	bool LoadColladaFile(const char *filename, const char *name);

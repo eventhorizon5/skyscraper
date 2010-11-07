@@ -52,14 +52,25 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	Ogre::String tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
-	if (tmpdirection == "front")
-		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, altitude, 1, 1);
-	if (tmpdirection == "back")
-		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX + (width / 2), CenterZ, CenterX - (width / 2), CenterZ, height, altitude, 1, 1);
-	if (tmpdirection == "left")
-		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, altitude, 1, 1);
-	if (tmpdirection == "right")
-		sbs->AddGenWall(FloorIndicatorMesh, texture.c_str(), CenterX, CenterZ - (width / 2), CenterX, CenterZ + (width / 2), height, altitude, 1, 1);
+	if (tmpdirection == "front" || tmpdirection == "back")
+	{
+		if (tmpdirection == "front")
+			sbs->DrawWalls(true, false, false, false, false, false);
+		else
+			sbs->DrawWalls(false, true, false, false, false, false);
+
+		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, altitude, altitude, 1, 1, false);
+	}
+	if (tmpdirection == "left" || tmpdirection == "right")
+	{
+		if (tmpdirection == "left")
+			sbs->DrawWalls(true, false, false, false, false, false);
+		else
+			sbs->DrawWalls(false, true, false, false, false, false);
+
+		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, height, altitude, altitude, 1, 1, false);
+	}
+	sbs->ResetWalls();
 }
 
 FloorIndicator::~FloorIndicator()

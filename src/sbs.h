@@ -285,7 +285,6 @@ public:
 	Ogre::Vector2 GetExtents(std::vector<Ogre::Vector3> &varray, int coord);
 	//Ogre::Vector2 GetExtents(MeshObject* mesh, int coord);
 	Ogre::Vector3 GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	void AddGenWall(MeshObject* mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th);
 	void Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3& end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
 	Ogre::Vector3 GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);

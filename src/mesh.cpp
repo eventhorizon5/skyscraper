@@ -163,57 +163,6 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 	return Ogre::Vector3(0, 0, 0);
 }
 
-void SBS::AddGenWall(MeshObject *mesh, const char *texture, float x1, float z1, float x2, float z2, float height, float altitude, float tw, float th)
-{
-	//add a simple wall in a general mesh (currently only used for objects that change textures)
-
-	//get texture
-	Ogre::String texname = texture;
-	bool result;
-	Ogre::String material = GetTextureMaterial(texture, result, mesh->MeshWrapper->getName().c_str());
-	if (!result)
-		texname = "Default";
-
-	if (tw == 0)
-		tw = 1;
-	if (th == 0)
-		th = 1;
-
-	float tw2 = tw, th2 = th;
-
-	float mw, mh;
-	if (GetTextureTiling(texname.c_str(), mw, mh))
-	{
-		//multiply the tiling parameters (tw and th) by
-		//the stored multipliers for that texture
-		tw2 = tw * mw;
-		th2 = th * mh;
-	}
-
-	//create texture mapping table
-	Ogre::Vector2 table[] = {Ogre::Vector2(tw2, th2), Ogre::Vector2(0, th2), Ogre::Vector2(tw2, 0), Ogre::Vector2(0, 0)};
-
-	//create a quad, map the texture, and append to the mesh
-	/*CS::Geometry::TesselatedQuad wall (Ogre::Vector3(ToRemote(x2), ToRemote(altitude), ToRemote(-z2)), Ogre::Vector3(ToRemote(x1), ToRemote(altitude), ToRemote(-z1)), Ogre::Vector3(ToRemote(x2), ToRemote(altitude + height), ToRemote(-z2)));
-	CS::Geometry::TableTextureMapper mapper(table);
-	wall.SetMapper(&mapper);
-	wall.append(mesh->GetFactory());*/
-
-	//set lighting factor
-	//mesh->GetMeshObject()->SetColor(csColor(1, 1, 1));
-
-	//set texture
-	//mesh->GetMeshObject()->SetMaterialWrapper(material);
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		DeleteColliders(mesh);
-		CreateColliders(mesh);
-	}
-}
-
-
 void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3& end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber, const char *checkstring, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
@@ -834,31 +783,37 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 	return wall;
 }
 
-Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck)
+Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, int submesh)
 {
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
+	Ogre::String tex = sbs->VerifyFile(texture);
+	Ogre::String path = sbs->GetMountPath(texture, tex);
+	TrimString(tex);
+
 	//exit if old and new materials are the same
-	/*if (matcheck == true)
+	if (matcheck == true)
 	{
-		if (MeshWrapper->getSubMesh(name)->getMaterialName() == Ogre::String(texture))
+		if (MeshWrapper->getSubMesh(submesh)->getMaterialName() == tex)
 			return Ogre::MaterialPtr(0);
 	}
 
 	//get new material
-	Ogre::MaterialPtr newmat = Ogre::MaterialManager::getSingleton().getByName(texture);
+	Ogre::MaterialPtr newmat;
+	try
+	{
+		newmat = Ogre::MaterialManager::getSingleton().getByName(tex, path);
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("ChangeTexture: Invalid texture '" + tex + "'\n" + e.getDescription());
+		return Ogre::MaterialPtr(0);
+	}
 
 	//set material if valid
-	if (newmat.get())
-	{
-		MeshWrapper->getSubMesh(name)->setMaterialName(texture);
-		return newmat;
-	}
-	else //otherwise report error
-		sbs->ReportError("ChangeTexture: Invalid texture '" + Ogre::String(texture) + "'");
-*/
-	return Ogre::MaterialPtr(0);
+	MeshWrapper->getSubMesh(name)->setMaterialName(tex, path);
+	return newmat;
 }
 
 int MeshObject::FindWall(const Ogre::Vector3 &point)

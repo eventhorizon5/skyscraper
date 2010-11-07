@@ -91,37 +91,27 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 		if (Direction == "front" || Direction == "back")
 		{
-			float x1, x2;
+			float x1 = CenterX - (BackWidth / 2);
+			float x2 = CenterX + (BackWidth / 2);
 			if (Direction == "front")
-			{
-				x1 = CenterX - (BackWidth / 2);
-				x2 = CenterX + (BackWidth / 2);
-			}
+				sbs->DrawWalls(true, false, false, false, false, false);
 			else
-			{
-				x2 = CenterX - (BackWidth / 2);
-				x1 = CenterX + (BackWidth / 2);
-			}
-			sbs->AddGenWall(CallButtonBackMesh, BackTexture, x1, CenterZ, x2, CenterZ, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
-			sbs->ResetWalls();
+				sbs->DrawWalls(false, true, false, false, false, false);
+
+			sbs->AddWallMain(object, CallButtonBackMesh, "Call Button Panel", BackTexture, 0, x1, CenterZ, x2, CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
 		if (Direction == "left" || Direction == "right")
 		{
-			float z1, z2;
+			float z1 = CenterZ - (BackWidth / 2);
+			float z2 = CenterZ + (BackWidth / 2);
 			if (Direction == "left")
-			{
-				z2 = CenterZ - (BackWidth / 2);
-				z1 = CenterZ + (BackWidth / 2);
-			}
+				sbs->DrawWalls(true, false, false, false, false, false);
 			else
-			{
-				//right
-				z1 = CenterZ - (BackWidth / 2);
-				z2 = CenterZ + (BackWidth / 2);
-			}
-			sbs->AddGenWall(CallButtonBackMesh, BackTexture, CenterX, z1, CenterX, z2, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, tw, th);
-			sbs->ResetWalls();
+				sbs->DrawWalls(false, true, false, false, false, false);
+
+			sbs->AddWallMain(object, CallButtonBackMesh, "Call Button Panel", BackTexture, 0, CenterX, z1, CenterX, z2, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
+		sbs->ResetWalls();
 	}
 
 	//create buttons
@@ -133,65 +123,71 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 	if (Direction == "front" || Direction == "back")
 	{
-		float x1, x2;
+		float x1 = CenterX - (BackWidth / 4);
+		float x2 = CenterX + (BackWidth / 4);
 		float offset;
 		if (Direction == "front")
 		{
 			offset = -0.01f;
-			x1 = CenterX - (BackWidth / 4);
-			x2 = CenterX + (BackWidth / 4);
+			sbs->DrawWalls(true, false, false, false, false, false);
 		}
 		else
 		{
 			offset = 0.01f;
-			x2 = CenterX - (BackWidth / 4);
-			x1 = CenterX + (BackWidth / 4);
+			sbs->DrawWalls(false, true, false, false, false, false);
 		}
 
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
-			sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
-			sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
+			float height = (BackHeight / 7) * 2;
+			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
+			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
+			sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+			sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
+			float height = (BackHeight / 7) * 2;
+			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14));
 			if (floornum < topfloor)
-				sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
 			if (floornum > bottomfloor)
-				sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, x1, CenterZ + offset, x2, CenterZ + offset, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
 		}
-
 		sbs->ResetWalls();
 	}
 	else
 	{
-		float z1, z2;
+		float z1 = CenterZ - (BackWidth / 4);
+		float z2 = CenterZ + (BackWidth / 4);
 		float offset;
 		if (Direction == "left")
 		{
 			offset = -0.01f;
-			z2 = CenterZ - (BackWidth / 4);
-			z1 = CenterZ + (BackWidth / 4);
+			sbs->DrawWalls(true, false, false, false, false, false);
 		}
 		else
 		{
 			offset = 0.01f;
-			z1 = CenterZ - (BackWidth / 4);
-			z2 = CenterZ + (BackWidth / 4);
+			sbs->DrawWalls(false, true, false, false, false, false);
 		}
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
-			sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4), 1, 1);
-			sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7), 1, 1);
+			float height = (BackHeight / 7) * 2;
+			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
+			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
+			sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+			sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
+			float height = (BackHeight / 7) * 2;
+			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14));
 			if (floornum < topfloor)
-				sbs->AddGenWall(CallButtonMeshUp, UpButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
 			if (floornum > bottomfloor)
-				sbs->AddGenWall(CallButtonMeshDown, DownButtonTexture, CenterX + offset, z1, CenterX + offset, z2, (BackHeight / 7) * 2, sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14)), 1, 1);
+				sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
 		}
-
 		sbs->ResetWalls();
 	}
 	sbs->ResetTextureMapping();
