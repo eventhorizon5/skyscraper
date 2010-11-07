@@ -1289,7 +1289,7 @@ void MeshObject::Prepare()
 	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
 
 	//set up vertex data arrays
-	unsigned int vsize = MeshGeometry.size();
+	unsigned int vsize = (unsigned int)MeshGeometry.size();
 	float *mVertexElements = new float[vsize * 8];
 
 	//populate array with vertex geometry
@@ -1323,7 +1323,7 @@ void MeshObject::Prepare()
 		Ogre::SubMesh *submesh = MeshWrapper->getSubMesh(index);
 
 		//set up index data array
-		unsigned int isize = Triangles[index].triangles.size() * 3;
+		unsigned int isize = (unsigned int)Triangles[index].triangles.size() * 3;
 		unsigned int *mIndices = new unsigned int[isize];
 
 		//create array of triangle indices

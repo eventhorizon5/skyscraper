@@ -52,7 +52,7 @@ SBS::SBS()
 	PrintBanner();
 
 	//Pause for 2 seconds
-	//sleep(2000);
+	wxSleep(2);
 
 	//initialize other variables
 	BuildingName = "";
@@ -482,12 +482,6 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	mRoot = Ogre::Root::getSingletonPtr();
 	this->mSceneManager = mSceneManager;
 
-	//create default sector
-	/*
-	area = engine->CreateSector("area");
-	if (!area)
-		return ReportError("No iSector object available");*/
-
 	root_dir = rootdirectory;
 	dir_char = directory_char;
 
@@ -532,7 +526,7 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	return true;
 }
 
-bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
+bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps)
 {
 	//first verify the filename
 	Ogre::String filename2 = VerifyFile(filename);
@@ -542,7 +536,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	Ogre::TexturePtr mTex;
 	try
 	{
-		mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, Ogre::MIP_DEFAULT, 1.0f, false);
+		mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -565,11 +559,20 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	//mMat->getTechnique(0)->getPass(0)->setManualCullingMode(Ogre::MANUAL_CULL_NONE);
 
 	//show only clockwise side of material
-	mMat->getTechnique(0)->getPass(0)->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	//if texture has an alpha map, force binary alpha
-	//if (wrapper->GetTextureHandle()->GetAlphaType() == csAlphaMode::alphaSmooth)
-		//wrapper->GetTextureHandle()->SetAlphaType(csAlphaMode::alphaBinary);
+	if (disable_depth_buffer == true)
+	{
+		mMat->setDepthCheckEnabled(false);
+		mMat->setDepthWriteEnabled(false);
+	}
+
+	//enable alpha blending for related textures
+	/*if (mTex->hasAlpha() == true)
+	{
+		mMat->setSceneBlending(Ogre::SceneBlendType::SBT_TRANSPARENT_ALPHA);
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_EQUAL, 255);
+	}*/
 
 	Report("Loaded texture " + Ogre::String(filename));
 
@@ -1614,9 +1617,9 @@ void SBS::EnableSkybox(bool value)
 
 	//disable vertical sync if skybox is on, for improved performance
 	if (value == false)
-		mRoot->getRenderSystem()->setWaitForVerticalBlank(true); //enable vsync
+		EnableVSync(true);
 	else
-		mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
+		EnableVSync(false);
 }
 
 void SBS::CreateSky(const char *filenamebase)
@@ -1627,15 +1630,14 @@ void SBS::CreateSky(const char *filenamebase)
 	Mount(Ogre::String("data/sky-" + file + ".zip").c_str(), "sky");
 
 	//load textures
-	LoadTexture("sky/up.jpg", "SkyTop", 1, -1);
-	LoadTexture("sky/down.jpg", "SkyBottom", -1, 1);
-	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1);
-	LoadTexture("sky/right.jpg", "SkyRight", 1, 1);
-	LoadTexture("sky/front.jpg", "SkyFront", 1, 1);
-	LoadTexture("sky/back.jpg", "SkyBack", 1, 1);
+	LoadTexture("sky/up.jpg", "SkyTop", 1, -1, false, false, true, 0);
+	LoadTexture("sky/down.jpg", "SkyBottom", -1, 1, false, false, true, 0);
+	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, true, 0);
+	LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, true, 0);
+	LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, true, 0);
+	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, true, 0);
 
 	SkyBox = new MeshObject(this->object, "SkyBox");
-	//SkyBox->MeshWrapper->SetZBufMode(CS_ZBUF_NONE);
 	//SkyBox->MeshWrapper->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
@@ -3679,16 +3681,17 @@ std::string SBS::VerifyFile(const char *filename)
 	if (loc2 > 0)
 		loc = loc2;
 
-	directory = file.substr(0, loc + 1);
+	directory = file.substr(0, loc + 1);*/
 
-	csRef<iStringArray> array = vfs->FindFiles(directory);
-	for (int i = 0; i < array->size(); i++)
+	Ogre::StringVectorPtr listing = filesystem.list();
+	for (int i = 0; i < listing->size(); i++)
 	{
-		Ogre::String check = array->Get(i);
-		if (check.CompareNoCase(filename) == true)
+		Ogre::String check = listing->at(i);
+		Ogre::String checkoriginal = SetCaseCopy(check, false);
+		Ogre::String checkfile = SetCaseCopy(file, false);
+		if (checkoriginal == checkfile)
 			return check;
 	}
-	return filename;*/
 	return file;
 }
 
@@ -3897,4 +3900,10 @@ std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
 		}
 	}
 	return "General";
+}
+
+void SBS::EnableVSync(bool value)
+{
+	//enable or disable vertical sync
+	mRoot->getRenderSystem()->setWaitForVerticalBlank(value);
 }

@@ -151,7 +151,7 @@ public:
 	~SBS();
 	void Report(std::string message);
 	bool ReportError(std::string message);
-	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
+	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, bool disable_depth_buffer = false, int mipmaps = -1);
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
@@ -306,6 +306,7 @@ public:
 	unsigned int GetRunTime();
 	unsigned int GetElapsedTime();
 	std::string GetMountPath(const char *filename, std::string &newfilename);
+	void EnableVSync(bool value);
 
 	//Meshes
 	MeshObject* Buildings;
