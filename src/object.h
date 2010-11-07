@@ -26,7 +26,7 @@
 #ifndef _SBS_OBJECT_H
 #define _SBS_OBJECT_H
 
-#include <Ogre.h>
+#include <OgreString.h>
 
 class SBSIMPEXP Object
 {

@@ -27,8 +27,9 @@
 #include <wx/variant.h>
 #include <time.h>
 #include <sys/timeb.h>
-#include <Ogre.h>
+#include <OgreRoot.h>
 #include <OgreFileSystem.h>
+#include <OgreMaterialManager.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -3752,8 +3753,8 @@ void SBS::Prepare()
 {
 	//prepare objects for run
 	
-	//prepare CS objects
-	//engine->Prepare();
+	for (int i = 0; i < meshes.size(); i++)
+		meshes[i]->Prepare();
 }
 
 Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)

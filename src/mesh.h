@@ -85,6 +85,7 @@ public:
 	int ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String &material, const char *name, bool add);
 	int FindMatchingSubMesh(Ogre::String material);
 	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<TriangleType> &deleted_indices);
+	void Prepare();
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;

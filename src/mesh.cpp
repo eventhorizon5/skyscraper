@@ -23,6 +23,12 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreSubMesh.h>
+#include <OgreMeshManager.h>
+#include <OgreResourceGroupManager.h>
+#include <OgreSceneManager.h>
+#include <OgreMaterialManager.h>
+#include <OgreEntity.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -1189,12 +1195,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String &material, const char *name, bool add)
 {
 	//processes submeshes for new or removed geometry
-	//(uploads vertex and index arrays to graphics card, and applies material)
-
-	//arrays must be populated correctly before this function is called
-
-	float radius = 0;
-	Ogre::AxisAlignedBox box;
+	//the Process() function must be called when the mesh is ready to view, in order to upload data to graphics card
 
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
@@ -1251,6 +1252,27 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 		}
 	}
 
+	//bind material
+	submesh->setMaterialName(material);
+
+	return index;
+}
+
+void MeshObject::Prepare()
+{
+	//prepare mesh object
+	//collects and uploads geometry and triangle data to graphics card, and prepares mesh for rendering
+	//arrays must be populated correctly before this function is called
+
+	//All submeshes share mesh vertex data, but triangle indices are stored in each submesh
+	//each submesh represents a portion of the mesh that uses the same material
+
+	if (Submeshes.size() == 0)
+		return;
+
+	float radius = 0;
+	Ogre::AxisAlignedBox box;
+
 	//set up vertex buffer
 	OGRE_DELETE MeshWrapper->sharedVertexData;
 	Ogre::VertexData* data = new Ogre::VertexData();
@@ -1266,11 +1288,9 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 	offset += Ogre::VertexElement::getTypeSize(Ogre::VET_FLOAT3);
 	decl->addElement(0, offset, Ogre::VET_FLOAT2, Ogre::VES_TEXTURE_COORDINATES); //texels
 
-	//set up data arrays
+	//set up vertex data arrays
 	unsigned int vsize = MeshGeometry.size();
-	unsigned int isize = Triangles[index].triangles.size() * 3;
 	float *mVertexElements = new float[vsize * 8];
-	unsigned int *mIndices = new unsigned int[isize];
 
 	//populate array with vertex geometry
 	unsigned int loc = 0;
@@ -1296,38 +1316,46 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String 
 	//bind vertex data to mesh
 	data->vertexBufferBinding->setBinding(0, vbuffer);
 
-	//create array of triangle indices
-	loc = 0;
-	for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
+	//process index arrays for each submesh
+	for (int index = 0; index < Submeshes.size(); index++)
 	{
-		mIndices[loc] = Triangles[index].triangles[i].x;
-		mIndices[loc + 1] = Triangles[index].triangles[i].y;
-		mIndices[loc + 2] = Triangles[index].triangles[i].z;
-		loc += 3;
+		//get submesh object
+		Ogre::SubMesh *submesh = MeshWrapper->getSubMesh(index);
+
+		//set up index data array
+		unsigned int isize = Triangles[index].triangles.size() * 3;
+		unsigned int *mIndices = new unsigned int[isize];
+
+		//create array of triangle indices
+		loc = 0;
+		for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
+		{
+			mIndices[loc] = Triangles[index].triangles[i].x;
+			mIndices[loc + 1] = Triangles[index].triangles[i].y;
+			mIndices[loc + 2] = Triangles[index].triangles[i].z;
+			loc += 3;
+		}
+
+		//create index hardware buffer
+		Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+		ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
+		delete mIndices;
+
+		//delete any old index data
+		if (submesh->indexData)
+		{
+			delete submesh->indexData;
+			submesh->indexData = new Ogre::IndexData();
+		}
+
+		//bind index data to submesh
+		submesh->indexData->indexCount = isize;
+		submesh->indexData->indexBuffer = ibuffer;
+		submesh->indexData->indexStart = 0;
 	}
-
-	//create index hardware buffer
-	Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-	ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
-	delete mIndices;
-
-	if (submesh->indexData)
-	{
-		delete submesh->indexData;
-		submesh->indexData = new Ogre::IndexData();
-	}
-
-	//bind index data to submesh
-	submesh->indexData->indexCount = isize;
-	submesh->indexData->indexBuffer = ibuffer;
-	submesh->indexData->indexStart = 0;
-
-	//bind material
-	submesh->setMaterialName(material);
 
 	MeshWrapper->_setBounds(box);
 	MeshWrapper->_setBoundingSphereRadius(radius);
-	return index;
 }
 
 int MeshObject::FindMatchingSubMesh(Ogre::String material)
@@ -1370,8 +1398,6 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 		MeshGeometry.erase(MeshGeometry.begin() + deleted[i]);
 	}
 
-	//TODO - need to reconstruct vertex hardware buffer here
-
 	//reindex triangle indices in all submeshes
 	for (int submesh = 0; submesh < (int)Triangles.size(); submesh++)
 	{
@@ -1401,8 +1427,6 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 		}
 		elements.clear();
 	}
-
-	//TODO - need to reconstruct triangle hardware buffer here
 
 	//reindex triangle indices in all wall objects
 	for (int i = 0; i < (int)wallarray.size(); i++)

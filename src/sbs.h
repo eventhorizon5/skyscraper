@@ -26,8 +26,11 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include <Ogre.h>
-
+#include <OgreString.h>
+#include <OgreStringConverter.h>
+#include <OgreVector2.h>
+#include <OgreVector3.h>
+#include <OgreMesh.h>
 #include "light.h"
 #include "mesh.h"
 #include "model.h"

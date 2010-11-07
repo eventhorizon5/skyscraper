@@ -26,8 +26,10 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
 #include "globals.h"
-#include "Ogre.h"
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
