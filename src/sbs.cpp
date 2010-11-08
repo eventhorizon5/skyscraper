@@ -526,25 +526,48 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	return true;
 }
 
-bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps)
+bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//first verify the filename
 	Ogre::String filename2 = VerifyFile(filename);
 
+	//determine if the file is a GIF image, to force keycolor alpha
+	Ogre::String extension = filename2.substr(filename2.size() - 3);
+	SetCase(extension, false);
+	if (extension == "gif")
+		use_alpha_color = true;
+
 	// Load the texture
 	Ogre::String path = GetMountPath(filename2.c_str(), filename2);
 	Ogre::TexturePtr mTex;
-	try
+	Ogre::String texturename;
+	bool has_alpha = false;
+
+	if (use_alpha_color == false)
 	{
-		mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+		try
+		{
+			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+		}
+		catch (Ogre::Exception &e)
+		{
+			return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+		}
+
+		if (mTex.isNull())
+			return ReportError("Error loading texture" + filename2);
+		texturename = mTex->getName();
+		has_alpha = mTex->hasAlpha();
 	}
-	catch (Ogre::Exception &e)
+	else
 	{
-		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+		//load based on chroma key for alpha
+
+		texturename = "kc_" + filename2;
+		loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
+		has_alpha = true;
 	}
 
-	if (mTex.isNull())
-		return ReportError("Error loading texture" + filename2);
 
 	//create a new material
 	Ogre::String matname = name;
@@ -552,11 +575,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 
 	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState()->setTextureName(mTex->getName());
-
-	//show both sides of material
-	//mMat->getTechnique(0)->getPass(0)->setCullingMode(Ogre::CULL_NONE);
-	//mMat->getTechnique(0)->getPass(0)->setManualCullingMode(Ogre::MANUAL_CULL_NONE);
+	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
@@ -568,11 +587,10 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	}
 
 	//enable alpha blending for related textures
-	//if (mTex->hasAlpha() == true)
-	if (matname == "MainWindows" || matname == "MainWindowsInt")
+	if (has_alpha == true)
+	//if (matname == "MainWindows" || matname == "MainWindowsInt")
 	{
-		//mMat->setSceneBlending(Ogre::SceneBlendType::SBT_TRANSPARENT_ALPHA);
-		mMat->setSceneBlending(Ogre::SBF_ONE, Ogre::SBF_ZERO);
+		mMat->setSceneBlending(Ogre::SceneBlendType::SBT_TRANSPARENT_ALPHA);
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
