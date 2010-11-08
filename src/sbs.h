@@ -307,7 +307,8 @@ public:
 	unsigned int GetElapsedTime();
 	std::string GetMountPath(const char *filename, std::string &newfilename);
 	void EnableVSync(bool value);
-
+	void loadChromaKeyedTexture(const Ogre::String& filename, const Ogre::String& resGroup, const Ogre::String& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
+	
 	//Meshes
 	MeshObject* Buildings;
 	MeshObject* External;

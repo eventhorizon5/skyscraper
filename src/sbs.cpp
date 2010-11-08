@@ -568,11 +568,14 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	}
 
 	//enable alpha blending for related textures
-	/*if (mTex->hasAlpha() == true)
+	//if (mTex->hasAlpha() == true)
+	if (matname == "MainWindows" || matname == "MainWindowsInt")
 	{
-		mMat->setSceneBlending(Ogre::SceneBlendType::SBT_TRANSPARENT_ALPHA);
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_EQUAL, 255);
-	}*/
+		//mMat->setSceneBlending(Ogre::SceneBlendType::SBT_TRANSPARENT_ALPHA);
+		mMat->setSceneBlending(Ogre::SBF_ONE, Ogre::SBF_ZERO);
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}
 
 	Report("Loaded texture " + Ogre::String(filename));
 
