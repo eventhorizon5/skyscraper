@@ -499,7 +499,7 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
 	DisableSound = GetConfigBool("Skyscraper.SBS.DisableSound", false);
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
-	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", true);
+	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	ResetTextureMapping(true); //set default texture map values
 
@@ -528,6 +528,9 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
+	//set verbosity level
+	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
+
 	//first verify the filename
 	Ogre::String filename2 = VerifyFile(filename);
 
@@ -567,7 +570,6 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
 		has_alpha = true;
 	}
-
 
 	//create a new material
 	Ogre::String matname = name;
