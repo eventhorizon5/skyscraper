@@ -628,7 +628,7 @@ void Skyscraper::GetInput()
 
 	if (wxGetKeyState(WXK_F2) && wait == false)
 	{
-		Report(wxVariant(Simcore->FPS).GetString().ToAscii());
+		Report(std::string(wxVariant(Simcore->FPS).GetString().ToAscii()));
 		wait = true;
 	}
 

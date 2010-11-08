@@ -592,7 +592,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	if (has_alpha == true)
 	//if (matname == "MainWindows" || matname == "MainWindowsInt")
 	{
-		mMat->setSceneBlending(Ogre::SceneBlendType::SBT_TRANSPARENT_ALPHA);
+		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
@@ -3911,12 +3911,14 @@ std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
 
 	for (int i = 0; i < list.size(); i++)
 	{
-		if (StartsWith(file + "/", list[i].c_str()) == true)
+		std::string check = file + "/";
+		if (StartsWith(check, list[i].c_str()) == true)
 		{
 			newfilename = file.substr(list[i].size() + 1);
 			return list[i];
 		}
-		if (StartsWith(file + "\\", list[i].c_str()) == true)
+		check = file + "\\";
+		if (StartsWith(check, list[i].c_str()) == true)
 		{
 			newfilename = file.substr(list[i].size() + 1);
 			return list[i];
