@@ -958,9 +958,9 @@ void Camera::SetViewMode(int mode)
 	//2 - point mode
 
 	if (mode == 0)
-		MainCamera->setPolygonMode(Ogre::PolygonMode::PM_SOLID);
+		MainCamera->setPolygonMode(Ogre::PM_SOLID);
 	if (mode == 1)
-		MainCamera->setPolygonMode(Ogre::PolygonMode::PM_WIREFRAME);
+		MainCamera->setPolygonMode(Ogre::PM_WIREFRAME);
 	if (mode == 2)
-		MainCamera->setPolygonMode(Ogre::PolygonMode::PM_POINTS);
+		MainCamera->setPolygonMode(Ogre::PM_POINTS);
 }
