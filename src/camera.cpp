@@ -139,9 +139,10 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 		vector.z += 360;
 
 	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::NEGATIVE_UNIT_Z);
+	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
+	rotation = vector;
 	CameraNode->setOrientation(rot);
 }
 
@@ -164,26 +165,8 @@ void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 Ogre::Vector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
-	Ogre::Vector3 rot;
-	rot.x = RadiansToDegrees(MainCamera->getDirection().x);
-	rot.y = RadiansToDegrees(MainCamera->getDirection().y);
-	rot.z = RadiansToDegrees(-MainCamera->getDirection().z);
 
-	//keep values within the 0-360 range
-	if (rot.x > 360)
-		rot.x -= 360 * int(rot.x / 360);
-	if (rot.x < 0)
-		rot.x = 360 + (rot.x - (360 * int(rot.x / 360)));
-	if (rot.y > 360)
-		rot.y -= 360 * int(rot.y / 360);
-	if (rot.y < 0)
-		rot.y = 360 + (rot.y - (360 * int(rot.y / 360)));
-	if (rot.z > 360)
-		rot.z -= 360 * int(rot.z / 360);
-	if (rot.z < 0)
-		rot.z = 360 + (rot.z - (360 * int(rot.z / 360)));
-
-	return rot;
+	return rotation;
 }
 
 void Camera::UpdateCameraFloor()
@@ -209,7 +192,8 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(const Ogre::Vector3 &vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	SetPosition(Ogre::Vector3(GetPosition().x + (vector.x * speed), GetPosition().y + (vector.y * speed), GetPosition().z + (vector.z * speed)));
+	//SetPosition(Ogre::Vector3(GetPosition().x + (vector.x * speed), GetPosition().y + (vector.y * speed), GetPosition().z + (vector.z * speed)));
+	CameraNode->translate(sbs->ToRemote(vector * speed), Ogre::Node::TS_LOCAL);
 	return true;
 }
 
@@ -747,11 +731,14 @@ void Camera::Loop()
 		//collider_actor.SetOnGround(false);
 
 	//calculate acceleration
-	//InterpolateMovement();
+	InterpolateMovement();
 
 	//general movement
-	//float delta = sbs->vc->GetElapsedTicks() / 1000.0f;
+	float delta = sbs->GetElapsedTime() / 1000.0f;
 	//collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
+	Move(velocity * delta, 1);
+	//Rotate(angle_velocity * delta, 1);
+	Rotate(angle_velocity, 1);
 
 	//get list of hit meshes and put them into the 'hitlist' array
 	/*if (EnableCollisions == true)
@@ -820,7 +807,7 @@ void Camera::Loop()
 void Camera::Strafe(float speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
-	desired_velocity.x = cfg_strafespeed * speed * cfg_walk_maxspeed	* cfg_walk_maxspeed_multreal;
+	desired_velocity.x = cfg_strafespeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
 void Camera::Step(float speed)
@@ -844,14 +831,12 @@ void Camera::Jump()
 void Camera::Look(float speed)
 {
 	//look up/down by rotating camera on X axis
-	CameraNode->pitch(Ogre::Degree(0.05 * speed));
 	desired_angle_velocity.x = cfg_lookspeed * speed * cfg_rotate_maxspeed;
 }
 
 void Camera::Turn(float speed)
 {
 	//turn camera by rotating on Y axis
-	CameraNode->yaw(Ogre::Degree(0.05 * -speed));
 	desired_angle_velocity.y = cfg_turnspeed * speed * cfg_rotate_maxspeed * cfg_walk_maxspeed_multreal;
 }
 

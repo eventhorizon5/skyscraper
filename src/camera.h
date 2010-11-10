@@ -143,6 +143,7 @@ private:
 	bool lastfloorset;
 	float FOV; //default FOV angle
 	bool ResetOnGround;
+	Ogre::Vector3 rotation;
 
 	//collision
 	//csColliderActor collider_actor;
