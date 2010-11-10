@@ -247,7 +247,13 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 				Ogre::Vector3 v = ptB;
 				v -= ptA;
 
-				float sect = -(ptA.x - value) / v.x;
+				float sect = 0;
+				if (axis == 0)
+					sect = -(ptA.x - value) / v.x;
+				if (axis == 1)
+					sect = -(ptA.y - value) / v.y;
+				if (axis == 2)
+					sect = -(ptA.z - value) / v.z;
 				v *= sect;
 				v += ptA;
 				poly1.push_back(v);
@@ -267,7 +273,13 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 				Ogre::Vector3 v = ptB;
 				v -= ptA;
 
-				float sect = -(ptA.x - value) / v.x;
+				float sect = 0;
+				if (axis == 0)
+					sect = -(ptA.x - value) / v.x;
+				if (axis == 1)
+					sect = -(ptA.y - value) / v.y;
+				if (axis == 2)
+					sect = -(ptA.z - value) / v.z;
 				v *= sect;
 				v += ptA;
 				poly1.push_back(v);

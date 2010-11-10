@@ -1116,6 +1116,7 @@ bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<
 
 	for (int i = 0; i < (int)trimesh.size(); i++)
 	{
+		int min = count + k;
 		for (int j = 0; j < (int)trimesh[i].vertices.size(); j++)
 		{
 			mesh_geometry[k].normal = mesh_geometry[k].vertex = trimesh[i].vertices[j];
@@ -1126,6 +1127,8 @@ bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<
 			AddVertex(mesh_geometry[k]);
 			k++;
 		}
+		int max = count + k - 1;
+		mesh_indices.push_back(Ogre::Vector2(min, max));
 	}
 
 	//delete texel array
@@ -1386,9 +1389,12 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 	std::vector<int> deleted;
 	for (int i = 0; i < (int)deleted_indices.size(); i++)
 	{
-		deleted.push_back(deleted_indices[i].x);
-		deleted.push_back(deleted_indices[i].y);
-		deleted.push_back(deleted_indices[i].z);
+		if (find(deleted.begin(), deleted.end(), deleted_indices[i].x) == deleted.end())
+			deleted.push_back(deleted_indices[i].x);
+		if (find(deleted.begin(), deleted.end(), deleted_indices[i].y) == deleted.end())
+			deleted.push_back(deleted_indices[i].y);
+		if (find(deleted.begin(), deleted.end(), deleted_indices[i].z) == deleted.end())
+			deleted.push_back(deleted_indices[i].z);
 	}
 	sort(deleted.begin(), deleted.end());
 
@@ -1459,7 +1465,7 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 
 			for (int ii = 0; ii < size; ii++)
 			{
-				wallarray[ii]->handles[j].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+				wallarray[i]->handles[j].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 				element += 3;
 			}
 			elements.clear();
