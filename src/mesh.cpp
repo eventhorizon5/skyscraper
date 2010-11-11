@@ -931,7 +931,7 @@ void MeshObject::SetRotation(const Ogre::Vector3 rotation)
 {
 	//rotate light
 	Ogre::Quaternion x(Ogre::Degree(rotation.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::UNIT_Y);
+	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
 	SceneNode->setOrientation(rot);
