@@ -143,13 +143,14 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
 	rotation = vector;
+	//MainCamera->rotate(rot);
 	CameraNode->setOrientation(rot);
 }
 
 Ogre::Vector3 Camera::GetPosition()
 {
 	//returns the camera's current position
-	if (MainCamera)
+	if (CameraNode)
 		return sbs->ToLocal(CameraNode->getPosition());
 	else
 		return Ogre::Vector3(0, 0, 0);
@@ -736,9 +737,8 @@ void Camera::Loop()
 	//general movement
 	float delta = sbs->GetElapsedTime() / 1000.0f;
 	//collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
-	Move(velocity * delta, 1);
-	//Rotate(angle_velocity * delta, 1);
-	Rotate(angle_velocity, 1);
+	Move(velocity, delta);
+	Rotate(angle_velocity, delta * 40);
 
 	//get list of hit meshes and put them into the 'hitlist' array
 	/*if (EnableCollisions == true)

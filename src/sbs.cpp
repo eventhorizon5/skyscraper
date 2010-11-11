@@ -581,7 +581,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
+	
 	if (disable_depth_buffer == true)
 	{
 		mMat->setDepthCheckEnabled(false);
