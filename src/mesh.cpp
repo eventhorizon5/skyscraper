@@ -594,25 +594,25 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	if (largest_normal == 0)
 	{
 		if (normal.x < 0)
-			return Ogre::Vector3(1, 0, 0);
-		else
 			return Ogre::Vector3(-1, 0, 0);
+		else
+			return Ogre::Vector3(1, 0, 0);
 	}
 
 	if (largest_normal == 1)
 	{
 		if (normal.y < 0)
-			return Ogre::Vector3(0, 1, 0);
-		else
 			return Ogre::Vector3(0, -1, 0);
+		else
+			return Ogre::Vector3(0, 1, 0);
 	}
 
 	if (largest_normal == 2)
 	{
 		if (normal.z < 0)
-			return Ogre::Vector3(0, 0, 1);
-		else
 			return Ogre::Vector3(0, 0, -1);
+		else
+			return Ogre::Vector3(0, 0, 1);
 	}
 	return Ogre::Vector3(0, 0, 0);
 }
