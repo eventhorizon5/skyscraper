@@ -854,6 +854,13 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 
+			//flip values for z axis
+			if (j == 3)
+			{
+				extents.x = -extents.x;
+				extents.y = -extents.y;
+			}
+
 			if (j == 1)
 			{
 				if (extents.x < x1 || firstrun == true)

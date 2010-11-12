@@ -1635,7 +1635,7 @@ void SBS::EnableExternal(bool value)
 void SBS::EnableSkybox(bool value)
 {
 	//turns skybox on/off
-	SkyBox->Enable(value);
+	//SkyBox->Enable(value);
 	IsSkyboxEnabled = value;
 
 	//disable vertical sync if skybox is on, for improved performance
