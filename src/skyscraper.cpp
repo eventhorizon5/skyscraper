@@ -309,7 +309,7 @@ bool Skyscraper::Initialize()
 
 	mRoot->initialise(false);
 	mRenderWindow = CreateRenderWindow();
-	mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
+	mRoot->getRenderSystem()->setWaitForVerticalBlank(true); //disable vsync
 
 	//load resources
 	Ogre::ConfigFile cf;

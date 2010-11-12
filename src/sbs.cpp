@@ -1639,10 +1639,10 @@ void SBS::EnableSkybox(bool value)
 	IsSkyboxEnabled = value;
 
 	//disable vertical sync if skybox is on, for improved performance
-	if (value == false)
+	/*if (value == false)
 		EnableVSync(true);
 	else
-		EnableVSync(false);
+		EnableVSync(false);*/
 }
 
 void SBS::CreateSky(const char *filenamebase)

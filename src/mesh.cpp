@@ -1305,7 +1305,7 @@ void MeshObject::Prepare()
 		mVertexElements[loc + 3] = MeshGeometry[i].normal.x;
 		mVertexElements[loc + 4] = MeshGeometry[i].normal.y;
 		mVertexElements[loc + 5] = MeshGeometry[i].normal.z;
-		mVertexElements[loc + 6] = MeshGeometry[i].texel.x;
+		mVertexElements[loc + 6] = -MeshGeometry[i].texel.x;
 		mVertexElements[loc + 7] = MeshGeometry[i].texel.y;
 		box.merge(MeshGeometry[i].vertex);
 		radius = std::max(radius, MeshGeometry[i].vertex.length());
