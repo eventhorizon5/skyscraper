@@ -39,10 +39,10 @@
     Load data/windows11h_mid_int2.gif, MainWindowsInt2, 0.05, 1
     Load data/windows11h_inside_double.gif, MainWindowsIntDouble, 0.05, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
-    Load data/symb5.jpg, Wood3, 0.269, 0.25
+    Load data/stucco3.jpg, MainCeiling, 0.25, 0.25
     Load data/graniteTexture_0018e.jpg, LobbyFloor, 0.15, 0.15
     Load data/ceilinglight1b.jpg, LobbyCeiling, 1, 1, false
-    Load data/otis4_downlightceiling.jpg, ElevCeiling, 3, 3, false
+    Load data/ceilinglight1b.jpg, ElevCeiling, 2, 2, false
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
     Load data/MetalBare0085_3_S.jpg, ServiceElevWall, 0.25, 0.25
@@ -65,10 +65,12 @@
     Load data/intext.jpg, InterExt, 0.269, 0.25
     Load data/intext.jpg, InterInt, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
-    Load data/door1c.jpg, ElevDoors, 1, 1
-    Load data/door1c.jpg, ElevDoors2, -1, 1
-    Load data/door1.jpg, ServiceElevDoors, 1, 1
-    Load data/door1.jpg, ServiceElevDoors2, -1, 1
+    Load data/aluminumdoor_c.jpg, ElevDoors, 1, 1
+    Load data/aluminumdoor_c.jpg, ElevDoors2, -1, 1
+    Load data/door1c.jpg, ServiceElevDoors, 1, 1
+    Load data/door1c.jpg, ServiceElevDoors2, -1, 1
+    Load data/door1.jpg, ServiceElevDoorsb, 1, 1
+    Load data/door1.jpg, ServiceElevDoors2b, -1, 1
     Load data/gray3.jpg, Gray, 1, 1
     Load data/otis67/OTIS67_OTIS_PANEL_BUTTON_EXTERNAL_nologo_b.jpg, ElevExtPanels, 1, 1
     Load data/otis67/OTIS67_OTIS_PANEL_BUTTON_EXTERNAL_nologo_b.jpg, ElevExtPanels2, 1, 1
@@ -76,7 +78,7 @@
     Load data/diamond18j.jpg, ElevPanelMain, 1, 1
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
-    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/cem_tr_b.jpg, Stairs, 0.25, 0.25
     Load data/servicedoor2b.jpg, StairsDoor, 1, 1
     Load data/miscdoor8.jpg, StairsDoor2, 1, 1
     Load data/miscdoor9b.jpg, HotelDoor, 1, 1
@@ -620,7 +622,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Wood3, 0.5, -75, -70, 75, 70, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, MainCeiling, 0.5, -75, -70, 75, 70, %height%, %height%, 0, 0, False
 
     #Internal Windows
     SetAutoSize = true, false
@@ -841,7 +843,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Wood3, 0.5, -63, -70, 63, 70, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, MainCeiling, 0.5, -63, -70, 63, 70, %height%, %height%, 0, 0, False
 
     #Internal Windows
     SetAutoSize = true, false
@@ -1032,7 +1034,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     if[%floor% > 101] InterfloorHeight = 1.5
 
     Set 1 = Carpet1
-    Set 2 = Wood3
+    Set 2 = MainCeiling
     if[%floor% > 81 & %floor% < 100] Set 1 = HotelFloor
     if[%floor% > 81 & %floor% < 100] Set 2 = HotelCeiling
     
@@ -1442,7 +1444,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Wood3, 0.5, -39, -70, 39, 70, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, MainCeiling, 0.5, -39, -70, 39, 70, %height%, %height%, 0, 0, False
 
     #Internal Windows
     SetAutoSize = true, false
@@ -1567,7 +1569,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Wood3, 0.5, -39, 0, 39, 70, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, MainCeiling, 0.5, -39, 0, 39, 70, %height%, %height%, 0, 0, False
 
     #Internal Windows
     SetAutoSize = true, false
@@ -1641,11 +1643,11 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Wood3, 0.5, -39, -70, 39, 70, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, MainCeiling, 0.5, -39, -70, 39, 70, %height%, %height%, 0, 0, False
 
     #cover over interfloor gap
     WallOrientation = left
-    AddWall Filler, Wood3, 0.2, -39, 0, 39, 0, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    AddWall Filler, ICover, 0.2, -39, 0, 39, 0, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -1687,7 +1689,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Wood3, 0.5, -39, -70, 39, 70, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, MainCeiling, 0.5, -39, -70, 39, 70, %height%, %height%, 0, 0, False
 
     #Internal Windows
     SetAutoSize = true, false
@@ -6297,19 +6299,17 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoorComponent 1, FreightDoor1, ServiceElevDoors2, Black, 0.1, left, 0.3 / 2, 3.918, -2.25, 3.918, -1.125, 8, 0, 0, 0, 0, 0
-    AddDoorComponent 1, FreightDoor2, ServiceElevDoors2, Black, 0.1, left, 0.3, 3.918 + 0.1, -1.125, 3.918 + 0.1, 0, 8, 0, 0, 0, 0, 0
-    AddDoorComponent 1, FreightDoor3, ServiceElevDoors, Black, 0.1, right, 0.3, 3.918 + 0.1, 0, 3.918 + 0.1, 1.125, 8, 0, 0, 0, 0, 0
-    AddDoorComponent 1, FreightDoor4, ServiceElevDoors, Black, 0.1, right, 0.3 / 2, 3.918, 1.125, 3.918, 2.25, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor1, ServiceElevDoors2b, Black, 0.1, left, 0.3 / 2, 3.918, -2.25, 3.918, -1.125, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor2, ServiceElevDoors2b, Black, 0.1, left, 0.3, 3.918 + 0.1, -1.125, 3.918 + 0.1, 0, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor3, ServiceElevDoorsb, Black, 0.1, right, 0.3, 3.918 + 0.1, 0, 3.918 + 0.1, 1.125, 8, 0, 0, 0, 0, 0
+    AddDoorComponent 1, FreightDoor4, ServiceElevDoorsb, Black, 0.1, right, 0.3 / 2, 3.918, 1.125, 3.918, 2.25, 8, 0, 0, 0, 0, 0
     FinishDoors 1
-    AddShaftDoorsComponent 1, FreightShaftDoor1, ServiceElevDoors, Black, 0.1, left, 0.3 / 2, 4.218 + 0.1, -2.25, 4.218 + 0.1, -1.125, 8, 0, 0, 0, 0, 0
-    AddShaftDoorsComponent 1, FreightShaftDoor2, ServiceElevDoors, Black, 0.1, left, 0.3, 4.218, -1.125, 4.218, 0, 8, 0, 0, 0, 0, 0
-    AddShaftDoorsComponent 1, FreightShaftDoor3, ServiceElevDoors2, Black, 0.1, right, 0.3, 4.218, 0, 4.218, 1.125, 8, 0, 0, 0, 0, 0
-    AddShaftDoorsComponent 1, FreightShaftDoor4, ServiceElevDoors2, Black, 0.1, right, 0.3 / 2, 4.218 + 0.1, 1.125, 4.218 + 0.1, 2.25, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor1, ServiceElevDoorsb, Black, 0.1, left, 0.3 / 2, 4.218 + 0.1, -2.25, 4.218 + 0.1, -1.125, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor2, ServiceElevDoorsb, Black, 0.1, left, 0.3, 4.218, -1.125, 4.218, 0, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor3, ServiceElevDoors2b, Black, 0.1, right, 0.3, 4.218, 0, 4.218, 1.125, 8, 0, 0, 0, 0, 0
+    AddShaftDoorsComponent 1, FreightShaftDoor4, ServiceElevDoors2b, Black, 0.1, right, 0.3 / 2, 4.218 + 0.1, 1.125, 4.218 + 0.1, 2.25, 8, 0, 0, 0, 0, 0
     FinishShaftDoors 1
 
-    #AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, 3.918, 0, 4.5, 8, false, 0, 0 #doors
-    #AddShaftDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, 4.218, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -6637,7 +6637,7 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, -3.926, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
@@ -7144,6 +7144,8 @@ DrawWalls = true, true, false, false, false, false
 
 <Function MainPanel>
     #Main indicator panel
+    SetAutoSize = false, false
+    DrawWalls = true, false, false, false, false, false
     AddWall Panel, MainPanelBack, 0, -2.28, -4.75 + 42.71 - 0.33 - 0.01, 2.28, -4.75 + 42.71 - 0.33 - 0.01, 6.2, 6.2, 2.05, 2.05, 0, 0, False
     
     AddFloorIndicator 1, false, front, (-0.765 * 2) - 0.275, -4.75 + 42.71 - 0.33 - 0.02, 0.35, 0.3, 5 + (0.5 * 5) + 0.25
