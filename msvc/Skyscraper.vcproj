@@ -51,7 +51,7 @@
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;"
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;_WINDOWS;_SECURE_SCL=0"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;_WINDOWS"
 				StringPooling="true"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"

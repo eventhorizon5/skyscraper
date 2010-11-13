@@ -44,7 +44,7 @@
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;_SECURE_SCL=0"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH"
 				StringPooling="true"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
