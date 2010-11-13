@@ -57,6 +57,9 @@ textures:
 -otis4_* by epco_rules
 -brassdoor.jpg, elevmove3.wav, elevstart3.wav and elevstop3.wav by escalatorgeek881
 -otis-touch.gif and otis-touchlit.gif by Peter McLaughlin
+-granite_000*.jpg and graniteTExture_00*.jpg modified from www.grungetexturereference.com
+-square_offices.jpg, marble1-4, rose_marble, and stone.jpg from mayang.com/textures/
+-marble5 and marble6 from www.public-domain-image.com
 
 sounds:
 -chime1.wav made by me
