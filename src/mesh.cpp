@@ -814,7 +814,7 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	}
 
 	//set material if valid
-	MeshWrapper->getSubMesh(name)->setMaterialName(tex, path);
+	MeshWrapper->getSubMesh(submesh)->setMaterialName(tex, path);
 	return newmat;
 }
 
