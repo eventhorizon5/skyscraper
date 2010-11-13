@@ -40,7 +40,8 @@
     Load data/windows11h_inside_double.gif, MainWindowsIntDouble, 0.05, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Wood3, 0.269, 0.25
-    Load data/marb047.jpg, Marble4, 0.269, 0.25
+    Load data/graniteTexture_0018e.jpg, LobbyFloor, 0.15, 0.15
+    Load data/marb047.jpg, LobbyCeiling, 0.269, 0.25
     Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
     Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
     Load data/Threadplate0055_2_S.jpg, ServiceElevFloor, 0.5, 0.5
@@ -51,8 +52,11 @@
     Load data/diamond18i.jpg, HotelElevWall, 0.333, 0.333
     Load data/diamond18g.jpg, ResidentialElevWall, 0.333, 0.333
     Load data/metal080.jpg, ColumnTex, 0.5, 0.5
-    Load data/marbl3.jpg, Wall1, 0.269, 0.25
+    Load data/granite_0007e.jpg, LobbyWalls, 0.25, 0.25
+    Load data/marble5c.jpg, LobbyWalls2, 0.25, 0.25
+    Load data/marble5c.jpg, Wall1, 0.25, 0.25
     Load data/stucco4c.jpg, Stucco4, 0.25, 0.25
+    Load data/marble4b.jpg, ICover, 0.25, 0.25
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/grndroad1mid.jpg, ParkingFloor, 0.25, 0.25
     Load data/stucco4c.jpg, ParkingCeiling, 0.25, 0.25
@@ -61,7 +65,8 @@
     Load data/intext.jpg, InterExt, 0.269, 0.25
     Load data/intext.jpg, InterInt, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
-    Load data/text16.jpg, ElevDoors, 1, 1
+    Load data/door1c.jpg, ElevDoors, 1, 1
+    Load data/door1c.jpg, ElevDoors2, -1, 1
     Load data/door1.jpg, ServiceElevDoors, 1, 1
     Load data/door1.jpg, ServiceElevDoors2, -1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
@@ -359,7 +364,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Marble4, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
+    AddFloor Floor, LobbyFloor, 0.5, -75, -70, 75, 70, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -417,11 +422,11 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Left Restroom
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    AddWall RRFront, Wall1, 0.5, -51.2 - 0.33, -50, -33.5, -50, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
-    AddWall RRLeft, Wall1, 0.5, -51.2 - 0.33, -50, -51.2 - 0.33, -42.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRFront, LobbyWalls, 0.5, -51.2 - 0.33, -50, -33.5, -50, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRLeft, LobbyWalls, 0.5, -51.2 - 0.33, -50, -51.2 - 0.33, -42.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
     WallOrientation = right
-    AddWall RRRight, Wall1, 0.5, -33.5, -50, -33.5, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
-    AddWall RRBack, Wall1, 0.5, -42.75 + 0.33, -24 + 0.33, -33.5, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRRight, LobbyWalls, 0.5, -33.5, -50, -33.5, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRBack, LobbyWalls, 0.5, -42.75 + 0.33, -24 + 0.33, -33.5, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     AddFloor RRCeiling, Ceiling1, 0.5, -51.2 - 0.33, -50, -33.5, -42.33, %height%, %height%, 0, 0, False
@@ -430,11 +435,11 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Right Restroom
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    AddWall RRFront, Wall1, 0.5, 33.5, -50, 51.2 + 0.33, -50, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
-    AddWall RRLeft, Wall1, 0.5, 33.5, -50, 33.5, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRFront, LobbyWalls, 0.5, 33.5, -50, 51.2 + 0.33, -50, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRLeft, LobbyWalls, 0.5, 33.5, -50, 33.5, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
     WallOrientation = right
-    AddWall RRRight, Wall1, 0.5, 51.2 + 0.33, -50, 51.2 + 0.33, -42.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
-    AddWall RRBack, Wall1, 0.5, 33.5, -24 + 0.33, 42.37, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRRight, LobbyWalls, 0.5, 51.2 + 0.33, -50, 51.2 + 0.33, -42.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
+    AddWall RRBack, LobbyWalls, 0.5, 33.5, -24 + 0.33, 42.37, -24 + 0.33, %height% + 1.5, %height% + 1.5, 0, 0, 0, 0, False
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
     AddFloor RRCeiling, Ceiling1, 0.5, 33.5, -50, 48.5 + 0.33, -42.33, %height%, %height%, 0, 0, False
@@ -483,7 +488,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddFloor Floor, Carpet1, 0.5, -4.5 - 0.33, 13.5, 4.5 + 0.33, 37.5, 0, 0, 0, 0, False #service area
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Marble4, 0.5, -75, -70, 75, 70, %height%, %height%, 0, 0, False
+    AddFloor Ceiling, LobbyCeiling, 0.5, -75, -70, 75, 70, %height%, %height%, 0, 0, False
 
     #Interfloor bottom
     FloorOrientation = bottom
@@ -518,24 +523,24 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor cover sections
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddInterfloorWall ICover1, Wood3, 0.5, -48.5, 13.5, -48.5, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ICover2, Wood3, 0.5, -48.5, -70, -48.5, -50, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover1, ICover, 0.5, -48.5, 13.5, -48.5, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover2, ICover, 0.5, -48.5, -70, -48.5, -50, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = left
-    AddInterfloorWall ICover3, Wood3, 0.5, 48.5, 13.5, 48.5, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ICover4, Wood3, 0.5, 48.5, -70, 48.5, -50, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover3, ICover, 0.5, 48.5, 13.5, 48.5, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover4, ICover, 0.5, 48.5, -70, 48.5, -50, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
-    AddInterfloorWall ICover5, Wood3, 0.5, -33.5, -13.833, -22.25, -13.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ICover5, Wood3, 0.5, 22.25, -13.833, 33.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, -33.5, -13.833, -22.25, -13.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, 22.25, -13.833, 33.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = left
-    AddInterfloorWall ICover5, Wood3, 0.5, -33.5, -23.833, -22.25, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ICover5, Wood3, 0.5, 22.25, -23.833, 33.5, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ICover5, Wood3, 0.5, -7.5, -23.833, 7.5, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, -33.5, -23.833, -22.25, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, 22.25, -23.833, 33.5, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, -7.5, -23.833, 7.5, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     #Wall Facades
     #DrawWalls = true, true, false, false, false, false
     #ReverseAxis = true
-    #AddFloor MainFacadeLeft, Wall1, 0.5, -42.37, -42.33, -33.5, -24 + 0.33, %height%, 0, 0, 0, False
-    #AddFloor MainFacadeRight, Wall1, 0.5, 33.5, -42.33, 42.37, -24 + 0.33, 0, %height%, 0, 0, False
+    #AddFloor MainFacadeLeft, LobbyWalls, 0.5, -42.37, -42.33, -33.5, -24 + 0.33, %height%, 0, 0, 0, False
+    #AddFloor MainFacadeRight, LobbyWalls, 0.5, 33.5, -42.33, 42.37, -24 + 0.33, 0, %height%, 0, 0, False
     #ReverseAxis = false
 
     #Left Restroom
@@ -2071,6 +2076,8 @@ Cut external, -20, Floor(143).Altitude - 5, -40, 20, Floor(143).Altitude + 5, 40
     Set 5 = Wall1
     if[%floor% = -1] Set 5 = LowerLevelWalls
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
     WallOrientation = Left
     DrawWalls = true, true, false, false, false, false
     if[%floor% ! 38 & %floor% ! 39 & %floor% ! 79 & %floor% ! 119 & %floor% < 138] AddWall ServiceWall, %5%, 0.5, -4.33, 14.29, 4, 14.29, %height%, %height%, 0, 0, 0, 0, False
@@ -2082,15 +2089,17 @@ Cut external, -20, Floor(143).Altitude - 5, -40, 20, Floor(143).Altitude + 5, 40
 
 #Residential divider wall
 <Floors -1 to 16>
+    Set 5 = Wall1
+    if[%floor% = 0] Set 5 = LobbyWalls
     WallOrientation = Left
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-    if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallBack, Wall1, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = 1] AddWall DividerWallBack, LobbyWalls2, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallBack, %5%, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% = -1] AddWall DividerWallBack, LowerLevelWalls, 0.25, -5 - 29.083, 13.5 + 0.33, 5 - 29.083, 13.5 + 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = Right
     DrawWalls = true, false, false, false, false, false
-    if[%floor% = 1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-    if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallFront, Wall1, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = 1] AddWall DividerWallFront, LobbyWalls2, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height% + %interfloorheight%, %height% + %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    if[%floor% ! 1 & %floor% ! -1] AddWall DividerWallFront, %5%, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
     if[%floor% = -1] AddWall DividerWallFront, LowerLevelWalls, 0.25, -5 - 27.67, 13.5, 5 - 27.67, 13.5, %height%, %height%, 0, 0, 0, 0, False
 
     DrawWalls = true, true, false, false, false, false
@@ -2208,6 +2217,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 #office zone 1 local shafts
 <Floors -1 to 38>
     Set 5 = Wall1
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
 
@@ -2269,6 +2280,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 
 <Floors -1 to 16>
     Set 5 = Wall1
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
     if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 3
@@ -2322,6 +2335,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 
 <Floors -1 to 28>
     Set 5 = Wall1
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
     if[%floor% = -1] Set 5 = LowerLevelWalls
 
     #shaft 4
@@ -2379,6 +2394,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 #office express shafts
 <Floors -1 to 42>
     Set 5 = Wall1
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
@@ -2440,6 +2457,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 <Floors -8 to 2>
     if[%floor% > -1] Set 5 = Wall1
     if[%floor% < 0] Set 5 = LowerLevelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #shaft 9
     FloorOrientation = top
@@ -2504,6 +2523,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #shaft 11
     FloorOrientation = top
@@ -2573,6 +2594,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
     if[%floor% = 82] Set 5 = HotelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #shaft 13
     FloorOrientation = top
@@ -2616,6 +2639,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #Service/skydeck shaft
     #shaft 14
@@ -2728,6 +2753,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% > 137] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #Upper express shaft
     #shaft 15
@@ -3135,6 +3162,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #shaft 29
     FloorOrientation = top
@@ -3176,6 +3205,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% > 137] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #shaft 30
     FloorOrientation = top
@@ -3213,6 +3244,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #shaft 31
     FloorOrientation = top
@@ -3277,6 +3310,8 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 119] Set 5 = Stucco4
     if[%floor% > 137] Set 5 = Stucco4
     if[%floor% = -1] Set 5 = LowerLevelWalls
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
 
     #shaft 33
     FloorOrientation = top
@@ -3493,8 +3528,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 3.426, 0, 0, 0 #shaft doors
 
     #floor signs
     AddFloorSigns 0, true, Button, front, 3.426 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
@@ -3599,8 +3634,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -3709,8 +3744,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -3817,8 +3852,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -3928,8 +3963,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -4037,8 +4072,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4147,8 +4182,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 4.051, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 4.051, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -4242,8 +4277,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -4.051, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, -3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, -4.051, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4328,8 +4363,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 3.426, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -4418,8 +4453,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, -3.126, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, -3.426, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4511,8 +4546,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 4.051, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 4.051, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -4594,8 +4629,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ElevDoors, 0.2, -3.751, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, -4.051, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, -3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, -4.051, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -4680,8 +4715,8 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = left
-    AddDoors 1, ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 4.051, 0, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 3.751, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 4.051, 0, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -4768,8 +4803,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -4840,8 +4875,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.751, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 4.051, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -4950,8 +4985,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -5071,8 +5106,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -5192,8 +5227,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5314,8 +5349,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5408,8 +5443,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5510,8 +5545,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -5600,8 +5635,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5748,8 +5783,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, -3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.426, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
@@ -5898,8 +5933,8 @@ DrawWalls = true, true, false, false, false, false
     #doors
     WallOrientation = left
     DrawWalls = true, true, true, true, true, true
-    AddDoors 1, ElevDoors, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
+    AddDoors 1, ElevDoors, ElevDoors2, 0.2, 0, 3.126, 3.5, 8, true, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors2, ElevDoors, 0.2, 0, 3.426, 0, 0 #shaft doors
     SetAutoSize = true, true
 
     #floor signs
@@ -7501,6 +7536,8 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < 0] Set 5 = LowerLevelWalls
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
     if[%floor% < -1] AddWall StairsLeftE, %5%, 0.33, -4.5 + -46.67, -9.708 + -3.708 - 0.33 - 0.084, -4.5 + -46.67, 9.708 + -3.708 + 0.33, %height%, %height%, 0, 0, 0, 0, False
@@ -7666,6 +7703,8 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < 0] Set 5 = LowerLevelWalls
     if[%floor% = 38] Set 5 = Stucco4
     if[%floor% = 39] Set 5 = Stucco4
+    if[%floor% = 0] Set 5 = LobbyWalls
+    if[%floor% = 1] Set 5 = LobbyWalls2
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
     if[%floor% < -1] AddWall StairsFrontE, %5%, 0.33, -4.5 + 46.67 - 0.33, -9.708 + 3.708, 4.5 + 46.67 + 0.33, -9.708 + 3.708, %height%, %height%, 0, 0, 0, 0, False
