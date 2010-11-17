@@ -30,6 +30,9 @@
 #include <OgreRoot.h>
 #include <OgreFileSystem.h>
 #include <OgreMaterialManager.h>
+#include <OgreFontManager.h>
+#include <OgreFont.h>
+#include <OgreHardwarePixelBuffer.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -712,27 +715,46 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
-/*	Ogre::String hAlign = h_align;
+	Ogre::String hAlign = h_align;
 	Ogre::String vAlign = v_align;
 	Ogre::String Name = name;
 	Ogre::String Origname = origname;
+	Ogre::String Text = text;
+	TrimString(Text);
+	TrimString(Name);
+	TrimString(Origname);
 
 	Ogre::String font_filename2 = VerifyFile(font_filename);
 	Ogre::String relative_filename = font_filename2;
 
 	//load font
-	Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
+	Ogre::FontPtr font = Ogre::FontManager::getSingleton().create(relative_filename, "General");
+	font->setParameter("type", "truetype"); //set as truetype
+	font->setParameter("source", relative_filename);
+	font->setParameter("size", Ogre::StringConverter::toString(font_size));
+	font->setParameter("resolution", "96");
+	//font->setParameter("antialias_color", "true");
+	font->load();
+
+	/*Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
 	if (!font)
 	{
 		ReportError("AddTextToTexture: Invalid font '" + relative_filename + "'");
 		return false;
-	}
+	}*/
 
 	//get original texture
-	Ogre::Texture* wrapper = engine->GetTextureList()->FindByName(origname);
-	if (!wrapper)
+	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
+	if (ptr.isNull())
 	{
-		ReportError("AddTextToTexture: Invalid original texture '" + Origname + "'");
+		ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
+		return false;
+	}
+	Ogre::String texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getName();
+	Ogre::TexturePtr background = Ogre::TextureManager::getSingleton().getByName(texname);
+	if (background.isNull())
+	{
+		ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
 		return false;
 	}
 
@@ -742,24 +764,22 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//get height and width of texture
 	int width, height;
-	wrapper->GetTextureHandle()->GetOriginalDimensions(width, height);
+	width = background->getWidth();
+	height = background->getHeight();
 
 	//create new empty texture
-	//the first one needs mipmaps off since otherwise the FinishDraw() below will hardware-generate mipmaps,
-	//causing corruption on some machines, which we don't want
-	csRef<iTextureHandle> handle = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "argb8", CS_TEXTURE_3D | CS_TEXTURE_NOMIPMAPS);
+	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_X8R8G8B8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	/*csRef<iTextureHandle> handle = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "argb8", CS_TEXTURE_3D | CS_TEXTURE_NOMIPMAPS);
 	if (!handle)
 	{
 		ReportError("AddTextToTexture: Error creating texture '" + Name + "'");
 		handle = 0;
 		return false;
-	}
-
-	//force binary alpha on texture
-	handle->SetAlphaType(csAlphaMode::alphaBinary);
+	}*/
 
 	//get new texture dimensions, if it was resized
-	handle->GetOriginalDimensions(width, height);
+	width = texture->getWidth();
+	height = texture->getHeight();
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -780,73 +800,36 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (y2 == -1)
 		y2 = height;
 
-	//set graphics rendering to the texture image
-	g3d->SetRenderTarget(handle);
-	if (!g3d->ValidateRenderTargets())
-		return false;
-	if (!g3d->BeginDraw (CSDRAW_2DGRAPHICS)) return false;
+	//draw original image onto new texture
+	texture->getBuffer()->blit(background->getBuffer());
 
-	//clear buffer with alpha mask and enable double buffering
-	if (GetConfigBool("Skyscraper.SBS.TextClear", true) == true)
-		g2d->Clear(g2d->FindRGB(0, 0, 0, 0));
-
-	//draw original image onto backbuffer
-	g3d->DrawPixmap(wrapper->GetTextureHandle(), 0, 0, width, height, 0, 0, width, height);
-
-	//get texture size info
-	int x, y, w, h;
-	font->GetDimensions(text, w, h);
-
-	//horizontal alignment
+	char align = 'c';
 	if (hAlign == "left")
-		x = x1;
-	else if (hAlign == "right")
-		x = x2 - w;
-	else //center
-		x = x1 + ((x2 - x1) >> 1) - (w >> 1);
-
-	//vertical alignment
-	if (vAlign == "top")
-		y = y1;
-	else if (vAlign == "bottom")
-		y = y2 - h;
-	else //center
-		y = y1 + ((y2 - y1) >> 1) - (h >> 1);
+		align = 'l';
+	if (hAlign == "right")
+		align = 'r';
 
 	//write text
-	g2d->Write(font, x, y, g2d->FindRGB(ColorR, ColorG, ColorB), -1, text);
+	WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align);
 
-	//finish with buffer
-	g3d->FinishDraw();
+	//create a new material
+	Ogre::String matname = Name;
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 
-	//copy image into mipmap-enabled texture handle
-	Ogre::Image* image = handle->Dump();
-	csRef<iTextureHandle> handle2 = g3d->GetTextureManager()->RegisterTexture(image, CS_TEXTURE_3D);
-	if (!handle2)
+	//bind texture to material
+	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
+
+	//show only clockwise side of material
+	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+
+	//enable alpha blending for related textures
+	/*if (has_alpha == true)
 	{
-		ReportError("AddTextToTexture: Error creating final texture for '" + Name + "'");
-		handle = 0;
-		return false;
-	}
-	handle2->SetAlphaType(csAlphaMode::alphaBinary);
+		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}*/
 
-	//create a texture wrapper for the 2nd new texture (mipmapped one)
-	Ogre::Texture* tex = engine->GetTextureList()->NewTexture(handle2);
-	if (!tex)
-	{
-		ReportError("AddTextToTexture: Error creating texture wrapper for '" + Name + "'");
-		handle = 0;
-		handle2 = 0;
-		return false;
-	}
-	
-	//set texture name
-	tex->setName(name);
-
-	//create material
-	Ogre::Material* material (engine->CreateBaseMaterial(tex));
-	Ogre::Material* matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
-*/
 	return true;
 }
 

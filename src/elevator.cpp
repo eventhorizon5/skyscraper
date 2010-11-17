@@ -24,6 +24,7 @@
 */
 
 #include "globals.h"
+#include "random.h"
 #include "sbs.h"
 #include "elevator.h"
 #include "camera.h"
@@ -3766,9 +3767,8 @@ void Elevator::Timer::Notify()
 	{
 		//random call timer
 		
-		/*
-		csRandomGen rnd_main(time(0) + elevator->Number);
-		csRandomGen rnd_floor(csGetTicks() + elevator->Number);
+		RandomGen rnd_main(time(0) + elevator->Number);
+		RandomGen rnd_floor(sbs->GetRunTime() + elevator->Number);
 
 		int num, floor;
 
@@ -3785,7 +3785,6 @@ void Elevator::Timer::Notify()
 		//if probability number matched, press selected floor button
 		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
 			elevator->SelectFloor(floor);
-		*/
 	}
 	else if (type > 1)
 	{
