@@ -28,6 +28,7 @@
 #include <wx/app.h>
 #include <wx/panel.h>
 #include <wx/frame.h>
+#include <fmod.hpp>
 #include "fileio.h"
 
 int main (int argc, char* argv[]);
@@ -106,8 +107,8 @@ private:
 	wxPanel* canvas;
 
 	//sound data
-	//csRef<iSndSysStream> sndstream;
-	//csRef<iSndSysSource> sndsource;
+	FMOD::System *soundsys;
+	FMOD::Sound *sound;
 
 	//script processor
 	ScriptProcessor* processor;

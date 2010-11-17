@@ -31,6 +31,7 @@
 #include <OgreVector2.h>
 #include <OgreVector3.h>
 #include <OgreMesh.h>
+#include <fmod.hpp>
 #include "light.h"
 #include "mesh.h"
 #include "model.h"
@@ -79,8 +80,12 @@ public:
 
 	float delta;
 
+	//OGRE objects
 	Ogre::Root* mRoot;
 	Ogre::SceneManager* mSceneManager;
+
+	//FMOD objects
+	FMOD::System *soundsys;
 
 	//SBS version
 	Ogre::String version;
@@ -155,7 +160,7 @@ public:
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
-	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char);
+	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem);
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
@@ -208,10 +213,6 @@ public:
 	int AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th);
 	void SetListenerLocation(const Ogre::Vector3 &location);
 	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
-	void SetListenerDistanceFactor(float factor);
-	float GetListenerDistanceFactor();
-	void SetListenerRollOffFactor(float factor);
-	float GetListenerRollOffFactor();
 	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
 	void SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom);
 	WallObject* AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
@@ -431,6 +432,12 @@ private:
 	//generic sound objects
 	std::vector<Sound*> sounds;
 	int soundcount;
+
+	//listener sound objects
+	FMOD_VECTOR listener_position;
+	FMOD_VECTOR listener_velocity;
+	FMOD_VECTOR listener_forward;
+	FMOD_VECTOR listener_up;
 
 	//meshes
 	std::vector<MeshObject*> meshes;

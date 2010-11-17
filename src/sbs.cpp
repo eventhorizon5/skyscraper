@@ -166,6 +166,18 @@ SBS::SBS()
 	current_time = 0;
 	current_virtual_time = 0;
 	elapsed_time = 0;
+	listener_position.x = 0;
+	listener_position.y = 0;
+	listener_position.z = 0;
+	listener_velocity.x = 0;
+	listener_velocity.y = 0;
+	listener_velocity.z = 0;
+	listener_forward.x = 0;
+	listener_forward.y = 0;
+	listener_forward.z = 0;
+	listener_up.x = 0;
+	listener_up.y = 0;
+	listener_up.z = 0;
 }
 
 SBS::~SBS()
@@ -477,7 +489,7 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char)
+bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem)
 {
 	mRoot = Ogre::Root::getSingletonPtr();
 	this->mSceneManager = mSceneManager;
@@ -503,9 +515,14 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	ResetTextureMapping(true); //set default texture map values
 
-	//disable sound if renderer or loader are not available
-	//if (!sndrenderer || !sndloader)
-		//DisableSound = true;
+	//disable sound if system is not available
+	if (!fmodsystem)
+		DisableSound = true;
+	soundsys = fmodsystem;
+
+	//set up sound options (mainly to set sound distance factor to feet instead of meters)
+	if (DisableSound == false)
+		soundsys->set3DSettings(1.0, 3.28, 1.0);
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "signs/sans");
@@ -2580,43 +2597,32 @@ bool SBS::GetReverseAxis()
 void SBS::SetListenerLocation(const Ogre::Vector3 &location)
 {
 	//set position of sound listener object
-	//if (DisableSound == false)
-		//sndrenderer->GetListener()->SetPosition(location);
+
+	//calculate sound velocity
+	listener_velocity.x = (location.x - listener_position.x) * (1000 / GetElapsedTime());
+	listener_velocity.y = (location.y - listener_position.y) * (1000 / GetElapsedTime());
+	listener_velocity.z = (location.z - listener_position.z) * (1000 / GetElapsedTime());
+
+	listener_position.x = location.x;
+	listener_position.y = location.y;
+	listener_position.z = location.z;
+
+	if (DisableSound == false)
+		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
 void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
 {
 	//set direction of sound listener object
-	//if (DisableSound == false)
-		//sndrenderer->GetListener()->SetDirection(front, top);
-}
+	listener_forward.x = front.x;
+	listener_forward.y = front.y;
+	listener_forward.z = front.z;
+	listener_up.x = top.x;
+	listener_up.y = top.y;
+	listener_up.z = top.z;
 
-void SBS::SetListenerDistanceFactor(float factor)
-{
-	//if (DisableSound == false)
-		//sndrenderer->GetListener()->SetDistanceFactor(factor);
-}
-
-float SBS::GetListenerDistanceFactor()
-{
-	/*if (DisableSound == false)
-		return sndrenderer->GetListener()->GetDistanceFactor();
-	else*/
-		return 0;
-}
-
-void SBS::SetListenerRollOffFactor(float factor)
-{
-	//if (DisableSound == false)
-		//sndrenderer->GetListener()->SetRollOffFactor(factor);
-}
-
-float SBS::GetListenerRollOffFactor()
-{
-	/*if (DisableSound == false)
-		return sndrenderer->GetListener()->GetRollOffFactor();
-	else*/
-		return 0;
+	if (DisableSound == false)
+		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
 void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)
@@ -3221,8 +3227,7 @@ Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 posi
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
-	sound->SetMinimumDistance(min_distance);
-	sound->SetMaximumDistance(max_distance);
+	sound->SetDistances(min_distance, max_distance);
 	sound->SetDirection(direction);
 	sound->SetDirectionalRadiation(dir_radiation);
 	sound->Load(filename);

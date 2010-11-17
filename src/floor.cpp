@@ -736,8 +736,7 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
-	sound->SetMinimumDistance(min_distance);
-	sound->SetMaximumDistance(max_distance);
+	sound->SetDistances(min_distance, max_distance);
 	sound->SetDirection(direction);
 	sound->SetDirectionalRadiation(dir_radiation);
 	sound->Load(filename);

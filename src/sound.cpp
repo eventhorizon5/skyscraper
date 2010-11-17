@@ -41,14 +41,16 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	PositionOffset = 0;
 	Position = 0;
 	Volume = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
-	MaxDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", -1.0);
+	MaxDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", 10000.0);
 	MinDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MinDistance", 1.0);
 	Direction = 0;
-	DirectionalRadiation = 0;
 	SoundLoop = sbs->GetConfigBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->GetConfigInt("Skyscraper.SBS.Sound.Speed", 100);
 	Name = name;
 	sbs->IncrementSoundCount();
+	sound = 0;
+	channel = 0;
+	default_speed = 0;
 }
 
 Sound::~Sound()
@@ -56,9 +58,7 @@ Sound::~Sound()
 	if (sbs->DisableSound == false)
 	{
 		Stop();
-		/*sbs->sndrenderer->RemoveSource(sndsource);
-		sbs->sndrenderer->RemoveStream(sndstream);
-		sbs->sndmanager->RemoveSound(sndwrapper);*/
+		sound->release();
 		sbs->DecrementSoundCount();
 	}
 
@@ -74,186 +74,154 @@ Sound::~Sound()
 	}
 
 	//destructor
-	/*directional = 0;
-	sndsource3d = 0;
-	sndsource = 0;
-	sndstream = 0;*/
 	delete object;
 }
 
 void Sound::SetPosition(const Ogre::Vector3& position)
 {
 	//set position of sound object
+
+	if (!channel)
+		return;
+
+	FMOD_VECTOR pos = {position.x, position.y, position.z};
+	FMOD_VECTOR vel;
+
+	//calculate sound velocity
+	vel.x = (position.x - Position.x) * (1000 / sbs->GetElapsedTime());
+	vel.y = (position.y - Position.y) * (1000 / sbs->GetElapsedTime());
+	vel.z = (position.z - Position.z) * (1000 / sbs->GetElapsedTime());
+
 	Position = position;
-	//if (sndsource3d)
-		//sndsource3d->SetPosition(Position); //note - do not use ToRemote for positioning
+	Velocity = (vel.x, vel.y, vel.z);
+	channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 }
 
 void Sound::SetPositionY(float position)
 {
 	//set vertical position of sound object
-	Position.y = position;
-	SetPosition(Position);
+	Ogre::Vector3 newposition = Position;
+	newposition.y = position;
+	SetPosition(newposition);
 }
 
 Ogre::Vector3 Sound::GetPosition()
 {
-	//get position of sound object
-	/*if (sndsource3d)
-		return sndsource3d->GetPosition();
-	else*/
-		return Ogre::Vector3(0, 0, 0);
+	return Position;
 }
 
 void Sound::SetVolume(float value)
 {
 	//set volume of sound
 	Volume = value;
-	//if (sndsource)
-		//sndsource->SetVolume(Volume);
+	if (channel)
+		channel->setVolume(value);
 }
 
 float Sound::GetVolume()
 {
 	//returns volume
-	/*if (sndsource)
-		return sndsource->GetVolume();
-	else*/
-		return 0;
+	return Volume;
 }
 
-void Sound::SetMinimumDistance(float distance)
+void Sound::SetDistances(float min, float max)
 {
-	MinDistance = distance;
-	//if (sndsource3d)
-		//sndsource3d->SetMinimumDistance(MinDistance);
+	//set minimum and maximum unattenuated distances
+	MinDistance = min;
+	MaxDistance = max;
+	if (channel)
+		channel->set3DMinMaxDistance(min, max);
 }
 
 float Sound::GetMinimumDistance()
 {
-	/*if (sndsource3d)
-		return sndsource3d->GetMinimumDistance();
-	else*/
-		return 0;
-}
-
-void Sound::SetMaximumDistance(float distance)
-{
-	//set the max distance at which the sound can be heard at full volume
-	MaxDistance = distance;
-	//if (sndsource3d)
-		//sndsource3d->SetMaximumDistance(MaxDistance);
+	return MinDistance;
 }
 
 float Sound::GetMaximumDistance()
 {
-	/*if (sndsource3d)
-		return sndsource3d->GetMaximumDistance();
-	else*/
-		return 0;
+	return MaxDistance;
 }
 
 void Sound::SetDirection(Ogre::Vector3 direction)
 {
 	Direction = direction;
-	//if (directional)
-		//directional->SetDirection(Direction);
+	FMOD_VECTOR vec;
+	vec.x = direction.x;
+	vec.y = direction.y;
+	vec.z = direction.z;
+
+	if (channel)
+		channel->set3DConeOrientation(&vec);
 }
 
 Ogre::Vector3 Sound::GetDirection()
 {
-	/*if (directional)
-		return directional->GetDirection();
-	else*/
-		return Ogre::Vector3(0, 0, 0);
+	return Direction;
 }
 
 void Sound::SetDirectionalRadiation(float rad)
 {
-	//from CS:
-	//The directional radiation applies to sound that are oriented in a particular direction.
-	//This value is expressed in radians and describes the half-angle of a cone spreading
-	//from the position of the source and opening in the direction of the source.
-	//Set this value to 0.0f for an omni-directional sound.
-
-	DirectionalRadiation = rad;
-	//if (directional)
-		//directional->SetDirectionalRadiation(DirectionalRadiation);
+	//this is no longer used - use SetConeSettings instead
 }
 
-float Sound::GetDirectionalRadiation()
+void Sound::SetConeSettings(float inside_angle, float outside_angle, float outside_volume)
 {
-	/*if (directional)
-		return directional->GetDirectionalRadiation();
-	else*/
-		return 0;
+	if (channel)
+		channel->set3DConeSettings(inside_angle, outside_angle, outside_volume);
 }
 
 void Sound::Loop(bool value)
 {
 	SoundLoop = value;
-	/*if (sndstream)
+	if (channel)
 	{
 		if (value == true)
-			sndstream->SetLoopState(CS_SNDSYS_STREAM_LOOP);
+			channel->setLoopCount(-1);
 		else
-			sndstream->SetLoopState(CS_SNDSYS_STREAM_DONTLOOP);
-	}*/
+			channel->setLoopCount(0);
+	}
 }
 
 bool Sound::GetLoopState()
 {
-	/*if (sndstream)
-	{
-		if (sndstream->GetLoopState() == CS_SNDSYS_STREAM_LOOP)
-			return true;
-		else
-			return false;
-	}
-	else*/
-		return false;
+	return SoundLoop;
 }
 
 void Sound::Pause()
 {
-	//if (sndstream)
-		//sndstream->Pause();
+	if (channel)
+		channel->setPaused(true);
 }
 
 bool Sound::IsPaused()
 {
-	/*if (sndstream)
-	{
-		if (sndstream->GetPauseState() == CS_SNDSYS_STREAM_PAUSED)
-			return true;
-		else
-			return false;
-	}
-	else*/
-		return true;
+	bool paused = false;
+	if (channel)
+		channel->getPaused(&paused);
+	return paused;
 }
 
 bool Sound::IsPlaying()
 {
-	/*if (IsPaused() == false)
-		return true;
-	else*/
-		return false;
+	bool result = false;
+	if (channel)
+		channel->isPlaying(&result);
+	return result;
 }
 
 void Sound::SetSpeed(int percent)
 {
 	Speed = percent;
-	//if (sndstream)
-		//sndstream->SetPlayRatePercent(Speed);
+	if (!channel)
+		return;
+
+	channel->setFrequency(default_speed * (percent / 100));
 }
 
 int Sound::GetSpeed()
 {
-	/*if (sndstream)
-		return sndstream->GetPlayRatePercent();
-	else*/
-		return 0;
+	return Speed;
 }
 
 void Sound::Stop()
@@ -266,20 +234,19 @@ void Sound::Play(bool reset)
 {
 	if (reset == true)
 		Reset();
-	//if (sndstream)
-		//sndstream->Unpause();
+	if (channel)
+		channel->setPaused(false);
 }
 
 void Sound::Reset()
 {
-	//if (sndstream)
-		//sndstream->ResetPosition();
+	SetPlayPosition(0);
 }
 
 void Sound::Load(const char *filename, bool force)
 {
 	//exit if filename is the same
-	/*Ogre::String filename_new = filename;
+	Ogre::String filename_new = filename;
 	if (filename_new == Filename && force == false)
 		return;
 
@@ -288,91 +255,73 @@ void Sound::Load(const char *filename, bool force)
 		return;
 
 	//clear old object references
-	directional = 0;
-	if (sndsource)
-		sbs->sndrenderer->RemoveSource(sndsource);
-	sndsource = 0;
-	if (sndstream)
-		sbs->sndrenderer->RemoveStream(sndstream);
-	sndstream = 0;
-	if (sndwrapper)
-		sbs->sndmanager->RemoveSound(sndwrapper);
-	sndwrapper = 0;
+	if (sound)
+		sound->release();
 
 	//exit if sound is disabled
 	if (sbs->DisableSound == true)
 		return;
 
-	//first create sound wrapper
-	sndwrapper = sbs->sndmanager->CreateSound(Name);
-
 	//load new sound
 	Filename = filename;
 	Ogre::String full_filename1 = "data/";
 	full_filename1.append(filename);
-	Ogre::String full_filename = sbs->VerifyFile(full_filename1);
+	Ogre::String full_filename = sbs->VerifyFile(full_filename1.c_str());
 
-	csRef<iDataBuffer> sndbuffer = sbs->vfs->ReadFile(full_filename);
-	if (!sndbuffer)
+	FMOD_RESULT result = sbs->soundsys->createSound(Filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE), 0, &sound);
+	//FMOD_RESULT result = sbs->soundsys->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
+	if (result != FMOD_OK)
 	{
 		sbs->ReportError("Can't load file '" + Filename + "'");
 		return;
 	}
 
-	csRef<iSndSysData> snddata = sbs->sndloader->LoadSound(sndbuffer);
-	if (!snddata)
-	{
-		sbs->ReportError("Can't load sound '" + Filename + "'");
-		return;
-	}
-	sndwrapper->SetData(snddata);
+	//prepare sound (and keep paused)
+	result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 
-	sndstream = sbs->sndrenderer->CreateStream(sndwrapper->GetData(), CS_SND3D_ABSOLUTE);
-	if (!sndstream)
-	{
-		sbs->ReportError("Can't create stream for '" + Filename + "'");
-		return;
-	}
-
-	sndsource = sbs->sndrenderer->CreateSource(sndstream);
-	if (!sndsource)
-	{
-		sbs->ReportError("Can't create source for '" + Filename + "'");
-		return;
-	}
-	sndsource3d = scfQueryInterface<iSndSysSource3D> (sndsource);
-	if (!sndsource3d)
-	{
-		sbs->ReportError("Can't create 3D source for '" + Filename + "'");
-		return;
-	}
-	directional = scfQueryInterface<iSndSysSource3DDirectionalSimple> (sndsource);
+	//set default speed value
+	if (channel)
+		channel->getFrequency(&default_speed);
 
 	//load previously stored values into new sound objects
 	SetPosition(Position);
 	SetVolume(Volume);
-	SetMaximumDistance(MaxDistance);
-	SetMinimumDistance(MinDistance);
+	SetDistances(MinDistance, MaxDistance);
 	SetDirection(Direction);
-	SetDirectionalRadiation(DirectionalRadiation);
 	Loop(SoundLoop);
-	SetSpeed(Speed);*/
+	SetSpeed(Speed);
 }
 
 float Sound::GetPlayPosition()
 {
 	//returns the current sound playback position, in percent (1 = 100%)
 
-	/*if (sndstream)
-		return sndstream->GetPosition() / sndstream->GetFrameCount();
-	else*/
-		return 0;
+	if (!channel)
+		return -1;
+
+	//get length of sound in milliseconds
+	unsigned int length;
+	sound->getLength(&length, FMOD_TIMEUNIT_MS);
+
+	//get sound position in milliseconds
+	unsigned int position;
+	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
+
+	return position / length;
 }
 
 void Sound::SetPlayPosition(float percent)
 {
 	//sets the current sound playback position, in percent (1 = 100%)
 
-	//if (sndstream)
-		//sndstream->SetPosition(percent * sndstream->GetFrameCount());
+	if (!channel)
+		return;
+
+	//get length of sound in milliseconds
+	unsigned int length;
+	sound->getLength(&length, FMOD_TIMEUNIT_MS);
+
+	unsigned int position;
+	position = percent * length;
+	channel->setPosition(position, FMOD_TIMEUNIT_MS);
 }

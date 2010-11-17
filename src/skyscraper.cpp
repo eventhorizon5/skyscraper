@@ -163,6 +163,9 @@ int Skyscraper::OnExit()
 	UnloadSim();
 
 	//cleanup sound
+	if (soundsys)
+		soundsys->release();
+
 	//if (sndsource)
 		//StopSound();
 
@@ -292,6 +295,8 @@ void Skyscraper::Render()
 
 bool Skyscraper::Initialize()
 {
+	//initialize OGRE
+
 	mRoot = Ogre::Root::getSingletonPtr();
 	if(!mRoot)
 		mRoot = new Ogre::Root();
@@ -344,6 +349,22 @@ bool Skyscraper::Initialize()
 	mViewport = mRenderWindow->addViewport(mCamera);
 	//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 	mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
+
+
+	//initialize FMOD (sound)
+
+	FMOD_RESULT result = FMOD::System_Create(&soundsys);
+	if (result != FMOD_OK)
+	{
+		printf("Error initializing FMOD\n");
+		return false;
+	}
+	result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
+	if (result != FMOD_OK)
+	{
+		printf("Error initializing FMOD\n");
+		return false;
+	}
 
 	//old CS code for reference
 	/*
@@ -1114,48 +1135,36 @@ void Skyscraper::StartSound()
 {
 	//load and start background music
 
-	/*if (DisableSound == true)
+	if (DisableSound == true)
 		return;
 
-	if (confman->GetBool("Skyscraper.Frontend.IntroMusic", true) == false)
+	/*if (confman->GetBool("Skyscraper.Frontend.IntroMusic", true) == false)
 	{
 		DisableSound = true;
 		return;
-	}
+	}*/
 
-	Ogre::String filename = confman->GetStr("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
+	//Ogre::String filename = confman->GetStr("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
+	Ogre::String filename = "intro.ogg";
 	Ogre::String filename_full = "data/" + filename;
 
 	//load new sound
-	csRef<iDataBuffer> sndbuffer = vfs->ReadFile(filename_full);
-	if (!sndbuffer)
+	FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), FMOD_DEFAULT, 0, &sound);
+	if (result != FMOD_OK)
 	{
-		ReportError("Can't load file " + filename);
+		ReportError("Can't load file '" + filename_full + "'");
 		return;
 	}
 
-	csRef<iSndSysData> snddata = sndloader->LoadSound(sndbuffer);
-	if (!snddata)
+	FMOD::Channel *channel;
+	result = soundsys->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+	if (result != FMOD_OK)
 	{
-		ReportError("Can't load sound " + filename);
+		ReportError("Error playing " + filename);
 		return;
 	}
 
-	sndstream = sndrenderer->CreateStream(snddata, CS_SND3D_DISABLE);
-	if (!sndstream)
-	{
-		ReportError("Can't create stream for " + filename);
-		return;
-	}
-
-	sndsource = sndrenderer->CreateSource(sndstream);
-	if (!sndsource)
-	{
-		ReportError("Can't create source for " + filename);
-		return;
-	}
-
-	sndstream->SetLoopState(true);
+	/*sndstream->SetLoopState(true);
 	sndsource->SetVolume(1.0f);
 	sndstream->Unpause();*/
 }
@@ -1236,7 +1245,7 @@ bool Skyscraper::Start()
 	Simcore = new SBS();
 
 	//initialize SBS
-	Simcore->Initialize(mRenderWindow, mSceneMgr, mCamera, root_dir.c_str(), dir_char.c_str());
+	Simcore->Initialize(mRenderWindow, mSceneMgr, mCamera, root_dir.c_str(), dir_char.c_str(), soundsys);
 	Simcore->Shaders = Shaders;
 
 	//load building data file

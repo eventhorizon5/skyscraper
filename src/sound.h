@@ -40,14 +40,12 @@ public:
 	Ogre::Vector3 GetPosition();
 	void SetVolume(float value);
 	float GetVolume();
-	void SetMinimumDistance(float distance);
+	void SetDistances(float min, float max);
 	float GetMinimumDistance();
-	void SetMaximumDistance(float distance);
 	float GetMaximumDistance();
 	void SetDirection(Ogre::Vector3 direction);
 	Ogre::Vector3 GetDirection();
 	void SetDirectionalRadiation(float rad);
-	float GetDirectionalRadiation();
 	void Loop(bool value);
 	bool GetLoopState();
 	void Pause();
@@ -61,29 +59,26 @@ public:
 	bool IsPlaying();
 	float GetPlayPosition();
 	void SetPlayPosition(float percent);
+	void SetConeSettings(float inside_angle = 360.0, float outside_angle = 360.0, float outside_volume = 1.0);
 
 private:
 
 	//sound data
-	//csRef<iSndSysStream> sndstream;
-
-	//sound source
-	/*csRef<iSndSysSource> sndsource;
-	csRef<iSndSysSource3D> sndsource3d;
-	csRef<iSndSysSource3DDirectionalSimple> directional;
-	csRef<iSndSysWrapper> sndwrapper;*/
+	FMOD::Sound *sound;
+	FMOD::Channel *channel;
 
 	// sound parameters
 	Ogre::Vector3 Position;
+	Ogre::Vector3 Velocity;
 	float Volume;
 	float MaxDistance;
 	float MinDistance;
 	Ogre::Vector3 Direction;
-	float DirectionalRadiation;
 	bool SoundLoop;
 	int Speed;
 	Ogre::String Filename;
 	Ogre::String Name;
+	float default_speed;
 
 };
 

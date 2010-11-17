@@ -123,7 +123,7 @@ void Camera::SetDirection(const Ogre::Vector3 &vector)
 void Camera::SetRotation(Ogre::Vector3 vector)
 {
 	//sets the camera's rotation in degrees
-	//return;
+
 	//keep rotation within 360 degree boundaries
 	if (vector.x > 360)
 		vector.x -= 360;
@@ -159,8 +159,10 @@ Ogre::Vector3 Camera::GetPosition()
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 {
 	//returns the camera's current direction in front and top vectors
-	//front = CameraNode->GetTransform().GetT2O().Col3();
-	//top = CameraNode->GetTransform().GetT2O().Col2();
+	front = CameraNode->getOrientation().zAxis();
+	front.normalise();
+	top = CameraNode->getOrientation().yAxis();
+	top.normalise();
 }
 
 Ogre::Vector3 Camera::GetRotation()
