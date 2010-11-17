@@ -88,9 +88,12 @@ void Sound::SetPosition(const Ogre::Vector3& position)
 	FMOD_VECTOR vel;
 
 	//calculate sound velocity
-	vel.x = (position.x - Position.x) * (1000 / sbs->GetElapsedTime());
-	vel.y = (position.y - Position.y) * (1000 / sbs->GetElapsedTime());
-	vel.z = (position.z - Position.z) * (1000 / sbs->GetElapsedTime());
+	if (sbs->GetElapsedTime() > 0)
+	{
+		vel.x = (position.x - Position.x) * (1000 / sbs->GetElapsedTime());
+		vel.y = (position.y - Position.y) * (1000 / sbs->GetElapsedTime());
+		vel.z = (position.z - Position.z) * (1000 / sbs->GetElapsedTime());
+	}
 
 	Position = position;
 	Velocity = (vel.x, vel.y, vel.z);
@@ -268,7 +271,7 @@ void Sound::Load(const char *filename, bool force)
 	full_filename1.append(filename);
 	Ogre::String full_filename = sbs->VerifyFile(full_filename1.c_str());
 
-	FMOD_RESULT result = sbs->soundsys->createSound(Filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE), 0, &sound);
+	FMOD_RESULT result = sbs->soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE), 0, &sound);
 	//FMOD_RESULT result = sbs->soundsys->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
 	if (result != FMOD_OK)
 	{
