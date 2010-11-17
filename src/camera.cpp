@@ -160,8 +160,11 @@ void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 {
 	//returns the camera's current direction in front and top vectors
 	front = CameraNode->getOrientation().zAxis();
+	front.x = -front.x; //convert to left-hand coordinate system
+	front.y = -front.y; //convert to left-hand coordinate system
 	front.normalise();
 	top = CameraNode->getOrientation().yAxis();
+	top.z = -top.z; //convert to left-hand coordinate system
 	top.normalise();
 }
 
