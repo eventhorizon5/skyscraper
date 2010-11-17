@@ -211,7 +211,7 @@ public:
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	int AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th);
-	void SetListenerLocation(const Ogre::Vector3 &location);
+	void SetListenerPosition(const Ogre::Vector3 &position);
 	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
 	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
 	void SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom);

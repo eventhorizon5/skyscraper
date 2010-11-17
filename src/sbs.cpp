@@ -2594,18 +2594,18 @@ bool SBS::GetReverseAxis()
 	return ReverseAxisValue;
 }
 
-void SBS::SetListenerLocation(const Ogre::Vector3 &location)
+void SBS::SetListenerPosition(const Ogre::Vector3 &position)
 {
 	//set position of sound listener object
 
 	//calculate sound velocity
-	listener_velocity.x = (location.x - listener_position.x) * (1000 / GetElapsedTime());
-	listener_velocity.y = (location.y - listener_position.y) * (1000 / GetElapsedTime());
-	listener_velocity.z = (location.z - listener_position.z) * (1000 / GetElapsedTime());
+	listener_velocity.x = (position.x - listener_position.x) * (1000 / GetElapsedTime());
+	listener_velocity.y = (position.y - listener_position.y) * (1000 / GetElapsedTime());
+	listener_velocity.z = (position.z - listener_position.z) * (1000 / GetElapsedTime());
 
-	listener_position.x = location.x;
-	listener_position.y = location.y;
-	listener_position.z = location.z;
+	listener_position.x = position.x;
+	listener_position.y = position.y;
+	listener_position.z = position.z;
 
 	if (DisableSound == false)
 	{

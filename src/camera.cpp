@@ -798,7 +798,7 @@ void Camera::Loop()
 	}*/
 
 	//sync sound listener object to camera position
-	sbs->SetListenerLocation(GetPosition());
+	sbs->SetListenerPosition(GetPosition());
 
 	//set direction of listener to camera's direction
 	Ogre::Vector3 front, top;
