@@ -804,6 +804,8 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
+	return Ogre::MaterialPtr(0);
+
 	Ogre::String tex = sbs->VerifyFile(texture);
 	Ogre::String path = sbs->GetMountPath(texture, tex);
 	TrimString(tex);
