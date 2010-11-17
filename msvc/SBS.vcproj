@@ -43,7 +43,7 @@
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH"
 				StringPooling="true"
 				ExceptionHandling="1"
@@ -71,10 +71,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib"
+				AdditionalDependencies="OgreMain.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib fmodex_vc.lib"
 				OutputFile="../SBS.dll"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;$(OGRE_HOME)\lib\release&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
+				AdditionalLibraryDirectories="&quot;$(OGRE_HOME)\lib\release&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\SBS.pdb"
 				SubSystem="2"
@@ -136,7 +136,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;"
+				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -164,10 +164,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib"
+				AdditionalDependencies="OgreMain_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib fmodex_vc.lib"
 				OutputFile="../SBS.dll"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;$(OGRE_HOME)\lib\debug&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;"
+				AdditionalLibraryDirectories="&quot;$(OGRE_HOME)\lib\debug&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/SBS.pdb"
 				SubSystem="2"
