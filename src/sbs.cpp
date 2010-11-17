@@ -2608,7 +2608,10 @@ void SBS::SetListenerLocation(const Ogre::Vector3 &location)
 	listener_position.z = location.z;
 
 	if (DisableSound == false)
+	{
 		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
+		soundsys->update();
+	}
 }
 
 void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
