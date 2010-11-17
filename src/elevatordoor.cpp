@@ -850,16 +850,9 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			Ogre::Vector2 extents = sbs->GetExtents(wrapper->doors[i]->mesh, j);
+			Ogre::Vector2 extents = sbs->GetExtents(wrapper->doors[i]->mesh, j, true);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
-
-			//flip values for z axis
-			if (j == 3)
-			{
-				extents.x = -extents.x;
-				extents.y = -extents.y;
-			}
 
 			if (j == 1)
 			{

@@ -49,7 +49,7 @@ void SBS::DumpVertices(WallObject* wallobject)
 	}*/
 }
 
-Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord)
+Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
@@ -72,7 +72,12 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord)
 		if (coord == 2)
 			tempnum = varray[i].y;
 		if (coord == 3)
-			tempnum = varray[i].z;
+		{
+			if (flip_z == false)
+				tempnum = varray[i].z;
+			else
+				tempnum = -varray[i].z;
+		}
 
 		if (i == 0)
 		{
@@ -91,7 +96,7 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord)
 	return Ogre::Vector2(esmall, ebig);
 }
 
-Ogre::Vector2 SBS::GetExtents(MeshObject* mesh, int coord)
+Ogre::Vector2 SBS::GetExtents(MeshObject* mesh, int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
 	//(x, y, or z) from a vertex array (polygon).
@@ -114,7 +119,12 @@ Ogre::Vector2 SBS::GetExtents(MeshObject* mesh, int coord)
 		if (coord == 2)
 			tempnum = mesh->MeshGeometry[i].vertex.y;
 		if (coord == 3)
-			tempnum = mesh->MeshGeometry[i].vertex.z;
+		{
+			if (flip_z == false)
+				tempnum = mesh->MeshGeometry[i].vertex.z;
+			else
+				tempnum = -mesh->MeshGeometry[i].vertex.z;
+		}
 
 		if (i == 0)
 		{

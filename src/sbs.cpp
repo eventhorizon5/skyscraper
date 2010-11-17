@@ -3790,8 +3790,10 @@ void SBS::Prepare()
 {
 	//prepare objects for run
 	
+	Report("Preparing objects...");
 	for (int i = 0; i < meshes.size(); i++)
 		meshes[i]->Prepare();
+	Report("Finished prepare");
 }
 
 Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
