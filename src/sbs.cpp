@@ -830,6 +830,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}*/
 
+	//unload font
+	Ogre::FontManager::getSingleton().remove(font->getName());
+
 	return true;
 }
 
