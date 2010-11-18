@@ -728,13 +728,20 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	Ogre::String relative_filename = font_filename2;
 
 	//load font
-	Ogre::FontPtr font = Ogre::FontManager::getSingleton().create(relative_filename, "General");
-	font->setParameter("type", "truetype"); //set as truetype
-	font->setParameter("source", relative_filename);
-	font->setParameter("size", "72");
-	font->setParameter("resolution", "72");
-	font->setParameter("antialias_color", "true");
-	font->load();
+	Ogre::FontPtr font;
+	font = Ogre::FontManager::getSingleton().getByName(relative_filename, "General");
+
+	//load if font is not already loaded
+	if (font.isNull())
+	{
+		font = Ogre::FontManager::getSingleton().create(relative_filename, "General");
+		font->setParameter("type", "truetype"); //set as truetype
+		font->setParameter("source", relative_filename);
+		font->setParameter("size", "72");
+		font->setParameter("resolution", "72");
+		font->setParameter("antialias_color", "true");
+		font->load();
+	}
 
 	/*Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
 	if (!font)
@@ -829,9 +836,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}*/
-
-	//unload font
-	Ogre::FontManager::getSingleton().remove(font->getName());
 
 	return true;
 }
