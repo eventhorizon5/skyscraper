@@ -731,9 +731,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	Ogre::FontPtr font = Ogre::FontManager::getSingleton().create(relative_filename, "General");
 	font->setParameter("type", "truetype"); //set as truetype
 	font->setParameter("source", relative_filename);
-	font->setParameter("size", Ogre::StringConverter::toString(font_size));
-	font->setParameter("resolution", "96");
-	//font->setParameter("antialias_color", "true");
+	font->setParameter("size", "72");
+	font->setParameter("resolution", "72");
+	font->setParameter("antialias_color", "true");
 	font->load();
 
 	/*Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
@@ -750,7 +750,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
 		return false;
 	}
-	Ogre::String texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getName();
+	Ogre::String texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
 	Ogre::TexturePtr background = Ogre::TextureManager::getSingleton().getByName(texname);
 	if (background.isNull())
 	{
@@ -818,7 +818,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
-
+	
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
