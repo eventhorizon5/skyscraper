@@ -205,10 +205,18 @@ bool Camera::Move(const Ogre::Vector3 &vector, float speed)
 
 void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 {
-	//rotates the camera in a relative amount
+	//rotates the camera in a relative amount in world space
 	Ogre::Vector3 rot = GetRotation() + (vector * speed);
 
 	SetRotation(rot);
+}
+
+void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
+{
+	//rotates the camera in a relative amount in local camera space
+	CameraNode->pitch(Ogre::Degree(vector.x * speed),  Ogre::Node::TS_LOCAL);
+	CameraNode->yaw(Ogre::Degree(-vector.y * speed),  Ogre::Node::TS_WORLD);
+	CameraNode->roll(Ogre::Degree(vector.z * speed),  Ogre::Node::TS_LOCAL);
 }
 
 void Camera::SetStartDirection(const Ogre::Vector3 &vector)
@@ -743,7 +751,7 @@ void Camera::Loop()
 	float delta = sbs->GetElapsedTime() / 1000.0f;
 	//collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
 	Move(velocity, delta);
-	Rotate(angle_velocity, delta * 40);
+	RotateLocal(angle_velocity, delta * 40);
 
 	//get list of hit meshes and put them into the 'hitlist' array
 	/*if (EnableCollisions == true)

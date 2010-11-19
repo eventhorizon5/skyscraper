@@ -129,12 +129,12 @@ bool Skyscraper::OnInit(void)
 		return ReportError("Error initializing OGRE");
 
 	//autoload a building file if specified
-	//BuildingFile = confman->GetStr("Skyscraper.Frontend.AutoLoad");
+	//BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad");
 	//if (BuildingFile != "")
 		//return Start();
 
 	//show menu
-	/*if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
+	/*if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
 	{
 		//draw background
 		DrawBackground();
@@ -316,6 +316,9 @@ bool Skyscraper::Initialize()
 	mRenderWindow = CreateRenderWindow();
 	mRoot->getRenderSystem()->setWaitForVerticalBlank(true); //disable vsync
 
+	//load config file
+	configfile.load("skyscraper.ini");
+
 	//load resources
 	Ogre::ConfigFile cf;
 	cf.load("resources.cfg");
@@ -366,209 +369,6 @@ bool Skyscraper::Initialize()
 		return false;
 	}
 
-	//old CS code for reference
-	/*
-	object_reg = csInitializer::CreateEnvironment(argc, argv);
-	if (!object_reg) return false;
-
-	//first initialize VFS
-	vfs = csInitializer::SetupVFS(object_reg);
-	if (!vfs)
-		return ReportError("Error loading the VFS plugin");
-	
-	//mount app's directory in VFS
-	#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-                dir_char = "/";
-        #else
-                dir_char = "\\";
-        #endif
-        root_dir = csInstallationPathsHelper::GetAppDir(argv[0]) + dir_char;
-        vfs->Mount("/root/", root_dir);
-
-	//load options from config file
-	//if (!csInitializer::SetupConfigManager(object_reg, "/root/data/config/skyscraper.cfg", "Skyscraper.Frontend"))
-    if (!csInitializer::SetupConfigManager(object_reg, "/root/skyscraper.ini", "Skyscraper.Frontend"))
-		return ReportError("Error reading config file skyscraper.ini");
-
-	if (!csInitializer::RequestPlugins(object_reg,
-		CS_REQUEST_FONTSERVER,
-		//CS_REQUEST_PLUGIN("crystalspace.font.server.freetype2", iFontServer),
-		CS_REQUEST_PLUGIN("crystalspace.graphics2d.wxgl", iGraphics2D),
-		CS_REQUEST_OPENGL3D,
-		CS_REQUEST_ENGINE,
-		CS_REQUEST_IMAGELOADER,
-		CS_REQUEST_LEVELLOADER,
-		CS_REQUEST_CONSOLEOUT,
-		CS_REQUEST_REPORTER,
-		CS_REQUEST_REPORTERLISTENER,
-		CS_REQUEST_PLUGIN("crystalspace.collisiondetection.opcode", iCollideSystem),
-		CS_REQUEST_PLUGIN("crystalspace.sndsys.element.loader", iSndSysLoader),
-		CS_REQUEST_PLUGIN("crystalspace.sndsys.renderer.software", iSndSysRenderer),
-		CS_REQUEST_END))
-		return ReportError("Couldn't init app!");
-
-	FocusGained = csevFocusGained(object_reg);
-	FocusLost = csevFocusLost(object_reg);
-	KeyboardDown = csevKeyboardDown(object_reg);
-
-	if (!csInitializer::SetupEventHandler(object_reg, SkyscraperEventHandler))
-		return ReportError("Couldn't initialize event handler!");
-
-	CS_INITIALIZE_EVENT_SHORTCUTS(object_reg);
-
-	// Check for commandline help.
-	if (csCommandLineHelper::CheckHelp(object_reg))
-	{
-		csCommandLineHelper::Help(object_reg);
-		return false;
-	}
-
-	csRef<iPluginManager> plugin_mgr = csQueryRegistry<iPluginManager> (object_reg);
-
-	vc = csQueryRegistry<iVirtualClock> (object_reg);
-	if (!vc) return ReportError("Failed to locate Virtual Clock");
-	kbd = csQueryRegistry<iKeyboardDriver> (object_reg);
-	if (!kbd) return ReportError ("Failed to locate Keyboard Driver");
-	engine = csQueryRegistry<iEngine> (object_reg);
-	if (!engine) return ReportError ("Failed to locate 3D engine");
-	loader = csQueryRegistry<iLoader> (object_reg);
-	if (!loader) return ReportError ("Failed to locate Loader");
-	g3d = csQueryRegistry<iGraphics3D> (object_reg);
-	if (!g3d) return ReportError ("Failed to locate 3D renderer");
-	imageio = csQueryRegistry<iImageIO> (object_reg);
-	if (!imageio) return ReportError ("Failed to locate image loader");
-	console = csQueryRegistry<iConsoleOutput> (object_reg);
-	if (!console) return ReportError ("Failed to locate console output driver");
-	confman = csQueryRegistry<iConfigManager> (object_reg);
-	if (!confman) return ReportError ("Failed to locate configuration manager");
-	mouse = csQueryRegistry<iMouseDriver> (object_reg);
-	if (!mouse) return ReportError("Failed to locate mouse driver");
-	collision_sys = csQueryRegistry<iCollideSystem> (object_reg);
-	if (!collision_sys) return ReportError("Failed to locate collision detection driver");
-	sndrenderer = csQueryRegistry<iSndSysRenderer> (object_reg);
-	if (!sndrenderer)
-	{
-		ReportError("Failed to locate sound renderer");
-		DisableSound = true;
-	}
-	sndloader = csQueryRegistry<iSndSysLoader> (object_reg);
-	if (!sndloader)
-	{
-		ReportError("Failed to locate sound loader");
-		DisableSound = true;
-	}
-	sndmanager = csQueryRegistry<iSndSysManager> (object_reg);
-	if (!sndmanager)
-	{
-		ReportError("Failed to locate sound manager");
-		DisableSound = true;
-	}
-
-#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 4
-	csRef<iBase> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
-#endif
-#if CS_VERSION_NUM_MAJOR == 1 && CS_VERSION_NUM_MINOR == 9
-	csRef<iComponent> plug = csLoadPluginAlways (plugin_mgr, "crystalspace.utilities.bugplug");
-#endif
-	if (!plug) return ReportError ("Failed to locate BugPlug!");
-	plug->IncRef ();
-
-	//load bugplug reference
-	bugplug = csQueryPluginClass<iBugPlug> (plugin_mgr, "crystalspace.utilities.bugplug");
-	if (confman->GetBool("Skyscraper.Frontend.DisplayFPS", false) == false)
-		bugplug->ExecCommand("fps"); //turn off FPS display
-	
-	rep = csQueryRegistry<iReporter> (object_reg);
-	if (!rep) return ReportError("Failed to locate reporter driver");
-	stdrep = csQueryRegistry<iStandardReporterListener> (object_reg);
-	if (!stdrep) return ReportError ("Failed to locate stdrep plugin!");
-	stdrep->SetDebugFile ("/tmp/skyscraper_report.txt");
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_BUG, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_ERROR, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_WARNING, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_NOTIFY, true, false, false, false, true, false);
-	stdrep->SetMessageDestination (CS_REPORTER_SEVERITY_DEBUG, true, false, false, false, true, false);
-
-	g2d = g3d->GetDriver2D();
-	wxwin = scfQueryInterface<iWxWindow> (g2d);
-	if(!wxwin) return ReportError("Canvas is no iWxWindow plugin!");
-	wxwin->SetParent(RenderObject);
-	canvas = RenderObject;
-	canvas_width = canvas->size().GetWidth();
-	canvas_height = canvas->size().GetHeight();
-
-	font = g2d->GetFontServer()->LoadFont(CSFONT_LARGE);
-	*/
-
-	//Platform = OGRE_PLATFORM;
-
-	/*Ogre::String renderLoop;
-	if (confman->GetBool("Skyscraper.Frontend.Shaders", false) == true)
-	{
-		renderLoop = "diffuse";
-		Shaders = true;
-	}
-	if (confman->GetBool("Skyscraper.Frontend.ShaderShadows", false) == true && Shaders == true)
-		renderLoop = "shadowed";*/
-
-	/*
-	// Open the main system. This will open all the previously loaded plug-ins.
-	if (!csInitializer::OpenApplication (object_reg))
-		return ReportError ("Error opening system!");
-
-	shaderman = csQueryRegistry<iShaderManager> (object_reg);
-	if (!shaderman)	return ReportError("Failed to locate shader manager");
-
-	if (!loader->LoadShader("/shader/light.xml"))
-		return false;
-	if (!loader->LoadShader("/shader/light_bumpmap.xml"))
-		return false;
-	if (!loader->LoadShader("/shader/ambient.xml"))
-		return false;
-	if (!loader->LoadShader("/shader/fullbright.xml"))
-		return false;
-	if (!loader->LoadShader("/shader/reflectsphere.xml"))
-		return false;
-	if (!loader->LoadShader("/shader/parallax/parallax.xml"))
-		return false;
-	if (!loader->LoadShader("/shader/parallaxAtt/parallaxAtt.xml"))
-		return false;
-	if (!loader->LoadShader("/shader/specular/light_spec_bumpmap.xml"))
-		return false;
-
-	//initialize frame printer
-	printer.AttachNew(new FramePrinter(object_reg));
-
-	//initialize event queue
-	equeue = csQueryRegistry<iEventQueue> (object_reg);
-
-	//enable ambient light
-	//engine->SetAmbientLight(csColor(0.5, 0.5, 0.5));
-	engine->SetAmbientLight(csColor(1, 1, 1));
-
-	//set up viewport
-	view = csPtr<iView>(new csView (engine, g3d));
-	view->SetRectangle(0, 0, g2d->GetWidth(), g2d->GetHeight());
-
-	//workaround for a canvas quirk on Mac
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	canvas->resize(canvas_width, canvas_height + 1);
-	canvas->resize(canvas_width, canvas_height);
-#endif
-
-	if (!renderLoop.IsEmpty ())
-	{
-		iRenderLoopManager* rloopmgr = engine->GetRenderLoopManager();
-		Ogre::String rl = "/shader/std_rloop_";
-		rl += renderLoop;
-		rl += ".xml";
-		csRef<iRenderLoop> rloop = rloopmgr->Load(rl);
-		if (!rloop)
-			return ReportError("Bad renderloop '%s'", (const char*)renderLoop);
-		if (!engine->SetCurrentDefaultRenderloop (rloop))
-			return ReportError ("Couldn't set renderloop in engine!");
-	}
-	*/
 	return true;
 }
 
@@ -785,7 +585,7 @@ void Skyscraper::GetInput()
 			//show control panel if closed
 			dpanel = new DebugPanel(NULL, -1);
 			dpanel->Show(true);
-			//dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
+			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 		}
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
@@ -877,8 +677,8 @@ void Skyscraper::Loop()
 		//wxwin->GetWindow()->resize(canvas->size());
 	}*/
 
-	//RenderOnly = confman->GetBool("Skyscraper.Frontend.RenderOnly", false);
-	//InputOnly = confman->GetBool("Skyscraper.Frontend.InputOnly", false);
+	//RenderOnly = GetConfigBool("Skyscraper.Frontend.RenderOnly", false);
+	//InputOnly = GetConfigBool("Skyscraper.Frontend.InputOnly", false);
 
 	Simcore->RenderOnly = RenderOnly;
 	//Simcore->InputOnly = this->InputOnly;
@@ -901,7 +701,7 @@ void Skyscraper::Loop()
 	{
 		Shutdown = false;
 		//if showmenu is true, unload simulator and return to main menu
-		//if (confman->GetBool("Skyscraper.Frontend.ShowMenu", true) == true)
+		//if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
 			//Unload();
 		//otherwise exit app
 		//else
@@ -1138,14 +938,13 @@ void Skyscraper::StartSound()
 	if (DisableSound == true)
 		return;
 
-	/*if (confman->GetBool("Skyscraper.Frontend.IntroMusic", true) == false)
+	if (GetConfigBool("Skyscraper.Frontend.IntroMusic", true) == false)
 	{
 		DisableSound = true;
 		return;
-	}*/
+	}
 
-	//Ogre::String filename = confman->GetStr("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
-	Ogre::String filename = "intro.ogg";
+	Ogre::String filename = GetConfigString("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
 	Ogre::String filename_full = "data/" + filename;
 
 	//load new sound
@@ -1221,23 +1020,17 @@ bool Skyscraper::Start()
 {
 	//start simulator
 
-	//clear screen
-	/*g2d->Clear(0);
-	g2d->FinishDraw();
-	g2d->Print(0);
-	g2d->ClearAll(0);*/
-
 	//resize main window
 	window->SetBackgroundColour(*wxBLACK);
-	//window->resize(confman->GetInt("Skyscraper.Frontend.ScreenWidth", 640), confman->GetInt("Skyscraper.Frontend.ScreenHeight", 480));
+	//window->resize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 640), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 480));
 	window->Center();
 
 	//switch to fullscreen mode if specified
-	/*if (confman->GetBool("Skyscraper.Frontend.FullScreen", false) == true)
+	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
 	{
 		FullScreen = true;
 		window->ShowFullScreen(FullScreen);
-	}*/
+	}
 
 	Starting = true;
 
@@ -1312,12 +1105,12 @@ bool Skyscraper::Start()
 	}
 
 	//load control panel
-	//if (confman->GetBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
-	//{
+	if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+	{
 		dpanel = new DebugPanel(NULL, -1);
 		dpanel->Show(true);
-		//dpanel->SetPosition(wxPoint(confman->GetInt("Skyscraper.Frontend.ControlPanelX", 10), confman->GetInt("Skyscraper.Frontend.ControlPanelY", 25)));
-	//}
+		dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+	}
 
 	window->Raise();
 
@@ -1325,7 +1118,7 @@ bool Skyscraper::Start()
 	window->ShowWindow();
 
 	//turn on window resizing, if specified
-	//AllowResize(confman->GetBool("Skyscraper.Frontend.AllowResize", true));
+	AllowResize(GetConfigBool("Skyscraper.Frontend.AllowResize", true));
 
 	//run simulation
 	Simcore->Report("Running simulation...");
@@ -1478,4 +1271,28 @@ const Ogre::String Skyscraper::getOgreHandle() const
 #else
    #error Not supported on this platform!
 #endif
+}
+
+int Skyscraper::GetConfigInt(const char *key, int default_value)
+{
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return Ogre::StringConverter::parseInt(result);
+}
+
+const char* Skyscraper::GetConfigString(const char *key, const char *default_value)
+{
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return result.c_str();
+}
+
+bool Skyscraper::GetConfigBool(const char *key, bool default_value)
+{
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return Ogre::StringConverter::parseBool(result);
+}
+
+float Skyscraper::GetConfigFloat(const char *key, float default_value)
+{
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return Ogre::StringConverter::parseReal(result);
 }

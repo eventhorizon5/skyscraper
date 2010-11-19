@@ -86,6 +86,7 @@ public:
 	void UpdateCameraFloor();
 	bool Move(const Ogre::Vector3 &vector, float speed);
 	void Rotate(const Ogre::Vector3 &vector, float speed);
+	void RotateLocal(const Ogre::Vector3 &vector, float speed);
 	void SetStartDirection(const Ogre::Vector3 &vector);
 	Ogre::Vector3 GetStartDirection();
 	void SetStartRotation(const Ogre::Vector3 &vector);

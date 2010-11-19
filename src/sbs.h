@@ -31,6 +31,7 @@
 #include <OgreVector2.h>
 #include <OgreVector3.h>
 #include <OgreMesh.h>
+#include <OgreConfigFile.h>
 #include <fmod.hpp>
 #include "light.h"
 #include "mesh.h"
@@ -454,6 +455,9 @@ private:
 	unsigned int current_time;
 	unsigned int current_virtual_time;
 	unsigned int elapsed_time;
+
+	//config file
+	Ogre::ConfigFile configfile;
 };
 
 #endif

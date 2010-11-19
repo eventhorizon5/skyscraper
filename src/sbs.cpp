@@ -500,6 +500,9 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	root_dir = rootdirectory;
 	dir_char = directory_char;
 
+	//load config file
+	configfile.load("skyscraper.ini");
+
 	//load default values from config file
 	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
 	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
@@ -1373,10 +1376,8 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 {
 	//create 4 walls
 
-	/*
 	Ogre::String NewName;
 	int firstidx = 0;
-	//int tmpidx = 0;
 
 	//swap values if the first is greater than the second
 	if (x1 > x2)
@@ -1399,54 +1400,53 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		NewName = name;
 		NewName.append(":inside");
 
-		csBox3 box (Ogre::Vector3(x1, voffset, z1), Ogre::Vector3(x2, voffset + height_in, z2));
 		wallobject->AddQuad( //front
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_xyz),
-			box.GetCorner(CS_BOX_CORNER_Xyz),
-			box.GetCorner(CS_BOX_CORNER_XYz),
-			box.GetCorner(CS_BOX_CORNER_xYz), tw, th, autosize);
+			Ogre::Vector3(x1, voffset, z1),
+			Ogre::Vector3(x2, voffset, z1),
+			Ogre::Vector3(x2, voffset + height_in, z1),
+			Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
 		wallobject->AddQuad( //right
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_Xyz),
-			box.GetCorner(CS_BOX_CORNER_XyZ),
-			box.GetCorner(CS_BOX_CORNER_XYZ),
-			box.GetCorner(CS_BOX_CORNER_XYz), tw, th, autosize);
+			Ogre::Vector3(x2, voffset, z1),
+			Ogre::Vector3(x2, voffset, z2),
+			Ogre::Vector3(x2, voffset + height_in, z2),
+			Ogre::Vector3(x2, voffset + height_in, z1), tw, th, autosize);
 		wallobject->AddQuad( //back
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_XyZ),
-			box.GetCorner(CS_BOX_CORNER_xyZ),
-			box.GetCorner(CS_BOX_CORNER_xYZ),
-			box.GetCorner(CS_BOX_CORNER_XYZ), tw, th, autosize);
+			Ogre::Vector3(x2, voffset, z2),
+			Ogre::Vector3(x1, voffset, z2),
+			Ogre::Vector3(x1, voffset + height_in, z2),
+			Ogre::Vector3(x2, voffset + height_in, z2), tw, th, autosize);
 		wallobject->AddQuad( //left
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_xyZ),
-			box.GetCorner(CS_BOX_CORNER_xyz),
-			box.GetCorner(CS_BOX_CORNER_xYz),
-			box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, autosize);
+			Ogre::Vector3(x1, voffset, z2),
+			Ogre::Vector3(x1, voffset, z1),
+			Ogre::Vector3(x1, voffset + height_in, z1),
+			Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
 		if (bottom == true)
 		{
 			wallobject->AddQuad( //bottom
-				NewName,
+				NewName.c_str(),
 				texture,
-				box.GetCorner(CS_BOX_CORNER_xyZ),
-				box.GetCorner(CS_BOX_CORNER_XyZ),
-				box.GetCorner(CS_BOX_CORNER_Xyz),
-				box.GetCorner(CS_BOX_CORNER_xyz), tw, th, autosize);
+				Ogre::Vector3(x1, voffset, z2),
+				Ogre::Vector3(x2, voffset, z2),
+				Ogre::Vector3(x2, voffset, z1),
+				Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
 		}
 		if (top == true)
 		{
 			wallobject->AddQuad( //top
-				NewName,
+				NewName.c_str(),
 				texture,
-				box.GetCorner(CS_BOX_CORNER_xYz),
-				box.GetCorner(CS_BOX_CORNER_XYz),
-				box.GetCorner(CS_BOX_CORNER_XYZ),
-				box.GetCorner(CS_BOX_CORNER_xYZ), tw, th, autosize);
+				Ogre::Vector3(x1, voffset + height_in, z1),
+				Ogre::Vector3(x2, voffset + height_in, z1),
+				Ogre::Vector3(x2, voffset + height_in, z1),
+				Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
 		}
 	}
 
@@ -1455,61 +1455,56 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 		NewName = name;
 		NewName.append(":outside");
 
-		csBox3 box (Ogre::Vector3(x1, voffset, z1), Ogre::Vector3(x2, voffset + height_in, z2));
 		wallobject->AddQuad( //front
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_xYz),
-			box.GetCorner(CS_BOX_CORNER_XYz),
-			box.GetCorner(CS_BOX_CORNER_Xyz),
-			box.GetCorner(CS_BOX_CORNER_xyz), tw, th, autosize);
-		//if (inside == false)
-			//firstidx = tmpidx;
+			Ogre::Vector3(x1, voffset + height_in, z1),
+			Ogre::Vector3(x2, voffset + height_in, z1),
+			Ogre::Vector3(x2, voffset, z1),
+			Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
 		wallobject->AddQuad( //right
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_XYz),
-			box.GetCorner(CS_BOX_CORNER_XYZ),
-			box.GetCorner(CS_BOX_CORNER_XyZ),
-			box.GetCorner(CS_BOX_CORNER_Xyz), tw, th, autosize);
+			Ogre::Vector3(x2, voffset + height_in, z1),
+			Ogre::Vector3(x2, voffset + height_in, z2),
+			Ogre::Vector3(x2, voffset, z2),
+			Ogre::Vector3(x2, voffset, z1), tw, th, autosize);
 		wallobject->AddQuad( //back
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_XYZ),
-			box.GetCorner(CS_BOX_CORNER_xYZ),
-			box.GetCorner(CS_BOX_CORNER_xyZ),
-			box.GetCorner(CS_BOX_CORNER_XyZ), tw, th, autosize);
+			Ogre::Vector3(x2, voffset + height_in, z2),
+			Ogre::Vector3(x1, voffset + height_in, z2),
+			Ogre::Vector3(x1, voffset, z2),
+			Ogre::Vector3(x2, voffset, z2), tw, th, autosize);
 		wallobject->AddQuad( //left
-			NewName,
+			NewName.c_str(),
 			texture,
-			box.GetCorner(CS_BOX_CORNER_xYZ),
-			box.GetCorner(CS_BOX_CORNER_xYz),
-			box.GetCorner(CS_BOX_CORNER_xyz),
-			box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, autosize);
+			Ogre::Vector3(x1, voffset + height_in, z2),
+			Ogre::Vector3(x1, voffset + height_in, z1),
+			Ogre::Vector3(x1, voffset, z1),
+			Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
 		if (bottom == true)
 		{
 			wallobject->AddQuad( //bottom
-				NewName,
+				NewName.c_str(),
 				texture,
-				box.GetCorner(CS_BOX_CORNER_xyz),
-				box.GetCorner(CS_BOX_CORNER_Xyz),
-				box.GetCorner(CS_BOX_CORNER_XyZ),
-				box.GetCorner(CS_BOX_CORNER_xyZ), tw, th, autosize);
+				Ogre::Vector3(x1, voffset, z1),
+				Ogre::Vector3(x2, voffset, z1),
+				Ogre::Vector3(x2, voffset, z2),
+				Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
 		}
 		if (top == true)
 		{
 			wallobject->AddQuad( //top
-				NewName,
+				NewName.c_str(),
 				texture,
-				box.GetCorner(CS_BOX_CORNER_xYZ),
-				box.GetCorner(CS_BOX_CORNER_XYZ),
-				box.GetCorner(CS_BOX_CORNER_XYz),
-				box.GetCorner(CS_BOX_CORNER_xYz), tw, th, autosize);
+				Ogre::Vector3(x1, voffset + height_in, z2),
+				Ogre::Vector3(x2, voffset + height_in, z2),
+				Ogre::Vector3(x2, voffset + height_in, z1),
+				Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
 		}
 	}
 	return firstidx;
-	*/
-	return 0;
 }
 
 int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
@@ -3172,8 +3167,7 @@ void SBS::CheckAutoAreas()
 int SBS::GetMeshCount()
 {
 	//return total number of mesh objects
-	//return engine->GetMeshes()->GetCount();
-	return 0;
+	return meshes.size();
 }
 
 int SBS::GetTextureCount()
@@ -3835,34 +3829,26 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 
 int SBS::GetConfigInt(const char *key, int default_value)
 {
-	//Ogre::ConfigFile* file;
-	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	//return Ogre::StringConverter::parseInt(result);
-	return default_value;
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return Ogre::StringConverter::parseInt(result);
 }
 
 const char* SBS::GetConfigString(const char *key, const char *default_value)
 {
-	//Ogre::ConfigFile* file;
-	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	//return result.c_str();
-	return default_value;
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return result.c_str();
 }
 
 bool SBS::GetConfigBool(const char *key, bool default_value)
 {
-	//Ogre::ConfigFile* file;
-	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	//return Ogre::StringConverter::parseBool(result);
-	return default_value;
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return Ogre::StringConverter::parseBool(result);
 }
 
 float SBS::GetConfigFloat(const char *key, float default_value)
 {
-	//Ogre::ConfigFile* file;
-	//Ogre::String result = file->getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	//return Ogre::StringConverter::parseReal(result);
-	return default_value;
+	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	return Ogre::StringConverter::parseReal(result);
 }
 
 bool SBS::InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test)

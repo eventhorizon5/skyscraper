@@ -722,10 +722,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	//if (!MeshWrapper->GetMeshObject()->GetMaterialWrapper())
 		//MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
-	//set maximum render distance
-	//if (max_render_distance > 0)
-		//MeshWrapper->SetMaximumRenderDistance(sbs->ToRemote(max_render_distance));
-
 	//rescale if a loaded model
 	if (filename)
 		RescaleVertices(scale_multiplier);
@@ -734,6 +730,10 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	Movable = sbs->mSceneManager->createEntity(MeshWrapper->getName());
 	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode();
 	SceneNode->attachObject(Movable);
+
+	//set maximum render distance
+	if (max_render_distance > 0)
+		Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
 
 	sbs->AddMeshHandle(this);
 
@@ -1495,4 +1495,10 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 			}
 		}
 	}
+}
+
+void MeshObject::EnableDebugView(bool value)
+{
+	//enable or disable debug view of mesh
+	Movable->setDebugDisplayEnabled(value);
 }

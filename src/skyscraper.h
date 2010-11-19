@@ -93,6 +93,10 @@ public:
 	void AllowResize(bool value);
 	void Unload();
 	void Quit();
+	int GetConfigInt(const char *key, int default_value);
+	const char *GetConfigString(const char *key, const char *default_value);
+	bool GetConfigBool(const char *key, bool default_value);
+	float GetConfigFloat(const char *key, float default_value);
 
 private:
 	//mouse status
@@ -139,6 +143,7 @@ private:
 	void UnloadSim();
 
 	bool DrewButtons;
+	Ogre::ConfigFile configfile;
 };
 
 class MainScreen : public wxFrame
