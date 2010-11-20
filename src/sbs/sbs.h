@@ -32,6 +32,7 @@
 #include <OgreMesh.h>
 #include <OgreConfigFile.h>
 #include <OgreBulletDynamicsRigidBody.h>
+#include <fmod.hpp>
 
 #include "light.h"
 #include "mesh.h"
