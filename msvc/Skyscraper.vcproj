@@ -24,7 +24,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="erase ..\src\revmain.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\revmain.h -i ..\src\cameracontrol.* ..\src\console.* ..\src\debugpanel.* ..\src/editelevator.* ..\src\fileio.* ..\src\keydialog.* ..\src\meshcontrol.* ..\src\objectinfo.* ..\src\skyscraper.* ..\src\stackwalker.* ..\src\stats.* ..\src\textwindow.* ..\src\uexception.h&#x0D;&#x0A;"
+				CommandLine="erase ..\src\frontend\revmain.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\cameracontrol.* ..\src\frontend\console.* ..\src\frontend\debugpanel.* ..\src/editelevator.* ..\src\frontend\fileio.* ..\src\frontend\keydialog.* ..\src\frontend\meshcontrol.* ..\src\frontend\objectinfo.* ..\src\frontend\skyscraper.* ..\src\frontend\stackwalker.* ..\src\frontend\stats.* ..\src\frontend\textwindow.* ..\src\frontend\uexception.h&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -133,7 +133,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="rem erase ..\src\revmain.h&#x0D;&#x0A;rem ..\svnrev\svnrev.exe -o..\src\revmain.h -i ..\src\cameracontrol.* ..\src\console.* ..\src\debugpanel.* ..\src/editelevator.* ..\src\fileio.* ..\src\keydialog.* ..\src\meshcontrol.* ..\src\objectinfo.* ..\src\skyscraper.* ..\src\stackwalker.* ..\src\stats.* ..\src\textwindow.* ..\src\uexception.h&#x0D;&#x0A;"
+				CommandLine="rem erase ..\src\frontend\revmain.h&#x0D;&#x0A;rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\cameracontrol.* ..\src\frontend\console.* ..\src\frontend\debugpanel.* ..\src/editelevator.* ..\src\frontend\fileio.* ..\src\frontend\keydialog.* ..\src\frontend\meshcontrol.* ..\src\frontend\objectinfo.* ..\src\frontend\skyscraper.* ..\src\frontend\stackwalker.* ..\src\frontend\stats.* ..\src\frontend\textwindow.* ..\src\frontend\uexception.h&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -238,51 +238,51 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="..\src\cameracontrol.cpp"
+				RelativePath="..\src\frontend\cameracontrol.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\console.cpp"
+				RelativePath="..\src\frontend\console.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\debugpanel.cpp"
+				RelativePath="..\src\frontend\debugpanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\editelevator.cpp"
+				RelativePath="..\src\frontend\editelevator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\fileio.cpp"
+				RelativePath="..\src\frontend\fileio.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\keydialog.cpp"
+				RelativePath="..\src\frontend\keydialog.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\meshcontrol.cpp"
+				RelativePath="..\src\frontend\meshcontrol.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\objectinfo.cpp"
+				RelativePath="..\src\frontend\objectinfo.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\skyscraper.cpp"
+				RelativePath="..\src\frontend\skyscraper.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\stackwalker.cpp"
+				RelativePath="..\src\frontend\stackwalker.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\stats.cpp"
+				RelativePath="..\src\frontend\stats.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\textwindow.cpp"
+				RelativePath="..\src\frontend\textwindow.cpp"
 				>
 			</File>
 		</Filter>
@@ -291,55 +291,55 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="..\src\cameracontrol.h"
+				RelativePath="..\src\frontend\cameracontrol.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\console.h"
+				RelativePath="..\src\frontend\console.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\debugpanel.h"
+				RelativePath="..\src\frontend\debugpanel.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\editelevator.h"
+				RelativePath="..\src\frontend\editelevator.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\fileio.h"
+				RelativePath="..\src\frontend\fileio.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\keydialog.h"
+				RelativePath="..\src\frontend\keydialog.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\meshcontrol.h"
+				RelativePath="..\src\frontend\meshcontrol.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\objectinfo.h"
+				RelativePath="..\src\frontend\objectinfo.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\skyscraper.h"
+				RelativePath="..\src\frontend\skyscraper.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\stackwalker.h"
+				RelativePath="..\src\frontend\stackwalker.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\stats.h"
+				RelativePath="..\src\frontend\stats.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\textwindow.h"
+				RelativePath="..\src\frontend\textwindow.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\uexception.h"
+				RelativePath="..\src\frontend\uexception.h"
 				>
 			</File>
 		</Filter>

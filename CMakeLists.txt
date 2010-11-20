@@ -4,9 +4,6 @@ project(Skyscraper)
  
 if(UNIX)
 	set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
-	set(OGRE_SAMPLES_INCLUDEPATH
-		/usr/local/share/OGRE/samples/Common/include/
-	)
 endif(UNIX)
  
 if (CMAKE_BUILD_TYPE STREQUAL "")
@@ -65,32 +62,39 @@ find_package(FMOD REQUIRED)
 #find GTK
 find_package(GTK2 COMPONENTS gtk REQUIRED)
 
-file(GLOB HDRS
-	src/*.h
-	#ogrebullet/Collisions/include/*.h
-	#ogrebullet/Dynamics/include/*.h
+file(GLOB FRONTEND_FILES
+	src/frontend/*.cpp
 )
  
-file(GLOB SRCS
-	src/*.cpp
-	#ogrebullet/Collisions/src/*.cpp
-        #ogrebullet/Dynamics/src/*.cpp
+file(GLOB SBS_FILES
+	src/sbs/*.cpp
 )
  
+file(GLOB SVNREV_FILES
+	svnrev/*.c
+)
+
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
-	${OGRE_SAMPLES_INCLUDEPATH}
 	${FMOD_INCLUDE_DIR}
 	${GTK2_INCLUDE_DIRS}
+	src/sbs
 )
  
 include(${wxWidgets_USE_FILE})
 
-add_executable(Skyscraper WIN32 ${HDRS} ${SRCS})
+#svnrev
+add_executable(svnrev/svnrev ${SVNREV_FILES})
+
+#SBS library
+add_library(SBS SHARED ${SBS_FILES})
+
+#frontend executable
+add_executable(Skyscraper ${FRONTEND_FILES})
  
 set_target_properties(Skyscraper PROPERTIES DEBUG_POSTFIX _d)
  
-target_link_libraries(Skyscraper ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES})
+target_link_libraries(Skyscraper SBS ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES})
  
 #file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)
 #file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/media)

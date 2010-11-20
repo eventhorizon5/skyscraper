@@ -25,7 +25,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="erase ..\src\revsbs.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\revsbs.h -i ..\src\buttonpanel.* ..\src\callbutton.* ..\src\camera.* ..\src\control.* ..\src\directional.* ..\src\door.* ..\src\elevator.* ..\src\elevatordoor.* ..\src\floor.* ..\src\floorindicator.* ..\src\globals.* ..\src\object.* ..\src\sbs.* ..\src\shaft.* ..\src\sound.* ..\src\stairs.* ..\src\unix.* ..\src\random.* ..\src\texmap.* ..\src\wall.*&#x0D;&#x0A;"
+				CommandLine="erase ..\src\sbs\revsbs.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\buttonpanel.* ..\src\sbs\callbutton.* ..\src\sbs\camera.* ..\src\sbs\control.* ..\src\sbs\directional.* ..\src\sbs\door.* ..\src\sbs\elevator.* ..\src\sbs\elevatordoor.* ..\src\sbs\floor.* ..\src\sbs\floorindicator.* ..\src\sbs\globals.* ..\src\sbs\object.* ..\src\sbs\sbs.* ..\src\sbs\shaft.* ..\src\sbs\sound.* ..\src\sbs\stairs.* ..\src\sbs\unix.* ..\src\sbs\random.* ..\src\sbs\texmap.* ..\src\sbs\wall.*&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -119,7 +119,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="rem erase ..\src\revsbs.h&#x0D;&#x0A;rem ..\svnrev\svnrev.exe -o..\src\revsbs.h -i ..\src\buttonpanel.* ..\src\callbutton.* ..\src\camera.* ..\src\control.* ..\src\directional.* ..\src\door.* ..\src\elevator.* ..\src\elevatordoor.* ..\src\floor.* ..\src\floorindicator.* ..\src\globals.* ..\src\object.* ..\src\sbs.* ..\src\shaft.* ..\src\sound.* ..\src\stairs.* ..\src\unix.* ..\src\random.* ..\src\texmap.* ..\src\wall.*&#x0D;&#x0A;"
+				CommandLine="rem erase ..\src\sbs\revsbs.h&#x0D;&#x0A;rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\buttonpanel.* ..\src\sbs\callbutton.* ..\src\sbs\camera.* ..\src\sbs\control.* ..\src\sbs\directional.* ..\src\sbs\door.* ..\src\sbs\elevator.* ..\src\sbs\elevatordoor.* ..\src\sbs\floor.* ..\src\sbs\floorindicator.* ..\src\sbs\globals.* ..\src\sbs\object.* ..\src\sbs\sbs.* ..\src\sbs\shaft.* ..\src\sbs\sound.* ..\src\sbs\stairs.* ..\src\sbs\unix.* ..\src\sbs\random.* ..\src\sbs\texmap.* ..\src\sbs\wall.*&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -212,99 +212,99 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\src\buttonpanel.cpp"
+				RelativePath="..\src\sbs\buttonpanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\callbutton.cpp"
+				RelativePath="..\src\sbs\callbutton.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\camera.cpp"
+				RelativePath="..\src\sbs\camera.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\control.cpp"
+				RelativePath="..\src\sbs\control.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\directional.cpp"
+				RelativePath="..\src\sbs\directional.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\door.cpp"
+				RelativePath="..\src\sbs\door.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\elevator.cpp"
+				RelativePath="..\src\sbs\elevator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\elevatordoor.cpp"
+				RelativePath="..\src\sbs\elevatordoor.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\floor.cpp"
+				RelativePath="..\src\sbs\floor.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\floorindicator.cpp"
+				RelativePath="..\src\sbs\floorindicator.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\globals.cpp"
+				RelativePath="..\src\sbs\globals.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\light.cpp"
+				RelativePath="..\src\sbs\light.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\mesh.cpp"
+				RelativePath="..\src\sbs\mesh.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\model.cpp"
+				RelativePath="..\src\sbs\model.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\object.cpp"
+				RelativePath="..\src\sbs\object.cpp"
 				>
 			</File>
 			<File
-                                RelativePath="..\src\random.cpp"
+                                RelativePath="..\src\sbs\random.cpp"
                                 >
                         </File>
 			<File
-				RelativePath="..\src\sbs.cpp"
+				RelativePath="..\src\sbs\sbs.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\shaft.cpp"
+				RelativePath="..\src\sbs\shaft.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\sound.cpp"
+				RelativePath="..\src\sbs\sound.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\stairs.cpp"
+				RelativePath="..\src\sbs\stairs.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\texmap.cpp"
+				RelativePath="..\src\sbs\texmap.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\texture.cpp"
+				RelativePath="..\src\sbs\texture.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\unix.cpp"
+				RelativePath="..\src\sbs\unix.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\src\wall.cpp"
+				RelativePath="..\src\sbs\wall.cpp"
 				>
 			</File>
 		</Filter>
@@ -314,91 +314,91 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\src\buttonpanel.h"
+				RelativePath="..\src\sbs\buttonpanel.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\callbutton.h"
+				RelativePath="..\src\sbs\callbutton.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\camera.h"
+				RelativePath="..\src\sbs\camera.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\control.h"
+				RelativePath="..\src\sbs\control.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\directional.h"
+				RelativePath="..\src\sbs\directional.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\door.h"
+				RelativePath="..\src\sbs\door.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\elevator.h"
+				RelativePath="..\src\sbs\elevator.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\elevatordoor.h"
+				RelativePath="..\src\sbs\elevatordoor.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\floor.h"
+				RelativePath="..\src\sbs\floor.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\floorindicator.h"
+				RelativePath="..\src\sbs\floorindicator.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\globals.h"
+				RelativePath="..\src\sbs\globals.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\light.h"
+				RelativePath="..\src\sbs\light.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\mesh.h"
+				RelativePath="..\src\sbs\mesh.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\model.h"
+				RelativePath="..\src\sbs\model.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\object.h"
+				RelativePath="..\src\sbs\object.h"
 				>
 			</File>
 			<File
-                                RelativePath="..\src\random.h"
+                                RelativePath="..\src\sbs\random.h"
                                 >
                         </File>
 			<File
-				RelativePath="..\src\sbs.h"
+				RelativePath="..\src\sbs\sbs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\shaft.h"
+				RelativePath="..\src\sbs\shaft.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\sound.h"
+				RelativePath="..\src\sbs\sound.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\stairs.h"
+				RelativePath="..\src\sbs\stairs.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\unix.h"
+				RelativePath="..\src\sbs\unix.h"
 				>
 			</File>
 			<File
-				RelativePath="..\src\wall.h"
+				RelativePath="..\src\sbs\wall.h"
 				>
 			</File>
 		</Filter>
