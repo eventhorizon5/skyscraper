@@ -12,9 +12,9 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif ()
  
-set(CMAKE_DEBUG_POSTFIX "_d")
+#set(CMAKE_DEBUG_POSTFIX "_d")
  
-set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/dist")
+#set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/dist")
  
 find_package(OGRE REQUIRED)
  
@@ -62,6 +62,9 @@ find_package(FMOD REQUIRED)
 #find GTK
 find_package(GTK2 COMPONENTS gtk REQUIRED)
 
+#find BULLET
+find_package(Bullet REQUIRED)
+
 file(GLOB FRONTEND_FILES
 	src/frontend/*.cpp
 )
@@ -74,11 +77,32 @@ file(GLOB SVNREV_FILES
 	svnrev/*.c
 )
 
+file(GLOB OGREBULLET_COLL_FILES
+	ogrebullet/Collisions/src/*.cpp
+	ogrebullet/Collisions/src/Debug/*.cpp
+	ogrebullet/Collisions/src/Shapes/*.cpp
+	ogrebullet/Collisions/src/Utils/*.cpp
+)
+
+file (GLOB OGREBULLET_DYN_FILES
+	ogrebullet/Dynamics/src/*.cpp
+	ogrebullet/Dynamics/src/Constraints/*.cpp
+	ogrebullet/Dynamics/src/Prefab/*.cpp
+)
+
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
 	${GTK2_INCLUDE_DIRS}
+	${BULLET_INCLUDE_DIRS}
 	src/sbs
+	ogrebullet/Collisions/include
+	ogrebullet/Collisions/include/Debug
+	ogrebullet/Collisions/include/Shapes
+	ogrebullet/Collisions/include/Utils
+	ogrebullet/Dynamics/include
+	ogrebullet/Dynamics/include/Constraints
+	ogrebullet/Dynamics/include/Prefab
 )
  
 include(${wxWidgets_USE_FILE})
@@ -86,15 +110,24 @@ include(${wxWidgets_USE_FILE})
 #svnrev
 add_executable(svnrev/svnrev ${SVNREV_FILES})
 
+#ogrebullet libraries
+add_library(OgreBulletCol SHARED ${OGREBULLET_COLL_FILES})
+add_library(OgreBulletDyn SHARED ${OGREBULLET_DYN_FILES})
+
 #SBS library
 add_library(SBS SHARED ${SBS_FILES})
 
 #frontend executable
 add_executable(Skyscraper ${FRONTEND_FILES})
  
-set_target_properties(Skyscraper PROPERTIES DEBUG_POSTFIX _d)
+#set_target_properties(Skyscraper PROPERTIES DEBUG_POSTFIX _d)
  
-target_link_libraries(Skyscraper SBS ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES})
+target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
+target_link_libraries(OgreBulletDyn ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
+
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY})
+
+target_link_libraries(Skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES})
  
 #file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)
 #file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/media)
