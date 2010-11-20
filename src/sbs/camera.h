@@ -147,10 +147,8 @@ private:
 	Ogre::Vector3 rotation;
 
 	//collision/physics
-#ifdef _OGREBULLETDYNAMICS_RigidObject_H
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::BoxCollisionShape* mShape;
-#endif
 };
 
 #endif
