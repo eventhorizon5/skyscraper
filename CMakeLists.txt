@@ -2,15 +2,8 @@ cmake_minimum_required(VERSION 2.6)
  
 project(Skyscraper)
  
-if(WIN32)
-	set(CMAKE_MODULE_PATH "$ENV{OGRE_HOME}/CMake/;${CMAKE_MODULE_PATH}")
-	set(OGRE_SAMPLES_INCLUDEPATH
-		$ENV{OGRE_HOME}/Samples/include
-	)
-endif(WIN32)
- 
 if(UNIX)
-	set(CMAKE_MODULE_PATH "/usr/local/lib/OGRE/cmake/;${CMAKE_MODULE_PATH}")
+	set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
 	set(OGRE_SAMPLES_INCLUDEPATH
 		/usr/local/share/OGRE/samples/Common/include/
 	)
@@ -40,17 +33,11 @@ endif()
  
 # Find Boost
 if (NOT OGRE_BUILD_PLATFORM_IPHONE)
-	if (WIN32 OR APPLE)
+	if (APPLE)
 		set(Boost_USE_STATIC_LIBS TRUE)
 	else ()
 		# Statically linking boost to a dynamic Ogre build doesn't work on Linux 64bit
 		set(Boost_USE_STATIC_LIBS ${OGRE_STATIC})
-	endif ()
-	if (MINGW)
-		# this is probably a bug in CMake: the boost find module tries to look for
-		# boost libraries with name libboost_*, but CMake already prefixes library
-		# search names with "lib". This is the workaround.
-		set(CMAKE_FIND_LIBRARY_PREFIXES ${CMAKE_FIND_LIBRARY_PREFIXES} "")
 	endif ()
 	set(Boost_ADDITIONAL_VERSIONS "1.42" "1.42.0" "1.41.0" "1.41" "1.40.0" "1.40" "1.39.0" "1.39" "1.38.0" "1.38" "1.37.0" "1.37" )
 	# Components that need linking (NB does not include header-only components like bind)
@@ -68,76 +55,43 @@ if (NOT OGRE_BUILD_PLATFORM_IPHONE)
 	add_definitions(-DBOOST_ALL_NO_LIB)
 	set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${Boost_LIBRARIES})
 endif()
- 
+
+#find wxWidgets
+find_package(wxWidgets COMPONENTS core base gl REQUIRED)
+
+#find FMOD
+find_package(FMOD REQUIRED)
+
+#find GTK
+find_package(GTK2 COMPONENTS gtk REQUIRED)
+
 file(GLOB HDRS
 	src/*.h
+	#ogrebullet/Collisions/include/*.h
+	#ogrebullet/Dynamics/include/*.h
 )
  
 file(GLOB SRCS
 	src/*.cpp
+	#ogrebullet/Collisions/src/*.cpp
+        #ogrebullet/Dynamics/src/*.cpp
 )
  
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
 	${OGRE_SAMPLES_INCLUDEPATH}
+	${FMOD_INCLUDE_DIR}
+	${GTK2_INCLUDE_DIRS}
 )
  
+include(${wxWidgets_USE_FILE})
+
 add_executable(Skyscraper WIN32 ${HDRS} ${SRCS})
  
 set_target_properties(Skyscraper PROPERTIES DEBUG_POSTFIX _d)
  
-target_link_libraries(Skyscraper ${OGRE_LIBRARIES} ${OIS_LIBRARIES})
+target_link_libraries(Skyscraper ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES})
  
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/media)
- 
-# post-build copy for win32
-if(WIN32 AND NOT MINGW)
-	add_custom_command( TARGET Skyscraper PRE_BUILD
-		COMMAND if not exist .\\dist\\bin mkdir .\\dist\\bin )
-	add_custom_command( TARGET Skyscraper POST_BUILD
-		COMMAND copy \"$(TargetPath)\" .\\dist\\bin )
-endif(WIN32 AND NOT MINGW)
-if(MINGW)
-	set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/dist/bin)
-endif(MINGW)
- 
-if(WIN32)
- 
-	install(TARGETS Skyscraper
-		RUNTIME DESTINATION bin
-		CONFIGURATIONS All)
- 
-	install(DIRECTORY ${CMAKE_SOURCE_DIR}/dist/Media
-		DESTINATION ./
-		CONFIGURATIONS Release RelWithDebInfo Debug
-	)
- 
-	install(FILES ${CMAKE_SOURCE_DIR}/dist/bin/plugins.cfg
-		${CMAKE_SOURCE_DIR}/dist/bin/resources.cfg
-		DESTINATION bin
-		CONFIGURATIONS Release RelWithDebInfo
-	)
- 
-	install(FILES ${CMAKE_SOURCE_DIR}/dist/bin/plugins_d.cfg
-		${CMAKE_SOURCE_DIR}/dist/bin/resources_d.cfg
-		DESTINATION bin
-		CONFIGURATIONS Debug
-	)
- 
-	install(FILES ${OGRE_PLUGIN_DIR_REL}/OgreMain.dll
-		${OGRE_PLUGIN_DIR_REL}/RenderSystem_Direct3D9.dll
-		${OGRE_PLUGIN_DIR_REL}/RenderSystem_GL.dll
-		${OGRE_PLUGIN_DIR_REL}/OIS.dll
-		DESTINATION bin
-		CONFIGURATIONS Release RelWithDebInfo
-	)
- 
-	install(FILES ${OGRE_PLUGIN_DIR_DBG}/OgreMain_d.dll
-		${OGRE_PLUGIN_DIR_DBG}/RenderSystem_Direct3D9_d.dll
-		${OGRE_PLUGIN_DIR_DBG}/RenderSystem_GL_d.dll
-		${OGRE_PLUGIN_DIR_DBG}/OIS_d.dll
-		DESTINATION bin
-		CONFIGURATIONS Debug
-	)
-endif(WIN32)
+#file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)
+#file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/media)
+
