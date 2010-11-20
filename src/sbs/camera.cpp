@@ -25,6 +25,7 @@
 
 #include <OgreCamera.h>
 #include <OgreSceneManager.h>
+#include <OgreBulletDynamicsRigidBody.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "globals.h"
 #include "sbs.h"
@@ -504,7 +505,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		polyname = "";
 
 	//get object number
-	Ogre::String number;
+	std::string number;
 	object_number = 0;
 	if (wall)
 	{
@@ -541,7 +542,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	{
 		if (obj)
 		{
-			if (Ogre::String(obj->GetType()) == "Wall")
+			if (std::string(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
 			else
 				sbs->Report("Cannot delete object " + number);
@@ -558,7 +559,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		int floor = atoi(meshname.substr(12, index - 12));
 		int number = atoi(meshname.substr(index + 1, index2 - index - 1));
 		CallButton *buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
-		Ogre::String direction = meshname.substr(index2 + 1);
+		std::string direction = meshname.substr(index2 + 1);
 		TrimString(direction);
 
 		if (shift == false)
@@ -776,7 +777,7 @@ void Camera::Loop()
 			while (iterator.HasNext())
 			{
 				//get mesh name
-				Ogre::String mesh = iterator.Next()->QueryObject()->GetName();
+				std::string mesh = iterator.Next()->QueryObject()->GetName();
 				int index = mesh.find(")");
 				mesh.DeleteAt(0, index + 1);
 				LastHitMesh = mesh;

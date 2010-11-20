@@ -52,10 +52,10 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	lastcheckresult = false;
 	checkfirstrun = true;
 
-	Ogre::String buffer, buffer2, buffer3;
+	std::string buffer, buffer2, buffer3;
 
 	buffer = Ogre::StringConverter::toString(number);
-	object->SetName(Ogre::String("Stairwell " + buffer).c_str());
+	object->SetName(std::string("Stairwell " + buffer).c_str());
 
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -140,15 +140,15 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddStairs: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddStairs: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
 	//create wall object
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
 
-	Ogre::String buffer, buffer2, buffer3;
-	Ogre::String Direction = direction;
+	std::string buffer, buffer2, buffer3;
+	std::string Direction = direction;
 	SetCase(Direction, false);
 	buffer3 = name;
 	TrimString(buffer3);
@@ -247,7 +247,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -266,7 +266,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddFloor: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddFloor: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -368,7 +368,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddDoor: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddDoor: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -408,9 +408,9 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
-	Ogre::String stairsnum = _itoa(StairsNum, intbuffer, 10);
-	Ogre::String num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
-	DoorArray[DoorArray.size() - 1].object = new Door(this->object, Ogre::String("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	std::string stairsnum = _itoa(StairsNum, intbuffer, 10);
+	std::string num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
+	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }
@@ -419,7 +419,7 @@ void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Ve
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + "...");
+	sbs->Report("Cutting for stairwell " + std::string(_itoa(StairsNum, intbuffer, 10)) + "...");
 
 	float voffset1, voffset2;
 	cutstart = start;
@@ -464,7 +464,7 @@ bool Stairs::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			ReportError("CutWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+			ReportError("CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 
@@ -545,7 +545,7 @@ void Stairs::OpenDoor(int number)
 			DoorArray[number].object->Open();
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 }
 
 void Stairs::CloseDoor(int number)
@@ -557,7 +557,7 @@ void Stairs::CloseDoor(int number)
 			DoorArray[number].object->Close();
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 }
 
 bool Stairs::IsDoorOpen(int number)
@@ -569,7 +569,7 @@ bool Stairs::IsDoorOpen(int number)
 			return DoorArray[number].object->IsOpen();
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
@@ -603,20 +603,20 @@ bool Stairs::IsDoorMoving(int number)
 			return DoorArray[number].object->IsMoving;
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
 void Stairs::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+	sbs->Report("Stairwell " + std::string(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }
 
 bool Stairs::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Stairwell " + Ogre::String(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Stairwell " + std::string(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
 }
 
 void Stairs::RemoveDoor(Door *door)

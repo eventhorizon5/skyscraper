@@ -41,7 +41,7 @@ class SBSIMPEXP Elevator
 public:
 	Object *object; //SBS object
 	int Number; //elevator number
-	Ogre::String Name; //elevator name
+	std::string Name; //elevator name
 	int NumDoors; //number of elevator doors
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
@@ -66,21 +66,21 @@ public:
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
 	bool IsMoving; //is elevator moving?
-	Ogre::String CarStartSound; //elevator start/speedup sound
-	Ogre::String CarMoveSound; //elevator move sound
-	Ogre::String CarStopSound; //elevator stop/slowdown sound
-	Ogre::String CarIdleSound; //elevator idle/fan sound
-	Ogre::String MotorStartSound; //motor start/speedup sound
-	Ogre::String MotorRunSound; //motor move sound
-	Ogre::String MotorStopSound; //motor stop/slowdown sound
-	Ogre::String MotorIdleSound; //motor idle sound
-	Ogre::String AlarmSound; //alarm sound (loop)
-	Ogre::String AlarmSoundStop; //alarm stopping sound
-	Ogre::String BeepSound; //floor beep sound (played when changing floors)
-	Ogre::String FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
-	Ogre::String UpMessageSound; //sound to play with message of elevator's direction if going up
-	Ogre::String DownMessageSound; //sound to play with message of elevator's direction if going down
-	Ogre::String Music; //elevator music sound to play
+	std::string CarStartSound; //elevator start/speedup sound
+	std::string CarMoveSound; //elevator move sound
+	std::string CarStopSound; //elevator stop/slowdown sound
+	std::string CarIdleSound; //elevator idle/fan sound
+	std::string MotorStartSound; //motor start/speedup sound
+	std::string MotorRunSound; //motor move sound
+	std::string MotorStopSound; //motor stop/slowdown sound
+	std::string MotorIdleSound; //motor idle sound
+	std::string AlarmSound; //alarm sound (loop)
+	std::string AlarmSoundStop; //alarm stopping sound
+	std::string BeepSound; //floor beep sound (played when changing floors)
+	std::string FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
+	std::string UpMessageSound; //sound to play with message of elevator's direction if going up
+	std::string DownMessageSound; //sound to play with message of elevator's direction if going down
+	std::string Music; //elevator music sound to play
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -219,8 +219,8 @@ public:
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
-	void Report(Ogre::String message);
-	bool ReportError(Ogre::String message);
+	void Report(std::string message);
+	bool ReportError(std::string message);
 	Object* AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	Object* AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	void AddShaftDoorsComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
@@ -347,7 +347,7 @@ private:
 	int oldfloor;
 	int lastfloor;
 	bool lastfloorset;
-	Ogre::String FloorSkipText;
+	std::string FloorSkipText;
 	bool RecallSet;
 	bool RecallAltSet;
 	bool ACPFloorSet;

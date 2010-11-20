@@ -33,7 +33,7 @@ class SBSIMPEXP Door
 public:
 
 	Object *object; //SBS object
-	Ogre::String Name; //door name
+	std::string Name; //door name
 	int Direction;
 	bool OpenState;
 	Ogre::Vector3 origin; //door origin
@@ -42,8 +42,8 @@ public:
 	bool Clockwise; //if door should rotate clockwise
 	bool IsEnabled;
 	float Speed; //rotation speed
-	Ogre::String OpenSound; //opening sound
-	Ogre::String CloseSound; //closing sound
+	std::string OpenSound; //opening sound
+	std::string CloseSound; //closing sound
 
 	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();

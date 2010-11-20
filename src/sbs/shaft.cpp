@@ -70,10 +70,10 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	lastcheckresult = false;
 	checkfirstrun = true;
 
-	Ogre::String buffer, buffer2, buffer3;
+	std::string buffer, buffer2, buffer3;
 
 	buffer = Ogre::StringConverter::toString(number);
-	object->SetName(Ogre::String("Shaft " + buffer).c_str());
+	object->SetName(std::string("Shaft " + buffer).c_str());
 
 	ShaftArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -139,7 +139,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -153,7 +153,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + " - AddFloor: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+		sbs->ReportError("Shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + " - AddFloor: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return 0;
 	}
 
@@ -288,7 +288,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + "...");
+	sbs->Report("Cutting for shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + "...");
 
 	float voffset1, voffset2;
 	cutstart = start;
@@ -333,7 +333,7 @@ bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const 
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("CutWall: Floor " + Ogre::String(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 
@@ -525,13 +525,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 void Shaft::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+	sbs->Report("Shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
 bool Shaft::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Shaft " + Ogre::String(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
 }
 
 Object* Shaft::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)

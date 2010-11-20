@@ -30,7 +30,7 @@ class SBSIMPEXP Model
 {
 public:
 	Object *object; //SBS object
-	Ogre::String Name;
+	std::string Name;
 	Ogre::Vector3 Origin;
 	bool load_error;
 

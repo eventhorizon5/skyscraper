@@ -23,6 +23,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#ifndef _SBS_UNIX_H
+
 #include <OgrePlatform.h>
 
 #if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
@@ -35,4 +37,5 @@ const char* itoa(int value, char* str, int radix);
 const char* strrev(char* szT);
 const char* StrRev(char* szT);
 
+#endif
 #endif

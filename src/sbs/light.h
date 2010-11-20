@@ -31,7 +31,7 @@ class SBSIMPEXP Light
 public:
 
 	Object *object; //SBS object
-	Ogre::String Name;
+	std::string Name;
 	int Type;
 	Ogre::Vector3 Origin;
 

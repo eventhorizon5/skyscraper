@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <fmod.hpp>
 #include "globals.h"
 #include "sbs.h"
 #include "sound.h"
@@ -65,11 +66,11 @@ Sound::~Sound()
 	//unregister from parent
 	if (object->parent_deleting == false)
 	{
-		if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
+		if (std::string(object->GetParent()->GetType()) == "Elevator")
 			((Elevator*)object->GetParent()->GetRawObject())->RemoveSound(this);
-		if (Ogre::String(object->GetParent()->GetType()) == "Floor")
+		if (std::string(object->GetParent()->GetType()) == "Floor")
 			((Floor*)object->GetParent()->GetRawObject())->RemoveSound(this);
-		if (Ogre::String(object->GetParent()->GetType()) == "SBS")
+		if (std::string(object->GetParent()->GetType()) == "SBS")
 			sbs->RemoveSound(this);
 	}
 
@@ -255,7 +256,7 @@ void Sound::Reset()
 void Sound::Load(const char *filename, bool force)
 {
 	//exit if filename is the same
-	Ogre::String filename_new = filename;
+	std::string filename_new = filename;
 	if (filename_new == Filename && force == false)
 		return;
 
@@ -273,9 +274,9 @@ void Sound::Load(const char *filename, bool force)
 
 	//load new sound
 	Filename = filename;
-	Ogre::String full_filename1 = "data/";
+	std::string full_filename1 = "data/";
 	full_filename1.append(filename);
-	Ogre::String full_filename = sbs->VerifyFile(full_filename1.c_str());
+	std::string full_filename = sbs->VerifyFile(full_filename1.c_str());
 
 	FMOD_RESULT result = sbs->soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
 	//FMOD_RESULT result = sbs->soundsys->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version

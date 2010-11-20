@@ -68,7 +68,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	array[0].push_back(v2);
 	array[0].push_back(v3);
 	array[0].push_back(v4);
-	Ogre::String name2 = ProcessName(name);
+	std::string name2 = ProcessName(name);
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
@@ -79,7 +79,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 		return 0;
 
 	bool result;
-	Ogre::String material = sbs->GetTextureMaterial(texture, result, name2.c_str());
+	std::string material = sbs->GetTextureMaterial(texture, result, name2.c_str());
 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
@@ -91,7 +91,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
 {
 	//create a generic polygon
-	Ogre::String name2 = ProcessName(name);
+	std::string name2 = ProcessName(name);
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
@@ -102,7 +102,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 		return 0;
 
 	bool result;
-	Ogre::String material = sbs->GetTextureMaterial(texture, result, name2.c_str());
+	std::string material = sbs->GetTextureMaterial(texture, result, name2.c_str());
 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(vertices[0], vertices[1], vertices[2]);
@@ -111,10 +111,10 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	return &handles[index];
 }
 
-WallPolygon* WallObject::AddPolygon(const char *name, Ogre::String material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
-	Ogre::String name2 = ProcessName(name);
+	std::string name2 = ProcessName(name);
 	std::vector<Ogre::Vector2> index_extents;
 	std::vector<TriangleType> triangles;
 	meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles);
@@ -129,7 +129,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, Ogre::String material, std
 	return &handles[index];
 }
 
-int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, Ogre::String material, const char *name, Ogre::Plane &plane)
+int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 	int i = (int)handles.size();
@@ -146,18 +146,18 @@ int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<O
 	return i;
 }
 
-Ogre::String WallObject::ProcessName(const char *name)
+std::string WallObject::ProcessName(const char *name)
 {
 	//process name for use
-	Ogre::String name_modified = name;
+	std::string name_modified = name;
 
 	//strip off object ID from name if it exists
 	if (name_modified.find("(") == 0)
 		name_modified.erase(0, name_modified.find(")") + 1);
 
 	//construct name
-	Ogre::String newname = "(";
-	Ogre::String num = Ogre::StringConverter::toString(Number);
+	std::string newname = "(";
+	std::string num = Ogre::StringConverter::toString(Number);
 	newname.append(num + ")");
 	newname.append(name_modified);
 	return newname;
@@ -218,10 +218,10 @@ int WallObject::FindPolygon(const char *name)
 {
 	//find a polygon object by name
 
-	Ogre::String name2 = name;
+	std::string name2 = name;
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
-		Ogre::String tmpname = handles[i].name;
+		std::string tmpname = handles[i].name;
 		if (tmpname.find("(") == 0)
 		{
 			//strip object number
@@ -250,15 +250,15 @@ void WallObject::SetPolygonName(int index, const char *name)
 			return;
 
 		//set polygon name
-        Ogre::String name_modified = name;
+        std::string name_modified = name;
 
         //strip off object ID from name if it exists
         if (name_modified.find("(") == 0)
                 name_modified.erase(0, name_modified.find(")") + 1);
 
         //construct name
-        Ogre::String newname = "(";
-        Ogre::String num = Ogre::StringConverter::toString(Number);
+        std::string newname = "(";
+        std::string num = Ogre::StringConverter::toString(Number);
         newname.append(num + ")");
         newname.append(name_modified);
 

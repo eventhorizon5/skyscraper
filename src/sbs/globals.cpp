@@ -24,6 +24,7 @@
 */
 
 #include <algorithm>
+#include <string>
 #include <ctype.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -203,7 +204,7 @@ void ReplaceAll(std::string &string, const char *original, const char *replaceme
 {
 	//replace all occurances of "original" with "replacement"
 
-	Ogre::String newstring = Ogre::StringUtil::replaceAll(string, original, replacement);
+	std::string newstring = Ogre::StringUtil::replaceAll(string, original, replacement);
 	string = newstring;
 }
 bool StartsWith(std::string &string, const char *check_string, bool ignore_case)

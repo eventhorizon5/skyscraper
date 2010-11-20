@@ -58,12 +58,12 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	DirectionalMesh = 0;
 
 	//create object mesh
-	Ogre::String buffer, buffer2, buffer3;
+	std::string buffer, buffer2, buffer3;
 	buffer2 = Ogre::StringConverter::toString(elevator);
 	buffer3 = Ogre::StringConverter::toString(floor);
 	buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
 	TrimString(buffer);
-	object->SetName(Ogre::String("Directional Indicator " + buffer2 + ":" + buffer3).c_str());
+	object->SetName(std::string("Directional Indicator " + buffer2 + ":" + buffer3).c_str());
 	DirectionalMeshBack = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Single == false)
@@ -278,9 +278,9 @@ DirectionalIndicator::~DirectionalIndicator()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
+			if (std::string(object->GetParent()->GetType()) == "Elevator")
 				((Elevator*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
-			if (Ogre::String(object->GetParent()->GetType()) == "Floor")
+			if (std::string(object->GetParent()->GetType()) == "Floor")
 				((Floor*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
 		}
 	}

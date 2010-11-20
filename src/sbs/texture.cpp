@@ -55,7 +55,7 @@ extern SBS *sbs; //external pointer to the SBS engine
  @return 
      Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename) 
  */ 
-void SBS::loadChromaKeyedTexture(const Ogre::String& filename, const Ogre::String& resGroup, const Ogre::String& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
+void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
  { 
      using namespace Ogre; 
      using std::fabs; 

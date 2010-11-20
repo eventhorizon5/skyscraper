@@ -43,7 +43,7 @@ class SBSIMPEXP MeshObject
 {
 public:
 	Object *object; //SBS object
-	Ogre::String name; //mesh name
+	std::string name; //mesh name
 
 	//define geometry type
 	struct Geometry
@@ -79,11 +79,11 @@ public:
 	void AddTriangle(int submesh, TriangleType &triangle);
 	void RemoveTriangle(int submesh, int index);
 	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles);
-	bool PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, bool convert_vertices = true);
+	bool PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices);
-	int ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String &material, const char *name, bool add);
-	int FindMatchingSubMesh(Ogre::String material);
+	int ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add);
+	int FindMatchingSubMesh(std::string material);
 	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<TriangleType> &deleted_indices);
 	void Prepare();
 	void EnableDebugView(bool value);
@@ -93,10 +93,13 @@ public:
 	std::vector<TriangleIndices> Triangles;
 	std::vector<Ogre::SubMesh*> Submeshes;
 	std::vector<WallObject*> Walls;
+
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;
+#ifdef _OGREBULLETDYNAMICS_RigidObject_H
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
+#endif
 
 private:
 	bool enabled;
@@ -125,8 +128,8 @@ public:
 	Ogre::Matrix3 t_matrix;
 	Ogre::Vector3 t_vector;
 
-	Ogre::String material; //polygon material
-	Ogre::String name; //polygon names
+	std::string material; //polygon material
+	std::string name; //polygon names
 
 	WallPolygon();
 	~WallPolygon();

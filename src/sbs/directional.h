@@ -33,12 +33,12 @@ public:
 	Object *object; //SBS object
 	int elevator_num; //elevator this indicator is assigned to
 	int floor_num; //floor the indicator is on
-	Ogre::String Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
+	std::string Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled; //true if indicator is currently enabled
-	Ogre::String UpTextureUnlit; //unlit up texture
-	Ogre::String UpTextureLit; //lit up texture
-	Ogre::String DownTextureUnlit; //unlit down texture
-	Ogre::String DownTextureLit; //lit down texture
+	std::string UpTextureUnlit; //unlit up texture
+	std::string UpTextureLit; //lit up texture
+	std::string DownTextureUnlit; //unlit down texture
+	std::string DownTextureLit; //lit down texture
 	bool UpStatus; //status of up light
 	bool DownStatus; //status of down light
 	bool Single; //is this a single-light indicator?

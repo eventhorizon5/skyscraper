@@ -44,12 +44,12 @@ public:
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::Camera* mCamera;
 
-	Ogre::String version;
-	Ogre::String version_rev;
-	Ogre::String version_state;
-	Ogre::String version_frontend;
+	std::string version;
+	std::string version_rev;
+	std::string version_state;
+	std::string version_frontend;
 
-	Ogre::String Platform;
+	std::string Platform;
 
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code
@@ -74,12 +74,12 @@ public:
 	virtual int OnExit(void);
 	void DrawBackground();
 
-	Ogre::String BuildingFile;
+	std::string BuildingFile;
 
 	//engine related stuff
-	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const Ogre::String& windowName = Ogre::String(""));
+	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = std::string(""));
 	void destroyRenderWindow();
-	const Ogre::String getOgreHandle() const;
+	const std::string getOgreHandle() const;
 	void Render();
 	void GetInput();
 	void Report(std::string message, ...);
@@ -103,8 +103,8 @@ private:
 	bool MouseDown;
 
 	//app directory
-	Ogre::String root_dir;
-	Ogre::String dir_char;
+	std::string root_dir;
+	std::string dir_char;
 
 	//canvas data
 	int canvas_width, canvas_height;
@@ -124,11 +124,11 @@ private:
 		int y;
 		int size_x;
 		int size_y;
-		Ogre::String filename;
+		std::string filename;
 		Ogre::Image* button_image;
-		Ogre::String filename_selected;
+		std::string filename_selected;
 		Ogre::Image* selected_image;
-		Ogre::String filename_pressed;
+		std::string filename_pressed;
 		Ogre::Image* pressed_image;
 		int offset_x;
 		int offset_y;

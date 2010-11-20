@@ -37,14 +37,14 @@ Floor::Floor(int number)
 	object = new Object();
 	object->SetValues(this, sbs->object, "Floor", "", false);
 
-	Ogre::String buffer;
+	std::string buffer;
 
 	//Set floor's object number
 	Number = number;
 
 	//Create primary level mesh
 	buffer = Ogre::StringConverter::toString(Number);
-	object->SetName(Ogre::String("Floor " + buffer).c_str());
+	object->SetName(std::string("Floor " + buffer).c_str());
 	buffer.insert(0, "Level ");
 	TrimString(buffer);
 	Level = new MeshObject(object, buffer.c_str());
@@ -510,9 +510,9 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
 	DoorArray.resize(DoorArray.size() + 1);
-	Ogre::String floornum = _itoa(Number, intbuffer, 10);
-	Ogre::String num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
-	DoorArray[DoorArray.size() - 1] = new Door(this->object, Ogre::String("Floor " + floornum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	std::string floornum = _itoa(Number, intbuffer, 10);
+	std::string num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
+	DoorArray[DoorArray.size() - 1] = new Door(this->object, std::string("Floor " + floornum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
 	return DoorArray[DoorArray.size() - 1]->object;
 }
 
@@ -602,7 +602,7 @@ void Floor::UpdateFloorIndicators(int elevator)
 {
 	//changes the number texture on the floor indicators to the specified elevator's current floor
 
-	Ogre::String value;
+	std::string value;
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -625,7 +625,7 @@ void Floor::UpdateFloorIndicators()
 {
 	//changes the number texture on the floor indicators
 
-	Ogre::String value;
+	std::string value;
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -749,13 +749,13 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 void Floor::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Floor " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
+	sbs->Report("Floor " + std::string(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
 bool Floor::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Floor " + Ogre::String(_itoa(Number, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Floor " + std::string(_itoa(Number, intbuffer, 10)) + ": " + message);
 }
 
 float Floor::GetBase(bool relative)
@@ -864,7 +864,7 @@ void Floor::UpdateDirectionalIndicators()
 {
 	//updates all active-direction indicators
 
-	Ogre::String value;
+	std::string value;
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
@@ -901,7 +901,7 @@ void Floor::OpenDoor(int number)
 			DoorArray[number]->Open();
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 }
 
 void Floor::CloseDoor(int number)
@@ -913,7 +913,7 @@ void Floor::CloseDoor(int number)
 			DoorArray[number]->Close();
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 }
 
 bool Floor::IsDoorOpen(int number)
@@ -925,7 +925,7 @@ bool Floor::IsDoorOpen(int number)
 			return DoorArray[number]->IsOpen();
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 	return false;
 }
 
@@ -938,7 +938,7 @@ bool Floor::IsDoorMoving(int number)
 			return DoorArray[number]->IsMoving;
 	}
 	else
-		Report("Invalid door " + Ogre::String(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 	return false;
 }
 

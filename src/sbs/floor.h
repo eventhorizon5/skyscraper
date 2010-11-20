@@ -41,11 +41,11 @@ public:
 	MeshObject *ColumnFrame; //columnframe mesh
 
 	int Number; //floor number
-	Ogre::String Name; //floor name
-	Ogre::String ID;
-	Ogre::String FloorType;
-	Ogre::String Description;
-	Ogre::String IndicatorTexture; //elevator indicator texture name
+	std::string Name; //floor name
+	std::string ID;
+	std::string FloorType;
+	std::string Description;
+	std::string IndicatorTexture; //elevator indicator texture name
 	float Altitude; //floor altitude
 	float Height; //floor height (not including interfloor height)
 	float InterfloorHeight; //height of interfloor area

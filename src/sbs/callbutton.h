@@ -34,7 +34,7 @@ public:
 	std::vector<int> Elevators; //elevators this call button set is assigned to
 	int floor; //floor this call button set is on
 	int Number; //call button index number (on the specified floor)
-	Ogre::String Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
+	std::string Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled;
 	bool UpStatus; //status of up light
 	bool DownStatus; //status of down light
@@ -57,8 +57,8 @@ private:
 	MeshObject* CallButtonMeshUp; //call button mesh object
 	MeshObject* CallButtonMeshDown; //call button mesh object
 
-	Ogre::String UpTexture, UpTextureLit;
-	Ogre::String DownTexture, DownTextureLit;
+	std::string UpTexture, UpTextureLit;
+	std::string DownTexture, DownTextureLit;
 
 	bool ProcessedUp;
 	bool ProcessedDown;

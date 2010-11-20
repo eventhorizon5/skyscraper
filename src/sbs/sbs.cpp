@@ -33,6 +33,8 @@
 #include <OgreFontManager.h>
 #include <OgreFont.h>
 #include <OgreHardwarePixelBuffer.h>
+#include <fmod.hpp>
+#include <OgreBulletDynamicsRigidBody.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -44,7 +46,7 @@ SBS *sbs; //self reference
 SBS::SBS()
 {
 	sbs = this;
-	version = "0.8.0." + Ogre::String(SVN_REVSTR);
+	version = "0.8.0." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//set up SBS object
@@ -577,18 +579,18 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
 
 	//first verify the filename
-	Ogre::String filename2 = VerifyFile(filename);
+	std::string filename2 = VerifyFile(filename);
 
 	//determine if the file is a GIF image, to force keycolor alpha
-	Ogre::String extension = filename2.substr(filename2.size() - 3);
+	std::string extension = filename2.substr(filename2.size() - 3);
 	SetCase(extension, false);
 	if (extension == "gif")
 		use_alpha_color = true;
 
 	// Load the texture
-	Ogre::String path = GetMountPath(filename2.c_str(), filename2);
+	std::string path = GetMountPath(filename2.c_str(), filename2);
 	Ogre::TexturePtr mTex;
-	Ogre::String texturename;
+	std::string texturename;
 	bool has_alpha = false;
 
 	if (use_alpha_color == false)
@@ -617,7 +619,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	}
 
 	//create a new material
-	Ogre::String matname = name;
+	std::string matname = name;
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 
@@ -642,7 +644,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	Report("Loaded texture " + Ogre::String(filename));
+	Report("Loaded texture " + std::string(filename));
 
 	TextureInfo info;
 	info.name = matname;
@@ -670,8 +672,8 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	//loads only a portion of the specified texture
 
 /*	Ogre::TextureManager *tm = g3d->GetTextureManager();
-	Ogre::String Name = name;
-	Ogre::String Filename = filename;
+	std::string Name = name;
+	std::string Filename = filename;
 
 	//load image
 	Ogre::Image* image = loader->LoadImage(filename, tm->GetTextureFormat());
@@ -740,17 +742,17 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
-	Ogre::String hAlign = h_align;
-	Ogre::String vAlign = v_align;
-	Ogre::String Name = name;
-	Ogre::String Origname = origname;
-	Ogre::String Text = text;
+	std::string hAlign = h_align;
+	std::string vAlign = v_align;
+	std::string Name = name;
+	std::string Origname = origname;
+	std::string Text = text;
 	TrimString(Text);
 	TrimString(Name);
 	TrimString(Origname);
 
-	Ogre::String font_filename2 = VerifyFile(font_filename);
-	Ogre::String relative_filename = font_filename2;
+	std::string font_filename2 = VerifyFile(font_filename);
+	std::string relative_filename = font_filename2;
 
 	//load font
 	Ogre::FontPtr font;
@@ -782,7 +784,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
 		return false;
 	}
-	Ogre::String texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
+	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
 	Ogre::TexturePtr background = Ogre::TextureManager::getSingleton().getByName(texname);
 	if (background.isNull())
 	{
@@ -845,7 +847,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align);
 
 	//create a new material
-	Ogre::String matname = Name;
+	std::string matname = Name;
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 
 	//bind texture to material
@@ -870,9 +872,9 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
-	/*Ogre::String Name = name;
-	Ogre::String Origname = orig_texture;
-	Ogre::String Overlay = overlay_texture;
+	/*std::string Name = name;
+	std::string Origname = orig_texture;
+	std::string Overlay = overlay_texture;
 
 	//get original texture
 	Ogre::Image* image1 = engine->GetTextureList()->FindByName(orig_texture)->GetImageFile();
@@ -1057,7 +1059,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	}
 
 	//create polygons and set names
-	Ogre::String NewName, texture2 = texture;
+	std::string NewName, texture2 = texture;
 	float tw2 = tw, th2 = th;
 
 	if (FlipTexture == true)
@@ -1264,7 +1266,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	}
 
 	//create polygons and set names
-	Ogre::String NewName, texture2 = texture;
+	std::string NewName, texture2 = texture;
 	float tw2 = tw, th2 = th;
 
 	if (FlipTexture == true)
@@ -1398,7 +1400,7 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 {
 	//create 4 walls
 
-	Ogre::String NewName;
+	std::string NewName;
 	int firstidx = 0;
 
 	//swap values if the first is greater than the second
@@ -1598,14 +1600,14 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	//add the polygons
 	if (DrawMainN == true)
 	{
-		Ogre::String NewName;
+		std::string NewName;
 		NewName = name;
 		NewName.append(":0");
 		wallobject->AddPolygon(NewName.c_str(), texture, varray1, tw2, th2, true);
 	}
 	if (DrawMainP == true)
 	{
-		Ogre::String NewName;
+		std::string NewName;
 		NewName = name;
 		NewName.append(":1");
 		wallobject->AddPolygon(NewName.c_str(), texture, varray2, tw2, th2, true);
@@ -1673,8 +1675,8 @@ void SBS::CreateSky(const char *filenamebase)
 {
 	//create skybox
 
-	Ogre::String file = filenamebase;
-	Mount(Ogre::String("data/sky-" + file + ".zip").c_str(), "sky");
+	std::string file = filenamebase;
+	Mount(std::string("data/sky-" + file + ".zip").c_str(), "sky");
 
 	//load textures
 	LoadTexture("sky/up.jpg", "SkyTop", 1, -1, false, false, true, 0);
@@ -1819,7 +1821,7 @@ void SBS::ListAltitudes()
 
 	Report("--- Floor Altitudes ---\n");
 	for (int i = -Basements; i < Floors; i++)
-		Report(Ogre::String(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + Ogre::String(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + Ogre::String(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
+		Report(std::string(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + std::string(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + std::string(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
 }
 
 Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
@@ -1830,7 +1832,7 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 	{
 		if (ShaftArray[i].number == number)
 		{
-			Ogre::String num = Ogre::StringConverter::toString(number);
+			std::string num = Ogre::StringConverter::toString(number);
 			ReportError("Shaft " + num + " already exists");
 			return 0;
 		}
@@ -1839,13 +1841,13 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 	//verify floor range
 	if (IsValidFloor(_startfloor) == false)
 	{
-		Ogre::String num = Ogre::StringConverter::toString(_startfloor);
+		std::string num = Ogre::StringConverter::toString(_startfloor);
 		ReportError("CreateShaft: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		Ogre::String num = Ogre::StringConverter::toString(_endfloor);
+		std::string num = Ogre::StringConverter::toString(_endfloor);
 		ReportError("CreateShaft: Invalid ending floor " + num);
 		return 0;
 	}
@@ -1864,7 +1866,7 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	{
 		if (StairsArray[i].number == number)
 		{
-			Ogre::String num = Ogre::StringConverter::toString(number);
+			std::string num = Ogre::StringConverter::toString(number);
 			ReportError("Stairwell " + num + " already exists");
 			return 0;
 		}
@@ -1873,13 +1875,13 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	//verify floor range
 	if (IsValidFloor(_startfloor) == false)
 	{
-		Ogre::String num = Ogre::StringConverter::toString(_startfloor);
+		std::string num = Ogre::StringConverter::toString(_startfloor);
 		ReportError("CreateStairwell: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		Ogre::String num = Ogre::StringConverter::toString(_endfloor);
+		std::string num = Ogre::StringConverter::toString(_endfloor);
 		ReportError("CreateStairwell: Invalid ending floor " + num);
 		return 0;
 	}
@@ -2066,7 +2068,7 @@ bool SBS::SetWallOrientation(const char *direction)
 	//the parameter is used to determine the location of the wall's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
 
-	Ogre::String temp = direction;
+	std::string temp = direction;
 	SetCase(temp, false);
 
 	if (temp == "left")
@@ -2096,7 +2098,7 @@ bool SBS::SetFloorOrientation(const char *direction)
 	//the parameter is used to determine the location of the floor's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
 
-	Ogre::String temp = direction;
+	std::string temp = direction;
 	SetCase(temp, false);
 
 	if (temp == "bottom")
@@ -2186,7 +2188,7 @@ void SBS::SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, O
 	MapMethod = 1;
 }
 
-void SBS::SetTextureMapping2(Ogre::String x1, Ogre::String y1, Ogre::String z1, Ogre::Vector2 uv1, Ogre::String x2, Ogre::String y2, Ogre::String z2, Ogre::Vector2 uv2, Ogre::String x3, Ogre::String y3, Ogre::String z3, Ogre::Vector2 uv3)
+void SBS::SetTextureMapping2(std::string x1, std::string y1, std::string z1, Ogre::Vector2 uv1, std::string x2, std::string y2, std::string z2, Ogre::Vector2 uv2, std::string x3, std::string y3, std::string z3, Ogre::Vector2 uv3)
 {
 	//Manually sets UV texture mapping (advanced version)
 	//Use ResetTextureMapping to return to default values
@@ -2412,7 +2414,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				Ogre::String string;
+				std::string string;
 				if (j == 0)
 					string = MapVerts1[i];
 				if (j == 1)
@@ -2426,33 +2428,33 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				int location = string.find("x");
 				if (location >= 0)
 				{
-					Ogre::String number = string.substr(location + 1);
+					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, Ogre::String("x" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].x, 12, buffer));
+						ReplaceAll(string, std::string("x" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].x, 12, buffer));
 					else
-						ReplaceAll(string, Ogre::String("x" + number).c_str(), "0"); //number value out of bounds
+						ReplaceAll(string, std::string("x" + number).c_str(), "0"); //number value out of bounds
 				}
 
 				//find Y component
 				location = string.find("y");
 				if (location >= 0)
 				{
-					Ogre::String number = string.substr(location + 1);
+					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, Ogre::String("y" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].y, 12, buffer));
+						ReplaceAll(string, std::string("y" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].y, 12, buffer));
 					else
-						ReplaceAll(string, Ogre::String("y" + number).c_str(), "0"); //number value out of bounds
+						ReplaceAll(string, std::string("y" + number).c_str(), "0"); //number value out of bounds
 				}
 
 				//find Z component
 				location = string.find("z");
 				if (location >= 0)
 				{
-					Ogre::String number = string.substr(location + 1);
+					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, Ogre::String("z" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].z, 12, buffer));
+						ReplaceAll(string, std::string("z" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].z, 12, buffer));
 					else
-						ReplaceAll(string, Ogre::String("z" + number).c_str(), "0"); //number value out of bounds
+						ReplaceAll(string, std::string("z" + number).c_str(), "0"); //number value out of bounds
 				}
 
 				//store values
@@ -2680,7 +2682,7 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 	//external, landscape, or buildings
 
 	//Adds a wall with the specified dimensions
-	Ogre::String mesh = meshname;
+	std::string mesh = meshname;
 	TrimString(mesh);
 	SetCase(mesh, false);
 
@@ -2702,7 +2704,7 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 	//external, landscape, or buildings
 
 	//Adds a floor with the specified dimensions and vertical offset
-	Ogre::String mesh = meshname;
+	std::string mesh = meshname;
 	TrimString(mesh);
 	SetCase(mesh, false);
 
@@ -2989,22 +2991,22 @@ void SBS::ProcessTextureFlip(float tw, float th)
 	}
 }
 
-Ogre::String SBS::GetTextureMaterial(const char *name, bool &result, const char *polygon_name)
+std::string SBS::GetTextureMaterial(const char *name, bool &result, const char *polygon_name)
 {
 	//perform a lookup on a texture, and return material name if it exists, or "Default" if not
 	//returns false in &result if texture load failed, and if default material was used instead
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(name);
 
-	Ogre::String final_material = name;
+	std::string final_material = name;
 
 	if (!material.get())
 	{
 		//if material's not found, display a warning and use a default material
-		Ogre::String message;
+		std::string message;
 		if (polygon_name)
-			message = "Texture '" + Ogre::String(name) + "' not found for polygon '" + Ogre::String(polygon_name) + "'; using default material";
+			message = "Texture '" + std::string(name) + "' not found for polygon '" + std::string(polygon_name) + "'; using default material";
 		else
-			message = "Texture '" + Ogre::String(name) + "' not found; using default material";
+			message = "Texture '" + std::string(name) + "' not found; using default material";
 		ReportError(message);
 
 		//set to default material
@@ -3099,8 +3101,8 @@ bool SBS::Mount(const char *filename, const char *path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	Ogre::String file = VerifyFile(filename);
-	Ogre::String Path = path;
+	std::string file = VerifyFile(filename);
+	std::string Path = path;
 
 	Report("Mounting " + file + " as path " + Path);
 	try
@@ -3431,24 +3433,24 @@ Ogre::Vector2 SBS::CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::V
 	return 0;
 }*/
 
-/*Ogre::String SBS::TruncateNumber(double value, int decimals)
+/*std::string SBS::TruncateNumber(double value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 
 	return Ogre::StringConverter::toString(value, decimals);
 }*/
 
-Ogre::String SBS::TruncateNumber(float value, int decimals)
+std::string SBS::TruncateNumber(float value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 	
 	return Ogre::StringConverter::toString(value, decimals);
 }
 
-Ogre::String SBS::TruncateNumber(const char *value, int decimals)
+std::string SBS::TruncateNumber(const char *value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
-	Ogre::String number = value;
+	std::string number = value;
 	
 	if (decimals < 1)
 		return number;
@@ -3467,11 +3469,11 @@ bool SBS::IsValidFloor(int floor)
 	return false;
 }
 
-Ogre::String SBS::DumpState()
+std::string SBS::DumpState()
 {
 	//dump basic simulator state to a character array
 
-	Ogre::String output = "SBS version: " + version + "\n";
+	std::string output = "SBS version: " + version + "\n";
 	output.append("Building Name: " + BuildingName + "\n");
 	output.append("Building Filename: " + BuildingFilename + "\n");
 	output.append("Building Version: " + BuildingVersion + "\n");
@@ -3530,7 +3532,7 @@ bool SBS::DeleteObject(Object *object)
 	//object deletion routine
 	//this should be called to delete a simulator object during runtime
 
-	Ogre::String number = Ogre::StringConverter::toString(object->GetNumber());
+	std::string number = Ogre::StringConverter::toString(object->GetNumber());
 	bool deleted = false;
 
 	if (!object)
@@ -3552,7 +3554,7 @@ bool SBS::DeleteObject(Object *object)
 		return false;
 	}
 
-	Ogre::String type = object->GetType();
+	std::string type = object->GetType();
 
 	//perform standard delete based on object type
 	if (type == "Floor")
@@ -3708,13 +3710,13 @@ std::string SBS::VerifyFile(const char *filename)
 	//case (fixes case-sensitivity issues mainly on Linux)
 	//returns the original string if not found
 
-	Ogre::String file = filename;
+	std::string file = filename;
 	TrimString(file);
 	Ogre::FileSystemArchive filesystem("","FileSystem");
 	if (filesystem.exists(file))
 		return file;
 
-	/*Ogre::String directory;
+	/*std::string directory;
 	int loc1 = file.find_last_of("/");
 	int loc2 = file.find_last_of("\\");
 	int loc = loc1;
@@ -3726,9 +3728,9 @@ std::string SBS::VerifyFile(const char *filename)
 	Ogre::StringVectorPtr listing = filesystem.list();
 	for (int i = 0; i < listing->size(); i++)
 	{
-		Ogre::String check = listing->at(i);
-		Ogre::String checkoriginal = SetCaseCopy(check, false);
-		Ogre::String checkfile = SetCaseCopy(file, false);
+		std::string check = listing->at(i);
+		std::string checkoriginal = SetCaseCopy(check, false);
+		std::string checkfile = SetCaseCopy(file, false);
 		if (checkoriginal == checkfile)
 			return check;
 	}
@@ -3739,14 +3741,14 @@ bool SBS::FileExists(const char *filename)
 {
 	//check to see if the specified file exists
 
-	Ogre::String file = filename;
+	std::string file = filename;
 	TrimString(file);
 
 	Ogre::FileSystemArchive filesystem("","FileSystem");
 	if (filesystem.exists(file))
 		return true;
 
-	Ogre::String verify = VerifyFile(file.c_str());
+	std::string verify = VerifyFile(file.c_str());
 	if (verify != file)
 		return true;
 	return false;
@@ -3851,25 +3853,25 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 
 int SBS::GetConfigInt(const char *key, int default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
 const char* SBS::GetConfigString(const char *key, const char *default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return result.c_str();
 }
 
 bool SBS::GetConfigBool(const char *key, bool default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
 float SBS::GetConfigFloat(const char *key, float default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }
 

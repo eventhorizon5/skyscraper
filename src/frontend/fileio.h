@@ -38,21 +38,21 @@ class ScriptProcessor
 	bool ReportMissingFiles();
 	int SplitData(const char *string, int start, bool calc = true);
 	int SplitAfterEquals(const char *string, bool calc = true);
-	Ogre::String GetAfterEquals(const char *string);
+	std::string GetAfterEquals(const char *string);
 
 	private:
 	int line; //line number
-	Ogre::String LineData; //line text
+	std::string LineData; //line text
 	int Current; //current range iteration
 	int Section; //current section number
-	Ogre::String Context; //section context
+	std::string Context; //section context
 	int temp1;
-	Ogre::String temp2;
+	std::string temp2;
 	int temp3;
 	int temp4;
 	int temp5;
-	Ogre::String temp6;
-	std::vector<Ogre::String> tempdata;
+	std::string temp6;
+	std::vector<std::string> tempdata;
 	std::vector<int> callbutton_elevators;
 	int FloorCheck;
 	int RangeL;
@@ -60,24 +60,24 @@ class ScriptProcessor
 	long RangeStart;
 	WallObject *wall;
 	char intbuffer[65];
-	Ogre::String buffer;
+	std::string buffer;
 	int startpos;
 	bool getfloordata;
 	bool setshaftdoors;
-	std::vector<Ogre::String> BuildingData;
-	std::vector<Ogre::String> UserVariable;
+	std::vector<std::string> BuildingData;
+	std::vector<std::string> UserVariable;
 	Ogre::Vector3 MinExtent;
 	Ogre::Vector3 MaxExtent;
 	bool InFunction;
 	int FunctionCallLine;
-	Ogre::String FunctionCallLineData;
-	std::vector<Ogre::String> FunctionParams;
+	std::string FunctionCallLineData;
+	std::vector<std::string> FunctionParams;
 	bool ReplaceLine;
-	std::vector<Ogre::String> nonexistent_files;
+	std::vector<std::string> nonexistent_files;
 
 	int ScriptError(std::string message);
 	int ScriptError();
-	Ogre::String Calc(const char *expression);
+	std::string Calc(const char *expression);
 	bool IfProc(const char *expression);
 	void StoreCommand(Object *object);
 	int ProcCommands();
@@ -90,7 +90,7 @@ class ScriptProcessor
 
 	struct FunctionInfo
 	{
-		Ogre::String name;
+		std::string name;
 		int line;
 	};
 
@@ -98,7 +98,7 @@ class ScriptProcessor
 
 	struct IncludeInfo
 	{
-		Ogre::String filename;
+		std::string filename;
 		int start_line;
 		int end_line;
 	};

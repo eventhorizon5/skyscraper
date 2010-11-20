@@ -48,7 +48,7 @@ public:
 		float speed;
 		float active_speed;
 		float openchange;
-		Ogre::String name;
+		std::string name;
 		DoorWrapper *wrapper; //associated wrapper
 		ElevatorDoor *parent;
 		float marker1;
@@ -82,7 +82,7 @@ public:
 
 		Object *object;
 		std::vector<DoorObject*> doors;
-		Ogre::String name;
+		std::string name;
 		bool Open;
 		bool Enabled;
 		Ogre::Vector3 Origin;
@@ -102,11 +102,11 @@ public:
 	int DoorTimer; //door autoclose timer value, in milliseconds
 	int QuickClose; //door quick close autotimer value, in milliseconds
 	float NudgeTimer; //wait time in seconds before enabling nudge mode
-	Ogre::String OpenSound; //door open sound
-	Ogre::String CloseSound; //door close sound
-	Ogre::String UpChimeSound; //elevator up chime sound
-	Ogre::String DownChimeSound; //elevator down chime sound
-	Ogre::String NudgeSound; //nudge mode sound
+	std::string OpenSound; //door open sound
+	std::string CloseSound; //door close sound
+	std::string UpChimeSound; //elevator up chime sound
+	std::string DownChimeSound; //elevator down chime sound
+	std::string NudgeSound; //nudge mode sound
 	int OpenDoor; //1=open doors, -1=close doors
 	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
 	Ogre::Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)

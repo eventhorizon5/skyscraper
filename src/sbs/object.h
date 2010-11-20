@@ -26,15 +26,16 @@
 #ifndef _SBS_OBJECT_H
 #define _SBS_OBJECT_H
 
-#include <OgreString.h>
+#include <string>
+#include <vector>
 
 class SBSIMPEXP Object
 {
 public:
 
-	Ogre::String command; //command line used to create object, if applicable
-	Ogre::String command_processed; //processed command used to create object
-	Ogre::String context; //script context object was created in
+	std::string command; //command line used to create object, if applicable
+	std::string command_processed; //processed command used to create object
+	std::string context; //script context object was created in
 	int linenum; //script line number where object was created
 	bool parent_deleting; //true if object's parent is deleting object
 
@@ -57,10 +58,10 @@ protected:
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object
 	void *raw_object; //raw object
-	Ogre::String Type; //object type
+	std::string Type; //object type
 	int Number; //object identifier
 	bool Temporary; //true if object can be deleted during runtime
-	Ogre::String Name; //object name
+	std::string Name; //object name
 	std::vector<Object*> children; //object's children
 };
 

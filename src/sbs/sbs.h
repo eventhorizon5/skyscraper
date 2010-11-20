@@ -26,14 +26,12 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include <OgreString.h>
 #include <OgreStringConverter.h>
 #include <OgreVector2.h>
 #include <OgreVector3.h>
 #include <OgreMesh.h>
 #include <OgreConfigFile.h>
-#include <OgreBulletDynamicsRigidBody.h>
-#include <fmod.hpp>
+
 #include "light.h"
 #include "mesh.h"
 #include "model.h"
@@ -87,23 +85,27 @@ public:
 	Ogre::SceneManager* mSceneManager;
 
 	//FMOD objects
+#ifdef _FMOD_HPP
 	FMOD::System *soundsys;
+#endif
 
 	//SBS version
-	Ogre::String version;
-	Ogre::String version_state;
+	std::string version;
+	std::string version_state;
 
 	//Building information
-	Ogre::String BuildingName;
-	Ogre::String BuildingFilename;
-	Ogre::String BuildingDesigner;
-	Ogre::String BuildingLocation;
-	Ogre::String BuildingDescription;
-	Ogre::String BuildingVersion;
+	std::string BuildingName;
+	std::string BuildingFilename;
+	std::string BuildingDesigner;
+	std::string BuildingLocation;
+	std::string BuildingDescription;
+	std::string BuildingVersion;
 
 	//physics objects
+#ifdef _OGREBULLETDYNAMICS_RigidObject_H
 	OgreBulletDynamics::DynamicsWorld *mWorld;
 	OgreBulletCollisions::DebugDrawer *debugDrawer;
+#endif
 
 	//Internal data
 	bool IsRunning; //is sim engine running?
@@ -139,17 +141,17 @@ public:
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
-	Ogre::String SkyName; //base filename of sky texture pack
-	Ogre::String root_dir; //app directory
-	Ogre::String dir_char;
+	std::string SkyName; //base filename of sky texture pack
+	std::string root_dir; //app directory
+	std::string dir_char;
 	bool DisableSound; //disable sound system if true
 	bool RecreateColliders; //true if system should recreate mesh colliders on each modification
 	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
 	bool Verbose; //set to true to enable verbose mode
 	bool InterfloorOnTop; //set to true to have interfloor area on top (it's on the bottom by default)
 	bool FastDelete; //used internally for quick object deletion
-	Ogre::String LastError; //most recent error message, from ReportError()
-	Ogre::String LastNotification; //most recent notification message, from Report()
+	std::string LastError; //most recent error message, from ReportError()
+	std::string LastNotification; //most recent notification message, from Report()
 	int WallCount; //wall object count
 	int PolygonCount; //wall polygon object count
 	bool Shaders; //true if shaders are enabled
@@ -166,7 +168,9 @@ public:
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
+#ifdef _FMOD_HPP
 	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem);
+#endif
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
@@ -189,7 +193,7 @@ public:
 	void ListAltitudes();
 	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	Ogre::String GetTextureMaterial(const char *name, bool &result, const char *polygon_name = 0);
+	std::string GetTextureMaterial(const char *name, bool &result, const char *polygon_name = 0);
 	bool NewElevator(int number);
 	bool NewFloor(int number);
 	int Elevators();
@@ -207,7 +211,7 @@ public:
 	void DrawWalls(bool MainN, bool MainP, bool SideN, bool SideP, bool Top, bool Bottom);
 	void ResetWalls(bool ToDefaults = false);
 	void SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, Ogre::Vector2 uv2, int vertindex3, Ogre::Vector2 uv3);
-	void SetTextureMapping2(Ogre::String x1, Ogre::String y1, Ogre::String z1, Ogre::Vector2 uv1, Ogre::String x2, Ogre::String y2, Ogre::String z2, Ogre::Vector2 uv2, Ogre::String x3, Ogre::String y3, Ogre::String z3, Ogre::Vector2 uv3);
+	void SetTextureMapping2(std::string x1, std::string y1, std::string z1, Ogre::Vector2 uv1, std::string x2, std::string y2, std::string z2, Ogre::Vector2 uv2, std::string x3, std::string y3, std::string z3, Ogre::Vector2 uv3);
 	void ResetTextureMapping(bool todefaults = false);
 	void ReverseAxis(bool value);
 	bool GetReverseAxis();
@@ -265,11 +269,11 @@ public:
 	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
 	Ogre::Vector2 CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::Vector2 y, Ogre::Vector2 z, float tw, float th);
 	//WallObject* GetWallObject(std::vector<WallObject*> &wallarray, int polygon_index);
-	//Ogre::String TruncateNumber(double value, int decimals);
-	Ogre::String TruncateNumber(float value, int decimals);
-	Ogre::String TruncateNumber(const char *number, int decimals);
+	//std::string TruncateNumber(double value, int decimals);
+	std::string TruncateNumber(float value, int decimals);
+	std::string TruncateNumber(const char *number, int decimals);
 	bool IsValidFloor(int floor);
-	Ogre::String DumpState();
+	std::string DumpState();
 	bool DeleteObject(Object *object);
 	bool DeleteObject(int object);
 	void RemoveFloor(Floor *floor);
@@ -313,7 +317,7 @@ public:
 	unsigned int GetElapsedTime();
 	std::string GetMountPath(const char *filename, std::string &newfilename);
 	void EnableVSync(bool value);
-	void loadChromaKeyedTexture(const Ogre::String& filename, const Ogre::String& resGroup, const Ogre::String& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
+	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
 	
 	//Meshes
 	MeshObject* Buildings;
@@ -358,12 +362,12 @@ private:
 	std::vector<int> OldMapIndex;
 	std::vector<Ogre::Vector2> MapUV;
 	std::vector<Ogre::Vector2> OldMapUV;
-	std::vector<Ogre::String> MapVerts1;
-	std::vector<Ogre::String> MapVerts2;
-	std::vector<Ogre::String> MapVerts3;
-	std::vector<Ogre::String> OldMapVerts1;
-	std::vector<Ogre::String> OldMapVerts2;
-	std::vector<Ogre::String> OldMapVerts3;
+	std::vector<std::string> MapVerts1;
+	std::vector<std::string> MapVerts2;
+	std::vector<std::string> MapVerts3;
+	std::vector<std::string> OldMapVerts1;
+	std::vector<std::string> OldMapVerts2;
+	std::vector<std::string> OldMapVerts3;
 	bool AutoX, AutoY; //autosizing
 	int MapMethod; //texture mapping method - 0=planar, 1=index, 2=verts
 	int OldMapMethod;
@@ -394,7 +398,7 @@ private:
 	//texture information structure
 	struct TextureInfo
 	{
-		Ogre::String name;
+		std::string name;
 		float widthmult;
 		float heightmult;
 		bool enable_force; //enable forcing of tile or stretch mode?
@@ -404,7 +408,7 @@ private:
 	std::vector<TextureInfo> textureinfo;
 
 	//override textures
-	Ogre::String mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
+	std::string mainnegtex, mainpostex, sidenegtex, sidepostex, toptex, bottomtex;
 
 	//texture flipping
 	int mainnegflip, mainposflip, sidenegflip, sideposflip, topflip, bottomflip;
@@ -440,10 +444,12 @@ private:
 	int soundcount;
 
 	//listener sound objects
+#ifdef _FMOD_HPP
 	FMOD_VECTOR listener_position;
 	FMOD_VECTOR listener_velocity;
 	FMOD_VECTOR listener_forward;
 	FMOD_VECTOR listener_up;
+#endif
 
 	//meshes
 	std::vector<MeshObject*> meshes;

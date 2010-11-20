@@ -58,7 +58,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	ProcessedDown = false;
 
 	//create object mesh
-	Ogre::String buffer, buffer2, buffer3;
+	std::string buffer, buffer2, buffer3;
 	buffer2 = Ogre::StringConverter::toString(floornum);
 	buffer3 = Ogre::StringConverter::toString(number);
 	buffer = "Call Panel " + buffer2 + ":" + buffer3;
@@ -366,7 +366,7 @@ bool CallButton::ServicesElevator(int elevator)
 		if (Elevators[i] == elevator)
 		{
 			if (sbs->Verbose)
-				Report(Ogre::String("Services elevator " + Ogre::String(_itoa(elevator, intbuffer, 10))).c_str());
+				Report(std::string("Services elevator " + std::string(_itoa(elevator, intbuffer, 10))).c_str());
 			return true;
 		}
 	}
@@ -410,7 +410,7 @@ void CallButton::Loop(bool direction)
 			int current = elevator->GetFloor();
 
 			if (sbs->Verbose)
-				Report(Ogre::String("Checking elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10))).c_str());
+				Report(std::string("Checking elevator " + std::string(_itoa(elevator->Number, intbuffer, 10))).c_str());
 
 			//if elevator is running
 			if (elevator->IsRunning() == true)
@@ -494,7 +494,7 @@ void CallButton::Loop(bool direction)
 		return;
 
 	if (sbs->Verbose)
-		Report(Ogre::String("Using elevator " + Ogre::String(_itoa(elevator->Number, intbuffer, 10))).c_str());
+		Report(std::string("Using elevator " + std::string(_itoa(elevator->Number, intbuffer, 10))).c_str());
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false && elevator->IsMoving == false)
@@ -549,7 +549,7 @@ void CallButton::Loop(bool direction)
 void CallButton::Report(const char *message)
 {
 	//general reporting function
-	Ogre::String msg = "Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message;
+	std::string msg = "Call button " + std::string(_itoa(floor, intbuffer, 10)) + ":" + std::string(_itoa(Number, intbuffer, 10)) + " - " + message;
 	sbs->Report(msg.c_str());
 
 }
@@ -557,6 +557,6 @@ void CallButton::Report(const char *message)
 bool CallButton::ReportError(const char *message)
 {
 	//general reporting function
-	Ogre::String msg = "Call button " + Ogre::String(_itoa(floor, intbuffer, 10)) + ":" + Ogre::String(_itoa(Number, intbuffer, 10)) + " - " + message;
+	std::string msg = "Call button " + std::string(_itoa(floor, intbuffer, 10)) + ":" + std::string(_itoa(Number, intbuffer, 10)) + " - " + message;
 	return sbs->ReportError(msg.c_str());
 }

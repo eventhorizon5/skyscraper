@@ -62,7 +62,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	Origin.y = voffset - (Height / 2);
 
 	//create mesh
-	Ogre::String buffer, buffer2, buffer3;
+	std::string buffer, buffer2, buffer3;
 	buffer2 = Ogre::StringConverter::toString(elevator);
 	buffer3 = Ogre::StringConverter::toString(index);
 	buffer = "Button Panel " + buffer2 + ":" + buffer3;
@@ -139,8 +139,8 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	//stop = Emergency Stop
 	//alarm = Alarm
 
-	std::vector<Ogre::String> textures, names;
-	Ogre::String newtype = type;
+	std::vector<std::string> textures, names;
+	std::string newtype = type;
 	SetCase(newtype, false);
 
 	//switch 'stop' to 'estop' for compatibility
@@ -161,7 +161,7 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 
 }
 
-void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<Ogre::String> &action_names, std::vector<Ogre::String> &textures)
+void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -244,7 +244,7 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	//create control object
 	controls.resize(controls.size() + 1);
 	int control_index = (int)controls.size() - 1;
-	Ogre::String buffer, buffer2, buffer3, buffer4;
+	std::string buffer, buffer2, buffer3, buffer4;
 	buffer2 = Ogre::StringConverter::toString(elevator);
 	buffer3 = Ogre::StringConverter::toString(Index);
 	buffer4 = Ogre::StringConverter::toString(control_index);
@@ -277,7 +277,7 @@ void ButtonPanel::Press(int index)
 	controls[index]->PlaySound();
 
 	//get action name of next position state
-	Ogre::String name = controls[index]->GetPositionAction(controls[index]->GetNextSelectPosition());
+	std::string name = controls[index]->GetPositionAction(controls[index]->GetNextSelectPosition());
 
 	if (IsNumeric(name.c_str()) == true)
 	{
@@ -471,7 +471,7 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 {
 	//change light status for all buttons that call the specified floor
 
-	Ogre::String floornum = Ogre::StringConverter::toString(floor);
+	std::string floornum = Ogre::StringConverter::toString(floor);
 	for (int i = 0; i < (int)controls.size(); i++)
 	{
 		int index = controls[i]->FindActionPosition(floornum.c_str());
@@ -490,7 +490,7 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 {
 	//return the index number of a floor button
 
-	Ogre::String floornum = Ogre::StringConverter::toString(floor);
+	std::string floornum = Ogre::StringConverter::toString(floor);
 
 	if (controls.size() > 0)
 	{

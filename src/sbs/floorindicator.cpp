@@ -44,13 +44,13 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	elev = elevator;
 	Prefix = texture_prefix;
 
-	Ogre::String buffer = Ogre::StringConverter::toString(elevator);
-	object->SetName(Ogre::String("Floor Indicator " + buffer).c_str());
+	std::string buffer = Ogre::StringConverter::toString(elevator);
+	object->SetName(std::string("Floor Indicator " + buffer).c_str());
 	TrimString(buffer);
 	FloorIndicatorMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	Ogre::String texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
-	Ogre::String tmpdirection = direction;
+	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
+	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
 	if (tmpdirection == "front" || tmpdirection == "back")
@@ -85,9 +85,9 @@ FloorIndicator::~FloorIndicator()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
+			if (std::string(object->GetParent()->GetType()) == "Elevator")
 				((Elevator*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
-			if (Ogre::String(object->GetParent()->GetType()) == "Floor")
+			if (std::string(object->GetParent()->GetType()) == "Floor")
 				((Floor*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
 		}
 	}
@@ -121,7 +121,7 @@ void FloorIndicator::Update(const char *value)
 {
 	//update display with a new texture value, such as a floor number
 
-	Ogre::String texture;
+	std::string texture;
 	texture = value;
 	texture.insert(0, Prefix);
 

@@ -123,8 +123,8 @@ bool ScriptProcessor::LoadBuilding()
 		{
 			for (int i = 0; i < (int)FunctionParams.size(); i++)
 			{
-				Ogre::String num = _itoa(i + 1, intbuffer, 10);
-				ReplaceAll(LineData, Ogre::String("%param" + num + "%").c_str(), FunctionParams[i].c_str());
+				std::string num = _itoa(i + 1, intbuffer, 10);
+				ReplaceAll(LineData, std::string("%param" + num + "%").c_str(), FunctionParams[i].c_str());
 			}
 		}
 
@@ -172,8 +172,8 @@ bool ScriptProcessor::LoadBuilding()
 
 			}
 			//get low and high range markers
-			Ogre::String str1 = LineData.substr(8, temp3 - 9);
-			Ogre::String str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
+			std::string str1 = LineData.substr(8, temp3 - 9);
+			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
 			TrimString(str1);
 			TrimString(str2);
 			if (!IsNumeric(str1.c_str(), RangeL) || !IsNumeric(str2.c_str(), RangeH))
@@ -181,10 +181,10 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid range");
 				return false;
 			}
-			Context = "Floor range " + Ogre::String(_itoa(RangeL, intbuffer, 10)) + " to " + Ogre::String(_itoa(RangeH, intbuffer, 10));
+			Context = "Floor range " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = line;
-			skyscraper->Report("Processing floors " + Ogre::String(_itoa(RangeL, intbuffer, 10)) + " to " + Ogre::String(_itoa(RangeH, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing floors " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (SetCaseCopy(LineData.substr(0, 7), false) == "<floor ")
@@ -197,15 +197,15 @@ bool ScriptProcessor::LoadBuilding()
 			Section = 2;
 			RangeL = 0;
 			RangeH = 0;
-			Ogre::String str = LineData.substr(7, LineData.length() - 8);
+			std::string str = LineData.substr(7, LineData.length() - 8);
 			TrimString(str);
 			if (!IsNumeric(str.c_str(), Current))
 			{
 				ScriptError("Invalid floor");
 				return false;
 			}
-			Context = "Floor " + Ogre::String(_itoa(Current, intbuffer, 10));
-			skyscraper->Report("Processing floor " + Ogre::String(_itoa(Current, intbuffer, 10)) + "...");
+			Context = "Floor " + std::string(_itoa(Current, intbuffer, 10));
+			skyscraper->Report("Processing floor " + std::string(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (SetCaseCopy(LineData, false) == "<endfloor>" && RangeL == RangeH)
@@ -234,8 +234,8 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Syntax error");
 				return false;
 			}
-			Ogre::String str1 = LineData.substr(11, temp3 - 12);
-			Ogre::String str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
+			std::string str1 = LineData.substr(11, temp3 - 12);
+			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
 			TrimString(str1);
 			TrimString(str2);
 			if (!IsNumeric(str1.c_str(), RangeL) || !IsNumeric(str2.c_str(), RangeH))
@@ -243,10 +243,10 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid range");
 				return false;
 			}
-			Context = "Elevator range " + Ogre::String(_itoa(RangeL, intbuffer, 10)) + " to " + Ogre::String(_itoa(RangeH, intbuffer, 10));
+			Context = "Elevator range " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10));
 			Current = RangeL;
 			RangeStart = line;
-			skyscraper->Report("Processing elevators " + Ogre::String(_itoa(RangeL, intbuffer, 10)) + " to " + Ogre::String(_itoa(RangeH, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing elevators " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (SetCaseCopy(LineData.substr(0, 10), false) == "<elevator ")
@@ -259,7 +259,7 @@ bool ScriptProcessor::LoadBuilding()
 			Section = 4;
 			RangeL = 0;
 			RangeH = 0;
-			Ogre::String str = LineData.substr(10, LineData.length() - 11);
+			std::string str = LineData.substr(10, LineData.length() - 11);
 			TrimString(str);
 			if (!IsNumeric(str.c_str(), Current))
 			{
@@ -271,8 +271,8 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid elevator");
 				return false;
 			}
-			Context = "Elevator " + Ogre::String(_itoa(Current, intbuffer, 10));
-			skyscraper->Report("Processing elevator " + Ogre::String(_itoa(Current, intbuffer, 10)) + "...");
+			Context = "Elevator " + std::string(_itoa(Current, intbuffer, 10));
+			skyscraper->Report("Processing elevator " + std::string(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
 		if (SetCaseCopy(LineData, false) == "<endelevator>" && RangeL == RangeH)
@@ -331,7 +331,7 @@ breakpoint:
 			//include another file at the current script location
 
 			int endloc = LineData.find(">");
-			Ogre::String includefile = LineData.substr(9, endloc - 9);
+			std::string includefile = LineData.substr(9, endloc - 9);
 			TrimString(includefile);
 
 			//delete current line
@@ -349,7 +349,7 @@ breakpoint:
 			//define a function (only available outside sections)
 
 			int endloc = LineData.find(">");
-			Ogre::String function = LineData.substr(10, endloc - 10);
+			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
 
 			//store function info in array
@@ -406,7 +406,7 @@ breakpoint:
 
 			if (temp1 + temp3 > 0)
 			{
-				Ogre::String str = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
+				std::string str = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
 				TrimString(str);
 				temp2 = str;
 				if (IsNumeric(temp2.c_str()) == true)
@@ -418,7 +418,7 @@ breakpoint:
 						return false;
 					}
 					//replace all occurrences of the variable with it's value
-					ReplaceAll(LineData, Ogre::String("%" + temp2 + "%").c_str(), UserVariable[temp4].c_str());
+					ReplaceAll(LineData, std::string("%" + temp2 + "%").c_str(), UserVariable[temp4].c_str());
 					startpos = temp1;
 				}
 				else
@@ -450,7 +450,7 @@ checkfloors:
 			}
 			else
 				getfloordata = false;
-			Ogre::String tempdata = Calc(LineData.substr(temp1 + 1, temp3 - temp1 - 1).c_str());
+			std::string tempdata = Calc(LineData.substr(temp1 + 1, temp3 - temp1 - 1).c_str());
 			TrimString(tempdata);
 			LineData = LineData.substr(0, temp1 + 1) + tempdata + LineData.substr(temp3);
 
@@ -647,7 +647,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 {
 	//loads a building data file into the runtime buffer
 	int location = insert_line;
-	Ogre::String Filename = filename;
+	std::string Filename = filename;
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
@@ -703,7 +703,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 bool ScriptProcessor::LoadFromText(const char *text)
 {
 	//loads building commands from a string
-	std::vector<Ogre::String> textarray;
+	std::vector<std::string> textarray;
 	SplitString(textarray, text, '\n');
 
 	//clear building data
@@ -722,9 +722,9 @@ bool ScriptProcessor::IfProc(const char *expression)
 	//IF statement processor
 
 	int temp1;
-	Ogre::String tmpcalc = expression;
-	Ogre::String one;
-	Ogre::String two;
+	std::string tmpcalc = expression;
+	std::string one;
+	std::string two;
 	int start, end;
 	bool check;
 
@@ -762,7 +762,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 			if (end != -1)
 			{
 				//call function recursively
-				Ogre::String newdata;
+				std::string newdata;
 				if (IfProc(tmpcalc.substr(start + 1, end - start - 1).c_str()) == true)
 					newdata = "true";
 				else
@@ -833,7 +833,7 @@ bool ScriptProcessor::IfProc(const char *expression)
 		}
 		if (operators > 1)
 		{
-			Ogre::String newdata;
+			std::string newdata;
 			if (IfProc(tmpcalc.substr(start, end - start).c_str()) == true)
 				newdata = "true";
 			else
@@ -939,7 +939,7 @@ int ScriptProcessor::ScriptError(std::string message)
 	int linenum = line;
 	int included_lines = 0;
 	bool isinclude = false;
-	Ogre::String includefile;
+	std::string includefile;
 
 	for (int i = 0; i < (int)includes.size(); i++)
 	{
@@ -961,11 +961,11 @@ int ScriptProcessor::ScriptError(std::string message)
 
 	//Script error reporting function
 	char intbuffer[65];
-	Ogre::String error;
+	std::string error;
 	if (isinclude == false)
-		error = "Script error on line " + Ogre::String(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + Ogre::String(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		error = "Script error on line " + std::string(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 	else
-		error = "Script error in included file " + includefile + " on line " + Ogre::String(_itoa(linenum, intbuffer, 10)) + ": " + Ogre::String(message) + "\nSection: " + Ogre::String(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		error = "Script error in included file " + includefile + " on line " + std::string(_itoa(linenum, intbuffer, 10)) + ": " + std::string(message) + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
 
 	skyscraper->ReportError(error.c_str());
 
@@ -982,10 +982,10 @@ int ScriptProcessor::ScriptError()
 {
 	//return automatic error message from contents of the simulator engine's LastError string
 
-	Ogre::String message = Simcore->LastError;
+	std::string message = Simcore->LastError;
 	int loc = message.find_last_of(":");
 
-	Ogre::String result = message.substr(loc + 1);
+	std::string result = message.substr(loc + 1);
 	TrimString(result);
 	return Ogre::StringConverter::parseInt(result);
 }
@@ -1067,7 +1067,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 13; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		if (Section == 2)
 		{
@@ -1129,7 +1129,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 13; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create wall
@@ -1149,7 +1149,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 11; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create floor
@@ -1169,7 +1169,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 2; i <= 8; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create tiled ground
@@ -1189,7 +1189,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 1; i <= 6; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
@@ -1224,7 +1224,7 @@ int ScriptProcessor::ProcCommands()
 
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + Ogre::String(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
 
 	//CreateWallBox2 command
@@ -1249,7 +1249,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 10; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		if (Section == 2)
@@ -1317,7 +1317,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 10; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		if (Section == 2)
@@ -1382,7 +1382,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i < params - 2; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
@@ -1440,7 +1440,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		if (atoi(tempdata[4].c_str()) < -Simcore->Basements)
@@ -1468,13 +1468,13 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 0; i <= 6; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//check for existence of shaft
 		int shaftnum = atoi(tempdata[0].c_str());
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
-			return ScriptError("Invalid shaft " + Ogre::String(tempdata[0]));
+			return ScriptError("Invalid shaft " + std::string(tempdata[0]));
 
 		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 	}
@@ -1487,7 +1487,7 @@ int ScriptProcessor::ProcCommands()
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		Ogre::String str = LineData.substr(15, loc - 16);
+		std::string str = LineData.substr(15, loc - 16);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), shaftnum))
 			return ScriptError("Invalid shaft number");
@@ -1503,14 +1503,14 @@ int ScriptProcessor::ProcCommands()
 
 		for (int line = 0; line < params; line++)
 		{
-			Ogre::String tmpstring = tempdata[line];
+			std::string tmpstring = tempdata[line];
 			TrimString(tmpstring);
 			if (tmpstring.find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				Ogre::String str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
+				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -1529,7 +1529,7 @@ int ScriptProcessor::ProcCommands()
 			else
 			{
 				int showfloor;
-				Ogre::String str = tempdata[line];
+				std::string str = tempdata[line];
 				TrimString(str);
 				if (!IsNumeric(str.c_str(), showfloor))
 					return ScriptError("Invalid value");
@@ -1546,7 +1546,7 @@ int ScriptProcessor::ProcCommands()
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		Ogre::String str = LineData.substr(16, loc - 17);
+		std::string str = LineData.substr(16, loc - 17);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), shaftnum))
 			return ScriptError("Invalid shaft number");
@@ -1560,14 +1560,14 @@ int ScriptProcessor::ProcCommands()
 
 		for (int line = 0; line < params; line++)
 		{
-			Ogre::String tmpstring = tempdata[line];
+			std::string tmpstring = tempdata[line];
 			TrimString(tmpstring);
 			if (tmpstring.find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				Ogre::String str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
+				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -1585,7 +1585,7 @@ int ScriptProcessor::ProcCommands()
 			else
 			{
 				int showfloor;
-				Ogre::String str = tempdata[line];
+				std::string str = tempdata[line];
 				TrimString(str);
 				if (!IsNumeric(str.c_str(), showfloor))
 					return ScriptError("Invalid value");
@@ -1602,7 +1602,7 @@ int ScriptProcessor::ProcCommands()
 		if (loc < 0)
 			return ScriptError("Syntax error");
 		int shaftnum;
-		Ogre::String str = LineData.substr(13, loc - 14);
+		std::string str = LineData.substr(13, loc - 14);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), shaftnum))
 			return ScriptError("Invalid shaft number");
@@ -1627,10 +1627,10 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 4; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		Object *object = Simcore->CreateStairwell(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
@@ -1652,10 +1652,10 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 6; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		int stairwell = atoi(tempdata[0].c_str());
@@ -1714,10 +1714,10 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 8; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		Simcore->SetTextureMapping(atoi(tempdata[0].c_str()), Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())),
@@ -1741,10 +1741,10 @@ int ScriptProcessor::ProcCommands()
 				i = 8;
 			if (i == 10)
 				i = 13;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		Simcore->SetTextureMapping2(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())),
@@ -1821,10 +1821,10 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		buffer = tempdata[0];
@@ -1845,7 +1845,7 @@ int ScriptProcessor::ProcCommands()
 
 		Ogre::Vector3 isect = Simcore->GetPoint(*wall_array, tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())));
 
-		buffer = Ogre::String(LineData).substr(0, temp5) + Ogre::String(wxVariant(isect.x).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(isect.y).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(isect.z).GetString().ToAscii()) + Ogre::String(LineData).substr(temp4 + 1);
+		buffer = std::string(LineData).substr(0, temp5) + std::string(wxVariant(isect.x).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(isect.y).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(isect.z).GetString().ToAscii()) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
 	}
 
@@ -1859,10 +1859,10 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		Ogre::String str = tempdata[2];
+		std::string str = tempdata[2];
 		TrimString(str);
 		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + Ogre::String(tempdata[2]));
+			return ScriptError("Invalid value: " + std::string(tempdata[2]));
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
@@ -1912,10 +1912,10 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		Ogre::String str = tempdata[2];
+		std::string str = tempdata[2];
 		TrimString(str);
 		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + Ogre::String(tempdata[2]));
+			return ScriptError("Invalid value: " + std::string(tempdata[2]));
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
@@ -1935,7 +1935,7 @@ int ScriptProcessor::ProcCommands()
 
 		Ogre::Vector3 result = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), Ogre::StringConverter::parseBool(tempdata[3]));
 
-		buffer = Ogre::String(LineData).substr(0, temp5) + Ogre::String(wxVariant(result.x).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(result.y).GetString().ToAscii()) + Ogre::String(", ") + Ogre::String(wxVariant(result.z).GetString().ToAscii()) + Ogre::String(LineData).substr(temp4 + 1);
+		buffer = std::string(LineData).substr(0, temp5) + std::string(wxVariant(result.x).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.y).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.z).GetString().ToAscii()) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
 	}
 
@@ -1975,10 +1975,10 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		Simcore->SetTextureFlip(atoi(tempdata[0].c_str()), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
@@ -2014,7 +2014,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create floor auto area
@@ -2040,7 +2040,7 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -2048,12 +2048,12 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 2; i <= 12; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		if (partial == true)
 			StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
@@ -2076,14 +2076,14 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
 		StoreCommand(Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
@@ -2123,8 +2123,8 @@ int ScriptProcessor::ProcGlobals()
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "cameraposition")
 	{
 		float x, z;
-		Ogre::String str1 = temp2.substr(0, temp2.find(",", 0));
-		Ogre::String str2 = temp2.substr(temp2.find(",", 0) + 1);
+		std::string str1 = temp2.substr(0, temp2.find(",", 0));
+		std::string str2 = temp2.substr(temp2.find(",", 0) + 1);
 		TrimString(str1);
 		TrimString(str2);
 		if (!IsNumeric(str1.c_str(), x) || !IsNumeric(str2.c_str(), z))
@@ -2138,9 +2138,9 @@ int ScriptProcessor::ProcGlobals()
 		temp3 = temp2.find(",", 0);
 		temp4 = temp2.find(",", temp3 + 1);
 		float x, y, z;
-		Ogre::String str1 = temp2.substr(0, temp3);
-		Ogre::String str2 = temp2.substr(temp3 + 1, temp4 - temp3 - 1);
-		Ogre::String str3 = temp2.substr(temp4 + 1);
+		std::string str1 = temp2.substr(0, temp3);
+		std::string str2 = temp2.substr(temp3 + 1, temp4 - temp3 - 1);
+		std::string str3 = temp2.substr(temp4 + 1);
 		TrimString(str1);
 		TrimString(str2);
 		TrimString(str3);
@@ -2154,9 +2154,9 @@ int ScriptProcessor::ProcGlobals()
 		temp3 = temp2.find(",", 0);
 		temp4 = temp2.find(",", temp3 + 1);
 		float x, y, z;
-		Ogre::String str1 = temp2.substr(0, temp3);
-		Ogre::String str2 = temp2.substr(temp3 + 1, temp4 - temp3 - 1);
-		Ogre::String str3 = temp2.substr(temp4 + 1);
+		std::string str1 = temp2.substr(0, temp3);
+		std::string str2 = temp2.substr(temp3 + 1, temp4 - temp3 - 1);
+		std::string str3 = temp2.substr(temp4 + 1);
 		TrimString(str1);
 		TrimString(str2);
 		TrimString(str3);
@@ -2181,7 +2181,7 @@ int ScriptProcessor::ProcFloors()
 	//exit with error if floor is invalid
 	if (!floor)
 	{
-		Ogre::String floornum;
+		std::string floornum;
 		floornum = Ogre::StringConverter::toString(Current);
 		return ScriptError("Invalid floor " + floornum);
 	}
@@ -2235,7 +2235,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		Ogre::String str = Calc(temp2.c_str());
+		std::string str = Calc(temp2.c_str());
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->Height))
 			return ScriptError("Invalid value");
@@ -2248,7 +2248,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		Ogre::String str = Calc(temp2.c_str());
+		std::string str = Calc(temp2.c_str());
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->InterfloorHeight))
 			return ScriptError("Invalid value");
@@ -2261,7 +2261,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		Ogre::String str = Calc(temp2.c_str());
+		std::string str = Calc(temp2.c_str());
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->Altitude))
 			return ScriptError("Invalid value");
@@ -2306,14 +2306,14 @@ int ScriptProcessor::ProcFloors()
 
 		for (int line = 0; line < params; line++)
 		{
-			Ogre::String tmpstring = tempdata[line];
+			std::string tmpstring = tempdata[line];
 			TrimString(tmpstring);
 			if (tmpstring.find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				Ogre::String str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
+				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -2331,7 +2331,7 @@ int ScriptProcessor::ProcFloors()
 			else
 			{
 				int data;
-				Ogre::String str = tempdata[line];
+				std::string str = tempdata[line];
 				TrimString(str);
 				if (!IsNumeric(str.c_str(), data))
 					return ScriptError("Invalid value");
@@ -2383,10 +2383,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 10; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create floor
@@ -2407,10 +2407,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create floor
@@ -2434,10 +2434,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create floor
@@ -2459,10 +2459,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 10; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create floor
@@ -2481,10 +2481,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create wall
@@ -2505,10 +2505,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create wall
@@ -2532,10 +2532,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create wall
@@ -2557,10 +2557,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create wall
@@ -2579,10 +2579,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		StoreCommand(floor->ColumnWallBox(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
@@ -2600,10 +2600,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		StoreCommand(floor->ColumnWallBox2(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
@@ -2615,7 +2615,7 @@ int ScriptProcessor::ProcFloors()
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
 			return ScriptError("Syntax Error");
-		Ogre::String str = LineData.substr(4, temp1 - 5);
+		std::string str = LineData.substr(4, temp1 - 5);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("Invalid variable number");
@@ -2627,7 +2627,7 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid variable number");
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + Ogre::String(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
 
 	//CallButtonElevators command
@@ -2644,7 +2644,7 @@ int ScriptProcessor::ProcFloors()
 		for (int line = 0; line < params; line++)
 		{
 			int elevnumber;
-			Ogre::String str = tempdata[line];
+			std::string str = tempdata[line];
 			TrimString(str);
 			if (!IsNumeric(str.c_str(), elevnumber))
 				return ScriptError("Invalid elevator number");
@@ -2674,10 +2674,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 6 || i == 9) //skip non-numeric parameters
 					i++;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -2690,10 +2690,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 8 || i == 11) //skip non-numeric parameters
 					i++;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -2718,10 +2718,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 4; //skip non-numeric parameters
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create stairs
@@ -2747,10 +2747,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 1; i <= 9; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 1;
 		}
@@ -2758,10 +2758,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 3; i <= 11; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 2;
 		}
@@ -2769,10 +2769,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 3; i <= 12; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 3;
 		}
@@ -2780,18 +2780,18 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 4; i <= 13; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[0]).c_str());
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+			CheckFile(std::string("data/" + tempdata[0]).c_str());
+			CheckFile(std::string("data/" + tempdata[1]).c_str());
 		}
 
 		//create door
@@ -2823,10 +2823,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 2; //skip non-numeric parameters
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 1;
 		}
@@ -2837,10 +2837,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 4; //skip non-numeric parameters
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 2;
 		}
@@ -2851,10 +2851,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 4; //skip non-numeric parameters
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 3;
 		}
@@ -2865,18 +2865,18 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 5; //skip non-numeric parameters
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
-			CheckFile(Ogre::String("data/" + tempdata[2]).c_str());
+			CheckFile(std::string("data/" + tempdata[1]).c_str());
+			CheckFile(std::string("data/" + tempdata[2]).c_str());
 		}
 
 		//create door
@@ -2917,10 +2917,10 @@ int ScriptProcessor::ProcFloors()
 					i = 13;
 				if (i == 15)
 					i = 16;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compatibility = true;
 		}
@@ -2934,10 +2934,10 @@ int ScriptProcessor::ProcFloors()
 					i = 14;
 				if (i == 16)
 					i = 17;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -2974,10 +2974,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 2)
 					i = 4;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -2986,10 +2986,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 2)
 					i = 3;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -3022,10 +3022,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 4;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -3034,10 +3034,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 3;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -3061,10 +3061,10 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 7)
 				i = 8;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		floor->AddFillerWalls(tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()));
@@ -3089,7 +3089,7 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -3097,12 +3097,12 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 2; i <= 12; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		if (partial == true)
 			StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
@@ -3126,10 +3126,10 @@ int ScriptProcessor::ProcFloors()
 				i = 5;
 			if (i == 6)
 				i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
@@ -3151,10 +3151,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
@@ -3176,14 +3176,14 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
 		StoreCommand(floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
@@ -3201,14 +3201,14 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 3; i <= 10; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
@@ -3229,14 +3229,14 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 3; i <= 10; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
@@ -3257,10 +3257,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//perform cut on floor
@@ -3279,10 +3279,10 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//perform cut on all objects related to the current floor
@@ -3353,7 +3353,7 @@ int ScriptProcessor::ProcElevators()
 		TrimString(temp2);
 		if (IfProc(temp2.c_str()) == true)
 		{
-			Ogre::String str = LineData.substr(temp3 + 1);
+			std::string str = LineData.substr(temp3 + 1);
 			TrimString(str);
 			LineData = str; //trim off IF statement
 			return sCheckFloors;
@@ -3407,7 +3407,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(9, LineData.find("=", 0) - 9);
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3446,14 +3446,14 @@ int ScriptProcessor::ProcElevators()
 
 		for (int line = 0; line < params; line++)
 		{
-			Ogre::String tmpstring = tempdata[line];
+			std::string tmpstring = tempdata[line];
 			TrimString(tmpstring);
 			if (tmpstring.find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				Ogre::String str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				Ogre::String str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
+				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -3474,7 +3474,7 @@ int ScriptProcessor::ProcElevators()
 			else
 			{
 				int data;
-				Ogre::String str = tempdata[line];
+				std::string str = tempdata[line];
 				TrimString(str);
 				if (!IsNumeric(str.c_str(), data))
 					return ScriptError("Invalid value");
@@ -3496,7 +3496,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(9, LineData.find("=", 0) - 9);
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3511,7 +3511,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3526,7 +3526,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3541,7 +3541,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(9, LineData.find("=", 0) - 9);
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3556,7 +3556,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(11, LineData.find("=", 0) - 11);
+		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3571,7 +3571,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(9, LineData.find("=", 0) - 9);
+		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3579,7 +3579,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->OpenSound = temp2;
 	}
@@ -3589,7 +3589,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3597,7 +3597,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
 	}
@@ -3607,7 +3607,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3615,7 +3615,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->NudgeSound = temp2;
 	}
@@ -3626,7 +3626,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarStartSound = temp2;
 		//turn off motor sounds
@@ -3642,7 +3642,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarMoveSound = temp2;
 		//turn off motor sounds
@@ -3658,7 +3658,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarStopSound = temp2;
 		//turn off motor sounds
@@ -3674,7 +3674,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarIdleSound = temp2;
 		//turn off motor sounds
@@ -3689,7 +3689,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarStartSound = temp2;
 	}
@@ -3699,7 +3699,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarMoveSound = temp2;
 	}
@@ -3709,7 +3709,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarStopSound = temp2;
 	}
@@ -3719,7 +3719,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarIdleSound = temp2;
 	}
@@ -3729,7 +3729,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorStartSound = temp2;
 	}
@@ -3739,7 +3739,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorRunSound = temp2;
 	}
@@ -3749,7 +3749,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorStopSound = temp2;
 	}
@@ -3759,7 +3759,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(10, LineData.find("=", 0) - 10);
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3767,7 +3767,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
@@ -3778,7 +3778,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(12, LineData.find("=", 0) - 12);
+		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3786,7 +3786,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 	}
@@ -3796,7 +3796,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
-		Ogre::String str = LineData.substr(14, LineData.find("=", 0) - 14);
+		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -3804,7 +3804,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
@@ -3814,7 +3814,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->AlarmSound = temp2;
 	}
@@ -3824,7 +3824,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->AlarmSoundStop = temp2;
 	}
@@ -3834,7 +3834,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetBeepSound(temp2.c_str());
 	}
@@ -3844,7 +3844,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetFloorSound(temp2.c_str());
 	}
@@ -3854,7 +3854,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetMessageSound(true, temp2.c_str());
 	}
@@ -3864,7 +3864,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetMessageSound(false, temp2.c_str());
 	}
@@ -3874,7 +3874,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + temp2).c_str());
+		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->Music = temp2;
 	}
@@ -3922,10 +3922,10 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 2; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		elev->MotorPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
@@ -3977,10 +3977,10 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		elev->ParkingFloor = atoi(tempdata[0].c_str());
@@ -4051,10 +4051,10 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 2; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		elev->MusicPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
@@ -4085,10 +4085,10 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 1; i <= 3; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()));
@@ -4109,10 +4109,10 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 2; i <= 10; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create floor
@@ -4131,10 +4131,10 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//create wall
@@ -4163,10 +4163,10 @@ int ScriptProcessor::ProcElevators()
 					i = 3;
 				if (i == 8)
 					i = 9;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -4177,10 +4177,10 @@ int ScriptProcessor::ProcElevators()
 					i = 2;
 				if (i == 7)
 					i = 8;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -4202,10 +4202,10 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 3; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		elev->SetShaftDoors(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
@@ -4232,10 +4232,10 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 3;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -4244,10 +4244,10 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 2;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		
@@ -4275,10 +4275,10 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 3)
 				i = 4;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		StoreCommand(elev->CreateButtonPanel(tempdata[0].c_str(), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
@@ -4304,16 +4304,16 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 2;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 1;
 		}
 		if (params == 9)
 		{
-			Ogre::String str = tempdata[2];
+			std::string str = tempdata[2];
 			TrimString(str);
 			if (IsNumeric(str.c_str()) == true)
 			{
@@ -4324,10 +4324,10 @@ int ScriptProcessor::ProcElevators()
 					if (i == 1 || i == 4)
 						i++;
 
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-						return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
 				}
 				hoffset = atof(tempdata[7].c_str());
 				voffset = atof(tempdata[8].c_str());
@@ -4344,10 +4344,10 @@ int ScriptProcessor::ProcElevators()
 					i = 3;
 				if (i == 5)
 					i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			if (params == 10)
 			{
@@ -4365,10 +4365,10 @@ int ScriptProcessor::ProcElevators()
 					i = 4;
 				if (i == 6)
 					i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			if (params == 11)
 			{
@@ -4382,7 +4382,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (compat == 0)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+			CheckFile(std::string("data/" + tempdata[1]).c_str());
 			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
@@ -4411,16 +4411,16 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1 || i == 4)
 					i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 1;
 		}
 		if (params == 9)
 		{
-			Ogre::String str = tempdata[2];
+			std::string str = tempdata[2];
 			TrimString(str);
 			if (IsNumeric(str.c_str()) == true)
 			{
@@ -4430,10 +4430,10 @@ int ScriptProcessor::ProcElevators()
 				{
 					if (i == 1 || i == 4)
 						i++;
-					Ogre::String str = tempdata[i];
+					std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-						return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
 				}
 				hoffset = atof(tempdata[7].c_str());
 				voffset = atof(tempdata[8].c_str());
@@ -4450,10 +4450,10 @@ int ScriptProcessor::ProcElevators()
 					i = 3;
 				if (i == 5)
 					i++;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			if (params == 10)
 			{
@@ -4471,10 +4471,10 @@ int ScriptProcessor::ProcElevators()
 					i = 4;
 				if (i == 6)
 					i++;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			if (params == 11)
 			{
@@ -4488,7 +4488,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (compat == 0)
 		{
-			CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+			CheckFile(std::string("data/" + tempdata[1]).c_str());
 			elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
@@ -4515,10 +4515,10 @@ int ScriptProcessor::ProcElevators()
 				i = 4;
 			if (i == 6)
 				i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		if (params == 11)
 		{
@@ -4530,7 +4530,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid panel number");
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 	}
@@ -4549,16 +4549,16 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 1)
 				i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid panel number");
 
-		std::vector<Ogre::String> action_array, tex_array;
+		std::vector<std::string> action_array, tex_array;
 		int slength, parameters;
 
 		//get number of action & texture parameters
@@ -4575,7 +4575,7 @@ int ScriptProcessor::ProcElevators()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 	}
@@ -4598,20 +4598,20 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 2; i <= 6; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
 		{
 			for (int i = 1; i <= 5; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -4638,10 +4638,10 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 11 || i == 14)
 					i++;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = true;
 		}
@@ -4652,10 +4652,10 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 12 || i == 15)
 					i++;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -4687,30 +4687,30 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 4;
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else if (compat == 1)
 		{
 			for (int i = 2; i <= 6; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else if (compat == 2)
 		{
 			for (int i = 3; i <= 7; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
@@ -4746,7 +4746,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 		else
@@ -4754,12 +4754,12 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 2; i <= 12; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		if (partial == true)
 			StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
@@ -4783,10 +4783,10 @@ int ScriptProcessor::ProcElevators()
 				i = 4;
 			if (i == 5)
 				i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str())));
@@ -4808,10 +4808,10 @@ int ScriptProcessor::ProcElevators()
 				i = 4;
 			if (i == 5)
 				i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		elev->AddShaftDoorsComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()));
@@ -4827,10 +4827,10 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		Ogre::String str = tempdata[0];
+		std::string str = tempdata[0];
 		TrimString(str);
 		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + Ogre::String(tempdata[0]));
+			return ScriptError("Invalid value: " + std::string(tempdata[0]));
 
 		StoreCommand(elev->FinishDoors(atoi(tempdata[0].c_str())));
 	}
@@ -4845,10 +4845,10 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		Ogre::String str = tempdata[0];
+		std::string str = tempdata[0];
 		TrimString(str);
 		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + Ogre::String(tempdata[0]));
+			return ScriptError("Invalid value: " + std::string(tempdata[0]));
 
 		bool result;
 		result = elev->FinishShaftDoors(atoi(tempdata[0].c_str()));
@@ -4871,10 +4871,10 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 11 || i == 14)
 				i++;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		StoreCommand(elev->AddDirectionalIndicator(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), tempdata[11].c_str(), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15].c_str()), atof(tempdata[16].c_str())));
@@ -4896,10 +4896,10 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 3; i <= 11; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 1;
 		}
@@ -4907,10 +4907,10 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 3; i <= 12; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = 2;
 		}
@@ -4918,15 +4918,15 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 4; i <= 13; i++)
 			{
-				Ogre::String str = tempdata[i];
+				std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
 
-		CheckFile(Ogre::String("data/" + tempdata[0]).c_str());
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[0]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create door
 		if (compat == 1)
@@ -4949,14 +4949,14 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
 		//check to see if file exists
-		CheckFile(Ogre::String("data/" + tempdata[1]).c_str());
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
 		StoreCommand(elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
@@ -4969,7 +4969,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp1 < 0)
 			return ScriptError("Syntax error");
 
-		Ogre::String str = LineData.substr(4, temp1 - 5);
+		std::string str = LineData.substr(4, temp1 - 5);
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("Invalid variable number");
@@ -4982,7 +4982,7 @@ int ScriptProcessor::ProcElevators()
 
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + Ogre::String(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
 	}
 
 	//handle elevator range
@@ -5021,10 +5021,10 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 2; i <= 3; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		buffer = tempdata[0];
 		CheckFile(buffer.c_str());
@@ -5046,10 +5046,10 @@ int ScriptProcessor::ProcTextures()
 		{
 			if (i == 2)
 				i = 4;
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		RangeL = atoi(tempdata[0].c_str());
 		RangeH = atoi(tempdata[1].c_str());
@@ -5084,10 +5084,10 @@ int ScriptProcessor::ProcTextures()
 			if (i == 9)
 				i = 11;
 
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		buffer = tempdata[2];
 		TrimString(buffer);
@@ -5116,10 +5116,10 @@ int ScriptProcessor::ProcTextures()
 			if (i == 11)
 				i = 13;
 
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		RangeL = atoi(tempdata[0].c_str());
 		RangeH = atoi(tempdata[1].c_str());
@@ -5155,10 +5155,10 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		buffer = tempdata[0];
 		TrimString(buffer);
@@ -5179,10 +5179,10 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 3; i <= 8; i++)
 		{
-			Ogre::String str = tempdata[i];
+			std::string str = tempdata[i];
 			TrimString(str);
 			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + Ogre::String(tempdata[i]));
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		if (params == 9)
 			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
@@ -5192,16 +5192,16 @@ int ScriptProcessor::ProcTextures()
 	return 0;
 }
 
-Ogre::String ScriptProcessor::Calc(const char *expression)
+std::string ScriptProcessor::Calc(const char *expression)
 {
 	//performs a calculation operation on a string
 	//for example, the string "1 + 1" would output to "2"
 	//supports multiple and nested operations (within parenthesis)
 
 	int temp1;
-	Ogre::String tmpcalc = expression;
-	Ogre::String one;
-	Ogre::String two;
+	std::string tmpcalc = expression;
+	std::string one;
+	std::string two;
 	int start, end;
 
 	//first remove all whitespace from the string
@@ -5231,7 +5231,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 			if (end != -1)
 			{
 				//call function recursively
-				Ogre::String newdata;
+				std::string newdata;
 				newdata = Calc(tmpcalc.substr(start + 1, end - start - 1).c_str());
 				//construct new string
 				one = tmpcalc.substr(0, start);
@@ -5279,7 +5279,7 @@ Ogre::String ScriptProcessor::Calc(const char *expression)
 		}
 		if (operators > 1)
 		{
-			Ogre::String newdata;
+			std::string newdata;
 			newdata = Calc(tmpcalc.substr(0, end).c_str());
 			//construct new string
 			two = tmpcalc.substr(end);
@@ -5355,7 +5355,7 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->command_processed = LineData;
 		object->linenum = line + 1;
 		object->context = Context;
-		Ogre::String current;
+		std::string current;
 		current = Ogre::StringConverter::toString(Current);
 		if (Section == 2)
 			object->context = "Floor " + current;
@@ -5381,7 +5381,7 @@ bool ScriptProcessor::FunctionProc()
 			//get function parameters
 			int location2 = location + (int)functions[i].name.length() + 1;
 			int end_loc = LineData.find(")", location);
-			Ogre::String newdata = LineData.substr(location2, end_loc - location2);
+			std::string newdata = LineData.substr(location2, end_loc - location2);
 			SplitString(tempdata, newdata.c_str(), ',');
 
 			//calculate inline math
@@ -5409,7 +5409,7 @@ void ScriptProcessor::CheckFile(const char *filename)
 	//check to see if the specified file exists.
 	//if not, add to nonexistent_files array
 
-	Ogre::String file = filename;
+	std::string file = filename;
 
 	if (file == "")
 		return;
@@ -5439,8 +5439,8 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 	//delimeter is a comma ","
 	//returns the number of parameters found
 
-	Ogre::String data = string;
-	Ogre::String stringbuffer;
+	std::string data = string;
+	std::string stringbuffer;
 	SplitString(tempdata, data.substr(start).c_str(), ',');
 	if (calc == true)
 	{
@@ -5459,12 +5459,12 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 	//get and split data after equal sign
 	//returns -1 if equal sign not found
 
-	Ogre::String data = string;
+	std::string data = string;
 	int loc = data.find("=", 0);
 	if (loc < 0)
 		return -1;
 
-	Ogre::String temp = data.substr(loc + 1);
+	std::string temp = data.substr(loc + 1);
 	TrimString(temp);
 
 	SplitString(tempdata, temp.c_str(), ',');
@@ -5472,7 +5472,7 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 	{
 		for (int i = 0; i < (int)tempdata.size(); i++)
 		{
-			Ogre::String buffer = Calc(tempdata[i].c_str());
+			std::string buffer = Calc(tempdata[i].c_str());
 			TrimString(buffer);
 			tempdata[i] = buffer;
 		}
@@ -5480,16 +5480,16 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 	return (int)tempdata.size();
 }
 
-Ogre::String ScriptProcessor::GetAfterEquals(const char *string)
+std::string ScriptProcessor::GetAfterEquals(const char *string)
 {
 	//return data after equal sign
 
-	Ogre::String data = string;
+	std::string data = string;
 	int loc = data.find("=", 0);
 	if (loc < 0)
 		return "";
 
-	Ogre::String temp = data.substr(loc + 1);
+	std::string temp = data.substr(loc + 1);
 	TrimString(temp);
 	return temp;
 }

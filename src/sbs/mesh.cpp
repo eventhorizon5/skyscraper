@@ -29,6 +29,7 @@
 #include <OgreSceneManager.h>
 #include <OgreMaterialManager.h>
 #include <OgreEntity.h>
+#include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsStaticPlaneShape.h>
 #include "globals.h"
 #include "sbs.h"
@@ -46,7 +47,7 @@ void SBS::DumpVertices(WallObject* wallobject)
 	/*for (int i = 0; i < mesh->getVertexCount(); i++)
 	{
 		Ogre::Vector3 vertex = mesh->GetVertices()[i];
-		Report(Ogre::String(_itoa(i, intbuffer, 10)) + ": " + Ogre::String(_gcvt(vertex.x, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.y, 6, buffer)) + ", " + Ogre::String(_gcvt(vertex.z, 6, buffer)));
+		Report(std::string(_itoa(i, intbuffer, 10)) + ": " + std::string(_gcvt(vertex.x, 6, buffer)) + ", " + std::string(_gcvt(vertex.y, 6, buffer)) + ", " + std::string(_gcvt(vertex.z, 6, buffer)));
 	}*/
 }
 
@@ -225,7 +226,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 			continue;
 
 		//get name
-		Ogre::String name = wall->GetHandle(i)->name;
+		std::string name = wall->GetHandle(i)->name;
 
 		//get original vertices
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
@@ -483,7 +484,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 		if (polycheck == true && newpolys.size() > 0)
 		{
 			//get texture data from original polygon
-			Ogre::String oldmat = wall->GetHandle(i)->material;
+			std::string oldmat = wall->GetHandle(i)->material;
 			Ogre::Vector3 oldvector;
 			Ogre::Matrix3 mapping;
 			wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
@@ -514,8 +515,8 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
 
-	Ogre::String newname;
-	Ogre::String name2 = name;
+	std::string newname;
+	std::string name2 = name;
 	for (int i = 0; i < 6; i++)
 	{
 		if (i == 0)
@@ -693,8 +694,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	enabled = true;
 
-	Ogre::String buffer;
-	Ogre::String Name = name;
+	std::string buffer;
+	std::string Name = name;
 	buffer = Ogre::StringConverter::toString(object->GetNumber());
 	Name.insert(0, "(" + buffer + ")");
 
@@ -818,8 +819,8 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
-	Ogre::String tex = sbs->VerifyFile(texture);
-	Ogre::String path = sbs->GetMountPath(texture, tex);
+	std::string tex = sbs->VerifyFile(texture);
+	std::string path = sbs->GetMountPath(texture, tex);
 	TrimString(tex);
 
 	//exit if old and new materials are the same
@@ -868,7 +869,7 @@ bool MeshObject::LoadColladaFile(const char *filename, const char *name)
 	//load a collada file into a new mesh, by converting to native Crystal Space format
 
 	//first verify the filename
-	/*Ogre::String File = sbs->VerifyFile(filename);;
+	/*std::string File = sbs->VerifyFile(filename);;
 	sbs->Report("Loading Collada model file " + File);
 	File.insert(0, "data/");
 
@@ -1017,9 +1018,9 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
 	//get texture material
-	Ogre::String texname = texture;
+	std::string texname = texture;
 	bool result;
-	Ogre::String material = sbs->GetTextureMaterial(texture, result, name);
+	std::string material = sbs->GetTextureMaterial(texture, result, name);
 	if (!result)
 		texname = "Default";
 
@@ -1086,7 +1087,7 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, false);
 }
 
-bool MeshObject::PolyMesh(const char *name, Ogre::String &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, bool convert_vertices)
+bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, bool convert_vertices)
 {
 	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1219,7 +1220,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	return texels;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, Ogre::String &material, const char *name, bool add)
+int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Process() function must be called when the mesh is ready to view, in order to upload data to graphics card
@@ -1385,7 +1386,7 @@ void MeshObject::Prepare()
 	MeshWrapper->_setBoundingSphereRadius(radius);
 }
 
-int MeshObject::FindMatchingSubMesh(Ogre::String material)
+int MeshObject::FindMatchingSubMesh(std::string material)
 {
 	//find a submesh with a matching material
 	//returns array index

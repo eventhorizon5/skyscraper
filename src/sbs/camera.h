@@ -31,7 +31,7 @@ class SBSIMPEXP Camera
 public:
 	Object *object; //SBS object
 	int CurrentFloor; //floor camera's on
-	Ogre::String CurrentFloorID; //indicator ID of camera's current floor
+	std::string CurrentFloorID; //indicator ID of camera's current floor
 	int StartFloor; //Starting floor
 	float StartPositionX; //starting position on X axis
 	float StartPositionZ; //starting position on Z axis
@@ -69,7 +69,7 @@ public:
 	bool EnableCollisions; //enable collision detection
 	bool MouseDown; //mouse status
 	bool ReportCollisions; //if true, print collisions on console
-	Ogre::String LastHitMesh; //name of last hit mesh
+	std::string LastHitMesh; //name of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	float Freelook_speed; //freelook speed
 	Ogre::Vector3 HitPosition; //last hit position
@@ -129,12 +129,12 @@ private:
 	Ogre::SceneNode* CameraNode; //camera scene node
 	Ogre::Vector3 StartDirection; //direction camera faces on start
 	Ogre::Vector3 StartRotation; //camera's startup rotation
-	Ogre::String meshname; //last clicked mesh name
-	Ogre::String polyname; //last clicked polygon name
+	std::string meshname; //last clicked mesh name
+	std::string polyname; //last clicked polygon name
 	int object_number; //last clicked object number
 	int object_line; //script line number of last clicked object
-	Ogre::String object_cmd; //original script command of last clicked object
-	Ogre::String object_cmd_processed; //processed script command of last clicked object
+	std::string object_cmd; //original script command of last clicked object
+	std::string object_cmd_processed; //processed script command of last clicked object
 	char intbuffer[65];
 	char buffer[20];
 	int FloorTemp; //previous floor check value
@@ -147,8 +147,10 @@ private:
 	Ogre::Vector3 rotation;
 
 	//collision/physics
+#ifdef _OGREBULLETDYNAMICS_RigidObject_H
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::BoxCollisionShape* mShape;
+#endif
 };
 
 #endif

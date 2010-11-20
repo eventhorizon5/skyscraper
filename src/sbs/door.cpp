@@ -152,11 +152,11 @@ Door::~Door()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (Ogre::String(object->GetParent()->GetType()) == "Elevator")
+			if (std::string(object->GetParent()->GetType()) == "Elevator")
 				((Elevator*)object->GetParent()->GetRawObject())->RemoveDoor(this);
-			if (Ogre::String(object->GetParent()->GetType()) == "Floor")
+			if (std::string(object->GetParent()->GetType()) == "Floor")
 				((Floor*)object->GetParent()->GetRawObject())->RemoveDoor(this);
-			if (Ogre::String(object->GetParent()->GetType()) == "Stairs")
+			if (std::string(object->GetParent()->GetType()) == "Stairs")
 				((Stairs*)object->GetParent()->GetRawObject())->RemoveDoor(this);
 		}
 		sbs->UnregisterDoorCallback(this);
@@ -166,7 +166,7 @@ Door::~Door()
 
 void Door::Open(bool playsound)
 {
-	sbs->Report(Ogre::String("Opening door " + Name).c_str());
+	sbs->Report(std::string("Opening door " + Name).c_str());
 	if (!sbs->RegisterDoorCallback(this))
 		return;
 	if (IsMoving == false)
@@ -181,7 +181,7 @@ void Door::Open(bool playsound)
 
 void Door::Close(bool playsound)
 {
-	sbs->Report(Ogre::String("Closing door " + Name).c_str());
+	sbs->Report(std::string("Closing door " + Name).c_str());
 	if (!sbs->RegisterDoorCallback(this))
 		return;
 	if (IsMoving == false)

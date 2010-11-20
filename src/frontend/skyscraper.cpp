@@ -29,6 +29,7 @@
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
+#include <fmod.hpp>
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
@@ -324,7 +325,7 @@ bool Skyscraper::Initialize()
 	cf.load("resources.cfg");
 	Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
-	Ogre::String secName, typeName, archName;
+	std::string secName, typeName, archName;
 	while(seci.hasMoreElements())
 	{
 		secName = seci.peekNextKey();
@@ -944,8 +945,8 @@ void Skyscraper::StartSound()
 		return;
 	}
 
-	Ogre::String filename = GetConfigString("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
-	Ogre::String filename_full = "data/" + filename;
+	std::string filename = GetConfigString("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
+	std::string filename_full = "data/" + filename;
 
 	//load new sound
 	FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), FMOD_DEFAULT, 0, &sound);
@@ -1173,11 +1174,11 @@ void Skyscraper::Quit()
 	wxGetApp().Exit();
 }
 
-Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const Ogre::String& windowName)
+Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
 {
-	Ogre::String name = windowName;
+	std::string name = windowName;
 	if (windowName.empty())
-		name = Ogre::String("wxOgreRenderWindow");
+		name = std::string("wxOgreRenderWindow");
 
 	//do not clear background
 	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -1213,7 +1214,7 @@ void Skyscraper::destroyRenderWindow()
 #endif
 }
 
-const Ogre::String Skyscraper::getOgreHandle() const
+const std::string Skyscraper::getOgreHandle() const
 {
 #if defined(__WXMSW__)
    // Handle for Windows systems
@@ -1251,7 +1252,7 @@ const Ogre::String Skyscraper::getOgreHandle() const
    XVisualInfo* vi = glXChooseVisual(display, DefaultScreen(display), attrlist);
    handleStream << ':' << (unsigned long)vi;
 
-   return Ogre::String(handleStream.str());
+   return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
    Rect rect;
@@ -1275,24 +1276,24 @@ const Ogre::String Skyscraper::getOgreHandle() const
 
 int Skyscraper::GetConfigInt(const char *key, int default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
 const char* Skyscraper::GetConfigString(const char *key, const char *default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return result.c_str();
 }
 
 bool Skyscraper::GetConfigBool(const char *key, bool default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
 float Skyscraper::GetConfigFloat(const char *key, float default_value)
 {
-	Ogre::String result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }

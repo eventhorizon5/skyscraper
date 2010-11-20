@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, const char *sound_file, std::vector<Ogre::String> &action_names, std::vector<Ogre::String> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, const char *name, const char *sound_file, std::vector<std::string> &action_names, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 
@@ -44,7 +44,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	object = new Object();
 	object->SetValues(this, parent, "Control", name, false);
 
-	Ogre::String objnum = Ogre::StringConverter::toString(object->GetNumber());
+	std::string objnum = Ogre::StringConverter::toString(object->GetNumber());
 	Name = "(" + objnum + ")" + name;
 	Actions = action_names;
 	Direction = direction;
@@ -99,7 +99,7 @@ Control::~Control()
 	{
 		if (object->parent_deleting == false)
 		{
-			if (Ogre::String(object->GetParent()->GetType()) == "ButtonPanel")
+			if (std::string(object->GetParent()->GetType()) == "ButtonPanel")
 				((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
 		}
 	}
@@ -264,7 +264,7 @@ int Control::FindActionPosition(const char *name)
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (Ogre::String(GetPositionAction(i)) == Ogre::String(name))
+		if (std::string(GetPositionAction(i)) == std::string(name))
 			return i;
 	}
 
