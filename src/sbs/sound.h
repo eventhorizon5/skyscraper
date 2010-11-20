@@ -64,10 +64,8 @@ public:
 private:
 
 	//sound data
-#ifdef _FMOD_HPP
 	FMOD::Sound *sound;
 	FMOD::Channel *channel;
-#endif
 
 	// sound parameters
 	Ogre::Vector3 Position;

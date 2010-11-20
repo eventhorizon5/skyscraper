@@ -96,10 +96,8 @@ public:
 
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;
-#ifdef _OGREBULLETDYNAMICS_RigidObject_H
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
-#endif
 
 private:
 	bool enabled;

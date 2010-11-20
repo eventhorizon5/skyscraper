@@ -31,6 +31,7 @@
 #include <OgreVector3.h>
 #include <OgreMesh.h>
 #include <OgreConfigFile.h>
+#include <OgreBulletDynamicsRigidBody.h>
 
 #include "light.h"
 #include "mesh.h"
@@ -85,9 +86,7 @@ public:
 	Ogre::SceneManager* mSceneManager;
 
 	//FMOD objects
-#ifdef _FMOD_HPP
 	FMOD::System *soundsys;
-#endif
 
 	//SBS version
 	std::string version;
@@ -102,10 +101,8 @@ public:
 	std::string BuildingVersion;
 
 	//physics objects
-#ifdef _OGREBULLETDYNAMICS_RigidObject_H
 	OgreBulletDynamics::DynamicsWorld *mWorld;
 	OgreBulletCollisions::DebugDrawer *debugDrawer;
-#endif
 
 	//Internal data
 	bool IsRunning; //is sim engine running?
@@ -168,9 +165,7 @@ public:
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
-#ifdef _FMOD_HPP
 	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem);
-#endif
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
@@ -444,12 +439,10 @@ private:
 	int soundcount;
 
 	//listener sound objects
-#ifdef _FMOD_HPP
 	FMOD_VECTOR listener_position;
 	FMOD_VECTOR listener_velocity;
 	FMOD_VECTOR listener_forward;
 	FMOD_VECTOR listener_up;
-#endif
 
 	//meshes
 	std::vector<MeshObject*> meshes;
