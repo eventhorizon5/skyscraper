@@ -32,6 +32,7 @@
 #include <OgreVector3.h>
 #include <OgreMesh.h>
 #include <OgreConfigFile.h>
+#include <OgreBulletDynamicsRigidBody.h>
 #include <fmod.hpp>
 #include "light.h"
 #include "mesh.h"
@@ -99,6 +100,10 @@ public:
 	Ogre::String BuildingLocation;
 	Ogre::String BuildingDescription;
 	Ogre::String BuildingVersion;
+
+	//physics objects
+	OgreBulletDynamics::DynamicsWorld *mWorld;
+	OgreBulletCollisions::DebugDrawer *debugDrawer;
 
 	//Internal data
 	bool IsRunning; //is sim engine running?

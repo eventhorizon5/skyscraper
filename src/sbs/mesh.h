@@ -95,6 +95,8 @@ public:
 	std::vector<WallObject*> Walls;
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;
+	OgreBulletDynamics::RigidBody* mBody;
+	OgreBulletCollisions::CollisionShape* mShape;
 
 private:
 	bool enabled;

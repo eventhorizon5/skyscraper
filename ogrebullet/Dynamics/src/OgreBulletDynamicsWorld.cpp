@@ -74,6 +74,17 @@ namespace OgreBulletDynamics
         delete mConstraintsolver;
     }
 
+    void DynamicsWorld::setGravity(const Ogre::Vector3 &gravity)
+    {
+    	static_cast <btDiscreteDynamicsWorld *> (mWorld)->setGravity(btVector3(gravity.x,gravity.y,gravity.z));
+    }
+
+    Ogre::Vector3 DynamicsWorld::getGravity()
+    {
+    	btVector3 gravity = static_cast <btDiscreteDynamicsWorld *> (mWorld)->getGravity();
+    	return Ogre::Vector3(gravity.x(), gravity.y(), gravity.z());
+    }
+
     // -------------------------------------------------------------------------
     void DynamicsWorld::addRigidBody (RigidBody *rb, short collisionGroup, short collisionMask)
     {

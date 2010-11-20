@@ -146,8 +146,9 @@ private:
 	bool ResetOnGround;
 	Ogre::Vector3 rotation;
 
-	//collision
-	//csColliderActor collider_actor;
+	//collision/physics
+	OgreBulletDynamics::RigidBody* mBody;
+	OgreBulletCollisions::BoxCollisionShape* mShape;
 };
 
 #endif

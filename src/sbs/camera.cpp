@@ -25,6 +25,7 @@
 
 #include <OgreCamera.h>
 #include <OgreSceneManager.h>
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "callbutton.h"
@@ -99,6 +100,13 @@ Camera::Camera(Ogre::Camera *camera)
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
+
+	//set up physics parameters
+	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
+	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
+	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
+	//mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
+	mBody->setStaticShape(mShape, 0.1, 0.5);
 }
 
 Camera::~Camera()
@@ -747,6 +755,9 @@ void Camera::Loop()
 	//calculate acceleration
 	InterpolateMovement();
 
+	//apply gravity force
+	//mBody->applyForce(Ogre::Vector3(0, sbs->ToRemote(Gravity), 0), Ogre::Vector3::ZERO);
+
 	//general movement
 	float delta = sbs->GetElapsedTime() / 1000.0f;
 	//collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
@@ -901,7 +912,7 @@ void Camera::InterpolateMovement()
 void Camera::SetGravity(float gravity)
 {
 	Gravity = gravity;
-	//collider_actor.SetGravity(sbs->ToRemote(Gravity));
+	sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(gravity), 0));
 }
 
 float Camera::GetGravity()
@@ -911,10 +922,10 @@ float Camera::GetGravity()
 
 void Camera::EnableGravity(bool value)
 {
-	/*if (value == true)
-		collider_actor.SetGravity(sbs->ToRemote(Gravity));
+	if (value == true)
+		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(Gravity), 0));
 	else
-		collider_actor.SetGravity(0.0f);*/
+		sbs->mWorld->setGravity(Ogre::Vector3::ZERO);
 	GravityStatus = value;
 }
 

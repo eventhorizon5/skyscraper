@@ -285,6 +285,15 @@ SBS::~SBS()
 	//Report("Deleting CS engine objects...");
 	//engine->clear();
 
+	//delete physics objects
+	if (mWorld)
+	{
+		delete mWorld->getDebugDrawer();
+		mWorld->setDebugDrawer(0);
+		delete mWorld;
+	}
+	mWorld = 0;
+
 	ObjectArray.clear();
 
 	//clear self reference
@@ -428,6 +437,9 @@ void SBS::MainLoop()
 		start_time = GetRunTime() / 1000.0;
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
+	//update physics
+	mWorld->stepSimulation(GetElapsedTime());
+
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
@@ -529,6 +541,16 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	if (DisableSound == false)
 		soundsys->set3DSettings(1.0, 3.28, 1.0);
+
+	//set up physics
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0));
+
+	debugDrawer = new OgreBulletCollisions::DebugDrawer();
+	debugDrawer->setDrawWireframe(true);
+	mWorld->setDebugDrawer(debugDrawer);
+	mWorld->setShowDebugShapes(true);
+	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Ogre::Vector3::ZERO);
+	node->attachObject(static_cast<Ogre::SimpleRenderable*> (debugDrawer));
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "signs/sans");
