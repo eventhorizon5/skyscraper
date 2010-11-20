@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic MinkowskiSumShape
-    class MinkowskiSumCollisionShape : public CollisionShape
+    class _OgreBulletExport MinkowskiSumCollisionShape : public CollisionShape
     {
     public:
 	    MinkowskiSumCollisionShape(CollisionShape* shapeA, CollisionShape* shapeB);

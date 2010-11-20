@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic SphereShape
-    class SphereCollisionShape : public CollisionShape
+    class _OgreBulletExport SphereCollisionShape : public CollisionShape
     {
     public:
         SphereCollisionShape(const Ogre::Real  radius);

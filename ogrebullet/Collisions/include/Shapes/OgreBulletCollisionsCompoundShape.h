@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic CompoundShape
-    class CompoundCollisionShape : public CollisionShape
+    class _OgreBulletExport CompoundCollisionShape : public CollisionShape
     {
     public:
 		CompoundCollisionShape();

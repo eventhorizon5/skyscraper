@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 namespace OgreBulletCollisions 
 {
-	class VertexIndexToShape
+	class _OgreBulletExport VertexIndexToShape
 	{
 	public:
 		VertexIndexToShape(const Ogre::Matrix4 &transform = Ogre::Matrix4::IDENTITY);
@@ -90,7 +90,7 @@ namespace OgreBulletCollisions
 
 	};
 
-	class StaticMeshToShapeConverter : public VertexIndexToShape
+	class _OgreBulletExport StaticMeshToShapeConverter : public VertexIndexToShape
 	{
 	public:
 
@@ -112,7 +112,7 @@ namespace OgreBulletCollisions
 
 	};
 
-	class AnimatedMeshToShapeConverter : public VertexIndexToShape
+	class _OgreBulletExport AnimatedMeshToShapeConverter : public VertexIndexToShape
 	{
 	public:
 

@@ -28,7 +28,6 @@
 
 #include <string>
 #include <vector>
-#include <deque>
 #include "wx/platform.h"
 
 //DLL Exporting

@@ -40,25 +40,25 @@ THE SOFTWARE.
 
 namespace OgreBulletDynamics
 {
-    class RigidBody;
-    class PhysicState;
-    class DynamicsWorld;
+    class _OgreBulletExport RigidBody;
+    class _OgreBulletExport PhysicState;
+    class _OgreBulletExport DynamicsWorld;
 
-	class ActionInterface;
+	class _OgreBulletExport ActionInterface;
 
-    class TypedConstraint;
-    class HingeConstraint;
-    class SixDofConstraint;
-    class PointToPointConstraint;
-	class ConeTwistConstraint;
+    class _OgreBulletExport TypedConstraint;
+    class _OgreBulletExport HingeConstraint;
+    class _OgreBulletExport SixDofConstraint;
+    class _OgreBulletExport PointToPointConstraint;
+	class _OgreBulletExport ConeTwistConstraint;
 
-    class WheeledRigidBody;
-    class VehicleRayCaster;
-    class VehicleTuning;
-    class RaycastVehicle;
-    class WheelInfo;
+    class _OgreBulletExport WheeledRigidBody;
+    class _OgreBulletExport VehicleRayCaster;
+    class _OgreBulletExport VehicleTuning;
+    class _OgreBulletExport RaycastVehicle;
+    class _OgreBulletExport WheelInfo;
 
-	class RagDoll;
+	class _OgreBulletExport RagDoll;
 }
 
 #endif //_OGREBULLETDYNAMICS_PREREQUISITES_H

@@ -40,7 +40,7 @@ namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
     // basic rigid body class
-    class DynamicsWorld : public OgreBulletCollisions::CollisionsWorld
+    class _OgreBulletExport DynamicsWorld : public OgreBulletCollisions::CollisionsWorld
     {
     public:
         DynamicsWorld(Ogre::SceneManager *mgr, 

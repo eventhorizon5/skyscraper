@@ -35,7 +35,7 @@ THE SOFTWARE.
 namespace OgreBulletCollisions
 {
     //------------------------------------------------------------------------------------------------
-    class  DebugLines:public Ogre::SimpleRenderable
+    class _OgreBulletExport DebugLines:public Ogre::SimpleRenderable
     {
     public:
         DebugLines(void);

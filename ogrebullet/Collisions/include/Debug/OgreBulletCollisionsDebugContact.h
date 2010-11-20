@@ -38,7 +38,7 @@ THE SOFTWARE.
 namespace OgreBulletCollisions 
 {
     //------------------------------------------------------------------------------------------------
-    class DebugContact
+    class _OgreBulletExport DebugContact
     {
     public:
         DebugContact(const Ogre::String &name, CollisionsWorld *world);
@@ -61,7 +61,7 @@ namespace OgreBulletCollisions
     };
 
     //------------------------------------------------------------------------------------------------
-    class DebugNormal : public DebugLines
+    class _OgreBulletExport DebugNormal : public DebugLines
     {
     public:
         DebugNormal() : DebugLines(){};
@@ -71,7 +71,7 @@ namespace OgreBulletCollisions
     };
 
     //------------------------------------------------------------------------------------------------
-    class DebugContactText : public Ogre::MovableObject, public Ogre::Renderable
+    class _OgreBulletExport DebugContactText : public Ogre::MovableObject, public Ogre::Renderable
     {
     public:
         enum HorizontalAlignment    {H_LEFT, H_CENTER};

@@ -40,7 +40,7 @@ namespace OgreBulletDynamics
 {
 	// -------------------------------------------------------------------------
 	// basic CollisionWorld
-	class RagDoll 
+	class _OgreBulletExport RagDoll 
 	{
 	public:
 		RagDoll (btDynamicsWorld* ownerWorld, 

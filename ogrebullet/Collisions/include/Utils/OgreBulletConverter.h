@@ -37,7 +37,7 @@ THE SOFTWARE.
 
 namespace OgreBulletCollisions
 {
-    class OgreBtConverter
+    class _OgreBulletExport OgreBtConverter
     {
     public:
         OgreBtConverter(){};
@@ -54,7 +54,7 @@ namespace OgreBulletCollisions
         };
 
     };
-    class BtOgreConverter
+    class _OgreBulletExport BtOgreConverter
     {
     public:
         BtOgreConverter(){};

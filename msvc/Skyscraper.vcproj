@@ -24,7 +24,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="erase ..\src\frontend\revmain.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\cameracontrol.* ..\src\frontend\console.* ..\src\frontend\debugpanel.* ..\src/editelevator.* ..\src\frontend\fileio.* ..\src\frontend\keydialog.* ..\src\frontend\meshcontrol.* ..\src\frontend\objectinfo.* ..\src\frontend\skyscraper.* ..\src\frontend\stackwalker.* ..\src\frontend\stats.* ..\src\frontend\textwindow.* ..\src\frontend\uexception.h&#x0D;&#x0A;"
+				CommandLine="erase ..\src\frontend\revmain.h&#x0D;&#x0A;..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h&#x0D;&#x0A;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -49,9 +49,9 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
+				AdditionalIncludeDirectories="..\src\sbs;&quot;$(BULLET_HOME)\src&quot;;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC"
 				StringPooling="true"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -82,12 +82,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SBS.lib OgreMain.lib OIS.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib fmodex_vc.lib"
+				AdditionalDependencies="SBS.lib OgreMain.lib OIS.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories=".\Release;&quot;$(OGRE_HOME)\lib\release&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
+				AdditionalLibraryDirectories="..\;.\Release;&quot;$(OGRE_HOME)\lib\release&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\Skyscraper.pdb"
 				SubSystem="1"
@@ -133,7 +133,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="rem erase ..\src\frontend\revmain.h&#x0D;&#x0A;rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\cameracontrol.* ..\src\frontend\console.* ..\src\frontend\debugpanel.* ..\src/editelevator.* ..\src\frontend\fileio.* ..\src\frontend\keydialog.* ..\src\frontend\meshcontrol.* ..\src\frontend\objectinfo.* ..\src\frontend\skyscraper.* ..\src\frontend\stackwalker.* ..\src\frontend\stats.* ..\src\frontend\textwindow.* ..\src\frontend\uexception.h&#x0D;&#x0A;"
+				CommandLine="rem erase ..\src\frontend\revmain.h&#x0D;&#x0A;rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -156,9 +156,9 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
+				AdditionalIncludeDirectories="..\src\sbs;&quot;$(BULLET_HOME)\src&quot;;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(OGRE_HOME)\include\OIS&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
 				AdditionalUsingDirectories=""
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC"
 				MinimalRebuild="true"
 				ExceptionHandling="1"
 				BasicRuntimeChecks="3"
@@ -189,12 +189,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SBS.lib OgreMain_d.lib OIS_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib fmodex_vc.lib"
+				AdditionalDependencies="SBS.lib OgreMain_d.lib OIS_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories=".\Debug;&quot;$(OGRE_HOME)\lib\debug&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
+				AdditionalLibraryDirectories="..\;.\Debug;&quot;$(OGRE_HOME)\lib\debug&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Skyscraper.pdb"
 				SubSystem="1"

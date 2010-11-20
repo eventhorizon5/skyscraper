@@ -38,7 +38,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic CollisionWorld
-    class CollisionsWorld 
+    class _OgreBulletExport CollisionsWorld 
     {
     public:
         // Note: If set32bitsAxisSweep = false, then the maximum value for maxHandles = USHRT_MAX

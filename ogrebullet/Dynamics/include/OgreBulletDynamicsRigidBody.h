@@ -46,7 +46,7 @@ namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
     // basic rigid body class
-    class RigidBody : public OgreBulletCollisions::Object
+    class _OgreBulletExport RigidBody : public OgreBulletCollisions::Object
     {
     public:
 	    RigidBody(const Ogre::String &name, 
@@ -122,7 +122,7 @@ namespace OgreBulletDynamics
     };
     // -------------------------------------------------------------------------
     // basic rigid body class
-    class WheeledRigidBody : public RigidBody
+    class _OgreBulletExport WheeledRigidBody : public RigidBody
     {
     public:
         WheeledRigidBody(const Ogre::String &name, DynamicsWorld *world): 

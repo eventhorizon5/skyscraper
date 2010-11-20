@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic TriangleShape
-    class TriangleCollisionShape : public CollisionShape
+    class _OgreBulletExport TriangleCollisionShape : public CollisionShape
     {
     public:
         TriangleCollisionShape(const Ogre::Vector3 &p1, const Ogre::Vector3 &p2, const Ogre::Vector3 &p3);	

@@ -39,7 +39,7 @@ namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
     // HingeConstraint  class
-    class HingeConstraint : public TypedConstraint
+    class _OgreBulletExport HingeConstraint : public TypedConstraint
     {
     public:
         HingeConstraint(RigidBody * rbA, 

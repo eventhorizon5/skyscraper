@@ -38,7 +38,7 @@ namespace OgreBulletCollisions
 {
    
 	//------------------------------------------------------------------------------------------------
-	class  DebugCollisionShape : public DebugLines
+	class _OgreBulletExport DebugCollisionShape : public DebugLines
 	{
 	public:
 		enum Mode
@@ -73,7 +73,7 @@ namespace OgreBulletCollisions
 
 	};
 	//------------------------------------------------------------------------------------------------
-	class  RayDebugShape:public DebugLines
+	class _OgreBulletExport  RayDebugShape:public DebugLines
 	{
 	public:
 		RayDebugShape(const Ogre::Vector3& start,const Ogre::Vector3& direction,const Ogre::Real length);

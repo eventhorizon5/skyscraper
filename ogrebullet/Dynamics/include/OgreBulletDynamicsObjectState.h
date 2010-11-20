@@ -38,7 +38,7 @@ namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
     // Object transforms
-    class PhysicState : public btMotionState
+    class _OgreBulletExport PhysicState : public btMotionState
     {
     public:
 	    PhysicState(RigidBody *parent);

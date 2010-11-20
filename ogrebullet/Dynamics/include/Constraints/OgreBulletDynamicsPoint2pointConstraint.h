@@ -39,7 +39,7 @@ namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
     // PointTopointConstraint  class
-    class PointToPointConstraint : public TypedConstraint
+    class _OgreBulletExport PointToPointConstraint : public TypedConstraint
     {
     public:
 	    PointToPointConstraint(RigidBody *body, const Ogre::Vector3 &pivot);

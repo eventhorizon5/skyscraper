@@ -39,7 +39,7 @@ namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
     // basic constraint class
-    class TypedConstraint
+    class _OgreBulletExport TypedConstraint
     {
     public:
         TypedConstraint(DynamicsWorld *world);
@@ -59,7 +59,7 @@ namespace OgreBulletDynamics
         RigidBody               *mBodyB;
 	}; 
 	// basic constraint action class
-	class ActionInterface
+	class _OgreBulletExport ActionInterface
 	{
 	public:
 		ActionInterface(DynamicsWorld *world);

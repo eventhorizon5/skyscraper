@@ -29,6 +29,7 @@
 #include <OgreSceneManager.h>
 #include <OgreMaterialManager.h>
 #include <OgreEntity.h>
+#include <OgreBulletCollisionsStaticPlaneShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -736,9 +737,9 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 		Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
 
 	//set up physics parameters
-	//mShape = new OgreBulletCollisions::StaticPlaneCollisionShape(Ogre::Vector3(0,1,0), 0);
-	//mBody = new OgreBulletDynamics::RigidBody("BasePlane", sbs->mWorld);
-	//mBody->setStaticShape(mShape, 0.1, 0.8);
+	mShape = new OgreBulletCollisions::StaticPlaneCollisionShape(Ogre::Vector3(0,1,0), 0);
+	mBody = new OgreBulletDynamics::RigidBody("BasePlane", sbs->mWorld);
+	mBody->setStaticShape(mShape, 0.1, 0.8);
 
 	sbs->AddMeshHandle(this);
 

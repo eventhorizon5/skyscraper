@@ -37,7 +37,7 @@ THE SOFTWARE.
 namespace OgreBulletCollisions
 {
 	//------------------------------------------------------------------------------------------------
-	class  DebugDrawer : public DebugLines, public btIDebugDraw
+	class _OgreBulletExport DebugDrawer : public DebugLines, public btIDebugDraw
 	{
 	public:
         DebugDrawer();

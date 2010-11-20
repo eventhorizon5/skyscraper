@@ -40,7 +40,7 @@ namespace OgreBulletDynamics
 
     // -------------------------------------------------------------------------
     // VehicleRayCaster  class
-    class VehicleRayCaster
+    class _OgreBulletExport VehicleRayCaster
     {
     public:
         VehicleRayCaster(DynamicsWorld *world);
@@ -54,7 +54,7 @@ namespace OgreBulletDynamics
     };
     // -------------------------------------------------------------------------
     // VehicleTuning  class
-    class VehicleTuning
+    class _OgreBulletExport VehicleTuning
     {
     public:
         VehicleTuning(
@@ -73,7 +73,7 @@ namespace OgreBulletDynamics
     };
     // -------------------------------------------------------------------------
     // RaycastVehicle  class
-    class WheelInfo
+    class _OgreBulletExport WheelInfo
     {
     public:
         WheelInfo(btWheelInfo &w): 
@@ -88,7 +88,7 @@ namespace OgreBulletDynamics
     };
     // -------------------------------------------------------------------------
     // RaycastVehicle  class
-    class RaycastVehicle : public ActionInterface
+    class _OgreBulletExport RaycastVehicle : public ActionInterface
     {
     public:
         RaycastVehicle(WheeledRigidBody *body,  

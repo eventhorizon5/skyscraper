@@ -364,7 +364,7 @@ ConvexHullCollisionShape* VertexIndexToShape::createConvex()
 //------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------
-class MyConvexDecomposition : public ConvexDecomposition::ConvexDecompInterface
+class _OgreBulletExport MyConvexDecomposition : public ConvexDecomposition::ConvexDecompInterface
 {
 	//ConvexDecompositionDemo*	m_convexDemo;
 

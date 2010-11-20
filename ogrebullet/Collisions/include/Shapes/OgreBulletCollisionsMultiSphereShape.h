@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic MultiSphereShape
-    class MultiSphereCollisionShape : public CollisionShape
+    class _OgreBulletExport MultiSphereCollisionShape : public CollisionShape
     {
     public:
         MultiSphereCollisionShape(

@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic TrimeshShape
-    class TriangleMeshCollisionShape : public CollisionShape
+    class _OgreBulletExport TriangleMeshCollisionShape : public CollisionShape
     {
 	public:
 		TriangleMeshCollisionShape(Ogre::Vector3 *_vertices, unsigned int _vertex_count, unsigned int *_indices, unsigned int_index_count, bool use32bitsIndices = true);

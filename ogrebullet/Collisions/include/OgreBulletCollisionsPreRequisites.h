@@ -43,53 +43,65 @@ THE SOFTWARE.
 #define M_PI 3.14159265
 #endif
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#   define _CDECL _cdecl
+#   if defined( _OGREBULLET_EXPORTS ) && defined( _OGREBULLET_DYNAMIC )
+#       define _OgreBulletExport __declspec( dllexport )
+#   elif defined( _OGREBULLET_DYNAMIC )
+#       define _OgreBulletExport __declspec( dllimport )
+#   else
+#       define _OgreBulletExport
+#endif
+
+#endif 
+
 namespace OgreBulletCollisions
 {
-    class BtOgreConverter;
-    class OgreBtConverter;
+    class _OgreBulletExport BtOgreConverter;
+    class _OgreBulletExport OgreBtConverter;
 
-    class CollisionsWorld;
+    class _OgreBulletExport CollisionsWorld;
 
-    class CollisionRayResultCallback;
-    class CollisionClosestRayResultCallback;
+    class _OgreBulletExport CollisionRayResultCallback;
+    class _OgreBulletExport CollisionClosestRayResultCallback;
 
-    class DebugLines;
+    class _OgreBulletExport DebugLines;
 
-    class DebugDrawer;
+    class _OgreBulletExport DebugDrawer;
 
-    class DebugContact;
-    class DebugNormal;
-    class DebugContactText;
+    class _OgreBulletExport DebugContact;
+    class _OgreBulletExport DebugNormal;
+    class _OgreBulletExport DebugContactText;
     
-    class DebugCollisionShape;
-    class BoxDebugShape;
-    class SphereDebugShape;
-    class ConeDebugShape;
-    class TriangleMeshDebugShape;
-    class RayDebugShape;
+    class _OgreBulletExport DebugCollisionShape;
+    class _OgreBulletExport BoxDebugShape;
+    class _OgreBulletExport SphereDebugShape;
+    class _OgreBulletExport ConeDebugShape;
+    class _OgreBulletExport TriangleMeshDebugShape;
+    class _OgreBulletExport RayDebugShape;
 
-	class GImpactConcaveShape;
-	class HeightmapCollisionShape;
-    class CollisionShape;
-    class BoxCollisionShape;
-    class SphereCollisionShape;
-    class CylinderCollisionShape;
-	class CapsuleCollisionShape;
-    class ConeCollisionShape;
+	class _OgreBulletExport GImpactConcaveShape;
+	class _OgreBulletExport HeightmapCollisionShape;
+    class _OgreBulletExport CollisionShape;
+    class _OgreBulletExport BoxCollisionShape;
+    class _OgreBulletExport SphereCollisionShape;
+    class _OgreBulletExport CylinderCollisionShape;
+	class _OgreBulletExport CapsuleCollisionShape;
+    class _OgreBulletExport ConeCollisionShape;
 
-    class CompoundCollisionShape;
+    class _OgreBulletExport CompoundCollisionShape;
 
-    class MultiSphereCollisionShape;
-    class MinkowskiSumCollisionShape;
+    class _OgreBulletExport MultiSphereCollisionShape;
+    class _OgreBulletExport MinkowskiSumCollisionShape;
 
-    class ConvexHullCollisionShape;
-    class TriangleMeshCollisionShape;
+    class _OgreBulletExport ConvexHullCollisionShape;
+    class _OgreBulletExport TriangleMeshCollisionShape;
 
-    class Object;
+    class _OgreBulletExport Object;
 
-    class ObjectState;
+    class _OgreBulletExport ObjectState;
 
-	class CollisionShapebject;
+	class _OgreBulletExport CollisionShapebject;
 
     typedef std::vector<Ogre::Vector3> Vector3Array;
     typedef std::map<unsigned short, Vector3Array* > BoneIndex;

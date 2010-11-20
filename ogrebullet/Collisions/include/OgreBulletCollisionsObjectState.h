@@ -36,7 +36,7 @@ THE SOFTWARE.
 
 namespace OgreBulletCollisions
 {
-    class ObjectState : public btMotionState
+    class _OgreBulletExport ObjectState : public btMotionState
     {
     public:
 	    ObjectState(Object *parent);

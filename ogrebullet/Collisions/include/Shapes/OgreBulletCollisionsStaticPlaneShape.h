@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic BoxShape
-    class StaticPlaneCollisionShape : public CollisionShape
+    class _OgreBulletExport StaticPlaneCollisionShape : public CollisionShape
     {
     public:
         StaticPlaneCollisionShape(const Ogre::Vector3 normal, Ogre::Real distance);

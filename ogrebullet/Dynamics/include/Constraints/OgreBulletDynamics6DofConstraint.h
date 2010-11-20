@@ -39,7 +39,7 @@ namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------
     // SixDofConstraint  class
-    class SixDofConstraint : public TypedConstraint
+    class _OgreBulletExport SixDofConstraint : public TypedConstraint
     {
     public:
         SixDofConstraint(RigidBody * rbA, RigidBody * rbB, 

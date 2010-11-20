@@ -50,7 +50,7 @@ namespace OgreBulletCollisions
 	 * \see
 	 * Ogre::MovableObject | Ogre::UserDefinedObject | OgreBulletDynamics::RigidBody
 	 */
-	class Object : public Ogre::MovableObject
+	class _OgreBulletExport Object : public Ogre::MovableObject
     {
     public:
         Object(const Ogre::String &name,  CollisionsWorld *world, bool init);

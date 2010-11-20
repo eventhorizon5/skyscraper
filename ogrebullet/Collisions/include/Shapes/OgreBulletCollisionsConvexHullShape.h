@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic ConvexHullShape
-    class ConvexHullCollisionShape : public CollisionShape
+    class _OgreBulletExport ConvexHullCollisionShape : public CollisionShape
     {
     public:
         ConvexHullCollisionShape(const Ogre::Real* points, int numPoints, int stride);

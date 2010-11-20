@@ -38,7 +38,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic CollisionRay
-    class CollisionRayResultCallback 
+    class _OgreBulletExport CollisionRayResultCallback 
     {
 	public:
 		CollisionRayResultCallback(const Ogre::Ray &ray, CollisionsWorld *world, Ogre::Real max_distance, bool init = true);
@@ -72,7 +72,7 @@ namespace OgreBulletCollisions
     }
     // -------------------------------------------------------------------------
     //  CollisionClosestRay
-    class CollisionClosestRayResultCallback : public CollisionRayResultCallback
+    class _OgreBulletExport CollisionClosestRayResultCallback : public CollisionRayResultCallback
     { 
 	public:
 		CollisionClosestRayResultCallback(const Ogre::Ray &ray, CollisionsWorld *world, Ogre::Real max_distance);

@@ -38,11 +38,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
 	// basic Shape
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	class __declspec( dllexport ) CollisionShape
-#else
-	class CollisionShape 
-#endif
+	class _OgreBulletExport CollisionShape
     {
 
     public:

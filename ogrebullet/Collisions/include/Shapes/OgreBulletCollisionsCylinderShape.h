@@ -39,7 +39,7 @@ namespace OgreBulletCollisions
 {
     // -------------------------------------------------------------------------
     // basic CylinderShape
-    class CylinderCollisionShape : public CollisionShape
+    class _OgreBulletExport CylinderCollisionShape : public CollisionShape
     {
     public:
         CylinderCollisionShape(const Ogre::Vector3  &halfExtents, const Ogre::Vector3 &axe);

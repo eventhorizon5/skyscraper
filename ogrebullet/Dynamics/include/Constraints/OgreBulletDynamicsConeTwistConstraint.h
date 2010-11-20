@@ -39,7 +39,7 @@ namespace OgreBulletDynamics
 {
     //-------------------------------------------------------------------------
     // ConeTwistConstraint  class
-    class ConeTwistConstraint : public TypedConstraint
+    class _OgreBulletExport ConeTwistConstraint : public TypedConstraint
     {
     public:
         ConeTwistConstraint(RigidBody * rbA, RigidBody * rbB,

@@ -13,7 +13,7 @@
 namespace OgreBulletCollisions
 {
 	
-	class DebugHelper : public btIDebugDraw
+	class _OgreBulletExport DebugHelper : public btIDebugDraw
 	{
 	public:
 
@@ -52,7 +52,7 @@ namespace OgreBulletCollisions
 		DebugLines* m_pLines;
 	};
 
-	class DebugTriangleDrawCallback : public btTriangleCallback
+	class _OgreBulletExport DebugTriangleDrawCallback : public btTriangleCallback
 	{
 	private:
 
@@ -79,7 +79,7 @@ namespace OgreBulletCollisions
 		}						 
 	};
 
-	class HeightmapCollisionShape : public CollisionShape
+	class _OgreBulletExport HeightmapCollisionShape : public CollisionShape
 	{
 	public:
 		HeightmapCollisionShape(int width, int length, Ogre::Vector3& scale, Ogre::Real* pHeightData, bool bFlip)
