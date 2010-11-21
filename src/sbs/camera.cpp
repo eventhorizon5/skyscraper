@@ -106,7 +106,7 @@ Camera::Camera(Ogre::Camera *camera)
 	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
 	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
-	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
+	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 0);
 	//mBody->setStaticShape(mShape, 0.1, 0.5);
 }
 
@@ -757,7 +757,7 @@ void Camera::Loop()
 	InterpolateMovement();
 
 	//apply gravity force
-	mBody->applyForce(Ogre::Vector3(0, sbs->ToRemote(Gravity), 0), Ogre::Vector3::ZERO);
+	mBody->applyForce(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0), Ogre::Vector3::ZERO);
 
 	//general movement
 	float delta = sbs->GetElapsedTime() / 1000.0f;
@@ -913,7 +913,7 @@ void Camera::InterpolateMovement()
 void Camera::SetGravity(float gravity)
 {
 	Gravity = gravity;
-	sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(gravity), 0));
+	sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
 }
 
 float Camera::GetGravity()
@@ -924,7 +924,7 @@ float Camera::GetGravity()
 void Camera::EnableGravity(bool value)
 {
 	if (value == true)
-		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(Gravity), 0));
+		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
 	else
 		sbs->mWorld->setGravity(Ogre::Vector3::ZERO);
 	GravityStatus = value;

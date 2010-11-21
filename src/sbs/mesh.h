@@ -87,6 +87,7 @@ public:
 	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<TriangleType> &deleted_indices);
 	void Prepare();
 	void EnableDebugView(bool value);
+	void CreateCollider();
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;
@@ -97,7 +98,7 @@ public:
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;
 	OgreBulletDynamics::RigidBody* mBody;
-	OgreBulletCollisions::CollisionShape* mShape;
+	OgreBulletCollisions::TriangleMeshCollisionShape* mShape;
 
 private:
 	bool enabled;

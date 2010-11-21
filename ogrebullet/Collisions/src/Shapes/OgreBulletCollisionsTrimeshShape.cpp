@@ -52,6 +52,8 @@ namespace OgreBulletCollisions
 		unsigned int numFaces = indexCount / 3;
 
 		mTriMesh = new btTriangleMesh(use32bitsIndices);
+		mTriMesh->preallocateVertices(vertexCount);
+		mTriMesh->preallocateIndices(indexCount);
 
         btVector3    vertexPos[3];
         for (unsigned int n = 0; n < numFaces; ++n)
@@ -84,7 +86,50 @@ namespace OgreBulletCollisions
         mShape = new btBvhTriangleMeshShape(mTriMesh, useQuantizedAABB);
 
     }
-    // -------------------------------------------------------------------------
+
+	//this constructor allows for adding triangles individually at a later stage.
+	//sequence is this function, then AddTriangle(), and then Finish()
+    TriangleMeshCollisionShape::TriangleMeshCollisionShape(
+        unsigned int vertexCount, 
+        unsigned int indexCount, 
+		bool use32bitsIndices) :	
+        CollisionShape(),
+        mTriMesh(0)
+    {
+		mTriMesh = new btTriangleMesh(use32bitsIndices);
+		mTriMesh->preallocateVertices(vertexCount);
+		mTriMesh->preallocateIndices(indexCount);
+    }
+
+	//add an individual triangle
+    void TriangleMeshCollisionShape::AddTriangle(
+        Vector3        &vertex1, 
+        Vector3        &vertex2, 
+        Vector3        &vertex3)
+    {
+        btVector3    vertexPos[3];
+
+		vertexPos[0][0] = vertex1.x;
+		vertexPos[0][1] = vertex1.y;
+		vertexPos[0][2] = vertex1.z;
+		vertexPos[1][0] = vertex2.x;
+		vertexPos[1][1] = vertex2.y;
+		vertexPos[1][2] = vertex2.z;
+		vertexPos[2][0] = vertex3.x;
+		vertexPos[2][1] = vertex3.y;
+		vertexPos[2][2] = vertex3.z;
+
+        mTriMesh->addTriangle(vertexPos[0], vertexPos[1], vertexPos[2]);
+    }
+
+	//finalize collider
+	void TriangleMeshCollisionShape::Finish()
+	{
+		const bool useQuantizedAABB = true;
+        mShape = new btBvhTriangleMeshShape(mTriMesh, useQuantizedAABB);
+	}
+
+	// -------------------------------------------------------------------------
     TriangleMeshCollisionShape::~TriangleMeshCollisionShape()
     {
         if(mTriMesh)

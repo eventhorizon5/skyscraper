@@ -43,7 +43,10 @@ namespace OgreBulletCollisions
     {
 	public:
 		TriangleMeshCollisionShape(Ogre::Vector3 *_vertices, unsigned int _vertex_count, unsigned int *_indices, unsigned int_index_count, bool use32bitsIndices = true);
-	    virtual ~TriangleMeshCollisionShape();
+		TriangleMeshCollisionShape(unsigned int vertexCount, unsigned int indexCount, bool use32bitsIndices = true);
+		virtual ~TriangleMeshCollisionShape();
+		void AddTriangle(Ogre::Vector3 &vertex1, Ogre::Vector3 &vertex2, Ogre::Vector3 &vertex3);
+		void Finish();
 
 		bool drawWireFrame(DebugLines *wire, 
 			const Ogre::Vector3 &pos = Ogre::Vector3::ZERO, 

@@ -30,7 +30,7 @@
 #include <OgreMaterialManager.h>
 #include <OgreEntity.h>
 #include <OgreBulletDynamicsRigidBody.h>
-#include <OgreBulletCollisionsStaticPlaneShape.h>
+#include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -693,6 +693,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	object->SetValues(this, parent, "Mesh", name, false);
 
 	enabled = true;
+	mShape = 0;
+	mBody = 0;
 
 	std::string buffer;
 	std::string Name = name;
@@ -736,11 +738,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	//set maximum render distance
 	if (max_render_distance > 0)
 		Movable->setRenderingDistance(sbs->ToRemote(max_render_distance));
-
-	//set up physics parameters
-	mShape = new OgreBulletCollisions::StaticPlaneCollisionShape(Ogre::Vector3(0,1,0), 0);
-	mBody = new OgreBulletDynamics::RigidBody("BasePlane", sbs->mWorld);
-	mBody->setStaticShape(mShape, 0.1, 0.8);
 
 	sbs->AddMeshHandle(this);
 
@@ -1516,4 +1513,25 @@ void MeshObject::EnableDebugView(bool value)
 {
 	//enable or disable debug view of mesh
 	Movable->setDebugDisplayEnabled(value);
+}
+
+void MeshObject::CreateCollider()
+{
+	//set up physics parameters
+
+	//initialize collider shape
+	mShape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), Triangles.size() * 3);
+
+	//add vertices to shape
+	for (int i = 0; i < Triangles.size(); i += 3)
+	{
+		mShape->AddTriangle(MeshGeometry[i].vertex, MeshGeometry[i + 1].vertex, MeshGeometry[i + 2].vertex);
+	}
+
+	//finalize shape
+	mShape->Finish();
+
+	mBody = new OgreBulletDynamics::RigidBody(MeshWrapper->getName(), sbs->mWorld);
+	mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5);
+	//mBody->setShape(SceneNode, mShape, 0.1, 0.5, 1);
 }
