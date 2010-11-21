@@ -75,7 +75,7 @@
  **********************************************************************/
 #include "globals.h"
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <tchar.h>
 #include <stdio.h>
