@@ -193,19 +193,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamics6DofConstraint.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsConeTwistConstraint.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Dynamics\src\OgreBulletDynamicsConstraint.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsHingeConstraint.cpp"
 				>
 			</File>
 			<File
@@ -213,19 +201,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsPoint2pointConstraint.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\Dynamics\src\OgreBulletDynamicsPrecompiled.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\src\Prefab\OgreBulletDynamicsRagDoll.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsRaycastVehicle.cpp"
 				>
 			</File>
 			<File
@@ -236,6 +212,38 @@
 				RelativePath=".\Dynamics\src\OgreBulletDynamicsWorld.cpp"
 				>
 			</File>
+			<Filter
+				Name="Constraints"
+				>
+				<File
+					RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamics6DofConstraint.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsConeTwistConstraint.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsHingeConstraint.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsPoint2pointConstraint.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\src\Constraints\OgreBulletDynamicsRaycastVehicle.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Prefab"
+				>
+				<File
+					RelativePath=".\Dynamics\src\Prefab\OgreBulletDynamicsRagDoll.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -247,19 +255,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamics6DofConstraint.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsConeTwistConstraint.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Dynamics\include\OgreBulletDynamicsConstraint.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsHingeConstraint.h"
 				>
 			</File>
 			<File
@@ -267,19 +263,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsPoint2pointConstraint.h"
-				>
-			</File>
-			<File
 				RelativePath=".\Dynamics\include\OgreBulletDynamicsPreRequisites.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\include\Prefab\OgreBulletDynamicsRagDoll.h"
-				>
-			</File>
-			<File
-				RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsRaycastVehicle.h"
 				>
 			</File>
 			<File
@@ -290,6 +274,38 @@
 				RelativePath=".\Dynamics\include\OgreBulletDynamicsWorld.h"
 				>
 			</File>
+			<Filter
+				Name="Constraints"
+				>
+				<File
+					RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamics6DofConstraint.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsConeTwistConstraint.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsHingeConstraint.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsPoint2pointConstraint.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Dynamics\include\Constraints\OgreBulletDynamicsRaycastVehicle.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Prefab"
+				>
+				<File
+					RelativePath=".\Dynamics\include\Prefab\OgreBulletDynamicsRagDoll.h"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"
