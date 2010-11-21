@@ -1519,6 +1519,10 @@ void MeshObject::CreateCollider()
 {
 	//set up physics parameters
 
+	//exit if mesh is empty
+	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
+		return;
+
 	//initialize collider shape
 	mShape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), Triangles.size() * 3);
 

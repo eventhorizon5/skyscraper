@@ -245,8 +245,6 @@ public:
 	int GetTextureCount();
 	int GetMaterialCount();
 	int GetMeshFactoryCount();
-	void CreateColliders(MeshObject* mesh);
-	void DeleteColliders(MeshObject* mesh);
 	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	int GetSoundCount();
 	void IncrementSoundCount();

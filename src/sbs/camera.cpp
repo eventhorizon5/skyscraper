@@ -103,10 +103,11 @@ Camera::Camera(Ogre::Camera *camera)
 	HitPosition = 0;
 
 	//set up physics parameters
-	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
+	//Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
+	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), 0, sbs->ToRemote(1.64 / 2));
 	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
-	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 0);
+	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
 	//mBody->setStaticShape(mShape, 0.1, 0.5);
 }
 
@@ -755,9 +756,6 @@ void Camera::Loop()
 
 	//calculate acceleration
 	InterpolateMovement();
-
-	//apply gravity force
-	mBody->applyForce(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0), Ogre::Vector3::ZERO);
 
 	//general movement
 	float delta = sbs->GetElapsedTime() / 1000.0f;

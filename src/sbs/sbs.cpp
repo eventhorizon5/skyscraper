@@ -3215,20 +3215,6 @@ int SBS::GetMeshFactoryCount()
 	return 0;
 }
 
-void SBS::CreateColliders(MeshObject* mesh)
-{
-	//create colliders for the given mesh
-	//csColliderHelper::InitializeCollisionWrapper(collision_sys, mesh);
-}
-
-void SBS::DeleteColliders(MeshObject* mesh)
-{
-	//delete colliders for the given mesh
-	/*csColliderWrapper *collider = csColliderWrapper::GetColliderWrapper(mesh->QueryObject());
-	if (collider)
-		engine->RemoveObject(collider);*/
-}
-
 Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, Ogre::Vector3 direction)
 {
 	//create a looping sound object
@@ -3800,7 +3786,10 @@ void SBS::Prepare()
 	
 	Report("Preparing objects...");
 	for (int i = 0; i < meshes.size(); i++)
+	{
+		meshes[i]->CreateCollider();
 		meshes[i]->Prepare();
+	}
 	Report("Finished prepare");
 }
 
