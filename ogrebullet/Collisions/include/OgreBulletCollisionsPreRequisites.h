@@ -51,9 +51,10 @@ THE SOFTWARE.
 #       define _OgreBulletExport __declspec( dllimport )
 #   else
 #       define _OgreBulletExport
+#   endif
+#else
+#	define _OgreBulletExport
 #endif
-
-#endif 
 
 namespace OgreBulletCollisions
 {
