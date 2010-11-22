@@ -133,22 +133,18 @@ namespace OgreBulletCollisions
         mRootNode->setOrientation(worldTrans.getRotation().getW(),worldTrans.getRotation().getX(), worldTrans.getRotation().getY(), worldTrans.getRotation().getZ());
     }
     //-----------------------------------------------------------------------
-    void Object::setShape(CollisionShape *shape, 
-        const Vector3 &pos, 
-        const Quaternion &quat)
+    void Object::setShape(CollisionShape *shape)
     {
         mShape = shape;
 
-        mRootNode = mWorld->getSceneManager()->getRootSceneNode()->createChildSceneNode(mName, pos, quat);
+        mRootNode = mWorld->getSceneManager()->getRootSceneNode()->createChildSceneNode(mName);
         mShapeNode = mRootNode->createChildSceneNode(mName + "Shape");
         mShapeNode->attachObject(this);
 
         mObject->setCollisionShape(shape->getBulletShape());
         showDebugShape(mWorld->getShowDebugShapes()); 
 
-		mObject->getWorldTransform().setOrigin(btVector3(pos.x, pos.y, pos.z));
-		mObject->getWorldTransform().setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
-
+		_notifyMoved();
     }
     // -------------------------------------------------------------------------
     //-----------------------------------------------------------------------
@@ -185,6 +181,14 @@ namespace OgreBulletCollisions
     void Object::_notifyCurrentCamera(Camera* camera)
     {
     }
+
+	void Object::_notifyMoved()
+	{
+		Vector3 pos = mRootNode->getPosition();
+		Quaternion quat = mRootNode->getOrientation();
+		mObject->getWorldTransform().setOrigin(btVector3(pos.x, pos.y, pos.z));
+		mObject->getWorldTransform().setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
+	}
 
     //-----------------------------------------------------------------------
     const AxisAlignedBox& Object::getBoundingBox(void) const

@@ -60,30 +60,22 @@ namespace OgreBulletDynamics
             OgreBulletCollisions::CollisionShape *shape,
             const float      bodyRestitution,
             const float      bodyFriction,
-            const float      bodyMass,
-            const Ogre::Vector3 &pos = Ogre::Vector3::ZERO, 
-            const Ogre::Quaternion &quat = Ogre::Quaternion::IDENTITY);
+            const float      bodyMass);
 
         void setStaticShape(Ogre::SceneNode *node,
             OgreBulletCollisions::CollisionShape *shape,
             const float      bodyRestitution,
-            const float      bodyFriction,
-            const Ogre::Vector3 &pos = Ogre::Vector3::ZERO, 
-            const Ogre::Quaternion &quat = Ogre::Quaternion::IDENTITY);
+            const float      bodyFriction);
 
 
 		   void setStaticShape(btScaledBvhTriangleMeshShape *shape,
 		           const float      bodyRestitution,
-		           const float      bodyFriction,
-		           const Ogre::Vector3 &pos = Ogre::Vector3::ZERO,
-		           const Ogre::Quaternion &quat = Ogre::Quaternion::IDENTITY);
+		           const float      bodyFriction);
 
 
         void setStaticShape(OgreBulletCollisions::CollisionShape *shape,
             const float      bodyRestitution,
-            const float      bodyFriction,
-            const Ogre::Vector3 &pos = Ogre::Vector3::ZERO, 
-            const Ogre::Quaternion &quat = Ogre::Quaternion::IDENTITY);
+            const float      bodyFriction);
 
 
         void setLinearVelocity(const Ogre::Vector3 &vel);

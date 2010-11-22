@@ -62,9 +62,7 @@ namespace OgreBulletDynamics
         OgreBulletCollisions::CollisionShape *shape,                          
         const float      bodyRestitution,
         const float      bodyFriction,
-        const float      bodyMass,
-        const Vector3 &pos, 
-        const Quaternion &quat)
+        const float      bodyMass)
     {
 
         mState = new ObjectState(this);
@@ -72,9 +70,6 @@ namespace OgreBulletDynamics
         mRootNode = node;
         mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
         mShapeNode->attachObject(this);
-
-        node->setPosition (pos);
-        node->setOrientation (quat);
 
         mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
@@ -88,6 +83,7 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
+		_notifyMoved();
 
 		getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
     }
@@ -96,9 +92,7 @@ namespace OgreBulletDynamics
     void RigidBody::setStaticShape(Ogre::SceneNode *node, 
         OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
-        const float      bodyFriction,
-        const Vector3 &pos, 
-        const Quaternion &quat)
+        const float      bodyFriction)
     {
         mState = new ObjectState(this);
 
@@ -106,9 +100,6 @@ namespace OgreBulletDynamics
 
         mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
         mShapeNode->attachObject(this);
-
-        node->setPosition (pos);
-        node->setOrientation (quat);
 
         mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
@@ -118,18 +109,15 @@ namespace OgreBulletDynamics
         body->setRestitution(bodyRestitution);
         body->setFriction(bodyFriction);
 
-        body->getWorldTransform().setOrigin(btVector3(pos.x, pos.y, pos.z));
-        body->getWorldTransform().setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
-
         mObject = body;
+		_notifyMoved();
+
 		getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
 	}
 	// -------------------------------------------------------------------------
     void RigidBody::setStaticShape(btScaledBvhTriangleMeshShape *shape,
         const float      bodyRestitution,
-        const float      bodyFriction,
-        const Vector3 &pos,
-        const Quaternion &quat)
+        const float      bodyFriction)
     {
         //mState = new ObjectState(this);
 
@@ -138,18 +126,14 @@ namespace OgreBulletDynamics
         body->setRestitution(bodyRestitution);
         body->setFriction(bodyFriction);
 
-        body->getWorldTransform().setOrigin(btVector3(pos.x, pos.y, pos.z));
-        body->getWorldTransform().setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
-
         mObject = body;
+		_notifyMoved();
       getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
    }		
     // -------------------------------------------------------------------------
     void RigidBody::setStaticShape(OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
-        const float      bodyFriction,
-        const Vector3 &pos, 
-        const Quaternion &quat)
+        const float      bodyFriction)
     {
         //mState = new ObjectState(this);
 
@@ -159,10 +143,8 @@ namespace OgreBulletDynamics
         body->setRestitution(bodyRestitution);
         body->setFriction(bodyFriction);
 
-        body->getWorldTransform().setOrigin(btVector3(pos.x, pos.y, pos.z));
-        body->getWorldTransform().setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
-
         mObject = body;
+		_notifyMoved();
 		getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
 	}
 	// -------------------------------------------------------------------------

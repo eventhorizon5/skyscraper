@@ -65,6 +65,7 @@ namespace OgreBulletCollisions
         virtual void _notifyAttached(Ogre::Node* parent,bool isTagPoint = false);
         //virtual const Ogre::String& getName(void) const {return mName};
         virtual void _notifyCurrentCamera(Ogre::Camera* camera);
+		virtual void _notifyMoved();
         virtual const Ogre::AxisAlignedBox& getBoundingBox(void) const;
         virtual Ogre::Real getBoundingRadius(void) const;
         virtual void _updateRenderQueue(Ogre::RenderQueue* queue);
@@ -91,9 +92,7 @@ namespace OgreBulletCollisions
         inline CollisionShape *getShape() const{ return mShape;};
         inline DebugCollisionShape* getDebugShape() const{ return mDebugShape;};
 
-        void setShape(CollisionShape *shape, 
-            const Ogre::Vector3 &pos, 
-            const Ogre::Quaternion &quat);
+        void setShape(CollisionShape *shape);
         void showDebugShape(bool show);
 
 		Ogre::SceneNode *getRootNode() { return mRootNode; }
