@@ -731,8 +731,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 		RescaleVertices(scale_multiplier);
 
 	//create movable
-	Movable = sbs->mSceneManager->createEntity(MeshWrapper->getName());
-	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode();
+	Movable = sbs->mSceneManager->createEntity(Name);
+	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
 	SceneNode->attachObject(Movable);
 
 	//set maximum render distance
