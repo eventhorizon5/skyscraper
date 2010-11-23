@@ -107,7 +107,7 @@ Camera::Camera(Ogre::Camera *camera)
 	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), 0, sbs->ToRemote(1.64 / 2));
 	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
-	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 0);
+	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
 	//mBody->setStaticShape(mShape, 0.1, 0.5);
 }
 

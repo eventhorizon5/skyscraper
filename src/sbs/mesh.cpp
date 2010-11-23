@@ -1527,9 +1527,12 @@ void MeshObject::CreateCollider()
 	mShape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), Triangles.size() * 3);
 
 	//add vertices to shape
-	for (int i = 0; i < Triangles.size(); i += 3)
+	for (int i = 0; i < Submeshes.size(); i++)
 	{
-		mShape->AddTriangle(MeshGeometry[i].vertex, MeshGeometry[i + 1].vertex, MeshGeometry[i + 2].vertex);
+		for (int j = 0; j < Triangles[i].triangles.size(); j++)
+		{
+			mShape->AddTriangle(MeshGeometry[Triangles[i].triangles[j].x].vertex, MeshGeometry[Triangles[i].triangles[j].y].vertex, MeshGeometry[Triangles[i].triangles[j].z].vertex);
+		}
 	}
 
 	//finalize shape

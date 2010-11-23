@@ -440,13 +440,15 @@ void SBS::MainLoop()
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//update physics
-	mWorld->stepSimulation(GetElapsedTime());
+	//mWorld->stepSimulation(GetElapsedTime());
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
 	while (elapsed >= delta)
 	{
+		mWorld->stepSimulation(delta);
+
 		if (RenderOnly == false && InputOnly == false)
 		{
 			//Determine floor that the camera is on
