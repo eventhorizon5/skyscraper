@@ -159,8 +159,8 @@ namespace OgreBulletCollisions
                 static_cast<SceneNode*>(parent)->detachObject(other_object);
 
             }
-            setPosition(parent->getPosition());
-            setOrientation(parent->getOrientation());
+            //setPosition(parent->getPosition());
+            //setOrientation(parent->getOrientation());
         } 
     }
 #if (OGRE_VERSION >=  ((1 << 16) | (5 << 8) | 0)) // must have at least shoggoth (1.5.0)
