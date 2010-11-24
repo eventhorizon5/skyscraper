@@ -97,9 +97,9 @@ public:
 
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;
-	//OgreBulletDynamics::RigidBody* mBody;
-	OgreBulletCollisions::Object* mObject;
-	OgreBulletCollisions::TriangleMeshCollisionShape* mShape;
+	std::vector<OgreBulletDynamics::RigidBody*> mBodies;
+	//OgreBulletCollisions::Object* mObject;
+	std::vector<OgreBulletCollisions::TriangleMeshCollisionShape*> mShapes;
 
 private:
 	bool enabled;

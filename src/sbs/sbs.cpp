@@ -743,6 +743,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
+	return false;
 	std::string hAlign = h_align;
 	std::string vAlign = v_align;
 	std::string Name = name;
@@ -3786,9 +3787,14 @@ void SBS::Prepare()
 	//prepare objects for run
 	
 	Report("Preparing objects...");
+	Report("Creating colliders...");
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->CreateCollider();
+	}
+	Report("Processing geometry...");
+	for (int i = 0; i < meshes.size(); i++)
+	{
 		meshes[i]->Prepare();
 	}
 	Report("Finished prepare");
