@@ -694,7 +694,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	enabled = true;
 	mShape = 0;
-	mBody = 0;
+	//mBody = 0;
+	mObject = 0;
 
 	std::string buffer;
 	std::string Name = name;
@@ -750,9 +751,12 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 MeshObject::~MeshObject()
 {
 	//delete physics components
-	if (mBody)
-		delete mBody;
-	mBody = 0;
+	//if (mBody)
+		//delete mBody;
+	//mBody = 0;
+	if (mObject)
+		delete mObject;
+	mObject = 0;
 	/*if (mShape)
 		delete mShape;
 	mShape = 0;*/
@@ -816,6 +820,7 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
+	return Ogre::MaterialPtr(0);
 	std::string tex = sbs->VerifyFile(texture);
 	std::string path = sbs->GetMountPath(texture, tex);
 	TrimString(tex);
@@ -1542,7 +1547,9 @@ void MeshObject::CreateCollider()
 	//finalize shape
 	mShape->Finish();
 
-	mBody = new OgreBulletDynamics::RigidBody(MeshWrapper->getName(), sbs->mWorld);
-	mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5);
+	mObject = new OgreBulletCollisions::Object(MeshWrapper->getName(), sbs->mWorld, true);
+	mObject->setShape(mShape);
+	//mBody = new OgreBulletDynamics::RigidBody(MeshWrapper->getName(), sbs->mWorld);
+	//mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5);
 	//mBody->setShape(SceneNode, mShape, 0.1, 0.5, 1);
 }

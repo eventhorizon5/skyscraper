@@ -97,7 +97,8 @@ public:
 
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;
-	OgreBulletDynamics::RigidBody* mBody;
+	//OgreBulletDynamics::RigidBody* mBody;
+	OgreBulletCollisions::Object* mObject;
 	OgreBulletCollisions::TriangleMeshCollisionShape* mShape;
 
 private:
