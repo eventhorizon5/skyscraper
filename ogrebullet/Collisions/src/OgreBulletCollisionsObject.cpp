@@ -205,5 +205,13 @@ namespace OgreBulletCollisions
     void Object::_updateRenderQueue(RenderQueue* queue)
     {
     }
+
+	void Object::enableCollisions(bool value)
+	{
+		if (value == true)
+			mObject->setCollisionFlags(mObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		else
+			mObject->setCollisionFlags(mObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	}
 }
 

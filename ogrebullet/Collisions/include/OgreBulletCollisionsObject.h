@@ -95,6 +95,8 @@ namespace OgreBulletCollisions
         void setShape(CollisionShape *shape);
         void showDebugShape(bool show);
 
+		void enableCollisions(bool value);
+
 		Ogre::SceneNode *getRootNode() { return mRootNode; }
 
     protected:
