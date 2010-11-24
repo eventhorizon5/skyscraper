@@ -552,7 +552,6 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);
 	mWorld->setDebugDrawer(debugDrawer);
-	mWorld->setShowDebugShapes(true);
 	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Ogre::Vector3::ZERO);
 	node->attachObject(static_cast<Ogre::SimpleRenderable*> (debugDrawer));
 
@@ -3935,4 +3934,10 @@ void SBS::EnableVSync(bool value)
 {
 	//enable or disable vertical sync
 	mRoot->getRenderSystem()->setWaitForVerticalBlank(value);
+}
+
+void SBS::ShowColliders(bool value)
+{
+	if (mWorld)
+		mWorld->setShowDebugShapes(value);
 }

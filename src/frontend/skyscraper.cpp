@@ -380,7 +380,7 @@ void Skyscraper::GetInput()
 		return;
 
 	static int wireframe;
-	static bool wait, waitcheck;
+	static bool wait, waitcheck, colliders;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
@@ -498,13 +498,13 @@ void Skyscraper::GetInput()
 			if (Simcore->camera->GetGravityStatus() == false)
 			{
 				Simcore->camera->EnableGravity(true);
-					Simcore->camera->EnableCollisions = true;
+				Simcore->camera->EnableCollisions(true);
 				Report("Gravity and collision detection on");
 			}
 			else
 			{
 				Simcore->camera->EnableGravity(false);
-					Simcore->camera->EnableCollisions = false;
+				Simcore->camera->EnableCollisions(false);
 				Report("Gravity and collision detection off");
 			}
 			wait = true;
@@ -546,12 +546,20 @@ void Skyscraper::GetInput()
 			Simcore->GetFloor(Simcore->camera->CurrentFloor)->Enabled(false);
 			Simcore->GetFloor(Simcore->camera->CurrentFloor)->EnableGroup(false);
 			Simcore->camera->EnableGravity(true);
-			Simcore->camera->EnableCollisions = true;
+			Simcore->camera->EnableCollisions(true);
 			Simcore->camera->SetToStartPosition();
 			Simcore->camera->SetToStartRotation();
 			Simcore->camera->SetToDefaultFOV();
 			Simcore->GetFloor(Simcore->camera->StartFloor)->Enabled(true);
 			Simcore->GetFloor(Simcore->camera->StartFloor)->EnableGroup(true);
+		}
+
+		if (wxGetKeyState(WXK_F7) && wait == false)
+		{
+			//show colliders
+			Simcore->ShowColliders(!colliders);
+			colliders = !colliders;
+			wait = true;
 		}
 
 		if (wxGetKeyState(WXK_F4) && wait == false)

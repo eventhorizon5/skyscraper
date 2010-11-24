@@ -262,7 +262,7 @@ DebugPanel::~DebugPanel()
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
 {
-	Simcore->camera->EnableCollisions = chkCollisionDetection->GetValue();
+	Simcore->camera->EnableCollisions(chkCollisionDetection->GetValue());
 }
 
 void DebugPanel::On_chkFrameLimiter_Click(wxCommandEvent& event)
@@ -306,7 +306,7 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 void DebugPanel::OnInit()
 {
 	//set check boxes
-	chkCollisionDetection->SetValue(Simcore->camera->EnableCollisions);
+	chkCollisionDetection->SetValue(Simcore->camera->CollisionsEnabled());
 	chkGravity->SetValue(Simcore->camera->GetGravityStatus());
 	chkFrameLimiter->SetValue(Simcore->FrameLimiter);
 	chkProcessElevators->SetValue(Simcore->ProcessElevators);

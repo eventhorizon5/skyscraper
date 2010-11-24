@@ -441,7 +441,7 @@ void CameraControl::Loop()
 	txtStartFloor->SetValue(wxVariant((long)Simcore->camera->StartFloor).GetString());
 	txtStartPosition->SetValue(TruncateNumber(Simcore->camera->StartPositionX, 2) + wxT(", ") + TruncateNumber(Simcore->camera->StartPositionZ, 2));
 	txtGravityEnabled->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->GetGravityStatus())));
-	txtCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->EnableCollisions)));
+	txtCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->CollisionsEnabled())));
 	txtReportCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->ReportCollisions)));
 	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook)));
 	lblPosition->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
@@ -574,7 +574,7 @@ void CameraControl::On_bGravityEnabled_Click(wxCommandEvent& event)
 
 void CameraControl::On_bCollisions_Click(wxCommandEvent& event)
 {
-	Simcore->camera->EnableCollisions = !Simcore->camera->EnableCollisions;
+	Simcore->camera->EnableCollisions(!Simcore->camera->CollisionsEnabled());
 }
 
 void CameraControl::On_bReportCollisions_Click(wxCommandEvent& event)

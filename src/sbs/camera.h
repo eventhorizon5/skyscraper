@@ -66,7 +66,6 @@ public:
 	Ogre::Vector3 desired_angle_velocity;
 	Ogre::Vector3 angle_velocity;
 	float speed; //movement speed base
-	bool EnableCollisions; //enable collision detection
 	bool MouseDown; //mouse status
 	bool ReportCollisions; //if true, print collisions on console
 	std::string LastHitMesh; //name of last hit mesh
@@ -123,6 +122,8 @@ public:
 	void SetToDefaultFOV();
 	float GetHeight();
 	void SetViewMode(int mode);
+	void EnableCollisions(bool value);
+	bool CollisionsEnabled();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -145,6 +146,7 @@ private:
 	float FOV; //default FOV angle
 	bool ResetOnGround;
 	Ogre::Vector3 rotation;
+	bool Collisions; //collision detection status
 
 	//collision/physics
 	OgreBulletDynamics::RigidBody* mBody;

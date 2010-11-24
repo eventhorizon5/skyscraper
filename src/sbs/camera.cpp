@@ -87,7 +87,7 @@ Camera::Camera(Ogre::Camera *camera)
 	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
 	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
 	speed = 1;
-	EnableCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true);
+	Collisions = 0;
 	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
 	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719)); // 9.806 m/s/s
 	lastfloor = 0;
@@ -110,6 +110,7 @@ Camera::Camera(Ogre::Camera *camera)
 	mBody->setSleepingThresholds(0, 0);
 	mBody->setAngularFactor(0, 0, 0);
 	//mBody->setStaticShape(mShape, 0.1, 0.5);
+	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 }
 
 Camera::~Camera()
@@ -990,4 +991,18 @@ void Camera::SetViewMode(int mode)
 		MainCamera->setPolygonMode(Ogre::PM_WIREFRAME);
 	if (mode == 2)
 		MainCamera->setPolygonMode(Ogre::PM_POINTS);
+}
+
+void Camera::EnableCollisions(bool value)
+{
+	if (value == Collisions)
+		return;
+
+	Collisions = value;
+	mBody->enableCollisions(value);
+}
+
+bool Camera::CollisionsEnabled()
+{
+	return Collisions;
 }

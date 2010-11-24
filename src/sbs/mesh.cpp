@@ -1531,7 +1531,11 @@ void MeshObject::CreateCollider()
 	{
 		for (int j = 0; j < Triangles[i].triangles.size(); j++)
 		{
-			mShape->AddTriangle(MeshGeometry[Triangles[i].triangles[j].x].vertex, MeshGeometry[Triangles[i].triangles[j].y].vertex, MeshGeometry[Triangles[i].triangles[j].z].vertex);
+			Ogre::Vector3 tri;
+			tri.x = Triangles[i].triangles[j].x;
+			tri.y = Triangles[i].triangles[j].y;
+			tri.z = Triangles[i].triangles[j].z;
+			mShape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
 		}
 	}
 
