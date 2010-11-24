@@ -172,6 +172,43 @@ namespace OgreBulletDynamics
 		return BtOgreConverter::to(lv);
 	}
     // -------------------------------------------------------------------------
+    void RigidBody::setAngularVelocity( const Ogre::Vector3 &vel )
+    {
+        getBulletRigidBody()->setAngularVelocity (btVector3(vel.x, vel.y, vel.z));
+    }
+    // -------------------------------------------------------------------------
+    void RigidBody::setAngularVelocity( const Ogre::Real x, const Ogre::Real y, const Ogre::Real z )
+    {
+        getBulletRigidBody()->setAngularVelocity (btVector3(x, y, z));
+    }
+    // -------------------------------------------------------------------------
+	Ogre::Vector3 RigidBody::getAngularVelocity()
+	{
+		const btVector3 lv = getBulletRigidBody()->getAngularVelocity();
+		return BtOgreConverter::to(lv);
+	}
+    // -------------------------------------------------------------------------
+    void RigidBody::setAngularFactor( const Ogre::Vector3 &vel )
+    {
+        getBulletRigidBody()->setAngularFactor (btVector3(vel.x, vel.y, vel.z));
+    }
+    // -------------------------------------------------------------------------
+    void RigidBody::setAngularFactor( const Ogre::Real x, const Ogre::Real y, const Ogre::Real z )
+    {
+        getBulletRigidBody()->setAngularFactor (btVector3(x, y, z));
+    }
+    // -------------------------------------------------------------------------
+	Ogre::Vector3 RigidBody::getAngularFactor()
+	{
+		const btVector3 lv = getBulletRigidBody()->getAngularFactor();
+		return BtOgreConverter::to(lv);
+	}
+    // -------------------------------------------------------------------------
+    void RigidBody::setSleepingThresholds( const Ogre::Real linear, const Ogre::Real angular )
+    {
+        getBulletRigidBody()->setSleepingThresholds (linear, angular);
+    }
+    // -------------------------------------------------------------------------
     void RigidBody::applyImpulse( const Ogre::Vector3 &impulse, const Ogre::Vector3 &position )
     {
         getBulletRigidBody()->applyImpulse (OgreBtConverter::to(impulse), OgreBtConverter::to(position));

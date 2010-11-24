@@ -103,11 +103,12 @@ Camera::Camera(Ogre::Camera *camera)
 	HitPosition = 0;
 
 	//set up physics parameters
-	//Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
-	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), 0, sbs->ToRemote(1.64 / 2));
+	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
 	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
 	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
+	mBody->setSleepingThresholds(0, 0);
+	mBody->setAngularFactor(0, 0, 0);
 	//mBody->setStaticShape(mShape, 0.1, 0.5);
 }
 
@@ -205,18 +206,35 @@ void Camera::UpdateCameraFloor()
 		CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
 }
 
-bool Camera::Move(const Ogre::Vector3 &vector, float speed)
+bool Camera::Move(Ogre::Vector3 vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
 	//SetPosition(Ogre::Vector3(GetPosition().x + (vector.x * speed), GetPosition().y + (vector.y * speed), GetPosition().z + (vector.z * speed)));
-	CameraNode->translate(sbs->ToRemote(vector * speed), Ogre::Node::TS_LOCAL);
+	//CameraNode->translate(sbs->ToRemote(vector * speed), Ogre::Node::TS_LOCAL);
+
+	//multiply vector with object's orientation, and flip X axis
+	vector = mBody->getWorldOrientation() * vector * Ogre::Vector3(-1, 1, 1);
+	//vector.x *= CameraNode->getLocalAxes()[2][0];
+	//vector.y *= CameraNode->getLocalAxes()[2][1];
+	//vector.z *= CameraNode->getLocalAxes()[2][2];
+
+	if (vector != Ogre::Vector3::ZERO)
+	{
+		if (vector.y == 0)
+			mBody->setLinearVelocity((mBody->getLinearVelocity() * Ogre::Vector3(0, 1, 0)) + sbs->ToRemote(vector));
+		else
+			mBody->setLinearVelocity((mBody->getLinearVelocity() * Ogre::Vector3(1, 0, 1)) + sbs->ToRemote(vector));
+	}
 	return true;
 }
 
 void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in world space
-	Ogre::Vector3 rot = GetRotation() + (vector * speed);
+
+	//mBody->setAngularVelocity(sbs->ToRemote(Ogre::Vector3(0, -vector.y, 0)));
+	//Ogre::Vector3 rot = GetRotation() + (Ogre::Vector3(vector.x, 0, vector.z) * speed);
+	Ogre::Vector3 rot = GetRotation() + (vector.x * speed);
 
 	SetRotation(rot);
 }
@@ -224,8 +242,9 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in local camera space
+	mBody->setAngularVelocity(Ogre::Vector3(0, -vector.y, 0));
 	CameraNode->pitch(Ogre::Degree(vector.x * speed),  Ogre::Node::TS_LOCAL);
-	CameraNode->yaw(Ogre::Degree(-vector.y * speed),  Ogre::Node::TS_WORLD);
+	//CameraNode->yaw(Ogre::Degree(-vector.y * speed),  Ogre::Node::TS_WORLD);
 	CameraNode->roll(Ogre::Degree(vector.z * speed),  Ogre::Node::TS_LOCAL);
 }
 
