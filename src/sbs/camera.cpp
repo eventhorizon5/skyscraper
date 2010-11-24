@@ -221,10 +221,12 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 
 	if (vector != Ogre::Vector3::ZERO)
 	{
-		if (vector.y == 0)
+		mBody->setLinearVelocity(sbs->ToRemote(vector));
+		/*if (vector.y == 0)
 			mBody->setLinearVelocity((mBody->getLinearVelocity() * Ogre::Vector3(0, 1, 0)) + sbs->ToRemote(vector));
 		else
 			mBody->setLinearVelocity((mBody->getLinearVelocity() * Ogre::Vector3(1, 0, 1)) + sbs->ToRemote(vector));
+			*/
 	}
 	return true;
 }
