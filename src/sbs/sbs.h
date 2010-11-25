@@ -307,6 +307,7 @@ public:
 	Ogre::Vector2 GetExtents(MeshObject* mesh, int coord, bool flip_z = false);
 	bool InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test);
 	void AdvanceClock();
+	unsigned int GetCurrentTime();
 	unsigned int GetRunTime();
 	unsigned int GetElapsedTime();
 	std::string GetMountPath(const char *filename, std::string &newfilename);

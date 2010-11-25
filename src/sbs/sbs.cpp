@@ -441,15 +441,13 @@ void SBS::MainLoop()
 
 	//update physics
 	float step = float(GetElapsedTime()) / 1000.0;
-	mWorld->stepSimulation(step, 1);
+	mWorld->stepSimulation(step, 7);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
 	while (elapsed >= delta)
 	{
-		//mWorld->stepSimulation(delta);
-
 		if (RenderOnly == false && InputOnly == false)
 		{
 			//Determine floor that the camera is on
@@ -3890,9 +3888,7 @@ void SBS::AdvanceClock()
 	unsigned int last = current_time;
 
 	//get current time
-	timeb t;
-	ftime(&t);
-	current_time = t.time * 1000 + t.millitm;
+	current_time = GetCurrentTime();
 	if (last == 0)
 		last = current_time;
 
@@ -3901,6 +3897,14 @@ void SBS::AdvanceClock()
 	else
 		elapsed_time = current_time - last;
 	current_virtual_time += elapsed_time;
+}
+
+unsigned int SBS::GetCurrentTime()
+{
+	//get current time
+	timeb t;
+	ftime(&t);
+	return t.time * 1000 + t.millitm;
 }
 
 unsigned int SBS::GetRunTime()

@@ -801,6 +801,10 @@ void MeshObject::Enable(bool value)
 	//set visibility flag instead
 	//Movable->setVisible(value);
 
+	//enable or disable collision detection
+	if (mBody)
+		mBody->enableCollisions(value);
+
 	enabled = value;
 }
 
