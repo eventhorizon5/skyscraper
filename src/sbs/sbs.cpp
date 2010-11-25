@@ -290,8 +290,8 @@ SBS::~SBS()
 	//delete physics objects
 	if (mWorld)
 	{
-		delete mWorld->getDebugDrawer();
-		mWorld->setDebugDrawer(0);
+		//delete mWorld->getDebugDrawer();
+		//mWorld->setDebugDrawer(0);
 		delete mWorld;
 	}
 	mWorld = 0;
@@ -440,14 +440,14 @@ void SBS::MainLoop()
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//update physics
-	//mWorld->stepSimulation(GetElapsedTime());
+	mWorld->stepSimulation(GetElapsedTime());
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
 	while (elapsed >= delta)
 	{
-		mWorld->stepSimulation(delta);
+		//mWorld->stepSimulation(delta);
 
 		if (RenderOnly == false && InputOnly == false)
 		{
@@ -547,13 +547,14 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 		soundsys->set3DSettings(1.0, 3.28, 1.0);
 
 	//set up physics
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true, false, 16384);
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true, false, 32768);
 
-	debugDrawer = new OgreBulletCollisions::DebugDrawer();
+	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);
 	mWorld->setDebugDrawer(debugDrawer);
 	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Ogre::Vector3::ZERO);
 	node->attachObject(static_cast<Ogre::SimpleRenderable*> (debugDrawer));
+	*/
 
 	//mount sign texture packs
 	Mount("signs-sans.zip", "signs/sans");
@@ -737,6 +738,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 {
 	//adds text to the named texture, in the given box coordinates and alignment
 
+	return false;
 	//h_align is either "left", "right" or "center" - default is center
 	//v_align is either "top", "bottom", or "center" - default is center
 

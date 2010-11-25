@@ -752,27 +752,15 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 MeshObject::~MeshObject()
 {
 	//delete physics components
-	for (int i = 0; i < mBodies.size(); i++)
-	{
-		if (mBodies[i])
-			delete mBodies[i];
-		mBodies[i] = 0;
-	}
-	for (int i = 0; i < mShapes.size(); i++)
-	{
-		if (mShapes[i])
-			delete mShapes[i];
-		mShapes[i] = 0;
-	}
-	//if (mBody)
-		//delete mBody;
-	//mBody = 0;
+	if (mBody)
+		delete mBody;
+	mBody = 0;
 	//if (mObject)
 		//delete mObject;
 	//mObject = 0;
-	/*if (mShape)
-		delete mShape;
-	mShape = 0;*/
+	//if (mShape)
+		//delete mShape;
+	//mShape = 0;
 
 	//delete wall objects
 	for (int i = 0; i < (int)Walls.size(); i++)
@@ -1541,52 +1529,38 @@ void MeshObject::CreateCollider()
 	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
 		return;
 
-	//Bullet recommends not creating collider polygons with more than 100 vertices.
-	//this function iterates through all of the triangles and creates sets of colliders based
-	//on a predefined triangle limit - generally the maximum vertices would be trianglecount * 3,
-	//but is normally less due to index sharing
-
-	//split into batches of 25 triangles
-	int triangle_limit = 25;
-	int nameindex = 0;
+	int tricount = 0;
+	for (int i = 0; i < Triangles.size(); i++)
+		tricount += Triangles[i].triangles.size();
 
 	//if (MeshGeometry.size() > 100)
 		//printf("Warning - collider vertex count %d %s\n", MeshGeometry.size(), MeshWrapper->getName().c_str());
 
 	printf("%s\n", MeshWrapper->getName().c_str());
 
+	//initialize collider shape
+	OgreBulletCollisions::TriangleMeshCollisionShape* mShape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
+
 	//add vertices to shape
 	for (int i = 0; i < Submeshes.size(); i++)
 	{
-		for (int j = 0; j < Triangles[i].triangles.size(); j += triangle_limit)
+		for (int j = 0; j < Triangles[i].triangles.size(); j++)
 		{
-			//initialize collider shape
-			OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(triangle_limit * 3, triangle_limit * 3);
-
-			for (int k = 0; k < triangle_limit; k++)
-			{
-				int index = j + k;
-				if (index < Triangles[i].triangles.size())
-				{
-					Ogre::Vector3 tri;
-					tri.x = Triangles[i].triangles[index].x;
-					tri.y = Triangles[i].triangles[index].y;
-					tri.z = Triangles[i].triangles[index].z;
-					shape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
-				}
-			}
-
-			//finalize shape
-			shape->Finish();
-			//mShapes.push_back(shape);
-			std::string name = MeshWrapper->getName() + Ogre::StringConverter::toString(nameindex);
-			nameindex++;
-
-			OgreBulletDynamics::RigidBody* body = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-			body->setStaticShape(SceneNode, shape, 0.1, 0.5);
-			mBodies.push_back(body);
+			Ogre::Vector3 tri;
+			tri.x = Triangles[i].triangles[j].x;
+			tri.y = Triangles[i].triangles[j].y;
+			tri.z = Triangles[i].triangles[j].z;
+			mShape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
 		}
 	}
+
+	//finalize shape
+	mShape->Finish();
+	//mShapes.push_back(shape);
+	std::string name = MeshWrapper->getName();
+
+	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+	mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5);
 
 	//mObject = new OgreBulletCollisions::Object(MeshWrapper->getName(), sbs->mWorld, true);
 	//mObject->setShape(mShape);
