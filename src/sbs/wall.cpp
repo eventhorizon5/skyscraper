@@ -64,6 +64,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 
 	std::vector<std::vector<Ogre::Vector3> > array;
 	array.resize(1);
+	array[0].reserve(4);
 	array[0].push_back(v1);
 	array[0].push_back(v2);
 	array[0].push_back(v3);

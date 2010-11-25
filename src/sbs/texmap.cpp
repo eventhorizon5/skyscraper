@@ -208,6 +208,10 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	poly1.clear();
 	poly2.clear();
 
+	//preallocate memory for a worst-case scenario
+	poly1.reserve(orig.size());
+	poly2.reserve(orig.size());
+
 	Ogre::Vector3 ptB;
 	float sideA, sideB;
 	Ogre::Vector3 ptA = orig[orig.size() - 1];

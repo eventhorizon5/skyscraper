@@ -74,8 +74,10 @@ public:
 	void Rotate(const Ogre::Vector3 rotation, float speed);
 	void SetRotation(const Ogre::Vector3 rotation);
 	Ogre::Vector3 GetRotation();
+	void ReserveVertices(int count);
 	void AddVertex(Geometry &vertex_geom);
 	void RemoveVertex(int index);
+	void ReserveTriangles(int submesh, int count);
 	void AddTriangle(int submesh, TriangleType &triangle);
 	void RemoveTriangle(int submesh, int index);
 	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles);

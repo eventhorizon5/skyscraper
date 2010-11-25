@@ -652,6 +652,7 @@ std::vector<int> Floor::GetCallButtons(int elevator)
 	//get numbers of call buttons that service the specified elevator
 	
 	std::vector<int> buttons;
+	buttons.reserve(CallButtonArray.size());
 	for (int i = 0; i < (int)CallButtonArray.size(); i++)
 	{
 		//put button number onto the array if it serves the elevator

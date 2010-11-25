@@ -441,7 +441,7 @@ void SBS::MainLoop()
 
 	//update physics
 	float step = float(GetElapsedTime()) / 1000.0;
-	mWorld->stepSimulation(step, 7);
+	mWorld->stepSimulation(step, 7, 1./10.);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
@@ -1571,6 +1571,7 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	num = (int)varray.size();
 
 	//create a second array with reversed vertices
+	varray2.reserve(num);
 	for (int i = num - 1; i >= 0; i--)
 		varray2.push_back(varray1[i]);
 
@@ -1632,6 +1633,7 @@ int SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *t
 	std::vector<Ogre::Vector3> varray;
 
 	//set up temporary vertex array
+	varray.reserve(3);
 	varray.push_back(Ogre::Vector3(x1, y1, z1));
 	varray.push_back(Ogre::Vector3(x2, y2, z2));
 	varray.push_back(Ogre::Vector3(x3, y3, z3));
@@ -2256,6 +2258,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		bool rev_x = false, rev_z = false;
 
 		//copy vertices into polygon object
+		varray1.reserve(vertices.size());
 		for (int i = 0; i < (int)vertices.size(); i++)
 			varray1.push_back(vertices[i]);
 
@@ -2273,6 +2276,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		size_t selX = (1 << projDimension) & 0x3;
 		size_t selY = (1 << selX) & 0x3;
 
+		varray2.reserve(varray1.size());
 		for (int i = 0; i < (int)varray1.size(); i++)
 		{
 			Ogre::Vector3 tmpvertex = varray1[i];

@@ -710,6 +710,7 @@ bool ScriptProcessor::LoadFromText(const char *text)
 	BuildingData.clear();
 
 	//feed each line of text into the script array
+	BuildingData.reserve(textarray.size());
 	for (int i = 0; i < (int)textarray.size(); i++)
 	{
 		BuildingData.push_back(textarray[i]);
@@ -5385,6 +5386,7 @@ bool ScriptProcessor::FunctionProc()
 			SplitString(tempdata, newdata.c_str(), ',');
 
 			//calculate inline math
+			FunctionParams.reserve(tempdata.size());
 			for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3].c_str());
