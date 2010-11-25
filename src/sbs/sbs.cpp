@@ -440,7 +440,8 @@ void SBS::MainLoop()
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//update physics
-	mWorld->stepSimulation(GetElapsedTime());
+	float step = float(GetElapsedTime()) / 1000.0;
+	mWorld->stepSimulation(step, 1);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
@@ -547,7 +548,7 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 		soundsys->set3DSettings(1.0, 3.28, 1.0);
 
 	//set up physics
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true, false, 32768);
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true, false, 32766);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);

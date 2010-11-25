@@ -107,9 +107,8 @@ Camera::Camera(Ogre::Camera *camera)
 	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
 	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
-	mBody->setSleepingThresholds(0, 0);
-	mBody->setAngularFactor(0, 0, 0);
-	//mBody->setStaticShape(mShape, 0.1, 0.5);
+	mBody->setSleepingThresholds(0, 0); //prevent object from deactivating
+	mBody->setAngularFactor(0, 0, 0); //prevent other objects from affecting this object's rotation
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 }
 
@@ -210,24 +209,14 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(Ogre::Vector3 vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	//SetPosition(Ogre::Vector3(GetPosition().x + (vector.x * speed), GetPosition().y + (vector.y * speed), GetPosition().z + (vector.z * speed)));
 	//CameraNode->translate(sbs->ToRemote(vector * speed), Ogre::Node::TS_LOCAL);
 
 	//multiply vector with object's orientation, and flip X axis
 	vector = mBody->getWorldOrientation() * vector * Ogre::Vector3(-1, 1, 1);
-	//vector.x *= CameraNode->getLocalAxes()[2][0];
-	//vector.y *= CameraNode->getLocalAxes()[2][1];
-	//vector.z *= CameraNode->getLocalAxes()[2][2];
 
 	if (vector != Ogre::Vector3::ZERO)
-	{
 		mBody->setLinearVelocity(sbs->ToRemote(vector));
-		/*if (vector.y == 0)
-			mBody->setLinearVelocity((mBody->getLinearVelocity() * Ogre::Vector3(0, 1, 0)) + sbs->ToRemote(vector));
-		else
-			mBody->setLinearVelocity((mBody->getLinearVelocity() * Ogre::Vector3(1, 0, 1)) + sbs->ToRemote(vector));
-			*/
-	}
+
 	return true;
 }
 
@@ -245,6 +234,7 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in local camera space
+
 	mBody->setAngularVelocity(Ogre::Vector3(0, -vector.y, 0));
 	CameraNode->pitch(Ogre::Degree(vector.x * speed),  Ogre::Node::TS_LOCAL);
 	//CameraNode->yaw(Ogre::Degree(-vector.y * speed),  Ogre::Node::TS_WORLD);

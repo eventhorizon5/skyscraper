@@ -694,7 +694,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	enabled = true;
 	//mShape = 0;
-	//mBody = 0;
+	mBody = 0;
 	//mObject = 0;
 
 	std::string buffer;
