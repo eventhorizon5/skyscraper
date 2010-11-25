@@ -147,6 +147,8 @@ private:
 	bool ResetOnGround;
 	Ogre::Vector3 rotation;
 	bool Collisions; //collision detection status
+	bool RotationStopped;
+	bool MovementStopped;
 
 	//collision/physics
 	OgreBulletDynamics::RigidBody* mBody;

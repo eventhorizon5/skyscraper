@@ -441,7 +441,7 @@ void SBS::MainLoop()
 
 	//update physics
 	float step = float(GetElapsedTime()) / 1000.0;
-	mWorld->stepSimulation(step, 7, 1./10.);
+	mWorld->stepSimulation(step, 7);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)

@@ -101,6 +101,8 @@ Camera::Camera(Ogre::Camera *camera)
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
+	RotationStopped = false;
+	MovementStopped = false;
 
 	//set up physics parameters
 	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
@@ -211,11 +213,18 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	//moves the camera in a relative amount specified by a vector
 	//CameraNode->translate(sbs->ToRemote(vector * speed), Ogre::Node::TS_LOCAL);
 
+	if (MovementStopped == true && vector == Ogre::Vector3::ZERO)
+		return false;
+
+	MovementStopped = false;
+
+	if (vector == Ogre::Vector3::ZERO)
+		MovementStopped = true;
+
 	//multiply vector with object's orientation, and flip X axis
 	vector = mBody->getWorldOrientation() * vector * Ogre::Vector3(-1, 1, 1);
 
-	if (vector != Ogre::Vector3::ZERO)
-		mBody->setLinearVelocity(sbs->ToRemote(vector));
+	mBody->setLinearVelocity(sbs->ToRemote(vector));
 
 	return true;
 }
@@ -234,6 +243,14 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in local camera space
+
+	if (RotationStopped == true && vector == Ogre::Vector3::ZERO)
+		return;
+
+	RotationStopped = false;
+
+	if (vector == Ogre::Vector3::ZERO)
+		RotationStopped = true;
 
 	mBody->setAngularVelocity(Ogre::Vector3(0, -vector.y, 0));
 	CameraNode->pitch(Ogre::Degree(vector.x * speed),  Ogre::Node::TS_LOCAL);
