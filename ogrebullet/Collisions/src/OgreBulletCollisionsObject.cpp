@@ -69,8 +69,8 @@ namespace OgreBulletCollisions
         if (mRootNode)
         {
             showDebugShape(false);
-            mShapeNode->detachObject (this);
-            mRootNode->removeAndDestroyChild (mShapeNode->getName ());
+            //mShapeNode->detachObject (this);
+            //mRootNode->removeAndDestroyChild (mShapeNode->getName ());
             //mRootNode->getParentSceneNode ()->removeAndDestroyChild (mRootNode->getName ());
         }
 
@@ -137,9 +137,9 @@ namespace OgreBulletCollisions
     {
         mShape = shape;
 
-        mRootNode = mWorld->getSceneManager()->getRootSceneNode()->createChildSceneNode(mName);
-        mShapeNode = mRootNode->createChildSceneNode(mName + "Shape");
-        mShapeNode->attachObject(this);
+        //mRootNode = mWorld->getSceneManager()->getRootSceneNode()->createChildSceneNode(mName);
+        //mShapeNode = mRootNode->createChildSceneNode(mName + "Shape");
+        //mShapeNode->attachObject(this);
 
         mObject->setCollisionShape(shape->getBulletShape());
         showDebugShape(mWorld->getShowDebugShapes()); 

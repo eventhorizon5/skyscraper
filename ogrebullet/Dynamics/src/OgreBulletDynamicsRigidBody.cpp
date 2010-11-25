@@ -98,8 +98,9 @@ namespace OgreBulletDynamics
 
         mRootNode = node;
 
-        mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
-        mShapeNode->attachObject(this);
+		mShapeNode = 0;
+        //mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
+        //mShapeNode->attachObject(this);
 
         mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
