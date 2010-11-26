@@ -85,7 +85,7 @@ namespace OgreBulletDynamics
         mObject = body;
 		_notifyMoved();
 
-		getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
+		addToWorld();
     }
 
     // -------------------------------------------------------------------------
@@ -113,7 +113,7 @@ namespace OgreBulletDynamics
         mObject = body;
 		_notifyMoved();
 
-		getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
+		addToWorld();
 	}
 	// -------------------------------------------------------------------------
     void RigidBody::setStaticShape(btScaledBvhTriangleMeshShape *shape,
@@ -129,7 +129,7 @@ namespace OgreBulletDynamics
 
         mObject = body;
 		_notifyMoved();
-      getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
+        addToWorld();
    }		
     // -------------------------------------------------------------------------
     void RigidBody::setStaticShape(OgreBulletCollisions::CollisionShape *shape,
@@ -146,8 +146,18 @@ namespace OgreBulletDynamics
 
         mObject = body;
 		_notifyMoved();
+		addToWorld();
+	}
+
+	void RigidBody::addToWorld()
+	{
 		getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
 	}
+	void RigidBody::removeFromWorld()
+	{
+		getDynamicsWorld()->removeRigidBody(this);
+	}
+
 	// -------------------------------------------------------------------------
 	void RigidBody::setKinematicObject(bool isKinematic) {
 		if (this->isKinematicObject() != isKinematic) {

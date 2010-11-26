@@ -78,6 +78,8 @@ namespace OgreBulletDynamics
             const float      bodyFriction);
 
 
+		void addToWorld();
+		void removeFromWorld();
         void setLinearVelocity(const Ogre::Vector3 &vel);
         void setLinearVelocity(const Ogre::Real x, const Ogre::Real y, const Ogre::Real z);
 		Ogre::Vector3 getLinearVelocity();

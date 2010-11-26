@@ -62,7 +62,7 @@ namespace OgreBulletDynamics
         void stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps = 1, const Ogre::Real fixedTimestep = 1./60.);
 
         void addRigidBody (RigidBody *rb, short collisionGroup, short collisionMask);
-
+		void removeRigidBody (RigidBody *rb);
 
         inline btDynamicsWorld * getBulletDynamicsWorld() const {return static_cast<btDynamicsWorld *> (mWorld);};
 

@@ -800,18 +800,23 @@ void MeshObject::Enable(bool value)
 	if (value == enabled)
 		return;
 
-	//2 methods for this - either disable, or detach from scenegraph. Trying detach method for now
+	//attach or detach from scenegraph
 	if (value == false)
 		SceneNode->detachObject(Movable);
 	else
 		SceneNode->attachObject(Movable);
 
-	//set visibility flag instead
-	//Movable->setVisible(value);
-
 	//enable or disable collision detection
 	if (mBody)
-		mBody->enableCollisions(value);
+	{
+		//completely remove object from dynamics world if disabled; re-add to enable
+		if (value == false)
+			mBody->removeFromWorld();
+		else
+			mBody->addToWorld();
+
+		//mBody->enableCollisions(value);
+	}
 
 	enabled = value;
 }

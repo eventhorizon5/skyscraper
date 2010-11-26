@@ -101,6 +101,14 @@ namespace OgreBulletDynamics
 		}
     }
     // -------------------------------------------------------------------------
+    void DynamicsWorld::removeRigidBody (RigidBody *rb)
+    {
+		//int loc = mObjects.find(mObjects.begin(), mObjects.end(), static_cast <Object *> rb);
+		//mObjects.erase(mObjects.begin() + loc);
+
+		static_cast <btDiscreteDynamicsWorld *> (mWorld)->removeRigidBody(rb->getBulletRigidBody());      
+    }
+    // -------------------------------------------------------------------------
     void DynamicsWorld::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep)
     {
         // Reset Debug Lines
