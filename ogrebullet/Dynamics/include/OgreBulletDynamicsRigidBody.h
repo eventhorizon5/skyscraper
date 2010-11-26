@@ -65,12 +65,13 @@ namespace OgreBulletDynamics
         void setStaticShape(Ogre::SceneNode *node,
             OgreBulletCollisions::CollisionShape *shape,
             const float      bodyRestitution,
-            const float      bodyFriction);
+            const float      bodyFriction,
+			bool			 movable);
 
 
-		   void setStaticShape(btScaledBvhTriangleMeshShape *shape,
+		   /*void setStaticShape(btScaledBvhTriangleMeshShape *shape,
 		           const float      bodyRestitution,
-		           const float      bodyFriction);
+		           const float      bodyFriction);*/
 
 
         void setStaticShape(OgreBulletCollisions::CollisionShape *shape,
@@ -120,6 +121,7 @@ namespace OgreBulletDynamics
 	protected:
 		short mCollisionGroup;
 		short mCollisionMask;
+		bool can_move;
     };
     // -------------------------------------------------------------------------
     // basic rigid body class

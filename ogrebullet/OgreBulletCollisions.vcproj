@@ -153,6 +153,8 @@
 				AdditionalDependencies="OgreMain.lib ois.lib bulletcollision.lib bulletdynamics.lib linearmath.lib convexdecomposition.lib"
 				OutputFile="..\OgreBulletCollisions.dll"
 				AdditionalLibraryDirectories="&quot;$(BULLET_HOME)\msvc\2005\lib\Release&quot;;&quot;$(BULLET_HOME)\$(ConfigurationName)&quot;;&quot;$(OGRE_HOME)\lib\$(ConfigurationName)&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="..\OgreBulletCollisions.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"

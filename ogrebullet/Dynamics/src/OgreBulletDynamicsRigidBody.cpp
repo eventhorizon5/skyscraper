@@ -52,6 +52,7 @@ namespace OgreBulletDynamics
     {
 		mCollisionGroup = collisionGroup;
 		mCollisionMask = collisionMask;
+		can_move = false;
     }
     // -------------------------------------------------------------------------
     RigidBody::~RigidBody()
@@ -69,7 +70,6 @@ namespace OgreBulletDynamics
 
         mRootNode = node;
         mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
-        mShapeNode->attachObject(this);
 
         mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
@@ -92,17 +92,19 @@ namespace OgreBulletDynamics
     void RigidBody::setStaticShape(Ogre::SceneNode *node, 
         OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
-        const float      bodyFriction)
+        const float      bodyFriction,
+		bool			 movable)
     {
         mState = new ObjectState(this);
 
         mRootNode = node;
 
-		mShapeNode = 0;
-        //mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
-        //mShapeNode->attachObject(this);
+		can_move = movable;
 
-        mShape = shape;
+		if (can_move == true)
+			mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
+
+		mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
 
         btRigidBody *body = new btRigidBody(0.0, mState, mShape->getBulletShape ());
@@ -116,7 +118,7 @@ namespace OgreBulletDynamics
 		addToWorld();
 	}
 	// -------------------------------------------------------------------------
-    void RigidBody::setStaticShape(btScaledBvhTriangleMeshShape *shape,
+    /*void RigidBody::setStaticShape(btScaledBvhTriangleMeshShape *shape,
         const float      bodyRestitution,
         const float      bodyFriction)
     {
@@ -130,7 +132,7 @@ namespace OgreBulletDynamics
         mObject = body;
 		_notifyMoved();
         addToWorld();
-   }		
+   }*/	
     // -------------------------------------------------------------------------
     void RigidBody::setStaticShape(OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
@@ -151,11 +153,21 @@ namespace OgreBulletDynamics
 
 	void RigidBody::addToWorld()
 	{
+		//add collider to world
 		getDynamicsWorld()->addRigidBody(this, mCollisionGroup, mCollisionMask);
+
+		//attach scene node
+		if (can_move == true)
+			mShapeNode->attachObject(this);
 	}
 	void RigidBody::removeFromWorld()
 	{
+		//remove collider from world
 		getDynamicsWorld()->removeRigidBody(this);
+
+		//detach scene node
+		if (can_move == true)
+			mShapeNode->detachObject(this);
 	}
 
 	// -------------------------------------------------------------------------
