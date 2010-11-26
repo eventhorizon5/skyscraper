@@ -582,7 +582,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 
 	if (relative == false)
 	{
-		FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
+		FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset, false);
 		return FloorIndicatorArray[size]->object;
 	}
 	else
@@ -590,7 +590,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
+			FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset, false);
 			return FloorIndicatorArray[size]->object;
 		}
 		else
@@ -812,7 +812,7 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 
 	int index = (int)DirIndicatorArray.size();
 	DirIndicatorArray.resize(index + 1);
-	DirIndicatorArray[index] = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirIndicatorArray[index] = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th, false);
 	return DirIndicatorArray[index]->object;
 }
 

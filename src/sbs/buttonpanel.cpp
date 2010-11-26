@@ -68,7 +68,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	buffer = "Button Panel " + buffer2 + ":" + buffer3;
 	TrimString(buffer);
 	object->SetName(buffer.c_str());
-	ButtonPanelMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ButtonPanelMesh = new MeshObject(object, buffer.c_str(), true, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//move
 	SetToElevatorAltitude();

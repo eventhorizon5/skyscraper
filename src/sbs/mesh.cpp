@@ -694,16 +694,15 @@ bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool
 	return false;
 }
 
-MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier)
+MeshObject::MeshObject(Object* parent, const char *name, bool movable, const char *filename, float max_render_distance, float scale_multiplier)
 {
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, parent, "Mesh", name, false);
 
 	enabled = true;
-	//mShape = 0;
 	mBody = 0;
-	//mObject = 0;
+	can_move = movable;
 
 	std::string buffer;
 	std::string Name = name;
@@ -1602,7 +1601,7 @@ void MeshObject::CreateCollider()
 	std::string name = MeshWrapper->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5);
+	mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5, can_move);
 
 	//mObject = new OgreBulletCollisions::Object(MeshWrapper->getName(), sbs->mWorld, true);
 	//mObject->setShape(mShape);

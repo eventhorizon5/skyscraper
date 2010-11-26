@@ -36,7 +36,7 @@ public:
 	std::string Prefix; //texture name prefix
 
 	//functions
-	FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude);
+	FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude, bool movable);
 	~FloorIndicator();
 	void Enabled(bool value);
 	Ogre::Vector3 GetPosition();

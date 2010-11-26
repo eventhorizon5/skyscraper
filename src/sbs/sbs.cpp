@@ -3858,10 +3858,10 @@ int SBS::GetConfigInt(const char *key, int default_value)
 	return Ogre::StringConverter::parseInt(result);
 }
 
-const char* SBS::GetConfigString(const char *key, const char *default_value)
+std::string SBS::GetConfigString(const char *key, const char *default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return result.c_str();
+	return result;
 }
 
 bool SBS::GetConfigBool(const char *key, bool default_value)

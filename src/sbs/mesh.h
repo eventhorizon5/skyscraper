@@ -60,7 +60,7 @@ public:
 		Ogre::IndexData *databuffer; //used to find the related submesh
 	};
 
-	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1);
+	MeshObject(Object* parent, const char *name, bool movable = false, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1);
 	~MeshObject();
 	void Enable(bool value);
 	bool IsEnabled();
@@ -100,11 +100,10 @@ public:
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;
 	OgreBulletDynamics::RigidBody* mBody;
-	//OgreBulletCollisions::Object* mObject;
 
 private:
 	bool enabled;
-	//csRef<iCollection> collection;
+	bool can_move;
 	float rotX, rotY, rotZ;
 	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);
 

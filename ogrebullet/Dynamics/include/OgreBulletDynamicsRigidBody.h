@@ -122,6 +122,7 @@ namespace OgreBulletDynamics
 		short mCollisionGroup;
 		short mCollisionMask;
 		bool can_move;
+		bool in_world;
     };
     // -------------------------------------------------------------------------
     // basic rigid body class

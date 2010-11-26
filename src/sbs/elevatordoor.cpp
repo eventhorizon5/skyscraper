@@ -1348,7 +1348,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	parent = wrapper->parent;
 
 	//create object mesh
-	mesh = new MeshObject(wrapper->object, doorname);
+	mesh = new MeshObject(wrapper->object, doorname, true);
 	
 	std::string direction_check = Direction;
 	SetCase(direction_check, false);

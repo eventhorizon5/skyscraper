@@ -296,7 +296,7 @@ public:
 	Ogre::Vector3 GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);
 	int GetConfigInt(const char *key, int default_value);
-	const char *GetConfigString(const char *key, const char *default_value);
+	std::string GetConfigString(const char *key, const char *default_value);
 	bool GetConfigBool(const char *key, bool default_value);
 	float GetConfigFloat(const char *key, float default_value);
 	int Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value);
