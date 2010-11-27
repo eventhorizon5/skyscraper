@@ -127,7 +127,7 @@ void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
 	CameraNode->setPosition(sbs->ToRemote(vector));
-	mBody->_notifyMoved();
+	mBody->updateTransform(true);
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)

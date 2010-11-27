@@ -72,6 +72,7 @@ namespace OgreBulletDynamics
         mState = new ObjectState(this);
 
 		can_move = true;
+		is_static = false;
         mRootNode = node;
 		mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 
@@ -87,7 +88,7 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
-		_notifyMoved();
+		updateTransform(true);
 
 		addToWorld();
     }
@@ -104,6 +105,7 @@ namespace OgreBulletDynamics
         mRootNode = node;
 
 		can_move = movable;
+		is_static = true;
 
 		if (can_move == true)
 			mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
@@ -117,7 +119,7 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
-		_notifyMoved();
+		updateTransform(true);
 
 		addToWorld();
 	}
@@ -151,7 +153,7 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
-		_notifyMoved();
+		updateTransform(true);
 		addToWorld();
 	}
 

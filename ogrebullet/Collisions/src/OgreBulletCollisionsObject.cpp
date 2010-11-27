@@ -55,7 +55,8 @@ namespace OgreBulletCollisions
         mBounds(Vector3::ZERO, Vector3::ZERO),
         mDebugShape(0),
         mShapeNode(0),
-        mDebugNode(0)
+        mDebugNode(0),
+		is_static(false)
     {
         if (init)
         {
@@ -185,13 +186,20 @@ namespace OgreBulletCollisions
 
 	void Object::_notifyMoved()
 	{
+		if (is_static == true)
+			updateTransform(false);
+	}
+
+	void Object::updateTransform(bool set_interpolate)
+	{
 		Vector3 pos = mRootNode->getPosition();
 		Quaternion quat = mRootNode->getOrientation();
 		btTransform transform;
 		transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
 		transform.setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
 		mObject->setWorldTransform(transform);
-		mObject->setInterpolationWorldTransform(transform);
+		if (set_interpolate == true)
+			mObject->setInterpolationWorldTransform(transform);
 	}
 
     //-----------------------------------------------------------------------
