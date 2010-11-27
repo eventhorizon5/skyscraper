@@ -109,7 +109,7 @@ Camera::Camera(Ogre::Camera *camera)
 	//set up physics parameters
 	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), sbs->ToRemote(cfg_body_depth / 2));
 	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
-	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
+	mBody = new OgreBulletDynamics::RigidBody("CameraCollider", sbs->mWorld);
 	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
 	mBody->setSleepingThresholds(0, 0); //prevent object from deactivating
 	mBody->setAngularFactor(0, 0, 0); //prevent other objects from affecting this object's rotation

@@ -191,6 +191,7 @@ namespace OgreBulletCollisions
 		transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
 		transform.setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
 		mObject->setWorldTransform(transform);
+		mObject->setInterpolationWorldTransform(transform);
 	}
 
     //-----------------------------------------------------------------------
