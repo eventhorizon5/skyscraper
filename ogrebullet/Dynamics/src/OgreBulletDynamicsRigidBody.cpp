@@ -58,7 +58,9 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     RigidBody::~RigidBody()
     {
-    }  
+ 		if (can_move == true)
+			mShapeNode->detachObject(this);
+   }  
     // -------------------------------------------------------------------------
     void RigidBody::setShape(Ogre::SceneNode *node,  
         OgreBulletCollisions::CollisionShape *shape,                          
@@ -69,8 +71,9 @@ namespace OgreBulletDynamics
 
         mState = new ObjectState(this);
 
+		can_move = true;
         mRootNode = node;
-        mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
+		mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 
         mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
@@ -84,9 +87,9 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
-	_notifyMoved();
+		_notifyMoved();
 
-	addToWorld();
+		addToWorld();
     }
 
     // -------------------------------------------------------------------------
@@ -100,12 +103,12 @@ namespace OgreBulletDynamics
 
         mRootNode = node;
 
-	can_move = movable;
+		can_move = movable;
 
-	if (can_move == true)
-		mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
+		if (can_move == true)
+			mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 
-	mShape = shape;
+		mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
 
         btRigidBody *body = new btRigidBody(0.0, mState, mShape->getBulletShape ());
@@ -114,9 +117,9 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
-	_notifyMoved();
+		_notifyMoved();
 
-	addToWorld();
+		addToWorld();
 	}
 	// -------------------------------------------------------------------------
     /*void RigidBody::setStaticShape(btScaledBvhTriangleMeshShape *shape,

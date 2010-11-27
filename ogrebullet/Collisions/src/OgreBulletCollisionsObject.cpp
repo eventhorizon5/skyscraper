@@ -119,16 +119,17 @@ namespace OgreBulletCollisions
     // -------------------------------------------------------------------------
     void Object::setPosition(const btVector3 &pos)
     {
-	mRootNode->setPosition(pos[0], pos[1], pos[2]);
+		mRootNode->setPosition(pos[0], pos[1], pos[2]);
     }
     // -------------------------------------------------------------------------
     void Object::setOrientation(const btQuaternion &quat)
     {   
-	mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
+		mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
     }
     // -------------------------------------------------------------------------
     void Object::setTransform(const btTransform& worldTrans)
     { 
+		//this sets the node's transformation based on the Bullet collider's world transformation
         mRootNode->setPosition(worldTrans.getOrigin()[0], worldTrans.getOrigin()[1],worldTrans.getOrigin()[2]);
         mRootNode->setOrientation(worldTrans.getRotation().getW(),worldTrans.getRotation().getX(), worldTrans.getRotation().getY(), worldTrans.getRotation().getZ());
     }
@@ -144,7 +145,7 @@ namespace OgreBulletCollisions
         mObject->setCollisionShape(shape->getBulletShape());
         showDebugShape(mWorld->getShowDebugShapes()); 
 
-	_notifyMoved();
+		_notifyMoved();
     }
     // -------------------------------------------------------------------------
     //-----------------------------------------------------------------------
@@ -186,8 +187,10 @@ namespace OgreBulletCollisions
 	{
 		Vector3 pos = mRootNode->getPosition();
 		Quaternion quat = mRootNode->getOrientation();
-		mObject->getWorldTransform().setOrigin(btVector3(pos.x, pos.y, pos.z));
-		mObject->getWorldTransform().setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
+		btTransform transform;
+		transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
+		transform.setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
+		mObject->setWorldTransform(transform);
 	}
 
     //-----------------------------------------------------------------------

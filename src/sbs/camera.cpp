@@ -42,12 +42,6 @@ Camera::Camera(Ogre::Camera *camera)
 	object = new Object();
 	object->SetValues(this, sbs->object, "Camera", "Camera", true);
 
-	MainCamera = camera;
-	MainCamera->setNearClipDistance(0.1f);
-	MainCamera->setFarClipDistance(0.0f);
-	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
-	CameraNode->attachObject(MainCamera);
-
 	//init variables
 	CurrentFloor = 0;
 	StartFloor = 0;
@@ -104,8 +98,16 @@ Camera::Camera(Ogre::Camera *camera)
 	RotationStopped = false;
 	MovementStopped = false;
 
+	//set up camera and scene nodes
+	MainCamera = camera;
+	MainCamera->setNearClipDistance(0.1f);
+	MainCamera->setFarClipDistance(0.0f);
+	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), 0));
+	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
+	CameraNode->attachObject(MainCamera);
+
 	//set up physics parameters
-	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(1.64 / 2), sbs->ToRemote(5 / 2), sbs->ToRemote(1.64 / 2));
+	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), sbs->ToRemote(cfg_body_depth / 2));
 	mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	mBody = new OgreBulletDynamics::RigidBody("Camera", sbs->mWorld);
 	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
@@ -125,6 +127,7 @@ void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
 	CameraNode->setPosition(sbs->ToRemote(vector));
+	mBody->_notifyMoved();
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)
