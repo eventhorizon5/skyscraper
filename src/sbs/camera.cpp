@@ -155,12 +155,17 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 		vector.z += 360;
 
 	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
+	Ogre::Quaternion x2(Ogre::Degree(0), Ogre::Vector3::UNIT_X);
 	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::Quaternion y2(Ogre::Degree(0), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion rot = x * y * z;
+	Ogre::Quaternion z2(Ogre::Degree(0), Ogre::Vector3::UNIT_Z);
+	Ogre::Quaternion camrot = x * y2 * z;
+	Ogre::Quaternion bodyrot = x2 * y * z2;
 	rotation = vector;
-	//MainCamera->rotate(rot);
-	CameraNode->setOrientation(rot);
+	MainCamera->setOrientation(camrot);
+	mBody->setOrientation(bodyrot);
+	mBody->updateTransform(true);
 }
 
 Ogre::Vector3 Camera::GetPosition()
@@ -256,9 +261,9 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 		RotationStopped = true;
 
 	mBody->setAngularVelocity(Ogre::Vector3(0, -vector.y, 0));
-	CameraNode->pitch(Ogre::Degree(vector.x * speed),  Ogre::Node::TS_LOCAL);
+	MainCamera->pitch(Ogre::Degree(vector.x * speed));
 	//CameraNode->yaw(Ogre::Degree(-vector.y * speed),  Ogre::Node::TS_WORLD);
-	CameraNode->roll(Ogre::Degree(vector.z * speed),  Ogre::Node::TS_LOCAL);
+	MainCamera->roll(Ogre::Degree(vector.z * speed));
 }
 
 void Camera::SetStartDirection(const Ogre::Vector3 &vector)
