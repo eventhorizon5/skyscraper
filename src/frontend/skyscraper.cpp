@@ -531,8 +531,14 @@ void Skyscraper::GetInput()
 			Simcore->camera->Step(speed_normal);
 		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
 			Simcore->camera->Step(-speed_normal);
-		if (wxGetKeyState(WXK_SPACE))
-			Simcore->camera->Jump();
+		if (wxGetKeyState(WXK_SPACE) && wait == false)
+		{
+			if (Simcore->camera->IsOnGround() == true)
+			{
+				Simcore->camera->Jump();
+				wait = true;
+			}
+		}
 		if (wxGetKeyState(WXK_F3))
 		{
 			//reset view

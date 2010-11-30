@@ -220,7 +220,6 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(Ogre::Vector3 vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	//CameraNode->translate(sbs->ToRemote(vector * speed), Ogre::Node::TS_LOCAL);
 
 	if (MovementStopped == true && vector == Ogre::Vector3::ZERO)
 		return false;
@@ -233,7 +232,16 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	//multiply vector with object's orientation, and flip X axis
 	vector = mBody->getWorldOrientation() * vector * Ogre::Vector3(-1, 1, 1);
 
-	mBody->setLinearVelocity(sbs->ToRemote(vector));
+	//vector.y += sbs->ToLocal(mBody->getLinearVelocity().y);
+
+	//mBody->setLinearVelocity(sbs->ToRemote(vector));
+	if (vector.y == 0)
+		mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), mBody->getLinearVelocity().y, sbs->ToRemote(-vector.z)));
+	else
+	{
+		mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), 0, sbs->ToRemote(-vector.z)));
+		mBody->applyForce(Ogre::Vector3(0, sbs->ToRemote(vector.y * 50), 0), Ogre::Vector3::ZERO);
+	}
 
 	return true;
 }
@@ -502,11 +510,12 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//get a collision callback from Bullet
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote(1000));
 
+	//exit if no collision
+	if (callback.doesCollide() == false)
+		return;
+
 	//get collided collision object
 	OgreBulletCollisions::Object* object = callback.getCollidedObject();
-
-	if (!object)
-		return;
 
 	//get name of collision object's parent scenenode (which is the same name as the mesh object)
 	meshname = object->getRootNode()->getName();
@@ -770,13 +779,14 @@ void Camera::CreateColliders()
 
 void Camera::Loop()
 {
-	//set collision detection status
-	//collider_actor.SetCD(EnableCollisions);
-
-	//set on ground status to false, to force checking of moving object intersections
-	//disabled by default due to the massive performance hit it causes
-	//if (ResetOnGround == true)
-		//collider_actor.SetOnGround(false);
+	//switch off gravity if camera is not on ground - this fixes vertical movement jitter
+	if (CollisionsEnabled() == true)
+	{
+		if (IsOnGround() == true)
+			mBody->setGravity(Ogre::Vector3::ZERO);
+		else
+			mBody->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
+	}
 
 	//calculate acceleration
 	InterpolateMovement();
@@ -1009,4 +1019,17 @@ void Camera::EnableCollisions(bool value)
 bool Camera::CollisionsEnabled()
 {
 	return Collisions;
+}
+
+bool Camera::IsOnGround()
+{
+	//return true or false depending on if the camera is on the ground - uses Bullet raycasting
+
+	//cast a ray from the camera position downwards
+	Ogre::Ray ray (CameraNode->getPosition(), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	
+	//get a collision callback from Bullet
+	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote((cfg_body_height + cfg_legs_height + 1) / 2));
+
+	return callback.doesCollide();
 }

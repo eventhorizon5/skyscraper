@@ -124,6 +124,7 @@ public:
 	void SetViewMode(int mode);
 	void EnableCollisions(bool value);
 	bool CollisionsEnabled();
+	bool IsOnGround();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
