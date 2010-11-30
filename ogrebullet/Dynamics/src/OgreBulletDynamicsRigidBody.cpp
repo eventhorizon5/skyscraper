@@ -272,7 +272,16 @@ namespace OgreBulletDynamics
         getBulletRigidBody()->setDamping( linearDamping,  angularDamping);
     }
     // -------------------------------------------------------------------------
+	void RigidBody::setGravity( const Ogre::Vector3 &gravity )
+	{
+		getBulletRigidBody()->setGravity(OgreBtConverter::to(gravity));
+	}
     // -------------------------------------------------------------------------
+	Ogre::Vector3 RigidBody::getGravity()
+	{
+		const btVector3 gravity = getBulletRigidBody()->getGravity();
+		return BtOgreConverter::to(gravity);
+	}
     // -------------------------------------------------------------------------
     void WheeledRigidBody::setPosition(const btVector3 &pos)
     { 

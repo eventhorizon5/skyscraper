@@ -93,6 +93,8 @@ namespace OgreBulletDynamics
         void applyImpulse(const Ogre::Vector3 &impulse, const Ogre::Vector3 &position);
         void applyForce(const Ogre::Vector3 &impulse, const Ogre::Vector3 &position);
 		void setSleepingThresholds( const Ogre::Real linear, const Ogre::Real angular );
+		void setGravity(const Ogre::Vector3 &gravity);
+		Ogre::Vector3 getGravity();
 
 
         inline btRigidBody*         getBulletRigidBody() const;
