@@ -26,6 +26,7 @@
 #include <OgreCamera.h>
 #include <OgreSceneManager.h>
 #include <OgreBulletDynamicsRigidBody.h>
+#include <OgreBulletCollisionsRay.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "globals.h"
 #include "sbs.h"
@@ -493,47 +494,33 @@ void Camera::CheckStairwell()
 
 void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 {
-	/*
-	//some code and comments from the CrystalSpace manual
-	//this returns the mesh that the user clicks on
+	//get mesh object that the user clicked on, and perform related work
 
-	// Setup a 2D vector with our mouse position.  We invert the y
-	// (based on vertical screen dimension) because CS assumes y=0
-	// is down for 3D calculations.
-	Ogre::Vector2 v2d (sbs->mouse_x, MainCamera->GetShiftY() * 2 - sbs->mouse_y);
+	//cast a ray from the camera in the direction of the clicked position
+	Ogre::Ray ray = MainCamera->getCameraToViewportRay(sbs->mouse_x, MainCamera->getViewport()->getHeight() - sbs->mouse_y);
+	
+	//get a collision callback from Bullet
+	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote(1000));
 
-	// We calculate the inverse perspective of this 2D point at
-	// z=100.  This results in a 3D position in camera space at
-	// z=100 that directly corresponds to the 2D position we
-	// clicked on.  We use z=100 to ensure that we will at least
-	// hit all objects that are before that distance.
-	Ogre::Vector3 v3d = MainCamera->InvPerspective(v2d, 100);
+	//get collided collision object
+	OgreBulletCollisions::Object* object = callback.getCollidedObject();
 
-	// We are going to cast a beam in the current sector of the
-	// camera from our camera position in the direction of the
-	// 'v3d' point.  First we transform the v3d camera space
-	// location to world space.
-	Ogre::Vector3 startbeam = MainCamera->GetTransform().GetOrigin();
-	Ogre::Vector3 endbeam = MainCamera->GetTransform().This2Other(v3d);
-
-	// Now do the actual intersection.
-	csSectorHitBeamResult result = sbs->area->HitBeam(startbeam, endbeam, true);
-	if (!result.mesh)
+	if (!object)
 		return;
 
-	//get mesh name
-	meshname = result.mesh->QueryObject()->GetName();
+	//get name of collision object's parent scenenode (which is the same name as the mesh object)
+	meshname = object->getRootNode()->getName();
 
 	//get hit/intersection position
-	HitPosition = sbs->ToLocal(result.isect);
+	HitPosition = sbs->ToLocal(callback.getCollisionPoint());
 
 	//get wall name
 	WallObject* wall = 0;
-	MeshObject* meshobject = sbs->FindMeshObject(result.mesh);
+	MeshObject* meshobject = sbs->FindMeshObject(meshname);
 	if (!meshobject)
 		return;
 
-	int num = meshobject->FindWall(result.isect);
+	int num = meshobject->FindWall(HitPosition);
 	if (num > -1)
 		wall = meshobject->Walls[num];
 
@@ -542,21 +529,21 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	else
 		polyname = "";
 
-	//get object number
+	//get and strip object number
 	std::string number;
 	object_number = 0;
 	if (wall)
 	{
 		object_number = wall->GetNumber();
 		int index = polyname.find(")");
-		polyname.DeleteAt(0, index + 1);
+		polyname.erase(polyname.begin(), polyname.begin() + index);
 	}
 	if (meshname.find("(") == 0)
 	{
 		int index = meshname.find(")");
 		if (object_number == 0)
-			object_number = atoi(meshname.substr(1, index - 1));
-		meshname.DeleteAt(0, index + 1);
+			object_number = atoi(meshname.substr(1, index - 1).c_str());
+		meshname.erase(meshname.begin(), meshname.begin() + index);
 	}
 	number = object_number;
 
@@ -594,8 +581,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		//user clicked on a call button
 		int index = meshname.find(":");
 		int index2 = meshname.find(":", index + 1);
-		int floor = atoi(meshname.substr(12, index - 12));
-		int number = atoi(meshname.substr(index + 1, index2 - index - 1));
+		int floor = atoi(meshname.substr(12, index - 12).c_str());
+		int number = atoi(meshname.substr(index + 1, index2 - index - 1).c_str());
 		CallButton *buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
 		std::string direction = meshname.substr(index2 + 1);
 		TrimString(direction);
@@ -624,9 +611,9 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		//user clicked on an elevator button
 		int index = meshname.find(":");
 		int index2 = meshname.find("Control");
-		int elevator = atoi(meshname.substr(13, index - 13));
-		int panel_number = atoi(meshname.substr(index + 1, meshname.find(" ", index) - index - 1));
-		int control_number = atoi(meshname.substr(index2 + 8));
+		int elevator = atoi(meshname.substr(13, index - 13).c_str());
+		int panel_number = atoi(meshname.substr(index + 1, meshname.find(" ", index) - index - 1).c_str());
+		int control_number = atoi(meshname.substr(index2 + 8).c_str());
 
 		//press button
 		sbs->GetElevator(elevator)->GetPanel(panel_number)->Press(control_number);
@@ -636,11 +623,11 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	if (meshname.find("Shaft Door") != -1 && shift == true)
 	{
 		//user clicked on a shaft door
-		int elevator = atoi(meshname.substr(9, meshname.find(":") - 9));
+		int elevator = atoi(meshname.substr(9, meshname.find(":") - 9).c_str());
 		int index = meshname.find("Shaft Door");
 		int index2 = meshname.find(":", index);
-		int number = atoi(meshname.substr(index + 10, index2 - (index + 10)));
-		int floor = atoi(meshname.substr(index2 + 1, meshname.length() - index2 - 2));
+		int number = atoi(meshname.substr(index + 10, index2 - (index + 10)).c_str());
+		int floor = atoi(meshname.substr(index2 + 1, meshname.length() - index2 - 2).c_str());
 		if (sbs->GetElevator(elevator)->AreShaftDoorsOpen(number, floor) == false)
 			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 3, floor);
 		else
@@ -651,8 +638,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	if (meshname.find("ElevatorDoor") != -1 && shift == true)
 	{
 		//user clicked on an elevator door
-		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13));
-		int number = atoi(meshname.substr(meshname.find(":") + 1, meshname.length() - meshname.find(":") - 1));
+		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13).c_str());
+		int number = atoi(meshname.substr(meshname.find(":") + 1, meshname.length() - meshname.find(":") - 1).c_str());
 		if (sbs->GetElevator(elevator)->AreDoorsOpen(number) == false)
 			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 2);
 		else
@@ -666,8 +653,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		if (meshname.substr(0, 5) == "Floor")
 		{
 			int marker = meshname.find(":");
-			int floornumber = atoi(meshname.substr(5, marker - 5));
-			int doornumber = atoi(meshname.substr(marker + 5));
+			int floornumber = atoi(meshname.substr(5, marker - 5).c_str());
+			int doornumber = atoi(meshname.substr(marker + 5).c_str());
 			Floor *floor = sbs->GetFloor(floornumber);
 			if (floor->IsDoorOpen(doornumber) == false)
 			{
@@ -687,8 +674,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		if (meshname.substr(0, 9) == "Stairwell")
 		{
 			int marker = meshname.find(":");
-			int stairsnumber = atoi(meshname.substr(9, marker - 9));
-			int doornumber = atoi(meshname.substr(marker + 5));
+			int stairsnumber = atoi(meshname.substr(9, marker - 9).c_str());
+			int doornumber = atoi(meshname.substr(marker + 5).c_str());
 			Stairs *stairs = sbs->GetStairs(stairsnumber);
 			if (stairs->IsDoorOpen(doornumber) == false)
 			{
@@ -708,8 +695,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		if (meshname.substr(0, 8) == "Elevator" && meshname.find("Shaft Door") == -1 && meshname.find("ElevatorDoor") == -1)
 		{
 			int marker = meshname.find(":");
-			int elevnumber = atoi(meshname.substr(8, marker - 8));
-			int doornumber = atoi(meshname.substr(marker + 5));
+			int elevnumber = atoi(meshname.substr(8, marker - 8).c_str());
+			int doornumber = atoi(meshname.substr(marker + 5).c_str());
 			Elevator *elevator = sbs->GetElevator(elevnumber);
 			if (elevator->IsDoorOpen(doornumber) == false)
 			{
@@ -726,7 +713,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					elevator->OpenDoor(doornumber);
 			}
 		}
-	}*/
+	}
 }
 
 const char* Camera::GetClickedMeshName()

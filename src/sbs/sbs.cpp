@@ -3839,6 +3839,17 @@ MeshObject* SBS::FindMeshObject(Ogre::MeshPtr meshwrapper)
 	return 0;
 }
 
+MeshObject* SBS::FindMeshObject(std::string name)
+{
+	//find a mesh object by searching for matching wrapper
+	for (int i = 0; i < (int)meshes.size(); i++)
+	{
+		if (meshes[i]->name == name)
+			return meshes[i];
+	}
+	return 0;
+}
+
 Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
 {
 	//add a model

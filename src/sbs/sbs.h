@@ -288,6 +288,7 @@ public:
 	void Prepare();
 	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
 	MeshObject* FindMeshObject(Ogre::MeshPtr meshwrapper);
+	MeshObject* FindMeshObject(std::string name);
 	Object* AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
 	void DumpVertices(WallObject* wallobject);
 	Ogre::Vector2 GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z = false);
