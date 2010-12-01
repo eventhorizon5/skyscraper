@@ -415,19 +415,19 @@ void Skyscraper::GetInput()
 	old_mouse_y = Simcore->mouse_y;
 
 	//get mouse pointer coordinates
-	//Simcore->mouse_x = mouse->GetLastX();
-	//Simcore->mouse_y = mouse->GetLastY();
+	Simcore->mouse_x = wxGetMousePosition().x - window->GetScreenPosition().x;
+	Simcore->mouse_y = wxGetMousePosition().y - window->GetScreenPosition().y;
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
-	/*if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
+	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
-		canvas->WarpPointer(g2d->GetWidth() / 2, g2d->GetHeight() / 2);
-		Ogre::Vector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (g2d->GetHeight() / 2))) / (g2d->GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((g2d->GetWidth() / 2) - (float)Simcore->mouse_x) / (g2d->GetWidth() * 2)), 0);
+		window->WarpPointer(window->GetSize().GetWidth() / 2, window->GetSize().GetHeight() / 2);
+		Ogre::Vector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (window->GetSize().GetHeight() / 2))) / (window->GetSize().GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((window->GetSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetSize().GetWidth() * 2)), 0);
 		Simcore->camera->Rotate(rotational, 1);
 	}
 
 	//check if the user clicked on an object, and process it
-	if (mouse->GetLastButton(0) == true && MouseDown == false)
+	if (wxGetMouseState().LeftDown() == true && MouseDown == false)
 	{
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
@@ -435,11 +435,11 @@ void Skyscraper::GetInput()
 	}
 
 	//reset mouse state
-	if (mouse->GetLastButton(0) == false)
+	if (wxGetMouseState().LeftDown() == false)
 	{
 		MouseDown = false;
 		Simcore->camera->MouseDown = MouseDown;
-	}*/
+	}
 
 	if (wxGetKeyState(WXK_ESCAPE))
 	{
@@ -605,12 +605,12 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
 			//enable/disable freelook mode
-			/*Simcore->camera->Freelook = !Simcore->camera->Freelook;
+			Simcore->camera->Freelook = !Simcore->camera->Freelook;
 			if (Simcore->camera->Freelook == true)
-				canvas->SetCursor(wxCURSOR_BLANK);
+				window->SetCursor(wxCURSOR_BLANK);
 			else
-				canvas->SetCursor(wxNullCursor);
-			wait = true;*/
+				window->SetCursor(wxNullCursor);
+			wait = true;
 		}
 		if (wxGetKeyState(WXK_F10) && wait == false)
 		{
