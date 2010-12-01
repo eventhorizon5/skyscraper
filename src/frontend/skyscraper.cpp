@@ -423,7 +423,7 @@ void Skyscraper::GetInput()
 	{
 		window->WarpPointer(window->GetSize().GetWidth() / 2, window->GetSize().GetHeight() / 2);
 		Ogre::Vector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (window->GetSize().GetHeight() / 2))) / (window->GetSize().GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((window->GetSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetSize().GetWidth() * 2)), 0);
-		Simcore->camera->Rotate(rotational, 1);
+		Simcore->camera->RotateLocal(rotational, 1);
 	}
 
 	//check if the user clicked on an object, and process it
