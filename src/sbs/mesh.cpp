@@ -30,6 +30,7 @@
 #include <OgreMaterialManager.h>
 #include <OgreEntity.h>
 #include <OgreBulletDynamicsRigidBody.h>
+#include <OgreMath.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include "globals.h"
 #include "sbs.h"
@@ -1575,9 +1576,6 @@ void MeshObject::CreateCollider()
 	for (int i = 0; i < Triangles.size(); i++)
 		tricount += Triangles[i].triangles.size();
 
-	//if (MeshGeometry.size() > 100)
-		//printf("Warning - collider vertex count %d %s\n", MeshGeometry.size(), MeshWrapper->getName().c_str());
-
 	printf("%s\n", MeshWrapper->getName().c_str());
 
 	//initialize collider shape
@@ -1602,10 +1600,52 @@ void MeshObject::CreateCollider()
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 	mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5, can_move);
+}
 
-	//mObject = new OgreBulletCollisions::Object(MeshWrapper->getName(), sbs->mWorld, true);
-	//mObject->setShape(mShape);
-	//mBody = new OgreBulletDynamics::RigidBody(MeshWrapper->getName(), sbs->mWorld);
-	//mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5);
-	//mBody->setShape(SceneNode, mShape, 0.1, 0.5, 1);
+int MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance)
+{
+	//cast a ray and return the collision distance to the mesh
+	//return -1 if no hit
+
+	//cast a ray from the camera position downwards
+	Ogre::Ray ray (sbs->ToRemote(origin) -  SceneNode->getPosition(), direction);
+	for (int i = 0; i < Triangles.size(); i++)
+	{
+		for (int j = 0; j < Triangles[i].triangles.size(); j++)
+		{
+			Ogre::Vector3 tri_a, tri_b, tri_c;
+			tri_a = MeshGeometry[Triangles[i].triangles[j].x].vertex;
+			tri_b = MeshGeometry[Triangles[i].triangles[j].y].vertex;
+			tri_c = MeshGeometry[Triangles[i].triangles[j].z].vertex;
+
+			std::pair<bool, float> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
+			if (result.first == true)
+			{
+				if (result.second <= max_distance)
+					return sbs->ToLocal(result.second);
+			}
+		}
+	}
+	return -1;
+}
+
+bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
+{
+	//determine if position 'pos' is inside the mesh's bounding box
+
+	Ogre::Vector3 pos2 = sbs->ToRemote(pos);
+	pos2 -= SceneNode->getPosition();
+	Ogre::Vector3 min = MeshWrapper->getBounds().getMinimum();
+	Ogre::Vector3 max = MeshWrapper->getBounds().getMaximum();
+	if (pos2.x >= min.x && pos2.x <= max.x && pos2.z >= min.z && pos2.z <= max.z)
+	{
+		if (check_y == false)
+			return true;
+		else
+		{
+			if (pos2.y >= min.y && pos2.y <= max.y)
+				return true;
+		}
+	}
+	return false;
 }

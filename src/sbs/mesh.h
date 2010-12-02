@@ -90,6 +90,8 @@ public:
 	void Prepare();
 	void EnableDebugView(bool value);
 	void CreateCollider();
+	int HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance);
+	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;

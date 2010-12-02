@@ -158,6 +158,7 @@ Elevator::Elevator(int number)
 	ArrivalDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
 	WaitForTimer = false;
 	SoundsQueued = false;
+	HeightSet = false;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -1055,13 +1056,17 @@ void Elevator::MonitorLoop()
 	//Monitors elevator and starts actions if needed
 
 	//make sure height value is set
-	if (Height == 0)
+	if (HeightSet == false)
 	{
+		Height = 0;
+		//search through mesh geometry to find actual height
 		for (int i = 0; i < (int)ElevatorMesh->MeshGeometry.size(); i++)
 		{
+			//set height value
 			if (sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y) > Height)
 				Height = sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y);
 		}
+		HeightSet = true;
 	}
 
 	//set random lobby level if not set
@@ -2096,50 +2101,38 @@ bool Elevator::IsElevator(Ogre::MeshPtr test)
 	return false;
 }
 
-/*csHitBeamResult Elevator::HitBeam(const Ogre::Vector3 &start, const Ogre::Vector3 &end)
-{
-	//passes info onto HitBeam function
-	return ElevatorMesh->MeshWrapper->HitBeam(sbs->ToRemote(start), sbs->ToRemote(end));
-}*/
-
 bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 {
 	//determine if the given 3D position is inside the elevator
 
+	int inelevator = false;
+
 	//if last position is the same as new, return previous result
-	/*if (position == lastposition && checkfirstrun == false)
+	if (position == lastposition && checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;
 
 	if (position.y > GetPosition().y && position.y < GetPosition().y + (Height * 2))
 	{
-		//cast a ray from the camera position downwards
-		Ogre::Ray ray (position, Ogre::Vector3::NEGATIVE_UNIT_Y);
-
-		//get a collision callback from Bullet
-		OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote(Height));
-
-		//check for collision
-		sbs->mWorld->launchRay(callback);
-
-		//get collided collision object
-		OgreBulletCollisions::Object* object = callback.getCollidedObject();
-		if (callback.doesCollide() == true)
+		if (ElevatorMesh->InBoundingBox(position, false) == true)
 		{
-
-			if (IsMoving == false)
+			if (ElevatorMesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
-				//store camera offset if elevator is not moving
-				CameraOffset = position.y - GetPosition().y;
-			}
-			else if (CameraOffset == 0)
-			{
-				//reposition camera with a moving elevator if the offset is 0
-				if (position.y < GetPosition().y + Height)
-					CameraOffset = sbs->camera->GetHeight(); //if below ceiling, set to camera height
-				else
-					CameraOffset = Height + sbs->camera->GetHeight(); //if above ceiling, set to elev height + camera height
+				if (IsMoving == false)
+				{
+					//store camera offset if elevator is not moving
+					CameraOffset = position.y - GetPosition().y;
+				}
+				else if (CameraOffset == 0)
+				{
+					//reposition camera with a moving elevator if the offset is 0
+					if (position.y < GetPosition().y + Height)
+						CameraOffset = sbs->camera->GetHeight(); //if below ceiling, set to camera height
+					else
+						CameraOffset = Height + sbs->camera->GetHeight(); //if above ceiling, set to elev height + camera height
+				}
+				inelevator = true;
 			}
 		}
 		else
@@ -2148,10 +2141,10 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 		if (position.y < GetPosition().y + Height)
 		{
 			//cache values
-			lastcheckresult = callback.doesCollide();
+			lastcheckresult = inelevator;
 			lastposition = position;
 
-			return callback.doesCollide();
+			return inelevator;
 		}
 	}
 
@@ -2159,7 +2152,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 	lastcheckresult = false;
 	lastposition = position;
 
-	*/return false;
+	return inelevator;
 }
 
 float Elevator::GetElevatorStart()

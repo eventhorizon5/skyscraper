@@ -266,15 +266,19 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 
 	checkfirstrun = false;
 
-	if (position.y > bottom && position.y < top)
+	if (position.y > bottom && position.y < top && ShaftArray.size() > 0)
 	{
-		/*csHitBeamResult result = ShaftArray[0]->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(Ogre::Vector3(position.x, position.y - (top - bottom), position.z)));
+		//first determine if camera has X and Z values within the first shaft floor's bounding box
+		if (ShaftArray[0]->InBoundingBox(position, false) == true)
+		{
+			bool result = (ShaftArray[0]->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, position.y - bottom) >= 0);
 
-		//cache values
-		lastcheckresult = result.hit;
-		lastposition = position;
+			//cache values
+			lastcheckresult = result;
+			lastposition = position;
 		
-		return result.hit;*/
+			return result;
+		}
 	}
 	
 	//cache values

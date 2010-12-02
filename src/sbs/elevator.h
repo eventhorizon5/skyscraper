@@ -65,6 +65,7 @@ public:
 	bool IsEnabled; //true if elevator is enabled
 	int Direction; //-1=down, 1=up, 0=stopped
 	float Height; //elevator height
+	bool HeightSet;
 	bool IsMoving; //is elevator moving?
 	std::string CarStartSound; //elevator start/speedup sound
 	std::string CarMoveSound; //elevator move sound
@@ -148,7 +149,6 @@ public:
 	void EnableObjects(bool value);
 	bool IsElevator(Ogre::MeshPtr test);
 	bool IsInElevator(const Ogre::Vector3 &position);
-	//csHitBeamResult HitBeam(const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	float GetElevatorStart();
 	float GetDestination();
 	float GetStoppingDistance();

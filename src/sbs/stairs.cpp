@@ -338,19 +338,19 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 
 	Floor *floorptr = sbs->GetFloor(floor);
 
-	/*if (position.y > bottom && position.y < top)
+	if (position.y > bottom && position.y < top)
 	{
 		//check both the current floor and floor below
-		Ogre::Vector3 endposition = Ogre::Vector3(position.x, position.y - floorptr->FullHeight(), position.z);
+		float distance = position.y - floorptr->FullHeight();
 		if (floor > startfloor)
-			hit = GetMeshObject(floor - 1)->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
+			hit = (GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0);
 		if (floor >= startfloor && floor <= endfloor)
 		{
-			hittmp = GetMeshObject(floor)->MeshWrapper->HitBeam(sbs->ToRemote(position), sbs->ToRemote(endposition)).hit;
+			hittmp = (GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0);
 			if (hittmp == true)
 				hit = true;
 		}
-	}*/
+	}
 	floorptr = 0;
 
 	//cache values
