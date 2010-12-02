@@ -505,10 +505,17 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//get mesh object that the user clicked on, and perform related work
 
 	//cast a ray from the camera in the direction of the clicked position
-	Ogre::Ray ray = MainCamera->getCameraToViewportRay(sbs->mouse_x, MainCamera->getViewport()->getHeight() - sbs->mouse_y);
+	float width = MainCamera->getViewport()->getActualWidth();
+	float height = MainCamera->getViewport()->getActualHeight();
+	float x = sbs->mouse_x / width;
+	float y = sbs->mouse_y / height;
+	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 	
 	//get a collision callback from Bullet
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote(1000));
+
+	//check for collision
+	sbs->mWorld->launchRay(callback);
 
 	//exit if no collision
 	if (callback.doesCollide() == false)
@@ -545,16 +552,17 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	{
 		object_number = wall->GetNumber();
 		int index = polyname.find(")");
-		polyname.erase(polyname.begin(), polyname.begin() + index);
+		if (index > -1)
+			polyname.erase(polyname.begin(), polyname.begin() + index + 1);
 	}
 	if (meshname.find("(") == 0)
 	{
 		int index = meshname.find(")");
 		if (object_number == 0)
 			object_number = atoi(meshname.substr(1, index - 1).c_str());
-		meshname.erase(meshname.begin(), meshname.begin() + index);
+		meshname.erase(meshname.begin(), meshname.begin() + index + 1);
 	}
-	number = object_number;
+	number = Ogre::StringConverter::toString(object_number);
 
 	//store parameters of object
 	Object *obj = sbs->GetObject(object_number);
@@ -1029,7 +1037,10 @@ bool Camera::IsOnGround()
 	Ogre::Ray ray (CameraNode->getPosition(), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	
 	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote((cfg_body_height + cfg_legs_height + 1) / 2));
+	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2));
+
+	//check for collision
+	sbs->mWorld->launchRay(callback);
 
 	return callback.doesCollide();
 }

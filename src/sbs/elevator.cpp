@@ -23,6 +23,7 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "random.h"
 #include "sbs.h"
@@ -2106,17 +2107,27 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 	//determine if the given 3D position is inside the elevator
 
 	//if last position is the same as new, return previous result
-/*	if (position == lastposition && checkfirstrun == false)
+	/*if (position == lastposition && checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;
 
 	if (position.y > GetPosition().y && position.y < GetPosition().y + (Height * 2))
 	{
-		csHitBeamResult result = HitBeam(position, Ogre::Vector3(position.x, position.y - Height, position.z));
+		//cast a ray from the camera position downwards
+		Ogre::Ray ray (position, Ogre::Vector3::NEGATIVE_UNIT_Y);
 
-		if (result.hit == true)
+		//get a collision callback from Bullet
+		OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote(Height));
+
+		//check for collision
+		sbs->mWorld->launchRay(callback);
+
+		//get collided collision object
+		OgreBulletCollisions::Object* object = callback.getCollidedObject();
+		if (callback.doesCollide() == true)
 		{
+
 			if (IsMoving == false)
 			{
 				//store camera offset if elevator is not moving
@@ -2137,10 +2148,10 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 		if (position.y < GetPosition().y + Height)
 		{
 			//cache values
-			lastcheckresult = result.hit;
+			lastcheckresult = callback.doesCollide();
 			lastposition = position;
 
-			return result.hit;
+			return callback.doesCollide();
 		}
 	}
 
@@ -2148,7 +2159,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 	lastcheckresult = false;
 	lastposition = position;
 
-*/	return false;
+	*/return false;
 }
 
 float Elevator::GetElevatorStart()

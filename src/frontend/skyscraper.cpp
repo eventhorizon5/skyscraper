@@ -309,13 +309,13 @@ bool Skyscraper::Initialize()
 		{
 			//show dialog if load failed
 			if(!mRoot->showConfigDialog())
-				OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "No RenderSystem chosen", "wxOgre::createOgreRenderWindow");
+				OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "No RenderSystem chosen", "Skyscraper::Initialize");
 		}
 	}
 
 	mRoot->initialise(false);
 	mRenderWindow = CreateRenderWindow();
-	mRoot->getRenderSystem()->setWaitForVerticalBlank(true); //disable vsync
+	//mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
 
 	//load config file
 	configfile.load("skyscraper.ini");
@@ -1191,8 +1191,8 @@ void Skyscraper::Quit()
 Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
 {
 	std::string name = windowName;
-	if (windowName.empty())
-		name = std::string("wxOgreRenderWindow");
+	//if (windowName.empty())
+		//name = std::string("wxOgreRenderWindow");
 
 	//do not clear background
 	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -1204,6 +1204,8 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	if (miscParams)
 		params = *miscParams;
 
+	//params["vsync"] = "true";
+	//params["vsyncInterval"] = "1";
 	params["externalWindowHandle"] = getOgreHandle();
 
 	//create the render window
