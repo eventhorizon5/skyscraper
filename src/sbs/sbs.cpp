@@ -737,14 +737,12 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 {
 	//adds text to the named texture, in the given box coordinates and alignment
 
-	return false;
 	//h_align is either "left", "right" or "center" - default is center
 	//v_align is either "top", "bottom", or "center" - default is center
 
 	//if either x1 or y1 are -1, the value of 0 is used.
 	//If either x2 or y2 are -1, the width or height of the texture is used.
 
-	return false;
 	std::string hAlign = h_align;
 	std::string vAlign = v_align;
 	std::string Name = name;

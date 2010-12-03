@@ -838,10 +838,13 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
-	return Ogre::MaterialPtr(0);
+	//return Ogre::MaterialPtr(0);
 	std::string tex = sbs->VerifyFile(texture);
 	std::string path = sbs->GetMountPath(texture, tex);
 	TrimString(tex);
+
+	if (MeshWrapper->getNumSubMeshes() == 0)
+		return Ogre::MaterialPtr(0);
 
 	//exit if old and new materials are the same
 	if (matcheck == true)
@@ -860,6 +863,10 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 
 	//set material if valid
 	MeshWrapper->getSubMesh(submesh)->setMaterialName(tex, path);
+
+	//apply changes (refresh mesh state)
+	MeshWrapper->_dirtyState();
+
 	return newmat;
 }
 

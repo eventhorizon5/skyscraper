@@ -88,6 +88,7 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
+		mObject->setContactProcessingThreshold(0); //eliminates bouncing when moving over interior mesh triangles
 		updateTransform(true);
 
 		addToWorld();

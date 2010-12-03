@@ -98,6 +98,7 @@ Camera::Camera(Ogre::Camera *camera)
 	HitPosition = 0;
 	RotationStopped = false;
 	MovementStopped = false;
+	gravity_counter = 0;
 
 	//set up camera and scene nodes
 	MainCamera = camera;
@@ -787,15 +788,6 @@ void Camera::CreateColliders()
 
 void Camera::Loop()
 {
-	//switch off gravity if camera is not on ground - this fixes vertical movement jitter
-	if (CollisionsEnabled() == true)
-	{
-		if (IsOnGround() == true)
-			mBody->setGravity(Ogre::Vector3::ZERO);
-		else
-			mBody->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
-	}
-
 	//calculate acceleration
 	InterpolateMovement();
 
@@ -1032,6 +1024,7 @@ bool Camera::CollisionsEnabled()
 bool Camera::IsOnGround()
 {
 	//return true or false depending on if the camera is on the ground - uses Bullet raycasting
+	//this function currently doesn't work properly
 
 	//cast a ray from the camera position downwards
 	Ogre::Ray ray (CameraNode->getPosition(), Ogre::Vector3::NEGATIVE_UNIT_Y);
