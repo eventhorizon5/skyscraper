@@ -98,7 +98,6 @@ Camera::Camera(Ogre::Camera *camera)
 	HitPosition = 0;
 	RotationStopped = false;
 	MovementStopped = false;
-	gravity_counter = 0;
 
 	//set up camera and scene nodes
 	MainCamera = camera;
