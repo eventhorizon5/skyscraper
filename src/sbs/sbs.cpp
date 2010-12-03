@@ -297,6 +297,7 @@ SBS::~SBS()
 	mWorld = 0;
 
 	ObjectArray.clear();
+	verify_results.clear();
 
 	//clear self reference
 	sbs = 0;
@@ -848,8 +849,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align);
 
 	//create a new material
-	std::string matname = Name;
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
@@ -865,6 +865,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}*/
 
+	CacheFilename(Name, Name);
 	return true;
 }
 
@@ -3703,9 +3704,20 @@ std::string SBS::VerifyFile(const char *filename)
 
 	std::string file = filename;
 	TrimString(file);
+
+	//check for a cached result
+	for (int i = 0; i < verify_results.size(); i++)
+	{
+		if (verify_results[i].filename == file)
+			return verify_results[i].result;
+	}
+
 	Ogre::FileSystemArchive filesystem("","FileSystem");
 	if (filesystem.exists(file))
+	{
+		CacheFilename(file, file);
 		return file;
+	}
 
 	/*std::string directory;
 	int loc1 = file.find_last_of("/");
@@ -3723,8 +3735,13 @@ std::string SBS::VerifyFile(const char *filename)
 		std::string checkoriginal = SetCaseCopy(check, false);
 		std::string checkfile = SetCaseCopy(file, false);
 		if (checkoriginal == checkfile)
+		{
+			CacheFilename(file, check);
 			return check;
+		}
 	}
+
+	CacheFilename(file, file);
 	return file;
 }
 
@@ -3966,4 +3983,13 @@ void SBS::ShowColliders(bool value)
 {
 	if (mWorld)
 		mWorld->setShowDebugShapes(value);
+}
+
+void SBS::CacheFilename(std::string filename, std::string result)
+{
+	//caches filename information for VerifyFile function
+	VerifyResult verify;
+	verify.filename = filename;
+	verify.result = result;
+	verify_results.push_back(verify);
 }

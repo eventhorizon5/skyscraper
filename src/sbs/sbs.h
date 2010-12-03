@@ -315,6 +315,7 @@ public:
 	void EnableVSync(bool value);
 	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
 	void ShowColliders(bool value);
+	void CacheFilename(std::string filename, std::string result);
 	
 	//Meshes
 	MeshObject* Buildings;
@@ -464,6 +465,13 @@ private:
 
 	//config file
 	Ogre::ConfigFile configfile;
+
+	struct VerifyResult
+	{
+		std::string filename;
+		std::string result;
+	};
+	std::vector<VerifyResult> verify_results;
 };
 
 #endif
