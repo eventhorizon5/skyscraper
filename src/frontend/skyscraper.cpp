@@ -415,8 +415,8 @@ void Skyscraper::GetInput()
 	old_mouse_y = Simcore->mouse_y;
 
 	//get mouse pointer coordinates
-	Simcore->mouse_x = wxGetMousePosition().x - window->GetScreenPosition().x;
-	Simcore->mouse_y = wxGetMousePosition().y - window->GetScreenPosition().y;
+	Simcore->mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
+	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
