@@ -30,6 +30,7 @@
 #include <string>
 #include <string.h>
 #include <algorithm>
+#include <stdio.h>
 
 using namespace std;
 
