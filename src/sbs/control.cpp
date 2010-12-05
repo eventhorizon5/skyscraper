@@ -55,22 +55,24 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	//create object mesh
 	ControlMesh = new MeshObject(object, name, true, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	if (Direction == "front" || Direction == "back")
+	if (Direction == "front")
 	{
-		if (Direction == "front")
-			sbs->DrawWalls(true, false, false, false, false, false);
-		else
-			sbs->DrawWalls(false, true, false, false, false, false);
-
+		sbs->DrawWalls(true, false, false, false, false, false);
 		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
 	}
-	if (Direction == "left" || Direction == "right")
+	if (Direction == "back")
 	{
-		if (Direction == "left")
-			sbs->DrawWalls(true, false, false, false, false, false);
-		else
-			sbs->DrawWalls(false, true, false, false, false, false);
-
+		sbs->DrawWalls(false, true, false, false, false, false);
+		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
+	}
+	if (Direction == "left")
+	{
+		sbs->DrawWalls(true, false, false, false, false, false);
+		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
+	}
+	if (Direction == "right")
+	{
+		sbs->DrawWalls(false, true, false, false, false, false);
 		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
 	}
 	sbs->ResetWalls();
