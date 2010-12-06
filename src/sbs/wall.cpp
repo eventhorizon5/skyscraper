@@ -74,7 +74,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
 	std::vector<TriangleType> triangles;
-	if (!meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents, triangles));
+	if (!meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents, triangles))
 	{
 		sbs->ReportError("Error creating wall " + name2);
 		return 0;
@@ -101,7 +101,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	Ogre::Vector3 tv;
 	std::vector<Ogre::Vector2> index_extents;
 	std::vector<TriangleType> triangles;
-	if (!meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles));
+	if (!meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles))
 	{
 		sbs->ReportError("Error creating wall " + name2);
 		return 0;
@@ -126,7 +126,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std:
 	std::string name2 = ProcessName(name);
 	std::vector<Ogre::Vector2> index_extents;
 	std::vector<TriangleType> triangles;
-	if (!meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles));
+	if (!meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles))
 	{
 		sbs->ReportError("Error creating wall " + name2);
 		return 0;

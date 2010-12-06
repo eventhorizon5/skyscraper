@@ -72,10 +72,7 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	float det = m11 * m22 - m12 * m21;
 
 	if (abs(det) < SMALL_EPSILON)
-	{
-		sbs->ReportError("Warning: bad UV coordinates");
-		return false;
-	}
+		return sbs->ReportError("ComputeTextureMap: Bad UV coordinates");
 	else
 	{
 		//invert matrix
@@ -116,8 +113,7 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	float len1f = sqrtf(len1.x * len1.x + len1.y * len1.y + len1.z * len1.z);
 	float len2f = sqrtf(len2.x * len2.x + len2.y * len2.y + len2.z * len2.z);
 
-	ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
-	return true;
+	return ComputeTextureSpace(t_matrix, t_vector, po, pu, len1f, pv, len2f);
 }
 
 bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
@@ -152,7 +148,7 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 	if (abs(det) < SMALL_EPSILON)
 	{
 		m = m.IDENTITY;
-		return false;
+		return sbs->ReportError("Error computing texture space");
 	}
 	else
 		m = m.Inverse();

@@ -45,7 +45,8 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	object->SetValues(this, parent, "Control", name, false);
 
 	std::string objnum = Ogre::StringConverter::toString(object->GetNumber());
-	Name = "(" + objnum + ")" + name;
+	//Name = "(" + objnum + ")" + name;
+	Name = name;
 	Actions = action_names;
 	Direction = direction;
 	IsEnabled = true;
@@ -55,27 +56,30 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	//create object mesh
 	ControlMesh = new MeshObject(object, name, true, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
+	sbs->SetTextureMapping(0, Ogre::Vector2(0, 0), 1, Ogre::Vector2(1, 0), 2, Ogre::Vector2(1, 1));
+
 	if (Direction == "front")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, "Floor Indicator", textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
 	}
 	sbs->ResetWalls();
+	sbs->ResetTextureMapping();
 
 	//create sound object
 	sound = new Sound(this->object, "Control", true);
