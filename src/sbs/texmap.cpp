@@ -147,11 +147,58 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 	float det = m.Determinant();
 	if (fabs(det) < SMALL_EPSILON)
 	{
-		m = m.IDENTITY;
-		return sbs->ReportError("Error computing texture space");
+		//m = m.IDENTITY;
+		//return sbs->ReportError("Error computing texture space");
+
+		//alternate matrix inversion method
+		//(standard inversion breaks when using small numbers)
+		if (v_u.x == 0)
+			m[0][0] = 0;
+		else
+			m[0][0] = 1 / v_u.x;
+
+		if (v_v.x == 0)
+			m[0][1] = 0;
+		else
+			m[0][1] = 1 / v_v.x;
+
+		if (v_w.x == 0)
+			m[0][2] = 0;
+		else
+			m[0][2] = 1 / v_w.x;
+
+		if (v_u.y == 0)
+			m[1][0] = 0;
+		else
+			m[1][0] = 1 / v_u.y;
+
+		if (v_v.y == 0)
+			m[1][1] = 0;
+		else
+			m[1][1] = 1 / v_v.y;
+
+		if (v_w.y == 0)
+			m[1][2] = 0;
+		else
+			m[1][2] = 1 / v_w.y;
+
+		if (v_u.z == 0)
+			m[2][0] = 0;
+		else
+			m[2][0] = 1 / v_u.z;
+
+		if (v_v.z == 0)
+			m[2][1] = 0;
+		else
+			m[2][1] = 1 / v_v.z;
+
+		if (v_w.z == 0)
+			m[2][2] = 0;
+		else
+			m[2][2] = 1 / v_w.z;
 	}
 	else
-		m = m.Inverse();
+		m = m.Inverse(); //standard inversion
 
 	return true;
 }
