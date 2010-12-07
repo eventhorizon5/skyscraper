@@ -77,7 +77,7 @@ Sound::~Sound()
 	delete object;
 }
 
-void Sound::SetPosition(const Ogre::Vector3& position)
+void Sound::SetPosition(const Ogre::Vector3& position, bool set_velocity)
 {
 	//set position of sound object
 
@@ -88,7 +88,7 @@ void Sound::SetPosition(const Ogre::Vector3& position)
 	vel.z = 0;
 
 	//calculate sound velocity
-	if (sbs->GetElapsedTime() > 0)
+	if (sbs->GetElapsedTime() > 0 && set_velocity == true)
 	{
 		vel.x = (position.x - Position.x) * (1000 / sbs->GetElapsedTime());
 		vel.y = (position.y - Position.y) * (1000 / sbs->GetElapsedTime());
@@ -101,12 +101,12 @@ void Sound::SetPosition(const Ogre::Vector3& position)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 }
 
-void Sound::SetPositionY(float position)
+void Sound::SetPositionY(float position, bool set_velocity)
 {
 	//set vertical position of sound object
 	Ogre::Vector3 newposition = Position;
 	newposition.y = position;
-	SetPosition(newposition);
+	SetPosition(newposition, set_velocity);
 }
 
 Ogre::Vector3 Sound::GetPosition()
@@ -288,12 +288,12 @@ void Sound::Load(const char *filename, bool force)
 	//prepare sound (and keep paused)
 	result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 
-	//set default speed value
+	//get default speed value
 	if (channel)
 		channel->getFrequency(&default_speed);
 
 	//load previously stored values into new sound objects
-	SetPosition(Position);
+	//SetPosition(Position);
 	SetVolume(Volume);
 	SetDistances(MinDistance, MaxDistance);
 	SetDirection(Direction);

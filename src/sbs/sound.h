@@ -35,8 +35,8 @@ public:
 
 	Sound(Object *parent, const char *name, bool permanent);
 	~Sound();
-	void SetPosition(const Ogre::Vector3& position);
-	void SetPositionY(float position);
+	void SetPosition(const Ogre::Vector3& position, bool set_velocity = false);
+	void SetPositionY(float position, bool set_velocity = false);
 	Ogre::Vector3 GetPosition();
 	void SetVolume(float value);
 	float GetVolume();
