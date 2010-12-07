@@ -293,7 +293,7 @@ void Sound::Load(const char *filename, bool force)
 		channel->getFrequency(&default_speed);
 
 	//load previously stored values into new sound objects
-	//SetPosition(Position);
+	SetPosition(Position);
 	SetVolume(Volume);
 	SetDistances(MinDistance, MaxDistance);
 	SetDirection(Direction);
