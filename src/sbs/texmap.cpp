@@ -71,7 +71,7 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	//compute determinant of matrix
 	float det = m11 * m22 - m12 * m21;
 
-	if (abs(det) < SMALL_EPSILON)
+	if (fabs(det) < SMALL_EPSILON)
 		return sbs->ReportError("ComputeTextureMap: Bad UV coordinates");
 	else
 	{
@@ -145,7 +145,7 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 	v = v_orig;
 
 	float det = m.Determinant();
-	if (abs(det) < SMALL_EPSILON)
+	if (fabs(det) < SMALL_EPSILON)
 	{
 		m = m.IDENTITY;
 		return sbs->ReportError("Error computing texture space");
@@ -219,7 +219,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	if (axis == 2)
 		sideA = ptA.z - value;
 
-	if (abs(sideA) < SMALL_EPSILON)
+	if (fabs(sideA) < SMALL_EPSILON)
 		sideA = 0;
 
 	int i;
@@ -233,7 +233,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 		if (axis == 2)
 			sideB = ptB.z - value;
 		
-		if (abs(sideB) < SMALL_EPSILON)
+		if (fabs(sideB) < SMALL_EPSILON)
 			sideB = 0;
 
 		if (sideB > 0)
