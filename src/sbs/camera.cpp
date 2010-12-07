@@ -792,9 +792,8 @@ void Camera::Loop()
 
 	//general movement
 	float delta = sbs->GetElapsedTime() / 1000.0f;
-	//collider_actor.Move(delta, speed, sbs->ToRemote(velocity), angle_velocity);
-	Move(velocity, delta);
-	RotateLocal(angle_velocity, delta * 40);
+	Move(velocity * speed, delta);
+	RotateLocal(angle_velocity * speed, delta * 40);
 
 	//get list of hit meshes and put them into the 'hitlist' array
 	/*if (EnableCollisions == true)
