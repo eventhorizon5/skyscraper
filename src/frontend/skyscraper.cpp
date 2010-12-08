@@ -422,7 +422,7 @@ void Skyscraper::GetInput()
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
 		window->WarpPointer(window->GetSize().GetWidth() / 2, window->GetSize().GetHeight() / 2);
-		Ogre::Vector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (window->GetSize().GetHeight() / 2))) / (window->GetSize().GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((window->GetSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetSize().GetWidth() * 2)), 0);
+		Ogre::Vector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (window->GetClientSize().GetHeight() / 2))) / (window->GetClientSize().GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((window->GetClientSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetClientSize().GetWidth() * 2)), 0);
 		Simcore->camera->RotateLocal(rotational, 1);
 	}
 
@@ -1204,8 +1204,8 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	if (miscParams)
 		params = *miscParams;
 
-	//params["vsync"] = "true";
-	//params["vsyncInterval"] = "1";
+	params["vsync"] = "true";
+	params["vsyncInterval"] = "1";
 	params["externalWindowHandle"] = getOgreHandle();
 
 	//create the render window
