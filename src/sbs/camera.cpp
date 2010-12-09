@@ -280,7 +280,6 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	mBody->setOrientation(rot);
 	mBody->updateTransform(true);
-	printf("%g\n", rotation.y);
 
 	//rotate camera on X and Z axes
 	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
