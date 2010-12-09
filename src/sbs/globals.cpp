@@ -32,6 +32,8 @@
 #include <OgreString.h>
 #include "globals.h"
 
+const double pi = 3.14159265;
+
 bool IsEven(int Number)
 {
 	//Determine if the passed number is even.
