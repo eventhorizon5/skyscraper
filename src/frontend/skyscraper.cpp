@@ -421,9 +421,12 @@ void Skyscraper::GetInput()
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
-		window->WarpPointer(window->GetSize().GetWidth() / 2, window->GetSize().GetHeight() / 2);
-		Ogre::Vector3 rotational (Simcore->camera->Freelook_speed * (-((float)(Simcore->mouse_y - (window->GetClientSize().GetHeight() / 2))) / (window->GetClientSize().GetHeight() * 2)), Simcore->camera->Freelook_speed * (-((window->GetClientSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetClientSize().GetWidth() * 2)), 0);
-		Simcore->camera->RotateLocal(rotational, 1, false);
+		window->WarpPointer(window->GetClientSize().GetWidth() / 2, window->GetClientSize().GetHeight() / 2);
+		Ogre::Vector3 rotational;
+		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (window->GetClientSize().GetHeight() / 2))) / (window->GetClientSize().GetHeight() * 2));
+		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((window->GetClientSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetClientSize().GetWidth() * 2));
+		rotational.z = 0;
+		Simcore->camera->RotateLocal(rotational, 1);
 	}
 
 	//check if the user clicked on an object, and process it

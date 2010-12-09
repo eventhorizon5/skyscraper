@@ -191,6 +191,7 @@ Ogre::Vector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
 
+	//return mBody->getWorldOrientation() * MainCamera->getOrientation();
 	return rotation;
 }
 
@@ -254,7 +255,7 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 	SetRotation(rot);
 }
 
-void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed, bool is_velocity)
+void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in local camera space
 
@@ -266,17 +267,24 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed, bool is_veloc
 	if (vector == Ogre::Vector3::ZERO)
 		RotationStopped = true;
 
-	if (is_velocity == true)
-		mBody->setAngularVelocity(0, -vector.y, 0);
-	else
-	{
-		Ogre::Quaternion rot(Ogre::Degree(mBody->getWorldOrientation().y + (-vector.y * speed)), Ogre::Vector3::UNIT_Y);
-		mBody->setOrientation(rot);
-	}
+	//rotate collider body on Y axis (left/right)
+	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
+	rotation.y += ydeg;
 
-	MainCamera->pitch(Ogre::Degree(vector.x * speed));
-	//CameraNode->yaw(Ogre::Degree(-vector.y * speed),  Ogre::Node::TS_WORLD);
-	MainCamera->roll(Ogre::Degree(vector.z * speed));
+	if (rotation.y > 360)
+		rotation.y -= 360;
+	if (rotation.y < 0)
+		rotation.y += 360;
+
+	//Ogre::Quaternion rot(Ogre::Radian(vector.y) * speed, Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	mBody->setOrientation(rot);
+	mBody->updateTransform(true);
+	printf("%g\n", rotation.y);
+
+	//rotate camera on X and Z axes
+	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
+	MainCamera->roll(Ogre::Radian(vector.z) * speed);
 }
 
 void Camera::SetStartDirection(const Ogre::Vector3 &vector)
@@ -797,7 +805,7 @@ void Camera::Loop()
 	//general movement
 	float delta = sbs->GetElapsedTime() / 1000.0f;
 	Move(velocity * speed, delta);
-	RotateLocal(angle_velocity * speed, delta * 40);
+	RotateLocal(angle_velocity * speed, delta);
 
 	//get list of hit meshes and put them into the 'hitlist' array
 	/*if (EnableCollisions == true)
@@ -866,7 +874,7 @@ void Camera::Loop()
 void Camera::Strafe(float speed)
 {
 	speed *= cfg_walk_maxspeed_multreal;
-	desired_velocity.x = cfg_strafespeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
+	desired_velocity.x = -cfg_strafespeed * speed * cfg_walk_maxspeed * cfg_walk_maxspeed_multreal;
 }
 
 void Camera::Step(float speed)
