@@ -354,9 +354,7 @@ bool Skyscraper::Initialize()
 	//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 	mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
 
-
 	//initialize FMOD (sound)
-
 	FMOD_RESULT result = FMOD::System_Create(&soundsys);
 	if (result != FMOD_OK)
 	{
@@ -865,10 +863,9 @@ void Skyscraper::GetMenuInput()
 	if (Starting == true)
 		return;
 
-	/*
 	//get mouse coordinates
-	int mouse_x = mouse->GetLastX();
-	int mouse_y = mouse->GetLastY();
+	int mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
+	int mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
 	for (int i = 1; i <= 5; i++)
 	{
@@ -886,11 +883,11 @@ void Skyscraper::GetMenuInput()
 
 		//draw buttons
 		if (button->drawn_pressed == true)
-			DrawImage(button->filename_pressed, button, button->offset_x, button->offset_y, true);
+			DrawImage(button->filename_pressed.c_str(), button, button->offset_x, button->offset_y, true);
 		else if (button->drawn_selected == true)
-			DrawImage(button->filename_selected, button, button->offset_x, button->offset_y, true);
+			DrawImage(button->filename_selected.c_str(), button, button->offset_x, button->offset_y, true);
 		else
-			DrawImage(button->filename, button, button->offset_x, button->offset_y, true);
+			DrawImage(button->filename.c_str(), button, button->offset_x, button->offset_y, true);
 
 	    //only process buttons if main window is selected
         if (window->IsActive() != false)
@@ -898,7 +895,7 @@ void Skyscraper::GetMenuInput()
         	//change button status based on mouse position and button press status
         	if (mouse_x > button->x && mouse_x < button->x + button->size_x && mouse_y > button->y && mouse_y < button->y + button->size_y)
         	{
-        		if (button->drawn_selected == false && mouse->GetLastButton(0) == false)
+        		if (button->drawn_selected == false && wxGetMouseState().LeftDown() == true == false)
         		{
         			if (button->drawn_pressed == true)
         			{
@@ -909,7 +906,7 @@ void Skyscraper::GetMenuInput()
         			}
         			button->drawn_selected = true;
         		}
-        		if (button->drawn_pressed == false && mouse->GetLastButton(0) == true)
+        		if (button->drawn_pressed == false && wxGetMouseState().LeftDown() == true == true)
         		{
         			button->drawn_pressed = true;
         			button->drawn_selected = false;
@@ -921,8 +918,7 @@ void Skyscraper::GetMenuInput()
         		button->drawn_pressed = false;
         	}
         }
-	}*/
-
+	}
 }
 
 void Skyscraper::Click(int index)
@@ -966,7 +962,7 @@ void Skyscraper::StartSound()
 	std::string filename_full = "data/" + filename;
 
 	//load new sound
-	FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), FMOD_DEFAULT, 0, &sound);
+	FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
 	if (result != FMOD_OK)
 	{
 		ReportError("Can't load file '" + filename_full + "'");
@@ -974,30 +970,24 @@ void Skyscraper::StartSound()
 	}
 
 	FMOD::Channel *channel;
-	result = soundsys->playSound(FMOD_CHANNEL_FREE, sound, false, &channel);
+	result = soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 	if (result != FMOD_OK)
 	{
 		ReportError("Error playing " + filename);
 		return;
 	}
 
-	/*sndstream->SetLoopState(true);
-	sndsource->SetVolume(1.0f);
-	sndstream->Unpause();*/
+	channel->setLoopCount(-1);
+	channel->setVolume(1.0f);
+	channel->setPaused(false);
 }
 
 void Skyscraper::StopSound()
 {
 	//stop and unload sound
-	/*if (sndstream)
-		sndstream->Pause();
-	if (sndrenderer)
-	{
-		sndrenderer->RemoveSource(sndsource);
-		sndrenderer->RemoveStream(sndstream);
-	}
-	sndsource = 0;
-	sndstream = 0;*/
+	if (sound)
+		sound->release();
+	sound = 0;
 }
 
 bool Skyscraper::SelectBuilding()
@@ -1064,7 +1054,7 @@ bool Skyscraper::Start()
 	Simcore->BuildingFilename = BuildingFile;
 
 	//Pause for 1 second
-	//sleep(1000);
+	wxSleep(1);
 
 	if (Reload == false)
 		BuildingFile.insert(0, "buildings/");
