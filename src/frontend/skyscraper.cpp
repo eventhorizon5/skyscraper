@@ -236,6 +236,10 @@ void MainScreen::OnShow(wxShowEvent& event)
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
+	if (skyscraper->mRenderWindow)
+		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+	if (skyscraper->mCamera)
+		skyscraper->mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
 	//panel->resize(this->GetClientSize());
 }
 
