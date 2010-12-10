@@ -288,8 +288,10 @@ void Skyscraper::Render()
 			//return;
 	}
 
-	//if (skyscraper->mRenderWindow)
-		//skyscraper->mRenderWindow->update(true);
+#if defined(__WXGTK__)
+	if (skyscraper->mRenderWindow)
+		skyscraper->mRenderWindow->update(true);
+#endif
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
