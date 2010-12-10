@@ -47,6 +47,7 @@
 
 #if defined(__WXMAC__)
 #include <Carbon/Carbon.h>
+	WindowRef i_carbonWin;
 #endif
 
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
@@ -1267,8 +1268,8 @@ const std::string Skyscraper::getOgreHandle() const
    Rect rect;
    wxPoint position;
    wxSize size;
-   position = GetScreenPosition();
-   size      = GetSize();
+   position = window->GetScreenPosition();
+   size      = window->GetSize();
    rect.left   = position.x;
    rect.top   = position.y;
    rect.right   = position.x + size.GetWidth();
