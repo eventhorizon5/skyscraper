@@ -245,7 +245,7 @@ void Door::MoveDoor()
 		rotation = 0;
 	}
 
-	DoorMesh->Rotate(Ogre::Vector3(0, rotation, 0), 1);
+	DoorMesh->SetRotation(Ogre::Vector3(0, rotation, 0));
 }
 
 void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
