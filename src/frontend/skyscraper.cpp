@@ -287,8 +287,8 @@ void Skyscraper::Render()
 			//return;
 	}
 
-	if (skyscraper->mRenderWindow)
-		skyscraper->mRenderWindow->update(true);
+	//if (skyscraper->mRenderWindow)
+		//skyscraper->mRenderWindow->update(true);
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
@@ -1130,7 +1130,7 @@ bool Skyscraper::Start()
 
 	//run simulation
 	Simcore->Report("Running simulation...");
-	StopSound();
+	//StopSound();
 	Simcore->IsRunning = true;
 	IsRunning = true;
 	Starting = false;
