@@ -55,7 +55,7 @@ Camera::Camera(Ogre::Camera *camera)
 	desired_velocity = Ogre::Vector3(0, 0, 0);
 	angle_velocity = Ogre::Vector3(0, 0, 0);
 	desired_angle_velocity = Ogre::Vector3(0, 0, 0);
-	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 0.08);
+	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 14.0);
 	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
 	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
 	cfg_walk_maxspeed_mult = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0);
@@ -234,7 +234,12 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 
 	//mBody->setLinearVelocity(sbs->ToRemote(vector));
 	if (vector.y == 0)
-		mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), mBody->getLinearVelocity().y, sbs->ToRemote(-vector.z)));
+	{
+		if (GetGravityStatus() == true)
+			mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), mBody->getLinearVelocity().y, sbs->ToRemote(-vector.z)));
+		else
+			mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), 0, sbs->ToRemote(-vector.z)));
+	}
 	else
 	{
 		mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), 0, sbs->ToRemote(-vector.z)));
@@ -967,7 +972,13 @@ void Camera::EnableGravity(bool value)
 	if (value == true)
 		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
 	else
+	{
+		//stop all velocity
 		sbs->mWorld->setGravity(Ogre::Vector3::ZERO);
+		mBody->setLinearVelocity(Ogre::Vector3::ZERO);
+		velocity.y = 0;
+		desired_velocity.y = 0;
+	}
 	GravityStatus = value;
 }
 

@@ -119,6 +119,7 @@ bool Skyscraper::OnInit(void)
 	mViewport = 0;
 	mSceneMgr = 0;
 	canvas = 0;
+	mCamera = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -237,10 +238,12 @@ void MainScreen::OnShow(wxShowEvent& event)
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 	if (skyscraper->mRenderWindow)
-		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+	{
+		//skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+		skyscraper->mRenderWindow->windowMovedOrResized();
+	}
 	if (skyscraper->mCamera)
-		skyscraper->mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
-	//panel->resize(this->GetClientSize());
+		skyscraper->mCamera->setAspectRatio(Ogre::Real(skyscraper->mViewport->getActualWidth()) / Ogre::Real(skyscraper->mViewport->getActualHeight()));
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
@@ -360,6 +363,29 @@ bool Skyscraper::Initialize()
 	mViewport = mRenderWindow->addViewport(mCamera);
 	//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 	mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
+
+	//setup texture filtering
+	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
+	int maxanisotropy = GetConfigInt("Skyscraper.Frontend.MaxAnisotropy", 8);
+
+	if (filtermode < 0 || filtermode > 3)
+		filtermode = 3;
+
+	if (filtermode < 3)
+		maxanisotropy = 1;
+
+	Ogre::TextureFilterOptions filter;
+	if (filtermode == 0)
+		filter = Ogre::TFO_NONE;
+	if (filtermode == 1)
+		filter = Ogre::TFO_BILINEAR;
+	if (filtermode == 2)
+		filter = Ogre::TFO_TRILINEAR;
+	if (filtermode == 3)
+		filter = Ogre::TFO_ANISOTROPIC;
+
+	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
+	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
 	//initialize FMOD (sound)
 	FMOD_RESULT result = FMOD::System_Create(&soundsys);
