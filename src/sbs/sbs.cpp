@@ -309,9 +309,6 @@ bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
-	//initialize mesh colliders
-	//csColliderHelper::InitializeCollisionWrappers(collision_sys, engine);
-
 	//initialize camera/actor
 	camera->CreateColliders();
 

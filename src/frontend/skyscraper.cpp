@@ -1230,7 +1230,11 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	if (miscParams)
 		params = *miscParams;
 
-	params["vsync"] = "true";
+	bool vsync = GetConfigBool("Skyscraper.Frontend.Vsync", true);
+	if (vsync == true)
+		params["vsync"] = "true";
+	else
+		params["vsync"] = "false";
 	params["vsyncInterval"] = "1";
 	params["externalWindowHandle"] = getOgreHandle();
 

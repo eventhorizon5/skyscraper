@@ -726,9 +726,6 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	if (!MeshWrapper.get())
 		return;
 
-	//set zbuf mode to "USE" by default
-	//MeshWrapper->SetZBufMode(CS_ZBUF_USE);
-
 	//set render priority to "object" by default
 	//MeshWrapper->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
 
@@ -1583,7 +1580,7 @@ void MeshObject::CreateCollider()
 	for (int i = 0; i < Triangles.size(); i++)
 		tricount += Triangles[i].triangles.size();
 
-	printf("%s\n", MeshWrapper->getName().c_str());
+	//printf("%s\n", MeshWrapper->getName().c_str());
 
 	//initialize collider shape
 	OgreBulletCollisions::TriangleMeshCollisionShape* mShape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
