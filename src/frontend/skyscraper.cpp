@@ -108,7 +108,6 @@ bool Skyscraper::OnInit(void)
 	Starting = false;
 	Pause = false;
 	DisableSound = false;
-	DrewButtons = false;
 	FullScreen = false;
 	Shutdown = false;
 	PositionOverride = false;
@@ -120,6 +119,7 @@ bool Skyscraper::OnInit(void)
 	mSceneMgr = 0;
 	canvas = 0;
 	mCamera = 0;
+	sound = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -132,12 +132,12 @@ bool Skyscraper::OnInit(void)
 		return ReportError("Error initializing OGRE");
 
 	//autoload a building file if specified
-	//BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad");
-	//if (BuildingFile != "")
-		//return Start();
+	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
+	if (BuildingFile != "")
+		return Start();
 
 	//show menu
-	/*if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
+	if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
 	{
 		//draw background
 		DrawBackground();
@@ -145,13 +145,13 @@ bool Skyscraper::OnInit(void)
 		StartSound();
 	}
 	else
-	{*/
+	{
 		//or show building selection window if ShowMenu is false
 		if (SelectBuilding() == true)
 			return Start();
 		else
 			return false;
-	//}
+	}
 
 	return true;
 }
@@ -169,8 +169,7 @@ int Skyscraper::OnExit()
 	if (soundsys)
 		soundsys->release();
 
-	//if (sndsource)
-		//StopSound();
+	StopSound();
 
 	//delete wx canvas
 	if (canvas)
@@ -287,21 +286,13 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 
 void Skyscraper::Render()
 {
-	if (skyscraper->StartupRunning == false)
-	{
-		// Tell 3D driver we're going to display 3D things.
-
-		//if (!g3d->BeginDraw(engine->GetBeginDrawFlags() | CSDRAW_3DGRAPHICS | CSDRAW_CLEARZBUFFER | CSDRAW_CLEARSCREEN))
-			//return;
-	}
+	// Render to the frame buffer
+	mRoot->renderOneFrame();
 
 #if defined(__WXGTK__)
 	if (skyscraper->mRenderWindow)
 		skyscraper->mRenderWindow->update(true);
 #endif
-
-	// Render to the frame buffer
-	mRoot->renderOneFrame();
 }
 
 bool Skyscraper::Initialize()
@@ -626,7 +617,7 @@ void Skyscraper::GetInput()
 		}
 		if (wxGetKeyState(WXK_F11) && wait == false)
 		{
-			//bugplug->ExecCommand("scrshot");
+			mRenderWindow->writeContentsToTimestampedFile("screenshots/skyscraper-", ".jpg");
 			wait = true;
 		}
 		if (wxGetKeyState(WXK_F12) && !dpanel)
@@ -705,6 +696,7 @@ void Skyscraper::Loop()
 	{
 		DrawBackground();
 		GetMenuInput();
+		Render();
 		return;
 	}
 
@@ -750,10 +742,10 @@ void Skyscraper::Loop()
 	{
 		Shutdown = false;
 		//if showmenu is true, unload simulator and return to main menu
-		//if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			//Unload();
+		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
+			Unload();
 		//otherwise exit app
-		//else
+		else
 			Quit();
 	}
 
@@ -778,114 +770,145 @@ void Skyscraper::DrawBackground()
 
 	int w = mRenderWindow->getWidth();
 	int h = mRenderWindow->getHeight();
+
 	/*if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
 		return;
 	g2d->Clear(0);
-	g2d->SetClipRect(0, 0, w, h);
+	g2d->SetClipRect(0, 0, w, h);*/
 
-	DrawImage("data/menu.png", 0, 0, 1, false);
+	DrawImage("data/menu.png", 0, -1, -1, false);
 
-	if (DrewButtons == false)
-	{
-		DrawImage("data/button_triton.png", &button1, 0, -20, true, "/root/data/button_triton_selected.png", "/root/data/button_triton_pressed.png");
-		DrawImage("data/button_searstower.png", &button2, 0, 30, true, "/root/data/button_searstower_selected.png", "/root/data/button_searstower_pressed.png");
-		DrawImage("data/button_glasstower.png", &button3, 0, 80, true, "/root/data/button_glasstower_selected.png", "/root/data/button_glasstower_pressed.png");
-		DrawImage("data/button_simple.png", &button4, 0, 130, true, "/root/data/button_simple_selected.png", "/root/data/button_simple_pressed.png");
-		DrawImage("data/button_other.png", &button5, 0, 180, true, "/root/data/button_other_selected.png", "/root/data/button_other_pressed.png");
-		DrewButtons = true;
-	}*/
+	DrawImage("data/button_triton.png", &button1, 0, -0.08, true, "data/button_triton_selected.png", "data/button_triton_pressed.png");
+	DrawImage("data/button_searstower.png", &button2, 0, 0.125, true, "data/button_searstower_selected.png", "data/button_searstower_pressed.png");
+	DrawImage("data/button_glasstower.png", &button3, 0, 0.333, true, "data/button_glasstower_selected.png", "data/button_glasstower_pressed.png");
+	DrawImage("data/button_simple.png", &button4, 0, 0.541, true, "data/button_simple_selected.png", "data/button_simple_pressed.png");
+	DrawImage("data/button_other.png", &button5, 0, 0.75, true, "data/button_other_selected.png", "data/button_other_pressed.png");
 }
 
-void Skyscraper::DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected, const char *filename_pressed)
+void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, float y, bool center, const char *filename_selected, const char *filename_pressed)
 {
-	int w2, h2;
-	int w = mRenderWindow->getWidth();
-	int h = mRenderWindow->getHeight();
+	//X and Y represent the image's top-left location.
+	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
+	//center is at 0, 0
 
-	/*
-	image = 0;
+	float w, h;
+	bool background = false;
+
+	std::string material = "";
+	std::string Filename = filename;
 
 	if (!filename)
 		return;
 
-	//preload stored image data
-	if (button)
-	{
-		if (button->filename == filename && button->button_image.IsValid())
-			image = button->button_image;
-		if (button->filename_selected == filename && button->selected_image.IsValid())
-			image = button->selected_image;
-		if (button->filename_pressed == filename && button->pressed_image.IsValid())
-			image = button->pressed_image;
-	}
-	else if (background_image.IsValid())
-		image = background_image;
+	//exit if background has already been drawn
+	if (background_image == Filename)
+		return;
+
+	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
+	if (tex.isNull() == false)
+		material = Filename;
 
 	//load image data from file, if not already preloaded
-	if (!image)
+	if (material == "")
 	{
-		csRef<iFile> imagefile = vfs->Open(filename, VFS_FILE_READ);
-		if (imagefile.IsValid())
+		Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
+		tex = Ogre::TextureManager::getSingleton().load(Filename, "General");
+		mat->getTechnique(0)->getPass(0)->createTextureUnitState(Filename);
+		mat->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
+		mat->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
+		mat->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+		material = Filename;
+		if (button)
 		{
-			csRef<iDataBuffer> filedata = imagefile->GetAllData();
-			image = imageio->Load(filedata, CS_IMGFMT_TRUECOLOR | CS_IMGFMT_ALPHA);
+			button->node = 0;
+			button->drawn_selected = false;
+			button->drawn_pressed = false;
+			button->active_button = 0;
 		}
-		imagefile = 0;
+	}
+
+	//exit if requested button is already visible
+	if (button)
+	{
+		if (button->drawn_selected == false && button->drawn_pressed == false && button->active_button == 1)
+			return;
+		else
+			button->active_button = 1;
+
+		if (button->drawn_selected == true && button->active_button == 2)
+			return;
+		else
+			button->active_button = 2;
+
+		if (button->drawn_pressed == true && button->active_button == 3)
+			return;
+		else
+			button->active_button = 3;
 	}
 
 	//set values and draw button
-	if (image.IsValid())
+	if (material != "")
 	{
-		w2 = image->GetWidth();
-		h2 = image->GetHeight();
+		w = tex->getWidth() / (mRenderWindow->getWidth() / 2.0);
+		h = tex->getHeight() / (mRenderWindow->getHeight() / 2.0);
 		if (button)
 		{
+			//detach previous scenenode
+			if (button->node)
+				button->node->detachAllObjects();
+
 			//store general button data
-			if (filename_selected)
-			{
-				button->filename = filename;
-				button->filename_selected = filename_selected;
-				button->drawn_selected = false;
-				button->drawn_pressed = false;
-			}
-			if (filename_pressed)
-				button->filename_pressed = filename_pressed;
+			button->filename = filename;
+			button->filename_selected = filename_selected;
+			button->filename_pressed = filename_pressed;
+
 			button->offset_x = x;
 			button->offset_y = y;
 			if (center == true)
 			{
-				button->x = (w / 2) - (w2 / 2) + x;
-				button->y = (h / 2) - (h2 / 2) + y;
+				button->x = x - (w / 2);
+				button->y = y - (h / 2);
 			}
 			else
 			{
 				button->x = x;
 				button->y = y;
 			}
-			button->size_x = w2;
-			button->size_y = h2;
+			button->size_x = w;
+			button->size_y = h;
 
-			//then store image data if not done yet
-			if (button->filename == filename && !button->button_image)
-				button->button_image = image;
-			if (button->filename_selected == filename && !button->selected_image)
-				button->selected_image = image;
-			if (button->filename_pressed == filename && !button->pressed_image)
-				button->pressed_image = image;
+			x = button->x;
+			y = button->y;
 		}
 		else
-			background_image = image;
-
-		if (center == true)
 		{
-			x += (w / 2) - (w2 / 2);
-			y += (h / 2) - (h2 / 2);
+			background_image = material;
+			background = true;
+			if (center == true)
+			{
+				x += -(w / 2);
+				y += -(h / 2);
+			}
 		}
 
-		//draw image data
-		g2d->Blit(x, y, w2, h2, (unsigned char*)image->GetImageData());
+		//create rectangle
+		Ogre::Rectangle2D* rect = new Ogre::Rectangle2D(true);
+		rect->setCorners(x, -y, x + w, -(y + h));
+		rect->setMaterial(material);
+		if (background == true)
+			rect->setRenderQueueGroup(Ogre::RENDER_QUEUE_BACKGROUND);
+
+		//set infinite bounding box
+		Ogre::AxisAlignedBox aabInf;
+		aabInf.setInfinite();
+		rect->setBoundingBox(aabInf);
+
+		//attach scene node
+		Ogre::SceneNode* node = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+		node->attachObject(rect);
+		if (button)
+			button->node = node;
 	}
-	image = 0;*/
 }
 
 void Skyscraper::GetMenuInput()
@@ -914,21 +937,20 @@ void Skyscraper::GetMenuInput()
 		if (i == 5)
 			button = &button5;
 
-		//draw buttons
-		if (button->drawn_pressed == true)
-			DrawImage(button->filename_pressed.c_str(), button, button->offset_x, button->offset_y, true);
-		else if (button->drawn_selected == true)
-			DrawImage(button->filename_selected.c_str(), button, button->offset_x, button->offset_y, true);
-		else
-			DrawImage(button->filename.c_str(), button, button->offset_x, button->offset_y, true);
-
 	    //only process buttons if main window is selected
         if (window->IsActive() != false)
         {
+			float mx = mouse_x;
+			float my = mouse_y;
+			float w = mx / window->GetClientSize().x;
+			float h = my / window->GetClientSize().y;
+			float mouse_x_rel = (w * 2) - 1;
+			float mouse_y_rel = (h * 2) - 1;
+
         	//change button status based on mouse position and button press status
-        	if (mouse_x > button->x && mouse_x < button->x + button->size_x && mouse_y > button->y && mouse_y < button->y + button->size_y)
+        	if (mouse_x_rel > button->x && mouse_x_rel < button->x + button->size_x && mouse_y_rel > button->y && mouse_y_rel < button->y + button->size_y)
         	{
-        		if (button->drawn_selected == false && wxGetMouseState().LeftDown() == true == false)
+        		if (button->drawn_selected == false && wxGetMouseState().LeftDown() == false)
         		{
         			if (button->drawn_pressed == true)
         			{
@@ -939,7 +961,7 @@ void Skyscraper::GetMenuInput()
         			}
         			button->drawn_selected = true;
         		}
-        		if (button->drawn_pressed == false && wxGetMouseState().LeftDown() == true == true)
+        		if (button->drawn_pressed == false && wxGetMouseState().LeftDown() == true)
         		{
         			button->drawn_pressed = true;
         			button->drawn_selected = false;
@@ -1193,8 +1215,7 @@ void Skyscraper::Unload()
 	UnloadSim();
 
 	//cleanup sound
-	//if (sndsource)
-		//StopSound();
+	StopSound();
 
 	//return to main menu
 	DrawBackground();
@@ -1320,25 +1341,24 @@ const std::string Skyscraper::getOgreHandle() const
 #endif
 }
 
-int Skyscraper::GetConfigInt(const char *key, int default_value)
+int Skyscraper::GetConfigInt(std::string key, int default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
-std::string Skyscraper::GetConfigString(const char *key, const char *default_value)
+std::string Skyscraper::GetConfigString(std::string key, std::string default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return result;
+	return configfile.getSetting(key, Ogre::StringUtil::BLANK, default_value);
 }
 
-bool Skyscraper::GetConfigBool(const char *key, bool default_value)
+bool Skyscraper::GetConfigBool(std::string key, bool default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
-float Skyscraper::GetConfigFloat(const char *key, float default_value)
+float Skyscraper::GetConfigFloat(std::string key, float default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);

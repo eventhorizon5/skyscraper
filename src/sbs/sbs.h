@@ -296,10 +296,10 @@ public:
 	void Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3& end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber = 0, const char *checkstring = "", bool reset_check = true);
 	Ogre::Vector3 GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude,  bool get_max);
 	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);
-	int GetConfigInt(const char *key, int default_value);
-	std::string GetConfigString(const char *key, const char *default_value);
-	bool GetConfigBool(const char *key, bool default_value);
-	float GetConfigFloat(const char *key, float default_value);
+	int GetConfigInt(std::string key, int default_value);
+	std::string GetConfigString(std::string key, std::string default_value);
+	bool GetConfigBool(std::string key, bool default_value);
+	float GetConfigFloat(std::string key, float default_value);
 	int Classify(int axis, std::vector<Ogre::Vector3> &vertices, float value);
 	void SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector<Ogre::Vector3> &poly1, std::vector<Ogre::Vector3> &poly2, float value);
 	Ogre::Vector3 ComputeNormal(std::vector<Ogre::Vector3> &vertices);

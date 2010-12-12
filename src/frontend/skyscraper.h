@@ -93,10 +93,10 @@ public:
 	void AllowResize(bool value);
 	void Unload();
 	void Quit();
-	int GetConfigInt(const char *key, int default_value);
-	std::string GetConfigString(const char *key, const char *default_value);
-	bool GetConfigBool(const char *key, bool default_value);
-	float GetConfigFloat(const char *key, float default_value);
+	int GetConfigInt(std::string key, int default_value);
+	std::string GetConfigString(std::string key, std::string default_value);
+	bool GetConfigBool(std::string key, bool default_value);
+	float GetConfigFloat(std::string key, float default_value);
 
 private:
 	//mouse status
@@ -120,29 +120,26 @@ private:
 	//button locations
 	struct buttondata
 	{
-		int x;
-		int y;
-		int size_x;
-		int size_y;
+		float x;
+		float y;
+		float size_x;
+		float size_y;
 		std::string filename;
-		Ogre::Image* button_image;
 		std::string filename_selected;
-		Ogre::Image* selected_image;
 		std::string filename_pressed;
-		Ogre::Image* pressed_image;
-		int offset_x;
-		int offset_y;
+		float offset_x;
+		float offset_y;
 		bool drawn_selected, drawn_pressed;
+		int active_button;
+		Ogre::SceneNode* node;
 	};
 	buttondata button1, button2, button3, button4, button5;
 
-	//Ogre::Image* background_image; //background image
-
-	void DrawImage(const char *filename, buttondata *button, int x, int y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
+	std::string background_image;
+	void DrawImage(const char *filename, buttondata *button, float x, float y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
 	void Click(int index);
 	void UnloadSim();
 
-	bool DrewButtons;
 	Ogre::ConfigFile configfile;
 };
 

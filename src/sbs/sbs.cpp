@@ -3875,25 +3875,24 @@ Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 posi
 	return model->object;
 }
 
-int SBS::GetConfigInt(const char *key, int default_value)
+int SBS::GetConfigInt(std::string key, int default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
-std::string SBS::GetConfigString(const char *key, const char *default_value)
+std::string SBS::GetConfigString(std::string key, std::string default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return result;
+	return configfile.getSetting(key, Ogre::StringUtil::BLANK, default_value);
 }
 
-bool SBS::GetConfigBool(const char *key, bool default_value)
+bool SBS::GetConfigBool(std::string key, bool default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
-float SBS::GetConfigFloat(const char *key, float default_value)
+float SBS::GetConfigFloat(std::string key, float default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
