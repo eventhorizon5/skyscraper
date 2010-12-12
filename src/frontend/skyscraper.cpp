@@ -811,39 +811,77 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 	//load image data from file, if not already preloaded
 	if (material == "")
 	{
-		Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
-		tex = Ogre::TextureManager::getSingleton().load(Filename, "General");
-		mat->getTechnique(0)->getPass(0)->createTextureUnitState(Filename);
-		mat->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
-		mat->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
-		mat->getTechnique(0)->getPass(0)->setLightingEnabled(false);
-		material = Filename;
+		int count = 1;
+		if (button)
+			count = 3;
+
+		for (int i = 0; i < count; i++)
+		{
+			if (i == 0)
+				Filename = filename;
+			if (i == 1)
+				Filename = filename_selected;
+			if (i == 2)
+				Filename = filename_pressed;
+
+			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
+			tex = Ogre::TextureManager::getSingleton().load(Filename, "General");
+			mat->getTechnique(0)->getPass(0)->createTextureUnitState(Filename);
+			mat->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
+			mat->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
+			mat->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+		}
+		material = filename;
 		if (button)
 		{
 			button->node = 0;
 			button->drawn_selected = false;
 			button->drawn_pressed = false;
 			button->active_button = 0;
+			button->rect = 0;
+		}
+		else
+		{
+			background_rect = 0;
+			background_node = 0;
 		}
 	}
 
 	//exit if requested button is already visible
 	if (button)
 	{
-		if (button->drawn_selected == false && button->drawn_pressed == false && button->active_button == 1)
-			return;
-		else
-			button->active_button = 1;
+		if (button->drawn_selected == false && button->drawn_pressed == false)
+		{
+			if (button->active_button == 1)
+				return;
+			else
+			{
+				button->active_button = 1;
+				material = filename;
+			}
+		}
 
-		if (button->drawn_selected == true && button->active_button == 2)
-			return;
-		else
-			button->active_button = 2;
+		if (button->drawn_selected == true)
+		{
+			if (button->active_button == 2)
+				return;
+			else
+			{
+				button->active_button = 2;
+				material = filename_selected;
+			}
+		}
 
-		if (button->drawn_pressed == true && button->active_button == 3)
-			return;
-		else
-			button->active_button = 3;
+		if (button->drawn_pressed == true)
+		{
+			if (button->active_button == 3)
+				return;
+			else
+			{
+				button->active_button = 3;
+				material = filename_pressed;
+			}
+		}
 	}
 
 	//set values and draw button
@@ -853,29 +891,35 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 		h = tex->getHeight() / (mRenderWindow->getHeight() / 2.0);
 		if (button)
 		{
-			//detach previous scenenode
+			//delete previous object
 			if (button->node)
 				button->node->detachAllObjects();
+			if (button->rect)
+				delete button->rect;
+			button->rect = 0;
 
-			//store general button data
-			button->filename = filename;
-			button->filename_selected = filename_selected;
-			button->filename_pressed = filename_pressed;
+			if (button->filename == "")
+			{
+				//store general button data
+				button->filename = filename;
+				button->filename_selected = filename_selected;
+				button->filename_pressed = filename_pressed;
 
-			button->offset_x = x;
-			button->offset_y = y;
-			if (center == true)
-			{
-				button->x = x - (w / 2);
-				button->y = y - (h / 2);
+				button->offset_x = x;
+				button->offset_y = y;
+				if (center == true)
+				{
+					button->x = x - (w / 2);
+					button->y = y - (h / 2);
+				}
+				else
+				{
+					button->x = x;
+					button->y = y;
+				}
+				button->size_x = w;
+				button->size_y = h;
 			}
-			else
-			{
-				button->x = x;
-				button->y = y;
-			}
-			button->size_x = w;
-			button->size_y = h;
 
 			x = button->x;
 			y = button->y;
@@ -907,7 +951,15 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 		Ogre::SceneNode* node = mSceneMgr->getRootSceneNode()->createChildSceneNode();
 		node->attachObject(rect);
 		if (button)
+		{
 			button->node = node;
+			button->rect = rect;
+		}
+		else
+		{
+			background_node = node;
+			background_rect = rect;
+		}
 	}
 }
 
@@ -984,7 +1036,10 @@ void Skyscraper::Click(int index)
 	{
 		//show file selection dialog
 		if (SelectBuilding() == true)
+		{
+			DeleteButtons();
 			Start();
+		}
 		return;
 	}
 
@@ -997,7 +1052,41 @@ void Skyscraper::Click(int index)
 	if (index == 4)
 		BuildingFile = "Simple.bld";
 	if (index > 0 && BuildingFile != "")
+	{
+		DeleteButtons();
 		Start();
+	}
+}
+
+void Skyscraper::DeleteButtons()
+{
+	buttondata *button;
+	for (int i = 0; i < 5; i++)
+	{
+		if (i == 0)
+			button = &button1;
+		if (i == 1)
+			button = &button2;
+		if (i == 2)
+			button = &button3;
+		if (i == 3)
+			button = &button4;
+		if (i == 4)
+			button = &button5;
+	
+		if (button->node)
+			button->node->detachAllObjects();
+		if (button->rect)
+			delete button->rect;
+		button->rect = 0;
+		button->filename = "";
+	}
+	if (background_node)
+		background_node->detachAllObjects();
+	if (background_rect)
+		delete background_rect;
+	background_rect = 0;
+	background_image = "";
 }
 
 void Skyscraper::StartSound()
@@ -1087,7 +1176,7 @@ bool Skyscraper::Start()
 	window->SetBackgroundColour(*wxBLACK);
 	//window->resize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 640), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 480));
 	window->Center();
-
+	
 	//switch to fullscreen mode if specified
 	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
 	{
@@ -1095,6 +1184,9 @@ bool Skyscraper::Start()
 		window->ShowFullScreen(FullScreen);
 	}
 
+	//clear screen
+	mRoot->renderOneFrame();
+	
 	Starting = true;
 
 	//Create new simulator object
@@ -1155,10 +1247,6 @@ bool Skyscraper::Start()
 	if (!Simcore->Start())
 		return ReportError("Error starting simulator\n");
 
-	//g2d->Clear(0);
-	//g2d->FinishDraw();
-	//g2d->Print(0);
-
 	//set to saved position if reloading building
 	if (PositionOverride == true)
 	{
@@ -1185,7 +1273,7 @@ bool Skyscraper::Start()
 
 	//run simulation
 	Simcore->Report("Running simulation...");
-	//StopSound();
+	StopSound();
 	Simcore->IsRunning = true;
 	IsRunning = true;
 	Starting = false;

@@ -132,13 +132,17 @@ private:
 		bool drawn_selected, drawn_pressed;
 		int active_button;
 		Ogre::SceneNode* node;
+		Ogre::Rectangle2D* rect;
 	};
 	buttondata button1, button2, button3, button4, button5;
 
+	Ogre::Rectangle2D* background_rect;
+	Ogre::SceneNode* background_node;
 	std::string background_image;
 	void DrawImage(const char *filename, buttondata *button, float x, float y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
 	void Click(int index);
 	void UnloadSim();
+	void DeleteButtons();
 
 	Ogre::ConfigFile configfile;
 };
