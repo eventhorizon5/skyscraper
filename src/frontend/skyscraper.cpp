@@ -830,6 +830,13 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 			mat->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
 			mat->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
 			mat->getTechnique(0)->getPass(0)->setLightingEnabled(false);
+			mat->getTechnique(0)->getPass(0)->setTextureFiltering(Ogre::TFO_BILINEAR);
+
+			if (tex->hasAlpha() == true && button)
+			{
+				mat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+				mat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+			}
 		}
 		material = filename;
 		if (button)
@@ -923,6 +930,8 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 
 			x = button->x;
 			y = button->y;
+			w = button->size_x;
+			h = button->size_y;
 		}
 		else
 		{
