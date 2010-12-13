@@ -120,6 +120,7 @@ bool Skyscraper::OnInit(void)
 	canvas = 0;
 	mCamera = 0;
 	sound = 0;
+	channel = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -166,10 +167,9 @@ int Skyscraper::OnExit()
 	UnloadSim();
 
 	//cleanup sound
+	StopSound();
 	if (soundsys)
 		soundsys->release();
-
-	StopSound();
 
 	//delete wx canvas
 	if (canvas)
@@ -1123,7 +1123,6 @@ void Skyscraper::StartSound()
 		return;
 	}
 
-	FMOD::Channel *channel;
 	result = soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 	if (result != FMOD_OK)
 	{
@@ -1139,6 +1138,8 @@ void Skyscraper::StartSound()
 void Skyscraper::StopSound()
 {
 	//stop and unload sound
+	if (channel)
+		channel->stop();
 	if (sound)
 		sound->release();
 	sound = 0;

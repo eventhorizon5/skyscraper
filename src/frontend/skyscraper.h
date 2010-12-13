@@ -113,6 +113,7 @@ private:
 	//sound data
 	FMOD::System *soundsys;
 	FMOD::Sound *sound;
+	FMOD::Channel *channel;
 
 	//script processor
 	ScriptProcessor* processor;
