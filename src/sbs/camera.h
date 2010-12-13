@@ -150,6 +150,7 @@ private:
 	bool Collisions; //collision detection status
 	bool RotationStopped;
 	bool MovementStopped;
+	Ogre::Vector3 previous_location;
 
 	//collision/physics
 	OgreBulletDynamics::RigidBody* mBody;

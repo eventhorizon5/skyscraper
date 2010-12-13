@@ -96,6 +96,7 @@ Camera::Camera(Ogre::Camera *camera)
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
+	previous_location = Ogre::Vector3::ZERO;
 	RotationStopped = false;
 	MovementStopped = false;
 
@@ -245,6 +246,13 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 		mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), 0, sbs->ToRemote(-vector.z)));
 		mBody->applyForce(Ogre::Vector3(0, sbs->ToRemote(vector.y * 50), 0), Ogre::Vector3::ZERO);
 	}
+
+	//bounce when hitting an object
+	/*Ogre::Vector3 diff = sbs->ToLocal(mBody->getWorldPosition()) - previous_location;
+	if ((vector.z > 1 && diff.z < 0.01) || (vector.x > 1 && diff.x < 0.01) && vector.y == 0)
+		velocity.y = 10;*/
+	//printf("vel: %g - pos change: %g\n", vector.z, sbs->ToLocal(-mBody->getWorldPosition().z) - previous_location.z);
+	previous_location = sbs->ToLocal(mBody->getWorldPosition());
 
 	return true;
 }

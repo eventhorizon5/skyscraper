@@ -804,6 +804,7 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 	if (background_image == Filename)
 		return;
 
+	Ogre::TextureManager::getSingleton().setVerbose(false);
 	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
 	if (tex.isNull() == false)
 		material = Filename;
