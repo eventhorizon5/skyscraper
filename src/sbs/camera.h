@@ -154,7 +154,7 @@ private:
 
 	//collision/physics
 	OgreBulletDynamics::RigidBody* mBody;
-	OgreBulletCollisions::BoxCollisionShape* mShape;
+	OgreBulletCollisions::CollisionShape* mShape;
 };
 
 #endif

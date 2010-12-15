@@ -171,6 +171,7 @@ SBS::SBS()
 	current_time = 0;
 	current_virtual_time = 0;
 	elapsed_time = 0;
+	average_time = 0;
 	listener_position.x = 0;
 	listener_position.y = 0;
 	listener_position.z = 0;
@@ -491,9 +492,6 @@ void SBS::MainLoop()
 
 void SBS::CalculateFrameRate()
 {
-	// First get elapsed time from the virtual clock.
-	elapsed_time = GetElapsedTime();
-
 	//calculate frame rate
 	fps_tottime += elapsed_time;
 	fps_frame_count++;
@@ -3923,6 +3921,8 @@ void SBS::AdvanceClock()
 	else
 		elapsed_time = current_time - last;
 	current_virtual_time += elapsed_time;
+	frame_times.push_back(current_time);
+	CalculateElapsedTime();
 }
 
 unsigned int SBS::GetCurrentTime()
@@ -3935,12 +3935,48 @@ unsigned int SBS::GetCurrentTime()
 
 unsigned int SBS::GetRunTime()
 {
+	//returns simulator run time
 	return current_virtual_time;
 }
 
 unsigned int SBS::GetElapsedTime()
 {
+	//returns the average elapsed time between frames
+	return average_time;
+}
+
+unsigned int SBS::GetElapsedTimeActual()
+{
+	//returns the actual elapsed time between the last two calls to AdvanceClock()
 	return elapsed_time;
+}
+
+void SBS::CalculateElapsedTime()
+{
+	//calculates the average frame processing time for a specified number of frames
+
+	if (frame_times.size() <= 1)
+		return;
+
+	//maximum number of seconds to hold timing info
+	unsigned int smoothing_limit = 1000;
+	
+	//find oldest time to keep
+	std::deque<unsigned int>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
+
+	while (it != end)
+	{
+		if (frame_times.back() - *it > smoothing_limit)
+			++it;
+		else
+			break;
+	}
+
+	//remove old times
+	frame_times.erase(frame_times.begin(), it);
+
+	//calculate average time
+	average_time = (frame_times.back() - frame_times.front()) / (frame_times.size() - 1);
 }
 
 std::string SBS::GetMountPath(const char *filename, std::string &newfilename)

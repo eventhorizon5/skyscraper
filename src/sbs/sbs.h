@@ -311,6 +311,7 @@ public:
 	unsigned int GetCurrentTime();
 	unsigned int GetRunTime();
 	unsigned int GetElapsedTime();
+	unsigned int GetElapsedTimeActual();
 	std::string GetMountPath(const char *filename, std::string &newfilename);
 	void EnableVSync(bool value);
 	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
@@ -388,6 +389,7 @@ private:
 	void CheckAutoAreas();
 	void BackupMapping();
 	void WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', bool wordwrap = true);
+	void CalculateElapsedTime();
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
@@ -462,6 +464,7 @@ private:
 	unsigned int current_time;
 	unsigned int current_virtual_time;
 	unsigned int elapsed_time;
+	unsigned int average_time;
 
 	//config file
 	Ogre::ConfigFile configfile;
@@ -472,6 +475,7 @@ private:
 		std::string result;
 	};
 	std::vector<VerifyResult> verify_results;
+	std::deque<unsigned int> frame_times;
 };
 
 #endif
