@@ -114,7 +114,7 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 
 	// create pixel box using the copy of the buffer
 	PixelBox fontPb(fontBuffer->getWidth(), fontBuffer->getHeight(), fontBuffer->getDepth(), fontBuffer->getFormat(), buffer);
-	fontBuffer->blitToMemory(fontPb);
+	fontBuffer->blitToMemory(fontPb); //this is too slow
 
 	unsigned char* fontData = static_cast<unsigned char*>(fontPb.data);
 	unsigned char* destData = static_cast<unsigned char*>(destPb.data);

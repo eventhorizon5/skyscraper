@@ -826,12 +826,12 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 				Filename = filename_pressed;
 
 			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
-			tex = Ogre::TextureManager::getSingleton().load(Filename, "General");
+			tex = Ogre::TextureManager::getSingleton().load(Filename, "General", Ogre::TEX_TYPE_2D, 0);
 			mat->getTechnique(0)->getPass(0)->createTextureUnitState(Filename);
 			mat->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
 			mat->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
 			mat->getTechnique(0)->getPass(0)->setLightingEnabled(false);
-			mat->getTechnique(0)->getPass(0)->setTextureFiltering(Ogre::TFO_BILINEAR);
+			mat->getTechnique(0)->getPass(0)->setTextureFiltering(Ogre::TFO_NONE);
 
 			if (tex->hasAlpha() == true && button)
 			{
