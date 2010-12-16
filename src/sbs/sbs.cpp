@@ -759,7 +759,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (font.isNull())
 	{
 		font = Ogre::FontManager::getSingleton().create(relative_filename, "General");
-		font->setType(Ogre::FontType::FT_TRUETYPE);
+		//font->setType(Ogre::FontType::FT_TRUETYPE);
 		font->setSource(relative_filename);
 		font->setTrueTypeSize(font_size);
 		font->setTrueTypeResolution(96);
