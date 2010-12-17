@@ -101,6 +101,11 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 
 	TexturePtr fontTexture = (TexturePtr)TextureManager::getSingleton().getByName(font->getMaterial()->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName());
 
+	//output glyph map to file
+	/*Image image;
+	fontTexture->convertToImage(image);
+	image.save("test.png");*/
+
 	HardwarePixelBufferSharedPtr fontBuffer = fontTexture->getBuffer();
 	HardwarePixelBufferSharedPtr destBuffer = destTexture->getBuffer();
 
