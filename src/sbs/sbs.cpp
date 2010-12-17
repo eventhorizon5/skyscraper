@@ -748,33 +748,30 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	TrimString(Name);
 	TrimString(Origname);
 
-	//For compatibility - Crystal Space multiplied font sizes by 1.75 for a higher quality
-	font_size *= 1.75;
-
 	std::string font_filename2 = VerifyFile(font_filename);
-	std::string relative_filename = font_filename2;
 
 	//load font
 	Ogre::FontPtr font;
-	font = Ogre::FontManager::getSingleton().getByName(relative_filename, "General");
+	Ogre::String fontname = font_filename2 + Ogre::StringConverter::toString(font_size);
+	font = Ogre::FontManager::getSingleton().getByName(fontname, "General");
 
 	//load if font is not already loaded
 	if (font.isNull())
 	{
-		font = Ogre::FontManager::getSingleton().create(relative_filename, "General");
+		font = Ogre::FontManager::getSingleton().create(fontname, "General");
 		//font->setType(Ogre::FontType::FT_TRUETYPE);
-		font->setSource(relative_filename);
+		font->setSource(font_filename2);
 		font->setTrueTypeSize(font_size);
 		font->setTrueTypeResolution(96);
 		font->setAntialiasColour(true);
-		//font->addCodePointRange(Ogre::Font::CodePointRange(48, 122));
+		font->addCodePointRange(Ogre::Font::CodePointRange(48, 122));
 		font->load();
 	}
 
 	/*Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
 	if (!font)
 	{
-		ReportError("AddTextToTexture: Invalid font '" + relative_filename + "'");
+		ReportError("AddTextToTexture: Invalid font '" + font_filename2 + "'");
 		return false;
 	}*/
 
