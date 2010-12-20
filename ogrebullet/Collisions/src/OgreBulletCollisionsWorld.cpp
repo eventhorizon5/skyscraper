@@ -59,7 +59,7 @@ mDebugDrawer(0)
 {
 	mDispatcher = new btCollisionDispatcher(&mDefaultCollisionConfiguration);
 
-	if (set32bitsAxisSweep)
+	/*if (set32bitsAxisSweep)
 	{
 		mBroadphase = new bt32BitAxisSweep3(
 			OgreBtConverter::to(bounds.getMinimum()), 
@@ -77,7 +77,10 @@ mDebugDrawer(0)
 		mBroadphase = new btAxisSweep3(
 			OgreBtConverter::to(bounds.getMinimum()), 
 			OgreBtConverter::to(bounds.getMaximum()), static_cast<unsigned short>(maxHandles));
-	}
+	}*/
+
+	//use btDbvtBroadphase instead
+	mBroadphase = new btDbvtBroadphase();
 
 	// if not called by a inherited class
 	if (init)
