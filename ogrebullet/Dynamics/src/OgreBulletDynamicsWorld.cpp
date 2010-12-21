@@ -51,8 +51,8 @@ namespace OgreBulletDynamics
     DynamicsWorld::DynamicsWorld(Ogre::SceneManager *mgr, 
                 const Ogre::AxisAlignedBox &bounds,  
                 const Ogre::Vector3 &gravity,
-                bool init, bool set32BitAxisSweep, unsigned int maxHandles) :
-                CollisionsWorld(mgr, bounds, false, set32BitAxisSweep, maxHandles)
+                bool init) :
+                CollisionsWorld(mgr, bounds, false)
     {
         //btSequentialImpulseConstraintSolver
         //btSequentialImpulseConstraintSolver3

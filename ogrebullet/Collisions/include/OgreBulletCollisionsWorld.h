@@ -41,12 +41,7 @@ namespace OgreBulletCollisions
     class _OgreBulletExport CollisionsWorld 
     {
     public:
-        // Note: If set32bitsAxisSweep = false, then the maximum value for maxHandles = USHRT_MAX
-        //       because btAxisSweep3 uses an 'unsigned short' for maxHandles while
-        //       bt32BitAxisSweep3 uses an unsigned int. A note will be placed in the Ogre log
-        //       if the maxHandles value for btAxisSweep3 is exceeded and maxHandles will be reset
-        //       to USHRT_MAX in order to avoid overflowing the unsigned short.
-        CollisionsWorld(Ogre::SceneManager *scn, const Ogre::AxisAlignedBox &bounds, bool init = true, bool set32bitsAxisSweep = true, unsigned int maxHandles = 1500000);
+        CollisionsWorld(Ogre::SceneManager *scn, const Ogre::AxisAlignedBox &bounds, bool init = true);
 	    virtual ~CollisionsWorld();
 
         void addObject(Object *obj, int filterGrp = 1, short int collisionFilter = -1);

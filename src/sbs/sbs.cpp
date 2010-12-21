@@ -542,7 +542,7 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 		soundsys->set3DSettings(1.0, 3.28, 1.0);
 
 	//set up physics
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true, false, 32766);
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
 	debugDrawer->setDrawWireframe(true);

@@ -49,7 +49,7 @@ using namespace OgreBulletCollisions;
 namespace OgreBulletCollisions
 {
 	// -------------------------------------------------------------------------
-	CollisionsWorld::CollisionsWorld(SceneManager *scn, const AxisAlignedBox &bounds, bool init, bool set32bitsAxisSweep, unsigned int maxHandles):
+	CollisionsWorld::CollisionsWorld(SceneManager *scn, const AxisAlignedBox &bounds, bool init):
 mScnMgr(scn),
 mBounds(bounds),
 mShowDebugShapes(false),
@@ -58,28 +58,6 @@ mDebugContactPoints(0),
 mDebugDrawer(0)
 {
 	mDispatcher = new btCollisionDispatcher(&mDefaultCollisionConfiguration);
-
-	/*if (set32bitsAxisSweep)
-	{
-		mBroadphase = new bt32BitAxisSweep3(
-			OgreBtConverter::to(bounds.getMinimum()), 
-			OgreBtConverter::to(bounds.getMaximum()), maxHandles);
-	}
-	else
-	{
-        if(maxHandles > USHRT_MAX)
-        {
-            Ogre::String logNote("Exceeded the maximum number of handles for btAxisSweep3. Max = USHRT_MAX. Resetting maxHandles to USHRT_MAX in OgreBulletCollisions::CollisionsWorld::CollisionsWorld().");
-            Ogre::LogManager::getSingleton().logMessage(logNote);
-            maxHandles = USHRT_MAX;
-        }
-
-		mBroadphase = new btAxisSweep3(
-			OgreBtConverter::to(bounds.getMinimum()), 
-			OgreBtConverter::to(bounds.getMaximum()), static_cast<unsigned short>(maxHandles));
-	}*/
-
-	//use btDbvtBroadphase instead
 	mBroadphase = new btDbvtBroadphase();
 
 	// if not called by a inherited class

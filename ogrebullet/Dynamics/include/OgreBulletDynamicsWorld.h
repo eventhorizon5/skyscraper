@@ -46,7 +46,7 @@ namespace OgreBulletDynamics
         DynamicsWorld(Ogre::SceneManager *mgr, 
             const Ogre::AxisAlignedBox &bounds,  
             const Ogre::Vector3 &gravity,
-            bool init = true, bool set32BitAxisSweep = true, unsigned int maxHandles = 1500000);
+            bool init = true);
 
 	    ~DynamicsWorld();
 
