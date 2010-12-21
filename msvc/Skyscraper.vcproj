@@ -82,7 +82,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SBS.lib OgreMain.lib OIS.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
+				AdditionalDependencies="SBS.lib OgreMain.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="1"
@@ -189,7 +189,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SBS.lib OgreMain_d.lib OIS_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
+				AdditionalDependencies="SBS.lib OgreMain_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="2"
