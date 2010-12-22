@@ -113,21 +113,37 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 
 	// The font texture buffer was created write only...so we cannot read it back :o). One solution is to copy the buffer  instead of locking it. (Maybe there is a way to create a font texture which is not write_only ?)
 
-	// create a buffer
-	size_t nBuffSize = fontBuffer->getSizeInBytes();
-	unsigned char* buffer = (unsigned char*)calloc(nBuffSize, sizeof(unsigned char));
+	int index = -1;
+	for (int i = 0; i < textureboxes.size(); i++)
+	{
+		if (textureboxes[i].font == font)
+		{
+			index = i;
+			break;
+		}
+	}
+	if (index == -1)
+	{
+		// create a buffer
+		index = textureboxes.size();
+		textureboxes.resize(textureboxes.size() + 1);
+		textureboxes[index].font = font;
+		size_t nBuffSize = fontBuffer->getSizeInBytes();
+		textureboxes[index].buffer = (unsigned char*)calloc(nBuffSize, sizeof(unsigned char));
 
-	// create pixel box using the copy of the buffer
-	PixelBox fontPb(fontBuffer->getWidth(), fontBuffer->getHeight(), fontBuffer->getDepth(), fontBuffer->getFormat(), buffer);
-	fontBuffer->blitToMemory(fontPb); //this is too slow
+		// create pixel box using the copy of the buffer
+		textureboxes[index].box = Ogre::PixelBox(fontBuffer->getWidth(), fontBuffer->getHeight(), fontBuffer->getDepth(), fontBuffer->getFormat(), textureboxes[index].buffer);
+		fontBuffer->blitToMemory(textureboxes[index].box); //this is very slow
+	}
 
-	unsigned char* fontData = static_cast<unsigned char*>(fontPb.data);
+
+	unsigned char* fontData = static_cast<unsigned char*>(textureboxes[index].box.data);
 	unsigned char* destData = static_cast<unsigned char*>(destPb.data);
 
-	const size_t fontPixelSize = PixelUtil::getNumElemBytes(fontPb.format);
+	const size_t fontPixelSize = PixelUtil::getNumElemBytes(textureboxes[index].box.format);
 	const size_t destPixelSize = PixelUtil::getNumElemBytes(destPb.format);
 
-	const size_t fontRowPitchBytes = fontPb.rowPitch * fontPixelSize;
+	const size_t fontRowPitchBytes = textureboxes[index].box.rowPitch * fontPixelSize;
 	const size_t destRowPitchBytes = destPb.rowPitch * destPixelSize;
 
 	Box *GlyphTexCoords;
@@ -273,7 +289,4 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	delete[] GlyphTexCoords;
 
 	destBuffer->unlock();
-
-	// Free the memory allocated for the buffer
-	free(buffer); buffer = 0;
 }

@@ -32,6 +32,7 @@
 #include <OgreMesh.h>
 #include <OgreConfigFile.h>
 #include <OgreBulletDynamicsRigidBody.h>
+#include <OgreFont.h>
 #include <fmod.hpp>
 
 #include "light.h"
@@ -476,6 +477,14 @@ private:
 	};
 	std::vector<VerifyResult> verify_results;
 	std::deque<unsigned int> frame_times;
+
+	struct TexturePixelBox
+	{
+		Ogre::FontPtr font;
+		Ogre::PixelBox box;
+		unsigned char *buffer;
+	};
+	std::vector<TexturePixelBox> textureboxes;
 };
 
 #endif

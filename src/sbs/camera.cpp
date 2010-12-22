@@ -27,7 +27,6 @@
 #include <OgreSceneManager.h>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreBulletCollisionsRay.h>
-#include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include <Shapes/OgreBulletCollisionsCapsuleShape.h>
 #include <Shapes/OgreBulletCollisionsCylinderShape.h>
 #include "globals.h"
@@ -113,7 +112,6 @@ Camera::Camera(Ogre::Camera *camera)
 	//set up physics parameters
 	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), sbs->ToRemote(cfg_body_depth / 2));
 	//mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote(cfg_body_height + cfg_legs_height), Ogre::Vector3::UNIT_Y);
-	//mShape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	mShape = new OgreBulletCollisions::CylinderCollisionShape(bounds, Ogre::Vector3::UNIT_Y);
 	mBody = new OgreBulletDynamics::RigidBody("CameraCollider", sbs->mWorld);
 	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);

@@ -310,6 +310,11 @@ bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
+	//free text texture memory
+	for (int i = 0; i < textureboxes.size(); i++)
+		free(textureboxes[i].buffer);
+	textureboxes.clear();
+
 	//initialize camera/actor
 	camera->CreateColliders();
 
