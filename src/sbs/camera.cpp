@@ -819,7 +819,7 @@ void Camera::Loop()
 	InterpolateMovement();
 
 	//general movement
-	float delta = sbs->GetElapsedTimeAverage() / 1000.0f;
+	float delta = sbs->GetElapsedTime() / 1000.0f;
 	//float delta = sbs->GetElapsedTime() / 1000.0f;
 	Move(velocity * speed, delta);
 	RotateLocal(angle_velocity * speed, delta);
