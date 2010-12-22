@@ -283,7 +283,7 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 		RotationStopped = true;
 
 	//rotate collider body on Y axis (left/right)
-	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
+	/*float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
 	rotation.y += ydeg;
 
 	if (rotation.y > 360)
@@ -294,7 +294,9 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	//Ogre::Quaternion rot(Ogre::Radian(vector.y) * speed, Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	mBody->setOrientation(rot);
-	mBody->updateTransform(true);
+	mBody->updateTransform(true);*/
+
+	mBody->setAngularVelocity(0, -vector.y, 0);
 
 	//rotate camera on X and Z axes
 	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
@@ -817,7 +819,8 @@ void Camera::Loop()
 	InterpolateMovement();
 
 	//general movement
-	float delta = sbs->GetElapsedTime() / 1000.0f;
+	float delta = sbs->GetElapsedTimeAverage() / 1000.0f;
+	//float delta = sbs->GetElapsedTime() / 1000.0f;
 	Move(velocity * speed, delta);
 	RotateLocal(angle_velocity * speed, delta);
 
