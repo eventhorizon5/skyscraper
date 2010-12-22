@@ -312,7 +312,7 @@ public:
 	unsigned int GetCurrentTime();
 	unsigned int GetRunTime();
 	unsigned int GetElapsedTime();
-	unsigned int GetElapsedTimeAverage();
+	unsigned int GetElapsedTimeActual();
 	std::string GetMountPath(const char *filename, std::string &newfilename);
 	void EnableVSync(bool value);
 	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);

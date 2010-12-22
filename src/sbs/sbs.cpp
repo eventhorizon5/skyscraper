@@ -3946,13 +3946,13 @@ unsigned int SBS::GetRunTime()
 	return current_virtual_time;
 }
 
-unsigned int SBS::GetElapsedTimeAverage()
+unsigned int SBS::GetElapsedTime()
 {
 	//returns the average elapsed time between frames
 	return average_time;
 }
 
-unsigned int SBS::GetElapsedTime()
+unsigned int SBS::GetElapsedTimeActual()
 {
 	//returns the actual elapsed time between the last two calls to AdvanceClock()
 	return elapsed_time;
