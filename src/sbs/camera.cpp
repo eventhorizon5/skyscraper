@@ -164,12 +164,9 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
 	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion camrot = x * z;
-	Ogre::Quaternion bodyrot = y;
+	Ogre::Quaternion rot = x * y * z;
 	rotation = vector;
-	MainCamera->setOrientation(camrot);
-	mBody->setOrientation(bodyrot);
-	mBody->updateTransform(true);
+	MainCamera->setOrientation(rot);
 }
 
 Ogre::Vector3 Camera::GetPosition()
@@ -224,6 +221,7 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(Ogre::Vector3 vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
+	//don't send delta values to this function
 
 	if (MovementStopped == true && vector == Ogre::Vector3::ZERO)
 		return false;
@@ -233,8 +231,8 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	if (vector == Ogre::Vector3::ZERO)
 		MovementStopped = true;
 
-	//multiply vector with object's orientation, and flip X axis
-	vector = mBody->getWorldOrientation() * vector * Ogre::Vector3(-1, 1, 1) * speed * 60;
+	//multiply vector with camera's orientation, and flip X axis
+	vector = MainCamera->getOrientation() * vector * Ogre::Vector3(-1, 1, 1) * speed;
 
 	//vector.y += sbs->ToLocal(mBody->getLinearVelocity().y);
 
@@ -266,7 +264,6 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in world space
 
-	//mBody->setAngularVelocity(sbs->ToRemote(Ogre::Vector3(0, -vector.y, 0)));
 	//Ogre::Vector3 rot = GetRotation() + (Ogre::Vector3(vector.x, 0, vector.z) * speed);
 	Ogre::Vector3 rot = GetRotation() + (vector.x * speed);
 
@@ -285,24 +282,9 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	if (vector == Ogre::Vector3::ZERO)
 		RotationStopped = true;
 
-	//rotate collider body on Y axis (left/right)
-	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
-	rotation.y += ydeg;
-
-	if (rotation.y > 360)
-		rotation.y -= 360;
-	if (rotation.y < 0)
-		rotation.y += 360;
-
-	//Ogre::Quaternion rot(Ogre::Radian(vector.y) * speed, Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	mBody->setOrientation(rot);
-	mBody->updateTransform(true);
-
-	//mBody->setAngularVelocity(0, -vector.y, 0);
-
-	//rotate camera on X and Z axes
+	//rotate camera
 	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
+	MainCamera->yaw(Ogre::Radian(-vector.y) * speed);
 	MainCamera->roll(Ogre::Radian(vector.z) * speed);
 }
 
@@ -850,7 +832,7 @@ void Camera::Loop()
 	if (delta > .3f)
 		delta = .3f;
 
-	Ogre::Vector3 intervalSize;
+	/*Ogre::Vector3 intervalSize;
 	intervalSize.x = std::min(cfg_body_width, cfg_legs_width);
 	intervalSize.y = std::min(cfg_body_height, cfg_legs_height);
 	intervalSize.z = std::min(cfg_body_depth, cfg_legs_depth);
@@ -863,7 +845,6 @@ void Camera::Loop()
 	while (delta > maxinterval && max_iter > 0)
 	{
 		max_iter--;
-		Move(velocity, maxinterval * speed);
 		RotateLocal(angle_velocity, maxinterval * speed);
 		//printf("max_iter = %d, maxinterval = %g, delta = %g\n", max_iter, maxinterval, delta);
 		delta -= maxinterval;
@@ -872,11 +853,10 @@ void Camera::Loop()
 		maxinterval -= 0.005f; //err on the side of safety
 	}
 
-	if (delta)
-	{
-		Move(velocity, delta * speed);
+	if (delta)*/
 		RotateLocal(angle_velocity, delta * speed);
-	}
+
+	Move(velocity, speed);
 
 	//sync sound listener object to camera position
 	sbs->SetListenerPosition(GetPosition());

@@ -445,7 +445,7 @@ void SBS::MainLoop()
 
 	//update physics
 	float step = float(GetElapsedTime()) / 1000.0;
-	mWorld->stepSimulation(step, 7);
+	mWorld->stepSimulation(step, 2);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
@@ -3949,13 +3949,13 @@ unsigned int SBS::GetRunTime()
 unsigned int SBS::GetElapsedTime()
 {
 	//returns the average elapsed time between frames
-	return average_time;
+	return elapsed_time;
 }
 
-unsigned int SBS::GetElapsedTimeActual()
+unsigned int SBS::GetElapsedTimeAverage()
 {
 	//returns the actual elapsed time between the last two calls to AdvanceClock()
-	return elapsed_time;
+	return average_time;
 }
 
 void SBS::CalculateElapsedTime()
@@ -3965,8 +3965,8 @@ void SBS::CalculateElapsedTime()
 	if (frame_times.size() <= 1)
 		return;
 
-	//maximum number of seconds to hold timing info
-	unsigned int smoothing_limit = 1000;
+	//maximum number of milliseconds to hold timing info
+	unsigned int smoothing_limit = 100;
 	
 	//find oldest time to keep
 	std::deque<unsigned int>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
