@@ -125,6 +125,7 @@ public:
 	void EnableCollisions(bool value);
 	bool CollisionsEnabled();
 	bool IsOnGround();
+	float ComputeMaxInterval(Ogre::Vector3 intervalSize);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

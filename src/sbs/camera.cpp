@@ -38,6 +38,9 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
+#undef SMALL_EPSILON
+#define SMALL_EPSILON 0.000001f
+
 Camera::Camera(Ogre::Camera *camera)
 {
 	//set up SBS object
@@ -283,7 +286,7 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 		RotationStopped = true;
 
 	//rotate collider body on Y axis (left/right)
-	/*float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
+	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
 	rotation.y += ydeg;
 
 	if (rotation.y > 360)
@@ -294,9 +297,9 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	//Ogre::Quaternion rot(Ogre::Radian(vector.y) * speed, Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	mBody->setOrientation(rot);
-	mBody->updateTransform(true);*/
+	mBody->updateTransform(true);
 
-	mBody->setAngularVelocity(0, -vector.y, 0);
+	//mBody->setAngularVelocity(0, -vector.y, 0);
 
 	//rotate camera on X and Z axes
 	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
@@ -813,71 +816,65 @@ void Camera::CreateColliders()
 	EnableGravity(GravityStatus);*/
 }
 
+float Camera::ComputeMaxInterval(Ogre::Vector3 intervalSize)
+{
+	float max_interval;
+	if (fabs(intervalSize.x) < SMALL_EPSILON)
+		intervalSize.x = 1;
+	else
+		intervalSize.x /= velocity.x;
+
+	if (fabs(intervalSize.y) < SMALL_EPSILON)
+		intervalSize.y = 1;
+	else
+		intervalSize.y /= velocity.y;
+
+	if (fabs(intervalSize.z) < SMALL_EPSILON)
+		intervalSize.z = 1;
+	else
+		intervalSize.z /= velocity.z;
+
+	max_interval = std::min(intervalSize.x, intervalSize.y);
+	max_interval = std::min(max_interval, intervalSize.z);
+}
+
 void Camera::Loop()
 {
 	//calculate acceleration
 	InterpolateMovement();
 
 	//general movement
+	Ogre::Vector3 intervalSize;
+	intervalSize.x = std::min(cfg_body_width, cfg_legs_width);
+	intervalSize.y = std::min(cfg_body_height, cfg_legs_height);
+	intervalSize.z = std::min(cfg_body_depth, cfg_legs_depth);
+
+	float maxinterval = ComputeMaxInterval(intervalSize - Ogre::Vector3(0.005f));
+	maxinterval /= speed; //compensate for speed
+
 	float delta = sbs->GetElapsedTime() / 1000.0f;
-	//float delta = sbs->GetElapsedTime() / 1000.0f;
-	Move(velocity * speed, delta);
-	RotateLocal(angle_velocity * speed, delta);
+	if (delta > .3f)
+		delta = .3f;
 
-	//get list of hit meshes and put them into the 'hitlist' array
-	/*if (EnableCollisions == true)
+	int max_iter = 20;
+
+	while (delta > maxinterval && max_iter > 0)
 	{
-		if (collider_actor.CheckHitMeshes())
-		{
-			//get mesh list iterator from the actor object
-			csSet<csPtrKey<iMeshWrapper> >::GlobalIterator iterator = collider_actor.GetHitMeshes().GetIterator();
+		max_iter--;
+		Move(velocity, maxinterval * speed);
+		RotateLocal(angle_velocity, maxinterval * speed);
+		//printf("max_iter = %d, maxinterval = %g, delta = %g\n", max_iter, maxinterval, delta);
+		delta -= maxinterval;
+		maxinterval = ComputeMaxInterval(intervalSize);
+		maxinterval /= speed; //compensate for speed
+		maxinterval -= 0.005f; //err on the side of safety
+	}
 
-			//get names of each hit mesh and check if any where shaft doors or elevator doors
-			while (iterator.HasNext())
-			{
-				//get mesh name
-				std::string mesh = iterator.Next()->QueryObject()->GetName();
-				int index = mesh.find(")");
-				mesh.DeleteAt(0, index + 1);
-				LastHitMesh = mesh;
-
-				//report name of mesh
-				if (ReportCollisions == true)
-					sbs->Report(mesh);
-
-				//check shaft doors
-				if (mesh.find("Shaft Door") != -1)
-				{
-					//user hit a shaft door
-					int elevator = atoi(mesh.substr(9, mesh.find(":") - 9));
-					int index = mesh.find("Shaft Door");
-					int index2 = mesh.find(":", index);
-					int number = atoi(mesh.substr(index + 10, index2 - (index + 10)));
-					//int floor = atoi(mesh.substr(index2 + 1, mesh.length() - index2 - 2));
-					Elevator *tmpelevator = sbs->GetElevator(elevator);
-					int whichdoors = tmpelevator->GetDoor(number)->GetWhichDoors();
-					if (tmpelevator->GetDoor(number)->OpenDoor == -1 && whichdoors == 1)
-						sbs->GetElevator(elevator)->OpenDoors(number, 1);
-					tmpelevator = 0;
-				}
-
-				//check elevator doors
-				if (mesh.find("ElevatorDoor") != -1)
-				{
-					//user hit an elevator door
-					int elevator = atoi(mesh.substr(13, mesh.find(":") - 13));
-					int number = atoi(mesh.substr(mesh.find(":") + 1, mesh.length() - mesh.find(":") - 1));
-					Elevator *tmpelevator = sbs->GetElevator(elevator);
-					int whichdoors = tmpelevator->GetDoor(number)->GetWhichDoors();
-					if (tmpelevator->GetDoor(number)->OpenDoor == -1 && whichdoors == 1)
-						sbs->GetElevator(elevator)->OpenDoors(number, 1);
-					tmpelevator = 0;
-				}
-			}
-		}
-		else
-			collider_actor.EnableHitMeshes(true); //tell collider to report on hit meshes if currently off
-	}*/
+	if (delta)
+	{
+		Move(velocity, delta * speed);
+		RotateLocal(angle_velocity, delta * speed);
+	}
 
 	//sync sound listener object to camera position
 	sbs->SetListenerPosition(GetPosition());
@@ -933,6 +930,10 @@ void Camera::Spin(float speed)
 void Camera::InterpolateMovement()
 {
 	//calculate acceleration
+	velocity = desired_velocity;
+	angle_velocity = desired_angle_velocity;
+	return;
+
 	float elapsed = sbs->GetElapsedTime() / 1000.0f;
 	elapsed *= 1700.0f;
 
