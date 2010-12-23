@@ -234,7 +234,7 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 		MovementStopped = true;
 
 	//multiply vector with object's orientation, and flip X axis
-	vector = mBody->getWorldOrientation() * vector * Ogre::Vector3(-1, 1, 1);
+	vector = mBody->getWorldOrientation() * vector * Ogre::Vector3(-1, 1, 1) * speed * 60;
 
 	//vector.y += sbs->ToLocal(mBody->getLinearVelocity().y);
 
@@ -819,20 +819,20 @@ void Camera::CreateColliders()
 float Camera::ComputeMaxInterval(Ogre::Vector3 intervalSize)
 {
 	float max_interval;
-	if (fabs(intervalSize.x) < SMALL_EPSILON)
+	if (fabs(intervalSize.x) < SMALL_EPSILON || fabs(velocity.x) < SMALL_EPSILON)
 		intervalSize.x = 1;
 	else
-		intervalSize.x /= velocity.x;
+		intervalSize.x /= fabs(velocity.x);
 
-	if (fabs(intervalSize.y) < SMALL_EPSILON)
+	if (fabs(intervalSize.y) < SMALL_EPSILON || fabs(velocity.y) < SMALL_EPSILON)
 		intervalSize.y = 1;
 	else
-		intervalSize.y /= velocity.y;
+		intervalSize.y /= fabs(velocity.y);
 
-	if (fabs(intervalSize.z) < SMALL_EPSILON)
+	if (fabs(intervalSize.z) < SMALL_EPSILON || fabs(velocity.z) < SMALL_EPSILON)
 		intervalSize.z = 1;
 	else
-		intervalSize.z /= velocity.z;
+		intervalSize.z /= fabs(velocity.z);
 
 	max_interval = std::min(intervalSize.x, intervalSize.y);
 	max_interval = std::min(max_interval, intervalSize.z);
@@ -845,6 +845,11 @@ void Camera::Loop()
 	InterpolateMovement();
 
 	//general movement
+
+	float delta = sbs->GetElapsedTime() / 1000.0f;
+	if (delta > .3f)
+		delta = .3f;
+
 	Ogre::Vector3 intervalSize;
 	intervalSize.x = std::min(cfg_body_width, cfg_legs_width);
 	intervalSize.y = std::min(cfg_body_height, cfg_legs_height);
@@ -852,10 +857,6 @@ void Camera::Loop()
 
 	float maxinterval = ComputeMaxInterval(intervalSize - Ogre::Vector3(0.005f));
 	maxinterval /= speed; //compensate for speed
-
-	float delta = sbs->GetElapsedTime() / 1000.0f;
-	if (delta > .3f)
-		delta = .3f;
 
 	int max_iter = 20;
 
@@ -931,9 +932,6 @@ void Camera::Spin(float speed)
 void Camera::InterpolateMovement()
 {
 	//calculate acceleration
-	velocity = desired_velocity;
-	angle_velocity = desired_angle_velocity;
-	return;
 
 	float elapsed = sbs->GetElapsedTime() / 1000.0f;
 	elapsed *= 1700.0f;
