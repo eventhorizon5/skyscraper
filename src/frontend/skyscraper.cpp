@@ -303,6 +303,9 @@ bool Skyscraper::Initialize()
 	if(!mRoot)
 		mRoot = new Ogre::Root();
 	
+	//load config file
+	configfile.load("skyscraper.ini");
+
 	if(!mRoot->getRenderSystem())
 	{
 		//if no render systems are loaded, try to load previous config
@@ -317,9 +320,6 @@ bool Skyscraper::Initialize()
 	mRoot->initialise(false);
 	mRenderWindow = CreateRenderWindow();
 	//mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
-
-	//load config file
-	configfile.load("skyscraper.ini");
 
 	//load resources
 	Ogre::ConfigFile cf;
