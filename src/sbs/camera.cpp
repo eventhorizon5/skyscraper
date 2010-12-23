@@ -836,6 +836,7 @@ float Camera::ComputeMaxInterval(Ogre::Vector3 intervalSize)
 
 	max_interval = std::min(intervalSize.x, intervalSize.y);
 	max_interval = std::min(max_interval, intervalSize.z);
+	return max_interval;
 }
 
 void Camera::Loop()
