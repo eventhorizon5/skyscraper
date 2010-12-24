@@ -1144,7 +1144,7 @@ bool Skyscraper::SelectBuilding()
 
 	//set building file
 	//wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxOPEN);
-	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxOPEN);
+	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
 	int result = Selector->ShowModal();
 	if (result == wxID_CANCEL)
 	{
