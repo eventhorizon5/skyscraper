@@ -2969,11 +2969,15 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData, 22);
 
-		if (params != 18)
+		if (params < 18 || params > 19)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 0; i <= 17; i++)
+		bool compat = false;
+		if (params == 18)
+			compat = true;
+
+		for (int i = 0; i <= params - 1; i++)
 		{
 			if (i == 2)
 				i = 5;
@@ -2987,7 +2991,10 @@ int ScriptProcessor::ProcFloors()
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
-		StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
+		if (compat == true)
+			StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
+		else
+			StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1]), Current, tempdata[2], tempdata[3], tempdata[4], atof(tempdata[5]), tempdata[6], atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17]), atof(tempdata[18])));
 	}
 
 	//FinishShaftDoor command
@@ -4517,11 +4524,15 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData, 17);
 
-		if (params != 17)
+		if (params < 17 || params > 18)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 0; i <= 16; i++)
+		bool compat = false;
+		if (params == 17)
+			compat = true;
+
+		for (int i = 0; i <= params - 1; i++)
 		{
 			if (i == 1)
 				i = 4;
@@ -4531,7 +4542,10 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
-		StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
+		if (compat == true)
+			StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16])));
+		else
+			StoreCommand(elev->AddDoorComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17])));
 	}
 
 	//AddShaftDoorsComponent command
@@ -4540,11 +4554,15 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData, 23);
 
-		if (params != 17)
+		if (params < 17 || params > 18)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 0; i <= 16; i++)
+		bool compat = false;
+		if (params == 17)
+			compat = true;
+
+		for (int i = 0; i <= params - 1; i++)
 		{
 			if (i == 1)
 				i = 4;
@@ -4554,7 +4572,10 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + csString(tempdata[i]));
 		}
 
-		elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
+		if (compat == true)
+			elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]));
+		else
+			elev->AddShaftDoorsComponent(atoi(tempdata[0]), tempdata[1], tempdata[2], tempdata[3], atof(tempdata[4]), tempdata[5], atof(tempdata[6]), atof(tempdata[7]), atof(tempdata[8]), atof(tempdata[9]), atof(tempdata[10]), atof(tempdata[11]), atof(tempdata[12]), atof(tempdata[13]), atof(tempdata[14]), atof(tempdata[15]), atof(tempdata[16]), atof(tempdata[17]));
 	}
 
 	//FinishDoors command

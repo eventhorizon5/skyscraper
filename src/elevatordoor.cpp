@@ -674,21 +674,21 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	}
 
 	//create left door
-	AddDoorComponent("Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, x1, z1, x2, z2, height, 0, tw, th, tw, th);
+	AddDoorComponent("Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, height, 0, tw, th, tw, th);
 
 	//create right door
-	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, x3, z3, x4, z4, height, 0, tw, th, tw, th);
+	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, height, 0, tw, th, tw, th);
 
 	//finish doors
 	return FinishDoors();
 }
 
-void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//creates a door component - finish with FinishDoor()
 
 	//create door object
-	DoorObject *door = wrapper->CreateDoor(meshname, direction, speed);
+	DoorObject *door = wrapper->CreateDoor(meshname, direction, OpenSpeed, CloseSpeed);
 	
 	if (tw == 0)
 		tw = 1;
@@ -738,7 +738,7 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	sbs->ResetTextureMapping();
 }
 
-Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component; remake of AddDoors command
 
@@ -752,11 +752,11 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 	buffer = "ElevatorDoor " + elevnumber + ":" + doornumber + ":" + Name;
 	buffer.Trim();
 
-	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors->object;
 }
 
-Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a shaft door component; remake of AddShaftDoor command
 
@@ -778,11 +778,11 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
-	AddDoorComponent(ShaftDoors[index], name, buffer, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, floorobj->Altitude + floorobj->GetBase(true) + voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(ShaftDoors[index], name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, floorobj->Altitude + floorobj->GetBase(true) + voffset, tw, th, side_tw, side_th);
 	return ShaftDoors[index]->object;
 }
 
-void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float speed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
@@ -801,7 +801,7 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 		floornumber = floor;
 		floornumber.Trim();
 		buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
-		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, speed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
 }
 
@@ -1063,10 +1063,10 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	//create doors
 
 	//create left door
-	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, "Left", OpenSpeed, x1, z1, x2, z2, Doors->Height, 0, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, Doors->Height, 0, tw, th, tw, th);
 
 	//create right door
-	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, "Right", OpenSpeed, x3, z3, x4, z4, Doors->Height, 0, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, Doors->Height, 0, tw, th, tw, th);
 
 	//finish doors
 	Object *object = FinishShaftDoor(floor);
@@ -1306,7 +1306,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	return false;
 }
 
-ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper, const char *Direction, float Speed)
+ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper, const char *Direction, float OpenSpeed, float CloseSpeed)
 {
 	name = doorname;
 	wrapper = Wrapper;
@@ -1327,7 +1327,8 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	if (direction_check == "right" || direction_check == "back")
 		direction = 3;
 
-	speed = Speed;
+	open_speed = OpenSpeed;
+	close_speed = CloseSpeed;
 	active_speed = 0;
 	openchange = 0;
 	marker1 = 0;
@@ -1379,13 +1380,13 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 	object = 0;
 }
 
-ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, const char *direction, float speed)
+ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, const char *direction, float OpenSpeed, float CloseSpeed)
 {
 	//initialize a door component
 	
 	doors.SetSize(doors.GetSize() + 1);
 	int index = doors.GetSize() - 1;
-	doors[index] = new DoorObject(doorname, this, direction, speed);
+	doors[index] = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
 
 	//move object to positions
 	if (IsShaftDoor == false)
@@ -1483,6 +1484,12 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		//marker2 is the position to start decelerating at (runs full speed until marker 2)
 		if (manual == false)
 		{
+			float speed;
+			if (open == true)
+				speed = open_speed;
+			else
+				speed = close_speed;
+
 			if (parent->GetNudgeStatus() == false || parent->SlowSpeed == 0)
 				openchange = speed / 50;
 			else
