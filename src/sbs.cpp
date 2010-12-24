@@ -2533,10 +2533,6 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 	int index = 0;
 	if (wall1a == true && wall2a == true)
 	{
-		wall1a = false;
-		wall1b = false;
-		wall2a = false;
-		wall2b = false;
 		DrawWalls(true, true, false, false, false, false);
 		if (fabs(wall_extents_x.x - wall_extents_x.y) > fabs(wall_extents_z.x - wall_extents_z.y))
 		{
@@ -2553,8 +2549,20 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 			AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th, true);
 		}
 		ResetWalls();
+		ResetDoorwayWalls();
 	}
 	return index;
+}
+
+void SBS::ResetDoorwayWalls()
+{
+	wall1a = false;
+	wall1b = false;
+	wall2a = false;
+	wall2b = false;
+	wall_extents_x = 0;
+	wall_extents_y = 0;
+	wall_extents_z = 0;
 }
 
 void SBS::SetAutoSize(bool x, bool y)
