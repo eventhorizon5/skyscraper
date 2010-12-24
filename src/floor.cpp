@@ -372,19 +372,25 @@ void Floor::CutAll(const csVector3 &start, const csVector3 &end, bool cutwalls, 
 	//cut shafts
 	for (int i = 1; i <= sbs->Shafts(); i++)
 	{
-		if (cutwalls == true)
-			sbs->GetShaft(i)->CutWall(false, Number, start, end);
-		if (cutfloors == true)
-			sbs->GetShaft(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+		if (sbs->GetShaft(i))
+		{
+			if (cutwalls == true)
+				sbs->GetShaft(i)->CutWall(false, Number, start, end);
+			if (cutfloors == true)
+				sbs->GetShaft(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+		}
 	}
 
 	//cut stairs
 	for (int i = 1; i <= sbs->StairsNum(); i++)
 	{
-		if (cutwalls == true)
-			sbs->GetStairs(i)->CutWall(false, Number, start, end);
-		if (cutfloors == true)
-			sbs->GetStairs(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+		if (sbs->GetStairs(i))
+		{
+			if (cutwalls == true)
+				sbs->GetStairs(i)->CutWall(false, Number, start, end);
+			if (cutfloors == true)
+				sbs->GetStairs(i)->CutFloors(false, csVector2(start.x, start.z), csVector2(end.x, end.z), Altitude, Altitude + FullHeight());
+		}
 	}
 
 	//cut external
