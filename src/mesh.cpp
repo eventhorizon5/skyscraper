@@ -196,7 +196,6 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 		return;
 
 	csPoly3D temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
-	csArray<WallPolygon*> ignore_list;
 
 	bool polycheck = false;
 
@@ -215,21 +214,9 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 	}
 
 	//step through each polygon
-	for (int i = 0; i < wall->GetHandleCount(); i++)
+	int polycount = wall->GetHandleCount();
+	for (int i = 0; i < polycount; i++)
 	{
-		//skip created submeshes
-		bool ignorecheck = false;
-		for (int j = 0; j < ignore_list.GetSize(); j++)
-		{
-			if (ignore_list[j] == wall->GetHandle(i))
-			{
-				ignorecheck = true;
-				break;
-			}
-		}
-		if (ignorecheck == true)
-			continue;
-
 		//get name
 		csString name = wall->GetHandle(i)->name;
 
@@ -498,12 +485,11 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 			wall->DeletePolygon(i, false);
 
 			//create new polygon
-			WallPolygon* handle = 0;
-			handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
-			ignore_list.Push(handle);
+			WallPolygon* handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
 
 			//reset search position
 			i--;
+			polycount--;
 			polycheck = false;
 		}
 	}
