@@ -4933,6 +4933,7 @@ csString ScriptProcessor::Calc(const char *expression)
 	csString one;
 	csString two;
 	int start, end;
+	CalcError = false;
 
 	//first remove all whitespace from the string
 	tmpcalc.ReplaceAll(" ", "");
@@ -4963,6 +4964,10 @@ csString ScriptProcessor::Calc(const char *expression)
 				//call function recursively
 				csString newdata;
 				newdata = Calc(tmpcalc.Slice(start + 1, end - start - 1));
+
+				if (CalcError == true)
+					return newdata;
+
 				//construct new string
 				one = tmpcalc.Slice(0, start);
 				if (end < tmpcalc.Length() - 1)
@@ -4973,7 +4978,8 @@ csString ScriptProcessor::Calc(const char *expression)
 			}
 			else
 			{
-				skyscraper->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				CalcError = true;
 				return "false";
 			}
 		}
@@ -5004,13 +5010,18 @@ csString ScriptProcessor::Calc(const char *expression)
 		}
 		if (end >= tmpcalc.Length() - 1 && operators > 0)
 		{
-			skyscraper->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			CalcError = true;
 			return "false";
 		}
 		if (operators > 1)
 		{
 			csString newdata;
 			newdata = Calc(tmpcalc.Slice(0, end));
+
+			if (CalcError == true)
+				return newdata;
+
 			//construct new string
 			two = tmpcalc.Slice(end);
 			tmpcalc = newdata + two;
@@ -5035,6 +5046,15 @@ csString ScriptProcessor::Calc(const char *expression)
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
 		}
+		else
+		{
+			if (IsNumeric(one.GetData()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
+		}
 	}
 	temp1 = tmpcalc.Find("-", 1);
 	if (temp1 > 0)
@@ -5046,6 +5066,15 @@ csString ScriptProcessor::Calc(const char *expression)
 			float tmpnum = atof(one.GetData()) - atof(two.GetData());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
+		}
+		else
+		{
+			if (IsNumeric(one.GetData()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
 		}
 	}
 	temp1 = tmpcalc.Find("/", 1);
@@ -5059,6 +5088,15 @@ csString ScriptProcessor::Calc(const char *expression)
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
 		}
+		else
+		{
+			if (IsNumeric(one.GetData()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
+		}
 	}
 	temp1 = tmpcalc.Find("*", 1);
 	if (temp1 > 0)
@@ -5070,6 +5108,15 @@ csString ScriptProcessor::Calc(const char *expression)
 			float tmpnum = atof(one.GetData()) * atof(two.GetData());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc.GetData();
+		}
+		else
+		{
+			if (IsNumeric(one.GetData()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
 		}
 	}
 	return tmpcalc.GetData();

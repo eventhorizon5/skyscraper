@@ -76,6 +76,7 @@ class ScriptProcessor
 	csArray<csString> FunctionParams;
 	bool ReplaceLine;
 	csArray<csString> nonexistent_files;
+	bool CalcError;
 
 	int ScriptError(const char *message);
 	int ScriptError();
