@@ -26,6 +26,8 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
+#include <OgreBulletDynamicsCharacter.h>
+
 class SBSIMPEXP Camera
 {
 public:
@@ -125,7 +127,6 @@ public:
 	void EnableCollisions(bool value);
 	bool CollisionsEnabled();
 	bool IsOnGround();
-	float ComputeMaxInterval(Ogre::Vector3 intervalSize);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -151,10 +152,9 @@ private:
 	bool Collisions; //collision detection status
 	bool RotationStopped;
 	bool MovementStopped;
-	Ogre::Vector3 previous_location;
 
 	//collision/physics
-	OgreBulletDynamics::RigidBody* mBody;
+	OgreBulletDynamics::CharacterController* mCharacter;
 	OgreBulletCollisions::CollisionShape* mShape;
 };
 

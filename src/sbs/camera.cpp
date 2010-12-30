@@ -25,10 +25,10 @@
 
 #include <OgreCamera.h>
 #include <OgreSceneManager.h>
-#include <OgreBulletDynamicsRigidBody.h>
+#include <OgreBulletDynamicsCharacter.h>
 #include <OgreBulletCollisionsRay.h>
-#include <Shapes/OgreBulletCollisionsCapsuleShape.h>
-#include <Shapes/OgreBulletCollisionsCylinderShape.h>
+//#include <Shapes/OgreBulletCollisionsCapsuleShape.h>
+//#include <Shapes/OgreBulletCollisionsCylinderShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "callbutton.h"
@@ -100,7 +100,6 @@ Camera::Camera(Ogre::Camera *camera)
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
-	previous_location = Ogre::Vector3::ZERO;
 	RotationStopped = false;
 	MovementStopped = false;
 
@@ -113,13 +112,14 @@ Camera::Camera(Ogre::Camera *camera)
 	CameraNode->attachObject(MainCamera);
 
 	//set up physics parameters
-	Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), sbs->ToRemote(cfg_body_depth / 2));
+	//Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), sbs->ToRemote(cfg_body_depth / 2));
 	//mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote(cfg_body_height + cfg_legs_height), Ogre::Vector3::UNIT_Y);
-	mShape = new OgreBulletCollisions::CylinderCollisionShape(bounds, Ogre::Vector3::UNIT_Y);
-	mBody = new OgreBulletDynamics::RigidBody("CameraCollider", sbs->mWorld);
-	mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
-	mBody->setSleepingThresholds(0, 0); //prevent object from deactivating
-	mBody->setAngularFactor(0, 0, 0); //prevent other objects from affecting this object's rotation
+	//mShape = new OgreBulletCollisions::CylinderCollisionShape(bounds, Ogre::Vector3::UNIT_Y);
+	//mBody = new OgreBulletDynamics::RigidBody("CameraCollider", sbs->mWorld);
+	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width), sbs->ToRemote(cfg_body_height + cfg_legs_height), sbs->ToRemote(0.35));
+	//mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
+	//mBody->setSleepingThresholds(0, 0); //prevent object from deactivating
+	//mBody->setAngularFactor(0, 0, 0); //prevent other objects from affecting this object's rotation
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 }
 
@@ -134,7 +134,7 @@ void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
 	CameraNode->setPosition(sbs->ToRemote(vector));
-	mBody->updateTransform(true);
+	mCharacter->updateTransform(true);
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)
@@ -232,30 +232,9 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 		MovementStopped = true;
 
 	//multiply vector with camera's orientation, and flip X axis
-	vector = MainCamera->getOrientation() * vector * Ogre::Vector3(-1, 1, 1) * speed;
+	vector = MainCamera->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
 
-	//vector.y += sbs->ToLocal(mBody->getLinearVelocity().y);
-
-	//mBody->setLinearVelocity(sbs->ToRemote(vector));
-	if (vector.y == 0)
-	{
-		if (GetGravityStatus() == true)
-			mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), mBody->getLinearVelocity().y, sbs->ToRemote(-vector.z)));
-		else
-			mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), 0, sbs->ToRemote(-vector.z)));
-	}
-	else
-	{
-		mBody->setLinearVelocity(Ogre::Vector3(sbs->ToRemote(vector.x), 0, sbs->ToRemote(-vector.z)));
-		mBody->applyForce(Ogre::Vector3(0, sbs->ToRemote(vector.y * 50), 0), Ogre::Vector3::ZERO);
-	}
-
-	//bounce when hitting an object
-	/*Ogre::Vector3 diff = sbs->ToLocal(mBody->getWorldPosition()) - previous_location;
-	if ((vector.z > 1 && diff.z < 0.01) || (vector.x > 1 && diff.x < 0.01) && vector.y == 0)
-		velocity.y = 10;*/
-	//printf("vel: %g - pos change: %g\n", vector.z, sbs->ToLocal(-mBody->getWorldPosition().z) - previous_location.z);
-	previous_location = sbs->ToLocal(mBody->getWorldPosition());
+	mCharacter->setWalkDirection(vector, speed);
 
 	return true;
 }
@@ -798,29 +777,6 @@ void Camera::CreateColliders()
 	EnableGravity(GravityStatus);*/
 }
 
-float Camera::ComputeMaxInterval(Ogre::Vector3 intervalSize)
-{
-	float max_interval;
-	if (fabs(intervalSize.x) < SMALL_EPSILON || fabs(velocity.x) < SMALL_EPSILON)
-		intervalSize.x = 1;
-	else
-		intervalSize.x /= fabs(velocity.x);
-
-	if (fabs(intervalSize.y) < SMALL_EPSILON || fabs(velocity.y) < SMALL_EPSILON)
-		intervalSize.y = 1;
-	else
-		intervalSize.y /= fabs(velocity.y);
-
-	if (fabs(intervalSize.z) < SMALL_EPSILON || fabs(velocity.z) < SMALL_EPSILON)
-		intervalSize.z = 1;
-	else
-		intervalSize.z /= fabs(velocity.z);
-
-	max_interval = std::min(intervalSize.x, intervalSize.y);
-	max_interval = std::min(max_interval, intervalSize.z);
-	return max_interval;
-}
-
 void Camera::Loop()
 {
 	//calculate acceleration
@@ -832,29 +788,7 @@ void Camera::Loop()
 	if (delta > .3f)
 		delta = .3f;
 
-	/*Ogre::Vector3 intervalSize;
-	intervalSize.x = std::min(cfg_body_width, cfg_legs_width);
-	intervalSize.y = std::min(cfg_body_height, cfg_legs_height);
-	intervalSize.z = std::min(cfg_body_depth, cfg_legs_depth);
-
-	float maxinterval = ComputeMaxInterval(intervalSize - Ogre::Vector3(0.005f));
-	maxinterval /= speed; //compensate for speed
-
-	int max_iter = 20;
-
-	while (delta > maxinterval && max_iter > 0)
-	{
-		max_iter--;
-		RotateLocal(angle_velocity, maxinterval * speed);
-		//printf("max_iter = %d, maxinterval = %g, delta = %g\n", max_iter, maxinterval, delta);
-		delta -= maxinterval;
-		maxinterval = ComputeMaxInterval(intervalSize);
-		maxinterval /= speed; //compensate for speed
-		maxinterval -= 0.005f; //err on the side of safety
-	}
-
-	if (delta)*/
-		RotateLocal(angle_velocity, delta * speed);
+	RotateLocal(angle_velocity, delta * speed);
 
 	Move(velocity, speed);
 
@@ -887,8 +821,9 @@ void Camera::Float(float speed)
 
 void Camera::Jump()
 {
-	velocity.y = cfg_jumpspeed;
-	desired_velocity.y = 0.0f;
+	//velocity.y = cfg_jumpspeed;
+	//desired_velocity.y = 0.0f;
+	mCharacter->jump();
 }
 
 void Camera::Look(float speed)
@@ -968,7 +903,7 @@ void Camera::EnableGravity(bool value)
 	{
 		//stop all velocity
 		sbs->mWorld->setGravity(Ogre::Vector3::ZERO);
-		mBody->setLinearVelocity(Ogre::Vector3::ZERO);
+		//mBody->setLinearVelocity(Ogre::Vector3::ZERO);
 		velocity.y = 0;
 		desired_velocity.y = 0;
 	}
@@ -1026,7 +961,7 @@ void Camera::EnableCollisions(bool value)
 		return;
 
 	Collisions = value;
-	mBody->enableCollisions(value);
+	//mBody->enableCollisions(value);
 }
 
 bool Camera::CollisionsEnabled()
@@ -1036,17 +971,5 @@ bool Camera::CollisionsEnabled()
 
 bool Camera::IsOnGround()
 {
-	//return true or false depending on if the camera is on the ground - uses Bullet raycasting
-	//this function currently doesn't work properly
-
-	//cast a ray from the camera position downwards
-	Ogre::Ray ray (CameraNode->getPosition(), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	
-	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2));
-
-	//check for collision
-	sbs->mWorld->launchRay(callback);
-
-	return callback.doesCollide();
+	return mCharacter->onGround();
 }
