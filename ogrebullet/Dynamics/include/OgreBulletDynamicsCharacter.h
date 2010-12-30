@@ -50,63 +50,40 @@ namespace OgreBulletDynamics
     public:
 	    CharacterController(const Ogre::String &name, 
 				  DynamicsWorld *world,
-				  Ogre::SceneNode *node);
+				  Ogre::SceneNode *node,
+				  float width,
+				  float height,
+				  float stepHeight);
 
 	    virtual ~CharacterController();
 
 	void addToWorld();
 	void removeFromWorld();
-        void setLinearVelocity(const Ogre::Vector3 &vel);
-        void setLinearVelocity(const Ogre::Real x, const Ogre::Real y, const Ogre::Real z);
-		Ogre::Vector3 getLinearVelocity();
-        void setAngularVelocity(const Ogre::Vector3 &vel);
-        void setAngularVelocity(const Ogre::Real x, const Ogre::Real y, const Ogre::Real z);
-		Ogre::Vector3 getAngularVelocity();
-        void setAngularFactor(const Ogre::Vector3 &vel);
-        void setAngularFactor(const Ogre::Real x, const Ogre::Real y, const Ogre::Real z);
-		Ogre::Vector3 getAngularFactor();
-        void applyImpulse(const Ogre::Vector3 &impulse, const Ogre::Vector3 &position);
-        void applyForce(const Ogre::Vector3 &impulse, const Ogre::Vector3 &position);
-		void setSleepingThresholds( const Ogre::Real linear, const Ogre::Real angular );
-		void setGravity(const Ogre::Vector3 &gravity);
-		Ogre::Vector3 getGravity();
 
-
-        inline btRigidBody*         getBulletRigidBody() const;
-        inline btDynamicsWorld*     getBulletDynamicsWorld() const;
         inline DynamicsWorld*       getDynamicsWorld();
 
         Ogre::SceneNode*  getSceneNode() const {return mRootNode;};
 
-        inline void disableDeactivation();
-        inline void enableActiveState ();
-        inline void forceActivationState();
-        void setDeactivationTime(const float ftime);
+	void setWalkDirection( const Ogre::Vector3 &dir, const Ogre::Real speed );
+	void setVelocityForTimeInterval( const Ogre::Vector3 &velocity, const Ogre::Real timeInterval );
+	void reset();
+	void warp(const Ogre::Vector3 &origin);
+	void setFallSpeed(Ogre::Real speed);
+	void setJumpSpeed(Ogre::Real speed);
+	void setMaxJumpHeight(Ogre::Real height);
+	void jump();
+	bool canJump();
+	void setGravity(Ogre::Real gravity);
+	Ogre::Real getGravity();
+	void setMaxSlope(Ogre::Real radians);
+	Ogre::Real getMaxSlope();
+	bool onGround();
 
-        inline const btTransform &getCenterOfMassTransform() const;
-        inline Ogre::Quaternion    getCenterOfMassOrientation () const;
-        inline Ogre::Vector3 getCenterOfMassPosition() const;
-
-        Ogre::Vector3       getCenterOfMassPivot (const Ogre::Vector3 &pivotPosition) const;
-        
-        void setDamping( const Ogre::Real linearDamping, const Ogre::Real angularDamping );
 	protected:
 		short mCollisionGroup;
 		short mCollisionMask;
 		bool in_world;
 		btKinematicCharacterController *m_character;
-    };
-    // -------------------------------------------------------------------------
-    // basic rigid body class inline methods
-    // -------------------------------------------------------------------------
-    /*inline btRigidBody*  RigidBody::getBulletRigidBody() const 
-    {
-        return static_cast <btRigidBody* > (mObject);
-    };*/
-    // -------------------------------------------------------------------------
-    inline btDynamicsWorld*     CharacterController::getBulletDynamicsWorld() const 
-    { 
-        return static_cast <btDynamicsWorld * > (mWorld->getBulletCollisionWorld ());
     };
     // -------------------------------------------------------------------------
     inline DynamicsWorld*       CharacterController::getDynamicsWorld() 

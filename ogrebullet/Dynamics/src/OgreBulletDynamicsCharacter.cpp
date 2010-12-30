@@ -46,7 +46,7 @@ namespace OgreBulletDynamics
 {
 
     // -------------------------------------------------------------------------
-    CharacterController::CharacterController(const String &name, DynamicsWorld *world, Ogre::SceneNode *node)
+    CharacterController::CharacterController(const String &name, DynamicsWorld *world, Ogre::SceneNode *node, float width, float height, float stepHeight)
         :	
         Object(name, world, false)
     {
@@ -61,13 +61,10 @@ namespace OgreBulletDynamics
 		btPairCachingGhostObject* ghost = new btPairCachingGhostObject();
 		mObject = ghost;
 		mObject->setWorldTransform(startTransform);
-		getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-		btScalar characterHeight=1.75;
-	        btScalar characterWidth =1.75;
-	        btConvexShape* capsule = new btCapsuleShape(characterWidth,characterHeight);
+		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	        btConvexShape* capsule = new btCapsuleShape(width, height);
 		mObject->setCollisionShape (capsule);
 		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
-		btScalar stepHeight = btScalar(0.35);
 	        m_character = new btKinematicCharacterController (ghost,capsule,stepHeight);
 
 		addToWorld();
@@ -77,15 +74,15 @@ namespace OgreBulletDynamics
     CharacterController::~CharacterController()
     {
 		mShapeNode->detachObject(this);
-   }  
+    }  
 	void CharacterController::addToWorld()
 	{
 		if (in_world == true)
 			return;
 
 		//add collider to world
-		getBulletDynamicsWorld()->addCollisionObject(mObject,btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
-		getBulletDynamicsWorld()->addAction(m_character);
+		getDynamicsWorld()->getBulletDynamicsWorld()->addCollisionObject(mObject,btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
+		getDynamicsWorld()->getBulletDynamicsWorld()->addAction(m_character);
 
 		//attach scene node
 		mShapeNode->attachObject(this);
@@ -97,107 +94,68 @@ namespace OgreBulletDynamics
 			return;
 
 		//remove collider from world
-		getBulletDynamicsWorld()->removeCollisionObject(mObject);
+		getDynamicsWorld()->getBulletDynamicsWorld()->removeCollisionObject(mObject);
 
 		//detach scene node
 		mShapeNode->detachObject(this);
 		in_world = false;
 	}
 
-	// -------------------------------------------------------------------------
-    void CharacterController::setLinearVelocity( const Ogre::Vector3 &vel )
+    void CharacterController::setWalkDirection( const Ogre::Vector3 &dir, const Ogre::Real speed )
     {
-        //getBulletCharacterController()->setLinearVelocity (btVector3(vel.x, vel.y, vel.z));
+	m_character->setWalkDirection(btVector3(dir.x * speed, dir.y * speed, dir.z * speed));	
     }
-    // -------------------------------------------------------------------------
-    void CharacterController::setLinearVelocity( const Ogre::Real x, const Ogre::Real y, const Ogre::Real z )
+    void CharacterController::setVelocityForTimeInterval( const Ogre::Vector3 &velocity, const Ogre::Real timeInterval )
     {
-        //getBulletCharacterController()->setLinearVelocity (btVector3(x, y, z));
+    	m_character->setVelocityForTimeInterval(btVector3(velocity.x, velocity.y, velocity.z), timeInterval);
     }
-    // -------------------------------------------------------------------------
-	Ogre::Vector3 CharacterController::getLinearVelocity()
-	{
-		//const btVector3 lv = getBulletCharacterController()->getLinearVelocity();
-		//return BtOgreConverter::to(lv);
-		return Ogre::Vector3::ZERO;
-	}
-    // -------------------------------------------------------------------------
-    void CharacterController::setAngularVelocity( const Ogre::Vector3 &vel )
+    void CharacterController::reset()
     {
-        //getBulletCharacterController()->setAngularVelocity (btVector3(vel.x, vel.y, vel.z));
+    	m_character->reset();
     }
-    // -------------------------------------------------------------------------
-    void CharacterController::setAngularVelocity( const Ogre::Real x, const Ogre::Real y, const Ogre::Real z )
+    void CharacterController::warp(const Ogre::Vector3 &origin)
     {
-        //getBulletCharacterController()->setAngularVelocity (btVector3(x, y, z));
+    	m_character->warp(btVector3(origin.x, origin.y, origin.z));
     }
-    // -------------------------------------------------------------------------
-	Ogre::Vector3 CharacterController::getAngularVelocity()
-	{
-		//const btVector3 lv = getBulletCharacterController()->getAngularVelocity();
-		//return BtOgreConverter::to(lv);
-		return Ogre::Vector3::ZERO;
-	}
-    // -------------------------------------------------------------------------
-    void CharacterController::setAngularFactor( const Ogre::Vector3 &vel )
+    void CharacterController::setFallSpeed(Ogre::Real speed)
     {
-        //getBulletCharacterController()->setAngularFactor (btVector3(vel.x, vel.y, vel.z));
+    	m_character->setFallSpeed(speed);
     }
-    // -------------------------------------------------------------------------
-    void CharacterController::setAngularFactor( const Ogre::Real x, const Ogre::Real y, const Ogre::Real z )
+    void CharacterController::setJumpSpeed(Ogre::Real speed)
     {
-        //getBulletCharacterController()->setAngularFactor (btVector3(x, y, z));
+	m_character->setJumpSpeed(speed);
     }
-    // -------------------------------------------------------------------------
-	Ogre::Vector3 CharacterController::getAngularFactor()
-	{
-		//const btVector3 lv = getBulletCharacterController()->getAngularFactor();
-		//return BtOgreConverter::to(lv);
-		return Ogre::Vector3::ZERO;
-	}
-    // -------------------------------------------------------------------------
-    void CharacterController::setSleepingThresholds( const Ogre::Real linear, const Ogre::Real angular )
+    void CharacterController::setMaxJumpHeight(Ogre::Real height)
     {
-        //getBulletCharacterController()->setSleepingThresholds (linear, angular);
+	m_character->setMaxJumpHeight(height);
     }
-    // -------------------------------------------------------------------------
-    void CharacterController::applyImpulse( const Ogre::Vector3 &impulse, const Ogre::Vector3 &position )
+    void CharacterController::jump()
     {
-        //getBulletCharacterController()->applyImpulse (OgreBtConverter::to(impulse), OgreBtConverter::to(position));
+    	m_character->jump();
     }
-    // -------------------------------------------------------------------------
-    void CharacterController::applyForce( const Ogre::Vector3 &impulse, const Ogre::Vector3 &position )
+    bool CharacterController::canJump()
     {
-        //getBulletCharacterController()->applyForce(OgreBtConverter::to(impulse), OgreBtConverter::to(position));
+    	return m_character->canJump();
     }
-    // -------------------------------------------------------------------------
-    Ogre::Vector3 CharacterController::getCenterOfMassPivot( const Ogre::Vector3 &pivotPosition ) const
+    void CharacterController::setGravity(Ogre::Real gravity)
     {
-        //const btVector3 centerOfMassPivot(getCenterOfMassTransform().inverse()* OgreBtConverter::to(pivotPosition));
-        //return BtOgreConverter::to(centerOfMassPivot);
-	return Ogre::Vector3::ZERO;
+    	m_character->setGravity(gravity);
     }
-    // -------------------------------------------------------------------------
-    void CharacterController::setDeactivationTime( const float ftime )
+    Ogre::Real CharacterController::getGravity()
     {
-        //getBulletCharacterController()->setDeactivationTime( ftime );
+    	return m_character->getGravity();
     }
-    // -------------------------------------------------------------------------
-    void CharacterController::setDamping( const Ogre::Real linearDamping, const Ogre::Real angularDamping )
+    void CharacterController::setMaxSlope(Ogre::Real radians)
     {
-        //getBulletCharacterController()->setDamping( linearDamping,  angularDamping);
+    	m_character->setMaxSlope(radians);
     }
-    // -------------------------------------------------------------------------
-	void CharacterController::setGravity( const Ogre::Vector3 &gravity )
-	{
-		//getBulletCharacterController()->setGravity(OgreBtConverter::to(gravity));
-	}
-    // -------------------------------------------------------------------------
-	Ogre::Vector3 CharacterController::getGravity()
-	{
-		//const btVector3 gravity = getBulletCharacterController()->getGravity();
-		//return BtOgreConverter::to(gravity);
-		return Ogre::Vector3::ZERO;
-	}
+    Ogre::Real CharacterController::getMaxSlope()
+    {
+    	return m_character->getMaxSlope();
+    }
+    bool CharacterController::onGround()
+    {
+    	return m_character->onGround();
+    }
 }
 
