@@ -55,29 +55,29 @@ namespace OgreBulletDynamics
 				  float height,
 				  float stepHeight);
 
-	    virtual ~CharacterController();
+		virtual ~CharacterController();
 
-	void addToWorld();
-	void removeFromWorld();
+		void addToWorld();
+		void removeFromWorld();
 
-        inline DynamicsWorld*       getDynamicsWorld();
+		inline DynamicsWorld*       getDynamicsWorld();
 
-        Ogre::SceneNode*  getSceneNode() const {return mRootNode;};
+		Ogre::SceneNode*  getSceneNode() const {return mRootNode;};
 
-	void setWalkDirection( const Ogre::Vector3 &dir, const Ogre::Real speed );
-	void setVelocityForTimeInterval( const Ogre::Vector3 &velocity, const Ogre::Real timeInterval );
-	void reset();
-	void warp(const Ogre::Vector3 &origin);
-	void setFallSpeed(Ogre::Real speed);
-	void setJumpSpeed(Ogre::Real speed);
-	void setMaxJumpHeight(Ogre::Real height);
-	void jump();
-	bool canJump();
-	void setGravity(Ogre::Real gravity);
-	Ogre::Real getGravity();
-	void setMaxSlope(Ogre::Real radians);
-	Ogre::Real getMaxSlope();
-	bool onGround();
+		void setWalkDirection( const Ogre::Vector3 &dir, const Ogre::Real speed );
+		void setVelocityForTimeInterval( const Ogre::Vector3 &velocity, const Ogre::Real timeInterval );
+		void reset();
+		void warp(const Ogre::Vector3 &origin);
+		void setFallSpeed(Ogre::Real speed);
+		void setJumpSpeed(Ogre::Real speed);
+		void setMaxJumpHeight(Ogre::Real height);
+		void jump();
+		bool canJump();
+		void setGravity(Ogre::Real gravity);
+		Ogre::Real getGravity();
+		void setMaxSlope(Ogre::Real radians);
+		Ogre::Real getMaxSlope();
+		bool onGround();
 
 	protected:
 		short mCollisionGroup;
