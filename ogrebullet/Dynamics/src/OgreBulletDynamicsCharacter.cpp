@@ -66,7 +66,7 @@ namespace OgreBulletDynamics
 		btConvexShape* capsule = new btCapsuleShape(width, height);
 		mObject->setCollisionShape (capsule);
 		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
-		m_character = new btKinematicCharacterController (ghost,capsule,stepHeight);
+		m_character = new btKinematicCharacterController(ghost, capsule, stepHeight);
 
 		addToWorld();
 		

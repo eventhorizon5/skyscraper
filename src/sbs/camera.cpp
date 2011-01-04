@@ -27,6 +27,7 @@
 #include <OgreSceneManager.h>
 #include <OgreBulletDynamicsCharacter.h>
 #include <OgreBulletCollisionsRay.h>
+#include <OgreBulletCollisionsCapsuleShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "callbutton.h"
@@ -67,10 +68,10 @@ Camera::Camera(Ogre::Camera *camera)
 	cfg_rotate_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015);
 	cfg_rotate_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015);
 	cfg_look_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookAccelerate", 0.028);
-	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 2.7);
+	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 3.0);
 	cfg_body_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64);
 	cfg_body_depth = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyDepth", 1.64);
-	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 2.3);
+	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 3.0);
 	cfg_legs_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
 	cfg_legs_depth = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsDepth", 1.312);
 	cfg_lookspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0);
@@ -85,8 +86,6 @@ Camera::Camera(Ogre::Camera *camera)
 	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
 	speed = 1;
 	Collisions = 0;
-	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
-	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719)); // 9.806 m/s/s
 	lastfloor = 0;
 	lastfloorset = false;
 	MouseDown = false;
@@ -105,13 +104,23 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
 	MainCamera->setFarClipDistance(0.0f);
-	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), 0));
+	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 4), 0));
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
 
 	//set up collider character
-	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width), sbs->ToRemote(cfg_body_height + cfg_legs_height), sbs->ToRemote(0.35));
+	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) - cfg_body_width), sbs->ToRemote(0.35));
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
+
+	//create debug shape
+	mCharacter->setShape(new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) - cfg_body_width), Ogre::Vector3::UNIT_Y));
+	mCharacter->showDebugShape(true);
+
+	//other movement options
+	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
+	mCharacter->setFallSpeed(sbs->ToRemote(177.65));
+	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719)); // 9.806 m/s/s
+	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
 }
 
 Camera::~Camera()
@@ -506,6 +515,9 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//get collided collision object
 	OgreBulletCollisions::Object* object = callback.getCollidedObject();
 
+	if (!object)
+		return;
+
 	//get name of collision object's parent scenenode (which is the same name as the mesh object)
 	meshname = object->getRootNode()->getName();
 
@@ -867,6 +879,7 @@ void Camera::SetGravity(float gravity)
 {
 	Gravity = gravity;
 	sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
+	mCharacter->setGravity(sbs->ToRemote(Gravity));
 }
 
 float Camera::GetGravity()
