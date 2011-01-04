@@ -68,6 +68,9 @@ namespace OgreBulletDynamics
 	        m_character = new btKinematicCharacterController (ghost,capsule,stepHeight);
 
 		addToWorld();
+		
+		getDynamicsWorld()->getBulletDynamicsWorld()->getBroadphase()->getOverlappingPairCache()->cleanProxyFromPairs(ghost->getBroadphaseHandle(),getDynamicsWorld()->getBulletDynamicsWorld()->getDispatcher());
+		reset();
 
     }
     // -------------------------------------------------------------------------
