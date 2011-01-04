@@ -126,6 +126,7 @@ public:
 	void EnableCollisions(bool value);
 	bool CollisionsEnabled();
 	bool IsOnGround();
+	void Sync();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

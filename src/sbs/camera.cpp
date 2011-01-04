@@ -134,7 +134,7 @@ void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
 	CameraNode->setPosition(sbs->ToRemote(vector));
-	mCharacter->updateTransform(true);
+	mCharacter->updateTransform(false);
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)
@@ -767,9 +767,6 @@ const char *Camera::GetClickedObjectCommandP()
 
 void Camera::Loop()
 {
-	//sync camera with collider
-	mCharacter->sync();
-
 	//calculate acceleration
 	InterpolateMovement();
 
@@ -790,6 +787,9 @@ void Camera::Loop()
 	Ogre::Vector3 front, top;
 	GetDirection(front, top);
 	sbs->SetListenerDirection(front, top);
+
+	//sync camera with collider
+	Sync();
 }
 
 void Camera::Strafe(float speed)
@@ -964,4 +964,10 @@ bool Camera::CollisionsEnabled()
 bool Camera::IsOnGround()
 {
 	return mCharacter->onGround();
+}
+
+void Camera::Sync()
+{
+	//sync scene node with bullet object
+	mCharacter->sync();
 }

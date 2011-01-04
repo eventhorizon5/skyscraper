@@ -444,6 +444,9 @@ void SBS::MainLoop()
 	float step = float(GetElapsedTime()) / 1000.0;
 	mWorld->stepSimulation(step, 2);
 
+	//sync camera to physics
+	camera->Sync();
+
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
