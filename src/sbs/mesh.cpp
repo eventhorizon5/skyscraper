@@ -815,6 +815,9 @@ void MeshObject::Enable(bool value)
 		//mBody->enableCollisions(value);
 	}
 
+	//show scenenode bounding box
+	//SceneNode->showBoundingBox(value);
+
 	enabled = value;
 }
 

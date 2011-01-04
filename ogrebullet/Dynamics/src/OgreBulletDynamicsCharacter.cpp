@@ -51,21 +51,22 @@ namespace OgreBulletDynamics
         Object(name, world, false)
     {
 		in_world = false;
-		mState = new ObjectState(this);
+		//mState = new ObjectState(this);
+		mState = 0;
 		mRootNode = node;
 		mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 		btTransform startTransform;
-	        startTransform.setIdentity ();
+		startTransform.setIdentity ();
 		startTransform.setOrigin (btVector3(node->getPosition().x,node->getPosition().y,node->getPosition().z));
 		showDebugShape(mWorld->getShowDebugShapes());
 		btPairCachingGhostObject* ghost = new btPairCachingGhostObject();
 		mObject = ghost;
 		mObject->setWorldTransform(startTransform);
 		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
-	        btConvexShape* capsule = new btCapsuleShape(width, height);
+		btConvexShape* capsule = new btCapsuleShape(width, height);
 		mObject->setCollisionShape (capsule);
 		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
-	        m_character = new btKinematicCharacterController (ghost,capsule,stepHeight);
+		m_character = new btKinematicCharacterController (ghost,capsule,stepHeight);
 
 		addToWorld();
 		
@@ -106,7 +107,7 @@ namespace OgreBulletDynamics
 
     void CharacterController::setWalkDirection( const Ogre::Vector3 &dir, const Ogre::Real speed )
     {
-	m_character->setWalkDirection(btVector3(dir.x * speed, dir.y * speed, dir.z * speed));	
+		m_character->setWalkDirection(btVector3(dir.x * speed, dir.y * speed, dir.z * speed));	
     }
     void CharacterController::setVelocityForTimeInterval( const Ogre::Vector3 &velocity, const Ogre::Real timeInterval )
     {
@@ -126,11 +127,11 @@ namespace OgreBulletDynamics
     }
     void CharacterController::setJumpSpeed(Ogre::Real speed)
     {
-	m_character->setJumpSpeed(speed);
+		m_character->setJumpSpeed(speed);
     }
     void CharacterController::setMaxJumpHeight(Ogre::Real height)
     {
-	m_character->setMaxJumpHeight(height);
+		m_character->setMaxJumpHeight(height);
     }
     void CharacterController::jump()
     {
@@ -160,5 +161,9 @@ namespace OgreBulletDynamics
     {
     	return m_character->onGround();
     }
+	void CharacterController::sync()
+	{
+		setTransform(mObject->getWorldTransform());
+	}
 }
 

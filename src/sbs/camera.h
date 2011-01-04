@@ -105,7 +105,6 @@ public:
 	int GetClickedObjectLine();
 	const char* GetClickedObjectCommand();
 	const char* GetClickedObjectCommandP();
-	void CreateColliders();
 	void Loop();
 	void Strafe(float speed);
 	void Step(float speed);

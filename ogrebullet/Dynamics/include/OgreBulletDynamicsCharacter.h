@@ -78,6 +78,7 @@ namespace OgreBulletDynamics
 		void setMaxSlope(Ogre::Real radians);
 		Ogre::Real getMaxSlope();
 		bool onGround();
+		void sync();
 
 	protected:
 		short mCollisionGroup;

@@ -27,8 +27,6 @@
 #include <OgreSceneManager.h>
 #include <OgreBulletDynamicsCharacter.h>
 #include <OgreBulletCollisionsRay.h>
-//#include <Shapes/OgreBulletCollisionsCapsuleShape.h>
-//#include <Shapes/OgreBulletCollisionsCylinderShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "callbutton.h"
@@ -111,15 +109,8 @@ Camera::Camera(Ogre::Camera *camera)
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
 
-	//set up physics parameters
-	//Ogre::Vector3 bounds = Ogre::Vector3(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote((cfg_body_height + cfg_legs_height) / 2), sbs->ToRemote(cfg_body_depth / 2));
-	//mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width / 2), sbs->ToRemote(cfg_body_height + cfg_legs_height), Ogre::Vector3::UNIT_Y);
-	//mShape = new OgreBulletCollisions::CylinderCollisionShape(bounds, Ogre::Vector3::UNIT_Y);
-	//mBody = new OgreBulletDynamics::RigidBody("CameraCollider", sbs->mWorld);
+	//set up collider character
 	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width), sbs->ToRemote(cfg_body_height + cfg_legs_height), sbs->ToRemote(0.35));
-	//mBody->setShape(CameraNode, mShape, 0.1, 0.5, 1);
-	//mBody->setSleepingThresholds(0, 0); //prevent object from deactivating
-	//mBody->setAngularFactor(0, 0, 0); //prevent other objects from affecting this object's rotation
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 }
 
@@ -221,7 +212,6 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(Ogre::Vector3 vector, float speed)
 {
 	//moves the camera in a relative amount specified by a vector
-	//don't send delta values to this function
 
 	if (MovementStopped == true && vector == Ogre::Vector3::ZERO)
 		return false;
@@ -234,7 +224,7 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	//multiply vector with camera's orientation, and flip X axis
 	vector = MainCamera->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
 
-	mCharacter->setWalkDirection(vector, speed);
+	mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
 
 	return true;
 }
@@ -763,22 +753,11 @@ const char *Camera::GetClickedObjectCommandP()
 	return object_cmd_processed.c_str();
 }
 
-void Camera::CreateColliders()
-{
-	// Define the player bounding box.
-
-	/*collider_actor.SetCollideSystem(sbs->collision_sys);
-	collider_actor.SetEngine(sbs->engine);
-	Ogre::Vector3 legs (cfg_legs_width, cfg_legs_height, cfg_legs_depth);
-	Ogre::Vector3 body (cfg_body_width, cfg_body_height, cfg_body_depth);
-	Ogre::Vector3 shift (0, -(cfg_legs_height + cfg_body_height), 0);
-	collider_actor.InitializeColliders (MainCamera, sbs->ToRemote(legs), sbs->ToRemote(body), sbs->ToRemote(shift));
-	collider_actor.SetCamera(MainCamera, true);
-	EnableGravity(GravityStatus);*/
-}
-
 void Camera::Loop()
 {
+	//sync camera with collider
+	mCharacter->sync();
+
 	//calculate acceleration
 	InterpolateMovement();
 
@@ -790,7 +769,7 @@ void Camera::Loop()
 
 	RotateLocal(angle_velocity, delta * speed);
 
-	Move(velocity, speed);
+	Move(velocity, delta * speed);
 
 	//sync sound listener object to camera position
 	sbs->SetListenerPosition(GetPosition());

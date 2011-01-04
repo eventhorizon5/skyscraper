@@ -315,9 +315,6 @@ bool SBS::Start()
 		free(textureboxes[i].buffer);
 	textureboxes.clear();
 
-	//initialize camera/actor
-	camera->CreateColliders();
-
 	//move camera to start location
 	camera->SetToStartPosition();
 	camera->SetToStartDirection();
@@ -3966,7 +3963,7 @@ void SBS::CalculateElapsedTime()
 		return;
 
 	//maximum number of milliseconds to hold timing info
-	unsigned int smoothing_limit = 100;
+	unsigned int smoothing_limit = 1000;
 	
 	//find oldest time to keep
 	std::deque<unsigned int>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
