@@ -890,11 +890,15 @@ float Camera::GetGravity()
 void Camera::EnableGravity(bool value)
 {
 	if (value == true)
+	{
 		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
+		mCharacter->setGravity(sbs->ToRemote(Gravity));
+	}
 	else
 	{
 		//stop all velocity
 		sbs->mWorld->setGravity(Ogre::Vector3::ZERO);
+		mCharacter->setGravity(0.0);
 		//mBody->setLinearVelocity(Ogre::Vector3::ZERO);
 		velocity.y = 0;
 		desired_velocity.y = 0;
