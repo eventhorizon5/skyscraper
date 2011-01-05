@@ -25,9 +25,9 @@
     if[%param9% = left | %param9% = right] Set 200 = %param5%
     if[%param9% = left | %param9% = right] Set 201 = %param5%
 
-    if[%param12% = false] AddDoorComponent %param1%, Main, %param2%, %param3%, %param4%, %param10%, %param11%, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param12% = false] AddDoorComponent %param1%, Main, %param2%, %param3%, %param4%, %param10%, %param11%, %param11% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
     if[%param12% = false] FinishDoors %param1%
-    if[%param12% = true] AddShaftDoorsComponent %param1%, Main, %param2%, %param3%, %param4%, %param10%, %param11%, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param12% = true] AddShaftDoorsComponent %param1%, Main, %param2%, %param3%, %param4%, %param10%, %param11%, %param11% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
     if[%param12% = true] FinishShaftDoors %param1%
 <EndFunction>
 
@@ -63,11 +63,11 @@
     if[%param9% = left | %param9% = right] Set 204 = %param5%
     if[%param9% = left | %param9% = right] Set 205 = %param5%
 
-    if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
-    if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
     if[%param11% = false] FinishDoors %param1%
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
     if[%param11% = true] FinishShaftDoors %param1%
 <EndFunction>
 
@@ -103,8 +103,8 @@
     if[%param9% = left | %param9% = right] Set 204 = %param5%
     if[%param9% = left | %param9% = right] Set 205 = %param5%
 
-    if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
-    if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
     if[%param11% = false] FinishDoors %param1%
 
     if[%param9% = front | %param9% = back] Set 201 = %param5%
@@ -112,8 +112,8 @@
     if[%param9% = left | %param9% = right] Set 203 = %param6%
     if[%param9% = left | %param9% = right] Set 206 = %param6%
 
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
     if[%param11% = true] FinishShaftDoors %param1%
 <EndFunction>
 
@@ -151,13 +151,13 @@
 
     if[%param9% = front | %param9% = left] WallOrientation = right
     if[%param9% = back | %param9% = right] WallOrientation = left
-    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, left, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, left, %param10% / 2, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) * 2, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
 
     if[%param9% = front | %param9% = left] WallOrientation = left
     if[%param9% = back | %param9% = right] WallOrientation = right
-    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, left, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) * 2, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
     if[%param11% = false] FinishDoors %param1%
     if[%param11% = true] FinishShaftDoors %param1%
 <EndFunction>
@@ -196,13 +196,13 @@
 
     if[%param9% = front | %param9% = left] WallOrientation = left
     if[%param9% = back | %param9% = right] WallOrientation = right
-    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, right, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
 
     if[%param9% = front | %param9% = left] WallOrientation = right
     if[%param9% = back | %param9% = right] WallOrientation = left
-    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, right, %param10%, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, right, %param10% / 2, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
     if[%param11% = false] FinishDoors %param1%
     if[%param11% = true] FinishShaftDoors %param1%
 <EndFunction>
@@ -259,17 +259,17 @@
 
     if[%param9% = front | %param9% = left] WallOrientation = right
     if[%param9% = back | %param9% = right] WallOrientation = left
-    if[%param11% = false] AddDoorComponent %param1%, Left2, %param2%, %param3%, %param4% / 2, left, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
-    if[%param11% = false] AddDoorComponent %param1%, Right2, %param2%, %param3%, %param4% / 2, right, %param10%, %208%, %210%, %209%, %211%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Left1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Right1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, %212%, %214%, %213%, %215%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Left2, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right2, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %208%, %210%, %209%, %211%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) / 2, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %212%, %214%, %213%, %215%, %param8%, 0, -1, 0, 0, 0
 
     if[%param9% = front | %param9% = left] WallOrientation = left
     if[%param9% = back | %param9% = right] WallOrientation = right
-    if[%param11% = false] AddDoorComponent %param1%, Left1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
-    if[%param11% = false] AddDoorComponent %param1%, Right1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, %212%, %214%, %213%, %215%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Left2, %param2%, %param3%, %param4% / 2, left, %param10%, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
-    if[%param11% = true] AddShaftDoorsComponent %param1%, Right2, %param2%, %param3%, %param4% / 2, right, %param10%, %208%, %210%, %209%, %211%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Left1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) / 2, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %212%, %214%, %213%, %215%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left2, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right2, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %208%, %210%, %209%, %211%, %param8%, 0, -1, 0, 0, 0
     if[%param11% = false] FinishDoors %param1%
     if[%param11% = true] FinishShaftDoors %param1%
 <EndFunction>
