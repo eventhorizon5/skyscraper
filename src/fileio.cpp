@@ -5048,12 +5048,12 @@ csString ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.GetData()) == false)
+			/*if (IsNumeric(one.GetData()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	temp1 = tmpcalc.Find("-", 1);
@@ -5069,12 +5069,12 @@ csString ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.GetData()) == false)
+			/*if (IsNumeric(one.GetData()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	temp1 = tmpcalc.Find("/", 1);
@@ -5090,12 +5090,12 @@ csString ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.GetData()) == false)
+			/*if (IsNumeric(one.GetData()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	temp1 = tmpcalc.Find("*", 1);
@@ -5111,12 +5111,12 @@ csString ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.GetData()) == false)
+			/*if (IsNumeric(one.GetData()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	return tmpcalc.GetData();
