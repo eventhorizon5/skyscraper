@@ -435,7 +435,6 @@ void SBS::MainLoop()
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
 	float elapsed = remaining_delta + (GetElapsedTime() / 1000.0);
-	printf("elapsed: %g\n", elapsed);
 
 	//calculate start and running time
 	if (start_time == 0)
@@ -2564,10 +2563,6 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 	int index = 0;
 	if (wall1a == true && wall2a == true)
 	{
-		wall1a = false;
-		wall1b = false;
-		wall2a = false;
-		wall2b = false;
 		DrawWalls(true, true, false, false, false, false);
 		if (fabs(wall_extents_x.x - wall_extents_x.y) > fabs(wall_extents_z.x - wall_extents_z.y))
 		{
@@ -2584,8 +2579,20 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 			AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th, true);
 		}
 		ResetWalls();
+		ResetDoorwayWalls();
 	}
 	return index;
+}
+
+void SBS::ResetDoorwayWalls()
+{
+	wall1a = false;
+	wall1b = false;
+	wall2a = false;
+	wall2b = false;
+	wall_extents_x = 0;
+	wall_extents_y = 0;
+	wall_extents_z = 0;
 }
 
 void SBS::SetAutoSize(bool x, bool y)
@@ -3929,7 +3936,6 @@ void SBS::AdvanceClock()
 		elapsed_time = current_time + ((unsigned long)-1 - last) + 1;
 	else
 		elapsed_time = current_time - last;
-	printf("%u\n", elapsed_time);
 	current_virtual_time += elapsed_time;
 	frame_times.push_back(current_time);
 	CalculateElapsedTime();

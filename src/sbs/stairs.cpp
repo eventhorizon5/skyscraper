@@ -391,6 +391,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	}
 
 	//cut area
+	sbs->ResetDoorwayWalls();
 	if (direction < 5)
 	{
 		CutWall(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), 1, "Stairs");

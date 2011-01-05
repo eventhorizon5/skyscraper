@@ -910,6 +910,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		float base2 = floorobj->Altitude + base; //absolute
 
 		//cut shaft and floor walls
+		sbs->ResetDoorwayWalls();
 		if (DoorDirection == false)
 		{
 			if (!shaft->CutWall(false, floor, Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), 1, "Shaft"))
