@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.8 Alpha - Debug Panel
-	Copyright (C)2004-2010 Ryan Thoryk
+	Copyright (C)2004-2011 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net

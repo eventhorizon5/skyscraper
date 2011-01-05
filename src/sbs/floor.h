@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Floor Class
 	The Skyscraper Project - Version 1.8 Alpha
-	Copyright (C)2004-2010 Ryan Thoryk
+	Copyright (C)2004-2011 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
