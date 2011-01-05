@@ -777,8 +777,8 @@ void Camera::Loop()
 		delta = .3f;
 
 	RotateLocal(angle_velocity, delta * speed);
-
-	Move(velocity, delta * speed);
+	//Move(velocity, delta * speed);
+	Move(velocity, speed / 60);
 
 	//sync sound listener object to camera position
 	sbs->SetListenerPosition(GetPosition());
