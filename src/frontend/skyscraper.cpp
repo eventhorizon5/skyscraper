@@ -379,18 +379,21 @@ bool Skyscraper::Initialize()
 	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
 	//initialize FMOD (sound)
+	Report("\nFMOD Sound System, copyright © Firelight Technologies Pty, Ltd., 1994-2010");
+
 	FMOD_RESULT result = FMOD::System_Create(&soundsys);
 	if (result != FMOD_OK)
 	{
-		printf("Error initializing FMOD\n");
+		printf("Error initializing sound\n");
 		return false;
 	}
 	result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
 	if (result != FMOD_OK)
 	{
-		printf("Error initializing FMOD\n");
+		printf("Error initializing sound\n");
 		return false;
 	}
+	Report("Sound initialized");
 
 	return true;
 }

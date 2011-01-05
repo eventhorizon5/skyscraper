@@ -4,7 +4,7 @@ http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
 
 Contents
-1. Legal Notice
+1. Legal Notices
 2. Introduction
 3. Release Notes
 4. Building and Installing
@@ -14,7 +14,7 @@ Contents
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1. Legal Notice
+1. Legal Notices
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -31,6 +31,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 For more information, see the LICENSE file.
+
+This software utilizes the FMOD sound system
+FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2010.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
