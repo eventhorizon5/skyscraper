@@ -33,6 +33,7 @@
 #include <OgreConfigFile.h>
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreFont.h>
+#include <OgreTimer.h>
 #include <fmod.hpp>
 
 #include "light.h"
@@ -309,10 +310,10 @@ public:
 	Ogre::Vector2 GetExtents(MeshObject* mesh, int coord, bool flip_z = false);
 	bool InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test);
 	void AdvanceClock();
-	unsigned int GetCurrentTime();
-	unsigned int GetRunTime();
-	unsigned int GetElapsedTime();
-	unsigned int GetElapsedTimeAverage();
+	unsigned long GetCurrentTime();
+	unsigned long GetRunTime();
+	unsigned long GetElapsedTime();
+	unsigned long GetElapsedTimeAverage();
 	std::string GetMountPath(const char *filename, std::string &newfilename);
 	void EnableVSync(bool value);
 	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
@@ -462,10 +463,12 @@ private:
 	int ObjectCount; //number of simulator objects
 
 	//internal clock
-	unsigned int current_time;
-	unsigned int current_virtual_time;
-	unsigned int elapsed_time;
-	unsigned int average_time;
+	unsigned long current_time;
+	unsigned long current_virtual_time;
+	unsigned long elapsed_time;
+	unsigned long average_time;
+	std::deque<unsigned long> frame_times;
+	Ogre::Timer *timer;
 
 	//config file
 	Ogre::ConfigFile configfile;
@@ -476,7 +479,6 @@ private:
 		std::string result;
 	};
 	std::vector<VerifyResult> verify_results;
-	std::deque<unsigned int> frame_times;
 
 	struct TexturePixelBox
 	{

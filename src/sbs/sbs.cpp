@@ -25,8 +25,6 @@
 
 #include <wx/wx.h>
 #include <wx/variant.h>
-#include <time.h>
-#include <sys/timeb.h>
 #include <OgreRoot.h>
 #include <OgreFileSystem.h>
 #include <OgreMaterialManager.h>
@@ -184,6 +182,7 @@ SBS::SBS()
 	listener_up.x = 0;
 	listener_up.y = 0;
 	listener_up.z = 0;
+	timer = new Ogre::Timer();
 }
 
 SBS::~SBS()
@@ -310,6 +309,8 @@ bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
+	timer->reset();
+
 	//free text texture memory
 	for (int i = 0; i < textureboxes.size(); i++)
 		free(textureboxes[i].buffer);
@@ -434,6 +435,7 @@ void SBS::MainLoop()
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
 	float elapsed = remaining_delta + (GetElapsedTime() / 1000.0);
+	printf("elapsed: %g\n", elapsed);
 
 	//calculate start and running time
 	if (start_time == 0)
@@ -3916,7 +3918,7 @@ void SBS::AdvanceClock()
 {
 	//advance the clock
 
-	unsigned int last = current_time;
+	unsigned long last = current_time;
 
 	//get current time
 	current_time = GetCurrentTime();
@@ -3924,35 +3926,34 @@ void SBS::AdvanceClock()
 		last = current_time;
 
 	if (current_time < last)
-		elapsed_time = current_time + ((unsigned int)-1 - last) + 1;
+		elapsed_time = current_time + ((unsigned long)-1 - last) + 1;
 	else
 		elapsed_time = current_time - last;
+	printf("%u\n", elapsed_time);
 	current_virtual_time += elapsed_time;
 	frame_times.push_back(current_time);
 	CalculateElapsedTime();
 }
 
-unsigned int SBS::GetCurrentTime()
+unsigned long SBS::GetCurrentTime()
 {
 	//get current time
-	timeb t;
-	ftime(&t);
-	return t.time * 1000 + t.millitm;
+	return timer->getMilliseconds();
 }
 
-unsigned int SBS::GetRunTime()
+unsigned long SBS::GetRunTime()
 {
 	//returns simulator run time
 	return current_virtual_time;
 }
 
-unsigned int SBS::GetElapsedTime()
+unsigned long SBS::GetElapsedTime()
 {
 	//returns the average elapsed time between frames
 	return elapsed_time;
 }
 
-unsigned int SBS::GetElapsedTimeAverage()
+unsigned long SBS::GetElapsedTimeAverage()
 {
 	//returns the actual elapsed time between the last two calls to AdvanceClock()
 	return average_time;
@@ -3969,7 +3970,7 @@ void SBS::CalculateElapsedTime()
 	unsigned int smoothing_limit = 1000;
 	
 	//find oldest time to keep
-	std::deque<unsigned int>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
+	std::deque<unsigned long>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
 
 	while (it != end)
 	{
