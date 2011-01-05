@@ -193,7 +193,6 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 		return;
 
 	std::vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
-	std::vector<WallPolygon*> ignore_list;
 
 	bool polycheck = false;
 
@@ -212,21 +211,9 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	}
 
 	//step through each polygon
-	for (int i = 0; i < wall->GetHandleCount(); i++)
+	int polycount = wall->GetHandleCount();
+	for (int i = 0; i < polycount; i++)
 	{
-		//skip created submeshes
-		bool ignorecheck = false;
-		for (int j = 0; j < (int)ignore_list.size(); j++)
-		{
-			if (ignore_list[j] == wall->GetHandle(i))
-			{
-				ignorecheck = true;
-				break;
-			}
-		}
-		if (ignorecheck == true)
-			continue;
-
 		//get name
 		std::string name = wall->GetHandle(i)->name;
 
@@ -502,10 +489,10 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 			//create new polygon
 			WallPolygon* handle = 0;
 			handle = wall->AddPolygon(name.c_str(), oldmat, newpolys, mapping, oldvector);
-			ignore_list.push_back(handle);
 
 			//reset search position
 			i--;
+			polycount--;
 			polycheck = false;
 		}
 	}
