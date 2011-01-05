@@ -5204,6 +5204,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 	std::string one;
 	std::string two;
 	int start, end;
+	CalcError = false;
 
 	//first remove all whitespace from the string
 	ReplaceAll(tmpcalc, " ", "");
@@ -5234,6 +5235,10 @@ std::string ScriptProcessor::Calc(const char *expression)
 				//call function recursively
 				std::string newdata;
 				newdata = Calc(tmpcalc.substr(start + 1, end - start - 1).c_str());
+
+				if (CalcError == true)
+					return newdata;
+
 				//construct new string
 				one = tmpcalc.substr(0, start);
 				if (end < (int)tmpcalc.length() - 1)
@@ -5244,7 +5249,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 			}
 			else
 			{
-				skyscraper->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+				CalcError = true;
 				return "false";
 			}
 		}
@@ -5275,13 +5281,18 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		if (end >= (int)tmpcalc.length() - 1 && operators > 0)
 		{
-			skyscraper->ReportError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
+			CalcError = true;
 			return "false";
 		}
 		if (operators > 1)
 		{
 			std::string newdata;
 			newdata = Calc(tmpcalc.substr(0, end).c_str());
+
+			if (CalcError == true)
+				return newdata;
+
 			//construct new string
 			two = tmpcalc.substr(end);
 			tmpcalc = newdata + two;
@@ -5306,6 +5317,15 @@ std::string ScriptProcessor::Calc(const char *expression)
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
 		}
+		else
+		{
+			if (IsNumeric(one.c_str()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
+		}
 	}
 	temp1 = tmpcalc.find("-", 1);
 	if (temp1 > 0)
@@ -5317,6 +5337,15 @@ std::string ScriptProcessor::Calc(const char *expression)
 			float tmpnum = atof(one.c_str()) - atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
+		}
+		else
+		{
+			if (IsNumeric(one.c_str()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
 		}
 	}
 	temp1 = tmpcalc.find("/", 1);
@@ -5330,6 +5359,15 @@ std::string ScriptProcessor::Calc(const char *expression)
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
 		}
+		else
+		{
+			if (IsNumeric(one.c_str()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
+		}
 	}
 	temp1 = tmpcalc.find("*", 1);
 	if (temp1 > 0)
@@ -5341,6 +5379,15 @@ std::string ScriptProcessor::Calc(const char *expression)
 			float tmpnum = atof(one.c_str()) * atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			return tmpcalc;
+		}
+		else
+		{
+			if (IsNumeric(one.c_str()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";
 		}
 	}
 	return tmpcalc;
