@@ -5340,12 +5340,12 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.c_str()) == false)
+			/*if (IsNumeric(one.c_str()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	temp1 = tmpcalc.find("-", 1);
@@ -5361,12 +5361,12 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.c_str()) == false)
+			/*if (IsNumeric(one.c_str()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	temp1 = tmpcalc.find("/", 1);
@@ -5382,12 +5382,12 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.c_str()) == false)
+			/*if (IsNumeric(one.c_str()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	temp1 = tmpcalc.find("*", 1);
@@ -5403,12 +5403,12 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			if (IsNumeric(one.c_str()) == false)
+			/*if (IsNumeric(one.c_str()) == false)
 				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
 			else
 				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";
+			return "false";*/
 		}
 	}
 	return tmpcalc;
