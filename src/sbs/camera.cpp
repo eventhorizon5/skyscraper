@@ -248,7 +248,6 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in world space
 
-	//Ogre::Vector3 rot = GetRotation() + (Ogre::Vector3(vector.x, 0, vector.z) * speed);
 	Ogre::Vector3 rot = GetRotation() + (vector.x * speed);
 
 	SetRotation(rot);
@@ -794,8 +793,7 @@ void Camera::Loop()
 	if (delta > .3f)
 		delta = .3f;
 
-	RotateLocal(angle_velocity, delta * speed);
-	//Move(velocity, delta * speed);
+	RotateLocal(Ogre::Vector3(angle_velocity.x * delta, angle_velocity.y / 60, angle_velocity.z * delta), speed);
 	Move(velocity, speed / 60);
 
 	//sync sound listener object to camera position
