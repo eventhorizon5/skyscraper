@@ -97,6 +97,8 @@ void Sound::SetPosition(const Ogre::Vector3& position, bool set_velocity)
 
 	Position = position;
 	Velocity = (vel.x, vel.y, vel.z);
+	if (!IsValid())
+		Reload();
 	if (channel)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 }
@@ -118,6 +120,8 @@ void Sound::SetVolume(float value)
 {
 	//set volume of sound
 	Volume = value;
+	if (!IsValid())
+		Reload();
 	if (channel)
 		channel->setVolume(value);
 }
@@ -133,6 +137,8 @@ void Sound::SetDistances(float min, float max)
 	//set minimum and maximum unattenuated distances
 	MinDistance = min;
 	MaxDistance = max;
+	if (!IsValid())
+		Reload();
 	if (channel)
 		channel->set3DMinMaxDistance(min, max);
 }
@@ -155,6 +161,8 @@ void Sound::SetDirection(Ogre::Vector3 direction)
 	vec.y = direction.y;
 	vec.z = direction.z;
 
+	if (!IsValid())
+		Reload();
 	if (channel)
 		channel->set3DConeOrientation(&vec);
 }
@@ -171,6 +179,8 @@ void Sound::SetDirectionalRadiation(float rad)
 
 void Sound::SetConeSettings(float inside_angle, float outside_angle, float outside_volume)
 {
+	if (!IsValid())
+		Reload();
 	if (channel)
 		channel->set3DConeSettings(inside_angle, outside_angle, outside_volume);
 }
@@ -178,6 +188,8 @@ void Sound::SetConeSettings(float inside_angle, float outside_angle, float outsi
 void Sound::Loop(bool value)
 {
 	SoundLoop = value;
+	if (!IsValid())
+		Reload();
 	if (channel)
 	{
 		if (value == true)
@@ -194,6 +206,8 @@ bool Sound::GetLoopState()
 
 void Sound::Pause()
 {
+	if (!IsValid())
+		return;
 	if (channel)
 		channel->setPaused(true);
 }
@@ -201,6 +215,8 @@ void Sound::Pause()
 bool Sound::IsPaused()
 {
 	bool paused = false;
+	if (!IsValid())
+		return true;
 	if (channel)
 		channel->getPaused(&paused);
 	return paused;
@@ -209,6 +225,9 @@ bool Sound::IsPaused()
 bool Sound::IsPlaying()
 {
 	bool result = false;
+
+	if (!IsValid())
+		return false;
 
 	if (!channel)
 		return false;
@@ -222,6 +241,8 @@ bool Sound::IsPlaying()
 void Sound::SetSpeed(int percent)
 {
 	Speed = percent;
+	if (!IsValid())
+		Reload();
 	if (!channel)
 		return;
 
@@ -235,12 +256,24 @@ int Sound::GetSpeed()
 
 void Sound::Stop()
 {
-	Pause();
-	Reset();
+	if (channel)
+		channel->stop();
+}
+
+bool Sound::IsValid()
+{
+	if (!channel)
+		return false;
+	bool playing;
+	if (channel->isPlaying(&playing) == FMOD_ERR_INVALID_HANDLE)
+		return false;
+	return true;
 }
 
 void Sound::Play(bool reset)
 {
+	if (!IsValid())
+		Reload();
 	if (reset == true)
 		Reset();
 	if (channel)
@@ -250,6 +283,26 @@ void Sound::Play(bool reset)
 void Sound::Reset()
 {
 	SetPlayPosition(0);
+}
+
+void Sound::Reload()
+{
+	//prepare sound (and keep paused)
+	FMOD_RESULT result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
+
+	if (result != FMOD_OK || !channel)
+		return;
+
+	//get default speed value
+	channel->getFrequency(&default_speed);
+
+	//load previously stored values into new sound objects
+	SetPosition(Position);
+	SetVolume(Volume);
+	SetDistances(MinDistance, MaxDistance);
+	SetDirection(Direction);
+	Loop(SoundLoop);
+	SetSpeed(Speed);
 }
 
 void Sound::Load(const char *filename, bool force)
@@ -264,8 +317,12 @@ void Sound::Load(const char *filename, bool force)
 		return;
 
 	//clear old object references
+	if (channel)
+		channel->stop();
+	channel = 0;
 	if (sound)
 		sound->release();
+	sound = 0;
 
 	//exit if sound is disabled
 	if (sbs->DisableSound == true)
@@ -284,27 +341,14 @@ void Sound::Load(const char *filename, bool force)
 		sbs->ReportError("Can't load file '" + Filename + "'");
 		return;
 	}
-
-	//prepare sound (and keep paused)
-	result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
-
-	//get default speed value
-	if (channel)
-		channel->getFrequency(&default_speed);
-
-	//load previously stored values into new sound objects
-	SetPosition(Position);
-	SetVolume(Volume);
-	SetDistances(MinDistance, MaxDistance);
-	SetDirection(Direction);
-	Loop(SoundLoop);
-	SetSpeed(Speed);
 }
 
 float Sound::GetPlayPosition()
 {
 	//returns the current sound playback position, in percent (1 = 100%)
 
+	if (!IsValid())
+		return 0.0;
 	if (!channel)
 		return -1;
 
@@ -323,6 +367,8 @@ void Sound::SetPlayPosition(float percent)
 {
 	//sets the current sound playback position, in percent (1 = 100%)
 
+	if (!IsValid())
+		Reload();
 	if (!channel)
 		return;
 

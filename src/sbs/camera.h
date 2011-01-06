@@ -129,6 +129,7 @@ public:
 	void Sync();
 	void SetMaxRenderDistance(float value);
 	float GetMaxRenderDistance();
+	void ShowDebugShape(bool value);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

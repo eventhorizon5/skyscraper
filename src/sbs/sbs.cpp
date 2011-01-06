@@ -448,6 +448,9 @@ void SBS::MainLoop()
 	//sync camera to physics
 	camera->Sync();
 
+	//update sound
+	soundsys->update();
+
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
@@ -2637,10 +2640,7 @@ void SBS::SetListenerPosition(const Ogre::Vector3 &position)
 	listener_position.z = position.z;
 
 	if (DisableSound == false)
-	{
 		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
-		soundsys->update();
-	}
 }
 
 void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
@@ -4029,6 +4029,7 @@ void SBS::ShowColliders(bool value)
 {
 	if (mWorld)
 		mWorld->setShowDebugShapes(value);
+	camera->ShowDebugShape(value);
 }
 
 void SBS::CacheFilename(std::string filename, std::string result)

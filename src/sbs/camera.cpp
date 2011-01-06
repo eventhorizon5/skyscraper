@@ -104,7 +104,6 @@ Camera::Camera(Ogre::Camera *camera)
 	//set up camera and scene nodes
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
-	MainCamera->setFarClipDistance(0.0f);
 	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 4), 0));
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
@@ -117,7 +116,6 @@ Camera::Camera(Ogre::Camera *camera)
 
 	//create debug shape
 	mCharacter->setShape(new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), Ogre::Vector3::UNIT_Y));
-	mCharacter->showDebugShape(true);
 
 	//other movement options
 	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
@@ -793,7 +791,7 @@ void Camera::Loop()
 	if (delta > .3f)
 		delta = .3f;
 
-	RotateLocal(Ogre::Vector3(angle_velocity.x * delta, angle_velocity.y / 60, angle_velocity.z * delta), speed);
+	RotateLocal(angle_velocity, delta * speed);
 	Move(velocity, speed / 60);
 
 	//sync sound listener object to camera position
@@ -975,7 +973,7 @@ void Camera::EnableCollisions(bool value)
 		return;
 
 	Collisions = value;
-	//mBody->enableCollisions(value);
+	mCharacter->enableCollisions(value);
 }
 
 bool Camera::CollisionsEnabled()
@@ -1004,4 +1002,9 @@ void Camera::SetMaxRenderDistance(float value)
 float Camera::GetMaxRenderDistance()
 {
 	return FarClip;
+}
+
+void Camera::ShowDebugShape(bool value)
+{
+	mCharacter->showDebugShape(value);
 }

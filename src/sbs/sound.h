@@ -63,6 +63,9 @@ public:
 
 private:
 
+	void Reload();
+	bool IsValid();
+
 	//sound data
 	FMOD::Sound *sound;
 	FMOD::Channel *channel;

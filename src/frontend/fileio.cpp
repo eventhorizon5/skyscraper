@@ -91,7 +91,7 @@ bool ScriptProcessor::LoadBuilding()
 	ReplaceLine = false;
 	nonexistent_files.clear();
 
-	while (line < (int)BuildingData.size() - 1)
+	while (line < (int)BuildingData.size())
 	{
 		if (Simcore->GetFloor(0) == 0)
 			TrimString(LineData);
