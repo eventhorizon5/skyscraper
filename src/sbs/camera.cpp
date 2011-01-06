@@ -116,8 +116,8 @@ Camera::Camera(Ogre::Camera *camera)
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
 	//create debug shape
-	//mCharacter->setShape(new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), Ogre::Vector3::UNIT_Y));
-	//mCharacter->showDebugShape(true);
+	mCharacter->setShape(new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), Ogre::Vector3::UNIT_Y));
+	mCharacter->showDebugShape(true);
 
 	//other movement options
 	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
@@ -167,9 +167,12 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	Ogre::Quaternion x(Ogre::Degree(vector.x), Ogre::Vector3::UNIT_X);
 	Ogre::Quaternion y(Ogre::Degree(vector.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion rot = x * y * z;
+	Ogre::Quaternion camrot = x * z;
+	Ogre::Quaternion bodyrot = y;
 	rotation = vector;
-	MainCamera->setOrientation(rot);
+	MainCamera->setOrientation(camrot);
+	mCharacter->setOrientation(bodyrot);
+	mCharacter->updateTransform(true);
 }
 
 Ogre::Vector3 Camera::GetPosition()
@@ -233,12 +236,9 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	if (vector == Ogre::Vector3::ZERO)
 		MovementStopped = true;
 
-	vector *= Ogre::Vector3(1, -1, 1);
-
 	//multiply vector with camera's orientation, and flip X axis
-	vector = MainCamera->getOrientation() * vector * Ogre::Vector3(-1, -1, 1);
+	vector = mCharacter->getRootNode()->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
 
-	Ogre::Vector3 v = MainCamera->getOrientation().zAxis();
 	mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
 
 	return true;
@@ -266,9 +266,21 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	if (vector == Ogre::Vector3::ZERO)
 		RotationStopped = true;
 
+	//rotate collider body on Y axis (left/right)
+	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
+	rotation.y += ydeg;
+
+	if (rotation.y > 360)
+		rotation.y -= 360;
+	if (rotation.y < 0)
+		rotation.y += 360;
+
+	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	mCharacter->setOrientation(rot);
+	mCharacter->updateTransform(true);
+
 	//rotate camera
 	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
-	MainCamera->yaw(Ogre::Radian(-vector.y) * speed);
 	MainCamera->roll(Ogre::Radian(vector.z) * speed);
 }
 
