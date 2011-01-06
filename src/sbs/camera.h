@@ -127,6 +127,8 @@ public:
 	bool CollisionsEnabled();
 	bool IsOnGround();
 	void Sync();
+	void SetMaxRenderDistance(float value);
+	float GetMaxRenderDistance();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -147,11 +149,11 @@ private:
 	int lastfloor;
 	bool lastfloorset;
 	float FOV; //default FOV angle
-	bool ResetOnGround;
 	Ogre::Vector3 rotation;
 	bool Collisions; //collision detection status
 	bool RotationStopped;
 	bool MovementStopped;
+	float FarClip;
 
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;

@@ -93,7 +93,8 @@ Camera::Camera(Ogre::Camera *camera)
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
-	ResetOnGround = sbs->GetConfigBool("Skyscraper.SBS.Camera.ResetOnGround", false);
+	//FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 73.7397);
+	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
@@ -107,6 +108,8 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 4), 0));
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
+	SetFOVAngle(FOV);
+	SetMaxRenderDistance(FarClip);
 
 	//set up collider character
 	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), sbs->ToRemote(1.0));
@@ -230,9 +233,12 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	if (vector == Ogre::Vector3::ZERO)
 		MovementStopped = true;
 
-	//multiply vector with camera's orientation, and flip X axis
-	vector = MainCamera->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
+	vector *= Ogre::Vector3(1, -1, 1);
 
+	//multiply vector with camera's orientation, and flip X axis
+	vector = MainCamera->getOrientation() * vector * Ogre::Vector3(-1, -1, 1);
+
+	Ogre::Vector3 v = MainCamera->getOrientation().zAxis();
 	mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
 
 	return true;
@@ -914,14 +920,16 @@ bool Camera::GetGravityStatus()
 void Camera::SetFOVAngle(float angle)
 {
 	//set camera FOV angle
-	//if (angle > 0 && angle < 179.63)
-		//CameraNode->SetFOVAngle(angle, sbs->g2d->GetWidth());
+	if (angle > 0 && angle < 179.63)
+	{
+		float ratio = MainCamera->getAspectRatio();
+		MainCamera->setFOVy(Ogre::Degree(angle / ratio));
+	}
 }
 
 float Camera::GetFOVAngle()
 {
-	//return MainCamera->GetFOVAngle();
-	return 0;
+	return MainCamera->getFOVy().valueDegrees() * MainCamera->getAspectRatio();
 }
 
 void Camera::SetToDefaultFOV()
@@ -974,4 +982,16 @@ void Camera::Sync()
 {
 	//sync scene node with bullet object
 	mCharacter->sync();
+}
+
+void Camera::SetMaxRenderDistance(float value)
+{
+	//set distance of camera's far clipping plane - set to 0 for infinite
+	MainCamera->setFarClipDistance(sbs->ToRemote(value));
+	FarClip = value;
+}
+
+float Camera::GetMaxRenderDistance()
+{
+	return FarClip;
 }
