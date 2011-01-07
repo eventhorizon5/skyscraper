@@ -261,22 +261,25 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 							break;
 					}
 
-					switch (vert_justify)
+					if (charheight < destRectangle.getHeight())
 					{
-						case 'c':
-							cursorY = (destRectangle.getHeight() - charheight + cursorY) / 2;
-							break;
+						switch (vert_justify)
+						{
+							case 'c':
+								cursorY = (destRectangle.getHeight() - charheight + cursorY) / 2;
+								break;
 
-						case 'b':
-							cursorY = (destRectangle.getHeight() - charheight + cursorY);
-							break;
+							case 'b':
+								cursorY = (destRectangle.getHeight() - charheight + cursorY);
+								break;
+						}
 					}
 					carriagereturn = false;
 				}
 
 				//abort - not enough space to draw
-				if ((cursorY + charheight) > destRectangle.getHeight())
-					goto stop;
+				/*if ((cursorY + charheight) > destRectangle.getHeight())
+					goto stop;*/
 
 				//draw pixel by pixel
 				for (size_t i = 0; i < GlyphTexCoords[strindex].getHeight(); i++)
