@@ -85,9 +85,10 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
      TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
  }
 
-void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, bool wordwrap)
+void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
 {
-	//justify is left by default - set to 'r' or 'c' for right or center
+	//justify is left 'l' by default - set to 'r' or 'c' for right or center
+	//vert_justify is top 't' by defautl - set to 'c' or 'b' for center or bottom
 
 	using namespace Ogre;
 
@@ -260,6 +261,16 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 							break;
 					}
 
+					switch (vert_justify)
+					{
+						case 'c':
+							cursorY = (destRectangle.getHeight() - charheight + cursorY) / 2;
+							break;
+
+						case 'b':
+							cursorY = (destRectangle.getHeight() - charheight + cursorY);
+							break;
+					}
 					carriagereturn = false;
 				}
 

@@ -777,13 +777,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		font->load();
 	}
 
-	/*Ogre::Font* font = g2d->GetFontServer()->LoadFont(font_filename2, font_size);
-	if (!font)
-	{
-		ReportError("AddTextToTexture: Invalid font '" + font_filename2 + "'");
-		return false;
-	}*/
-
 	//get original texture
 	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
 	if (ptr.isNull())
@@ -810,13 +803,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//create new empty texture
 	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_X8R8G8B8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
-	/*csRef<iTextureHandle> handle = g3d->GetTextureManager()->CreateTexture(width, height, csimg2D, "argb8", CS_TEXTURE_3D | CS_TEXTURE_NOMIPMAPS);
-	if (!handle)
-	{
-		ReportError("AddTextToTexture: Error creating texture '" + Name + "'");
-		handle = 0;
-		return false;
-	}*/
 
 	//get new texture dimensions, if it was resized
 	width = texture->getWidth();
@@ -849,9 +835,14 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		align = 'l';
 	if (hAlign == "right")
 		align = 'r';
+	char valign = 'c';
+	if (vAlign == "top")
+		valign = 't';
+	if (vAlign == "bottom")
+		valign = 'b';
 
 	//write text
-	WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align);
+	WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align, valign);
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
