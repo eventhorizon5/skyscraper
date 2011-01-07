@@ -185,11 +185,14 @@ Ogre::Vector3 Camera::GetPosition()
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 {
 	//returns the camera's current direction in front and top vectors
-	front = MainCamera->getOrientation().zAxis();
+
+	Ogre::Quaternion dir = MainCamera->getDerivedOrientation();
+
+	front = dir.zAxis();
 	front.x = -front.x; //convert to left-hand coordinate system
 	front.y = -front.y; //convert to left-hand coordinate system
 	front.normalise();
-	top = MainCamera->getOrientation().yAxis();
+	top = dir.yAxis();
 	top.z = -top.z; //convert to left-hand coordinate system
 	top.normalise();
 }
@@ -904,15 +907,10 @@ float Camera::GetGravity()
 void Camera::EnableGravity(bool value)
 {
 	if (value == true)
-	{
-		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
-		mCharacter->setGravity(sbs->ToRemote(Gravity));
-	}
+		SetGravity(Gravity);
 	else
 	{
-		//stop all velocity
-		sbs->mWorld->setGravity(Ogre::Vector3::ZERO);
-		mCharacter->setGravity(0.0);
+		SetGravity(0);
 		//mBody->setLinearVelocity(Ogre::Vector3::ZERO);
 		velocity.y = 0;
 		desired_velocity.y = 0;
