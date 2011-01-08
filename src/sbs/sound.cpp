@@ -59,6 +59,8 @@ Sound::~Sound()
 	{
 		Stop();
 		sound->release();
+		//delete sound;
+		sound = 0;
 		sbs->DecrementSoundCount();
 	}
 

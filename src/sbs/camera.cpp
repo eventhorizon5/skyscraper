@@ -127,7 +127,10 @@ Camera::Camera(Ogre::Camera *camera)
 Camera::~Camera()
 {
 	//Destructor
-	//MainCamera = 0;
+	CameraNode->detachAllObjects();
+	CameraNode->getParent()->removeChild(CameraNode);
+	delete CameraNode;
+
 	delete object;
 }
 

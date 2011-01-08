@@ -296,8 +296,22 @@ SBS::~SBS()
 	}
 	mWorld = 0;
 
+	//clear scene
+	//mSceneManager->clearScene();
+
 	ObjectArray.clear();
 	verify_results.clear();
+
+	if (timer)
+		delete timer;
+	timer = 0;
+
+	//remove all materials
+	Ogre::MaterialManager::getSingleton().removeAll();
+	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
+
+	//remove all textures
+	Ogre::TextureManager::getSingleton().removeAll();
 
 	//clear self reference
 	sbs = 0;
@@ -670,6 +684,11 @@ bool SBS::UnloadTexture(const char *name)
 	if (!wrapper.isNull())
 		return false;
 	Ogre::TextureManager::getSingleton().remove(name);
+	Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().getByName(name);
+	if (!wrapper.isNull())
+		return false;
+	Ogre::MaterialManager::getSingleton().remove(name);
+
 	return true;
 }
 

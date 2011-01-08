@@ -379,7 +379,7 @@ bool Skyscraper::Initialize()
 	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
 	//initialize FMOD (sound)
-	Report("\nFMOD Sound System, copyright © Firelight Technologies Pty, Ltd., 1994-2010");
+	Report("\nFMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2010");
 
 	FMOD_RESULT result = FMOD::System_Create(&soundsys);
 	if (result != FMOD_OK)
@@ -1085,7 +1085,12 @@ void Skyscraper::DeleteButtons()
 			button = &button5;
 	
 		if (button->node)
+		{
 			button->node->detachAllObjects();
+			button->node->getParent()->removeChild(button->node);
+			delete button->node;
+			button->node = 0;
+		}
 		if (button->rect)
 			delete button->rect;
 		button->rect = 0;
@@ -1097,7 +1102,12 @@ void Skyscraper::DeleteButtons()
 		button->active_button = 0;
 	}
 	if (background_node)
+	{
 		background_node->detachAllObjects();
+		background_node->getParent()->removeChild(background_node);
+		delete background_node;
+		background_node = 0;
+	}
 	if (background_rect)
 		delete background_rect;
 	background_rect = 0;
@@ -1187,6 +1197,9 @@ bool Skyscraper::SelectBuilding()
 bool Skyscraper::Start()
 {
 	//start simulator
+
+	//clear scene
+	//mSceneMgr->clearScene();
 
 	//resize main window
 	window->SetBackgroundColour(*wxBLACK);

@@ -765,7 +765,12 @@ MeshObject::~MeshObject()
 		Walls[i] = 0;
 	}
 
-	SceneNode->detachObject(Movable);
+	SceneNode->detachAllObjects();
+	SceneNode->getParent()->removeChild(SceneNode);
+	delete SceneNode;
+	SceneNode = 0;
+	delete Movable;
+	Movable = 0;
 
 	if (sbs->FastDelete == false)
 	{
