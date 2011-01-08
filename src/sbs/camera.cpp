@@ -115,7 +115,8 @@ Camera::Camera(Ogre::Camera *camera)
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
 	//create debug shape
-	mCharacter->setShape(new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), Ogre::Vector3::UNIT_Y));
+	mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), Ogre::Vector3::UNIT_Y);
+	mCharacter->setShape(mShape);
 
 	//other movement options
 	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
@@ -127,9 +128,16 @@ Camera::Camera(Ogre::Camera *camera)
 Camera::~Camera()
 {
 	//Destructor
+	if (mCharacter)
+		delete mCharacter;
+	if (mShape)
+		delete mShape;
+	std::string nodename = CameraNode->getChild(0)->getName();
 	CameraNode->detachAllObjects();
 	CameraNode->getParent()->removeChild(CameraNode);
-	delete CameraNode;
+	sbs->mSceneManager->destroySceneNode(nodename);
+	sbs->mSceneManager->destroySceneNode(CameraNode->getName());
+	CameraNode = 0;
 
 	delete object;
 }

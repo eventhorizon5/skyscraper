@@ -690,6 +690,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 
 	enabled = true;
 	mBody = 0;
+	mShape = 0;
 	can_move = movable;
 
 	std::string buffer;
@@ -747,12 +748,9 @@ MeshObject::~MeshObject()
 	if (mBody)
 		delete mBody;
 	mBody = 0;
-	//if (mObject)
-		//delete mObject;
-	//mObject = 0;
-	//if (mShape)
-		//delete mShape;
-	//mShape = 0;
+	if (mShape)
+		delete mShape;
+	mShape = 0;
 
 	//delete wall objects
 	for (int i = 0; i < (int)Walls.size(); i++)
@@ -765,17 +763,22 @@ MeshObject::~MeshObject()
 		Walls[i] = 0;
 	}
 
+	std::string nodename;
+	if (can_move == true)
+		nodename = SceneNode->getChild(0)->getName();
 	SceneNode->detachAllObjects();
 	SceneNode->getParent()->removeChild(SceneNode);
-	delete SceneNode;
+	if (can_move == true)
+		sbs->mSceneManager->destroySceneNode(nodename);
+	sbs->mSceneManager->destroySceneNode(SceneNode->getName());
+	sbs->mSceneManager->destroyEntity(Movable->getName());
 	SceneNode = 0;
-	delete Movable;
 	Movable = 0;
 
 	if (sbs->FastDelete == false)
 	{
 		sbs->DeleteMeshHandle(this);
-		//sbs->engine->WantToDie(MeshWrapper);
+		Ogre::MeshManager::getSingleton().remove(name);
 		MeshWrapper.setNull();
 	}
 
@@ -1578,7 +1581,7 @@ void MeshObject::CreateCollider()
 	//printf("%s\n", MeshWrapper->getName().c_str());
 
 	//initialize collider shape
-	OgreBulletCollisions::TriangleMeshCollisionShape* mShape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
+	OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
 
 	//add vertices to shape
 	for (int i = 0; i < Submeshes.size(); i++)
@@ -1589,16 +1592,17 @@ void MeshObject::CreateCollider()
 			tri.x = Triangles[i].triangles[j].x;
 			tri.y = Triangles[i].triangles[j].y;
 			tri.z = Triangles[i].triangles[j].z;
-			mShape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
+			shape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
 		}
 	}
 
 	//finalize shape
-	mShape->Finish();
+	shape->Finish();
 	std::string name = MeshWrapper->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	mBody->setStaticShape(SceneNode, mShape, 0.1, 0.5, can_move);
+	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	mShape = shape;
 }
 
 int MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance)

@@ -1088,7 +1088,6 @@ void Skyscraper::DeleteButtons()
 		{
 			button->node->detachAllObjects();
 			button->node->getParent()->removeChild(button->node);
-			delete button->node;
 			button->node = 0;
 		}
 		if (button->rect)
@@ -1105,7 +1104,6 @@ void Skyscraper::DeleteButtons()
 	{
 		background_node->detachAllObjects();
 		background_node->getParent()->removeChild(background_node);
-		delete background_node;
 		background_node = 0;
 	}
 	if (background_rect)
@@ -1199,7 +1197,7 @@ bool Skyscraper::Start()
 	//start simulator
 
 	//clear scene
-	//mSceneMgr->clearScene();
+	mSceneMgr->clearScene();
 
 	//resize main window
 	window->SetBackgroundColour(*wxBLACK);
