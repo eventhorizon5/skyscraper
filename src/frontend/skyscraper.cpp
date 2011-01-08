@@ -776,11 +776,6 @@ void Skyscraper::DrawBackground()
 	int w = mRenderWindow->getWidth();
 	int h = mRenderWindow->getHeight();
 
-	/*if (!g3d->BeginDraw(CSDRAW_2DGRAPHICS))
-		return;
-	g2d->Clear(0);
-	g2d->SetClipRect(0, 0, w, h);*/
-
 	DrawImage("data/menu.png", 0, -1, -1, false);
 
 	DrawImage("data/button_triton.png", &button1, 0, -0.08, true, "data/button_triton_selected.png", "data/button_triton_pressed.png");
@@ -1095,6 +1090,11 @@ void Skyscraper::DeleteButtons()
 			delete button->rect;
 		button->rect = 0;
 		button->filename = "";
+		button->filename_pressed = "";
+		button->filename_selected = "";
+		button->drawn_pressed = false;
+		button->drawn_selected = false;
+		button->active_button = 0;
 	}
 	if (background_node)
 		background_node->detachAllObjects();
