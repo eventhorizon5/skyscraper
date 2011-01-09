@@ -585,7 +585,12 @@ csVector3 SBS::GetPolygonDirection(csPoly3D &polygon)
 
 	//get largest normal
 
-	csVector3 normal = polygon.ComputeNormal();
+	//convert to remote values for precision compatibility with Alpha 7 and earlier
+	csPoly3D newpoly;
+	for (int i = 0; i < polygon.GetVertexCount(); i++)
+		newpoly.AddVertex(ToRemote(polygon[i]));
+
+	csVector3 normal = newpoly.ComputeNormal();
 
 	int largest_normal = 0; //x
 
