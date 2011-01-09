@@ -589,7 +589,12 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 
 	//get largest normal
 
-	Ogre::Vector3 normal = sbs->ComputeNormal(polygon);
+	//convert to remote values for precision compatibility with Alpha 7 and earlier
+	std::vector<Ogre::Vector3> newpoly;
+	for (int i = 0; i < polygon.size(); i++)
+		newpoly.push_back(Ogre::Vector3(ToRemote(polygon[i].x), ToRemote(polygon[i].y), ToRemote(polygon[i].z)));
+
+	Ogre::Vector3 normal = sbs->ComputeNormal(newpoly);
 
 	int largest_normal = 0; //x
 
