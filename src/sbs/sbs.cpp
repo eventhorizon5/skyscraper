@@ -619,29 +619,29 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	std::string texturename;
 	bool has_alpha = false;
 
-	if (use_alpha_color == false)
+	try
 	{
-		try
+		if (use_alpha_color == false)
 		{
 			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+
+			if (mTex.isNull())
+				return ReportError("Error loading texture" + filename2);
+			texturename = mTex->getName();
+			has_alpha = mTex->hasAlpha();
 		}
-		catch (Ogre::Exception &e)
+		else
 		{
-			return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+			//load based on chroma key for alpha
+
+			texturename = "kc_" + filename2;
+			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
+			has_alpha = true;
 		}
-
-		if (mTex.isNull())
-			return ReportError("Error loading texture" + filename2);
-		texturename = mTex->getName();
-		has_alpha = mTex->hasAlpha();
 	}
-	else
+	catch (Ogre::Exception &e)
 	{
-		//load based on chroma key for alpha
-
-		texturename = "kc_" + filename2;
-		loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-		has_alpha = true;
+		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
 	}
 
 	//create a new material

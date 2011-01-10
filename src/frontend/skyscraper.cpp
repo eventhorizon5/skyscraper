@@ -825,8 +825,18 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 			if (i == 2)
 				Filename = filename_pressed;
 
-			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
-			tex = Ogre::TextureManager::getSingleton().load(Filename, "General", Ogre::TEX_TYPE_2D, 0);
+			Ogre::MaterialPtr mat;
+			try
+			{
+				mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
+				tex = Ogre::TextureManager::getSingleton().load(Filename, "General", Ogre::TEX_TYPE_2D, 0);
+			}
+			catch (Ogre::Exception &e)
+			{
+				ReportError("Error loading texture " + Filename + "\n" + e.getDescription());
+				return;
+			}
+
 			mat->getTechnique(0)->getPass(0)->createTextureUnitState(Filename);
 			mat->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
 			mat->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
@@ -1375,9 +1385,18 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	params["externalWindowHandle"] = getOgreHandle();
 
 	//create the render window
-	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	try
+	{
+		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportError("Error creating render window\n" + e.getDescription());
+		return 0;
+	}
+
 	mRenderWindow->setActive(true);
-	
+
 	return mRenderWindow;
 }
 
