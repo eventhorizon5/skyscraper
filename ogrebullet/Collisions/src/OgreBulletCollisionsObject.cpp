@@ -40,6 +40,17 @@ THE SOFTWARE.
 using namespace Ogre;
 using namespace OgreBulletCollisions;
 
+#include "BulletCollision/CollisionDispatch/btInternalEdgeUtility.h"
+extern ContactAddedCallback             gContactAddedCallback;
+
+static bool CustomMaterialCombinerCallback(btManifoldPoint& cp, const btCollisionObject* colObj0,int partId0,int index0,const btCollisionObject* colObj1,int partId1,int index1)
+{
+
+        btAdjustInternalEdgeContacts(cp, colObj1, colObj0, partId1, index1);
+        //btAdjustInternalEdgeContacts(cp,colObj1,colObj0, partId1,index1, BT_TRIANGLE_CONVEX_BACKFACE_MODE);
+        //btAdjustInternalEdgeContacts(cp,colObj1,colObj0, partId1,index1, BT_TRIANGLE_CONVEX_DOUBLE_SIDED+BT_TRIANGLE_CONCAVE_DOUBLE_SIDED);
+}
+
 namespace OgreBulletCollisions
 {
     //-----------------------------------------------------------------------
@@ -63,6 +74,7 @@ namespace OgreBulletCollisions
             mObject = new btCollisionObject();
             mState = new ObjectState(this);
         }
+	gContactAddedCallback = CustomMaterialCombinerCallback;
     }
     // -------------------------------------------------------------------------
     Object::~Object()

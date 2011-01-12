@@ -28,6 +28,8 @@ THE SOFTWARE.
 -----------------------------------------------------------------------------
 */
 
+#include "BulletCollision/CollisionDispatch/btInternalEdgeUtility.h"
+
 #include "OgreBulletCollisions.h"
 
 #include "Shapes/OgreBulletCollisionsTrimeshShape.h"
@@ -83,8 +85,10 @@ namespace OgreBulletCollisions
         }
 
 		const bool useQuantizedAABB = true;
-        mShape = new btBvhTriangleMeshShape(mTriMesh, useQuantizedAABB);
-
+	btBvhTriangleMeshShape *trishape = new btBvhTriangleMeshShape(mTriMesh, useQuantizedAABB);
+	btTriangleInfoMap* triangleInfoMap = new btTriangleInfoMap();
+	btGenerateInternalEdgeInfo(trishape,triangleInfoMap);
+	mShape = trishape;
     }
 
 	//this constructor allows for adding triangles individually at a later stage.
@@ -126,7 +130,10 @@ namespace OgreBulletCollisions
 	void TriangleMeshCollisionShape::Finish()
 	{
 		const bool useQuantizedAABB = true;
-        mShape = new btBvhTriangleMeshShape(mTriMesh, useQuantizedAABB);
+		btBvhTriangleMeshShape *trishape = new btBvhTriangleMeshShape(mTriMesh, useQuantizedAABB);
+	        btTriangleInfoMap* triangleInfoMap = new btTriangleInfoMap();
+	        btGenerateInternalEdgeInfo(trishape,triangleInfoMap);
+	        mShape = trishape;
 	}
 
 	// -------------------------------------------------------------------------
