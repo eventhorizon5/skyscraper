@@ -49,6 +49,7 @@ static bool CustomMaterialCombinerCallback(btManifoldPoint& cp, const btCollisio
         btAdjustInternalEdgeContacts(cp, colObj1, colObj0, partId1, index1);
         //btAdjustInternalEdgeContacts(cp,colObj1,colObj0, partId1,index1, BT_TRIANGLE_CONVEX_BACKFACE_MODE);
         //btAdjustInternalEdgeContacts(cp,colObj1,colObj0, partId1,index1, BT_TRIANGLE_CONVEX_DOUBLE_SIDED+BT_TRIANGLE_CONCAVE_DOUBLE_SIDED);
+		return true;
 }
 
 namespace OgreBulletCollisions

@@ -66,18 +66,18 @@ namespace OgreBulletDynamics
 		btConvexShape* capsule = new btCapsuleShape(width, height);
 		mObject->setCollisionShape (capsule);
 		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
+		mObject->setContactProcessingThreshold(0.0);
 		m_character = new btKinematicCharacterController(ghost, capsule, stepHeight);
 
 		addToWorld();
 		
 		getDynamicsWorld()->getBulletDynamicsWorld()->getBroadphase()->getOverlappingPairCache()->cleanProxyFromPairs(ghost->getBroadphaseHandle(),getDynamicsWorld()->getBulletDynamicsWorld()->getDispatcher());
 		reset();
-
     }
     // -------------------------------------------------------------------------
     CharacterController::~CharacterController()
     {
-		mShapeNode->detachObject(this);
+		mShapeNode->detachAllObjects();
     }  
 	void CharacterController::addToWorld()
 	{

@@ -1259,7 +1259,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 		for (int j = 0; j < (int)vertices[i].size(); j++)
 		{
 			texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
-			texels[index].x = texel_temp.x;
+			texels[index].x = -texel_temp.x; //flip X for compatibility with right-hand coordinate system
 			texels[index].y = texel_temp.y;
 			index++;
 		}
