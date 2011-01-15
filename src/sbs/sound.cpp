@@ -267,7 +267,8 @@ bool Sound::IsValid()
 	if (!channel)
 		return false;
 	bool playing;
-	if (channel->isPlaying(&playing) == FMOD_ERR_INVALID_HANDLE)
+	FMOD_RESULT result = channel->isPlaying(&playing);
+	if (result == FMOD_ERR_INVALID_HANDLE || result == FMOD_ERR_CHANNEL_STOLEN)
 		return false;
 	return true;
 }
