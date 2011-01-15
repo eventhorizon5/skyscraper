@@ -145,7 +145,7 @@ Camera::~Camera()
 void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
-	CameraNode->setPosition(sbs->ToRemote(vector));
+	CameraNode->setPosition(sbs->ToRemote(vector) - MainCamera->getPosition());
 	mCharacter->updateTransform(false);
 }
 
@@ -188,7 +188,7 @@ Ogre::Vector3 Camera::GetPosition()
 {
 	//returns the camera's current position
 	if (CameraNode)
-		return sbs->ToLocal(CameraNode->getPosition());
+		return sbs->ToLocal(CameraNode->getPosition() + MainCamera->getPosition());
 	else
 		return Ogre::Vector3(0, 0, 0);
 }

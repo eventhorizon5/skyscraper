@@ -317,7 +317,13 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	//determine if user is in the stairwell
 
 	//if last position is the same as new, return previous result
-	if (position == lastposition && checkfirstrun == false)
+	if ((position.x >= (lastposition.x - 0.01)) &&
+		(position.y >= (lastposition.y - 0.01)) &&
+		(position.z >= (lastposition.z - 0.01)) &&
+		(position.x <= (lastposition.x + 0.01)) &&
+		(position.y <= (lastposition.y + 0.01)) &&
+		(position.z <= (lastposition.z + 0.01)) &&
+		checkfirstrun == false)
 		return lastcheckresult;
 
 	bool hit = false;
@@ -341,7 +347,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	if (position.y > bottom && position.y < top)
 	{
 		//check both the current floor and floor below
-		float distance = position.y - floorptr->FullHeight();
+		float distance = floorptr->FullHeight();
 		if (floor > startfloor)
 			hit = (GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0);
 		if (floor >= startfloor && floor <= endfloor)

@@ -261,7 +261,13 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 {
 	//if last position is the same as new, return previous result
-	if (position == lastposition && checkfirstrun == false)
+	if ((position.x >= (lastposition.x - 0.01)) &&
+		(position.y >= (lastposition.y - 0.01)) &&
+		(position.z >= (lastposition.z - 0.01)) &&
+		(position.x <= (lastposition.x + 0.01)) &&
+		(position.y <= (lastposition.y + 0.01)) &&
+		(position.z <= (lastposition.z + 0.01)) &&
+		checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;

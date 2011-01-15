@@ -2108,7 +2108,13 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 	int inelevator = false;
 
 	//if last position is the same as new, return previous result
-	if (position == lastposition && checkfirstrun == false)
+	if ((position.x >= (lastposition.x - 0.01)) &&
+		(position.y >= (lastposition.y - 0.01)) &&
+		(position.z >= (lastposition.z - 0.01)) &&
+		(position.x <= (lastposition.x + 0.01)) &&
+		(position.y <= (lastposition.y + 0.01)) &&
+		(position.z <= (lastposition.z + 0.01)) &&
+		checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;
@@ -2152,7 +2158,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 	lastcheckresult = false;
 	lastposition = position;
 
-	return inelevator;
+	return false;
 }
 
 float Elevator::GetElevatorStart()

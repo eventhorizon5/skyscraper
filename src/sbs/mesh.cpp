@@ -1629,7 +1629,7 @@ int MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direct
 			std::pair<bool, float> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
 			if (result.first == true)
 			{
-				if (result.second <= max_distance)
+				if (result.second <= sbs->ToRemote(max_distance))
 					return sbs->ToLocal(result.second);
 			}
 		}
