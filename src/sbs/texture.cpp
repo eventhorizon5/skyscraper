@@ -60,7 +60,51 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
      using namespace Ogre; 
      using std::fabs; 
      Image srcImg; 
-     srcImg.load(filename, resGroup); 
+	 Ogre::ColourValue keyCol2 = keyCol;
+
+	 String strExt;
+
+	 size_t pos = filename.find_last_of(".");
+	 if( pos != String::npos && pos < (filename.length() - 1))
+	 {
+		strExt = filename.substr(pos+1);
+	 }
+
+	 //srcImg.load(filename, resGroup); 
+	 DataStreamPtr encoded = ResourceGroupManager::getSingleton().openResource(filename, resGroup);
+	 SetCase(strExt, false);
+	 if (strExt == "gif")
+	 {
+		//get chroma transparency color from GIF file data
+	    uchar enabled;
+		uchar trans_color;
+		encoded->seek(784); //transparency enabled if value is 0x1
+		encoded->read(&enabled, 1);
+		encoded->seek(787); //transparency color
+		encoded->read(&trans_color, 1);
+
+		if (enabled == 1 && trans_color <= 255)
+		{
+			//get color value from image palette
+			uchar r, g, b;
+			uint pos = (uint(trans_color) * 3) + 13; //palette starts at offset 0x13
+			encoded->seek(pos);
+			encoded->read(&r, 1);
+			encoded->seek(pos + 1);
+			encoded->read(&g, 1);
+			encoded->seek(pos + 2);
+			encoded->read(&b, 1);
+			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 00 && b <= 255)
+			{
+				keyCol2.r = r / 255;
+				keyCol2.g = g / 255;
+				keyCol2.b = b / 255;
+			}
+		}
+		encoded->seek(0);
+	 }
+	srcImg.load(encoded, strExt);
+
      unsigned int width = srcImg.getWidth(), height = srcImg.getHeight();
      // Since Ogre 1.6 Shoggoth, the OGRE_ALLOC_T memory macro must be used:
      uchar* pixelData = OGRE_ALLOC_T(uchar, PixelUtil::getMemorySize(width, height, 1, PF_A8R8G8B8), MEMCATEGORY_GENERAL);
@@ -71,7 +115,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
          for(unsigned int x = 0; x < width; ++x) 
          { 
              ColourValue pixCol = srcImg.getColourAt(x, y, 0); 
-             ColourValue diffCol = pixCol - keyCol; 
+             ColourValue diffCol = pixCol - keyCol2; 
              pixCol.a = ((fabs(diffCol.r) < threshold) && (fabs(diffCol.g) < threshold) && (fabs(diffCol.b) < threshold)) ? 0 : 1; 
              Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex)); 
              pxDataIndex += pxDataIndexStep; 
