@@ -855,6 +855,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//draw original image onto new texture
 	texture->getBuffer()->blit(background->getBuffer());
 
+	TrimString(hAlign);
+	TrimString(vAlign);
 	char align = 'c';
 	if (hAlign == "left")
 		align = 'l';

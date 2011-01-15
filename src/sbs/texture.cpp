@@ -110,7 +110,8 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	HardwarePixelBufferSharedPtr fontBuffer = fontTexture->getBuffer();
 	HardwarePixelBufferSharedPtr destBuffer = destTexture->getBuffer();
 
-	PixelBox destPb = destBuffer->lock(destRectangle, HardwareBuffer::HBL_NORMAL);
+	//PixelBox destPb = destBuffer->lock(destRectangle, HardwareBuffer::HBL_NORMAL);
+	PixelBox destPb = destBuffer->lock(Box(0, 0, destTexture->getWidth(), destTexture->getHeight()), HardwareBuffer::HBL_NORMAL);
 
 	// The font texture buffer was created write only...so we cannot read it back :o). One solution is to copy the buffer  instead of locking it. (Maybe there is a way to create a font texture which is not write_only ?)
 
@@ -141,18 +142,18 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	unsigned char* fontData = static_cast<unsigned char*>(textureboxes[index].box.data);
 	unsigned char* destData = static_cast<unsigned char*>(destPb.data);
 
-	const size_t fontPixelSize = PixelUtil::getNumElemBytes(textureboxes[index].box.format);
-	const size_t destPixelSize = PixelUtil::getNumElemBytes(destPb.format);
+	const int fontPixelSize = PixelUtil::getNumElemBytes(textureboxes[index].box.format);
+	const int destPixelSize = PixelUtil::getNumElemBytes(destPb.format);
 
-	const size_t fontRowPitchBytes = textureboxes[index].box.rowPitch * fontPixelSize;
-	const size_t destRowPitchBytes = destPb.rowPitch * destPixelSize;
+	const int fontRowPitchBytes = textureboxes[index].box.rowPitch * fontPixelSize;
+	const int destRowPitchBytes = destPb.rowPitch * destPixelSize;
 
 	Box *GlyphTexCoords;
 	GlyphTexCoords = new Box[str.size()];
 
 	Font::UVRect glypheTexRect;
-	size_t charheight = 0;
-	size_t charwidth = 0;
+	int charheight = 0; //max character height
+	int charwidth = 0; //max character width
 
 	for(unsigned int i = 0; i < str.size(); i++)
 	{
@@ -171,9 +172,9 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 		}
 	}
 
-	size_t cursorX = 0;
-	size_t cursorY = 0;
-	size_t lineend = destRectangle.getWidth();
+	int cursorX = 0;
+	int cursorY = 0;
+	int lineend = destRectangle.getWidth();
 	bool carriagereturn = true;
 	for (unsigned int strindex = 0; strindex < str.size(); strindex++)
 	{
@@ -191,18 +192,18 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 			default:
 			{
 				//wrapping
-				if ((cursorX + GlyphTexCoords[strindex].getWidth()> lineend) && !carriagereturn)
+				/*if ((cursorX + GlyphTexCoords[strindex].getWidth() > lineend) && !carriagereturn)
 				{
 					cursorY += charheight;
 					carriagereturn = true;
-				}
+				}*/
 
 				//justify
 				if (carriagereturn)
 				{
-					size_t l = strindex;
-					size_t textwidth = 0;
-					size_t wordwidth = 0;
+					int l = strindex;
+					int textwidth = 0;
+					int wordwidth = 0;
 
 					while((l < str.size()) && (str[l] != '\n'))
 					{
@@ -234,65 +235,70 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 							l++;
 						}
 
-						if ((textwidth + wordwidth) <= destRectangle.getWidth())
-							textwidth += (wordwidth);
-						else
-							break;
+						textwidth += wordwidth;
 					}
 
-					if ((textwidth == 0) && (wordwidth > destRectangle.getWidth()))
+					if (textwidth == 0)
 						textwidth = destRectangle.getWidth();
 
 					switch (justify)
 					{
 						case 'c':
-							cursorX = (destRectangle.getWidth() - textwidth)/2;
+							cursorX = destRectangle.left + (destRectangle.getWidth() / 2) - (textwidth / 2);
 							lineend = destRectangle.getWidth() - cursorX;
 							break;
 
 						case 'r':
-							cursorX = (destRectangle.getWidth() - textwidth);
+							cursorX = destRectangle.right - textwidth;
 							lineend = destRectangle.getWidth();
 							break;
 
 						default:
-							cursorX = 0;
+							cursorX = destRectangle.right;
 							lineend = textwidth;
 							break;
 					}
 
-					if (charheight < destRectangle.getHeight())
+					switch (vert_justify)
 					{
-						switch (vert_justify)
-						{
-							case 'c':
-								cursorY = (destRectangle.getHeight() - charheight + cursorY) / 2;
-								break;
+						case 'c':
+							cursorY = destRectangle.top + (destRectangle.getHeight() / 2) - (charheight / 2);
+							break;
 
-							case 'b':
-								cursorY = (destRectangle.getHeight() - charheight + cursorY);
-								break;
-						}
+						case 'b':
+							cursorY = destRectangle.bottom - charheight + cursorY;
+							break;
+						default:
+							cursorY = destRectangle.top;
 					}
 					carriagereturn = false;
 				}
 
 				//abort - not enough space to draw
-				/*if ((cursorY + charheight) > destRectangle.getHeight())
-					goto stop;*/
+				if ((cursorY + charheight) > destTexture->getHeight())
+				{
+					Report("Text '" + str + "' out of bounds\n");
+					goto stop;
+				}
+				//printf("%d, %d\n", cursorX, cursorY);
 
 				//draw pixel by pixel
-				for (size_t i = 0; i < GlyphTexCoords[strindex].getHeight(); i++)
-					for (size_t j = 0; j < GlyphTexCoords[strindex].getWidth(); j++)
+				for (int i = 0; i < GlyphTexCoords[strindex].getHeight(); i++)
+				{
+					for (int j = 0; j < GlyphTexCoords[strindex].getWidth(); j++)
 					{
 						float alpha =  color.a * (fontData[(i + GlyphTexCoords[strindex].top) * fontRowPitchBytes + (j + GlyphTexCoords[strindex].left) * fontPixelSize + 1] / 255.0);
 						float invalpha = 1.0 - alpha;
-						size_t offset = (i + cursorY) * destRowPitchBytes + (j + cursorX) * destPixelSize;
-						ColourValue pix;
-						PixelUtil::unpackColour(&pix, destPb.format, &destData[offset]);
-						pix = (pix * invalpha) + (color * alpha);
-						PixelUtil::packColour(pix, destPb.format, &destData[offset]);
+						int offset = (i + cursorY) * destRowPitchBytes + (j + cursorX) * destPixelSize;
+						if (offset >= 0)
+						{
+							ColourValue pix;
+							PixelUtil::unpackColour(&pix, destPb.format, &destData[offset]);
+							pix = (pix * invalpha) + (color * alpha);
+							PixelUtil::packColour(pix, destPb.format, &destData[offset]);
+						}
 					}
+				}
 
 				cursorX += GlyphTexCoords[strindex].getWidth();
 			}//default
