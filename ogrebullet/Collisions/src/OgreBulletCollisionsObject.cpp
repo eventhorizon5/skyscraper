@@ -234,9 +234,17 @@ namespace OgreBulletCollisions
 	void Object::enableCollisions(bool value)
 	{
 		if (value == true)
-			mObject->setCollisionFlags(mObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		{
+			//mObject->setCollisionFlags(mObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
+			mObject->getBroadphaseHandle()->m_collisionFilterGroup = btBroadphaseProxy::DefaultFilter;
+			mObject->getBroadphaseHandle()->m_collisionFilterMask = btBroadphaseProxy::AllFilter;
+		}
 		else
-			mObject->setCollisionFlags(mObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+		{
+			//mObject->setCollisionFlags(mObject->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+			mObject->getBroadphaseHandle()->m_collisionFilterGroup = btBroadphaseProxy::AllFilter;
+			mObject->getBroadphaseHandle()->m_collisionFilterMask = 0;
+		}
 	}
 }
 

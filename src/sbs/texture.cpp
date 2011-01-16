@@ -103,7 +103,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 		}
 		encoded->seek(0);
 	 }
-	srcImg.load(encoded, strExt);
+	 srcImg.load(encoded, strExt);
 
      unsigned int width = srcImg.getWidth(), height = srcImg.getHeight();
      // Since Ogre 1.6 Shoggoth, the OGRE_ALLOC_T memory macro must be used:
