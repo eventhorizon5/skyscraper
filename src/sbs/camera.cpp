@@ -842,7 +842,8 @@ void Camera::Jump()
 {
 	//velocity.y = cfg_jumpspeed;
 	//desired_velocity.y = 0.0f;
-	mCharacter->jump();
+	if (mCharacter->getGravity() != 0)
+		mCharacter->jump();
 }
 
 void Camera::Look(float speed)
@@ -926,6 +927,7 @@ void Camera::EnableGravity(bool value)
 		velocity.y = 0;
 		desired_velocity.y = 0;
 	}
+	mCharacter->reset();
 	GravityStatus = value;
 }
 
