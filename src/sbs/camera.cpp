@@ -903,11 +903,12 @@ void Camera::InterpolateMovement()
 	}
 }
 
-void Camera::SetGravity(float gravity)
+void Camera::SetGravity(float gravity, bool save_value)
 {
-	Gravity = gravity;
-	sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-Gravity), 0));
-	mCharacter->setGravity(sbs->ToRemote(Gravity));
+	if (save_value == true)
+		Gravity = gravity;
+	sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
+	mCharacter->setGravity(sbs->ToRemote(gravity));
 }
 
 float Camera::GetGravity()
@@ -921,8 +922,7 @@ void Camera::EnableGravity(bool value)
 		SetGravity(Gravity);
 	else
 	{
-		SetGravity(0);
-		//mBody->setLinearVelocity(Ogre::Vector3::ZERO);
+		SetGravity(0, false);
 		velocity.y = 0;
 		desired_velocity.y = 0;
 	}

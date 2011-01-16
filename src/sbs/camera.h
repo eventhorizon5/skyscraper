@@ -114,7 +114,7 @@ public:
 	void Turn(float speed);
 	void Spin(float speed);
 	void InterpolateMovement();
-	void SetGravity(float gravity);
+	void SetGravity(float gravity, bool save_value = true);
 	float GetGravity();
 	void EnableGravity(bool value);
 	bool GetGravityStatus();
