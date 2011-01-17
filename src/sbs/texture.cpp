@@ -87,7 +87,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 		{
 			//get color value from image palette
 			uchar r, g, b;
-			uint pos = (uint(trans_color) * 3) + 13; //palette starts at offset 0x13
+			Ogre::uint pos = (Ogre::uint(trans_color) * 3) + 13; //palette starts at offset 0x13
 			encoded->seek(pos);
 			encoded->read(&r, 1);
 			encoded->seek(pos + 1);
