@@ -1867,6 +1867,12 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 	}
 
 	//verify floor range
+	if (_startfloor > _endfloor)
+	{
+		ReportError("CreateShaft: starting floor is greater than ending floor");
+		return 0;
+	}
+
 	if (IsValidFloor(_startfloor) == false)
 	{
 		std::string num = Ogre::StringConverter::toString(_startfloor);
@@ -1901,6 +1907,11 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	}
 
 	//verify floor range
+	if (_startfloor > _endfloor)
+	{
+		ReportError("CreateStairwell: starting floor is greater than ending floor");
+		return 0;
+	}
 	if (IsValidFloor(_startfloor) == false)
 	{
 		std::string num = Ogre::StringConverter::toString(_startfloor);

@@ -988,7 +988,7 @@ int ScriptProcessor::ScriptError()
 
 	std::string result = message.substr(loc + 1);
 	TrimString(result);
-	return Ogre::StringConverter::parseInt(result);
+	return ScriptError(result);
 }
 
 bool ScriptProcessor::ReportMissingFiles()
@@ -2738,7 +2738,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
 
-		if (params < 10 || params > 14)
+		if (params < 10 || params == 11 || params > 14)
 			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
