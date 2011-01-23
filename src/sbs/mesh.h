@@ -68,7 +68,6 @@ public:
 	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
 	int FindWall(const Ogre::Vector3 &point);
 	void RescaleVertices(float multiplier);
-	bool LoadColladaFile(const char *filename, const char *name);
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin = Ogre::Vector3(0, 0, 0));
 	Ogre::Vector3 GetPosition();
 	void Rotate(const Ogre::Vector3 rotation, float speed);

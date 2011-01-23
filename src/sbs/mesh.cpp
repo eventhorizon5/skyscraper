@@ -711,8 +711,18 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	}
 	else
 	{
-		//load mesh object from collada file
-		LoadColladaFile(filename, name);
+		//load mesh object from a file
+		std::string filename2;
+		std::string path = sbs->GetMountPath(filename, filename2);
+		try
+		{
+			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportError("Error loading model " + filename2 + "\n" + e.getDescription());
+			return;
+		}
 	}
 
 	//exit if mesh wrapper wasn't created
@@ -889,66 +899,6 @@ void MeshObject::RescaleVertices(float multiplier)
 	//multiply vertex data
 	for (int i = 0; i < (int)MeshGeometry.size(); i++)
 		MeshGeometry[i].vertex *= multiplier;
-}
-
-bool MeshObject::LoadColladaFile(const char *filename, const char *name)
-{
-	//load a collada file into a new mesh, by converting to native Crystal Space format
-
-	//first verify the filename
-	/*std::string File = sbs->VerifyFile(filename);;
-	sbs->Report("Loading Collada model file " + File);
-	File.insert(0, "data/");
-
-	#define COLLADA_VERSION "1.4.1"
-	csRef<iColladaConvertor> collada = csQueryRegistryOrLoad<iColladaConvertor>(sbs->object_reg, "crystalspace.utilities.colladaconvertor");
-	if(!collada)
-	{
-		printf("Collada plugin failed to load\n");
-		return false;
-	}
-	collada->SetOutputFiletype(CS_LIBRARY_FILE);
-	if (collada->Load(File) != 0)
-		return sbs->ReportError("LoadColladaFile: Error loading collada file");
-
-	if (collada->Convert() != 0)
-		return sbs->ReportError("LoadColladaFile: Error converting collada file");
-	csRef<iDocument> doc = collada->GetCrystalDocument();
-
-	collection = sbs->engine->CreateCollection(name);
-	csLoadResult rc = sbs->loader->Load(doc->GetRoot(), collection, false, true);
-
-	if (!rc.success)
-		return sbs->ReportError("LoadColladaFile: Error parsing model");
-
-	csRef<iMeshFactoryWrapper> factory;
-	if (rc.result == 0)
-	{
-		// Library file. Find the last factory in our region.
-		iMeshFactoryList* factories = sbs->engine->GetMeshFactories();
-		int i;
-		for (i = factories->GetCount() - 1 ; i >= 0 ; --i)
-		{
-			iMeshFactoryWrapper* f = factories->Get(i);
-			if (collection->IsParentOf(f->QueryObject()))
-			{
-				factory = f;
-				break;
-			}
-		}
-	}
-	else
-	{
-		factory = scfQueryInterface<iMeshFactoryWrapper> (rc.result);
-	}
-
-	if (!factory)
-		return sbs->ReportError("LoadColladaFile: Error creating mesh factory");
-
-	//create mesh wrapper and factory
-	MeshWrapper = sbs->engine->CreateMeshWrapper(factory, name, sbs->area);
-	sbs->Report("Model file loaded");*/
-	return true;
 }
 
 bool MeshObject::IsEnabled()
