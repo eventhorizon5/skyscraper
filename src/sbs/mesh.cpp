@@ -720,7 +720,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportError("Error loading model " + filename2 + "\n" + e.getDescription());
+			sbs->ReportError("Error loading model " + filename2 + "\n" + e.getDescription());
 			return;
 		}
 	}
