@@ -697,6 +697,8 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	mBody = 0;
 	mShape = 0;
 	can_move = movable;
+	SceneNode = 0;
+	Movable = 0;
 
 	std::string buffer;
 	std::string Name = name;
@@ -712,8 +714,11 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	else
 	{
 		//load mesh object from a file
+		std::string filename1 = filename;
 		std::string filename2;
-		std::string path = sbs->GetMountPath(filename, filename2);
+		filename1.insert(0, "/data/");
+		std::string filename1b = sbs->VerifyFile(filename);
+		std::string path = sbs->GetMountPath(filename1b.c_str(), filename2);
 		try
 		{
 			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
@@ -736,14 +741,14 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	//if (!MeshWrapper->GetMeshObject()->GetMaterialWrapper())
 		//MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
-	//rescale if a loaded model
-	if (filename)
-		RescaleVertices(scale_multiplier);
-
 	//create movable
 	Movable = sbs->mSceneManager->createEntity(Name);
 	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
 	SceneNode->attachObject(Movable);
+
+	//rescale if a loaded model
+	if (filename)
+		SceneNode->setScale(sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier));
 
 	//set maximum render distance
 	if (max_render_distance > 0)
@@ -779,14 +784,17 @@ MeshObject::~MeshObject()
 	}
 
 	std::string nodename;
-	if (can_move == true)
-		nodename = SceneNode->getChild(0)->getName();
-	SceneNode->detachAllObjects();
-	SceneNode->getParent()->removeChild(SceneNode);
-	if (can_move == true)
-		sbs->mSceneManager->destroySceneNode(nodename);
-	sbs->mSceneManager->destroySceneNode(SceneNode->getName());
-	sbs->mSceneManager->destroyEntity(Movable->getName());
+	if (SceneNode)
+	{
+		if (can_move == true)
+			nodename = SceneNode->getChild(0)->getName();
+		SceneNode->detachAllObjects();
+		SceneNode->getParent()->removeChild(SceneNode);
+		if (can_move == true)
+			sbs->mSceneManager->destroySceneNode(nodename);
+		sbs->mSceneManager->destroySceneNode(SceneNode->getName());
+		sbs->mSceneManager->destroyEntity(Movable->getName());
+	}
 	SceneNode = 0;
 	Movable = 0;
 
