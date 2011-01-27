@@ -37,6 +37,7 @@ Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogr
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, sbs->object, "Model", name, false);
+	Origin = position;
 
 	load_error = false;
 	mesh = new MeshObject(object, name, true, filename, max_render_distance, scale_multiplier);

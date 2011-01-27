@@ -705,6 +705,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	buffer = Ogre::StringConverter::toString(object->GetNumber());
 	Name.insert(0, "(" + buffer + ")");
 	this->name = Name;
+	std::string filename2;
 
 	if (!filename)
 	{
@@ -714,7 +715,9 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	else
 	{
 		//load mesh object from a file
-		std::string filename2 = sbs->VerifyFile(filename);
+		std::string filename1 = "data/";
+		filename1.append(filename);
+		filename2 = sbs->VerifyFile(filename1.c_str());
 		std::string path = sbs->GetMountPath(filename2.c_str(), filename2);
 		try
 		{
@@ -739,7 +742,10 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		//MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
 	//create movable
-	Movable = sbs->mSceneManager->createEntity(Name);
+	if (!filename)
+		Movable = sbs->mSceneManager->createEntity(Name);
+	else
+		Movable = sbs->mSceneManager->createEntity(filename2);
 	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
 	SceneNode->attachObject(Movable);
 
