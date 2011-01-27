@@ -714,11 +714,8 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	else
 	{
 		//load mesh object from a file
-		std::string filename1 = "data/";
-		filename1.append(filename);
-		std::string filename1b = sbs->VerifyFile(filename1.c_str());
-		std::string filename2;
-		std::string path = sbs->GetMountPath(filename1b.c_str(), filename2);
+		std::string filename2 = sbs->VerifyFile(filename);
+		std::string path = sbs->GetMountPath(filename2.c_str(), filename2);
 		try
 		{
 			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);

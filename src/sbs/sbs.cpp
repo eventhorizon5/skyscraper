@@ -4029,6 +4029,7 @@ std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
 	
 	std::string file = filename;
 	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
+	newfilename = filename;
 
 	for (int i = 0; i < list.size(); i++)
 	{
