@@ -722,10 +722,13 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		try
 		{
 			std::string matname = filename2.substr(0, filename2.length() - 5) + ".material";
-			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname, path);
+			std::string matname2 = sbs->VerifyFile(matname.c_str());
+			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
+			sbs->Report("Loading material script " + matname2);
 			Ogre::MaterialManager::getSingleton().parseScript(stream, path);
 			if(!stream.isNull())
 			{
+				stream->seek(0);
 				while(!stream->eof())
 				{
 					std::string line = stream->getLine();
@@ -739,10 +742,10 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 							Ogre::StringUtil::trim(match);
 							if (!match.empty())
 							{
-								sbs->Report("Loading material " + match);
 								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
 								if (!materialPtr.isNull())
 				                {
+									sbs->Report("Loading material " + match);
 				                    materialPtr->compile();
 				                    materialPtr->load();
 				                }
