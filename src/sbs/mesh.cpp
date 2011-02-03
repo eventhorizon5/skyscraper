@@ -721,6 +721,36 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		std::string path = sbs->GetMountPath(filename2.c_str(), filename2);
 		try
 		{
+			std::string matname = filename2.substr(0, filename2.length() - 5) + ".material";
+			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname, path);
+			Ogre::MaterialManager::getSingleton().parseScript(stream, path);
+			if(!stream.isNull())
+			{
+				while(!stream->eof())
+				{
+					std::string line = stream->getLine();
+					Ogre::StringUtil::trim(line);
+					if (Ogre::StringUtil::startsWith(line, "material"))
+					{
+						Ogre::vector<Ogre::String>::type vec = Ogre::StringUtil::split(line," \t:");
+						for (Ogre::vector<Ogre::String>::type::iterator it = vec.begin(); it < vec.end(); ++it)
+						{
+							std::string match = (*it);
+							Ogre::StringUtil::trim(match);
+							if (!match.empty())
+							{
+								sbs->Report("Loading material " + match);
+								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
+								if (!materialPtr.isNull())
+				                {
+				                    materialPtr->compile();
+				                    materialPtr->load();
+				                }
+							}
+						}
+					}
+				}
+			}
 			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
 		}
 		catch (Ogre::Exception &e)
