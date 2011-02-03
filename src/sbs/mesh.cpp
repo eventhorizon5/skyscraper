@@ -726,7 +726,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
 			sbs->Report("Loading material script " + matname2);
 			Ogre::MaterialManager::getSingleton().parseScript(stream, path);
-			if(!stream.isNull())
+			/*if(!stream.isNull())
 			{
 				stream->seek(0);
 				while(!stream->eof())
@@ -746,14 +746,15 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 								if (!materialPtr.isNull())
 				                {
 									sbs->Report("Loading material " + match);
-				                    materialPtr->compile();
+				                    //materialPtr->compile();
 				                    materialPtr->load();
 				                }
 							}
 						}
 					}
 				}
-			}
+				stream->close();
+			}*/
 			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
 		}
 		catch (Ogre::Exception &e)
