@@ -719,42 +719,25 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		filename1.append(filename);
 		filename2 = sbs->VerifyFile(filename1.c_str());
 		std::string path = sbs->GetMountPath(filename2.c_str(), filename2);
+		std::string matname;
+
+		//load material file
 		try
 		{
-			std::string matname = filename2.substr(0, filename2.length() - 5) + ".material";
+			matname = filename2.substr(0, filename2.length() - 5) + ".material";
 			std::string matname2 = sbs->VerifyFile(matname.c_str());
 			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
 			sbs->Report("Loading material script " + matname2);
 			Ogre::MaterialManager::getSingleton().parseScript(stream, path);
-			/*if(!stream.isNull())
-			{
-				stream->seek(0);
-				while(!stream->eof())
-				{
-					std::string line = stream->getLine();
-					Ogre::StringUtil::trim(line);
-					if (Ogre::StringUtil::startsWith(line, "material"))
-					{
-						Ogre::vector<Ogre::String>::type vec = Ogre::StringUtil::split(line," \t:");
-						for (Ogre::vector<Ogre::String>::type::iterator it = vec.begin(); it < vec.end(); ++it)
-						{
-							std::string match = (*it);
-							Ogre::StringUtil::trim(match);
-							if (!match.empty())
-							{
-								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
-								if (!materialPtr.isNull())
-				                {
-									sbs->Report("Loading material " + match);
-				                    //materialPtr->compile();
-				                    materialPtr->load();
-				                }
-							}
-						}
-					}
-				}
-				stream->close();
-			}*/
+		}
+		catch (Ogre::Exception &e)
+		{
+			sbs->ReportError("Error loading material file " + matname + "\n" + e.getDescription());
+		}
+
+		//load model
+		try
+		{
 			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
 		}
 		catch (Ogre::Exception &e)
@@ -823,11 +806,11 @@ MeshObject::~MeshObject()
 	std::string nodename;
 	if (SceneNode)
 	{
-		if (can_move == true)
+		if (can_move == true && SceneNode->numChildren() > 0)
 			nodename = SceneNode->getChild(0)->getName();
 		SceneNode->detachAllObjects();
 		SceneNode->getParent()->removeChild(SceneNode);
-		if (can_move == true)
+		if (can_move == true && SceneNode->numChildren() > 0)
 			sbs->mSceneManager->destroySceneNode(nodename);
 		sbs->mSceneManager->destroySceneNode(SceneNode->getName());
 		sbs->mSceneManager->destroyEntity(Movable->getName());
