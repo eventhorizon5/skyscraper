@@ -3412,8 +3412,8 @@ Ogre::Vector2 SBS::CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::V
 	//Call texture autosizing formulas
 	float tw2 = tw, th2 = th;
 
-	bool force_enable, force_mode;
-	GetTextureForce(texture, force_enable, force_mode);
+	bool force_enable = false, force_mode = false;
+	bool result = GetTextureForce(texture, force_enable, force_mode);
 
 	bool is_wall = true;
 	if (fabs(y.y - y.x) < fabs(x.y - x.x) && fabs(y.y - y.x) < fabs(z.y - z.x))
