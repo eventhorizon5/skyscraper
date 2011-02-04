@@ -1707,15 +1707,14 @@ void SBS::CreateSky(const char *filenamebase)
 	Mount(std::string("data/sky-" + file + ".zip").c_str(), "sky");
 
 	//load textures
-	LoadTexture("sky/up.jpg", "SkyTop", 1, -1, false, false, true, 0);
-	LoadTexture("sky/down.jpg", "SkyBottom", -1, 1, false, false, true, 0);
-	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, true, 0);
-	LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, true, 0);
-	LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, true, 0);
-	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, true, 0);
+	LoadTexture("sky/up.jpg", "SkyTop", 1, -1, false, false, false, 0);
+	LoadTexture("sky/down.jpg", "SkyBottom", -1, 1, false, false, false, 0);
+	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
+	LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
+	LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
+	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
 
 	SkyBox = new MeshObject(this->object, "SkyBox");
-	//SkyBox->MeshWrapper->SetRenderPriority(sbs->engine->GetSkyRenderPriority());
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
@@ -1762,7 +1761,7 @@ void SBS::CreateSky(const char *filenamebase)
 		"SkyTop",
 		Ogre::Vector3(-skysize, skysize, -skysize),
 		Ogre::Vector3(skysize, skysize, -skysize),
-		Ogre::Vector3(skysize,skysize, -skysize),
+		Ogre::Vector3(skysize, skysize, skysize),
 		Ogre::Vector3(-skysize, skysize, skysize), 1, 1, false);
 
 	sbs->ResetTextureMapping();

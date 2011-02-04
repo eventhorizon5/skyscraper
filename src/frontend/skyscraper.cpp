@@ -1275,7 +1275,7 @@ bool Skyscraper::Start()
 	}
 
 	//the sky needs to be created before Prepare() is called
-	//Simcore->CreateSky(Simcore->SkyName.c_str());
+	Simcore->CreateSky(Simcore->SkyName.c_str());
 
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
