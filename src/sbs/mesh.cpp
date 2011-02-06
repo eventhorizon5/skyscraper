@@ -729,6 +729,37 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
 			sbs->Report("Loading material script " + matname2);
 			Ogre::MaterialManager::getSingleton().parseScript(stream, path);
+
+			if(!stream.isNull())
+			{
+				stream->seek(0);
+				while(!stream->eof())
+				{
+					std::string line = stream->getLine();
+					Ogre::StringUtil::trim(line);
+					if (Ogre::StringUtil::startsWith(line, "material"))
+					{
+						Ogre::vector<Ogre::String>::type vec = Ogre::StringUtil::split(line," \t:");
+						for (Ogre::vector<Ogre::String>::type::iterator it = vec.begin(); it < vec.end(); ++it)
+						{
+							std::string match = (*it);
+							Ogre::StringUtil::trim(match);
+							if (!match.empty())
+							{
+								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
+								if (!materialPtr.isNull())
+				                {
+									sbs->Report("Loading material " + match);
+				                    //materialPtr->compile();
+				                    materialPtr->load();
+									materialPtr->setLightingEnabled(false);
+				                }
+							}
+						}
+					}
+				}
+				stream->close();
+			}
 		}
 		catch (Ogre::Exception &e)
 		{
