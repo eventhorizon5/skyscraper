@@ -91,6 +91,8 @@ public:
 	void CreateCollider();
 	int HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance);
 	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
+	void GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices);
+	void CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;
