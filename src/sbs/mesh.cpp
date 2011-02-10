@@ -843,7 +843,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		else
 		{
 			//create generic box collider if separate mesh collider isn't available
-			CreateBoxCollider(MeshWrapper);
+			CreateBoxCollider(MeshWrapper, sbs->ToRemote(scale_multiplier));
 		}
 	}
 
@@ -1687,14 +1687,14 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 	mShape = shape;
 }
 
-void MeshObject::CreateBoxCollider(Ogre::MeshPtr mesh)
+void MeshObject::CreateBoxCollider(Ogre::MeshPtr mesh, float scale_multiplier)
 {
 	//get mesh extents
 
 	//set up physics parameters
 
 	//initialize collider shape
-	Ogre::Vector3 bounds = mesh->getBounds().getHalfSize();
+	Ogre::Vector3 bounds = mesh->getBounds().getHalfSize() * scale_multiplier;
 	OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	std::string name = MeshWrapper->getName();
 

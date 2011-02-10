@@ -93,7 +93,7 @@ public:
 	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
 	void GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier);
 	void CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices);
-	void CreateBoxCollider(Ogre::MeshPtr mesh);
+	void CreateBoxCollider(Ogre::MeshPtr mesh, float scale_multiplier);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;
