@@ -32,6 +32,7 @@
 #include <OgreBulletDynamicsRigidBody.h>
 #include <OgreMath.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
+#include <Shapes/OgreBulletCollisionsBoxShape.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -687,7 +688,7 @@ bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool
 	return false;
 }
 
-MeshObject::MeshObject(Object* parent, const char *name, bool movable, const char *filename, float max_render_distance, float scale_multiplier)
+MeshObject::MeshObject(Object* parent, const char *name, bool movable, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
 	object = new Object();
@@ -699,6 +700,12 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	can_move = movable;
 	SceneNode = 0;
 	Movable = 0;
+	IsPhysical = enable_physics;
+	this->restitution = restitution;
+	this->friction = friction;
+	this->mass = mass;
+
+	Ogre::MeshPtr collidermesh;
 
 	std::string buffer;
 	std::string Name = name;
@@ -776,6 +783,18 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 			sbs->ReportError("Error loading model " + filename2 + "\n" + e.getDescription());
 			return;
 		}
+
+		//load collider model
+		try
+		{
+			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
+			std::string colname2 = sbs->VerifyFile(colname.c_str());
+			collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
+		}
+		catch (Ogre::Exception &e)
+		{
+			sbs->ReportError("Error loading collider model " + filename2 + "\n" + e.getDescription());
+		}
 	}
 
 	//exit if mesh wrapper wasn't created
@@ -809,14 +828,23 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 
 	if (filename)
 	{
-		//create collider for model
-		size_t vertex_count, index_count;
-		Ogre::Vector3* vertices;
-		long unsigned int* indices;
-		GetMeshInformation(MeshWrapper.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier));
-		CreateColliderFromModel(vertex_count, vertices, index_count, indices);
-		delete[] vertices;
-		delete[] indices;
+		if (collidermesh.get())
+		{
+			//create collider for model
+			size_t vertex_count, index_count;
+			Ogre::Vector3* vertices;
+			long unsigned int* indices;
+			GetMeshInformation(collidermesh.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier));
+			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
+			delete[] vertices;
+			delete[] indices;
+			Ogre::MeshManager::getSingleton().remove(collidermesh->getName());
+		}
+		else
+		{
+			//create generic box collider if separate mesh collider isn't available
+			CreateBoxCollider(MeshWrapper);
+		}
 	}
 
 	//State->SetLighting(false);
@@ -1627,7 +1655,10 @@ void MeshObject::CreateCollider()
 	std::string name = MeshWrapper->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	if (IsPhysical == false)
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	else
+		mBody->setShape(SceneNode, shape, restitution, friction, mass);
 	mShape = shape;
 }
 
@@ -1649,7 +1680,29 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 	std::string name = MeshWrapper->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	if (IsPhysical == false)
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	else
+		mBody->setShape(SceneNode, shape, restitution, friction, mass);
+	mShape = shape;
+}
+
+void MeshObject::CreateBoxCollider(Ogre::MeshPtr mesh)
+{
+	//get mesh extents
+
+	//set up physics parameters
+
+	//initialize collider shape
+	Ogre::Vector3 bounds = mesh->getBounds().getHalfSize();
+	OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
+	std::string name = MeshWrapper->getName();
+
+	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+	if (IsPhysical == false)
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	else
+		mBody->setShape(SceneNode, shape, restitution, friction, mass);
 	mShape = shape;
 }
 

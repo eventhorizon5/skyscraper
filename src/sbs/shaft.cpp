@@ -557,7 +557,7 @@ Object* Shaft::AddLight(int floor, const char *name, int type, Ogre::Vector3 pos
 	return light->object;
 }
 
-Object* Shaft::AddModel(int floor, const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
+Object* Shaft::AddModel(int floor, const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
 
@@ -565,7 +565,7 @@ Object* Shaft::AddModel(int floor, const char *name, const char *filename, Ogre:
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(name, filename, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier);
+	Model* model = new Model(name, filename, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

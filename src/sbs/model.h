@@ -35,7 +35,7 @@ public:
 	bool load_error;
 
 	//functions
-	Model(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1);
+	Model(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~Model();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	Ogre::Vector3 GetPosition();

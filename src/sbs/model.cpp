@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
+Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//loads a 3D model into the simulation
 
@@ -40,7 +40,7 @@ Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogr
 	Origin = position;
 
 	load_error = false;
-	mesh = new MeshObject(object, name, true, filename, max_render_distance, scale_multiplier);
+	mesh = new MeshObject(object, name, true, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (!mesh->MeshWrapper.get() || !mesh->SceneNode)
 	{
 		load_error = true;

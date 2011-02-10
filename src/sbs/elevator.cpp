@@ -4273,10 +4273,10 @@ void Elevator::MoveLights(Ogre::Vector3 position, bool relative_x, bool relative
 		lights[i]->Move(position, relative_x, relative_y, relative_z);
 }
 
-Object* Elevator::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier)
+Object* Elevator::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(name, filename, position + Origin, rotation, max_render_distance, scale_multiplier);
+	Model* model = new Model(name, filename, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
