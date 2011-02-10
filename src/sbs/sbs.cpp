@@ -183,6 +183,12 @@ SBS::SBS()
 	listener_up.y = 0;
 	listener_up.z = 0;
 	timer = new Ogre::Timer();
+	AmbientR = 1;
+	AmbientG = 1;
+	AmbientB = 1;
+	OldAmbientR = 1;
+	OldAmbientG = 1;
+	OldAmbientB = 1;
 }
 
 SBS::~SBS()
@@ -588,9 +594,11 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 
 	//load default textures
 	Report("Loading default textures...");
+	SetLighting();
 	LoadTexture("data/brick1.jpg", "Default", 1, 1);
 	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
 	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
+	ResetLighting();
 	Report("Done");
 
 	//create camera object
@@ -648,6 +656,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	std::string matname = name;
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
+	mMat->setLightingEnabled(true);
+	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
@@ -873,6 +883,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
+	mMat->setLightingEnabled(true);
+	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
@@ -1707,12 +1719,14 @@ void SBS::CreateSky(const char *filenamebase)
 	Mount(std::string("data/sky-" + file + ".zip").c_str(), "sky");
 
 	//load textures
+	SetLighting();
 	LoadTexture("sky/up.jpg", "SkyTop", 1, -1, false, false, false, 0);
 	LoadTexture("sky/down.jpg", "SkyBottom", -1, 1, false, false, false, 0);
 	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
 	LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
 	LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
 	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
+	ResetLighting();
 
 	SkyBox = new MeshObject(this->object, "SkyBox");
 
@@ -3859,11 +3873,11 @@ void SBS::Prepare()
 	Report("Finished prepare");
 }
 
-Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
-	Light* light = new Light(name, type, position, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
+	Light* light = new Light(name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light->object;
 }
@@ -4068,4 +4082,21 @@ void SBS::CacheFilename(std::string filename, std::string result)
 	verify.filename = filename;
 	verify.result = result;
 	verify_results.push_back(verify);
+}
+
+void SBS::SetLighting(float red, float green, float blue)
+{
+	OldAmbientR = AmbientR;
+	OldAmbientG = AmbientG;
+	OldAmbientB = AmbientB;
+	AmbientR = red;
+	AmbientG = green;
+	AmbientB = blue;
+}
+
+void SBS::ResetLighting()
+{
+	AmbientR = OldAmbientR;
+	AmbientG = OldAmbientG;
+	AmbientB = OldAmbientB;
 }

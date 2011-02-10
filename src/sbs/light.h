@@ -36,20 +36,15 @@ public:
 	Ogre::Vector3 Origin;
 
 	//functions
-	Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 rotation, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer);
+	Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	~Light();
-	void Prepare();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	Ogre::Vector3 GetPosition();
 	void SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b);
-	void SetRotation(const Ogre::Vector3& rotation);
-	void Rotate(const Ogre::Vector3& rotation, float speed);
-	Ogre::Vector3 GetRotation();
 
 private:
 
 	Ogre::Light* light;
-	float rotX, rotY, rotZ;
 };
 
 #endif

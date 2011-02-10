@@ -5221,6 +5221,24 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), true, Ogre::StringConverter::parseBool(tempdata[9]));
 	}
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "setlighting")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 12, false);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+		Simcore->SetLighting(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+	}
 	return 0;
 }
 

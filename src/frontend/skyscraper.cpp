@@ -347,8 +347,8 @@ bool Skyscraper::Initialize()
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
 
 	//set ambient light
-	mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0, 1.0, 1.0));
-	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
+	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
+	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
 
 	mCamera = mSceneMgr->createCamera("Main Camera");
 	mViewport = mRenderWindow->addViewport(mCamera);

@@ -759,7 +759,8 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 									sbs->Report("Loading material " + match);
 				                    //materialPtr->compile();
 				                    materialPtr->load();
-									materialPtr->setLightingEnabled(false);
+									materialPtr->setLightingEnabled(true);
+									materialPtr->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
 				                }
 							}
 						}
@@ -813,6 +814,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		Movable = sbs->mSceneManager->createEntity(Name);
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
+	//Movable->setCastShadows(true);
 	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
 	SceneNode->attachObject(Movable);
 

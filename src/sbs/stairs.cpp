@@ -639,7 +639,7 @@ void Stairs::RemoveDoor(Door *door)
 	}
 }
 
-Object* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
@@ -647,7 +647,7 @@ Object* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 po
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
+	Light* light = new Light(name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights[floor - startfloor].push_back(light);
 	return light->object;
 }

@@ -530,7 +530,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	ElevatorFloor = floor;
 
 	//create test light
-	//AddLight("test", 0, Ogre::Vector3(0, 2, -15), Ogre::Vector3(90, 0, 0), 50, 0, 255, 0, 0, 255, 255, 255, 0, 0, 0);
+	//AddLight("light", 0, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), 1, 1, 1, 1, 1, 1, 0, 0, 0, 100, 0, 1, 0);
 
 	Created = true;
 
@@ -4257,11 +4257,11 @@ void Elevator::EnableNudgeMode(bool value, int number)
 	}
 }
 
-Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float radius, float max_distance, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float directional_cutoff_radius, float spot_falloff_inner, float spot_falloff_outer)
+Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
-	Light* light = new Light(name, type, position + Origin, direction, radius, max_distance, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, directional_cutoff_radius, spot_falloff_inner, spot_falloff_outer);
+	Light* light = new Light(name, type, position + Origin, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light->object;
 }
