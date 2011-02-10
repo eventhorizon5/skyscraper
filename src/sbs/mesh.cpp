@@ -834,7 +834,8 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 			size_t vertex_count, index_count;
 			Ogre::Vector3* vertices;
 			long unsigned int* indices;
-			GetMeshInformation(collidermesh.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier));
+			Ogre::AxisAlignedBox box;
+			GetMeshInformation(collidermesh.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier), box);
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
 			delete[] indices;
@@ -1021,6 +1022,8 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 	else
 		pos.z = SceneNode->getPosition().z + sbs->ToRemote(-position.z);
 	SceneNode->setPosition(pos);
+	if (mBody)
+		mBody->updateTransform(false);
 }
 
 Ogre::Vector3 MeshObject::GetPosition()
@@ -1689,8 +1692,6 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 
 void MeshObject::CreateBoxCollider(Ogre::MeshPtr mesh, float scale_multiplier)
 {
-	//get mesh extents
-
 	//set up physics parameters
 
 	//initialize collider shape
@@ -1754,7 +1755,7 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 	return false;
 }
 
-void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier)
+void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents)
 {
     bool added_shared = false;
     size_t current_offset = 0;
@@ -1828,6 +1829,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex
                 Ogre::Vector3 pt(pReal[0], pReal[1], pReal[2]);
                 //vertices[current_offset + j] = (orient * (pt * scale)) + position;
                 vertices[current_offset + j] = pt * scale_multiplier;
+                extents.merge(vertices[current_offset + j]);
             }
 
             vbuf->unlock();
