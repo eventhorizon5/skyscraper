@@ -813,7 +813,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		size_t vertex_count, index_count;
 		Ogre::Vector3* vertices;
 		long unsigned int* indices;
-		GetMeshInformation(MeshWrapper.getPointer(), vertex_count, vertices, index_count, indices);
+		GetMeshInformation(MeshWrapper.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier));
 		CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 		delete[] vertices;
 		delete[] indices;
@@ -1701,7 +1701,7 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 	return false;
 }
 
-void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices)
+void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier)
 {
     bool added_shared = false;
     size_t current_offset = 0;
@@ -1774,7 +1774,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex
                 posElem->baseVertexPointerToElement(vertex, &pReal);
                 Ogre::Vector3 pt(pReal[0], pReal[1], pReal[2]);
                 //vertices[current_offset + j] = (orient * (pt * scale)) + position;
-                vertices[current_offset + j] = pt;
+                vertices[current_offset + j] = pt * scale_multiplier;
             }
 
             vbuf->unlock();
