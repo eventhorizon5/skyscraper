@@ -530,7 +530,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	ElevatorFloor = floor;
 
 	//create test light
-	//AddLight("light", 0, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), 1, 1, 1, 1, 1, 1, 0, 0, 0, 100, 0, 1, 0);
+	//AddLight("light", 0, Ogre::Vector3(0, 6, 0), Ogre::Vector3(0, 0, 0), 1, 1, 1, 1, 1, 1, 0, 0, 0, 1000, 1, 1, 1);
 
 	Created = true;
 

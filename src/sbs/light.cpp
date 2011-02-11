@@ -105,7 +105,7 @@ void Light::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y,
 
 Ogre::Vector3 Light::GetPosition()
 {
-	return light->getPosition();
+	return sbs->ToLocal(light->getPosition());
 }
 
 void Light::SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b)
