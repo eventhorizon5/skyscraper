@@ -846,6 +846,14 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		else
 		{
 			//create generic box collider if separate mesh collider isn't available
+			size_t vertex_count, index_count;
+			Ogre::Vector3* vertices;
+			long unsigned int* indices;
+			Ogre::AxisAlignedBox box;
+			GetMeshInformation(MeshWrapper.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier), box);
+			delete[] vertices;
+			delete[] indices;
+
 			CreateBoxCollider(MeshWrapper, sbs->ToRemote(scale_multiplier));
 		}
 	}

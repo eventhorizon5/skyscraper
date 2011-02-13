@@ -2065,7 +2065,7 @@ int ScriptProcessor::ProcCommands()
 	//AddModel command
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
 	{
-		if (Section == 2)
+		if (Section == 2 || Section == 4)
 			return 0;
 
 		//get data

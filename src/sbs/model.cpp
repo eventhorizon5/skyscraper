@@ -64,7 +64,8 @@ Model::~Model()
 
 void Model::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
-	mesh->Move(position, relative_x, relative_y, relative_z, Origin);
+	//mesh->Move(position, relative_x, relative_y, relative_z, Origin);
+	mesh->Move(position, relative_x, relative_y, relative_z);
 }
 
 Ogre::Vector3 Model::GetPosition()
