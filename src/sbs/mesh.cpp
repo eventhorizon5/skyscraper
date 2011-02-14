@@ -794,7 +794,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error loading collider model " + filename2 + "\n" + e.getDescription());
+			sbs->ReportError("Error loading collider model " + colname2 + "\n" + e.getDescription());
 		}
 	}
 
@@ -1690,7 +1690,7 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 
 	//finalize shape
 	shape->Finish();
-	std::string name = MeshWrapper->getName();
+	std::string name = SceneNode->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 	if (IsPhysical == false)
@@ -1707,7 +1707,7 @@ void MeshObject::CreateBoxCollider(Ogre::MeshPtr mesh, float scale_multiplier)
 	//initialize collider shape
 	Ogre::Vector3 bounds = mesh->getBounds().getHalfSize() * scale_multiplier;
 	OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
-	std::string name = MeshWrapper->getName();
+	std::string name = SceneNode->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 	if (IsPhysical == false)
