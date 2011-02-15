@@ -129,7 +129,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
      TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
  }
 
-void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
+bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
 {
 	//justify is left 'l' by default - set to 'r' or 'c' for right or center
 	//vert_justify is top 't' by defautl - set to 'c' or 'b' for center or bottom
@@ -141,8 +141,16 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	if (destTexture->getWidth() < destRectangle.right)
 		destRectangle.right = destTexture->getWidth();
 
-	if (!font->isLoaded())
-		font->load();
+	try
+	{
+		if (!font->isLoaded())
+			font->load();
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error loading font " + font->getName() + "\n" + e.getDescription());
+		return false;
+	}
 
 	TexturePtr fontTexture = (TexturePtr)TextureManager::getSingleton().getByName(font->getMaterial()->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName());
 
@@ -353,4 +361,5 @@ void SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	delete[] GlyphTexCoords;
 
 	destBuffer->unlock();
+	return true;
 }

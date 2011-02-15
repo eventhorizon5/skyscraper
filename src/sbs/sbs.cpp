@@ -887,7 +887,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		valign = 'b';
 
 	//write text
-	WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align, valign);
+	bool result = WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align, valign);
+	if (result == false)
+		return false;
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");

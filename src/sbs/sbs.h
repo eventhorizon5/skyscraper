@@ -395,7 +395,7 @@ private:
 	void PrintBanner();
 	void CheckAutoAreas();
 	void BackupMapping();
-	void WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
+	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
 	void CalculateElapsedTime();
 
 	//doorway data
