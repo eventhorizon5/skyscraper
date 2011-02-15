@@ -785,11 +785,13 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 			return;
 		}
 
+		std::string colname2;
+
 		//load collider model
 		try
 		{
 			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
-			std::string colname2 = sbs->VerifyFile(colname.c_str());
+			colname2 = sbs->VerifyFile(colname.c_str());
 			collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
 		}
 		catch (Ogre::Exception &e)

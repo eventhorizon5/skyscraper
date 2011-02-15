@@ -802,14 +802,22 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//load if font is not already loaded
 	if (font.isNull())
 	{
-		font = Ogre::FontManager::getSingleton().create(fontname, "General");
-		//font->setType(Ogre::FontType::FT_TRUETYPE);
-		font->setSource(font_filename2);
-		font->setTrueTypeSize(font_size);
-		font->setTrueTypeResolution(96);
-		font->setAntialiasColour(true);
-		font->addCodePointRange(Ogre::Font::CodePointRange(48, 122));
-		font->load();
+		try
+		{
+			font = Ogre::FontManager::getSingleton().create(fontname, "General");
+			//font->setType(Ogre::FontType::FT_TRUETYPE);
+			font->setSource(font_filename2);
+			font->setTrueTypeSize(font_size);
+			font->setTrueTypeResolution(96);
+			font->setAntialiasColour(true);
+			font->addCodePointRange(Ogre::Font::CodePointRange(48, 122));
+			font->load();
+		}
+		catch (Ogre::Exception &e)
+		{
+			sbs->ReportError("Error loading font " + fontname + "\n" + e.getDescription());
+			return false;
+		}
 	}
 
 	//get original texture
