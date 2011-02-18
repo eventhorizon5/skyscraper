@@ -189,6 +189,7 @@ SBS::SBS()
 	OldAmbientR = 1;
 	OldAmbientG = 1;
 	OldAmbientB = 1;
+	TexelOverride = false;
 }
 
 SBS::~SBS()
@@ -712,15 +713,23 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 {
 	//loads only a portion of the specified texture
 
-/*	Ogre::TextureManager *tm = g3d->GetTextureManager();
 	std::string Name = name;
 	std::string Filename = filename;
 
-	//load image
-	Ogre::Image* image = loader->LoadImage(filename, tm->GetTextureFormat());
-
-	if (!image)
-		return ReportError("LoadTextureCropped: Error loading image '" + Filename + "'");
+	//get original texture
+	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Filename);
+	if (ptr.isNull())
+	{
+		ReportError("LoadTextureCropped: Invalid original material '" + Filename + "'");
+		return false;
+	}
+	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
+	Ogre::TexturePtr image = Ogre::TextureManager::getSingleton().getByName(texname);
+	if (image.isNull())
+	{
+		ReportError("LoadTextureCropped: Invalid original texture '" + texname + "'");
+		return false;
+	}
 
 	//set default values if specified
 	if (x == -1)
@@ -728,38 +737,41 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	if (y == -1)
 		y = 0;
 	if (width < 1)
-		width = image->GetWidth();
+		width = image->getWidth();
 	if (height < 1)
-		height = image->GetHeight();
+		height = image->getHeight();
 
-	if (x > image->GetWidth() || y > image->GetHeight())
-		return ReportError("LoadTextureCropped: invalid coordinates for '" + Filename + "'");
-	if (x + width > image->GetWidth() || y + height > image->GetHeight())
-		return ReportError("LoadTextureCropped: invalid size for '" + Filename + "'");
+	if (x > image->getWidth() || y > image->getHeight())
+		return ReportError("LoadTextureCropped: invalid coordinates for '" + Name + "'");
+	if (x + width > image->getWidth() || y + height > image->getHeight())
+		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
-	//crop image
-	Ogre::Image* cropped_image = csImageManipulate::Crop(image, x, y, width, height);
-	if (!cropped_image)
-		return ReportError("LoadTextureCropped: Error cropping image '" + Filename + "'");
+	//create new empty texture
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_X8R8G8B8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 
-	//register texture
-	csRef<iTextureHandle> handle = tm->RegisterTexture(cropped_image, CS_TEXTURE_3D);
-	if (!handle)
-		return ReportError("LoadTextureCropped: Error registering texture '" + Name + "'");
+	//copy source and overlay images onto new image
+	Ogre::Box source (x, y, x + width, y + height);
+	Ogre::Box dest (0, 0, width, height);
+	new_texture->getBuffer()->blit(image->getBuffer(), source, dest);
 
-	//if texture has an alpha map, force binary alpha
-	if (handle->GetAlphaType() == csAlphaMode::alphaSmooth)
-		handle->SetAlphaType(csAlphaMode::alphaBinary);
+	//create a new material
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
+	mMat->setLightingEnabled(true);
+	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
-	//create texture wrapper
-	Ogre::Texture* wrapper = engine->GetTextureList()->NewTexture(handle);
-	wrapper->setName(name);
+	//bind texture to material
+	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
 
-	//create material
-	Ogre::Material* material (engine->CreateBaseMaterial(wrapper));
-	Ogre::Material* matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
+	//show only clockwise side of material
+	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	wrapper->SetImageFile(cropped_image);
+	//enable alpha blending for related textures
+	/*if (has_alpha == true)
+	{
+		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}*/
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -769,7 +781,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
 	textureinfo.push_back(info);
-*/
+
 	return true;
 }
 
@@ -920,23 +932,37 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//draws the specified texture on top of another texture
 	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
 
-	/*std::string Name = name;
+	std::string Name = name;
 	std::string Origname = orig_texture;
 	std::string Overlay = overlay_texture;
 
 	//get original texture
-	Ogre::Image* image1 = engine->GetTextureList()->FindByName(orig_texture)->GetImageFile();
-	if (!image1)
+	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
+	if (ptr.isNull())
 	{
-		ReportError("AddTextureOverlay: Invalid original texture '" + Origname + "'");
+		ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
+		return false;
+	}
+	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
+	Ogre::TexturePtr image1 = Ogre::TextureManager::getSingleton().getByName(texname);
+	if (image1.isNull())
+	{
+		ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
 		return false;
 	}
 
 	//get overlay texture
-	Ogre::Image* image2 = engine->GetTextureList()->FindByName(overlay_texture)->GetImageFile();
-	if (!image2)
+	ptr = Ogre::MaterialManager::getSingleton().getByName(Overlay);
+	if (ptr.isNull())
 	{
-		ReportError("AddTextureOverlay: Invalid overlay texture '" + Overlay + "'");
+		ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
+		return false;
+	}
+	texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
+	Ogre::TexturePtr image2 = Ogre::TextureManager::getSingleton().getByName(texname);
+	if (image2.isNull())
+	{
+		ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
 		return false;
 	}
 
@@ -946,39 +972,43 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	if (y == -1)
 		y = 0;
 	if (width < 1)
-		width = image2->GetWidth();
+		width = image2->getWidth();
 	if (height < 1)
-		height = image2->GetHeight();
+		height = image2->getHeight();
 
-	if (x > image1->GetWidth() || y > image1->GetHeight())
+	if (x > image1->getWidth() || y > image1->getHeight())
 		return ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
-	if (x + width > image1->GetWidth() || y + height > image1->GetHeight())
+	if (x + width > image1->getWidth() || y + height > image1->getHeight())
 		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
-	//copy overlay image onto source image
-	csRef<csImageMemory> imagemem;
-	imagemem.AttachNew(new csImageMemory(image1));
+	//create new empty texture
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, image1->getWidth(), image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_X8R8G8B8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 
-	imagemem->CopyScale(image2, x, y, width, height);
+	//copy source and overlay images onto new image
+	Ogre::Box source (x, y, x + width, y + height);
+	Ogre::Box source_full (0, 0, image1->getWidth(), image1->getHeight());
+	Ogre::Box overlay (0, 0, image2->getWidth(), image2->getHeight());
+	new_texture->getBuffer()->blit(image1->getBuffer(), source_full, source_full);
+	new_texture->getBuffer()->blit(image2->getBuffer(), overlay, source);
 
-	//register new texture
-	csRef<iTextureHandle> handle = g3d->GetTextureManager()->RegisterTexture(imagemem, CS_TEXTURE_3D);
-	if (!handle)
-		return ReportError("AddTextureOverlay: Error registering texture '" + Name + "'");
+	//create a new material
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
+	mMat->setLightingEnabled(true);
+	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
-	//if texture has an alpha map, force binary alpha
-	if (handle->GetAlphaType() == csAlphaMode::alphaSmooth)
-		handle->SetAlphaType(csAlphaMode::alphaBinary);
+	//bind texture to material
+	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
 
-	//create texture wrapper
-	Ogre::Texture* wrapper = engine->GetTextureList()->NewTexture(handle);
-	wrapper->setName(name);
+	//show only clockwise side of material
+	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	//create material
-	Ogre::Material* material (engine->CreateBaseMaterial(wrapper));
-	Ogre::Material* matwrapper = engine->GetMaterialList()->NewMaterial(material, name);
-
-	wrapper->SetImageFile(imagemem);
+	//enable alpha blending for related textures
+	/*if (has_alpha == true)
+	{
+		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}*/
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -988,7 +1018,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
 	textureinfo.push_back(info);
-*/
+
 	return true;
 }
 

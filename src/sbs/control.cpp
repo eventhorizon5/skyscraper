@@ -56,6 +56,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	//create object mesh
 	ControlMesh = new MeshObject(object, name, true, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
+	//sbs->TexelOverride = true;
 	if (Direction == "front")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
@@ -77,6 +78,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
 	}
 	sbs->ResetWalls();
+	//sbs->TexelOverride = false;
 
 	//create sound object
 	sound = new Sound(this->object, "Control", true);

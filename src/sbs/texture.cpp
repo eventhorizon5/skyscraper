@@ -76,8 +76,8 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	 if (strExt == "gif")
 	 {
 		//get chroma transparency color from GIF file data
-	    uchar enabled;
-		uchar trans_color;
+	    uchar enabled = 0;
+		uchar trans_color = 0;
 		encoded->seek(784); //transparency enabled if value is 0x1
 		encoded->read(&enabled, 1);
 		encoded->seek(787); //transparency color

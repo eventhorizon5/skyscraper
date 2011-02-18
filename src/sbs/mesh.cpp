@@ -1309,26 +1309,43 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 {
 	//return texel array for specified texture transformation matrix and vector
 
-	//create array for texel map
-	int texel_count = 0;
-	for (int i = 0; i < (int)vertices.size(); i++)
-		texel_count += (int)vertices[i].size();
-	Ogre::Vector2 *texels = new Ogre::Vector2[texel_count];
-
-	//transform matrix into texel map
-	int index = 0;
-	Ogre::Vector3 texel_temp;
-	for (int i = 0; i < (int)vertices.size(); i++)
+	if (sbs->TexelOverride == false)
 	{
-		for (int j = 0; j < (int)vertices[i].size(); j++)
+		//create array for texel map
+		int texel_count = 0;
+		for (int i = 0; i < (int)vertices.size(); i++)
+			texel_count += (int)vertices[i].size();
+		Ogre::Vector2 *texels = new Ogre::Vector2[texel_count];
+
+		//transform matrix into texel map
+		int index = 0;
+		Ogre::Vector3 texel_temp;
+		for (int i = 0; i < (int)vertices.size(); i++)
 		{
-			texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
-			texels[index].x = -texel_temp.x; //flip X for compatibility with right-hand coordinate system
-			texels[index].y = texel_temp.y;
-			index++;
+			for (int j = 0; j < (int)vertices[i].size(); j++)
+			{
+				texel_temp = tex_matrix * (vertices[i][j] - tex_vector);
+				texels[index].x = -texel_temp.x; //flip X for compatibility with right-hand coordinate system
+				texels[index].y = texel_temp.y;
+				index++;
+			}
 		}
+		return texels;
 	}
-	return texels;
+	else
+	{
+		Ogre::Vector2 *texels = new Ogre::Vector2[4];
+		texels[0].x = 0;
+		texels[0].y = 0;
+		texels[1].x = 1;
+		texels[1].y = 0;
+		texels[2].x = 1;
+		texels[2].y = 1;
+		texels[3].x = 0;
+		texels[3].y = 1;
+		return texels;
+	}
+	return 0;
 }
 
 int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add)

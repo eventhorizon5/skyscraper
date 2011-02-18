@@ -34,6 +34,7 @@ WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Obj
 {
 	//wall object constructor
 	meshwrapper = wrapper;
+	parent_array = 0;
 
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)

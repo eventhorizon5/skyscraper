@@ -330,6 +330,7 @@ public:
 	MeshObject* SkyBox;
 
 	float AmbientR, AmbientG, AmbientB, OldAmbientR, OldAmbientG, OldAmbientB; //ambient colors
+	bool TexelOverride; //used for small square-shaped controls
 
 private:
 
