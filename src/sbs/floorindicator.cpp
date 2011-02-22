@@ -123,6 +123,11 @@ void FloorIndicator::Update(const char *value)
 
 	std::string texture;
 	texture = value;
+
+	//don't update if name is set to 'null'
+	if (texture == "null")
+		return;
+
 	texture.insert(0, Prefix);
 
 	FloorIndicatorMesh->ChangeTexture(texture.c_str());

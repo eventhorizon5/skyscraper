@@ -123,6 +123,7 @@ public:
 	float DepartureDelay; //delay in seconds between door closure and elevator departure
 	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
+	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -257,6 +258,7 @@ public:
 	void MoveLights(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	Object* AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	void MoveModels(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
+	void AddDisplayFloor(int floor);
 
 private:
 

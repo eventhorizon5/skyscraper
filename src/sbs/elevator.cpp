@@ -2261,8 +2261,22 @@ void Elevator::UpdateFloorIndicators()
 	if (UseFloorSkipText == true && IsServicedFloor(GetFloor()) == false)
 		value = FloorSkipText;
 	else
-		value = sbs->GetFloor(GetFloor())->ID;
+	{
+		if (DisplayFloors.size() > 0)
+		{
+			for (int i = 0; i < DisplayFloors.size(); i++)
+			{
+				if (GetFloor() == DisplayFloors[i])
+					value = sbs->GetFloor(GetFloor())->ID;
+			}
+		}
+		else
+			value = sbs->GetFloor(GetFloor())->ID;
+	}
 	TrimString(value);
+
+	if (value == "")
+		value = "null";
 
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
@@ -4291,4 +4305,10 @@ void Elevator::MoveModels(Ogre::Vector3 position, bool relative_x, bool relative
 	//move models
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 		ModelArray[i]->Move(position, relative_x, relative_y, relative_z);
+}
+
+void Elevator::AddDisplayFloor(int floor)
+{
+	//add a floor to the display floors list
+	DisplayFloors.push_back(floor);
 }

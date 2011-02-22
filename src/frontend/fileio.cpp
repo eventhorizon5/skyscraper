@@ -3499,6 +3499,50 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 	}
+	if (SetCaseCopy(LineData.substr(0, 13), false) == "displayfloors")
+	{
+		//copy string listing of serviced floors into array
+		int params = SplitAfterEquals(LineData.c_str(), false);
+		if (params == -1)
+			return ScriptError("Syntax Error");
+
+		for (int line = 0; line < params; line++)
+		{
+			std::string tmpstring = tempdata[line];
+			TrimString(tmpstring);
+			if (tmpstring.find("-", 1) > 0)
+			{
+				int start, end;
+				//found a range marker
+				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
+				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				TrimString(str1);
+				TrimString(str2);
+				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
+					return ScriptError("Invalid value");
+				if (end < start)
+				{
+					int temp = start;
+					start = end;
+					end = temp;
+				}
+
+				for (int k = start; k <= end; k++)
+				{
+					elev->AddDisplayFloor(k);
+				}
+			}
+			else
+			{
+				int data;
+				std::string str = tempdata[line];
+				TrimString(str);
+				if (!IsNumeric(str.c_str(), data))
+					return ScriptError("Invalid value");
+				elev->AddDisplayFloor(data);
+			}
+		}
+	}
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "assignedshaft")
 	{
 		if (temp2check < 0)
