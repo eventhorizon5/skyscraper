@@ -619,7 +619,18 @@ void Floor::UpdateFloorIndicators(int elevator)
 				if (elev->UseFloorSkipText == true && elev->IsServicedFloor(elev->GetFloor()) == false)
 					value = elev->GetFloorSkipText();
 				else
-					value = sbs->GetFloor(elev->GetFloor())->ID;
+				{
+					if (elev->DisplayFloors.size() > 0)
+					{
+						for (int i = 0; i < elev->DisplayFloors.size(); i++)
+						{
+							if (elev->GetFloor() == elev->DisplayFloors[i])
+								value = sbs->GetFloor(elev->GetFloor())->ID;
+						}
+					}
+					else
+						value = sbs->GetFloor(elev->GetFloor())->ID;
+				}
 				TrimString(value);
 				FloorIndicatorArray[i]->Update(value.c_str());
 			}
@@ -640,7 +651,18 @@ void Floor::UpdateFloorIndicators()
 			if (elevator->UseFloorSkipText == true && elevator->IsServicedFloor(elevator->GetFloor()) == false)
 				value = elevator->GetFloorSkipText();
 			else
-				value = sbs->GetFloor(elevator->GetFloor())->ID;
+			{
+				if (elevator->DisplayFloors.size() > 0)
+				{
+					for (int i = 0; i < elevator->DisplayFloors.size(); i++)
+					{
+						if (elevator->GetFloor() == elevator->DisplayFloors[i])
+							value = sbs->GetFloor(elevator->GetFloor())->ID;
+					}
+				}
+				else
+					value = sbs->GetFloor(elevator->GetFloor())->ID;
+			}
 			TrimString(value);
 			FloorIndicatorArray[i]->Update(value.c_str());
 		}

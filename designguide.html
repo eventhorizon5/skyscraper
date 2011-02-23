@@ -1037,6 +1037,11 @@
     The default is 0. Note that a value greater than 0 will switch off the LevelingOpen 
     setting.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">ArrivalDelay = <em>0.5</em></font></p>
+  <p align="left"><strong>54. DisplayFloors</strong> - sets the floors that will 
+    be displayed by the elevator's indicators. This command uses the same syntax 
+    as the ServicedFloors command.<br>
+    Syntax: <font size="2" face="Courier New, Courier, mono">DisplayFloors = <em>0, 
+    9, 19, 29</em></font></p>
   <p align="left"><strong></strong></p>
   <p align="left"><strong>Commands:</strong></p>
   <p align="left"><strong>1. CreateElevator</strong> - creates an elevator at 
@@ -1378,8 +1383,10 @@
     6 - faces front, opens back<br>
     7 - faces back, opens back<br>
     8 - faces back, opens front</p>
-  <p align="left"><strong>20. AddModel</strong>adds a 3D model to the
-      floor. The model's textures/materials must be defined in a separate ".material" file, and a separate collider mesh ".collider" will be loaded.  If a collider mesh isn't available, a simple box collider will be created.<br>
+  <p align="left"><strong>20. AddModel</strong> - adds a 3D model to the floor. 
+    The model's textures/materials must be defined in a separate ".material" file, 
+    and a separate collider mesh ".collider" will be loaded. If a collider mesh 
+    isn't available, a simple box collider will be created.<br>
     Syntax: <font size="2" face="Courier New, Courier, mono">AddModel<em> name, 
     filename, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ, MaxRenderDistance, 
     ScaleMultiplier, EnablePhysics, Restitution, Friction, Mass</em><em><br>
