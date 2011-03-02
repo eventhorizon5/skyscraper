@@ -2898,13 +2898,16 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	else
 		additionalfloors = 0;
 
-	//disable floors 1 floor outside of range
+	//disable floors 1 floor outside of range, unless part of group
 	if (value == true)
 	{
-		if (IsValidFloor(floor - additionalfloors - 1))
-			GetFloor(floor - additionalfloors - 1)->Enabled(false);
-		if (IsValidFloor(floor + additionalfloors + 1))
-			GetFloor(floor + additionalfloors + 1)->Enabled(false);
+		int floorval = floor - additionalfloors - 1;
+		if (IsValidFloor(floorval) && GetFloor(floor)->IsInGroup(floorval) == false)
+				GetFloor(floorval)->Enabled(false);
+
+		floorval = floor + additionalfloors + 1;
+		if (IsValidFloor(floorval) && GetFloor(floor)->IsInGroup(floorval) == false)
+			GetFloor(floorval)->Enabled(false);
 	}
 
 	//enable floors within range
