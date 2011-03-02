@@ -84,6 +84,7 @@ public:
 	void GetInput();
 	void Report(std::string message, ...);
 	bool ReportError(std::string message, ...);
+	bool ReportFatalError(std::string message, ...);
 	bool Initialize();
 	void GetMenuInput();
 	void StartSound();

@@ -130,7 +130,7 @@ bool Skyscraper::OnInit(void)
 
 	//start and initialize OGRE
 	if (!Initialize())
-		return ReportError("Error initializing OGRE");
+		return ReportError("Error initializing frontend");
 
 	//autoload a building file if specified
 	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
@@ -298,14 +298,32 @@ void Skyscraper::Render()
 bool Skyscraper::Initialize()
 {
 	//initialize OGRE
-
 	mRoot = Ogre::Root::getSingletonPtr();
 	if(!mRoot)
-		mRoot = new Ogre::Root();
+	{
+		try
+		{
+			mRoot = new Ogre::Root();
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportFatalError("Error initializing OGRE\nDetails:" + e.getDescription());
+			return false;
+		}
+	}
 	
 	//load config file
-	configfile.load("skyscraper.ini");
+	try
+	{
+		configfile.load("skyscraper.ini");
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
+		return false;
+	}
 
+	//configure render system
 	if(!mRoot->getRenderSystem())
 	{
 		//if no render systems are loaded, try to load previous config
@@ -317,31 +335,58 @@ bool Skyscraper::Initialize()
 		}
 	}
 
-	mRoot->initialise(false);
-	mRenderWindow = CreateRenderWindow();
-	//mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
+	//initialize render window
+	try
+	{
+		mRoot->initialise(false);
+		mRenderWindow = CreateRenderWindow();
+		//mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error initializing render window\nDetails:" + e.getDescription());
+		return false;
+	}
 
-	//load resources
+
+	//load resource configuration
 	Ogre::ConfigFile cf;
-	cf.load("resources.cfg");
+	try
+	{
+		cf.load("resources.cfg");
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error loading resources.cfg\nDetails:" + e.getDescription());
+		return false;
+	}
 	Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
-	std::string secName, typeName, archName;
-	while(seci.hasMoreElements())
+	//add resource locations
+	try
 	{
-		secName = seci.peekNextKey();
-		Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
-		Ogre::ConfigFile::SettingsMultiMap::iterator i;
-		for(i = settings->begin(); i != settings->end(); ++i)
+		std::string secName, typeName, archName;
+		while(seci.hasMoreElements())
 		{
-				typeName = i->first;
-				archName = i->second;
-				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+			secName = seci.peekNextKey();
+			Ogre::ConfigFile::SettingsMultiMap *settings = seci.getNext();
+			Ogre::ConfigFile::SettingsMultiMap::iterator i;
+			for(i = settings->begin(); i != settings->end(); ++i)
+			{
+					typeName = i->first;
+					archName = i->second;
+					Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+			}
 		}
+
+		//add app's directory to resource manager
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
 	}
-	
-	//add app's directory to resource manager
-	Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error initializing resources\nDetails:" + e.getDescription());
+		return false;
+	}
 	
 	//create scene manager
 	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
@@ -385,15 +430,19 @@ bool Skyscraper::Initialize()
 	if (result != FMOD_OK)
 	{
 		printf("Error initializing sound\n");
-		return false;
+		DisableSound = true;
 	}
-	result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
-	if (result != FMOD_OK)
+	else
 	{
-		printf("Error initializing sound\n");
-		return false;
+		result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
+		if (result != FMOD_OK)
+		{
+			printf("Error initializing sound\n");
+			DisableSound = true;
+		}
+		else
+			Report("Sound initialized");
 	}
-	Report("Sound initialized");
 
 	return true;
 }
@@ -688,6 +737,22 @@ bool Skyscraper::ReportError(std::string message, ...)
 	printf(message.c_str());
 	printf("\n");
 	fflush(stdout);
+
+	return false;
+}
+
+bool Skyscraper::ReportFatalError(std::string message, ...)
+{
+	ReplaceAll(message, "%", "%%"); //allow percent signs
+
+	printf(message.c_str());
+	printf("\n");
+	fflush(stdout);
+
+	//show error dialog
+	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+	dialog->ShowModal();
+	delete dialog;
 
 	return false;
 }
