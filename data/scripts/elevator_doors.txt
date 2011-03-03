@@ -1,0 +1,276 @@
+#Elevator door functions
+
+<Function elevdoor_single>
+    #parameters:
+    #1. door number
+    #2. texture
+    #3. side texture
+    #4. thickness
+    #5. X position of doors
+    #6. Z position of doors
+    #7. width
+    #8. height
+    #9. direction door faces (left, right, front, back)
+    #10. movement direction (left/right/up/down)
+    #11. speed
+    #12. is shaft door? (true/false)
+    
+    if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = (%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 202 = %param6%
+    if[%param9% = front | %param9% = back] Set 203 = %param6%
+
+    if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = (%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 200 = %param5%
+    if[%param9% = left | %param9% = right] Set 201 = %param5%
+
+    if[%param12% = false] AddDoorComponent %param1%, Main, %param2%, %param3%, %param4%, %param10%, %param11%, %param11% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param12% = false] FinishDoors %param1%
+    if[%param12% = true] AddShaftDoorsComponent %param1%, Main, %param2%, %param3%, %param4%, %param10%, %param11%, %param11% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param12% = true] FinishShaftDoors %param1%
+<EndFunction>
+
+<Function elevdoor_center>
+    #parameters:
+    #1. door number
+    #2. texture
+    #3. side texture
+    #4. thickness
+    #5. X position of doors
+    #6. Z position of doors
+    #7. width
+    #8. height
+    #9. direction door faces (left, right, front, back)
+    #10. speed
+    #11. is shaft door? (true/false)
+    
+    if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
+    if[%param9% = front | %param9% = back] Set 202 = %param6%
+    if[%param9% = front | %param9% = back] Set 203 = %param6%
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
+    if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 206 = %param6%
+    if[%param9% = front | %param9% = back] Set 207 = %param6%
+
+    if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
+    if[%param9% = left | %param9% = right] Set 200 = %param5%
+    if[%param9% = left | %param9% = right] Set 201 = %param5%
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
+    if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 205 = %param5%
+
+    if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] FinishDoors %param1%
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] FinishShaftDoors %param1%
+<EndFunction>
+
+<Function elevdoor_center_classic>
+    #parameters:
+    #1. door number
+    #2. texture
+    #3. side texture
+    #4. thickness
+    #5. X position of doors
+    #6. Z position of doors
+    #7. width
+    #8. height
+    #9. direction door faces (left, right, front, back)
+    #10. speed
+    #11. is shaft door? (true/false)
+    
+    if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = -0.025 + %param5%
+    if[%param9% = front | %param9% = back] Set 202 = %param6%
+    if[%param9% = front | %param9% = back] Set 203 = %param6%
+    if[%param9% = front | %param9% = back] Set 204 = 0.025 + %param5%
+    if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 206 = %param6%
+    if[%param9% = front | %param9% = back] Set 207 = %param6%
+
+    if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = -0.025 + %param6%
+    if[%param9% = left | %param9% = right] Set 200 = %param5%
+    if[%param9% = left | %param9% = right] Set 201 = %param5%
+    if[%param9% = left | %param9% = right] Set 206 = 0.025 + %param6%
+    if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 205 = %param5%
+
+    if[%param11% = false] AddDoorComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] FinishDoors %param1%
+
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
+
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left, %param2%, %param3%, %param4%, left, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right, %param2%, %param3%, %param4%, right, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] FinishShaftDoors %param1%
+<EndFunction>
+
+<Function elevdoor_dualspeed_left>
+    #parameters:
+    #1. door number
+    #2. texture
+    #3. side texture
+    #4. thickness
+    #5. X position of doors
+    #6. Z position of doors
+    #7. width
+    #8. height
+    #9. direction door faces (left, right, front, back)
+    #10. speed
+    #11. is shaft door? (true/false)
+    
+    if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
+    if[%param9% = front | %param9% = back] Set 202 = %param6%
+    if[%param9% = front | %param9% = back] Set 203 = %param6%
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
+    if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 206 = %param6%
+    if[%param9% = front | %param9% = back] Set 207 = %param6%
+
+    if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
+    if[%param9% = left | %param9% = right] Set 200 = %param5%
+    if[%param9% = left | %param9% = right] Set 201 = %param5%
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
+    if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 205 = %param5%
+
+    if[%param9% = front | %param9% = left] WallOrientation = right
+    if[%param9% = back | %param9% = right] WallOrientation = left
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) * 2, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+
+    if[%param9% = front | %param9% = left] WallOrientation = left
+    if[%param9% = back | %param9% = right] WallOrientation = right
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) * 2, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = false] FinishDoors %param1%
+    if[%param11% = true] FinishShaftDoors %param1%
+<EndFunction>
+
+<Function elevdoor_dualspeed_right>
+    #parameters:
+    #1. door number
+    #2. texture
+    #3. side texture
+    #4. thickness
+    #5. X position of doors
+    #6. Z position of doors
+    #7. width
+    #8. height
+    #9. direction door faces (left, right, front, back)
+    #10. speed
+    #11. is shaft door? (true/false)
+    
+    if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = %param5%
+    if[%param9% = front | %param9% = back] Set 202 = %param6%
+    if[%param9% = front | %param9% = back] Set 203 = %param6%
+    if[%param9% = front | %param9% = back] Set 204 = %param5%
+    if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 206 = %param6%
+    if[%param9% = front | %param9% = back] Set 207 = %param6%
+
+    if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = %param6%
+    if[%param9% = left | %param9% = right] Set 200 = %param5%
+    if[%param9% = left | %param9% = right] Set 201 = %param5%
+    if[%param9% = left | %param9% = right] Set 206 = %param6%
+    if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 205 = %param5%
+
+    if[%param9% = front | %param9% = left] WallOrientation = left
+    if[%param9% = back | %param9% = right] WallOrientation = right
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+
+    if[%param9% = front | %param9% = left] WallOrientation = right
+    if[%param9% = back | %param9% = right] WallOrientation = left
+    if[%param11% = false] AddDoorComponent %param1%, Door1, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Door2, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] FinishDoors %param1%
+    if[%param11% = true] FinishShaftDoors %param1%
+<EndFunction>
+
+<Function elevdoor_center_dualspeed>
+    #parameters:
+    #1. door number
+    #2. texture
+    #3. side texture
+    #4. thickness
+    #5. X position of doors
+    #6. Z position of doors
+    #7. width
+    #8. height
+    #9. direction door faces (left, right, front, back)
+    #10. speed
+    #11. is shaft door? (true/false)
+    
+    if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = -(%param7% / 4) + %param5%
+    if[%param9% = front | %param9% = back] Set 202 = %param6%
+    if[%param9% = front | %param9% = back] Set 203 = %param6%
+    if[%param9% = front | %param9% = back] Set 204 = -(%param7% / 4) + %param5%
+    if[%param9% = front | %param9% = back] Set 205 = %param5%
+    if[%param9% = front | %param9% = back] Set 206 = %param6%
+    if[%param9% = front | %param9% = back] Set 207 = %param6%
+
+    if[%param9% = front | %param9% = back] Set 208 = %param5%
+    if[%param9% = front | %param9% = back] Set 209 = (%param7% / 4) + %param5%
+    if[%param9% = front | %param9% = back] Set 210 = %param6%
+    if[%param9% = front | %param9% = back] Set 211 = %param6%
+    if[%param9% = front | %param9% = back] Set 212 = (%param7% / 4) + %param5%
+    if[%param9% = front | %param9% = back] Set 213 = (%param7% / 2) + %param5%
+    if[%param9% = front | %param9% = back] Set 214 = %param6%
+    if[%param9% = front | %param9% = back] Set 215 = %param6%
+
+    if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = -(%param7% / 4) + %param6%
+    if[%param9% = left | %param9% = right] Set 200 = %param5%
+    if[%param9% = left | %param9% = right] Set 201 = %param5%
+    if[%param9% = left | %param9% = right] Set 206 = -(%param7% / 4) + %param6%
+    if[%param9% = left | %param9% = right] Set 207 = %param6%
+    if[%param9% = left | %param9% = right] Set 204 = %param5%
+    if[%param9% = left | %param9% = right] Set 205 = %param5%
+
+    if[%param9% = left | %param9% = right] Set 210 = %param6%
+    if[%param9% = left | %param9% = right] Set 211 = (%param7% / 4) + %param6%
+    if[%param9% = left | %param9% = right] Set 208 = %param5%
+    if[%param9% = left | %param9% = right] Set 209 = %param5%
+    if[%param9% = left | %param9% = right] Set 214 = (%param7% / 4) + %param6%
+    if[%param9% = left | %param9% = right] Set 215 = (%param7% / 2) + %param6%
+    if[%param9% = left | %param9% = right] Set 212 = %param5%
+    if[%param9% = left | %param9% = right] Set 213 = %param5%
+
+    if[%param9% = front | %param9% = left] WallOrientation = right
+    if[%param9% = back | %param9% = right] WallOrientation = left
+    if[%param11% = false] AddDoorComponent %param1%, Left2, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right2, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %208%, %210%, %209%, %211%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) / 2, %200%, %202%, %201%, %203%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %212%, %214%, %213%, %215%, %param8%, 0, -1, 0, 0, 0
+
+    if[%param9% = front | %param9% = left] WallOrientation = left
+    if[%param9% = back | %param9% = right] WallOrientation = right
+    if[%param11% = false] AddDoorComponent %param1%, Left1, %param2%, %param3%, %param4% / 2, left, %param10% / 2, (%param10% * 0.75) / 2, %200%, %202%, %201%, %203%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] AddDoorComponent %param1%, Right1, %param2%, %param3%, %param4% / 2, right, %param10% / 2, (%param10% * 0.75) / 2, %212%, %214%, %213%, %215%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Left2, %param2%, %param3%, %param4% / 2, left, %param10%, %param10% * 0.75, %204%, %206%, %205%, %207%, %param8%, 0, 1, 0, 0, 0
+    if[%param11% = true] AddShaftDoorsComponent %param1%, Right2, %param2%, %param3%, %param4% / 2, right, %param10%, %param10% * 0.75, %208%, %210%, %209%, %211%, %param8%, 0, -1, 0, 0, 0
+    if[%param11% = false] FinishDoors %param1%
+    if[%param11% = true] FinishShaftDoors %param1%
+<EndFunction>
+

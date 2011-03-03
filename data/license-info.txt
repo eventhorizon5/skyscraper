@@ -1,0 +1,76 @@
+Some objects in this directory are by different authors and are covered
+by their licensing terms.  All other objects have been created by me (Ryan Thoryk).
+
+Third-party objects:
+
+textures:
+-bracing1 - cropped version of MetalBulkheads0013_M.jpg from cgtextures.com
+-brick1 - unknown
+-brick102.jpg, brick040+.jpg and brick021.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-Carpet0002_S.jpg - from cgtextures.com
+-Carpet0006_S.jpg - from cgtextures.com
+-Carpet0012_S.jpg - from cgtextures.com
+-Carpet0013_S.jpg - from cgtextures.com
+-Carpet0013_S.jpg - from cgtextures.com
+-Carpet0021b_S.jpg - from cgtextures.com
+-Carpet0021c_S.jpg - from cgtextures.com
+-Carpet0034_S.jpg - from cgtextures.com
+-checker*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-cinderblocks.jpg - modified version of cinder-block-texture.jpg from photoshoptextures.com
+-cutston.jpg - unknown
+-diamond*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-diamond18b.jpg to diamond18j.jpg - my own modifications of diamond18.jpg
+-door068.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-floor*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-herringbone*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-hungary*.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-intext.jpg - unknown
+-lobbyfront.jpg - unknown
+-marb047.jpg - unknown
+-marb148.jpg - unknown
+-marbl3.jpg - unknown
+-metal1.jpg - from telias.free.fr
+-metal1-sm.jpg - modified version of metal1.jpg
+-metal080.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-MetalBare0085_3_S.jpg - from cgtextures.com
+-metal034.jpg and metal072.jpg - from the Photorealistic Texture Pack at http://berneyboy.planetquake.gamespy.com/textures.htm
+-miscdoor8.jpg - unknown
+-searstower.jpg - modified version of windows11.jpg
+-servicedoor2.jpg and servicedoor3.jpg - unknown
+-stucco1.jpg to stucco5.jpg - from telias.free.fr
+-stucco4b.jpg - modified version of stucco4.jpg
+-stucco4c.jpg - modified version of stucco4.jpg
+-symb5.jpg - unknown
+-text12.jpg - unknown
+-text13.jpg - unknown
+-text16.jpg - unknown
+-Threadplate0055_2_S.jpg - from cgtextures.com
+-vents1.jpg - unknown
+-vents1b.jpg - modified version of vents1.jpg
+-vents1c.jpg - modified version of vents1.jpg
+-windows11.jpg - unknown
+-windows11e.jpg - modified version of windows11.jpg
+-windows11h.jpg - modified version of windows11.jpg
+-windows11h-inside.jpg - modified version of windows11.jpg
+-stucco22.jpg, wall5.jpg, stucco30.jpg, stucco2f.jpg, metal10.jpg and cem_tr.jpg from telias.free.fr
+-doverindicator*.gif by TampaBayElevator
+-otis4_* by epco_rules
+-brassdoor.jpg, elevmove3.wav, elevstart3.wav and elevstop3.wav by escalatorgeek881
+-otis-touch.gif and otis-touchlit.gif by Peter McLaughlin
+-granite_000*.jpg and graniteTExture_00*.jpg modified from www.grungetexturereference.com
+-square_offices.jpg, marble1-4, rose_marble, and stone.jpg from mayang.com/textures/
+-marble5 and marble6 from www.public-domain-image.com
+
+sounds:
+-chime1.wav made by me
+-chime2.wav originally from service_elevator.mp3 from www.freesound.org
+-chime4.wav originally liftbell.mp3 from www.freesound.org
+-motor_start.wav, motor_running.wav, and motor_stop.wav originally elevatormotor1.mp3 from www.freesound.org
+-elevidle.wav, elevmove.wav, elevstart.wav and elevstop.wav originally from "service_elavator.mp3" from www.freesound.org
+-elevatoropen.wav and elevatorclose.wav originally from elevator.wav from www.freesound.org
+-fire_alarm.wav - originally "Fire alarm.wav" by fonogeno on www.freesound.org
+-bell1.wav and bell1-stop.wav originally from "Electric_school_bell.wav" by John_Sauter on www.freesound.org
+-bell2.wav and bell2-stop.wav originall from "bell_school_ringing.wav" by vtkproductions.com at www.freesound.org
+-mechchime8.wav, mechchime9.wav and mechchime10.wav by escalatorgeek881
+-motor_start_hydraulic.wav, motor_run_hydraulic.wav, motor_stop_hydraulic.wav by Elevator5519
+-ambient.ogg was made by me, and is background audio recorded in the Sears Tower lobby

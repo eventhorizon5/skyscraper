@@ -1,0 +1,1967 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<wxsmith>
+	<object class="wxDialog" name="editelevator">
+		<title>Elevator Editor</title>
+		<centered>1</centered>
+		<id_arg>0</id_arg>
+		<style>wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX</style>
+		<object class="wxBoxSizer" variable="BoxSizer1" member="yes">
+			<orient>wxVERTICAL</orient>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer2" member="yes">
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer6" member="yes">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_tElevator" variable="tElevator" member="yes">
+									<label>Elevator</label>
+									<style>wxALIGN_CENTRE</style>
+								</object>
+								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+							</object>
+							<object class="sizeritem">
+								<object class="wxScrollBar" name="ID_sNumber" variable="sNumber" member="yes">
+									<style>wxSB_HORIZONTAL</style>
+								</object>
+								<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticText" name="ID_tFloor" variable="tFloor" member="yes">
+									<label>Floor</label>
+									<style>wxALIGN_CENTRE</style>
+								</object>
+								<flag>wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>10</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxScrollBar" name="ID_sFloor" variable="sFloor" member="yes">
+									<style>wxSB_HORIZONTAL</style>
+								</object>
+								<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+							</object>
+							<object class="sizeritem">
+								<object class="wxFlexGridSizer" variable="FlexGridSizer4" member="no">
+									<cols>5</cols>
+									<hgap>5</hgap>
+									<object class="sizeritem">
+										<object class="wxBoxSizer" variable="BoxSizer5" member="no">
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bACPMode" variable="bACPMode" member="yes">
+													<label>ACP Mode</label>
+													<handler function="On_bACPMode_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bUpPeak" variable="bUpPeak" member="yes">
+													<label>Up Peak</label>
+													<handler function="On_bUpPeak_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bDownPeak" variable="bDownPeak" member="yes">
+													<label>Down Peak</label>
+													<handler function="On_bDownPeak_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bIndService" variable="bIndService" member="yes">
+													<label>Independent Service</label>
+													<handler function="On_bIndService_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bInsService" variable="bInsService" member="yes">
+													<label>Inspection Service</label>
+													<handler function="On_bInsService_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticBoxSizer" variable="StaticBoxSizer10" member="no">
+											<label>Fire Ph 1</label>
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire1Off" variable="Fire1Off" member="yes">
+													<label>Off</label>
+													<selected>1</selected>
+													<handler function="On_Fire1Off_Select" entry="EVT_RADIOBUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire1On" variable="Fire1On" member="yes">
+													<label>On</label>
+													<handler function="On_Fire1On_Select" entry="EVT_RADIOBUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire1Bypass" variable="Fire1Bypass" member="yes">
+													<label>Bypass</label>
+													<handler function="On_Fire1Bypass_Select" entry="EVT_RADIOBUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxTOP|wxBOTTOM|wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticBoxSizer" variable="StaticBoxSizer9" member="no">
+											<label>Fire Ph 2</label>
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire2Off" variable="Fire2Off" member="yes">
+													<label>Off</label>
+													<handler function="On_Fire2Off_Select" entry="EVT_RADIOBUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire2On" variable="Fire2On" member="yes">
+													<label>On</label>
+													<handler function="On_Fire2On_Select" entry="EVT_RADIOBUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxRadioButton" name="ID_Fire2Hold" variable="Fire2Hold" member="yes">
+													<label>Hold</label>
+													<handler function="On_Fire2Hold_Select" entry="EVT_RADIOBUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticBoxSizer" variable="StaticBoxSizer6" member="no">
+											<label>Manual</label>
+											<orient>wxVERTICAL</orient>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bUp" variable="bUp" member="yes">
+													<label>Up</label>
+													<size>50,0</size>
+													<handler function="On_bUp_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bGoToggle" variable="bGoToggle" member="yes">
+													<label>Go</label>
+													<size>50,-1</size>
+													<handler function="On_bGoToggle_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxToggleButton" name="ID_bDown" variable="bDown" member="yes">
+													<label>Down</label>
+													<size>50,0</size>
+													<handler function="On_bDown_Toggle" entry="EVT_TOGGLEBUTTON" />
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer8" member="no">
+											<cols>1</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_tDoor" variable="tDoor" member="yes">
+													<label>Door</label>
+													<style>wxALIGN_CENTRE</style>
+												</object>
+												<flag>wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxScrollBar" name="ID_sDoor" variable="sDoor" member="yes">
+													<style>wxSB_HORIZONTAL</style>
+												</object>
+												<flag>wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bRefresh" variable="bRefresh" member="yes">
+													<label>Refresh Values</label>
+													<handler function="On_bRefresh_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bDumpFloors" variable="bDumpFloors" member="yes">
+													<label>Dump Floor List</label>
+													<handler function="On_bDumpFloors_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bDumpQueues" variable="bDumpQueues" member="yes">
+													<label>Dump Queues</label>
+													<handler function="On_bDumpQueues_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxBoxSizer" variable="BoxSizer4" member="no">
+													<object class="sizeritem">
+														<object class="wxCheckBox" name="ID_CHECKBOX1" variable="chkVisible" member="yes">
+															<label>Visible</label>
+															<handler function="On_chkVisible_Click" entry="EVT_CHECKBOX" />
+														</object>
+														<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+													<object class="sizeritem">
+														<object class="wxCheckBox" name="ID_chkRun" variable="chkRun" member="yes">
+															<label>Run</label>
+															<handler function="On_chkRun_Click" entry="EVT_CHECKBOX" />
+														</object>
+														<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+														<border>5</border>
+														<option>1</option>
+													</object>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<border>5</border>
+						<option>2</option>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="yes">
+							<label>Control</label>
+							<object class="sizeritem">
+								<object class="wxBoxSizer" variable="BoxSizer8" member="yes">
+									<orient>wxVERTICAL</orient>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bCall" variable="bCall" member="yes">
+											<label>Call</label>
+											<focused>1</focused>
+											<handler function="On_bCall_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bGo" variable="bGo" member="yes">
+											<label>Go</label>
+											<handler function="On_bGo_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bOpen" variable="bOpen" member="yes">
+											<label>Open</label>
+											<handler function="On_bOpen_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bOpenManual" variable="bOpenManual" member="yes">
+											<label>Open Manual</label>
+											<handler function="On_bOpenManual_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bOpenShaftDoor" variable="bOpenShaftDoor" member="yes">
+											<label>Open Shaft Doors</label>
+											<handler function="On_bOpenShaftDoor_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bStop" variable="bStop" member="yes">
+											<label>Emerg. Stop</label>
+											<handler function="On_bStop_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bChime" variable="bChime" member="yes">
+											<label>Chime</label>
+											<handler function="On_bChime_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bUpIndicator" variable="bUpIndicator" member="yes">
+											<label>Set Up Indicator</label>
+											<handler function="On_bUpIndicator_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxBoxSizer" variable="BoxSizer9" member="yes">
+									<orient>wxVERTICAL</orient>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bEnqueueUp" variable="bEnqueueUp" member="yes">
+											<label>Enqueue Up</label>
+											<handler function="On_bEnqueueUp_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bEnqueueDown" variable="bEnqueueDown" member="yes">
+											<label>Enqueue Down</label>
+											<handler function="On_bEnqueueDown_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bClose" variable="bClose" member="yes">
+											<label>Close</label>
+											<handler function="On_bClose_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bCloseManual" variable="bCloseManual" member="yes">
+											<label>Close Manual</label>
+											<handler function="On_bCloseManual_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bCloseShaftDoor" variable="bCloseShaftDoor" member="yes">
+											<label>Close Shaft Doors</label>
+											<handler function="On_bCloseShaftDoor_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bAlarm" variable="bAlarm" member="yes">
+											<label>Alarm</label>
+											<handler function="On_bAlarm_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bStopDoors" variable="bStopDoors" member="yes">
+											<label>Stop Doors</label>
+											<handler function="On_bStopDoors_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bDownIndicator" variable="bDownIndicator" member="yes">
+											<label>Set Down Indicator</label>
+											<handler function="On_bDownIndicator_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxRIGHT|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+			</object>
+			<object class="sizeritem">
+				<object class="wxBoxSizer" variable="BoxSizer3" member="yes">
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="yes">
+							<label>General</label>
+							<object class="sizeritem">
+								<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="yes">
+									<cols>3</cols>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
+											<label>Number:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtNumber" variable="txtNumber" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
+											<label>Name:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtName" variable="txtName" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetName" variable="bSetName" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetName_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
+											<label>Enabled:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtEnabled" variable="txtEnabled" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
+											<label>Shaft:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtShaft" variable="txtShaft" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
+											<label>Height:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtHeight" variable="txtHeight" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
+											<label>DWidth:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDoorWidth" variable="txtDoorWidth" member="yes">
+											<size>75,-1</size>
+											<tooltip>Door Width</tooltip>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
+											<label>DHeight:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDoorHeight" variable="txtDoorHeight" member="yes">
+											<pos>-1,75</pos>
+											<size>75,-1</size>
+											<tooltip>Door Height</tooltip>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText10" member="yes">
+											<label>DDirection:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDoorDirection" variable="txtDoorDirection" member="yes">
+											<size>75,-1</size>
+											<tooltip>Door Direction</tooltip>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT11" variable="StaticText11" member="yes">
+											<label>DoorsOpen:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDoorsOpen" variable="txtDoorsOpen" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT12" variable="StaticText12" member="yes">
+											<label>Brakes:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtBrakes" variable="txtBrakes" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT13" variable="StaticText13" member="yes">
+											<label>EmergStop:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtStop" variable="txtStop" member="yes">
+											<size>75,-1</size>
+											<tooltip>Emergency Stop</tooltip>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT42" variable="StaticText42" member="yes">
+											<label>DoorTimer:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDoorTimer" variable="txtDoorTimer" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetDoorTimer" variable="bSetDoorTimer" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetDoorTimer_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT61" variable="StaticText61" member="yes">
+											<label>QuickClose:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtQuickClose" variable="txtQuickClose" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetQuickClose" variable="bSetQuickClose" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetQuickClose_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT32" variable="StaticText32" member="yes">
+											<label>UseFlrSkip:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtUseSkipFloor" variable="txtUseSkipFloor" member="yes">
+											<size>75,-1</size>
+											<tooltip>Use Floor Skip Text</tooltip>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT44" variable="StaticText44" member="yes">
+											<label>FlrSkipTxt:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtSkipFloorText" variable="txtSkipFloorText" member="yes">
+											<size>75,-1</size>
+											<tooltip>Floor Skip Text</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetSkipFloorText" variable="bSetSkipFloorText" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetSkipFloorText_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT52" variable="StaticText52" member="yes">
+											<label>Alarm On:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtAlarm" variable="txtAlarm" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT28" variable="StaticText28" member="yes">
+											<label>WaitDoors:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtWaitForDoors" variable="txtWaitForDoors" member="yes">
+											<size>75,-1</size>
+											<tooltip>Wait for Doors</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT67" variable="StaticText67" member="yes">
+											<label>Nudge:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtNudgeMode" variable="txtNudgeMode" member="yes">
+											<size>75,-1</size>
+											<tooltip>Nudge Mode</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+							</object>
+						</object>
+						<flag>wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<border>5</border>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer10" member="yes">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer5" member="yes">
+									<label>Position</label>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="yes">
+											<cols>2</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT14" variable="StaticText14" member="yes">
+													<label>Floor:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtFloor" variable="txtFloor" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT15" variable="StaticText15" member="yes">
+													<label>Pos:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtPosition" variable="txtPosition" member="yes">
+													<size>75,-1</size>
+													<tooltip>Position</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText16" member="yes">
+													<label>Origin:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtOrigin" variable="txtOrigin" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT17" variable="StaticText17" member="yes">
+													<label>OriginFlr:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtOriginFloor" variable="txtOriginFloor" member="yes">
+													<size>75,-1</size>
+													<tooltip>Origin Floor</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT18" variable="StaticText18" member="yes">
+													<label>EStart:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtElevStart" variable="txtElevStart" member="yes">
+													<size>75,-1</size>
+													<tooltip>Elevator Start</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT19" variable="StaticText19" member="yes">
+													<label>DOrigin:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtDoorOrigin" variable="txtDoorOrigin" member="yes">
+													<size>75,-1</size>
+													<tooltip>Door Origin</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT20" variable="StaticText20" member="yes">
+													<label>SDOrigin:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtShaftDoorOrigin" variable="txtShaftDoorOrigin" member="yes">
+													<size>75,-1</size>
+													<tooltip>Shaft Door Origin</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT50" variable="StaticText50" member="yes">
+													<label>OnFloor:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtOnFloor" variable="txtOnFloor" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT25" variable="StaticText25" member="yes">
+													<label>Motor:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMotor" variable="txtMotor" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT54" variable="StaticText54" member="yes">
+													<label>Camera:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtCameraOffset" variable="txtCameraOffset" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer3" member="yes">
+									<label>Queues</label>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer3" member="yes">
+											<cols>2</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT38" variable="StaticText38" member="yes">
+													<label>Direction:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtQueueDirection" variable="txtQueueDirection" member="yes">
+													<size>75,-1</size>
+													<tooltip>Queue Direction</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT40" variable="StaticText40" member="yes">
+													<label>LastUp:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtQueueLastUp" variable="txtQueueLastUp" member="yes">
+													<size>75,-1</size>
+													<tooltip>Queue Last Up</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT41" variable="StaticText41" member="yes">
+													<label>LastDwn:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtQueueLastDown" variable="txtQueueLastDown" member="yes">
+													<size>75,-1</size>
+													<tooltip>Queue Last Down</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT51" variable="StaticText51" member="yes">
+													<label>Last:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtQueueLastDirection" variable="txtQueueLastDirection" member="yes">
+													<size>75,-1</size>
+													<tooltip>Queue Last Direction</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bResetQueues" variable="bResetQueues" member="yes">
+													<label>Reset</label>
+													<handler function="On_bResetQueues_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+							</object>
+						</object>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<border>5</border>
+					</object>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer7" member="yes">
+							<label>Motion</label>
+							<object class="sizeritem">
+								<object class="wxFlexGridSizer" variable="FlexGridSizer6" member="yes">
+									<cols>3</cols>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT21" variable="StaticText21" member="yes">
+											<label>Speed:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtSpeed" variable="txtSpeed" member="yes">
+											<size>75,-1</size>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetSpeed" variable="bSetSpeed" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetSpeed_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT22" variable="StaticText22" member="yes">
+											<label>Accel:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtAcceleration" variable="txtAcceleration" member="yes">
+											<size>75,-1</size>
+											<tooltip>Acceleration</tooltip>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetAcceleration" variable="bSetAcceleration" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetAcceleration_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT23" variable="StaticText23" member="yes">
+											<label>Decel:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDeceleration" variable="txtDeceleration" member="yes">
+											<size>75,-1</size>
+											<tooltip>Deceleration</tooltip>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetDeceleration" variable="bSetDeceleration" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetDeceleration_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT1" variable="StaticText1" member="yes">
+											<label>AccelJerk:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtAccelJerk" variable="txtAccelJerk" member="yes">
+											<size>75,-1</size>
+											<tooltip>Acceleration Jerk Rate</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetAccelJerk" variable="bSetAccelJerk" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetAccelJerk_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT29" variable="StaticText29" member="yes">
+											<label>DecelJerk:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDecelJerk" variable="txtDecelJerk" member="yes">
+											<size>75,-1</size>
+											<tooltip>Deceleration Jerk Rate</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetDecelJerk" variable="bSetDecelJerk" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetDecelJerk_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT26" variable="StaticText26" member="yes">
+											<label>Rate:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtRate" variable="txtRate" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT27" variable="StaticText27" member="yes">
+											<label>Direction:</label>
+										</object>
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDirection" variable="txtDirection" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+									<object class="spacer">
+										<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+											<label>JerkRate:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtJerkRate" variable="txtJerkRate" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT49" variable="StaticText49" member="yes">
+											<label>DStopped:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtDoorStopped" variable="txtDoorStopped" member="yes">
+											<size>75,-1</size>
+											<tooltip>Door Stopped</tooltip>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT53" variable="StaticText53" member="yes">
+											<label>IsIdle:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtIsIdle" variable="txtIsIdle" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT24" variable="StaticText24" member="yes">
+											<label>Manual:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtManualGo" variable="txtManualGo" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT55" variable="StaticText55" member="yes">
+											<label>Leveling:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLeveling" variable="txtLeveling" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT56" variable="StaticText56" member="yes">
+											<label>LevSpeed:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLevelingSpeed" variable="txtLevelingSpeed" member="yes">
+											<size>75,-1</size>
+											<tooltip>Leveling Speed</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetLevelingSpeed" variable="bSetLevelingSpeed" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetLevelingSpeed_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT57" variable="StaticText57" member="yes">
+											<label>LvOffset:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLevelingOffset" variable="txtLevelingOffset" member="yes">
+											<size>75,-1</size>
+											<tooltip>Leveling Offset</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetLevelingOffset" variable="bSetLevelingOffset" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetLevelingOffset_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT58" variable="StaticText58" member="yes">
+											<label>LevOpen:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtLevelingOpen" variable="txtLevelingOpen" member="yes">
+											<size>75,-1</size>
+											<tooltip>Leveling Open</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetLevelingOpen" variable="bSetLevelingOpen" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetLevelingOpen_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT60" variable="StaticText60" member="yes">
+											<label>Parking:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtParking" variable="txtParking" member="yes">
+											<size>75,-1</size>
+											<style>wxTE_READONLY</style>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="spacer">
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT63" variable="StaticText63" member="yes">
+											<label>SlowSpd:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtSlowSpeed" variable="txtSlowSpeed" member="yes">
+											<size>75,-1</size>
+											<tooltip>Slow Speed Door Multiplier</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetSlowSpeed" variable="bSetSlowSpeed" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetSlowSpeed_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT64" variable="StaticText64" member="yes">
+											<label>ManualSpd:</label>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_txtManualSpeed" variable="txtManualSpeed" member="yes">
+											<size>75,-1</size>
+											<tooltip>Manual Door Speed Multiplier</tooltip>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxButton" name="ID_bSetManualSpeed" variable="bSetManualSpeed" member="yes">
+											<label>Set</label>
+											<style>wxBU_EXACTFIT</style>
+											<handler function="On_bSetManualSpeed_Click" entry="EVT_BUTTON" />
+										</object>
+										<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+							</object>
+						</object>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<border>5</border>
+					</object>
+					<object class="sizeritem">
+						<object class="wxBoxSizer" variable="BoxSizer7" member="no">
+							<orient>wxVERTICAL</orient>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer8" member="yes">
+									<label>Destination</label>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer7" member="yes">
+											<cols>3</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT30" variable="StaticText30" member="yes">
+													<label>Floor:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtDestFloor" variable="txtDestFloor" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT43" variable="StaticText43" member="yes">
+													<label>IsMoving:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtIsMoving" variable="txtIsMoving" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT31" variable="StaticText31" member="yes">
+													<label>Move:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtMoveElevator" variable="txtMoveElevator" member="yes">
+													<size>75,-1</size>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT33" variable="StaticText33" member="yes">
+													<label>Distance:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtDistance" variable="txtDistance" member="yes">
+													<size>75,-1</size>
+													<tooltip>Distance to Destination</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT34" variable="StaticText34" member="yes">
+													<label>Dest:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtDestination" variable="txtDestination" member="yes">
+													<size>75,-1</size>
+													<tooltip>Destination</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT35" variable="StaticText35" member="yes">
+													<label>StopDist:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtStopDistance" variable="txtStopDistance" member="yes">
+													<size>75,-1</size>
+													<tooltip>Stopping Distance</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT36" variable="StaticText36" member="yes">
+													<label>TmpDecel:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtTempDecel" variable="txtTempDecel" member="yes">
+													<size>75,-1</size>
+													<tooltip>Temp Deceleration</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT37" variable="StaticText37" member="yes">
+													<label>Error:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtErrorOffset" variable="txtErrorOffset" member="yes">
+													<size>75,-1</size>
+													<tooltip>Error Offset</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="spacer">
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT59" variable="StaticText59" member="yes">
+													<label>Notify:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtNotifyEarly" variable="txtNotifyEarly" member="yes">
+													<size>75,-1</size>
+													<tooltip>Notify Early</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bNotifyEarly" variable="bNotifyEarly" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bNotifyEarly_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT65" variable="StaticText65" member="yes">
+													<label>DDelay:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtDepartureDelay" variable="txtDepartureDelay" member="yes">
+													<size>75,-1</size>
+													<tooltip>Departure Delay</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetDepartureDelay" variable="bSetDepartureDelay" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetDepartureDelay_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT66" variable="StaticText66" member="yes">
+													<label>ADelay:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtArrivalDelay" variable="txtArrivalDelay" member="yes">
+													<size>75,-1</size>
+													<tooltip>Arrival Delay</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetArrivalDelay" variable="bSetArrivalDelay" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetArrivalDelay_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
+										<border>5</border>
+									</object>
+								</object>
+								<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<border>5</border>
+							</object>
+							<object class="sizeritem">
+								<object class="wxStaticBoxSizer" variable="StaticBoxSizer4" member="no">
+									<label>Modes</label>
+									<object class="sizeritem">
+										<object class="wxFlexGridSizer" variable="FlexGridSizer5" member="no">
+											<cols>3</cols>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT45" variable="StaticText45" member="yes">
+													<label>ACP Floor:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtACPFloor" variable="txtACPFloor" member="yes">
+													<size>75,-1</size>
+													<tooltip>Anti-Crime Prevention Floor</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetACPFloor" variable="bSetACPFloor" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetACPFloor_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT46" variable="StaticText46" member="yes">
+													<label>Recall Flr:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtRecallFloor" variable="txtRecallFloor" member="yes">
+													<size>75,-1</size>
+													<tooltip>Primary Recall Floor</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetRecallFloor" variable="bSetRecallFloor" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetRecallFloor_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT47" variable="StaticText47" member="yes">
+													<label>Rcl Flr Alt:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtRecallAlternate" variable="txtRecallAlternate" member="yes">
+													<size>75,-1</size>
+													<tooltip>Alternate Recall Floor</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetRecallAlternate" variable="bSetRecallAlternate" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetRecallAlternate_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT39" variable="StaticText39" member="yes">
+													<label>Park Flr:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtParkingFloor" variable="txtParkingFloor" member="yes">
+													<size>75,-1</size>
+													<tooltip>Parking Floor</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetParkingFloor" variable="bSetParkingFloor" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetParkingFloor_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT48" variable="StaticText48" member="yes">
+													<label>Park Dly:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtParkingDelay" variable="txtParkingDelay" member="yes">
+													<size>75,-1</size>
+													<tooltip>Parking Delay</tooltip>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetParkingDelay" variable="bSetParkingDelay" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetParkingDelay_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT62" variable="StaticText62" member="yes">
+													<label>NudgeTimer:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtNudgeTimer" variable="txtNudgeTimer" member="yes">
+													<size>75,-1</size>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetNudgeTimer" variable="bSetNudgeTimer" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetNudgeTimer_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+										</object>
+										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxBOTTOM|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
+				</object>
+				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+			</object>
+		</object>
+	</object>
+</wxsmith>

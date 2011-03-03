@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Skyscraper", "Skyscraper.vcproj", "{899501B5-1571-4301-B4D0-5FAADAE2A607}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1164EB58-F768-469D-9AC2-8A940B3B1BFD} = {1164EB58-F768-469D-9AC2-8A940B3B1BFD}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SBS", "SBS.vcproj", "{1164EB58-F768-469D-9AC2-8A940B3B1BFD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{899501B5-1571-4301-B4D0-5FAADAE2A607}.Debug|Win32.ActiveCfg = Debug|Win32
+		{899501B5-1571-4301-B4D0-5FAADAE2A607}.Debug|Win32.Build.0 = Debug|Win32
+		{899501B5-1571-4301-B4D0-5FAADAE2A607}.Release|Win32.ActiveCfg = Release|Win32
+		{899501B5-1571-4301-B4D0-5FAADAE2A607}.Release|Win32.Build.0 = Release|Win32
+		{1164EB58-F768-469D-9AC2-8A940B3B1BFD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1164EB58-F768-469D-9AC2-8A940B3B1BFD}.Debug|Win32.Build.0 = Debug|Win32
+		{1164EB58-F768-469D-9AC2-8A940B3B1BFD}.Release|Win32.ActiveCfg = Release|Win32
+		{1164EB58-F768-469D-9AC2-8A940B3B1BFD}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

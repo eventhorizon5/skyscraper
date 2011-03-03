@@ -1,0 +1,300 @@
+Version 1.8 (2.0 Alpha 8)
+-------------------------
+-new internal mesh system
+-new horizon distance setting
+-added render distance limits for small objects
+-added lighting system (not currently enabled)
+-added support for loading Collada models
+
+Version 1.7 (2.0 Alpha 7)
+-------------------------
+-added braille fonts
+-added support for elevator panel switches and knobs
+-added elevator fan toggle
+-door open and close buttons now support specific doors
+-added door hold feature
+-elevator now resets queue search direction if last entry in active queue is in the opposite movement direction
+-elevator doors no longer try to open if you press the call button as it's passing the floor
+-floor buttons now properly add floor route if pressed on the same floor as elevator is moving
+-Fix for vertically-moving elevator doors' offset calculations
+-Elevators now properly sync camera offsets if a person boards a moving elevator
+-Fixed an issue where the random activity system wouldn't select the top serviced floor
+-added standard doors to elevator objects
+-added sound support to doors
+-fixed a crash that occurred if ServicedFloors included an invalid floor number
+-added internal error reporting system
+-new object tree browser
+-elevator parking fixes
+-call cancel now only works in fire phase 2 mode
+-elevators now reroute properly if switched to fire phase 1 mode while moving
+-added object deletion support
+-added elevator run/stop states
+-arrival notification can now be performed at the start of leveling or at deceleration
+-Added adjacent floor check - eliminates crashes related to trying to create floors in the wrong order
+-Elevator doors no longer open when parking
+-some interior elevator objects now stay enabled while user is outside elevator
+-grouped floors now also enable stairwells and shafts
+-Added braille callbuttons
+-Elevator beep sounds now support floor number substitution
+-added support for direction message sounds
+-added separate folder for screenshots, and switched format to jpeg
+-added support for elevator music
+-ShaftCut and CutStairwell commands now cut external objects
+-Added support for displaying last clicked 3D position
+-Added Housing Estate building
+-Added support for changing door speeds
+-added SVN versioning info
+-Elevator objects can now be used in certain global commands
+-fixed a peak mode dispatch issue
+-Added case insensitivity support for file loading
+-Internal indicator vertical positioning fix
+-App now displays missing files after building load
+-Texture rendering fixes
+-added "open" parameter to doors
+-added DepartureDelay and ArrivalDelay elevator parameters
+-Error reporting system is now more verbose about certain errors
+-added sign textures
+-added nudge mode
+
+Version 1.6 (2.0 Alpha 6)
+-------------------------
+-added current floor ID to the control panel's main and camera control windows
+-added support for forcing autosizing on or off on a per-texture basis
+-added support for floor arrival sounds
+-added more camera speed config parameters
+-added full camera reset (respawn) triggered by F6
+-added elevator motor sound object
+-added support for exiting back to the main screen
+-added support for per-door elevator floor signs
+-added new simulator/building statistics dialog
+-moved button code into separate control class
+-added support for elevator button lighting
+-fixed issue involving elevator door sound playing for non-serviced doors
+-added script console
+-text-to-texture objects now support transparency
+-fixed floor sign autosizing issues
+-many elevator queue fixes
+-fixed call cancel button
+-app now properly exits to the main menu if a building fails to load
+-added custom sound objects
+-added new Simple building with basements
+-more comments added to the Simple building
+-elevators can now be named
+-call buttons now light up in groups
+-added Schindler MT textures and sounds
+-added verbose mode
+-control panel can now be reopened by pressing F12
+-fixed blank canvas issue on Mac
+-elevator modes can now be set from building scripts and the INI file
+-fixed ACP mode
+-fixed other service modes
+-added SetTextureMapping2 command
+-created new planar texture mapper
+-added the GetWallExtents and Print commands
+-added InterfloorOnTop global parameter and base variable
+-made new SetPlanarMapping command which is an extended version of the old ReverseExtents command
+-new planar texture mapper is now the default
+-added object information dialog
+-added support for file includes
+-added support for script functions
+-added support for user-defined elevator and shaft doors
+-added automatic elevator parking support
+-added button sound support
+-elevator and motor sounds now start at a position based on the elevator's speed
+-elevators now support an unlimited number of button panels
+-added CutAll command
+-added support for internal elevator directional indicators
+-directional indicators can now show active (running) elevator direction
+-fixed some quirks with elevator movement
+-added elevator leveling support
+-Lines with both functions and IF statements now process the IF statement first
+-door cutting uses CutAll function, which now makes it cut stairs, shafts, external, etc
+-Texture flipping now works properly with zero tw/th values
+-call buttons are now only created if any of the given elevators serves the floor
+-ACP mode now works in conjunction with peak modes
+-added experimental random elevator traffic
+
+Version 1.5 (2.0 Alpha 5)
+-------------------------
+-clicking on shaft doors and elevator doors while holding down shift now causes them to manually open/close
+-manually opening shaft doors causes the related floor to turn on if user is
+in a shaft or an elevator
+-added new buildings
+-added support for multiple floor indicators per elevator
+-floors can now have floor indicators
+-added support for elevator floor beeps
+-added support for separate up/down chimes
+-added support for per-door textures on elevator/shaft doors
+-added elevator door collision sensors
+-added last collision indicator to control panel
+-added support for call button lighting
+-major fixes to the elevator queue and call processing
+-fixes to some elevator parameters, where they would error out if used in a different block than the CreateElevator command
+-sound support is now optional and will switch off automatically if not available
+-some new script checks for valid floor ranges
+-added basic glass elevators to the Glass Tower
+-simultaneous door movements are now supported
+-call button monitor added, to realistically wait for an available elevator during a call
+-call button light status can now be changed by shift-clicking the button
+-elevator panel buttons now support position offsets
+-fixed manual sizing parameters of the panel buttons
+-added support for mounting zipfiles into virtual directories
+-added the ability to spin the camera (Z-axis rotation)
+-startup screen now works on Linux and Mac
+-added mouse look (freelook) mode, activated by F5
+-new Camera Control window
+-split chimes sounds into up and down versions
+-added support for writing text onto a texture with the AddText command
+-fixed a memory leak involving floor beeps
+-added support for texture name prefixes, used with floor indicators and signs
+-added support for cropping and overlaying textures with the LoadCropped and AddOverlay commands
+-added configuration file support
+-added support for zooming in and out (FOV angles)
+-added support for starting up without the control panel
+-added fullscreen support, activated by F10
+-fixed an issue where walls along the Z axis would have the side negative and
+positives switched
+-height element can now be chosen from the script's object parameters
+-added parking ramps to the Triton Center
+-added AddFloorAutoArea command, which enables and disables floors within a specified area
+-fixed texture flipping
+-removed ReverseExtents command (was broken since early 2007)
+-added SetTextureMapping and ResetTextureMapping commands (replaces ReverseExtents) to allow manual setting of UV texture coordinate data
+-added AddFillerWalls command which is a convenience function used in creating doors
+-added hotel rooms to the Triton Center
+-added control reference (for keyboard commands, etc) to the control panel
+
+Version 1.4.1 (2.0 Alpha 4.1)
+-------------------------
+-Linux build fix
+-fixed a shaft door regression
+
+Version 1.4 (2.0 Alpha 4)
+-------------------------
+-added syntax checking and error notification to the script processor
+-fixed an old bug that could crash the sim if the floor ID matched a non-existent texture
+-added support (and FloorSkipText parameter) for showing express zone indicators during floor skips
+-added ACP, Up Peak, Down Peak, Independent Service, Inspection Service, and Fire Service phases 1 and 2 modes to elevators (not all work yet)
+-remade manual/emergency door open/close methods
+-added door stop function for doors in manual/emergency mode
+-elevator doors no longer open during an emergency stop (except for a manual open)
+-manual opens during an emergency stop will only open the elevator car doors
+-fixed a crash that involved trying to open shaft doors on a non-serviced floor
+-added shaft tops to the Triton Center and Simple elevator shafts
+-lots of memory leak fixes
+-simulator now pauses when main window is minimized
+-Sears Tower skydeck elevator crash fixed
+-performance enhancements
+-call selection fix
+-half of express elevators in both the Triton Center and Sears Tower buildings
+are now stationed at the top
+-fixed ShowFullShaft command
+-added support for elevator directional indicators
+-added alarm sounds
+-added support for multiple elevator doors
+-added support for specifying shaft doors on a per-floor basis
+-added AddFloorSigns command that creates floor signs on all floors served by an elevator
+-numerous Triton Center fixes
+-split Triton Center topside mechanical into 2 floors, added stairs to the roof, and did roof/penthouse work
+-moved Triton Center's skydeck entrance to LL1
+-Triton Center's pool express elevator now only serves lobbies instead of upper residential floors in addition to lobbies
+-fontserver fix
+-added wireframe mode and screenshot keys
+-and lots more
+
+Version 1.3 (2.0 Alpha 3)
+-------------------------
+-added door framework
+-fixed a range bug that caused ranges to fail if the first value was negative
+-added basement levels to Triton Center
+-added ShaftShowFloors, ShaftShowOutside, and ShowFullShaft commands
+-fixed a bug involving certain variables not being processed
+-fixed up sign generator script
+-new floor signs (floors 151 to 300, and floors CC and PL for the Sears Tower)
+-fixed sound code
+-new elevator sounds
+-added script parameters for specifying elevator sounds
+-fixed door sound location and movement
+-moved main Crystal Space code out of SBS core into frontend
+-fixed an infinite loop condition when processing multiple and/or operators
+-more Sears Tower work; currently have all express and local elevators in place
+-added TextureFlip command
+-elevator editor's floor scrollbar now supports negative floors
+-fixed a bug where the elevator doors would immediately close (and the current floor would turn off) if going to next floor in queue
+-increased elevator door speeds to match new sounds
+-added basement levels to the Triton Center
+-new intro screen (doesn't work yet on Linux)
+-major performance improvements
+-added keys w, a, s and d for movement
+-input is now only processed if main window is selected
+
+Version 1.2 (2.0 Alpha 2) - Jan 10, 2009
+-------------------------
+-added missing DLL for CS, and fixed installer
+-added AddGround command, for creating tile grid-based grounds (fixes ground interference issue in 1.1)
+
+Version 1.1 (2.0 Alpha 1) - Jan 6, 2009
+-------------------------
+-complete rewrite from scratch, using C++ and the Crystal Space graphics engine
+-numerous features added that were not found in the 1.0 release
+
+
+Changelog from old 1.0 tree:
+
+Version 1.0
+1.0 is being released now due to the massive overhauls and redesigns that have
+rendered the main development Skyscraper tree unstable, and uncompilable at the moment.
+1.0 is not complete in any way, and is still a primitive release.
+1.0 is a fork of the stable 0.96 code, while the 0.97 code (renamed 1.1 alpha) is under development.
+-----------
+-fixed up shaft and pipe shaft issues
+-bundled with new installer
+
+Version 0.96 (build 161)
+-------------
+-cleaned up elevator button code, and made it into a nice little algorithm
+-fixed falling issue
+-added error detection during startup, for the absence of the TrueVision engine
+-fixed bugs in the Object Manager
+-fixed up 134th floor, and reworked the pool
+-rewrote elevator queuing system
+-collision detection failure bug fixed
+-reworked pipe shafts and crawl spaces
+-new cinematic intro added (will be enhanced later)
+-new functionality added to the simulator control panel
+-automation added to the simulator control panel
+-new buildings added
+-building texture resolutions fixed
+-ModelViewer application added
+
+Version 0.95b (build 144)
+-------------
+-minor code changes
+-adapted for the new TrueVision3D 6.2 engine
+
+Version 0.95 (build 140)
+------------
+Changelog begins during 0.95 development.
+-Date change
+-Shaft wall put over stairwell wall
+-Shaft ceilings raised to next floor
+-Fixed mezzanine walls and shafts somewhat
+-Fixed shaft floors
+-Fixed mezzanine to work with queues
+-Fixed mezzanine call buttons
+-Stopped elevator doors from opening if on a different floor
+-Large chunk of useless code deleted from DrawElevatorWalls2
+-Support for 4 stairwells added
+-Pipeshafts fixed, 4 total
+-Elevator call issue fixed (elevators didn't initally set currentfloorexact value to corresponding floor)
+-Massive bugs introduced with new features fixed
+-Elevator call queues added
+-Stairs creation moved into realtime
+-integrated with TrueVision3D 6.1b	
+-Tons of bugfixes and features
+-Elevator grouping support
+
+Versions 0.94 (build 125) and below
+-----------------------
+Zillions of changes...
+
