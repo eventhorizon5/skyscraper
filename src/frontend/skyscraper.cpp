@@ -1461,6 +1461,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	}
 
 	mRenderWindow->setActive(true);
+	mRenderWindow->windowMovedOrResized();
 
 	return mRenderWindow;
 }
@@ -1470,6 +1471,7 @@ void Skyscraper::destroyRenderWindow()
 	if (mRenderWindow)
 	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
 
+	mRenderWindow->destroy();
 	mRenderWindow = 0;
 
 	//restore background
