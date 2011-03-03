@@ -48,9 +48,11 @@ if (NOT OGRE_BUILD_PLATFORM_IPHONE)
 	find_package(Boost QUIET)
  
 	# Set up referencing of Boost
-	include_directories(${Boost_INCLUDE_DIR})
-	add_definitions(-DBOOST_ALL_NO_LIB)
-	set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${Boost_LIBRARIES})
+	if (Boost_FOUND)
+		include_directories(${Boost_INCLUDE_DIR})
+		add_definitions(-DBOOST_ALL_NO_LIB)
+		set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${Boost_LIBRARIES})
+	endif()
 endif()
 
 #find wxWidgets
