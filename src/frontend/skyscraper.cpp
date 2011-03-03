@@ -45,11 +45,6 @@
    #include "GL/glx.h"
 #endif
 
-#if defined(__WXMAC__)
-#include <Carbon/Carbon.h>
-	WindowRef i_carbonWin;
-#endif
-
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
 //IMPLEMENT_CLASS(Skyscraper, wxApp)
 //BEGIN_EVENT_TABLE(Skyscraper, wxApp)
@@ -1476,10 +1471,6 @@ void Skyscraper::destroyRenderWindow()
 
 	//restore background
 	//window->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
-
-#if defined(__WXMAC__)
-   DisposeWindow(i_carbonWin);
-#endif
 }
 
 const std::string Skyscraper::getOgreHandle() const
@@ -1523,19 +1514,7 @@ const std::string Skyscraper::getOgreHandle() const
    return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-   Rect rect;
-   wxPoint position;
-   wxSize size;
-   position = window->GetScreenPosition();
-   size      = window->GetSize();
-   rect.left   = position.x;
-   rect.top   = position.y;
-   rect.right   = position.x + size.GetWidth();
-   rect.bottom   = position.y + size.GetHeight();
-
-   CreateNewWindow(kFloatingWindowClass, kWindowNoTitleBarAttribute, &rect, &i_carbonWin);
-   ShowWindow(i_carbonWin);
-   return Ogre::StringConverter::toString((unsigned long)(HIViewGetRoot(i_carbonWin)));
+   return Ogre::StringConverter::toString((unsigned long)(HIViewRef(window->GetHandle())));
 
 #else
    #error Not supported on this platform!
