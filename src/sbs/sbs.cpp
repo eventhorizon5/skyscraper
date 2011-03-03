@@ -674,7 +674,6 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 
 	//enable alpha blending for related textures
 	if (has_alpha == true)
-	//if (matname == "MainWindows" || matname == "MainWindowsInt")
 	{
 		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
 		//enable hard alpha for alpha mask values 128 and above
@@ -747,7 +746,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_X8R8G8B8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
@@ -766,12 +765,9 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//enable alpha blending for related textures
-	/*if (has_alpha == true)
-	{
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}*/
+	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+	//enable hard alpha for alpha mask values 128 and above
+	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -857,7 +853,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	height = background->getHeight();
 
 	//create new empty texture
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_X8R8G8B8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 
 	//get new texture dimensions, if it was resized
 	width = texture->getWidth();
@@ -915,12 +911,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//enable alpha blending for related textures
-	/*if (has_alpha == true)
-	{
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}*/
+	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+	//enable hard alpha for alpha mask values 128 and above
+	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 
 	Report("AddTextToTexture: created texture " + Name);
 	CacheFilename(Name, Name);
@@ -982,7 +975,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, image1->getWidth(), image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_X8R8G8B8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, image1->getWidth(), image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
@@ -1003,12 +996,9 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//enable alpha blending for related textures
-	/*if (has_alpha == true)
-	{
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}*/
+	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+	//enable hard alpha for alpha mask values 128 and above
+	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 
 	//add texture multipliers for new texture
 	TextureInfo info;

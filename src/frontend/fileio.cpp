@@ -5572,7 +5572,19 @@ void ScriptProcessor::CheckFile(const char *filename)
 	ReplaceAll(file, "\\", "/");
 
 	if (Simcore->FileExists(file.c_str()) == false)
-		nonexistent_files.push_back(file);
+	{
+		bool exists = false;
+		for (int i = 0; i < nonexistent_files.size(); i++)
+		{
+			if (nonexistent_files[i] == file)
+			{
+				exists = true;
+				break;
+			}
+		}
+		if (exists == false)
+			nonexistent_files.push_back(file);
+	}
 }
 
 int ScriptProcessor::SplitData(const char *string, int start, bool calc)
