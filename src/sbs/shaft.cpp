@@ -343,7 +343,8 @@ bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const 
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		if (sbs->Verbose)
+			ReportError("CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		return false;
 	}
 
