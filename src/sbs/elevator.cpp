@@ -1098,6 +1098,18 @@ void Elevator::MonitorLoop()
 			InspectionService = false;
 			EnableInspectionService(true);
 		}
+		if (FireServicePhase1 > 0)
+		{
+			int value = FireServicePhase1;
+			FireServicePhase1 = 0;
+			EnableFireService1(value);
+		}
+		if (FireServicePhase2 > 0)
+		{
+			int value = FireServicePhase2;
+			FireServicePhase2 = 0;
+			EnableFireService2(value);
+		}
 		if (ACP == true)
 		{
 			ACP = false;
