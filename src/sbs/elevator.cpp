@@ -99,8 +99,8 @@ Elevator::Elevator(int number)
 	DownPeak = sbs->GetConfigBool("Skyscraper.SBS.Elevator.DownPeak", false);
 	IndependentService = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IndependentService", false);
 	InspectionService = sbs->GetConfigBool("Skyscraper.SBS.Elevator.InspectionService", false);
-	FireServicePhase1 = 0;
-	FireServicePhase2 = 0;
+	FireServicePhase1 = sbs->GetConfigInt("Skyscraper.SBS.Elevator.FireService1", 0);
+	FireServicePhase2 = sbs->GetConfigInt("Skyscraper.SBS.Elevator.FireService2", 0);
 	RecallFloor = 0;
 	RecallFloorAlternate = 0;
 	OnFloor = true;

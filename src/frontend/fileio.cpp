@@ -4026,6 +4026,18 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		elev->InspectionService = Ogre::StringConverter::parseBool(temp2);
 	}
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "fireservice1")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->FireServicePhase1 = Ogre::StringConverter::parseInt(temp2);
+	}
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "fireservice2")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->FireServicePhase2 = Ogre::StringConverter::parseInt(temp2);
+	}
 	if (SetCaseCopy(LineData.substr(0, 7), false) == "parking")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
