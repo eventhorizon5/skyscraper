@@ -36,6 +36,28 @@ THE SOFTWARE.
 #include "OgreBulletCollisionsWorld.h"
 #include "Debug/OgreBulletCollisionsDebugDrawer.h"
 
+class _OgreBulletExport oClock
+{
+public:
+	oClock();
+
+	~oClock();
+
+	/// Resets the initial reference time.
+	void reset();
+
+	/// Returns the time in ms since the last call to reset or since 
+	/// the btClock was created.
+	unsigned long int getTimeMilliseconds();
+
+	/// Returns the time in us since the last call to reset or since 
+	/// the Clock was created.
+	unsigned long int getTimeMicroseconds();
+
+private:
+	btClock *clock;
+};
+
 namespace OgreBulletDynamics
 {
     // -------------------------------------------------------------------------

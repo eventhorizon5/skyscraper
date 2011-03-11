@@ -1,9 +1,10 @@
+#include <OgreBulletDynamicsWorld.h>
 #include "globals.h"
 #include "sbs.h"
 #include "profiler.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
-static btClock gProfileClock;
+static oClock gProfileClock;
 
 /*
 

@@ -1,8 +1,6 @@
 #ifndef _SBS_PROFILER_H
 #define _SBS_PROFILER_H
 
-#include "LinearMath/btQuickprof.h"
-
 #define ENABLE_PROFILING
 
 /***************************************************************************************************

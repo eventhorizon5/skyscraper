@@ -45,6 +45,32 @@ THE SOFTWARE.
 using namespace Ogre;
 using namespace OgreBulletCollisions;
 
+oClock::oClock()
+{
+	clock = new btClock();
+}
+
+oClock::~oClock()
+{
+	delete clock;
+	clock = 0;
+}
+
+void oClock::reset()
+{
+	clock->reset();
+}
+
+unsigned long int oClock::getTimeMilliseconds()
+{
+	return clock->getTimeMilliseconds();
+}
+
+unsigned long int oClock::getTimeMicroseconds()
+{
+	return clock->getTimeMicroseconds();
+}
+
 namespace OgreBulletDynamics
 {
 
