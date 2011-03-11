@@ -3938,6 +3938,20 @@ int ScriptProcessor::ProcElevators()
 
 		elev->Music = temp2;
 	}
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "musicon")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		elev->MusicOn = Ogre::StringConverter::parseBool(temp2);
+	}
+	if (SetCaseCopy(LineData.substr(0, 11), false) == "musiconmove")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		elev->MusicOnMove = Ogre::StringConverter::parseBool(temp2);
+	}
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "floorskiptext")
 	{
 		if (temp2check < 0)

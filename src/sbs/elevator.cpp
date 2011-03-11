@@ -153,7 +153,9 @@ Elevator::Elevator(int number)
 	Notified = false;
 	Parking = false;
 	MusicPosition = 0;
-	MusicOn = true;
+	Music = sbs->GetConfigString("Skyscraper.SBS.Elevator.Music", "");
+	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOn", true);;
+	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOnMove", false);;
 	DepartureDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0);
 	ArrivalDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
 	WaitForTimer = false;
@@ -1159,7 +1161,7 @@ void Elevator::MonitorLoop()
 	//play music sound if in elevator, or if doors open
 	if (Music != "")
 	{
-		if (musicsound->IsPlaying() == false && MusicOn == true)
+		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && IsMoving == true) || MusicOnMove == false))
 		{
 			if (InServiceMode() == false)
 			{
@@ -1179,7 +1181,7 @@ void Elevator::MonitorLoop()
 		}
 		else
 		{
-			if ((MusicOn == false || InServiceMode() == true) && musicsound->IsPlaying() == true)
+			if ((MusicOn == false || InServiceMode() == true || (MusicOnMove == true && IsMoving == false)) && musicsound->IsPlaying() == true)
 			{
 				if (sbs->Verbose)
 					Report("stopping music");

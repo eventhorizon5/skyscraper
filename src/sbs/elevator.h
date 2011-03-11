@@ -120,6 +120,7 @@ public:
 	bool Parking; //is elevator parking?
 	Ogre::Vector3 MusicPosition; //music emitter position, relative of elevator center
 	bool MusicOn; //music enabled status
+	bool MusicOnMove; //true if music should only play during move
 	float DepartureDelay; //delay in seconds between door closure and elevator departure
 	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
