@@ -272,6 +272,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\src\sbs\profiler.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\sbs\random.cpp"
 				>
 			</File>
@@ -371,6 +375,10 @@
 			</File>
 			<File
 				RelativePath="..\src\sbs\object.h"
+				>
+			</File>
+			<File
+				RelativePath="..\src\sbs\profiler.h"
 				>
 			</File>
 			<File
