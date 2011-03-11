@@ -366,11 +366,12 @@ void SBSProfileManager::dumpAll()
 	SBSProfileManager::Release_Iterator(profileIterator);
 }
 
-SBSProfileSample::SBSProfileSample( const char * name )
+SBSProfileSample::SBSProfileSample( const char * name, bool advanced )
 {
+	is_advanced = advanced;
 	if (!sbs)
 		return;
-	if (sbs->enable_advanced_profiling == false)
+	if (is_advanced == true && sbs->enable_advanced_profiling == false)
 		return;
 	SBSProfileManager::Start_Profile( name );
 }
@@ -379,7 +380,7 @@ SBSProfileSample::~SBSProfileSample( void )
 {
 	if (!sbs)
 		return;
-	if (sbs->enable_advanced_profiling == false)
+	if (is_advanced == true && sbs->enable_advanced_profiling == false)
 		return;
 	SBSProfileManager::Stop_Profile();
 }

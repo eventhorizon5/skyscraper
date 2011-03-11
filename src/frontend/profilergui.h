@@ -28,6 +28,7 @@
 //(*Headers(Profiler)
 #include <wx/sizer.h>
 #include <wx/stattext.h>
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 //*)
 
@@ -41,11 +42,13 @@ class Profiler: public wxDialog
 
 		//(*Declarations(Profiler)
 		wxStaticText* txtMain;
+		wxCheckBox* chkAdvanced;
 		//*)
 
 	protected:
 
 		//(*Identifiers(Profiler)
+		static const long ID_chkAdvanced;
 		static const long ID_txtMain;
 		//*)
 
@@ -54,6 +57,7 @@ class Profiler: public wxDialog
 		//(*Handlers(Profiler)
 		//*)
 
+		bool advanced;
 		DECLARE_EVENT_TABLE()
 };
 

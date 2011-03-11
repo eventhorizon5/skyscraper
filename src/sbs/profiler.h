@@ -119,12 +119,15 @@ private:
 ///Use the SBS_PROFILE macro at the start of scope to time
 class SBSIMPEXP SBSProfileSample {
 public:
-	SBSProfileSample( const char * name );
+	SBSProfileSample( const char * name, bool advanced = true );
 	~SBSProfileSample( void );
+private:
+	bool is_advanced;
 };
 
 #ifdef ENABLE_PROFILING
-#define	SBS_PROFILE(name)			SBSProfileSample __profile(name)
+#define	SBS_PROFILE(name)			SBSProfileSample __profile(name, true)
+#define	SBS_PROFILE_MAIN(name)			SBSProfileSample __profile(name, false)
 #else
 #define	SBS_PROFILE(name)
 #endif

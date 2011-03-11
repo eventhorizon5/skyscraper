@@ -281,7 +281,7 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 
 void Skyscraper::Render()
 {
-	SBS_PROFILE("Render");
+	SBS_PROFILE_MAIN("Render");
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
@@ -446,7 +446,7 @@ bool Skyscraper::Initialize()
 
 void Skyscraper::GetInput()
 {
-	SBS_PROFILE("GetInput");
+	SBS_PROFILE_MAIN("GetInput");
 
 	//quit if main window isn't selected
 	if (window->IsActive() == false)

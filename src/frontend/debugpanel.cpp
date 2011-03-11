@@ -401,13 +401,13 @@ void DebugPanel::Timer::Notify()
 		if (profiler->IsShown() == true)
 		{
 			Simcore->enable_profiling = true;
-			Simcore->enable_advanced_profiling = true;
+			//Simcore->enable_advanced_profiling = true;
 			profiler->Loop();
 		}
 		else
 		{
 			Simcore->enable_profiling = false;
-			Simcore->enable_advanced_profiling = false;
+			//Simcore->enable_advanced_profiling = false;
 		}
 	}
 }

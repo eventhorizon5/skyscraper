@@ -23,8 +23,11 @@
 */
 
 #include "globals.h"
+#include "sbs.h"
 #include "profilergui.h"
 #include "profiler.h"
+
+extern SBS *Simcore; //external pointer to the SBS engine
 
 //(*InternalHeaders(Profiler)
 #include <wx/intl.h>
@@ -32,6 +35,7 @@
 //*)
 
 //(*IdInit(Profiler)
+const long Profiler::ID_chkAdvanced = wxNewId();
 const long Profiler::ID_txtMain = wxNewId();
 //*)
 
@@ -43,14 +47,21 @@ END_EVENT_TABLE()
 Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Profiler)
+	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
+	wxFlexGridSizer* FlexGridSizer1;
 	
-	Create(parent, id, _("Profiler"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER, _T("id"));
-	SetClientSize(wxDefaultSize);
-	Move(wxDefaultPosition);
+	Create(parent, wxID_ANY, _("Profiler"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
+	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
+	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+	chkAdvanced = new wxCheckBox(this, ID_chkAdvanced, _("Advanced Profiling"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAdvanced"));
+	chkAdvanced->SetValue(false);
+	BoxSizer2->Add(chkAdvanced, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	txtMain = new wxStaticText(this, ID_txtMain, wxEmptyString, wxDefaultPosition, wxSize(400,400), wxALIGN_LEFT, _T("ID_txtMain"));
-	BoxSizer1->Add(txtMain, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer1->Add(txtMain, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer1->Add(FlexGridSizer1, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
@@ -66,6 +77,11 @@ Profiler::~Profiler()
 
 void Profiler::Loop()
 {
+	if (advanced != chkAdvanced->GetValue())
+		SBSProfileManager::CleanupMemory();
+
+	advanced = chkAdvanced->GetValue();
+	Simcore->enable_advanced_profiling = advanced;
 	SBSProfileIterator* profileIterator = 0;
 	profileIterator = SBSProfileManager::Get_Iterator();
 

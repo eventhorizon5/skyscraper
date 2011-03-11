@@ -474,7 +474,7 @@ void SBS::MainLoop()
 
 	//update physics
 	float step = float(GetElapsedTime()) / 1000.0;
-	SBSProfileManager::Start_Profile("Bullet");
+	SBSProfileManager::Start_Profile("Collisions/Physics");
 	mWorld->stepSimulation(step, 2);
 	SBSProfileManager::Stop_Profile();
 
@@ -482,7 +482,7 @@ void SBS::MainLoop()
 	camera->Sync();
 
 	//update sound
-	SBSProfileManager::Start_Profile("FMOD");
+	SBSProfileManager::Start_Profile("Sound");
 	soundsys->update();
 	SBSProfileManager::Stop_Profile();
 
