@@ -284,6 +284,7 @@ void Stairs::Enabled(int floor, bool value)
 {
 	//turns stairwell on/off for a specific floor
 
+	SBS_PROFILE("Stairs::Enabled");
 	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor)
 	{
 		GetMeshObject(floor)->Enable(value);
@@ -315,6 +316,8 @@ void Stairs::EnableWholeStairwell(bool value)
 bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 {
 	//determine if user is in the stairwell
+
+	SBS_PROFILE("Stairs::IsInStairwell");
 
 	//if last position is the same as new, return previous result
 	if ((position.x >= (lastposition.x - 0.01)) &&
@@ -497,6 +500,8 @@ void Stairs::EnableRange(int floor, int range)
 	//turn on a range of floors
 	//if range is 3, show stairwell on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show only the current floor (floor)
+
+	SBS_PROFILE("Stairs::EnableRange");
 
 	//range must be greater than 0
 	if (range < 1)

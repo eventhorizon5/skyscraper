@@ -281,6 +281,8 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 
 void Skyscraper::Render()
 {
+	SBS_PROFILE("Render");
+
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
 
@@ -444,6 +446,8 @@ bool Skyscraper::Initialize()
 
 void Skyscraper::GetInput()
 {
+	SBS_PROFILE("GetInput");
+
 	//quit if main window isn't selected
 	if (window->IsActive() == false)
 		return;
@@ -756,6 +760,9 @@ void Skyscraper::Loop()
 {
 	//Main simulator loop
 
+	SBSProfileManager::Reset();
+	SBSProfileManager::Increment_Frame_Counter();
+
 	//main menu routine
 	if (IsRunning == false)
 	{
@@ -827,6 +834,8 @@ void Skyscraper::Loop()
 		//mouse->Reset();
 		Start();
 	}
+
+	//SBSProfileManager::dumpAll();
 }
 
 void Skyscraper::DrawBackground()

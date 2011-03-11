@@ -121,6 +121,7 @@ void FloorIndicator::Update(const char *value)
 {
 	//update display with a new texture value, such as a floor number
 
+	SBS_PROFILE("FloorIndicator::Update");
 	std::string texture;
 	texture = value;
 

@@ -482,6 +482,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	//this is the parent controller function that runs the movement function for each
 	//individual door component.
 
+	SBS_PROFILE("ElevatorDoor::MoveDoors");
+
 	//find which doors should be moved
 	bool elevdoors = false, shaftdoors = false;
 	if (WhichDoors == 1)
@@ -1122,6 +1124,8 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
+	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabled");
+
 	//exit if shaft's ShowFullShaft is set
 	if (sbs->GetShaft(elev->AssignedShaft)->ShowFullShaft == true && value == false)
 		return;
@@ -1153,6 +1157,8 @@ void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
 	//turn on a range of floors
 	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show door on only the current floor (floor)
+
+	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabledRange");
 
 	//exit if shaft's ShowFullShaft is set
 	if (sbs->GetShaft(elev->AssignedShaft)->ShowFullShaft == true)
@@ -1262,6 +1268,7 @@ bool ElevatorDoor::DoorsStopped()
 void ElevatorDoor::Loop()
 {
 	//main loop
+	SBS_PROFILE("ElevatorDoor::Loop");
 	if (OpenDoor == 1)
 		MoveDoors(true, false);
 	if (OpenDoor == -1)
@@ -1276,6 +1283,7 @@ void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool rel
 {
 	//moves doors
 
+	SBS_PROFILE("ElevatorDoor::Move");
 	for (int i = 0; i < (int)Doors->doors.size(); i++)
 	{
 		Doors->doors[i]->mesh->Move(position, relative_x, relative_y, relative_z);
@@ -1461,6 +1469,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
+	SBS_PROFILE("ElevatorDoor::DoorObject::MoveDoors");
 	float tempposition, temporigin;
 
 	if (finished == true)

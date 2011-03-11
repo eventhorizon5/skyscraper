@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
@@ -45,6 +45,8 @@
 					<CompileFile command="jam $file" />
 					<Clean command="jam clean" />
 					<DistClean command="jam distclean" />
+					<AskRebuildNeeded command="$make -q -f $makefile $target" />
+					<SilentBuild command="$make -s -f $makefile $target" />
 				</MakeCommands>
 			</Target>
 			<Target title="Release">
@@ -84,6 +86,8 @@
 		<Unit filename="../src/fileio.cpp" />
 		<Unit filename="../src/floor.cpp" />
 		<Unit filename="../src/floor.h" />
+		<Unit filename="../src/frontend/profilergui.cpp" />
+		<Unit filename="../src/frontend/profilergui.h" />
 		<Unit filename="../src/globals.cpp" />
 		<Unit filename="../src/globals.h" />
 		<Unit filename="../src/keydialog.cpp" />
@@ -112,17 +116,19 @@
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
 				<resources>
-                                        <wxFrame wxs="wxsmith/DebugPanel.wxs" src="../src/debugpanel.cpp" hdr="../src/debugpanel.h" name="DebugPanel" language="CPP" />
-                                        <wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/cameracontrol.cpp" hdr="../src/cameracontrol.h" name="CameraControl" language="CPP" />
-                                        <wxDialog wxs="wxsmith/editelevator.wxs" src="../src/editelevator.cpp" hdr="../src/editelevator.h" name="editelevator" language="CPP" />
-                                        <wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/meshcontrol.cpp" hdr="../src/meshcontrol.h" name="MeshControl" language="CPP" />
-					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/keydialog.cpp" hdr="../src/keydialog.h" name="KeyDialog" language="CPP" />
-					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/stats.cpp" hdr="../src/stats.h" name="Stats" language="CPP" />
-					<wxDialog wxs="wxsmith/Console.wxs" src="../src/console.cpp" hdr="../src/console.h" name="Console" language="CPP" />
-					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/objectinfo.cpp" hdr="../src/objectinfo.h" name="ObjectInfo" language="CPP" />
-					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/textwindow.cpp" hdr="../src/textwindow.h" name="TextWindow" language="CPP" />
-                                </resources>
+					<wxFrame wxs="wxsmith/DebugPanel.wxs" src="../src/frontend/debugpanel.cpp" hdr="../src/frontend/debugpanel.h" name="DebugPanel" language="CPP" />
+					<wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/frontend/cameracontrol.cpp" hdr="../src/frontend/cameracontrol.h" name="CameraControl" language="CPP" />
+					<wxDialog wxs="wxsmith/editelevator.wxs" src="../src/frontend/editelevator.cpp" hdr="../src/frontend/editelevator.h" name="editelevator" language="CPP" />
+					<wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/frontend/meshcontrol.cpp" hdr="../src/frontend/meshcontrol.h" name="MeshControl" language="CPP" />
+					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/frontend/keydialog.cpp" hdr="../src/frontend/keydialog.h" name="KeyDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/frontend/stats.cpp" hdr="../src/frontend/stats.h" name="Stats" language="CPP" />
+					<wxDialog wxs="wxsmith/Console.wxs" src="../src/frontend/console.cpp" hdr="../src/frontend/console.h" name="Console" language="CPP" />
+					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/frontend/objectinfo.cpp" hdr="../src/frontend/objectinfo.h" name="ObjectInfo" language="CPP" />
+					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/frontend/textwindow.cpp" hdr="../src/frontend/textwindow.h" name="TextWindow" language="CPP" />
+					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/frontend/profilergui.cpp" hdr="../src/frontend/profilergui.h" name="Profiler" language="CPP" />
+				</resources>
 			</wxsmith>
+			<envvars />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

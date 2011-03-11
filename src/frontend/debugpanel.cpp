@@ -30,6 +30,7 @@
 #include "meshcontrol.h"
 #include "editelevator.h"
 #include "keydialog.h"
+#include "profilergui.h"
 #include "stats.h"
 #include "globals.h"
 #include "sbs.h"
@@ -51,6 +52,7 @@ KeyDialog *kd;
 Stats *stats;
 Console *console;
 ObjectInfo *objectinfo;
+Profiler *profiler;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -88,6 +90,7 @@ const long DebugPanel::ID_bControlReference = wxNewId();
 const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
+const long DebugPanel::ID_bProfiler = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -197,6 +200,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bConsole, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bObjectInfo = new wxButton(Panel1, ID_bObjectInfo, _("Object Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bObjectInfo"));
 	BoxSizer3->Add(bObjectInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bProfiler = new wxButton(Panel1, ID_bProfiler, _("Profiler"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bProfiler"));
+	BoxSizer3->Add(bProfiler, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer3, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
@@ -222,6 +227,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
+	Connect(ID_bProfiler,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
 	//*)
 	dp = this;
 	OnInit();
@@ -257,6 +263,9 @@ DebugPanel::~DebugPanel()
 	if (objectinfo)
 		objectinfo->Destroy();
 	objectinfo = 0;
+	if (profiler)
+		profiler->Destroy();
+	profiler = 0;
 	dpanel = 0; //clear external pointer
 }
 
@@ -323,6 +332,7 @@ void DebugPanel::OnInit()
 	stats = new Stats(dp, -1);
 	console = new Console(dp, -1);
 	objectinfo = new ObjectInfo(dp, -1);
+	profiler = new Profiler(dp, -1);
 
 	timer = new Timer();
 	timer->Start(40);
@@ -385,6 +395,20 @@ void DebugPanel::Timer::Notify()
 	{
 		if (objectinfo->IsShown() == true)
 			objectinfo->Loop();
+	}
+	if (profiler && Simcore)
+	{
+		if (profiler->IsShown() == true)
+		{
+			Simcore->enable_profiling = true;
+			Simcore->enable_advanced_profiling = true;
+			profiler->Loop();
+		}
+		else
+		{
+			Simcore->enable_profiling = false;
+			Simcore->enable_advanced_profiling = false;
+		}
 	}
 }
 
@@ -481,5 +505,14 @@ void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
 			if (Simcore->GetElevator(i))
 				Simcore->GetElevator(i)->RandomActivity = chkRandom->GetValue();
 		}
+	}
+}
+
+void DebugPanel::On_bProfiler_Click(wxCommandEvent& event)
+{
+	if (profiler)
+	{
+		profiler->CenterOnScreen();
+		profiler->Show();
 	}
 }

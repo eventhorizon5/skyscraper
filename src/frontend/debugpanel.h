@@ -32,7 +32,6 @@
 #endif
 
 //(*Headers(DebugPanel)
-#include <wx/app.h>
 #include <wx/sizer.h>
 #include <wx/stattext.h>
 #include <wx/checkbox.h>
@@ -87,6 +86,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bStats;
 		static const long ID_bConsole;
 		static const long ID_bObjectInfo;
+		static const long ID_bProfiler;
 		static const long ID_PANEL1;
 		//*)
 		class Timer : public wxTimer
@@ -117,6 +117,7 @@ class DebugPanel: public wxFrame
 		void On_chkVerbose_Click(wxCommandEvent& event);
 		void On_bObjectInfo_Click(wxCommandEvent& event);
 		void On_chkRandom_Click(wxCommandEvent& event);
+		void On_bProfiler_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -152,6 +153,7 @@ class DebugPanel: public wxFrame
 		wxButton* bControlReference;
 		wxStaticText* t_object;
 		wxStaticText* StaticText5;
+		wxButton* bProfiler;
 		wxStaticText* StaticText7;
 		wxStaticText* t_clickposition;
 		wxBoxSizer* BoxSizer1;

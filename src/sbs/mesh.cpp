@@ -919,6 +919,8 @@ void MeshObject::Enable(bool value)
 	if (value == enabled)
 		return;
 
+	SBS_PROFILE("MeshObject::Enable");
+
 	//attach or detach from scenegraph
 	if (value == false)
 		SceneNode->detachObject(Movable);
@@ -961,6 +963,7 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	//if matcheck is true, exit if old and new textures are the same
 
 	//return Ogre::MaterialPtr(0);
+	SBS_PROFILE("MeshObject::ChangeTexture");
 	std::string tex = sbs->VerifyFile(texture);
 	std::string path = sbs->GetMountPath(texture, tex);
 	TrimString(tex);
@@ -996,6 +999,7 @@ int MeshObject::FindWall(const Ogre::Vector3 &point)
 {
 	//find a wall from a 3D point
 
+	SBS_PROFILE("MeshObject::FindWall");
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
 		if (Walls[i]->IsPointOnWall(point) == true)
@@ -1020,6 +1024,7 @@ bool MeshObject::IsEnabled()
 
 void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin)
 {
+	SBS_PROFILE("MeshObject::Move");
 	Ogre::Vector3 pos;
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(origin.x + position.x);
@@ -1045,7 +1050,7 @@ Ogre::Vector3 MeshObject::GetPosition()
 
 void MeshObject::SetRotation(const Ogre::Vector3 rotation)
 {
-	//rotate light
+	//rotate mesh
 	Ogre::Quaternion x(Ogre::Degree(rotation.x), Ogre::Vector3::UNIT_X);
 	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
@@ -1742,6 +1747,7 @@ int MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direct
 	//return -1 if no hit
 
 	//cast a ray from the camera position downwards
+	SBS_PROFILE("MeshObject::HitBeam");
 	Ogre::Ray ray (sbs->ToRemote(origin) -  SceneNode->getPosition(), direction);
 	for (int i = 0; i < Triangles.size(); i++)
 	{

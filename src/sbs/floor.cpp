@@ -246,6 +246,7 @@ void Floor::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
+	SBS_PROFILE("Floor::Enabled");
 	Level->Enable(value);
 	Interfloor->Enable(value);
 	IsEnabled = value;
@@ -441,6 +442,7 @@ void Floor::EnableGroup(bool value)
 {
 	//enable floors grouped with this floor
 
+	SBS_PROFILE("Floor::EnableGroup");
 	if (Group.size() > 0)
 	{
 		for (size_t i = 0; i < Group.size(); i++)
@@ -608,6 +610,7 @@ void Floor::UpdateFloorIndicators(int elevator)
 {
 	//changes the number texture on the floor indicators to the specified elevator's current floor
 
+	SBS_PROFILE("Floor::UpdateFloorIndicators1");
 	std::string value;
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
@@ -642,6 +645,7 @@ void Floor::UpdateFloorIndicators()
 {
 	//changes the number texture on the floor indicators
 
+	SBS_PROFILE("Floor::UpdateFloorIndicators2");
 	std::string value;
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
@@ -862,6 +866,7 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 {
 	//updates the active-direction indicators associated with the given elevator
 
+	SBS_PROFILE("Floor::UpdateDirectionalIndicators1");
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i])
@@ -893,6 +898,7 @@ void Floor::UpdateDirectionalIndicators()
 {
 	//updates all active-direction indicators
 
+	SBS_PROFILE("Floor::UpdateDirectionalIndicators2");
 	std::string value;
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{

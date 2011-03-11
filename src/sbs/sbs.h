@@ -47,6 +47,7 @@
 #include "stairs.h"
 #include "sound.h"
 #include "callbutton.h"
+#include "profiler.h"
 
 //global functions
 
@@ -155,6 +156,8 @@ public:
 	int WallCount; //wall object count
 	int PolygonCount; //wall polygon object count
 	bool Shaders; //true if shaders are enabled
+	bool enable_profiling; //enable general profiling
+	bool enable_advanced_profiling;
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

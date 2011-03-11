@@ -338,6 +338,7 @@ void Camera::CheckElevator()
 	//first checks to see if camera is within an elevator's height range, and then
 	//checks for a collision with the elevator's floor below
 
+	SBS_PROFILE("Camera::CheckElevator");
 	bool test = false;
 	for (int i = 1; i <= sbs->Elevators(); i++)
 	{
@@ -379,6 +380,7 @@ void Camera::CheckShaft()
 {
 	//check to see if user (camera) is in a shaft
 
+	SBS_PROFILE("Camera::CheckShaft");
 	for (int i = 1; i <= sbs->Shafts(); i++)
 	{
 		Shaft *shaft = sbs->GetShaft(i);
@@ -470,6 +472,7 @@ void Camera::CheckStairwell()
 {
 	//check to see if user (camera) is in a stairwell
 
+	SBS_PROFILE("Camera::CheckStairwell");
 	for (int i = 1; i <= sbs->StairsNum(); i++)
 	{
 		Stairs *stairs = sbs->GetStairs(i);
@@ -525,6 +528,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//get mesh object that the user clicked on, and perform related work
 
 	//cast a ray from the camera in the direction of the clicked position
+	SBS_PROFILE("Camera::ClickedObject");
 	float width = MainCamera->getViewport()->getActualWidth();
 	float height = MainCamera->getViewport()->getActualHeight();
 	float x = sbs->mouse_x / width;
@@ -796,6 +800,8 @@ const char *Camera::GetClickedObjectCommandP()
 
 void Camera::Loop()
 {
+	SBS_PROFILE("Camera::Loop");
+
 	//calculate acceleration
 	InterpolateMovement();
 

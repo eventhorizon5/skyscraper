@@ -383,6 +383,7 @@ void CallButton::Loop(bool direction)
 
 	//first exit if no call button is not processing a call for the current direction
 	//or if a call has already been processed
+	SBS_PROFILE("CallButton::Loop");
 	if ((UpStatus == false && direction == true) || (ProcessedUp == true && direction == true))
 		return;
 	if ((DownStatus == false && direction == false) || (ProcessedDown == true && direction == false))

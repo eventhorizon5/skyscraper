@@ -542,6 +542,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
+	//SBS_PROFILE("Elevator::AddRoute");
 
 	if (Running == false)
 	{
@@ -641,6 +642,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
+	//SBS_PROFILE("Elevator::DeleteRoute");
 
 	if (Running == false)
 	{
@@ -768,6 +770,7 @@ void Elevator::OpenHatch()
 void Elevator::ProcessCallQueue()
 {
 	//Processes the elevator's call queue, and sends elevators to called floors
+	SBS_PROFILE("Elevator::ProcessCallQueue");
 
 	//exit if elevator is not running
 	if (Running == false)
@@ -1038,6 +1041,7 @@ void Elevator::ProcessCallQueue()
 int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
+	//SBS_PROFILE("Elevator::GetFloor");
 
 	int newlastfloor;
 
@@ -1054,6 +1058,7 @@ int Elevator::GetFloor()
 void Elevator::MonitorLoop()
 {
 	//Monitors elevator and starts actions if needed
+	SBS_PROFILE("Elevator::MonitorLoop");
 
 	//make sure height value is set
 	if (HeightSet == false)
@@ -1238,6 +1243,7 @@ void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
+	SBS_PROFILE("Elevator::MoveElevatorToFloor");
 
 	Ogre::Vector3 movement = Ogre::Vector3(0, 0, 0);
 
@@ -2046,6 +2052,7 @@ void Elevator::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
+	//SBS_PROFILE("Elevator::Enabled");
 	if (sbs->Verbose)
 	{
 		if (value == true)
@@ -2063,6 +2070,7 @@ void Elevator::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
 
+	//SBS_PROFILE("Elevator::EnableObjects");
 	if (sbs->Verbose)
 	{
 		if (value == true)
@@ -2117,6 +2125,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 {
 	//determine if the given 3D position is inside the elevator
 
+	SBS_PROFILE("Elevator::IsInElevator");
 	int inelevator = false;
 
 	//if last position is the same as new, return previous result
@@ -2269,6 +2278,7 @@ void Elevator::UpdateFloorIndicators()
 {
 	//changes the number texture on the floor indicators to the elevator's current floor
 
+	SBS_PROFILE("Elevator::UpdateFloorIndicators");
 	std::string value;
 	if (UseFloorSkipText == true && IsServicedFloor(GetFloor()) == false)
 		value = FloorSkipText;
@@ -2328,6 +2338,7 @@ bool Elevator::IsServicedFloor(int floor)
 {
 	//returns true if floor is in serviced floor list, otherwise false
 
+	//SBS_PROFILE("Elevator::IsServicedFloor");
 	int index = -1;
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
@@ -3206,6 +3217,7 @@ void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 {
 	//turns shaft elevator doors on/off
 
+	SBS_PROFILE("Elevator::ShaftDoorsEnabled");
 	int start, end;
 	if (number == 0)
 	{
@@ -3233,6 +3245,7 @@ void Elevator::ShaftDoorsEnabledRange(int number, int floor, int range)
 	//if range is 3, show shaft door on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show door on only the current floor (floor)
 
+	SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
 	int start, end;
 	if (number == 0)
 	{
@@ -3258,6 +3271,7 @@ bool Elevator::AreDoorsOpen(int number)
 {
 	//returns the internal door state
 
+	SBS_PROFILE("Elevator::AreDoorsOpen");
 	int start, end;
 	if (number == 0)
 	{
@@ -3287,6 +3301,7 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 {
 	//returns the internal shaft door state
 
+	SBS_PROFILE("Elevator::AreShaftDoorsOpen");
 	ElevatorDoor *door = GetDoor(number);
 	if (door)
 		return door->AreShaftDoorsOpen(floor);
@@ -3299,6 +3314,7 @@ void Elevator::Chime(int number, int floor, bool direction)
 {
 	//play chime sound on specified floor
 
+	SBS_PROFILE("Elevator::Chime");
 	int start, end;
 	if (number == 0)
 	{
@@ -3390,6 +3406,7 @@ void Elevator::MoveDoors(int number, const Ogre::Vector3 position, bool relative
 {
 	//move all doors
 
+	SBS_PROFILE("Elevator::MoveDoors");
 	if (number == 0)
 	{
 		for (int i = 1; i <= NumDoors; i++)
@@ -3409,6 +3426,7 @@ void Elevator::EnableDoors(bool value)
 {
 	//enable/disable all doors
 
+	SBS_PROFILE("Elevator::EnableDoors");
 	if (sbs->Verbose)
 	{
 		if (value == true)
@@ -3779,6 +3797,7 @@ void Elevator::Timer::Notify()
 	if (elevator->IsRunning() == false)
 		return;
 
+	SBS_PROFILE("Elevator::Timer::Notify");
 	if (type == 0)
 	{
 		//parking timer

@@ -190,6 +190,8 @@ SBS::SBS()
 	OldAmbientG = 1;
 	OldAmbientB = 1;
 	TexelOverride = false;
+	enable_profiling = false;
+	enable_advanced_profiling = false;
 }
 
 SBS::~SBS()
@@ -459,6 +461,8 @@ void SBS::MainLoop()
 {
 	//Main simulator loop
 
+	SBS_PROFILE("SBS::MainLoop");
+
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
 	float elapsed = remaining_delta + (GetElapsedTime() / 1000.0);
@@ -470,13 +474,17 @@ void SBS::MainLoop()
 
 	//update physics
 	float step = float(GetElapsedTime()) / 1000.0;
+	SBSProfileManager::Start_Profile("Bullet");
 	mWorld->stepSimulation(step, 2);
+	SBSProfileManager::Stop_Profile();
 
 	//sync camera to physics
 	camera->Sync();
 
 	//update sound
+	SBSProfileManager::Start_Profile("FMOD");
 	soundsys->update();
+	SBSProfileManager::Stop_Profile();
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
@@ -2873,6 +2881,8 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	//turn on/off a range of floors
 	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show only the current floor (floor)
+
+	SBS_PROFILE("SBS::EnableFloorRange");
 
 	//range must be greater than 0
 	if (range < 1)

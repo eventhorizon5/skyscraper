@@ -232,6 +232,8 @@ int WallObject::FindPolygon(const char *name)
 {
 	//find a polygon object by name
 
+	SBS_PROFILE("WallObject::FindPolygon");
+
 	std::string name2 = name;
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
@@ -284,6 +286,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point)
 {
 	//check through polygons to see if the specified point is on this wall object
 
+	SBS_PROFILE("WallObject::IsPointOnWall");
 	bool checkplane = false;
 	for (int i = 0; i < (int)handles.size(); i++)
 	{

@@ -176,6 +176,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 {
+	SBS_PROFILE("Shaft::Enabled");
 	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor && EnableCheck == false)
 	{
 		//turns shaft on/off for a specific floor
@@ -260,6 +261,8 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 
 bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 {
+	SBS_PROFILE("Shaft::IsInShaft");
+
 	//if last position is the same as new, return previous result
 	if ((position.x >= (lastposition.x - 0.01)) &&
 		(position.y >= (lastposition.y - 0.01)) &&
@@ -373,6 +376,8 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 	//exit if ShowFullShaft is true
 	if (ShowFullShaft == true)
 		return;
+
+	SBS_PROFILE("Shaft::EnableRange");
 
 	//range must be greater than 0
 	if (range < 1)

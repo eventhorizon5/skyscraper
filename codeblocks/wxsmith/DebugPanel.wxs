@@ -62,6 +62,14 @@
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText9" member="yes">
+														<label>Clicked Position:</label>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<border>5</border>
+													<option>1</option>
+												</object>
+												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText8" member="yes">
 														<label>Last Collision:</label>
 													</object>
@@ -138,6 +146,16 @@
 													</object>
 													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 													<border>5</border>
+												</object>
+												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_t_clickposition" variable="t_clickposition" member="yes">
+														<label></label>
+														<size>150,-1</size>
+														<style>wxST_NO_AUTORESIZE</style>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<border>5</border>
+													<option>1</option>
 												</object>
 												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_t_collision" variable="t_collision" member="yes">
@@ -320,6 +338,15 @@
 									<object class="wxButton" name="ID_bObjectInfo" variable="bObjectInfo" member="yes">
 										<label>Object Information</label>
 										<handler function="On_bObjectInfo_Click" entry="EVT_BUTTON" />
+									</object>
+									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									<border>5</border>
+									<option>1</option>
+								</object>
+								<object class="sizeritem">
+									<object class="wxButton" name="ID_bProfiler" variable="bProfiler" member="yes">
+										<label>Profiler</label>
+										<handler function="On_bProfiler_Click" entry="EVT_BUTTON" />
 									</object>
 									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
