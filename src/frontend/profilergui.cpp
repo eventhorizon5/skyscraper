@@ -23,7 +23,6 @@
 */
 
 #include "globals.h"
-//#include "sbs.h"
 #include "profilergui.h"
 #include "profiler.h"
 
