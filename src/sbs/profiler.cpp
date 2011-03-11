@@ -2,6 +2,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "profiler.h"
+#include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
 static oClock gProfileClock;
