@@ -646,12 +646,10 @@ Ogre::SubMesh* WallPolygon::GetSubMesh()
 
 WallPolygon::WallPolygon()
 {
-	sbs->PolygonCount++;
 }
 
 WallPolygon::~WallPolygon()
 {
-	sbs->PolygonCount--;
 }
 
 void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly)

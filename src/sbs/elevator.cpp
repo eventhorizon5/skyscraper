@@ -3192,7 +3192,7 @@ bool Elevator::AddShaftDoors(int number, const char *lefttexture, const char *ri
 		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, tw, th);
 	else
 		ReportError("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-	return 0;
+	return false;
 }
 
 Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th)

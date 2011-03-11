@@ -56,6 +56,7 @@ WallObject::~WallObject()
 	}
 
 	sbs->WallCount--;
+	sbs->PolygonCount -= handles.size();
 	handles.clear();
 }
 
@@ -148,6 +149,7 @@ int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<O
 	//create a polygon handle
 	int i = (int)handles.size();
 	handles.resize(handles.size() + 1);
+	sbs->PolygonCount++;
 	handles[i].mesh = meshwrapper;
 	handles[i].index_extents = index_extents;
 	handles[i].t_matrix = tex_matrix;
@@ -203,6 +205,8 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 
 		//delete polygon
 		handles.erase(handles.begin() + index);
+
+		sbs->PolygonCount--;
 
 		//reprocess mesh
 		//state->Invalidate();
