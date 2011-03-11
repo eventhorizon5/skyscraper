@@ -475,6 +475,8 @@ bool Stairs::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const
 	{
 		if (sbs->Verbose)
 			ReportError("CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		else
+			sbs->LastError = "CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range";
 		return false;
 	}
 
