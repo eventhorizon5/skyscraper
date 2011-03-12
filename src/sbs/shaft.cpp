@@ -261,7 +261,7 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 
 bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 {
-	SBS_PROFILE("Shaft::IsInShaft");
+	//SBS_PROFILE("Shaft::IsInShaft");
 
 	//if last position is the same as new, return previous result
 	if ((position.x >= (lastposition.x - 0.01)) &&

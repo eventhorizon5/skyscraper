@@ -317,7 +317,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 {
 	//determine if user is in the stairwell
 
-	SBS_PROFILE("Stairs::IsInStairwell");
+	//SBS_PROFILE("Stairs::IsInStairwell");
 
 	//if last position is the same as new, return previous result
 	if ((position.x >= (lastposition.x - 0.01)) &&

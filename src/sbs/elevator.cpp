@@ -2127,7 +2127,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 {
 	//determine if the given 3D position is inside the elevator
 
-	SBS_PROFILE("Elevator::IsInElevator");
+	//SBS_PROFILE("Elevator::IsInElevator");
 	int inelevator = false;
 
 	//if last position is the same as new, return previous result

@@ -800,7 +800,7 @@ const char *Camera::GetClickedObjectCommandP()
 
 void Camera::Loop()
 {
-	SBS_PROFILE("Camera::Loop");
+	SBS_PROFILE_MAIN("Camera Loop");
 
 	//calculate acceleration
 	InterpolateMovement();

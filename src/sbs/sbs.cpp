@@ -460,7 +460,6 @@ void SBS::PrintBanner()
 void SBS::MainLoop()
 {
 	//Main simulator loop
-
 	SBS_PROFILE("SBS::MainLoop");
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
@@ -474,7 +473,10 @@ void SBS::MainLoop()
 
 	//update physics
 	float step = float(GetElapsedTime()) / 1000.0;
-	SBSProfileManager::Start_Profile("Collisions/Physics");
+	if (enable_advanced_profiling == false)
+		SBSProfileManager::Start_Profile("Collisions/Physics");
+	else
+		SBSProfileManager::Start_Profile("Bullet");
 	mWorld->stepSimulation(step, 2);
 	SBSProfileManager::Stop_Profile();
 
@@ -482,13 +484,17 @@ void SBS::MainLoop()
 	camera->Sync();
 
 	//update sound
-	SBSProfileManager::Start_Profile("Sound");
+	if (enable_advanced_profiling == false)
+		SBSProfileManager::Start_Profile("Sound");
+	else
+		SBSProfileManager::Start_Profile("FMOD");
 	soundsys->update();
 	SBSProfileManager::Stop_Profile();
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > 0.5)
 		elapsed = 0.5;
+	SBSProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{
 		if (RenderOnly == false && InputOnly == false)
@@ -532,6 +538,7 @@ void SBS::MainLoop()
 		elapsed -= delta;
 	}
 	remaining_delta = elapsed;
+	SBSProfileManager::Stop_Profile();
 }
 
 void SBS::CalculateFrameRate()
