@@ -3928,7 +3928,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetMessageSound(false, temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "music")
+	if (SetCaseCopy(LineData.substr(0, 6), false) == "music ")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3938,7 +3938,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->Music = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "musicon")
+	if (SetCaseCopy(LineData.substr(0, 8), false) == "musicon ")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
