@@ -476,20 +476,28 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 		}
 
 		//create new polygon
-		if (polycheck == true && newpolys.size() > 0)
+		if (polycheck == true)
 		{
-			//get texture data from original polygon
-			std::string oldmat = wall->GetHandle(i)->material;
+			std::string oldmat;
 			Ogre::Vector3 oldvector;
 			Ogre::Matrix3 mapping;
-			wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
+
+			if (newpolys.size() > 0)
+			{
+				//get texture data from original polygon
+				oldmat = wall->GetHandle(i)->material;
+				wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
+			}
 
 			//delete original polygon
 			wall->DeletePolygon(i, false);
 
-			//create new polygon
-			WallPolygon* handle = 0;
-			handle = wall->AddPolygon(name.c_str(), oldmat, newpolys, mapping, oldvector);
+			if (newpolys.size() > 0)
+			{
+				//create new polygon
+				WallPolygon* handle = 0;
+				handle = wall->AddPolygon(name.c_str(), oldmat, newpolys, mapping, oldvector);
+			}
 
 			//reset search position
 			i--;
