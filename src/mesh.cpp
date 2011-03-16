@@ -473,19 +473,27 @@ void SBS::Cut(WallObject *wall, const csVector3& start, const csVector3& end, bo
 		}
 
 		//create new polygon
-		if (polycheck == true && newpolys.GetSize() > 0)
+		if (polycheck == true)
 		{
-			//get texture data from original polygon
-			iMaterialWrapper *oldmat = wall->GetHandle(i)->material;
+			iMaterialWrapper *oldmat = 0;
 			csVector3 oldvector;
-			csMatrix3 mapping;
-			wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
+                        csMatrix3 mapping;
+
+			if (newpolys.GetSize() > 0)
+			{
+				//get texture data from original polygon
+				oldmat = wall->GetHandle(i)->material;
+				wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
+			}
 
 			//delete original polygon
 			wall->DeletePolygon(i, false);
 
-			//create new polygon
-			WallPolygon* handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
+			if (newpolys.GetSize() > 0)
+			{
+				//create new polygon
+				WallPolygon* handle = wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
+			}
 
 			//reset search position
 			i--;
