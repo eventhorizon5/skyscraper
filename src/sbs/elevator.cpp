@@ -161,6 +161,8 @@ Elevator::Elevator(int number)
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
+	messagesnd = 0;
+	musicsound = 0;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -714,18 +716,24 @@ void Elevator::Alarm()
 		//ring alarm
 		AlarmActive = true;
 		Report("alarm on");
-		alarm->Load(AlarmSound.c_str());
-		alarm->Loop(true);
-		alarm->Play();
+		if (AlarmSound != "")
+		{
+			alarm->Load(AlarmSound.c_str());
+			alarm->Loop(true);
+			alarm->Play();
+		}
 	}
 	if (AlarmActive == true && sbs->camera->MouseDown == false)
 	{
 		//stop alarm
 		AlarmActive = false;
-		alarm->Stop();
-		alarm->Load(AlarmSoundStop.c_str());
-		alarm->Loop(false);
-		alarm->Play();
+		if (AlarmSound != "")
+		{
+			alarm->Stop();
+			alarm->Load(AlarmSoundStop.c_str());
+			alarm->Loop(false);
+			alarm->Play();
+		}
 		Report("alarm off");
 	}
 }
@@ -1132,29 +1140,32 @@ void Elevator::MonitorLoop()
 	}
 
 	//play idle sound if in elevator, or if doors open
-	if (idlesound->IsPlaying() == false && Fan == true)
+	if (CarIdleSound != "")
 	{
-		if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+		if (idlesound->IsPlaying() == false && Fan == true)
 		{
-			if (sbs->Verbose)
-				Report("playing idle sound");
-			idlesound->Loop(true);
-			idlesound->Play();
+			if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+			{
+				if (sbs->Verbose)
+					Report("playing idle sound");
+				idlesound->Loop(true);
+				idlesound->Play();
+			}
 		}
-	}
-	else
-	{
-		if (Fan == false && idlesound->IsPlaying() == true)
+		else
 		{
-			if (sbs->Verbose)
-				Report("stopping idle sound");
-			idlesound->Stop();
-		}
-		else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
-		{
-			if (sbs->Verbose)
-				Report("stopping idle sound");
-			idlesound->Stop();
+			if (Fan == false && idlesound->IsPlaying() == true)
+			{
+				if (sbs->Verbose)
+					Report("stopping idle sound");
+				idlesound->Stop();
+			}
+			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
+			{
+				if (sbs->Verbose)
+					Report("stopping idle sound");
+				idlesound->Stop();
+			}
 		}
 	}
 
@@ -1512,7 +1523,7 @@ void Elevator::MoveElevatorToFloor()
 		motorsound->Play(false);
 	}
 
-	if (mainsound->IsPlaying() == false && Brakes == false && CarMoveSound.empty() == false)
+	if (mainsound->IsPlaying() == false && Brakes == false && CarMoveSound.empty() == false && CarMoveSound != "")
 	{
 		//Movement sound
 		if (sbs->Verbose)
@@ -1522,7 +1533,7 @@ void Elevator::MoveElevatorToFloor()
 		mainsound->Play();
 	}
 
-	if (motorsound->IsPlaying() == false && Brakes == false && MotorRunSound.empty() == false)
+	if (motorsound->IsPlaying() == false && Brakes == false && MotorRunSound.empty() == false && MotorRunSound != "")
 	{
 		//Motor sound
 		if (sbs->Verbose)
