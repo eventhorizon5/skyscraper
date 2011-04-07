@@ -115,7 +115,7 @@ namespace OgreBulletDynamics
     }
     void CharacterController::reset()
     {
-    	m_character->reset();
+    	m_character->reset(getDynamicsWorld()->getBulletDynamicsWorld());
     }
     void CharacterController::warp(const Ogre::Vector3 &origin)
     {
