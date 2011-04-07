@@ -58,7 +58,7 @@ Camera::Camera(Ogre::Camera *camera)
 	desired_velocity = Ogre::Vector3(0, 0, 0);
 	angle_velocity = Ogre::Vector3(0, 0, 0);
 	desired_angle_velocity = Ogre::Vector3(0, 0, 0);
-	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 14.0);
+	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 9.0);
 	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
 	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
 	cfg_walk_maxspeed_mult = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0);
