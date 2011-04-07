@@ -245,5 +245,10 @@ namespace OgreBulletDynamics
         }
         return false;
     }
+
+    void DynamicsWorld::setAllowedCcdPenetration(float value)
+    {
+        mWorld->getDispatchInfo().m_allowedCcdPenetration = value;
+    }
 }
 
