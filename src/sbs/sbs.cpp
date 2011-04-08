@@ -477,8 +477,12 @@ void SBS::MainLoop()
 		SBSProfileManager::Start_Profile("Collisions/Physics");
 	else
 		SBSProfileManager::Start_Profile("Bullet");
-	mWorld->stepSimulation(step, 2);
+	int steps = mWorld->stepSimulation(step, 1);
 	SBSProfileManager::Stop_Profile();
+
+	//only move character if Bullet processed a step (within it's 60fps timestep)
+	if (steps >= 1)
+		camera->MoveCharacter();
 
 	//sync camera to physics
 	camera->Sync();
@@ -4048,13 +4052,13 @@ unsigned long SBS::GetRunTime()
 
 unsigned long SBS::GetElapsedTime()
 {
-	//returns the average elapsed time between frames
+	//returns the actual elapsed time between frames
 	return elapsed_time;
 }
 
 unsigned long SBS::GetElapsedTimeAverage()
 {
-	//returns the actual elapsed time between the last two calls to AdvanceClock()
+	//returns the average elapsed time between frames
 	return average_time;
 }
 

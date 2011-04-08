@@ -81,7 +81,7 @@ namespace OgreBulletDynamics
 
 	void setGravity(const Ogre::Vector3 &gravity);
 	Ogre::Vector3 getGravity();
-        void stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps = 1, const Ogre::Real fixedTimestep = 1./60.);
+        int stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps = 1, const Ogre::Real fixedTimestep = 1./60.);
 
         void addRigidBody (RigidBody *rb, short collisionGroup, short collisionMask);
 		void removeRigidBody (RigidBody *rb);

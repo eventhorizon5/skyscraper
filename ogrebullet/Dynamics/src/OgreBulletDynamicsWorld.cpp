@@ -135,7 +135,7 @@ namespace OgreBulletDynamics
 		static_cast <btDiscreteDynamicsWorld *> (mWorld)->removeRigidBody(rb->getBulletRigidBody());      
     }
     // -------------------------------------------------------------------------
-    void DynamicsWorld::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep)
+    int DynamicsWorld::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep)
     {
         // Reset Debug Lines
         if (mDebugDrawer) 
@@ -143,7 +143,7 @@ namespace OgreBulletDynamics
 		if (mDebugContactPoints)  
 			mDebugContactPoints->clear ();
 
-        static_cast <btDiscreteDynamicsWorld *> (mWorld)->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
+        int result = static_cast <btDiscreteDynamicsWorld *> (mWorld)->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
 
 		if (mDebugContactPoints) 
 		{
@@ -203,6 +203,7 @@ namespace OgreBulletDynamics
 				}
 			}
 		}
+		return result;
     }
     // -------------------------------------------------------------------------
     void DynamicsWorld::removeConstraint(TypedConstraint *constraint)

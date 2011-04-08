@@ -130,6 +130,7 @@ public:
 	void SetMaxRenderDistance(float value);
 	float GetMaxRenderDistance();
 	void ShowDebugShape(bool value);
+	void MoveCharacter();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -155,6 +156,7 @@ private:
 	bool RotationStopped;
 	bool MovementStopped;
 	float FarClip;
+	Ogre::Vector3 accum_movement;
 
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;

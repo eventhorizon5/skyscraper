@@ -100,6 +100,7 @@ Camera::Camera(Ogre::Camera *camera)
 	HitPosition = 0;
 	RotationStopped = false;
 	MovementStopped = false;
+	accum_movement = 0;
 
 	//set up camera and scene nodes
 	MainCamera = camera;
@@ -251,7 +252,8 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	//multiply vector with camera's orientation, and flip X axis
 	vector = mCharacter->getRootNode()->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
 
-	mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
+	accum_movement += (sbs->ToRemote(vector) * speed);
+	//mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
 
 	return true;
 }
@@ -812,7 +814,7 @@ void Camera::Loop()
 		delta = .3f;
 
 	RotateLocal(angle_velocity, delta * speed);
-	Move(velocity, speed / 60);
+	Move(velocity, delta * speed);
 
 	//sync sound listener object to camera position
 	sbs->SetListenerPosition(GetPosition());
@@ -1024,4 +1026,10 @@ float Camera::GetMaxRenderDistance()
 void Camera::ShowDebugShape(bool value)
 {
 	mCharacter->showDebugShape(value);
+}
+
+void Camera::MoveCharacter()
+{
+	mCharacter->setWalkDirection(accum_movement, 1);
+	accum_movement = 0;
 }
