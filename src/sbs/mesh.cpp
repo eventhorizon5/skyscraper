@@ -710,6 +710,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	this->restitution = restitution;
 	this->friction = friction;
 	this->mass = mass;
+	no_collider = false;
 
 	Ogre::MeshPtr collidermesh;
 

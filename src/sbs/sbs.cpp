@@ -1770,8 +1770,8 @@ void SBS::CreateSky(const char *filenamebase)
 
 	//load textures
 	SetLighting();
-	LoadTexture("sky/up.jpg", "SkyTop", 1, -1, false, false, false, 0);
-	LoadTexture("sky/down.jpg", "SkyBottom", -1, 1, false, false, false, 0);
+	LoadTexture("sky/up.jpg", "SkyTop", 1, 1, false, false, false, 0);
+	LoadTexture("sky/down.jpg", "SkyBottom", 1, 1, false, false, false, 0);
 	LoadTexture("sky/left.jpg", "SkyLeft", 1, 1, false, false, false, 0);
 	LoadTexture("sky/right.jpg", "SkyRight", 1, 1, false, false, false, 0);
 	LoadTexture("sky/front.jpg", "SkyFront", 1, 1, false, false, false, 0);
@@ -1779,6 +1779,7 @@ void SBS::CreateSky(const char *filenamebase)
 	ResetLighting();
 
 	SkyBox = new MeshObject(this->object, "SkyBox");
+	SkyBox->no_collider = true;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;

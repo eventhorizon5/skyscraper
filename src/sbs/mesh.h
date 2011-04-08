@@ -44,6 +44,7 @@ class SBSIMPEXP MeshObject
 public:
 	Object *object; //SBS object
 	std::string name; //mesh name
+	bool no_collider; //set to true if collider shouldn't be automatically generated
 
 	//define geometry type
 	struct Geometry
