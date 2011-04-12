@@ -39,12 +39,12 @@ FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2010.
 
 2. Introduction
 
-Skyscraper is a 3D virtual building simulator written in C++ using the Crystal Space
-graphics engine.  The goal of the Skyscraper project is to create a fully-featured,
-modular, multiplatform 3D realtime building simulation engine, including gaming support (single
-and network multiplayer). Everything possible is planned to be simulated, including
-elevators, stairs, interfloor areas, ductwork, and more, all in first-person 3D. The
-simulator core is called the Scalable Building Simulator, or SBS. Buildings are stored
+Skyscraper is a 3D virtual building simulator written in C++ using the OGRE graphics engine
+(previously Crystal Space) graphics engine.  The goal of the Skyscraper project is to create a
+fully-featured, modular, multiplatform 3D realtime building simulation engine, including
+gaming support (single and network multiplayer). Everything possible is planned to be simulated,
+including elevators, stairs, interfloor areas, ductwork, and more, all in first-person 3D.
+The simulator core is called the Scalable Building Simulator, or SBS. Buildings are stored
 in scripted text files that are loaded and generated in realtime by the simulator. A
 graphical building designer application is planned to assist in creating building data
 files.
@@ -56,11 +56,10 @@ files.
 This release is the eighth development relase of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
-This software requires both the Crystal Space graphics engine library (version 1.4) which
-can be found at http://www.crystalspace3d.org, and the wxWidgets library (version 2.6.3 or
-later) which can be found at http://www.wxwidgets.org.  The Windows packages comes bundled
-with a custom-patched Crystal Space 1.4 (SVN snapshot) and wxWidgets 2.8.9 runtimes.  The custom patch for
-Crystal Space is included and is called cs12-poly3d.patch, which fixes a skybox issue.
+This software requires both the OGRE graphics engine library (version 1.7) which
+can be found at http://www.ogre3d.org, the Bullet physics engine with some custom patches,
+available at http://www.skyscrapersim.com/downloads/dev/other_apps/ and the wxWidgets
+library (version 2.6.3 or later)  which can be found at http://www.wxwidgets.org.
 
 See the changelog for new features, fixes, and other changes in this release.
 
