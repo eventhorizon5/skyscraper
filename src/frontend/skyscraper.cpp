@@ -58,6 +58,7 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_CLOSE(MainScreen::OnClose)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
+  EVT_ACTIVATE(MainScreen::OnActivate)
 END_EVENT_TABLE()
 
 SBS *Simcore;
@@ -197,6 +198,7 @@ void Skyscraper::UnloadSim()
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
+	Active = false;
 	this->Center();
 	wxString title;
 	title = wxT("Skyscraper 1.8 Alpha");
@@ -208,6 +210,12 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 MainScreen::~MainScreen()
 {
 
+}
+
+void MainScreen::OnActivate(wxActivateEvent & event)
+{
+	Active = event.GetActive();
+	event.Skip();
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
@@ -449,7 +457,7 @@ void Skyscraper::GetInput()
 	SBS_PROFILE_MAIN("GetInput");
 
 	//quit if main window isn't selected
-	if (window->IsActive() == false)
+	if (window->Active == false)
 		return;
 
 	static int wireframe;

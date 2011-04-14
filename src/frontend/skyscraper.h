@@ -161,7 +161,9 @@ public:
 	void ShowWindow();
 	void OnIdle(wxIdleEvent& event);
 	void OnPaint(wxPaintEvent& event);
+	void OnActivate(wxActivateEvent & event);
 	//wxPanel *panel;
+	bool Active;
 
 	DECLARE_EVENT_TABLE()
 
