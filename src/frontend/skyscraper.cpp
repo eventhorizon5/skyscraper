@@ -204,7 +204,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	title = wxT("Skyscraper 1.8 Alpha");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	this->SetTitle(title);
-	//panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
+	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 }
 
 MainScreen::~MainScreen()
@@ -216,6 +216,7 @@ void MainScreen::OnActivate(wxActivateEvent & event)
 {
 	Active = event.GetActive();
 	event.Skip();
+	printf("active\n");
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
@@ -268,7 +269,7 @@ void MainScreen::OnClose(wxCloseEvent& event)
 void MainScreen::ShowWindow()
 {
 	Show(true);
-	//panel->Show(true);
+	panel->Show(true);
 }
 
 void MainScreen::OnIdle(wxIdleEvent& event)
@@ -1447,7 +1448,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
 	int width, height;
-	window->GetClientSize(&width, &height);
+	window->panel->GetClientSize(&width, &height);
 
 	Ogre::NameValuePairList params;
 	if (miscParams)
@@ -1494,7 +1495,7 @@ const std::string Skyscraper::getOgreHandle() const
 {
 #if defined(__WXMSW__)
    // Handle for Windows systems
-   return Ogre::StringConverter::toString((size_t)((HWND)window->GetHandle()));
+   return Ogre::StringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
 #elif defined(__WXGTK__)
    // Handle for GTK-based systems
 
@@ -1503,7 +1504,7 @@ const std::string Skyscraper::getOgreHandle() const
    // one to interact with GLX, so we do the same.
    // NOTE: this method relies on implementation details in wxGTK and could
    //      change without any notification from the developers.
-   GtkWidget* privHandle = window->m_wxwindow;
+   GtkWidget* privHandle = window->panel->m_wxwindow;
 
    // prevents flickering
    gtk_widget_set_double_buffered(privHandle, false);
@@ -1531,7 +1532,7 @@ const std::string Skyscraper::getOgreHandle() const
    return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-   return Ogre::StringConverter::toString((unsigned long)(HIViewRef(window->GetHandle())));
+   return Ogre::StringConverter::toString((unsigned long)(HIViewRef(window->panel->GetHandle())));
 
 #else
    #error Not supported on this platform!
