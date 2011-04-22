@@ -2055,7 +2055,7 @@ Floor* SBS::GetFloor(int number)
 	if (FloorArray.size() > 0)
 	{
 		//quick prediction
-		if (Basements + number <= (int)FloorArray.size() - 1)
+		if (Basements + number < (int)FloorArray.size())
 		{
 			FloorMap floor = FloorArray[Basements + number];
 			if (floor.number == number)
@@ -2067,7 +2067,7 @@ Floor* SBS::GetFloor(int number)
 			}
 			else if (number < 0)
 			{
-				if (-(number + 1) <= (int)FloorArray.size() - 1)
+				if (-(number + 1) < (int)FloorArray.size())
 				{
 					floor = FloorArray[-(number + 1)];
 					if (floor.number == number)
@@ -3586,6 +3586,10 @@ std::string SBS::DumpState()
 	output.append("\n");
 	output.append("InShaft: ");
 	output.append(wxString::FromAscii(BoolToString(InShaft)).ToAscii());
+	output.append("\n");
+	output.append("CameraFloor: ");
+	if (camera)
+		output.append(wxVariant((int)camera->CurrentFloor).GetString().ToAscii());
 	output.append("\n");
 	output.append("ElevatorNumber: ");
 	output.append(wxVariant((int)ElevatorNumber).GetString().ToAscii());
