@@ -304,7 +304,16 @@ void Skyscraper::Render()
 bool Skyscraper::Initialize()
 {
 	//initialize OGRE
-	mRoot = Ogre::Root::getSingletonPtr();
+	try
+	{
+		mRoot = Ogre::Root::getSingletonPtr();
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error during initial OGRE check\nDetails:" + e.getDescription());
+		return false;
+	}
+
 	if(!mRoot)
 	{
 		try
