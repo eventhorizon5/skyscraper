@@ -216,7 +216,7 @@ void MainScreen::OnActivate(wxActivateEvent & event)
 {
 	Active = event.GetActive();
 	event.Skip();
-	printf("active\n");
+	//printf("active\n");
 }
 
 void MainScreen::OnIconize(wxIconizeEvent& event)
