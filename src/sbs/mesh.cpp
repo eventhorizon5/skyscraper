@@ -1511,7 +1511,7 @@ void MeshObject::Prepare()
 
 		//set up index data array
 		unsigned int isize = (unsigned int)Triangles[index].triangles.size() * 3;
-		unsigned int *mIndices = new unsigned int[isize];
+		unsigned short *mIndices = new unsigned short[isize];
 
 		//create array of triangle indices
 		loc = 0;
@@ -1524,7 +1524,7 @@ void MeshObject::Prepare()
 		}
 
 		//create index hardware buffer
-		Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+		Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 		ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
 		delete mIndices;
 
