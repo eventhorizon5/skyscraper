@@ -67,7 +67,8 @@ public:
 	bool IsEnabled();
 	WallObject* CreateWallObject(Object *parent, const char *name);
 	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
-	int FindWall(const Ogre::Vector3 &point);
+	int FindWall(const Ogre::Vector3 &point, bool convert = true);
+	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert = true);
 	void RescaleVertices(float multiplier);
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin = Ogre::Vector3(0, 0, 0));
 	Ogre::Vector3 GetPosition();
@@ -143,8 +144,9 @@ public:
 	~WallPolygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();
-	void GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly);
-	bool PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check = true);
+	void GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert = true);
+	bool PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check = true, bool convert = true);
+	bool IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert = true);
 };
 
 #endif

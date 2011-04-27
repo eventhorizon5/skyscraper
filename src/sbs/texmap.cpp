@@ -424,3 +424,65 @@ int SBS::WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre
 		return -1;
 	else return 0;
 }
+
+bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert)
+{
+	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
+
+	float x1 = start.x;
+	float y1 = start.y;
+	float z1 = start.z;
+	float x2 = end.x;
+	float y2 = end.y;
+	float z2 = end.z;
+	float r, num, denom;
+
+	std::vector<std::vector<Ogre::Vector3> > vertices;
+	GetGeometry(mesh, vertices, false, convert);
+
+	// So now we have the plane equation of the polygon:
+	// A*x + B*y + C*z + D = 0
+	//
+	// We also have the parameter line equations of the ray
+	// going through 'start' and 'end':
+	// x = r*(x2-x1)+x1
+	// y = r*(y2-y1)+y1
+	// z = r*(z2-z1)+z1
+	//
+	// =>   A*(r*(x2-x1)+x1) + B*(r*(y2-y1)+y1) + C*(r*(z2-z1)+z1) + D = 0
+	// Set *pr to -1 to indicate error if we return false now.
+	if (pr) *pr = -1;
+
+	//compute plane from first 3 vertices
+	Ogre::Plane plane(vertices[0][0], vertices[0][1], vertices[0][2]);
+
+	denom = plane.normal.x * (x2 - x1) +
+			plane.normal.y * (y2 - y1) +
+			plane.normal.z * (z2 - z1);
+
+	if (fabs(denom) < SMALL_EPSILON)
+		return false;  // Lines are parallel
+
+	num = -(plane.normal.x * x1 +
+			plane.normal.y * y1 +
+			plane.normal.z * z1 +
+			plane.d);
+	r = num / denom;
+
+	// Calculate 'r' and 'isect' even if the intersection point is
+	// not on the segment. That way we can use this function for testing
+	// with rays as well.
+	if (pr)
+		*pr = r;
+
+	isect.x = r * (x2 - x1) + x1;
+	isect.y = r * (y2 - y1) + y1;
+	isect.z = r * (z2 - z1) + z1;
+
+	// If r is not in [0,1] the intersection point is not on the segment.
+	if (r < 0 /*-SMALL_EPSILON*/ || r > 1)
+		return false;
+
+	return true;
+}
+

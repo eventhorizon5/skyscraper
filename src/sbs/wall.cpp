@@ -286,7 +286,7 @@ void WallObject::SetPolygonName(int index, const char *name)
         handles[index].name = newname;
 }
 
-bool WallObject::IsPointOnWall(const Ogre::Vector3 &point)
+bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 {
 	//check through polygons to see if the specified point is on this wall object
 
@@ -296,7 +296,25 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point)
 	{
 		if (i == 0)
 			checkplane = true;
-		bool check = handles[i].PointInside(meshwrapper, point, checkplane);
+		bool check = handles[i].PointInside(meshwrapper, point, checkplane, convert);
+		if (check == true)
+			return true;
+	}
+	return false;
+}
+
+bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert)
+{
+	//check through polygons to see if the specified point is on this wall object
+
+	SBS_PROFILE("WallObject::IntersectsWall");
+	bool checkplane = false;
+	for (int i = 0; i < (int)handles.size(); i++)
+	{
+		if (i == 0)
+			checkplane = true;
+		float pr;
+		bool check = handles[i].IntersectSegmentPlane(meshwrapper, start, end, isect, &pr, convert);
 		if (check == true)
 			return true;
 	}

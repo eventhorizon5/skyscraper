@@ -660,7 +660,7 @@ WallPolygon::~WallPolygon()
 {
 }
 
-void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly)
+void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -672,18 +672,23 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 		int max = index_extents[i].y;
 		vertices[i].reserve(vertices[i].size() + max - min + 1);
 		for (int j = min; j <= max; j++)
-			vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex));
+		{
+			if (convert == true)
+				vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex));
+			else
+				vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+		}
 		if (firstonly == true)
 			return;
 	}
 }
 
-bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check)
+bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check, bool convert)
 {
 	//check if a point is inside the polygon
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(mesh, vertices, false);
+	GetGeometry(mesh, vertices, false, convert);
 
 	for (int i = 0; i < (int)vertices.size(); i++)
 	{
@@ -1002,14 +1007,27 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	return newmat;
 }
 
-int MeshObject::FindWall(const Ogre::Vector3 &point)
+int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
 {
 	//find a wall from a 3D point
 
 	SBS_PROFILE("MeshObject::FindWall");
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		if (Walls[i]->IsPointOnWall(point) == true)
+		if (Walls[i]->IsPointOnWall(point, convert) == true)
+			return i;
+	}
+	return -1;
+}
+
+int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert)
+{
+	//find a wall from a 3D point
+
+	SBS_PROFILE("MeshObject::FindWallIntersect");
+	for (int i = 0; i < (int)Walls.size(); i++)
+	{
+		if (Walls[i]->IntersectsWall(start, end, isect, convert) == true)
 			return i;
 	}
 	return -1;
