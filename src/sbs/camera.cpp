@@ -566,8 +566,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		return;
 
 	Ogre::Vector3 isect;
-	int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, false);
-
+	int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, true);
+	
 	if (num > -1)
 		wall = meshobject->Walls[num];
 

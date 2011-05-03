@@ -308,15 +308,25 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 	//check through polygons to see if the specified point is on this wall object
 
 	SBS_PROFILE("WallObject::IntersectsWall");
-	bool checkplane = false;
+	float pr, best_pr = 2000000000.;
+	int best_i = -1;
+	Ogre::Vector3 cur_isect;
+
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
-		if (i == 0)
-			checkplane = true;
-		float pr;
-		bool check = handles[i].IntersectSegmentPlane(meshwrapper, start, end, isect, &pr, convert);
-		if (check == true)
-			return true;
+		if (handles[i].IntersectSegmentPlane(meshwrapper, start, end, cur_isect, &pr, convert))
+		{
+			if (pr < best_pr)
+			{
+				best_pr = pr;
+				best_i = i;
+				isect = cur_isect;
+			}
+		}
 	}
+
+	if (best_i > -1)
+		return true;
+
 	return false;
 }

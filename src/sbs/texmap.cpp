@@ -425,6 +425,47 @@ int SBS::WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre
 	else return 0;
 }
 
+bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+{
+	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
+
+	// First we do backface culling on the polygon with respect to
+	// the starting point of the beam.
+
+	//compute plane from first 3 vertices
+	Ogre::Plane pl(vertices[0][0], vertices[0][1], vertices[0][2]);
+	float dot1 = pl.d + pl.normal.x * start.x + pl.normal.y * start.y + pl.normal.z * start.z;
+	if (dot1 > 0)
+		return false;
+
+	// If this vector is perpendicular to the plane of the polygon we
+	// need to catch this case here.
+	float dot2 = pl.d + pl.normal.x * end.x + pl.normal.y * end.y + pl.normal.z * end.z;
+	if (fabs(dot1 - dot2) < SMALL_EPSILON)
+		return false;
+
+	// Now we generate a plane between the starting point of the ray and
+	// every edge of the polygon. With the plane normal of that plane we
+	// can then check if the end of the ray is on the same side for all
+	// these planes.
+	Ogre::Vector3 normal;
+	Ogre::Vector3 relend = end;
+	relend -= start;
+
+	int i, i1;
+	i1 = vertices[0].size() - 1;
+	for (i = 0; i < vertices[0].size(); i++)
+	{
+		Ogre::Vector3 start2 = start - vertices[0][i1];
+		normal = start2.crossProduct(start - vertices[0][i]);
+		if ((relend * normal) > Ogre::Vector3::ZERO)
+			return false;
+		i1 = i;
+	}
+
+	return true;
+}
+
 bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
@@ -439,6 +480,9 @@ bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &s
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
 	GetGeometry(mesh, vertices, false, convert);
+
+	if (!IntersectRay(vertices, start, end))
+		return false;
 
 	// So now we have the plane equation of the polygon:
 	// A*x + B*y + C*z + D = 0

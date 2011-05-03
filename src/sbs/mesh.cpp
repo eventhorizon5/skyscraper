@@ -1025,12 +1025,29 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	//find a wall from a 3D point
 
 	SBS_PROFILE("MeshObject::FindWallIntersect");
+	float pr, best_pr = 2000000000.;
+	int best_i = -1;
+	int best_j = -1;
+	Ogre::Vector3 cur_isect;
+
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		if (Walls[i]->IntersectsWall(start, end, isect, convert) == true)
-			return i;
+		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
+		{
+			if (Walls[i]->handles[j].IntersectSegmentPlane(this, start, end, cur_isect, &pr, convert) == true)
+			{
+				if (pr < best_pr)
+				{
+					best_pr = pr;
+					best_i = i;
+					best_j = j;
+					isect = cur_isect;
+				}
+			}
+		}
 	}
-	return -1;
+
+	return best_i;
 }
 
 void MeshObject::RescaleVertices(float multiplier)
