@@ -536,6 +536,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	float x = sbs->mouse_x / width;
 	float y = sbs->mouse_y / height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
+
+	//generate left-hand coordinate ray
 	
 	//get a collision callback from Bullet
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1000);
@@ -566,7 +568,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		return;
 
 	Ogre::Vector3 isect;
-	int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, true);
+	int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, false);
 	
 	if (num > -1)
 		wall = meshobject->Walls[num];
