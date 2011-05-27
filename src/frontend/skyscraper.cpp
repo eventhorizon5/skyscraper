@@ -245,7 +245,7 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 	if (skyscraper->mRenderWindow)
 	{
-		//skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 		skyscraper->mRenderWindow->windowMovedOrResized();
 	}
 	if (skyscraper->mCamera)
