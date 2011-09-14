@@ -155,16 +155,13 @@ public:
 	MainScreen(int width, int height);
 	~MainScreen();
 	void OnIconize(wxIconizeEvent& event);
-	void OnShow(wxShowEvent& event);
 	void OnSize(wxSizeEvent& event);
 	void OnClose(wxCloseEvent& event);
 	void ShowWindow();
 	void OnIdle(wxIdleEvent& event);
 	void OnPaint(wxPaintEvent& event);
-	void OnActivate(wxActivateEvent & event);
 	void OnEnterWindow(wxMouseEvent& event);
 	void OnLeaveWindow(wxMouseEvent& event);
-	bool IsActive();
 	wxPanel *panel;
 	bool Active;
 

@@ -52,13 +52,11 @@ IMPLEMENT_APP_NO_MAIN(Skyscraper)
 
 
 BEGIN_EVENT_TABLE(MainScreen, wxFrame)
-  EVT_SHOW(MainScreen::OnShow)
   EVT_ICONIZE(MainScreen::OnIconize)
   EVT_SIZE(MainScreen::OnSize)
   EVT_CLOSE(MainScreen::OnClose)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
-  EVT_ACTIVATE(MainScreen::OnActivate)
   EVT_ENTER_WINDOW(MainScreen::OnEnterWindow)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
@@ -214,13 +212,6 @@ MainScreen::~MainScreen()
 
 }
 
-void MainScreen::OnActivate(wxActivateEvent & event)
-{
-	//Active = event.GetActive();
-	//event.Skip();
-	//printf("active\n");
-}
-
 void MainScreen::OnIconize(wxIconizeEvent& event)
 {
 	//pause simulator while minimized
@@ -233,11 +224,6 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 		skyscraper->Report("Pausing simulator...");
 	else
 		skyscraper->Report("Resuming simulator...");
-}
-
-void MainScreen::OnShow(wxShowEvent& event)
-{
-	//printf("got show %d\n", (int)event.GetShow());
 }
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
@@ -311,11 +297,6 @@ void MainScreen::OnLeaveWindow(wxMouseEvent& event)
 			Simcore->camera->desired_angle_velocity = Ogre::Vector3(0, 0, 0);
 		}
 	}
-}
-
-bool MainScreen::IsActive()
-{
-	return Active;
 }
 
 void Skyscraper::Render()
@@ -1127,7 +1108,7 @@ void Skyscraper::GetMenuInput()
 			button = &button5;
 
 	    //only process buttons if main window is selected
-        if (window->IsActive() != false)
+        if (window->Active != false)
         {
 			float mx = mouse_x;
 			float my = mouse_y;
