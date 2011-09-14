@@ -162,6 +162,9 @@ public:
 	void OnIdle(wxIdleEvent& event);
 	void OnPaint(wxPaintEvent& event);
 	void OnActivate(wxActivateEvent & event);
+	void OnEnterWindow(wxMouseEvent& event);
+	void OnLeaveWindow(wxMouseEvent& event);
+	bool IsActive();
 	wxPanel *panel;
 	bool Active;
 

@@ -59,6 +59,8 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
   EVT_ACTIVATE(MainScreen::OnActivate)
+  EVT_ENTER_WINDOW(MainScreen::OnEnterWindow)
+  EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
 
 SBS *Simcore;
@@ -214,8 +216,8 @@ MainScreen::~MainScreen()
 
 void MainScreen::OnActivate(wxActivateEvent & event)
 {
-	Active = event.GetActive();
-	event.Skip();
+	//Active = event.GetActive();
+	//event.Skip();
 	//printf("active\n");
 }
 
@@ -289,6 +291,31 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 
 	//if (skyscraper->mRenderWindow)
 		//skyscraper->mRenderWindow->update(true);
+}
+
+void MainScreen::OnEnterWindow(wxMouseEvent& event)
+{
+	Active = true;
+}
+
+void MainScreen::OnLeaveWindow(wxMouseEvent& event)
+{
+	Active = false;
+
+	//reset velocities
+	if (Simcore)
+	{
+		if (Simcore->camera)
+		{
+			Simcore->camera->desired_velocity = Ogre::Vector3(0, 0, 0);
+			Simcore->camera->desired_angle_velocity = Ogre::Vector3(0, 0, 0);
+		}
+	}
+}
+
+bool MainScreen::IsActive()
+{
+	return Active;
 }
 
 void Skyscraper::Render()
