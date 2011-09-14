@@ -479,7 +479,7 @@ bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &s
 	float r, num, denom;
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(mesh, vertices, false, convert);
+	GetGeometry(mesh, vertices, false, convert, false);
 
 	if (!IntersectRay(vertices, start, end))
 		return false;

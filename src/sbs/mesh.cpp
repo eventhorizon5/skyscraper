@@ -660,7 +660,7 @@ WallPolygon::~WallPolygon()
 {
 }
 
-void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert)
+void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool relative)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -673,10 +673,20 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 		vertices[i].reserve(vertices[i].size() + max - min + 1);
 		for (int j = min; j <= max; j++)
 		{
-			if (convert == true)
-				vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex));
+			if (relative == true)
+			{
+				if (convert == true)
+					vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex));
+				else
+					vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+			}
 			else
-				vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+			{
+				if (convert == true)
+					vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition()));
+				else
+					vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+			}
 		}
 		if (firstonly == true)
 			return;
