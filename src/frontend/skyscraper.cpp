@@ -205,7 +205,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	title = wxT("Skyscraper 1.8 Alpha");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	this->SetTitle(title);
-	panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
+	//panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 }
 
 MainScreen::~MainScreen()
@@ -229,8 +229,8 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-	if (panel)
-		panel->SetSize(this->GetClientSize());
+	//if (panel)
+		//panel->SetSize(this->GetClientSize());
 
 	if (skyscraper->mRenderWindow)
 	{
@@ -261,7 +261,7 @@ void MainScreen::OnClose(wxCloseEvent& event)
 void MainScreen::ShowWindow()
 {
 	Show(true);
-	panel->Show(true);
+	//panel->Show(true);
 }
 
 void MainScreen::OnIdle(wxIdleEvent& event)
@@ -282,30 +282,18 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 
 void MainScreen::OnActivate(wxActivateEvent &event)
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	Active = event.GetActive();
 	event.Skip();
-#endif
 }
 
 void MainScreen::OnEnterWindow(wxMouseEvent& event)
 {
-	Active = true;
+
 }
 
 void MainScreen::OnLeaveWindow(wxMouseEvent& event)
 {
-	Active = false;
 
-	//reset velocities
-	if (Simcore)
-	{
-		if (Simcore->camera)
-		{
-			Simcore->camera->desired_velocity = Ogre::Vector3(0, 0, 0);
-			Simcore->camera->desired_angle_velocity = Ogre::Vector3(0, 0, 0);
-		}
-	}
 }
 
 void Skyscraper::Render()
@@ -1477,7 +1465,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
 	int width, height;
-	window->panel->GetClientSize(&width, &height);
+	window->GetClientSize(&width, &height);
 
 	Ogre::NameValuePairList params;
 	if (miscParams)
@@ -1524,7 +1512,7 @@ const std::string Skyscraper::getOgreHandle() const
 {
 #if defined(__WXMSW__)
    // Handle for Windows systems
-   return Ogre::StringConverter::toString((size_t)((HWND)window->panel->GetHandle()));
+   return Ogre::StringConverter::toString((size_t)((HWND)window->GetHandle()));
 #elif defined(__WXGTK__)
    // Handle for GTK-based systems
 
@@ -1533,7 +1521,7 @@ const std::string Skyscraper::getOgreHandle() const
    // one to interact with GLX, so we do the same.
    // NOTE: this method relies on implementation details in wxGTK and could
    //      change without any notification from the developers.
-   GtkWidget* privHandle = window->panel->m_wxwindow;
+   GtkWidget* privHandle = window->m_wxwindow;
 
    // prevents flickering
    gtk_widget_set_double_buffered(privHandle, false);
@@ -1561,7 +1549,7 @@ const std::string Skyscraper::getOgreHandle() const
    return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-   return Ogre::StringConverter::toString((unsigned long)(HIViewRef(window->panel->GetHandle())));
+   return Ogre::StringConverter::toString((unsigned long)(HIViewRef(window->GetHandle())));
 
 #else
    #error Not supported on this platform!
