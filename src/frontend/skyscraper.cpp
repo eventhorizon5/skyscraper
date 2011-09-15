@@ -57,6 +57,7 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_CLOSE(MainScreen::OnClose)
   EVT_IDLE(MainScreen::OnIdle)
   EVT_PAINT(MainScreen::OnPaint)
+  EVT_ACTIVATE(MainScreen::OnActivate)
   EVT_ENTER_WINDOW(MainScreen::OnEnterWindow)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
@@ -277,6 +278,14 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 
 	//if (skyscraper->mRenderWindow)
 		//skyscraper->mRenderWindow->update(true);
+}
+
+void MainScreen::OnActivate(wxActivateEvent &event)
+{
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Active = event.GetActive();
+	event.Skip();
+#endif
 }
 
 void MainScreen::OnEnterWindow(wxMouseEvent& event)
