@@ -136,10 +136,10 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 
 	using namespace Ogre;
 
-	if (destTexture->getHeight() < destRectangle.bottom)
-		destRectangle.bottom = destTexture->getHeight();
-	if (destTexture->getWidth() < destRectangle.right)
-		destRectangle.right = destTexture->getWidth();
+	if (destTexture->getHeight() < destRectangle.bottom - 1)
+		destRectangle.bottom = destTexture->getHeight() - 1;
+	if (destTexture->getWidth() < destRectangle.right - 1)
+		destRectangle.right = destTexture->getWidth() - 1;
 
 	try
 	{
@@ -163,7 +163,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	HardwarePixelBufferSharedPtr destBuffer = destTexture->getBuffer();
 
 	//PixelBox destPb = destBuffer->lock(destRectangle, HardwareBuffer::HBL_NORMAL);
-	PixelBox destPb = destBuffer->lock(Box(0, 0, destTexture->getWidth(), destTexture->getHeight()), HardwareBuffer::HBL_NORMAL);
+	PixelBox destPb = destBuffer->lock(Box(0, 0, destTexture->getWidth() - 1, destTexture->getHeight() - 1), HardwareBuffer::HBL_NORMAL);
 
 	// The font texture buffer was created write only...so we cannot read it back :o). One solution is to copy the buffer  instead of locking it. (Maybe there is a way to create a font texture which is not write_only ?)
 
@@ -327,7 +327,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 				}
 
 				//abort - not enough space to draw
-				if ((cursorY + charheight) > destTexture->getHeight())
+				if ((cursorY + charheight) >= destTexture->getHeight())
 				{
 					Report("Text '" + str + "' out of bounds\n");
 					goto stop;

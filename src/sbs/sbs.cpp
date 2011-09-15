@@ -583,6 +583,8 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
 	DisableSound = GetConfigBool("Skyscraper.SBS.DisableSound", false);
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
+	if (UnitScale <= 0)
+		UnitScale = 1;
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	ResetTextureMapping(true); //set default texture map values
@@ -894,9 +896,9 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (y1 == -1)
 		y1 = 0;
 	if (x2 == -1)
-		x2 = width;
+		x2 = width - 1;
 	if (y2 == -1)
-		y2 = height;
+		y2 = height - 1;
 
 	//draw original image onto new texture
 	texture->getBuffer()->blit(background->getBuffer());
@@ -3388,7 +3390,7 @@ Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
 	return remote_value * UnitScale;
 }
 
-Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value)
+Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale)
 {
 	//convert remote (Crystal Space) vertex positions to local (SBS) positions
 	//also convert Z value to OGRE's right-hand coordinate system
@@ -3397,7 +3399,10 @@ Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value)
 	newvalue.x = remote_value.x;
 	newvalue.y = remote_value.y;
 	newvalue.z = -remote_value.z; //flip z value for OGRE's right-hand coordinate system
-	return newvalue * UnitScale;
+	if (rescale == true)
+		return newvalue * UnitScale;
+	else
+		return newvalue;
 }
 
 float SBS::ToRemote(float local_value)
@@ -3420,7 +3425,7 @@ Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 	return local_value / UnitScale;
 }
 
-Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value)
+Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale)
 {
 	//convert local (SBS) vertex positions to remote (Crystal Space) positions
 	
@@ -3428,7 +3433,10 @@ Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value)
 	newvalue.x = local_value.x;
 	newvalue.y = local_value.y;
 	newvalue.z = -local_value.z; //flip z value for OGRE's right-hand coordinate system
-	return (newvalue / UnitScale);
+	if (rescale == true)
+		return (newvalue / UnitScale);
+	else
+		return newvalue;
 }
 
 int SBS::GetObjectCount()

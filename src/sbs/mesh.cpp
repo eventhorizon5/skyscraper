@@ -660,7 +660,7 @@ WallPolygon::~WallPolygon()
 {
 }
 
-void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool relative)
+void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -671,21 +671,44 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
 		vertices[i].reserve(vertices[i].size() + max - min + 1);
-		for (int j = min; j <= max; j++)
+		if (reverse == false)
 		{
-			if (relative == true)
+			for (int j = min; j <= max; j++)
 			{
-				if (convert == true)
-					vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex));
+				if (relative == true)
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex, rescale));
+					else
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+				}
 				else
-					vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition(), rescale));
+					else
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+				}
 			}
-			else
+		}
+		else
+		{
+			for (int j = max; j >= min; j--)
 			{
-				if (convert == true)
-					vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition()));
+				if (relative == true)
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex, rescale));
+					else
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex);
+				}
 				else
-					vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+				{
+					if (convert == true)
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition(), rescale));
+					else
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+				}
 			}
 		}
 		if (firstonly == true)
@@ -1030,7 +1053,7 @@ int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
 	return -1;
 }
 
-int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert)
+int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert, bool rescale)
 {
 	//find a wall from a 3D point
 
@@ -1044,7 +1067,7 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	{
 		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
 		{
-			if (Walls[i]->handles[j].IntersectSegmentPlane(this, start, end, cur_isect, &pr, convert) == true)
+			if (Walls[i]->handles[j].IntersectSegmentPlane(this, start, end, cur_isect, &pr, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{
