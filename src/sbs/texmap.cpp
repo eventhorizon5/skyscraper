@@ -458,7 +458,8 @@ bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertice
 	{
 		Ogre::Vector3 start2 = start - vertices[0][i1];
 		normal = start2.crossProduct(start - vertices[0][i]);
-		if ((relend * -normal) > Ogre::Vector3::ZERO)
+		normal = -normal;
+		if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
 			return false;
 		i1 = i;
 	}
