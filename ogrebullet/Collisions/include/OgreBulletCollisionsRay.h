@@ -87,6 +87,24 @@ namespace OgreBulletCollisions
             return static_cast <btCollisionWorld::ClosestRayResultCallback * > (mRayResultCallback);
         }
     };
+    // -------------------------------------------------------------------------
+    //  CollisionClosestRay
+    class _OgreBulletExport CollisionAllRayResultCallback : public CollisionRayResultCallback
+    { 
+	public:
+		CollisionAllRayResultCallback(const Ogre::Ray &ray, CollisionsWorld *world, Ogre::Real max_distance);
+        virtual ~CollisionAllRayResultCallback(){};
+
+		int getCollisionCount();
+        Object *getCollidedObject(int num) const;
+		Ogre::Vector3 getCollisionPoint(int num) const;
+		Ogre::Vector3 getCollisionNormal(int num) const;
+
+        inline btCollisionWorld::AllHitsRayResultCallback *getBulletAllRayResultCallback() const 
+        {
+            return static_cast <btCollisionWorld::AllHitsRayResultCallback * > (mRayResultCallback);
+        }
+    };
 }
 #endif //_OGREBULLETCOLLISIONS_CollisionRay_H
 

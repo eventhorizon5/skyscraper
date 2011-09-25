@@ -540,7 +540,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//generate left-hand coordinate ray
 	
 	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1000);
+	OgreBulletCollisions::CollisionAllRayResultCallback callback (ray, sbs->mWorld, 1000);
 
 	//check for collision
 	sbs->mWorld->launchRay(callback);
@@ -549,34 +549,43 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	if (callback.doesCollide() == false)
 		return;
 
-	//get collided collision object
-	OgreBulletCollisions::Object* object = callback.getCollidedObject();
-
-	if (!object)
-		return;
-
-	//get name of collision object's parent scenenode (which is the same name as the mesh object)
-	meshname = object->getRootNode()->getName();
-
-	//get hit/intersection position
-	HitPosition = sbs->ToLocal(callback.getCollisionPoint());
-
-	//get wall name
+	polyname = "";
 	WallObject* wall = 0;
-	MeshObject* meshobject = sbs->FindMeshObject(meshname);
-	if (!meshobject)
-		return;
+	MeshObject* meshobject;
 
-	Ogre::Vector3 isect;
-	int num = meshobject->FindWallIntersect(sbs->ToLocal(ray.getOrigin(), false), sbs->ToLocal(ray.getPoint(1000), false), isect, true, false);
+	//get collided collision object
+	for (int i = 0; i < callback.getCollisionCount(); i++)
+	{
+		OgreBulletCollisions::Object* object = callback.getCollidedObject(i);
+
+		if (!object)
+			return;
+
+		//get name of collision object's parent scenenode (which is the same name as the mesh object)
+		meshname = object->getRootNode()->getName();
+
+		//get hit/intersection position
+		HitPosition = sbs->ToLocal(callback.getCollisionPoint(i));
+
+		//get wall name
+		meshobject = sbs->FindMeshObject(meshname);
+		if (!meshobject)
+			return;
+
+		Ogre::Vector3 isect;
+		int num = meshobject->FindWallIntersect(sbs->ToLocal(ray.getOrigin(), false), sbs->ToLocal(ray.getPoint(1000), false), isect, true, false);
 	
-	if (num > -1)
-		wall = meshobject->Walls[num];
+		if (num > -1)
+		{
+			wall = meshobject->Walls[num];
 
-	if (wall)
-		polyname = wall->GetName();
-	else
-		polyname = "";
+			if (wall)
+				polyname = wall->GetName();
+			else
+				polyname = "";
+			break;
+		}
+	}
 
 	//get and strip object number
 	std::string number;
