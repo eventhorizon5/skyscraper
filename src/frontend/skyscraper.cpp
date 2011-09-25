@@ -234,7 +234,7 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 	if (skyscraper->mRenderWindow)
 	{
-		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+		//skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 		skyscraper->mRenderWindow->windowMovedOrResized();
 	}
 	if (skyscraper->mCamera)
@@ -1401,7 +1401,7 @@ bool Skyscraper::Start()
 	window->ShowWindow();
 
 	//turn on window resizing, if specified
-	AllowResize(GetConfigBool("Skyscraper.Frontend.AllowResize", true));
+	//AllowResize(GetConfigBool("Skyscraper.Frontend.AllowResize", true));
 
 	//run simulation
 	Simcore->Report("Running simulation...");
