@@ -68,7 +68,7 @@ public:
 	WallObject* CreateWallObject(Object *parent, const char *name);
 	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
 	int FindWall(const Ogre::Vector3 &point, bool convert = true);
-	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert = true, bool rescale = true);
+	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, bool convert = true, bool rescale = true);
 	void RescaleVertices(float multiplier);
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin = Ogre::Vector3(0, 0, 0));
 	Ogre::Vector3 GetPosition();

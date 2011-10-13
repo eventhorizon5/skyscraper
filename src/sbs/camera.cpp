@@ -552,6 +552,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	polyname = "";
 	WallObject* wall = 0;
 	MeshObject* meshobject;
+	float best_distance = 2000000000.;
+	MeshObject* bestmesh = 0;
+	int best_i = -1;
+	std::string prevmesh = "";
 
 	//get collided collision object
 	for (int i = 0; i < callback.getCollisionCount(); i++)
@@ -559,10 +563,15 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		OgreBulletCollisions::Object* object = callback.getCollidedObject(i);
 
 		if (!object)
-			return;
+			continue;
 
 		//get name of collision object's parent scenenode (which is the same name as the mesh object)
 		meshname = object->getRootNode()->getName();
+
+		if (meshname == prevmesh)
+			continue;
+
+		prevmesh = meshname;
 
 		//get hit/intersection position
 		HitPosition = sbs->ToLocal(callback.getCollisionPoint(i));
@@ -570,21 +579,31 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		//get wall name
 		meshobject = sbs->FindMeshObject(meshname);
 		if (!meshobject)
-			return;
+			continue;
 
 		Ogre::Vector3 isect;
-		int num = meshobject->FindWallIntersect(sbs->ToLocal(ray.getOrigin(), false), sbs->ToLocal(ray.getPoint(1000), false), isect, true, false);
-	
-		if (num > -1)
-		{
-			wall = meshobject->Walls[num];
+		float distance = best_distance;
+		int num = meshobject->FindWallIntersect(sbs->ToLocal(ray.getOrigin(), false), sbs->ToLocal(ray.getPoint(1000), false), isect, distance, true, false);
 
-			if (wall)
-				polyname = wall->GetName();
-			else
-				polyname = "";
-			break;
+		if (distance < best_distance)
+		{
+			best_distance = distance;
+			bestmesh = meshobject;
+			best_i = num;
 		}
+	}
+
+	if (best_i > -1 && bestmesh)
+	{
+		wall = bestmesh->Walls[best_i];
+		if (wall)
+		{
+			polyname = wall->GetName();
+			meshname = bestmesh->name;
+			meshobject = bestmesh;
+		}
+		else
+			polyname = "";
 	}
 
 	//get and strip object number

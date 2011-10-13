@@ -57,25 +57,30 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	ControlMesh = new MeshObject(object, name, true, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//sbs->TexelOverride = true;
+	WallObject *wall;
 	if (Direction == "front")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
-		sbs->AddWallMain(object, ControlMesh, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	//sbs->TexelOverride = false;

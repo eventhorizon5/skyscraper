@@ -99,7 +99,9 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
 
-			sbs->AddWallMain(object, CallButtonBackMesh, "Call Button Panel", BackTexture, 0, x1, CenterZ, x2, CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
+			WallObject *wall;
+			wall = CallButtonBackMesh->CreateWallObject(this->object, "Call Button Panel");
+			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, x1, CenterZ, x2, CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
 		if (Direction == "left" || Direction == "right")
 		{
@@ -110,7 +112,9 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
 
-			sbs->AddWallMain(object, CallButtonBackMesh, "Call Button Panel", BackTexture, 0, CenterX, z1, CenterX, z2, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
+			WallObject *wall;
+			wall = CallButtonBackMesh->CreateWallObject(this->object, "Call Button Panel");
+			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, CenterX, z1, CenterX, z2, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
 		sbs->ResetWalls();
 	}
@@ -144,17 +148,28 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float height = (BackHeight / 7) * 2;
 			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
 			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
-			sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
-			sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude2, altitude2, 1, 1, false);
+			WallObject *wall;
+			wall = CallButtonMeshUp->CreateWallObject(this->object, "Call Button Up");
+			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+
+			wall = CallButtonMeshDown->CreateWallObject(this->object, "Call Button Down");
+			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
 			float height = (BackHeight / 7) * 2;
 			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14));
+			WallObject *wall;
 			if (floornum < topfloor)
-				sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+			{
+				wall = CallButtonMeshUp->CreateWallObject(this->object, "Call Button Up");
+				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+			}
 			if (floornum > bottomfloor)
-				sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+			{
+				wall = CallButtonMeshDown->CreateWallObject(this->object, "Call Button Down");
+				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+			}
 		}
 		sbs->ResetWalls();
 	}
@@ -178,17 +193,28 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float height = (BackHeight / 7) * 2;
 			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
 			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
-			sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
-			sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude2, altitude2, 1, 1, false);
+			WallObject *wall;
+			wall = CallButtonMeshUp->CreateWallObject(this->object, "Call Button Up");
+			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+
+			wall = CallButtonMeshDown->CreateWallObject(this->object, "Call Button Down");
+			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
 			float height = (BackHeight / 7) * 2;
 			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14));
+			WallObject *wall;
 			if (floornum < topfloor)
-				sbs->AddWallMain(object, CallButtonMeshUp, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+			{
+				wall = CallButtonMeshUp->CreateWallObject(this->object, "Call Button Up");
+				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+			}
 			if (floornum > bottomfloor)
-				sbs->AddWallMain(object, CallButtonMeshDown, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+			{
+				wall = CallButtonMeshDown->CreateWallObject(this->object, "Call Button Down");
+				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+			}
 		}
 		sbs->ResetWalls();
 	}

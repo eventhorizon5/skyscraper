@@ -1053,7 +1053,7 @@ int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
 	return -1;
 }
 
-int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert, bool rescale)
+int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, bool convert, bool rescale)
 {
 	//find a wall from a 3D point
 
@@ -1071,6 +1071,9 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 			{
 				if (pr < best_pr)
 				{
+					//calculate distance to intersection
+					distance = start.distance(cur_isect);
+
 					best_pr = pr;
 					best_i = i;
 					best_j = j;
