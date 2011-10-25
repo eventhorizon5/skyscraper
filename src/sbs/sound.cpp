@@ -99,8 +99,6 @@ void Sound::SetPosition(const Ogre::Vector3& position, bool set_velocity)
 
 	Position = position;
 	Velocity = (vel.x, vel.y, vel.z);
-	if (!IsValid())
-		Reload();
 	if (channel)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 }
@@ -122,8 +120,6 @@ void Sound::SetVolume(float value)
 {
 	//set volume of sound
 	Volume = value;
-	if (!IsValid())
-		Reload();
 	if (channel)
 		channel->setVolume(value);
 }
@@ -139,8 +135,6 @@ void Sound::SetDistances(float min, float max)
 	//set minimum and maximum unattenuated distances
 	MinDistance = min;
 	MaxDistance = max;
-	if (!IsValid())
-		Reload();
 	if (channel)
 		channel->set3DMinMaxDistance(min, max);
 }
@@ -163,8 +157,6 @@ void Sound::SetDirection(Ogre::Vector3 direction)
 	vec.y = direction.y;
 	vec.z = direction.z;
 
-	if (!IsValid())
-		Reload();
 	if (channel)
 		channel->set3DConeOrientation(&vec);
 }
@@ -181,8 +173,6 @@ void Sound::SetDirectionalRadiation(float rad)
 
 void Sound::SetConeSettings(float inside_angle, float outside_angle, float outside_volume)
 {
-	if (!IsValid())
-		Reload();
 	if (channel)
 		channel->set3DConeSettings(inside_angle, outside_angle, outside_volume);
 }
@@ -190,8 +180,6 @@ void Sound::SetConeSettings(float inside_angle, float outside_angle, float outsi
 void Sound::Loop(bool value)
 {
 	SoundLoop = value;
-	if (!IsValid())
-		Reload();
 	if (channel)
 	{
 		if (value == true)
@@ -243,8 +231,6 @@ bool Sound::IsPlaying()
 void Sound::SetSpeed(int percent)
 {
 	Speed = percent;
-	if (!IsValid())
-		Reload();
 	if (!channel)
 		return;
 
@@ -276,7 +262,25 @@ bool Sound::IsValid()
 void Sound::Play(bool reset)
 {
 	if (!IsValid())
-		Reload();
+	{
+		//prepare sound (and keep paused)
+		FMOD_RESULT result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
+
+		if (result != FMOD_OK || !channel)
+			return;
+
+		//get default speed value
+		channel->getFrequency(&default_speed);
+
+		//load previously stored values into new sound objects
+		SetPosition(Position);
+		SetVolume(Volume);
+		SetDistances(MinDistance, MaxDistance);
+		SetDirection(Direction);
+		Loop(SoundLoop);
+		SetSpeed(Speed);
+	}
+
 	if (reset == true)
 		Reset();
 	if (channel)
@@ -286,26 +290,6 @@ void Sound::Play(bool reset)
 void Sound::Reset()
 {
 	SetPlayPosition(0);
-}
-
-void Sound::Reload()
-{
-	//prepare sound (and keep paused)
-	FMOD_RESULT result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
-
-	if (result != FMOD_OK || !channel)
-		return;
-
-	//get default speed value
-	channel->getFrequency(&default_speed);
-
-	//load previously stored values into new sound objects
-	SetPosition(Position);
-	SetVolume(Volume);
-	SetDistances(MinDistance, MaxDistance);
-	SetDirection(Direction);
-	Loop(SoundLoop);
-	SetSpeed(Speed);
 }
 
 void Sound::Load(const char *filename, bool force)
@@ -370,8 +354,6 @@ void Sound::SetPlayPosition(float percent)
 {
 	//sets the current sound playback position, in percent (1 = 100%)
 
-	if (!IsValid())
-		Reload();
 	if (!channel)
 		return;
 

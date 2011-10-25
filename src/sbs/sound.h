@@ -63,7 +63,6 @@ public:
 
 private:
 
-	void Reload();
 	bool IsValid();
 
 	//sound data
