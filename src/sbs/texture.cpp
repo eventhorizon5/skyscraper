@@ -353,6 +353,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 				}
 
 				cursorX += GlyphTexCoords[strindex].getWidth();
+				break;
 			}//default
 		}//switch
 	}//for
