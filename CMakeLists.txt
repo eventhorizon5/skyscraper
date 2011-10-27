@@ -67,6 +67,9 @@ find_package(GTK2 COMPONENTS gtk REQUIRED)
 #find BULLET
 find_package(Bullet REQUIRED)
 
+#find Caelum
+find_package(Caelum REQUIRED)
+
 file(GLOB FRONTEND_FILES
 	src/frontend/*.cpp
 )
@@ -97,6 +100,7 @@ include_directories( ${OIS_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
 	${GTK2_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}
+	${Caelum_INCLUDE_DIRS}
 	src/sbs
 	ogrebullet/Collisions/include
 	ogrebullet/Collisions/include/Debug
@@ -127,7 +131,7 @@ add_executable(Skyscraper ${FRONTEND_FILES})
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
-target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY})
+target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${Caelum_LIBRARIES})
 
 target_link_libraries(Skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES})
  
