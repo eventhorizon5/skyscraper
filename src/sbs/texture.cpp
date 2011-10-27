@@ -217,6 +217,19 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 			GlyphTexCoords[i].right = glypheTexRect.right * fontTexture->getSrcWidth();
 			GlyphTexCoords[i].bottom = glypheTexRect.bottom * fontTexture->getSrcHeight();
 
+			//get true bottom of character, since the previous routine doesn't seem to get an accurate result
+			int lastline = 0;
+			for (int j = 0; j < GlyphTexCoords[i].getHeight(); j++)
+			{
+				for (int k = 0; k < GlyphTexCoords[i].getWidth(); k++)
+				{
+					float alpha =  color.a * (fontData[(j + GlyphTexCoords[i].top) * fontRowPitchBytes + (k + GlyphTexCoords[i].left) * fontPixelSize + 1] / 255.0);
+					if (alpha > 0.0)
+						lastline = j;
+				}
+			}
+			GlyphTexCoords[i].bottom = GlyphTexCoords[i].top + lastline + 1;
+
 			if (GlyphTexCoords[i].getHeight() > charheight)
 				charheight = GlyphTexCoords[i].getHeight();
 			if (GlyphTexCoords[i].getWidth() > charwidth)
