@@ -839,7 +839,10 @@ void Skyscraper::Loop()
 
 	//update Caelum
 	if (mCaelumSystem)
+	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
+		mCaelumSystem->updateSubcomponents(Simcore->GetElapsedTime() / 1000);
+	}
 
 	//render graphics
 	Render();
@@ -1606,6 +1609,9 @@ bool Skyscraper::InitSky()
 		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, SkyName);
 		mCaelumSystem->attachViewport(mCamera->getViewport());
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
+		mCaelumSystem->setSceneFogDensityMultiplier(0.0008f);
+		mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
+		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
 	}
 	catch (Ogre::Exception &e)
 	{
