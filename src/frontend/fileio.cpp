@@ -2115,6 +2115,8 @@ int ScriptProcessor::ProcGlobals()
 		Simcore->BuildingVersion = temp2;
 	if (SetCaseCopy(LineData.substr(0, 3), false) == "sky")
 		Simcore->SkyName = temp2;
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "dynamicsky")
+		skyscraper->SkyName = temp2;
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "camerafloor")
 	{
 		int data;

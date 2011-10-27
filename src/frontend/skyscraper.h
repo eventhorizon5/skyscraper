@@ -51,6 +51,7 @@ public:
 	std::string version_frontend;
 
 	std::string Platform;
+	std::string SkyName;
 
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code

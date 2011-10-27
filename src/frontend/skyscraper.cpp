@@ -118,6 +118,7 @@ bool Skyscraper::OnInit(void)
 	mCamera = 0;
 	sound = 0;
 	channel = 0;
+	SkyName = "DefaultSky";
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -1602,7 +1603,7 @@ bool Skyscraper::InitSky()
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Caelum");
 
 		mCaelumSystem = new Caelum::CaelumSystem(mRoot, mSceneMgr, Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE);
-		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, "DefaultSky");
+		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, SkyName);
 		mCaelumSystem->attachViewport(mCamera->getViewport());
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 	}
