@@ -49,7 +49,7 @@
 				Optimization="2"
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\src\sbs;&quot;$(BULLET_HOME)\src&quot;;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
+				AdditionalIncludeDirectories="..\src\sbs;&quot;$(BULLET_HOME)\src&quot;;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(WXWIN)\lib\vc_dll\msw&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;;&quot;$(CAELUM_HOME)\main\include&quot;"
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC"
 				StringPooling="true"
@@ -82,12 +82,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SBS.lib OgreMain.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
+				AdditionalDependencies="SBS.lib OgreMain.lib wxbase28.lib wxmsw28_core.lib wxmsw28_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib Caelum.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\;.\Release;&quot;$(OGRE_HOME)\lib\release&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
+				AdditionalLibraryDirectories="..\;.\Release;&quot;$(OGRE_HOME)\lib\release&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;;&quot;$(CAELUM_HOME)\lib\release&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="..\Skyscraper.pdb"
 				SubSystem="1"
@@ -156,7 +156,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\src\sbs;&quot;$(BULLET_HOME)\src&quot;;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;"
+				AdditionalIncludeDirectories="..\src\sbs;&quot;$(BULLET_HOME)\src&quot;;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;&quot;$(OGRE_HOME)\include\OGRE&quot;;&quot;$(OGRE_HOME)\boost_1_42&quot;;&quot;$(WXWIN)\lib\vc_dll\mswd&quot;;&quot;$(WXWIN)\include&quot;;&quot;$(FMOD_HOME)\api\inc&quot;;&quot;$(CAELUM_HOME)\main\include&quot;"
 				AdditionalUsingDirectories=""
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;_WINDOWS;_OGREBULLET_DYNAMIC"
 				MinimalRebuild="true"
@@ -189,12 +189,12 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SBS.lib OgreMain_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib"
+				AdditionalDependencies="SBS.lib OgreMain_d.lib wxbase28d.lib wxmsw28d_core.lib wxmsw28d_gl.lib fmodex_vc.lib OgreBulletCollisions.lib OgreBulletDynamics.lib Caelum.lib"
 				OutputFile="../Skyscraper.exe"
 				Version=""
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="..\;.\Debug;&quot;$(OGRE_HOME)\lib\debug&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;"
+				AdditionalLibraryDirectories="..\;.\Debug;&quot;$(OGRE_HOME)\lib\debug&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;;&quot;$(WXWIN)\lib\vc_dll&quot;;&quot;$(FMOD_HOME)\api\lib&quot;;&quot;$(CAELUM_HOME)\lib\debug&quot;"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Skyscraper.pdb"
 				SubSystem="1"
