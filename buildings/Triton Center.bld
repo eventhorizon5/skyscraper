@@ -4121,6 +4121,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 40
     AssignedShaft = 7
+    DisplayFloors = 0, 10, 20, 30, 40
     CreateElevator false, -12.414, -29.083, 0
 <EndElevator>
 
@@ -4133,6 +4134,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 40
     AssignedShaft = 7
+    DisplayFloors = 0, 10, 20, 30, 40
     CreateElevator false, -12.414, -38.916, 0
 <EndElevator>
 
@@ -4145,6 +4147,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 40
     AssignedShaft = 7
+    DisplayFloors = 0, 10, 20, 30, 40
     CreateElevator false, -12.414, -48.75, 0
 <EndElevator>
 
@@ -4216,6 +4219,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 40
     AssignedShaft = 8
+    DisplayFloors = 0, 10, 20, 30, 40
     CreateElevator false, 12.414, -29.083, 40
 <EndElevator>
 
@@ -4228,6 +4232,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 40
     AssignedShaft = 8
+    DisplayFloors = 0, 10, 20, 30, 40
     CreateElevator false, 12.414, -38.916, 40
 <EndElevator>
 
@@ -4240,6 +4245,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 40
     AssignedShaft = 8
+    DisplayFloors = 0, 10, 20, 30, 40
     CreateElevator false, 12.414, -48.75, 40
 <EndElevator>
 
@@ -4497,6 +4503,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 100
     AssignedShaft = 11
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
     CreateElevator false, -38.997, 28.253, 0
 <EndElevator>
 
@@ -4509,6 +4516,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 100
     AssignedShaft = 11
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
     CreateElevator false, -38.997, 18.42, 0
 <EndElevator>
 
@@ -4580,6 +4588,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 100
     AssignedShaft = 12
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
     CreateElevator false, -19.169, 28.253, 100
 <EndElevator>
 
@@ -4592,6 +4601,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 100
     AssignedShaft = 12
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
     CreateElevator false, -19.169, 18.42, 100
 <EndElevator>
 
@@ -4666,6 +4676,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = 0, 134 - 136
     AssignedShaft = 15
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 134, 135, 136
     CreateElevator false, 9.252, 38.42, 0
 <EndElevator>
 
@@ -4678,6 +4689,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = 0, 134 - 136
     AssignedShaft = 15
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 134, 135, 136
     CreateElevator false, 9.252, 28.42, 135
 <EndElevator>
 
@@ -4753,6 +4765,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 80
     AssignedShaft = 13
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80
     CreateElevator false, 19.083, 18.249, 0
 <EndElevator>
 
@@ -4765,6 +4778,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 80
     AssignedShaft = 13
+    DisplayFloors = 0, 10, 20, 30, 40, 50, 60, 70, 80
     CreateElevator false, 28.917, 18.249, 80
 <EndElevator>
 
@@ -4839,6 +4853,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.2
     ServicedFloors = -1, 137
     AssignedShaft = 14
+    DisplayFloors = -1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 137
     CreateElevator false, -9.166, 42.879, -1
 
     #floor
@@ -5596,6 +5611,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
+    DisplayFloors = 80, 90, 100, 110, 120, 130, 132
     ServicedFloors = 80, 100, 132
     AssignedShaft = 24
     FloorSkipText = EZ
