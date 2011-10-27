@@ -837,7 +837,8 @@ void Skyscraper::Loop()
 	Simcore->camera->Loop();
 
 	//update Caelum
-	mCaelumSystem->notifyCameraChanged(mCamera);
+	if (mCaelumSystem)
+		mCaelumSystem->notifyCameraChanged(mCamera);
 
 	//render graphics
 	Render();
@@ -1377,8 +1378,10 @@ bool Skyscraper::Start()
 	}
 
 	//the sky needs to be created before Prepare() is called
-	//Simcore->CreateSky(Simcore->SkyName.c_str());
-	InitSky();
+	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == false)
+		Simcore->CreateSky(Simcore->SkyName.c_str());
+	else
+		InitSky();
 
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
