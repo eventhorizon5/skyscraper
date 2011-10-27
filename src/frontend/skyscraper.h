@@ -29,6 +29,7 @@
 #include <wx/panel.h>
 #include <wx/frame.h>
 #include <fmod.hpp>
+#include "Caelum.h"
 #include "fileio.h"
 
 int main (int argc, char* argv[]);
@@ -98,6 +99,7 @@ public:
 	std::string GetConfigString(std::string key, std::string default_value);
 	bool GetConfigBool(std::string key, bool default_value);
 	float GetConfigFloat(std::string key, float default_value);
+	bool InitSky();
 
 private:
 	//mouse status
@@ -147,6 +149,7 @@ private:
 	void DeleteButtons();
 
 	Ogre::ConfigFile configfile;
+	Caelum::CaelumSystem *mCaelumSystem;
 };
 
 class MainScreen : public wxFrame

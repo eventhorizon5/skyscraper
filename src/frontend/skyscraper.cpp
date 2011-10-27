@@ -163,6 +163,10 @@ int Skyscraper::OnExit()
 
 	UnloadSim();
 
+	//delete Caelum
+	if (mCaelumSystem)
+		delete mCaelumSystem;
+
 	//cleanup sound
 	StopSound();
 	if (soundsys)
@@ -832,6 +836,9 @@ void Skyscraper::Loop()
 	//process camera loop
 	Simcore->camera->Loop();
 
+	//update Caelum
+	mCaelumSystem->notifyCameraChanged(mCamera);
+
 	//render graphics
 	Render();
 
@@ -1370,7 +1377,8 @@ bool Skyscraper::Start()
 	}
 
 	//the sky needs to be created before Prepare() is called
-	Simcore->CreateSky(Simcore->SkyName.c_str());
+	//Simcore->CreateSky(Simcore->SkyName.c_str());
+	InitSky();
 
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
@@ -1577,4 +1585,27 @@ float Skyscraper::GetConfigFloat(std::string key, float default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);
+}
+
+bool Skyscraper::InitSky()
+{
+	//initialize sky
+	try
+	{
+		if (!Caelum::CaelumPlugin::getSingletonPtr())
+			mRoot->installPlugin(new Caelum::CaelumPlugin());
+
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/caelum", "FileSystem", "Caelum", false);
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Caelum");
+
+		mCaelumSystem = new Caelum::CaelumSystem(mRoot, mSceneMgr, Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE);
+		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, "DefaultSky");
+		mCaelumSystem->attachViewport(mCamera->getViewport());
+		mCaelumSystem->setAutoNotifyCameraChanged(false);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error initializing Caelum:" + e.getDescription());
+		return false;
+	}
 }
