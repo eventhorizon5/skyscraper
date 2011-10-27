@@ -570,18 +570,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 		if (shaftdoors == true)
 		{
-			if (!ShaftDoors[index])
+			if (ShaftDoors[index])
 			{
-				OpenDoor = 0;
-                                WhichDoors = 0;
-                                DoorIsRunning = false;
-				sbs->ReportError("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": invalid shaft door");
-                                return;
-			}
-
-			for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
-			{
-				ShaftDoors[index]->doors[i]->finished = false;
+				for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
+				{
+					ShaftDoors[index]->doors[i]->finished = false;
+				}
 			}
 		}
 	}
@@ -602,18 +596,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	if (shaftdoors == true)
 	{
-		if (!ShaftDoors[index])
+		if (ShaftDoors[index])
 		{
-			OpenDoor = 0;
-			WhichDoors = 0;
-			DoorIsRunning = false;
-			sbs->ReportError("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": invalid shaft door");
-			return;
-		}
-
-		for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
-		{
-			ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
+			for (int i = 0; i < (int)ShaftDoors[index]->doors.size(); i++)
+			{
+				ShaftDoors[index]->doors[i]->MoveDoors(open, manual);
+			}
 		}
 	}
 
@@ -629,9 +617,12 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	}
 	if (shaftdoors == true)
 	{
-		ShaftDoors[index]->CheckDoorsOpen();
-		if (ShaftDoors[index]->IsFinished() == false)
-			return;
+		if (ShaftDoors[index])
+		{
+			ShaftDoors[index]->CheckDoorsOpen();
+			if (ShaftDoors[index]->IsFinished() == false)
+				return;
+		}
 	}
 
 	//the doors are open or closed now
