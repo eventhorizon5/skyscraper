@@ -133,6 +133,9 @@ class CameraControl: public wxDialog
 		static const long ID_txtSetFOV;
 		static const long ID_bSetFOV;
 		static const long ID_bResetFOV;
+		static const long ID_STATICTEXT31;
+		static const long ID_TEXTCTRL1;
+		static const long ID_BUTTON1;
 		//*)
 		void Loop();
 
@@ -166,6 +169,7 @@ class CameraControl: public wxDialog
 		void On_chkHold_Click(wxCommandEvent& event);
 		void On_bSetFOV_Click(wxCommandEvent& event);
 		void On_bResetFOV_Click(wxCommandEvent& event);
+		void On_bSetSkyMult_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -207,6 +211,7 @@ class CameraControl: public wxDialog
 		wxStaticText* StaticText18;
 		wxButton* bPositionY;
 		wxButton* bStartRotation;
+		wxStaticText* StaticText31;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText27;
 		wxButton* bStartDirection;
@@ -234,6 +239,7 @@ class CameraControl: public wxDialog
 		wxButton* bFreelookSpeed;
 		wxStaticLine* StaticLine3;
 		wxStaticLine* StaticLine1;
+		wxTextCtrl* txtSetSkyMult;
 		wxButton* bPositionZ;
 		wxButton* bGravity;
 		wxStaticText* StaticText28;
@@ -242,6 +248,7 @@ class CameraControl: public wxDialog
 		wxStaticText* StaticText12;
 		wxTextCtrl* txtMoveSpeed;
 		wxTextCtrl* txtRotationX;
+		wxButton* bSetSkyMult;
 		wxCheckBox* chkHold;
 		wxTextCtrl* txtSetFOV;
 		wxStaticText* StaticText25;

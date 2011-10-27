@@ -119,6 +119,7 @@ bool Skyscraper::OnInit(void)
 	sound = 0;
 	channel = 0;
 	SkyName = "DefaultSky";
+	SkyMult = 1;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -200,6 +201,10 @@ void Skyscraper::UnloadSim()
 	//delete simulator object
 	delete Simcore;
 	Simcore = 0;
+
+	if (mCaelumSystem)
+		delete mCaelumSystem;
+	mCaelumSystem = 0;
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
@@ -841,6 +846,7 @@ void Skyscraper::Loop()
 	if (mCaelumSystem)
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
+		mCaelumSystem->setTimeScale(SkyMult);
 		mCaelumSystem->updateSubcomponents(Simcore->GetElapsedTime() / 1000);
 	}
 
@@ -1609,9 +1615,10 @@ bool Skyscraper::InitSky()
 		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, SkyName);
 		mCaelumSystem->attachViewport(mCamera->getViewport());
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
-		mCaelumSystem->setSceneFogDensityMultiplier(0.0008f);
-		mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
+		mCaelumSystem->setSceneFogDensityMultiplier(0.0001f);
+		//mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
 		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
+		SkyMult = mCaelumSystem->getTimeScale();
 	}
 	catch (Ogre::Exception &e)
 	{

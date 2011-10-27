@@ -35,6 +35,7 @@
 #include "cameracontrol.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
+extern Skyscraper *skyscraper;
 
 //(*IdInit(CameraControl)
 const long CameraControl::ID_STATICTEXT3 = wxNewId();
@@ -126,6 +127,9 @@ const long CameraControl::ID_STATICTEXT30 = wxNewId();
 const long CameraControl::ID_txtSetFOV = wxNewId();
 const long CameraControl::ID_bSetFOV = wxNewId();
 const long CameraControl::ID_bResetFOV = wxNewId();
+const long CameraControl::ID_STATICTEXT31 = wxNewId();
+const long CameraControl::ID_TEXTCTRL1 = wxNewId();
+const long CameraControl::ID_BUTTON1 = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(CameraControl,wxDialog)
@@ -365,13 +369,19 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(StaticLine3, 1, wxTOP|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer10 = new wxFlexGridSizer(0, 4, 0, 0);
 	StaticText30 = new wxStaticText(this, ID_STATICTEXT30, _("FOV:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT30"));
-	FlexGridSizer10->Add(StaticText30, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer10->Add(StaticText30, 1, wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtSetFOV = new wxTextCtrl(this, ID_txtSetFOV, _("0"), wxDefaultPosition, wxSize(50,-1), 0, wxDefaultValidator, _T("ID_txtSetFOV"));
 	FlexGridSizer10->Add(txtSetFOV, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetFOV = new wxButton(this, ID_bSetFOV, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetFOV"));
 	FlexGridSizer10->Add(bSetFOV, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bResetFOV = new wxButton(this, ID_bResetFOV, _("Reset"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bResetFOV"));
 	FlexGridSizer10->Add(bResetFOV, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText31 = new wxStaticText(this, ID_STATICTEXT31, _("Sky Time Mult:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT31"));
+	FlexGridSizer10->Add(StaticText31, 1, wxLEFT|wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	txtSetSkyMult = new wxTextCtrl(this, ID_TEXTCTRL1, _("1"), wxDefaultPosition, wxSize(50,-1), 0, wxDefaultValidator, _T("ID_TEXTCTRL1"));
+	FlexGridSizer10->Add(txtSetSkyMult, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetSkyMult = new wxButton(this, ID_BUTTON1, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_BUTTON1"));
+	FlexGridSizer10->Add(bSetSkyMult, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer6->Add(FlexGridSizer10, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer4->Add(FlexGridSizer6, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer9->Add(StaticBoxSizer4, 1, wxTOP|wxBOTTOM|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
@@ -407,6 +417,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bRotationZ,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bRotationZ_Click);
 	Connect(ID_bSetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bSetFOV_Click);
 	Connect(ID_bResetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bResetFOV_Click);
+	Connect(ID_BUTTON1,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bSetSkyMult_Click);
 	//*)
 	OnInit();
 }
@@ -636,4 +647,9 @@ void CameraControl::On_bSetFOV_Click(wxCommandEvent& event)
 void CameraControl::On_bResetFOV_Click(wxCommandEvent& event)
 {
 	Simcore->camera->SetToDefaultFOV();
+}
+
+void CameraControl::On_bSetSkyMult_Click(wxCommandEvent& event)
+{
+	skyscraper->SkyMult = (atof(txtSetSkyMult->GetValue().ToAscii()));
 }
