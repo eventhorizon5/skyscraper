@@ -1070,13 +1070,7 @@ int ScriptProcessor::ProcCommands()
 			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
-		if (Section == 2)
-		{
-			buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[4].c_str())));
-			 tempdata.insert(tempdata.begin() + 4, buffer);
-			 buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[7].c_str())));
-			 tempdata.insert(tempdata.begin() + 7, buffer);
-		}
+
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
@@ -1113,8 +1107,16 @@ int ScriptProcessor::ProcCommands()
 		//store command and line info in object
 		StoreCommand(wall);
 
+		float voffset1 = atof(tempdata[4].c_str());
+		float voffset2 = atof(tempdata[7].c_str());
+		if (Section == 2)
+		{
+			voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+			voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		}
+
 		//create triangle wall
-		Simcore->AddTriangleWall(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+		Simcore->AddTriangleWall(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), voffset1, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), voffset2, atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 	}
 
 	//AddWall command
@@ -1253,11 +1255,6 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
-		if (Section == 2)
-		{
-			buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str())));
-			tempdata.insert(tempdata.begin() + 8, buffer);
-		}
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
@@ -1293,7 +1290,11 @@ int ScriptProcessor::ProcCommands()
 
 		StoreCommand(wall);
 
-		Simcore->CreateWallBox2(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		float voffset = atof(tempdata[8].c_str());
+		if (Section == 2)
+			voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+
+		Simcore->CreateWallBox2(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), voffset, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 	}
 
 	//CreateWallBox command
@@ -1321,11 +1322,6 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 
-		if (Section == 2)
-		{
-			buffer = Ogre::StringConverter::toString(Ogre::Real(Simcore->GetFloor(Current)->GetBase() + atof(tempdata[8].c_str())));
-			tempdata.insert(tempdata.begin() + 8, buffer);
-		}
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
@@ -1361,7 +1357,11 @@ int ScriptProcessor::ProcCommands()
 
 		StoreCommand(wall);
 
-		Simcore->CreateWallBox(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		float voffset = atof(tempdata[8].c_str());
+		if (Section == 2)
+			voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+
+		Simcore->CreateWallBox(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), voffset, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 	}
 
 	//AddCustomWall command
@@ -1814,7 +1814,7 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3].c_str());
-			tempdata.insert(tempdata.begin() + temp3, buffer);
+			tempdata[temp3] = buffer;
 		}
 		if (tempdata.size() < 8 || tempdata.size() > 8)
 			return ScriptError("Incorrect number of parameters");
@@ -1907,7 +1907,7 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
 		{
 			buffer = Calc(tempdata[temp3].c_str());
-			tempdata.insert(tempdata.begin() + temp3, buffer);
+			tempdata[temp3] = buffer;
 		}
 		if (tempdata.size() < 4 || tempdata.size() > 4)
 			return ScriptError("Incorrect number of parameters");
