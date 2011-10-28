@@ -120,6 +120,7 @@ bool Skyscraper::OnInit(void)
 	channel = 0;
 	SkyName = "DefaultSky";
 	SkyMult = 1;
+	mCaelumSystem = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -198,13 +199,19 @@ void Skyscraper::UnloadSim()
 		dpanel->Destroy();
 	}
 	dpanel = 0;
+
+	if (mCaelumSystem)
+	{
+		mCaelumSystem->clear();
+		mCaelumSystem->detachAllViewports();
+		delete mCaelumSystem;
+		mCaelumSystem = 0;
+		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
+	}
+
 	//delete simulator object
 	delete Simcore;
 	Simcore = 0;
-
-	if (mCaelumSystem)
-		delete mCaelumSystem;
-	mCaelumSystem = 0;
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
@@ -475,6 +482,19 @@ bool Skyscraper::Initialize()
 		}
 		else
 			Report("Sound initialized");
+	}
+
+
+	//load Caelum plugin
+	try
+	{
+		if (!Caelum::CaelumPlugin::getSingletonPtr())
+			mRoot->installPlugin(new Caelum::CaelumPlugin());
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error initializing Caelum plugin:" + e.getDescription());
+		return false;
 	}
 
 	return true;
@@ -847,7 +867,7 @@ void Skyscraper::Loop()
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
 		mCaelumSystem->setTimeScale(SkyMult);
-		mCaelumSystem->updateSubcomponents(Simcore->GetElapsedTime() / 1000);
+		mCaelumSystem->updateSubcomponents(float(Simcore->GetElapsedTime()) / 1000);
 	}
 
 	//render graphics
@@ -1605,24 +1625,22 @@ bool Skyscraper::InitSky()
 	//initialize sky
 	try
 	{
-		if (!Caelum::CaelumPlugin::getSingletonPtr())
-			mRoot->installPlugin(new Caelum::CaelumPlugin());
-
+		//load Caelum resources
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/caelum", "FileSystem", "Caelum", false);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Caelum");
 
-		mCaelumSystem = new Caelum::CaelumSystem(mRoot, mSceneMgr, Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE);
+		if (!mCaelumSystem)
+			mCaelumSystem = new Caelum::CaelumSystem(mRoot, mSceneMgr, Caelum::CaelumSystem::CAELUM_COMPONENTS_NONE);
 		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, SkyName);
 		mCaelumSystem->attachViewport(mCamera->getViewport());
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(0.0001f);
-		//mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
 		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
 		SkyMult = mCaelumSystem->getTimeScale();
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error initializing Caelum:" + e.getDescription());
+		ReportFatalError("Error initializing sky:" + e.getDescription());
 		return false;
 	}
 }

@@ -651,5 +651,5 @@ void CameraControl::On_bResetFOV_Click(wxCommandEvent& event)
 
 void CameraControl::On_bSetSkyMult_Click(wxCommandEvent& event)
 {
-	skyscraper->SkyMult = (atof(txtSetSkyMult->GetValue().ToAscii()));
+	skyscraper->SkyMult = (atoi(txtSetSkyMult->GetValue().ToAscii()));
 }
