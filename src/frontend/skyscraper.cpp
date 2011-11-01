@@ -1636,7 +1636,7 @@ bool Skyscraper::InitSky()
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(0.0001f);
 		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
-			mCaelumSystem->setManageSceneFog(Ogre::FogMode::FOG_NONE);
+			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
 		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
 		SkyMult = mCaelumSystem->getTimeScale();
 	}
