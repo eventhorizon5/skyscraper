@@ -934,6 +934,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//enable alpha blending for related textures
 	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
 	//enable hard alpha for alpha mask values 128 and above
 	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 
@@ -1019,6 +1020,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 
 	//enable alpha blending for related textures
 	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
 	//enable hard alpha for alpha mask values 128 and above
 	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 
@@ -1753,14 +1755,7 @@ void SBS::EnableExternal(bool value)
 void SBS::EnableSkybox(bool value)
 {
 	//turns skybox on/off
-	//SkyBox->Enable(value);
 	IsSkyboxEnabled = value;
-
-	//disable vertical sync if skybox is on, for improved performance
-	/*if (value == false)
-		EnableVSync(true);
-	else
-		EnableVSync(false);*/
 }
 
 void SBS::CreateSky(const char *filenamebase)
