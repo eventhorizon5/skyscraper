@@ -486,15 +486,18 @@ bool Skyscraper::Initialize()
 
 
 	//load Caelum plugin
-	try
+	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
 	{
-		if (!Caelum::CaelumPlugin::getSingletonPtr())
-			mRoot->installPlugin(new Caelum::CaelumPlugin());
-	}
-	catch (Ogre::Exception &e)
-	{
-		ReportFatalError("Error initializing Caelum plugin:" + e.getDescription());
-		return false;
+		try
+		{
+			if (!Caelum::CaelumPlugin::getSingletonPtr())
+				mRoot->installPlugin(new Caelum::CaelumPlugin());
+		}
+		catch (Ogre::Exception &e)
+		{
+			ReportFatalError("Error initializing Caelum plugin:" + e.getDescription());
+			return false;
+		}
 	}
 
 	return true;
