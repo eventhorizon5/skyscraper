@@ -89,6 +89,7 @@ elseif (UNIX)
     /usr/local/lib${LIB_SUFFIX}/OGRE
     $ENV{HOME}/ogre
     $ENV{HOME}/OGRE
+    /opt/local/lib/OGRE
   )
 endif ()
 set(OGRE_PREFIX_PATH
