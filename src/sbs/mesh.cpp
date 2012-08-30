@@ -1668,7 +1668,9 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 
 		for (int i = 0; i < size; i++)
 		{
-			Triangles[submesh].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+			//check if triangle indices are valid
+			if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
+				Triangles[submesh].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 			element += 3;
 		}
 		elements.clear();
@@ -1707,7 +1709,9 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 
 			for (int ii = 0; ii < size; ii++)
 			{
-				wallarray[i]->handles[j].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+				//check if triangle indices are valid
+				if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
+					wallarray[i]->handles[j].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 				element += 3;
 			}
 			elements.clear();
@@ -1757,7 +1761,7 @@ void MeshObject::CreateCollider()
 	{
 		for (int j = 0; j < Triangles[i].triangles.size(); j++)
 		{
-			Ogre::Vector3 tri;
+			TriangleType tri(0, 0, 0);
 			tri.x = Triangles[i].triangles[j].x;
 			tri.y = Triangles[i].triangles[j].y;
 			tri.z = Triangles[i].triangles[j].z;
