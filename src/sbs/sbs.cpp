@@ -734,23 +734,55 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 {
 	//loads only a portion of the specified texture
 
+	Ogre::ColourValue alpha_color = Ogre::ColourValue::Black;
+	int mipmaps = -1;
+	bool use_alpha_color = false;
+
+	//set verbosity level
+	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
+
+	//first verify the filename
+	std::string filename2 = VerifyFile(filename);
+
+	//determine if the file is a GIF image, to force keycolor alpha
+	std::string extension = filename2.substr(filename2.size() - 3);
+	SetCase(extension, false);
+	if (extension == "gif")
+		use_alpha_color = true;
+
+	// Load the texture
+	std::string path = GetMountPath(filename2.c_str(), filename2);
+	Ogre::TexturePtr mTex;
+	std::string texturename;
+	bool has_alpha = false;
+
+	try
+	{
+		if (use_alpha_color == false)
+		{
+			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+
+			if (mTex.isNull())
+				return ReportError("Error loading texture" + filename2);
+			texturename = mTex->getName();
+			has_alpha = mTex->hasAlpha();
+		}
+		else
+		{
+			//load based on chroma key for alpha
+
+			texturename = "kc_" + filename2;
+			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
+			has_alpha = true;
+		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+	}
+
 	std::string Name = name;
 	std::string Filename = filename;
-
-	//get original texture
-	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Filename);
-	if (ptr.isNull())
-	{
-		ReportError("LoadTextureCropped: Invalid original material '" + Filename + "'");
-		return false;
-	}
-	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr image = Ogre::TextureManager::getSingleton().getByName(texname);
-	if (image.isNull())
-	{
-		ReportError("LoadTextureCropped: Invalid original texture '" + texname + "'");
-		return false;
-	}
 
 	//set default values if specified
 	if (x == -1)
@@ -758,13 +790,13 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	if (y == -1)
 		y = 0;
 	if (width < 1)
-		width = image->getWidth();
+		width = mTex->getWidth();
 	if (height < 1)
-		height = image->getHeight();
+		height = mTex->getHeight();
 
-	if (x > image->getWidth() || y > image->getHeight())
+	if (x > mTex->getWidth() || y > mTex->getHeight())
 		return ReportError("LoadTextureCropped: invalid coordinates for '" + Name + "'");
-	if (x + width > image->getWidth() || y + height > image->getHeight())
+	if (x + width > mTex->getWidth() || y + height > mTex->getHeight())
 		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
 	//create new empty texture
@@ -773,7 +805,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
 	Ogre::Box dest (0, 0, width, height);
-	new_texture->getBuffer()->blit(image->getBuffer(), source, dest);
+	new_texture->getBuffer()->blit(mTex->getBuffer(), source, dest);
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
