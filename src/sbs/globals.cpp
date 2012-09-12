@@ -235,23 +235,33 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
 
     int startpos = 0;
     int endpos = 0;
+    std::string newstring;
 
 	dest_array.clear();
 	std::string original = original_string;
+	TrimString(original);
 
     endpos = original.find_first_of(separator, startpos);
 	if (endpos == -1)
-		dest_array.push_back(original.substr(startpos, endpos - startpos));
+	{
+		newstring = original.substr(startpos, endpos - startpos);
+		TrimString(newstring);
+		dest_array.push_back(newstring);
+	}
 
     while (endpos != -1)
-    {       
-        dest_array.push_back(original.substr(startpos, endpos - startpos)); //add to vector
+    {
+    	newstring = original.substr(startpos, endpos - startpos);
+    	TrimString(newstring);
+        dest_array.push_back(newstring); //add to vector
         startpos = endpos + 1; //jump past separator
         endpos = original.find_first_of(separator, startpos); //find next
         if(endpos == -1)
         {
             //last one, so no 2nd param required to go to end of string
-            dest_array.push_back(original.substr(startpos));
+        	newstring = original.substr(startpos);
+        	TrimString(newstring);
+            dest_array.push_back(newstring);
         }
     }
 }
