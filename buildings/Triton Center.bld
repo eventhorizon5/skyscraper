@@ -8196,7 +8196,7 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 
 #Upper Stairs (141-Roof)
 CreateStairwell 7, 0, -5, 141, 143
-CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, -2.5, 5, 5
+CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, 5, 5, 5
 
 <Floor 141>
     #shorter stairs going from 141 to 142
@@ -8215,12 +8215,12 @@ CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, -2.5, 5, 5
     SetAutoSize = true, true
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 7, Left, Brick, 0, -9.4 - 3, -15, -9.4 - 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 7, Left, Brick, 0, -9.4 - 3, -15, -9.4 - 3, 5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
     AddStairsWall 7, Front, Brick, 0, -9.4 - 3, -15, -9.4 + 3, -15, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 7, Right, Brick, 0, -9.4 + 3, -15, -9.4 + 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
-    AddStairsWall 7, Back, Brick, 0, -9.4 - 3, -2.5, -9.4 + 3, -2.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 7, Right, Brick, 0, -9.4 + 3, -15, -9.4 + 3, 5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
+    AddStairsWall 7, Back, Brick, 0, -9.4 - 3, 5, -9.4 + 3, 5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
