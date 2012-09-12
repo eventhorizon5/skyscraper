@@ -607,7 +607,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 
 	int largest_normal = 0; //x
 
-	if (fabsf(normal.y) > fabsf(normal.x) && fabsf(normal.y) > fabsf(normal.z))
+	if (fabsf(normal.y) >= fabsf(normal.x) && fabsf(normal.y) >= fabsf(normal.z))
 		largest_normal = 1; //y biggest
 	else if (fabsf(normal.z) > fabsf(normal.x))
 		largest_normal = 2; //z biggest
