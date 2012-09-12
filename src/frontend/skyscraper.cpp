@@ -251,7 +251,9 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 	if (skyscraper->mRenderWindow)
 	{
-		//skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
+		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+#endif
 		skyscraper->mRenderWindow->windowMovedOrResized();
 	}
 	if (skyscraper->mCamera)
