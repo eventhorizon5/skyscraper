@@ -50,7 +50,7 @@ BEGIN
             VALUE "FileDescription", "Skyscraper\0"
             VALUE "FileVersion", "1.8.0." SVN_REVSTR "\0"
             VALUE "InternalName", "Skyscraper\0"
-            VALUE "LegalCopyright", "©2003-2011 Ryan Thoryk, released under the GPL\0"
+            VALUE "LegalCopyright", "©20032012 Ryan Thoryk, released under the GPL\0"
             VALUE "OriginalFilename", "Skyscraper.exe\0"
             VALUE "ProductName", "Skyscraper\0"
             VALUE "ProductVersion", "1.8.0." SVN_REVSTR "\0"

@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.8 Alpha - Control Reference Form
-	Copyright (C)2003-2011 Ryan Thoryk
+	Copyright (C)20032012 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
