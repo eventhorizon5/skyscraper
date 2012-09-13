@@ -1080,7 +1080,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 {
 	//determine axis of wall
 	int axis = 0;
-	if (fabs(x1 - x2) > fabs(z1 - z2))
+	if (fabs(x1 - x2) > (fabs(z1 - z2) + 0.00001))
 		//x axis
 		axis = 1;
 	else
