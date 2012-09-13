@@ -50,7 +50,7 @@ BEGIN
             VALUE "FileDescription", "Scalable Building Simulator\0"
             VALUE "FileVersion", "0.8.0." SVN_REVSTR "\0"
             VALUE "InternalName", "SBS\0"
-            VALUE "LegalCopyright", "©20052012 Ryan Thoryk, released under the GPL\0"
+            VALUE "LegalCopyright", "©2005-2012 Ryan Thoryk, released under the GPL\0"
             VALUE "OriginalFilename", "SBS.dll\0"
             VALUE "ProductName", "Scalable Building Simulator\0"
             VALUE "ProductVersion", "0.8.0." SVN_REVSTR "\0"

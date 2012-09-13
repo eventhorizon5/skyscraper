@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Mesh and Polygon Classes
 	The Skyscraper Project - Version 1.8 Alpha
-	Copyright (C)20042012 Ryan Thoryk
+	Copyright (C)2004-2012 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
