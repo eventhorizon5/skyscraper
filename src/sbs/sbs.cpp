@@ -3863,7 +3863,7 @@ std::string SBS::VerifyFile(const char *filename)
 			return verify_results[i].result;
 	}
 
-	Ogre::FileSystemArchive filesystem("","FileSystem");
+	Ogre::FileSystemArchive filesystem(".","FileSystem");
 	if (filesystem.exists(file))
 	{
 		CacheFilename(file, file);
@@ -3903,7 +3903,7 @@ bool SBS::FileExists(const char *filename)
 	std::string file = filename;
 	TrimString(file);
 
-	Ogre::FileSystemArchive filesystem("","FileSystem");
+	Ogre::FileSystemArchive filesystem(".","FileSystem");
 	if (filesystem.exists(file))
 		return true;
 
