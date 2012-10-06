@@ -1525,6 +1525,11 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 	params["vsyncInterval"] = "1";
 	params["externalWindowHandle"] = getOgreHandle();
 
+#if defined(__WXMAC__)
+	params["macAPI"] = "cocoa";
+	params["macAPICocoaUseNSView"] = "true";
+#endif
+
 	//create the render window
 	try
 	{
@@ -1595,7 +1600,7 @@ const std::string Skyscraper::getOgreHandle() const
    return std::string(handleStream.str());
 
 #elif defined(__WXMAC__)
-   return Ogre::StringConverter::toString((unsigned long)(HIViewRef(window->GetHandle())));
+   return Ogre::StringConverter::toString((size_t)window->GetHandle());
 
 #else
    #error Not supported on this platform!
