@@ -1074,3 +1074,8 @@ void Camera::MoveCharacter()
 	mCharacter->setWalkDirection(accum_movement, 1);
 	accum_movement = 0;
 }
+
+void Camera::ResetCollisions()
+{
+	mCharacter->resetCollisions();
+}

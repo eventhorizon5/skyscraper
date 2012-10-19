@@ -95,6 +95,7 @@ namespace OgreBulletDynamics
 		void setSleepingThresholds( const Ogre::Real linear, const Ogre::Real angular );
 		void setGravity(const Ogre::Vector3 &gravity);
 		Ogre::Vector3 getGravity();
+		void enableCollisions(bool value);
 
 
         inline btRigidBody*         getBulletRigidBody() const;

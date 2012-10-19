@@ -975,13 +975,8 @@ void MeshObject::Enable(bool value)
 	//enable or disable collision detection
 	if (mBody)
 	{
-		//completely remove object from dynamics world if disabled; re-add to enable
-		if (value == false)
-			mBody->removeFromWorld();
-		else
-			mBody->addToWorld();
-
-		//mBody->enableCollisions(value);
+		mBody->enableCollisions(value);
+		sbs->camera->ResetCollisions();
 	}
 
 	//show scenenode bounding box

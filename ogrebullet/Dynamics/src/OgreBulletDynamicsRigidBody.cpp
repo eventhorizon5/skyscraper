@@ -76,6 +76,10 @@ namespace OgreBulletDynamics
         mRootNode = node;
 		mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 
+		//override collision group/mask
+		mCollisionGroup = btBroadphaseProxy::DefaultFilter;
+		mCollisionMask = btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter | btBroadphaseProxy::StaticFilter;
+
         mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
 
@@ -110,6 +114,10 @@ namespace OgreBulletDynamics
 
 		if (can_move == true)
 			mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
+
+		//override collision group/mask
+		mCollisionGroup = btBroadphaseProxy::StaticFilter;
+		mCollisionMask = btBroadphaseProxy::CharacterFilter | btBroadphaseProxy::DefaultFilter;
 
 		mShape = shape;
         showDebugShape(mWorld->getShowDebugShapes());
@@ -284,6 +292,13 @@ namespace OgreBulletDynamics
 		return BtOgreConverter::to(gravity);
 	}
     // -------------------------------------------------------------------------
+	void RigidBody::enableCollisions(bool value)
+	{
+		if (value == true)
+			setCollisionMask(mCollisionGroup, mCollisionMask);
+		else
+			setCollisionMask(mCollisionGroup, 0);
+	}
     void WheeledRigidBody::setPosition(const btVector3 &pos)
     { 
         //should update wheels as well ?

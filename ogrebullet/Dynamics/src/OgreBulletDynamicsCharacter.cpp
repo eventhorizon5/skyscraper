@@ -68,6 +68,8 @@ namespace OgreBulletDynamics
 		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
 		mObject->setContactProcessingThreshold(0.0);
 		m_character = new btKinematicCharacterController(ghost, capsule, stepHeight);
+		//m_character->setUpInterpolate(false);
+		collisions_enabled = true;
 
 		addToWorld();
 		
@@ -164,6 +166,23 @@ namespace OgreBulletDynamics
 	void CharacterController::sync()
 	{
 		setTransform(mObject->getWorldTransform());
+	}
+	void CharacterController::enableCollisions(bool value)
+	{
+		collisions_enabled = value;
+		resetCollisions();
+	}
+	void CharacterController::resetCollisions()
+	{
+		//removes and adds character collider back to world to reset collisions for stationary objects
+		//there might be a better way to do this, but this works well
+		getDynamicsWorld()->getBulletDynamicsWorld()->removeAction(m_character);
+		getDynamicsWorld()->getBulletDynamicsWorld()->removeCollisionObject(mObject);
+		if (collisions_enabled == true)
+			getDynamicsWorld()->getBulletDynamicsWorld()->addCollisionObject(mObject,btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::StaticFilter|btBroadphaseProxy::DefaultFilter);
+		else
+			getDynamicsWorld()->getBulletDynamicsWorld()->addCollisionObject(mObject,btBroadphaseProxy::CharacterFilter, 0);
+		getDynamicsWorld()->getBulletDynamicsWorld()->addAction(m_character);
 	}
 }
 

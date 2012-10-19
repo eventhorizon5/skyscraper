@@ -79,11 +79,14 @@ namespace OgreBulletDynamics
 		Ogre::Real getMaxSlope();
 		bool onGround();
 		void sync();
+		void enableCollisions(bool value);
+		void resetCollisions();
 
 	protected:
 		short mCollisionGroup;
 		short mCollisionMask;
 		bool in_world;
+		bool collisions_enabled;
 		btKinematicCharacterController *m_character;
     };
     // -------------------------------------------------------------------------
