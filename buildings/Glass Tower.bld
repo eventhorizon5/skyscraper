@@ -1197,14 +1197,14 @@ AddCustomWall external, Right Complex Windows Front Side, MainWindows2double, 15
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Right Complex Windows Front Side, MainWindowsInsideDouble, 150, Floor(6).Altitude, -25.6, 158, Floor(6).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
 
-DrawWalls = false, true, false, false, false, false
-AddCustomWall external, Right Complex Windows Front Side Under, MainWindows2double, 150, Floor(2).Altitude, -25.6, 158, Floor(2).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
 DrawWalls = true, false, false, false, false, false
+AddCustomWall external, Right Complex Windows Front Side Under, MainWindows2double, 150, Floor(2).Altitude, -25.6, 158, Floor(2).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
+DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Right Complex Windows Front Side Under, MainWindowsInsideDouble, 150, Floor(2).Altitude, -25.6, 158, Floor(2).Altitude, -25.6, 158, Floor(4).Altitude, -49.6, 150, Floor(4).Altitude, -49.6, 1, 2
 
-DrawWalls = true, false, false, false, false, false
-AddCustomWall external, Right Complex Windows Back, MainWindows2double, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(6).Altitude, 70.4, 62.2, Floor(6).Altitude, 70.4, 14, 2
 DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Back, MainWindows2double, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(6).Altitude, 70.4, 62.2, Floor(6).Altitude, 70.4, 14, 2
+DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Right Complex Windows Back, MainWindowsInsideDouble, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(6).Altitude, 70.4, 62.2, Floor(6).Altitude, 70.4, 14, 2
 
 DrawWalls = false, true, false, false, false, false
@@ -1212,9 +1212,9 @@ AddCustomWall external, Right Complex Windows Back Under, MainWindows2double, 49
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Right Complex Windows Back Under, MainWindowsInsideDouble, 49.6, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 150, Floor(2).Altitude, 70.4, 62.2, Floor(2).Altitude, 70.4, 14, 2
 
-DrawWalls = true, false, false, false, false, false
-AddCustomWall external, Right Complex Windows Back Side, MainWindows2double, 150, Floor(6).Altitude, 70.4, 158, Floor(6).Altitude, 70.4, 158, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 1, 2
 DrawWalls = false, true, false, false, false, false
+AddCustomWall external, Right Complex Windows Back Side, MainWindows2double, 150, Floor(6).Altitude, 70.4, 158, Floor(6).Altitude, 70.4, 158, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 1, 2
+DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Right Complex Windows Back Side, MainWindowsInsideDouble, 150, Floor(6).Altitude, 70.4, 158, Floor(6).Altitude, 70.4, 158, Floor(4).Altitude, 94.4, 150, Floor(4).Altitude, 94.4, 1, 2
 
 DrawWalls = false, true, false, false, false, false
