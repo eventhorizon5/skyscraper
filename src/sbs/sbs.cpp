@@ -2395,7 +2395,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
 		Ogre::Plane plane = Ogre::Plane(varray1[0], varray1[1], varray1[2]);
-		Ogre::Vector3 normal = -plane.normal; //flip normal for coordinate system conversion
+		Ogre::Vector3 normal = plane.normal;
+
 		int projDimension = 0; //x; faces left/right
 
 		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
@@ -2429,15 +2430,15 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		{
 			if (rev_z == false)
 			{
-				v1.z = b.x; //left
-				v2.z = b.y; //right
-				v3.z = b.y; //right
-			}
-			else
-			{
 				v1.z = b.y; //right
 				v2.z = b.x; //left
 				v3.z = b.x; //left
+			}
+			else
+			{
+				v1.z = b.x; //left
+				v2.z = b.y; //right
+				v3.z = b.y; //right
 			}
 			if (RevY == false)
 			{
@@ -2468,30 +2469,30 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 			}
 			if (rev_z == false)
 			{
-				v1.z = a.y; //top
-				v2.z = a.y; //top
-				v3.z = a.x; //bottom
-			}
-			else
-			{
 				v1.z = a.x; //bottom
 				v2.z = a.x; //bottom
 				v3.z = a.y; //top
+			}
+			else
+			{
+				v1.z = a.y; //top
+				v2.z = a.y; //top
+				v3.z = a.x; //bottom
 			}
 		}
 		if (projDimension == 2)
 		{
 			if (rev_x == false)
 			{
-				v1.x = a.x; //left
-				v2.x = a.y; //right
-				v3.x = a.y; //right
-			}
-			else
-			{
 				v1.x = a.y; //right
 				v2.x = a.x; //left
 				v3.x = a.x; //left
+			}
+			else
+			{
+				v1.x = a.x; //left
+				v2.x = a.y; //right
+				v3.x = a.y; //right
 			}
 			if (RevY == false)
 			{
