@@ -1600,7 +1600,7 @@ void MeshObject::Prepare()
 		submesh->indexData->indexStart = 0;
 	}
 
-	//apply changes (refresh mesh state)
+	//mark ogre mesh as dirty to update changes
 	MeshWrapper->_dirtyState();
 
 	prepared = true;

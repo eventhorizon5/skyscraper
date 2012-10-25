@@ -158,7 +158,6 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	oldobject = -1;
 	oldcamobject = -1;
 	changed = false;
-	populated = false;
 }
 
 ObjectInfo::~ObjectInfo()
@@ -234,16 +233,14 @@ void ObjectInfo::Loop()
 
 void ObjectInfo::PopulateTree()
 {
-	if (populated == true)
-		return;
+	//erase tree
+	ObjectTree->DeleteAllItems();
 
 	//populate object tree
 	wxTreeItemId id = ObjectTree->AddRoot(wxString::FromAscii(Simcore->object->GetName()), -1, -1, new TreeItemData(wxVariant(Simcore->object->GetNumber()).GetString()));
 
 	//add child objects
 	AddChildren(Simcore->object, id);
-
-	populated = true;
 }
 
 void ObjectInfo::AddChildren(Object *parent, const wxTreeItemId& treeparent)

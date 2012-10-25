@@ -116,7 +116,6 @@ class ObjectInfo: public wxDialog
 		//*)
 		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
 		bool changed;
-		bool populated;
 
 		DECLARE_EVENT_TABLE()
 };
