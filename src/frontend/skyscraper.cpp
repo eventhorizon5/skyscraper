@@ -662,9 +662,9 @@ void Skyscraper::GetInput()
 			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
 				Simcore->camera->Strafe(-speed_normal);
 		}
-		if (wxGetKeyState(WXK_PAGEUP))
+		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'p'))
 			Simcore->camera->Look(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN))
+		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'l'))
 			Simcore->camera->Look(-speed_normal);
 		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'w'))
 			Simcore->camera->Step(speed_normal);
@@ -760,13 +760,13 @@ void Skyscraper::GetInput()
 			window->Refresh();
 			wait = true;
 		}
-		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT))
+		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT) || wxGetKeyState((wxKeyCode)'['))
 		{
 			//increase FOV angle
 			float angle = Simcore->camera->GetFOVAngle() + Simcore->camera->cfg_zoomspeed;
 			Simcore->camera->SetFOVAngle(angle);
 		}
-		if (wxGetKeyState(WXK_NUMPAD_ADD))
+		if (wxGetKeyState(WXK_NUMPAD_ADD) || wxGetKeyState((wxKeyCode)']'))
 		{
 			//decrease FOV angle
 			float angle = Simcore->camera->GetFOVAngle() - Simcore->camera->cfg_zoomspeed;
@@ -774,9 +774,9 @@ void Skyscraper::GetInput()
 		}
 
 		//values from old version
-		if (wxGetKeyState(WXK_HOME))
+		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'o'))
 			Simcore->camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_END))
+		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'k'))
 			Simcore->camera->Float(-speed_normal);
 	}
 }
