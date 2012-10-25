@@ -187,8 +187,8 @@ void WallObject::DeletePolygons()
 		DeletePolygon(i, false);
 
 	//recreate colliders
-	//sbs->DeleteColliders(meshwrapper);
-	//sbs->CreateColliders(meshwrapper);
+	meshwrapper->DeleteCollider();
+	meshwrapper->CreateCollider();
 }
 
 void WallObject::DeletePolygon(int index, bool recreate_colliders)
@@ -208,14 +208,11 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 
 		sbs->PolygonCount--;
 
-		//reprocess mesh
-		//state->Invalidate();
-
 		//recreate colliders if specified
 		if (recreate_colliders == true)
 		{
-			//sbs->DeleteColliders(meshwrapper);
-			//sbs->CreateColliders(meshwrapper);
+			meshwrapper->DeleteCollider();
+			meshwrapper->CreateCollider();
 		}
 	}
 }

@@ -1289,8 +1289,8 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wallobject);
-		//CreateColliders(wallobject);
+		wallobject->meshwrapper->DeleteCollider();
+		wallobject->meshwrapper->CreateCollider();
 	}
 
 	return 0;
@@ -1490,8 +1490,8 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wallobject);
-		//CreateColliders(wallobject);
+		wallobject->meshwrapper->DeleteCollider();
+		wallobject->meshwrapper->CreateCollider();
 	}
 
 	return 0;
@@ -1741,8 +1741,8 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wallobject);
-		//CreateColliders(wallobject);
+		wallobject->meshwrapper->DeleteCollider();
+		wallobject->meshwrapper->CreateCollider();
 	}
 
 	return 0;
@@ -3676,14 +3676,14 @@ bool SBS::DeleteObject(Object *object)
 	//object deletion routine
 	//this should be called to delete a simulator object during runtime
 
-	std::string number = Ogre::StringConverter::toString(object->GetNumber());
-	bool deleted = false;
-
 	if (!object)
 	{
-		sbs->Report("Invalid object " + number);
+		sbs->Report("Invalid object");
 		return false;
 	}
+
+	std::string number = Ogre::StringConverter::toString(object->GetNumber());
+	bool deleted = false;
 
 	if (!object->GetRawObject())
 	{
@@ -3766,7 +3766,6 @@ bool SBS::DeleteObject(Object *object)
 
 	if (deleted == true)
 	{
-		//engine->Prepare();
 		sbs->Report("Deleted object " + number);
 		return true;
 	}

@@ -52,6 +52,10 @@ Object::~Object()
 	if (sbs->FastDelete == true || Temporary == true)
 		return;
 
+	//unregister this object from parent
+	if (Parent)
+		Parent->RemoveChild(this);
+
 	sbs->UnregisterObject(Number);
 }
 
@@ -115,6 +119,22 @@ void Object::AddChild(Object *object)
 {
 	//add a child object to the internal array
 	children.push_back(object);
+}
+
+void Object::RemoveChild(Object *object)
+{
+	//remove a child object in the internal array
+	if (GetChildrenCount() > 0)
+	{
+		for (int i = 0; i < GetChildrenCount(); i++)
+		{
+			if (children[i] == object)
+			{
+				children.erase(children.begin() + i);
+				return;
+			}
+		}
+	}
 }
 
 Object* Object::GetChild(int index)

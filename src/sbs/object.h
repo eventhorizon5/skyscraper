@@ -53,6 +53,7 @@ public:
 	void AddChild(Object *object);
 	Object* GetChild(int index);
 	int GetChildrenCount();
+	void RemoveChild(Object *object);
 
 protected:
 	bool Permanent; //is object permanent?

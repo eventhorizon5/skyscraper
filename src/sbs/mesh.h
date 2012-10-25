@@ -91,6 +91,7 @@ public:
 	void Prepare();
 	void EnableDebugView(bool value);
 	void CreateCollider();
+	void DeleteCollider();
 	int HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance);
 	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
 	void GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents);
@@ -114,6 +115,7 @@ private:
 	float rotX, rotY, rotZ;
 	bool IsPhysical;
 	float restitution, friction, mass;
+	bool prepared;
 	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);
 
 	struct TriangleMesh

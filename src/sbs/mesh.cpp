@@ -509,8 +509,8 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
-		//DeleteColliders(wall);
-		//CreateColliders(wall);
+		wall->meshwrapper->DeleteCollider();
+		wall->meshwrapper->CreateCollider();
 	}
 }
 
@@ -744,6 +744,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	can_move = movable;
 	SceneNode = 0;
 	Movable = 0;
+	prepared = false;
 	IsPhysical = enable_physics;
 	this->restitution = restitution;
 	this->friction = friction;
@@ -1171,6 +1172,8 @@ void MeshObject::RemoveVertex(int index)
 	MeshGeometry.erase(MeshGeometry.begin() + index);
 
 	//TODO: reindex triangles here
+
+	prepared = false; //need to re-prepare mesh
 }
 
 void MeshObject::ReserveTriangles(int submesh, int count)
@@ -1193,6 +1196,7 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 		return;
 
 	Triangles[submesh].triangles.erase(Triangles[submesh].triangles.begin() + index);
+	prepared = false; //need to re-prepare mesh
 }
 
 bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles)
@@ -1376,8 +1380,8 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	//recreate colliders if specified
 	if (sbs->RecreateColliders == true)
 	{
-		//DeleteColliders(mesh);
-		//CreateColliders(mesh);
+		DeleteCollider();
+		CreateCollider();
 	}
 
 	return true;
@@ -1505,6 +1509,10 @@ void MeshObject::Prepare()
 	if (Submeshes.size() == 0)
 		return;
 
+	//exit if mesh has already been prepared
+	if (prepared == true)
+		return;
+
 	float radius = 0;
 	Ogre::AxisAlignedBox box;
 
@@ -1589,6 +1597,7 @@ void MeshObject::Prepare()
 		submesh->indexData->indexStart = 0;
 	}
 
+	prepared = true;
 	MeshWrapper->_setBounds(box);
 	MeshWrapper->_setBoundingSphereRadius(radius);
 }
@@ -1742,11 +1751,13 @@ void MeshObject::CreateCollider()
 	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
 		return;
 
+	//exit if collider already exists
+	if (mBody)
+		return;
+
 	int tricount = 0;
 	for (int i = 0; i < Triangles.size(); i++)
 		tricount += Triangles[i].triangles.size();
-
-	//printf("%s\n", MeshWrapper->getName().c_str());
 
 	//initialize collider shape
 	OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
@@ -1776,9 +1787,31 @@ void MeshObject::CreateCollider()
 	mShape = shape;
 }
 
+void MeshObject::DeleteCollider()
+{
+	//delete mesh collider
+
+	//exit if collider doesn't exist
+	if (!mBody)
+		return;
+
+	//remove collider from world
+	mBody->removeFromWorld();
+
+	//delete collider object
+	delete mShape;
+	mShape = 0;
+	delete mBody;
+	mBody = 0;
+}
+
 void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices)
 {
 	//set up physics parameters
+
+	//exit of collider already exists
+	if (mBody)
+		return;
 
 	//initialize collider shape
 	OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vertex_count, index_count);
