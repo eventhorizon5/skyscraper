@@ -3703,8 +3703,12 @@ bool SBS::DeleteObject(Object *object)
 	//perform standard delete based on object type
 	if (type == "Floor")
 	{
-		delete (Floor*)object->GetRawObject();
-		deleted = true;
+		//for now skip floor deletion, since it'll cause an immediate crash at the moment if done
+		sbs->Report("Cannot delete object " + number + ": deleting floors is not supported yet");
+		return false;
+
+		//delete (Floor*)object->GetRawObject();
+		//deleted = true;
 	}
 	if (type == "Elevator")
 	{
@@ -3767,7 +3771,6 @@ bool SBS::DeleteObject(Object *object)
 	if (deleted == true)
 	{
 		Prepare(); //prepare modified meshes
-		sbs->Report("Deleted object " + number);
 		return true;
 	}
 	return false;
