@@ -130,11 +130,11 @@ W or Up Arrow - move forwards
 S or Down Arrow - move backwards
 A or Left Arrow - move left
 D or Right Arrow - move right
-PgUp - Look upwards
-PgDown - Look downwards
+PgUp or P - Look upwards
+PgDown or L - Look downwards
 Space - Jump
-Home - Float upwards (or jump if collision detection is on)
-End - Float downwards (or crouch if collision detection is on)
+Home or O - Float upwards (or jump if collision detection is on)
+End or K - Float downwards (or crouch if collision detection is on)
 F2 - print FPS on console
 F3 - Reset camera rotation and zoom to default
 F4 - Enable/disable wireframe mode
@@ -148,8 +148,8 @@ Control - Walk slowly (hold down with other keys)
 Alt + arrow keys - Strafe
 Alt + PgUp - Spin right
 Alt + PgDown - Spin left
-Plus - Zoom in (decrease FOV angle)
-Minus - Zoom out (increase FOV angle)
+Plus or ] - Zoom in (decrease FOV angle)
+Minus or [ - Zoom out (increase FOV angle)
 Esc - exit to main menu
 R - Toggle noclip mode (gravity and collisions off)
 Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers

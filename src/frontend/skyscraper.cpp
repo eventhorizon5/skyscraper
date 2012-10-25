@@ -625,9 +625,9 @@ void Skyscraper::GetInput()
 			Simcore->camera->Float(speed_normal);
 		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
 			Simcore->camera->Float(-speed_normal);
-		if (wxGetKeyState(WXK_PAGEUP))
+		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'p'))
 			Simcore->camera->Spin(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN))
+		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'l'))
 			Simcore->camera->Spin(-speed_normal);
 	}
 	else
