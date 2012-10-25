@@ -37,7 +37,7 @@ public:
 	WallPolygon* AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize);
 	WallPolygon* AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector);
 	int CreateHandle(std::vector<TriangleType> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane);
-	void DeletePolygons();
+	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
 	void DeleteVertices(std::vector<int> &deleted_indices);
 	std::string ProcessName(const char *name);

@@ -179,7 +179,7 @@ std::string WallObject::ProcessName(const char *name)
 	return newname;
 }
 
-void WallObject::DeletePolygons()
+void WallObject::DeletePolygons(bool recreate_collider)
 {
 	//delete polygons and handles
 	
@@ -187,8 +187,11 @@ void WallObject::DeletePolygons()
 		DeletePolygon(i, false);
 
 	//recreate colliders
-	meshwrapper->DeleteCollider();
-	meshwrapper->CreateCollider();
+	if (recreate_collider == true)
+	{
+		meshwrapper->DeleteCollider();
+		meshwrapper->CreateCollider();
+	}
 }
 
 void WallObject::DeletePolygon(int index, bool recreate_colliders)

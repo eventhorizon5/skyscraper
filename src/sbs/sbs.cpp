@@ -3759,13 +3759,14 @@ bool SBS::DeleteObject(Object *object)
 	if (type == "Wall")
 	{
 		WallObject *obj = (WallObject*)object->GetRawObject();
-		obj->DeletePolygons();
+		obj->DeletePolygons(false);
 		delete obj;
 		deleted = true;
 	}
 
 	if (deleted == true)
 	{
+		Prepare(); //prepare modified meshes
 		sbs->Report("Deleted object " + number);
 		return true;
 	}

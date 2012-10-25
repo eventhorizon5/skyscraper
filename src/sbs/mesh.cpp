@@ -1160,6 +1160,7 @@ void MeshObject::AddVertex(Geometry &vertex_geom)
 {
 	//add a vertex to the mesh
 	MeshGeometry.push_back(vertex_geom);
+	prepared = false; //need to re-prepare mesh
 }
 
 void MeshObject::RemoveVertex(int index)
@@ -1186,6 +1187,7 @@ void MeshObject::AddTriangle(int submesh, TriangleType &triangle)
 {
 	//add a triangle to the mesh
 	Triangles[submesh].triangles.push_back(triangle);
+	prepared = false; //need to re-prepare mesh
 }
 
 void MeshObject::RemoveTriangle(int submesh, int index)
@@ -1433,7 +1435,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add)
 {
 	//processes submeshes for new or removed geometry
-	//the Process() function must be called when the mesh is ready to view, in order to upload data to graphics card
+	//the Prepare() function must be called when the mesh is ready to view, in order to upload data to graphics card
 
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
@@ -1506,11 +1508,12 @@ void MeshObject::Prepare()
 	//All submeshes share mesh vertex data, but triangle indices are stored in each submesh
 	//each submesh represents a portion of the mesh that uses the same material
 
-	if (Submeshes.size() == 0)
-		return;
-
 	//exit if mesh has already been prepared
 	if (prepared == true)
+		return;
+
+	//exit if there's no submesh data
+	if (Submeshes.size() == 0)
 		return;
 
 	float radius = 0;
@@ -1596,6 +1599,9 @@ void MeshObject::Prepare()
 		submesh->indexData->indexBuffer = ibuffer;
 		submesh->indexData->indexStart = 0;
 	}
+
+	//apply changes (refresh mesh state)
+	MeshWrapper->_dirtyState();
 
 	prepared = true;
 	MeshWrapper->_setBounds(box);
@@ -1735,6 +1741,7 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 			}
 		}
 	}
+	prepared = false; //need to re-prepare mesh
 }
 
 void MeshObject::EnableDebugView(bool value)
@@ -1747,12 +1754,12 @@ void MeshObject::CreateCollider()
 {
 	//set up physics parameters
 
-	//exit if mesh is empty
-	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
-		return;
-
 	//exit if collider already exists
 	if (mBody)
+		return;
+
+	//exit if mesh is empty
+	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
 		return;
 
 	int tricount = 0;
