@@ -540,8 +540,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	//generate left-hand coordinate ray
 	
 	//get a collision callback from Bullet
-	//OgreBulletCollisions::CollisionAllRayResultCallback callback (ray, sbs->mWorld, 1000);
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1000);
+	OgreBulletCollisions::CollisionAllRayResultCallback callback (ray, sbs->mWorld, 1000);
 
 	//check for collision
 	sbs->mWorld->launchRay(callback);
@@ -559,61 +558,53 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	std::string prevmesh = "";
 
 	//get collided collision object
-	//for (int i = 0; i < callback.getCollisionCount(); i++)
-	//{
-		//OgreBulletCollisions::Object* object = callback.getCollidedObject(i);
-		OgreBulletCollisions::Object* object = callback.getCollidedObject();
+	for (int i = 0; i < callback.getCollisionCount(); i++)
+	{
+		OgreBulletCollisions::Object* object = callback.getCollidedObject(i);
 
 		if (!object)
-			//continue;
-			return;
+			continue;
 
 		//get name of collision object's parent scenenode (which is the same name as the mesh object)
 		meshname = object->getRootNode()->getName();
 
 		if (meshname == prevmesh)
-			//continue;
-			return;
+			continue;
 
 		prevmesh = meshname;
 
 		//get hit/intersection position
-		//HitPosition = sbs->ToLocal(callback.getCollisionPoint(i));
-		HitPosition = sbs->ToLocal(callback.getCollisionPoint());
+		HitPosition = sbs->ToLocal(callback.getCollisionPoint(i));
 
 		//get wall name
 		meshobject = sbs->FindMeshObject(meshname);
 		if (!meshobject)
-			//continue;
-			return;
+			continue;
 
 		Ogre::Vector3 isect;
 		float distance = best_distance;
 		int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, distance, false, false);
 
-		/*if (distance < best_distance)
+		if (distance < best_distance)
 		{
 			best_distance = distance;
 			bestmesh = meshobject;
 			best_i = num;
 		}
-	}*/
+	}
 
-	//if (best_i > -1 && bestmesh)
-	//{
-		//wall = bestmesh->Walls[best_i];
-		if (num > -1)
-			wall = meshobject->Walls[num];
+	if (best_i > -1 && bestmesh)
+	{
+		wall = bestmesh->Walls[best_i];
 		if (wall)
 		{
 			polyname = wall->GetName();
-			//meshname = bestmesh->name;
-			meshname = meshobject->name;
-			//meshobject = bestmesh;
+			meshname = bestmesh->name;
+			meshobject = bestmesh;
 		}
 		else
 			polyname = "";
-	//}
+	}
 
 	//get and strip object number
 	std::string number;
