@@ -1056,6 +1056,7 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 
 	SBS_PROFILE("MeshObject::FindWallIntersect");
 	float pr, best_pr = 2000000000.;
+	float dist, best_dist = 2000000000.;
 	int best_i = -1;
 	int best_j = -1;
 	Ogre::Vector3 cur_isect;
@@ -1068,13 +1069,21 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 			{
 				if (pr < best_pr)
 				{
-					//calculate distance to intersection
-					distance = start.distance(cur_isect);
+					//currently test against previous camera intersection test to fix some weird issues
+					Ogre::Vector3 orig_start = sbs->ToRemote(sbs->camera->HitPosition);
+					dist = orig_start.distance(cur_isect);
 
-					best_pr = pr;
-					best_i = i;
-					best_j = j;
-					isect = cur_isect;
+					if (dist < best_dist)
+					{
+						//calculate distance to intersection
+						distance = start.distance(cur_isect);
+
+						best_dist = dist;
+						best_pr = pr;
+						best_i = i;
+						best_j = j;
+						isect = cur_isect;
+					}
 				}
 			}
 		}

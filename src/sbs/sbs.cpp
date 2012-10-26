@@ -3759,7 +3759,7 @@ bool SBS::DeleteObject(Object *object)
 	if (type == "Wall")
 	{
 		WallObject *obj = (WallObject*)object->GetRawObject();
-		obj->DeletePolygons(false);
+		obj->DeletePolygons(true);
 		delete obj;
 		deleted = true;
 	}
