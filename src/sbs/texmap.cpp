@@ -430,7 +430,7 @@ int SBS::WhichSide3D(const Ogre::Vector3 &p, const Ogre::Vector3 &v1, const Ogre
 	else return 0;
 }
 
-bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -439,7 +439,7 @@ bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertice
 
 	//compute plane from first 3 vertices
 	float DD;
-	Ogre::Vector3 norm = sbs->ComputeNormal(vertices[0], DD);
+	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
 	norm.normalise();
 
 	Ogre::Plane pl(norm.x, norm.y, norm.z, DD);
@@ -463,11 +463,11 @@ bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertice
 	relend -= start;
 
 	int i, i1;
-	i1 = vertices[0].size() - 1;
-	for (i = 0; i < vertices[0].size() - 1; i++)
+	i1 = vertices.size() - 1;
+	for (i = 0; i < vertices.size() - 1; i++)
 	{
-		Ogre::Vector3 start2 = start - vertices[0][i1];
-		normal = start2.crossProduct(start - vertices[0][i]);
+		Ogre::Vector3 start2 = start - vertices[i1];
+		normal = start2.crossProduct(start - vertices[i]);
 		if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
 			return false;
 		i1 = i;
@@ -476,7 +476,25 @@ bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertice
 	return true;
 }
 
-bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert, bool rescale)
+bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert, bool rescale)
+{
+	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
+
+	std::vector<std::vector<Ogre::Vector3> > vertices;
+	GetGeometry(mesh, vertices, false, convert, rescale, false, true);
+
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		if (!IntersectRay(vertices[i], start, end))
+			continue;
+
+		if (IntersectSegmentPlane(vertices[i], start, end, isect, pr))
+			return true;
+	}
+	return false;
+}
+
+bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -487,12 +505,6 @@ bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &s
 	float y2 = end.y;
 	float z2 = end.z;
 	float r, num, denom;
-
-	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(mesh, vertices, false, convert, rescale, false, true);
-
-	if (!IntersectRay(vertices, start, end))
-		return false;
 
 	// So now we have the plane equation of the polygon:
 	// A*x + B*y + C*z + D = 0
@@ -509,7 +521,7 @@ bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &s
 
 	//compute plane from first 3 vertices
 	float DD;
-	Ogre::Vector3 norm = sbs->ComputeNormal(vertices[0], DD);
+	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
 	norm.normalise();
 
 	Ogre::Plane plane(norm.x, norm.y, norm.z, DD);

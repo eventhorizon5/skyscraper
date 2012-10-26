@@ -1064,7 +1064,7 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	{
 		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
 		{
-			if (Walls[i]->handles[j].IntersectSegmentPlane(this, start, end, cur_isect, &pr, convert, rescale) == true)
+			if (Walls[i]->handles[j].IntersectSegment(this, start, end, cur_isect, &pr, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{

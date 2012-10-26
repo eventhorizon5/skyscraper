@@ -148,8 +148,9 @@ public:
 	Ogre::SubMesh* GetSubMesh();
 	void GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	bool PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check = true, bool convert = true);
-	bool IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	bool IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert = true, bool rescale = true);
+	bool IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert = true, bool rescale = true);
+	bool IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
+	bool IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr);
 };
 
 #endif

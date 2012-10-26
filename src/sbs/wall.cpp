@@ -314,7 +314,7 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
-		if (handles[i].IntersectSegmentPlane(meshwrapper, start, end, cur_isect, &pr, convert))
+		if (handles[i].IntersectSegment(meshwrapper, start, end, cur_isect, &pr, convert))
 		{
 			if (pr < best_pr)
 			{

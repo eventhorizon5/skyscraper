@@ -589,7 +589,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 
 		Ogre::Vector3 isect;
 		float distance = best_distance;
-		int num = meshobject->FindWallIntersect(sbs->ToLocal(ray.getOrigin(), false), sbs->ToLocal(ray.getPoint(1000), false), isect, distance, true, false);
+		int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, distance, false, false);
 
 		/*if (distance < best_distance)
 		{
