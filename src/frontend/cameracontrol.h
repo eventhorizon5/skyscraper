@@ -26,14 +26,14 @@
 #define CAMERACONTROL_H
 
 //(*Headers(CameraControl)
+#include <wx/checkbox.h>
+#include <wx/dialog.h>
 #include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/radiobut.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/checkbox.h>
-#include <wx/statline.h>
-#include <wx/radiobut.h>
-#include <wx/button.h>
-#include <wx/dialog.h>
 //*)
 
 class CameraControl: public wxDialog
@@ -79,9 +79,6 @@ class CameraControl: public wxDialog
 		static const long ID_STATICTEXT17;
 		static const long ID_txtCollisions;
 		static const long ID_bCollisions;
-		static const long ID_STATICTEXT18;
-		static const long ID_txtReportCollisions;
-		static const long ID_bReportCollisions;
 		static const long ID_STATICTEXT19;
 		static const long ID_txtFreelook;
 		static const long ID_bFreelook;
@@ -157,7 +154,6 @@ class CameraControl: public wxDialog
 		void On_bGravity_Click(wxCommandEvent& event);
 		void On_bGravityEnabled_Click(wxCommandEvent& event);
 		void On_bCollisions_Click(wxCommandEvent& event);
-		void On_bReportCollisions_Click(wxCommandEvent& event);
 		void On_bFreelook_Click(wxCommandEvent& event);
 		void On_bFreelookSpeed_Click(wxCommandEvent& event);
 		void On_bPositionX_Click(wxCommandEvent& event);
@@ -174,98 +170,95 @@ class CameraControl: public wxDialog
 		void OnInit();
 
 		//(*Declarations(CameraControl)
-		wxStaticText* StaticText10;
-		wxTextCtrl* txtRotationZ;
-		wxStaticText* StaticText22;
-		wxStaticText* StaticText9;
-		wxStaticText* StaticText20;
-		wxTextCtrl* txtStartFloor;
-		wxButton* bResetFOV;
-		wxButton* bYNeg;
-		wxTextCtrl* txtAngle;
-		wxStaticText* StaticText29;
-		wxTextCtrl* txtFreelookSpeed;
-		wxStaticText* StaticText13;
-		wxStaticText* StaticText2;
-		wxTextCtrl* txtGravityEnabled;
-		wxTextCtrl* txtDesiredVel;
-		wxTextCtrl* txtGravity;
-		wxStaticText* StaticText30;
-		wxStaticText* StaticText14;
-		wxTextCtrl* txtReportCollisions;
-		wxRadioButton* rRotation;
-		wxButton* bXPlus;
-		wxStaticText* StaticText26;
-		wxTextCtrl* txtFOV;
-		wxStaticText* StaticText6;
-		wxTextCtrl* txtCollisions;
-		wxButton* bReportCollisions;
-		wxButton* bYPlus;
-		wxButton* bFreelook;
-		wxStaticText* StaticText19;
-		wxTextCtrl* txtDirectionFront;
-		wxTextCtrl* txtRotationY;
-		wxStaticText* lblRotation;
-		wxStaticText* StaticText8;
-		wxStaticText* StaticText11;
-		wxStaticText* StaticText18;
-		wxButton* bPositionY;
-		wxButton* bStartRotation;
-		wxStaticText* StaticText31;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText27;
-		wxButton* bStartDirection;
-		wxStaticText* StaticText3;
-		wxButton* bXNeg;
-		wxButton* bPositionX;
-		wxTextCtrl* txtPositionX;
-		wxTextCtrl* txtVelocity;
-		wxButton* bRotationX;
-		wxButton* bZPlus;
-		wxStaticText* StaticText21;
-		wxStaticLine* StaticLine2;
-		wxStaticText* StaticText23;
-		wxTextCtrl* txtStartPosition;
 		wxStaticText* StaticText24;
+		wxButton* bPositionY;
+		wxTextCtrl* txtDirectionTop;
+		wxStaticText* lblGravityEnabled;
+		wxStaticText* StaticText22;
+		wxTextCtrl* txtGravityEnabled;
+		wxButton* bGravity;
+		wxTextCtrl* txtStartFloor;
+		wxStaticText* StaticText21;
 		wxButton* bRotationY;
-		wxTextCtrl* txtPositionY;
+		wxStaticText* StaticText13;
+		wxStaticText* StaticText14;
+		wxStaticText* StaticText15;
+		wxButton* bGravityEnabled;
+		wxTextCtrl* txtSetFOV;
+		wxStaticLine* StaticLine2;
+		wxTextCtrl* txtFOV;
+		wxCheckBox* chkHold;
+		wxStaticText* StaticText17;
+		wxTextCtrl* txtRotationY;
+		wxStaticText* StaticText28;
+		wxTextCtrl* txtVelocity;
+		wxButton* bPositionX;
+		wxTextCtrl* txtFreelookSpeed;
+		wxTextCtrl* txtDirectionFront;
+		wxTextCtrl* txtMouseDown;
+		wxTextCtrl* txtDesiredAngle;
+		wxRadioButton* rPosition;
+		wxStaticText* lblRotation;
+		wxTextCtrl* txtLastMesh;
+		wxButton* bZNeg;
+		wxButton* bXPlus;
 		wxStaticText* lblPosition;
+		wxButton* bYNeg;
+		wxTextCtrl* txtCurrentFloor;
+		wxTextCtrl* txtFreelook;
+		wxStaticText* StaticText20;
 		wxButton* bSetFOV;
+		wxStaticText* StaticText1;
+		wxTextCtrl* txtCollisions;
+		wxStaticText* StaticText10;
+		wxStaticText* StaticText16;
+		wxButton* bRotationZ;
+		wxStaticText* StaticText3;
+		wxTextCtrl* txtRotationX;
+		wxStaticText* StaticText23;
+		wxButton* bStartRotation;
+		wxTextCtrl* txtDesiredVel;
+		wxButton* bXNeg;
+		wxTextCtrl* txtPositionX;
+		wxStaticLine* StaticLine1;
+		wxStaticText* StaticText8;
+		wxStaticText* StaticText12;
+		wxTextCtrl* txtStartPosition;
+		wxStaticLine* StaticLine3;
+		wxButton* bRotationX;
+		wxButton* bYPlus;
+		wxStaticText* StaticText7;
+		wxTextCtrl* txtAngle;
+		wxTextCtrl* txtSetSkyMult;
+		wxTextCtrl* txtSpeed;
+		wxButton* bSetSkyMult;
+		wxTextCtrl* txtRotationZ;
+		wxTextCtrl* txtPositionZ;
+		wxButton* bZPlus;
+		wxStaticText* StaticText4;
 		wxButton* bCollisions;
 		wxStaticText* StaticText5;
-		wxStaticText* StaticText7;
-		wxTextCtrl* txtPositionZ;
-		wxStaticText* lblGravityEnabled;
-		wxButton* bFreelookSpeed;
-		wxStaticLine* StaticLine3;
-		wxStaticLine* StaticLine1;
-		wxTextCtrl* txtSetSkyMult;
-		wxButton* bPositionZ;
-		wxButton* bGravity;
-		wxStaticText* StaticText28;
-		wxButton* bRotationZ;
-		wxStaticText* StaticText15;
-		wxStaticText* StaticText12;
+		wxStaticText* StaticText30;
+		wxButton* bStartDirection;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText27;
 		wxTextCtrl* txtMoveSpeed;
-		wxTextCtrl* txtRotationX;
-		wxButton* bSetSkyMult;
-		wxCheckBox* chkHold;
-		wxTextCtrl* txtSetFOV;
-		wxStaticText* StaticText25;
-		wxButton* bZNeg;
+		wxButton* bFreelookSpeed;
+		wxTextCtrl* txtGravity;
+		wxStaticText* StaticText26;
+		wxStaticText* StaticText6;
+		wxButton* bResetFOV;
+		wxStaticText* StaticText19;
+		wxStaticText* StaticText29;
+		wxTextCtrl* txtPositionY;
 		wxButton* bStartPosition;
-		wxButton* bGravityEnabled;
-		wxStaticText* StaticText17;
-		wxStaticText* StaticText4;
-		wxTextCtrl* txtDirectionTop;
-		wxRadioButton* rPosition;
-		wxTextCtrl* txtFreelook;
-		wxTextCtrl* txtLastMesh;
-		wxTextCtrl* txtDesiredAngle;
-		wxTextCtrl* txtCurrentFloor;
-		wxStaticText* StaticText16;
-		wxTextCtrl* txtMouseDown;
-		wxTextCtrl* txtSpeed;
+		wxStaticText* StaticText9;
+		wxButton* bFreelook;
+		wxStaticText* StaticText31;
+		wxStaticText* StaticText11;
+		wxStaticText* StaticText25;
+		wxButton* bPositionZ;
+		wxRadioButton* rRotation;
 		//*)
 		Ogre::Vector3 hold_vector;
 

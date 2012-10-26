@@ -33,8 +33,8 @@ extern SBS *Simcore;
 extern Skyscraper *skyscraper;
 
 //(*InternalHeaders(Console)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 
 //(*IdInit(Console)
@@ -51,9 +51,9 @@ END_EVENT_TABLE()
 Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Console)
+	wxFlexGridSizer* FlexGridSizer1;
 	wxBoxSizer* BoxSizer2;
 	wxBoxSizer* BoxSizer1;
-	wxFlexGridSizer* FlexGridSizer1;
 	
 	Create(parent, id, _("Script Console"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
 	SetClientSize(wxDefaultSize);

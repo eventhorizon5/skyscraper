@@ -23,8 +23,8 @@
 */
 
 //(*InternalHeaders(DebugPanel)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 #include "debugpanel.h"
 #include "meshcontrol.h"

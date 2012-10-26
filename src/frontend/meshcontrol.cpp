@@ -23,8 +23,8 @@
 */
 
 //(*InternalHeaders(MeshControl)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 #include "debugpanel.h"
 #include "meshcontrol.h"
@@ -63,9 +63,9 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(MeshControl)
 	wxStaticBoxSizer* StaticBoxSizer2;
+	wxBoxSizer* BoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer1;
-	wxBoxSizer* BoxSizer3;
 	
 	Create(parent, wxID_ANY, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);

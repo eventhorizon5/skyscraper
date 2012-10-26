@@ -32,10 +32,10 @@
 #endif
 
 //(*Headers(MeshControl)
-#include <wx/sizer.h>
 #include <wx/checkbox.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
 //*)
 
 class MeshControl: public wxDialog
@@ -85,21 +85,21 @@ class MeshControl: public wxDialog
 
 		//(*Declarations(MeshControl)
 		wxCheckBox* chkAllShafts;
-		wxCheckBox* chkAllFloors;
-		wxCheckBox* chkColumnFrame;
-		wxCheckBox* chkShafts;
-		wxCheckBox* chkBuildings;
+		wxCheckBox* chkAllStairs;
+		wxCheckBox* chkSky;
 		wxCheckBox* chkExternal;
 		wxBoxSizer* BoxSizer2;
-		wxCheckBox* chkAllColumnFrames;
-		wxCheckBox* chkFloor;
 		wxCheckBox* chkElevators;
-		wxCheckBox* chkAllStairs;
-		wxCheckBox* chkStairs;
+		wxCheckBox* chkBuildings;
 		wxButton* bOk;
-		wxBoxSizer* BoxSizer1;
-		wxCheckBox* chkSky;
 		wxCheckBox* chkLandscape;
+		wxCheckBox* chkColumnFrame;
+		wxCheckBox* chkStairs;
+		wxBoxSizer* BoxSizer1;
+		wxCheckBox* chkShafts;
+		wxCheckBox* chkAllColumnFrames;
+		wxCheckBox* chkAllFloors;
+		wxCheckBox* chkFloor;
 		//*)
 
 	private:

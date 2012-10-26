@@ -26,10 +26,10 @@
 #define TEXTWINDOW_H
 
 //(*Headers(TextWindow)
-#include <wx/sizer.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/textctrl.h>
 //*)
 
 class TextWindow: public wxDialog
@@ -40,10 +40,8 @@ class TextWindow: public wxDialog
 		virtual ~TextWindow();
 
 		//(*Declarations(TextWindow)
-		wxBoxSizer* BoxSizer1;
-		wxFlexGridSizer* FlexGridSizer1;
-		wxButton* bOK;
 		wxTextCtrl* tMain;
+		wxButton* bOK;
 		//*)
 
 	protected:

@@ -25,8 +25,8 @@
 #include "textwindow.h"
 
 //(*InternalHeaders(TextWindow)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 
 //(*IdInit(TextWindow)
@@ -42,6 +42,9 @@ END_EVENT_TABLE()
 TextWindow::TextWindow(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(TextWindow)
+	wxFlexGridSizer* FlexGridSizer1;
+	wxBoxSizer* BoxSizer1;
+	
 	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);

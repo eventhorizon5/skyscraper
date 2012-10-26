@@ -23,8 +23,8 @@
 */
 
 //(*InternalHeaders(CameraControl)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 #include "debugpanel.h"
 #include "globals.h"
@@ -73,9 +73,6 @@ const long CameraControl::ID_bGravityEnabled = wxNewId();
 const long CameraControl::ID_STATICTEXT17 = wxNewId();
 const long CameraControl::ID_txtCollisions = wxNewId();
 const long CameraControl::ID_bCollisions = wxNewId();
-const long CameraControl::ID_STATICTEXT18 = wxNewId();
-const long CameraControl::ID_txtReportCollisions = wxNewId();
-const long CameraControl::ID_bReportCollisions = wxNewId();
 const long CameraControl::ID_STATICTEXT19 = wxNewId();
 const long CameraControl::ID_txtFreelook = wxNewId();
 const long CameraControl::ID_bFreelook = wxNewId();
@@ -141,82 +138,83 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(CameraControl)
 	wxStaticBoxSizer* StaticBoxSizer2;
+	wxFlexGridSizer* FlexGridSizer8;
+	wxGridSizer* GridSizer1;
+	wxFlexGridSizer* FlexGridSizer1;
+	wxFlexGridSizer* FlexGridSizer2;
+	wxFlexGridSizer* FlexGridSizer11;
+	wxFlexGridSizer* FlexGridSizer7;
 	wxFlexGridSizer* FlexGridSizer4;
+	wxFlexGridSizer* FlexGridSizer9;
+	wxFlexGridSizer* FlexGridSizer14;
+	wxStaticBoxSizer* StaticBoxSizer3;
+	wxFlexGridSizer* FlexGridSizer6;
+	wxFlexGridSizer* FlexGridSizer3;
 	wxStaticBoxSizer* StaticBoxSizer4;
 	wxFlexGridSizer* FlexGridSizer10;
-	wxFlexGridSizer* FlexGridSizer3;
-	wxFlexGridSizer* FlexGridSizer5;
-	wxFlexGridSizer* FlexGridSizer9;
-	wxFlexGridSizer* FlexGridSizer2;
-	wxFlexGridSizer* FlexGridSizer7;
-	wxStaticBoxSizer* StaticBoxSizer3;
-	wxGridSizer* GridSizer1;
-	wxFlexGridSizer* FlexGridSizer8;
-	wxFlexGridSizer* FlexGridSizer14;
 	wxFlexGridSizer* FlexGridSizer13;
 	wxFlexGridSizer* FlexGridSizer12;
-	wxFlexGridSizer* FlexGridSizer6;
+	wxFlexGridSizer* FlexGridSizer5;
 	wxStaticBoxSizer* StaticBoxSizer1;
-	wxFlexGridSizer* FlexGridSizer1;
-	wxFlexGridSizer* FlexGridSizer11;
 	
 	Create(parent, wxID_ANY, _("Camera Control"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(2, 2, 0, 0);
 	FlexGridSizer8 = new wxFlexGridSizer(0, 1, 0, 0);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Information"));
-	FlexGridSizer2 = new wxFlexGridSizer(0, 2, 0, 0);
+	FlexGridSizer2 = new wxFlexGridSizer(10, 2, 0, 0);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Direction Front:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer2->Add(StaticText3, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtDirectionFront = new wxTextCtrl(this, ID_txtDirectionFront, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtDirectionFront"));
+	txtDirectionFront->SetMinSize(wxSize(150,-1));
 	FlexGridSizer2->Add(txtDirectionFront, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText15 = new wxStaticText(this, ID_STATICTEXT15, _("Direction Top:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT15"));
 	FlexGridSizer2->Add(StaticText15, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtDirectionTop = new wxTextCtrl(this, ID_txtDirectionTop, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtDirectionTop"));
-	FlexGridSizer2->Add(txtDirectionTop, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtDirectionTop, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Current Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(StaticText4, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtCurrentFloor = new wxTextCtrl(this, ID_txtCurrentFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtCurrentFloor"));
-	FlexGridSizer2->Add(txtCurrentFloor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtCurrentFloor, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Last Hit Mesh:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
 	FlexGridSizer2->Add(StaticText5, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtLastMesh = new wxTextCtrl(this, ID_txtLastMesh, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtLastMesh"));
-	FlexGridSizer2->Add(txtLastMesh, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtLastMesh, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Desired Velocity:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
 	FlexGridSizer2->Add(StaticText6, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtDesiredVel = new wxTextCtrl(this, ID_txtDesiredVel, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtDesiredVel"));
-	FlexGridSizer2->Add(txtDesiredVel, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtDesiredVel, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Velocity:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
 	FlexGridSizer2->Add(StaticText7, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtVelocity = new wxTextCtrl(this, ID_txtVelocity, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtVelocity"));
-	FlexGridSizer2->Add(txtVelocity, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtVelocity, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Des Angle Vel:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
 	FlexGridSizer2->Add(StaticText8, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtDesiredAngle = new wxTextCtrl(this, ID_txtDesiredAngle, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtDesiredAngle"));
-	FlexGridSizer2->Add(txtDesiredAngle, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtDesiredAngle, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText9 = new wxStaticText(this, ID_STATICTEXT9, _("Anglular Velocity:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
 	FlexGridSizer2->Add(StaticText9, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtAngle = new wxTextCtrl(this, ID_txtAngle, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtAngle"));
-	FlexGridSizer2->Add(txtAngle, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtAngle, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText10 = new wxStaticText(this, ID_STATICTEXT10, _("Speed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
 	FlexGridSizer2->Add(StaticText10, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtSpeed = new wxTextCtrl(this, ID_txtSpeed, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtSpeed"));
-	FlexGridSizer2->Add(txtSpeed, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtSpeed, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText11 = new wxStaticText(this, ID_STATICTEXT11, _("MouseDown:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
 	FlexGridSizer2->Add(StaticText11, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtMouseDown = new wxTextCtrl(this, ID_txtMouseDown, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtMouseDown"));
-	FlexGridSizer2->Add(txtMouseDown, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtMouseDown, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText12 = new wxStaticText(this, ID_STATICTEXT12, _("Start Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));
 	FlexGridSizer2->Add(StaticText12, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtStartFloor = new wxTextCtrl(this, ID_txtStartFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtStartFloor"));
-	FlexGridSizer2->Add(txtStartFloor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtStartFloor, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText13 = new wxStaticText(this, ID_STATICTEXT13, _("Start Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT13"));
 	FlexGridSizer2->Add(StaticText13, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtStartPosition = new wxTextCtrl(this, ID_txtStartPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtStartPosition"));
-	FlexGridSizer2->Add(txtStartPosition, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtStartPosition, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText29 = new wxStaticText(this, ID_STATICTEXT29, _("FOV Angle:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT29"));
 	FlexGridSizer2->Add(StaticText29, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtFOV = new wxTextCtrl(this, ID_txtFOV, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtFOV"));
-	FlexGridSizer2->Add(txtFOV, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(txtFOV, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer8->Add(StaticBoxSizer1, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Parameters"));
@@ -224,41 +222,36 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	StaticText14 = new wxStaticText(this, ID_STATICTEXT14, _("Gravity:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT14"));
 	FlexGridSizer3->Add(StaticText14, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtGravity = new wxTextCtrl(this, ID_txtGravity, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtGravity"));
+	txtGravity->SetMinSize(wxSize(100,-1));
 	FlexGridSizer3->Add(txtGravity, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bGravity = new wxButton(this, ID_bGravity, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bGravity"));
 	FlexGridSizer3->Add(bGravity, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	lblGravityEnabled = new wxStaticText(this, ID_lblGravityEnabled, _("Gravity On:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_lblGravityEnabled"));
 	FlexGridSizer3->Add(lblGravityEnabled, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtGravityEnabled = new wxTextCtrl(this, ID_txtGravityEnabled, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtGravityEnabled"));
-	FlexGridSizer3->Add(txtGravityEnabled, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer3->Add(txtGravityEnabled, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bGravityEnabled = new wxButton(this, ID_bGravityEnabled, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bGravityEnabled"));
 	FlexGridSizer3->Add(bGravityEnabled, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText17 = new wxStaticText(this, ID_STATICTEXT17, _("Collisions:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT17"));
 	FlexGridSizer3->Add(StaticText17, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtCollisions = new wxTextCtrl(this, ID_txtCollisions, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtCollisions"));
-	FlexGridSizer3->Add(txtCollisions, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer3->Add(txtCollisions, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bCollisions = new wxButton(this, ID_bCollisions, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bCollisions"));
 	FlexGridSizer3->Add(bCollisions, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText18 = new wxStaticText(this, ID_STATICTEXT18, _("Report Coll:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT18"));
-	FlexGridSizer3->Add(StaticText18, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	txtReportCollisions = new wxTextCtrl(this, ID_txtReportCollisions, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtReportCollisions"));
-	FlexGridSizer3->Add(txtReportCollisions, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bReportCollisions = new wxButton(this, ID_bReportCollisions, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bReportCollisions"));
-	FlexGridSizer3->Add(bReportCollisions, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText19 = new wxStaticText(this, ID_STATICTEXT19, _("Freelook:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT19"));
 	FlexGridSizer3->Add(StaticText19, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtFreelook = new wxTextCtrl(this, ID_txtFreelook, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtFreelook"));
-	FlexGridSizer3->Add(txtFreelook, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer3->Add(txtFreelook, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFreelook = new wxButton(this, ID_bFreelook, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFreelook"));
 	FlexGridSizer3->Add(bFreelook, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText21 = new wxStaticText(this, ID_STATICTEXT20, _("Freelook Spd:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT20"));
 	FlexGridSizer3->Add(StaticText21, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtFreelookSpeed = new wxTextCtrl(this, ID_txtFreelookSpeed, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtFreelookSpeed"));
-	FlexGridSizer3->Add(txtFreelookSpeed, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer3->Add(txtFreelookSpeed, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFreelookSpeed = new wxButton(this, ID_bFreelookSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFreelookSpeed"));
 	FlexGridSizer3->Add(bFreelookSpeed, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3->Add(FlexGridSizer3, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer8->Add(StaticBoxSizer3, 1, wxBOTTOM|wxLEFT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer8->Add(StaticBoxSizer3, 1, wxBOTTOM|wxLEFT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer8, 1, wxTOP|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer9 = new wxFlexGridSizer(0, 1, 0, 0);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Control"));
@@ -394,7 +387,6 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bGravity,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGravity_Click);
 	Connect(ID_bGravityEnabled,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGravityEnabled_Click);
 	Connect(ID_bCollisions,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bCollisions_Click);
-	Connect(ID_bReportCollisions,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bReportCollisions_Click);
 	Connect(ID_bFreelook,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelook_Click);
 	Connect(ID_bFreelookSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelookSpeed_Click);
 	Connect(ID_rPosition,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&CameraControl::On_rPosition_Select);
@@ -433,6 +425,7 @@ void CameraControl::OnInit()
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
 	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());
 	hold_vector = Ogre::Vector3(0, 0, 0);
+	txtSetSkyMult->SetValue(wxVariant(skyscraper->SkyMult).GetString());
 }
 
 void CameraControl::Loop()
@@ -453,7 +446,6 @@ void CameraControl::Loop()
 	txtStartPosition->SetValue(TruncateNumber(Simcore->camera->StartPositionX, 2) + wxT(", ") + TruncateNumber(Simcore->camera->StartPositionZ, 2));
 	txtGravityEnabled->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->GetGravityStatus())));
 	txtCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->CollisionsEnabled())));
-	txtReportCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->ReportCollisions)));
 	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook)));
 	lblPosition->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	lblRotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
@@ -586,11 +578,6 @@ void CameraControl::On_bGravityEnabled_Click(wxCommandEvent& event)
 void CameraControl::On_bCollisions_Click(wxCommandEvent& event)
 {
 	Simcore->camera->EnableCollisions(!Simcore->camera->CollisionsEnabled());
-}
-
-void CameraControl::On_bReportCollisions_Click(wxCommandEvent& event)
-{
-	Simcore->camera->ReportCollisions = !Simcore->camera->ReportCollisions;
 }
 
 void CameraControl::On_bFreelook_Click(wxCommandEvent& event)

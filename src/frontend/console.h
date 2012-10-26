@@ -26,11 +26,10 @@
 #define CONSOLE_H
 
 //(*Headers(Console)
-#include <wx/app.h>
-#include <wx/sizer.h>
-#include <wx/textctrl.h>
-#include <wx/button.h>
 #include <wx/dialog.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/textctrl.h>
 //*)
 
 class Console: public wxDialog
@@ -41,8 +40,8 @@ class Console: public wxDialog
 		virtual ~Console();
 
 		//(*Declarations(Console)
-		wxButton* bSend;
 		wxButton* bClose;
+		wxButton* bSend;
 		wxTextCtrl* tCommand;
 		//*)
 

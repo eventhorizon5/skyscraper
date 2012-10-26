@@ -6,7 +6,188 @@
 		<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
 			<cols>1</cols>
 			<object class="sizeritem">
-				<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+				<object class="wxFlexGridSizer" variable="FlexGridSizer4" member="no">
+					<cols>3</cols>
+					<object class="sizeritem">
+						<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
+							<label>Building Information</label>
+							<object class="sizeritem">
+								<object class="wxFlexGridSizer" variable="FlexGridSizer3" member="no">
+									<cols>2</cols>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT18" variable="StaticText18" member="yes">
+											<label>Name:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tName" variable="tName" member="yes">
+											<minsize>175,50</minsize>
+											<style>wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE|wxTE_WORDWRAP</style>
+										</object>
+										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT17" variable="StaticText17" member="yes">
+											<label>Designer:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tDesigner" variable="tDesigner" member="yes">
+											<minsize>-1,50</minsize>
+											<style>wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE|wxTE_WORDWRAP</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText16" member="yes">
+											<label>Location:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tLocation" variable="tLocation" member="yes">
+											<minsize>-1,50</minsize>
+											<style>wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE|wxTE_WORDWRAP</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT15" variable="StaticText15" member="yes">
+											<label>Description:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tDescription" variable="tDescription" member="yes">
+											<minsize>-1,50</minsize>
+											<style>wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE|wxTE_WORDWRAP</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT14" variable="StaticText14" member="yes">
+											<label>Version:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tVersion" variable="tVersion" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
+											<label>Floors:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tFloors" variable="tFloors" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
+											<label>Basements:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tBasements" variable="tBasements" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
+											<label>Elevators:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tElevators" variable="tElevators" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
+											<label>Shafts:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tShafts" variable="tShafts" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
+											<label>Stairs:</label>
+										</object>
+										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxTextCtrl" name="ID_tStairs" variable="tStairs" member="yes">
+											<style>wxTE_READONLY|wxTE_CENTRE</style>
+										</object>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+								</object>
+								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+						</object>
+						<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
+						<border>5</border>
+						<option>1</option>
+					</object>
 					<object class="sizeritem">
 						<object class="wxStaticBoxSizer" variable="StaticBoxSizer1" member="no">
 							<label>General Information</label>
@@ -23,6 +204,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_tMeshes" variable="tMeshes" member="yes">
+											<minsize>150,-1</minsize>
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
@@ -41,7 +223,7 @@
 										<object class="wxTextCtrl" name="ID_tTextures" variable="tTextures" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -57,7 +239,7 @@
 										<object class="wxTextCtrl" name="ID_tMaterials" variable="tMaterials" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -73,7 +255,7 @@
 										<object class="wxTextCtrl" name="ID_tSounds" variable="tSounds" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -89,7 +271,7 @@
 										<object class="wxTextCtrl" name="ID_tObjects" variable="tObjects" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -105,7 +287,7 @@
 										<object class="wxTextCtrl" name="ID_tWalls" variable="tWalls" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -121,7 +303,7 @@
 										<object class="wxTextCtrl" name="ID_tPolygons" variable="tPolygons" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -137,7 +319,7 @@
 										<object class="wxTextCtrl" name="ID_tInStairwell" variable="tInStairwell" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -153,7 +335,7 @@
 										<object class="wxTextCtrl" name="ID_tInElevator" variable="tInElevator" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -169,7 +351,7 @@
 										<object class="wxTextCtrl" name="ID_tInShaft" variable="tInShaft" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -185,7 +367,7 @@
 										<object class="wxTextCtrl" name="ID_tRunningTime" variable="tRunningTime" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -201,7 +383,7 @@
 										<object class="wxTextCtrl" name="ID_tStartTime" variable="tStartTime" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -217,7 +399,7 @@
 										<object class="wxTextCtrl" name="ID_tFrontendVersion" variable="tFrontendVersion" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -233,7 +415,7 @@
 										<object class="wxTextCtrl" name="ID_tSBSVersion" variable="tSBSVersion" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -249,183 +431,7 @@
 										<object class="wxTextCtrl" name="ID_tPlatform" variable="tPlatform" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-								</object>
-								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
-						</object>
-						<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
-						<border>5</border>
-						<option>1</option>
-					</object>
-					<object class="sizeritem">
-						<object class="wxStaticBoxSizer" variable="StaticBoxSizer2" member="no">
-							<label>Building Information</label>
-							<object class="sizeritem">
-								<object class="wxFlexGridSizer" variable="FlexGridSizer3" member="no">
-									<cols>2</cols>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT18" variable="StaticText18" member="yes">
-											<label>Name:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tName" variable="tName" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT17" variable="StaticText17" member="yes">
-											<label>Designer:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tDesigner" variable="tDesigner" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText16" member="yes">
-											<label>Location:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tLocation" variable="tLocation" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT15" variable="StaticText15" member="yes">
-											<label>Description:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tDescription" variable="tDescription" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT14" variable="StaticText14" member="yes">
-											<label>Version:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tVersion" variable="tVersion" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
-											<label>Floors:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tFloors" variable="tFloors" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT6" variable="StaticText6" member="yes">
-											<label>Basements:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tBasements" variable="tBasements" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT7" variable="StaticText7" member="yes">
-											<label>Elevators:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tElevators" variable="tElevators" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
-											<label>Shafts:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tShafts" variable="tShafts" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
-											<label>Stairs:</label>
-										</object>
-										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tStairs" variable="tStairs" member="yes">
-											<style>wxTE_READONLY|wxTE_CENTRE</style>
-										</object>
-										<flag>wxLEFT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
@@ -440,7 +446,7 @@
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>

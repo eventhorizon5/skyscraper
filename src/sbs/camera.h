@@ -69,7 +69,6 @@ public:
 	Ogre::Vector3 angle_velocity;
 	float speed; //movement speed base
 	bool MouseDown; //mouse status
-	bool ReportCollisions; //if true, print collisions on console
 	std::string LastHitMesh; //name of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	float Freelook_speed; //freelook speed

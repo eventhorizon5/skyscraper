@@ -23,8 +23,8 @@
 */
 
 //(*InternalHeaders(editelevator)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 #include "debugpanel.h"
 #include "editelevator.h"
@@ -247,16 +247,16 @@ END_EVENT_TABLE()
 editelevator::editelevator(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(editelevator)
-	wxBoxSizer* BoxSizer4;
-	wxFlexGridSizer* FlexGridSizer4;
-	wxBoxSizer* BoxSizer5;
-	wxBoxSizer* BoxSizer7;
-	wxStaticBoxSizer* StaticBoxSizer4;
-	wxFlexGridSizer* FlexGridSizer5;
-	wxStaticBoxSizer* StaticBoxSizer9;
-	wxStaticBoxSizer* StaticBoxSizer10;
-	wxStaticBoxSizer* StaticBoxSizer6;
 	wxFlexGridSizer* FlexGridSizer8;
+	wxStaticBoxSizer* StaticBoxSizer10;
+	wxBoxSizer* BoxSizer7;
+	wxFlexGridSizer* FlexGridSizer4;
+	wxBoxSizer* BoxSizer4;
+	wxStaticBoxSizer* StaticBoxSizer4;
+	wxStaticBoxSizer* StaticBoxSizer9;
+	wxStaticBoxSizer* StaticBoxSizer6;
+	wxFlexGridSizer* FlexGridSizer5;
+	wxBoxSizer* BoxSizer5;
 	
 	Create(parent, wxID_ANY, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);

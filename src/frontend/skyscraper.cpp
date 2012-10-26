@@ -1648,7 +1648,7 @@ bool Skyscraper::InitSky()
 		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
 			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
 		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
-		SkyMult = mCaelumSystem->getTimeScale();
+		SkyMult = GetConfigInt("Skyscraper.Frontend.SkyMult", 50);
 	}
 	catch (Ogre::Exception &e)
 	{

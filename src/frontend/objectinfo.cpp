@@ -23,8 +23,8 @@
 */
 
 //(*InternalHeaders(ObjectInfo)
-#include <wx/intl.h>
 #include <wx/string.h>
+#include <wx/intl.h>
 //*)
 
 #include "debugpanel.h"
@@ -71,13 +71,13 @@ END_EVENT_TABLE()
 ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(ObjectInfo)
-	wxFlexGridSizer* FlexGridSizer4;
-	wxFlexGridSizer* FlexGridSizer3;
-	wxFlexGridSizer* FlexGridSizer5;
+	wxFlexGridSizer* FlexGridSizer1;
 	wxFlexGridSizer* FlexGridSizer2;
 	wxBoxSizer* BoxSizer2;
+	wxFlexGridSizer* FlexGridSizer4;
+	wxFlexGridSizer* FlexGridSizer3;
 	wxBoxSizer* BoxSizer1;
-	wxFlexGridSizer* FlexGridSizer1;
+	wxFlexGridSizer* FlexGridSizer5;
 	
 	Create(parent, wxID_ANY, _("Object Info"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);

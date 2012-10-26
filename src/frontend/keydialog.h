@@ -26,9 +26,9 @@
 #define KEYDIALOG_H
 
 //(*Headers(KeyDialog)
+#include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/textctrl.h>
-#include <wx/dialog.h>
 //*)
 
 class KeyDialog: public wxDialog

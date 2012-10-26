@@ -89,7 +89,6 @@ Camera::Camera(Ogre::Camera *camera)
 	lastfloor = 0;
 	lastfloorset = false;
 	MouseDown = false;
-	ReportCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.ReportCollisions", false);
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);

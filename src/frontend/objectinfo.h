@@ -26,13 +26,13 @@
 #define OBJECTINFO_H
 
 //(*Headers(ObjectInfo)
-#include <wx/treectrl.h>
+#include <wx/dialog.h>
 #include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/statline.h>
 #include <wx/stattext.h>
 #include <wx/textctrl.h>
-#include <wx/statline.h>
-#include <wx/button.h>
-#include <wx/dialog.h>
+#include <wx/treectrl.h>
 //*)
 
 class ObjectInfo: public wxDialog
@@ -43,32 +43,32 @@ class ObjectInfo: public wxDialog
 		virtual ~ObjectInfo();
 
 		//(*Declarations(ObjectInfo)
-		wxStaticText* StaticText10;
-		wxStaticText* StaticText9;
-		wxButton* bOK;
-		wxTreeCtrl* ObjectTree;
-		wxButton* bDelete;
-		wxStaticText* StaticText2;
-		wxTextCtrl* tPermanent;
-		wxStaticText* StaticText6;
-		wxTextCtrl* tContext;
-		wxStaticText* StaticText8;
-		wxStaticText* StaticText11;
-		wxStaticText* StaticText1;
-		wxStaticText* StaticText3;
 		wxTextCtrl* tType;
-		wxTextCtrl* tNumber;
-		wxTextCtrl* tName;
-		wxTextCtrl* tLineNum;
-		wxStaticText* StaticText5;
-		wxStaticText* StaticText7;
 		wxTextCtrl* tScriptCommand;
-		wxTextCtrl* tScriptCommand2;
-		wxTextCtrl* tParentType;
-		wxStaticLine* StaticLine1;
 		wxTextCtrl* tParent;
-		wxTextCtrl* tParentName;
+		wxTextCtrl* tScriptCommand2;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText10;
+		wxTextCtrl* tNumber;
+		wxTreeCtrl* ObjectTree;
+		wxStaticText* StaticText3;
+		wxTextCtrl* tContext;
+		wxTextCtrl* tLineNum;
+		wxStaticLine* StaticLine1;
+		wxStaticText* StaticText8;
+		wxTextCtrl* tParentType;
+		wxStaticText* StaticText7;
+		wxTextCtrl* tPermanent;
+		wxTextCtrl* tName;
 		wxStaticText* StaticText4;
+		wxButton* bDelete;
+		wxStaticText* StaticText5;
+		wxStaticText* StaticText2;
+		wxStaticText* StaticText6;
+		wxButton* bOK;
+		wxTextCtrl* tParentName;
+		wxStaticText* StaticText9;
+		wxStaticText* StaticText11;
 		//*)
 		void Loop();
 		void PopulateTree();
