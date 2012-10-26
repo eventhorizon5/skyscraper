@@ -346,7 +346,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	}
 }
 
-Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices)
+Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices, float &D)
 {
 	//from Crystal Space libs/csgeom/poly3d.cpp
 	//calculate polygon normal
@@ -380,7 +380,12 @@ Ogre::Vector3 SBS::ComputeNormal(std::vector<Ogre::Vector3> &vertices)
 		invd = 1.0f / SMALL_EPSILON;
 	else
 		invd = 1.0f / sqrtf(sqd);
-	return Ogre::Vector3(ayz * invd, azx * invd, axy * invd);
+	Ogre::Vector3 norm;
+	norm.x = ayz * invd;
+	norm.y = azx * invd;
+	norm.z = axy * invd;
+	D = -norm.x * vertices[0].x - norm.y * vertices[0].y - norm.z * vertices[0].z;
+	return norm;
 }
 
 bool SBS::InPolygon(std::vector<Ogre::Vector3> &poly, const Ogre::Vector3 &v)
@@ -433,7 +438,12 @@ bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertice
 	// the starting point of the beam.
 
 	//compute plane from first 3 vertices
-	Ogre::Plane pl(vertices[0][0], vertices[0][1], vertices[0][2]);
+	float DD;
+	Ogre::Vector3 norm = sbs->ComputeNormal(vertices[0], DD);
+	norm.normalise();
+
+	Ogre::Plane pl(norm.x, norm.y, norm.z, DD);
+
 	float dot1 = pl.d + pl.normal.x * start.x + pl.normal.y * start.y + pl.normal.z * start.z;
 	if (dot1 > 0)
 		return false;
@@ -458,7 +468,6 @@ bool WallPolygon::IntersectRay(std::vector<std::vector<Ogre::Vector3> > &vertice
 	{
 		Ogre::Vector3 start2 = start - vertices[0][i1];
 		normal = start2.crossProduct(start - vertices[0][i]);
-		normal = -normal;
 		if ((relend.x * normal.x + relend.y * normal.y + relend.z * normal.z > 0))
 			return false;
 		i1 = i;
@@ -499,7 +508,11 @@ bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &s
 	if (pr) *pr = -1;
 
 	//compute plane from first 3 vertices
-	Ogre::Plane plane(vertices[0][0], vertices[0][1], vertices[0][2]);
+	float DD;
+	Ogre::Vector3 norm = sbs->ComputeNormal(vertices[0], DD);
+	norm.normalise();
+
+	Ogre::Plane plane(norm.x, norm.y, norm.z, DD);
 
 	denom = plane.normal.x * (x2 - x1) +
 			plane.normal.y * (y2 - y1) +
@@ -530,4 +543,3 @@ bool WallPolygon::IntersectSegmentPlane(MeshObject *mesh, const Ogre::Vector3 &s
 
 	return true;
 }
-
