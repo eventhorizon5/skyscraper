@@ -1008,7 +1008,10 @@ void Camera::SetToDefaultFOV()
 float Camera::GetHeight()
 {
 	//return camera's height
-	return cfg_body_height + cfg_legs_height;
+
+	float height = cfg_body_height + cfg_legs_height;
+
+	return height - (height / 4);
 }
 
 void Camera::SetViewMode(int mode)
