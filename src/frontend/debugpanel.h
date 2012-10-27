@@ -31,6 +31,7 @@
     #pragma hdrstop
 #endif
 
+#include <wx/app.h>
 //(*Headers(DebugPanel)
 #include <wx/checkbox.h>
 #include <wx/sizer.h>
