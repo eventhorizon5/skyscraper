@@ -17,7 +17,7 @@
 							<object class="sizeritem">
 								<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
 									<cols>2</cols>
-									<rows>10</rows>
+									<rows>0</rows>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
 											<label>Direction Front:</label>

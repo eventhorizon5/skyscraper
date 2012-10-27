@@ -161,7 +161,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer1 = new wxFlexGridSizer(2, 2, 0, 0);
 	FlexGridSizer8 = new wxFlexGridSizer(0, 1, 0, 0);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Information"));
-	FlexGridSizer2 = new wxFlexGridSizer(10, 2, 0, 0);
+	FlexGridSizer2 = new wxFlexGridSizer(0, 2, 0, 0);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Direction Front:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer2->Add(StaticText3, 1, wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtDirectionFront = new wxTextCtrl(this, ID_txtDirectionFront, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtDirectionFront"));
