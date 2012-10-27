@@ -25,6 +25,7 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
+#include <wx/app.h>
 //(*Headers(Console)
 #include <wx/dialog.h>
 #include <wx/sizer.h>

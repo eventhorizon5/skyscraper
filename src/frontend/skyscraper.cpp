@@ -1655,4 +1655,5 @@ bool Skyscraper::InitSky()
 		ReportFatalError("Error initializing sky:" + e.getDescription());
 		return false;
 	}
+	return true;
 }
