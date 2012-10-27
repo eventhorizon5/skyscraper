@@ -502,6 +502,26 @@ bool Skyscraper::Initialize()
 		}
 	}
 
+	//set platform name
+	std::string arch;
+
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_32
+	arch = "32-bit";
+#endif
+#if OGRE_ARCH_TYPE == OGRE_ARCHITECTURE_64
+	arch = "64-bit";
+#endif
+
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Platform = "Windows " + arch;
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+	Platform = "Linux " + arch;
+#endif
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+	Platform = "MacOS " + arch;
+#endif
+
 	return true;
 }
 
