@@ -1273,22 +1273,24 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 
 	//texture mapping
 	Ogre::Vector3 v1, v2, v3;
+
 	sbs->GetTextureMapping(vertices2[0], v1, v2, v3);
 	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
-		v1,
-		Ogre::Vector2 (sbs->MapUV[0].x * tw2, sbs->MapUV[0].y * th2),
-		v2,
-		Ogre::Vector2 (sbs->MapUV[1].x * tw2, sbs->MapUV[1].y * th2),
-		v3,
-		Ogre::Vector2 (sbs->MapUV[2].x * tw2, sbs->MapUV[2].y * th2)))
+			v1,
+			Ogre::Vector2 (sbs->MapUV[0].x * tw2, sbs->MapUV[0].y * th2),
+			v2,
+			Ogre::Vector2 (sbs->MapUV[1].x * tw2, sbs->MapUV[1].y * th2),
+			v3,
+			Ogre::Vector2 (sbs->MapUV[2].x * tw2, sbs->MapUV[2].y * th2)))
 		return false;
 
-	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, false);
+	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, bool convert_vertices)
+bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices)
 {
-	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
+	//create custom geometry, apply a texture map and material, and return the created submesh
+	//tw and th are only used when overriding texel map
 
 	//convert to remote positioning
 	std::vector<std::vector<Ogre::Vector3> > vertices2;
@@ -1306,7 +1308,7 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 		vertices2 = vertices;
 
 	//texture mapping
-	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2);
+	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2, tw, th);
 
 	//triangulate mesh
 	std::vector<TriangleMesh> trimesh;
@@ -1399,7 +1401,7 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	return true;
 }
 
-Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices)
+Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th)
 {
 	//return texel array for specified texture transformation matrix and vector
 
@@ -1429,14 +1431,14 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	else
 	{
 		Ogre::Vector2 *texels = new Ogre::Vector2[4];
-		texels[0].x = 0;
+		texels[0].x = tw;
 		texels[0].y = 0;
-		texels[1].x = 1;
+		texels[1].x = 0;
 		texels[1].y = 0;
-		texels[2].x = 1;
-		texels[2].y = 1;
-		texels[3].x = 0;
-		texels[3].y = 1;
+		texels[2].x = 0;
+		texels[2].y = th;
+		texels[3].x = tw;
+		texels[3].y = th;
 		return texels;
 	}
 	return 0;

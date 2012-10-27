@@ -126,7 +126,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	if (sbs->Verbose)
 		Report("Creating buttons");
 
-	//sbs->TexelOverride = true;
+	sbs->TexelOverride = true;
 	if (Direction == "front" || Direction == "back")
 	{
 		float x1 = CenterX - (BackWidth / 4);
@@ -219,7 +219,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 		sbs->ResetWalls();
 	}
 	sbs->ResetTextureMapping();
-	//sbs->TexelOverride = false;
+	sbs->TexelOverride = false;
 }
 
 CallButton::~CallButton()

@@ -128,7 +128,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std:
 	std::string name2 = ProcessName(name);
 	std::vector<Ogre::Vector2> index_extents;
 	std::vector<TriangleType> triangles;
-	if (!meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles))
+	if (!meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles, 0, 0))
 	{
 		sbs->ReportError("Error creating wall " + name2);
 		return 0;
