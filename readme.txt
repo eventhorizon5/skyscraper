@@ -147,8 +147,8 @@ F12 - Open control panel
 Shift - Run (hold down with other keys)
 Control - Walk slowly (hold down with other keys)
 Alt + arrow keys - Strafe
-Alt + PgUp - Spin right
-Alt + PgDown - Spin left
+Alt + PgUp/P - Spin right
+Alt + PgDown/L - Spin left
 Plus or ] - Zoom in (decrease FOV angle)
 Minus or [ - Zoom out (increase FOV angle)
 Esc - exit to main menu
