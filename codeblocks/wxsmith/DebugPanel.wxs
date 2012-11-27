@@ -336,7 +336,7 @@
 								</object>
 								<object class="sizeritem">
 									<object class="wxButton" name="ID_bObjectInfo" variable="bObjectInfo" member="yes">
-										<label>Object Information</label>
+										<label>Object Manager</label>
 										<handler function="On_bObjectInfo_Click" entry="EVT_BUTTON" />
 									</object>
 									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
