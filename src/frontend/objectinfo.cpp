@@ -323,7 +323,7 @@ void ObjectInfo::On_bCreate_Click(wxCommandEvent& event)
 void ObjectInfo::On_bModify_Click(wxCommandEvent& event)
 {
 	if (!modifyobject)
-		modifyobject = new ParameterViewer(this, tType->GetValue(), false, -1);
+		modifyobject = new ParameterViewer(this, tType->GetValue(), tParentType->GetValue(), false, -1);
 	if (modifyobject)
 		modifyobject->Show();
 }

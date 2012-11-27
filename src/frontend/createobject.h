@@ -17,6 +17,7 @@ class CreateObject: public wxDialog
 		//(*Declarations(CreateObject)
 		wxButton* bShaft;
 		wxButton* bLoadTexture;
+		wxButton* bAddFloor;
 		wxButton* bFloor;
 		wxButton* bElevator;
 		//*)
@@ -26,6 +27,7 @@ class CreateObject: public wxDialog
 		//(*Identifiers(CreateObject)
 		static const long ID_bLoadTexture;
 		static const long ID_bFloor;
+		static const long ID_bAddFloor;
 		static const long ID_bElevator;
 		static const long ID_bShaft;
 		//*)
@@ -37,6 +39,7 @@ class CreateObject: public wxDialog
 		void On_bFloor_Click(wxCommandEvent& event);
 		void On_bElevator_Click(wxCommandEvent& event);
 		void On_bShaft_Click(wxCommandEvent& event);
+		void On_bAddFloor_Click(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()
