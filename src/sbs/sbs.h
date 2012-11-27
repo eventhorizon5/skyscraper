@@ -326,6 +326,7 @@ public:
 	void SetLighting(float red = 1.0, float green = 1.0, float blue = 1.0);
 	void ResetLighting();
 	void SaveTexture(Ogre::TexturePtr texture, std::string filename);
+	std::string ListTextures();
 	
 	//Meshes
 	MeshObject* Buildings;

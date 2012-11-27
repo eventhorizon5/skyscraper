@@ -20,6 +20,7 @@ class ParameterViewer: public wxDialog
 		wxStaticText* l7;
 		wxTextCtrl* t7;
 		wxTextCtrl* t20;
+		wxButton* bTextures;
 		wxTextCtrl* t9;
 		wxStaticText* l15;
 		wxStaticText* l20;
@@ -118,6 +119,7 @@ class ParameterViewer: public wxDialog
 		static const long ID_STATICTEXT11;
 		static const long ID_tCommand;
 		static const long ID_bCancel;
+		static const long ID_bTextures;
 		static const long ID_bOK;
 		//*)
 
@@ -127,6 +129,7 @@ class ParameterViewer: public wxDialog
 		void On_bCancel_Click(wxCommandEvent& event);
 		void On_bOK_Click(wxCommandEvent& event);
 		void ChangeParam(wxCommandEvent& event);
+		void On_bTextures_Click(wxCommandEvent& event);
 		//*)
 
 		bool Setup();

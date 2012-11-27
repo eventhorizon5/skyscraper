@@ -4199,3 +4199,16 @@ void SBS::ResetLighting()
 	AmbientG = OldAmbientG;
 	AmbientB = OldAmbientB;
 }
+
+std::string SBS::ListTextures()
+{
+	//list loaded textures
+
+	std::string list;
+	for (int i = 0; i < textureinfo.size(); i++)
+	{
+		list.append(textureinfo[i].name);
+		list.append("\n");
+	}
+	return list;
+}

@@ -4,6 +4,7 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
+#include <wx/filedlg.h>
 
 #include "globals.h"
 #include "sbs.h"
@@ -11,6 +12,7 @@
 #include "fileio.h"
 #include "skyscraper.h"
 #include "objectinfo.h"
+#include "textwindow.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
 extern Skyscraper *skyscraper;
@@ -62,6 +64,7 @@ const long ParameterViewer::ID_t20 = wxNewId();
 const long ParameterViewer::ID_STATICTEXT11 = wxNewId();
 const long ParameterViewer::ID_tCommand = wxNewId();
 const long ParameterViewer::ID_bCancel = wxNewId();
+const long ParameterViewer::ID_bTextures = wxNewId();
 const long ParameterViewer::ID_bOK = wxNewId();
 //*)
 
@@ -185,10 +188,12 @@ ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxStrin
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT11, _("Script Command:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT11"));
 	FlexGridSizer1->Add(StaticText1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	tCommand = new wxTextCtrl(this, ID_tCommand, _("Command"), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tCommand"));
-	FlexGridSizer1->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM|wxALIGN_CENTER_HORIZONTAL, 5);
+	FlexGridSizer1->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	bCancel = new wxButton(this, ID_bCancel, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCancel"));
 	BoxSizer1->Add(bCancel, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bTextures = new wxButton(this, ID_bTextures, _("List Textures"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
+	BoxSizer1->Add(bTextures, 1, wxALL|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer1->Add(bOK, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
@@ -218,6 +223,7 @@ ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxStrin
 	Connect(ID_t19,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&ParameterViewer::ChangeParam);
 	Connect(ID_t20,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&ParameterViewer::ChangeParam);
 	Connect(ID_bCancel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ParameterViewer::On_bCancel_Click);
+	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ParameterViewer::On_bTextures_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ParameterViewer::On_bOK_Click);
 	//*)
 	objecttype = object_type;
@@ -238,43 +244,80 @@ bool ParameterViewer::Setup()
 
 	if (create == true)
 	{
+		if (objecttype == wxT("Load") && objectparent == wxT("Texture"))
+		{
+			SetTitle(wxT("Load Texture"));
+
+			wxString newlabel = wxT("Loads a texture.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+
+			wxFileDialog *Selector = new wxFileDialog(0, _("Select a Texture"), _("data/"), _(""), _("Image files (*.jpg *.png *.gif *.tga)|*.jpg;*.png;*.gif;*.tga"), wxFD_OPEN);
+			int result = Selector->ShowModal();
+			if (result == wxID_CANCEL)
+			{
+				//delete dialog
+				delete Selector;
+				Selector = 0;
+				//quit
+				return false;
+			}
+			wxString filename = wxT("data/") + Selector->GetFilename();
+
+			l1->SetLabel(wxT("Filename:"));
+			t1->SetValue(filename);
+
+			l2->SetLabel(wxT("Name:"));
+			l2->SetToolTip(wxT("Name of texture"));
+
+			l3->SetLabel(wxT("Tile X"));
+			l3->SetToolTip(wxT("The values tile_x and tile_y are per-texture multipliers. For example, if you set tile_x to 2, and you specify a texture width (tw) of 2 during an AddFloor command later, the tiling value will be 4 (2 times 2), and the texture will be repeated 4 times horizontally."));
+
+			l4->SetLabel(wxT("Tile Y"));
+			l4->SetToolTip(wxT("The values tile_x and tile_y are per-texture multipliers. For example, if you set tile_x to 2, and you specify a texture width (tw) of 2 during an AddFloor command later, the tiling value will be 4 (2 times 2), and the texture will be repeated 4 times horizontally."));
+
+			l5->SetLabel(wxT("Force*"));
+			l5->SetToolTip(wxT("The force value is optional, and if set to false, autosizing will always be disabled for this texture; if set to true, autosizing will always be enabled."));
+		}
+
 		if (objecttype == wxT("Floor") && objectparent == wxT("Floor"))
 		{
 			SetTitle(wxT("Create Floor"));
 
 			t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
 
-			wxString newlabel = wxT("Create a New Floor\nFloors above ground start with 0 (so a 15-story building would have floors 0-14).\nAlso, floors must be made in the proper order: basement levels must be made first in decending order (-1, -2, -3 etc),\nand then above-ground floors in ascending order (0, 1, 2, etc)\nItems with an asterisk (*) are required.\nMove mouse over parameter name for help");
-			newlabel = newlabel +wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n");
+			wxString newlabel = wxT("Create a New Floor\nFloors above ground start with 0 (so a 15-story building would have floors 0-14).\nAlso, floors must be made in the proper order: basement levels must be made first in decending order (-1, -2, -3 etc),\nand then above-ground floors in ascending order (0, 1, 2, etc)\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
 
 			tDesc->SetLabel(newlabel);
 			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
 
-			l1->SetLabel(wxT("Number*:"));
+			l1->SetLabel(wxT("Number:"));
 			l1->SetToolTip(wxT("Number of new floor (such as 1), or a range of floors (such as 5 to 10)"));
 
-			l2->SetLabel(wxT("Name*:"));
+			l2->SetLabel(wxT("Name:"));
 			l2->SetToolTip(wxT("the name of the current floor, required\nExample: Name = Floor %floor%"));
 
-			l3->SetLabel(wxT("ID*:"));
+			l3->SetLabel(wxT("ID:"));
 			l3->SetToolTip(wxT("the floor indicator name for the current floor, such as L (for Lobby), LL (lower level), M (Mezzanine), etc. This is also used to determine what texture should be loaded for the elevator floor indicators and floor signs. The texture name would be 'Button[ID]' - so if the ID is 10, the texture name would be 'Button10'.\nExample: ID = %floor%"));
 
-			l4->SetLabel(wxT("Type*:"));
+			l4->SetLabel(wxT("Type:"));
 			l4->SetToolTip(wxT("the type of floor the current floor is. The types are still being defined, but the currently used ones are Basement, Lobby, Mezzanine, Conference, Office, Service, Skylobby, Hotel, Apartment, Condominium, Restaurant, Observatory, Recreation, Ballroom, Communications, and Roof. (Required)\nExample: Type = Office"));
 
-			l5->SetLabel(wxT("Description:"));
+			l5->SetLabel(wxT("Description*:"));
 			l5->SetToolTip(wxT("description of the current floor, optional\nExample: Description = Offices"));
 
-			l6->SetLabel(wxT("Height*:"));
+			l6->SetLabel(wxT("Height:"));
 			l6->SetToolTip(wxT("the floor-to-ceiling height of the current floor, required\nExample: Height = 9.5"));
 
-			l7->SetLabel(wxT("InterfloorHeight*:"));
+			l7->SetLabel(wxT("InterfloorHeight:"));
 			l7->SetToolTip(wxT(" the height in feet of the space between floors (below each floor), starting at the floor's altitude, and ending right below the level's floor; required.\nExample: InterfloorHeight = 2.24"));
 
-			l8->SetLabel(wxT("Altitude:"));
+			l8->SetLabel(wxT("Altitude*:"));
 			l8->SetToolTip(wxT("this parameter is optional and is only recommended if the first level has an interfloor area that needs to be below ground. If this parameter is not used, the altitude will be calculated automatically.\nExample: Altitude = -2.24"));
 
-			l9->SetLabel(wxT("Group:"));
+			l9->SetLabel(wxT("Group*:"));
 			l9->SetToolTip(wxT("group floors together. This is a list of comma-separated floor numbers (or a range specified with the - symbol) that should be enabled along with this floor when the user arrives at this floor. For example, if a 2-story room has a balcony, and the room base and balcony are separate floors, you would specify the other floor's number in this parameter.\nExamples:\nGroup = 5\nGroup = 4, 5\nGroup = 4 - 10"));
 		}
 
@@ -285,12 +328,12 @@ bool ParameterViewer::Setup()
 			SetTitle(wxT("Floor - AddFloor"));
 
 			wxString newlabel = wxT("Adds a textured floor with the specified dimensions to the current floor/level\n");
-			newlabel = newlabel + wxT("Items with an asterisk (*) are required.\nMove mouse over parameter name for help");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
 
 			tDesc->SetLabel(newlabel);
 			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
 
-			l1->SetLabel(wxT("Number:"));
+			l1->SetLabel(wxT("Floor Number:"));
 			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
 
 			l2->SetLabel(wxT("Name:"));
@@ -324,7 +367,808 @@ bool ParameterViewer::Setup()
 			l13->SetLabel(wxT("Is External:"));
 			l13->SetToolTip(wxT("isexternal determines if the wall is part of the building's external framework (true) or if it's part of the current floor (false)"));
 			t13->SetValue(wxT("false"));
+		}
 
+		if (objecttype == wxT("AddWall") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddWall"));
+
+			wxString newlabel = wxT("Adds a textured wall with the specified dimensions to the current floor/level\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Name:"));
+
+			l3->SetLabel(wxT("Texture Name:"));
+
+			l4->SetLabel(wxT("Thickness:"));
+
+			l5->SetLabel(wxT("X1:"));
+
+			l6->SetLabel(wxT("Z1:"));
+
+			l7->SetLabel(wxT("X2:"));
+
+			l8->SetLabel(wxT("Z2:"));
+
+			l9->SetLabel(wxT("Height 1:"));
+			l9->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l10->SetLabel(wxT("Height 2:"));
+			l10->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l11->SetLabel(wxT("Vertical Offset1:"));
+			l11->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l12->SetLabel(wxT("Vertical Offset2:"));
+			l12->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l13->SetLabel(wxT("Texture Width:"));
+			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t13->SetValue(wxT("0"));
+
+			l14->SetLabel(wxT("Texture Height:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
+
+			l15->SetLabel(wxT("Is External:"));
+			l15->SetToolTip(wxT("isexternal determines if the wall is part of the building's external framework (true) or if it's part of the current floor (false)"));
+			t15->SetValue(wxT("false"));
+		}
+
+		if (objecttype == wxT("AddInterfloorFloor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddInterfloorFloor"));
+
+			wxString newlabel = wxT("Adds a textured floor with the specified dimensions below the current floor/level\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Name:"));
+
+			l3->SetLabel(wxT("Texture Name:"));
+
+			l4->SetLabel(wxT("Thickness:"));
+
+			l5->SetLabel(wxT("X1:"));
+
+			l6->SetLabel(wxT("Z1:"));
+
+			l7->SetLabel(wxT("X2:"));
+
+			l8->SetLabel(wxT("Z2:"));
+
+			l9->SetLabel(wxT("Vertical Offset1:"));
+			l9->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
+
+			l10->SetLabel(wxT("Vertical Offset2:"));
+			l10->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
+
+			l11->SetLabel(wxT("Texture Width:"));
+			l11->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t11->SetValue(wxT("0"));
+
+			l12->SetLabel(wxT("Texture Height:"));
+			l12->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t12->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddInterfloorWall") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddInterfloorWall"));
+
+			wxString newlabel = wxT("Adds a textured wall with the specified dimensions below the current floor/level\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Name:"));
+
+			l3->SetLabel(wxT("Texture Name:"));
+
+			l4->SetLabel(wxT("Thickness:"));
+
+			l5->SetLabel(wxT("X1:"));
+
+			l6->SetLabel(wxT("Z1:"));
+
+			l7->SetLabel(wxT("X2:"));
+
+			l8->SetLabel(wxT("Z2:"));
+
+			l9->SetLabel(wxT("Height 1:"));
+			l9->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l10->SetLabel(wxT("Height 2:"));
+			l10->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l11->SetLabel(wxT("Vertical Offset1:"));
+			l11->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l12->SetLabel(wxT("Vertical Offset2:"));
+			l12->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l13->SetLabel(wxT("Texture Width:"));
+			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t13->SetValue(wxT("0"));
+
+			l14->SetLabel(wxT("Texture Height:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddStairsFloor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddStairsFloor"));
+
+			wxString newlabel = wxT("Adds a textured floor to the specified stairwell, on the current floor\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Stairwell Number:"));
+
+			l3->SetLabel(wxT("Name:"));
+
+			l4->SetLabel(wxT("Texture Name:"));
+
+			l5->SetLabel(wxT("Thickness:"));
+
+			l6->SetLabel(wxT("X1:"));
+
+			l7->SetLabel(wxT("Z1:"));
+
+			l8->SetLabel(wxT("X2:"));
+
+			l9->SetLabel(wxT("Z2:"));
+
+			l10->SetLabel(wxT("Vertical Offset1:"));
+			l10->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
+
+			l11->SetLabel(wxT("Vertical Offset2:"));
+			l11->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
+
+			l12->SetLabel(wxT("Texture Width:"));
+			l12->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t12->SetValue(wxT("0"));
+
+			l13->SetLabel(wxT("Texture Height:"));
+			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t13->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddStairsWall") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddStairsWall"));
+
+			wxString newlabel = wxT("Adds a textured wall to the specified stairwell, on the current floor\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Stairwell Number:"));
+
+			l3->SetLabel(wxT("Name:"));
+
+			l4->SetLabel(wxT("Texture Name:"));
+
+			l5->SetLabel(wxT("Thickness:"));
+
+			l6->SetLabel(wxT("X1:"));
+
+			l7->SetLabel(wxT("Z1:"));
+
+			l8->SetLabel(wxT("X2:"));
+
+			l9->SetLabel(wxT("Z2:"));
+
+			l10->SetLabel(wxT("Height 1:"));
+			l10->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l11->SetLabel(wxT("Height 2:"));
+			l11->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l12->SetLabel(wxT("Vertical Offset1:"));
+			l12->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l13->SetLabel(wxT("Vertical Offset2:"));
+			l13->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l14->SetLabel(wxT("Texture Width:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
+
+			l15->SetLabel(wxT("Texture Height:"));
+			l15->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t15->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddShaftFloor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddShaftFloor"));
+
+			wxString newlabel = wxT("Adds a textured floor to the specified shaft, on the current floor\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Shaft Number:"));
+
+			l3->SetLabel(wxT("Name:"));
+
+			l4->SetLabel(wxT("Texture Name:"));
+
+			l5->SetLabel(wxT("Thickness:"));
+
+			l6->SetLabel(wxT("X1:"));
+
+			l7->SetLabel(wxT("Z1:"));
+
+			l8->SetLabel(wxT("X2:"));
+
+			l9->SetLabel(wxT("Z2:"));
+
+			l10->SetLabel(wxT("Vertical Offset1:"));
+			l10->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
+
+			l11->SetLabel(wxT("Vertical Offset2:"));
+			l11->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
+
+			l12->SetLabel(wxT("Texture Width:"));
+			l12->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t12->SetValue(wxT("0"));
+
+			l13->SetLabel(wxT("Texture Height:"));
+			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t13->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddShaftWall") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddShaftWall"));
+
+			wxString newlabel = wxT("Adds a textured wall to the specified shaft, on the current floor\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Shaft Number:"));
+
+			l3->SetLabel(wxT("Name:"));
+
+			l4->SetLabel(wxT("Texture Name:"));
+
+			l5->SetLabel(wxT("Thickness:"));
+
+			l6->SetLabel(wxT("X1:"));
+
+			l7->SetLabel(wxT("Z1:"));
+
+			l8->SetLabel(wxT("X2:"));
+
+			l9->SetLabel(wxT("Z2:"));
+
+			l10->SetLabel(wxT("Height 1:"));
+			l10->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l11->SetLabel(wxT("Height 2:"));
+			l11->SetToolTip(wxT("Height1 is the wall height in feet at the first coordinate set (x1 and z1), and height2 is for the second set (x2, and z2)"));
+
+			l12->SetLabel(wxT("Vertical Offset1:"));
+			l12->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l13->SetLabel(wxT("Vertical Offset2:"));
+			l13->SetToolTip(wxT("Voffset1 is the vertical offset in feet (from the floor's altitude) for the first coordinate set, and voffset2 is for the second set"));
+
+			l14->SetLabel(wxT("Texture Width:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
+
+			l15->SetLabel(wxT("Texture Height:"));
+			l15->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t15->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("ColumnWallBox") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - ColumnWallBox"));
+
+			wxString newlabel = wxT("creates 4 walls (box) at the specified coordinate locations, as part of the current floor's columnframe mesh\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Name:"));
+
+			l3->SetLabel(wxT("Texture Name:"));
+
+			l4->SetLabel(wxT("X1:"));
+
+			l5->SetLabel(wxT("X2:"));
+
+			l6->SetLabel(wxT("Z1:"));
+
+			l7->SetLabel(wxT("Z2:"));
+
+			l8->SetLabel(wxT("Height:"));
+
+			l9->SetLabel(wxT("Vertical Offset:"));
+			l9->SetToolTip(wxT("Voffset is the starting height of the object"));
+
+			l10->SetLabel(wxT("Texture Width:"));
+			l10->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t10->SetValue(wxT("0"));
+
+			l11->SetLabel(wxT("Texture Height:"));
+			l11->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t11->SetValue(wxT("0"));
+
+			l12->SetLabel(wxT("Show Inside:"));
+			l12->SetLabel(wxT("Show Outside:"));
+			l12->SetLabel(wxT("Show Top:"));
+			l12->SetLabel(wxT("Show Bottom:"));
+		}
+
+		if (objecttype == wxT("ColumnWallBox2") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - ColumnWallBox2"));
+
+			wxString newlabel = wxT("creates 4 walls (box) at a specified central location, as part of the current floor's columnframe mesh \n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Name:"));
+
+			l3->SetLabel(wxT("Texture Name:"));
+
+			l4->SetLabel(wxT("CenterX:"));
+
+			l5->SetLabel(wxT("CenterZ:"));
+
+			l6->SetLabel(wxT("WidthX:"));
+
+			l7->SetLabel(wxT("LengthZ:"));
+
+			l8->SetLabel(wxT("Height:"));
+
+			l9->SetLabel(wxT("Vertical Offset:"));
+			l9->SetToolTip(wxT("Voffset is the starting height of the object"));
+
+			l10->SetLabel(wxT("Texture Width:"));
+			l10->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t10->SetValue(wxT("0"));
+
+			l11->SetLabel(wxT("Texture Height:"));
+			l11->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t11->SetValue(wxT("0"));
+
+			l12->SetLabel(wxT("Show Inside:"));
+			l12->SetLabel(wxT("Show Outside:"));
+			l12->SetLabel(wxT("Show Top:"));
+			l12->SetLabel(wxT("Show Bottom:"));
+		}
+
+		if (objecttype == wxT("CreateCallButtons") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - CreateCallButtons"));
+
+			wxString newlabel = wxT("creates a call button set\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Elevator List"));
+			l2->SetToolTip(wxT("comma-separated list of elevators the next created call button set will work with (this must be specified before CreateCallButtons)\nExample: 1, 2, 3, 4"));
+
+			l3->SetLabel(wxT("Back Texture:"));
+			l3->SetToolTip(wxT("texture of the wall plate behind the buttons"));
+
+			l4->SetLabel(wxT("Up Button Texture:"));
+			l4->SetToolTip(wxT("UpButtonTexture and DownButtonTexture are the textures used for the buttons themselves (unlit).\nUpButtonTexture_Lit and DownButtonTexture_Lit specify the lit button textures."));
+			l5->SetLabel(wxT("Up Button Texture (lit):"));
+			l5->SetToolTip(wxT("UpButtonTexture and DownButtonTexture are the textures used for the buttons themselves (unlit).\nUpButtonTexture_Lit and DownButtonTexture_Lit specify the lit button textures."));
+			l6->SetLabel(wxT("Down Button Texture:"));
+			l6->SetToolTip(wxT("UpButtonTexture and DownButtonTexture are the textures used for the buttons themselves (unlit).\nUpButtonTexture_Lit and DownButtonTexture_Lit specify the lit button textures."));
+			l7->SetLabel(wxT("Down Button Texture (lit):"));
+			l7->SetToolTip(wxT("UpButtonTexture and DownButtonTexture are the textures used for the buttons themselves (unlit).\nUpButtonTexture_Lit and DownButtonTexture_Lit specify the lit button textures."));
+
+			l8->SetLabel(wxT("CenterX:"));
+			l8->SetToolTip(wxT("the central location of the call button set object"));
+
+			l9->SetLabel(wxT("CenterZ:"));
+			l9->SetToolTip(wxT("the central location of the call button set object"));
+
+			l10->SetLabel(wxT("Vertical Offset:"));
+			l10->SetToolTip(wxT("altitude offset that the object is above each floor"));
+
+			l11->SetLabel(wxT("Direction:"));
+			l11->SetToolTip(wxT("direction determines the direction the call buttons face:\n'front' means they face towards the front of the building\n'back' means they face towards the back of the building\n'left' means they face left\n'right' means they face right"));
+
+			l12->SetLabel(wxT("Back Width:"));
+			l12->SetToolTip(wxT("BackWidth and BackHeight are the width and height of the wall plate"));
+
+			l13->SetLabel(wxT("Back Height:"));
+			l13->SetToolTip(wxT("BackWidth and BackHeight are the width and height of the wall plate"));
+
+			l14->SetLabel(wxT("Show Back:"));
+			l14->SetToolTip(wxT("ShowBack determines if the wall plate should be shown, and is either true or false"));
+
+			l15->SetLabel(wxT("Texture Width:"));
+			l15->SetToolTip(wxT("tw and th are the texture scaling for the wall plate."));
+			t15->SetValue(wxT("0"));
+
+			l16->SetLabel(wxT("Texture Height:"));
+			l16->SetToolTip(wxT("tw and th are the texture scaling for the wall plate."));
+			t16->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddStairs") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddStairs"));
+
+			wxString newlabel = wxT("creates a custom staircase at the specified location.\nTo determine the height of the staircase, multiply num_stairs with risersize.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Stairwell Number:"));
+
+			l3->SetLabel(wxT("Name:"));
+
+			l4->SetLabel(wxT("Texture:"));
+
+			l5->SetLabel(wxT("Direction:"));
+			l5->SetToolTip(wxT("The direction parameter specifies the direction the staircase faces (where the bottom step is), and so if a staircase goes up from left to right, the direction would be left."));
+
+			l6->SetLabel(wxT("CenterX:"));
+
+			l7->SetLabel(wxT("CenterZ:"));
+
+			l8->SetLabel(wxT("Width:"));
+			l8->SetToolTip(wxT("the step width"));
+
+			l9->SetLabel(wxT("Riser Size:"));
+			l9->SetToolTip(wxT("the height of each step riser (vertical portion)"));
+
+			l10->SetLabel(wxT("Tread Size:"));
+			l10->SetToolTip(wxT("the length of each step tread/run (horizontal portion)"));
+
+			l11->SetLabel(wxT("Number of Stairs:"));
+			l11->SetToolTip(wxT("Number of steps - Note that the tread of the top step is not drawn (the top step is the landing platform);\ntherefore for a staircase containing 10 steps, the total staircase width\nwould be comprised of 9 treads (which is why the length calculation used num_stairs minus 1).\n"));
+
+			l12->SetLabel(wxT("Vertical Offset:"));
+			l12->SetToolTip(wxT("altitude offset that the object is above each floor"));
+
+			l13->SetLabel(wxT("Texture Width:"));
+			t13->SetValue(wxT("0"));
+
+			l14->SetLabel(wxT("Texture Height:"));
+			t14->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddDoor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddDoor"));
+
+			wxString newlabel = wxT("adds a textured door in the specified location, and performs a wall cut on that area (this must be called after the associated wall is created)\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Open Sound*:"));
+			l2->SetToolTip(wxT("filename of the door open sound"));
+
+			l3->SetLabel(wxT("Close Sound*:"));
+			l3->SetToolTip(wxT("filename of the door close sound"));
+
+			l4->SetLabel(wxT("Open:"));
+			l4->SetToolTip(wxT("determines if the door should be opened on start; default is false."));
+			t4->SetValue(wxT("false"));
+
+			l5->SetLabel(wxT("Texture:"));
+
+			l6->SetLabel(wxT("Thickness:"));
+
+			l7->SetLabel(wxT("Direction:"));
+			l7->SetToolTip(wxT("Direction specifies the direction the door faces (the side in which the handle is on the left) and also the direction it opens. These are the values:\n1 - faces left, opens left\n2 - faces left, opens right\n3 - faces right, opens right\n4 - faces right, opens left\n5 - faces front, opens front\n6 - faces front, opens back\n7 - faces back, opens back\n8 - faces back, opens front"));
+
+			l8->SetLabel(wxT("Speed:"));
+			t8->SetValue(wxT("75"));
+			l8->SetToolTip(wxT("The default door speed is 75; you can also specify 0 for the speed to use the system default."));
+
+			l9->SetLabel(wxT("CenterX:"));
+
+			l10->SetLabel(wxT("CenterZ:"));
+
+			l11->SetLabel(wxT("Width:"));
+			l11->SetToolTip(wxT("the door width"));
+
+			l12->SetLabel(wxT("Height:"));
+			l12->SetToolTip(wxT("the door width"));
+
+			l13->SetLabel(wxT("Vertical Offset:"));
+			l13->SetToolTip(wxT("altitude offset that the object is above each floor"));
+
+			l14->SetLabel(wxT("Texture Width:"));
+			t14->SetValue(wxT("0"));
+
+			l15->SetLabel(wxT("Texture Height:"));
+			t15->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddStairsDoor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddStairsDoor"));
+
+			wxString newlabel = wxT("adds a textured door for the specified stairwell, in a location relative to the stairwell's center. This also performs a wall cut on that area (this must be called after the associated wall is created)\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Stairwell Number:"));
+
+			l3->SetLabel(wxT("Open Sound*:"));
+			l3->SetToolTip(wxT("filename of the door open sound"));
+
+			l4->SetLabel(wxT("Close Sound*:"));
+			l4->SetToolTip(wxT("filename of the door close sound"));
+
+			l5->SetLabel(wxT("Open:"));
+			l5->SetToolTip(wxT("determines if the door should be opened on start; default is false."));
+			t5->SetValue(wxT("false"));
+
+			l6->SetLabel(wxT("Texture:"));
+
+			l7->SetLabel(wxT("Thickness:"));
+
+			l8->SetLabel(wxT("Direction:"));
+			l8->SetToolTip(wxT("Direction specifies the direction the door faces (the side in which the handle is on the left) and also the direction it opens. These are the values:\n1 - faces left, opens left\n2 - faces left, opens right\n3 - faces right, opens right\n4 - faces right, opens left\n5 - faces front, opens front\n6 - faces front, opens back\n7 - faces back, opens back\n8 - faces back, opens front"));
+
+			l9->SetLabel(wxT("Speed:"));
+			t9->SetValue(wxT("75"));
+			l9->SetToolTip(wxT("The default door speed is 75; you can also specify 0 for the speed to use the system default."));
+
+			l10->SetLabel(wxT("CenterX:"));
+
+			l11->SetLabel(wxT("CenterZ:"));
+
+			l12->SetLabel(wxT("Width:"));
+			l12->SetToolTip(wxT("the door width"));
+
+			l13->SetLabel(wxT("Height:"));
+			l13->SetToolTip(wxT("the door width"));
+
+			l14->SetLabel(wxT("Vertical Offset:"));
+			l14->SetToolTip(wxT("altitude offset that the object is above each floor"));
+
+			l15->SetLabel(wxT("Texture Width:"));
+			t15->SetValue(wxT("0"));
+
+			l16->SetLabel(wxT("Texture Height:"));
+			t16->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddShaftDoor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddShaftDoor"));
+
+			wxString newlabel = wxT("creates working shaft elevator doors on the current floor only.\nThe other command, AddShaftDoors (in the elevator section) creates all shaft doors in a single command.\nThis command is useful for specifying different textures for shaft doors depending on the floor,\nand also for only creating shaft doors on one side if an elevator serves a specific floor.\nThe SetShaftDoors command in the elevator section must be used before using this command.\nParameters such as width, height, and direction are taken from the AddDoors command\n(so the regular elevator doors need to be created first).\nThese doors should be moved slightly away from the elevator doors (to separate them both).\nAlso, this command cuts any shaft walls that are within the door area\n(and so this must be called after the shaft walls are created).\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Elevator Number:"));
+
+			l3->SetLabel(wxT("Number:"));
+			l3->SetToolTip(wxT("specifies the number of the door to create (related to the Doors command) - if the elevator only has one door, or if the Doors command was not used, specify 1 here."));
+
+			l4->SetLabel(wxT("Left Texture:"));
+			l4->SetToolTip(wxT("texture used on left door"));
+
+			l5->SetLabel(wxT("Right Texture:"));
+			l5->SetToolTip(wxT("texture used on right door"));
+
+			l15->SetLabel(wxT("Texture Width:"));
+			t15->SetValue(wxT("0"));
+
+			l16->SetLabel(wxT("Texture Height:"));
+			t16->SetValue(wxT("0"));
+		}
+
+		if (objecttype == wxT("AddFloorIndicator") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddFloorIndicator"));
+
+			wxString newlabel = wxT("creates a floor indicator associated with a specific elevator\nThis command can be given multiple times to create multiple indicators.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Elevator Number:"));
+
+			l3->SetLabel(wxT("Relative:"));
+			l3->SetToolTip(wxT("determines if the CenterX and CenterZ values are relative of the elevator's center or not"));
+
+			l4->SetLabel(wxT("Texture Prefix:"));
+			l4->SetToolTip(wxT("the base name of the texture to load when displaying a floor ID; for example if the indicator is on floor 3, and you specify a prefix of 'Button', it'll load the 'Button3' texture."));
+
+			l5->SetLabel(wxT("Direction:"));
+			l5->SetToolTip(wxT("the direction the indicator faces, and can be either left, right, front or back"));
+
+			l6->SetLabel(wxT("CenterX:"));
+			l6->SetToolTip(wxT("floor indicator central position"));
+
+			l7->SetLabel(wxT("CenterZ:"));
+			l7->SetToolTip(wxT("floor indicator central position"));
+
+			l8->SetLabel(wxT("Width:"));
+
+			l9->SetLabel(wxT("Height:"));
+
+			l10->SetLabel(wxT("Vertical Offset:"));
+		}
+		if (objecttype == wxT("AddDirectionalIndicator") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddDirectionalIndicator"));
+
+			wxString newlabel = wxT("creates a single elevator directional indicator/lantern on the current floor (similar to the CreateCallButtons command)\n(if ActiveDirection is false, then it'll only create it if the elevator serves that floor).\nIt'll also automatically create the up and down lights depending on the floor\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Elevator Number:"));
+			l2->SetToolTip(wxT("specifies the elevator to create the indicators for."));
+
+			l3->SetLabel(wxT("Relative:"));
+			l3->SetToolTip(wxT("determines if the X and Z coordinates are relative to the elevator's origin (center) or not."));
+
+			l4->SetLabel(wxT("Active Direction:"));
+			l4->SetToolTip(wxT("determines if the indicator should continuously display the active elevator direction (true), or if it should show the elevator's direction for the current call (false, default)"));
+			t4->SetValue(wxT("false"));
+
+			l5->SetLabel(wxT("Single:"));
+			l5->SetToolTip(wxT("determines if a single indicator light should be created instead of two. If this is true, the unlit texture is specified in UpLight, and the DownLight value is ignored."));
+
+			l6->SetLabel(wxT("Vertical:"));
+			l6->SetToolTip(wxT("determines if the two lights should be vertically separated (true), or horizontally separated (false)"));
+
+			l7->SetLabel(wxT("Back Texture:"));
+			l7->SetToolTip(wxT("the texture of the wall plate behind the lights"));
+
+			l8->SetLabel(wxT("Up Texture:"));
+			l8->SetToolTip(wxT("UpTexture and DownTexture are the textures used for the lights themselves, and the 'Lit' texures are the ones to show when the light is on. DownTexture is ignored if Single is true."));
+			l9->SetLabel(wxT("Up Texture Lit:"));
+			l9->SetToolTip(wxT("UpTexture and DownTexture are the textures used for the lights themselves, and the 'Lit' texures are the ones to show when the light is on. DownTexture is ignored if Single is true."));
+			l10->SetLabel(wxT("Down Texture:"));
+			l10->SetToolTip(wxT("UpTexture and DownTexture are the textures used for the lights themselves, and the 'Lit' texures are the ones to show when the light is on. DownTexture is ignored if Single is true."));
+			l11->SetLabel(wxT("Down Texture Lit:"));
+			l11->SetToolTip(wxT("UpTexture and DownTexture are the textures used for the lights themselves, and the 'Lit' texures are the ones to show when the light is on. DownTexture is ignored if Single is true."));
+
+			l12->SetLabel(wxT("CenterX:"));
+			l12->SetToolTip(wxT("CenterX and CenterZ are the central location of the indicators"));
+
+			l13->SetLabel(wxT("CenterZ:"));
+			l13->SetToolTip(wxT("CenterX and CenterZ are the central location of the indicators"));
+
+			l14->SetLabel(wxT("Vertical Offset:"));
+			l14->SetToolTip(wxT("altitude offset that the object is above each floor"));
+
+			l15->SetLabel(wxT("Direction:"));
+			l15->SetToolTip(wxT("direction determines the direction the indicators face:\n'front' means they face towards the front of the building\n'back' means they face towards the back of the buildin\n'left' means they face left\n'right' means they face right"));
+
+			l16->SetLabel(wxT("Back Width:"));
+			l16->SetToolTip(wxT("BackWidth and BackHeight are the width and height of the wall plateh"));
+
+			l17->SetLabel(wxT("Back Height:"));
+			l17->SetToolTip(wxT("BackWidth and BackHeight are the width and height of the wall plate"));
+
+			l18->SetLabel(wxT("Show Back:"));
+			l18->SetToolTip(wxT("ShowBack determines if the wall plate should be shown, and is either true or false"));
+
+			l19->SetLabel(wxT("Texture Width:"));
+			t19->SetValue(wxT("0"));
+
+			l20->SetLabel(wxT("Texture Height:"));
+			t20->SetValue(wxT("0"));
 		}
 
 		if (l1->GetLabel() == wxT("1"))
@@ -449,12 +1293,28 @@ void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 	Simcore->Prepare();
 	Simcore->RecreateColliders = false;
 	objectinfo->PopulateTree();
-	this->Hide();
+	this->Close();
 }
 
 void ParameterViewer::ChangeParam(wxCommandEvent& event)
 {
 	//command constructor
+
+	if (objecttype == wxT("Load") && objectparent == wxT("Texture"))
+	{
+		command = wxT("<Textures>\n");
+		command = command + wxT("Load " + wxString(t1->GetValue()) + wxT(", "));
+		command = command + wxString(t2->GetValue()) + wxT(", ");
+		command = command + wxString(t3->GetValue()) + wxT(", ");
+		command = command + wxString(t4->GetValue()) + wxT(", ");
+		command = command + wxString(t5->GetValue()) + wxT("\n");
+		command = command + wxT("<EndTextures>\n");
+
+		tCommand->SetValue(command);
+		this->Fit();
+		this->CentreOnScreen();
+		return;
+	}
 
 	if (objecttype == wxT("Floor") && objectparent == wxT("Floor"))
 	{
@@ -484,41 +1344,98 @@ void ParameterViewer::ChangeParam(wxCommandEvent& event)
 			command = command + wxT("<EndFloors>\n");
 		else
 			command = command + wxT("<EndFloor>\n");
+
+		tCommand->SetValue(command);
+		this->Fit();
+		this->CentreOnScreen();
+		return;
 	}
 
-	if (objecttype == wxT("AddFloor") && objectparent == wxT("Floor"))
+	//generic commands
+
+	bool multiple = false;
+	wxString temp = t1->GetValue();
+	temp.LowerCase();
+	if (temp.Find(wxT("to")) > 0)
+		multiple = true;
+
+	if (multiple == true && objectparent == wxT("Floor"))
+		command = wxT("<Floors ") + wxString(t1->GetValue()) + wxT(">\n");
+	else
+		command = wxT("<Floor ") + wxString(t1->GetValue()) + wxT(">\n");
+
+	command = command + objecttype + wxT(" ");
+
+	if (objecttype == wxT("CreateCallButtons"))
 	{
-		wxString temp = t1->GetValue();
-		temp.LowerCase();
-		bool multiple = false;
-		if (temp.Find(wxT("to")) > 0)
-			multiple = true;
-
-		if (multiple == true)
-			command = wxT("<Floors ") + wxString(t1->GetValue()) + wxT(">\n");
-		else
-			command = wxT("<Floor ") + wxString(t1->GetValue()) + wxT(">\n");
-
-		command = command + wxT("AddFloor ") + wxString(t2->GetValue()) + wxT(", ");
-		command = command + wxString(t3->GetValue()) + wxT(", ");
-		command = command + wxString(t4->GetValue()) + wxT(", ");
-		command = command + wxString(t5->GetValue()) + wxT(", ");
-		command = command + wxString(t6->GetValue()) + wxT(", ");
-		command = command + wxString(t7->GetValue()) + wxT(", ");
-		command = command + wxString(t8->GetValue()) + wxT(", ");
-		command = command + wxString(t9->GetValue()) + wxT(", ");
-		command = command + wxString(t10->GetValue()) + wxT(", ");
-		command = command + wxString(t11->GetValue()) + wxT(", ");
-		command = command + wxString(t12->GetValue()) + wxT(", ");
-		command = command + wxString(t13->GetValue()) + wxT("\n");
-
-		if (multiple == true)
-			command = command + wxT("<EndFloors>\n");
-		else
-			command = command + wxT("<EndFloor>\n");
+		command = command + wxT("CallButtonElevators " + wxString(t2->GetValue()) + wxT("\n"));
+		if (t3->IsShown() == true)
+			command = command + wxString(t3->GetValue());
 	}
+	else
+	{
+		if (t2->IsShown() == true)
+			command = command + wxString(t2->GetValue());
+		if (t3->IsShown() == true)
+			command = command + wxT(", ") + wxString(t3->GetValue());
+	}
+	if (t4->IsShown() == true)
+		command = command + wxT(", ") + wxString(t4->GetValue());
+	if (t5->IsShown() == true)
+		command = command + wxT(", ") + wxString(t5->GetValue());
+	if (t6->IsShown() == true)
+		command = command + wxT(", ") + wxString(t6->GetValue());
+	if (t7->IsShown() == true)
+		command = command + wxT(", ") + wxString(t7->GetValue());
+	if (t8->IsShown() == true)
+		command = command + wxT(", ") + wxString(t8->GetValue());
+	if (t9->IsShown() == true)
+		command = command + wxT(", ") + wxString(t9->GetValue());
+	if (t10->IsShown() == true)
+		command = command + wxT(", ") + wxString(t10->GetValue());
+	if (t11->IsShown() == true)
+		command = command + wxT(", ") + wxString(t11->GetValue());
+	if (t12->IsShown() == true)
+		command = command + wxT(", ") + wxString(t12->GetValue());
+	if (t13->IsShown() == true)
+		command = command + wxT(", ") + wxString(t13->GetValue());
+	if (t14->IsShown() == true)
+		command = command + wxT(", ") + wxString(t14->GetValue());
+	if (t15->IsShown() == true)
+		command = command + wxT(", ") + wxString(t15->GetValue());
+	if (t16->IsShown() == true)
+		command = command + wxT(", ") + wxString(t16->GetValue());
+	if (t17->IsShown() == true)
+		command = command + wxT(", ") + wxString(t17->GetValue());
+	if (t18->IsShown() == true)
+		command = command + wxT(", ") + wxString(t18->GetValue());
+	if (t19->IsShown() == true)
+		command = command + wxT(", ") + wxString(t19->GetValue());
+	if (t20->IsShown() == true)
+		command = command + wxT(", ") + wxString(t20->GetValue());
+	command = command + wxT("\n");
+
+	if (multiple == true && objectparent == wxT("Floor"))
+		command = command + wxT("<EndFloors>\n");
+	else
+		command = command + wxT("<EndFloor>\n");
 
 	tCommand->SetValue(command);
 	this->Fit();
 	this->CentreOnScreen();
+}
+
+void ParameterViewer::On_bTextures_Click(wxCommandEvent& event)
+{
+	//create text window
+	TextWindow *twindow = new TextWindow(NULL, -1);
+	twindow->SetMinSize(wxSize(300, 200));
+	twindow->tMain->SetMinSize(wxSize(300, 200));
+	twindow->Fit();
+	twindow->Center();
+	twindow->SetTitle(wxT("Loaded Textures"));
+	twindow->Show(true);
+	wxString message = wxString::FromAscii(Simcore->ListTextures().c_str());
+	twindow->tMain->WriteText(message);
+	twindow->tMain->SetInsertionPoint(0);
 }

@@ -2117,6 +2117,22 @@ int ScriptProcessor::ProcGlobals()
 		Simcore->SkyName = temp2;
 	if (SetCaseCopy(LineData.substr(0, 10), false) == "dynamicsky")
 		skyscraper->SkyName = temp2;
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "collisions")
+	{
+		SetCase(temp2, false);
+		if (temp2 == "false")
+			Simcore->camera->EnableCollisions(false);
+		else
+			Simcore->camera->EnableCollisions(true);
+	}
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "gravity")
+	{
+		SetCase(temp2, false);
+		if (temp2 == "false")
+			Simcore->camera->EnableGravity(false);
+		else
+			Simcore->camera->EnableGravity(true);
+	}
 	if (SetCaseCopy(LineData.substr(0, 11), false) == "camerafloor")
 	{
 		int data;
