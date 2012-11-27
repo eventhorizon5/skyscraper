@@ -3860,6 +3860,8 @@ std::string SBS::VerifyFile(const char *filename)
 	std::string file = filename;
 	TrimString(file);
 
+	ReplaceAll(file, "\\", "/");
+
 	//check for a cached result
 	for (int i = 0; i < verify_results.size(); i++)
 	{
@@ -3874,14 +3876,9 @@ std::string SBS::VerifyFile(const char *filename)
 		return file;
 	}
 
-	/*std::string directory;
-	int loc1 = file.find_last_of("/");
-	int loc2 = file.find_last_of("\\");
-	int loc = loc1;
-	if (loc2 > 0)
-		loc = loc2;
-
-	directory = file.substr(0, loc + 1);*/
+	std::string directory;
+	int loc = file.find_last_of("/");
+	directory = file.substr(0, loc + 1);
 
 	Ogre::StringVectorPtr listing = filesystem.list();
 	for (int i = 0; i < listing->size(); i++)

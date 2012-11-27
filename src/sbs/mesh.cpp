@@ -877,11 +877,12 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 
 	sbs->AddMeshHandle(this);
 
+	//set up collider for model (if mesh loaded from a filename)
 	if (filename)
 	{
 		if (collidermesh.get())
 		{
-			//create collider for model
+			//create collider based on provided mesh collider
 			size_t vertex_count, index_count;
 			Ogre::Vector3* vertices;
 			long unsigned int* indices;

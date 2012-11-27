@@ -84,6 +84,7 @@ Camera::Camera(Ogre::Camera *camera)
 	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0);
 	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
 	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
+	cfg_stepheight = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StepHeight", 1.0);
 	speed = 1;
 	Collisions = 0;
 	lastfloor = 0;
@@ -111,7 +112,7 @@ Camera::Camera(Ogre::Camera *camera)
 	SetMaxRenderDistance(FarClip);
 
 	//set up collider character
-	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), sbs->ToRemote(1.0));
+	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), sbs->ToRemote(cfg_stepheight));
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
 	//create debug shape

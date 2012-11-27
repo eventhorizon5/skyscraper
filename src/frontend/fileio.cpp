@@ -5599,6 +5599,11 @@ void ScriptProcessor::CheckFile(const char *filename)
 
 	ReplaceAll(file, "\\", "/");
 
+	//skip file if a wildcard character is found
+	loc = file.find_last_of("*");
+	if (loc > 0)
+		return;
+
 	if (Simcore->FileExists(file.c_str()) == false)
 	{
 		bool exists = false;

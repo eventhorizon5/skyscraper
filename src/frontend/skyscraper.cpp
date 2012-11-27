@@ -137,6 +137,10 @@ bool Skyscraper::OnInit(void)
 	if (BuildingFile != "")
 		return Start();
 
+	//set size of menu window from INI file defaults
+	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
+	window->Center();
+
 	//show menu
 	if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
 	{
@@ -1369,7 +1373,7 @@ bool Skyscraper::Start()
 
 	//resize main window
 	window->SetBackgroundColour(*wxBLACK);
-	//window->resize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 640), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 480));
+	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
 	window->Center();
 	
 	//switch to fullscreen mode if specified
