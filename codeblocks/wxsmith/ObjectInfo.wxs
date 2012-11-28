@@ -32,9 +32,10 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bModify" variable="bModify" member="yes">
 									<label>Modify</label>
+									<enabled>0</enabled>
 									<handler function="On_bModify_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -54,6 +55,24 @@
 					</object>
 					<object class="sizeritem">
 						<object class="wxBoxSizer" variable="BoxSizer3" member="no">
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_bViewScript" variable="bViewScript" member="yes">
+									<label>View Script</label>
+									<handler function="On_bViewScript_Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_bSave" variable="bSave" member="yes">
+									<label>Save Script</label>
+									<handler function="On_bSave_Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bOK" variable="bOK" member="yes">
 									<label>OK</label>
