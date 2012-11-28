@@ -677,12 +677,16 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	while (file->eof() == false)
 	{
 		//push next line of data onto the tail end of the BuildingData array
+		std::string line = file->getLine(true);
 		if (insert == false)
-			BuildingData.push_back(file->getLine(true));
+		{
+			BuildingData.push_back(line);
+			skyscraper->runtime_script.push_back(line);
+		}
 		else
 		{
 			//otherwise insert data into building array
-			BuildingData.insert(BuildingData.begin() + location, file->getLine(true));
+			BuildingData.insert(BuildingData.begin() + location, line);
 			location++;
 		}
 	}
@@ -714,6 +718,7 @@ bool ScriptProcessor::LoadFromText(const char *text)
 	for (int i = 0; i < (int)textarray.size(); i++)
 	{
 		BuildingData.push_back(textarray[i]);
+		skyscraper->runtime_script.push_back(textarray[i]);
 	}
 	return true;
 }

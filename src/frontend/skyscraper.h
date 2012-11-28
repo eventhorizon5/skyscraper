@@ -78,6 +78,7 @@ public:
 	void DrawBackground();
 
 	std::string BuildingFile;
+	std::vector<std::string> runtime_script;
 
 	//engine related stuff
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = std::string(""));

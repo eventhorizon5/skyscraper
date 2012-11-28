@@ -27,14 +27,18 @@
 #include <wx/intl.h>
 //*)
 
+#include <wx/filedlg.h>
 #include "debugpanel.h"
 #include "globals.h"
 #include "sbs.h"
+#include "skyscraper.h"
 #include "objectinfo.h"
 #include "createobject.h"
 #include "parameterviewer.h"
+#include "textwindow.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
+extern Skyscraper *skyscraper;
 CreateObject *createobject;
 ParameterViewer *modifyobject;
 
@@ -43,6 +47,8 @@ const long ObjectInfo::ID_ObjectTree = wxNewId();
 const long ObjectInfo::ID_bDelete = wxNewId();
 const long ObjectInfo::ID_bModify = wxNewId();
 const long ObjectInfo::ID_bCreate = wxNewId();
+const long ObjectInfo::ID_bViewScript = wxNewId();
+const long ObjectInfo::ID_bSave = wxNewId();
 const long ObjectInfo::ID_bOK = wxNewId();
 const long ObjectInfo::ID_STATICTEXT1 = wxNewId();
 const long ObjectInfo::ID_tNumber = wxNewId();
@@ -95,11 +101,16 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
 	BoxSizer2->Add(bDelete, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bModify = new wxButton(this, ID_bModify, _("Modify"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bModify"));
-	BoxSizer2->Add(bModify, 1, wxALL|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bModify->Disable();
+	BoxSizer2->Add(bModify, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bCreate = new wxButton(this, ID_bCreate, _("Create"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCreate"));
 	BoxSizer2->Add(bCreate, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer4->Add(BoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
+	bViewScript = new wxButton(this, ID_bViewScript, _("View Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bViewScript"));
+	BoxSizer3->Add(bViewScript, 1, wxALL|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bSave = new wxButton(this, ID_bSave, _("Save Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
+	BoxSizer3->Add(bSave, 1, wxALL|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer3->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(BoxSizer3, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -167,6 +178,8 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
 	Connect(ID_bModify,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bModify_Click);
 	Connect(ID_bCreate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
+	Connect(ID_bViewScript,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
+	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
 	//*)
 	//OnInit();
@@ -326,4 +339,33 @@ void ObjectInfo::On_bModify_Click(wxCommandEvent& event)
 		modifyobject = new ParameterViewer(this, tType->GetValue(), tParentType->GetValue(), false, -1);
 	if (modifyobject)
 		modifyobject->Show();
+}
+
+void ObjectInfo::On_bSave_Click(wxCommandEvent& event)
+{
+	wxFileDialog *Selector = new wxFileDialog(0, _("Save Building Script"), _("buildings/"), _(""), _("Building files (*.bld *.txt)|*.bld;*.txt"), wxFD_SAVE);
+	int result = Selector->ShowModal();
+	if (result == wxID_CANCEL)
+	{
+		//delete dialog
+		delete Selector;
+		Selector = 0;
+		//quit
+		return;
+	}
+	wxString filename = wxT("buildings/") + Selector->GetFilename();
+}
+
+void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
+{
+	TextWindow *twindow = new TextWindow(NULL, -1);
+	twindow->SetMinSize(wxSize(640, 480));
+	twindow->tMain->SetMinSize(wxSize(640, 480));
+	twindow->Fit();
+	twindow->Center();
+	twindow->SetTitle(wxT("Current Script"));
+	twindow->Show(true);
+	for (int i = 0; i < skyscraper->runtime_script.size(); i++)
+			twindow->tMain->WriteText(wxString::FromAscii(skyscraper->runtime_script[i].c_str()) + wxT("\n"));
+	twindow->tMain->SetInsertionPoint(0);
 }
