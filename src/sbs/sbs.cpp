@@ -2081,8 +2081,8 @@ Floor* SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
-	if (Basements + number < 0)
-		return 0;
+	/*if (Basements + number < 0)
+		return 0;*/
 
 	if (FloorArray.size() > 0)
 	{
