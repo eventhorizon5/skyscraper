@@ -86,6 +86,10 @@
 		<Unit filename="../src/fileio.cpp" />
 		<Unit filename="../src/floor.cpp" />
 		<Unit filename="../src/floor.h" />
+		<Unit filename="../src/frontend/createobject.cpp" />
+		<Unit filename="../src/frontend/createobject.h" />
+		<Unit filename="../src/frontend/parameterviewer.cpp" />
+		<Unit filename="../src/frontend/parameterviewer.h" />
 		<Unit filename="../src/frontend/profilergui.cpp" />
 		<Unit filename="../src/frontend/profilergui.h" />
 		<Unit filename="../src/globals.cpp" />
@@ -126,6 +130,8 @@
 					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/frontend/objectinfo.cpp" hdr="../src/frontend/objectinfo.h" name="ObjectInfo" language="CPP" />
 					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/frontend/textwindow.cpp" hdr="../src/frontend/textwindow.h" name="TextWindow" language="CPP" />
 					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/frontend/profilergui.cpp" hdr="../src/frontend/profilergui.h" name="Profiler" language="CPP" />
+					<wxDialog wxs="wxsmith/CreateObject.wxs" src="../src/frontend/createobject.cpp" hdr="../src/frontend/createobject.h" name="CreateObject" language="CPP" />
+					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/frontend/parameterviewer.cpp" hdr="../src/frontend/parameterviewer.h" name="ParameterViewer" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />

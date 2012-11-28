@@ -84,7 +84,6 @@ Camera::Camera(Ogre::Camera *camera)
 	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0);
 	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
 	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
-	cfg_stepheight = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StepHeight", 1.0);
 	speed = 1;
 	Collisions = 0;
 	lastfloor = 0;
@@ -105,18 +104,26 @@ Camera::Camera(Ogre::Camera *camera)
 	//set up camera and scene nodes
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
-	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height) / 4), 0));
+	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0));
+	//MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote(((cfg_body_height + cfg_legs_height) / 2) + 0.5), 0));
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
 
 	//set up collider character
-	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), sbs->ToRemote(cfg_stepheight));
+	float width = cfg_legs_width / 2;
+	if (cfg_body_width > cfg_legs_width)
+		width = cfg_body_width / 2;
+
+	float height = (cfg_body_height + cfg_legs_height - 0.5) - (width * 2);
+	float step_height = cfg_legs_height - 0.5;
+
+	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
 	//create debug shape
-	mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(cfg_body_width), sbs->ToRemote((cfg_body_height + cfg_legs_height) - (cfg_body_width * 2)), Ogre::Vector3::UNIT_Y);
+	mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Ogre::Vector3::UNIT_Y);
 	mCharacter->setShape(mShape);
 
 	//other movement options

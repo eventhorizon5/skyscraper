@@ -63,7 +63,6 @@ public:
 	float cfg_speedfast; //camera fast speed multiplier
 	float cfg_speedslow; //camera slow speed multiplier
 	float cfg_zoomspeed; //camera zoom speed
-	float cfg_stepheight; //camera step height
 	Ogre::Vector3 desired_velocity;
 	Ogre::Vector3 velocity;
 	Ogre::Vector3 desired_angle_velocity;
