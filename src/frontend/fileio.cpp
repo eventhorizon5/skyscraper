@@ -338,7 +338,12 @@ breakpoint:
 			BuildingData.erase(BuildingData.begin() + line);
 
 			//insert file at current line
-			LoadDataFile(includefile.c_str(), true, line);
+			bool result = LoadDataFile(includefile.c_str(), true, line);
+			if (result == false)
+			{
+				ScriptError("File not found");
+				return false;
+			}
 
 			skyscraper->Report("Inserted file " + includefile);
 			line--;

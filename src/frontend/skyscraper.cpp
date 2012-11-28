@@ -1371,18 +1371,6 @@ bool Skyscraper::Start()
 	//clear scene
 	mSceneMgr->clearScene();
 
-	//resize main window
-	window->SetBackgroundColour(*wxBLACK);
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
-	window->Center();
-	
-	//switch to fullscreen mode if specified
-	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
-	{
-		FullScreen = true;
-		window->ShowFullScreen(FullScreen);
-	}
-
 	//clear screen
 	mRoot->renderOneFrame();
 	
@@ -1444,6 +1432,21 @@ bool Skyscraper::Start()
 
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
+
+	//resize main window
+	window->SetBackgroundColour(*wxBLACK);
+	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
+	window->Center();
+
+	//switch to fullscreen mode if specified
+	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
+	{
+		FullScreen = true;
+		window->ShowFullScreen(FullScreen);
+	}
+
+	//clear screen
+	mRoot->renderOneFrame();
 
 	//start simulation
 	if (!Simcore->Start())
@@ -1508,6 +1511,9 @@ void Skyscraper::Unload()
 	StopSound();
 
 	//return to main menu
+	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
+	window->Center();
+
 	DrawBackground();
 	StartSound();
 	StartupRunning = true;
