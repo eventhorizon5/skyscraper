@@ -65,7 +65,7 @@ namespace OgreBulletDynamics
 		getDynamicsWorld()->getBulletDynamicsWorld()->getPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 		btConvexShape* capsule = new btCapsuleShape(width, height);
 		mObject->setCollisionShape (capsule);
-		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT);
+		mObject->setCollisionFlags (btCollisionObject::CF_CHARACTER_OBJECT | btCollisionObject::CF_CUSTOM_MATERIAL_CALLBACK);
 		mObject->setContactProcessingThreshold(0.0);
 		m_character = new btKinematicCharacterController(ghost, capsule, stepHeight);
 		//m_character->setUpInterpolate(false);
