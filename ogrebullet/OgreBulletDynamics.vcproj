@@ -67,7 +67,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="OgreMain_d.lib OgreBulletCollisions.lib bulletcollision.lib bulletdynamics.lib linearmath.lib ConvexDecomposition.lib"
+				AdditionalDependencies="OgreMain_d.lib OgreBulletCollisions.lib bulletcollision_debug.lib bulletdynamics_debug.lib linearmath_debug.lib ConvexDecomposition_debug.lib"
 				OutputFile="..\OgreBulletDynamics.dll"
 				AdditionalLibraryDirectories="..\;&quot;$(BULLET_HOME)\lib\Debug&quot;;&quot;$(OGRE_HOME)\lib\$(ConfigurationName)&quot;;&quot;$(OGRE_HOME)\boost_1_42\lib&quot;"
 				GenerateDebugInformation="true"
