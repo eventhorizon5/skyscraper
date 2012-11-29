@@ -27,6 +27,7 @@
 #include <wx/intl.h>
 //*)
 #include <wx/filedlg.h>
+#include <wx/app.h>
 
 #include "globals.h"
 #include "sbs.h"

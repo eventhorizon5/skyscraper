@@ -26,6 +26,7 @@
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
+#include <wx/app.h>
 
 #include "globals.h"
 #include "sbs.h"
