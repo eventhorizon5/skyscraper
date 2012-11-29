@@ -154,7 +154,7 @@ Camera::~Camera()
 void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
-	CameraNode->setPosition(sbs->ToRemote(vector) - MainCamera->getPosition());
+	mCharacter->setPosition(sbs->ToRemote(vector) - MainCamera->getPosition());
 	mCharacter->updateTransform(false);
 }
 
@@ -1022,9 +1022,7 @@ float Camera::GetHeight()
 {
 	//return camera's height
 
-	float height = cfg_body_height + cfg_legs_height;
-
-	return height - (height / 4);
+	return cfg_body_height + cfg_legs_height;
 }
 
 void Camera::SetViewMode(int mode)
