@@ -43,7 +43,7 @@ using namespace OgreBulletCollisions;
 #include "BulletCollision/CollisionDispatch/btInternalEdgeUtility.h"
 extern ContactAddedCallback             gContactAddedCallback;
 
-static bool CustomMaterialCombinerCallback(btManifoldPoint& cp, const btCollisionObject* colObj0,int partId0,int index0,const btCollisionObject* colObj1,int partId1,int index1)
+static bool CustomMaterialCombinerCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0,int partId0,int index0,const btCollisionObjectWrapper* colObj1,int partId1,int index1)
 {
 
         btAdjustInternalEdgeContacts(cp, colObj1, colObj0, partId1, index1);

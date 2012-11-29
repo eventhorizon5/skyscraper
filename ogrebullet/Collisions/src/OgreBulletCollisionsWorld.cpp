@@ -163,7 +163,7 @@ bool CollisionsWorld::isObjectregistered(Object *obj) const
 	return false;
 }
 // -------------------------------------------------------------------------
-Object *CollisionsWorld::findObject(btCollisionObject *object) const
+Object *CollisionsWorld::findObject(const btCollisionObject *object) const
 {
 	std::deque<Object *>::const_iterator it = mObjects.begin();
 	while (it != mObjects.end())
@@ -204,8 +204,8 @@ void CollisionsWorld::discreteCollide()
 	{
 		btPersistentManifold* contactManifold = mWorld->getDispatcher()->getManifoldByIndexInternal(i);
 
-		btCollisionObject* obA = static_cast<btCollisionObject*>(contactManifold->getBody0());
-		btCollisionObject* obB = static_cast<btCollisionObject*>(contactManifold->getBody1());
+		const btCollisionObject* obA = static_cast<const btCollisionObject*>(contactManifold->getBody0());
+		const btCollisionObject* obB = static_cast<const btCollisionObject*>(contactManifold->getBody1());
 
 		contactManifold->refreshContactPoints(obA->getWorldTransform(),obB->getWorldTransform());
 

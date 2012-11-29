@@ -153,8 +153,8 @@ namespace OgreBulletDynamics
 			{
 				btPersistentManifold* contactManifold = mWorld->getDispatcher()->getManifoldByIndexInternal(i);
 
-				btCollisionObject* obA = static_cast<btCollisionObject*>(contactManifold->getBody0());
-				btCollisionObject* obB = static_cast<btCollisionObject*>(contactManifold->getBody1());
+				const btCollisionObject* obA = static_cast<const btCollisionObject*>(contactManifold->getBody0());
+				const btCollisionObject* obB = static_cast<const btCollisionObject*>(contactManifold->getBody1());
 
 				contactManifold->refreshContactPoints(obA->getWorldTransform(),obB->getWorldTransform());
 

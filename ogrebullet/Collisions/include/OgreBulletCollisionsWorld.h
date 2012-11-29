@@ -53,7 +53,7 @@ namespace OgreBulletCollisions
 
         bool isObjectregistered(Object *) const;
         Object *findObject(Ogre::SceneNode *node) const;
-        Object *findObject(btCollisionObject *object) const;
+        Object *findObject(const btCollisionObject *object) const;
 
 
         // mShowDebugContactPoints getter
