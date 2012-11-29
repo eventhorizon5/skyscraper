@@ -1299,6 +1299,7 @@ bool ParameterViewer::Setup()
 		this->Fit();
 		this->CentreOnScreen();
 	}
+	return true;
 }
 
 void ParameterViewer::On_bCancel_Click(wxCommandEvent& event)
