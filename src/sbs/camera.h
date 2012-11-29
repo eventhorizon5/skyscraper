@@ -157,6 +157,7 @@ private:
 	bool MovementStopped;
 	float FarClip;
 	Ogre::Vector3 accum_movement;
+	bool collision_reset;
 
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;
