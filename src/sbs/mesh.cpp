@@ -960,7 +960,7 @@ MeshObject::~MeshObject()
 	delete object;
 }
 
-void MeshObject::Enable(bool value)
+void MeshObject::Enable(bool value, bool remove)
 {
 	//enables or disables the mesh
 
@@ -978,7 +978,17 @@ void MeshObject::Enable(bool value)
 	//enable or disable collision detection
 	if (mBody)
 	{
-		mBody->enableCollisions(value);
+		//disable collisions on object only (don't remove)
+		if (remove == false)
+			mBody->enableCollisions(value);
+		else
+		{
+			//completely remove object from dynamics world if disabled; re-add to enable
+			if (value == false)
+				mBody->removeFromWorld();
+			else
+				mBody->addToWorld();
+		}
 		sbs->camera->ResetCollisions();
 	}
 

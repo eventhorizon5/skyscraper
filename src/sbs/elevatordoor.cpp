@@ -1462,7 +1462,7 @@ void ElevatorDoor::DoorWrapper::Enable(bool value)
 		return;
 
 	for (int i = 0; i < (int)doors.size(); i++)
-		doors[i]->mesh->Enable(value);
+		doors[i]->mesh->Enable(value, false);
 	Enabled = value;
 }
 

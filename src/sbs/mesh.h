@@ -63,7 +63,7 @@ public:
 
 	MeshObject(Object* parent, const char *name, bool movable = false, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~MeshObject();
-	void Enable(bool value);
+	void Enable(bool value, bool remove = true);
 	bool IsEnabled();
 	WallObject* CreateWallObject(Object *parent, const char *name);
 	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);

@@ -100,6 +100,7 @@ Camera::Camera(Ogre::Camera *camera)
 	RotationStopped = false;
 	MovementStopped = false;
 	accum_movement = 0;
+	collision_reset = false;
 
 	//set up camera and scene nodes
 	MainCamera = camera;
@@ -852,6 +853,10 @@ void Camera::Loop()
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
+	if (collision_reset == true)
+		mCharacter->resetCollisions();
+	collision_reset = false;
+
 	//calculate acceleration
 	InterpolateMovement();
 
@@ -1087,5 +1092,6 @@ void Camera::MoveCharacter()
 
 void Camera::ResetCollisions()
 {
-	mCharacter->resetCollisions();
+	//queue a collision reset for next loop cycle
+	collision_reset = true;
 }
