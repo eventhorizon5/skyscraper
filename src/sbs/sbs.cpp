@@ -2915,7 +2915,9 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 			else
 				sizez = tile_z;
 
+			DrawWalls(false, true, false, false, false, false);
 			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, 1, 1, false);
+			ResetWalls(false);
 		}
 	}
 	Report("Finished ground");
