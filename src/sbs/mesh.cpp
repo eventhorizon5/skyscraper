@@ -1656,21 +1656,29 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 		return;
 
 	//construct new sorted and compressed index array
-	std::vector<int> deleted;
-	deleted.reserve(deleted_indices.size() * 3);
+	std::vector<int> deleted_v;
+	deleted_v.reserve(deleted_indices.size() * 3);
 	for (int i = 0; i < (int)deleted_indices.size(); i++)
 	{
-		if (find(deleted.begin(), deleted.end(), deleted_indices[i].x) == deleted.end())
-			deleted.push_back(deleted_indices[i].x);
-		if (find(deleted.begin(), deleted.end(), deleted_indices[i].y) == deleted.end())
-			deleted.push_back(deleted_indices[i].y);
-		if (find(deleted.begin(), deleted.end(), deleted_indices[i].z) == deleted.end())
-			deleted.push_back(deleted_indices[i].z);
+		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].x) == deleted_v.end())
+			deleted_v.push_back(deleted_indices[i].x);
+		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].y) == deleted_v.end())
+			deleted_v.push_back(deleted_indices[i].y);
+		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].z) == deleted_v.end())
+			deleted_v.push_back(deleted_indices[i].z);
 	}
-	sort(deleted.begin(), deleted.end());
+	sort(deleted_v.begin(), deleted_v.end());
+
+	//copy vector index array into simple array
+	int deleted_size = (int)deleted_v.size();
+	int deleted[deleted_size];
+	for (int i = 0; i < deleted_size; i++)
+	{
+		deleted[i] = deleted_v[i];
+	}
 
 	//delete specified vertices
-	for (int i = (int)deleted.size() - 1; i >= 0; i--)
+	for (int i = deleted_size - 1; i >= 0; i--)
 	{
 		MeshGeometry.erase(MeshGeometry.begin() + deleted[i]);
 	}
@@ -1678,17 +1686,23 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 	//reindex triangle indices in all submeshes
 	for (int submesh = 0; submesh < (int)Triangles.size(); submesh++)
 	{
-		std::vector<int> elements;
-		elements.reserve(Triangles[submesh].triangles.size() * 3);
+		int elements_size = Triangles[submesh].triangles.size() * 3;
+		int elements[elements_size];
+
+		int elements_pos = 0;
 		for (int i = 0; i < (int)Triangles[submesh].triangles.size(); i++)
 		{
-			elements.push_back(Triangles[submesh].triangles[i].x);
-			elements.push_back(Triangles[submesh].triangles[i].y);
-			elements.push_back(Triangles[submesh].triangles[i].z);
+			elements[elements_pos] = Triangles[submesh].triangles[i].x;
+			elements_pos++;
+			elements[elements_pos] = Triangles[submesh].triangles[i].y;
+			elements_pos++;
+			elements[elements_pos] = Triangles[submesh].triangles[i].z;
+			elements_pos++;
 		}
-		for (int e = 0; e < (int)elements.size(); e++)
+
+		for (int e = 0; e < elements_size; e++)
 		{
-			for (int i = (int)deleted.size() - 1; i >= 0; i--)
+			for (int i = deleted_size - 1; i >= 0; i--)
 			{
 				if (elements[e] >= deleted[i])
 					elements[e]--;
@@ -1706,7 +1720,6 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 				Triangles[submesh].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 			element += 3;
 		}
-		elements.clear();
 	}
 
 	//reindex triangle indices in all wall objects
@@ -1719,17 +1732,22 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 		{
 			//reindex triangle indices
 
-			std::vector<int> elements;
-			elements.reserve(wallarray[i]->handles[j].triangles.size() * 3);
+			int elements_size = wallarray[i]->handles[j].triangles.size() * 3;
+			int elements[elements_size];
+
+			int elements_pos = 0;
 			for (int k = 0; k < (int)wallarray[i]->handles[j].triangles.size(); k++)
 			{
-				elements.push_back(wallarray[i]->handles[j].triangles[k].x);
-				elements.push_back(wallarray[i]->handles[j].triangles[k].y);
-				elements.push_back(wallarray[i]->handles[j].triangles[k].z);
+				elements[elements_pos] = wallarray[i]->handles[j].triangles[k].x;
+				elements_pos++;
+				elements[elements_pos] = wallarray[i]->handles[j].triangles[k].y;
+				elements_pos++;
+				elements[elements_pos] = wallarray[i]->handles[j].triangles[k].z;
+				elements_pos++;
 			}
-			for (int e = 0; e < (int)elements.size(); e++)
+			for (int e = 0; e < elements_size; e++)
 			{
-				for (int i = (int)deleted.size() - 1; i >= 0; i--)
+				for (int i = deleted_size - 1; i >= 0; i--)
 				{
 					if (elements[e] >= deleted[i])
 						elements[e]--;
@@ -1747,10 +1765,9 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 					wallarray[i]->handles[j].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 				element += 3;
 			}
-			elements.clear();
 
 			//reindex extents, used for getting original geometry
-			for (int k = (int)deleted.size() - 1; k >= 0; k--)
+			for (int k = deleted_size - 1; k >= 0; k--)
 			{
 				for (int m = 0; m < (int)wallarray[i]->handles[j].index_extents.size(); m++)
 				{
