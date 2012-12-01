@@ -215,7 +215,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	int polycount = wall->GetHandleCount();
 	for (int i = 0; i < polycount; i++)
 	{
-		//get name
+//get name
 		std::string name = wall->GetHandle(i)->name;
 
 		//get original vertices
@@ -978,9 +978,15 @@ void MeshObject::Enable(bool value, bool remove)
 	//enable or disable collision detection
 	if (mBody)
 	{
-		//disable collisions on object only (don't remove)
 		if (remove == false)
+		{
+			//if removed from world and 'remove' is false, add to world
+			if (mBody->isInWorld() == false)
+				mBody->addToWorld();
+
+			//disable collisions on object only (don't remove)
 			mBody->enableCollisions(value);
+		}
 		else
 		{
 			//completely remove object from dynamics world if disabled; re-add to enable
@@ -1460,6 +1466,12 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view, in order to upload data to graphics card
 
+	int index_count = (int)indices.size();
+	TriangleType indexarray[index_count];
+
+	for (int i = 0; i < index_count; i++)
+		indexarray[i] = indices[i];
+
 	//first get related submesh
 	int index = FindMatchingSubMesh(material);
 	Ogre::SubMesh *submesh = 0;
@@ -1483,7 +1495,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	//delete submesh and exit if it's going to be emptied
 	if (createnew == false && add == false)
 	{
-		if (Triangles[index].triangles.size() - indices.size() <= 0)
+		if (Triangles[index].triangles.size() - index_count <= 0)
 		{
 			MeshWrapper->destroySubMesh(index);
 			Submeshes.erase(Submeshes.begin() + index);
@@ -1495,18 +1507,18 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	//add triangles
 	if (add == true)
 	{
-		ReserveTriangles(index, (int)indices.size());
-		for (int i = 0; i < (int)indices.size(); i++)
-			AddTriangle(index, indices[i]);
+		ReserveTriangles(index, index_count);
+		for (int i = 0; i < index_count; i++)
+			AddTriangle(index, indexarray[i]);
 	}
 	else
 	{
 		//remove triangles
 		for (int i = 0; i < (int)Triangles[index].triangles.size(); i++)
 		{
-			for (int j = 0; j < (int)indices.size(); j++)
+			for (int j = 0; j < index_count; j++)
 			{
-				if (Triangles[index].triangles[i].x == indices[j].x && Triangles[index].triangles[i].y == indices[j].y && Triangles[index].triangles[i].z == indices[j].z)
+				if (Triangles[index].triangles[i].x == indexarray[j].x && Triangles[index].triangles[i].y == indexarray[j].y && Triangles[index].triangles[i].z == indexarray[j].z)
 				{
 					//delete match
 					RemoveTriangle(index, i);

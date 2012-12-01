@@ -131,8 +131,8 @@ namespace OgreBulletCollisions
 	{
 		const bool useQuantizedAABB = true;
 		btBvhTriangleMeshShape *trishape = new btBvhTriangleMeshShape(mTriMesh, useQuantizedAABB);
-	        btTriangleInfoMap* triangleInfoMap = new btTriangleInfoMap();
-	        btGenerateInternalEdgeInfo(trishape,triangleInfoMap);
+	        //btTriangleInfoMap* triangleInfoMap = new btTriangleInfoMap();
+	        //btGenerateInternalEdgeInfo(trishape,triangleInfoMap);
 	        mShape = trishape;
 	}
 

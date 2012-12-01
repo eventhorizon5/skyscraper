@@ -293,7 +293,7 @@ SBS::~SBS()
 	//sndmanager->RemoveSounds();
 
 	//remove all engine objects
-	//Report("Deleting CS engine objects...");
+	//Report("Deleting engine objects...");
 	//engine->clear();
 
 	//delete physics objects

@@ -63,6 +63,6 @@ namespace OgreBulletCollisions
         assert (mObject);        
 
         mObject->setTransform (worldTrans);
-        mWorldTrans = worldTrans;        
+        mWorldTrans = worldTrans;
     }
 }

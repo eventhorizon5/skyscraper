@@ -60,13 +60,15 @@ namespace OgreBulletDynamics
             OgreBulletCollisions::CollisionShape *shape,
             const float      bodyRestitution,
             const float      bodyFriction,
-            const float      bodyMass);
+            const float      bodyMass,
+	    bool	     add = true);
 
         void setStaticShape(Ogre::SceneNode *node,
             OgreBulletCollisions::CollisionShape *shape,
             const float      bodyRestitution,
             const float      bodyFriction,
-			bool			 movable);
+			bool			 movable,
+			bool			 add = true);
 
 
 		   /*void setStaticShape(btScaledBvhTriangleMeshShape *shape,
@@ -121,6 +123,7 @@ namespace OgreBulletDynamics
         Ogre::Vector3       getCenterOfMassPivot (const Ogre::Vector3 &pivotPosition) const;
         
         void setDamping( const Ogre::Real linearDamping, const Ogre::Real angularDamping );
+        bool isInWorld();
 	protected:
 		short mCollisionGroup;
 		short mCollisionMask;

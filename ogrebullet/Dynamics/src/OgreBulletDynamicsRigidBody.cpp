@@ -66,7 +66,8 @@ namespace OgreBulletDynamics
         OgreBulletCollisions::CollisionShape *shape,                          
         const float      bodyRestitution,
         const float      bodyFriction,
-        const float      bodyMass)
+        const float      bodyMass,
+        bool			 add)
     {
 
         mState = new ObjectState(this);
@@ -95,7 +96,8 @@ namespace OgreBulletDynamics
 		mObject->setContactProcessingThreshold(0); //eliminates bouncing when moving over interior mesh triangles
 		updateTransform(true);
 
-		addToWorld();
+		if (add == true)
+			addToWorld();
     }
 
     // -------------------------------------------------------------------------
@@ -103,7 +105,8 @@ namespace OgreBulletDynamics
         OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
         const float      bodyFriction,
-		bool			 movable)
+		bool			 movable,
+		bool			 add)
     {
         mState = new ObjectState(this);
 
@@ -130,7 +133,8 @@ namespace OgreBulletDynamics
         mObject = body;
 		updateTransform(true);
 
-		addToWorld();
+		if (add == true)
+			addToWorld();
 	}
 	// -------------------------------------------------------------------------
     /*void RigidBody::setStaticShape(btScaledBvhTriangleMeshShape *shape,
@@ -191,6 +195,10 @@ namespace OgreBulletDynamics
 		if (can_move == true)
 			mShapeNode->detachObject(this);
 		in_world = false;
+	}
+	bool RigidBody::isInWorld()
+	{
+		return in_world;
 	}
 
 	// -------------------------------------------------------------------------
