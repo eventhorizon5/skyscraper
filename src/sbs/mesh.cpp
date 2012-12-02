@@ -168,7 +168,7 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 	{
 		//do a plane intersection with a line
 		Ogre::Vector3 isect;
-		float dist;
+		float dist = 0;
 		std::vector<Ogre::Vector3> original;
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
 		wallarray[index]->GetGeometry(index2, origpolys, true);
@@ -1467,7 +1467,8 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	//the Prepare() function must be called when the mesh is ready to view, in order to upload data to graphics card
 
 	int index_count = (int)indices.size();
-	TriangleType indexarray[index_count];
+	TriangleType *indexarray;
+	indexarray = new TriangleType[index_count];
 
 	for (int i = 0; i < index_count; i++)
 		indexarray[i] = indices[i];
@@ -1500,6 +1501,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 			MeshWrapper->destroySubMesh(index);
 			Submeshes.erase(Submeshes.begin() + index);
 			Triangles.erase(Triangles.begin() + index);
+			delete indexarray;
 			return -1;
 		}
 	}
@@ -1531,6 +1533,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	//bind material
 	submesh->setMaterialName(material);
 
+	delete indexarray;
 	return index;
 }
 
@@ -1683,7 +1686,8 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 
 	//copy vector index array into simple array
 	int deleted_size = (int)deleted_v.size();
-	int deleted[deleted_size];
+	int *deleted;
+	deleted = new int[deleted_size];
 	for (int i = 0; i < deleted_size; i++)
 	{
 		deleted[i] = deleted_v[i];
@@ -1699,7 +1703,8 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 	for (int submesh = 0; submesh < (int)Triangles.size(); submesh++)
 	{
 		int elements_size = Triangles[submesh].triangles.size() * 3;
-		int elements[elements_size];
+		int *elements;
+		elements = new int[elements_size];
 
 		int elements_pos = 0;
 		for (int i = 0; i < (int)Triangles[submesh].triangles.size(); i++)
@@ -1732,6 +1737,7 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 				Triangles[submesh].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 			element += 3;
 		}
+		delete elements;
 	}
 
 	//reindex triangle indices in all wall objects
@@ -1745,7 +1751,8 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 			//reindex triangle indices
 
 			int elements_size = wallarray[i]->handles[j].triangles.size() * 3;
-			int elements[elements_size];
+			int *elements;
+			elements = new int[elements_size];
 
 			int elements_pos = 0;
 			for (int k = 0; k < (int)wallarray[i]->handles[j].triangles.size(); k++)
@@ -1791,9 +1798,11 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 					wallarray[i]->handles[j].index_extents[m] = extents;
 				}
 			}
+			delete elements;
 		}
 	}
 	prepared = false; //need to re-prepare mesh
+	delete deleted;
 }
 
 void MeshObject::EnableDebugView(bool value)
