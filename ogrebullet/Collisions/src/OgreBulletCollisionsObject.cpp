@@ -200,16 +200,23 @@ namespace OgreBulletCollisions
 	void Object::_notifyMoved()
 	{
 		if (is_static == true)
-			updateTransform(false);
+			updateTransform(true, true, false);
 	}
 
-	void Object::updateTransform(bool set_interpolate)
+	void Object::updateTransform(bool update_pos, bool update_rot, bool set_interpolate)
 	{
-		Vector3 pos = mRootNode->getPosition();
-		Quaternion quat = mRootNode->getOrientation();
-		btTransform transform;
-		transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
-		transform.setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
+		Vector3 pos;
+		Quaternion quat;
+		if (update_pos == true)
+			pos = mRootNode->getPosition();
+		if (update_rot == true)
+			quat = mRootNode->getOrientation();
+
+		btTransform transform = mObject->getWorldTransform();
+		if (update_pos == true)
+			transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
+		if (update_rot == true)
+			transform.setRotation(btQuaternion(quat.x, quat.y, quat.z, quat.w));
 		mObject->setWorldTransform(transform);
 		if (set_interpolate == true)
 			mObject->setInterpolationWorldTransform(transform);

@@ -100,7 +100,7 @@ SBS::SBS()
 	DrawSidePOld = false;
 	DrawTopOld = false;
 	DrawBottomOld = false;
-	delta = 0.01f;
+	delta = 0.0167f;
 	wall1a = false;
 	wall1b = false;
 	wall2a = false;
@@ -477,12 +477,12 @@ void SBS::MainLoop()
 		SBSProfileManager::Start_Profile("Collisions/Physics");
 	else
 		SBSProfileManager::Start_Profile("Bullet");
-	int steps = mWorld->stepSimulation(step, 1);
+	int steps = mWorld->stepSimulation(step, 10);
 	SBSProfileManager::Stop_Profile();
 
 	//only move character if Bullet processed a step (within it's 60fps timestep)
-	if (steps >= 1)
-		camera->MoveCharacter();
+	//if (steps >= 1)
+		camera->MoveCharacter(step);
 
 	//sync camera to physics
 	camera->Sync();
@@ -1678,6 +1678,7 @@ void SBS::InitMeshes()
 	Buildings = new MeshObject(this->object, "Buildings");
 	External = new MeshObject(this->object, "External");
 	Landscape = new MeshObject(this->object, "Landscape");
+	//Landscape->tricollider = false;
 }
 
 int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
@@ -3961,15 +3962,18 @@ void SBS::Prepare()
 	//prepare objects for run
 	
 	Report("Preparing objects...");
-	Report("Creating colliders...");
-	for (int i = 0; i < meshes.size(); i++)
-	{
-		meshes[i]->CreateCollider();
-	}
 	Report("Processing geometry...");
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
+	}
+	Report("Creating colliders...");
+	for (int i = 0; i < meshes.size(); i++)
+	{
+		if (meshes[i]->tricollider == true)
+			meshes[i]->CreateCollider();
+		else
+			meshes[i]->CreateBoxCollider(1);
 	}
 	Report("Finished prepare");
 }

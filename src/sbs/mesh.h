@@ -51,6 +51,7 @@ public:
 	Object *object; //SBS object
 	std::string name; //mesh name
 	bool no_collider; //set to true if collider shouldn't be automatically generated
+	bool tricollider; //collider type; box if false, triangle if true
 
 	//define geometry type
 	struct Geometry
@@ -102,7 +103,7 @@ public:
 	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
 	void GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents);
 	void CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices);
-	void CreateBoxCollider(Ogre::MeshPtr mesh, float scale_multiplier);
+	void CreateBoxCollider(float scale_multiplier);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry;

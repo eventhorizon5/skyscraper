@@ -215,7 +215,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	int polycount = wall->GetHandleCount();
 	for (int i = 0; i < polycount; i++)
 	{
-//get name
+		//get name
 		std::string name = wall->GetHandle(i)->name;
 
 		//get original vertices
@@ -751,6 +751,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	this->friction = friction;
 	this->mass = mass;
 	no_collider = false;
+	tricollider = true;
 
 	Ogre::MeshPtr collidermesh;
 
@@ -904,7 +905,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 			delete[] vertices;
 			delete[] indices;
 
-			CreateBoxCollider(MeshWrapper, sbs->ToRemote(scale_multiplier));
+			CreateBoxCollider(sbs->ToRemote(scale_multiplier));
 		}
 	}
 
@@ -1141,7 +1142,7 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 		pos.z = SceneNode->getPosition().z + sbs->ToRemote(-position.z);
 	SceneNode->setPosition(pos);
 	if (mBody)
-		mBody->updateTransform(false);
+		mBody->updateTransform(true, false, false);
 }
 
 Ogre::Vector3 MeshObject::GetPosition()
@@ -1160,6 +1161,8 @@ void MeshObject::SetRotation(const Ogre::Vector3 rotation)
 	rotX = rotation.x;
 	rotY = rotation.y;
 	rotZ = rotation.z;
+	if (mBody)
+		mBody->updateTransform(false, true, false);
 }
 
 void MeshObject::Rotate(const Ogre::Vector3 rotation, float speed)
@@ -1230,7 +1233,7 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 
 bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles)
 {
-	//create custom genmesh geometry, apply a texture map and material, and return the created submesh
+	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
 	//get texture material
 	std::string texname = texture;
@@ -1813,7 +1816,7 @@ void MeshObject::EnableDebugView(bool value)
 
 void MeshObject::CreateCollider()
 {
-	//set up physics parameters
+	//set up triangle collider based on raw SBS mesh geometry
 
 	//exit if collider already exists
 	if (mBody)
@@ -1875,7 +1878,7 @@ void MeshObject::DeleteCollider()
 
 void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices)
 {
-	//set up physics parameters
+	//set up triangle collider based on loaded model geometry
 
 	//exit of collider already exists
 	if (mBody)
@@ -1902,18 +1905,19 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 	mShape = shape;
 }
 
-void MeshObject::CreateBoxCollider(Ogre::MeshPtr mesh, float scale_multiplier)
+void MeshObject::CreateBoxCollider(float scale_multiplier)
 {
-	//set up physics parameters
+	//set up a box collider for full extents of a mesh
 
 	//initialize collider shape
-	Ogre::Vector3 bounds = mesh->getBounds().getHalfSize() * scale_multiplier;
+	Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
 	OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 	std::string name = SceneNode->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 	if (IsPhysical == false)
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		//mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		mBody->setStaticShape(SceneNode, shape, 0.0, 0.5, can_move);
 	else
 		mBody->setShape(SceneNode, shape, restitution, friction, mass);
 	mShape = shape;

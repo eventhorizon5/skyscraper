@@ -94,7 +94,7 @@ namespace OgreBulletDynamics
 
         mObject = body;
 		mObject->setContactProcessingThreshold(0); //eliminates bouncing when moving over interior mesh triangles
-		updateTransform(true);
+		updateTransform(true, true, true);
 
 		if (add == true)
 			addToWorld();
@@ -131,7 +131,7 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
-		updateTransform(true);
+		updateTransform(true, true, true);
 
 		if (add == true)
 			addToWorld();
@@ -166,7 +166,7 @@ namespace OgreBulletDynamics
         body->setFriction(bodyFriction);
 
         mObject = body;
-		updateTransform(true);
+		updateTransform(true, true, true);
 		addToWorld();
 	}
 

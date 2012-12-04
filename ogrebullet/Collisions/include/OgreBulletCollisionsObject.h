@@ -69,7 +69,7 @@ namespace OgreBulletCollisions
         virtual const Ogre::AxisAlignedBox& getBoundingBox(void) const;
         virtual Ogre::Real getBoundingRadius(void) const;
         virtual void _updateRenderQueue(Ogre::RenderQueue* queue);
-		void updateTransform(bool set_interpolate);
+		void updateTransform(bool update_pos, bool update_rot, bool set_interpolate);
 
 
         inline const Ogre::Vector3 &getWorldPosition() const {return mRootNode->_getDerivedPosition();};

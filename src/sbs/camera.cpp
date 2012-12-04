@@ -100,6 +100,7 @@ Camera::Camera(Ogre::Camera *camera)
 	RotationStopped = false;
 	MovementStopped = false;
 	accum_movement = 0;
+	accum_rotation = 0;
 	collision_reset = false;
 
 	//set up camera and scene nodes
@@ -155,7 +156,7 @@ void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
 	mCharacter->setPosition(sbs->ToRemote(vector) - MainCamera->getPosition());
-	mCharacter->updateTransform(false);
+	mCharacter->updateTransform(true, false, false);
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)
@@ -190,7 +191,7 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	rotation = vector;
 	MainCamera->setOrientation(camrot);
 	mCharacter->setOrientation(bodyrot);
-	mCharacter->updateTransform(true);
+	mCharacter->updateTransform(false, true, true);
 }
 
 Ogre::Vector3 Camera::GetPosition()
@@ -261,7 +262,6 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 	vector = mCharacter->getRootNode()->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
 
 	accum_movement += (sbs->ToRemote(vector) * speed);
-	//mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
 
 	return true;
 }
@@ -287,22 +287,7 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	if (vector == Ogre::Vector3::ZERO)
 		RotationStopped = true;
 
-	//rotate collider body on Y axis (left/right)
-	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
-	rotation.y += ydeg;
-
-	if (rotation.y > 360)
-		rotation.y -= 360;
-	if (rotation.y < 0)
-		rotation.y += 360;
-
-	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	mCharacter->setOrientation(rot);
-	mCharacter->updateTransform(true);
-
-	//rotate camera
-	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
-	MainCamera->roll(Ogre::Radian(vector.z) * speed);
+	accum_rotation = vector * speed;
 }
 
 void Camera::SetStartDirection(const Ogre::Vector3 &vector)
@@ -862,12 +847,8 @@ void Camera::Loop()
 
 	//general movement
 
-	float delta = sbs->GetElapsedTime() / 1000.0f;
-	if (delta > .3f)
-		delta = .3f;
-
-	RotateLocal(angle_velocity, delta * speed);
-	Move(velocity, delta * speed);
+	RotateLocal(angle_velocity, speed);
+	Move(velocity, speed);
 
 	//sync sound listener object to camera position
 	sbs->SetListenerPosition(GetPosition());
@@ -930,6 +911,7 @@ void Camera::InterpolateMovement()
 	//calculate acceleration
 
 	float elapsed = sbs->GetElapsedTime() / 1000.0f;
+	//float elapsed = sbs->delta;
 	elapsed *= 1700.0f;
 
 	for (size_t i = 0; i < 3; i++)
@@ -1082,10 +1064,32 @@ void Camera::ShowDebugShape(bool value)
 	mCharacter->showDebugShape(value);
 }
 
-void Camera::MoveCharacter()
+void Camera::MoveCharacter(float delta)
 {
-	mCharacter->setWalkDirection(accum_movement, 1);
+	//rotation
+
+	//rotate collider body on Y axis (left/right)
+	float ydeg = Ogre::Math::RadiansToDegrees(accum_rotation.y * delta);
+	rotation.y += ydeg;
+
+	if (rotation.y > 360)
+		rotation.y -= 360;
+	if (rotation.y < 0)
+		rotation.y += 360;
+
+	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	mCharacter->setOrientation(rot);
+	mCharacter->updateTransform(false, true, true);
+
+	//rotate camera
+	MainCamera->pitch(Ogre::Radian(accum_rotation.x) * delta);
+	MainCamera->roll(Ogre::Radian(accum_rotation.z) * delta);
+
+	//movement
+	mCharacter->setVelocityForTimeInterval(accum_movement, delta);
+
 	accum_movement = 0;
+	accum_rotation = 0;
 }
 
 void Camera::ResetCollisions()
