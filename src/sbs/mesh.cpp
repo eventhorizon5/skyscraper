@@ -1557,7 +1557,7 @@ void MeshObject::Prepare()
 	if (Submeshes.size() == 0)
 		return;
 
-	float radius = 0;
+	Ogre::Real radius = 0;
 	Ogre::AxisAlignedBox box;
 
 	//set up vertex buffer
