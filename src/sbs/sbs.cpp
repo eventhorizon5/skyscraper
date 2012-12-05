@@ -100,7 +100,7 @@ SBS::SBS()
 	DrawSidePOld = false;
 	DrawTopOld = false;
 	DrawBottomOld = false;
-	delta = 0.0167f;
+	delta = 0.01f;
 	wall1a = false;
 	wall1b = false;
 	wall2a = false;
@@ -477,12 +477,12 @@ void SBS::MainLoop()
 		SBSProfileManager::Start_Profile("Collisions/Physics");
 	else
 		SBSProfileManager::Start_Profile("Bullet");
-	int steps = mWorld->stepSimulation(step, 10);
+	int steps = mWorld->stepSimulation(step, 1);
 	SBSProfileManager::Stop_Profile();
 
 	//only move character if Bullet processed a step (within it's 60fps timestep)
-	//if (steps >= 1)
-		camera->MoveCharacter(step);
+	if (steps >= 1)
+		camera->MoveCharacter();
 
 	//sync camera to physics
 	camera->Sync();

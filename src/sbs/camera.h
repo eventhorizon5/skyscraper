@@ -129,7 +129,7 @@ public:
 	void SetMaxRenderDistance(float value);
 	float GetMaxRenderDistance();
 	void ShowDebugShape(bool value);
-	void MoveCharacter(float delta);
+	void MoveCharacter();
 	void ResetCollisions();
 
 private:
@@ -157,7 +157,6 @@ private:
 	bool MovementStopped;
 	float FarClip;
 	Ogre::Vector3 accum_movement;
-	Ogre::Vector3 accum_rotation;
 	bool collision_reset;
 
 	//collision/physics
