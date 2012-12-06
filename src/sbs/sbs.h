@@ -168,6 +168,7 @@ public:
 	void Report(std::string message);
 	bool ReportError(std::string message);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, bool disable_depth_buffer = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	bool LoadMaterial(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, bool disable_depth_buffer = false);
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
@@ -412,6 +413,7 @@ private:
 	struct TextureInfo
 	{
 		std::string name;
+		std::string material_name; //used if material is loaded instead of texture, as an alias
 		float widthmult;
 		float heightmult;
 		bool enable_force; //enable forcing of tile or stretch mode?

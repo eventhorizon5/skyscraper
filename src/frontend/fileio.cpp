@@ -483,6 +483,7 @@ checkfloors:
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
+
 			//height parameter
 			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
@@ -496,6 +497,7 @@ checkfloors:
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
+
 			//altitude parameter
 			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
@@ -509,6 +511,7 @@ checkfloors:
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
+
 			//interfloorheight parameter
 			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
@@ -523,6 +526,7 @@ checkfloors:
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 			temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
+
 			//base parameter
 			buffer = Ogre::StringConverter::toString(temp4);
 			TrimString(buffer);
@@ -5162,6 +5166,28 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		else
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
+	}
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "loadmaterial")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 12, false);
+
+		if (params < 4 || params > 5)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 3; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+		buffer = tempdata[0];
+		if (params == 4)
+			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
+		else
+			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 	}
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "loadrange")
 	{

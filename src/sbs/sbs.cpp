@@ -702,10 +702,51 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	Report("Loaded texture " + std::string(filename));
+	Report("Loaded texture " + filename2);
 
 	TextureInfo info;
 	info.name = matname;
+	info.widthmult = widthmult;
+	info.heightmult = heightmult;
+	info.enable_force = enable_force;
+	info.force_mode = force_mode;
+	textureinfo.push_back(info);
+	return true;
+}
+
+bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer)
+{
+	//set verbosity level
+	Ogre::MaterialManager::getSingleton().setVerbose(Verbose);
+	Ogre::MaterialPtr mMat;
+	std::string matname = materialname;
+
+	try
+	{
+		mMat = Ogre::MaterialManager::getSingleton().getByName(matname, "Materials");
+
+		if (mMat.isNull())
+			return ReportError("Error loading material " + matname);
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportError("Error loading material " + matname + "\n" + e.getDescription());
+	}
+
+	//show only clockwise side of material
+	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+
+	if (disable_depth_buffer == true)
+	{
+		mMat->setDepthCheckEnabled(false);
+		mMat->setDepthWriteEnabled(false);
+	}
+
+	Report("Loaded material " + matname);
+
+	TextureInfo info;
+	info.name = name;
+	info.material_name = matname;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
@@ -3146,18 +3187,29 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, const char *
 {
 	//perform a lookup on a texture, and return material name if it exists, or "Default" if not
 	//returns false in &result if texture load failed, and if default material was used instead
-	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(name);
 
-	std::string final_material = name;
+	//use material_name value instead of name, if loaded as a material script instead of a direct texture
+	std::string matname = name;
+	for (int i = 0; i < (int)textureinfo.size(); i++)
+	{
+		if (textureinfo[i].name == name)
+		{
+			if (textureinfo[i].material_name != "")
+				matname = textureinfo[i].material_name;
+		}
+	}
+	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(matname);
+
+	std::string final_material = matname;
 
 	if (!material.get())
 	{
 		//if material's not found, display a warning and use a default material
 		std::string message;
 		if (polygon_name)
-			message = "Texture '" + std::string(name) + "' not found for polygon '" + std::string(polygon_name) + "'; using default material";
+			message = "Texture '" + std::string(matname) + "' not found for polygon '" + std::string(polygon_name) + "'; using default material";
 		else
-			message = "Texture '" + std::string(name) + "' not found; using default material";
+			message = "Texture '" + std::string(matname) + "' not found; using default material";
 		ReportError(message);
 
 		//set to default material

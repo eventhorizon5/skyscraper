@@ -427,6 +427,10 @@ bool Skyscraper::Initialize()
 
 		//add app's directory to resource manager
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(".", "FileSystem", "General", true);
+
+		//add materials group, and autoload
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/materials", "FileSystem", "Materials", true);
+		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Materials");
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -1534,8 +1538,6 @@ void Skyscraper::Quit()
 Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
 {
 	std::string name = windowName;
-	//if (windowName.empty())
-		//name = std::string("wxOgreRenderWindow");
 
 	//do not clear background
 	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
