@@ -2129,7 +2129,7 @@ Floor* SBS::GetFloor(int number)
 	if (FloorArray.size() > 0)
 	{
 		//quick prediction
-		if (Basements + number < (int)FloorArray.size())
+		if (Basements + number < (int)FloorArray.size() && Basements + number >= 0)
 		{
 			FloorMap floor = FloorArray[Basements + number];
 			if (floor.number == number)
