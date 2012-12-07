@@ -5208,7 +5208,6 @@ int ScriptProcessor::ProcTextures()
 		}
 
 		buffer = tempdata[0];
-		//CheckFile(buffer.c_str());
 		std::vector<std::string> filenames;
 		if (force == true)
 		{
@@ -5220,6 +5219,10 @@ int ScriptProcessor::ProcTextures()
 			for (int i = 0; i < params - 5; i++)
 				filenames.push_back(tempdata[i]);
 		}
+
+		//check existence of files
+		for (int i = 0; i < filenames.size(); i++)
+			CheckFile(filenames[i].c_str());
 
 		if (force == false)
 			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 4].c_str(), atof(tempdata[params - 3].c_str()), atof(tempdata[params - 2].c_str()), atof(tempdata[params - 1].c_str()));
@@ -5243,7 +5246,12 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		buffer = tempdata[0];
+
+		//check existence of files
 		CheckFile(buffer.c_str());
+		CheckFile(tempdata[1].c_str());
+		CheckFile(tempdata[2].c_str());
+
 		if (params == 7)
 			Simcore->LoadAlphaBlendTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), Ogre::StringConverter::parseBool(tempdata[4]), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 		else

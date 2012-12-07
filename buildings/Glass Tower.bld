@@ -39,7 +39,6 @@ SetPlanarMapping true, false, false, false
     LoadAlphaBlend data/windows11j.jpg, data/windows11jspec.png, data/sky3h.jpg, MainWindows, true, 0.101, 1
     LoadAlphaBlend data/windows11j.jpg, data/windows11jspec.png, data/sky3h.jpg, MainWindows2, true, 1, 1
     Load data/windows11j_inside.gif, MainWindowsInside, 1, 1
-    LoadAlphaBlend data/windows11j-2.jpg, data/windows11jspec.png, data/sky3h.jpg, MainWindows2, true, 1, 1
     LoadAlphaBlend data/windows11j-2.jpg, data/windows11j-2-spec.png, data/sky3h.jpg, MainWindows2single, true, 1, 1
     LoadAlphaBlend data/windows11j-3.jpg, data/windows11j-3-spec.png, data/sky3h.jpg, MainWindows2double, true, 1, 1
     Load data/windows11j-2_inside.gif, MainWindowsInsideSingle, 1, 1
@@ -49,7 +48,6 @@ SetPlanarMapping true, false, false, false
     Load data/stucco22d.jpg, EntranceColumns, 0.2, 0.2
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     Load data/symb5.jpg, Marble3, 0.269, 0.25
-    #Load data/marb047.jpg, Marble4, 0.269, 0.25
     Load data/stone.jpg, Marble4, 0.1, 0.1
     Load data/cutston.jpg, Ceiling1, 0.269, 0.25
     Load data/cutston3.jpg, Backing, 0.111, 1
