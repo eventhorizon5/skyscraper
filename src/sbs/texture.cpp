@@ -606,7 +606,7 @@ bool SBS::ScrollTexture(const char *name, float x_offset, float y_offset)
 
 	//set scrolling value
 	if (state)
-		state->setTextureScroll(x_offset, y_offset);
+		state->setTextureScroll(-x_offset, y_offset); //invert x value
 	else
 		return false;
 
@@ -637,7 +637,7 @@ bool SBS::ScrollAnimTexture(const char *name, float x_speed, float y_speed)
 
 	//set scrolling animation
 	if (state)
-		state->setScrollAnimation(x_speed, y_speed);
+		state->setScrollAnimation(x_speed, -y_speed);
 	else
 		return false;
 
