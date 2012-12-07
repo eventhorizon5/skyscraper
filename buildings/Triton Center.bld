@@ -31,7 +31,8 @@
 <Textures>
     Load data/brick1.jpg, Brick, 0.269, 0.25
     Load data/lobbyfront-b.gif, LobbyFront, 1, 1
-    Load data/windows11h.jpg, MainWindows, 0.05, 1
+    #Load data/windows11h.jpg, MainWindows, 0.05, 1
+    LoadAlphaBlend data/windows11i.jpg, data/windows11ispec.png, data/sky3d.jpg, MainWindows, true, 0.05, 1
     Load data/windows11h_black.jpg, MainWindows2, 0.05, 1
     Load data/windows11h_black_mid2.jpg, MainWindows2b, 0.05, 1
     Load data/windows11h_black_double.jpg, MainWindowsDouble, 0.05, 1
@@ -62,7 +63,6 @@
     Load data/stucco4c.jpg, ParkingCeiling, 0.25, 0.25
     Load data/stucco4e.jpg, ParkingWalls, 0.269, 0.25
     Load data/stucco4b.jpg, LowerLevelWalls, 0.25, 0.25
-    Load data/intext.jpg, InterExt, 0.269, 0.25
     Load data/intext.jpg, InterInt, 0.269, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/aluminumdoor_c.jpg, ElevDoors, 1, 1
@@ -648,12 +648,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    if[%floor% > 2] AddWall IFront, InterExt, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    if[%floor% > 2] AddWall ILeft, InterExt, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% > 2] AddWall IFront, MainWindows, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% > 2] AddWall ILeft, MainWindows, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    if[%floor% > 2] AddWall IRight, InterExt, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    if[%floor% > 2] AddWall IBack, InterExt, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% > 2] AddWall IRight, MainWindows, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    if[%floor% > 2] AddWall IBack, MainWindows, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -869,12 +869,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall IFront, InterExt, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall ILeft, InterExt, 0.5, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IFront, MainWindows, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, MainWindows, 0.5, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall IRight, InterExt, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall IBack, InterExt, 0.5, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IRight, MainWindows, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, MainWindows, 0.5, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -1072,12 +1072,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall IFront, InterExt, 0.5, -51, -70, 51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall ILeft, InterExt, 0.5, -51, 70, -51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IFront, MainWindows, 0.5, -51, -70, 51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, MainWindows, 0.5, -51, 70, -51, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall IRight, InterExt, 0.5, 51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall IBack, InterExt, 0.5, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IRight, MainWindows, 0.5, 51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, MainWindows, 0.5, 51, 70, -51, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -1470,12 +1470,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall IFront, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall ILeft, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IFront, MainWindows, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, MainWindows, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall IRight, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall IBack, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IRight, MainWindows, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, MainWindows, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -1595,12 +1595,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall IFront, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall ILeft, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IFront, MainWindows, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, MainWindows, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall IRight, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall IBack, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IRight, MainWindows, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, MainWindows, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -1715,12 +1715,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall IFront, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall ILeft, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IFront, MainWindows, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, MainWindows, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall IRight, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall IBack, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IRight, MainWindows, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, MainWindows, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -1789,12 +1789,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall IFront, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall ILeft, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IFront, MainWindows, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, MainWindows, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall IRight, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall IBack, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IRight, MainWindows, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, MainWindows, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -2006,12 +2006,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall IFront, InterExt, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall ILeft, InterExt, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IFront, MainWindows, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall ILeft, MainWindows, 0.5, -39, 70, -39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall IRight, InterExt, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
-    AddWall IBack, InterExt, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IRight, MainWindows, 0.5, 39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
+    AddWall IBack, MainWindows, 0.5, 39, 70, -39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
 
     #Interfloor bottom
