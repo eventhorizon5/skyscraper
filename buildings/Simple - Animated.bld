@@ -42,7 +42,7 @@
     Load data/brick1.jpg, Brick, 0.269, 0.25
     #LoadMaterial testmat, MainWindows, 0.05, 1
     #LoadMaterial triton_windows, MainWindows, 1, 1, false
-    LoadAlphaBlend data/windows11h.jpg, data/windows11hspec.png, data/aluminumdoor.jpg, MainWindows, true, 0.05, 1
+    LoadAlphaBlend data/windows11i.jpg, data/windows11ispec.png, data/sky3c.jpg, MainWindows, true, 0.05, 1
     ScrollAnim MainWindows, 0.5, -0.5
     LoadAnimated data/Carpet0013_S.jpg, data/Carpet0002_S.jpg, data/Carpet0006_S.jpg, data/Carpet0012_S.jpg, Carpet1, 1, 0.2, 0.2
     Load data/windows11h_inside.gif, MainWindowsInt, 0.05, 1
