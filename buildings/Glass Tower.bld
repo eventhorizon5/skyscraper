@@ -1635,7 +1635,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 134
     AssignedShaft = 1
-    CreateElevator false, -0.24 + 10, -40.426 - 0.33, 0
+    CreateElevator false, -0.24 + 10, -40.426 - 0.33, 134
 <EndElevator>
 
 <Elevators 1 to 3>    
