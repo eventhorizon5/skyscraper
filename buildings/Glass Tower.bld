@@ -55,20 +55,21 @@ SetPlanarMapping true, false, false, false
     Load data/cutston2.jpg, Backing2, 0.1, 0.1
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
-    Load data/door1.jpg, ElevDoors, 1, 1
-    Load data/door1.jpg, ElevDoors2, -1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors, 1, 1
+    Load data/otis4_aluminumdoor.jpg, ElevDoors2, -1, 1
     Load data/panel-back2.jpg, ElevExtPanels, 1, 1
-    Load data/marb148.jpg, ElevPanel, 1, 1
-    Load data/diamond18j.jpg, ElevWall, 1, 1
-    Load data/windows11h_inside.gif, ElevWallGlass, 1, 1
-    Load data/diamond18j.jpg, ElevPanelMain, 1, 1
-    Load data/elev1.jpg, ElevCeiling, 0.25, 0.25
-    Load data/Carpet0006_S.jpg, ElevFloor, 0.25, 0.25
+    Load data/otis4_buttonpanel.jpg, ElevPanel, 1, 1
+    Load data/otis4_woodwall.jpg, ElevWall, 1, 1
+    Load data/glasselevator1.gif, ElevWallGlass, 1, 1
+    Load data/otis4_woodwallpanel.jpg, ElevPanelMain, 1, 1
+    Load data/otis4_weaveceiling_3x3.jpg, ElevCeiling, 1, 1
+    Load data/otis4_weavefloor.jpg, ElevFloor, 1, 1
+    Load data/floor065b.jpg, ElevFloor2, 1, 1
     Load data/callbutton.gif, ButtonUp, 1, 1
     Load data/callbutton_lit.gif, ButtonUpLit, 1, 1
     Load data/callbutton.gif, ButtonDown, 1, -1
     Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
-    Load data/cinderblocks.jpg, Wall1, 0.25, 0.25
+    Load data/granite_0007e.jpg, Wall1, 0.25, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/darrow_unlit.gif, ArrowUp, 1, 1
     Load data/darrow_unlit.gif, ArrowDown, 1, -1
@@ -1638,30 +1639,27 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevators 1 to 3>    
+    SetAutoSize = false, false
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
-    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Floor, ElevFloor, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
+    TextureOverride ElevExt, ElevFloor2, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor2, 0.2, -3.75, -3.125, 3.75, 3.125, 0, 0, 0, 0
 
     #ceiling
     FloorOrientation = bottom
     TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
     AddFloor Ceiling, ElevCeiling, 0.2, -3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0 #ceiling
 
-    SetAutoSize = false, false
-    
     #right wall
     WallOrientation = right
     DrawWalls = true, true, false, false, false, false
-    AddWall Right, ElevWallGlass, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 1, 2 #right wall
+    AddWall Right, ElevWallGlass, 0.2, 3.75, -3.125, 3.75, 3.125, 8, 8, 0, 0, 1, 1 #right wall
 
     #front and left walls
     WallOrientation = left
-    AddWall Front, ElevWallGlass, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 1, 2 #front wall
-    AddWall Left, ElevWallGlass, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 1, 2 #left wall
-
-    SetAutoSize = true, true
+    AddWall Front, ElevWallGlass, 0.2, -3.75, -3.125, 3.75, -3.125, 8, 8, 0, 0, 1, 1 #front wall
+    AddWall Left, ElevWallGlass, 0.2, -3.75, -3.125, -3.75, 3.125, 8, 8, 0, 0, 1, 1 #left wall
 
     #panels
     WallOrientation = right
@@ -1710,6 +1708,7 @@ DrawWalls = true, true, false, false, false, false
     CreateElevator false, 0, 0 - 0.294, 0
     
     #floor
+    SetAutoSize = false, false
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
     TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
