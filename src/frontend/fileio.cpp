@@ -667,7 +667,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	if (Simcore->FileExists(Filename.c_str()) == false)
 		return false;
 
-	Simcore->Report(Filename);
+	//Simcore->Report(Filename);
 
 	//load file
 	Ogre::FileSystemArchive filesystem(".","FileSystem");
@@ -5167,6 +5167,88 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 	}
+	if (SetCaseCopy(LineData.substr(0, 12), false) == "loadanimated")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 12, false);
+
+		if (params < 7)
+			return ScriptError("Incorrect number of parameters");
+
+		bool force;
+		std::string temp = tempdata[params - 1];
+		std::string temp2 = tempdata[params - 2];
+		TrimString(temp);
+		TrimString(temp2);
+		if (IsNumeric(temp.c_str()) == true && IsNumeric(temp2.c_str()) == true)
+			force = false;
+		else
+			force = true;
+
+		//check numeric values
+		if (force == true)
+		{
+			for (int i = (params - 4); i <= (params - 2); i++)
+			{
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+		else
+		{
+			for (int i = (params - 3); i <= (params - 1); i++)
+			{
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+
+		buffer = tempdata[0];
+		//CheckFile(buffer.c_str());
+		std::vector<std::string> filenames;
+		if (force == true)
+		{
+			for (int i = 0; i < params - 6; i++)
+				filenames.push_back(tempdata[i]);
+		}
+		else
+		{
+			for (int i = 0; i < params - 5; i++)
+				filenames.push_back(tempdata[i]);
+		}
+
+		if (force == false)
+			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 4].c_str(), atof(tempdata[params - 3].c_str()), atof(tempdata[params - 2].c_str()), atof(tempdata[params - 1].c_str()));
+		else
+			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 5].c_str(), atof(tempdata[params - 4].c_str()), atof(tempdata[params - 3].c_str()), atof(tempdata[params - 2].c_str()), true, Ogre::StringConverter::parseBool(tempdata[params - 1]));
+	}
+	if (SetCaseCopy(LineData.substr(0, 14), false) == "loadalphablend")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 14, false);
+
+		if (params < 7 || params > 8)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 5; i <= 6; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+		buffer = tempdata[0];
+		CheckFile(buffer.c_str());
+		if (params == 7)
+			Simcore->LoadAlphaBlendTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), Ogre::StringConverter::parseBool(tempdata[4]), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
+		else
+			Simcore->LoadAlphaBlendTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), Ogre::StringConverter::parseBool(tempdata[4]), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), true, Ogre::StringConverter::parseBool(tempdata[7]));
+	}
 	if (SetCaseCopy(LineData.substr(0, 12), false) == "loadmaterial")
 	{
 		//get data
@@ -5362,6 +5444,120 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		Simcore->SetLighting(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+	}
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "rotate ")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 7, false);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric value
+		std::string str = tempdata[1];
+		TrimString(str);
+		if (!IsNumeric(str.c_str()))
+			return ScriptError("Invalid value: " + std::string(tempdata[1]));
+
+		buffer = tempdata[0];
+		Simcore->RotateTexture(buffer.c_str(), atof(tempdata[1].c_str()));
+	}
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "rotateanim")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 10, false);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric value
+		std::string str = tempdata[1];
+		TrimString(str);
+		if (!IsNumeric(str.c_str()))
+			return ScriptError("Invalid value: " + std::string(tempdata[1]));
+
+		buffer = tempdata[0];
+		Simcore->RotateAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()));
+	}
+	if (SetCaseCopy(LineData.substr(0, 7), false) == "scroll ")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 7, false);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 2; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		buffer = tempdata[0];
+		Simcore->ScrollTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+	}
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "scrollanim")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 10, false);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 2; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		buffer = tempdata[0];
+		Simcore->ScrollAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+	}
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "scale")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 5, false);
+
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 2; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		buffer = tempdata[0];
+		Simcore->ScaleTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+	}
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "transform")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 9, false);
+
+		if (params != 7)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 6; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		buffer = tempdata[0];
+		Simcore->TransformTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 	}
 	return 0;
 }

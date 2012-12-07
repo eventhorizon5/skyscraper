@@ -168,9 +168,17 @@ public:
 	void Report(std::string message);
 	bool ReportError(std::string message);
 	bool LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, bool disable_depth_buffer = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	bool LoadAnimatedTexture(std::vector<std::string> filenames, const char *name, float duration, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, bool disable_depth_buffer = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	bool LoadAlphaBlendTexture(const char *filename, const char *specular_filename, const char *blend_filename, const char *name, bool spherical, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, bool disable_depth_buffer = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	bool LoadMaterial(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, bool disable_depth_buffer = false);
 	bool UnloadTexture(const char *name);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
+	bool RotateTexture(const char *name, float angle);
+	bool RotateAnimTexture(const char *name, float speed);
+	bool ScrollTexture(const char *name, float x_offset, float y_offset);
+	bool ScrollAnimTexture(const char *name, float x_speed, float y_speed);
+	bool ScaleTexture(const char *name, float x_scale, float y_scale);
+	bool TransformTexture(const char *name, const char *type, const char *wave_type, float base, float frequency, float phase, float amplitude);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
 	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem);
 	bool Start();
@@ -195,7 +203,7 @@ public:
 	void ListAltitudes();
 	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	std::string GetTextureMaterial(const char *name, bool &result, const char *polygon_name = 0);
+	std::string GetTextureMaterial(const char *name, bool &result, bool report = true, const char *polygon_name = 0);
 	bool NewElevator(int number);
 	bool NewFloor(int number);
 	int Elevators();
@@ -500,6 +508,16 @@ private:
 		unsigned char *buffer;
 	};
 	std::vector<TexturePixelBox> textureboxes;
+
+	//function caching
+	Floor* getfloor_result;
+	int getfloor_number;
+	Elevator* getelevator_result;
+	int getelevator_number;
+	Shaft* getshaft_result;
+	int getshaft_number;
+	Stairs* getstairs_result;
+	int getstairs_number;
 };
 
 #endif

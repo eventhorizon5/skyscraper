@@ -27,7 +27,6 @@
 #include <wx/variant.h>
 #include <OgreRoot.h>
 #include <OgreFileSystem.h>
-#include <OgreMaterialManager.h>
 #include <OgreFontManager.h>
 #include <OgreFont.h>
 #include <OgreHardwarePixelBuffer.h>
@@ -192,6 +191,14 @@ SBS::SBS()
 	TexelOverride = false;
 	enable_profiling = false;
 	enable_advanced_profiling = false;
+	getfloor_result = 0;
+	getfloor_number = 0;
+	getelevator_result = 0;
+	getelevator_number = 0;
+	getshaft_result = 0;
+	getshaft_number = 0;
+	getstairs_result = 0;
+	getstairs_number = 0;
 }
 
 SBS::~SBS()
@@ -425,29 +432,6 @@ bool SBS::Start()
 	return true;
 }
 
-float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode)
-{
-	//Texture autosizing formulas
-
-	if (offset == 0)
-		offset = 1;
-
-	if (iswidth == true)
-	{
-		if ((AutoX == true && enable_force == false) || (enable_force == true && force_mode == true))
-			return fabs(n1 - n2) * offset;
-		else
-			return offset;
-	}
-	else
-	{
-		if ((AutoY == true && enable_force == false) || (enable_force == true && force_mode == true))
-			return fabs(n1 - n2) * offset;
-		else
-			return offset;
-	}
-}
-
 void SBS::PrintBanner()
 {
 	Report("\n Scalable Building Simulator " + version + " " + version_state);
@@ -531,7 +515,8 @@ void SBS::MainLoop()
 			ProcessCallButtons();
 
 			//process misc operations on current floor
-			GetFloor(camera->CurrentFloor)->Loop();
+			if (GetFloor(camera->CurrentFloor))
+				GetFloor(camera->CurrentFloor)->Loop();
 
 			//process auto areas
 			CheckAutoAreas();
@@ -627,485 +612,6 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	//create camera object
 	this->camera = new Camera(camera);
 	
-	return true;
-}
-
-bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
-{
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
-	//first verify the filename
-	std::string filename2 = VerifyFile(filename);
-
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
-
-	// Load the texture
-	std::string path = GetMountPath(filename2.c_str(), filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename;
-	bool has_alpha = false;
-
-	try
-	{
-		if (use_alpha_color == false)
-		{
-			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-
-			if (mTex.isNull())
-				return ReportError("Error loading texture" + filename2);
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
-		}
-		else
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-	}
-
-	//create a new material
-	std::string matname = name;
-	TrimString(matname);
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
-
-	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-	
-	if (disable_depth_buffer == true)
-	{
-		mMat->setDepthCheckEnabled(false);
-		mMat->setDepthWriteEnabled(false);
-	}
-
-	//enable alpha blending for related textures
-	if (has_alpha == true)
-	{
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}
-
-	Report("Loaded texture " + filename2);
-
-	TextureInfo info;
-	info.name = matname;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
-	return true;
-}
-
-bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer)
-{
-	//set verbosity level
-	Ogre::MaterialManager::getSingleton().setVerbose(Verbose);
-	Ogre::MaterialPtr mMat;
-	std::string matname = materialname;
-
-	try
-	{
-		mMat = Ogre::MaterialManager::getSingleton().getByName(matname, "Materials");
-
-		if (mMat.isNull())
-			return ReportError("Error loading material " + matname);
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading material " + matname + "\n" + e.getDescription());
-	}
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	if (disable_depth_buffer == true)
-	{
-		mMat->setDepthCheckEnabled(false);
-		mMat->setDepthWriteEnabled(false);
-	}
-
-	Report("Loaded material " + matname);
-
-	TextureInfo info;
-	info.name = name;
-	info.material_name = matname;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
-	return true;
-}
-
-bool SBS::UnloadTexture(const char *name)
-{
-	//unloads a texture
-
-	Ogre::TexturePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name);
-	if (!wrapper.isNull())
-		return false;
-	Ogre::TextureManager::getSingleton().remove(name);
-	Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().getByName(name);
-	if (!wrapper.isNull())
-		return false;
-	Ogre::MaterialManager::getSingleton().remove(name);
-
-	return true;
-}
-
-bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force, bool force_mode)
-{
-	//loads only a portion of the specified texture
-
-	Ogre::ColourValue alpha_color = Ogre::ColourValue::Black;
-	int mipmaps = -1;
-	bool use_alpha_color = false;
-
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
-	//first verify the filename
-	std::string filename2 = VerifyFile(filename);
-
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
-
-	// Load the texture
-	std::string path = GetMountPath(filename2.c_str(), filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename;
-	bool has_alpha = false;
-
-	try
-	{
-		if (use_alpha_color == false)
-		{
-			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-
-			if (mTex.isNull())
-				return ReportError("Error loading texture" + filename2);
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
-		}
-		else
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-	}
-
-	std::string Name = name;
-	std::string Filename = filename;
-
-	//set default values if specified
-	if (x == -1)
-		x = 0;
-	if (y == -1)
-		y = 0;
-	if (width < 1)
-		width = mTex->getWidth();
-	if (height < 1)
-		height = mTex->getHeight();
-
-	if (x > mTex->getWidth() || y > mTex->getHeight())
-		return ReportError("LoadTextureCropped: invalid coordinates for '" + Name + "'");
-	if (x + width > mTex->getWidth() || y + height > mTex->getHeight())
-		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
-
-	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
-
-	//copy source and overlay images onto new image
-	Ogre::Box source (x, y, x + width, y + height);
-	Ogre::Box dest (0, 0, width, height);
-	new_texture->getBuffer()->blit(mTex->getBuffer(), source, dest);
-
-	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
-
-	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-	//enable hard alpha for alpha mask values 128 and above
-	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-
-	//add texture multipliers for new texture
-	TextureInfo info;
-	info.name = name;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
-
-	return true;
-}
-
-bool SBS::AddTextToTexture(const char *origname, const char *name, const char *font_filename, float font_size, const char *text, int x1, int y1, int x2, int y2, const char *h_align, const char *v_align, int ColorR, int ColorG, int ColorB, bool enable_force, bool force_mode)
-{
-	//adds text to the named texture, in the given box coordinates and alignment
-
-	//h_align is either "left", "right" or "center" - default is center
-	//v_align is either "top", "bottom", or "center" - default is center
-
-	//if either x1 or y1 are -1, the value of 0 is used.
-	//If either x2 or y2 are -1, the width or height of the texture is used.
-
-	std::string hAlign = h_align;
-	std::string vAlign = v_align;
-	std::string Name = name;
-	std::string Origname = origname;
-	std::string Text = text;
-	TrimString(Text);
-	TrimString(Name);
-	TrimString(Origname);
-
-	std::string font_filename2 = VerifyFile(font_filename);
-
-	//load font
-	Ogre::FontPtr font;
-	Ogre::String fontname = font_filename2 + Ogre::StringConverter::toString(font_size);
-	font = Ogre::FontManager::getSingleton().getByName(fontname, "General");
-
-	//load if font is not already loaded
-	if (font.isNull())
-	{
-		try
-		{
-			font = Ogre::FontManager::getSingleton().create(fontname, "General");
-			//font->setType(Ogre::FontType::FT_TRUETYPE);
-			font->setSource(font_filename2);
-			font->setTrueTypeSize(font_size);
-			font->setTrueTypeResolution(96);
-			font->setAntialiasColour(true);
-			font->addCodePointRange(Ogre::Font::CodePointRange(48, 122));
-			font->load();
-		}
-		catch (Ogre::Exception &e)
-		{
-			sbs->ReportError("Error loading font " + fontname + "\n" + e.getDescription());
-			return false;
-		}
-	}
-
-	//get original texture
-	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
-	if (ptr.isNull())
-	{
-		ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
-		return false;
-	}
-	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr background = Ogre::TextureManager::getSingleton().getByName(texname);
-	if (background.isNull())
-	{
-		ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
-		return false;
-	}
-
-	//get texture tiling info
-	float widthmult, heightmult;
-	GetTextureTiling(origname, widthmult, heightmult);
-
-	//get height and width of texture
-	int width, height;
-	width = background->getWidth();
-	height = background->getHeight();
-
-	//create new empty texture
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
-
-	//get new texture dimensions, if it was resized
-	width = texture->getWidth();
-	height = texture->getHeight();
-
-	//add texture multipliers for new texture
-	TextureInfo info;
-	info.name = name;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
-
-	//set default values if specified
-	if (x1 == -1)
-		x1 = 0;
-	if (y1 == -1)
-		y1 = 0;
-	if (x2 == -1)
-		x2 = width - 1;
-	if (y2 == -1)
-		y2 = height - 1;
-
-	//draw original image onto new texture
-	texture->getBuffer()->blit(background->getBuffer());
-
-	TrimString(hAlign);
-	TrimString(vAlign);
-	char align = 'c';
-	if (hAlign == "left")
-		align = 'l';
-	if (hAlign == "right")
-		align = 'r';
-	char valign = 'c';
-	if (vAlign == "top")
-		valign = 't';
-	if (vAlign == "bottom")
-		valign = 'b';
-
-	//write text
-	bool result = WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align, valign);
-	if (result == false)
-		return false;
-
-	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
-
-	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
-	
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-	//enable hard alpha for alpha mask values 128 and above
-	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-
-	Report("AddTextToTexture: created texture " + Name);
-	CacheFilename(Name, Name);
-	return true;
-}
-
-bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_texture, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force, bool force_mode)
-{
-	//draws the specified texture on top of another texture
-	//orig_texture is the original texture to use; overlay_texture is the texture to draw on top of it
-
-	std::string Name = name;
-	std::string Origname = orig_texture;
-	std::string Overlay = overlay_texture;
-
-	//get original texture
-	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
-	if (ptr.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
-		return false;
-	}
-	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr image1 = Ogre::TextureManager::getSingleton().getByName(texname);
-	if (image1.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
-		return false;
-	}
-
-	//get overlay texture
-	ptr = Ogre::MaterialManager::getSingleton().getByName(Overlay);
-	if (ptr.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
-		return false;
-	}
-	texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr image2 = Ogre::TextureManager::getSingleton().getByName(texname);
-	if (image2.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
-		return false;
-	}
-
-	//set default values if specified
-	if (x == -1)
-		x = 0;
-	if (y == -1)
-		y = 0;
-	if (width < 1)
-		width = image2->getWidth();
-	if (height < 1)
-		height = image2->getHeight();
-
-	if (x > image1->getWidth() || y > image1->getHeight())
-		return ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
-	if (x + width > image1->getWidth() || y + height > image1->getHeight())
-		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
-
-	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, image1->getWidth(), image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
-
-	//copy source and overlay images onto new image
-	Ogre::Box source (x, y, x + width, y + height);
-	Ogre::Box source_full (0, 0, image1->getWidth(), image1->getHeight());
-	Ogre::Box overlay (0, 0, image2->getWidth(), image2->getHeight());
-	new_texture->getBuffer()->blit(image1->getBuffer(), source_full, source_full);
-	new_texture->getBuffer()->blit(image2->getBuffer(), overlay, source);
-
-	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
-
-	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-	//enable hard alpha for alpha mask values 128 and above
-	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-
-	//add texture multipliers for new texture
-	TextureInfo info;
-	info.name = name;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
-
 	return true;
 }
 
@@ -2126,6 +1632,10 @@ Floor* SBS::GetFloor(int number)
 	/*if (Basements + number < 0)
 		return 0;*/
 
+	//return previous cached entry if the same
+	if (getfloor_number == number && getfloor_result)
+		return getfloor_result;
+
 	if (FloorArray.size() > 0)
 	{
 		//quick prediction
@@ -2135,9 +1645,17 @@ Floor* SBS::GetFloor(int number)
 			if (floor.number == number)
 			{
 				if (floor.object)
+				{
+					getfloor_number = number;
+					getfloor_result = floor.object;
 					return floor.object;
+				}
 				else
+				{
+					getfloor_number = 0;
+					getfloor_result = 0;
 					return 0;
+				}
 			}
 			else if (number < 0)
 			{
@@ -2147,9 +1665,17 @@ Floor* SBS::GetFloor(int number)
 					if (floor.number == number)
 					{
 						if (floor.object)
+						{
+							getfloor_number = number;
+							getfloor_result = floor.object;
 							return floor.object;
+						}
 						else
+						{
+							getfloor_number = 0;
+							getfloor_result = 0;
 							return 0;
+						}
 					}
 				}
 			}
@@ -2157,8 +1683,17 @@ Floor* SBS::GetFloor(int number)
 	}
 
 	for (size_t i = 0; i < (int)FloorArray.size(); i++)
+	{
 		if (FloorArray[i].number == number)
-			return FloorArray[i].object;
+		{
+			getfloor_number = number;
+			getfloor_result = FloorArray[i].object;
+			return getfloor_result;
+		}
+	}
+
+	getfloor_number = 0;
+	getfloor_result = 0;
 	return 0;
 }
 
@@ -2169,21 +1704,41 @@ Elevator* SBS::GetElevator(int number)
 	if (number < 1 || number > Elevators())
 		return 0;
 
+	if (getelevator_number == number && getelevator_result)
+		return getelevator_result;
+
 	if ((int)ElevatorArray.size() > number - 1)
 	{
 		//quick prediction
 		if (ElevatorArray[number - 1].number == number)
 		{
 			if (ElevatorArray[number - 1].object)
-				return ElevatorArray[number - 1].object;
+			{
+				getelevator_number = number;
+				getelevator_result = ElevatorArray[number - 1].object;
+				return getelevator_result;
+			}
 			else
+			{
+				getelevator_number = 0;
+				getelevator_result = 0;
 				return 0;
+			}
 		}
 	}
 
 	for (size_t i = 0; i < ElevatorArray.size(); i++)
+	{
 		if (ElevatorArray[i].number == number)
-			return ElevatorArray[i].object;
+		{
+			getelevator_number = number;
+			getelevator_result = ElevatorArray[i].object;
+			return getelevator_result;
+		}
+	}
+
+	getelevator_number = 0;
+	getelevator_result = 0;
 	return 0;
 }
 
@@ -2194,21 +1749,41 @@ Shaft* SBS::GetShaft(int number)
 	if (number < 1 || number > Shafts())
 		return 0;
 
+	if (getshaft_number == number && getshaft_result)
+		return getshaft_result;
+
 	if ((int)ShaftArray.size() > number - 1)
 	{
 		//quick prediction
 		if (ShaftArray[number - 1].number == number)
 		{
 			if (ShaftArray[number - 1].object)
-				return ShaftArray[number - 1].object;
+			{
+				getshaft_number = number;
+				getshaft_result = ShaftArray[number - 1].object;
+				return getshaft_result;
+			}
 			else
+			{
+				getshaft_number = 0;
+				getshaft_result = 0;
 				return 0;
+			}
 		}
 	}
 
 	for (size_t i = 0; i < ShaftArray.size(); i++)
+	{
 		if (ShaftArray[i].number == number)
-			return ShaftArray[i].object;
+		{
+			getshaft_number = number;
+			getshaft_result = ShaftArray[i].object;
+			return getshaft_result;
+		}
+	}
+
+	getshaft_number = 0;
+	getshaft_result = 0;
 	return 0;
 }
 
@@ -2219,21 +1794,41 @@ Stairs* SBS::GetStairs(int number)
 	if (number < 1 || number > StairsNum())
 		return 0;
 
+	if (getstairs_number == number && getstairs_result)
+		return getstairs_result;
+
 	if ((int)StairsArray.size() > number - 1)
 	{
 		//quick prediction
 		if (StairsArray[number - 1].number == number)
 		{
 			if (StairsArray[number - 1].object)
-				return StairsArray[number - 1].object;
+			{
+				getstairs_number = number;
+				getstairs_result = StairsArray[number - 1].object;
+				return getstairs_result;
+			}
 			else
+			{
+				getstairs_number = 0;
+				getstairs_result = 0;
 				return 0;
+			}
 		}
 	}
 
 	for (size_t i = 0; i < StairsArray.size(); i++)
+	{
 		if (StairsArray[i].number == number)
-			return StairsArray[i].object;
+		{
+			getstairs_number = number;
+			getstairs_result = StairsArray[i].object;
+			return getstairs_result;
+		}
+	}
+
+	getstairs_number = 0;
+	getstairs_result = 0;
 	return 0;
 }
 
@@ -2329,370 +1924,6 @@ void SBS::ResetWalls(bool ToDefaults)
 		DrawWalls(DrawMainNOld, DrawMainPOld, DrawSideNOld, DrawSidePOld, DrawTopOld, DrawBottomOld);
 }
 
-void SBS::SetPlanarMapping(bool flat, bool X, bool Y, bool Z)
-{
-	//sets planar texture mapping parameters
-	//X, Y and Z reverse planar texture mapping per axis
-	//Flat determines if depth should be ignored when mapping
-
-	//first backup old parameters
-	BackupMapping();
-
-	//now set new parameters
-	RevX = X;
-	RevY = Y;
-	RevZ = Z;
-	MapUV[0] = Ogre::Vector2(0, 0);
-	MapUV[1] = Ogre::Vector2(1, 0);
-	MapUV[2] = Ogre::Vector2(1, 1);
-	PlanarFlat = flat;
-	MapMethod = 0;
-}
-
-void SBS::SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, Ogre::Vector2 uv2, int vertindex3, Ogre::Vector2 uv3)
-{
-	//Manually sets UV texture mapping.  Use ResetTextureMapping to return to default values
-
-	BackupMapping();
-
-	//set new values
-	MapIndex[0] = vertindex1;
-	MapIndex[1] = vertindex2;
-	MapIndex[2] = vertindex3;
-	MapUV[0] = uv1;
-	MapUV[1] = uv2;
-	MapUV[2] = uv3;
-	MapMethod = 1;
-}
-
-void SBS::SetTextureMapping2(std::string x1, std::string y1, std::string z1, Ogre::Vector2 uv1, std::string x2, std::string y2, std::string z2, Ogre::Vector2 uv2, std::string x3, std::string y3, std::string z3, Ogre::Vector2 uv3)
-{
-	//Manually sets UV texture mapping (advanced version)
-	//Use ResetTextureMapping to return to default values
-
-	BackupMapping();
-
-	MapVerts1[0] = x1;
-	MapVerts1[1] = y1;
-	MapVerts1[2] = z1;
-	MapVerts2[0] = x2;
-	MapVerts2[1] = y2;
-	MapVerts2[2] = z2;
-	MapVerts3[0] = x3;
-	MapVerts3[1] = y3;
-	MapVerts3[2] = z3;
-	MapUV[0] = uv1;
-	MapUV[1] = uv2;
-	MapUV[2] = uv3;
-	MapMethod = 2;
-}
-
-void SBS::BackupMapping()
-{
-	//backup texture mapping parameters
-	if (MapMethod == 0)
-	{
-		OldRevX = RevX;
-		OldRevY = RevY;
-		OldRevZ = RevZ;
-		OldPlanarFlat = PlanarFlat;
-	}
-	else
-	{
-		for (int i = 0; i <= 2; i++)
-		{
-			if (MapMethod == 1)
-				OldMapIndex[i] = MapIndex[i];
-			if (MapMethod == 2)
-			{
-				OldMapVerts1[i] = MapVerts1[i];
-				OldMapVerts1[i] = MapVerts1[i];
-				OldMapVerts1[i] = MapVerts1[i];
-			}
-		}
-	}
-	for (int i = 0; i <= 2; i++)
-		OldMapUV[i] = MapUV[i];
-	OldMapMethod = MapMethod;
-}
-
-void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3)
-{
-	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
-	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
-
-	if (MapMethod == 0)
-	{
-		//planar method
-
-		Ogre::Vector2 x, y, z;
-		std::vector<Ogre::Vector3> varray1, varray2;
-		bool rev_x = false, rev_z = false;
-
-		//copy vertices into polygon object
-		varray1.reserve(vertices.size());
-		for (int i = 0; i < (int)vertices.size(); i++)
-			varray1.push_back(vertices[i]);
-
-		//determine the largest projection dimension (the dimension that the polygon is generally on;
-		//with a floor Y would be biggest)
-		Ogre::Plane plane = Ogre::Plane(varray1[0], varray1[1], varray1[2]);
-		Ogre::Vector3 normal = plane.normal;
-
-		int projDimension = 0; //x; faces left/right
-
-		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
-			projDimension = 1; //y biggest; faces up/down
-		else if (fabsf (normal.z) > fabsf (normal.x))
-			projDimension = 2; //z biggest; faces front/back
-
-		size_t selX = (1 << projDimension) & 0x3;
-		size_t selY = (1 << selX) & 0x3;
-
-		varray2.reserve(varray1.size());
-		for (int i = 0; i < (int)varray1.size(); i++)
-		{
-			Ogre::Vector3 tmpvertex = varray1[i];
-			varray2.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
-		}
-
-		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.z < -0.999)
-			rev_x = true;
-
-		if (RevZ == true || (normal.x > 0.001 && normal.z > 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.x > 0.999)
-			rev_z = true;
-
-		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
-		Ogre::Vector2 a, b;
-		a = GetExtents(varray2, 1);
-		b = GetExtents(varray2, 2);
-
-		//set the result 2D coordinates
-		if (projDimension == 0)
-		{
-			if (rev_z == false)
-			{
-				v1.z = b.y; //right
-				v2.z = b.x; //left
-				v3.z = b.x; //left
-			}
-			else
-			{
-				v1.z = b.x; //left
-				v2.z = b.y; //right
-				v3.z = b.y; //right
-			}
-			if (RevY == false)
-			{
-				v1.y = a.y; //top
-				v2.y = a.y; //top
-				v3.y = a.x; //bottom
-			}
-			else
-			{
-				v1.y = a.x; //bottom
-				v2.y = a.x; //bottom
-				v3.y = a.y; //top
-			}
-		}
-		if (projDimension == 1)
-		{
-			if (rev_x == false)
-			{
-				v1.x = b.x; //left
-				v2.x = b.y; //right
-				v3.x = b.y; //right
-			}
-			else
-			{
-				v1.x = b.y; //right
-				v2.x = b.x; //left
-				v3.x = b.x; //left
-			}
-			if (rev_z == false)
-			{
-				v1.z = a.x; //bottom
-				v2.z = a.x; //bottom
-				v3.z = a.y; //top
-			}
-			else
-			{
-				v1.z = a.y; //top
-				v2.z = a.y; //top
-				v3.z = a.x; //bottom
-			}
-		}
-		if (projDimension == 2)
-		{
-			if (rev_x == false)
-			{
-				v1.x = a.y; //right
-				v2.x = a.x; //left
-				v3.x = a.x; //left
-			}
-			else
-			{
-				v1.x = a.x; //left
-				v2.x = a.y; //right
-				v3.x = a.y; //right
-			}
-			if (RevY == false)
-			{
-				v1.y = b.y; //top
-				v2.y = b.y; //top
-				v3.y = b.x; //bottom
-			}
-			else
-			{
-				v1.y = b.x; //bottom
-				v2.y = b.x; //bottom
-				v3.y = b.y; //top
-			}
-		}
-
-		//use the plane equation to get the coordinate values of the dropped dimension
-		if (projDimension == 0)
-		{
-			v1.x = -((normal.y * v1.y) + (normal.z * v1.z) + plane.d) / normal.x; //get X
-			v2.x = -((normal.y * v2.y) + (normal.z * v2.z) + plane.d) / normal.x; //get X
-			v3.x = -((normal.y * v3.y) + (normal.z * v3.z) + plane.d) / normal.x; //get X
-
-			if (PlanarFlat == true)
-				v3.x = v2.x;
-		}
-		if (projDimension == 1)
-		{
-			v1.y = -((normal.x * v1.x) + (normal.z * v1.z) + plane.d) / normal.y; //get Y
-			v2.y = -((normal.x * v2.x) + (normal.z * v2.z) + plane.d) / normal.y; //get Y
-			v3.y = -((normal.x * v3.x) + (normal.z * v3.z) + plane.d) / normal.y; //get Y
-
-			if (PlanarFlat == true)
-				v3.y = v2.y;
-		}
-		if (projDimension == 2)
-		{
-			v1.z = -((normal.x * v1.x) + (normal.y * v1.y) + plane.d) / normal.z; //get Z
-			v2.z = -((normal.x * v2.x) + (normal.y * v2.y) + plane.d) / normal.z; //get Z
-			v3.z = -((normal.x * v3.x) + (normal.y * v3.y) + plane.d) / normal.z; //get Z
-
-			if (PlanarFlat == true)
-				v3.z = v2.z;
-		}
-	}
-	if (MapMethod == 1)
-	{
-		//index method
-		v1 = vertices[MapIndex[0]];
-		v2 = vertices[MapIndex[1]];
-		v3 = vertices[MapIndex[2]];
-	}
-	if (MapMethod == 2)
-	{
-		//advanced manual vertex method
-
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 3; j++)
-			{
-				std::string string;
-				if (j == 0)
-					string = MapVerts1[i];
-				if (j == 1)
-					string = MapVerts2[i];
-				if (j == 2)
-					string = MapVerts3[i];
-
-				SetCase(string, false);
-
-				//find X component
-				int location = string.find("x");
-				if (location >= 0)
-				{
-					std::string number = string.substr(location + 1);
-					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("x" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].x, 12, buffer));
-					else
-						ReplaceAll(string, std::string("x" + number).c_str(), "0"); //number value out of bounds
-				}
-
-				//find Y component
-				location = string.find("y");
-				if (location >= 0)
-				{
-					std::string number = string.substr(location + 1);
-					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("y" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].y, 12, buffer));
-					else
-						ReplaceAll(string, std::string("y" + number).c_str(), "0"); //number value out of bounds
-				}
-
-				//find Z component
-				location = string.find("z");
-				if (location >= 0)
-				{
-					std::string number = string.substr(location + 1);
-					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("z" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].z, 12, buffer));
-					else
-						ReplaceAll(string, std::string("z" + number).c_str(), "0"); //number value out of bounds
-				}
-
-				//store values
-				if (i == 0)
-				{
-					if (j == 0)
-						v1.x = atof(string.c_str());
-					if (j == 1)
-						v2.x = atof(string.c_str());
-					if (j == 2)
-						v3.x = atof(string.c_str());
-				}
-				if (i == 1)
-				{
-					if (j == 0)
-						v1.y = atof(string.c_str());
-					if (j == 1)
-						v2.y = atof(string.c_str());
-					if (j == 2)
-						v3.y = atof(string.c_str());
-				}
-				if (i == 2)
-				{
-					if (j == 0)
-						v1.z = atof(string.c_str());
-					if (j == 1)
-						v2.z = atof(string.c_str());
-					if (j == 2)
-						v3.z = atof(string.c_str());
-				}
-			}
-		}
-	}
-}
-
-void SBS::ResetTextureMapping(bool todefaults)
-{
-	//Resets UV texture mapping to defaults or previous values
-	if (todefaults == true)
-	{
-		if (DefaultMapper == 0)
-			SetPlanarMapping(false, false, false, false);
-		if (DefaultMapper == 1)
-			SetTextureMapping(0, Ogre::Vector2(0, 0), 1, Ogre::Vector2(1, 0), 2, Ogre::Vector2(1, 1));
-		if (DefaultMapper == 2)
-			SetTextureMapping2("x0", "y0", "z0", Ogre::Vector2(0, 0), "x1", "y1", "z1", Ogre::Vector2(1, 0), "x2", "y2", "z2", Ogre::Vector2(1, 1));
-	}
-	else
-	{
-		if (OldMapMethod == 0)
-			SetPlanarMapping(OldPlanarFlat, OldRevX, OldRevY, OldRevZ);
-		if (OldMapMethod == 1)
-			SetTextureMapping(OldMapIndex[0], OldMapUV[0], OldMapIndex[1], OldMapUV[1], OldMapIndex[2], OldMapUV[2]);
-		if (OldMapMethod == 2)
-			SetTextureMapping2(OldMapVerts1[0], OldMapVerts1[1], OldMapVerts1[2], OldMapUV[0], OldMapVerts2[0], OldMapVerts2[1], OldMapVerts2[2], OldMapUV[1], OldMapVerts3[0], OldMapVerts3[1], OldMapVerts3[2], OldMapUV[2]);
-	}
-}
-
 int SBS::GetDrawWallsCount()
 {
 	//gets the number of wall polygons enabled
@@ -2766,20 +1997,6 @@ void SBS::ResetDoorwayWalls()
 	wall_extents_z = 0;
 }
 
-void SBS::SetAutoSize(bool x, bool y)
-{
-	//enable or disable texture autosizing
-	AutoX = x;
-	AutoY = y;
-}
-
-void SBS::GetAutoSize(bool &x, bool &y)
-{
-	//return autosizing values
-	x = AutoX;
-	y = AutoY;
-}
-
 void SBS::ReverseAxis(bool value)
 {
 	//reverse wall/floor altitude axis
@@ -2823,42 +2040,6 @@ void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &
 
 	if (DisableSound == false)
 		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
-}
-
-void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)
-{
-	//set override textures and enable override
-	mainnegtex = mainneg;
-	TrimString(mainnegtex);
-	mainpostex = mainpos;
-	TrimString(mainpostex);
-	sidenegtex = sideneg;
-	TrimString(sidenegtex);
-	sidepostex = sidepos;
-	TrimString(sidepostex);
-	toptex = top;
-	TrimString(toptex);
-	bottomtex = bottom;
-	TrimString(bottomtex);
-	TextureOverride = true;
-}
-
-void SBS::SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom)
-{
-	//flip a texture on a specified side either horizontally or vertically (or both)
-	//parameters are:
-	//0 = no flipping
-	//1 = flip horizontally
-	//2 = flip vertically
-	//3 = flip both
-
-	mainnegflip = mainneg;
-	mainposflip = mainpos;
-	sidenegflip = sideneg;
-	sideposflip = sidepos;
-	topflip = top;
-	bottomflip = bottom;
-	FlipTexture = true;
 }
 
 WallObject* SBS::AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
@@ -3140,117 +2321,6 @@ bool SBS::UnregisterCallButtonCallback(CallButton *button)
 	return true;
 }
 
-void SBS::ProcessTextureFlip(float tw, float th)
-{
-	//process texture flip info
-
-	if (tw == 0)
-		tw = 1;
-	if (th == 0)
-		th = 1;
-
-	for (int i = 0; i <= 5; i++)
-	{
-		widthscale[i] = tw;
-		heightscale[i] = th;
-	}
-
-	//texture flipping
-	if (FlipTexture == true)
-	{
-		int info;
-		for (int i = 0; i <= 5; i++)
-		{
-			info = 0;
-			if (i == 0)
-				info = mainnegflip;
-			if (i == 1)
-				info = mainposflip;
-			if (i == 2)
-				info = sidenegflip;
-			if (i == 3)
-				info = sideposflip;
-			if (i == 4)
-				info = topflip;
-			if (i == 5)
-				info = bottomflip;
-
-			if (info == 1 || info == 3)
-				widthscale[i] = -tw;
-			if (info == 2 || info == 3)
-				heightscale[i] = -th;
-		}
-	}
-}
-
-std::string SBS::GetTextureMaterial(const char *name, bool &result, const char *polygon_name)
-{
-	//perform a lookup on a texture, and return material name if it exists, or "Default" if not
-	//returns false in &result if texture load failed, and if default material was used instead
-
-	//use material_name value instead of name, if loaded as a material script instead of a direct texture
-	std::string matname = name;
-	for (int i = 0; i < (int)textureinfo.size(); i++)
-	{
-		if (textureinfo[i].name == name)
-		{
-			if (textureinfo[i].material_name != "")
-				matname = textureinfo[i].material_name;
-		}
-	}
-	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(matname);
-
-	std::string final_material = matname;
-
-	if (!material.get())
-	{
-		//if material's not found, display a warning and use a default material
-		std::string message;
-		if (polygon_name)
-			message = "Texture '" + std::string(matname) + "' not found for polygon '" + std::string(polygon_name) + "'; using default material";
-		else
-			message = "Texture '" + std::string(matname) + "' not found; using default material";
-		ReportError(message);
-
-		//set to default material
-		final_material = "Default";
-		result = false;
-	}
-	else
-		result = true;
-	return final_material;
-}
-
-bool SBS::GetTextureTiling(const char *texture, float &tw, float &th)
-{
-	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < (int)textureinfo.size(); i++)
-	{
-		if (textureinfo[i].name == texture)
-		{
-			tw = textureinfo[i].widthmult;
-			th = textureinfo[i].heightmult;
-			return true;
-		}
-	}
-	return false;
-}
-
-bool SBS::GetTextureForce(const char *texture, bool &enable_force, bool &force_mode)
-{
-	//get per-texture tiling values from the textureinfo array
-	for (int i = 0; i < (int)textureinfo.size(); i++)
-	{
-		if (textureinfo[i].name == texture)
-		{
-			enable_force = textureinfo[i].enable_force;
-			force_mode = textureinfo[i].force_mode;
-			return true;
-		}
-	}
-	return false;
-}
-
 void SBS::ProcessCallButtons()
 {
 	//process all registered call buttons
@@ -3317,14 +2387,6 @@ bool SBS::Mount(const char *filename, const char *path)
 		return ReportError("Error mounting file " + file + "\n" + e.getDescription());
 	}
 	return true;
-}
-
-void SBS::FreeTextureImages()
-{
-	//unload images in all texture wrappers
-
-	//for (int i = 0; i < engine->GetTextureList()->GetCount(); i++)
-		//engine->GetTextureList()->Get(i)->SetImageFile(0);
 }
 
 void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
@@ -3395,20 +2457,6 @@ int SBS::GetMeshCount()
 {
 	//return total number of mesh objects
 	return meshes.size();
-}
-
-int SBS::GetTextureCount()
-{
-	//return total number of textures
-	//return engine->GetTextureList()->GetCount();
-	return 0;
-}
-
-int SBS::GetMaterialCount()
-{
-	//return total number of materials
-	//return engine->GetMaterialList()->GetCount();
-	return 0;
 }
 
 int SBS::GetMeshFactoryCount()
@@ -3566,52 +2614,6 @@ bool SBS::UnregisterObject(int number)
 		}
 	}
 	return false;
-}
-
-Ogre::Vector2 SBS::CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::Vector2 y, Ogre::Vector2 z, float tw, float th)
-{
-	//calculate autosizing based on polygon extents
-
-	//Call texture autosizing formulas
-	float tw2 = tw, th2 = th;
-
-	bool force_enable = false, force_mode = false;
-	bool result = GetTextureForce(texture, force_enable, force_mode);
-
-	bool is_wall = true;
-	if (fabs(y.y - y.x) < fabs(x.y - x.x) && fabs(y.y - y.x) < fabs(z.y - z.x))
-	is_wall = false;
-
-	if (is_wall)
-	{
-		if (z.x == z.y)
-			tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
-		if (x.x == x.y)
-			tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
-		if ((z.x != z.y) && (x.x != x.y))
-		{
-			//calculate diagonals
-			float tempw1, tempw2;
-			if (x.x > x.y)
-				tempw1 = x.x - x.y;
-			else
-				tempw1 = x.y - x.x;
-			if (z.x > z.y)
-				tempw2 = z.x - z.y;
-			else
-				tempw2 = z.y - z.x;
-			tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-		}
-		th2 = AutoSize(y.x, y.y, false, th, force_enable, force_mode);
-	}
-	else
-	{
-		tw2 = sbs->AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
-		th2 = sbs->AutoSize(z.x, z.y, false, th, force_enable, force_mode);
-	}
-
-	//return results
-	return Ogre::Vector2(tw2, th2);
 }
 
 /*WallObject* SBS::GetWallObject(std::vector<WallObject*> &wallarray, int polygon_index)
@@ -3845,6 +2847,10 @@ void SBS::RemoveFloor(Floor *floor)
 				Basements--;
 			else
 				Floors--;
+
+			//clear cached values
+			getfloor_result = 0;
+			getfloor_number = 0;
 			return;
 		}
 	}
@@ -3858,6 +2864,10 @@ void SBS::RemoveElevator(Elevator *elevator)
 		if (ElevatorArray[i].object == elevator)
 		{
 			ElevatorArray.erase(ElevatorArray.begin() + i);
+
+			//clear cached values
+			getelevator_result = 0;
+			getelevator_number = 0;
 			return;
 		}
 	}
@@ -3871,6 +2881,10 @@ void SBS::RemoveShaft(Shaft *shaft)
 		if (ShaftArray[i].object == shaft)
 		{
 			ShaftArray.erase(ShaftArray.begin() + i);
+
+			//clear cached values
+			getshaft_result = 0;
+			getshaft_number = 0;
 			return;
 		}
 	}
@@ -3884,6 +2898,10 @@ void SBS::RemoveStairs(Stairs *stairs)
 		if (StairsArray[i].object == stairs)
 		{
 			StairsArray.erase(StairsArray.begin() + i);
+
+			//clear cached values
+			getstairs_result = 0;
+			getstairs_number = 0;
 			return;
 		}
 	}
@@ -4256,17 +3274,4 @@ void SBS::ResetLighting()
 	AmbientR = OldAmbientR;
 	AmbientG = OldAmbientG;
 	AmbientB = OldAmbientB;
-}
-
-std::string SBS::ListTextures()
-{
-	//list loaded textures
-
-	std::string list;
-	for (int i = 0; i < textureinfo.size(); i++)
-	{
-		list.append(textureinfo[i].name);
-		list.append("\n");
-	}
-	return list;
 }
