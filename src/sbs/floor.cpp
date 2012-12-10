@@ -1053,3 +1053,11 @@ Object* Floor::AddModel(const char *name, const char *filename, Ogre::Vector3 po
 	ModelArray.push_back(model);
 	return model->object;
 }
+
+void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	//change all instances of oldtexture in all meshes to newtexture
+	Level->ReplaceTexture(oldtexture, newtexture);
+	Interfloor->ReplaceTexture(oldtexture, newtexture);
+	ColumnFrame->ReplaceTexture(oldtexture, newtexture);
+}

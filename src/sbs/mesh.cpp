@@ -1022,7 +1022,6 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
 
-	//return Ogre::MaterialPtr(0);
 	SBS_PROFILE("MeshObject::ChangeTexture");
 	std::string tex = sbs->VerifyFile(texture);
 	std::string path = sbs->GetMountPath(texture, tex);
@@ -1053,6 +1052,19 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	MeshWrapper->_dirtyState();
 
 	return newmat;
+}
+
+bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	//replace submesh materials named oldtexture with newtexture
+	int submesh = FindMatchingSubMesh(oldtexture);
+	if (submesh >= 0)
+	{
+		Ogre::MaterialPtr result = ChangeTexture(newtexture.c_str(), true, submesh);
+		if (!result.isNull())
+			return true;
+	}
+	return false;
 }
 
 int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)

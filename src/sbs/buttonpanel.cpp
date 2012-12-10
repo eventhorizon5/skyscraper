@@ -140,6 +140,7 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	//alarm = Alarm
 
 	std::vector<std::string> textures, names;
+	std::vector<std::vector<std::string> > parameters;
 	std::string newtype = type;
 	SetCase(newtype, false);
 
@@ -157,45 +158,13 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	}
 	else
 		names.push_back(newtype);
-	AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
+	AddControl(sound, row, column, width, height, hoffset, voffset, names, parameters, textures);
 
 }
 
-void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
-
-	//Supported action names:
-	//Off
-	//(floor number)
-	//Open = Open Doors
-	//Close = Close Doors
-	//Cancel = Call Cancel
-	//Run
-	//Stop
-	//EStop (emergency stop)
-	//Alarm
-	//Fire1Off
-	//Fire1On
-	//Fire1Bypass
-	//Fire2Off
-	//Fire2On
-	//Fire2Hold
-	//UpPeakOn
-	//UpPeakOff
-	//DownPeakOn
-	//DownPeakOff
-	//IndOn
-	//IndOff
-	//InsOn
-	//InsOff
-	//AcpOn
-	//AcpOff
-	//FanOn
-	//FanOff
-	//MusicOn
-	//MusicOff
-	//Hold
 
 	float xpos = 0, ypos = 0, zpos = 0;
 
@@ -250,7 +219,7 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	buffer4 = Ogre::StringConverter::toString(control_index);
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	TrimString(buffer);
-	controls[control_index] = new Control(this->object, buffer.c_str(), sound, action_names, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	controls[control_index] = new Control(this->object, buffer.c_str(), sound, sbs->GetElevator(elevator)->object, action_names, action_parameters, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
 	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }
@@ -267,150 +236,12 @@ void ButtonPanel::Press(int index)
 	if (index == -1)
 		return;
 
-	Elevator *elev = sbs->GetElevator(elevator);
-
 	//exit if index is invalid
 	if (index < 0 || index > (int)controls.size() - 1)
 		return;
 
-	//play button sound
-	controls[index]->PlaySound();
-
-	//get action name of next position state
-	std::string name = controls[index]->GetPositionAction(controls[index]->GetNextSelectPosition());
-
-	if (IsNumeric(name.c_str()) == true)
-	{
-		//exit if in inspection mode or in fire service phase 1 mode
-		if (elev->InspectionService == true || elev->FireServicePhase1 == 1)
-			return;
-
-		int floor = atoi(name.c_str());
-		int elev_floor = elev->GetFloor();
-
-		//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
-		if (elev->IsQueueActive() && elev->QueueResets == true)
-			elev->AddRoute(floor, elev->QueuePositionDirection, true);
-		else
-		{
-			//elevator is above floor
-			if (elev_floor > floor)
-				elev->AddRoute(floor, -1, true);
-
-			//elevator is below floor
-			if (elev_floor < floor)
-				elev->AddRoute(floor, 1, true);
-
-			//elevator is on floor
-			if (elev_floor == floor)
-			{
-				if (elev->Direction == 0)
-				{
-					//stopped - play chime and open doors
-					if (elev->InServiceMode() == false)
-					{
-						if (elev->LastQueueDirection == -1)
-							elev->Chime(0, floor, false);
-						else if (elev->LastQueueDirection == 1)
-							elev->Chime(0, floor, true);
-					}
-					if (elev->FireServicePhase2 == 0)
-						elev->OpenDoors();
-				}
-				else
-				{
-					//add a route to the current floor if elevator is moving
-					elev->AddRoute(floor, -elev->Direction, true);
-				}
-			}
-		}
-
-		return;
-	}
-
-	SetCase(name, false);
-	//exit without changing position if floor button is currently selected
-	if (name == "off" && IsNumeric(controls[index]->GetSelectPositionAction()) == true)
-		return;
-
-	//change to next control position
-	controls[index]->NextSelectPosition();
-
-	if (name == "off")
-		return;
-
-	if (StartsWith(name, "open", false) == true && elev->Direction == 0)
-	{
-		int number = 0;
-		if (name.length() > 4)
-			number = atoi(name.substr(4, name.length() - 4).c_str());
-		elev->OpenDoors(number);
-	}
-	if (StartsWith(name, "close", false) == true && elev->Direction == 0)
-	{
-		int number = 0;
-		if (name.length() > 5)
-			number = atoi(name.substr(5, name.length() - 5).c_str());
-		elev->CloseDoors(number);
-	}
-	if (name == "cancel" && elev->FireServicePhase2 == 1)
-		elev->CancelLastRoute();
-	if (name == "run")
-		elev->SetRunState(true);
-	if (name == "stop")
-		elev->SetRunState(false);
-	if (name == "estop")
-		elev->Stop(true);
-	if (name == "alarm")
-		elev->Alarm();
-	if (name == "fire1off")
-		elev->EnableFireService1(0);
-	if (name == "fire1on")
-		elev->EnableFireService1(1);
-	if (name == "fire1bypass")
-		elev->EnableFireService1(2);
-	if (name == "fire2off")
-		elev->EnableFireService2(0);
-	if (name == "fire2on")
-		elev->EnableFireService2(1);
-	if (name == "fire2hold")
-		elev->EnableFireService2(2);
-	if (name == "uppeakon")
-		elev->EnableUpPeak(true);
-	if (name == "uppeakoff")
-		elev->EnableUpPeak(false);
-	if (name == "downpeakon")
-		elev->EnableDownPeak(true);
-	if (name == "downpeakoff")
-		elev->EnableDownPeak(false);
-	if (name == "indon")
-		elev->EnableIndependentService(true);
-	if (name == "indoff")
-		elev->EnableIndependentService(false);
-	if (name == "inson")
-		elev->EnableInspectionService(true);
-	if (name == "insoff")
-		elev->EnableInspectionService(false);
-	if (name == "acpon")
-		elev->EnableACP(true);
-	if (name == "acpoff")
-		elev->EnableACP(false);
-	if (name == "fanon")
-		elev->Fan = true;
-	if (name == "fanoff")
-		elev->Fan = false;
-	if (name == "musicon")
-		elev->MusicOn = true;
-	if (name == "musicoff")
-		elev->MusicOn = false;
-
-	if (StartsWith(name, "hold", false) == true && elev->Direction == 0)
-	{
-		int number = 0;
-		if (name.length() > 4)
-			number = atoi(name.substr(4, name.length() - 4).c_str());
-		elev->HoldDoors(number);
-	}
+	//press button
+	controls[index]->Press();
 }
 
 void ButtonPanel::Move(const Ogre::Vector3 &position)
@@ -474,15 +305,7 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 	std::string floornum = Ogre::StringConverter::toString(floor);
 	for (int i = 0; i < (int)controls.size(); i++)
 	{
-		int index = controls[i]->FindActionPosition(floornum.c_str());
-		int index2 = controls[i]->FindActionPosition("off");
-		if (index > 0 && index2 > 0)
-		{
-			if (value == false)
-				controls[i]->ChangeSelectPosition(index2);
-			else
-				controls[i]->ChangeSelectPosition(index);
-		}
+		controls[i]->ChangeLight(floor, value);
 	}
 }
 

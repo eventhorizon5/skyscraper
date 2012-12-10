@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, const char *sound_file, std::vector<std::string> &action_names, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 
@@ -47,7 +47,17 @@ Control::Control(Object *parent, const char *name, const char *sound_file, std::
 	std::string objnum = Ogre::StringConverter::toString(object->GetNumber());
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
-	Actions = action_names;
+
+	for (int i = 0; i < action_names.size(); i++)
+	{
+		Action *action;
+		if (action_parameters.size() > 0)
+			action = new Action(action_parent, action_names[i], action_parameters[i]);
+		else
+			action = new Action(action_parent, action_names[i]);
+		Actions.push_back(action);
+	}
+
 	Direction = direction;
 	IsEnabled = true;
 	TextureArray = textures;
@@ -103,6 +113,13 @@ Control::~Control()
 	if (ControlMesh)
 		delete ControlMesh;
 	ControlMesh = 0;
+
+	for (int i = 0; i < Actions.size(); i++)
+	{
+		if (Actions[i])
+			delete Actions[i];
+		Actions[i] = 0;
+	}
 
 	//unregister from parent
 	if (sbs->FastDelete == false)
@@ -242,7 +259,7 @@ int Control::GetSelectPosition()
 const char* Control::GetPositionAction(int position)
 {
 	//return action name associated with the specified selection position
-	return Actions[position - 1].c_str();
+	return Actions[position - 1]->GetName();
 }
 
 const char* Control::GetSelectPositionAction()
@@ -279,4 +296,47 @@ int Control::FindActionPosition(const char *name)
 	}
 
 	return 0;
+}
+
+bool Control::DoAction()
+{
+	//perform object's action
+	return Actions[current_position]->DoAction();
+}
+
+bool Control::Press()
+{
+	//press button/control
+
+	//play sound
+	PlaySound();
+
+	//get action name of next position state
+	std::string name = GetPositionAction(GetNextSelectPosition());
+
+	//exit without changing position if floor button is currently selected
+	if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
+		return false;
+
+	//change to next control position
+	NextSelectPosition();
+
+	//perform selected action
+	return DoAction();
+}
+
+void Control::ChangeLight(int floor, bool value)
+{
+	//change light status on control if it calls the specified floor
+
+	std::string floornum = Ogre::StringConverter::toString(floor);
+	int index = FindActionPosition(floornum.c_str());
+	int index2 = FindActionPosition("off");
+	if (index > 0 && index2 > 0)
+	{
+		if (value == false)
+			ChangeSelectPosition(index2);
+		else
+			ChangeSelectPosition(index);
+	}
 }
