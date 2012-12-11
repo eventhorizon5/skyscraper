@@ -700,18 +700,20 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		}
 	}
 
-	//check elevator buttons
-	if (meshname.find("Button Panel") != -1 && meshname.find("Control") != -1)
+	//check controls
+	if (meshname.find("Control") != -1)
 	{
-		//user clicked on an elevator button
-		int index = meshname.find(":");
-		int index2 = meshname.find("Control");
-		int elevator = atoi(meshname.substr(13, index - 13).c_str());
-		int panel_number = atoi(meshname.substr(index + 1, meshname.find(" ", index) - index - 1).c_str());
-		int control_number = atoi(meshname.substr(index2 + 8).c_str());
-
-		//press button
-		sbs->GetElevator(elevator)->GetPanel(panel_number)->Press(control_number);
+		//user clicked on a control object
+		Object *obj = sbs->GetObject(object_number);
+		if (obj)
+		{
+			if (obj->GetParent())
+			{
+				Control *control = (Control*)obj->GetParent()->GetRawObject();
+				if (control)
+					control->Press();
+			}
+		}
 	}
 
 	//check shaft doors

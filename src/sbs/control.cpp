@@ -35,11 +35,6 @@ Control::Control(Object *parent, const char *name, const char *sound_file, Objec
 {
 	//create a control at the specified location
 
-	//the parent object is responsible for control actions via a click callback.
-	//action_name is simply a second name used to determine the control's action, instead of
-	//needing it embedded in the mesh object
-	//'texture' is the texture for the first selection position
-
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, parent, "Control", name, false);
