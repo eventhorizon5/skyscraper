@@ -102,6 +102,36 @@ void Trigger::Enabled(bool value)
 	IsEnabled = value;
 }
 
+Ogre::Vector3 Trigger::GetPosition()
+{
+	//return current position
+	return pos;
+}
+
+void Trigger::SetPosition(const Ogre::Vector3 &position)
+{
+	//set position
+	sound->SetPosition(position);
+	pos = position;
+}
+
+void Trigger::SetPositionY(float position)
+{
+	//set Y position
+	Ogre::Vector3 tmppos = GetPosition();
+	tmppos.y = position;
+	SetPosition(tmppos);
+}
+
+void Trigger::Move(const Ogre::Vector3 &position)
+{
+	//relative movement
+	pos += position;
+
+	//move sound
+	sound->SetPosition(pos);
+}
+
 bool Trigger::SetSelectPosition(int position)
 {
 	//set selection position without checking state
@@ -226,7 +256,7 @@ bool Trigger::Check()
 	if (IsInside == false)
 	{
 		Ogre::Vector3 pos = sbs->camera->GetPosition();
-		if (pos >= area_min && pos <= area_max)
+		if (pos > area_min && pos < area_max)
 		{
 			//camera is inside trigger area
 			IsInside = true;

@@ -75,6 +75,28 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 
 Stairs::~Stairs()
 {
+	//delete controls
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		for (int j = 0; j < (int)ControlArray[i].size(); j++)
+		{
+			if (ControlArray[i][j])
+				delete ControlArray[i][j];
+			ControlArray[i][j] = 0;
+		}
+	}
+
+	//delete triggers
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
+		{
+			if (TriggerArray[i][j])
+				delete TriggerArray[i][j];
+			TriggerArray[i][j] = 0;
+		}
+	}
+
 	//delete models
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
@@ -289,6 +311,20 @@ void Stairs::Enabled(int floor, bool value)
 	{
 		GetMeshObject(floor)->Enable(value);
 		EnableArray[floor - startfloor] = value;
+
+		//controls
+		for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
+		{
+			if (ControlArray[floor - startfloor][i])
+				ControlArray[floor - startfloor][i]->Enabled(value);
+		}
+
+		//triggers
+		for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
+		{
+			if (TriggerArray[floor - startfloor][i])
+				TriggerArray[floor - startfloor][i]->Enabled(value);
+		}
 
 		//models
 		for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
@@ -685,4 +721,23 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, Ogre
 	}
 	ModelArray[floor - startfloor].push_back(model);
 	return model->object;
+}
+
+Object* Stairs::AddControl(int floor, const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+{
+	//add a control
+	Control* control = new Control(object, name, sound, action_parent, action_names, action_parameters, textures, direction, width, height, voffset);
+	control->SetPosition(position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z));
+	ControlArray[floor - startfloor].push_back(control);
+	return control->object;
+}
+
+Object* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+{
+	//add a trigger
+	Ogre::Vector3 min = area_min + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z);
+	Ogre::Vector3 max = area_max + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z);
+	Trigger* trigger = new Trigger(object, name, sound_file, action_parent, action_names, action_parameters, min, max);
+	TriggerArray[floor - startfloor].push_back(trigger);
+	return trigger->object;
 }

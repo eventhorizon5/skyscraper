@@ -40,6 +40,10 @@ public:
 	Trigger(Object *parent, const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
 	~Trigger();
 	void Enabled(bool value);
+	Ogre::Vector3 GetPosition();
+	void SetPosition(const Ogre::Vector3 &position);
+	void SetPositionY(float position);
+	void Move(const Ogre::Vector3 &position);
 	bool SetSelectPosition(int position);
 	bool ChangeSelectPosition(int position);
 	bool NextSelectPosition(bool check_state = true);
@@ -58,6 +62,7 @@ public:
 private:
 	Ogre::Vector3 area_min;
 	Ogre::Vector3 area_max;
+	Ogre::Vector3 pos;
 	int current_position; //current trigger position
 	bool IsInside;
 	std::vector<Action*> Actions; //trigger actions

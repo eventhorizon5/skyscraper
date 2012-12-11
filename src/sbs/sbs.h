@@ -48,6 +48,8 @@
 #include "sound.h"
 #include "callbutton.h"
 #include "profiler.h"
+#include "control.h"
+#include "trigger.h"
 
 //global functions
 
@@ -336,6 +338,8 @@ public:
 	void ResetLighting();
 	void SaveTexture(Ogre::TexturePtr texture, std::string filename);
 	std::string ListTextures();
+	Object* AddControl(const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset);
+	Object* AddTrigger(const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
 	
 	//Meshes
 	MeshObject* Buildings;
@@ -480,6 +484,12 @@ private:
 
 	//all models
 	std::vector<Model*> all_models;
+
+	//global controls
+	std::vector<Control*> ControlArray;
+
+	//global triggers
+	std::vector<Trigger*> TriggerArray;
 
 	int ObjectCount; //number of simulator objects
 

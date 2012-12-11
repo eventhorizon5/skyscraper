@@ -209,6 +209,22 @@ SBS::~SBS()
 
 	FastDelete = true;
 
+	//delete controls
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+			delete ControlArray[i];
+		ControlArray[i] = 0;
+	}
+
+	//delete triggers
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+			delete TriggerArray[i];
+		TriggerArray[i] = 0;
+	}
+
 	//delete models
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
@@ -3274,4 +3290,21 @@ void SBS::ResetLighting()
 	AmbientR = OldAmbientR;
 	AmbientG = OldAmbientG;
 	AmbientB = OldAmbientB;
+}
+
+Object* SBS::AddControl(const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+{
+	//add a control
+	Control* control = new Control(object, name, sound, action_parent, action_names, action_parameters, textures, direction, width, height, voffset);
+	control->SetPosition(position);
+	ControlArray.push_back(control);
+	return control->object;
+}
+
+Object* SBS::AddTrigger(const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+{
+	//add a trigger
+	Trigger* trigger = new Trigger(object, name, sound_file, action_parent, action_names, action_parameters, area_min, area_max);
+	TriggerArray.push_back(trigger);
+	return trigger->object;
 }

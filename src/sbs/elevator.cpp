@@ -183,6 +183,22 @@ Elevator::Elevator(int number)
 
 Elevator::~Elevator()
 {
+	//delete controls
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+			delete ControlArray[i];
+		ControlArray[i] = 0;
+	}
+
+	//delete triggers
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+			delete TriggerArray[i];
+		TriggerArray[i] = 0;
+	}
+
 	//delete models
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
@@ -2101,6 +2117,20 @@ void Elevator::EnableObjects(bool value)
 
 	//interior directional indicators
 	//EnableDirectionalIndicators(value);
+
+	//controls
+	for (size_t i = 0; i < (int)ControlArray.size(); i++)
+	{
+		if (ControlArray[i])
+			ControlArray[i]->Enabled(value);
+	}
+
+	//triggers
+	for (size_t i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+			TriggerArray[i]->Enabled(value);
+	}
 
 	//models
 	for (size_t i = 0; i < (int)ModelArray.size(); i++)
@@ -4355,4 +4385,21 @@ void Elevator::AddDisplayFloor(int floor)
 {
 	//add a floor to the display floors list
 	DisplayFloors.push_back(floor);
+}
+
+Object* Elevator::AddControl(const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+{
+	//add a control
+	Control* control = new Control(object, name, sound, action_parent, action_names, action_parameters, textures, direction, width, height, voffset);
+	control->SetPosition(position);
+	ControlArray.push_back(control);
+	return control->object;
+}
+
+Object* Elevator::AddTrigger(const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+{
+	//add a trigger
+	Trigger* trigger = new Trigger(object, name, sound_file, action_parent, action_names, action_parameters, area_min, area_max);
+	TriggerArray.push_back(trigger);
+	return trigger->object;
 }
