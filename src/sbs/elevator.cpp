@@ -1567,8 +1567,7 @@ void Elevator::MoveElevatorToFloor()
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
 	MoveDoors(0, movement, true, true, true);
-	MoveLights(movement, true, true, true);
-	MoveModels(movement, true, true, true);
+	MoveObjects(movement, true, true, true);
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
@@ -1849,8 +1848,7 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 		MoveDoors(0, Ogre::Vector3(0, Destination, 0), true, false, true);
-		MoveLights(Ogre::Vector3(0, Destination, 0), true, false, true);
-		MoveModels(Ogre::Vector3(0, Destination, 0), true, false, true);
+		MoveObjects(Ogre::Vector3(0, Destination, 0), true, false, true);
 		for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 		{
 			if (FloorIndicatorArray[i])
@@ -4354,13 +4352,6 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 	return light->object;
 }
 
-void Elevator::MoveLights(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//move lights
-	for (int i = 0; i < (int)lights.size(); i++)
-		lights[i]->Move(position, relative_x, relative_y, relative_z);
-}
-
 Object* Elevator::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
@@ -4374,11 +4365,55 @@ Object* Elevator::AddModel(const char *name, const char *filename, Ogre::Vector3
 	return model->object;
 }
 
-void Elevator::MoveModels(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
+void Elevator::MoveObjects(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
+	//move controls
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		Ogre::Vector3 pos = ControlArray[i]->GetPosition();
+		if (relative_x == true)
+			pos.x += position.x;
+		else
+			pos.x = position.x;
+		if (relative_y == true)
+			pos.y += position.y;
+		else
+			pos.y = position.y;
+		if (relative_z == true)
+			pos.z += position.z;
+		else
+			pos.z = position.z;
+
+		ControlArray[i]->Move(pos);
+	}
+
+	//move triggers
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		Ogre::Vector3 pos = TriggerArray[i]->GetPosition();
+		if (relative_x == true)
+			pos.x += position.x;
+		else
+			pos.x = position.x;
+		if (relative_y == true)
+			pos.y += position.y;
+		else
+			pos.y = position.y;
+		if (relative_z == true)
+			pos.z += position.z;
+		else
+			pos.z = position.z;
+
+		TriggerArray[i]->Move(pos);
+	}
+
 	//move models
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 		ModelArray[i]->Move(position, relative_x, relative_y, relative_z);
+
+	//move lights
+	for (int i = 0; i < (int)lights.size(); i++)
+		lights[i]->Move(position, relative_x, relative_y, relative_z);
 }
 
 void Elevator::AddDisplayFloor(int floor)
