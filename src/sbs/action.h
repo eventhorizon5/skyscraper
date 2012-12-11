@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-        Scalable Building Simulator - Action Class
+        Scalable Building Simulator - Action Interface Class
         The Skyscraper Project - Version 1.8 Alpha
         Copyright (C)2004-2012 Ryan Thoryk
         http://www.skyscrapersim.com

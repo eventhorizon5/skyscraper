@@ -301,7 +301,7 @@ int Control::FindActionPosition(const char *name)
 bool Control::DoAction()
 {
 	//perform object's action
-	return Actions[current_position]->DoAction();
+	return Actions[current_position - 1]->DoAction();
 }
 
 bool Control::Press()
