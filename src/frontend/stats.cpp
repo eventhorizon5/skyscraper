@@ -61,7 +61,7 @@ const long Stats::ID_tMeshes = wxNewId();
 const long Stats::ID_STATICTEXT3 = wxNewId();
 const long Stats::ID_tTextures = wxNewId();
 const long Stats::ID_STATICTEXT4 = wxNewId();
-const long Stats::ID_tMaterials = wxNewId();
+const long Stats::ID_tActions = wxNewId();
 const long Stats::ID_STATICTEXT21 = wxNewId();
 const long Stats::ID_tSounds = wxNewId();
 const long Stats::ID_STATICTEXT22 = wxNewId();
@@ -166,10 +166,10 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText3, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tTextures = new wxTextCtrl(this, ID_tTextures, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tTextures"));
 	FlexGridSizer2->Add(tTextures, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Materials:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Actions:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(StaticText4, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	tMaterials = new wxTextCtrl(this, ID_tMaterials, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaterials"));
-	FlexGridSizer2->Add(tMaterials, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	tActions = new wxTextCtrl(this, ID_tActions, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tActions"));
+	FlexGridSizer2->Add(tActions, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText21 = new wxStaticText(this, ID_STATICTEXT21, _("Sounds:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT21"));
 	FlexGridSizer2->Add(StaticText21, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tSounds = new wxTextCtrl(this, ID_tSounds, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tSounds"));
@@ -220,7 +220,7 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(tPlatform, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
-	FlexGridSizer1->Add(FlexGridSizer4, 1, wxALL|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	FlexGridSizer1->Add(FlexGridSizer4, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	FlexGridSizer1->Add(bOK, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
@@ -261,7 +261,7 @@ void Stats::Loop()
 {
 	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());
 	tTextures->SetValue(wxVariant(Simcore->GetTextureCount()).GetString());
-	tMaterials->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
+	tActions->SetValue(wxVariant(Simcore->GetActionCount()).GetString());
 	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
 	tInStairwell->SetValue(wxString::FromAscii(BoolToString(Simcore->InStairwell)));
 	tInElevator->SetValue(wxString::FromAscii(BoolToString(Simcore->InElevator)));

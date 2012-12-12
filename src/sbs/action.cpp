@@ -30,13 +30,9 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Action::Action(Object *parent, Object *action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
+Action::Action(Object *action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//create an action
-
-	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Action", name.c_str(), false);
 
 	command_name = command;
 	this->name = name;
@@ -54,13 +50,9 @@ Action::Action(Object *parent, Object *action_parent, const std::string name, co
 	parent_object = action_parent;
 }
 
-Action::Action(Object *parent, Object* action_parent, const std::string name, const std::string &command)
+Action::Action(Object* action_parent, const std::string name, const std::string &command)
 {
 	//create an action
-
-	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Action", name.c_str(), false);
 
 	command_name = command;
 	this->name = name;

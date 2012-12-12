@@ -2128,9 +2128,9 @@ int ScriptProcessor::ProcCommands()
 		if (obj)
 		{
 			if (params > 3)
-				StoreCommand(Simcore->AddAction(obj, tempdata[1], tempdata[2], actparams));
+				Simcore->AddAction(obj, tempdata[1], tempdata[2], actparams);
 			else
-				StoreCommand(Simcore->AddAction(obj, tempdata[1], tempdata[2]));
+				Simcore->AddAction(obj, tempdata[1], tempdata[2]);
 		}
 	}
 

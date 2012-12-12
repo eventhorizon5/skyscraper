@@ -3318,7 +3318,7 @@ Object* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 
 	return trigger->object;
 }
 
-Object* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
+Action* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//add a global action
 
@@ -3327,12 +3327,12 @@ Object* SBS::AddAction(Object* action_parent, const std::string name, const std:
 	if (check)
 		return 0;
 
-	Action *action = new Action(object, action_parent, name, command, parameters);
+	Action *action = new Action(action_parent, name, command, parameters);
 	ActionArray.push_back(action);
-	return action->object;
+	return action;
 }
 
-Object* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command)
+Action* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command)
 {
 	//add a global action
 
@@ -3341,9 +3341,9 @@ Object* SBS::AddAction(Object* action_parent, const std::string name, const std:
 	if (check)
 		return 0;
 
-	Action *action = new Action(object, action_parent, name, command);
+	Action *action = new Action(action_parent, name, command);
 	ActionArray.push_back(action);
-	return action->object;
+	return action;
 }
 
 Action* SBS::GetAction(const std::string name)

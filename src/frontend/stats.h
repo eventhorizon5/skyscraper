@@ -69,6 +69,7 @@ class Stats: public wxDialog
 		wxStaticText* StaticText23;
 		wxTextCtrl* tPolygons;
 		wxTextCtrl* tRunningTime;
+		wxTextCtrl* tActions;
 		wxTextCtrl* tBasements;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText12;
@@ -89,7 +90,6 @@ class Stats: public wxDialog
 		wxButton* bOK;
 		wxStaticText* StaticText19;
 		wxStaticText* StaticText9;
-		wxTextCtrl* tMaterials;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText25;
 		//*)
@@ -123,7 +123,7 @@ class Stats: public wxDialog
 		static const long ID_STATICTEXT3;
 		static const long ID_tTextures;
 		static const long ID_STATICTEXT4;
-		static const long ID_tMaterials;
+		static const long ID_tActions;
 		static const long ID_STATICTEXT21;
 		static const long ID_tSounds;
 		static const long ID_STATICTEXT22;
