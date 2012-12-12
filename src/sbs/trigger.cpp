@@ -70,13 +70,6 @@ Trigger::~Trigger()
 	}
 	sound = 0;
 
-	for (int i = 0; i < Actions.size(); i++)
-	{
-		if (Actions[i])
-			delete Actions[i];
-		Actions[i] = 0;
-	}
-
 	//unregister from parent
 	/*if (sbs->FastDelete == false)
 	{

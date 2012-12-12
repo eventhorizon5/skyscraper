@@ -238,6 +238,10 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
+				RelativePath="..\src\frontend\actionviewer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\src\frontend\cameracontrol.cpp"
 				>
 			</File>
@@ -302,6 +306,10 @@
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl"
 			>
+			<File
+				RelativePath="..\src\frontend\actionviewer.h"
+				>
+			</File>
 			<File
 				RelativePath="..\src\frontend\cameracontrol.h"
 				>
