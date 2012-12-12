@@ -229,14 +229,14 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
-											<label>Materials:</label>
+											<label>Actions:</label>
 										</object>
 										<flag>wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxTextCtrl" name="ID_tMaterials" variable="tMaterials" member="yes">
+										<object class="wxTextCtrl" name="ID_tActions" variable="tActions" member="yes">
 											<style>wxTE_READONLY|wxTE_CENTRE</style>
 										</object>
 										<flag>wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
@@ -446,7 +446,7 @@
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+				<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>

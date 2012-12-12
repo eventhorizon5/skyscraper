@@ -86,6 +86,8 @@
 		<Unit filename="../src/fileio.cpp" />
 		<Unit filename="../src/floor.cpp" />
 		<Unit filename="../src/floor.h" />
+		<Unit filename="../src/frontend/actionviewer.cpp" />
+		<Unit filename="../src/frontend/actionviewer.h" />
 		<Unit filename="../src/frontend/createobject.cpp" />
 		<Unit filename="../src/frontend/createobject.h" />
 		<Unit filename="../src/frontend/parameterviewer.cpp" />
@@ -132,6 +134,7 @@
 					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/frontend/profilergui.cpp" hdr="../src/frontend/profilergui.h" name="Profiler" language="CPP" />
 					<wxDialog wxs="wxsmith/CreateObject.wxs" src="../src/frontend/createobject.cpp" hdr="../src/frontend/createobject.h" name="CreateObject" language="CPP" />
 					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/frontend/parameterviewer.cpp" hdr="../src/frontend/parameterviewer.h" name="ParameterViewer" language="CPP" />
+					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/frontend/actionviewer.cpp" hdr="../src/frontend/actionviewer.h" name="ActionViewer" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />
