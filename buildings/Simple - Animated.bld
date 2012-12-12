@@ -82,6 +82,10 @@
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
 
+    Load data/cutston.jpg, Ceiling1Old, 0.269, 0.25
+    Load data/otis-touch.gif, Touch, 1, 1
+    Load data/otis-touchlit.gif, TouchLit, 1, 1
+
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -174,6 +178,13 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
+
+<Floor 0>
+    AddAction Floor 0, MyAction, ChangeTexture, Ceiling1, Ceiling1Old
+    AddAction Floor 0, UndoMyAction, ChangeTexture, Ceiling1Old, Ceiling1
+    AddActionControl MyControl, switch.wav, front, 0, 10, 1.5, 1.5, 4, UndoMyAction, MyAction, Touch, TouchLit
+    AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction, MyAction
+<EndFloor>
 
 #Finally create the roof (11th floor), and add a square brick floor on it.
 <Floor 10>
