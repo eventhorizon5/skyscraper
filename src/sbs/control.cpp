@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, const char *name, const char *sound_file, const std::vector<std::string> &action_names, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
 
@@ -43,14 +43,12 @@ Control::Control(Object *parent, const char *name, const char *sound_file, Objec
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 
+	//get pointers to actions
 	for (int i = 0; i < action_names.size(); i++)
 	{
-		Action *action;
-		if (action_parameters.size() > 0)
-			action = new Action(action_parent, action_names[i], action_parameters[i]);
-		else
-			action = new Action(action_parent, action_names[i]);
-		Actions.push_back(action);
+		Action *action = sbs->GetAction(parent, action_names[i]);
+		if (action)
+			Actions.push_back(action);
 	}
 
 	Direction = direction;
@@ -253,8 +251,8 @@ int Control::GetSelectPosition()
 
 const char* Control::GetPositionAction(int position)
 {
-	//return action name associated with the specified selection position
-	return Actions[position - 1]->GetName();
+	//return action's command name associated with the specified selection position
+	return Actions[position - 1]->GetCommandName();
 }
 
 const char* Control::GetSelectPositionAction()

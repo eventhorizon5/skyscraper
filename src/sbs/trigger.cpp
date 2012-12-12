@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &_area_min, Ogre::Vector3 &_area_max)
+Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
 {
 	//create a proximity trigger at the specified location
 
@@ -42,20 +42,18 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Objec
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 
+	//get pointers to actions
 	for (int i = 0; i < action_names.size(); i++)
 	{
-		Action *action;
-		if (action_parameters.size() > 0)
-			action = new Action(action_parent, action_names[i], action_parameters[i]);
-		else
-			action = new Action(action_parent, action_names[i]);
-		Actions.push_back(action);
+		Action *action = sbs->GetAction(parent, action_names[i]);
+		if (action)
+			Actions.push_back(action);
 	}
 
 	IsEnabled = true;
 	current_position = 1;
-	area_min = _area_min;
-	area_max = _area_max;
+	this->area_min = area_min;
+	this->area_max = area_max;
 	IsInside = false;
 
 	//create sound object

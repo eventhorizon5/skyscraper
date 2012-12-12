@@ -60,6 +60,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
 	ModelArray.resize(endfloor - startfloor + 1);
+	ControlArray.resize(endfloor - startfloor + 1);
+	TriggerArray.resize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -723,21 +725,29 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, Ogre
 	return model->object;
 }
 
-Object* Stairs::AddControl(int floor, const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Object* Stairs::AddControl(int floor, const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
-	Control* control = new Control(object, name, sound, action_parent, action_names, action_parameters, textures, direction, width, height, voffset);
-	control->SetPosition(position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z));
+	Control* control = new Control(object, name, sound, action_names, textures, direction, width, height, voffset);
+	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
 	ControlArray[floor - startfloor].push_back(control);
 	return control->object;
 }
 
-Object* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+Object* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Ogre::Vector3 min = area_min + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z);
-	Ogre::Vector3 max = area_max + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z);
-	Trigger* trigger = new Trigger(object, name, sound_file, action_parent, action_names, action_parameters, min, max);
+	Ogre::Vector3 base = Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z);
+	Ogre::Vector3 min = area_min + base;
+	Ogre::Vector3 max = area_min + max;
+	Trigger* trigger = new Trigger(object, name, sound_file, min, max, action_names);
 	TriggerArray[floor - startfloor].push_back(trigger);
 	return trigger->object;
 }
+
+void Stairs::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+	for (int i = startfloor; i <= endfloor; i++)
+	        GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
+}
+

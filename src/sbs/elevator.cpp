@@ -4422,19 +4422,27 @@ void Elevator::AddDisplayFloor(int floor)
 	DisplayFloors.push_back(floor);
 }
 
-Object* Elevator::AddControl(const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Object* Elevator::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
-	Control* control = new Control(object, name, sound, action_parent, action_names, action_parameters, textures, direction, width, height, voffset);
-	control->SetPosition(position);
+	Control* control = new Control(object, name, sound, action_names, textures, direction, width, height, voffset);
+	control->SetPosition(Ogre::Vector3(CenterX + Origin.x, Origin.y, CenterZ + Origin.z));
 	ControlArray.push_back(control);
 	return control->object;
 }
 
-Object* Elevator::AddTrigger(const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, sound_file, action_parent, action_names, action_parameters, area_min, area_max);
+	Ogre::Vector3 min = area_min + Origin;
+	Ogre::Vector3 max = area_max + Origin;
+	Trigger* trigger = new Trigger(object, name, sound_file, min, max, action_names);
 	TriggerArray.push_back(trigger);
 	return trigger->object;
 }
+
+void Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+{
+        ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
+}
+

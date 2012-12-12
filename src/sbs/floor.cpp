@@ -1092,19 +1092,23 @@ void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &new
 	ColumnFrame->ReplaceTexture(oldtexture, newtexture);
 }
 
-Object* Floor::AddControl(const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Object* Floor::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
-	Control* control = new Control(object, name, sound, action_parent, action_names, action_parameters, textures, direction, width, height, voffset);
-	control->SetPosition(position);
+	Control* control = new Control(object, name, sound, action_names, textures, direction, width, height, voffset);
+	control->SetPosition(Ogre::Vector3(CenterX, GetBase(), CenterZ));
 	ControlArray.push_back(control);
 	return control->object;
 }
 
-Object* Floor::AddTrigger(const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, sound_file, action_parent, action_names, action_parameters, area_min, area_max);
+	Ogre::Vector3 base = Ogre::Vector3(0, GetBase(), 0);
+	Ogre::Vector3 min = area_min + base;
+	Ogre::Vector3 max = area_max + base;
+	Trigger* trigger = new Trigger(object, name, sound_file, min, max, action_names);
 	TriggerArray.push_back(trigger);
 	return trigger->object;
 }
+

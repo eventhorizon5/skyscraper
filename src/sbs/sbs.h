@@ -50,6 +50,7 @@
 #include "profiler.h"
 #include "control.h"
 #include "trigger.h"
+#include "action.h"
 
 //global functions
 
@@ -273,6 +274,7 @@ public:
 	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true);
 	int GetObjectCount();
 	Object* GetObject(int number);
+	Object* GetObject(const std::string name);
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);
 	void GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3);
@@ -338,8 +340,12 @@ public:
 	void ResetLighting();
 	void SaveTexture(Ogre::TexturePtr texture, std::string filename);
 	std::string ListTextures();
-	Object* AddControl(const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset);
-	Object* AddTrigger(const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
+	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
+	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
+	Object* AddAction(Object* action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters);
+	Object* AddAction(Object* action_parent, const std::string name, const std::string &command);
+	Action* GetAction(Object* action_parent, const std::string name);
+	int GetActionCount();
 	
 	//Meshes
 	MeshObject* Buildings;
@@ -409,6 +415,9 @@ private:
 	std::vector<ElevatorMap> ElevatorArray; //elevator object array
 	std::vector<ShaftMap> ShaftArray; //shaft object array
 	std::vector<StairsMap> StairsArray; //stairs object array
+
+	//action array
+	std::vector<Action*> ActionArray;
 
 	//private functions
 	void PrintBanner();

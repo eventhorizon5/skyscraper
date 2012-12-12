@@ -2106,6 +2106,106 @@ int ScriptProcessor::ProcCommands()
 		StoreCommand(Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 	}
 
+	//AddAction command
+	if (SetCaseCopy(LineData.substr(0, 9), false) == "addaction")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 10);
+
+		if (params < 3)
+			return ScriptError("Incorrect number of parameters");
+
+		Object *obj = Simcore->GetObject(tempdata[0].c_str());
+		std::vector<std::string> actparams;
+		if (params > 3)
+		{
+			for (int i = 3; i < params - 1; i++)
+			{
+				actparams.push_back(tempdata[i]);	
+			}
+		}
+
+		if (obj)
+		{
+			if (params > 3)
+				StoreCommand(Simcore->AddAction(obj, tempdata[1], tempdata[2], actparams));
+			else
+				StoreCommand(Simcore->AddAction(obj, tempdata[1], tempdata[2]));
+		}
+	}
+
+	//AddActionControl command
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "addactioncontrol")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 17);
+
+		if (params < 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 7; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array, tex_array;
+		int slength, parameters;
+
+		//get number of action & texture parameters
+		slength = (int)tempdata.size();
+		parameters = slength - 8; //strip off main parameters
+
+		//action & texture parameter number needs to be even
+		if (IsEven(parameters) == false)
+			return ScriptError("Incorrect number of parameters");
+
+		for (temp3 = 8; temp3 < slength - (parameters / 2); temp3++)
+			action_array.push_back(tempdata[temp3]);
+		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
+			tex_array.push_back(tempdata[temp3]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		StoreCommand(Simcore->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array));
+	}
+
+	//AddTrigger command
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "addtrigger")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 11);
+
+		if (params < 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 7; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array;
+
+		//get number of action & texture parameters
+		for (int i = 8; i < params; i++)
+			action_array.push_back(tempdata[i]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()));
+		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
+		StoreCommand(Simcore->AddTrigger(tempdata[0].c_str(), tempdata[1].c_str(), min, max, action_array));
+	}
+
 	return 0;
 }
 
@@ -3291,6 +3391,242 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
 		else
 			return ScriptError("Invalid shaft");
+	}
+
+	//AddActionControl command
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "addactioncontrol")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 17);
+
+		if (params < 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 7; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array, tex_array;
+		int slength, parameters;
+
+		//get number of action & texture parameters
+		slength = (int)tempdata.size();
+		parameters = slength - 8; //strip off main parameters
+
+		//action & texture parameter number needs to be even
+		if (IsEven(parameters) == false)
+			return ScriptError("Incorrect number of parameters");
+
+		for (temp3 = 8; temp3 < slength - (parameters / 2); temp3++)
+			action_array.push_back(tempdata[temp3]);
+		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
+			tex_array.push_back(tempdata[temp3]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		StoreCommand(floor->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array));
+	}
+
+	//AddShaftActionControl command
+	if (SetCaseCopy(LineData.substr(0, 21), false) == "addshaftactioncontrol")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 21);
+
+		if (params < 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 8; i++)
+		{
+			if (i == 1)
+				i = 4;
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array, tex_array;
+		int slength, parameters;
+
+		//get number of action & texture parameters
+		slength = (int)tempdata.size();
+		parameters = slength - 9; //strip off main parameters
+
+		//action & texture parameter number needs to be even
+		if (IsEven(parameters) == false)
+			return ScriptError("Incorrect number of parameters");
+
+		for (temp3 = 9; temp3 < slength - (parameters / 2); temp3++)
+			action_array.push_back(tempdata[temp3]);
+		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
+			tex_array.push_back(tempdata[temp3]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array));
+		else
+			return ScriptError("Invalid shaft");
+	}
+
+	//AddStairsActionControl command
+	if (SetCaseCopy(LineData.substr(0, 21), false) == "addstairsactioncontrol")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 21);
+
+		if (params < 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 8; i++)
+		{
+			if (i == 1)
+				i = 4;
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array, tex_array;
+		int slength, parameters;
+
+		//get number of action & texture parameters
+		slength = (int)tempdata.size();
+		parameters = slength - 9; //strip off main parameters
+
+		//action & texture parameter number needs to be even
+		if (IsEven(parameters) == false)
+			return ScriptError("Incorrect number of parameters");
+
+		for (temp3 = 9; temp3 < slength - (parameters / 2); temp3++)
+			action_array.push_back(tempdata[temp3]);
+		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
+			tex_array.push_back(tempdata[temp3]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array));
+		else
+			return ScriptError("Invalid stairwell");
+	}
+
+	//AddTrigger command
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "addtrigger")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 11);
+
+		if (params < 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 7; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array;
+
+		//get number of action & texture parameters
+		for (int i = 8; i < params; i++)
+			action_array.push_back(tempdata[i]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()));
+		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
+		StoreCommand(floor->AddTrigger(tempdata[0].c_str(), tempdata[1].c_str(), min, max, action_array));
+	}
+
+	//AddShaftTrigger command
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "addshafttrigger")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 16);
+
+		if (params < 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 8; i++)
+		{
+			if (i == 1)
+				i = 3;
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array;
+
+		//get number of action & texture parameters
+		for (int i = 9; i < params; i++)
+			action_array.push_back(tempdata[i]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()));
+		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
+		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddTrigger(Current, tempdata[1].c_str(), tempdata[2].c_str(), min, max, action_array));
+		else
+			return ScriptError("Invalid shaft");
+	}
+
+	//AddStairsTrigger command
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "addstairstrigger")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 16);
+
+		if (params < 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 8; i++)
+		{
+			if (i == 1)
+				i = 3;
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array;
+
+		//get number of action & texture parameters
+		for (int i = 9; i < params; i++)
+			action_array.push_back(tempdata[i]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()));
+		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
+		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
+			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddTrigger(Current, tempdata[1].c_str(), tempdata[2].c_str(), min, max, action_array));
+		else
+			return ScriptError("Invalid stairwell");
 	}
 
 	//Cut command
@@ -4695,8 +5031,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		std::vector<std::vector<std::string> > action_parameters;
-		elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, action_parameters, tex_array);
+		elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 	}
 
 	//AddFloorIndicator command
@@ -5095,6 +5430,78 @@ int ScriptProcessor::ProcElevators()
 
 		//create model
 		StoreCommand(elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+	}
+
+	//AddActionControl command
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "addactioncontrol")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 17);
+
+		if (params < 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 3; i <= 7; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array, tex_array;
+		int slength, parameters;
+
+		//get number of action & texture parameters
+		slength = (int)tempdata.size();
+		parameters = slength - 8; //strip off main parameters
+
+		//action & texture parameter number needs to be even
+		if (IsEven(parameters) == false)
+			return ScriptError("Incorrect number of parameters");
+
+		for (temp3 = 8; temp3 < slength - (parameters / 2); temp3++)
+			action_array.push_back(tempdata[temp3]);
+		for (temp3 = slength - (parameters / 2); temp3 < slength; temp3++)
+			tex_array.push_back(tempdata[temp3]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		StoreCommand(elev->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array));
+	}
+
+	//AddTrigger command
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "addtrigger")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 11);
+
+		if (params < 9)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 7; i++)
+		{
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
+				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+		}
+
+		std::vector<std::string> action_array;
+
+		//get number of action & texture parameters
+		for (int i = 8; i < params; i++)
+			action_array.push_back(tempdata[i]);
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + tempdata[1]).c_str());
+
+		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()));
+		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
+		StoreCommand(elev->AddTrigger(tempdata[0].c_str(), tempdata[1].c_str(), min, max, action_array));
 	}
 
 	//Set command

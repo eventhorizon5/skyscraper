@@ -30,10 +30,16 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Action::Action(Object* action_parent, const std::string &command, const std::vector<std::string> &parameters)
+Action::Action(Object *parent, Object *action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//create an action
+
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, parent, "Action", name.c_str(), false);
+
 	command_name = command;
+	this->name = name;
 	TrimString(command_name);
 	SetCase(command_name, false);
 
@@ -48,10 +54,16 @@ Action::Action(Object* action_parent, const std::string &command, const std::vec
 	parent_object = action_parent;
 }
 
-Action::Action(Object* action_parent, const std::string &command)
+Action::Action(Object *parent, Object* action_parent, const std::string name, const std::string &command)
 {
 	//create an action
+
+	//set up SBS object
+	object = new Object();
+	object->SetValues(this, parent, "Action", name.c_str(), false);
+
 	command_name = command;
+	this->name = name;
 	TrimString(command_name);
 	SetCase(command_name, false);
 
@@ -66,12 +78,21 @@ Action::~Action()
 
 const char *Action::GetName()
 {
+	return name.c_str();
+}
+
+const char *Action::GetCommandName()
+{
 	return command_name.c_str();
 }
 
 bool Action::DoAction()
 {
 	//Supported action names:
+
+	////General actions:
+	//ChangeTexture  - param1: oldtexture param2: newtexture
+	//PlaySound - param1: name
 
 	////Elevator actions:
 	//Off
@@ -110,6 +131,7 @@ bool Action::DoAction()
 	Shaft *shaft = 0;
 	Stairs *stairs = 0;
 
+	std::string parent_name = parent_object->GetName();
 	std::string parent_type = parent_object->GetType();
 	if (parent_type == "Floor")
 		floor = (Floor*)parent_object->GetRawObject();
@@ -252,10 +274,20 @@ bool Action::DoAction()
 
 	}
 
-	if (command_name == "replacetexture")
+	if (command_name == "changetexture")
 	{
 		if (command_parameters.size() == 2)
 		{
+			if (parent_type == "Mesh")
+			{
+				if (parent_name == "External")
+					sbs->External->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				if (parent_name == "Landscape")
+					sbs->Landscape->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				if (parent_name == "Buildings")
+					sbs->Buildings->ReplaceTexture(command_parameters[0], command_parameters[1]);
+			}
+
 			if (parent_type == "Floor")
 			{
 				if (floor)
@@ -265,9 +297,42 @@ bool Action::DoAction()
 				else
 					return false;
 			}
+			if (parent_type == "Elevator")
+			{
+				if (elevator)
+				{
+					elevator->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				}
+				else
+					return false;
+			}
+			if (parent_type == "Shaft")
+                        {
+                                if (shaft)
+                                {
+                                        shaft->ReplaceTexture(command_parameters[0], command_parameters[1]);           
+                                }
+                                else
+                                        return false;
+                        }
+			if (parent_type == "Stairs")
+                        {
+                                if (stairs)
+                                {
+                                        stairs->ReplaceTexture(command_parameters[0], command_parameters[1]);           
+                                }
+                                else
+                                        return false;
+                        }
+
 		}
 		else
 			return false;
 	}
 	return true;
+}
+
+const Object* Action::GetParent()
+{
+	return parent_object;
 }

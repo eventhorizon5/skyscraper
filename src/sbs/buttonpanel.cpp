@@ -28,6 +28,7 @@
 #include "buttonpanel.h"
 #include "elevator.h"
 #include "camera.h"
+#include "action.h"
 #include "unix.h"
 
 extern SBS *sbs; //external pointer to the SBS engine
@@ -140,7 +141,6 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	//alarm = Alarm
 
 	std::vector<std::string> textures, names;
-	std::vector<std::vector<std::string> > parameters;
 	std::string newtype = type;
 	SetCase(newtype, false);
 
@@ -158,11 +158,11 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	}
 	else
 		names.push_back(newtype);
-	AddControl(sound, row, column, width, height, hoffset, voffset, names, parameters, textures);
+	AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 
 }
 
-void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures)
+void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -219,7 +219,16 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	buffer4 = Ogre::StringConverter::toString(control_index);
 	buffer = "Button Panel " + buffer2 + ":" + buffer3 + " Control " + buffer4;
 	TrimString(buffer);
-	controls[control_index] = new Control(this->object, buffer.c_str(), sound, sbs->GetElevator(elevator)->object, action_names, action_parameters, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+
+	//register actions
+	std::vector<std::string> actions;
+	for (int i = 0; i < action_names.size(); i++)
+	{
+		sbs->AddAction(sbs->GetElevator(elevator)->object, action_names[i], action_names[i]);
+		actions.push_back(action_names[i]);
+	}
+
+	controls[control_index] = new Control(this->object, buffer.c_str(), sound, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 	//move control
 	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 }

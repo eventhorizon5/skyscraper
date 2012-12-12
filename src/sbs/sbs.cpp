@@ -295,6 +295,15 @@ SBS::~SBS()
 	}
 	sounds.clear();
 
+	//delete actions
+	for (int i = 0; i < (int)ActionArray.size(); i++)
+	{
+		if (ActionArray[i])
+			delete ActionArray[i];
+		ActionArray[i] = 0;
+	}
+	ActionArray.clear();
+
 	//delete wall objects
 	if (SkyBox)
 		delete SkyBox;
@@ -3292,19 +3301,77 @@ void SBS::ResetLighting()
 	AmbientB = OldAmbientB;
 }
 
-Object* SBS::AddControl(const char *name, const char *sound, Ogre::Vector3 &position, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Object* SBS::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
-	Control* control = new Control(object, name, sound, action_parent, action_names, action_parameters, textures, direction, width, height, voffset);
-	control->SetPosition(position);
+	Control* control = new Control(object, name, sound, action_names, textures, direction, width, height, voffset);
+	control->SetPosition(Ogre::Vector3(CenterX, 0, CenterZ));
 	ControlArray.push_back(control);
 	return control->object;
 }
 
-Object* SBS::AddTrigger(const char *name, const char *sound_file, Object *action_parent, std::vector<std::string> &action_names, std::vector<std::vector<std::string> > &action_parameters, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+Object* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, sound_file, action_parent, action_names, action_parameters, area_min, area_max);
+	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
 	return trigger->object;
 }
+
+Object* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
+{
+	//add a global action
+
+	//return action object if it already exists
+	Action *check = GetAction(action_parent, name);
+	if (check)
+		return 0;
+
+	Action *action = new Action(object, action_parent, name, command, parameters);
+	ActionArray.push_back(action);
+	return action->object;
+}
+
+Object* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command)
+{
+	//add a global action
+
+	//exit if action already exists
+	Action *check = GetAction(action_parent, name);
+	if (check)
+		return 0;
+
+	Action *action = new Action(object, action_parent, name, command);
+	ActionArray.push_back(action);
+	return action->object;
+}
+
+Action* SBS::GetAction(Object* action_parent, const std::string name)
+{
+	//get action by name
+	for (int i = 0; i < ActionArray.size(); i++)
+	{
+		std::string actionname = ActionArray[i]->GetName();
+		if (actionname == name && action_parent == ActionArray[i]->GetParent())
+			return ActionArray[i];
+	}
+	return 0;
+}
+
+int SBS::GetActionCount()
+{
+	//get number of registered actions
+	return ActionArray.size();
+}
+
+Object* SBS::GetObject(const std::string name)
+{
+	//get object by name
+	for (int i = 0; i < ObjectArray.size(); i++)
+	{
+		std::string tmpname = ObjectArray[i]->GetName();
+		if (tmpname == name)
+			return ObjectArray[i];
+	}
+}
+
