@@ -44,7 +44,6 @@ Action::Action(Object *action_parent, const std::string name, const std::string 
 	{
 		command_parameters[i] = parameters[i];
 		TrimString(command_parameters[i]);
-		SetCase(command_parameters[i], false);
 	}
 	state = 0;
 	parent_object = action_parent;
@@ -302,23 +301,23 @@ bool Action::DoAction()
 					return false;
 			}
 			if (parent_type == "Shaft")
-                        {
-                                if (shaft)
-                                {
-                                        shaft->ReplaceTexture(command_parameters[0], command_parameters[1]);           
-                                }
-                                else
-                                        return false;
-                        }
+			{
+				if (shaft)
+				{
+					shaft->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				}
+				else
+					return false;
+			}
 			if (parent_type == "Stairs")
-                        {
-                                if (stairs)
-                                {
-                                        stairs->ReplaceTexture(command_parameters[0], command_parameters[1]);           
-                                }
-                                else
-                                        return false;
-                        }
+			{
+				if (stairs)
+				{
+					stairs->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				}
+				else
+					return false;
+			}
 
 		}
 		else

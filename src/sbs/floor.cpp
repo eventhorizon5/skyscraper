@@ -707,6 +707,11 @@ void Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
+	for (int i = 0; i < TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+			TriggerArray[i]->Check();
+	}
 }
 
 std::vector<int> Floor::GetCallButtons(int elevator)

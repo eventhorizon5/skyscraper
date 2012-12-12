@@ -3367,10 +3367,15 @@ int SBS::GetActionCount()
 Object* SBS::GetObject(const std::string name)
 {
 	//get object by name
+
+	std::string name2 = name;
+	ReplaceAll(name2, " ", "");
+
 	for (int i = 0; i < ObjectArray.size(); i++)
 	{
 		std::string tmpname = ObjectArray[i]->GetName();
-		if (tmpname == name)
+		ReplaceAll(tmpname, " ", "");
+		if (tmpname == name2)
 			return ObjectArray[i];
 	}
 	return 0;

@@ -2119,7 +2119,7 @@ int ScriptProcessor::ProcCommands()
 		std::vector<std::string> actparams;
 		if (params > 3)
 		{
-			for (int i = 3; i < params - 1; i++)
+			for (int i = 3; i < params; i++)
 			{
 				actparams.push_back(tempdata[i]);	
 			}

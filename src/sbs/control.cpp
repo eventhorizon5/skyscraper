@@ -196,12 +196,12 @@ bool Control::NextSelectPosition(bool check_state)
 {
 	//change to the next available control selection position
 
-	current_position = GetNextSelectPosition();
+	int position = GetNextSelectPosition();
 
 	if (check_state == true)
-		return SetSelectPosition(current_position);
+		return SetSelectPosition(position);
 	else
-		return ChangeSelectPosition(current_position);
+		return ChangeSelectPosition(position);
 }
 
 int Control::GetNextSelectPosition()
@@ -218,12 +218,12 @@ bool Control::PreviousSelectPosition(bool check_state)
 {
 	//change to the next available control selection position
 
-	current_position = GetPreviousSelectPosition();
+	int position = GetPreviousSelectPosition();
 
 	if (check_state == true)
-		return SetSelectPosition(current_position);
+		return SetSelectPosition(position);
 	else
-		return ChangeSelectPosition(current_position);
+		return ChangeSelectPosition(position);
 }
 
 int Control::GetPreviousSelectPosition()

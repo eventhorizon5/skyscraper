@@ -251,10 +251,10 @@ bool Trigger::Check()
 {
 	//check for action; should be called in a loop by the parent object
 
-	if (IsInside == false)
+	Ogre::Vector3 pos = sbs->camera->GetPosition();
+	if (pos > area_min && pos < area_max)
 	{
-		Ogre::Vector3 pos = sbs->camera->GetPosition();
-		if (pos > area_min && pos < area_max)
+		if (IsInside == false)
 		{
 			//camera is inside trigger area
 			IsInside = true;
@@ -275,8 +275,9 @@ bool Trigger::Check()
 			//perform selected action
 			return DoAction();
 		}
-		else
-			IsInside = false;
 	}
+	else
+		IsInside = false;
+
 	return false;
 }
