@@ -80,7 +80,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	lights.resize(endfloor - startfloor + 1);
 	ModelArray.resize(endfloor - startfloor + 1);
 	ControlArray.resize(endfloor - startfloor + 1);
-	TriggerArray.resize(endfloor - startfloor + 1);
+	//TriggerArray.resize(endfloor - startfloor + 1);
 
 	for (int i = startfloor; i <= endfloor; i++)
 	{
@@ -110,7 +110,7 @@ Shaft::~Shaft()
 	}
 
 	//delete triggers
-	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	/*for (int i = 0; i < (int)TriggerArray.size(); i++)
 	{
 		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
 		{
@@ -118,7 +118,7 @@ Shaft::~Shaft()
 				delete TriggerArray[i][j];
 			TriggerArray[i][j] = 0;
 		}
-	}
+	}*/
 
 	//delete models
 	for (int i = 0; i < (int)ModelArray.size(); i++)
@@ -217,11 +217,11 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 			}
 
 			//triggers
-			for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
+			/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
 			{
 				if (TriggerArray[floor - startfloor][i])
 					TriggerArray[floor - startfloor][i]->Enabled(true);
-			}
+			}*/
 
 			//models
 			for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
@@ -246,11 +246,11 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 				}
 
 				//triggers
-				for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
+				/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
 				{
 					if (TriggerArray[floor - startfloor][i])
 						TriggerArray[floor - startfloor][i]->Enabled(false);
-				}
+				}*/
 
 				//models
 				for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
@@ -646,13 +646,14 @@ Object* Shaft::AddControl(int floor, const char *name, const char *sound, const 
 
 Object* Shaft::AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
+	//triggers disabled for now
+
 	//add a trigger
-	Ogre::Vector3 base = Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z);
-	Ogre::Vector3 min = area_min + base;
-	Ogre::Vector3 max = area_min + max;
-	Trigger* trigger = new Trigger(object, name, sound_file, min, max, action_names);
+	/*Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
 	TriggerArray[floor - startfloor].push_back(trigger);
-	return trigger->object;
+	trigger->SetPosition(Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z));
+	return trigger->object;*/
+	return 0;
 }
 
 void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)

@@ -1262,6 +1262,16 @@ void Elevator::MonitorLoop()
 	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true)
 		random_timer->Start(RandomFrequency * 1000, false);
 
+	//process triggers
+	if (IsEnabled == true)
+	{
+		for (int i = 0; i < TriggerArray.size(); i++)
+		{
+			if (TriggerArray[i])
+				TriggerArray[i]->Check();
+		}
+	}
+
 	//elevator movement
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
@@ -3683,7 +3693,7 @@ void Elevator::SetMessageSound(bool direction, const char *filename)
 	UseMessageSounds = true;
 }
 
-Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, Ogre::Vector3 direction)
+Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, int volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
 	sounds.resize(sounds.size() + 1);
@@ -3691,17 +3701,18 @@ Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3
 	sound = new Sound(this->object, name, false);
 
 	//set parameters and play sound
-	sound->PositionOffset = position;
-	sound->SetPosition(Origin + position);
+	sound->SetPosition(position);
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
 	sound->SetDistances(min_distance, max_distance);
 	sound->SetDirection(direction);
-	sound->SetDirectionalRadiation(dir_radiation);
+	sound->SetDopplerLevel(doppler_level);
+	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
-	sound->Loop(true);
-	sound->Play();
+	sound->Loop(loop);
+	if (loop)
+		sound->Play();
 
 	return sound->object;
 }
@@ -4369,43 +4380,11 @@ void Elevator::MoveObjects(Ogre::Vector3 position, bool relative_x, bool relativ
 {
 	//move controls
 	for (int i = 0; i < (int)ControlArray.size(); i++)
-	{
-		Ogre::Vector3 pos = ControlArray[i]->GetPosition();
-		if (relative_x == true)
-			pos.x += position.x;
-		else
-			pos.x = position.x;
-		if (relative_y == true)
-			pos.y += position.y;
-		else
-			pos.y = position.y;
-		if (relative_z == true)
-			pos.z += position.z;
-		else
-			pos.z = position.z;
-
-		ControlArray[i]->Move(pos);
-	}
+		ControlArray[i]->Move(position, relative_x, relative_y, relative_z);
 
 	//move triggers
 	for (int i = 0; i < (int)TriggerArray.size(); i++)
-	{
-		Ogre::Vector3 pos = TriggerArray[i]->GetPosition();
-		if (relative_x == true)
-			pos.x += position.x;
-		else
-			pos.x = position.x;
-		if (relative_y == true)
-			pos.y += position.y;
-		else
-			pos.y = position.y;
-		if (relative_z == true)
-			pos.z += position.z;
-		else
-			pos.z = position.z;
-
-		TriggerArray[i]->Move(pos);
-	}
+		TriggerArray[i]->Move(position, relative_x, relative_y, relative_z);
 
 	//move models
 	for (int i = 0; i < (int)ModelArray.size(); i++)
@@ -4434,10 +4413,9 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Ogre::Vector3 min = area_min + Origin;
-	Ogre::Vector3 max = area_max + Origin;
-	Trigger* trigger = new Trigger(object, name, sound_file, min, max, action_names);
+	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
+	trigger->SetPosition(Origin);
 	return trigger->object;
 }
 
@@ -4446,3 +4424,21 @@ void Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &
         ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
 }
 
+Sound* Elevator::GetSound(const char *name)
+{
+	//get sound by name
+
+	std::string findname = name;
+	SetCase(findname, false);
+	for (int i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i])
+		{
+			std::string name2 = sounds[i]->GetName();
+			SetCase(name2, false);
+			if (findname == name2)
+				return sounds[i];
+		}
+	}
+	return 0;
+}

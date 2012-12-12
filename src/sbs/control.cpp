@@ -326,3 +326,12 @@ void Control::ChangeLight(int floor, bool value)
 			ChangeSelectPosition(index);
 	}
 }
+
+void Control::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
+{
+	//relative movement
+	ControlMesh->Move(position, relative_x, relative_y, relative_z);
+
+	//move sound
+	sound->SetPosition(GetPosition());
+}

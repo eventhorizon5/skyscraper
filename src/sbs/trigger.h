@@ -44,6 +44,7 @@ public:
 	void SetPosition(const Ogre::Vector3 &position);
 	void SetPositionY(float position);
 	void Move(const Ogre::Vector3 &position);
+	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	bool SetSelectPosition(int position);
 	bool ChangeSelectPosition(int position);
 	bool NextSelectPosition(bool check_state = true);

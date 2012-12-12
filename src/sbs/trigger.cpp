@@ -244,9 +244,9 @@ bool Trigger::Check()
 {
 	//check for action; should be called in a loop by the parent object
 
-	Ogre::Vector3 pos = sbs->camera->GetPosition();
+	Ogre::Vector3 cam = sbs->camera->GetPosition();
 	bool changed = false;
-	if (pos > area_min && pos < area_max)
+	if (cam > (pos + area_min) && cam < (pos + area_max))
 	{
 		if (IsInside == false)
 			changed = true;
@@ -278,4 +278,24 @@ bool Trigger::Check()
 		return DoAction();
 	}
 	return false;
+}
+
+void Trigger::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
+{
+	//relative movement
+	if (relative_x)
+		pos.x += position.x;
+	else
+		pos.x = position.x;
+	if (relative_y)
+		pos.y += position.y;
+	else
+		pos.y = position.y;
+	if (relative_z)
+		pos.z += position.z;
+	else
+		pos.z = position.z;
+
+	//move sound
+	sound->SetPosition(pos);
 }

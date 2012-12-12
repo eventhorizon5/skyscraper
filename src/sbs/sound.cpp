@@ -166,11 +166,6 @@ Ogre::Vector3 Sound::GetDirection()
 	return Direction;
 }
 
-void Sound::SetDirectionalRadiation(float rad)
-{
-	//this is no longer used - use SetConeSettings instead
-}
-
 void Sound::SetConeSettings(float inside_angle, float outside_angle, float outside_volume)
 {
 	if (channel)
@@ -364,4 +359,18 @@ void Sound::SetPlayPosition(float percent)
 	unsigned int position;
 	position = percent * length;
 	channel->setPosition(position, FMOD_TIMEUNIT_MS);
+}
+
+const char *Sound::GetName()
+{
+	return Name.c_str();
+}
+
+void Sound::SetDopplerLevel(float level)
+{
+	if (level < 0 || level > 5)
+		return;
+
+	if (channel)
+		channel->set3DDopplerLevel(level);
 }

@@ -217,7 +217,7 @@ public:
 	void SetFloorSound(const char *prefix);
 	void SetMessageSound(bool direction, const char *filename);
 	void SetMusic(const char *filename);
-	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float dir_radiation = 0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
+	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop = true, int volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 1.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	void DeleteActiveRoute();
 	bool IsQueueActive();
 	bool BeyondDecelMarker(int direction, float destination);
@@ -262,6 +262,7 @@ public:
 	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
+	Sound* GetSound(const char *name);
 
 private:
 

@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Action::Action(Object *action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
+Action::Action(const std::string name, Object *action_parent, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//create an action
 
@@ -49,7 +49,7 @@ Action::Action(Object *action_parent, const std::string name, const std::string 
 	parent_object = action_parent;
 }
 
-Action::Action(Object* action_parent, const std::string name, const std::string &command)
+Action::Action(const std::string name, Object* action_parent, const std::string &command)
 {
 	//create an action
 
@@ -83,7 +83,8 @@ bool Action::DoAction()
 
 	////General actions:
 	//ChangeTexture  - param1: oldtexture param2: newtexture
-	//PlaySound - param1: name
+	//PlaySound - param1: sound name, param2: loop (true/false)
+	//StopSound - param1: sound name
 
 	////Elevator actions:
 	//Off
@@ -285,36 +286,28 @@ bool Action::DoAction()
 			if (parent_type == "Floor")
 			{
 				if (floor)
-				{
 					floor->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				}
 				else
 					return false;
 			}
 			if (parent_type == "Elevator")
 			{
 				if (elevator)
-				{
 					elevator->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				}
 				else
 					return false;
 			}
 			if (parent_type == "Shaft")
 			{
 				if (shaft)
-				{
 					shaft->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				}
 				else
 					return false;
 			}
 			if (parent_type == "Stairs")
 			{
 				if (stairs)
-				{
 					stairs->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				}
 				else
 					return false;
 			}
@@ -323,6 +316,77 @@ bool Action::DoAction()
 		else
 			return false;
 	}
+
+	if (command_name == "playsound")
+	{
+		if (command_parameters.size() == 2)
+		{
+			Sound *sound = 0;
+
+			if (parent_type == "SBS")
+				Sound* sound = sbs->GetSound(command_parameters[0].c_str());
+
+			if (parent_type == "Floor")
+			{
+				if (floor)
+					Sound* sound = floor->GetSound(command_parameters[0].c_str());
+				else
+					return false;
+			}
+			if (parent_type == "Elevator")
+			{
+				if (elevator)
+					Sound* sound = elevator->GetSound(command_parameters[0].c_str());
+				else
+					return false;
+			}
+
+			if (sound)
+			{
+				std::string loop = command_parameters[1];
+				SetCase(loop, false);
+				if (loop == "true")
+					sound->Loop(true);
+				else
+					sound->Loop(false);
+				sound->Play();
+			}
+		}
+		else
+			return false;
+	}
+
+	if (command_name == "stopsound")
+	{
+		if (command_parameters.size() == 1)
+		{
+			Sound *sound = 0;
+
+			if (parent_type == "SBS")
+				Sound* sound = sbs->GetSound(command_parameters[0].c_str());
+
+			if (parent_type == "Floor")
+			{
+				if (floor)
+					Sound* sound = floor->GetSound(command_parameters[0].c_str());
+				else
+					return false;
+			}
+			if (parent_type == "Elevator")
+			{
+				if (elevator)
+					Sound* sound = elevator->GetSound(command_parameters[0].c_str());
+				else
+					return false;
+			}
+
+			if (sound)
+				sound->Stop();
+		}
+		else
+			return false;
+	}
+
 	return true;
 }
 

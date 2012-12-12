@@ -98,7 +98,7 @@ private:
 	std::vector<std::vector<Control*> > ControlArray;
 
 	//Triggers
-	std::vector<std::vector<Trigger*> > TriggerArray;
+	//std::vector<std::vector<Trigger*> > TriggerArray;
 
 	char intbuffer[65];
 	char buffer[20];

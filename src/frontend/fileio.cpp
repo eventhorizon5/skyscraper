@@ -2039,15 +2039,21 @@ int ScriptProcessor::ProcCommands()
 	//AddSound
 	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
 	{
+		if (Section == 2 || Section == 4)
+			return 0;
+
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params != 5 && params != 13)
+		if (params != 5 && params != 6 && params != 13 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool partial = false;
-		if (params == 5)
+		bool compat = false;
+		if (params == 5 || params == 6)
 			partial = true;
+		if (params == 5 || params == 13)
+			compat = true;
 
 		//check numeric values
 		if (partial == true)
@@ -2060,20 +2066,44 @@ int ScriptProcessor::ProcCommands()
 		}
 		else
 		{
-			for (int i = 2; i <= 12; i++)
+			if (compat == true)
 			{
-				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				for (int i = 2; i <= 12; i++)
+				{
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				}
+			}
+			else
+			{
+				for (int i = 2; i <= 16; i++)
+				{
+					if (i == 5)
+						i = 6;
+
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				}
 			}
 		}
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		if (partial == true)
-			StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
+		if (compat == true)
+		{
+			if (partial == true)
+				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
+			else
+				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), 1.0, 360, 360, 1.0, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
+		}
 		else
-			StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())))); 
+		{
+			if (partial == true)
+				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5])));
+			else
+				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5]), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::Vector3(atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()))));
+		}
 	}
 
 	//AddModel command
@@ -2115,7 +2145,14 @@ int ScriptProcessor::ProcCommands()
 		if (params < 3)
 			return ScriptError("Incorrect number of parameters");
 
-		Object *obj = Simcore->GetObject(tempdata[0].c_str());
+		Object *obj;
+		std::string tmpname = tempdata[1];
+		SetCase(tmpname, false);
+		if (tmpname == "global")
+			obj = Simcore->object;
+		else
+			obj = Simcore->GetObject(tempdata[1].c_str());
+
 		std::vector<std::string> actparams;
 		if (params > 3)
 		{
@@ -2128,15 +2165,18 @@ int ScriptProcessor::ProcCommands()
 		if (obj)
 		{
 			if (params > 3)
-				Simcore->AddAction(obj, tempdata[1], tempdata[2], actparams);
+				Simcore->AddAction(tempdata[0], obj, tempdata[2], actparams);
 			else
-				Simcore->AddAction(obj, tempdata[1], tempdata[2]);
+				Simcore->AddAction(tempdata[0], obj, tempdata[2]);
 		}
 	}
 
 	//AddActionControl command
 	if (SetCaseCopy(LineData.substr(0, 16), false) == "addactioncontrol")
 	{
+		if (Section == 2 || Section == 4)
+			return 0;
+
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
 
@@ -2177,6 +2217,9 @@ int ScriptProcessor::ProcCommands()
 	//AddTrigger command
 	if (SetCaseCopy(LineData.substr(0, 10), false) == "addtrigger")
 	{
+		if (Section == 2 || Section == 4)
+			return 0;
+
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
 
@@ -3211,12 +3254,15 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params != 5 && params != 13)
+		if (params != 5 && params != 6 && params != 13 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool partial = false;
-		if (params == 5)
+		bool compat = false;
+		if (params == 5 || params == 6)
 			partial = true;
+		if (params == 5 || params == 13)
+			compat = true;
 
 		//check numeric values
 		if (partial == true)
@@ -3229,20 +3275,44 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 		{
-			for (int i = 2; i <= 12; i++)
+			if (compat == true)
 			{
-				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				for (int i = 2; i <= 12; i++)
+				{
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				}
+			}
+			else
+			{
+				for (int i = 2; i <= 16; i++)
+				{
+					if (i == 5)
+						i = 6;
+
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				}
 			}
 		}
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		if (partial == true)
-			StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
+		if (compat == true)
+		{
+			if (partial == true)
+				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
+			else
+				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), 1.0, 360, 360, 1.0, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
+		}
 		else
-			StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())))); 
+		{
+			if (partial == true)
+				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5])));
+			else
+				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5]), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::Vector3(atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()))));
+		}
 	}
 
 	//AddShaftDoorComponent command
@@ -3556,7 +3626,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftTrigger command
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "addshafttrigger")
+	/*if (SetCaseCopy(LineData.substr(0, 15), false) == "addshafttrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -3627,7 +3697,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddTrigger(Current, tempdata[1].c_str(), tempdata[2].c_str(), min, max, action_array));
 		else
 			return ScriptError("Invalid stairwell");
-	}
+	}*/
 
 	//Cut command
 	if (SetCaseCopy(LineData.substr(0, 4), false) == "cut ")
@@ -5187,12 +5257,15 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params != 5 && params != 13)
+		if (params != 5 && params != 6 && params != 13 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool partial = false;
-		if (params == 5)
+		bool compat = false;
+		if (params == 5 || params == 6)
 			partial = true;
+		if (params == 5 || params == 13)
+			compat = true;
 
 		//check numeric values
 		if (partial == true)
@@ -5205,20 +5278,44 @@ int ScriptProcessor::ProcElevators()
 		}
 		else
 		{
-			for (int i = 2; i <= 12; i++)
+			if (compat == true)
 			{
-				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				for (int i = 2; i <= 12; i++)
+				{
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				}
+			}
+			else
+			{
+				for (int i = 2; i <= 16; i++)
+				{
+					if (i == 5)
+						i = 6;
+
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				}
 			}
 		}
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		if (partial == true)
-			StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
+		if (compat == true)
+		{
+			if (partial == true)
+				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
+			else
+				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), 1.0, 360, 360, 1.0, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
+		}
 		else
-			StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())))); 
+		{
+			if (partial == true)
+				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5])));
+			else
+				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5]), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::Vector3(atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()))));
+		}
 	}
 
 	//AddDoorComponent command

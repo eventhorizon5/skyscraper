@@ -707,10 +707,13 @@ void Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
-	for (int i = 0; i < TriggerArray.size(); i++)
+	if (IsEnabled == true)
 	{
-		if (TriggerArray[i])
-			TriggerArray[i]->Check();
+		for (int i = 0; i < TriggerArray.size(); i++)
+		{
+			if (TriggerArray[i])
+				TriggerArray[i]->Check();
+		}
 	}
 }
 
@@ -792,7 +795,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	sbs->ResetWalls();
 }
 
-Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, Ogre::Vector3 direction)
+Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, int volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
 	sounds.resize(sounds.size() + 1);
@@ -800,18 +803,39 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	sound = new Sound(this->object, name, false);
 
 	//set parameters and play sound
-	sound->SetPosition(Ogre::Vector3(position.x, GetBase() + position.y, position.z));
+	sound->SetPosition(position);
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
 	sound->SetDistances(min_distance, max_distance);
 	sound->SetDirection(direction);
-	sound->SetDirectionalRadiation(dir_radiation);
+	sound->SetDopplerLevel(doppler_level);
+	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
-	sound->Loop(true);
-	sound->Play();
+	sound->Loop(loop);
+	if (loop)
+		sound->Play();
 
 	return sound->object;
+}
+
+Sound* Floor::GetSound(const char *name)
+{
+	//get sound by name
+
+	std::string findname = name;
+	SetCase(findname, false);
+	for (int i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i])
+		{
+			std::string name2 = sounds[i]->GetName();
+			SetCase(name2, false);
+			if (findname == name2)
+				return sounds[i];
+		}
+	}
+	return 0;
 }
 
 void Floor::Report(std::string message)
@@ -1109,11 +1133,9 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Ogre::Vector3 base = Ogre::Vector3(0, GetBase(), 0);
-	Ogre::Vector3 min = area_min + base;
-	Ogre::Vector3 max = area_max + base;
-	Trigger* trigger = new Trigger(object, name, sound_file, min, max, action_names);
+	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
+	trigger->SetPosition(Ogre::Vector3(0, GetBase(), 0));
 	return trigger->object;
 }
 

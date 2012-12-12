@@ -260,7 +260,7 @@ void Stats::OnInit()
 void Stats::Loop()
 {
 	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());
-	tTextures->SetValue(wxVariant(Simcore->GetTextureCount()).GetString());
+	tTextures->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
 	tActions->SetValue(wxVariant(Simcore->GetActionCount()).GetString());
 	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
 	tInStairwell->SetValue(wxString::FromAscii(BoolToString(Simcore->InStairwell)));

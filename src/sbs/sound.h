@@ -45,7 +45,6 @@ public:
 	float GetMaximumDistance();
 	void SetDirection(Ogre::Vector3 direction);
 	Ogre::Vector3 GetDirection();
-	void SetDirectionalRadiation(float rad);
 	void Loop(bool value);
 	bool GetLoopState();
 	void Pause();
@@ -60,6 +59,8 @@ public:
 	float GetPlayPosition();
 	void SetPlayPosition(float percent);
 	void SetConeSettings(float inside_angle = 360.0, float outside_angle = 360.0, float outside_volume = 1.0);
+	const char *GetName();
+	void SetDopplerLevel(float level);
 
 private:
 

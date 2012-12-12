@@ -61,6 +61,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		if (use_alpha_color == false)
 		{
 			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+			IncrementTextureCount();
 
 			if (mTex.isNull())
 				return ReportError("Error loading texture" + filename2);
@@ -85,6 +86,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	std::string matname = name;
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
+	IncrementMaterialCount();
 	mMat->setLightingEnabled(true);
 	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
@@ -156,6 +158,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 			if (use_alpha_color == false)
 			{
 				mTex = Ogre::TextureManager::getSingleton().load(filenames2[i], path, Ogre::TEX_TYPE_2D, mipmaps);
+				IncrementTextureCount();
 
 				if (mTex.isNull())
 					return ReportError("Error loading texture" + filenames2[i]);
@@ -183,6 +186,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	std::string matname = name;
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
+	IncrementMaterialCount();
 	mMat->setLightingEnabled(true);
 	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
@@ -258,6 +262,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 		if (use_alpha_color == false)
 		{
 			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+			IncrementTextureCount();
 
 			if (mTex.isNull())
 				return ReportError("Error loading texture" + filename2);
@@ -282,6 +287,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	try
 	{
 		mTex = Ogre::TextureManager::getSingleton().load(specular_filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+		IncrementTextureCount();
 
 		if (mTex.isNull())
 			return ReportError("Error loading texture" + specular_filename2);
@@ -296,6 +302,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	try
 	{
 		mTex = Ogre::TextureManager::getSingleton().load(blend_filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+		IncrementTextureCount();
 
 		if (mTex.isNull())
 			return ReportError("Error loading texture" + blend_filename2);
@@ -310,6 +317,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	std::string matname = name;
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
+	IncrementMaterialCount();
 	mMat->setLightingEnabled(true);
 	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
@@ -408,10 +416,13 @@ bool SBS::UnloadTexture(const char *name)
 	if (!wrapper.isNull())
 		return false;
 	Ogre::TextureManager::getSingleton().remove(name);
+	DecrementTextureCount();
+
 	Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().getByName(name);
 	if (!wrapper.isNull())
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(name);
+	DecrementMaterialCount();
 
 	return true;
 }
@@ -447,6 +458,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		if (use_alpha_color == false)
 		{
 			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+			IncrementTextureCount();
 
 			if (mTex.isNull())
 				return ReportError("Error loading texture" + filename2);
@@ -487,6 +499,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 
 	//create new empty texture
 	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
@@ -495,6 +508,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
+	IncrementMaterialCount();
 	mMat->setLightingEnabled(true);
 	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
@@ -814,6 +828,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//create new empty texture
 	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	IncrementTextureCount();
 
 	//get new texture dimensions, if it was resized
 	width = texture->getWidth();
@@ -861,6 +876,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
+	IncrementMaterialCount();
 	mMat->setLightingEnabled(true);
 	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
@@ -937,6 +953,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 
 	//create new empty texture
 	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, image1->getWidth(), image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
@@ -947,6 +964,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
+	IncrementMaterialCount();
 	mMat->setLightingEnabled(true);
 	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
@@ -984,10 +1002,13 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, bool report,
 	std::string matname = name;
 	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
-		if (textureinfo[i].name == name)
+		if (textureinfo[i].name == matname)
 		{
 			if (textureinfo[i].material_name != "")
+			{
 				matname = textureinfo[i].material_name;
+				break;
+			}
 		}
 	}
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(matname);
@@ -1001,9 +1022,9 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, bool report,
 		if (report == true)
 		{
 			if (polygon_name)
-				message = "Texture '" + std::string(matname) + "' not found for polygon '" + std::string(polygon_name) + "'; using default material";
+				message = "Texture '" + matname + "' not found for polygon '" + std::string(polygon_name) + "'; using default material";
 			else
-				message = "Texture '" + std::string(matname) + "' not found; using default material";
+				message = "Texture '" + matname + "' not found; using default material";
 			ReportError(message);
 		}
 
@@ -1092,15 +1113,13 @@ bool SBS::GetTextureForce(const char *texture, bool &enable_force, bool &force_m
 int SBS::GetTextureCount()
 {
 	//return total number of textures
-	//return engine->GetTextureList()->GetCount();
-	return 0;
+	return texturecount;
 }
 
 int SBS::GetMaterialCount()
 {
 	//return total number of materials
-	//return engine->GetMaterialList()->GetCount();
-	return 0;
+	return materialcount;
 }
 
 void SBS::FreeTextureImages()
@@ -1701,7 +1720,8 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
      // You could save the chroma keyed image at this point for caching:
      // chromaKeyedImg.save(resName); 
      TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
- }
+     IncrementTextureCount();
+}
 
 bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
 {
@@ -1957,4 +1977,24 @@ void SBS::SaveTexture(Ogre::TexturePtr texture, std::string filename)
 	Ogre::Image image;
 	texture->convertToImage(image);
 	image.save(filename);
+}
+
+void SBS::IncrementTextureCount()
+{
+	texturecount++;
+}
+
+void SBS::DecrementTextureCount()
+{
+	texturecount--;
+}
+
+void SBS::IncrementMaterialCount()
+{
+	materialcount++;
+}
+
+void SBS::DecrementMaterialCount()
+{
+	materialcount--;
 }

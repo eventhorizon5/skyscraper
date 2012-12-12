@@ -1396,7 +1396,7 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 
 	//delete texel array
 	if (table)
-		delete table;
+		delete [] table;
 	table = 0;
 
 	//delete geometry array
@@ -1609,7 +1609,7 @@ void MeshObject::Prepare()
 	//create vertex hardware buffer
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vsize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);
-	delete mVertexElements;
+	delete [] mVertexElements;
 
 	//bind vertex data to mesh
 	data->vertexBufferBinding->setBinding(0, vbuffer);
@@ -1637,7 +1637,7 @@ void MeshObject::Prepare()
 		//create index hardware buffer
 		Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 		ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
-		delete mIndices;
+		delete [] mIndices;
 
 		//delete any old index data
 		if (submesh->indexData)

@@ -102,7 +102,7 @@ private:
 	std::vector<std::vector<Control*> > ControlArray;
 
 	//Triggers
-	std::vector<std::vector<Trigger*> > TriggerArray;
+	//std::vector<std::vector<Trigger*> > TriggerArray;
 
 	//cache objects for IsInStairwell()
 	Ogre::Vector3 lastposition;

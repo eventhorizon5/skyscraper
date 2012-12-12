@@ -1079,19 +1079,22 @@ door's parameters. Direction is either true if the door faces the front/back
 (width is along the X axis), or false if the door faces left/right (width is
 along the Z axis).</p>
 
-<p align="left"><strong>23. AddSound</strong> - creates a user-defined looping
-sound at the specified position<br>
+<p align="left"><strong>23. AddSound</strong> - creates a user-defined sound at
+the specified position<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddSound <em>name,
-filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation,
+filename, x, y, z, loop[, volume, speed, min_distance, max_distance,
+doppler_level, cone_inside_angle, cone_outside_angle, cone_outside_volume,
 direction_x, direction_y, direction_z]</em></font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">AddSound MySound,
-data/sound.wav, 10, 100, 5<br>
+sound.wav, 10, 100, 5, true<br>
 </font>Example 2: <font face="Courier New, Courier, mono" size="2">AddSound
-MySound, data/sound.wav, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
+MySound, sound.wav, 10, 100, 5, true, 1, 100, 1, -1, 1, 360, 360, 1, 0, 0,
+0</font></p>
 
 <p align="left">For information on the parameters, see the AddSound command in
 the Globals section. The only difference here is that the Y value is relative
-of the floor's base (altitude plus interfloor height).</p>
+of the floor's base (altitude plus interfloor height). <em>Loop</em> specifies
+if the sound should loop and play on startup.</p>
 
 <p align="left"><strong>24. AddShaftDoorComponent</strong> - creates a single
 shaft door component, used for creating custom door styles<br>
@@ -1161,6 +1164,86 @@ EnablePhysics, Restitution, Friction, Mass</em><em><br>
 
 <p align="left">The CenterY value is relative to the current floor's altitude.
 </p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>29.
+AddActionControl</strong> - creates a custom control that uses a specific
+action defined by AddAction.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
+<em>name, sound, direction, centerx, centerz, width, height, voffset,
+action_name(s), texture_name(s)<br>
+</em></font>Example: <font face="Courier New, Courier, mono"
+size="2">AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 4,
+UndoMyAction, MyAction, Touch, TouchLit<br>
+</font><br>
+AddActionControl command creates an advanced control similar to elevator button
+panel controls, but assigned to an action created with the AddAction command.
+The <em>action_name(s)</em> and <em>texture_name(s)</em> parameters allow you
+to specify a list of actions, and a list of textures to go along with those
+actions. There needs to be a texture for every action; if you specify 3 actions
+and only 2 textures, you will get an error. The control starts up in the first
+action, and switches to the next actions in sequence when it's clicked.
+<em>Direction</em> is the direction the control itself will face in 3D space
+(front, left, right, back). Voffset is relative of the floor's
+base.<strong></strong></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>30.
+AddShaftActionControl</strong> - creates a custom control in a specified shaft
+that uses a specific action defined by AddAction.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftActionControl
+<em>number, name, sound, direction, centerx, centerz, width, height, voffset,
+action_name(s), texture_name(s)<br>
+</em></font>Example: <font face="Courier New, Courier, mono"
+size="2">AddShaftActionControl 1, MyControl, switch.wav, front, -10, 10, 1.5,
+1.5, 4, UndoMyAction, MyAction, Touch, TouchLit<br>
+</font><br>
+This command creates an advanced control similar to elevator button panel
+controls, but assigned to an action created with the AddAction command. The
+<em>action_name(s)</em> and <em>texture_name(s)</em> parameters allow you to
+specify a list of actions, and a list of textures to go along with those
+actions. There needs to be a texture for every action; if you specify 3 actions
+and only 2 textures, you will get an error. The control starts up in the first
+action, and switches to the next actions in sequence when it's clicked.
+<em>Direction</em> is the direction the control itself will face in 3D space
+(front, left, right, back). Voffset is relative of the floor's
+base.<strong></strong></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
+AddStairsActionControl</strong> - creates a custom control in a specified
+stairwell that uses a specific action defined by AddAction.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsActionControl
+<em>number, name, sound, direction, centerx, centerz, width, height, voffset,
+action_name(s), texture_name(s)<br>
+</em></font>Example: <font face="Courier New, Courier, mono"
+size="2">AddStairsActionControl 1, MyControl, switch.wav, front, -10, 10, 1.5,
+1.5, 4, UndoMyAction, MyAction, Touch, TouchLit<br>
+</font><br>
+This command creates an advanced control similar to elevator button panel
+controls, but assigned to an action created with the AddAction command. The
+<em>action_name(s)</em> and <em>texture_name(s)</em> parameters allow you to
+specify a list of actions, and a list of textures to go along with those
+actions. There needs to be a texture for every action; if you specify 3 actions
+and only 2 textures, you will get an error. The control starts up in the first
+action, and switches to the next actions in sequence when it's clicked.
+<em>Direction</em> is the direction the control itself will face in 3D space
+(front, left, right, back). Voffset is relative of the floor's
+base.<strong></strong></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
+AddTrigger</strong> - creates a trigger that is used to signal an action when
+the user's camera enters or leaves the defined area.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,
+sound, start_x, start_y, start_z, end_x, end_y, end_z, action_names(s)<br>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddTrigger
+MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction,
+MyAction</font><br>
+<br>
+AddTrigger creates a trigger similar to action controls (AddActionControl) and
+elevator controls. The action_names(s) parameter allows you to specify a list
+of actions that this trigger will call when the camera enters or exits the
+area. The trigger starts in the first action, and will switch to each
+consecutive action when the users enters/leaves. The X, Y and Z parameters
+specify the 3D box that defines the trigger area. Y is relative of the floor's
+base.</p>
 
 <p align="left"><strong></strong></p>
 
@@ -1892,19 +1975,22 @@ number to check against, meaning if shaft doors don't exist on a certain floor
 for the specified door, the sign won't be created on that floor. This can be
 bypassed by setting door_number to 0.</p>
 
-<p align="left"><strong>14. AddSound</strong> - creates a user-defined looping
-sound at the specified position<br>
+<p align="left"><strong>14. AddSound</strong> - creates a user-defined sound at
+the specified position<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddSound <em>name,
-filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation,
+filename, x, y, z, loop[, volume, speed, min_distance, max_distance,
+doppler_level, cone_inside_angle, cone_outside_angle, cone_outside_volume,
 direction_x, direction_y, direction_z]</em></font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">AddSound MySound,
-data/sound.wav, 10, 100, 5<br>
+sound.wav, 10, 100, 5, true<br>
 </font>Example 2: <font face="Courier New, Courier, mono" size="2">AddSound
-MySound, data/sound.wav, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
+MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 1, 360, 360, 1, 0, 0,
+0</font></p>
 
 <p align="left">For information on the parameters, see the AddSound command in
 the Globals section. The only difference here is that the X, Y and Z position
-values are relative of the elevator's center/origin.</p>
+values are relative of the elevator's center/origin.<em>Loop</em> specifies if
+the sound should loop and play on startup.</p>
 
 <p align="left"><strong>15. AddDoorComponent</strong> - creates a single
 elevator door component, used for creating custom door styles<br>
@@ -2005,6 +2091,44 @@ are in the OGRE native mesh format. In the example, the material/texture file
 is cube.material, and the optional collider mesh file is cube.collider.
 EnablePhysics enables Bullet physics on the object, and Restitution, Friction
 and Mass determine the physical properties of the object.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>21.
+AddActionControl</strong> - creates a custom control that uses a specific
+action defined by AddAction.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
+<em>name, sound, direction, centerx, centerz, width, height, voffset,
+action_name(s), texture_name(s)<br>
+</em></font>Example: <font face="Courier New, Courier, mono"
+size="2">AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 4,
+UndoMyAction, MyAction, Touch, TouchLit<br>
+</font><br>
+AddActionControl command creates an advanced control similar to elevator button
+panel controls, but assigned to an action created with the AddAction command.
+The <em>action_name(s)</em> and <em>texture_name(s)</em> parameters allow you
+to specify a list of actions, and a list of textures to go along with those
+actions. There needs to be a texture for every action; if you specify 3 actions
+and only 2 textures, you will get an error. The control starts up in the first
+action, and switches to the next actions in sequence when it's clicked.
+<em>Direction</em> is the direction the control itself will face in 3D space
+(front, left, right, back). Voffset is relative of the elevator's
+base.<strong></strong></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
+AddTrigger</strong> - creates a trigger that is used to signal an action when
+the user's camera enters or leaves the defined area.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,
+sound, start_x, start_y, start_z, end_x, end_y, end_z, action_names(s)<br>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddTrigger
+MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction,
+MyAction</font><br>
+<br>
+AddTrigger creates a trigger similar to action controls (AddActionControl) and
+elevator controls. The action_names(s) parameter allows you to specify a list
+of actions that this trigger will call when the camera enters or exits the
+area. The trigger starts in the first action, and will switch to each
+consecutive action when the users enters/leaves. The X, Y and Z parameters
+specify the 3D box that defines the trigger area, and are relative of the
+elevator's location.</p>
 
 <p align="left"> </p>
 
@@ -2482,35 +2606,36 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
 Example: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
 -100, 0, -100, 100, 100, 100</font></p>
 
-<p align="left"><strong>ac. AddSound</strong> - creates a user-defined looping
-sound at the specified position<br>
+<p align="left"><strong>ac. AddSound</strong> - creates a user-defined sound at
+the specified position<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddSound <em>name,
-filename, x, y, z[, volume, speed, min_distance, max_distance, dir_radiation,
+filename, x, y, z, loop[, volume, speed, min_distance, max_distance,
+doppler_level, cone_inside_angle, cone_outside_angle, cone_outside_volume,
 direction_x, direction_y, direction_z]</em></font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">AddSound MySound,
-sound.wav, 10, 100, 5<br>
+sound.wav, 10, 100, 5, true<br>
 </font>Example 2: <font face="Courier New, Courier, mono" size="2">AddSound
-MySound, ambient.ogg, 10, 100, 5, 1, 100, 1, -1, 0, 0, 0, 0</font></p>
+MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 1, 360, 360, 1, 0, 0,
+0</font></p>
 
 <p align="left">This command creates a custom sound in the specified position,
 and has a number of optional parameters - the defaults for the optional
-parameters are shown in Example 2. If you're going to use any of the optional
+parameters are shown in Example 2. <em>Loop</em> specifies if the sound should
+loop and play on startup. If you're going to use any of the optional
 parameters, you must specify them all. <em>X</em>, <em>Y</em> and <em>Z</em>
 specify the location in 3D space that the sound will be at, <em>volume</em>
 specifies the volume percentage (with 1.0 being 100%) of the sound,
 <em>speed</em> determines the playback speed of the sound in percent,
 <em>min_distance</em> and <em>max_distance</em> set the minimum and maximum
 distances that the sound can be heard at full volume - by default, minimum is 1
-and maximum is -1. <em>Dir_radiation</em> specifies the directional radiation
-of the sound in radians (more info below), and <em>direction_x</em>,
-<em>direction_y</em> and <em>direction_z</em> specify the direction of the
-sound cone.</p>
-
-<p align="left">From the Crystal Space docs on directional radiation:<br>
-"The directional radiation applies to sound that are oriented in a particular
-direction. This value is expressed in radians and describes the half-angle of a
-cone spreading from the position of the source and opening in the direction of
-the source. Set this value to 0.0 for an omni-directional sound."</p>
+and maximum is -1. <em>Doppler_level </em>specifies the doppler scale for the
+sound (0 means off, 1 is default, 5 is max). <em>Cone_inside_angle</em> is the
+angle within which the sound is at it's normal volume (default 360),
+<em>cone_outside_angle</em> is the outside angle that the sound is at it's
+normal volume (default 360, shouldn't be less than the inside angle), and
+<em>cone_outside_volume</em> is the volume level of the sound outside (0.0 to
+1.0, default 1.0)<em>. Direction_x</em>, <em>direction_y</em> and
+<em>direction_z</em> specify the direction of the sound cone.</p>
 
 <p align="left"><strong>ad. GetWallExtents</strong> - the GetWallExtents
 command returns the X and Z extents (minimum and maximum values) of a wall, at
@@ -2539,11 +2664,82 @@ the endpoints. The command will store the results in the MinX, MinZ, MaxX and
 MaxZ variables, which can be used anywhere in the script - to get the minimum X
 result, you'd use %minx%.</p>
 
-<p align="left"><strong>ae. Print</strong> - prints the contents of a line to
-the console. This command will still convert variables and even math
-expressions, and output the results.<br>
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ae.
+AddAction</strong> - defines an action, to be used by custom controls and
+triggers.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2">AddAction <em>name,
+parent_object, command[, parameters</em></font><em>]<br>
+</em>Example:<font face="Courier New, Courier, mono" size="2">AddAction
+MyAction, Floor 2, ChangeTexture, OldTexture, NewTexture</font><br>
+Example:<font face="Courier New, Courier, mono" size="2">AddAction
+MySoundAction, Floor 2, PlaySound, Sound1, false</font><br>
+</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">This command
+creates a global action, to be used with commands such as
+<em>AddActionControl</em> and <em>AddTrigger</em>. <em>Name</em> must be a
+globally-unique name. <em>Parent_object</em> is the object to use to perform
+the action on. Currently includes "Global", floors such as "Floor 2", elevators
+such as "Elevator 1", shafts like "Shaft 1" and stairwells like "Stairs 2".</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Commands and
+parameters:</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">(General)<br>
+ChangeTexture: oldtexture, newtexture<br>
+PlaySound: name, loop true/false<br>
+</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">(Elevator commands,
+see AddControl command in elevator section for commands, these have no
+parameters)</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>af.
+AddActionControl</strong> - creates a custom control that uses a specific
+action defined by AddAction.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
+<em>name, sound, direction, centerx, centerz, width, height, voffset,
+action_name(s), texture_name(s)<br>
+</em></font>Example: <font face="Courier New, Courier, mono"
+size="2">AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 4,
+UndoMyAction, MyAction, Touch, TouchLit<br>
+</font><br>
+AddActionControl command creates an advanced control similar to elevator button
+panel controls, but assigned to an action created with the AddAction command.
+The <em>action_name(s)</em> and <em>texture_name(s)</em> parameters allow you
+to specify a list of actions, and a list of textures to go along with those
+actions. There needs to be a texture for every action; if you specify 3 actions
+and only 2 textures, you will get an error. The control starts up in the first
+action, and switches to the next actions in sequence when it's clicked.
+<em>Direction</em> is the direction the control itself will face in 3D space
+(front, left, right, back).</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ag.
+AddTrigger</strong> - creates a trigger that is used to signal an action when
+the user's camera enters or leaves the defined area.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,
+sound, start_x, start_y, start_z, end_x, end_y, end_z, action_names(s)<br>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddTrigger
+MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction,
+MyAction</font><br>
+<br>
+AddTrigger creates a trigger similar to action controls (AddActionControl) and
+elevator controls. The action_names(s) parameter allows you to specify a list
+of actions that this trigger will call when the camera enters or exits the
+area. The trigger starts in the first action, and will switch to each
+consecutive action when the users enters/leaves. The X, Y and Z parameters
+specify the 3D box that defines the trigger area.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
+Print</strong> - prints the contents of a line to the console. This command
+will still convert variables and even math expressions, and output the
+results.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2">Print text</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<p></p>
 
 <p align="left"> </p>
 

@@ -30,8 +30,8 @@ class SBSIMPEXP Action
 {
 public:
 	//functions
-	Action(Object *action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters);
-	Action(Object *action_parent, const std::string name, const std::string &command);
+	Action(const std::string name, Object *action_parent, const std::string &command, const std::vector<std::string> &parameters);
+	Action(const std::string name, Object *action_parent, const std::string &command);
 	~Action();
 	bool DoAction();
 	const char *GetName();

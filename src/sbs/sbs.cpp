@@ -199,6 +199,8 @@ SBS::SBS()
 	getshaft_number = 0;
 	getstairs_result = 0;
 	getstairs_number = 0;
+	texturecount = 0;
+	materialcount = 0;
 }
 
 SBS::~SBS()
@@ -353,12 +355,18 @@ SBS::~SBS()
 	//remove all materials
 	Ogre::MaterialManager::getSingleton().removeAll();
 	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
+	materialcount = 0;
 
 	//remove all fonts
 	Ogre::FontManager::getSingleton().removeAll();
 
 	//remove all textures
 	Ogre::TextureManager::getSingleton().removeAll();
+	texturecount = 0;
+
+	if (object)
+		delete object;
+	object = 0;
 
 	//clear self reference
 	sbs = 0;
@@ -546,8 +554,12 @@ void SBS::MainLoop()
 			//process auto areas
 			CheckAutoAreas();
 
-			//check if the user is outside (no code yet)
-
+			//process triggers
+			for (int i = 0; i < TriggerArray.size(); i++)
+			{
+				if (TriggerArray[i])
+					TriggerArray[i]->Check();
+			}
 		}
 		elapsed -= delta;
 	}
@@ -2491,7 +2503,7 @@ int SBS::GetMeshFactoryCount()
 	return 0;
 }
 
-Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, int volume, int speed, float min_distance, float max_distance, float dir_radiation, Ogre::Vector3 direction)
+Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, int volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
 	sounds.resize(sounds.size() + 1);
@@ -2505,12 +2517,33 @@ Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 posi
 	sound->SetSpeed(speed);
 	sound->SetDistances(min_distance, max_distance);
 	sound->SetDirection(direction);
-	sound->SetDirectionalRadiation(dir_radiation);
+	sound->SetDopplerLevel(doppler_level);
+	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
-	sound->Loop(true);
-	sound->Play();
+	sound->Loop(loop);
+	if (loop)
+		sound->Play();
 
 	return sound->object;
+}
+
+Sound* SBS::GetSound(const char *name)
+{
+	//get sound by name
+
+	std::string findname = name;
+	SetCase(findname, false);
+	for (int i = 0; i < sounds.size(); i++)
+	{
+		if (sounds[i])
+		{
+			std::string name2 = sounds[i]->GetName();
+			SetCase(name2, false);
+			if (findname == name2)
+				return sounds[i];
+		}
+	}
+	return 0;
 }
 
 int SBS::GetSoundCount()
@@ -3318,7 +3351,7 @@ Object* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 
 	return trigger->object;
 }
 
-Action* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters)
+Action* SBS::AddAction(const std::string name, Object* action_parent, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//add a global action
 
@@ -3327,12 +3360,12 @@ Action* SBS::AddAction(Object* action_parent, const std::string name, const std:
 	if (check)
 		return 0;
 
-	Action *action = new Action(action_parent, name, command, parameters);
+	Action *action = new Action(name, action_parent, command, parameters);
 	ActionArray.push_back(action);
 	return action;
 }
 
-Action* SBS::AddAction(Object* action_parent, const std::string name, const std::string &command)
+Action* SBS::AddAction(const std::string name, Object* action_parent, const std::string &command)
 {
 	//add a global action
 
@@ -3341,7 +3374,7 @@ Action* SBS::AddAction(Object* action_parent, const std::string name, const std:
 	if (check)
 		return 0;
 
-	Action *action = new Action(action_parent, name, command);
+	Action *action = new Action(name, action_parent, command);
 	ActionArray.push_back(action);
 	return action;
 }
