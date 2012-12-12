@@ -156,12 +156,12 @@ bool Trigger::NextSelectPosition(bool check_state)
 {
 	//change to the next available trigger selection position
 
-	current_position = GetNextSelectPosition();
+	int position = GetNextSelectPosition();
 
 	if (check_state == true)
-		return SetSelectPosition(current_position);
+		return SetSelectPosition(position);
 	else
-		return ChangeSelectPosition(current_position);
+		return ChangeSelectPosition(position);
 }
 
 int Trigger::GetNextSelectPosition()
@@ -178,12 +178,12 @@ bool Trigger::PreviousSelectPosition(bool check_state)
 {
 	//change to the next available trigger selection position
 
-	current_position = GetPreviousSelectPosition();
+	int position = GetPreviousSelectPosition();
 
 	if (check_state == true)
-		return SetSelectPosition(current_position);
+		return SetSelectPosition(position);
 	else
-		return ChangeSelectPosition(current_position);
+		return ChangeSelectPosition(position);
 }
 
 int Trigger::GetPreviousSelectPosition()
@@ -252,32 +252,37 @@ bool Trigger::Check()
 	//check for action; should be called in a loop by the parent object
 
 	Ogre::Vector3 pos = sbs->camera->GetPosition();
+	bool changed = false;
 	if (pos > area_min && pos < area_max)
 	{
 		if (IsInside == false)
-		{
-			//camera is inside trigger area
-			IsInside = true;
-
-			//play sound
-			PlaySound();
-
-			//get action name of next position state
-			std::string name = GetPositionAction(GetNextSelectPosition());
-
-			//exit without changing position if floor button is currently selected
-			if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
-				return false;
-
-			//change to next control position
-			NextSelectPosition();
-
-			//perform selected action
-			return DoAction();
-		}
+			changed = true;
+		IsInside = true;
 	}
 	else
+	{
+		if (IsInside == true)
+			changed = true;
 		IsInside = false;
+	}
 
+	if (changed == true)
+	{
+		//play sound
+		PlaySound();
+
+		//get action name of next position state
+		std::string name = GetPositionAction(GetNextSelectPosition());
+
+		//exit without changing position if floor button is currently selected
+		if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
+			return false;
+
+		//change to next control position
+		NextSelectPosition();
+
+		//perform selected action
+		return DoAction();
+	}
 	return false;
 }
