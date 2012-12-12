@@ -142,6 +142,9 @@ bool Action::DoAction()
 	if (parent_type == "Stairs")
 		stairs = (Stairs*)parent_object->GetRawObject();
 
+	//report the action used
+	sbs->Report("Executed action '" + name + "': with object '" + parent_name + "' using command '" + command_name + "'");
+
 	//numeric commands for elevator routes
 	if (IsNumeric(command_name.c_str()) == true && elevator)
 	{

@@ -224,8 +224,10 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	std::vector<std::string> actions;
 	for (int i = 0; i < action_names.size(); i++)
 	{
-		sbs->AddAction(sbs->GetElevator(elevator)->object, action_names[i], action_names[i]);
-		actions.push_back(action_names[i]);
+		std::string newname = sbs->GetElevator(elevator)->object->GetName();
+		newname += ":" + action_names[i];
+		sbs->AddAction(sbs->GetElevator(elevator)->object, newname, action_names[i]);
+		actions.push_back(newname);
 	}
 
 	controls[control_index] = new Control(this->object, buffer.c_str(), sound, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);

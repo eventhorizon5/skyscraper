@@ -2107,7 +2107,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddAction command
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "addaction")
+	if (SetCaseCopy(LineData.substr(0, 10), false) == "addaction ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10);

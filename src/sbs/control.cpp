@@ -46,7 +46,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	//get pointers to actions
 	for (int i = 0; i < action_names.size(); i++)
 	{
-		Action *action = sbs->GetAction(parent, action_names[i]);
+		Action *action = sbs->GetAction(action_names[i]);
 		if (action)
 			Actions.push_back(action);
 	}

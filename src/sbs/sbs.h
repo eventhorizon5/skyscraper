@@ -344,7 +344,7 @@ public:
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Object* AddAction(Object* action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters);
 	Object* AddAction(Object* action_parent, const std::string name, const std::string &command);
-	Action* GetAction(Object* action_parent, const std::string name);
+	Action* GetAction(const std::string name);
 	int GetActionCount();
 	
 	//Meshes

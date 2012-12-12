@@ -3323,7 +3323,7 @@ Object* SBS::AddAction(Object* action_parent, const std::string name, const std:
 	//add a global action
 
 	//return action object if it already exists
-	Action *check = GetAction(action_parent, name);
+	Action *check = GetAction(name);
 	if (check)
 		return 0;
 
@@ -3337,7 +3337,7 @@ Object* SBS::AddAction(Object* action_parent, const std::string name, const std:
 	//add a global action
 
 	//exit if action already exists
-	Action *check = GetAction(action_parent, name);
+	Action *check = GetAction(name);
 	if (check)
 		return 0;
 
@@ -3346,13 +3346,13 @@ Object* SBS::AddAction(Object* action_parent, const std::string name, const std:
 	return action->object;
 }
 
-Action* SBS::GetAction(Object* action_parent, const std::string name)
+Action* SBS::GetAction(const std::string name)
 {
 	//get action by name
 	for (int i = 0; i < ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
-		if (actionname == name && action_parent == ActionArray[i]->GetParent())
+		if (actionname == name)
 			return ActionArray[i];
 	}
 	return 0;
@@ -3373,5 +3373,6 @@ Object* SBS::GetObject(const std::string name)
 		if (tmpname == name)
 			return ObjectArray[i];
 	}
+	return 0;
 }
 
