@@ -37,6 +37,8 @@ public:
 	const char *GetName();
 	const char *GetCommandName();
 	const Object *GetParent();
+	const char *GetParentName();
+	const char *GetParentType();
 
 private:
 

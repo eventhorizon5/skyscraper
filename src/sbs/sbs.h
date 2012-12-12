@@ -345,7 +345,9 @@ public:
 	Action* AddAction(Object* action_parent, const std::string name, const std::string &command, const std::vector<std::string> &parameters);
 	Action* AddAction(Object* action_parent, const std::string name, const std::string &command);
 	Action* GetAction(const std::string name);
+	Action* GetAction(int index);
 	int GetActionCount();
+	bool RunAction(std::string name);
 	
 	//Meshes
 	MeshObject* Buildings;

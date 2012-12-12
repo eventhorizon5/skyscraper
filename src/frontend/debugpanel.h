@@ -87,6 +87,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bStats;
 		static const long ID_bConsole;
 		static const long ID_bObjectInfo;
+		static const long ID_bActionViewer;
 		static const long ID_bProfiler;
 		static const long ID_PANEL1;
 		//*)
@@ -119,6 +120,7 @@ class DebugPanel: public wxFrame
 		void On_bObjectInfo_Click(wxCommandEvent& event);
 		void On_chkRandom_Click(wxCommandEvent& event);
 		void On_bProfiler_Click(wxCommandEvent& event);
+		void On_bActionViewer_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -139,6 +141,7 @@ class DebugPanel: public wxFrame
 		wxButton* bCameraControl;
 		wxBoxSizer* BoxSizer2;
 		wxStaticText* StaticText1;
+		wxButton* bActionViewer;
 		wxStaticText* StaticText3;
 		wxButton* bStats;
 		wxButton* bProfiler;

@@ -3376,3 +3376,17 @@ Object* SBS::GetObject(const std::string name)
 	return 0;
 }
 
+Action* SBS::GetAction(int index)
+{
+	if (index >= 0 && index < ActionArray.size())
+		return ActionArray[index];
+	return 0;
+}
+
+bool SBS::RunAction(std::string name)
+{
+	Action* action = GetAction(name);
+	if (action)
+		return action->DoAction();
+	return false;
+}

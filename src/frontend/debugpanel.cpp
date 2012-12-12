@@ -32,6 +32,7 @@
 #include "keydialog.h"
 #include "profilergui.h"
 #include "stats.h"
+#include "actionviewer.h"
 #include "globals.h"
 #include "sbs.h"
 #include "camera.h"
@@ -53,6 +54,7 @@ Stats *stats;
 Console *console;
 ObjectInfo *objectinfo;
 Profiler *profiler;
+ActionViewer *actionviewer;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -90,6 +92,7 @@ const long DebugPanel::ID_bControlReference = wxNewId();
 const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
+const long DebugPanel::ID_bActionViewer = wxNewId();
 const long DebugPanel::ID_bProfiler = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
@@ -200,6 +203,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bConsole, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bObjectInfo = new wxButton(Panel1, ID_bObjectInfo, _("Object Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bObjectInfo"));
 	BoxSizer3->Add(bObjectInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bActionViewer = new wxButton(Panel1, ID_bActionViewer, _("Action Viewer"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bActionViewer"));
+	BoxSizer3->Add(bActionViewer, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bProfiler = new wxButton(Panel1, ID_bProfiler, _("Profiler"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bProfiler"));
 	BoxSizer3->Add(bProfiler, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer3, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
@@ -227,6 +232,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
+	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
 	Connect(ID_bProfiler,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
 	//*)
 	dp = this;
@@ -266,6 +272,9 @@ DebugPanel::~DebugPanel()
 	if (profiler)
 		profiler->Destroy();
 	profiler = 0;
+	if (actionviewer)
+		actionviewer->Destroy();
+	actionviewer = 0;
 	dpanel = 0; //clear external pointer
 }
 
@@ -333,6 +342,7 @@ void DebugPanel::OnInit()
 	console = new Console(dp, -1);
 	objectinfo = new ObjectInfo(dp, -1);
 	profiler = new Profiler(dp, -1);
+	actionviewer = new ActionViewer(dp, -1);
 
 	timer = new Timer();
 	timer->Start(40);
@@ -514,5 +524,14 @@ void DebugPanel::On_bProfiler_Click(wxCommandEvent& event)
 	{
 		profiler->CenterOnScreen();
 		profiler->Show();
+	}
+}
+
+void DebugPanel::On_bActionViewer_Click(wxCommandEvent& event)
+{
+	if (actionviewer)
+	{
+		actionviewer->CenterOnScreen();
+		actionviewer->Show();
 	}
 }

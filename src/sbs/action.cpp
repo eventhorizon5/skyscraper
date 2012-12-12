@@ -135,7 +135,7 @@ bool Action::DoAction()
 		stairs = (Stairs*)parent_object->GetRawObject();
 
 	//report the action used
-	sbs->Report("Executed action '" + name + "': with object '" + parent_name + "' using command '" + command_name + "'");
+	sbs->Report("Ran action '" + name + "': with object '" + parent_name + "' using command '" + command_name + "'");
 
 	//numeric commands for elevator routes
 	if (IsNumeric(command_name.c_str()) == true && elevator)
@@ -330,4 +330,18 @@ bool Action::DoAction()
 const Object* Action::GetParent()
 {
 	return parent_object;
+}
+
+const char* Action::GetParentName()
+{
+	if (parent_object)
+		return parent_object->GetName();
+	return 0;
+}
+
+const char* Action::GetParentType()
+{
+	if (parent_object)
+		return parent_object->GetType();
+	return 0;
 }
