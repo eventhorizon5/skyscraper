@@ -39,6 +39,8 @@ public:
 	const Object *GetParent();
 	const char *GetParentName();
 	const char *GetParentType();
+	int GetParameterCount();
+	const char *GetParameter(int index);
 
 private:
 

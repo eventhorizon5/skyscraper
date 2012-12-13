@@ -408,3 +408,14 @@ const char* Action::GetParentType()
 		return parent_object->GetType();
 	return 0;
 }
+
+int Action::GetParameterCount()
+{
+	return command_parameters.size();
+}
+
+const char *Action::GetParameter(int index)
+{
+	if (index >= 0 && index < command_parameters.size())
+		return command_parameters[index].c_str();
+}

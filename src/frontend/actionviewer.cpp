@@ -145,6 +145,10 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 		tParentName->SetValue(wxString::FromAscii(action->GetParentName()));
 		tType->SetValue(wxString::FromAscii(action->GetParentType()));
 		tCommand->SetValue(wxString::FromAscii(action->GetCommandName()));
+
+		tParameters->Clear();
+		for (int i = 0; i < action->GetParameterCount(); i++)
+			tParameters->AppendText(wxString::FromAscii(action->GetParameter(i)) + wxT("\n"));
 	}
 
 }
