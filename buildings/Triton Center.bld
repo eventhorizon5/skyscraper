@@ -32,7 +32,7 @@
     Load data/brick1.jpg, Brick, 0.269, 0.25
     Load data/lobbyfront-b.gif, LobbyFront, 1, 1
     #Load data/windows11h.jpg, MainWindows, 0.05, 1
-    LoadAlphaBlend data/windows11i.jpg, data/windows11ispec.png, data/sky3k.jpg, MainWindows, true, 0.05, 1
+    LoadAlphaBlend data/windows11i.jpg, data/windows11ispec.png, data/sky3l.jpg, MainWindows, true, 0.05, 1
     Load data/windows11h_black.jpg, MainWindows2, 0.05, 1
     Load data/windows11h_black_mid2.jpg, MainWindows2b, 0.05, 1
     Load data/windows11h_black_double.jpg, MainWindowsDouble, 0.05, 1
