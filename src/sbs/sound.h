@@ -82,6 +82,7 @@ private:
 	std::string Filename;
 	std::string Name;
 	float default_speed;
+	float doppler_level;
 
 };
 

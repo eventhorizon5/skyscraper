@@ -326,10 +326,13 @@ void Floor::Enabled(bool value)
 	{
 		if (sounds[i])
 		{
-			if (value == false)
-				sounds[i]->Stop();
-			else
-				sounds[i]->Play();
+			if (sounds[i]->GetLoopState() == true)
+			{
+				if (value == false)
+					sounds[i]->Stop();
+				else
+					sounds[i]->Play();
+			}
 		}
 	}
 }
@@ -798,9 +801,8 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, int volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
-	sounds.resize(sounds.size() + 1);
-	Sound *sound = sounds[sounds.size() - 1];
-	sound = new Sound(this->object, name, false);
+	Sound *sound = new Sound(object, name, false);
+	sounds.push_back(sound);
 
 	//set parameters and play sound
 	sound->SetPosition(position);

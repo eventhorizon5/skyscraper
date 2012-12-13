@@ -135,7 +135,7 @@ bool Action::DoAction()
 		stairs = (Stairs*)parent_object->GetRawObject();
 
 	//report the action used
-	sbs->Report("Ran action '" + name + "': with object '" + parent_name + "' using command '" + command_name + "'");
+	sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");
 
 	//numeric commands for elevator routes
 	if (IsNumeric(command_name.c_str()) == true && elevator)
@@ -324,19 +324,19 @@ bool Action::DoAction()
 			Sound *sound = 0;
 
 			if (parent_type == "SBS")
-				Sound* sound = sbs->GetSound(command_parameters[0].c_str());
+				sound = sbs->GetSound(command_parameters[0].c_str());
 
 			if (parent_type == "Floor")
 			{
 				if (floor)
-					Sound* sound = floor->GetSound(command_parameters[0].c_str());
+					sound = floor->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
 			if (parent_type == "Elevator")
 			{
 				if (elevator)
-					Sound* sound = elevator->GetSound(command_parameters[0].c_str());
+					sound = elevator->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
@@ -363,19 +363,19 @@ bool Action::DoAction()
 			Sound *sound = 0;
 
 			if (parent_type == "SBS")
-				Sound* sound = sbs->GetSound(command_parameters[0].c_str());
+				sound = sbs->GetSound(command_parameters[0].c_str());
 
 			if (parent_type == "Floor")
 			{
 				if (floor)
-					Sound* sound = floor->GetSound(command_parameters[0].c_str());
+					sound = floor->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
 			if (parent_type == "Elevator")
 			{
 				if (elevator)
-					Sound* sound = elevator->GetSound(command_parameters[0].c_str());
+					sound = elevator->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}

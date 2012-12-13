@@ -1088,7 +1088,7 @@ direction_x, direction_y, direction_z]</em></font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">AddSound MySound,
 sound.wav, 10, 100, 5, true<br>
 </font>Example 2: <font face="Courier New, Courier, mono" size="2">AddSound
-MySound, sound.wav, 10, 100, 5, true, 1, 100, 1, -1, 1, 360, 360, 1, 0, 0,
+MySound, sound.wav, 10, 100, 5, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0,
 0</font></p>
 
 <p align="left">For information on the parameters, see the AddSound command in
@@ -1984,7 +1984,7 @@ direction_x, direction_y, direction_z]</em></font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">AddSound MySound,
 sound.wav, 10, 100, 5, true<br>
 </font>Example 2: <font face="Courier New, Courier, mono" size="2">AddSound
-MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 1, 360, 360, 1, 0, 0,
+MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0,
 0</font></p>
 
 <p align="left">For information on the parameters, see the AddSound command in
@@ -2615,7 +2615,7 @@ direction_x, direction_y, direction_z]</em></font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">AddSound MySound,
 sound.wav, 10, 100, 5, true<br>
 </font>Example 2: <font face="Courier New, Courier, mono" size="2">AddSound
-MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 1, 360, 360, 1, 0, 0,
+MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0,
 0</font></p>
 
 <p align="left">This command creates a custom sound in the specified position,
@@ -2629,7 +2629,7 @@ specifies the volume percentage (with 1.0 being 100%) of the sound,
 <em>min_distance</em> and <em>max_distance</em> set the minimum and maximum
 distances that the sound can be heard at full volume - by default, minimum is 1
 and maximum is -1. <em>Doppler_level </em>specifies the doppler scale for the
-sound (0 means off, 1 is default, 5 is max). <em>Cone_inside_angle</em> is the
+sound (0 means off, the default, 1 is normal, 5 is max). <em>Cone_inside_angle</em> is the
 angle within which the sound is at it's normal volume (default 360),
 <em>cone_outside_angle</em> is the outside angle that the sound is at it's
 normal volume (default 360, shouldn't be less than the inside angle), and

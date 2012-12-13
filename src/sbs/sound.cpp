@@ -51,6 +51,7 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	sound = 0;
 	channel = 0;
 	default_speed = 0;
+	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 }
 
 Sound::~Sound()
@@ -274,6 +275,7 @@ void Sound::Play(bool reset)
 		SetDirection(Direction);
 		Loop(SoundLoop);
 		SetSpeed(Speed);
+		SetDopplerLevel(doppler_level);
 	}
 
 	if (reset == true)
@@ -370,6 +372,8 @@ void Sound::SetDopplerLevel(float level)
 {
 	if (level < 0 || level > 5)
 		return;
+
+	doppler_level = level;
 
 	if (channel)
 		channel->set3DDopplerLevel(level);

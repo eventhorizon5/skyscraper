@@ -182,8 +182,11 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 <Floor 0>
     AddAction MyAction, Floor 0, ChangeTexture, Ceiling1, Ceiling1Old
     AddAction UndoMyAction, Floor 0, ChangeTexture, Ceiling1Old, Ceiling1
+    AddSound MySound, intro.ogg, -20, 10, 10, false
+    AddAction PlayMySound, Floor 0, PlaySound, MySound, true
+    AddAction StopMySound, Floor 0, StopSound, MySound
     AddActionControl MyControl, switch.wav, front, -10, 10, 1.5, 1.5, 4, UndoMyAction, MyAction, Touch, TouchLit
-    AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction, MyAction
+    AddTrigger MyTrigger, , -50, 0, -30, -20, 10, 20, StopMySound, PlayMySound
 <EndFloor>
 
 #Finally create the roof (11th floor), and add a square brick floor on it.
