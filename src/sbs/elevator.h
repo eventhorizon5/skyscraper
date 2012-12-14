@@ -71,9 +71,12 @@ public:
 	std::string CarMoveSound; //elevator move sound
 	std::string CarStopSound; //elevator stop/slowdown sound
 	std::string CarIdleSound; //elevator idle/fan sound
-	std::string MotorStartSound; //motor start/speedup sound
-	std::string MotorRunSound; //motor move sound
-	std::string MotorStopSound; //motor stop/slowdown sound
+	std::string MotorUpStartSound; //motor up start/speedup sound
+	std::string MotorUpRunSound; //motor up move sound
+	std::string MotorUpStopSound; //motor up stop/slowdown sound
+	std::string MotorDownStartSound; //motor down start/speedup sound
+	std::string MotorDownRunSound; //motor down move sound
+	std::string MotorDownStopSound; //motor down stop/slowdown sound
 	std::string MotorIdleSound; //motor idle sound
 	std::string AlarmSound; //alarm sound (loop)
 	std::string AlarmSoundStop; //alarm stopping sound

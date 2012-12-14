@@ -4128,9 +4128,12 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarStartSound = temp2;
 		//turn off motor sounds
-		elev->MotorStartSound = "";
-		elev->MotorRunSound = "";
-		elev->MotorStopSound = "";
+		elev->MotorUpStartSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "movesound")
@@ -4144,9 +4147,12 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarMoveSound = temp2;
 		//turn off motor sounds
-		elev->MotorStartSound = "";
-		elev->MotorRunSound = "";
-		elev->MotorStopSound = "";
+		elev->MotorUpStartSound = "";
+                elev->MotorDownStartSound = "";
+                elev->MotorUpRunSound = "";
+                elev->MotorDownRunSound = "";
+                elev->MotorUpStopSound = "";
+                elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "stopsound")
@@ -4160,9 +4166,12 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarStopSound = temp2;
 		//turn off motor sounds
-		elev->MotorStartSound = "";
-		elev->MotorRunSound = "";
-		elev->MotorStopSound = "";
+		elev->MotorUpStartSound = "";
+                elev->MotorDownStartSound = "";
+                elev->MotorUpRunSound = "";
+                elev->MotorDownRunSound = "";
+                elev->MotorUpStopSound = "";
+                elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
 	if (SetCaseCopy(LineData.substr(0, 9), false) == "idlesound")
@@ -4176,9 +4185,12 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarIdleSound = temp2;
 		//turn off motor sounds
-		elev->MotorStartSound = "";
-		elev->MotorRunSound = "";
-		elev->MotorStopSound = "";
+		elev->MotorUpStartSound = "";
+                elev->MotorDownStartSound = "";
+                elev->MotorUpRunSound = "";
+                elev->MotorDownRunSound = "";
+                elev->MotorUpStopSound = "";
+                elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "carstartsound")
@@ -4229,8 +4241,29 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->MotorStartSound = temp2;
+		elev->MotorUpStartSound = temp2;
+		elev->MotorDownStartSound = temp2;
 	}
+	if (SetCaseCopy(LineData.substr(0, 17), false) == "motorupstartsound")
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+
+                //check to see if file exists
+                CheckFile(std::string("data/" + temp2).c_str());
+
+                elev->MotorUpStartSound = temp2;
+        }
+	if (SetCaseCopy(LineData.substr(0, 19), false) == "motordownstartsound")
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+
+                //check to see if file exists
+                CheckFile(std::string("data/" + temp2).c_str());
+
+                elev->MotorDownStartSound = temp2;
+        }
 	if (SetCaseCopy(LineData.substr(0, 13), false) == "motorrunsound")
 	{
 		if (temp2check < 0)
@@ -4239,8 +4272,29 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->MotorRunSound = temp2;
+		elev->MotorUpRunSound = temp2;
+		elev->MotorDownRunSound = temp2;
 	}
+	if (SetCaseCopy(LineData.substr(0, 15), false) == "motoruprunsound")
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+
+                //check to see if file exists
+                CheckFile(std::string("data/" + temp2).c_str());
+
+                elev->MotorUpRunSound = temp2;
+        }
+	if (SetCaseCopy(LineData.substr(0, 17), false) == "motordownrunsound")
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+
+                //check to see if file exists
+                CheckFile(std::string("data/" + temp2).c_str());
+
+                elev->MotorDownRunSound = temp2;
+        }
 	if (SetCaseCopy(LineData.substr(0, 14), false) == "motorstopsound")
 	{
 		if (temp2check < 0)
@@ -4249,8 +4303,29 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->MotorStopSound = temp2;
+		elev->MotorUpStopSound = temp2;
+		elev->MotorDownStopSound = temp2;
 	}
+	if (SetCaseCopy(LineData.substr(0, 16), false) == "motorupstopsound")
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+
+                //check to see if file exists
+                CheckFile(std::string("data/" + temp2).c_str());
+
+                elev->MotorUpStopSound = temp2;
+        }
+	if (SetCaseCopy(LineData.substr(0, 18), false) == "motordownstopsound")
+        {
+                if (temp2check < 0)
+                        return ScriptError("Syntax error");
+
+                //check to see if file exists
+                CheckFile(std::string("data/" + temp2).c_str());
+
+                elev->MotorDownStopSound = temp2;
+        }
 	if (SetCaseCopy(LineData.substr(0, 10), false) == "chimesound")
 	{
 		if (temp2check < 0)
