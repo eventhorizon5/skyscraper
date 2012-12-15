@@ -90,6 +90,7 @@ bool ScriptProcessor::LoadBuilding()
 	FunctionCallLine = 0;
 	ReplaceLine = false;
 	nonexistent_files.clear();
+	floorcache_firstrun = true;
 
 	while (line < (int)BuildingData.size())
 	{
@@ -105,6 +106,9 @@ bool ScriptProcessor::LoadBuilding()
 			ReplaceLine = false;
 		}
 
+		//create a lowercase string of the line
+		std::string linecheck = SetCaseCopy(LineData, false);
+
 		//skip blank lines
 		if (LineData == "")
 			goto Nextline;
@@ -113,6 +117,8 @@ bool ScriptProcessor::LoadBuilding()
 		temp1 = LineData.find("#", 0);
 		if (temp1 > -1)
 			LineData.erase(temp1);
+
+		linecheck = SetCaseCopy(LineData, false);
 
 		//skip blank lines
 		if (LineData == "")
@@ -128,10 +134,12 @@ bool ScriptProcessor::LoadBuilding()
 			}
 		}
 
+		linecheck = SetCaseCopy(LineData, false);
+
 		//////////////////////
 		//Section information
 		//////////////////////
-		if (SetCaseCopy(LineData, false) == "<globals>")
+		if (linecheck == "<globals>")
 		{
 			if (Section > 0)
 			{
@@ -143,7 +151,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing globals...");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData, false) == "<endglobals>")
+		if (linecheck == "<endglobals>")
 		{
 			if (Section != 1)
 			{
@@ -156,7 +164,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished globals");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 7), false) == "<floors")
+		if (linecheck.substr(0, 7) == "<floors")
 		{
 			if (Section > 0)
 			{
@@ -164,7 +172,7 @@ bool ScriptProcessor::LoadBuilding()
 				return false;
 			}
 			Section = 2;
-			temp3 = SetCaseCopy(LineData, false).find("to", 0);
+			temp3 = linecheck.find("to", 0);
 			if (temp3 < 0)
 			{
 				ScriptError("Syntax error");
@@ -187,7 +195,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing floors " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 7), false) == "<floor ")
+		if (linecheck.substr(0, 7) == "<floor ")
 		{
 			if (Section > 0)
 			{
@@ -208,7 +216,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing floor " + std::string(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData, false) == "<endfloor>" && RangeL == RangeH)
+		if (linecheck == "<endfloor>" && RangeL == RangeH)
 		{
 			if (Section != 2)
 			{
@@ -220,7 +228,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished floor");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 10), false) == "<elevators")
+		if (linecheck.substr(0, 10) == "<elevators")
 		{
 			if (Section > 0)
 			{
@@ -228,7 +236,7 @@ bool ScriptProcessor::LoadBuilding()
 				return false;
 			}
 			Section = 4;
-			temp3 = SetCaseCopy(LineData, false).find("to", 10);
+			temp3 = linecheck.find("to", 10);
 			if (temp3 < 0)
 			{
 				ScriptError("Syntax error");
@@ -249,7 +257,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing elevators " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 10), false) == "<elevator ")
+		if (linecheck.substr(0, 10) == "<elevator ")
 		{
 			if (Section > 0)
 			{
@@ -275,7 +283,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing elevator " + std::string(_itoa(Current, intbuffer, 10)) + "...");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData, false) == "<endelevator>" && RangeL == RangeH)
+		if (linecheck == "<endelevator>" && RangeL == RangeH)
 		{
 			if (Section != 4)
 			{
@@ -287,7 +295,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished elevator");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 10), false) == "<textures>")
+		if (linecheck.substr(0, 10) == "<textures>")
 		{
 			if (Section > 0)
 			{
@@ -299,7 +307,7 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Processing textures...");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 13), false) == "<endtextures>")
+		if (linecheck.substr(0, 13) == "<endtextures>")
 		{
 			if (Section != 5)
 			{
@@ -312,21 +320,21 @@ bool ScriptProcessor::LoadBuilding()
 			skyscraper->Report("Finished textures");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 5), false) == "<end>")
+		if (linecheck.substr(0, 5) == "<end>")
 		{
 			Section = 0;
 			Context = "None";
 			skyscraper->Report("Exiting building script");
 			break; //exit data file parser
 		}
-		if (SetCaseCopy(LineData.substr(0, 7), false) == "<break>")
+		if (linecheck.substr(0, 7) == "<break>")
 		{
 			//breakpoint function for debugging scripts
 breakpoint:
 			skyscraper->Report("Script breakpoint reached");
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 8), false) == "<include")
+		if (linecheck.substr(0, 8) == "<include")
 		{
 			//include another file at the current script location
 
@@ -349,7 +357,7 @@ breakpoint:
 			line--;
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 9), false) == "<function" && Section == 0)
+		if (linecheck.substr(0, 9) == "<function" && Section == 0)
 		{
 			//define a function (only available outside sections)
 
@@ -376,7 +384,7 @@ breakpoint:
 			skyscraper->Report("Defined function " + function);
 			goto Nextline;
 		}
-		if (SetCaseCopy(LineData.substr(0, 13), false) == "<endfunction>" && InFunction == true)
+		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction == true)
 		{
 			//end function and return to original line
 			InFunction = false;
@@ -1050,8 +1058,11 @@ int ScriptProcessor::ProcCommands()
 			return sNextLine;
 	}
 
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
 	//Print command
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "print" && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 5) == "print" && Section != 2 && Section != 4)
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(6).c_str());
@@ -1061,7 +1072,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddTriangleWall command
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "addtrianglewall")
+	if (linecheck.substr(0, 15) == "addtrianglewall")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1134,7 +1145,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddWall command
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall" && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 7) == "addwall" && Section != 2 && Section != 4)
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -1154,7 +1165,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddFloor
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor " && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 9) == "addfloor " && Section != 2 && Section != 4)
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -1174,7 +1185,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddGround
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "addground")
+	if (linecheck.substr(0, 9) == "addground")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10);
@@ -1194,7 +1205,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Cut command
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "cut " && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 4) == "cut " && Section != 2 && Section != 4)
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 4);
@@ -1228,7 +1239,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Set command
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "set " && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 4) == "set " && Section != 2 && Section != 4)
 	{
 		temp1 = LineData.find("=", 0);
 		temp3 = atoi(LineData.substr(4, temp1 - 5).c_str());
@@ -1245,7 +1256,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CreateWallBox2 command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "createwallbox2")
+	if (linecheck.substr(0, 14) == "createwallbox2")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1312,7 +1323,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CreateWallBox command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "createwallbox ")
+	if (linecheck.substr(0, 14) == "createwallbox ")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1379,7 +1390,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddCustomWall command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "addcustomwall ")
+	if (linecheck.substr(0, 14) == "addcustomwall ")
 	{
 		if (Section == 2 && getfloordata == false)
 		{
@@ -1443,7 +1454,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddShaft command
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "addshaft ")
+	if (linecheck.substr(0, 9) == "addshaft ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -1471,7 +1482,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShaftCut command
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "shaftcut ")
+	if (linecheck.substr(0, 9) == "shaftcut ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -1495,7 +1506,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShaftShowFloors command
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "shaftshowfloors")
+	if (linecheck.substr(0, 15) == "shaftshowfloors")
 	{
 		//get shaft number
 		int loc = LineData.find("=");
@@ -1554,7 +1565,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShaftShowOutside command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "shaftshowoutside")
+	if (linecheck.substr(0, 16) == "shaftshowoutside")
 	{
 		//get shaft number
 		int loc = LineData.find("=");
@@ -1610,7 +1621,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ShowFullShaft command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "showfullshaft")
+	if (linecheck.substr(0, 13) == "showfullshaft")
 	{
 		//get shaft number
 		int loc = LineData.find("=");
@@ -1631,7 +1642,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CreateStairwell command
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "createstairwell")
+	if (linecheck.substr(0, 15) == "createstairwell")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -1656,7 +1667,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CutStairwell command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "cutstairwell ")
+	if (linecheck.substr(0, 13) == "cutstairwell ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 13);
@@ -1681,7 +1692,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//WallOrientation command
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "wallorientation")
+	if (linecheck.substr(0, 15) == "wallorientation")
 	{
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData.c_str());
@@ -1691,7 +1702,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//FloorOrientation command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "floororientation")
+	if (linecheck.substr(0, 16) == "floororientation")
 	{
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData.c_str());
@@ -1701,7 +1712,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//DrawWalls command
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "drawwalls")
+	if (linecheck.substr(0, 9) == "drawwalls")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
@@ -1718,7 +1729,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetTextureMapping command
-	if (SetCaseCopy(LineData.substr(0, 18), false) == "settexturemapping ")
+	if (linecheck.substr(0, 18) == "settexturemapping ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
@@ -1741,7 +1752,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetTextureMapping2 command
-	if (SetCaseCopy(LineData.substr(0, 18), false) == "settexturemapping2")
+	if (linecheck.substr(0, 18) == "settexturemapping2")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 19);
@@ -1768,7 +1779,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ResetTextureMapping command
-	if (SetCaseCopy(LineData.substr(0, 19), false) == "resettexturemapping")
+	if (linecheck.substr(0, 19) == "resettexturemapping")
 	{
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
@@ -1781,7 +1792,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetPlanarMapping command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "setplanarmapping")
+	if (linecheck.substr(0, 16) == "setplanarmapping")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -1796,7 +1807,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//ReverseAxis command
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "reverseaxis")
+	if (linecheck.substr(0, 11) == "reverseaxis")
 	{
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
@@ -1862,10 +1873,11 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = std::string(LineData).substr(0, temp5) + std::string(wxVariant(isect.x).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(isect.y).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(isect.z).GetString().ToAscii()) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
+		linecheck = SetCaseCopy(LineData, false);
 	}
 
 	//GetWallExtents command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "getwallextents")
+	if (linecheck.substr(0, 14) == "getwallextents")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -1952,10 +1964,11 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = std::string(LineData).substr(0, temp5) + std::string(wxVariant(result.x).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.y).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.z).GetString().ToAscii()) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
+		linecheck = SetCaseCopy(LineData, false);
 	}
 
 	//SetAutoSize command
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "setautosize")
+	if (linecheck.substr(0, 11) == "setautosize")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
@@ -1968,7 +1981,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//TextureOverride command
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "textureoverride")
+	if (linecheck.substr(0, 15) == "textureoverride")
 	{
 		int params = SplitData(LineData.c_str(), 16, false);
 
@@ -1980,7 +1993,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//TextureFlip command
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "textureflip")
+	if (linecheck.substr(0, 11) == "textureflip")
 	{
 		int params = SplitData(LineData.c_str(), 12, false);
 
@@ -2001,7 +2014,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Mount command
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "mount")
+	if (linecheck.substr(0, 5) == "mount")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 6, false);
@@ -2017,7 +2030,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddFloorAutoArea command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "addfloorautoarea")
+	if (linecheck.substr(0, 16) == "addfloorautoarea")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -2037,7 +2050,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddSound
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
+	if (linecheck.substr(0, 8) == "addsound")
 	{
 		if (Section == 2 || Section == 4)
 			return 0;
@@ -2107,7 +2120,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddModel command
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
+	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		if (Section == 2 || Section == 4)
 			return 0;
@@ -2137,7 +2150,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddAction command
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "addaction ")
+	if (linecheck.substr(0, 10) == "addaction ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10);
@@ -2172,7 +2185,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddActionControl command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "addactioncontrol")
+	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{
 		if (Section == 2 || Section == 4)
 			return 0;
@@ -2215,7 +2228,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddTrigger command
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "addtrigger")
+	if (linecheck.substr(0, 10) == "addtrigger")
 	{
 		if (Section == 2 || Section == 4)
 			return 0;
@@ -2259,22 +2272,25 @@ int ScriptProcessor::ProcGlobals()
 	//get text after equal sign
 	temp2 = GetAfterEquals(LineData.c_str());
 
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
 	//store variable values
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
+	if (linecheck.substr(0, 4) == "name")
 		Simcore->BuildingName = temp2;
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "designer")
+	if (linecheck.substr(0, 8) == "designer")
 		Simcore->BuildingDesigner = temp2;
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "location")
+	if (linecheck.substr(0, 8) == "location")
 		Simcore->BuildingLocation = temp2;
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "description")
+	if (linecheck.substr(0, 11) == "description")
 		Simcore->BuildingDescription = temp2;
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "version")
+	if (linecheck.substr(0, 7) == "version")
 		Simcore->BuildingVersion = temp2;
-	if (SetCaseCopy(LineData.substr(0, 3), false) == "sky")
+	if (linecheck.substr(0, 3) == "sky")
 		Simcore->SkyName = temp2;
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "dynamicsky")
+	if (linecheck.substr(0, 10) == "dynamicsky")
 		skyscraper->SkyName = temp2;
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "collisions")
+	if (linecheck.substr(0, 10) == "collisions")
 	{
 		SetCase(temp2, false);
 		if (temp2 == "false")
@@ -2282,7 +2298,7 @@ int ScriptProcessor::ProcGlobals()
 		else
 			Simcore->camera->EnableCollisions(true);
 	}
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "gravity")
+	if (linecheck.substr(0, 7) == "gravity")
 	{
 		SetCase(temp2, false);
 		if (temp2 == "false")
@@ -2290,7 +2306,7 @@ int ScriptProcessor::ProcGlobals()
 		else
 			Simcore->camera->EnableGravity(true);
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "camerafloor")
+	if (linecheck.substr(0, 11) == "camerafloor")
 	{
 		int data;
 		if (!IsNumeric(temp2.c_str(), data))
@@ -2298,7 +2314,7 @@ int ScriptProcessor::ProcGlobals()
 
 		Simcore->camera->StartFloor = data;
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "cameraposition")
+	if (linecheck.substr(0, 14) == "cameraposition")
 	{
 		float x, z;
 		std::string str1 = temp2.substr(0, temp2.find(",", 0));
@@ -2311,7 +2327,7 @@ int ScriptProcessor::ProcGlobals()
 		Simcore->camera->StartPositionX  = x;
 		Simcore->camera->StartPositionZ  = z;
 	}
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "cameradirection")
+	if (linecheck.substr(0, 15) == "cameradirection")
 	{
 		temp3 = temp2.find(",", 0);
 		temp4 = temp2.find(",", temp3 + 1);
@@ -2327,7 +2343,7 @@ int ScriptProcessor::ProcGlobals()
 
 		Simcore->camera->SetStartDirection(Ogre::Vector3(x, y, z));
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "camerarotation")
+	if (linecheck.substr(0, 14) == "camerarotation")
 	{
 		temp3 = temp2.find(",", 0);
 		temp4 = temp2.find(",", temp3 + 1);
@@ -2343,7 +2359,7 @@ int ScriptProcessor::ProcGlobals()
 
 		Simcore->camera->SetStartRotation(Ogre::Vector3(x, y, z));
 	}
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "interfloorontop")
+	if (linecheck.substr(0, 15) == "interfloorontop")
 	{
 		Simcore->InterfloorOnTop = Ogre::StringConverter::parseBool(temp2);
 	}
@@ -2364,17 +2380,41 @@ int ScriptProcessor::ProcFloors()
 		return ScriptError("Invalid floor " + floornum);
 	}
 
+	//cache floor parameters
+	if (cache_current != Current || floorcache_firstrun == true)
+	{
+		cache_current = Current;
+		cache_current_s = Ogre::StringConverter::toString(cache_current);
+	}
+	if (cache_height != floor->Height || floorcache_firstrun == true)
+	{
+		cache_height = floor->Height;
+		cache_height_s = Ogre::StringConverter::toString(cache_height);
+	}
+	if (cache_fullheight != floor->FullHeight() || floorcache_firstrun == true)
+	{
+		cache_fullheight = floor->FullHeight();
+		cache_fullheight_s = Ogre::StringConverter::toString(cache_fullheight);
+	}
+	if (cache_interfloorheight != floor->InterfloorHeight || floorcache_firstrun == true)
+	{
+		cache_interfloorheight = floor->InterfloorHeight;
+		cache_interfloorheight_s = Ogre::StringConverter::toString(cache_interfloorheight);
+	}
+	if (cache_base != floor->GetBase() || floorcache_firstrun == true)
+	{
+		cache_base = floor->GetBase();
+		cache_base_s = Ogre::StringConverter::toString(cache_base);
+	}
+
+	floorcache_firstrun = false;
+
 	//replace variables with actual values
-	buffer = Ogre::StringConverter::toString(Current);
-	ReplaceAll(LineData, "%floor%", buffer.c_str());
-	buffer = Ogre::StringConverter::toString(floor->Height);
-	ReplaceAll(LineData, "%height%", buffer.c_str());
-	buffer = Ogre::StringConverter::toString(floor->FullHeight());
-	ReplaceAll(LineData, "%fullheight%", buffer.c_str());
-	buffer = Ogre::StringConverter::toString(floor->InterfloorHeight);
-	ReplaceAll(LineData, "%interfloorheight%", buffer.c_str());
-	buffer = Ogre::StringConverter::toString(floor->GetBase());
-	ReplaceAll(LineData, "%base%", buffer.c_str());
+	ReplaceAll(LineData, "%floor%", cache_current_s.c_str());
+	ReplaceAll(LineData, "%height%", cache_height_s.c_str());
+	ReplaceAll(LineData, "%fullheight%", cache_fullheight_s.c_str());
+	ReplaceAll(LineData, "%interfloorheight%", cache_interfloorheight_s.c_str());
+	ReplaceAll(LineData, "%base%", cache_base_s.c_str());
 
 	if (getfloordata == true)
 		return sCheckFloors;
@@ -2408,8 +2448,11 @@ int ScriptProcessor::ProcFloors()
 	int temp2check = LineData.find("=", 0);
 	temp2 = GetAfterEquals(LineData.c_str());
 
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
 	//parameters
-	if (SetCaseCopy(LineData.substr(0, 6), false) == "height")
+	if (linecheck.substr(0, 6) == "height")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -2422,7 +2465,7 @@ int ScriptProcessor::ProcFloors()
 		else
 			FloorCheck = 3;
 	}
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "interfloorheight")
+	if (linecheck.substr(0, 16) == "interfloorheight")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -2435,7 +2478,7 @@ int ScriptProcessor::ProcFloors()
 		else
 			FloorCheck = 3;
 	}
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "altitude")
+	if (linecheck.substr(0, 8) == "altitude")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -2444,37 +2487,37 @@ int ScriptProcessor::ProcFloors()
 		if (!IsNumeric(str.c_str(), floor->Altitude))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "id")
+	if (linecheck.substr(0, 2) == "id")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->ID = Calc(temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
+	if (linecheck.substr(0, 4) == "name")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->Name = Calc(temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "type")
+	if (linecheck.substr(0, 4) == "type")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->FloorType = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "description")
+	if (linecheck.substr(0, 11) == "description")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->Description = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "indicatortexture")
+	if (linecheck.substr(0, 16) == "indicatortexture")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->IndicatorTexture = Calc(temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "group")
+	if (linecheck.substr(0, 5) == "group")
 	{
 		//copy string listing of group floors into array
 
@@ -2527,7 +2570,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Print command
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "print")
+	if (linecheck.substr(0, 5) == "print")
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(6).c_str());
@@ -2537,20 +2580,23 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Exit command
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "exit")
+	if (linecheck.substr(0, 4) == "exit")
 	{
 		if (RangeL != RangeH)
 			LineData = "<endfloors>";
 		else
 			LineData = "<endfloor>";
+
+		//update linecheck
+		linecheck = SetCaseCopy(LineData, false);
 	}
 
 	//Break command
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "<break>")
+	if (linecheck.substr(0, 7) == "<break>")
 		return sBreak;
 
 	//AddFloor command
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor ")
+	if (linecheck.substr(0, 9) == "addfloor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -2572,7 +2618,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftFloor command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftfloor")
+	if (linecheck.substr(0, 13) == "addshaftfloor")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -2599,7 +2645,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsFloor command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsfloor")
+	if (linecheck.substr(0, 14) == "addstairsfloor")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -2626,7 +2672,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddInterFloorFloor command
-	if (SetCaseCopy(LineData.substr(0, 18), false) == "addinterfloorfloor")
+	if (linecheck.substr(0, 18) == "addinterfloorfloor")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 19);
@@ -2648,7 +2694,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddWall command
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall")
+	if (linecheck.substr(0, 7) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -2670,7 +2716,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftWall command
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "addshaftwall")
+	if (linecheck.substr(0, 12) == "addshaftwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 13);
@@ -2697,7 +2743,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsWall command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "addstairswall")
+	if (linecheck.substr(0, 13) == "addstairswall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -2724,7 +2770,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddInterFloorWall command
-	if (SetCaseCopy(LineData.substr(0, 17), false) == "addinterfloorwall")
+	if (linecheck.substr(0, 17) == "addinterfloorwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
@@ -2746,7 +2792,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//ColumnWallBox command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "columnwallbox ")
+	if (linecheck.substr(0, 14) == "columnwallbox ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -2767,7 +2813,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//ColumnWallBox2 command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "columnwallbox2")
+	if (linecheck.substr(0, 14) == "columnwallbox2")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -2788,7 +2834,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//Set command
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "set ")
+	if (linecheck.substr(0, 4) == "set ")
 	{
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
@@ -2809,7 +2855,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//CallButtonElevators command
-	if (SetCaseCopy(LineData.substr(0, 19), false) == "callbuttonelevators")
+	if (linecheck.substr(0, 19) == "callbuttonelevators")
 	{
 		//construct array containing floor numbers
 		int params = SplitAfterEquals(LineData.c_str(), false);
@@ -2833,7 +2879,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//CreateCallButtons command
-	if (SetCaseCopy(LineData.substr(0, 17), false) == "createcallbuttons")
+	if (linecheck.substr(0, 17) == "createcallbuttons")
 	{
 		if (callbutton_elevators.size() == 0)
 			return ScriptError("No elevators specified");
@@ -2883,7 +2929,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairs command
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "addstairs ")
+	if (linecheck.substr(0, 10) == "addstairs ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10);
@@ -2910,7 +2956,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddDoor command
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoor ")
+	if (linecheck.substr(0, 8) == "adddoor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -2984,7 +3030,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsDoor command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsdoor ")
+	if (linecheck.substr(0, 14) == "addstairsdoor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -3074,7 +3120,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddDirectionalIndicator command
-	if (SetCaseCopy(LineData.substr(0, 23), false) == "adddirectionalindicator")
+	if (linecheck.substr(0, 23) == "adddirectionalindicator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 24);
@@ -3129,7 +3175,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftDoor command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftdoor ")
+	if (linecheck.substr(0, 13) == "addshaftdoor ")
 	{
 		//exit if the SetShaftDoors command was never used
 		if (setshaftdoors == false)
@@ -3181,7 +3227,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddFloorIndicator command
-	if (SetCaseCopy(LineData.substr(0, 17), false) == "addfloorindicator")
+	if (linecheck.substr(0, 17) == "addfloorindicator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
@@ -3226,7 +3272,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddFillerWalls command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "addfillerwalls")
+	if (linecheck.substr(0, 14) == "addfillerwalls")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -3249,7 +3295,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddSound
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
+	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -3316,7 +3362,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftDoorComponent command
-	if (SetCaseCopy(LineData.substr(0, 21), false) == "addshaftdoorcomponent")
+	if (linecheck.substr(0, 21) == "addshaftdoorcomponent")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 22);
@@ -3352,7 +3398,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//FinishShaftDoor command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "finishshaftdoor ")
+	if (linecheck.substr(0, 16) == "finishshaftdoor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -3377,7 +3423,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddModel command
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
+	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -3404,7 +3450,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsModel command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "addstairsmodel")
+	if (linecheck.substr(0, 14) == "addstairsmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -3434,7 +3480,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftModel command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "addshaftmodel")
+	if (linecheck.substr(0, 13) == "addshaftmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -3464,7 +3510,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddActionControl command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "addactioncontrol")
+	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -3504,7 +3550,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftActionControl command
-	if (SetCaseCopy(LineData.substr(0, 21), false) == "addshaftactioncontrol")
+	if (linecheck.substr(0, 21) == "addshaftactioncontrol")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 21);
@@ -3549,7 +3595,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsActionControl command
-	if (SetCaseCopy(LineData.substr(0, 21), false) == "addstairsactioncontrol")
+	if (linecheck.substr(0, 21) == "addstairsactioncontrol")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 21);
@@ -3594,7 +3640,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddTrigger command
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "addtrigger")
+	if (linecheck.substr(0, 10) == "addtrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
@@ -3626,7 +3672,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftTrigger command
-	/*if (SetCaseCopy(LineData.substr(0, 15), false) == "addshafttrigger")
+	/*if (linecheck.substr(0, 15) == "addshafttrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -3663,7 +3709,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsTrigger command
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "addstairstrigger")
+	if (linecheck.substr(0, 15) == "addstairstrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -3700,7 +3746,7 @@ int ScriptProcessor::ProcFloors()
 	}*/
 
 	//Cut command
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "cut ")
+	if (linecheck.substr(0, 4) == "cut ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 4);
@@ -3722,7 +3768,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//CutAll command
-	if (SetCaseCopy(LineData.substr(0, 6), false) == "cutall")
+	if (linecheck.substr(0, 6) == "cutall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 7);
@@ -3744,7 +3790,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//handle floor range
-	if (RangeL != RangeH && SetCaseCopy(LineData.substr(0, 9), false) == "<endfloor")
+	if (RangeL != RangeH && linecheck.substr(0, 9) == "<endfloor")
 	{
 		if (RangeL < RangeH)
 		{
@@ -3826,36 +3872,39 @@ int ScriptProcessor::ProcElevators()
 
 	Elevator *elev = Simcore->GetElevator(Current);
 
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
 	//parameters
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "name")
+	if (linecheck.substr(0, 4) == "name")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		TrimString(temp2);
 		elev->Name = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "speed")
+	if (linecheck.substr(0, 5) == "speed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->ElevatorSpeed))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "acceleration")
+	if (linecheck.substr(0, 12) == "acceleration")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->Acceleration))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "deceleration")
+	if (linecheck.substr(0, 12) == "deceleration")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->Deceleration))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "openspeed")
+	if (linecheck.substr(0, 9) == "openspeed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -3870,28 +3919,28 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->OpenSpeed))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "doors")
+	if (linecheck.substr(0, 5) == "doors")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->NumDoors))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "acceljerk")
+	if (linecheck.substr(0, 9) == "acceljerk")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->AccelJerk))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "deceljerk")
+	if (linecheck.substr(0, 9) == "deceljerk")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->DecelJerk))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "servicedfloors")
+	if (linecheck.substr(0, 14) == "servicedfloors")
 	{
 		//copy string listing of serviced floors into array
 		int params = SplitAfterEquals(LineData.c_str(), false);
@@ -3937,7 +3986,7 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 	}
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "displayfloors")
+	if (linecheck.substr(0, 13) == "displayfloors")
 	{
 		//copy string listing of serviced floors into array
 		int params = SplitAfterEquals(LineData.c_str(), false);
@@ -3981,14 +4030,14 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 	}
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "assignedshaft")
+	if (linecheck.substr(0, 13) == "assignedshaft")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->AssignedShaft))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "doortimer")
+	if (linecheck.substr(0, 9) == "doortimer")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4003,7 +4052,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->DoorTimer))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "quickclose")
+	if (linecheck.substr(0, 10) == "quickclose")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4018,7 +4067,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->QuickClose))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "nudgetimer")
+	if (linecheck.substr(0, 10) == "nudgetimer")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4033,7 +4082,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->NudgeTimer))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "slowspeed")
+	if (linecheck.substr(0, 9) == "slowspeed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4048,7 +4097,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->SlowSpeed))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "manualspeed")
+	if (linecheck.substr(0, 11) == "manualspeed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4063,7 +4112,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->ManualSpeed))
 			return ScriptError("Invalid value");
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "opensound")
+	if (linecheck.substr(0, 9) == "opensound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4081,7 +4130,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->OpenSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "closesound")
+	if (linecheck.substr(0, 10) == "closesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4099,7 +4148,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "nudgesound")
+	if (linecheck.substr(0, 10) == "nudgesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4117,7 +4166,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->NudgeSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "startsound")
+	if (linecheck.substr(0, 10) == "startsound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -4136,7 +4185,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "movesound")
+	if (linecheck.substr(0, 9) == "movesound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -4155,7 +4204,7 @@ int ScriptProcessor::ProcElevators()
                 elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "stopsound")
+	if (linecheck.substr(0, 9) == "stopsound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -4174,7 +4223,7 @@ int ScriptProcessor::ProcElevators()
                 elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "idlesound")
+	if (linecheck.substr(0, 9) == "idlesound")
 	{
 		//backwards compatibility
 		if (temp2check < 0)
@@ -4193,7 +4242,7 @@ int ScriptProcessor::ProcElevators()
                 elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "carstartsound")
+	if (linecheck.substr(0, 13) == "carstartsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4203,7 +4252,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarStartSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "carmovesound")
+	if (linecheck.substr(0, 12) == "carmovesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4213,7 +4262,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarMoveSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "carstopsound")
+	if (linecheck.substr(0, 12) == "carstopsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4223,7 +4272,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarStopSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "caridlesound")
+	if (linecheck.substr(0, 12) == "caridlesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4233,7 +4282,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarIdleSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "motorstartsound")
+	if (linecheck.substr(0, 15) == "motorstartsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4244,7 +4293,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorUpStartSound = temp2;
 		elev->MotorDownStartSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 17), false) == "motorupstartsound")
+	if (linecheck.substr(0, 17) == "motorupstartsound")
         {
                 if (temp2check < 0)
                         return ScriptError("Syntax error");
@@ -4254,7 +4303,7 @@ int ScriptProcessor::ProcElevators()
 
                 elev->MotorUpStartSound = temp2;
         }
-	if (SetCaseCopy(LineData.substr(0, 19), false) == "motordownstartsound")
+	if (linecheck.substr(0, 19) == "motordownstartsound")
         {
                 if (temp2check < 0)
                         return ScriptError("Syntax error");
@@ -4264,7 +4313,7 @@ int ScriptProcessor::ProcElevators()
 
                 elev->MotorDownStartSound = temp2;
         }
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "motorrunsound")
+	if (linecheck.substr(0, 13) == "motorrunsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4275,7 +4324,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorUpRunSound = temp2;
 		elev->MotorDownRunSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 15), false) == "motoruprunsound")
+	if (linecheck.substr(0, 15) == "motoruprunsound")
         {
                 if (temp2check < 0)
                         return ScriptError("Syntax error");
@@ -4285,7 +4334,7 @@ int ScriptProcessor::ProcElevators()
 
                 elev->MotorUpRunSound = temp2;
         }
-	if (SetCaseCopy(LineData.substr(0, 17), false) == "motordownrunsound")
+	if (linecheck.substr(0, 17) == "motordownrunsound")
         {
                 if (temp2check < 0)
                         return ScriptError("Syntax error");
@@ -4295,7 +4344,7 @@ int ScriptProcessor::ProcElevators()
 
                 elev->MotorDownRunSound = temp2;
         }
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "motorstopsound")
+	if (linecheck.substr(0, 14) == "motorstopsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4306,7 +4355,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorUpStopSound = temp2;
 		elev->MotorDownStopSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "motorupstopsound")
+	if (linecheck.substr(0, 16) == "motorupstopsound")
         {
                 if (temp2check < 0)
                         return ScriptError("Syntax error");
@@ -4316,7 +4365,7 @@ int ScriptProcessor::ProcElevators()
 
                 elev->MotorUpStopSound = temp2;
         }
-	if (SetCaseCopy(LineData.substr(0, 18), false) == "motordownstopsound")
+	if (linecheck.substr(0, 18) == "motordownstopsound")
         {
                 if (temp2check < 0)
                         return ScriptError("Syntax error");
@@ -4326,7 +4375,7 @@ int ScriptProcessor::ProcElevators()
 
                 elev->MotorDownStopSound = temp2;
         }
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "chimesound")
+	if (linecheck.substr(0, 10) == "chimesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4345,7 +4394,7 @@ int ScriptProcessor::ProcElevators()
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "upchimesound")
+	if (linecheck.substr(0, 12) == "upchimesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4363,7 +4412,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "downchimesound")
+	if (linecheck.substr(0, 14) == "downchimesound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4381,7 +4430,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "alarmsound")
+	if (linecheck.substr(0, 10) == "alarmsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4391,7 +4440,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->AlarmSound = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "alarmsoundstop")
+	if (linecheck.substr(0, 14) == "alarmsoundstop")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4401,7 +4450,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->AlarmSoundStop = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "beepsound")
+	if (linecheck.substr(0, 9) == "beepsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4411,7 +4460,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetBeepSound(temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "floorsound")
+	if (linecheck.substr(0, 10) == "floorsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4421,7 +4470,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetFloorSound(temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "upmessage")
+	if (linecheck.substr(0, 9) == "upmessage")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4431,7 +4480,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetMessageSound(true, temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "downmessage")
+	if (linecheck.substr(0, 11) == "downmessage")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4441,7 +4490,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetMessageSound(false, temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 6), false) == "music ")
+	if (linecheck.substr(0, 6) == "music ")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4451,27 +4500,27 @@ int ScriptProcessor::ProcElevators()
 
 		elev->Music = temp2;
 	}
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "musicon ")
+	if (linecheck.substr(0, 8) == "musicon ")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
 		elev->MusicOn = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "musiconmove")
+	if (linecheck.substr(0, 11) == "musiconmove")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
 		elev->MusicOnMove = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "floorskiptext")
+	if (linecheck.substr(0, 13) == "floorskiptext")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->SetFloorSkipText(temp2.c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "recallfloor")
+	if (linecheck.substr(0, 11) == "recallfloor")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4480,7 +4529,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->SetRecallFloor(floortemp);
 	}
-	if (SetCaseCopy(LineData.substr(0, 20), false) == "alternaterecallfloor")
+	if (linecheck.substr(0, 20) == "alternaterecallfloor")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4489,7 +4538,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->SetAlternateRecallFloor(floortemp);
 	}
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "acpfloor")
+	if (linecheck.substr(0, 8) == "acpfloor")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4498,7 +4547,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->SetACPFloor(floortemp);
 	}
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "motorposition")
+	if (linecheck.substr(0, 13) == "motorposition")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
@@ -4517,55 +4566,55 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "queueresets")
+	if (linecheck.substr(0, 11) == "queueresets")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->QueueResets = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 3), false) == "acp")
+	if (linecheck.substr(0, 3) == "acp")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->ACP = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 6), false) == "uppeak")
+	if (linecheck.substr(0, 6) == "uppeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->UpPeak = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "downpeak")
+	if (linecheck.substr(0, 8) == "downpeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->DownPeak = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 18), false) == "independentservice")
+	if (linecheck.substr(0, 18) == "independentservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->IndependentService = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 17), false) == "inspectionservice")
+	if (linecheck.substr(0, 17) == "inspectionservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->InspectionService = Ogre::StringConverter::parseBool(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "fireservice1")
+	if (linecheck.substr(0, 11) == "fireservice1")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->FireServicePhase1 = Ogre::StringConverter::parseInt(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "fireservice2")
+	if (linecheck.substr(0, 11) == "fireservice2")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->FireServicePhase2 = Ogre::StringConverter::parseInt(temp2);
 	}
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "parking")
+	if (linecheck.substr(0, 7) == "parking")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
@@ -4585,7 +4634,7 @@ int ScriptProcessor::ProcElevators()
 		elev->ParkingFloor = atoi(tempdata[0].c_str());
 		elev->ParkingDelay = atof(tempdata[1].c_str());
 	}
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "levelingspeed")
+	if (linecheck.substr(0, 13) == "levelingspeed")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4594,7 +4643,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->LevelingSpeed = leveling;
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "levelingoffset")
+	if (linecheck.substr(0, 14) == "levelingoffset")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4603,7 +4652,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->LevelingOffset = leveling;
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "levelingopen")
+	if (linecheck.substr(0, 12) == "levelingopen")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4612,7 +4661,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->LevelingOpen = leveling;
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "notifyearly")
+	if (linecheck.substr(0, 11) == "notifyearly")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4621,7 +4670,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->NotifyEarly = notify;
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "departuredelay")
+	if (linecheck.substr(0, 14) == "departuredelay")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4630,7 +4679,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->DepartureDelay = delay;
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "arrivaldelay")
+	if (linecheck.substr(0, 12) == "arrivaldelay")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4639,7 +4688,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		elev->ArrivalDelay = delay;
 	}
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "musicposition")
+	if (linecheck.substr(0, 13) == "musicposition")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
 		if (params == -1)
@@ -4660,7 +4709,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//Print command
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "print")
+	if (linecheck.substr(0, 5) == "print")
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(6).c_str());
@@ -4669,11 +4718,11 @@ int ScriptProcessor::ProcElevators()
 		skyscraper->Report(buffer);
 	}
 
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "<break>")
+	if (linecheck.substr(0, 7) == "<break>")
 		return sBreak;
 
 	//CreateElevator command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "createelevator")
+	if (linecheck.substr(0, 14) == "createelevator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -4697,7 +4746,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloor command
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "addfloor ")
+	if (linecheck.substr(0, 9) == "addfloor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -4719,7 +4768,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddWall command
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "addwall")
+	if (linecheck.substr(0, 7) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -4741,7 +4790,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDoors command
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoors")
+	if (linecheck.substr(0, 8) == "adddoors")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -4790,7 +4839,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//SetShaftDoors command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "setshaftdoors")
+	if (linecheck.substr(0, 13) == "setshaftdoors")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -4812,7 +4861,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddShaftDoors command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "addshaftdoors ")
+	if (linecheck.substr(0, 14) == "addshaftdoors ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -4861,7 +4910,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//CreatePanel command
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "createpanel")
+	if (linecheck.substr(0, 11) == "createpanel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12);
@@ -4884,7 +4933,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorButton command
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "addfloorbutton")
+	if (linecheck.substr(0, 14) == "addfloorbutton")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -4991,7 +5040,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddControlButton command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "addcontrolbutton")
+	if (linecheck.substr(0, 16) == "addcontrolbutton")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -5097,7 +5146,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddButton command
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "addbutton ")
+	if (linecheck.substr(0, 10) == "addbutton ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10);
@@ -5135,7 +5184,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddControl command
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "addcontrol ")
+	if (linecheck.substr(0, 11) == "addcontrol ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
@@ -5180,7 +5229,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorIndicator command
-	if (SetCaseCopy(LineData.substr(0, 17), false) == "addfloorindicator")
+	if (linecheck.substr(0, 17) == "addfloorindicator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
@@ -5221,7 +5270,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDirectionalIndicators command
-	if (SetCaseCopy(LineData.substr(0, 24), false) == "adddirectionalindicators")
+	if (linecheck.substr(0, 24) == "adddirectionalindicators")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 25);
@@ -5265,7 +5314,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorSigns command
-	if (SetCaseCopy(LineData.substr(0, 13), false) == "addfloorsigns")
+	if (linecheck.substr(0, 13) == "addfloorsigns")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -5327,7 +5376,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddSound
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "addsound")
+	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -5394,7 +5443,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDoorComponent command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "adddoorcomponent")
+	if (linecheck.substr(0, 16) == "adddoorcomponent")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -5426,7 +5475,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddShaftDoorsComponent command
-	if (SetCaseCopy(LineData.substr(0, 22), false) == "addshaftdoorscomponent")
+	if (linecheck.substr(0, 22) == "addshaftdoorscomponent")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 23);
@@ -5458,7 +5507,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//FinishDoors command
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "finishdoors")
+	if (linecheck.substr(0, 11) == "finishdoors")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12);
@@ -5476,7 +5525,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//FinishShaftDoors command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "finishshaftdoors")
+	if (linecheck.substr(0, 16) == "finishshaftdoors")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -5498,7 +5547,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDirectionalIndicator command
-	if (SetCaseCopy(LineData.substr(0, 24), false) == "adddirectionalindicator ")
+	if (linecheck.substr(0, 24) == "adddirectionalindicator ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 24);
@@ -5521,7 +5570,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDoor command
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "adddoor ")
+	if (linecheck.substr(0, 8) == "adddoor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -5578,7 +5627,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddModel command
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "addmodel")
+	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -5605,7 +5654,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddActionControl command
-	if (SetCaseCopy(LineData.substr(0, 16), false) == "addactioncontrol")
+	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -5645,7 +5694,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddTrigger command
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "addtrigger")
+	if (linecheck.substr(0, 10) == "addtrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
@@ -5677,7 +5726,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//Set command
-	if (SetCaseCopy(LineData.substr(0, 4), false) == "set ")
+	if (linecheck.substr(0, 4) == "set ")
 	{
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
@@ -5700,7 +5749,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//handle elevator range
-	if (RangeL != RangeH && SetCaseCopy(LineData.substr(0, 12), false) == "<endelevator")
+	if (RangeL != RangeH && linecheck.substr(0, 12) == "<endelevator")
 	{
 		if (Current < RangeH)
 		{
@@ -5724,7 +5773,10 @@ int ScriptProcessor::ProcTextures()
 {
 	//Process Textures
 
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "load ")
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
+	if (linecheck.substr(0, 5) == "load ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 5, false);
@@ -5747,7 +5799,7 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "loadanimated")
+	if (linecheck.substr(0, 12) == "loadanimated")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
@@ -5809,7 +5861,7 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 5].c_str(), atof(tempdata[params - 4].c_str()), atof(tempdata[params - 3].c_str()), atof(tempdata[params - 2].c_str()), true, Ogre::StringConverter::parseBool(tempdata[params - 1]));
 	}
-	if (SetCaseCopy(LineData.substr(0, 14), false) == "loadalphablend")
+	if (linecheck.substr(0, 14) == "loadalphablend")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14, false);
@@ -5837,7 +5889,7 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->LoadAlphaBlendTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), Ogre::StringConverter::parseBool(tempdata[4]), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), true, Ogre::StringConverter::parseBool(tempdata[7]));
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "loadmaterial")
+	if (linecheck.substr(0, 12) == "loadmaterial")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
@@ -5859,7 +5911,7 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "loadrange")
+	if (linecheck.substr(0, 9) == "loadrange")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, false);
@@ -5894,7 +5946,7 @@ int ScriptProcessor::ProcTextures()
 				Simcore->LoadTexture(temp2.c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), true, Ogre::StringConverter::parseBool(tempdata[6]));
 		}
 	}
-	if (SetCaseCopy(LineData.substr(0, 8), false) == "addtext ")
+	if (linecheck.substr(0, 8) == "addtext ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8, false);
@@ -5924,7 +5976,7 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->AddTextToTexture(tempdata[0].c_str(), tempdata[1].c_str(), buffer.c_str(), atof(tempdata[3].c_str()), tempdata[4].c_str(), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), tempdata[9].c_str(), tempdata[10].c_str(), atoi(tempdata[11].c_str()), atoi(tempdata[12].c_str()), atoi(tempdata[13].c_str()), true, Ogre::StringConverter::parseBool(tempdata[14]));
 	}
-	if (SetCaseCopy(LineData.substr(0, 12), false) == "addtextrange")
+	if (linecheck.substr(0, 12) == "addtextrange")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 13, false);
@@ -5969,8 +6021,9 @@ int ScriptProcessor::ProcTextures()
 			else
 				Simcore->AddTextToTexture(tempdata[2].c_str(), tempdata[3].c_str(), buffer.c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), atoi(tempdata[9].c_str()), atoi(tempdata[10].c_str()), tempdata[11].c_str(), tempdata[12].c_str(), atoi(tempdata[13].c_str()), atoi(tempdata[14].c_str()), atoi(tempdata[15].c_str()), true, Ogre::StringConverter::parseBool(tempdata[16]));
 		}
+		linecheck = SetCaseCopy(LineData, false);
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "loadcropped")
+	if (linecheck.substr(0, 11) == "loadcropped")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
@@ -5994,7 +6047,7 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]));
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "addoverlay")
+	if (linecheck.substr(0, 10) == "addoverlay")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11, false);
@@ -6015,7 +6068,7 @@ int ScriptProcessor::ProcTextures()
 		else
 			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), true, Ogre::StringConverter::parseBool(tempdata[9]));
 	}
-	if (SetCaseCopy(LineData.substr(0, 11), false) == "setlighting")
+	if (linecheck.substr(0, 11) == "setlighting")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
@@ -6033,7 +6086,7 @@ int ScriptProcessor::ProcTextures()
 		}
 		Simcore->SetLighting(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "rotate ")
+	if (linecheck.substr(0, 7) == "rotate ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 7, false);
@@ -6050,7 +6103,7 @@ int ScriptProcessor::ProcTextures()
 		buffer = tempdata[0];
 		Simcore->RotateTexture(buffer.c_str(), atof(tempdata[1].c_str()));
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "rotateanim")
+	if (linecheck.substr(0, 10) == "rotateanim")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10, false);
@@ -6067,7 +6120,7 @@ int ScriptProcessor::ProcTextures()
 		buffer = tempdata[0];
 		Simcore->RotateAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()));
 	}
-	if (SetCaseCopy(LineData.substr(0, 7), false) == "scroll ")
+	if (linecheck.substr(0, 7) == "scroll ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 7, false);
@@ -6087,7 +6140,7 @@ int ScriptProcessor::ProcTextures()
 		buffer = tempdata[0];
 		Simcore->ScrollTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
-	if (SetCaseCopy(LineData.substr(0, 10), false) == "scrollanim")
+	if (linecheck.substr(0, 10) == "scrollanim")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10, false);
@@ -6107,7 +6160,7 @@ int ScriptProcessor::ProcTextures()
 		buffer = tempdata[0];
 		Simcore->ScrollAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
-	if (SetCaseCopy(LineData.substr(0, 5), false) == "scale")
+	if (linecheck.substr(0, 5) == "scale")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 5, false);
@@ -6127,7 +6180,7 @@ int ScriptProcessor::ProcTextures()
 		buffer = tempdata[0];
 		Simcore->ScaleTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
-	if (SetCaseCopy(LineData.substr(0, 9), false) == "transform")
+	if (linecheck.substr(0, 9) == "transform")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, false);

@@ -105,6 +105,18 @@ class ScriptProcessor
 	};
 
 	std::vector<IncludeInfo> includes; //stored include mappings
+
+	bool floorcache_firstrun;
+	int cache_current;
+	std::string cache_current_s;
+	float cache_height;
+	std::string cache_height_s;
+	float cache_fullheight;
+	std::string cache_fullheight_s;
+	float cache_interfloorheight;
+	std::string cache_interfloorheight_s;
+	float cache_base;
+	std::string cache_base_s;
 };
 
 #endif

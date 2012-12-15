@@ -1532,9 +1532,10 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 		//remove triangles
 		for (int i = 0; i < (int)Triangles[index].triangles.size(); i++)
 		{
+			TriangleType *triangle = &Triangles[index].triangles[i];
 			for (int j = 0; j < index_count; j++)
 			{
-				if (Triangles[index].triangles[i].x == indexarray[j].x && Triangles[index].triangles[i].y == indexarray[j].y && Triangles[index].triangles[i].z == indexarray[j].z)
+				if (triangle->x == indexarray[j].x && triangle->y == indexarray[j].y && triangle->z == indexarray[j].z)
 				{
 					//delete match
 					RemoveTriangle(index, i);
@@ -1715,38 +1716,42 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 	//reindex triangle indices in all submeshes
 	for (int submesh = 0; submesh < (int)Triangles.size(); submesh++)
 	{
-		int elements_size = Triangles[submesh].triangles.size() * 3;
+		TriangleIndices *indiceslist = &Triangles[submesh];
+
+		int elements_size = indiceslist->triangles.size() * 3;
 		int *elements = new int[elements_size];
 
 		int elements_pos = 0;
-		for (int i = 0; i < (int)Triangles[submesh].triangles.size(); i++)
+		for (int i = 0; i < (int)indiceslist->triangles.size(); i++)
 		{
-			elements[elements_pos] = Triangles[submesh].triangles[i].x;
+			elements[elements_pos] = indiceslist->triangles[i].x;
 			elements_pos++;
-			elements[elements_pos] = Triangles[submesh].triangles[i].y;
+			elements[elements_pos] = indiceslist->triangles[i].y;
 			elements_pos++;
-			elements[elements_pos] = Triangles[submesh].triangles[i].z;
+			elements[elements_pos] = indiceslist->triangles[i].z;
 			elements_pos++;
-		}
 
-		for (int e = 0; e < elements_size; e++)
-		{
-			for (int i = deleted_size - 1; i >= 0; i--)
+			for (int j = deleted_size - 1; j >= 0; j--)
 			{
-				if (elements[e] >= deleted[i])
-					elements[e]--;
+				if (elements[elements_pos - 3] >= deleted[j])
+					elements[elements_pos - 3]--;
+				if (elements[elements_pos - 2] >= deleted[j])
+					elements[elements_pos - 2]--;
+				if (elements[elements_pos - 1] >= deleted[j])
+					elements[elements_pos - 1]--;
 			}
 		}
+
 		int element = 0;
-		int size = (int)Triangles[submesh].triangles.size();
-		Triangles[submesh].triangles.clear();
-		Triangles[submesh].triangles.reserve(size);
+		int size = (int)indiceslist->triangles.size();
+		indiceslist->triangles.clear();
+		indiceslist->triangles.reserve(size);
 
 		for (int i = 0; i < size; i++)
 		{
 			//check if triangle indices are valid
 			if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
-				Triangles[submesh].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+				indiceslist->triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 			element += 3;
 		}
 		delete [] elements;
@@ -1762,51 +1767,57 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 		{
 			//reindex triangle indices
 
-			int elements_size = wallarray[i]->handles[j].triangles.size() * 3;
+			WallPolygon *poly = &wallarray[i]->handles[j];
+
+			int elements_size = poly->triangles.size() * 3;
 			int *elements = new int[elements_size];
 
 			int elements_pos = 0;
-			for (int k = 0; k < (int)wallarray[i]->handles[j].triangles.size(); k++)
+			for (int k = 0; k < (int)poly->triangles.size(); k++)
 			{
-				elements[elements_pos] = wallarray[i]->handles[j].triangles[k].x;
+				elements[elements_pos] = poly->triangles[k].x;
 				elements_pos++;
-				elements[elements_pos] = wallarray[i]->handles[j].triangles[k].y;
+				elements[elements_pos] = poly->triangles[k].y;
 				elements_pos++;
-				elements[elements_pos] = wallarray[i]->handles[j].triangles[k].z;
+				elements[elements_pos] = poly->triangles[k].z;
 				elements_pos++;
-			}
-			for (int e = 0; e < elements_size; e++)
-			{
-				for (int i = deleted_size - 1; i >= 0; i--)
+
+				for (int j = deleted_size - 1; j >= 0; j--)
 				{
-					if (elements[e] >= deleted[i])
-						elements[e]--;
+					if (elements[elements_pos - 3] >= deleted[j])
+						elements[elements_pos - 3]--;
+					if (elements[elements_pos - 2] >= deleted[j])
+						elements[elements_pos - 2]--;
+					if (elements[elements_pos - 1] >= deleted[j])
+						elements[elements_pos - 1]--;
 				}
 			}
+
 			int element = 0;
-			int size = (int)wallarray[i]->handles[j].triangles.size();
-			wallarray[i]->handles[j].triangles.clear();
-			wallarray[i]->handles[j].triangles.reserve(size);
+			int size = (int)poly->triangles.size();
+			poly->triangles.clear();
+			poly->triangles.reserve(size);
 
 			for (int ii = 0; ii < size; ii++)
 			{
 				//check if triangle indices are valid
 				if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
-					wallarray[i]->handles[j].triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+					poly->triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
 				element += 3;
 			}
 
 			//reindex extents, used for getting original geometry
 			for (int k = deleted_size - 1; k >= 0; k--)
 			{
-				for (int m = 0; m < (int)wallarray[i]->handles[j].index_extents.size(); m++)
+				int size = (int)poly->index_extents.size();
+				for (int m = 0; m < size; m++)
 				{
-					Ogre::Vector2 extents = wallarray[i]->handles[j].index_extents[m];
+					Ogre::Vector2 extents = poly->index_extents[m];
 					if (deleted[k] < extents.x)
 						extents.x--;
 					if (deleted[k] < extents.y)
 						extents.y--;
-					wallarray[i]->handles[j].index_extents[m] = extents;
+					poly->index_extents[m] = extents;
 				}
 			}
 			delete [] elements;

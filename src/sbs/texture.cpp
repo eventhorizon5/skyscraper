@@ -1000,7 +1000,8 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, bool report,
 	//use material_name value instead of name, if loaded as a material script instead of a direct texture
 	//if report is true and texture is not found, issue warning
 	std::string matname = name;
-	for (int i = 0; i < (int)textureinfo.size(); i++)
+	int size = (int)textureinfo.size();
+	for (int i = 0; i < size; i++)
 	{
 		if (textureinfo[i].name == matname)
 		{
