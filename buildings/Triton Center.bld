@@ -362,6 +362,11 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     InterfloorHeight = 2.24
     Altitude = -2.24
     Group = 1 #enable mezzanine also, since both are merged
+	
+	AddSound ambient, ambient.ogg, -60, 30, -60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+	AddSound ambient, ambient.ogg, 60, 30, -60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+	AddSound ambient, ambient.ogg, -60, 30, 60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+	AddSound ambient, ambient.ogg, 60, 30, 60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
 
     #Floor
     FloorOrientation = top
