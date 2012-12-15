@@ -2503,7 +2503,7 @@ int SBS::GetMeshFactoryCount()
 	return 0;
 }
 
-Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, int volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
 	Sound *sound = new Sound(object, name, false);
