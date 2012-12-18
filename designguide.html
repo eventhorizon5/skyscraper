@@ -919,7 +919,8 @@ values:<br>
 
 <p align="left">The default door speed is 75; you can also specify 0 for the
 speed to use the system default. The open parameter determines if the door
-should be opened on start; default is false. Leave the sound fields blank for no sounds to be played.<br>
+should be opened on start; default is false. Leave the sound fields blank for
+no sounds to be played.<br>
 </p>
 
 <p align="left"><strong>16. AddStairsDoor</strong> - adds a textured door for
@@ -933,7 +934,8 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsDoor
 
 <p align="left">Number specifies the stairwell number. Direction specifies the
 direction the door faces and also the direction it opens. For values of this,
-look at the AddDoor command above. Leave the sound fields blank for no sounds to be played.<</p>
+look at the AddDoor command above. Leave the sound fields blank for no sounds
+to be played.p&gt; </p>
 
 <p align="left"><strong>17. AddDirectionalIndicator</strong> - creates a single
 elevator directional indicator/lantern on the current floor (similar to the
@@ -1183,8 +1185,8 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the floor's
-base. Leave the sound field blank for no sound to be played.<<strong></strong></p>
+(front, left, right, back). Voffset is relative of the floor's base. Leave the
+sound field blank for no sound to be played.trong&gt;</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>30.
 AddShaftActionControl</strong> - creates a custom control in a specified shaft
@@ -1204,8 +1206,8 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the floor's
-base. Leave the sound field blank for no sound to be played.<strong></strong></p>
+(front, left, right, back). Voffset is relative of the floor's base. Leave the
+sound field blank for no sound to be played.<strong></strong></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
 AddStairsActionControl</strong> - creates a custom control in a specified
@@ -1225,8 +1227,8 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the floor's
-base. Leave the sound field blank for no sound to be played.<strong></strong></p>
+(front, left, right, back). Voffset is relative of the floor's base. Leave the
+sound field blank for no sound to be played.<strong></strong></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
@@ -1355,34 +1357,45 @@ Example: <font face="Courier New, Courier, mono" size="2">NudgeTimer 1 =
 10</font></p>
 
 <p align="left"><strong>13. OpenSound</strong> - the sound file to play when
-the elevator doors open. Default is <em>elevatoropen.wav</em>. Leave the filename field blank for no sound. This must be
-specified after the CreateElevator command.<br>
+the elevator doors open. Default is <em>elevatoropen.wav</em>. Leave the
+filename field blank for no sound. This must be specified after the
+CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">OpenSound
 <em>doornumber</em> = <em>filename</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">OpenSound 1 =
 open.wav</font></p>
 
 <p align="left"><strong>14. CloseSound</strong> - the sound file to play when
-the elevator doors close. Default is <em>elevatorclose.wav</em>. Leave the filename field blank for no sound. This must be
-specified after the CreateElevator command.<br>
+the elevator doors close. Default is <em>elevatorclose.wav</em>. Leave the
+filename field blank for no sound. This must be specified after the
+CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CloseSound
 <em>doornumber</em> = <em>filename</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">CloseSound 1 =
 close.wav</font></p>
 
-<p align="left"><strong>15. CarStartSound</strong> - the sound file to play
-when the elevator starts moving/speeds up. Leave the filename field blank for no sound. By default no sound is played.<br>
+<p align="left"><strong>15. CarStartSound, CarUpStartSound,
+CarDownStartSound</strong> - the sound file to play when the elevator starts
+moving/speeds up. Leave the filename field blank for no sound. By default no
+sound is played. The first command specifies both up and down sounds, while the
+others are for either upwards movement or downwards movement.<br>
 Example: <font face="Courier New, Courier, mono" size="2">CarStartSound =
 start.wav</font></p>
 
-<p align="left"><strong>16. CarMoveSound</strong> - the sound file to play
-while the elevator is moving. This file is automatically looped by the
-simulator. By default no sound is played. Leave the filename field blank for no sound. <br>
+<p align="left"><strong>16. CarMoveSound, CarUpMoveSound,
+CarDownMoveSound</strong> - the sound file to play while the elevator is
+moving. This file is automatically looped by the simulator. By default no sound
+is played. Leave the filename field blank for no sound. The first command
+specifies both up and down sounds, while the others are for either upwards
+movement or downwards movement.<br>
 Example: <font face="Courier New, Courier, mono" size="2">CarMoveSound =
 move.wav</font></p>
 
-<p align="left"><strong>17. CarStopSound</strong> - the sound file to play when
-the elevator slows down and stops. By default no sound is played. Leave the filename field blank for no sound. <br>
+<p align="left"><strong>17. CarStopSound, CarUpStopSound,
+CarDownStopSound</strong> - the sound file to play when the elevator slows down
+and stops. By default no sound is played. Leave the filename field blank for no
+sound. The first command specifies both up and down sounds, while the others
+are for either upwards movement or downwards movement.<br>
 Example: <font face="Courier New, Courier, mono" size="2">CarStopSound =
 stop.wav</font></p>
 
@@ -1392,66 +1405,40 @@ the elevator is idle (generally the fan sound). Default is
 Example: <font face="Courier New, Courier, mono" size="2">CarIdleSound =
 idle.wav</font></p>
 
-<p align="left"><strong>19. MotorStartSound</strong> - the sound file to play
-when the elevator motor starts moving/speeds up (sets both directions). Default is
-<em>elevstart.wav</em>. Leave the filename field blank for no sound. <br>
+<p align="left"><strong>19. MotorStartSound, MotorUpStartSound,
+MotorDownStartSound</strong> - the sound file to play when the elevator motor
+starts moving/speeds up (sets both directions). Default is
+<em>elevstart.wav</em>. Leave the filename field blank for no sound. The first
+command specifies both up and down sounds, while the others are for either
+upwards movement or downwards movement.<br>
 Example: <font face="Courier New, Courier, mono" size="2">MotorStartSound =
 start.wav</font></p>
 
-<p align="left"><strong>20. MotorUpStartSound</strong> - the sound file to play
-when the elevator motor starts moving/speeds up, in an upward direction. Default is
-<em>elevstart.wav</em>. Leave the filename field blank for no sound. <br>
-Example: <font face="Courier New, Courier, mono" size="2">MotorUpStartSound =
-start.wav</font></p>
-
-<p align="left"><strong>21. MotorDownStartSound</strong> - the sound file to play
-when the elevator motor starts moving/speeds up, an a downward direction. Default is
-<em>elevstart.wav</em>. Leave the filename field blank for no sound. <br>
-Example: <font face="Courier New, Courier, mono" size="2">MotorDownStartSound =
-start.wav</font></p>
-
-<p align="left"><strong>22. MotorRunSound</strong> - the sound file to play
-while the elevator motor is running (sets both directions). This file is automatically looped by the
-simulator. Default is <em>elevmove.wav</em>. Leave the filename field blank for no sound. <br>
+<p align="left"><strong>20. MotorRunSound, MotorUpRunSound,
+MotorDownRunSound</strong> - the sound file to play while the elevator motor is
+running (sets both directions). This file is automatically looped by the
+simulator. Default is <em>elevmove.wav</em>. Leave the filename field blank for
+no sound. The first command specifies both up and down sounds, while the others
+are for either upwards movement or downwards movement.<br>
 Example: <font face="Courier New, Courier, mono" size="2">MotorRunSound =
 run.wav</font></p>
 
-<p align="left"><strong>23. MotorUpRunSound</strong> - the sound file to play
-while the elevator motor is running in an upward direction. This file is automatically looped by the
-simulator. Default is <em>elevmove.wav</em>. Leave the filename field blank for no sound. <br>
-Example: <font face="Courier New, Courier, mono" size="2">MotorUpRunSound =
-run.wav</font></p>
-
-<p align="left"><strong>24. MotorDownRunSound</strong> - the sound file to play
-while the elevator motor is running in a downward direction. This file is automatically looped by the
-simulator. Default is <em>elevmove.wav</em>. Leave the filename field blank for no sound. <br>
-Example: <font face="Courier New, Courier, mono" size="2">MotorDownRunSound =
-run.wav</font></p>
-
-<p align="left"><strong>25. MotorStopSound</strong> - the sound file to play
-when the elevator motor slows down and stops (sets both directions). Default is
-<em>elevstop.wav</em>. Leave the filename field blank for no sound. <br>
+<p align="left"><strong>21. MotorStopSound, MotorUpStopSound,
+MotorDownStopSound</strong> - the sound file to play when the elevator motor
+slows down and stops (sets both directions). Default is <em>elevstop.wav</em>.
+Leave the filename field blank for no sound. The first command specifies both
+up and down sounds, while the others are for either upwards movement or
+downwards movement.<br>
 Example: <font face="Courier New, Courier, mono" size="2">MotorStopSound =
 stop.wav</font></p>
 
-<p align="left"><strong>26. MotorUpStopSound</strong> - the sound file to play
-when the elevator motor slows down and stops, in an upward direction. Default is
-<em>elevstop.wav</em>. Leave the filename field blank for no sound. <br>
-Example: <font face="Courier New, Courier, mono" size="2">MotorUpStopSound =
-stop.wav</font></p>
-
-<p align="left"><strong>27. MotorDownStopSound</strong> - the sound file to play
-when the elevator motor slows down and stops, in a downward direction. Default is
-<em>elevstop.wav</em>. Leave the filename field blank for no sound. <br>
-Example: <font face="Courier New, Courier, mono" size="2">MotorDownStopSound =
-stop.wav</font></p>
-
-<p align="left"><strong>28. MotorIdleSound</strong> - the sound file to play
-when the elevator motor is idling. There is no default yet. Leave the filename field blank for no sound. <br>
+<p align="left"><strong>22. MotorIdleSound</strong> - the sound file to play
+when the elevator motor is idling. There is no default yet. Leave the filename
+field blank for no sound. <br>
 Example: <font face="Courier New, Courier, mono" size="2">MotorIdleSound =
 idle.wav</font></p>
 
-<p align="left"><strong>29. ChimeSound</strong> - the sound file to play when
+<p align="left"><strong>23. ChimeSound</strong> - the sound file to play when
 the elevator arrives at a floor. Default is <em>chime1.wav</em>. This must be
 specified after the CreateElevator command. This is used for both up and down
 chimes. Leave the filename field blank for no sound. <br>
@@ -1460,43 +1447,44 @@ Syntax: <font face="Courier New, Courier, mono" size="2">ChimeSound
 Example: <font face="Courier New, Courier, mono" size="2">ChimeSound 1 =
 chime.wav</font></p>
 
-<p align="left"><strong>30. UpChimeSound</strong> - the sound file to play when
+<p align="left"><strong>24. UpChimeSound</strong> - the sound file to play when
 the elevator arrives at a floor and it's direction is up. Default is
-<em>chime1.wav</em>. Leave the filename field blank for no sound. This must be specified after the CreateElevator
-command.<br>
+<em>chime1.wav</em>. Leave the filename field blank for no sound. This must be
+specified after the CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">UpChimeSound
 <em>doornumber</em> = <em>filename</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">UpChimeSound 1 =
 chime.wav</font></p>
 
-<p align="left"><strong>31. DownChimeSound</strong> - the sound file to play
+<p align="left"><strong>25. DownChimeSound</strong> - the sound file to play
 when the elevator arrives at a floor and it's direction is down. Default is
-<em>chime1.wav</em>. Leave the filename field blank for no sound. This must be specified after the CreateElevator
-command.<br>
+<em>chime1.wav</em>. Leave the filename field blank for no sound. This must be
+specified after the CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DownChimeSound
 <em>doornumber</em> = <em>filename</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">DownChimeSound 1 =
 chime.wav</font></p>
 
-<p align="left"><strong>32. AlarmSound</strong> - the sound file to play when
-the elevator alarm button is pressed. Default is <em>bell1.wav</em>. Leave the filename field blank for no sound. <br>
+<p align="left"><strong>26. AlarmSound</strong> - the sound file to play when
+the elevator alarm button is pressed. Default is <em>bell1.wav</em>. Leave the
+filename field blank for no sound. <br>
 Example: <font face="Courier New, Courier, mono" size="2">AlarmSound =
 bell2.wav</font></p>
 
-<p align="left"><strong>33. AlarmSoundStop</strong> - the sound file to play
-when the elevator alarm button is released. Leave the filename field blank for no sound. Default is
-<em>bell1-stop.wav</em>.<br>
+<p align="left"><strong>27. AlarmSoundStop</strong> - the sound file to play
+when the elevator alarm button is released. Leave the filename field blank for
+no sound. Default is <em>bell1-stop.wav</em>.<br>
 Example: <font face="Courier New, Courier, mono" size="2">AlarmSoundStop =
 bell2-stop.wav</font></p>
 
-<p align="left"><strong>34. BeepSound</strong> - the sound file to play when
+<p align="left"><strong>28. BeepSound</strong> - the sound file to play when
 the elevator reaches a new floor. There is no default; if this is set, the
 beeps will be automatically enabled. If an asterisk (*) is specified, it is
 replaced with the current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">BeepSound =
 beep.wav</font></p>
 
-<p align="left"><strong>35. FloorSound</strong> - the sound file(s) to play
+<p align="left"><strong>29. FloorSound</strong> - the sound file(s) to play
 when the elevator arrives at a floor; normally this is used for files that
 speak the floor number. There is no default; if this is set, the sounds will be
 automatically enabled. If an asterisk (*) is specified, it is replaced with the
@@ -1504,7 +1492,7 @@ current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">FloorSound =
 floor*.wav</font></p>
 
-<p align="left"><strong>36. UpMessage</strong> - the sound file(s) to play
+<p align="left"><strong>30. UpMessage</strong> - the sound file(s) to play
 after the elevator arrives at a floor and the doors open - this tells the
 passengers that the elevator is going up. There is no default; if this is set,
 the sound will be automatically enabled. If an asterisk (*) is specified, it is
@@ -1512,7 +1500,7 @@ replaced with the current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">UpMessage =
 goingup.wav</font></p>
 
-<p align="left"><strong>37. DownMessage</strong> - the sound file(s) to play
+<p align="left"><strong>31. DownMessage</strong> - the sound file(s) to play
 after the elevator arrives at a floor and the doors open - this tells the
 passengers that the elevator is going down. There is no default; if this is
 set, the sound will be automatically enabled. If an asterisk (*) is specified,
@@ -1520,21 +1508,21 @@ it is replaced with the current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">DownMessage =
 goingdown.wav</font></p>
 
-<p align="left"><strong>38. Music</strong> - the sound file to play for the
+<p align="left"><strong>32. Music</strong> - the sound file to play for the
 elevator music - the sound is automatically looped. There is no default; if
 this is set, the sound will be automatically enabled. <br>
 Example: <font face="Courier New, Courier, mono" size="2">Music =
 musicfile.wav</font></p>
 
-<p align="left"><strong>39. NudgeSound</strong> - the sound file to play while
-in nudge mode. Default is <em>buzz.wav</em>. Leave the filename field blank for no sound. This must be specified after the
-CreateElevator command.<br>
+<p align="left"><strong>33. NudgeSound</strong> - the sound file to play while
+in nudge mode. Default is <em>buzz.wav</em>. Leave the filename field blank for
+no sound. This must be specified after the CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">NudgeSound
 <em>doornumber</em> = <em>filename</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">NudgeSound 1 =
 buzz.wav</font></p>
 
-<p align="left"><strong>40. FloorSkipText</strong> - sets the text that will be
+<p align="left"><strong>34. FloorSkipText</strong> - sets the text that will be
 shown in the floor indicator when passing non-serviced floors. The texture for
 this must be loaded for it to show - of you set this to EX for example, the
 texture it'll load is ButtonEX.jpg. Common values for this are EZ, X, and EX
@@ -1542,33 +1530,33 @@ texture it'll load is ButtonEX.jpg. Common values for this are EZ, X, and EX
 Example: <font face="Courier New, Courier, mono" size="2">FloorSkipText = EZ
 </font></p>
 
-<p align="left"><strong>41. RecallFloor</strong> - sets the floor the elevator
+<p align="left"><strong>35. RecallFloor</strong> - sets the floor the elevator
 will recall to during fire service phase 1 mode. Default is the lowest serviced
 floor. <br>
 Example: <font face="Courier New, Courier, mono" size="2">RecallFloor =
 5</font></p>
 
-<p align="left"><strong>42. AlternateRecallFloor</strong> - sets the alternate
+<p align="left"><strong>36. AlternateRecallFloor</strong> - sets the alternate
 floor the elevator will recall to during fire service phase 1 mode. Default is
 the highest serviced floor. <br>
 Example: <font face="Courier New, Courier, mono" size="2">AlternateRecallFloor
 = 6</font></p>
 
-<p align="left"><strong>43. ACP</strong> - enables ACP (Anti-Crime Protection)
+<p align="left"><strong>37. ACP</strong> - enables ACP (Anti-Crime Protection)
 mode<br>
 Example: <font face="Courier New, Courier, mono" size="2">ACP = true</font></p>
 
-<p align="left"><strong>44. ACPFloor</strong> - sets the floor the elevator
+<p align="left"><strong>38. ACPFloor</strong> - sets the floor the elevator
 will stop at while in ACP mode. Default is the lowest serviced floor. <br>
 Example: <font face="Courier New, Courier, mono" size="2">ACPFloor =
 5</font></p>
 
-<p align="left"><strong>45. Doors</strong> - sets the number of doors the
+<p align="left"><strong>39. Doors</strong> - sets the number of doors the
 elevator will have. The default is 1. Set to 0 in order to have a doorless
 elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">Doors = 2</font></p>
 
-<p align="left"><strong>46. MotorPosition</strong> - sets the position of the
+<p align="left"><strong>40. MotorPosition</strong> - sets the position of the
 motor sound emitter; if this command is not specified, it'll be placed at the
 base (altitude + interfloor) of the highest floor in the corresponding shaft.
 The X and Z values are relative of the elevator center.<br>
@@ -1577,7 +1565,7 @@ z<br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">MotorPosition
 = 0, 100, 0</font></p>
 
-<p align="left"><strong>47. QueueResets</strong> - set this to true if you want
+<p align="left"><strong>41. QueueResets</strong> - set this to true if you want
 the elevator to reset the related queue (up or down) after it reaches the last
 valid entry. If the elevator is moving up for example with this setting on, and
 you press buttons for floors below you, the elevator will remove those entries
@@ -1585,50 +1573,50 @@ after it reaches the highest selected floor.<br>
 Example: <font face="Courier New, Courier, mono" size="2">QueueResets =
 true</font></p>
 
-<p align="left"><strong>48. UpPeak</strong> - enables up peak mode for this
+<p align="left"><strong>42. UpPeak</strong> - enables up peak mode for this
 elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">UpPeak =
 true</font></p>
 
-<p align="left"><strong>49. DownPeak</strong> - enables down peak mode for this
+<p align="left"><strong>43. DownPeak</strong> - enables down peak mode for this
 elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">DownPeak =
 true</font></p>
 
-<p align="left"><strong>50. IndependentService</strong> - enables independent
+<p align="left"><strong>44. IndependentService</strong> - enables independent
 service mode for this elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">IndependentService =
 true</font></p>
 
-<p align="left"><strong>51. InspectionService</strong> - enables inspection
+<p align="left"><strong>45. InspectionService</strong> - enables inspection
 service mode for this elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">InspectionService =
 true</font></p>
 
-<p align="left"><strong>52. Parking</strong> - enables automatic elevator
+<p align="left"><strong>46. Parking</strong> - enables automatic elevator
 parking. If this option is used, the elevator will automatically send itself to
 the specified parking floor after the number of seconds specified in
 <em>delay</em>. <br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Parking = <em>floor,
 delay</em></font></p>
 
-<p align="left"><strong>53. LevelingSpeed</strong> - elevator's leveling speed.
+<p align="left"><strong>47. LevelingSpeed</strong> - elevator's leveling speed.
 Default is 0.2<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingSpeed =
 <em>speed</em></font></p>
 
-<p align="left"><strong>54. LevelingOffset</strong> - distance in feet from the
+<p align="left"><strong>48. LevelingOffset</strong> - distance in feet from the
 destination floor that the elevator will switch into leveling mode. Default is
 0.5<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingOffset =
 <em>distance</em></font></p>
 
-<p align="left"><strong>55. LevelingOpen</strong> - distance in feet from the
+<p align="left"><strong>49. LevelingOpen</strong> - distance in feet from the
 destination floor that the elevator will open the doors. Default is 0.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingOpen =
 <em>distance</em></font></p>
 
-<p align="left"><strong>56. NotifyEarly</strong> - changes behavior of arrival
+<p align="left"><strong>50. NotifyEarly</strong> - changes behavior of arrival
 notifications (chime and lighting of directional indicator). 0 is the default
 and notifies when the elevator stops on the floor. 1 notifies when the elevator
 starts the leveling process, and 2 notifies when the elevator starts
@@ -1636,7 +1624,7 @@ decelerating.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">NotifyEarly =
 <em>value</em></font></p>
 
-<p align="left"><strong>57. MusicPosition</strong> - sets the position of the
+<p align="left"><strong>51. MusicPosition</strong> - sets the position of the
 music sound emitter relative of the elevator's position. If this command is not
 specified, it'll be placed in the center of the elevator on the ceiling.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">MusicPosition = x, y,
@@ -1644,42 +1632,42 @@ z<br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">MusicPosition
 = 0, 8, 0</font></p>
 
-<p align="left"><strong>58. DepartureDelay</strong> - sets the time in seconds
+<p align="left"><strong>52. DepartureDelay</strong> - sets the time in seconds
 that the elevator waits before proceeding to the next floor. Default is 0.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DepartureDelay =
 <em>1</em> </font></p>
 
-<p align="left"><strong>59. ArrivalDelay</strong> - sets the time in seconds
+<p align="left"><strong>53. ArrivalDelay</strong> - sets the time in seconds
 that the elevator waits before opening the doors after arriving at a floor. The
 default is 0. Note that a value greater than 0 will switch off the LevelingOpen
 setting.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">ArrivalDelay =
 <em>0.5</em></font></p>
 
-<p align="left"><strong>60. DisplayFloors</strong> - sets the floors that will
+<p align="left"><strong>54. DisplayFloors</strong> - sets the floors that will
 be displayed by the elevator's indicators. This command uses the same syntax as
 the ServicedFloors command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DisplayFloors = <em>0,
 9, 19, 29</em></font></p>
 
-<p align="left"><strong>61. FireService1</strong> - sets the fire service phase
+<p align="left"><strong>55. FireService1</strong> - sets the fire service phase
 1 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
 for on, 2 for bypass.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService1 =
 2</font></p>
 
-<p align="left"><strong>62. FireService2</strong> - sets the fire service phase
+<p align="left"><strong>56. FireService2</strong> - sets the fire service phase
 2 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
 for on, 2 for hold.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService2 =
 1</font></p>
 
-<p align="left"><strong>63. MusicOn</strong> - Enables or disables music on
+<p align="left"><strong>57. MusicOn</strong> - Enables or disables music on
 start. Default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">MusicOn =
 false</font></p>
 
-<p align="left"><strong>64. MusicOnMove</strong> - Determines if music should
+<p align="left"><strong>58. MusicOnMove</strong> - Determines if music should
 only be played while elevator is moving or not. Default is false.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">MusicOnMove =
 true</font></p>
@@ -1830,7 +1818,8 @@ action being "FanOff" with the "SwitchFanOff" texture being used for that, and
 "FanOn" for the second action with the "SwitchFanOn" texture being used for
 that. Example 3 shows a standard floor button being created (which is what the
 AddButton command does) and example 4 shows a fire service mode knob being
-created with 3 positions. Leave the sound field blank for no sound to be played.</p>
+created with 3 positions. Leave the sound field blank for no sound to be
+played.</p>
 
 <p align="left">Available action names: <em>Off</em> (no action), [floor
 number], <em>Open</em> (open doors), <em>Close</em> (close doors),
@@ -2096,9 +2085,9 @@ closesound, texturename, open, thickness</em>, <em>direction, speed,
 CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>,
 <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
 
-<p align="left">Leave the sound fields blank for no sounds to be played. Direction specifies the direction the door faces (the side in
-which the handle is on the left) and also the direction it opens. These are the
-values:<br>
+<p align="left">Leave the sound fields blank for no sounds to be played.
+Direction specifies the direction the door faces (the side in which the handle
+is on the left) and also the direction it opens. These are the values:<br>
 1 - faces left, opens left<br>
 2 - faces left, opens right<br>
 3 - faces right, opens right<br>
@@ -2146,8 +2135,8 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the elevator's
-base. Leave the sound field blank for no sound to be played.<strong></strong></p>
+(front, left, right, back). Voffset is relative of the elevator's base. Leave
+the sound field blank for no sound to be played.<strong></strong></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
@@ -2665,13 +2654,14 @@ specifies the volume percentage (with 1.0 being 100%) of the sound,
 <em>min_distance</em> and <em>max_distance</em> set the minimum and maximum
 distances that the sound can be heard at full volume - by default, minimum is 1
 and maximum is -1. <em>Doppler_level </em>specifies the doppler scale for the
-sound (0 means off, the default, 1 is normal, 5 is max). <em>Cone_inside_angle</em> is the
-angle within which the sound is at it's normal volume (default 360),
-<em>cone_outside_angle</em> is the outside angle that the sound is at it's
-normal volume (default 360, shouldn't be less than the inside angle), and
-<em>cone_outside_volume</em> is the volume level of the sound outside (0.0 to
-1.0, default 1.0)<em>. Direction_x</em>, <em>direction_y</em> and
-<em>direction_z</em> specify the direction of the sound cone.</p>
+sound (0 means off, the default, 1 is normal, 5 is max).
+<em>Cone_inside_angle</em> is the angle within which the sound is at it's
+normal volume (default 360), <em>cone_outside_angle</em> is the outside angle
+that the sound is at it's normal volume (default 360, shouldn't be less than
+the inside angle), and <em>cone_outside_volume</em> is the volume level of the
+sound outside (0.0 to 1.0, default 1.0)<em>. Direction_x</em>,
+<em>direction_y</em> and <em>direction_z</em> specify the direction of the
+sound cone.</p>
 
 <p align="left"><strong>ad. GetWallExtents</strong> - the GetWallExtents
 command returns the X and Z extents (minimum and maximum values) of a wall, at
@@ -2748,7 +2738,8 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Leave the sound field blank for no sound to be played.</p>
+(front, left, right, back). Leave the sound field blank for no sound to be
+played.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ag.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
@@ -2764,7 +2755,8 @@ elevator controls. The action_names(s) parameter allows you to specify a list
 of actions that this trigger will call when the camera enters or exits the
 area. The trigger starts in the first action, and will switch to each
 consecutive action when the users enters/leaves. The X, Y and Z parameters
-specify the 3D box that defines the trigger area. Leave the sound field blank for no sound to be played.</p>
+specify the 3D box that defines the trigger area. Leave the sound field blank
+for no sound to be played.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
 Print</strong> - prints the contents of a line to the console. This command
