@@ -67,9 +67,12 @@ public:
 	float Height; //elevator height
 	bool HeightSet;
 	bool IsMoving; //is elevator moving?
-	std::string CarStartSound; //elevator start/speedup sound
-	std::string CarMoveSound; //elevator move sound
-	std::string CarStopSound; //elevator stop/slowdown sound
+	std::string CarUpStartSound; //elevator up start/speedup sound
+	std::string CarDownStartSound; //elevator down start/speedup sound
+	std::string CarUpMoveSound; //elevator up ove sound
+	std::string CarDownMoveSound; //elevator down move sound
+	std::string CarUpStopSound; //elevator up stop/slowdown sound
+	std::string CarDownStopSound; //elevator down stop/slowdown sound
 	std::string CarIdleSound; //elevator idle/fan sound
 	std::string MotorUpStartSound; //motor up start/speedup sound
 	std::string MotorUpRunSound; //motor up move sound

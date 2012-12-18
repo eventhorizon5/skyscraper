@@ -82,16 +82,19 @@ Elevator::Elevator(int number)
 	IsMoving = false;
 	lastfloor = 0;
 	lastfloorset = false;
-	CarStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarStartSound", "");
-	CarMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarMoveSound", "");
-	CarStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarStopSound", "");
+	CarUpStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarUpStartSound", "");
+	CarDownStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarDownStartSound", "");
+	CarUpMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarUpMoveSound", "");
+	CarDownMoveSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarDownMoveSound", "");
+	CarUpStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarUpStopSound", "");
+	CarDownStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarDownStopSound", "");
 	CarIdleSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarIdleSound", "elevidle.wav");
 	MotorUpStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorUpStartSound", "motor_start.wav");
 	MotorUpRunSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorUpRunSound", "motor_running.wav");
 	MotorUpStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorUpStopSound", "motor_stop.wav");
 	MotorDownStartSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorDownStartSound", "motor_start.wav");
-        MotorDownRunSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorDownRunSound", "motor_running.wav");
-        MotorDownStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorDownStopSound", "motor_stop.wav");
+	MotorDownRunSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorDownRunSound", "motor_running.wav");
+	MotorDownStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorDownStopSound", "motor_stop.wav");
 	MotorIdleSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorIdleSound", "");
 	AlarmSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.AlarmSound", "bell1.wav");
 	AlarmSoundStop = sbs->GetConfigString("Skyscraper.SBS.Elevator.AlarmSoundStop", "bell1-stop.wav");
@@ -1507,22 +1510,21 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->Verbose)
 			Report("playing starting sounds");
 		mainsound->Stop();
-		mainsound->Load(CarStartSound.c_str());
-		mainsound->Loop(false);
-		mainsound->Play();
 		motorsound->Stop();
 		if (Direction == 1)
 		{
+			mainsound->Load(CarUpStartSound.c_str());
 			motorsound->Load(MotorUpStartSound.c_str());
-			motorsound->Loop(false);
-			motorsound->Play();
 		}
 		else
 		{
+			mainsound->Load(CarDownStartSound.c_str());
 			motorsound->Load(MotorDownStartSound.c_str());
-                        motorsound->Loop(false);
-                        motorsound->Play();
 		}
+		mainsound->Loop(false);
+		mainsound->Play();
+		motorsound->Loop(false);
+		motorsound->Play();
 	}
 
 	if (EmergencyStop == true && Brakes == false)
@@ -1537,14 +1539,20 @@ void Elevator::MoveElevatorToFloor()
 		else
 			Direction = 1;
 		Brakes = true;
+
 		//stop sounds
 		mainsound->Stop();
 		motorsound->Stop();
 		//play stopping sounds
 		if (sbs->Verbose)
 			Report("playing stopping sounds");
-		mainsound->Load(CarStopSound.c_str());
+
+		if (Direction == 1)
+			mainsound->Load(CarUpStopSound.c_str());
+		else
+			mainsound->Load(CarDownStopSound.c_str());
 		mainsound->Loop(false);
+
 		bool adjust = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 		//set play position to current percent of the total speed
 		if (adjust == true)
@@ -1552,16 +1560,13 @@ void Elevator::MoveElevatorToFloor()
 		else
 			mainsound->Reset();
 		mainsound->Play(false);
+
 		if (Direction == 1)
-		{
 			motorsound->Load(MotorUpStopSound.c_str());
-			motorsound->Loop(false);
-		}
 		else
-		{
 			motorsound->Load(MotorDownStopSound.c_str());
-                        motorsound->Loop(false);
-		}
+		motorsound->Loop(false);
+
 		if (adjust == true)
 			motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
 		else
@@ -1569,14 +1574,24 @@ void Elevator::MoveElevatorToFloor()
 		motorsound->Play(false);
 	}
 
-	if (mainsound->IsPlaying() == false && Brakes == false && CarMoveSound.empty() == false && CarMoveSound != "")
+	if (mainsound->IsPlaying() == false && Brakes == false)
 	{
 		//Movement sound
 		if (sbs->Verbose)
 			Report("playing car movement sound");
-		mainsound->Load(CarMoveSound.c_str());
-		mainsound->Loop(true);
-		mainsound->Play();
+
+		if (Direction == 1 && CarUpMoveSound.empty() == false && CarUpMoveSound != "")
+		{
+			mainsound->Load(CarUpMoveSound.c_str());
+			mainsound->Loop(true);
+			mainsound->Play();
+		}
+		else if (Direction == -1 && CarDownMoveSound.empty() == false && CarDownMoveSound != "")
+		{
+			mainsound->Load(CarDownMoveSound.c_str());
+			mainsound->Loop(true);
+			mainsound->Play();
+		}
 	}
 
 	if (motorsound->IsPlaying() == false && Brakes == false)
@@ -1584,11 +1599,11 @@ void Elevator::MoveElevatorToFloor()
 		if (Direction == 1 && MotorUpRunSound.empty() == false && MotorUpRunSound != "")
 		{
 			//Motor sound
-                	if (sbs->Verbose)
-	                        Report("playing motor up run sound");
-	                motorsound->Load(MotorUpRunSound.c_str());
-	                motorsound->Loop(true);
-	                motorsound->Play();
+			if (sbs->Verbose)
+				Report("playing motor up run sound");
+			motorsound->Load(MotorUpRunSound.c_str());
+			motorsound->Loop(true);
+			motorsound->Play();
 		}
 		else if (Direction == -1 && MotorDownRunSound.empty() == false && MotorDownRunSound != "")
 		{
@@ -1769,24 +1784,24 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("playing stopping sounds");
 			bool adjust = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
-			mainsound->Load(CarStopSound.c_str());
+			if (Direction == 1)
+				mainsound->Load(CarUpStopSound.c_str());
+			else
+				mainsound->Load(CarDownStopSound.c_str());
 			mainsound->Loop(false);
+
 			//set play position to current percent of the total speed
 			if (adjust == true)
 				mainsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
 			else
 				mainsound->Reset();
 			mainsound->Play(false);
+
 			if (Direction == 1)
-			{
 				motorsound->Load(MotorUpStopSound.c_str());
-				motorsound->Loop(false);
-			}
 			else
-			{
 				motorsound->Load(MotorDownStopSound.c_str());
-				motorsound->Loop(false);
-			}
+			motorsound->Loop(false);
 			if (adjust == true)
 				motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
 			else

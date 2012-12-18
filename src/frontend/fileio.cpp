@@ -4175,7 +4175,9 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->CarStartSound = temp2;
+		elev->CarUpStartSound = temp2;
+		elev->CarDownStartSound = temp2;
+
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
 		elev->MotorDownStartSound = "";
@@ -4194,14 +4196,16 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->CarMoveSound = temp2;
+		elev->CarUpMoveSound = temp2;
+		elev->CarDownMoveSound = temp2;
+
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
-                elev->MotorDownStartSound = "";
-                elev->MotorUpRunSound = "";
-                elev->MotorDownRunSound = "";
-                elev->MotorUpStopSound = "";
-                elev->MotorDownStopSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
 	if (linecheck.substr(0, 9) == "stopsound")
@@ -4213,14 +4217,16 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->CarStopSound = temp2;
+		elev->CarUpStopSound = temp2;
+		elev->CarDownStopSound = temp2;
+
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
-                elev->MotorDownStartSound = "";
-                elev->MotorUpRunSound = "";
-                elev->MotorDownRunSound = "";
-                elev->MotorUpStopSound = "";
-                elev->MotorDownStopSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
 	if (linecheck.substr(0, 9) == "idlesound")
@@ -4233,13 +4239,14 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarIdleSound = temp2;
+
 		//turn off motor sounds
 		elev->MotorUpStartSound = "";
-                elev->MotorDownStartSound = "";
-                elev->MotorUpRunSound = "";
-                elev->MotorDownRunSound = "";
-                elev->MotorUpStopSound = "";
-                elev->MotorDownStopSound = "";
+		elev->MotorDownStartSound = "";
+		elev->MotorUpRunSound = "";
+		elev->MotorDownRunSound = "";
+		elev->MotorUpStopSound = "";
+		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
 	}
 	if (linecheck.substr(0, 13) == "carstartsound")
@@ -4250,7 +4257,28 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->CarStartSound = temp2;
+		elev->CarUpStartSound = temp2;
+		elev->CarDownStartSound = temp2;
+	}
+	if (linecheck.substr(0, 15) == "carupstartsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->CarUpStartSound = temp2;
+	}
+	if (linecheck.substr(0, 17) == "cardownstartsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->CarDownStartSound = temp2;
 	}
 	if (linecheck.substr(0, 12) == "carmovesound")
 	{
@@ -4260,7 +4288,28 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->CarMoveSound = temp2;
+		elev->CarUpMoveSound = temp2;
+		elev->CarDownMoveSound = temp2;
+	}
+	if (linecheck.substr(0, 14) == "carupmovesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->CarUpMoveSound = temp2;
+	}
+	if (linecheck.substr(0, 16) == "cardownmovesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->CarDownMoveSound = temp2;
 	}
 	if (linecheck.substr(0, 12) == "carstopsound")
 	{
@@ -4270,7 +4319,28 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->CarStopSound = temp2;
+		elev->CarUpStopSound = temp2;
+		elev->CarDownStopSound = temp2;
+	}
+	if (linecheck.substr(0, 14) == "carupstopsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->CarUpStopSound = temp2;
+	}
+	if (linecheck.substr(0, 16) == "cardownstopsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->CarDownStopSound = temp2;
 	}
 	if (linecheck.substr(0, 12) == "caridlesound")
 	{
@@ -4294,25 +4364,25 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorDownStartSound = temp2;
 	}
 	if (linecheck.substr(0, 17) == "motorupstartsound")
-        {
-                if (temp2check < 0)
-                        return ScriptError("Syntax error");
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
 
-                //check to see if file exists
-                CheckFile(std::string("data/" + temp2).c_str());
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
 
-                elev->MotorUpStartSound = temp2;
-        }
+		elev->MotorUpStartSound = temp2;
+	}
 	if (linecheck.substr(0, 19) == "motordownstartsound")
-        {
-                if (temp2check < 0)
-                        return ScriptError("Syntax error");
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
 
-                //check to see if file exists
-                CheckFile(std::string("data/" + temp2).c_str());
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
 
-                elev->MotorDownStartSound = temp2;
-        }
+		elev->MotorDownStartSound = temp2;
+	}
 	if (linecheck.substr(0, 13) == "motorrunsound")
 	{
 		if (temp2check < 0)
@@ -4325,25 +4395,25 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorDownRunSound = temp2;
 	}
 	if (linecheck.substr(0, 15) == "motoruprunsound")
-        {
-                if (temp2check < 0)
-                        return ScriptError("Syntax error");
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
 
-                //check to see if file exists
-                CheckFile(std::string("data/" + temp2).c_str());
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
 
-                elev->MotorUpRunSound = temp2;
-        }
+		elev->MotorUpRunSound = temp2;
+	}
 	if (linecheck.substr(0, 17) == "motordownrunsound")
-        {
-                if (temp2check < 0)
-                        return ScriptError("Syntax error");
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
 
-                //check to see if file exists
-                CheckFile(std::string("data/" + temp2).c_str());
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
 
-                elev->MotorDownRunSound = temp2;
-        }
+		elev->MotorDownRunSound = temp2;
+	}
 	if (linecheck.substr(0, 14) == "motorstopsound")
 	{
 		if (temp2check < 0)
@@ -4356,25 +4426,25 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorDownStopSound = temp2;
 	}
 	if (linecheck.substr(0, 16) == "motorupstopsound")
-        {
-                if (temp2check < 0)
-                        return ScriptError("Syntax error");
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
 
-                //check to see if file exists
-                CheckFile(std::string("data/" + temp2).c_str());
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
 
-                elev->MotorUpStopSound = temp2;
-        }
+		elev->MotorUpStopSound = temp2;
+	}
 	if (linecheck.substr(0, 18) == "motordownstopsound")
-        {
-                if (temp2check < 0)
-                        return ScriptError("Syntax error");
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
 
-                //check to see if file exists
-                CheckFile(std::string("data/" + temp2).c_str());
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
 
-                elev->MotorDownStopSound = temp2;
-        }
+		elev->MotorDownStopSound = temp2;
+	}
 	if (linecheck.substr(0, 10) == "chimesound")
 	{
 		if (temp2check < 0)
