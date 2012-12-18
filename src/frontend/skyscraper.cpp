@@ -1679,17 +1679,17 @@ bool Skyscraper::InitSky()
 		Caelum::CaelumPlugin::getSingleton().loadCaelumSystemFromScript(mCaelumSystem, SkyName);
 	}
 	catch (Ogre::Exception &e)
-        {
-                ReportError("Error initializing sky:" + e.getDescription());
-                //return false;
-        }
-		mCaelumSystem->attachViewport(mCamera->getViewport());
-		mCaelumSystem->setAutoNotifyCameraChanged(false);
-		mCaelumSystem->setSceneFogDensityMultiplier(0.0008f);
-		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
-			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
-		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
-		SkyMult = GetConfigInt("Skyscraper.Frontend.SkyMult", 50);
+	{
+		ReportError("Error initializing sky:" + e.getDescription());
+		//return false;
+	}
+	mCaelumSystem->attachViewport(mCamera->getViewport());
+	mCaelumSystem->setAutoNotifyCameraChanged(false);
+	mCaelumSystem->setSceneFogDensityMultiplier(0.0008f);
+	if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
+		mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
+	mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
+	SkyMult = GetConfigInt("Skyscraper.Frontend.SkyMult", 50);
 
 	return true;
 }
