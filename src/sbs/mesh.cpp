@@ -897,14 +897,6 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		else
 		{
 			//create generic box collider if separate mesh collider isn't available
-			size_t vertex_count, index_count;
-			Ogre::Vector3* vertices;
-			long unsigned int* indices;
-			Ogre::AxisAlignedBox box;
-			GetMeshInformation(MeshWrapper.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier), box);
-			delete[] vertices;
-			delete[] indices;
-
 			CreateBoxCollider(sbs->ToRemote(scale_multiplier));
 		}
 	}
@@ -1929,8 +1921,47 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	//set up a box collider for full extents of a mesh
 
 	//initialize collider shape
-	Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
-	OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
+	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+	box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
+
+	//initialize collider shape
+	int vertex_count = 8;
+	int index_count = 36;
+	OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vertex_count, index_count);
+
+	Ogre::Vector3 *vertices = new Ogre::Vector3[vertex_count];
+	vertices[0] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_LEFT_TOP));
+	vertices[1] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_RIGHT_TOP));
+	vertices[2] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_RIGHT_BOTTOM));
+	vertices[3] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_LEFT_BOTTOM));
+	vertices[4] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_LEFT_TOP));
+	vertices[5] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_RIGHT_TOP));
+	vertices[6] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_RIGHT_BOTTOM));
+	vertices[7] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_LEFT_BOTTOM));
+
+	//add vertices to shape
+	shape->AddTriangle(vertices[0], vertices[2], vertices[3]);
+	shape->AddTriangle(vertices[1], vertices[2], vertices[0]);
+
+	shape->AddTriangle(vertices[4], vertices[1], vertices[0]);
+	shape->AddTriangle(vertices[5], vertices[1], vertices[4]);
+
+	shape->AddTriangle(vertices[7], vertices[2], vertices[3]);
+	shape->AddTriangle(vertices[6], vertices[2], vertices[7]);
+
+	shape->AddTriangle(vertices[4], vertices[6], vertices[7]);
+	shape->AddTriangle(vertices[5], vertices[6], vertices[4]);
+
+	shape->AddTriangle(vertices[1], vertices[6], vertices[2]);
+	shape->AddTriangle(vertices[5], vertices[6], vertices[1]);
+
+	shape->AddTriangle(vertices[4], vertices[3], vertices[7]);
+	shape->AddTriangle(vertices[0], vertices[3], vertices[4]);
+
+	delete [] vertices;
+
+	//finalize shape
+	shape->Finish();
 	std::string name = SceneNode->getName();
 
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
