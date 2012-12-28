@@ -67,7 +67,7 @@ private:
 	MeshObject* ControlMesh; //control mesh object
 	int current_position; //current control position
 	std::vector<std::string> TextureArray; //selection texture array
-	std::vector<Action*> Actions; //button actions
+	std::vector<std::string> Actions; //button actions
 
 	Sound *sound; //sound object
 

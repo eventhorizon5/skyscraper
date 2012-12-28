@@ -42,14 +42,7 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre:
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 
-	//get pointers to actions
-	for (int i = 0; i < action_names.size(); i++)
-	{
-		Action *action = sbs->GetAction(action_names[i]);
-		if (action)
-			Actions.push_back(action);
-	}
-
+	Actions = action_names;
 	IsEnabled = true;
 	current_position = 1;
 	this->area_min = area_min;
@@ -205,7 +198,17 @@ int Trigger::GetSelectPosition()
 const char* Trigger::GetPositionAction(int position)
 {
 	//return action name associated with the specified selection position
-	return Actions[position - 1]->GetName();
+
+	std::vector<Action*> actionlist;
+	actionlist = sbs->GetAction(Actions[position - 1]);
+
+	//return command of first action in list
+	if (actionlist.size() > 0)
+	{
+		if (actionlist[0])
+			return actionlist[0]->GetCommandName();
+	}
+	return 0;
 }
 
 const char* Trigger::GetSelectPositionAction()
@@ -237,7 +240,21 @@ int Trigger::FindActionPosition(const char *name)
 bool Trigger::DoAction()
 {
 	//perform trigger's action
-	return Actions[current_position - 1]->DoAction();
+
+	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
+
+	bool result = true;
+	for (int i = 0; i < actionlist.size(); i++)
+	{
+		bool result2 = false;
+
+		if (actionlist[i])
+			result2 = actionlist[i]->DoAction();
+
+		if (result2 == false)
+			result = false;
+	}
+	return result;
 }
 
 bool Trigger::Check()

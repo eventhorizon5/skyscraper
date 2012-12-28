@@ -43,14 +43,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 
-	//get pointers to actions
-	for (int i = 0; i < action_names.size(); i++)
-	{
-		Action *action = sbs->GetAction(action_names[i]);
-		if (action)
-			Actions.push_back(action);
-	}
-
+	Actions = action_names;
 	Direction = direction;
 	IsEnabled = true;
 	TextureArray = textures;
@@ -245,7 +238,17 @@ int Control::GetSelectPosition()
 const char* Control::GetPositionAction(int position)
 {
 	//return action's command name associated with the specified selection position
-	return Actions[position - 1]->GetCommandName();
+
+	std::vector<Action*> actionlist;
+	actionlist = sbs->GetAction(Actions[position - 1]);
+
+	//return command of first action in list
+	if (actionlist.size() > 0)
+	{
+		if (actionlist[0])
+			return actionlist[0]->GetCommandName();
+	}
+	return 0;
 }
 
 const char* Control::GetSelectPositionAction()
@@ -287,7 +290,21 @@ int Control::FindActionPosition(const char *name)
 bool Control::DoAction()
 {
 	//perform object's action
-	return Actions[current_position - 1]->DoAction();
+
+	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
+
+	bool result = true;
+	for (int i = 0; i < actionlist.size(); i++)
+	{
+		bool result2 = false;
+
+		if (actionlist[i])
+			result2 = actionlist[i]->DoAction();
+
+		if (result2 == false)
+			result = false;
+	}
+	return result;
 }
 
 bool Control::Press()

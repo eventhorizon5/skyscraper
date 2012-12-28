@@ -1959,6 +1959,7 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	shape->AddTriangle(vertices[0], vertices[3], vertices[4]);
 
 	delete [] vertices;
+	vertices = 0;
 
 	//finalize shape
 	shape->Finish();

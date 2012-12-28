@@ -344,15 +344,16 @@ public:
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Action* AddAction(const std::string name, Object* action_parent, const std::string &command, const std::vector<std::string> &parameters);
 	Action* AddAction(const std::string name, Object* action_parent, const std::string &command);
-	Action* GetAction(const std::string name);
+	std::vector<Action*> GetAction(const std::string name);
 	Action* GetAction(int index);
 	int GetActionCount();
 	bool RunAction(std::string name);
+	bool RunAction(int index);
 	void IncrementTextureCount();
 	void DecrementTextureCount();
 	void IncrementMaterialCount();
 	void DecrementMaterialCount();
-	Sound* GetSound(const char *name);
+	std::vector<Sound*> GetSound(const char *name);
 	
 	//Meshes
 	MeshObject* Buildings;

@@ -321,35 +321,42 @@ bool Action::DoAction()
 	{
 		if (command_parameters.size() == 2)
 		{
-			Sound *sound = 0;
+			std::vector<Sound*> soundlist;
 
 			if (parent_type == "SBS")
-				sound = sbs->GetSound(command_parameters[0].c_str());
+				soundlist = sbs->GetSound(command_parameters[0].c_str());
 
 			if (parent_type == "Floor")
 			{
 				if (floor)
-					sound = floor->GetSound(command_parameters[0].c_str());
+					soundlist = floor->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
 			if (parent_type == "Elevator")
 			{
 				if (elevator)
-					sound = elevator->GetSound(command_parameters[0].c_str());
+					soundlist = elevator->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
 
-			if (sound)
+			if (soundlist.size() > 0)
 			{
 				std::string loop = command_parameters[1];
 				SetCase(loop, false);
-				if (loop == "true")
-					sound->Loop(true);
-				else
-					sound->Loop(false);
-				sound->Play();
+
+				for (int i = 0; i < soundlist.size(); i++)
+				{
+					if (soundlist[i])
+					{
+						if (loop == "true")
+							soundlist[i]->Loop(true);
+						else
+							soundlist[i]->Loop(false);
+						soundlist[i]->Play();
+					}
+				}
 			}
 		}
 		else
@@ -360,28 +367,31 @@ bool Action::DoAction()
 	{
 		if (command_parameters.size() == 1)
 		{
-			Sound *sound = 0;
+			std::vector<Sound*> soundlist;
 
 			if (parent_type == "SBS")
-				sound = sbs->GetSound(command_parameters[0].c_str());
+				soundlist = sbs->GetSound(command_parameters[0].c_str());
 
 			if (parent_type == "Floor")
 			{
 				if (floor)
-					sound = floor->GetSound(command_parameters[0].c_str());
+					soundlist = floor->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
 			if (parent_type == "Elevator")
 			{
 				if (elevator)
-					sound = elevator->GetSound(command_parameters[0].c_str());
+					soundlist = elevator->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
 
-			if (sound)
-				sound->Stop();
+			for (int i = 0; i < soundlist.size(); i++)
+			{
+				if (soundlist[i])
+					soundlist[i]->Stop();
+			}
 		}
 		else
 			return false;
@@ -418,4 +428,5 @@ const char *Action::GetParameter(int index)
 {
 	if (index >= 0 && index < command_parameters.size())
 		return command_parameters[index].c_str();
+	return 0;
 }

@@ -66,7 +66,7 @@ private:
 	Ogre::Vector3 pos;
 	int current_position; //current trigger position
 	bool IsInside;
-	std::vector<Action*> Actions; //trigger actions
+	std::vector<std::string> Actions; //trigger actions
 
 	Sound *sound; //sound object
 

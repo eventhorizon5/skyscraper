@@ -4481,12 +4481,13 @@ void Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &
         ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
 }
 
-Sound* Elevator::GetSound(const char *name)
+std::vector<Sound*> Elevator::GetSound(const char *name)
 {
 	//get sound by name
 
 	std::string findname = name;
 	SetCase(findname, false);
+	std::vector<Sound*> soundlist;
 	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
@@ -4494,8 +4495,8 @@ Sound* Elevator::GetSound(const char *name)
 			std::string name2 = sounds[i]->GetName();
 			SetCase(name2, false);
 			if (findname == name2)
-				return sounds[i];
+				soundlist.push_back(sounds[i]);
 		}
 	}
-	return 0;
+	return soundlist;
 }

@@ -2526,12 +2526,13 @@ Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 posi
 	return sound->object;
 }
 
-Sound* SBS::GetSound(const char *name)
+std::vector<Sound*> SBS::GetSound(const char *name)
 {
 	//get sound by name
 
 	std::string findname = name;
 	SetCase(findname, false);
+	std::vector<Sound*> soundlist;
 	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
@@ -2539,10 +2540,10 @@ Sound* SBS::GetSound(const char *name)
 			std::string name2 = sounds[i]->GetName();
 			SetCase(name2, false);
 			if (findname == name2)
-				return sounds[i];
+				soundlist.push_back(sounds[i]);
 		}
 	}
-	return 0;
+	return soundlist;
 }
 
 int SBS::GetSoundCount()
@@ -3355,8 +3356,8 @@ Action* SBS::AddAction(const std::string name, Object* action_parent, const std:
 	//add a global action
 
 	//return action object if it already exists
-	Action *check = GetAction(name);
-	if (check)
+	std::vector<Action*> actionlist = GetAction(name);
+	if (actionlist.size() > 0)
 		return 0;
 
 	Action *action = new Action(name, action_parent, command, parameters);
@@ -3369,8 +3370,8 @@ Action* SBS::AddAction(const std::string name, Object* action_parent, const std:
 	//add a global action
 
 	//exit if action already exists
-	Action *check = GetAction(name);
-	if (check)
+	std::vector<Action*> actionlist = GetAction(name);
+	if (actionlist.size() > 0)
 		return 0;
 
 	Action *action = new Action(name, action_parent, command);
@@ -3378,16 +3379,17 @@ Action* SBS::AddAction(const std::string name, Object* action_parent, const std:
 	return action;
 }
 
-Action* SBS::GetAction(const std::string name)
+std::vector<Action*> SBS::GetAction(const std::string name)
 {
 	//get action by name
+	std::vector<Action*> actionlist;
 	for (int i = 0; i < ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
 		if (actionname == name)
-			return ActionArray[i];
+			actionlist.push_back(ActionArray[i]);
 	}
-	return 0;
+	return actionlist;
 }
 
 int SBS::GetActionCount()
@@ -3422,7 +3424,29 @@ Action* SBS::GetAction(int index)
 
 bool SBS::RunAction(std::string name)
 {
-	Action* action = GetAction(name);
+	//run action by name - will run multiple actions if the name is the same
+
+	std::vector<Action*> actionlist = GetAction(name);
+
+	bool result = true;
+	for (int i = 0; i < actionlist.size(); i++)
+	{
+		bool result2 = false;
+
+		if (actionlist[i])
+			result2 = actionlist[i]->DoAction();
+
+		if (result2 == false)
+			result = false;
+	}
+	return result;
+}
+
+bool SBS::RunAction(int index)
+{
+	//run action by index number
+
+	Action *action = GetAction(index);
 	if (action)
 		return action->DoAction();
 	return false;

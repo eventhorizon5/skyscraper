@@ -115,7 +115,7 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	//*)
 
 	for (int i = 0; i < Simcore->GetActionCount(); i++)
-		ActionList->Append(wxString::FromAscii(Simcore->GetAction(i)->GetName()));
+		ActionList->Append(wxVariant(i + 1).GetString() + wxT(" - ") + wxString::FromAscii(Simcore->GetAction(i)->GetName()));
 }
 
 ActionViewer::~ActionViewer()
@@ -126,8 +126,9 @@ ActionViewer::~ActionViewer()
 
 void ActionViewer::On_bRun_Click(wxCommandEvent& event)
 {
-	wxString name = ActionList->GetStringSelection();
-	Simcore->RunAction(std::string(name.ToAscii()));
+	int selection = ActionList->GetSelection();
+	if (selection >= 0)
+		Simcore->RunAction(selection);
 }
 
 void ActionViewer::On_bOK_Click(wxCommandEvent& event)
@@ -137,8 +138,11 @@ void ActionViewer::On_bOK_Click(wxCommandEvent& event)
 
 void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 {
-	wxString name = ActionList->GetStringSelection();
-	Action *action = Simcore->GetAction(std::string(name.ToAscii()));
+	int selection = ActionList->GetSelection();
+	if (selection < 0)
+		return;
+
+	Action *action = Simcore->GetAction(selection);
 	if (action)
 	{
 		tName->SetValue(wxString::FromAscii(action->GetName()));

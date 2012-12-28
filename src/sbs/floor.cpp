@@ -821,12 +821,13 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	return sound->object;
 }
 
-Sound* Floor::GetSound(const char *name)
+std::vector<Sound*> Floor::GetSound(const char *name)
 {
 	//get sound by name
 
 	std::string findname = name;
 	SetCase(findname, false);
+	std::vector<Sound*> soundlist;
 	for (int i = 0; i < sounds.size(); i++)
 	{
 		if (sounds[i])
@@ -834,10 +835,10 @@ Sound* Floor::GetSound(const char *name)
 			std::string name2 = sounds[i]->GetName();
 			SetCase(name2, false);
 			if (findname == name2)
-				return sounds[i];
+				soundlist.push_back(sounds[i]);
 		}
 	}
-	return 0;
+	return soundlist;
 }
 
 void Floor::Report(std::string message)
