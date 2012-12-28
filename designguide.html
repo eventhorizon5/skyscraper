@@ -2704,9 +2704,11 @@ MySoundAction, Floor 2, PlaySound, Sound1, false</font><br>
 <p style="text-align:left;margin-left:0;margin-right:auto;">This command
 creates a global action, to be used with commands such as
 <em>AddActionControl</em> and <em>AddTrigger</em>. <em>Name</em> must be a
-globally-unique name. <em>Parent_object</em> is the object to use to perform
-the action on. Currently includes "Global", floors such as "Floor 2", elevators
-such as "Elevator 1", shafts like "Shaft 1" and stairwells like "Stairs 2".</p>
+globally-unique name. If the same name is used for multiple actions, all of
+those actions will be run when an object uses that name. <em>Parent_object</em>
+is the object to use to perform the action on. Currently includes "Global",
+floors such as "Floor 2", elevators such as "Elevator 1", shafts like "Shaft 1"
+and stairwells like "Stairs 2".</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;">Commands and
 parameters:</p>
@@ -2719,6 +2721,10 @@ PlaySound: name, loop true/false<br>
 <p style="text-align:left;margin-left:0;margin-right:auto;">(Elevator commands,
 see AddControl command in elevator section for commands, these have no
 parameters)</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">With the PlaySound
+command, if multiple sounds have the same name, all of those sounds will be
+played simultaneously when the related action is run.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>af.
 AddActionControl</strong> - creates a custom control that uses a specific
