@@ -41,7 +41,7 @@ Model::Model(const char *name, const char *filename, bool center, Ogre::Vector3 
 	Offset = 0;
 
 	load_error = false;
-	mesh = new MeshObject(object, name, true, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	mesh = new MeshObject(object, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (!mesh->MeshWrapper.get() || !mesh->SceneNode)
 	{
 		load_error = true;

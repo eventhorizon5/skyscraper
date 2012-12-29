@@ -733,7 +733,7 @@ bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool
 	return false;
 }
 
-MeshObject::MeshObject(Object* parent, const char *name, bool movable, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
 	object = new Object();
@@ -742,7 +742,6 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 	enabled = true;
 	mBody = 0;
 	mShape = 0;
-	can_move = movable;
 	SceneNode = 0;
 	Movable = 0;
 	prepared = false;

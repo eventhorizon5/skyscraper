@@ -2113,7 +2113,7 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 
 	int size = (int)FloorIndicatorArray.size();
 	FloorIndicatorArray.resize(size + 1);
-	FloorIndicatorArray[size] = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset, true);
+	FloorIndicatorArray[size] = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray[size]->SetPosition(Origin);
 	return FloorIndicatorArray[size]->object;
 }
@@ -3074,7 +3074,7 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 
 	int index = (int)DirIndicatorArray.size();
 	DirIndicatorArray.resize(index + 1);
-	DirIndicatorArray[index] = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th, true);
+	DirIndicatorArray[index] = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray[index]->SetPosition(Ogre::Vector3(DirIndicatorArray[index]->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), DirIndicatorArray[index]->GetPosition().z));
 	return DirIndicatorArray[index]->object;
 }
