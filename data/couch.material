@@ -1,58 +1,17 @@
-material 1297639103_1_Material3
+material 1356759433_1_<Brown>
 {
   technique
   {
     pass
     {
       ambient 0.0 0.0 0.0
-      diffuse 0.258823529411765 0.188235294117647 0.117647058823529
+      diffuse 0.466666666666667 0.345098039215686 0.211764705882353
       specular 0.0 0.0 0.0 0.0
       emissive 0.0 0.0 0.0
-      // texture size: 154.8125, 98.0323262839879
-      texture_unit
-      {
-        texture data/couch_4_AR-BC260_20070907_121222.jpg
-      }
     }
   }
 }
-material 1297639103_2_side
-{
-  technique
-  {
-    pass
-    {
-      ambient 0.0 0.0 0.0
-      diffuse 0.258823529411765 0.231372549019608 0.2
-      specular 0.0 0.0 0.0 0.0
-      emissive 0.0 0.0 0.0
-      // texture size: 251.0625, 129.117857142857
-      texture_unit
-      {
-        texture data/couch_6_side.jpg
-      }
-    }
-  }
-}
-material 1297639103_3_wood123_v-dark
-{
-  technique
-  {
-    pass
-    {
-      ambient 0.0 0.0 0.0
-      diffuse 0.109803921568627 0.0627450980392157 0.0313725490196078
-      specular 0.0 0.0 0.0 0.0
-      emissive 0.0 0.0 0.0
-      // texture size: 36.0, 36.0
-      texture_unit
-      {
-        texture data/couch_3_wood123_v-dark.jpg
-      }
-    }
-  }
-}
-material 1297639103_4_front_back
+material 1356759433_2_front_back
 {
   technique
   {
@@ -70,20 +29,25 @@ material 1297639103_4_front_back
     }
   }
 }
-material 1297639103_5_<Brown>
+material 1356759433_3_side
 {
   technique
   {
     pass
     {
       ambient 0.0 0.0 0.0
-      diffuse 0.466666666666667 0.345098039215686 0.211764705882353
+      diffuse 0.258823529411765 0.231372549019608 0.2
       specular 0.0 0.0 0.0 0.0
       emissive 0.0 0.0 0.0
+      // texture size: 251.0625, 129.117857142857
+      texture_unit
+      {
+        texture data/couch_6_side.jpg
+      }
     }
   }
 }
-material 1297639103_6_front_left_side
+material 1356759433_4_front_left_side
 {
   technique
   {
@@ -101,7 +65,43 @@ material 1297639103_6_front_left_side
     }
   }
 }
-material 1297639103_SketchupDefault
+material 1356759433_5_Material3
+{
+  technique
+  {
+    pass
+    {
+      ambient 0.0 0.0 0.0
+      diffuse 0.258823529411765 0.188235294117647 0.117647058823529
+      specular 0.0 0.0 0.0 0.0
+      emissive 0.0 0.0 0.0
+      // texture size: 154.8125, 98.0323262839879
+      texture_unit
+      {
+        texture data/couch_4_AR-BC260_20070907_121222.jpg
+      }
+    }
+  }
+}
+material 1356759433_6_wood123_v-dark
+{
+  technique
+  {
+    pass
+    {
+      ambient 0.0 0.0 0.0
+      diffuse 0.109803921568627 0.0627450980392157 0.0313725490196078
+      specular 0.0 0.0 0.0 0.0
+      emissive 0.0 0.0 0.0
+      // texture size: 36.0, 36.0
+      texture_unit
+      {
+        texture data/couch_3_wood123_v-dark.jpg
+      }
+    }
+  }
+}
+material 1356759433_SketchupDefault
 {
   technique
   {

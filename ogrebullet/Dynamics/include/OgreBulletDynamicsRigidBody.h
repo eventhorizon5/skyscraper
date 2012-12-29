@@ -56,7 +56,7 @@ namespace OgreBulletDynamics
 
 	    virtual ~RigidBody();
 
-        void setShape(Ogre::SceneNode *node, Ogre::Vector3 offset,
+        void setShape(Ogre::SceneNode *node,
             OgreBulletCollisions::CollisionShape *shape,
             const float      bodyRestitution,
             const float      bodyFriction,

@@ -72,13 +72,13 @@ namespace OgreBulletCollisions
 		void updateTransform(bool update_pos, bool update_rot, bool set_interpolate);
 
 
-        inline const Ogre::Vector3 getWorldPosition() const {return mRootNode->_getDerivedPosition() - Offset;};
+        inline const Ogre::Vector3 getWorldPosition() const {return mRootNode->_getDerivedPosition();};
 		inline const Ogre::Quaternion &getWorldOrientation() const {return mRootNode->_getDerivedOrientation();};
 
-        inline void setPosition(const Ogre::Vector3 &p) {mRootNode->setPosition (p + Offset);};
+        inline void setPosition(const Ogre::Vector3 &p) {mRootNode->setPosition (p);};
         inline void setOrientation(const Ogre::Quaternion &q)  {return mRootNode->setOrientation (q);};
 
-        inline void setPosition(const Ogre::Real x, const Ogre::Real y, const Ogre::Real z) {mRootNode->setPosition (x + Offset.x, y + Offset.y, z + Offset.z);};
+        inline void setPosition(const Ogre::Real x, const Ogre::Real y, const Ogre::Real z) {mRootNode->setPosition (x, y, z);};
         inline void setOrientation(const Ogre::Real x, const Ogre::Real y, const Ogre::Real z, const Ogre::Real w)  {return mRootNode->setOrientation (x,y,z,w);};
 
         virtual void setPosition(const btVector3 &pos);
@@ -116,7 +116,6 @@ namespace OgreBulletCollisions
         CollisionShape*         mShape;
         DebugCollisionShape *   mDebugShape;
 		bool					is_static;
-		Ogre::Vector3			Offset;
 
     public:
         static const Ogre::String mMovableType;

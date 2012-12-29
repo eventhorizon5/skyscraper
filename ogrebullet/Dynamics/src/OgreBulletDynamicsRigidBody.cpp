@@ -62,7 +62,7 @@ namespace OgreBulletDynamics
 			mShapeNode->detachObject(this);
    }  
     // -------------------------------------------------------------------------
-    void RigidBody::setShape(Ogre::SceneNode *node, Ogre::Vector3 offset, 
+    void RigidBody::setShape(Ogre::SceneNode *node,
         OgreBulletCollisions::CollisionShape *shape,                          
         const float      bodyRestitution,
         const float      bodyFriction,
@@ -76,7 +76,6 @@ namespace OgreBulletDynamics
         can_move = false;
 		is_static = false;
         mRootNode = node;
-        Offset = offset;
 		//mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 
 		//override collision group/mask
@@ -104,7 +103,7 @@ namespace OgreBulletDynamics
    }
 
     // -------------------------------------------------------------------------
-    void RigidBody::setStaticShape(Ogre::SceneNode *node, 
+    void RigidBody::setStaticShape(Ogre::SceneNode *node,
         OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
         const float      bodyFriction,

@@ -76,7 +76,6 @@ namespace OgreBulletCollisions
             mState = new ObjectState(this);
         }
 	gContactAddedCallback = CustomMaterialCombinerCallback;
-	Offset = 0;
     }
     // -------------------------------------------------------------------------
     Object::~Object()
@@ -128,13 +127,13 @@ namespace OgreBulletCollisions
     // -------------------------------------------------------------------------
     void Object::setTransform(const btVector3 &pos, const btQuaternion &quat)
     { 
-        mRootNode->setPosition(pos[0] + Offset.x, pos[1] + Offset.y, pos[2] + Offset.z);
+        mRootNode->setPosition(pos[0], pos[1], pos[2]);
         mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
     }
     // -------------------------------------------------------------------------
     void Object::setPosition(const btVector3 &pos)
     {
-		mRootNode->setPosition(pos[0] + Offset.x, pos[1] + Offset.y, pos[2] + Offset.z);
+		mRootNode->setPosition(pos[0], pos[1], pos[2]);
     }
     // -------------------------------------------------------------------------
     void Object::setOrientation(const btQuaternion &quat)
@@ -145,7 +144,7 @@ namespace OgreBulletCollisions
     void Object::setTransform(const btTransform& worldTrans)
     { 
 		//this sets the node's transformation based on the Bullet collider's world transformation
-        mRootNode->setPosition(worldTrans.getOrigin()[0] + Offset.x, worldTrans.getOrigin()[1] + Offset.y, worldTrans.getOrigin()[2] + Offset.z);
+        mRootNode->setPosition(worldTrans.getOrigin()[0], worldTrans.getOrigin()[1], worldTrans.getOrigin()[2]);
         mRootNode->setOrientation(worldTrans.getRotation().getW(),worldTrans.getRotation().getX(), worldTrans.getRotation().getY(), worldTrans.getRotation().getZ());
     }
     //-----------------------------------------------------------------------
@@ -209,7 +208,7 @@ namespace OgreBulletCollisions
 		Vector3 pos;
 		Quaternion quat;
 		if (update_pos == true)
-			pos = mRootNode->getPosition() - Offset;
+			pos = mRootNode->getPosition();
 		if (update_rot == true)
 			quat = mRootNode->getOrientation();
 

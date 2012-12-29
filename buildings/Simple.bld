@@ -175,7 +175,11 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 <EndFloor>
 
 <Floor 0>
-    AddModel Test, couch.mesh, true, 0, 0, -13, 0, 180, 0, 10000, 1, true, 0.1, 0.5, 0.1
+    AddModel Couch, couch.mesh, true, 0, 0, -13, 0, 180, 0, 10000, 1, true, 0.1, 0.5, 0.1
+<EndFloor>
+
+<Floor 10>
+    AddModel Couch, couch.mesh, true, 0, 0, -13, 0, 180, 0, 10000, 1, true, 0.1, 0.5, 0.1
 <EndFloor>
 
 #Now since the main portion of the building is done, it would be nice to have an elevator.
