@@ -1863,7 +1863,7 @@ void MeshObject::CreateCollider()
 
 	//physics is not supported on triangle meshes; use CreateBoxCollider instead
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	mBody->setStaticShape(SceneNode, Ogre::Vector3::ZERO, shape, 0.1, 0.5, can_move);
 	mShape = shape;
 }
 
@@ -1907,7 +1907,7 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 	std::string name = SceneNode->getName();
 
 	//physics is not supported on triangle meshes; use CreateBoxCollider instead
-	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+	mBody->setStaticShape(SceneNode, Ogre::Vector3::ZERO, shape, 0.1, 0.5, can_move);
 	mShape = shape;
 }
 
@@ -1923,11 +1923,14 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
 	box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
 
+	Ogre::Vector3 center = box.getCenter();
+	center.y = -center.y;
+
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 	if (IsPhysical == false)
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		mBody->setStaticShape(SceneNode, center, shape, 0.1, 0.5, can_move);
 	else
-		mBody->setShape(SceneNode, box.getCenter(), shape, restitution, friction, mass);
+		mBody->setShape(SceneNode, center, shape, restitution, friction, mass);
 	mShape = shape;
 }
 

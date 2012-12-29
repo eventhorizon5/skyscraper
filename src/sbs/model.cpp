@@ -53,7 +53,7 @@ Model::Model(const char *name, const char *filename, bool center, Ogre::Vector3 
 	{
 		Ogre::AxisAlignedBox box = mesh->MeshWrapper.get()->getBounds();
 		Ogre::Vector3 vec = box.getCenter();
-		Offset = Ogre::Vector3(-vec.x, -box.getMinimum().y, -vec.z);
+		Offset = Ogre::Vector3(vec.x, -box.getMinimum().y, -vec.z);
 	}
 	Move(position, false, false, false);
 	SetRotation(rotation);
