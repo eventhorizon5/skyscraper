@@ -1587,17 +1587,20 @@ void Elevator::MoveElevatorToFloor()
 	if (mainsound->IsPlaying() == false && Brakes == false)
 	{
 		//Movement sound
-		if (sbs->Verbose)
-			Report("playing car movement sound");
-
 		if (Direction == 1 && CarUpMoveSound.empty() == false && CarUpMoveSound != "")
 		{
+			if (sbs->Verbose)
+				Report("playing car up movement sound");
+
 			mainsound->Load(CarUpMoveSound.c_str());
 			mainsound->Loop(true);
 			mainsound->Play();
 		}
 		else if (Direction == -1 && CarDownMoveSound.empty() == false && CarDownMoveSound != "")
 		{
+			if (sbs->Verbose)
+				Report("playing car down movement sound");
+
 			mainsound->Load(CarDownMoveSound.c_str());
 			mainsound->Loop(true);
 			mainsound->Play();
@@ -1611,6 +1614,7 @@ void Elevator::MoveElevatorToFloor()
 			//Motor sound
 			if (sbs->Verbose)
 				Report("playing motor up run sound");
+
 			motorsound->Load(MotorUpRunSound.c_str());
 			motorsound->Loop(true);
 			motorsound->Play();
@@ -1620,6 +1624,7 @@ void Elevator::MoveElevatorToFloor()
 			//Motor sound
 			if (sbs->Verbose)
 				Report("playing motor down run sound");
+
 			motorsound->Load(MotorDownRunSound.c_str());
 			motorsound->Loop(true);
 			motorsound->Play();
