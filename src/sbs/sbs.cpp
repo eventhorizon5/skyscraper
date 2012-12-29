@@ -1458,7 +1458,7 @@ void SBS::CreateSky(const char *filenamebase)
 		Ogre::Vector3(-skysize, skysize, -skysize),
 		Ogre::Vector3(skysize, skysize, -skysize),
 		Ogre::Vector3(skysize, skysize, skysize),
-		Ogre::Vector3(-skysize, skysize, skysize), 1, 1, false);
+		Ogre::Vector3(-skysize, skysize, skysize), 1, -1, false);
 
 	sbs->ResetTextureMapping();
 	delete wall;
