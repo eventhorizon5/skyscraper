@@ -1968,8 +1968,8 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddFloor Roof, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, True
 
     #Antennae
-    CreateWallBox2 External, Left Antenna, Concrete, 0, -40, 4, 4, 300, 0, 0, 25, false, true, true, false
-    CreateWallBox2 External, Right Antenna, Concrete, 0, 40, 4, 4, 300, 0, 0, 25, false, true, true, false
+    CreateWallBox2 External, Left Antenna, Concrete, 0, -40, 4, 4, 300, 0, 0, 0, false, true, true, false
+    CreateWallBox2 External, Right Antenna, Concrete, 0, 40, 4, 4, 300, 0, 0, 0, false, true, true, false
 
     #Penthouse Floor
     FloorOrientation = top
