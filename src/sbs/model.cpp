@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model::Model(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//loads a 3D model into the simulation
 
@@ -38,6 +38,7 @@ Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogr
 	object = new Object();
 	object->SetValues(this, sbs->object, "Model", name, false);
 	Origin = position;
+	Offset = 0;
 
 	load_error = false;
 	mesh = new MeshObject(object, name, true, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -48,6 +49,12 @@ Model::Model(const char *name, const char *filename, Ogre::Vector3 position, Ogr
 	}
 	sbs->AddModelHandle(this);
 
+	if (center == true)
+	{
+		Ogre::AxisAlignedBox box = mesh->MeshWrapper.get()->getBounds();
+		Ogre::Vector3 vec = box.getCenter();
+		Offset = Ogre::Vector3(-vec.x, -box.getMinimum().y, -vec.z);
+	}
 	Move(position, false, false, false);
 	SetRotation(rotation);
 }
@@ -65,12 +72,12 @@ Model::~Model()
 void Model::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//mesh->Move(position, relative_x, relative_y, relative_z, Origin);
-	mesh->Move(position, relative_x, relative_y, relative_z);
+	mesh->Move(position, relative_x, relative_y, relative_z, Offset);
 }
 
 Ogre::Vector3 Model::GetPosition()
 {
-	return mesh->GetPosition();
+	return mesh->GetPosition() - Offset;
 }
 
 void Model::SetRotation(const Ogre::Vector3 rotation)

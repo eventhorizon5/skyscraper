@@ -181,7 +181,7 @@ Elevator::Elevator(int number)
 	buffer.insert(0, "Elevator ");
 	TrimString(buffer);
 	object->SetName(buffer.c_str());
-	ElevatorMesh = new MeshObject(object, buffer.c_str(), true);
+	ElevatorMesh = new MeshObject(object, buffer.c_str());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -4420,10 +4420,10 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 	return light->object;
 }
 
-Object* Elevator::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Object* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(name, filename, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(name, filename, center, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

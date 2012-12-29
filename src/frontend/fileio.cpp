@@ -2128,25 +2128,47 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params != 14)
+		if (params < 14 || params > 15)
 			return ScriptError("Incorrect number of parameters");
 
+		bool compat = false;
+		if (params == 14)
+			compat = true;
+
 		//check numeric values
-		for (int i = 2; i <= 3; i++)
+		if (compat == true)
 		{
-			if (i == 10)
-				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			for (int i = 2; i <= 13; i++)
+			{
+				if (i == 10)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+		else
+		{
+			for (int i = 3; i <= 14; i++)
+			{
+				if (i == 11)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
 		}
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		StoreCommand(Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		if (compat == true)
+			StoreCommand(Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		else
+			StoreCommand(Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
 	}
 
 	//AddAction command
@@ -3428,25 +3450,47 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params != 14)
+		if (params < 14 || params > 15)
 			return ScriptError("Incorrect number of parameters");
 
+		bool compat = false;
+		if (params == 14)
+			compat = true;
+
 		//check numeric values
-		for (int i = 2; i <= 13; i++)
+		if (compat == true)
 		{
-			if (i == 10)
-				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			for (int i = 2; i <= 13; i++)
+			{
+				if (i == 10)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+		else
+		{
+			for (int i = 3; i <= 14; i++)
+			{
+				if (i == 11)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
 		}
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		StoreCommand(floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		if (compat == true)
+			StoreCommand(floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		else
+			StoreCommand(floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
 	}
 
 	//AddStairsModel command
@@ -3455,18 +3499,37 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
 
-		if (params != 15)
+		if (params < 15 || params > 16)
 			return ScriptError("Incorrect number of parameters");
 
+		bool compat = false;
+		if (params == 15)
+			compat = true;
+
 		//check numeric values
-		for (int i = 3; i <= 14; i++)
+		if (compat == true)
 		{
-			if (i == 11)
-				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			for (int i = 3; i <= 14; i++)
+			{
+				if (i == 11)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+		else
+		{
+			for (int i = 4; i <= 15; i++)
+			{
+				if (i == 12)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
 		}
 
 		//check to see if file exists
@@ -3474,7 +3537,12 @@ int ScriptProcessor::ProcFloors()
 
 		//create model
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
-			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
+		{
+			if (compat == true)
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
+			else
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::Vector3(atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str())));
+		}
 		else
 			return ScriptError("Invalid stairwell");
 	}
@@ -3485,18 +3553,37 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
-		if (params != 15)
+		if (params < 15 || params > 16)
 			return ScriptError("Incorrect number of parameters");
 
+		bool compat = false;
+		if (params == 15)
+			compat = true;
+
 		//check numeric values
-		for (int i = 3; i <= 14; i++)
+		if (compat == true)
 		{
-			if (i == 11)
-				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			for (int i = 3; i <= 14; i++)
+			{
+				if (i == 11)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+		else
+		{
+			for (int i = 4; i <= 15; i++)
+			{
+				if (i == 12)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
 		}
 
 		//check to see if file exists
@@ -3504,7 +3591,12 @@ int ScriptProcessor::ProcFloors()
 
 		//create model
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
-			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
+		{
+			if (compat == true)
+				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
+			else
+				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::Vector3(atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str())));
+		}
 		else
 			return ScriptError("Invalid shaft");
 	}
@@ -5702,25 +5794,47 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params != 14)
+		if (params < 14 || params > 15)
 			return ScriptError("Incorrect number of parameters");
 
+		bool compat = false;
+		if (params == 14)
+			compat = true;
+
 		//check numeric values
-		for (int i = 2; i <= 13; i++)
+		if (compat == true)
 		{
-			if (i == 10)
-				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			for (int i = 2; i <= 13; i++)
+			{
+				if (i == 10)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+		else
+		{
+			for (int i = 3; i <= 14; i++)
+			{
+				if (i == 11)
+					i++;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
 		}
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		StoreCommand(elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		if (compat == true)
+			StoreCommand(elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		else
+			StoreCommand(elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
 	}
 
 	//AddActionControl command

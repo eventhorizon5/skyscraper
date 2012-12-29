@@ -240,6 +240,13 @@ int Sound::GetSpeed()
 
 void Sound::Stop()
 {
+	if (sbs->Verbose == true)
+	{
+		char intbuffer[65];
+		std::string objectnum = _itoa(object->GetNumber(), intbuffer, 10);
+		sbs->Report("Stopping sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
+	}
+
 	if (channel)
 		channel->stop();
 }
@@ -257,6 +264,13 @@ bool Sound::IsValid()
 
 void Sound::Play(bool reset)
 {
+	if (sbs->Verbose == true)
+	{
+		char intbuffer[65];
+		std::string objectnum = _itoa(object->GetNumber(), intbuffer, 10);
+		sbs->Report("Playing sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
+	}
+
 	if (!IsValid())
 	{
 		//prepare sound (and keep paused)

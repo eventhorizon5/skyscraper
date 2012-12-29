@@ -47,7 +47,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	std::string buffer = Ogre::StringConverter::toString(elevator);
 	object->SetName(std::string("Floor Indicator " + buffer).c_str());
 	TrimString(buffer);
-	FloorIndicatorMesh = new MeshObject(object, buffer.c_str(), movable, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	FloorIndicatorMesh = new MeshObject(object, buffer.c_str(), false, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
 	std::string tmpdirection = direction;

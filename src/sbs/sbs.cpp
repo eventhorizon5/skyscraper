@@ -3151,10 +3151,10 @@ MeshObject* SBS::FindMeshObject(std::string name)
 	return 0;
 }
 
-Object* SBS::AddModel(const char *name, const char *filename, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Object* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(name, filename, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -3355,11 +3355,6 @@ Action* SBS::AddAction(const std::string name, Object* action_parent, const std:
 {
 	//add a global action
 
-	//return action object if it already exists
-	std::vector<Action*> actionlist = GetAction(name);
-	if (actionlist.size() > 0)
-		return 0;
-
 	Action *action = new Action(name, action_parent, command, parameters);
 	ActionArray.push_back(action);
 	return action;
@@ -3368,11 +3363,6 @@ Action* SBS::AddAction(const std::string name, Object* action_parent, const std:
 Action* SBS::AddAction(const std::string name, Object* action_parent, const std::string &command)
 {
 	//add a global action
-
-	//exit if action already exists
-	std::vector<Action*> actionlist = GetAction(name);
-	if (actionlist.size() > 0)
-		return 0;
 
 	Action *action = new Action(name, action_parent, command);
 	ActionArray.push_back(action);

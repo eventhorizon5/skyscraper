@@ -62,7 +62,7 @@ namespace OgreBulletDynamics
 			mShapeNode->detachObject(this);
    }  
     // -------------------------------------------------------------------------
-    void RigidBody::setShape(Ogre::SceneNode *node,  
+    void RigidBody::setShape(Ogre::SceneNode *node, Ogre::Vector3 offset, 
         OgreBulletCollisions::CollisionShape *shape,                          
         const float      bodyRestitution,
         const float      bodyFriction,
@@ -72,10 +72,12 @@ namespace OgreBulletDynamics
 
         mState = new ObjectState(this);
 
-		can_move = true;
+		//can_move = true;
+        can_move = false;
 		is_static = false;
         mRootNode = node;
-		mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
+        Offset = offset;
+		//mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 
 		//override collision group/mask
 		mCollisionGroup = btBroadphaseProxy::DefaultFilter;
@@ -94,11 +96,12 @@ namespace OgreBulletDynamics
 
         mObject = body;
 		mObject->setContactProcessingThreshold(0); //eliminates bouncing when moving over interior mesh triangles
+
 		updateTransform(true, true, true);
 
 		if (add == true)
 			addToWorld();
-    }
+   }
 
     // -------------------------------------------------------------------------
     void RigidBody::setStaticShape(Ogre::SceneNode *node, 

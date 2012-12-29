@@ -844,7 +844,7 @@ MeshObject::MeshObject(Object* parent, const char *name, bool movable, const cha
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error loading collider model " + colname2 + "\n" + e.getDescription());
+			sbs->ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
 		}
 	}
 
@@ -1861,11 +1861,9 @@ void MeshObject::CreateCollider()
 	shape->Finish();
 	std::string name = MeshWrapper->getName();
 
+	//physics is not supported on triangle meshes; use CreateBoxCollider instead
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	if (IsPhysical == false)
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
-	else
-		mBody->setShape(SceneNode, shape, restitution, friction, mass);
+	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
 	mShape = shape;
 }
 
@@ -1908,11 +1906,8 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 	shape->Finish();
 	std::string name = SceneNode->getName();
 
-	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	if (IsPhysical == false)
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
-	else
-		mBody->setShape(SceneNode, shape, restitution, friction, mass);
+	//physics is not supported on triangle meshes; use CreateBoxCollider instead
+	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
 	mShape = shape;
 }
 
@@ -1921,56 +1916,18 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	//set up a box collider for full extents of a mesh
 
 	//initialize collider shape
+	Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
+	OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
+	std::string name = SceneNode->getName();
+
 	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
 	box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
 
-	//initialize collider shape
-	int vertex_count = 8;
-	int index_count = 36;
-	OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vertex_count, index_count);
-
-	Ogre::Vector3 *vertices = new Ogre::Vector3[vertex_count];
-	vertices[0] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_LEFT_TOP));
-	vertices[1] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_RIGHT_TOP));
-	vertices[2] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_RIGHT_BOTTOM));
-	vertices[3] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::NEAR_LEFT_BOTTOM));
-	vertices[4] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_LEFT_TOP));
-	vertices[5] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_RIGHT_TOP));
-	vertices[6] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_RIGHT_BOTTOM));
-	vertices[7] = Ogre::Vector3(box.getCorner(Ogre::AxisAlignedBox::FAR_LEFT_BOTTOM));
-
-	//add vertices to shape
-	shape->AddTriangle(vertices[0], vertices[2], vertices[3]);
-	shape->AddTriangle(vertices[1], vertices[2], vertices[0]);
-
-	shape->AddTriangle(vertices[4], vertices[1], vertices[0]);
-	shape->AddTriangle(vertices[5], vertices[1], vertices[4]);
-
-	shape->AddTriangle(vertices[7], vertices[2], vertices[3]);
-	shape->AddTriangle(vertices[6], vertices[2], vertices[7]);
-
-	shape->AddTriangle(vertices[4], vertices[6], vertices[7]);
-	shape->AddTriangle(vertices[5], vertices[6], vertices[4]);
-
-	shape->AddTriangle(vertices[1], vertices[6], vertices[2]);
-	shape->AddTriangle(vertices[5], vertices[6], vertices[1]);
-
-	shape->AddTriangle(vertices[4], vertices[3], vertices[7]);
-	shape->AddTriangle(vertices[0], vertices[3], vertices[4]);
-
-	delete [] vertices;
-	vertices = 0;
-
-	//finalize shape
-	shape->Finish();
-	std::string name = SceneNode->getName();
-
 	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 	if (IsPhysical == false)
-		//mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
-		mBody->setStaticShape(SceneNode, shape, 0.0, 0.5, can_move);
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
 	else
-		mBody->setShape(SceneNode, shape, restitution, friction, mass);
+		mBody->setShape(SceneNode, box.getCenter(), shape, restitution, friction, mass);
 	mShape = shape;
 }
 

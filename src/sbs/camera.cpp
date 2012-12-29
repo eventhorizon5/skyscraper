@@ -704,7 +704,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	if (meshname.find("Control") != -1)
 	{
 		//user clicked on a control object
-		Object *obj = sbs->GetObject(object_number);
 		if (obj)
 		{
 			if (obj->GetParent())

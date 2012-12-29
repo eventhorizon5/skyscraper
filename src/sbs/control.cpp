@@ -42,6 +42,9 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	std::string objnum = Ogre::StringConverter::toString(object->GetNumber());
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
+	std::string Name2 = Name;
+	if (Name.find("Control", 0) == -1)
+		Name2 = "Control " + Name;
 
 	Actions = action_names;
 	Direction = direction;
@@ -50,7 +53,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	current_position = 1;
 
 	//create object mesh
-	ControlMesh = new MeshObject(object, name, true, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(object, Name2.c_str(), false, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	sbs->TexelOverride = true;
 	WallObject *wall;
@@ -58,31 +61,31 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
 		sbs->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
 		sbs->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, Name.c_str(), textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	sbs->TexelOverride = false;
 
 	//create sound object
-	sound = new Sound(this->object, "Control", true);
+	sound = new Sound(this->object, name, true);
 	sound->Load(sound_file);
 }
 

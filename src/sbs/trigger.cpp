@@ -50,7 +50,7 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre:
 	IsInside = false;
 
 	//create sound object
-	sound = new Sound(this->object, "Trigger", true);
+	sound = new Sound(this->object, name, true);
 	sound->Load(sound_file);
 }
 
@@ -278,6 +278,16 @@ bool Trigger::Check()
 
 	if (changed == true)
 	{
+		if (sbs->Verbose == true)
+		{
+			char intbuffer[65];
+			std::string objectnum = _itoa(object->GetNumber(), intbuffer, 10);
+			if (IsInside == true)
+				sbs->Report("Inside trigger area '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
+			else
+				sbs->Report("Outside trigger area '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
+		}
+
 		//play sound
 		PlaySound();
 

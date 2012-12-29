@@ -1121,35 +1121,43 @@ size="2">FinishShaftDoor<em>elevator, number</em></font></p>
 the elevator section below - see that for more information) except that it's
 used for finishing a shaft door.</p>
 
-<p align="left"><strong>26. AddModel</strong> - adds a 3D model to the floor.
-The model's textures/materials must be defined in a separate ".material" file,
-and a separate collider mesh ".collider" will be loaded. If a collider mesh
-isn't available, a simple box collider will be created.<br>
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>26.
+AddModel</strong> - adds a 3D model to the floor. The model's
+textures/materials must be defined in a separate ".material" file, and a
+separate collider mesh ".collider" will be loaded. If a collider mesh isn't
+available, a simple box collider will be created.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em>name,
-filename, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
+filename, center, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
 MaxRenderDistance, ScaleMultiplier, EnablePhysics, Restitution, Friction,
 Mass</em><em><br>
 </em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
-MyModel, cube.mesh, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
+MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font><br>
+Example:<font face="Courier New, Courier, mono" size="2">AddModel MyModel,
+cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
 
-<p align="left">The CenterY value is relative to the current floor's base.
-MaxRenderDistance determines the maximum distance in feet that the object will
-be shown (0 means unlimited). ScaleMultiplier allows you to change the size of
-the object during the load - for example, set to 2 to double the size. Models
-are in the OGRE native mesh format. In the example, the material/texture file
-is cube.material, and the optional collider mesh file is cube.collider.
-EnablePhysics enables Bullet physics on the object, and Restitution, Friction
-and Mass determine the physical properties of the object.</p>
+<p></p>
+
+<p align="left">The Center value is either true or false, and determines if the
+loaded model should be automatically centered, otherwise the exact mesh
+positioning in the model file will be used. The CenterY value is relative to
+the current floor's base. MaxRenderDistance determines the maximum distance in
+feet that the object will be shown (0 means unlimited). ScaleMultiplier allows
+you to change the size of the object during the load - for example, set to 2 to
+double the size. Models are in the OGRE native mesh format. In the example, the
+material/texture file is cube.material, and the optional collider mesh file is
+cube.collider. EnablePhysics enables Bullet physics on the object (physics will
+only work if you don't provide a collider mesh), and Restitution, Friction and
+Mass determine the physical properties of the object.</p>
 
 <p align="left"><strong>27. AddStairsModel</strong> - adds a 3D model to the
 specified stairwell, on the current floor. See the AddModel command above for
 parameter information.<br>
 Syntax: <font face="Courier New, Courier, mono"
-size="2">AddStairsModel<em>number, name, filename, CenterX, CenterY, CenterZ,
-RotationX, RotationY, RotationZ, MaxRenderDistance, ScaleMultiplier,
+size="2">AddStairsModel<em>number, name, filename, center, CenterX, CenterY,
+CenterZ, RotationX, RotationY, RotationZ, MaxRenderDistance, ScaleMultiplier,
 EnablePhysics, Restitution, Friction, Mass</em><em><br>
 </em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
-1, MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
+1, MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
 <p align="left">The CenterY value is relative to the current floor's altitude.
 </p>
@@ -1158,11 +1166,11 @@ EnablePhysics, Restitution, Friction, Mass</em><em><br>
 specified shaft, on the current floor. See the AddModel command above for
 parameter information.<br>
 Syntax: <font face="Courier New, Courier, mono"
-size="2">AddShaftModel<em>number, name, filename, CenterX, CenterY, CenterZ,
-RotationX, RotationY, RotationZ, MaxRenderDistance, ScaleMultiplier,
+size="2">AddShaftModel<em>number, name, filename, center, CenterX, CenterY,
+CenterZ, RotationX, RotationY, RotationZ, MaxRenderDistance, ScaleMultiplier,
 EnablePhysics, Restitution, Friction, Mass</em><em><br>
 </em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
-1, MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
+1, MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
 <p align="left">The CenterY value is relative to the current floor's altitude.
 </p>
@@ -2102,20 +2110,23 @@ The model's textures/materials must be defined in a separate ".material" file,
 and a separate collider mesh ".collider" will be loaded. If a collider mesh
 isn't available, a simple box collider will be created.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em>name,
-filename, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
+filename, center, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
 MaxRenderDistance, ScaleMultiplier, EnablePhysics, Restitution, Friction,
 Mass</em><em><br>
 </em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
-MyModel, cube.dae, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
+MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
-<p align="left">The CenterY value is relative to the current floor's base.
-MaxRenderDistance determines the maximum distance in feet that the object will
-be shown (0 means unlimited). ScaleMultiplier allows you to change the size of
-the object during the load - for example, set to 2 to double the size. Models
-are in the OGRE native mesh format. In the example, the material/texture file
-is cube.material, and the optional collider mesh file is cube.collider.
-EnablePhysics enables Bullet physics on the object, and Restitution, Friction
-and Mass determine the physical properties of the object.</p>
+<p align="left">The Center value is either true or false, and determines if the
+loaded model should be automatically centered, otherwise the exact mesh
+positioning in the model file will be used. The CenterY value is relative to
+the current floor's base. MaxRenderDistance determines the maximum distance in
+feet that the object will be shown (0 means unlimited). ScaleMultiplier allows
+you to change the size of the object during the load - for example, set to 2 to
+double the size. Models are in the OGRE native mesh format. In the example, the
+material/texture file is cube.material, and the optional collider mesh file is
+cube.collider. EnablePhysics enables Bullet physics on the object, and
+Restitution, Friction and Mass determine the physical properties of the
+object.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>21.
 AddActionControl</strong> - creates a custom control that uses a specific
