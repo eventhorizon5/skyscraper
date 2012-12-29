@@ -274,16 +274,14 @@ DirectionalIndicator::~DirectionalIndicator()
 	DirectionalMeshDown = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false && object->parent_deleting == false)
 	{
-		if (object->parent_deleting == false)
-		{
-			if (std::string(object->GetParent()->GetType()) == "Elevator")
-				((Elevator*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
-			if (std::string(object->GetParent()->GetType()) == "Floor")
-				((Floor*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
-		}
+		if (std::string(object->GetParent()->GetType()) == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
+		if (std::string(object->GetParent()->GetType()) == "Floor")
+			((Floor*)object->GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
 	}
+
 	delete object;
 }
 

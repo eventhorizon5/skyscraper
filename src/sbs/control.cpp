@@ -104,13 +104,20 @@ Control::~Control()
 	ControlMesh = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false && object->parent_deleting == false)
 	{
-		if (object->parent_deleting == false)
-		{
-			if (std::string(object->GetParent()->GetType()) == "ButtonPanel")
-				((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
-		}
+		if (std::string(object->GetParent()->GetType()) == "ButtonPanel")
+			((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
+		if (std::string(object->GetParent()->GetType()) == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->RemoveControl(this);
+		if (std::string(object->GetParent()->GetType()) == "Floor")
+			((Floor*)object->GetParent()->GetRawObject())->RemoveControl(this);
+		if (std::string(object->GetParent()->GetType()) == "Shaft")
+			((Shaft*)object->GetParent()->GetRawObject())->RemoveControl(this);
+		if (std::string(object->GetParent()->GetType()) == "Stairs")
+			((Stairs*)object->GetParent()->GetRawObject())->RemoveControl(this);
+		if (std::string(object->GetParent()->GetType()) == "SBS")
+			sbs->RemoveControl(this);
 	}
 
 	delete object;

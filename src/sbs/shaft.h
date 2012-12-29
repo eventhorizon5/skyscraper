@@ -69,6 +69,10 @@ public:
 	bool IsValidFloor(int floor);
 	void AddElevator(int number);
 	void RemoveElevator(int number);
+	void RemoveLight(Light *light);
+	void RemoveModel(Model *model);
+	void RemoveControl(Control *control);
+	void RemoveTrigger(Trigger *trigger);
 	MeshObject* GetMeshObject(int floor);
 	void Report(std::string message);
 	bool ReportError(std::string message);

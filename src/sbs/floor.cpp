@@ -83,7 +83,10 @@ Floor::~Floor()
 	for (int i = 0; i < (int)ControlArray.size(); i++)
 	{
 		if (ControlArray[i])
+		{
+			ControlArray[i]->object->parent_deleting = true;
 			delete ControlArray[i];
+		}
 		ControlArray[i] = 0;
 	}
 
@@ -91,7 +94,10 @@ Floor::~Floor()
 	for (int i = 0; i < (int)TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
+		{
+			TriggerArray[i]->object->parent_deleting = true;
 			delete TriggerArray[i];
+		}
 		TriggerArray[i] = 0;
 	}
 
@@ -99,7 +105,10 @@ Floor::~Floor()
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
+		{
+			ModelArray[i]->object->parent_deleting = true;
 			delete ModelArray[i];
+		}
 		ModelArray[i] = 0;
 	}
 
@@ -107,7 +116,10 @@ Floor::~Floor()
 	for (int i = 0; i < (int)lights.size(); i++)
 	{
 		if (lights[i])
+		{
+			lights[i]->object->parent_deleting = true;
 			delete lights[i];
+		}
 		lights[i] = 0;
 	}
 
@@ -183,11 +195,8 @@ Floor::~Floor()
 	ColumnFrame = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false)
-	{
-		if (object->parent_deleting == false)
-			sbs->RemoveFloor(this);
-	}
+	if (sbs->FastDelete == false && object->parent_deleting == false)
+		sbs->RemoveFloor(this);
 
 	delete object;
 }
@@ -1046,7 +1055,10 @@ void Floor::RemoveCallButton(CallButton *callbutton)
 	for (int i = 0; i < (int)CallButtonArray.size(); i++)
 	{
 		if (CallButtonArray[i] == callbutton)
+		{
 			CallButtonArray.erase(CallButtonArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -1057,7 +1069,10 @@ void Floor::RemoveFloorIndicator(FloorIndicator *indicator)
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i] == indicator)
+		{
 			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -1068,7 +1083,10 @@ void Floor::RemoveDirectionalIndicator(DirectionalIndicator *indicator)
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i] == indicator)
+		{
 			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -1079,7 +1097,10 @@ void Floor::RemoveDoor(Door *door)
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
 		if (DoorArray[i] == door)
+		{
 			DoorArray.erase(DoorArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -1090,7 +1111,62 @@ void Floor::RemoveSound(Sound *sound)
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
+		{
 			sounds.erase(sounds.begin() + i);
+			return;
+		}
+	}
+}
+
+void Floor::RemoveLight(Light *light)
+{
+	//remove a light reference (does not delete the object itself)
+	for (int i = 0; i < (int)lights.size(); i++)
+	{
+		if (lights[i] == light)
+		{
+			lights.erase(lights.begin() + i);
+			return;
+		}
+	}
+}
+
+void Floor::RemoveModel(Model *model)
+{
+	//remove a model reference (does not delete the object itself)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+		{
+			ModelArray.erase(ModelArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Floor::RemoveControl(Control *control)
+{
+	//remove a control reference (does not delete the object itself)
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		if (ControlArray[i] == control)
+		{
+			ControlArray.erase(ControlArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Floor::RemoveTrigger(Trigger *trigger)
+{
+	//remove a trigger reference (does not delete the object itself)
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i] == trigger)
+		{
+			TriggerArray.erase(TriggerArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -1098,7 +1174,7 @@ Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre
 {
 	//add a light
 
-	Light* light = new Light(name, type, position + Ogre::Vector3(0, GetBase(), 0), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(object, name, type, position + Ogre::Vector3(0, GetBase(), 0), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light->object;
 }
@@ -1106,7 +1182,7 @@ Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre
 Object* Floor::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(name, filename, center, position + Ogre::Vector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

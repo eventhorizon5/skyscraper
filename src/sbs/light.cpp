@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Light::Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light::Light(Object *parent, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//creates a light object
 
@@ -42,7 +42,7 @@ Light::Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 d
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Light", name, false);
+	object->SetValues(this, parent, "Light", name, false);
 
 	Type = type;
 	Name = name;
@@ -70,17 +70,27 @@ Light::Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 d
 	{
 		sbs->ReportError("Error creating light:\n" + e.getDescription());
 	}
-
-	sbs->AddLightHandle(this);
 }
 
 Light::~Light()
 {
-	if (sbs->FastDelete == false)
+	sbs->mSceneManager->destroyLight(Name);
+
+	//unregister from parent
+	if (sbs->FastDelete == false && object->parent_deleting == false)
 	{
-		sbs->mSceneManager->destroyLight(Name);
-		sbs->DeleteLightHandle(this);
+		if (std::string(object->GetParent()->GetType()) == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(object->GetParent()->GetType()) == "Floor")
+			((Floor*)object->GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(object->GetParent()->GetType()) == "Shaft")
+			((Shaft*)object->GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(object->GetParent()->GetType()) == "Stairs")
+			((Stairs*)object->GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(object->GetParent()->GetType()) == "SBS")
+			sbs->RemoveLight(this);
 	}
+
 	delete object;
 }
 

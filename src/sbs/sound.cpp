@@ -66,14 +66,17 @@ Sound::~Sound()
 	}
 
 	//unregister from parent
-	if (object->parent_deleting == false)
+	if (sbs->FastDelete == false)
 	{
-		if (std::string(object->GetParent()->GetType()) == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->RemoveSound(this);
-		if (std::string(object->GetParent()->GetType()) == "Floor")
-			((Floor*)object->GetParent()->GetRawObject())->RemoveSound(this);
-		if (std::string(object->GetParent()->GetType()) == "SBS")
-			sbs->RemoveSound(this);
+		if (object->parent_deleting == false)
+		{
+			if (std::string(object->GetParent()->GetType()) == "Elevator")
+				((Elevator*)object->GetParent()->GetRawObject())->RemoveSound(this);
+			if (std::string(object->GetParent()->GetType()) == "Floor")
+				((Floor*)object->GetParent()->GetRawObject())->RemoveSound(this);
+			if (std::string(object->GetParent()->GetType()) == "SBS")
+				sbs->RemoveSound(this);
+		}
 	}
 
 	//destructor

@@ -66,6 +66,10 @@ public:
 	void Report(std::string message);
 	bool ReportError(std::string message);
 	void RemoveDoor(Door *door);
+	void RemoveLight(Light *light);
+	void RemoveModel(Model *model);
+	void RemoveControl(Control *control);
+	void RemoveTrigger(Trigger *trigger);
 	Object* AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	MeshObject* GetMeshObject(int floor);
 	Object* AddModel(int floor, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);

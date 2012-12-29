@@ -293,16 +293,16 @@ public:
 	void RemoveShaft(Shaft *shaft);
 	void RemoveStairs(Stairs *stairs);
 	void RemoveSound(Sound *sound);
+	void RemoveLight(Light *light);
+	void RemoveModel(Model *model);
+	void RemoveControl(Control *control);
+	void RemoveTrigger(Trigger *trigger);
 	std::string VerifyFile(const char *filename);
 	bool FileExists(const char *filename);
 	int GetWallCount();
 	int GetPolygonCount();
-	void AddLightHandle(Light* handle);
-	void DeleteLightHandle(Light* handle);
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
-	void AddModelHandle(Model* handle);
-	void DeleteModelHandle(Model* handle);
 	void Prepare();
 	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	MeshObject* FindMeshObject(Ogre::MeshPtr meshwrapper);
@@ -477,9 +477,6 @@ private:
 	//floor auto area array
 	std::vector<AutoArea> FloorAutoArea;
 
-	//all lights
-	std::vector<Light*> all_lights;
-
 	//global lights
 	std::vector<Light*> lights;
 
@@ -502,9 +499,6 @@ private:
 
 	//global models
 	std::vector<Model*> ModelArray;
-
-	//all models
-	std::vector<Model*> all_models;
 
 	//global controls
 	std::vector<Control*> ControlArray;

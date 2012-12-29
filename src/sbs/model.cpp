@@ -30,13 +30,13 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Model::Model(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model::Model(Object *parent, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//loads a 3D model into the simulation
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->object, "Model", name, false);
+	object->SetValues(this, parent, "Model", name, false);
 	Origin = position;
 	Offset = 0;
 
@@ -47,7 +47,6 @@ Model::Model(const char *name, const char *filename, bool center, Ogre::Vector3 
 		load_error = true;
 		return;
 	}
-	sbs->AddModelHandle(this);
 
 	if (center == true)
 	{
@@ -61,11 +60,25 @@ Model::Model(const char *name, const char *filename, bool center, Ogre::Vector3 
 
 Model::~Model()
 {
-	if (sbs->FastDelete == false)
-		sbs->DeleteModelHandle(this);
 	if (mesh)
 		delete mesh;
 	mesh = 0;
+
+	//unregister from parent
+	if (sbs->FastDelete == false && object->parent_deleting == false)
+	{
+		if (std::string(object->GetParent()->GetType()) == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(object->GetParent()->GetType()) == "Floor")
+			((Floor*)object->GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(object->GetParent()->GetType()) == "Shaft")
+			((Shaft*)object->GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(object->GetParent()->GetType()) == "Stairs")
+			((Stairs*)object->GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(object->GetParent()->GetType()) == "SBS")
+			sbs->RemoveModel(this);
+	}
+
 	delete object;
 }
 

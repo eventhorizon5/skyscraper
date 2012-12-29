@@ -64,14 +64,22 @@ Trigger::~Trigger()
 	sound = 0;
 
 	//unregister from parent
-	/*if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false)
 	{
 		if (object->parent_deleting == false)
 		{
-			if (std::string(object->GetParent()->GetType()) == "ButtonPanel")
-				((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(object->GetParent()->GetType()) == "Elevator")
+				((Elevator*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(object->GetParent()->GetType()) == "Floor")
+				((Floor*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(object->GetParent()->GetType()) == "Shaft")
+				((Shaft*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(object->GetParent()->GetType()) == "Stairs")
+				((Stairs*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(object->GetParent()->GetType()) == "SBS")
+				sbs->RemoveTrigger(this);
 		}
-	}*/
+	}
 
 	delete object;
 }

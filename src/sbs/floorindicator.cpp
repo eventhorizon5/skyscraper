@@ -81,16 +81,14 @@ FloorIndicator::~FloorIndicator()
 	FloorIndicatorMesh = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false && object->parent_deleting == false)
 	{
-		if (object->parent_deleting == false)
-		{
-			if (std::string(object->GetParent()->GetType()) == "Elevator")
-				((Elevator*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
-			if (std::string(object->GetParent()->GetType()) == "Floor")
-				((Floor*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
-		}
+		if (std::string(object->GetParent()->GetType()) == "Elevator")
+			((Elevator*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
+		if (std::string(object->GetParent()->GetType()) == "Floor")
+			((Floor*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
 	}
+
 	delete object;
 }
 

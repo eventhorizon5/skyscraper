@@ -36,7 +36,7 @@ public:
 	Ogre::Vector3 Origin;
 
 	//functions
-	Light(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
+	Light(Object *parent, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	~Light();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	Ogre::Vector3 GetPosition();

@@ -193,7 +193,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < (int)ControlArray.size(); i++)
 	{
 		if (ControlArray[i])
+		{
+			ControlArray[i]->object->parent_deleting = true;
 			delete ControlArray[i];
+		}
 		ControlArray[i] = 0;
 	}
 
@@ -201,7 +204,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < (int)TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
+		{
+			TriggerArray[i]->object->parent_deleting = true;
 			delete TriggerArray[i];
+		}
 		TriggerArray[i] = 0;
 	}
 
@@ -209,7 +215,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
+		{
+			ModelArray[i]->object->parent_deleting = true;
 			delete ModelArray[i];
+		}
 		ModelArray[i] = 0;
 	}
 
@@ -217,7 +226,10 @@ Elevator::~Elevator()
 	for (int i = 0; i < (int)lights.size(); i++)
 	{
 		if (lights[i])
+		{
+			lights[i]->object->parent_deleting = true;
 			delete lights[i];
+		}
 		lights[i] = 0;
 	}
 
@@ -410,11 +422,9 @@ Elevator::~Elevator()
 	ElevatorMesh = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false)
-	{
-		if (object->parent_deleting == false)
-			sbs->RemoveElevator(this);
-	}
+	if (sbs->FastDelete == false && object->parent_deleting == false)
+		sbs->RemoveElevator(this);
+
 	delete object;
 }
 
@@ -4151,7 +4161,10 @@ void Elevator::RemovePanel(ButtonPanel* panel)
 	for (int i = 0; i < (int)PanelArray.size(); i++)
 	{
 		if (PanelArray[i] == panel)
+		{
 			PanelArray.erase(PanelArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -4161,7 +4174,10 @@ void Elevator::RemoveDirectionalIndicator(DirectionalIndicator* indicator)
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
 		if (DirIndicatorArray[i] == indicator)
+		{
 			DirIndicatorArray.erase(DirIndicatorArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -4171,7 +4187,10 @@ void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
 		if (DoorArray[i] == door)
+		{
 			DoorArray.erase(DoorArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -4181,7 +4200,10 @@ void Elevator::RemoveFloorIndicator(FloorIndicator* indicator)
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i] == indicator)
+		{
 			FloorIndicatorArray.erase(FloorIndicatorArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -4191,7 +4213,10 @@ void Elevator::RemoveDoor(Door* door)
 	for (int i = 0; i < (int)StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i] == door)
+		{
 			StdDoorArray.erase(StdDoorArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -4201,7 +4226,62 @@ void Elevator::RemoveSound(Sound *sound)
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i] == sound)
+		{
 			sounds.erase(sounds.begin() + i);
+			return;
+		}
+	}
+}
+
+void Elevator::RemoveLight(Light *light)
+{
+	//remove a light reference (does not delete the object itself)
+	for (int i = 0; i < (int)lights.size(); i++)
+	{
+		if (lights[i] == light)
+		{
+			lights.erase(lights.begin() + i);
+			return;
+		}
+	}
+}
+
+void Elevator::RemoveModel(Model *model)
+{
+	//remove a model reference (does not delete the object itself)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+		{
+			ModelArray.erase(ModelArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Elevator::RemoveControl(Control *control)
+{
+	//remove a control reference (does not delete the object itself)
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		if (ControlArray[i] == control)
+		{
+			ControlArray.erase(ControlArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Elevator::RemoveTrigger(Trigger *trigger)
+{
+	//remove a trigger reference (does not delete the object itself)
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i] == trigger)
+		{
+			TriggerArray.erase(TriggerArray.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -4415,7 +4495,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 {
 	//add a global light
 
-	Light* light = new Light(name, type, position + Origin, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(object, name, type, position + Origin, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light->object;
 }
@@ -4423,7 +4503,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 Object* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(name, filename, center, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, name, filename, center, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

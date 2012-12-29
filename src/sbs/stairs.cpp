@@ -83,7 +83,10 @@ Stairs::~Stairs()
 		for (int j = 0; j < (int)ControlArray[i].size(); j++)
 		{
 			if (ControlArray[i][j])
+			{
+				ControlArray[i][j]->object->parent_deleting = true;
 				delete ControlArray[i][j];
+			}
 			ControlArray[i][j] = 0;
 		}
 	}
@@ -94,7 +97,10 @@ Stairs::~Stairs()
 		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
 		{
 			if (TriggerArray[i][j])
+			{
+				TriggerArray[i][j]->object->parent_deleting = true;
 				delete TriggerArray[i][j];
+			}
 			TriggerArray[i][j] = 0;
 		}
 	}*/
@@ -105,7 +111,10 @@ Stairs::~Stairs()
 		for (int j = 0; j < (int)ModelArray[i].size(); j++)
 		{
 			if (ModelArray[i][j])
+			{
+				ModelArray[i][j]->object->parent_deleting = true;
 				delete ModelArray[i][j];
+			}
 			ModelArray[i][j] = 0;
 		}
 	}
@@ -116,7 +125,10 @@ Stairs::~Stairs()
 		for (int j = 0; j < (int)lights[i].size(); j++)
 		{
 			if (lights[i][j])
+			{
+				lights[i][j]->object->parent_deleting = true;
 				delete lights[i][j];
+			}
 			lights[i][j] = 0;
 		}
 	}
@@ -684,6 +696,70 @@ void Stairs::RemoveDoor(Door *door)
 	}
 }
 
+void Stairs::RemoveLight(Light *light)
+{
+	//remove a light reference (does not delete the object itself)
+	for (int i = 0; i < (int)lights.size(); i++)
+	{
+		for (int j = 0; j < (int)lights[i].size(); j++)
+		{
+			if (lights[i][j] == light)
+			{
+				lights[i].erase(lights[i].begin() + i);
+				return;
+			}
+		}
+	}
+}
+
+void Stairs::RemoveModel(Model *model)
+{
+	//remove a model reference (does not delete the object itself)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		for (int j = 0; j < (int)ModelArray[i].size(); j++)
+		{
+			if (ModelArray[i][j] == model)
+			{
+				ModelArray[i].erase(ModelArray[i].begin() + i);
+				return;
+			}
+		}
+	}
+}
+
+void Stairs::RemoveControl(Control *control)
+{
+	//remove a control reference (does not delete the object itself)
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		for (int j = 0; j < (int)ControlArray[i].size(); j++)
+		{
+			if (ControlArray[i][j] == control)
+			{
+				ControlArray[i].erase(ControlArray[i].begin() + i);
+				return;
+			}
+		}
+	}
+}
+
+void Stairs::RemoveTrigger(Trigger *trigger)
+{
+	//remove a trigger reference (does not delete the object itself)
+	/*for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		for (int j = 0; j < (int)TriggerArray[i].size(); j++)
+		{
+			if (TriggerArray[i][j] == trigger)
+			{
+				TriggerArray[i].erase(TriggerArray[i].begin() + i);
+				return;
+			}
+		}
+	}*/
+}
+
 Object* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
@@ -692,7 +768,7 @@ Object* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 po
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(object, name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights[floor - startfloor].push_back(light);
 	return light->object;
 }
@@ -715,7 +791,7 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, bool
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(name, filename, center, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

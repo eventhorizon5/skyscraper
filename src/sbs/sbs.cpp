@@ -215,7 +215,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)ControlArray.size(); i++)
 	{
 		if (ControlArray[i])
+		{
+			ControlArray[i]->object->parent_deleting = true;
 			delete ControlArray[i];
+		}
 		ControlArray[i] = 0;
 	}
 
@@ -223,7 +226,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
+		{
+			TriggerArray[i]->object->parent_deleting = true;
 			delete TriggerArray[i];
+		}
 		TriggerArray[i] = 0;
 	}
 
@@ -231,7 +237,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
 		if (ModelArray[i])
+		{
+			ModelArray[i]->object->parent_deleting = true;
 			delete ModelArray[i];
+		}
 		ModelArray[i] = 0;
 	}
 
@@ -239,7 +248,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)lights.size(); i++)
 	{
 		if (lights[i])
+		{
+			lights[i]->object->parent_deleting = true;
 			delete lights[i];
+		}
 		lights[i] = 0;
 	}
 
@@ -256,7 +268,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)FloorArray.size(); i++)
 	{
 		if (FloorArray[i].object)
+		{
+			FloorArray[i].object->object->parent_deleting = true;
 			delete FloorArray[i].object;
+		}
 		FloorArray[i].object = 0;
 	}
 	FloorArray.clear();
@@ -265,7 +280,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)ElevatorArray.size(); i++)
 	{
 		if (ElevatorArray[i].object)
+		{
+			ElevatorArray[i].object->object->parent_deleting = true;
 			delete ElevatorArray[i].object;
+		}
 		ElevatorArray[i].object = 0;
 	}
 	ElevatorArray.clear();
@@ -274,7 +292,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i].object)
+		{
+			ShaftArray[i].object->object->parent_deleting = true;
 			delete ShaftArray[i].object;
+		}
 		ShaftArray[i].object = 0;
 	}
 	ShaftArray.clear();
@@ -283,7 +304,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)StairsArray.size(); i++)
 	{
 		if (StairsArray[i].object)
+		{
+			StairsArray[i].object->object->parent_deleting = true;
 			delete StairsArray[i].object;
+		}
 		StairsArray[i].object = 0;
 	}
 	StairsArray.clear();
@@ -292,7 +316,10 @@ SBS::~SBS()
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
+		{
+			sounds[i]->object->parent_deleting = true;
 			delete sounds[i];
+		}
 		sounds[i] = 0;
 	}
 	sounds.clear();
@@ -323,13 +350,6 @@ SBS::~SBS()
 		delete Buildings;
 	Buildings = 0;
 
-	//remove referenced sounds
-	//sndmanager->RemoveSounds();
-
-	//remove all engine objects
-	//Report("Deleting engine objects...");
-	//engine->clear();
-
 	//delete physics objects
 	if (mWorld)
 	{
@@ -338,9 +358,6 @@ SBS::~SBS()
 		delete mWorld;
 	}
 	mWorld = 0;
-
-	//clear scene
-	//mSceneManager->clearScene();
 
 	ObjectArray.clear();
 	verify_results.clear();
@@ -2980,6 +2997,58 @@ void SBS::RemoveSound(Sound *sound)
 	}
 }
 
+void SBS::RemoveLight(Light *light)
+{
+	//remove a light reference (does not delete the object itself)
+	for (int i = 0; i < (int)lights.size(); i++)
+	{
+		if (lights[i] == light)
+		{
+			lights.erase(lights.begin() + i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveModel(Model *model)
+{
+	//remove a model reference (does not delete the object itself)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+		{
+			ModelArray.erase(ModelArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveControl(Control *control)
+{
+	//remove a control reference (does not delete the object itself)
+	for (int i = 0; i < (int)ControlArray.size(); i++)
+	{
+		if (ControlArray[i] == control)
+		{
+			ControlArray.erase(ControlArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void SBS::RemoveTrigger(Trigger *trigger)
+{
+	//remove a trigger reference (does not delete the object itself)
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i] == trigger)
+		{
+			TriggerArray.erase(TriggerArray.begin() + i);
+			return;
+		}
+	}
+}
+
 std::string SBS::VerifyFile(const char *filename)
 {
 	//verify a filename
@@ -3057,34 +3126,6 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-void SBS::AddLightHandle(Light* handle)
-{
-	all_lights.push_back(handle);
-}
-
-void SBS::DeleteLightHandle(Light* handle)
-{
-	for (int i = 0; i < (int)all_lights.size(); i++)
-	{
-		if (all_lights[i] == handle)
-			all_lights.erase(all_lights.begin() + i);
-	}
-}
-
-void SBS::AddModelHandle(Model* handle)
-{
-	all_models.push_back(handle);
-}
-
-void SBS::DeleteModelHandle(Model* handle)
-{
-	for (int i = 0; i < (int)all_models.size(); i++)
-	{
-		if (all_models[i] == handle)
-			all_models.erase(all_models.begin() + i);
-	}
-}
-
 void SBS::Prepare()
 {
 	//prepare objects for run
@@ -3110,7 +3151,7 @@ Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::
 {
 	//add a global light
 
-	Light* light = new Light(name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(object, name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light->object;
 }
@@ -3154,7 +3195,7 @@ MeshObject* SBS::FindMeshObject(std::string name)
 Object* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

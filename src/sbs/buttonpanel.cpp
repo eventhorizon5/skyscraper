@@ -118,11 +118,9 @@ ButtonPanel::~ButtonPanel()
 	ButtonPanelMesh = 0;
 
 	//unregister with parent floor object
-	if (sbs->FastDelete == false)
-	{
-		if (object->parent_deleting == false)
-			sbs->GetElevator(elevator)->RemovePanel(this);
-	}
+	if (sbs->FastDelete == false && object->parent_deleting == false)
+		sbs->GetElevator(elevator)->RemovePanel(this);
+
 	delete object;
 }
 

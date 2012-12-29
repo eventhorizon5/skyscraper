@@ -143,7 +143,7 @@ ElevatorDoor::~ElevatorDoor()
 	Doors = 0;
 
 	//unregister from parent
-	if (object->parent_deleting == false)
+	if (sbs->FastDelete == false && object->parent_deleting == false)
 		elev->RemoveElevatorDoor(this);
 
 	delete object;

@@ -251,6 +251,10 @@ public:
 	void RemoveFloorIndicator(FloorIndicator *indicator);
 	void RemoveDoor(Door *door);
 	void RemoveSound(Sound *sound);
+	void RemoveLight(Light *light);
+	void RemoveModel(Model *model);
+	void RemoveControl(Control *control);
+	void RemoveTrigger(Trigger *trigger);
 	void NotifyArrival(int floor);
 	void SetRunState(bool value);
 	bool IsRunning();

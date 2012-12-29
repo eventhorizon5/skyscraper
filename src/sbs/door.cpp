@@ -164,6 +164,7 @@ Door::~Door()
 		}
 		sbs->UnregisterDoorCallback(this);
 	}
+
 	delete object;
 }
 
