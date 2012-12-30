@@ -2895,26 +2895,6 @@ bool SBS::DeleteObject(Object *object)
 		delete obj;
 		deleted = true;
 	}
-	if (type == "Light")
-	{
-		delete (Light*)object->GetRawObject();
-		deleted = true;
-	}
-	if (type == "Model")
-	{
-		delete (Model*)object->GetRawObject();
-		deleted = true;
-	}
-	if (type == "Control")
-	{
-		delete (Control*)object->GetRawObject();
-		deleted = true;
-	}
-	if (type == "Trigger")
-	{
-		delete (Trigger*)object->GetRawObject();
-		deleted = true;
-	}
 
 	if (deleted == true)
 	{

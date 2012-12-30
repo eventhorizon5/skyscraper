@@ -32,24 +32,6 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
 {
-	//translate action names into actions
-	std::vector<std::vector<Action*> > actions;
-	for (int i = 0; i < action_names.size(); i++)
-	{
-		std::vector<Action*> actionlist;
-		actionlist = sbs->GetAction(action_names[i]);
-		actions.push_back(actionlist);
-	}
-	Create(parent, name, sound_file, area_min, area_max, actions);
-}
-
-Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::vector<Action*> > &actions)
-{
-	Create(parent, name, sound_file, area_min, area_max, actions);
-}
-
-void Trigger::Create(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::vector<Action*> > &actions)
-{
 	//create a proximity trigger at the specified location
 
 	//set up SBS object
@@ -60,7 +42,7 @@ void Trigger::Create(Object *parent, const char *name, const char *sound_file, O
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 
-	Actions = actions;
+	Actions = action_names;
 	IsEnabled = true;
 	current_position = 1;
 	this->area_min = area_min;
@@ -225,8 +207,16 @@ const char* Trigger::GetPositionAction(int position)
 {
 	//return action name associated with the specified selection position
 
-	//return first in position list
-	return Actions[position - 1][0]->GetCommandName();
+	std::vector<Action*> actionlist;
+	actionlist = sbs->GetAction(Actions[position - 1]);
+
+	//return command of first action in list
+	if (actionlist.size() > 0)
+	{
+		if (actionlist[0])
+			return actionlist[0]->GetCommandName();
+	}
+	return 0;
 }
 
 const char* Trigger::GetSelectPositionAction()
@@ -259,13 +249,15 @@ bool Trigger::DoAction()
 {
 	//perform trigger's action
 
+	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
+
 	bool result = true;
-	for (int i = 0; i < Actions[current_position - 1].size(); i++)
+	for (int i = 0; i < actionlist.size(); i++)
 	{
 		bool result2 = false;
 
-		if (Actions[current_position - 1][i])
-			result2 = Actions[current_position - 1][i]->DoAction();
+		if (actionlist[i])
+			result2 = actionlist[i]->DoAction();
 
 		if (result2 == false)
 			result = false;
