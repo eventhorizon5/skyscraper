@@ -38,7 +38,9 @@ public:
 
 	//functions
 	Trigger(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names);
+	Trigger(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::vector<Action*> > &actions);
 	~Trigger();
+	void Create(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::vector<Action*> > &actions);
 	void Enabled(bool value);
 	Ogre::Vector3 GetPosition();
 	void SetPosition(const Ogre::Vector3 &position);
@@ -66,7 +68,7 @@ private:
 	Ogre::Vector3 pos;
 	int current_position; //current trigger position
 	bool IsInside;
-	std::vector<std::string> Actions; //trigger actions
+	std::vector<std::vector<Action*> > Actions; //trigger actions
 
 	Sound *sound; //sound object
 
