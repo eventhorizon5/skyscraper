@@ -1557,7 +1557,7 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->Verbose)
 			Report("playing stopping sounds");
 
-		if (Direction == 1)
+		if (Direction == -1)
 			mainsound->Load(CarUpStopSound.c_str());
 		else
 			mainsound->Load(CarDownStopSound.c_str());
@@ -1571,7 +1571,7 @@ void Elevator::MoveElevatorToFloor()
 			mainsound->Reset();
 		mainsound->Play(false);
 
-		if (Direction == 1)
+		if (Direction == -1)
 			motorsound->Load(MotorUpStopSound.c_str());
 		else
 			motorsound->Load(MotorDownStopSound.c_str());
@@ -1799,7 +1799,7 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("playing stopping sounds");
 			bool adjust = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
-			if (Direction == 1)
+			if (Direction == -1)
 				mainsound->Load(CarUpStopSound.c_str());
 			else
 				mainsound->Load(CarDownStopSound.c_str());
@@ -1812,7 +1812,7 @@ void Elevator::MoveElevatorToFloor()
 				mainsound->Reset();
 			mainsound->Play(false);
 
-			if (Direction == 1)
+			if (Direction == -1)
 				motorsound->Load(MotorUpStopSound.c_str());
 			else
 				motorsound->Load(MotorDownStopSound.c_str());
