@@ -342,8 +342,8 @@ public:
 	std::string ListTextures();
 	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
-	Action* AddAction(const std::string name, Object* action_parent, const std::string &command, const std::vector<std::string> &parameters);
-	Action* AddAction(const std::string name, Object* action_parent, const std::string &command);
+	Action* AddAction(const std::string name, std::vector<Object*> action_parents, const std::string &command, const std::vector<std::string> &parameters);
+	Action* AddAction(const std::string name, std::vector<Object*> action_parents, const std::string &command);
 	std::vector<Action*> GetAction(const std::string name);
 	Action* GetAction(int index);
 	int GetActionCount();

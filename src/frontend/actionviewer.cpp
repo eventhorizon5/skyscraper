@@ -146,8 +146,8 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 	if (action)
 	{
 		tName->SetValue(wxString::FromAscii(action->GetName()));
-		tParentName->SetValue(wxString::FromAscii(action->GetParentName()));
-		tType->SetValue(wxString::FromAscii(action->GetParentType()));
+		tParentName->SetValue(wxString::FromAscii(action->GetParentName(0)));
+		tType->SetValue(wxString::FromAscii(action->GetParentType(0)));
 		tCommand->SetValue(wxString::FromAscii(action->GetCommandName()));
 
 		tParameters->Clear();

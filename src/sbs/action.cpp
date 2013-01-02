@@ -30,7 +30,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Action::Action(const std::string name, Object *action_parent, const std::string &command, const std::vector<std::string> &parameters)
+Action::Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//create an action
 
@@ -46,10 +46,10 @@ Action::Action(const std::string name, Object *action_parent, const std::string 
 		TrimString(command_parameters[i]);
 	}
 	state = 0;
-	parent_object = action_parent;
+	parent_objects = action_parents;
 }
 
-Action::Action(const std::string name, Object* action_parent, const std::string &command)
+Action::Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command)
 {
 	//create an action
 
@@ -59,7 +59,7 @@ Action::Action(const std::string name, Object* action_parent, const std::string 
 	SetCase(command_name, false);
 
 	state = 0;
-	parent_object = action_parent;
+	parent_objects = action_parents;
 }
 
 Action::~Action()
@@ -118,304 +118,324 @@ bool Action::DoAction()
 	//MusicOff
 	//Hold
 
-	Elevator *elevator = 0;
-	Floor *floor = 0;
-	Shaft *shaft = 0;
-	Stairs *stairs = 0;
-
-	std::string parent_name = parent_object->GetName();
-	std::string parent_type = parent_object->GetType();
-	if (parent_type == "Floor")
-		floor = (Floor*)parent_object->GetRawObject();
-	if (parent_type == "Elevator")
-		elevator = (Elevator*)parent_object->GetRawObject();
-	if (parent_type == "Shaft")
-		shaft = (Shaft*)parent_object->GetRawObject();
-	if (parent_type == "Stairs")
-		stairs = (Stairs*)parent_object->GetRawObject();
-
-	//report the action used
-	sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");
-
-	//numeric commands for elevator routes
-	if (IsNumeric(command_name.c_str()) == true && elevator)
+	for (int i = 0; i < parent_objects.size(); i++)
 	{
-		//exit if in inspection mode or in fire service phase 1 mode
-		if (elevator->InspectionService == true || elevator->FireServicePhase1 == 1)
-			return false;
+		Elevator *elevator = 0;
+		Floor *floor = 0;
+		Shaft *shaft = 0;
+		Stairs *stairs = 0;
 
-		int floor = atoi(command_name.c_str());
-		int elev_floor = elevator->GetFloor();
+		if (!parent_objects[i])
+			continue;
 
-		//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
-		if (elevator->IsQueueActive() && elevator->QueueResets == true)
-			elevator->AddRoute(floor, elevator->QueuePositionDirection, true);
-		else
+		std::string parent_name = parent_objects[i]->GetName();
+		std::string parent_type = parent_objects[i]->GetType();
+		if (parent_type == "Floor")
+			floor = (Floor*)parent_objects[i]->GetRawObject();
+		if (parent_type == "Elevator")
+			elevator = (Elevator*)parent_objects[i]->GetRawObject();
+		if (parent_type == "Shaft")
+			shaft = (Shaft*)parent_objects[i]->GetRawObject();
+		if (parent_type == "Stairs")
+			stairs = (Stairs*)parent_objects[i]->GetRawObject();
+
+		//report the action used
+		sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");
+
+		//numeric commands for elevator routes
+		if (IsNumeric(command_name.c_str()) == true && elevator)
 		{
-			//elevator is above floor
-			if (elev_floor > floor)
-				elevator->AddRoute(floor, -1, true);
+			//exit if in inspection mode or in fire service phase 1 mode
+			if (elevator->InspectionService == true || elevator->FireServicePhase1 == 1)
+				return false;
 
-			//elevator is below floor
-			if (elev_floor < floor)
-				elevator->AddRoute(floor, 1, true);
+			int floor = atoi(command_name.c_str());
+			int elev_floor = elevator->GetFloor();
 
-			//elevator is on floor
-			if (elev_floor == floor)
+			//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
+			if (elevator->IsQueueActive() && elevator->QueueResets == true)
+				elevator->AddRoute(floor, elevator->QueuePositionDirection, true);
+			else
 			{
-				if (elevator->Direction == 0)
+				//elevator is above floor
+				if (elev_floor > floor)
+					elevator->AddRoute(floor, -1, true);
+
+				//elevator is below floor
+				if (elev_floor < floor)
+					elevator->AddRoute(floor, 1, true);
+
+				//elevator is on floor
+				if (elev_floor == floor)
 				{
-					//stopped - play chime and open doors
-					if (elevator->InServiceMode() == false)
+					if (elevator->Direction == 0)
 					{
-						if (elevator->LastQueueDirection == -1)
-							elevator->Chime(0, floor, false);
-						else if (elevator->LastQueueDirection == 1)
-							elevator->Chime(0, floor, true);
+						//stopped - play chime and open doors
+						if (elevator->InServiceMode() == false)
+						{
+							if (elevator->LastQueueDirection == -1)
+								elevator->Chime(0, floor, false);
+							else if (elevator->LastQueueDirection == 1)
+								elevator->Chime(0, floor, true);
+						}
+						if (elevator->FireServicePhase2 == 0)
+							elevator->OpenDoors();
 					}
-					if (elevator->FireServicePhase2 == 0)
-						elevator->OpenDoors();
-				}
-				else
-				{
-					//add a route to the current floor if elevator is moving
-					elevator->AddRoute(floor, -elevator->Direction, true);
+					else
+					{
+						//add a route to the current floor if elevator is moving
+						elevator->AddRoute(floor, -elevator->Direction, true);
+					}
 				}
 			}
-		}
 
-		return true;
-	}
-
-	if (elevator)
-	{
-		//elevator-specific commands
-
-		if (command_name == "off")
 			return true;
-
-		if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0)
-		{
-			int number = 0;
-			if (command_name.length() > 4)
-				number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
-			elevator->OpenDoors(number);
-		}
-		if (StartsWith(command_name, "close", false) == true && elevator->Direction == 0)
-		{
-			int number = 0;
-			if (command_name.length() > 5)
-				number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
-			elevator->CloseDoors(number);
-		}
-		if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
-			elevator->CancelLastRoute();
-		if (command_name == "run")
-			elevator->SetRunState(true);
-		if (command_name == "stop")
-			elevator->SetRunState(false);
-		if (command_name == "estop")
-			elevator->Stop(true);
-		if (command_name == "alarm")
-			elevator->Alarm();
-		if (command_name == "fire1off")
-			elevator->EnableFireService1(0);
-		if (command_name == "fire1on")
-			elevator->EnableFireService1(1);
-		if (command_name == "fire1bypass")
-			elevator->EnableFireService1(2);
-		if (command_name == "fire2off")
-			elevator->EnableFireService2(0);
-		if (command_name == "fire2on")
-			elevator->EnableFireService2(1);
-		if (command_name == "fire2hold")
-			elevator->EnableFireService2(2);
-		if (command_name == "uppeakon")
-			elevator->EnableUpPeak(true);
-		if (command_name == "uppeakoff")
-			elevator->EnableUpPeak(false);
-		if (command_name == "downpeakon")
-			elevator->EnableDownPeak(true);
-		if (command_name == "downpeakoff")
-			elevator->EnableDownPeak(false);
-		if (command_name == "indon")
-			elevator->EnableIndependentService(true);
-		if (command_name == "indoff")
-			elevator->EnableIndependentService(false);
-		if (command_name == "inson")
-			elevator->EnableInspectionService(true);
-		if (command_name == "insoff")
-			elevator->EnableInspectionService(false);
-		if (command_name == "acpon")
-			elevator->EnableACP(true);
-		if (command_name == "acpoff")
-			elevator->EnableACP(false);
-		if (command_name == "fanon")
-			elevator->Fan = true;
-		if (command_name == "fanoff")
-			elevator->Fan = false;
-		if (command_name == "musicon")
-			elevator->MusicOn = true;
-		if (command_name == "musicoff")
-			elevator->MusicOn = false;
-
-		if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
-		{
-			int number = 0;
-			if (command_name.length() > 4)
-				number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
-			elevator->HoldDoors(number);
 		}
 
-	}
-
-	if (command_name == "changetexture")
-	{
-		if (command_parameters.size() == 2)
+		if (elevator)
 		{
-			if (parent_type == "Mesh")
-			{
-				if (parent_name == "External")
-					sbs->External->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				if (parent_name == "Landscape")
-					sbs->Landscape->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				if (parent_name == "Buildings")
-					sbs->Buildings->ReplaceTexture(command_parameters[0], command_parameters[1]);
-			}
+			//elevator-specific commands
 
-			if (parent_type == "Floor")
+			if (command_name == "off")
+				return true;
+
+			if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0)
 			{
-				if (floor)
-					floor->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
+				int number = 0;
+				if (command_name.length() > 4)
+					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				elevator->OpenDoors(number);
 			}
-			if (parent_type == "Elevator")
+			if (StartsWith(command_name, "close", false) == true && elevator->Direction == 0)
 			{
-				if (elevator)
-					elevator->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
+				int number = 0;
+				if (command_name.length() > 5)
+					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				elevator->CloseDoors(number);
 			}
-			if (parent_type == "Shaft")
+			if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
+				elevator->CancelLastRoute();
+			if (command_name == "run")
+				elevator->SetRunState(true);
+			if (command_name == "stop")
+				elevator->SetRunState(false);
+			if (command_name == "estop")
+				elevator->Stop(true);
+			if (command_name == "alarm")
+				elevator->Alarm();
+			if (command_name == "fire1off")
+				elevator->EnableFireService1(0);
+			if (command_name == "fire1on")
+				elevator->EnableFireService1(1);
+			if (command_name == "fire1bypass")
+				elevator->EnableFireService1(2);
+			if (command_name == "fire2off")
+				elevator->EnableFireService2(0);
+			if (command_name == "fire2on")
+				elevator->EnableFireService2(1);
+			if (command_name == "fire2hold")
+				elevator->EnableFireService2(2);
+			if (command_name == "uppeakon")
+				elevator->EnableUpPeak(true);
+			if (command_name == "uppeakoff")
+				elevator->EnableUpPeak(false);
+			if (command_name == "downpeakon")
+				elevator->EnableDownPeak(true);
+			if (command_name == "downpeakoff")
+				elevator->EnableDownPeak(false);
+			if (command_name == "indon")
+				elevator->EnableIndependentService(true);
+			if (command_name == "indoff")
+				elevator->EnableIndependentService(false);
+			if (command_name == "inson")
+				elevator->EnableInspectionService(true);
+			if (command_name == "insoff")
+				elevator->EnableInspectionService(false);
+			if (command_name == "acpon")
+				elevator->EnableACP(true);
+			if (command_name == "acpoff")
+				elevator->EnableACP(false);
+			if (command_name == "fanon")
+				elevator->Fan = true;
+			if (command_name == "fanoff")
+				elevator->Fan = false;
+			if (command_name == "musicon")
+				elevator->MusicOn = true;
+			if (command_name == "musicoff")
+				elevator->MusicOn = false;
+
+			if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
 			{
-				if (shaft)
-					shaft->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
-			}
-			if (parent_type == "Stairs")
-			{
-				if (stairs)
-					stairs->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
+				int number = 0;
+				if (command_name.length() > 4)
+					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				elevator->HoldDoors(number);
 			}
 
 		}
-		else
-			return false;
-	}
 
-	if (command_name == "playsound")
-	{
-		if (command_parameters.size() == 2)
+		if (command_name == "changetexture")
 		{
-			std::vector<Sound*> soundlist;
-
-			if (parent_type == "SBS")
-				soundlist = sbs->GetSound(command_parameters[0].c_str());
-
-			if (parent_type == "Floor")
+			if (command_parameters.size() == 2)
 			{
-				if (floor)
-					soundlist = floor->GetSound(command_parameters[0].c_str());
-				else
-					return false;
+				if (parent_type == "Mesh")
+				{
+					if (parent_name == "External")
+						sbs->External->ReplaceTexture(command_parameters[0], command_parameters[1]);
+					if (parent_name == "Landscape")
+						sbs->Landscape->ReplaceTexture(command_parameters[0], command_parameters[1]);
+					if (parent_name == "Buildings")
+						sbs->Buildings->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				}
+
+				if (parent_type == "Floor")
+				{
+					if (floor)
+						floor->ReplaceTexture(command_parameters[0], command_parameters[1]);
+					else
+						return false;
+				}
+				if (parent_type == "Elevator")
+				{
+					if (elevator)
+						elevator->ReplaceTexture(command_parameters[0], command_parameters[1]);
+					else
+						return false;
+				}
+				if (parent_type == "Shaft")
+				{
+					if (shaft)
+						shaft->ReplaceTexture(command_parameters[0], command_parameters[1]);
+					else
+						return false;
+				}
+				if (parent_type == "Stairs")
+				{
+					if (stairs)
+						stairs->ReplaceTexture(command_parameters[0], command_parameters[1]);
+					else
+						return false;
+				}
+
 			}
-			if (parent_type == "Elevator")
-			{
-				if (elevator)
-					soundlist = elevator->GetSound(command_parameters[0].c_str());
-				else
-					return false;
-			}
+			else
+				return false;
+		}
 
-			if (soundlist.size() > 0)
+		if (command_name == "playsound")
+		{
+			if (command_parameters.size() == 2)
 			{
-				std::string loop = command_parameters[1];
-				SetCase(loop, false);
+				std::vector<Sound*> soundlist;
+
+				if (parent_type == "SBS")
+					soundlist = sbs->GetSound(command_parameters[0].c_str());
+
+				if (parent_type == "Floor")
+				{
+					if (floor)
+						soundlist = floor->GetSound(command_parameters[0].c_str());
+					else
+						return false;
+				}
+				if (parent_type == "Elevator")
+				{
+					if (elevator)
+						soundlist = elevator->GetSound(command_parameters[0].c_str());
+					else
+						return false;
+				}
+
+				if (soundlist.size() > 0)
+				{
+					std::string loop = command_parameters[1];
+					SetCase(loop, false);
+
+					for (int i = 0; i < soundlist.size(); i++)
+					{
+						if (soundlist[i])
+						{
+							if (loop == "true")
+								soundlist[i]->Loop(true);
+							else
+								soundlist[i]->Loop(false);
+							soundlist[i]->Play();
+						}
+					}
+				}
+			}
+			else
+				return false;
+		}
+
+		if (command_name == "stopsound")
+		{
+			if (command_parameters.size() == 1)
+			{
+				std::vector<Sound*> soundlist;
+
+				if (parent_type == "SBS")
+					soundlist = sbs->GetSound(command_parameters[0].c_str());
+
+				if (parent_type == "Floor")
+				{
+					if (floor)
+						soundlist = floor->GetSound(command_parameters[0].c_str());
+					else
+						return false;
+				}
+				if (parent_type == "Elevator")
+				{
+					if (elevator)
+						soundlist = elevator->GetSound(command_parameters[0].c_str());
+					else
+						return false;
+				}
 
 				for (int i = 0; i < soundlist.size(); i++)
 				{
 					if (soundlist[i])
-					{
-						if (loop == "true")
-							soundlist[i]->Loop(true);
-						else
-							soundlist[i]->Loop(false);
-						soundlist[i]->Play();
-					}
+						soundlist[i]->Stop();
 				}
 			}
+			else
+				return false;
 		}
-		else
-			return false;
-	}
-
-	if (command_name == "stopsound")
-	{
-		if (command_parameters.size() == 1)
-		{
-			std::vector<Sound*> soundlist;
-
-			if (parent_type == "SBS")
-				soundlist = sbs->GetSound(command_parameters[0].c_str());
-
-			if (parent_type == "Floor")
-			{
-				if (floor)
-					soundlist = floor->GetSound(command_parameters[0].c_str());
-				else
-					return false;
-			}
-			if (parent_type == "Elevator")
-			{
-				if (elevator)
-					soundlist = elevator->GetSound(command_parameters[0].c_str());
-				else
-					return false;
-			}
-
-			for (int i = 0; i < soundlist.size(); i++)
-			{
-				if (soundlist[i])
-					soundlist[i]->Stop();
-			}
-		}
-		else
-			return false;
 	}
 
 	return true;
 }
 
-const Object* Action::GetParent()
+int Action::GetParentCount()
 {
-	return parent_object;
+	return parent_objects.size();
 }
 
-const char* Action::GetParentName()
+const Object* Action::GetParent(int number)
 {
-	if (parent_object)
-		return parent_object->GetName();
+	if (number < 0 || number >= parent_objects.size())
+		return 0;
+
+	return parent_objects[number];
+}
+
+const char* Action::GetParentName(int number)
+{
+	if (number < 0 || number >= parent_objects.size())
+		return 0;
+
+	if (parent_objects[number])
+		return parent_objects[number]->GetName();
 	return 0;
 }
 
-const char* Action::GetParentType()
+const char* Action::GetParentType(int number)
 {
-	if (parent_object)
-		return parent_object->GetType();
+	if (number < 0 || number >= parent_objects.size())
+		return 0;
+
+	if (parent_objects[number])
+		return parent_objects[number]->GetType();
 	return 0;
 }
 

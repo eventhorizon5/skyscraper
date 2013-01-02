@@ -30,15 +30,16 @@ class SBSIMPEXP Action
 {
 public:
 	//functions
-	Action(const std::string name, Object *action_parent, const std::string &command, const std::vector<std::string> &parameters);
-	Action(const std::string name, Object *action_parent, const std::string &command);
+	Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
+	Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command);
 	~Action();
 	bool DoAction();
 	const char *GetName();
 	const char *GetCommandName();
-	const Object *GetParent();
-	const char *GetParentName();
-	const char *GetParentType();
+	const Object *GetParent(int number);
+	const char *GetParentName(int number);
+	const char *GetParentType(int number);
+	int GetParentCount();
 	int GetParameterCount();
 	const char *GetParameter(int index);
 
@@ -48,7 +49,7 @@ private:
 	std::vector<std::string> command_parameters;
 	int state;
 	std::string name;
-	Object *parent_object;
+	std::vector<Object*> parent_objects;
 };
 
 #endif

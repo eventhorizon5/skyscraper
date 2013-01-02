@@ -224,7 +224,9 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 	{
 		std::string newname = sbs->GetElevator(elevator)->object->GetName();
 		newname += ":" + action_names[i];
-		sbs->AddAction(newname, sbs->GetElevator(elevator)->object, action_names[i]);
+		std::vector<Object*> parents;
+		parents.push_back(sbs->GetElevator(elevator)->object);
+		sbs->AddAction(newname, parents, action_names[i]);
 		actions.push_back(newname);
 	}
 

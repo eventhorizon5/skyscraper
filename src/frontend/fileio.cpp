@@ -2199,10 +2199,13 @@ int ScriptProcessor::ProcCommands()
 
 		if (obj)
 		{
+			std::vector<Object*> parents;
+			parents.push_back(obj);
+
 			if (params > 3)
-				Simcore->AddAction(tempdata[0], obj, tempdata[2], actparams);
+				Simcore->AddAction(tempdata[0], parents, tempdata[2], actparams);
 			else
-				Simcore->AddAction(tempdata[0], obj, tempdata[2]);
+				Simcore->AddAction(tempdata[0], parents, tempdata[2]);
 		}
 	}
 
