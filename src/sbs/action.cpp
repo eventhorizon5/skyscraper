@@ -180,6 +180,7 @@ bool Action::DoAction()
 						}
 						if (elevator->FireServicePhase2 == 0)
 							elevator->OpenDoors();
+						return false;
 					}
 					else
 					{

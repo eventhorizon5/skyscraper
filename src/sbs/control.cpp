@@ -334,8 +334,16 @@ bool Control::Press()
 	//change to next control position
 	NextSelectPosition();
 
-	//perform selected action
-	return DoAction();
+	//run action
+	bool result = false;
+	result = DoAction();
+
+	//change back to original selection if a numeric action returns false
+	//(elevator is on the same floor, and doors are reopened)
+	if (IsNumeric(name.c_str()) && result == false)
+		NextSelectPosition();
+
+	return result;
 }
 
 void Control::ChangeLight(int floor, bool value)
