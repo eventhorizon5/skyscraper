@@ -1,16 +1,17 @@
 Index: src/BulletDynamics/Character/btKinematicCharacterController.h
 ===================================================================
---- src/BulletDynamics/Character/btKinematicCharacterController.h	(revision 2388)
+--- src/BulletDynamics/Character/btKinematicCharacterController.h	(revision 2623)
 +++ src/BulletDynamics/Character/btKinematicCharacterController.h	(working copy)
-@@ -80,6 +80,7 @@
+@@ -81,6 +81,8 @@
  	int m_upAxis;
  
  	static btVector3* getUpAxisDirections();
 +	bool  m_interpolateUp;
++	bool  full_drop;
  
  	btVector3 computeReflectionDirection (const btVector3& direction, const btVector3& normal);
  	btVector3 parallelComponent (const btVector3& direction, const btVector3& normal);
-@@ -129,7 +130,7 @@
+@@ -133,7 +135,7 @@
  	virtual void setVelocityForTimeInterval(const btVector3& velocity,
  				btScalar timeInterval);
  
@@ -19,7 +20,7 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.h
  	void warp (const btVector3& origin);
  
  	void preStep (  btCollisionWorld* collisionWorld);
-@@ -157,6 +158,7 @@
+@@ -161,6 +163,7 @@
  	}
  
  	bool onGround () const;
@@ -29,7 +30,7 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.h
  #endif // BT_KINEMATIC_CHARACTER_CONTROLLER_H
 Index: src/BulletDynamics/Character/btKinematicCharacterController.cpp
 ===================================================================
---- src/BulletDynamics/Character/btKinematicCharacterController.cpp	(revision 2388)
+--- src/BulletDynamics/Character/btKinematicCharacterController.cpp	(revision 2623)
 +++ src/BulletDynamics/Character/btKinematicCharacterController.cpp	(working copy)
 @@ -14,6 +14,7 @@
  */
@@ -39,16 +40,59 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.cpp
  #include "LinearMath/btIDebugDraw.h"
  #include "BulletCollision/CollisionDispatch/btGhostObject.h"
  #include "BulletCollision/CollisionShapes/btMultiSphereShape.h"
-@@ -146,6 +147,7 @@
+@@ -77,6 +78,9 @@
+ 		if (convexResult.m_hitCollisionObject == m_me)
+ 			return btScalar(1.0);
+ 
++		if (!convexResult.m_hitCollisionObject->hasContactResponse())
++			return btScalar(1.0);
++
+ 		btVector3 hitNormalWorld;
+ 		if (normalInWorldSpace)
+ 		{
+@@ -137,7 +141,7 @@
+ 	m_stepHeight = stepHeight;
+ 	m_turnAngle = btScalar(0.0);
+ 	m_convexShape=convexShape;	
+-	m_useWalkDirection = true;	// use walk direction by default, legacy behavior
++	m_useWalkDirection = false;	// use walk direction by default, legacy behavior
+ 	m_velocityTimeInterval = 0.0;
+ 	m_verticalVelocity = 0.0;
+ 	m_verticalOffset = 0.0;
+@@ -146,7 +150,10 @@
  	m_jumpSpeed = 10.0; // ?
  	m_wasOnGround = false;
  	m_wasJumping = false;
 +	m_interpolateUp = true;
-- 	setMaxSlope(btRadians(45.0));
-+	setMaxSlope(btRadians(60.0));
+ 	setMaxSlope(btRadians(45.0));
++	m_currentStepOffset = 0;
++	full_drop = false;
  }
  
-@@ -246,7 +248,10 @@
+ btKinematicCharacterController::~btKinematicCharacterController ()
+@@ -188,6 +195,12 @@
+ 
+ 		btBroadphasePair* collisionPair = &m_ghostObject->getOverlappingPairCache()->getOverlappingPairArray()[i];
+ 		
++		btCollisionObject* obj0 = static_cast<btCollisionObject*>(collisionPair->m_pProxy0->m_clientObject);
++		btCollisionObject* obj1 = static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
++
++		if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
++			continue;
++
+ 		if (collisionPair->m_algorithm)
+ 			collisionPair->m_algorithm->getAllContactManifolds(m_manifoldArray);
+ 
+@@ -202,7 +215,7 @@
+ 
+ 				btScalar dist = pt.getDistance();
+ 
+-				if (dist < 0.0)
++				if (dist < 0.2)
+ 				{
+ 					if (dist < maxPen)
+ 					{
+@@ -260,7 +273,10 @@
  		{
  			// we moved up only a fraction of the step height
  			m_currentStepOffset = m_stepHeight * callback.m_closestHitFraction;
@@ -60,7 +104,43 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.cpp
  		}
  		m_verticalVelocity = 0.0;
  		m_verticalOffset = 0.0;
-@@ -394,9 +399,11 @@
+@@ -290,14 +306,14 @@
+ 		if (0)//tangentMag != 0.0)
+ 		{
+ 			btVector3 parComponent = parallelDir * btScalar (tangentMag*movementLength);
+-//			printf("parComponent=%f,%f,%f\n",parComponent[0],parComponent[1],parComponent[2]);
++//			printf("parComponent1=%f,%f,%f\n",parComponent[0],parComponent[1],parComponent[2]);
+ 			m_targetPosition +=  parComponent;
+ 		}
+ 
+ 		if (normalMag != 0.0)
+ 		{
+ 			btVector3 perpComponent = perpindicularDir * btScalar (normalMag*movementLength);
+-//			printf("perpComponent=%f,%f,%f\n",perpComponent[0],perpComponent[1],perpComponent[2]);
++//			printf("perpComponent2=%f,%f,%f\n",perpComponent[0],perpComponent[1],perpComponent[2]);
+ 			m_targetPosition += perpComponent;
+ 		}
+ 	} else
+@@ -325,7 +341,8 @@
+ 	{
+ 		if (m_normalizedDirection.dot(m_touchingNormal) > btScalar(0.0))
+ 		{
+-			updateTargetPositionBasedOnCollision (m_touchingNormal);
++			//interferes with step movement
++			//updateTargetPositionBasedOnCollision (m_touchingNormal);
+ 		}
+ 	}
+ 
+@@ -397,7 +414,7 @@
+ 
+ void btKinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, btScalar dt)
+ {
+-	btTransform start, end;
++	btTransform start, end, start2, end2;
+ 
+ 	// phase 3: down
+ 	/*btScalar additionalDownStep = (m_wasOnGround && !onGround()) ? m_stepHeight : 0.0;
+@@ -408,9 +425,11 @@
  
  	btScalar downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
  	if(downVelocity > 0.0 && downVelocity < m_stepHeight
@@ -72,14 +152,72 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.cpp
  	}
  
  	btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
-@@ -430,6 +437,16 @@
+@@ -419,9 +438,16 @@
+ 	start.setIdentity ();
+ 	end.setIdentity ();
+ 
++	start2.setIdentity ();
++	end2.setIdentity ();
++
+ 	start.setOrigin (m_currentPosition);
+ 	end.setOrigin (m_targetPosition);
+ 
++	//secondary test, with slight offset - this overcomes situations where the standard test misses the polygon due to large polygon rounding errors
++	start2.setOrigin (m_currentPosition + btVector3(0.02, 0.0, 0.02));
++	end2.setOrigin (m_targetPosition + btVector3(0.02, 0.0, 0.02));
++
+ 	btKinematicClosestNotMeConvexResultCallback callback (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
+ 	callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+ 	callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+@@ -429,22 +455,60 @@
+ 	if (m_useGhostObjectSweepTest)
+ 	{
+ 		m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++		if (!callback.hasHit())
++		{
++			//perform second sweep test to prevent check errors
++			m_ghostObject->convexSweepTest (m_convexShape, start2, end2, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++		}
+ 	} else
+ 	{
+ 		collisionWorld->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++		if (!callback.hasHit())
++		{
++			//perform second sweep test to prevent check errors
++			collisionWorld->convexSweepTest (m_convexShape, start2, end2, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++		}
+ 	}
+ 
+ 	if (callback.hasHit())
+ 	{
+ 		// we dropped a fraction of the height -> hit floor
+-		m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, callback.m_closestHitFraction);
++
++		btScalar fraction = (m_currentPosition.getY() - callback.m_hitPointWorld.getY()) / 2;
++
++		//printf("normal: %g %g %g\n", callback.m_hitNormalWorld.getX(), callback.m_hitNormalWorld.getY(), callback.m_hitNormalWorld.getZ());
++		//printf("current: %g, target: %g, hit point: %g - closest hit fraction: %g - new fraction: %g\n", m_currentPosition.getY(), m_targetPosition.getY(), callback.m_hitPointWorld.getY(), callback.m_closestHitFraction, fraction);
++
++		if (full_drop == true)
++			m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, callback.m_closestHitFraction);
++		else
++		//due to errors in the closestHitFraction variable when used with large polygons, calculate the hit fraction manually
++		//printf("up set: %g\n", m_currentPosition.getY()); //1.03
++			m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, fraction);
++		//printf("up set: %g\n", m_currentPosition.getY()); //0.78
++		full_drop = false;
++
+ 		m_verticalVelocity = 0.0;
+ 		m_verticalOffset = 0.0;
+ 		m_wasJumping = false;
  	} else {
  		// we dropped the full height
  		
++		full_drop = true;
++		//printf("full %g\n", m_currentPosition.getY());
 +		downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
 +		if (downVelocity > m_fallSpeed && (m_wasOnGround || !m_wasJumping))
 +		{
-+			printf("full\n");
 +			m_targetPosition += step_drop; //undo previous target change
 +			downVelocity = m_fallSpeed;
 +			step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
@@ -87,9 +225,13 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.cpp
 +		}
 +
  		m_currentPosition = m_targetPosition;
++
++		//btScalar fraction = (m_currentPosition.getY() - m_targetPosition.getY()) * 2;
++		//m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, fraction);
  	}
  }
-@@ -467,8 +484,21 @@
+ 
+@@ -481,8 +545,21 @@
  
  
  
@@ -112,7 +254,16 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.cpp
  }
  
  void btKinematicCharacterController::warp (const btVector3& origin)
-@@ -639,3 +669,9 @@
+@@ -496,7 +573,7 @@
+ 
+ void btKinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
+ {
+-	
++
+ 	int numPenetrationLoops = 0;
+ 	m_touchingContact = false;
+ 	while (recoverFromPenetration (collisionWorld))
+@@ -653,3 +730,9 @@
  void btKinematicCharacterController::debugDraw(btIDebugDraw* debugDrawer)
  {
  }
@@ -124,7 +275,7 @@ Index: src/BulletDynamics/Character/btKinematicCharacterController.cpp
 +
 Index: src/BulletDynamics/Character/btCharacterControllerInterface.h
 ===================================================================
---- src/BulletDynamics/Character/btCharacterControllerInterface.h	(revision 2388)
+--- src/BulletDynamics/Character/btCharacterControllerInterface.h	(revision 2623)
 +++ src/BulletDynamics/Character/btCharacterControllerInterface.h	(working copy)
 @@ -31,7 +31,7 @@
  	
@@ -143,16 +294,3 @@ Index: src/BulletDynamics/Character/btCharacterControllerInterface.h
  };
  
  #endif //BT_CHARACTER_CONTROLLER_INTERFACE_H
-Index: Demos/CharacterDemo/CharacterDemo.cpp
-===================================================================
---- Demos/CharacterDemo/CharacterDemo.cpp	(revision 2388)
-+++ Demos/CharacterDemo/CharacterDemo.cpp	(working copy)
-@@ -341,7 +341,7 @@
- {
- 	m_dynamicsWorld->getBroadphase()->getOverlappingPairCache()->cleanProxyFromPairs(m_ghostObject->getBroadphaseHandle(),getDynamicsWorld()->getDispatcher());
- 
--	m_character->reset ();
-+	m_character->reset (m_dynamicsWorld);
- 	///WTF
- 	m_character->warp (btVector3(10.210001,-2.0306311,16.576973));
- 	
