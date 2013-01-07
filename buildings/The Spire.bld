@@ -1,5 +1,5 @@
 #The Spire
-#Copyright: escalatorgeek881, 2009
+#Copyright: escalatorgeek881, 2011
 
 #This program is free software; you can redistribute it and/or
 #modify it under the terms of the GNU General Public License
@@ -22,7 +22,7 @@
     Description = The tallest building in Carrara (Imaginary City)
     Version = 1
     HorizScale = 1
-    CameraFloor = 55
+    CameraFloor = 177
     CameraPosition = 0, 0
     CameraRotation = 0, 0, 0
 <EndGlobals>
@@ -9025,8 +9025,12 @@ ShaftCut 47, -13.5, -4.25 + 0.33, 13.5, 4.25 - 0.33, 0, 5
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 177, 215, 273 - 288, 291, 294, 300
+    BeepSound = beep1.wav
     FloorSkipText = EX
     AssignedShaft = 38
+    CarStartSound = elevstart3.wav
+    CarMoveSound = elevmove3.wav
+    CarStopSound = elevstop3.wav
     CreateElevator false, 50.16, 23.288, 177
     OpenSpeed 1 = 0.4
 
@@ -9041,8 +9045,12 @@ ShaftCut 47, -13.5, -4.25 + 0.33, 13.5, 4.25 - 0.33, 0, 5
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 177, 215, 273 - 288, 291, 294, 300
+    BeepSound = beep1.wav
     FloorSkipText = EX
     AssignedShaft = 38
+    CarStartSound = elevstart3.wav
+    CarMoveSound = elevmove3.wav
+    CarStopSound = elevstop3.wav
     CreateElevator false, 41.16, 23.288, 275
     OpenSpeed 1 = 0.4
 
@@ -9057,8 +9065,12 @@ ShaftCut 47, -13.5, -4.25 + 0.33, 13.5, 4.25 - 0.33, 0, 5
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 177, 215, 273 - 288, 291, 294, 300
+    BeepSound = beep1.wav
     FloorSkipText = EX
     AssignedShaft = 38
+    CarStartSound = elevstart3.wav
+    CarMoveSound = elevmove3.wav
+    CarStopSound = elevstop3.wav
     CreateElevator false, 32.16, 23.288, 294
     OpenSpeed 1 = 0.4
 
@@ -9073,8 +9085,12 @@ ShaftCut 47, -13.5, -4.25 + 0.33, 13.5, 4.25 - 0.33, 0, 5
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 177, 215, 273 - 288, 291, 294, 300
+    BeepSound = beep1.wav
     FloorSkipText = EX
     AssignedShaft = 38
+    CarStartSound = elevstart3.wav
+    CarMoveSound = elevmove3.wav
+    CarStopSound = elevstop3.wav
     CreateElevator false, 23.16, 23.288, 273
     OpenSpeed 1 = 0.4
 
@@ -9089,8 +9105,12 @@ ShaftCut 47, -13.5, -4.25 + 0.33, 13.5, 4.25 - 0.33, 0, 5
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = 177, 215, 273 - 288, 291, 294, 300
+    BeepSound = beep1.wav
     FloorSkipText = EX
     AssignedShaft = 38
+    CarStartSound = elevstart3.wav
+    CarMoveSound = elevmove3.wav
+    CarStopSound = elevstop3.wav
     CreateElevator false, 14.16, 23.288, 286
     OpenSpeed 1 = 0.4
 
