@@ -56,6 +56,15 @@ const long CreateObject::ID_bAddStairsDoor = wxNewId();
 const long CreateObject::ID_bAddDirectionalIndicator = wxNewId();
 const long CreateObject::ID_bAddShaftDoor = wxNewId();
 const long CreateObject::ID_bAddFloorIndicator = wxNewId();
+const long CreateObject::ID_bFloorCut = wxNewId();
+const long CreateObject::ID_bFloorCutAll = wxNewId();
+const long CreateObject::ID_bAddFillerWalls = wxNewId();
+const long CreateObject::ID_bFloorAddSound = wxNewId();
+const long CreateObject::ID_bShaftDoorComponent = wxNewId();
+const long CreateObject::ID_bFinishShaftDoor = wxNewId();
+const long CreateObject::ID_bFloorAddModel = wxNewId();
+const long CreateObject::ID_bAddStairsModel = wxNewId();
+const long CreateObject::ID_bAddShaftModel = wxNewId();
 const long CreateObject::ID_bElevator = wxNewId();
 const long CreateObject::ID_bShaft = wxNewId();
 //*)
@@ -74,7 +83,7 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	wxStaticBoxSizer* StaticBoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer4;
 	wxStaticBoxSizer* StaticBoxSizer1;
-	
+
 	Create(parent, wxID_ANY, _("Create Object"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Textures"));
@@ -82,7 +91,7 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	StaticBoxSizer1->Add(bLoadTexture, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxVERTICAL, this, _("Floors/Levels"));
-	GridSizer1 = new wxGridSizer(0, 3, 0, 0);
+	GridSizer1 = new wxGridSizer(0, 4, 0, 0);
 	bFloor = new wxButton(this, ID_bFloor, _("New Level"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloor"));
 	GridSizer1->Add(bFloor, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bAddFloor = new wxButton(this, ID_bAddFloor, _("Floor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddFloor"));
@@ -119,6 +128,24 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	GridSizer1->Add(bAddShaftDoor, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bAddFloorIndicator = new wxButton(this, ID_bAddFloorIndicator, _("Floor Indicator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddFloorIndicator"));
 	GridSizer1->Add(bAddFloorIndicator, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bFloorCut = new wxButton(this, ID_bFloorCut, _("Cut"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorCut"));
+	GridSizer1->Add(bFloorCut, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bFloorCutAll = new wxButton(this, ID_bFloorCutAll, _("CutAll"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorCutAll"));
+	GridSizer1->Add(bFloorCutAll, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bAddFillerWalls = new wxButton(this, ID_bAddFillerWalls, _("Filler Walls"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddFillerWalls"));
+	GridSizer1->Add(bAddFillerWalls, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bFloorAddSound = new wxButton(this, ID_bFloorAddSound, _("AddSound"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorAddSound"));
+	GridSizer1->Add(bFloorAddSound, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bShaftDoorComponent = new wxButton(this, ID_bShaftDoorComponent, _("ShaftDoorComponent"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bShaftDoorComponent"));
+	GridSizer1->Add(bShaftDoorComponent, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bFinishShaftDoor = new wxButton(this, ID_bFinishShaftDoor, _("Finish ShaftDoor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFinishShaftDoor"));
+	GridSizer1->Add(bFinishShaftDoor, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bFloorAddModel = new wxButton(this, ID_bFloorAddModel, _("Model"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorAddModel"));
+	GridSizer1->Add(bFloorAddModel, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bAddStairsModel = new wxButton(this, ID_bAddStairsModel, _("Stairs Model"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddStairsModel"));
+	GridSizer1->Add(bAddStairsModel, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	bAddShaftModel = new wxButton(this, ID_bAddShaftModel, _("Shaft Model"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddShaftModel"));
+	GridSizer1->Add(bAddShaftModel, 1, wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
 	StaticBoxSizer2->Add(GridSizer1, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Elevators"));
@@ -133,7 +160,7 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_bLoadTexture,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bLoadTexture_Click);
 	Connect(ID_bFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bFloor_Click);
 	Connect(ID_bAddFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddFloor_Click);
@@ -153,6 +180,15 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	Connect(ID_bAddDirectionalIndicator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddDirectionalIndicator_Click);
 	Connect(ID_bAddShaftDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddShaftDoor_Click);
 	Connect(ID_bAddFloorIndicator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddFloorIndicator_Click);
+	Connect(ID_bFloorCut,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bFloorCut_Click);
+	Connect(ID_bFloorCutAll,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bFloorCutAll_Click);
+	Connect(ID_bAddFillerWalls,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddFillerWalls_Click);
+	Connect(ID_bFloorAddSound,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bFloorAddSound_Click);
+	Connect(ID_bShaftDoorComponent,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bShaftDoorComponent_Click);
+	Connect(ID_bFinishShaftDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bFinishShaftDoor_Click);
+	Connect(ID_bFloorAddModel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bFloorAddModel_Click);
+	Connect(ID_bAddStairsModel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddStairsModel_Click);
+	Connect(ID_bAddShaftModel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddShaftModel_Click);
 	Connect(ID_bElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bElevator_Click);
 	Connect(ID_bShaft,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bShaft_Click);
 	//*)
@@ -353,6 +389,87 @@ void CreateObject::On_bAddStairsFloor_Click(wxCommandEvent& event)
 	delete viewer;
 	viewer = 0;
 	viewer = new ParameterViewer(this, wxT("AddStairsFloor"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bFloorCut_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("Cut"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bFloorCutAll_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("CutAll"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bAddFillerWalls_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("AddFillerWalls"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bFloorAddSound_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("AddSound"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bShaftDoorComponent_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("AddShaftDoorComponent"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bFinishShaftDoor_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("FinishShaftDoor"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bFloorAddModel_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("AddModel"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bAddStairsModel_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("AddStairsModel"), wxT("Floor"), true, -1);
+	viewer->Show();
+	this->Hide();
+}
+
+void CreateObject::On_bAddShaftModel_Click(wxCommandEvent& event)
+{
+	delete viewer;
+	viewer = 0;
+	viewer = new ParameterViewer(this, wxT("AddShaftModel"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }

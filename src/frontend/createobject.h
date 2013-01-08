@@ -39,20 +39,29 @@ class CreateObject: public wxDialog
 		virtual ~CreateObject();
 
 		//(*Declarations(CreateObject)
+		wxButton* bFloorCut;
+		wxButton* bShaftDoorComponent;
 		wxButton* bAddShaftWall;
 		wxButton* bAddWall;
 		wxButton* bColumnWallBox;
+		wxButton* bFloorAddModel;
+		wxButton* bFloorAddSound;
+		wxButton* bFinishShaftDoor;
 		wxButton* bAddDoor;
+		wxButton* bFloorCutAll;
 		wxButton* bAddFloorIndicator;
 		wxButton* bShaft;
 		wxButton* bAddStairsDoor;
+		wxButton* bAddFillerWalls;
 		wxButton* bAddShaftDoor;
 		wxButton* bCreateCallButtons;
 		wxButton* bLoadTexture;
 		wxButton* bAddDirectionalIndicator;
+		wxButton* bAddShaftModel;
 		wxButton* bAddStairs;
 		wxButton* bColumnWallBox2;
 		wxButton* bAddFloor;
+		wxButton* bAddStairsModel;
 		wxButton* bAddStairsFloor;
 		wxButton* bAddInterfloorFloor;
 		wxButton* bFloor;
@@ -84,6 +93,15 @@ class CreateObject: public wxDialog
 		static const long ID_bAddDirectionalIndicator;
 		static const long ID_bAddShaftDoor;
 		static const long ID_bAddFloorIndicator;
+		static const long ID_bFloorCut;
+		static const long ID_bFloorCutAll;
+		static const long ID_bAddFillerWalls;
+		static const long ID_bFloorAddSound;
+		static const long ID_bShaftDoorComponent;
+		static const long ID_bFinishShaftDoor;
+		static const long ID_bFloorAddModel;
+		static const long ID_bAddStairsModel;
+		static const long ID_bAddShaftModel;
 		static const long ID_bElevator;
 		static const long ID_bShaft;
 		//*)
@@ -113,6 +131,15 @@ class CreateObject: public wxDialog
 		void On_bColumnWallBox_Click(wxCommandEvent& event);
 		void On_bAddStairsWall_Click(wxCommandEvent& event);
 		void On_bAddStairsFloor_Click(wxCommandEvent& event);
+		void On_bFloorCut_Click(wxCommandEvent& event);
+		void On_bFloorCutAll_Click(wxCommandEvent& event);
+		void On_bAddFillerWalls_Click(wxCommandEvent& event);
+		void On_bFloorAddSound_Click(wxCommandEvent& event);
+		void On_bShaftDoorComponent_Click(wxCommandEvent& event);
+		void On_bFinishShaftDoor_Click(wxCommandEvent& event);
+		void On_bFloorAddModel_Click(wxCommandEvent& event);
+		void On_bAddStairsModel_Click(wxCommandEvent& event);
+		void On_bAddShaftModel_Click(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()
