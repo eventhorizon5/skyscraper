@@ -339,7 +339,7 @@ DrawWalls = true, true, false, false, false, false
 
 #Stairs
 #The stairs can be tricky, but make sense once you've worked with them a little bit.
-#First you need to create the stariwell and cut a whole in the floors for the new stairwell
+#First you need to create the stairwell and cut a whole in the floors for the new stairwell
 #(this is almost identical to creating a shaft) - in this we say that the stairwell is centered at
 #(10, 15) and is servicing floors 0 to 9 (1-10):
 
