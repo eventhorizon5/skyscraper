@@ -1561,7 +1561,7 @@ ShaftCut 2, -4, -4.125 + 0.33, 4, 4.125, 0, 5
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, -0.1, -0.1, 0, 0
     DrawWalls = true, false, false, false, false, false
-    if[%floor% = 138] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0
+    if[%floor% = 137] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -15.25, -4.125, 15.25, 4.125, %fullheight%, %fullheight%, 0, 0
     SetAutoSize = true, false
     DrawWalls = true, true, true, true, false, false
     WallOrientation = right
@@ -1753,7 +1753,7 @@ DrawWalls = true, true, false, false, false, false
     
     #panel
     CreatePanel ElevPanel, 17, 7, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button138, ButtonLit138, 2, 6, 137, 1, 1
+    AddFloorButton 1, ButtonR, ButtonLitR, 2, 6, 137, 1, 1
     AddFloorButton 1, Button137, ButtonLit137, 2, 5, 136, 1, 1
     AddFloorButton 1, Button136, ButtonLit136, 2, 4, 135, 1, 1
     AddFloorButton 1, Button135, ButtonLit135, 2, 3, 134, 1, 1
@@ -1924,3 +1924,19 @@ DrawWalls = true, true, false, false, false, false
     CallButtonElevators = 4
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 0 + 3, 0 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
+
+
+#Roof layout
+
+<Floor 137>
+    DrawWalls = true, true, false, false, false, false
+    AddFloor Back, Backing2, 0, -6.63, 30.14, 14.72, 36.64, 10, 10, 0, 0, true
+    AddFloor Ceiling, Backing2, 0, -6.63, 14.59, 17.42, 30.14, 20, 20, 0, 0, true
+    AddFloor Shaft Top, Backing2, 0, -0.11, 15.68, 8.37, 22.2, 22.5, 22.5, 0, 0, true
+    AddFloor Landing, Backing2, 0, -0.11, 5, 8.43, 14.6, 10, 10, 0, 0, true
+    AddFloor Landing2, Backing2, 0, 8.43, 9.78, 17.42, 14.6, 10, 10, 0, 0, true
+    AddCustomWall External, Helipad, Backing2, -40.4, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 5, -32, Floor(137).Altitude + 15, -25.8, -70.15, Floor(137).Altitude + 15, -12.2, -40.4, Floor(137).Altitude + 15, 30.61, 0, 0
+    AddCustomWall External, ElevatorRoomCeiling, Backing2, -14.18, Floor(137).Altitude + 10, -20.4, 10.41, Floor(137).Altitude + 10, -20.4, 18.4, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -20.4, 0, 0
+    AddCustomWall External, ElevatorRoomCeilint2, Backing2, 10.41, Floor(137).Altitude + 10, -20.4, 12.43, Floor(137).Altitude + 10, -17.6, 25.11, Floor(137).Altitude + 10, -27, 18.4, Floor(137).Altitude + 10, -36.8, 10.41, Floor(137).Altitude + 10, -20.4, 0, 0
+<EndFloor>
+
