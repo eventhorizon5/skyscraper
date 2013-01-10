@@ -291,12 +291,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//if opening both doors, exit if shaft doors don't exist
-	int index = -1;
-	for (int i = 0; i < (int)ManualFloors.size(); i++)
-	{
-		if (ManualFloors[i] == floor)
-			index = i;
-	}
+	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
 		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors on " + std::string(_itoa(floor, intbuffer, 10)));
@@ -409,12 +404,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		floor = elev->GetFloor();
 
 	//if closing both doors, exit if shaft doors don't exist
-	int index = -1;
-	for (int i = 0; i < (int)ManualFloors.size(); i++)
-	{
-		if (ManualFloors[i] == floor)
-			index = i;
-	}
+	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
 		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors on " + std::string(_itoa(floor, intbuffer, 10)));
@@ -454,7 +444,10 @@ void ElevatorDoor::StopDoors()
 		if (WhichDoors == 1 || WhichDoors == 2)
 			Doors->StopDoors();
 		if (WhichDoors == 1 || WhichDoors == 3)
-			ShaftDoors[index]->StopDoors();
+		{
+			if (ShaftDoors[index])
+				ShaftDoors[index]->StopDoors();
+		}
 
 		DoorIsRunning = false;
 		OpenDoor = 0;
@@ -506,18 +499,9 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		DoorIsRunning = true;
 		door_changed = false;
 
-		index = -1;
-		for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
-		{
-			if (elev->ServicedFloors[i] == ShaftDoorFloor)
-				index = i;
-		}
-		int index2 = -1;
-		for (int i = 0; i < (int)ManualFloors.size(); i++)
-		{
-			if (ManualFloors[i] == ShaftDoorFloor)
-				index2 = i;
-		}
+		index = elev->GetFloorIndex(ShaftDoorFloor);
+		int index2 = GetManualIndex(ShaftDoorFloor);
+
 		if (ShaftDoorsExist(ShaftDoorFloor) == false && index2 == -1)
 		{
 			if (WhichDoors != 2)
@@ -795,12 +779,14 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	if (!elev->IsServicedFloor(floor))
 		return 0;
 
-	int index = -1;
-	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
-	{
-		if (elev->ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = elev->GetFloorIndex(floor);
+
+	if (index == -1)
+		return 0;
+
+	if (!ShaftDoors[index])
+		return 0;
+
 	std::string elevnumber, floornumber, doornumber, Name, buffer;
 	elevnumber = Ogre::StringConverter::toString(elev->Number);
 	TrimString(elevnumber);
@@ -840,7 +826,7 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	}
 }
 
-Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset)
+Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor)
 {
 	//finishes a door creation
 
@@ -850,12 +836,6 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		ManualFloors.push_back(floor);
 		return 0;
 	}
-
-	//set door parameters
-	wrapper->Origin = Ogre::Vector3(elev->Origin.x, voffset, elev->Origin.z);
-
-	if (ShaftDoor == false)
-		wrapper->Origin.y += elev->Origin.y;
 
 	//get full width and height of doors
 	float x1 = 0, x2 = 0, y1 = 0, y2 = 0, z1 = 0, z2 = 0;
@@ -910,6 +890,19 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		wrapper->Shift = z2 - (wrapper->Width / 2);
 	}
 	wrapper->Height = y2 - y1;
+	if (y2 < y1)
+		wrapper->altitude = y2;
+	else
+		wrapper->altitude = y1;
+
+	//set door parameters
+	wrapper->Origin = Ogre::Vector3(elev->Origin.x, 0, elev->Origin.z);
+
+	//set door voffset
+	if (ShaftDoor == false)
+		wrapper->Origin.y += elev->Origin.y;
+	else
+		wrapper->Origin.y = wrapper->altitude;
 
 	//if shaft door, cut walls for door
 	if (ShaftDoor == true)
@@ -920,8 +913,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		//create doors
 		Floor *floorobj = sbs->GetFloor(floor);
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-		float base = floorobj->GetBase(true); //relative to floor
-		float base2 = floorobj->Altitude + base; //absolute
+		float base = (wrapper->altitude - floorobj->GetBase()) + floorobj->GetBase(true); //relative to floor
 
 		//cut shaft and floor walls
 		sbs->ResetDoorwayWalls();
@@ -955,8 +947,8 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		wall = elev->ElevatorMesh->CreateWallObject(elev->object, "Connection");
 		name1 = "DoorF1";
 		name2 = "DoorF2";
-		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true, false);
-		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
 	}
 	else
 	{
@@ -969,8 +961,8 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		x2 += elev->Origin.x;
 		z1 += elev->Origin.z;
 		z2 += elev->Origin.z;
-		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + voffset, 0, 0, false, true, true, true, false);
-		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + voffset, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
 	}
 
 	sbs->ResetTextureMapping();
@@ -991,7 +983,7 @@ Object* ElevatorDoor::FinishDoors()
 {
 	//finish elevator doors
 
-	return FinishDoors(Doors, 0, false, 0);
+	return FinishDoors(Doors, 0, false);
 }
 
 Object* ElevatorDoor::FinishShaftDoor(int floor)
@@ -1007,29 +999,19 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 		return 0;
 	}
 
-	Floor *floorobj = sbs->GetFloor(floor);
-
-	if (!floorobj)
+	if (!sbs->GetFloor(floor))
 	{
 		elev->ReportError("Floor " + floornum + " does not exist");
 		return 0;
 	}
 
-	DoorWrapper *wrapper;
-
-	int index = -1;
-	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
-	{
-		if (elev->ServicedFloors[i] == floor)
-			index = i;
-	}
+	DoorWrapper *wrapper = 0;
+	int index = elev->GetFloorIndex(floor);
 
 	if (index > -1)
 		wrapper = ShaftDoors[index];
-	else
-		wrapper = 0;
 
-	return FinishDoors(wrapper, floor, true, floorobj->Altitude + floorobj->GetBase(true));
+	return FinishDoors(wrapper, floor, true);
 }
 
 bool ElevatorDoor::FinishShaftDoors()
@@ -1038,22 +1020,23 @@ bool ElevatorDoor::FinishShaftDoors()
 
 	for (size_t i = 0; i < (int)elev->ServicedFloors.size(); i++)
 		FinishShaftDoor(elev->ServicedFloors[i]);
+
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
+bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
 
 	//set door parameters
-	ShaftDoorOrigin = Ogre::Vector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
+	ShaftDoorOrigin = Ogre::Vector3(CenterX, 0, CenterZ);
 	ShaftDoorThickness = thickness;
 
 	//create doors
 	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 	{
-		if (!AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, tw, th))
+		if (!AddShaftDoor(elev->ServicedFloors[i], lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, voffset, tw, th))
 			return false;
 	}
 
@@ -1061,6 +1044,13 @@ bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttextu
 }
 
 Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th)
+{
+	//compatibility version of AddShaftDoor; please use newer implementation instead
+
+	return AddShaftDoor(floor, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
+}
+
+Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1072,35 +1062,33 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	int index = -1;
-	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
-	{
-		if (elev->ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = elev->GetFloorIndex(floor);
+
+	if (index == -1)
+		return 0;
 
 	//set up coordinates
 	if (DoorDirection == false)
 	{
-		x1 = ShaftDoorOrigin.x - elev->Origin.x;
-		x2 = ShaftDoorOrigin.x - elev->Origin.x;
-		x3 = ShaftDoorOrigin.x - elev->Origin.x;
-		x4 = ShaftDoorOrigin.x - elev->Origin.x;
-		z1 = ShaftDoorOrigin.z - elev->Origin.z - (Doors->Width / 2);
-		z2 = ShaftDoorOrigin.z - elev->Origin.z;
-		z3 = ShaftDoorOrigin.z - elev->Origin.z;
-		z4 = ShaftDoorOrigin.z - elev->Origin.z + (Doors->Width / 2);
+		x1 = CenterX;
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX;
+		z1 = CenterZ - (Doors->Width / 2);
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ + (Doors->Width / 2);
 	}
 	else
 	{
-		x1 = ShaftDoorOrigin.x - elev->Origin.x - (Doors->Width / 2);
-		x2 = ShaftDoorOrigin.x - elev->Origin.x;
-		x3 = ShaftDoorOrigin.x - elev->Origin.x;
-		x4 = ShaftDoorOrigin.x - elev->Origin.x + (Doors->Width / 2);
-		z1 = ShaftDoorOrigin.z - elev->Origin.z;
-		z2 = ShaftDoorOrigin.z - elev->Origin.z;
-		z3 = ShaftDoorOrigin.z - elev->Origin.z;
-		z4 = ShaftDoorOrigin.z - elev->Origin.z;
+		x1 = CenterX - (Doors->Width / 2);
+		x2 = CenterX;
+		x3 = CenterX;
+		x4 = CenterX + (Doors->Width / 2);
+		z1 = CenterZ;
+		z2 = CenterZ;
+		z3 = CenterZ;
+		z4 = CenterZ;
 	}
 
 	std::string buffer, buffer2, buffer3, buffer4, buffer5;
@@ -1108,28 +1096,31 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	//create doors
 
 	//create left door
-	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, ShaftDoorThickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, Doors->Height, 0, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, Doors->Height, voffset, tw, th, tw, th);
 
 	//create right door
-	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, ShaftDoorThickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, Doors->Height, 0, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, Doors->Height, voffset, tw, th, tw, th);
 
 	//finish doors
 	Object *object = FinishShaftDoor(floor);
 
 	//make doors invisible on start
-	ShaftDoors[index]->Enable(false);
+	if (ShaftDoors[index])
+		ShaftDoors[index]->Enable(false);
 
 	return object;
 }
 
 void ElevatorDoor::SetShaftDoors(float thickness, float CenterX, float CenterZ)
 {
+	//notice - this function is deprecated - use newer AddShaftDoor command instead
+
 	//pre-set shaft door parameters for the AddShaftDoor command.
 	//not needed if using the AddShaftDoors command
 	//the Center values are relative offsets from the associated elevator's center
 
 	ShaftDoorThickness = thickness;
-	ShaftDoorOrigin = Ogre::Vector3(elev->Origin.x + CenterX, 0, elev->Origin.z + CenterZ);
+	ShaftDoorOrigin = Ogre::Vector3(CenterX, 0, CenterZ);
 }
 
 void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
@@ -1147,12 +1138,7 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 		return;
 
 	//exit if elevator doesn't service the requested floor
-	int index = -1;
-	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
-	{
-		if (elev->ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = elev->GetFloorIndex(floor);
 
 	if (index == -1)
 		return;
@@ -1210,13 +1196,13 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	//returns the internal door state
 	if (ShaftDoorsExist(floor))
 	{
-		int index = -1;
-		for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
+		int index = elev->GetFloorIndex(floor);
+
+		if (index > -1)
 		{
-			if (elev->ServicedFloors[i] == floor)
-				index = i;
+			if (ShaftDoors[index])
+				return ShaftDoors[index]->Open;
 		}
-		return ShaftDoors[index]->Open;
 	}
 	return false;
 }
@@ -1324,6 +1310,21 @@ int ElevatorDoor::GetWhichDoors()
 	return WhichDoors;
 }
 
+float ElevatorDoor::GetShaftDoorAltitude(int floor)
+{
+	//returns altitude of the shaft door on the specified floor
+
+	int index = elev->GetFloorIndex(floor);
+
+	if (index == -1)
+		return 0;
+
+	if (!ShaftDoors[index])
+		return 0;
+
+	return ShaftDoors[index]->altitude;
+}
+
 void ElevatorDoor::MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move sound
@@ -1348,16 +1349,15 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 {
 	//return true if shaft doors have been created for this door on the specified floor
 
-	int index = -1;
-	for (int i = 0; i < (int)elev->ServicedFloors.size(); i++)
-	{
-		if (elev->ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = elev->GetFloorIndex(floor);
+
 	if (index != -1)
 	{
-		if (ShaftDoors[index]->doors.size() > 0)
-			return true;
+		if (ShaftDoors[index])
+		{
+			if (ShaftDoors[index]->doors.size() > 0)
+				return true;
+		}
 	}
 	return false;
 }
@@ -1419,6 +1419,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	Thickness = 0;
 	IsShaftDoor = shaftdoor;
 	Shift = 0;
+	altitude = 0;
 
 	object = new Object();
 	object->SetValues(this, parent->object, "DoorWrapper", "Door Wrapper", false);
@@ -1463,6 +1464,7 @@ void ElevatorDoor::DoorWrapper::Enable(bool value)
 
 	for (int i = 0; i < (int)doors.size(); i++)
 		doors[i]->mesh->Enable(value, false);
+
 	Enabled = value;
 }
 
@@ -1885,6 +1887,34 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
 {
 	//return door wrapper object
 	return Doors;
+}
+
+ElevatorDoor::DoorWrapper* ElevatorDoor::GetShaftDoorWrapper(int floor)
+{
+	//return shaft door wrapper object for the specified floor
+
+	int index = elev->GetFloorIndex(floor);
+
+	if (index == -1)
+		return 0;
+
+	if (!ShaftDoors[index])
+		return 0;
+
+	return ShaftDoors[index];
+}
+
+int ElevatorDoor::GetManualIndex(int floor)
+{
+	//return manual array index of the specified floor
+
+	for (int i = 0; i < (int)ManualFloors.size(); i++)
+	{
+		if (ManualFloors[i] == floor)
+			return i;
+	}
+
+	return -1;
 }
 
 void ElevatorDoor::Hold()

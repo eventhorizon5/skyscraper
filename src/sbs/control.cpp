@@ -43,7 +43,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 	std::string Name2 = Name;
-	if (Name.find("Control", 0) == -1)
+	if ((int)Name.find("Control", 0) == -1)
 		Name2 = "Control " + Name;
 
 	Actions = action_names;

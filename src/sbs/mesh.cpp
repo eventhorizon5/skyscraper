@@ -352,7 +352,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 						//store extents of temppoly5 for door sides if needed
 						if (checkwallnumber > 0 && checkwallnumber < 3)
 						{
-							if (name.find(checkstring) >= 0)
+							if ((int)name.find(checkstring) >= 0)
 							{
 								float extent;
 								if (checkwallnumber == 2 && (wall2a == false || wall2b == false))

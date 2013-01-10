@@ -828,3 +828,8 @@ void Stairs::ReplaceTexture(const std::string &oldtexture, const std::string &ne
 	        GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
 }
 
+void Stairs::Init()
+{
+	//startup initialization of stairs
+	EnableWholeStairwell(false);
+}

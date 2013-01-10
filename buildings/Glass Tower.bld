@@ -78,6 +78,7 @@ SetPlanarMapping true, false, false, false
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
     Load data/downtown.jpg, Downtown, 1, 1
+    Load data/grndroad1mid.jpg, Helipad, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -1545,6 +1546,69 @@ entrance_column(-119.7 - 2, 59.6 - 36)
 ResetTextureMapping = true
 DrawWalls = true, true, false, false, false, false
 
+
+#Roof layout
+
+CreateStairwell 1, -3.26, 9.78, 137, 137
+CreateStairwell 2, -3.26, -18.4, 137, 137
+
+<Floor 137>
+    DrawWalls = true, true, false, false, false, false
+    AddFloor Back, Backing2, 0, -6.63, 30.14, 17.42, 36.64, 10, 10, 0, 0, false
+    AddFloor Back2, Backing2, 0, -10.61, 36.64, -6.63, 14.59, 10, 10, 0, 0, false
+    #AddFloor Ceiling, Backing2, 0, -6.63, 30.14, 17.42, 14.59, 21.5, 20, 0, 0, false
+    AddCustomWall External, Ceiling, Backing2, -6.63, Floor(137).Altitude + 21.5, 30.14, 17.42, Floor(137).Altitude + 20, 30.14, 17.42, Floor(137).Altitude + 20, 14.59, -6.63, Floor(137).Altitude + 21.5, 14.59, -6.63, Floor(137).Altitude + 21.5, 30.14, 0, 0
+    DrawWalls = false, true, true, true, true, true
+    FloorOrientation = bottom
+    AddFloor Shaft Top, Backing2, 2.5, -0.11, 15.68, 8.37, 22.2, 20, 20, 0, 0, false
+    DrawWalls = true, true, false, false, false, false
+    AddFloor Landing, Backing2, 0, -0.11, 5, 8.43, 14.6, 10, 10, 0, 0, false
+    AddFloor Landing2, Backing2, 0, 8.43, 9.78, 17.42, 14.6, 10, 10, 0, 0, false
+    AddFloor DuckboardLanding, Backing2, 0, -0.11, 5, 8.43, 14.6, 0.25, 0.25, 0, 0, false
+    AddFloor LeftWalkway, Backing2, 0, -9.83, 5, -6.63, -16.38, 5, 5, 0, 0, false
+    AddFloor LeftLanding, Backing2, 0, -10.61, -16.38, -6.63, -20.4, 5, 5, 0, 0, false
+    AddFloor StairsLandingLower, Backing2, 0, -10.61, 14.59, -6.63, 5, 5, 5, 0, 0, false
+    AddFloor StairsLandingUpper, Backing2, 0, -10.61, 14.59, -6.63, 5, 15, 15, 0, 0, false
+    AddWall SideCover, Backing2, 0, 17.42, 36.64, 17.42, 9.78, 10, 10, 0, 0, 0, 0, false
+    AddWall MidCover, Backing2, 0, -10.61, 14.59, 8.43, 14.59, 10, 10, 0, 0, 0, 0, false
+    AddWall LeftCover, Backing2, 0, -35.5, -30.9, -32, -25.8, 10, 10, 0, 0, 0, 0, false
+    AddWall FrontLeft, Backing2, 0, -14.18, -20.4, -14.18, -36.8, 10, 10, 0, 0, 0, 0, false
+    AddWall Front, Backing2, 0, -14.18, -20.4, 10.41, -20.4, 10, 10, 0, 0, 0, 0, false
+    AddWall FrontMid, Backing2, 0, 10.41, -20.4, 12.43, -17.6, 10, 10, 0, 0, 0, 0, false
+    AddWall FrontSide, Backing2, 0, 12.43, -17.6, 25.11, -27, 10, 10, 0, 0, 0, 0, false
+    AddWall Back6, Backing2, 0, -40.4, 30.61, -10.61, 30.61, 5, 5, 10, 10, 0, 0, false
+    AddWall Back7, Backing2, 0, -10.61, 30.61, -10.61, 14.59, 5, 5, 10, 10, 0, 0, false
+    AddWall Back8, Backing2, 0, -40.4, 30.61, -70.15, -12.2, 5, 5, 10, 10, 0, 0, false
+    AddWall Back9, Backing2, 0, -70.15, -12.2, -32, -25.8, 5, 5, 10, 10, 0, 0, false
+    AddWall PenthouseLeft, Concrete, 0, -6.63, 30.14, -6.63, 14.59, 11.5, 11.5, 10, 10, 0, 0, false
+    AddWall PenthouseBack, Concrete, 0, -6.63, 30.14, 17.42, 30.14, 11.5, 10, 10, 10, 0, 0, false
+    AddWall PenthouseRight, Concrete, 0, 17.42, 30.14, 17.42, 14.59, 10, 10, 10, 10, 0, 0, false
+    AddWall PenthouseShaftFront, Concrete, 0, -6.63, 14.59, 17.42, 14.59, 11.5, 10, 10, 10, 0, 0, false
+    AddWall MainCover, Backing2, 0, -32, -25.8, -10.61, 5, 15, 15, 0, 0, 0, 0, false
+    AddWall MainCover2, Backing2, 0, -10.61, 14.59, -10.61, 5, 15, 15, 0, 0, 0, 0, false
+    AddWall StairCover, Backing2, 0, 8.43, 14.59, 8.43, 9.78, 10, 10, 0, 0, 0, 0, false
+    AddWall StairCover, Backing2, 0, 8.43, 9.78, 17.42, 9.78, 10, 10, 0, 0, 0, 0, false
+
+    AddCustomWall External, Helipad, Helipad, -40.4, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 5, -32, Floor(137).Altitude + 15, -25.8, -70.15, Floor(137).Altitude + 15, -12.2, -40.4, Floor(137).Altitude + 15, 30.61, 0, 0
+    AddCustomWall External, ElevatorRoomCeiling, Backing2, -14.18, Floor(137).Altitude + 10, -20.4, 10.41, Floor(137).Altitude + 10, -20.4, 18.4, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -20.4, 0, 0
+    AddCustomWall External, ElevatorRoomCeilint2, Backing2, 10.41, Floor(137).Altitude + 10, -20.4, 12.43, Floor(137).Altitude + 10, -17.6, 25.11, Floor(137).Altitude + 10, -27, 18.4, Floor(137).Altitude + 10, -36.8, 10.41, Floor(137).Altitude + 10, -20.4, 0, 0
+    AddCustomWall External, Back3, Backing2, -43.36, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 30.61, -40.4, Floor(137).Altitude + 10, 30.61, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
+    AddCustomWall External, Back4, Backing2, -43.36, Floor(137).Altitude + 10, 36.64, -40.4, Floor(137).Altitude + 10, 30.61, -70.15, Floor(137).Altitude + 10, -12.2, -79.2, Floor(137).Altitude + 10, -15.2, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
+    AddCustomWall External, Back5, Backing2, -70.15, Floor(137).Altitude + 10, -12.2, -32, Floor(137).Altitude + 10, -25.8, -35.5, Floor(137).Altitude + 10, -30.9, -79.2, Floor(137).Altitude + 10, -15.2, -70.15, Floor(137).Altitude + 10, -12.2, 0, 0
+    AddCustomWall External, FrontDuckboards, Backing2, 0.37, Floor(137).Altitude + 0.25, -16.38, 7.46, Floor(137).Altitude + 0.25, -16.38, 10.41, Floor(137).Altitude + 0.25, -20.4, 0.37, Floor(137).Altitude + 0.25, -20.4, 0.37, Floor(137).Altitude + 0.25, -16.38, 0, 0
+    AddCustomWall External, SideDuckboards1, Backing2, 7.46, Floor(137).Altitude + 0.25, -16.38, 24.08, Floor(137).Altitude + 0.25, 5.38, 27.25, Floor(137).Altitude + 0.25, 3, 10.41, Floor(137).Altitude + 0.25, -20.4, 7.46, Floor(137).Altitude + 0.25, -16.38, 0, 0
+    AddCustomWall External, SideDuckboards2, Backing2, 25.52, Floor(137).Altitude + 0.25, 9.32, 41.57, Floor(137).Altitude + 0.25, -2.86, 39.37, Floor(137).Altitude + 0.25, -6.08, 24.08, Floor(137).Altitude + 0.25, 5.38, 25.52, Floor(137).Altitude + 0.25, 9.32, 0, 0
+    AddCustomWall External, SideDuckboards3, Backing2, 8.43, Floor(137).Altitude + 0.25, 9.32, 25.52, Floor(137).Altitude + 0.25, 9.32, 24.08, Floor(137).Altitude + 0.25, 5.38, 8.43, Floor(137).Altitude + 0.25, 5.38, 8.43, Floor(137).Altitude + 0.25, 9.32, 0, 0
+
+    #stairs
+    Set 1 = 15 / 24 #determine riser size
+    AddStairs 1, StairsTop, Stairs, right, 0, 2.405, 4, %1%, 6.74 / 7, 8, 10, 0, 0
+    AddStairs 1, StairsMid, Stairs, left, 0, -2.405, 4, %1%, 6.74 / 7, 8, 5, 0, 0
+    AddStairs 1, StairsBot, Stairs, right, 0, 2.405, 4, %1%, 6.74 / 7, 8, 0, 0, 0
+    AddStairs 2, StairsFront, Stairs, right, 0, 0, 4, %1%, 6.74 / 7, 8, 0, 0, 0
+<EndFloor>
+
+
 #Glass Elevator Shaft
 AddShaft 1, 2, -0.24, -41.05, 0, 137
 ShaftCut 1, -18.64, -4.25 + 0.33, 18.64, 4.25, 0, 5
@@ -1710,7 +1774,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 2 - 135, 137
+    ServicedFloors = 0, 2 - 137
     AssignedShaft = 2
     CreateElevator true, 0, -0.294, 0
     
@@ -1751,12 +1815,11 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddDoors 1, ElevDoors2, ElevDoors, 0.2, 0, -3.01, 3.5, 8, true, 0, 0 #doors
-    AddShaftDoors 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
 
     #directional indicator
-    AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 16, front, 0.5, 1, true, 0, 0
     
     #panel
     CreatePanel ElevPanel, 17, 7, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
@@ -1915,6 +1978,20 @@ DrawWalls = true, true, false, false, false, false
    
 <EndElevator>
 
+<Floors 0 to 136>
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoor 4, 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 0, 0, 0 #shaft doors
+    WallOrientation = left
+<EndFloors>
+
+<Floor 137>
+    WallOrientation = right
+    DrawWalls = true, true, true, true, true, true
+    AddShaftDoor 4, 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 10, 0, 0 #shaft doors
+    WallOrientation = left
+<EndFloor>
+
 <Floor 0>
     CallButtonElevators = 1, 2, 3
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 - 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
@@ -1927,70 +2004,13 @@ DrawWalls = true, true, false, false, false, false
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 + 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
-<Floors 0 to 137>
+<Floors 0 to 136>
     CallButtonElevators = 4
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.13 + 3, 18.715 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
 
-
-#Roof layout
-
-CreateStairwell 1, -3.26, 9.78, 137, 137
-CreateStairwell 2, -3.26, -18.4, 137, 137
-
 <Floor 137>
-    DrawWalls = true, true, false, false, false, false
-    AddFloor Back, Backing2, 0, -6.63, 30.14, 17.42, 36.64, 10, 10, 0, 0, false
-    AddFloor Back2, Backing2, 0, -10.61, 36.64, -6.63, 14.59, 10, 10, 0, 0, false
-    #AddFloor Ceiling, Backing2, 0, -6.63, 30.14, 17.42, 14.59, 21.5, 20, 0, 0, false
-    AddCustomWall External, Ceiling, Backing2, -6.63, Floor(137).Altitude + 21.5, 30.14, 17.42, Floor(137).Altitude + 20, 30.14, 17.42, Floor(137).Altitude + 20, 14.59, -6.63, Floor(137).Altitude + 21.5, 14.59, -6.63, Floor(137).Altitude + 21.5, 30.14, 0, 0
-    DrawWalls = false, true, true, true, true, true
-    FloorOrientation = bottom
-    AddFloor Shaft Top, Backing2, 2.5, -0.11, 15.68, 8.37, 22.2, 20, 20, 0, 0, false
-    DrawWalls = true, true, false, false, false, false
-    AddFloor Landing, Backing2, 0, -0.11, 5, 8.43, 14.6, 10, 10, 0, 0, false
-    AddFloor Landing2, Backing2, 0, 8.43, 9.78, 17.42, 14.6, 10, 10, 0, 0, false
-    AddFloor DuckboardLanding, Backing2, 0, -0.11, 5, 8.43, 14.6, 0.25, 0.25, 0, 0, false
-    AddFloor LeftWalkway, Backing2, 0, -9.83, 5, -6.63, -16.38, 5, 5, 0, 0, false
-    AddFloor LeftLanding, Backing2, 0, -10.61, -16.38, -6.63, -20.4, 5, 5, 0, 0, false
-    AddFloor StairsLandingLower, Backing2, 0, -10.61, 14.59, -6.63, 5, 5, 5, 0, 0, false
-    AddFloor StairsLandingUpper, Backing2, 0, -10.61, 14.59, -6.63, 5, 15, 15, 0, 0, false
-    AddWall SideCover, Backing2, 0, 17.42, 36.64, 17.42, 9.78, 10, 10, 0, 0, 0, 0, false
-    AddWall MidCover, Backing2, 0, -10.61, 14.59, 8.43, 14.59, 10, 10, 0, 0, 0, 0, false
-    AddWall LeftCover, Backing2, 0, -35.5, -30.9, -32, -25.8, 10, 10, 0, 0, 0, 0, false
-    AddWall FrontLeft, Backing2, 0, -14.18, -20.4, -14.18, -36.8, 10, 10, 0, 0, 0, 0, false
-    AddWall Front, Backing2, 0, -14.18, -20.4, 10.41, -20.4, 10, 10, 0, 0, 0, 0, false
-    AddWall FrontMid, Backing2, 0, 10.41, -20.4, 12.43, -17.6, 10, 10, 0, 0, 0, 0, false
-    AddWall FrontSide, Backing2, 0, 12.43, -17.6, 25.11, -27, 10, 10, 0, 0, 0, 0, false
-    AddWall Back6, Backing2, 0, -40.4, 30.61, -10.61, 30.61, 5, 5, 10, 10, 0, 0, false
-    AddWall Back7, Backing2, 0, -10.61, 30.61, -10.61, 14.59, 5, 5, 10, 10, 0, 0, false
-    AddWall Back8, Backing2, 0, -40.4, 30.61, -70.15, -12.2, 5, 5, 10, 10, 0, 0, false
-    AddWall Back9, Backing2, 0, -70.15, -12.2, -32, -25.8, 5, 5, 10, 10, 0, 0, false
-    AddWall PenthouseLeft, Backing2, 0, -6.63, 30.14, -6.63, 14.59, 11.5, 11.5, 10, 10, 0, 0, false
-    AddWall PenthouseBack, Backing2, 0, -6.63, 30.14, 17.42, 30.14, 11.5, 10, 10, 10, 0, 0, false
-    AddWall PenthouseRight, Backing2, 0, 17.42, 30.14, 17.42, 14.59, 10, 10, 10, 10, 0, 0, false
-    AddWall PenthouseFront, Backing2, 0, -6.63, 14.59, 17.42, 14.59, 11.5, 10, 10, 10, 0, 0, false
-    AddWall MainCover, Backing2, 0, -32, -25.8, -10.61, 5, 15, 15, 0, 0, 0, 0, false
-    AddWall MainCover2, Backing2, 0, -10.61, 14.59, -10.61, 5, 15, 15, 0, 0, 0, 0, false
-    AddWall StairCover, Backing2, 0, 8.43, 14.59, 8.43, 9.78, 10, 10, 0, 0, 0, 0, false
-    AddWall StairCover, Backing2, 0, 8.43, 9.78, 17.42, 9.78, 10, 10, 0, 0, 0, 0, false
-
-    AddCustomWall External, Helipad, Backing2, -40.4, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 5, -32, Floor(137).Altitude + 15, -25.8, -70.15, Floor(137).Altitude + 15, -12.2, -40.4, Floor(137).Altitude + 15, 30.61, 0, 0
-    AddCustomWall External, ElevatorRoomCeiling, Backing2, -14.18, Floor(137).Altitude + 10, -20.4, 10.41, Floor(137).Altitude + 10, -20.4, 18.4, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -20.4, 0, 0
-    AddCustomWall External, ElevatorRoomCeilint2, Backing2, 10.41, Floor(137).Altitude + 10, -20.4, 12.43, Floor(137).Altitude + 10, -17.6, 25.11, Floor(137).Altitude + 10, -27, 18.4, Floor(137).Altitude + 10, -36.8, 10.41, Floor(137).Altitude + 10, -20.4, 0, 0
-    AddCustomWall External, Back3, Backing2, -43.36, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 30.61, -40.4, Floor(137).Altitude + 10, 30.61, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
-    AddCustomWall External, Back4, Backing2, -43.36, Floor(137).Altitude + 10, 36.64, -40.4, Floor(137).Altitude + 10, 30.61, -70.15, Floor(137).Altitude + 10, -12.2, -79.2, Floor(137).Altitude + 10, -15.2, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
-    AddCustomWall External, Back5, Backing2, -70.15, Floor(137).Altitude + 10, -12.2, -32, Floor(137).Altitude + 10, -25.8, -35.5, Floor(137).Altitude + 10, -30.9, -79.2, Floor(137).Altitude + 10, -15.2, -70.15, Floor(137).Altitude + 10, -12.2, 0, 0
-    AddCustomWall External, FrontDuckboards, Backing2, 0.37, Floor(137).Altitude + 0.25, -16.38, 7.46, Floor(137).Altitude + 0.25, -16.38, 10.41, Floor(137).Altitude + 0.25, -20.4, 0.37, Floor(137).Altitude + 0.25, -20.4, 0.37, Floor(137).Altitude + 0.25, -16.38, 0, 0
-    AddCustomWall External, SideDuckboards1, Backing2, 7.46, Floor(137).Altitude + 0.25, -16.38, 24.08, Floor(137).Altitude + 0.25, 5.38, 27.25, Floor(137).Altitude + 0.25, 3, 10.41, Floor(137).Altitude + 0.25, -20.4, 7.46, Floor(137).Altitude + 0.25, -16.38, 0, 0
-    AddCustomWall External, SideDuckboards2, Backing2, 25.52, Floor(137).Altitude + 0.25, 9.32, 41.57, Floor(137).Altitude + 0.25, -2.86, 39.37, Floor(137).Altitude + 0.25, -6.08, 24.08, Floor(137).Altitude + 0.25, 5.38, 25.52, Floor(137).Altitude + 0.25, 9.32, 0, 0
-    AddCustomWall External, SideDuckboards3, Backing2, 8.43, Floor(137).Altitude + 0.25, 9.32, 25.52, Floor(137).Altitude + 0.25, 9.32, 24.08, Floor(137).Altitude + 0.25, 5.38, 8.43, Floor(137).Altitude + 0.25, 5.38, 8.43, Floor(137).Altitude + 0.25, 9.32, 0, 0
-
-    #stairs
-    Set 1 = 15 / 24 #determine riser size
-    AddStairs 1, StairsTop, Stairs, right, 0, 2.405, 4, %1%, 6.74 / 7, 8, 10, 0, 0
-    AddStairs 1, StairsMid, Stairs, left, 0, -2.405, 4, %1%, 6.74 / 7, 8, 5, 0, 0
-    AddStairs 1, StairsBot, Stairs, right, 0, 2.405, 4, %1%, 6.74 / 7, 8, 0, 0, 0
-    AddStairs 2, StairsFront, Stairs, right, 0, 0, 4, %1%, 6.74 / 7, 8, 0, 0, 0
+    CallButtonElevators = 4
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.13 + 3, 18.715 - 4.125 - 0.33 - 0.1, 14, front, 0.5, 1, true, 0, 0
 <EndFloor>
 

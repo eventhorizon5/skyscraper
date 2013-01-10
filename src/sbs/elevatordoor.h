@@ -93,6 +93,7 @@ public:
 		ElevatorDoor *parent;
 		bool IsShaftDoor;
 		float Shift;
+		float altitude;
 	};
 
 	Object *object; //SBS object
@@ -129,8 +130,9 @@ public:
 	void ResetDoorTimer();
 	bool DoorsStopped();
 	Object* AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	bool AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	bool AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
 	Object* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th);
+	Object* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
 	void Chime(int floor, bool direction);
 	void Loop();
 	void Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
@@ -145,14 +147,17 @@ public:
 	Object* AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	Object* AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	void AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	Object* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, float voffset);
+	Object* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor);
 	Object* FinishDoors();
 	Object* FinishShaftDoor(int floor);
 	bool FinishShaftDoors();
 	DoorWrapper* GetDoorWrapper();
+	DoorWrapper* GetShaftDoorWrapper(int floor);
 	bool TimerIsRunning();
 	void EnableNudgeMode(bool value);
 	bool GetNudgeStatus();
+	int GetManualIndex(int floor);
+	float GetShaftDoorAltitude(int floor);
 
 private:
 

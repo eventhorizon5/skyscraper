@@ -169,6 +169,7 @@ Elevator::Elevator(int number)
 	HeightSet = false;
 	messagesnd = 0;
 	musicsound = 0;
+	elevposition = 0;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -533,6 +534,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (sbs->Verbose)
 		Report("moving elevator to origin position");
 	ElevatorMesh->Move(Origin, false, false, false);
+	elevposition = GetPosition();
 
 	//create sound objects
 	if (sbs->Verbose)
@@ -930,7 +932,7 @@ void Elevator::ProcessCallQueue()
 					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != UpQueue[i])
 					{
-						float tmpdestination = sbs->GetFloor(UpQueue[i])->GetBase();
+						float tmpdestination = GetDestinationAltitude(UpQueue[i]);
 						if (BeyondDecelMarker(1, tmpdestination) == false)
 						{
 							ActiveCallFloor = UpQueue[i];
@@ -1018,7 +1020,7 @@ void Elevator::ProcessCallQueue()
 					//if elevator is moving and not leveling, change destination floor if not beyond decel marker of that floor
 					if (GotoFloor != DownQueue[i])
 					{
-						float tmpdestination = sbs->GetFloor(DownQueue[i])->GetBase();
+						float tmpdestination = GetDestinationAltitude(DownQueue[i]);
 						if (BeyondDecelMarker(-1, tmpdestination) == false)
 						{
 							ActiveCallFloor = DownQueue[i];
@@ -1385,7 +1387,7 @@ void Elevator::MoveElevatorToFloor()
 		//Determine distance to destination floor
 		if (InspectionService == false)
 		{
-			Destination = sbs->GetFloor(GotoFloor)->GetBase();
+			Destination = GetDestinationAltitude(GotoFloor);
 			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
 		}
 		else
@@ -1393,7 +1395,7 @@ void Elevator::MoveElevatorToFloor()
 			//otherwise if inspection service is on, choose the altitude of the top/bottom floor
 			if (Direction == 1)
 			{
-				Destination = sbs->GetFloor(GetTopFloor())->GetBase();
+				Destination = GetDestinationAltitude(GetTopFloor());
 				if (ElevatorStart >= Destination)
 				{
 					//don't go above top floor
@@ -1408,7 +1410,7 @@ void Elevator::MoveElevatorToFloor()
 			}
 			else
 			{
-				Destination = sbs->GetFloor(GetBottomFloor())->GetBase();
+				Destination = GetDestinationAltitude(GetBottomFloor());
 				if (ElevatorStart <= Destination)
 				{
 					//don't go below bottom floor
@@ -1634,47 +1636,9 @@ void Elevator::MoveElevatorToFloor()
 	//move elevator objects and camera
 	movement.y = ElevatorRate * sbs->delta;
 
-	ElevatorMesh->Move(Ogre::Vector3(0, movement.y, 0), true, true, true);
-	elevposition = GetPosition();
+	SetAltitude(GetPosition().y + movement.y);
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
-	MoveDoors(0, movement, true, true, true);
-	MoveObjects(movement, true, true, true);
-	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->MovePosition(movement);
-	}
-	for (int i = 0; i < (int)PanelArray.size(); i++)
-	{
-		if (PanelArray[i])
-			PanelArray[i]->Move(movement);
-	}
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i])
-			DirIndicatorArray[i]->Move(movement);
-	}
-	for (int i = 0; i < (int)StdDoorArray.size(); i++)
-	{
-		if (StdDoorArray[i])
-			StdDoorArray[i]->Move(movement, true, true, true);
-	}
-
-	//move sounds
-	mainsound->SetPosition(elevposition);
-	idlesound->SetPosition(elevposition);
-	MoveDoorSound(0, elevposition, false, false, false);
-	alarm->SetPosition(elevposition);
-	floorbeep->SetPosition(elevposition);
-	floorsound->SetPosition(elevposition);
-	messagesnd->SetPosition(elevposition);
-	musicsound->SetPosition(elevposition + MusicPosition);
-	for (int i = 0; i < (int)sounds.size(); i++)
-	{
-		if (sounds[i])
-			sounds[i]->SetPositionY(elevposition.y + sounds[i]->PositionOffset.y);
-	}
 
 	//motion calculation
 	if (Brakes == false)
@@ -1924,46 +1888,11 @@ void Elevator::MoveElevatorToFloor()
 		//move elevator objects
 		if (sbs->Verbose)
 			Report("setting elevator to floor altitude");
-		ElevatorMesh->Move(Ogre::Vector3(elevposition.x, Destination, elevposition.z), false, false, false);
+
+		SetAltitude(Destination);
+
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 			sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
-		MoveDoors(0, Ogre::Vector3(0, Destination, 0), true, false, true);
-		MoveObjects(Ogre::Vector3(0, Destination, 0), true, false, true);
-		for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
-		{
-			if (FloorIndicatorArray[i])
-				FloorIndicatorArray[i]->SetPosition(Ogre::Vector3(FloorIndicatorArray[i]->GetPosition().x, Destination, FloorIndicatorArray[i]->GetPosition().z));
-		}
-		for (int i = 0; i < (int)PanelArray.size(); i++)
-		{
-			if (PanelArray[i])
-				PanelArray[i]->SetToElevatorAltitude();
-		}
-		for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
-		{
-			if (DirIndicatorArray[i])
-				DirIndicatorArray[i]->SetPosition(Ogre::Vector3(DirIndicatorArray[i]->GetPosition().x, Destination, DirIndicatorArray[i]->GetPosition().z));
-		}
-		for (int i = 0; i < (int)StdDoorArray.size(); i++)
-		{
-			if (StdDoorArray[i])
-				StdDoorArray[i]->Move(Ogre::Vector3(0, GetPosition().y, 0), true, false, true);
-		}
-
-		//move sounds
-		mainsound->SetPosition(GetPosition());
-		idlesound->SetPosition(GetPosition());
-		MoveDoorSound(0, GetPosition(), false, false, false);
-		alarm->SetPosition(GetPosition());
-		floorbeep->SetPosition(GetPosition());
-		floorsound->SetPosition(GetPosition());
-		messagesnd->SetPosition(GetPosition());
-		musicsound->SetPosition(GetPosition() + MusicPosition);
-		for (int i = 0; i < (int)sounds.size(); i++)
-		{
-			if (sounds[i])
-				sounds[i]->SetPositionY(GetPosition().y + sounds[i]->PositionOffset.y);
-		}
 	}
 
 	//reset values if at destination floor
@@ -1987,6 +1916,63 @@ finish:
 
 	if (FinishedMove == false)
 		FinishMove();
+}
+
+void Elevator::SetAltitude(float altitude)
+{
+	//set vertical position of elevator and objects
+
+	ElevatorMesh->Move(Ogre::Vector3(elevposition.x, altitude, elevposition.z), false, false, false);
+	elevposition.y = altitude;
+	MoveDoors(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
+	MoveObjects(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
+	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->SetPosition(Ogre::Vector3(FloorIndicatorArray[i]->GetPosition().x, elevposition.y, FloorIndicatorArray[i]->GetPosition().z));
+	}
+	for (int i = 0; i < (int)PanelArray.size(); i++)
+	{
+		if (PanelArray[i])
+			PanelArray[i]->SetToElevatorAltitude();
+	}
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
+	{
+		if (DirIndicatorArray[i])
+			DirIndicatorArray[i]->SetPosition(Ogre::Vector3(DirIndicatorArray[i]->GetPosition().x, elevposition.y, DirIndicatorArray[i]->GetPosition().z));
+	}
+	for (int i = 0; i < (int)StdDoorArray.size(); i++)
+	{
+		if (StdDoorArray[i])
+			StdDoorArray[i]->Move(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
+	}
+
+	//move sounds
+	mainsound->SetPosition(elevposition);
+	idlesound->SetPosition(elevposition);
+	MoveDoorSound(0, elevposition, false, false, false);
+	alarm->SetPosition(elevposition);
+	floorbeep->SetPosition(elevposition);
+	floorsound->SetPosition(elevposition);
+	messagesnd->SetPosition(elevposition);
+	musicsound->SetPosition(elevposition + MusicPosition);
+	for (int i = 0; i < (int)sounds.size(); i++)
+	{
+		if (sounds[i])
+			sounds[i]->SetPositionY(elevposition.y + sounds[i]->PositionOffset.y);
+	}
+}
+
+void Elevator::SetFloor(int floor)
+{
+	//set elevator's altitude to specified floor
+
+	float altitude = 0;
+	if (!sbs->GetFloor(floor))
+		return;
+
+	altitude = GetDestinationAltitude(floor);
+	SetAltitude(altitude);
 }
 
 void Elevator::FinishMove()
@@ -2371,11 +2357,9 @@ void Elevator::RemoveServicedFloor(int number)
 		Report("removing serviced floor " + std::string(_itoa(number, intbuffer, 10)));
 	if (IsServicedFloor(number) == true)
 	{
-		for (int i = 0; i < (int)ServicedFloors.size(); i++)
-		{
-			if (ServicedFloors[i] == number)
-				ServicedFloors.erase(ServicedFloors.begin() + i);
-		}
+		int index = GetFloorIndex(number);
+		if (index > -1)
+			ServicedFloors.erase(ServicedFloors.begin() + index);
 	}
 }
 
@@ -2463,12 +2447,7 @@ bool Elevator::IsServicedFloor(int floor)
 	//returns true if floor is in serviced floor list, otherwise false
 
 	//SBS_PROFILE("Elevator::IsServicedFloor");
-	int index = -1;
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
-	{
-		if (ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = GetFloorIndex(floor);
 	if (index == -1)
 	{
 		if (sbs->Verbose)
@@ -3307,13 +3286,13 @@ Object* Elevator::AddDoors(int number, const char *lefttexture, const char *righ
 	return 0;
 }
 
-bool Elevator::AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th)
+bool Elevator::AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
 
 	if (GetDoor(number))
-		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, tw, th);
+		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
 		ReportError("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
 	return false;
@@ -3324,15 +3303,23 @@ Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, c
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
-	int index = -1;
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
-	{
-		if (ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = GetFloorIndex(floor);
 
 	if (index != -1 && GetDoor(number))
 		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
+	else
+		return 0;
+}
+
+Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+{
+	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
+	//by the SetShaftDoors command.
+
+	int index = GetFloorIndex(floor);
+
+	if (index != -1 && GetDoor(number))
+		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
 		return 0;
 }
@@ -3858,12 +3845,8 @@ Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name,
 {
 	//adds a single elevator shaft door component on the specified floor
 
-	int index = -1;
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
-	{
-		if (ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = GetFloorIndex(floor);
+
 	if (index != -1 && GetDoor(number))
 		return GetDoor(number)->AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
@@ -3894,12 +3877,8 @@ Object* Elevator::FinishShaftDoor(int number, int floor)
 {
 	//finishes a single shaft door
 
-	int index = -1;
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
-	{
-		if (ServicedFloors[i] == floor)
-			index = i;
-	}
+	int index = GetFloorIndex(floor);
+
 	if (index != -1 && GetDoor(number))
 		return GetDoor(number)->FinishShaftDoor(floor);
 	else
@@ -4584,4 +4563,70 @@ std::vector<Sound*> Elevator::GetSound(const char *name)
 		}
 	}
 	return soundlist;
+}
+
+int Elevator::GetFloorIndex(int floor)
+{
+	//return array index of the specified floor
+
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
+	{
+		if (ServicedFloors[i] == floor)
+			return i;
+	}
+
+	return -1;
+}
+
+float Elevator::GetDestinationAltitude(int floor)
+{
+	//returns the destination altitude of the specified floor, based on shaft door positioning
+
+	int index = GetFloorIndex(floor);
+
+	if (index == -1)
+		return 0;
+
+	float result = 0;
+	bool found = false;
+	for (int i = 0; i < DoorArray.size(); i++)
+	{
+		if (DoorArray[i]->ShaftDoorsExist(floor) == true)
+		{
+			float altitude = DoorArray[i]->GetShaftDoorAltitude(floor);
+
+			if (altitude > result || found == false)
+			{
+				result = altitude;
+				found = true;
+			}
+		}
+	}
+
+	if (found == false)
+	{
+		if (sbs->GetFloor(floor))
+			return sbs->GetFloor(floor)->GetBase();
+	}
+	return result;
+}
+
+void Elevator::Init()
+{
+	//startup elevator initialization
+
+	bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
+
+	//turn on shaft doors
+	ShaftDoorsEnabled(0, sbs->camera->StartFloor, true);
+	ShaftDoorsEnabled(0, sbs->GetShaft(AssignedShaft)->startfloor, true);
+	ShaftDoorsEnabled(0, sbs->GetShaft(AssignedShaft)->endfloor, true);
+
+	//disable objects
+	EnableObjects(false);
+	if (enable_elevators == false)
+		Enabled(false);
+
+	//move elevator to starting position
+	SetFloor(OriginFloor);
 }

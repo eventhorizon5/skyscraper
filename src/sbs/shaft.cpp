@@ -738,3 +738,18 @@ void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &new
         	GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
 }
 
+void Shaft::Init()
+{
+	//startup initialization of shafts
+
+	if (ShowFullShaft == false)
+	{
+		EnableWholeShaft(false, true);
+
+		//enable extents
+		Enabled(startfloor, true, true);
+		Enabled(endfloor, true, true);
+	}
+	else
+		EnableWholeShaft(true, true, true);
+}

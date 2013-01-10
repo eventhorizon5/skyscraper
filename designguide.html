@@ -1005,7 +1005,10 @@ wall plate.</p>
 doors on the current floor only<br>
 Syntax: <font face="Courier New, Courier, mono"
 size="2">AddShaftDoor<em> elevator, number, lefttexture, righttexture</em>,
-<em>tw, th</em></font></p>
+<em>thickness, CenterX, CenterZ, voffset, tw, th</em></font><br>
+Syntax (with old SetShaftDoors command): <font
+face="Courier New, Courier, mono" size="2">AddShaftDoor<em> elevator, number,
+lefttexture, righttexture</em>, <em>tw, th</em></font></p>
 
 <p align="left">The AddShaftDoor command creates working shaft elevator doors
 on the current floor only - the other command, <em>AddShaftDoors</em> (in the
@@ -1015,13 +1018,17 @@ on the floor, and also for only creating shaft doors on one side if an elevator
 serves a specific floor. The <em>SetShaftDoors</em> command in the elevator
 section must be used before using this command. Parameters such as width,
 height, and direction are taken from the <em>AddDoors</em> command (so the
-regular elevator doors need to be created first). These doors should be moved
-slightly away from the elevator doors (to separate them both). Also, this
-command cuts any shaft walls that are within the door area (and so this must be
-called after the shaft walls are created). <em>Number</em> specifies the number
-of the door to create (related to the <em>Doors</em> command) - if the elevator
-only has one door, or if the <em>Doors</em> command was not used, specify 1
-here.</p>
+regular elevator doors need to be created first). The voffset parameter allows
+you to create shaft doors at a different vertical position than the base of the
+floor, and the elevator will automatically stop according to the shaft door's
+voffset for that floor. These doors should be moved slightly away from the
+elevator doors (to separate them both). Also, this command cuts any shaft walls
+that are within the door area (and so this must be called after the shaft walls
+are created). <em>Number</em> specifies the number of the door to create
+(related to the <em>Doors</em> command) - if the elevator only has one door, or
+if the <em>Doors</em> command was not used, specify 1 here. Note that for
+filler walls to be created automatically, the names of the surrounding walls
+(shaft and outer floor walls) must contain the word "Shaft".</p>
 
 <p align="left"><strong>19. AddFloorIndicator</strong> - creates a floor
 indicator associated with a specific elevator<br>
@@ -1108,7 +1115,9 @@ side_th</em></font></p>
 <p align="left">This command is almost identical to the AddDoorComponent
 command (in the elevator section below - see that for more information), except
 that it creates shaft doors. Use the FinishShaftDoor command after creating the
-components. This command replaces the AddShaftDoor command.</p>
+components. The components don't need to line up with the floor's base; the
+elevator will automatically stop at the base of the shaft door for each floor.
+This command replaces the AddShaftDoor command.</p>
 
 <p align="left"><strong>25. FinishShaftDoor</strong> - finishes shaft door
 creation - use this after all related AddShaftDoorComponent commands are used,
@@ -1119,7 +1128,9 @@ size="2">FinishShaftDoor<em> elevator, number</em></font></p>
 
 <p align="left">This command is almost identical to the FinishDoors command (in
 the elevator section below - see that for more information) except that it's
-used for finishing a shaft door.</p>
+used for finishing a shaft door. Note that for filler walls to be created
+automatically, the names of the surrounding walls (shaft and outer floor walls)
+must contain the word "Shaft".</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>26.
 AddModel</strong> - adds a 3D model to the floor. The model's
@@ -1735,19 +1746,23 @@ command was not used, specify 1 here.</p>
 doors<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftDoors
 <em>number, lefttexture, righttexture</em>, <em>thickness, CenterX, CenterZ,
-tw, th</em></font></p>
+voffset, tw, th</em></font></p>
 
 <p align="left">The AddShaftDoors command creates working shaft elevator doors
 at the central location specified by <em>CenterX</em> and <em>CenterZ</em>.
 Other parameters such as width, height, and direction are taken from the
-AddDoors command (so the regular elevator doors need to be created first).
-These doors should be moved slightly away from the elevator doors (to separate
-them both). Also, this command creates doors at all the floors specified in the
-ServicedFloors value, and cuts any shaft walls that are within the door area
-(and so this must be called after the shaft walls are created). <em>Number</em>
-specifies the number of the door to create (related to the <em>Doors</em>
-command) - if the elevator only has one door, or if the Doors command was not
-used, specify 1 here.</p>
+AddDoors command (so the regular elevator doors need to be created first). The
+voffset parameter allows you to create shaft doors at a different vertical
+position than the base of the floor, and the elevator will automatically stop
+according to the shaft door's voffset for that floor. These doors should be
+moved slightly away from the elevator doors (to separate them both). Also, this
+command creates doors at all the floors specified in the ServicedFloors value,
+and cuts any shaft walls that are within the door area (and so this must be
+called after the shaft walls are created). <em>Number</em> specifies the number
+of the door to create (related to the <em>Doors</em> command) - if the elevator
+only has one door, or if the Doors command was not used, specify 1 here. Note
+that for filler walls to be created automatically, the names of the surrounding
+walls (shaft and outer floor walls) must contain the word "Shaft".</p>
 
 <p align="left"><strong>6. CreatePanel</strong> - creates a button panel<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CreatePanel
@@ -1980,17 +1995,18 @@ and is either true or false</p>
 <p align="left"><em>tw</em> and <em>th</em> are the texture scaling for the
 wall plate.</p>
 
-<p align="left"><strong>12. SetShaftDoors</strong> - sets positioning and
-thickness of shaft doors which will be created with the <em>AddShaftDoor</em>
-command<br>
+<p align="left"><strong>12. SetShaftDoors</strong> - (deprecated) sets
+positioning and thickness of shaft doors which will be created with the
+<em>older AddShaftDoor</em> command. Please use the newer AddShaftDoor syntax
+instead.<br>
 Syntax: <font face="Courier New, Courier, mono"
 size="2">SetShaftDoors<em> number</em>, <em>thickness, CenterX,
 CenterZ</em></font> </p>
 
-<p align="left">This command must be used before calling <em>AddShaftDoor</em>.
-This specifies the thickness and X/Z positioning for the shaft doors that will
-be created. <em>Number</em> specifies the door number this is associated with
-(use 1 if only one door).</p>
+<p align="left">This command must be used before calling <em>the older
+AddShaftDoor</em> command. This specifies the thickness and X/Z positioning for
+the shaft doors that will be created. <em>Number</em> specifies the door number
+this is associated with (use 1 if only one door).</p>
 
 <p align="left"><strong>13. AddFloorSigns</strong> - creates floor signs on all
 floors serviced by the elevator<br>
@@ -2074,7 +2090,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">FinishDoors
 
 <p align="left">This command completes the elevator door creation by storing
 the central location and shift factor, cutting walls for the door, creating
-side connection pieces for the cut, etc.</p>
+side connection pieces for the cut, etc. </p>
 
 <p align="left"><strong>18. FinishShaftDoors</strong> - finishes shaft door
 creation for all serviced floors - use this after all related
@@ -2084,7 +2100,9 @@ Syntax: <font face="Courier New, Courier, mono" size="2">FinishShaftDoors
 <em>number</em></font></p>
 
 <p align="left">This command is almost identical to the FinishDoors command
-except that it's used for finishing shaft doors on all serviced floors.</p>
+except that it's used for finishing shaft doors on all serviced floors. Note
+that for filler walls to be created automatically, the names of the surrounding
+walls (shaft and outer floor walls) must contain the word "Shaft".</p>
 
 <p align="left"><strong>19. AddDoor</strong> - adds a textured door in the
 specified location, which moves with the elevator<br>

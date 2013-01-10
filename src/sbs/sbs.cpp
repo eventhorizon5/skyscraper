@@ -431,45 +431,25 @@ bool SBS::Start()
 	for (int i = 0; i < TotalFloors(); i++)
 		FloorArray[i].object->Enabled(false);
 
-	//turn off shafts
+	//init shafts
 	for (int i = 0; i < Shafts(); i++)
 	{
 		if (ShaftArray[i].object)
-		{
-			if (ShaftArray[i].object->ShowFullShaft == false)
-			{
-				ShaftArray[i].object->EnableWholeShaft(false, true);
-				//enable extents
-				ShaftArray[i].object->Enabled(ShaftArray[i].object->startfloor, true, true);
-				ShaftArray[i].object->Enabled(ShaftArray[i].object->endfloor, true, true);
-			}
-			else
-				ShaftArray[i].object->EnableWholeShaft(true, true, true);
-		}
+			ShaftArray[i].object->Init();
 	}
 
-	//turn off stairwells
+	//init stairwells
 	for (int i = 0; i < StairsNum(); i++)
 	{
 		if (StairsArray[i].object)
-			StairsArray[i].object->EnableWholeStairwell(false);
+			StairsArray[i].object->Init();
 	}
 
 	//init elevators
 	for (int i = 0; i < Elevators(); i++)
 	{
-		bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 		if (ElevatorArray[i].object)
-		{
-			//turn on shaft doors
-			ElevatorArray[i].object->ShaftDoorsEnabled(0, camera->StartFloor, true);
-			ElevatorArray[i].object->ShaftDoorsEnabled(0, GetShaft(ElevatorArray[i].object->AssignedShaft)->startfloor, true);
-			ElevatorArray[i].object->ShaftDoorsEnabled(0, GetShaft(ElevatorArray[i].object->AssignedShaft)->endfloor, true);
-			//disable objects
-			ElevatorArray[i].object->EnableObjects(false);
-			if (enable_elevators == false)
-				ElevatorArray[i].object->Enabled(false);
-		}
+			ElevatorArray[i].object->Init();
 	}
 
 	//turn on start floor
@@ -2726,7 +2706,7 @@ std::string SBS::TruncateNumber(const char *value, int decimals)
 	
 	if (decimals < 1)
 		return number;
-	number.erase(number.find(".") + decimals + 1);
+	number.erase((int)number.find(".") + decimals + 1);
 	if (number.at(number.length() - 1) == '.')
 		number = number.substr(0, number.length() - 1); //strip of extra decimal point if even
 	return number;

@@ -633,7 +633,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		if (index > -1)
 			polyname.erase(polyname.begin(), polyname.begin() + index + 1);
 	}
-	if (meshname.find("(") == 0)
+	if ((int)meshname.find("(") == 0)
 	{
 		int index = meshname.find(")");
 		if (object_number == 0)
@@ -671,7 +671,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check call buttons
-	if (meshname.find("Call Button") != -1)
+	if ((int)meshname.find("Call Button") != -1)
 	{
 		//user clicked on a call button
 		int index = meshname.find(":");
@@ -701,7 +701,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check controls
-	if (meshname.find("Control") != -1)
+	if ((int)meshname.find("Control") != -1)
 	{
 		//user clicked on a control object
 		if (obj)
@@ -716,7 +716,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check shaft doors
-	if (meshname.find("Shaft Door") != -1 && shift == true)
+	if ((int)meshname.find("Shaft Door") != -1 && shift == true)
 	{
 		//user clicked on a shaft door
 		int elevator = atoi(meshname.substr(9, meshname.find(":") - 9).c_str());
@@ -731,7 +731,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check elevator doors
-	if (meshname.find("ElevatorDoor") != -1 && shift == true)
+	if ((int)meshname.find("ElevatorDoor") != -1 && shift == true)
 	{
 		//user clicked on an elevator door
 		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13).c_str());
@@ -743,7 +743,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check doors
-	if (meshname.find(":Door") != -1)
+	if ((int)meshname.find(":Door") != -1)
 	{
 		//user clicked on a door
 		if (meshname.substr(0, 5) == "Floor")
@@ -788,7 +788,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					stairs->OpenDoor(doornumber);
 			}
 		}
-		if (meshname.substr(0, 8) == "Elevator" && meshname.find("Shaft Door") == -1 && meshname.find("ElevatorDoor") == -1)
+		if (meshname.substr(0, 8) == "Elevator" && (int)meshname.find("Shaft Door") == -1 && (int)meshname.find("ElevatorDoor") == -1)
 		{
 			int marker = meshname.find(":");
 			int elevnumber = atoi(meshname.substr(8, marker - 8).c_str());

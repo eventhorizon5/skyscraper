@@ -168,8 +168,8 @@ std::string WallObject::ProcessName(const char *name)
 	std::string name_modified = name;
 
 	//strip off object ID from name if it exists
-	if (name_modified.find("(") == 0)
-		name_modified.erase(0, name_modified.find(")") + 1);
+	if ((int)name_modified.find("(") == 0)
+		name_modified.erase(0, (int)name_modified.find(")") + 1);
 
 	//construct name
 	std::string newname = "(";
@@ -242,7 +242,7 @@ int WallObject::FindPolygon(const char *name)
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
 		std::string tmpname = handles[i].name;
-		if (tmpname.find("(") == 0)
+		if ((int)tmpname.find("(") == 0)
 		{
 			//strip object number
 			int loc = tmpname.find(")");
@@ -273,8 +273,8 @@ void WallObject::SetPolygonName(int index, const char *name)
         std::string name_modified = name;
 
         //strip off object ID from name if it exists
-        if (name_modified.find("(") == 0)
-                name_modified.erase(0, name_modified.find(")") + 1);
+        if ((int)name_modified.find("(") == 0)
+                name_modified.erase(0, (int)name_modified.find(")") + 1);
 
         //construct name
         std::string newname = "(";

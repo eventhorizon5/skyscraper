@@ -208,8 +208,9 @@ public:
 	void ResetDoorTimer(int number = 0);
 	bool DoorsStopped(int number = 0);
 	Object* AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	bool AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float tw, float th);
+	bool AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
 	Object* AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th);
+	Object* AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
 	void Chime(int number, int floor, bool direction);
 	void MoveDoors(int number, const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveDoorSound(int number, const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
@@ -273,6 +274,11 @@ public:
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	std::vector<Sound*> GetSound(const char *name);
+	int GetFloorIndex(int floor);
+	float GetDestinationAltitude(int floor);
+	void SetAltitude(float altitude);
+	void SetFloor(int floor);
+	void Init();
 
 private:
 
