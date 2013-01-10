@@ -2,7 +2,7 @@
 	
 # The Glass Tower
 # Featured in the movie The Towering Inferno
-# Model Copyright (C)2005-2010 Ryan Thoryk and Michael Jehn
+# Model Copyright (C)2005-2013 Ryan Thoryk and Michael Jehn
 # Original movie model design by Dan Goozee, William Creber and others
 
 #This program is free software; you can redistribute it and/or
@@ -1818,11 +1818,9 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     SetAutoSize = true, true
 
-    #directional indicator
-    AddDirectionalIndicators true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 16, front, 0.5, 1, true, 0, 0
-    
     #panel
-    CreatePanel ElevPanel, 17, 7, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    SetAutoSize = false, false
+    CreatePanel ElevPanel, 17, 7, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 1, ButtonR, ButtonLitR, 2, 6, 137, 1, 1
     AddFloorButton 1, Button137, ButtonLit137, 2, 5, 136, 1, 1
     AddFloorButton 1, Button136, ButtonLit136, 2, 4, 135, 1, 1
@@ -1899,7 +1897,7 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton 1, ButtonStop, 16, 5, stop, 1, 1
     AddControlButton 1, ButtonAlarm, 16, 6, alarm, 1, 1
 
-    CreatePanel ElevPanel, 17, 7, back, 1.75 + 0.875 - 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    CreatePanel ElevPanel, 17, 7, back, 1.75 + 0.875 - 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
     AddFloorButton 2, Button68, ButtonLit68, 2, 6, 67, 1, 1
     AddFloorButton 2, Button67, ButtonLit67, 2, 5, 66, 1, 1
     AddFloorButton 2, Button66, ButtonLit66, 2, 4, 65, 1, 1
@@ -1973,6 +1971,8 @@ DrawWalls = true, true, false, false, false, false
     AddControlButton 2, ButtonStop, 16, 3, stop, 1, 1
     AddControlButton 2, ButtonAlarm, 16, 2, alarm, 1, 1
 
+    SetAutoSize = true, true
+
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
    
@@ -1982,6 +1982,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddShaftDoor 4, 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 0, 0, 0 #shaft doors
+    AddDirectionalIndicator 4, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 6, front, 0.5, 1, true, 0, 0
     WallOrientation = left
 <EndFloors>
 
@@ -1989,6 +1990,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddShaftDoor 4, 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 10, 0, 0 #shaft doors
+    AddDirectionalIndicator 4, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 16, front, 0.5, 1, true, 0, 0
     WallOrientation = left
 <EndFloor>
 
