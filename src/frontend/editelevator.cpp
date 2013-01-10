@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.8 Alpha - Edit Elevator Form
-	Copyright (C)2003-2012 Ryan Thoryk
+	Copyright (C)2003-2013 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
