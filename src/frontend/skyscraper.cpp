@@ -1666,7 +1666,7 @@ bool Skyscraper::InitSky()
 {
 	//initialize sky
 
-	SkyName = GetConfigString("Skyscraper.Frontend.Caelum.SkyName", "DefaultSky");
+	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	try
 	{
@@ -1688,7 +1688,7 @@ bool Skyscraper::InitSky()
 	{
 		mCaelumSystem->attachViewport(mCamera->getViewport());
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
-		mCaelumSystem->setSceneFogDensityMultiplier(0.0008f);
+		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.FogMultiplier", 0.1f) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
 			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
 		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));

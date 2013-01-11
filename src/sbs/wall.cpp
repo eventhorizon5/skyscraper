@@ -189,6 +189,9 @@ void WallObject::DeletePolygons(bool recreate_collider)
 	//recreate colliders
 	if (recreate_collider == true)
 	{
+		//prepare mesh
+		meshwrapper->Prepare();
+
 		meshwrapper->DeleteCollider();
 		meshwrapper->CreateCollider();
 	}
@@ -214,6 +217,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		//recreate colliders if specified
 		if (recreate_colliders == true)
 		{
+			meshwrapper->Prepare();
 			meshwrapper->DeleteCollider();
 			meshwrapper->CreateCollider();
 		}

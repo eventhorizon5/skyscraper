@@ -381,7 +381,7 @@ Object* Floor::AddCallButtons(std::vector<int> &elevators, const char *BackTextu
 	return CallButtonArray[Current]->object;
 }
 
-void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring)
+void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring, bool prepare)
 {
 	//caller to SBS cut function
 	//Y values are relative to the floor's altitude
@@ -404,7 +404,7 @@ void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwa
 	}
 }
 
-void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors)
+void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool prepare)
 {
 	//cuts all objects related to this floor (floor, interfloor, shafts, stairs and external)
 	//Y values are relative to the floor's altitude

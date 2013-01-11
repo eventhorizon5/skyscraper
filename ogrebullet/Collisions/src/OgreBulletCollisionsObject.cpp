@@ -91,10 +91,18 @@ namespace OgreBulletCollisions
         getBulletCollisionWorld()->removeCollisionObject( mObject );
 		getCollisionWorld()->removeObject(this);
 
-        delete mObject;        
-        //delete mShape;
-        delete mState;
-        delete mDebugShape;
+		if (mObject)
+			delete mObject;
+        mObject = 0;
+        if (mShape)
+        	delete mShape;
+        mShape = 0;
+        if (mState)
+        	delete mState;
+        mState = 0;
+        if (mDebugShape)
+        	delete mDebugShape;
+        mDebugShape = 0;
     }
     //-----------------------------------------------------------------------
     void Object::showDebugShape(bool show)

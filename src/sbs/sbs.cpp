@@ -870,6 +870,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
+		wallobject->meshwrapper->Prepare();
 		wallobject->meshwrapper->DeleteCollider();
 		wallobject->meshwrapper->CreateCollider();
 	}
@@ -1071,6 +1072,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
+		wallobject->meshwrapper->Prepare();
 		wallobject->meshwrapper->DeleteCollider();
 		wallobject->meshwrapper->CreateCollider();
 	}
@@ -1323,6 +1325,7 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	//recreate colliders if specified
 	if (RecreateColliders == true)
 	{
+		wallobject->meshwrapper->Prepare();
 		wallobject->meshwrapper->DeleteCollider();
 		wallobject->meshwrapper->CreateCollider();
 	}
@@ -2875,13 +2878,23 @@ bool SBS::DeleteObject(Object *object)
 		delete obj;
 		deleted = true;
 	}
-
-	if (deleted == true)
+	if (type == "Model")
 	{
-		Prepare(); //prepare modified meshes
-		return true;
+		delete (Model*)object->GetRawObject();
+		deleted = true;
 	}
-	return false;
+	if (type == "Control")
+	{
+		delete (Control*)object->GetRawObject();
+		deleted = true;
+	}
+	if (type == "Trigger")
+	{
+		delete (Trigger*)object->GetRawObject();
+		deleted = true;
+	}
+
+	return deleted;
 }
 
 bool SBS::DeleteObject(int object)
@@ -3146,7 +3159,10 @@ void SBS::DeleteMeshHandle(MeshObject* handle)
 	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		if (meshes[i] == handle)
+		{
 			meshes.erase(meshes.begin() + i);
+			return;
+		}
 	}
 }
 

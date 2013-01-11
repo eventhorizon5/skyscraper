@@ -197,7 +197,7 @@
 									<label>Cut</label>
 									<handler function="On_bFloorCut_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -206,7 +206,7 @@
 									<label>CutAll</label>
 									<handler function="On_bFloorCutAll_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -215,7 +215,7 @@
 									<label>Filler Walls</label>
 									<handler function="On_bAddFillerWalls_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -224,7 +224,7 @@
 									<label>AddSound</label>
 									<handler function="On_bFloorAddSound_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -233,7 +233,7 @@
 									<label>ShaftDoorComponent</label>
 									<handler function="On_bShaftDoorComponent_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -242,7 +242,7 @@
 									<label>Finish ShaftDoor</label>
 									<handler function="On_bFinishShaftDoor_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -251,7 +251,7 @@
 									<label>Model</label>
 									<handler function="On_bFloorAddModel_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -260,7 +260,7 @@
 									<label>Stairs Model</label>
 									<handler function="On_bAddStairsModel_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -269,7 +269,7 @@
 									<label>Shaft Model</label>
 									<handler function="On_bAddShaftModel_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -289,6 +289,7 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_bElevator" variable="bElevator" member="yes">
 							<label>New Elevator</label>
+							<enabled>0</enabled>
 							<handler function="On_bElevator_Click" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -306,6 +307,7 @@
 					<object class="sizeritem">
 						<object class="wxButton" name="ID_bShaft" variable="bShaft" member="yes">
 							<label>New Shaft</label>
+							<enabled>0</enabled>
 							<handler function="On_bShaft_Click" entry="EVT_BUTTON" />
 						</object>
 						<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>

@@ -505,13 +505,6 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 			polycheck = false;
 		}
 	}
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		wall->meshwrapper->DeleteCollider();
-		wall->meshwrapper->CreateCollider();
-	}
 }
 
 Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude, bool get_max)
@@ -751,6 +744,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	this->mass = mass;
 	no_collider = false;
 	tricollider = true;
+	can_move = false;
 
 	Ogre::MeshPtr collidermesh;
 
@@ -908,13 +902,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 MeshObject::~MeshObject()
 {
-	//delete physics components
-	if (mBody)
-		delete mBody;
-	mBody = 0;
-	if (mShape)
-		delete mShape;
-	mShape = 0;
+	//delete physics/collider components
+	DeleteCollider();
 
 	//delete wall objects
 	for (int i = 0; i < (int)Walls.size(); i++)
@@ -1403,6 +1392,7 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	//recreate colliders if specified
 	if (sbs->RecreateColliders == true)
 	{
+		Prepare();
 		DeleteCollider();
 		CreateCollider();
 	}
@@ -1826,30 +1816,37 @@ void MeshObject::CreateCollider()
 	for (int i = 0; i < Triangles.size(); i++)
 		tricount += Triangles[i].triangles.size();
 
-	//initialize collider shape
-	OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
-
-	//add vertices to shape
-	for (int i = 0; i < Submeshes.size(); i++)
+	try
 	{
-		for (int j = 0; j < Triangles[i].triangles.size(); j++)
+		//initialize collider shape
+		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
+
+		//add vertices to shape
+		for (int i = 0; i < Submeshes.size(); i++)
 		{
-			TriangleType tri(0, 0, 0);
-			tri.x = Triangles[i].triangles[j].x;
-			tri.y = Triangles[i].triangles[j].y;
-			tri.z = Triangles[i].triangles[j].z;
-			shape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
+			for (int j = 0; j < Triangles[i].triangles.size(); j++)
+			{
+				TriangleType tri(0, 0, 0);
+				tri.x = Triangles[i].triangles[j].x;
+				tri.y = Triangles[i].triangles[j].y;
+				tri.z = Triangles[i].triangles[j].z;
+				shape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
+			}
 		}
+
+		//finalize shape
+		shape->Finish();
+		std::string name = MeshWrapper->getName();
+
+		//physics is not supported on triangle meshes; use CreateBoxCollider instead
+		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		mShape = shape;
 	}
-
-	//finalize shape
-	shape->Finish();
-	std::string name = MeshWrapper->getName();
-
-	//physics is not supported on triangle meshes; use CreateBoxCollider instead
-	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
-	mShape = shape;
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error creating collider for " + name + "\n" + e.getDescription());
+	}
 }
 
 void MeshObject::DeleteCollider()
@@ -1864,10 +1861,9 @@ void MeshObject::DeleteCollider()
 	mBody->removeFromWorld();
 
 	//delete collider object
-	delete mShape;
-	mShape = 0;
 	delete mBody;
 	mBody = 0;
+	mShape = 0;
 }
 
 void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices)
@@ -1878,42 +1874,60 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 	if (mBody)
 		return;
 
-	//initialize collider shape
-	OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vertex_count, index_count);
-
-	//add vertices to shape
-	for (int i = 0; i < index_count; i += 3)
+	try
 	{
-		shape->AddTriangle(vertices[indices[i]], vertices[indices[i + 1]], vertices[indices[i + 2]]);
+		//initialize collider shape
+		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(vertex_count, index_count);
+
+		//add vertices to shape
+		for (int i = 0; i < index_count; i += 3)
+		{
+			shape->AddTriangle(vertices[indices[i]], vertices[indices[i + 1]], vertices[indices[i + 2]]);
+		}
+
+		//finalize shape
+		shape->Finish();
+		std::string name = SceneNode->getName();
+
+		//physics is not supported on triangle meshes; use CreateBoxCollider instead
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		mShape = shape;
 	}
-
-	//finalize shape
-	shape->Finish();
-	std::string name = SceneNode->getName();
-
-	//physics is not supported on triangle meshes; use CreateBoxCollider instead
-	mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
-	mShape = shape;
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error creating model collider for " + name + "\n" + e.getDescription());
+	}
 }
 
 void MeshObject::CreateBoxCollider(float scale_multiplier)
 {
 	//set up a box collider for full extents of a mesh
 
-	//initialize collider shape
-	Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
-	OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
-	std::string name = SceneNode->getName();
+	//exit of collider already exists
+	if (mBody)
+		return;
 
-	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-	box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
+	try
+	{
+		//initialize collider shape
+		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
+		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
+		std::string name = SceneNode->getName();
 
-	mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-	if (IsPhysical == false)
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
-	else
-		mBody->setShape(SceneNode, shape, restitution, friction, mass);
-	mShape = shape;
+		Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+		box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
+
+		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		if (IsPhysical == false)
+			mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		else
+			mBody->setShape(SceneNode, shape, restitution, friction, mass);
+		mShape = shape;
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error creating box collider for " + name + "\n" + e.getDescription());
+	}
 }
 
 int MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance)

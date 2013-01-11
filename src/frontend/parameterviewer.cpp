@@ -1194,6 +1194,469 @@ bool ParameterViewer::Setup()
 			l20->SetLabel(wxT("Texture Tiling Height:"));
 			t20->SetValue(wxT("0"));
 		}
+		if (objecttype == wxT("Cut") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - Cut"));
+
+			wxString newlabel = wxT("performs a manual box cut on an area within the current floor\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("X1:"));
+			l2->SetToolTip(wxT("First X position (left side)"));
+
+			l3->SetLabel(wxT("Y1:"));
+			l3->SetToolTip(wxT("First Y position (bottom, relative of floor altitude)"));
+
+			l4->SetLabel(wxT("Z1:"));
+			l4->SetToolTip(wxT("First Z position (near side)"));
+
+			l5->SetLabel(wxT("X2:"));
+			l5->SetToolTip(wxT("Second X position (right side)"));
+
+			l6->SetLabel(wxT("Y2:"));
+			l6->SetToolTip(wxT("Second Y position (top, relative of floor altitude)"));
+
+			l7->SetLabel(wxT("Z2:"));
+			l7->SetToolTip(wxT("Second Z position (far side)"));
+
+			l8->SetLabel(wxT("Cut Walls:"));
+			l8->SetToolTip(wxT("If cutwalls is true, the function will cut walls"));
+			t8->SetValue(wxT("true"));
+
+			l9->SetLabel(wxT("Cut Floors:"));
+			l9->SetToolTip(wxT("If cutfloors is true, the function will cut floors"));
+			t9->SetValue(wxT("true"));
+		}
+		if (objecttype == wxT("CutAll") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - CutAll"));
+
+			wxString newlabel = wxT("performs a manual box cut on all objects associated with the current floor (the level itself, interfloor, shafts, stairs and external)\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("X1:"));
+			l2->SetToolTip(wxT("First X position (left side)"));
+
+			l3->SetLabel(wxT("Y1:"));
+			l3->SetToolTip(wxT("First Y position (bottom, relative of floor altitude)"));
+
+			l4->SetLabel(wxT("Z1:"));
+			l4->SetToolTip(wxT("First Z position (near side)"));
+
+			l5->SetLabel(wxT("X2:"));
+			l5->SetToolTip(wxT("Second X position (right side)"));
+
+			l6->SetLabel(wxT("Y2:"));
+			l6->SetToolTip(wxT("Second Y position (top, relative of floor altitude)"));
+
+			l7->SetLabel(wxT("Z2:"));
+			l7->SetToolTip(wxT("Second Z position (far side)"));
+
+			l8->SetLabel(wxT("Cut Walls:"));
+			l8->SetToolTip(wxT("If cutwalls is true, the function will cut walls"));
+			t8->SetValue(wxT("true"));
+
+			l9->SetLabel(wxT("Cut Floors:"));
+			l9->SetToolTip(wxT("If cutfloors is true, the function will cut floors"));
+			t9->SetValue(wxT("true"));
+		}
+		if (objecttype == wxT("AddFillerWalls") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddFillerWalls"));
+
+			wxString newlabel = wxT("helper function to add fillers around a door's cut location.\nWhen a door is created, the wall in it's location is cut to provide space; after the cut, the sides are open (if the wall has thickness) -\nthis creates a covering wall on each side and a floor above the door frame to fill the area.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Texture:"));
+
+			l3->SetLabel(wxT("Thickness:"));
+
+			l4->SetLabel(wxT("CenterX:"));
+
+			l5->SetLabel(wxT("CenterZ:"));
+
+			l6->SetLabel(wxT("Width:"));
+
+			l7->SetLabel(wxT("Height:"));
+
+			l8->SetLabel(wxT("Vertical Offset:"));
+
+			l9->SetLabel(wxT("Direction:"));
+			l9->SetToolTip(wxT("Direction is either true if the door faces the front/back (width is along the X axis), or false if the door faces left/right (width is along the Z axis)."));
+			t9->SetValue(wxT("true"));
+
+			l10->SetLabel(wxT("Texture Tiling Width:"));
+			l10->SetToolTip(wxT(""));
+			t10->SetValue(wxT("0"));
+
+			l11->SetLabel(wxT("Texture Tiling Height:"));
+			l11->SetToolTip(wxT(""));
+			t11->SetValue(wxT("0"));
+		}
+		if (objecttype == wxT("AddSound") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddSound"));
+
+			wxString newlabel = wxT("creates a user-defined sound at the specified position\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Name:"));
+
+			l3->SetLabel(wxT("Filename:"));
+
+			l4->SetLabel(wxT("X:"));
+
+			l5->SetLabel(wxT("Y:"));
+
+			l6->SetLabel(wxT("Z:"));
+
+			l7->SetLabel(wxT("Loop:"));
+			t7->SetValue(wxT("true"));
+			l7->SetToolTip(wxT("Loop specifies if the sound should loop and play on startup"));
+
+			l8->SetLabel(wxT("Volume:"));
+			t8->SetValue(wxT("1"));
+			l8->SetToolTip(wxT("the volume percentage (with 1.0 being 100%) of the sound"));
+
+			l9->SetLabel(wxT("Speed:"));
+			l9->SetToolTip(wxT("the playback speed of the sound in percent"));
+			t9->SetValue(wxT("100"));
+
+			l10->SetLabel(wxT("Min Distance:"));
+			t10->SetValue(wxT("1"));
+			l10->SetToolTip(wxT("min_distance and max_distance set the minimum and maximum distances that the sound can be heard at full volume - by default, minimum is 1 and maximum is -1."));
+
+			l11->SetLabel(wxT("Max Distance:"));
+			t11->SetValue(wxT("-1"));
+			l11->SetToolTip(wxT("min_distance and max_distance set the minimum and maximum distances that the sound can be heard at full volume - by default, minimum is 1 and maximum is -1."));
+
+			l12->SetLabel(wxT("Doppler Level:"));
+			t12->SetValue(wxT("0"));
+			l12->SetToolTip(wxT("the doppler scale for the sound (0 means off, the default, 1 is normal, 5 is max)"));
+
+			l13->SetLabel(wxT("Cone Inside Angle:"));
+			t13->SetValue(wxT("360"));
+			l13->SetToolTip(wxT(" the angle within which the sound is at it's normal volume (default 360)"));
+
+			l14->SetLabel(wxT("Cone Outside Angle:"));
+			t14->SetValue(wxT("360"));
+			l14->SetToolTip(wxT("the outside angle that the sound is at it's normal volume (default 360, shouldn't be less than the inside angle)"));
+
+			l15->SetLabel(wxT("Cone Outside Volume:"));
+			t15->SetValue(wxT("1"));
+			l15->SetToolTip(wxT("the volume level of the sound outside (0.0 to 1.0, default 1.0)"));
+
+			l16->SetLabel(wxT("DirectionX:"));
+			t16->SetValue(wxT("0"));
+			l16->SetToolTip(wxT("Direction of the sound cone"));
+
+			l17->SetLabel(wxT("DirectionY:"));
+			t17->SetValue(wxT("0"));
+			l17->SetToolTip(wxT("Direction of the sound cone"));
+
+			l18->SetLabel(wxT("DirectionZ:"));
+			t18->SetValue(wxT("0"));
+			l18->SetToolTip(wxT("Direction of the sound cone"));
+
+		}
+		if (objecttype == wxT("AddShaftDoorComponent") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddShaftDoorComponent"));
+
+			wxString newlabel = wxT("creates a single shaft door component, used for creating custom door styles\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Elevator:"));
+
+			l3->SetLabel(wxT("Number:"));
+			l3->SetToolTip(wxT("the number of the door to create (related to the Doors command) - if the elevator only has one door, or if the Doors command was not used, specify 1 here"));
+
+			l4->SetLabel(wxT("Name:"));
+
+			l5->SetLabel(wxT("Texture:"));
+			l5->SetToolTip(wxT("the texture used on the main (front and back) sides of the door"));
+
+			l6->SetLabel(wxT("Side Texture:"));
+			l6->SetToolTip(wxT("the texture used on the sides (and top/bottom) of the door"));
+
+			l7->SetLabel(wxT("Thickness:"));
+			l7->SetToolTip(wxT("Loop specifies if the sound should loop and play on startup"));
+
+			l8->SetLabel(wxT("Direction:"));
+			l8->SetToolTip(wxT("Direction is either Up, Down, Left (or Front; is the same), or Right (or Back; is also the same)"));
+
+			l9->SetLabel(wxT("Open Speed:"));
+
+			l10->SetLabel(wxT("Close Speed:"));
+
+			l11->SetLabel(wxT("X1:"));
+
+			l12->SetLabel(wxT("Z1:"));
+
+			l13->SetLabel(wxT("X2:"));
+
+			l14->SetLabel(wxT("Z2:"));
+
+			l15->SetLabel(wxT("Height:"));
+
+			l16->SetLabel(wxT("Vertical Offset:"));
+			t16->SetValue(wxT("0"));
+
+			l17->SetLabel(wxT("Texture Tiling Width:"));
+			t17->SetValue(wxT("0"));
+
+			l18->SetLabel(wxT("Texture Tiling Height:"));
+			t18->SetValue(wxT("0"));
+
+			l19->SetLabel(wxT("Side Texture Tiling Width:"));
+			t19->SetValue(wxT("0"));
+
+			l20->SetLabel(wxT("Side Texture Tiling Height:"));
+			t20->SetValue(wxT("0"));
+		}
+		if (objecttype == wxT("FinishShaftDoor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - FinishShaftDoor"));
+
+			wxString newlabel = wxT("finishes shaft door creation - use this after all related AddShaftDoorComponent commands are used,\nor specify it without the AddShaftDoorComponent commands if you're creating a manual shaft door.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Elevator:"));
+
+			l3->SetLabel(wxT("Number:"));
+		}
+		if (objecttype == wxT("AddModel") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddModel"));
+
+			wxString newlabel = wxT("adds a 3D model to the floor.\nThe model's textures/materials must be defined in a separate '.material' file, and a separate collider mesh '.collider' will be loaded.\nIf a collider mesh isn't available, a simple box collider will be created.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Name:"));
+
+			l3->SetLabel(wxT("Filename:"));
+
+			l4->SetLabel(wxT("AutoCenter:"));
+			t4->SetValue(wxT("true"));
+			l4->SetToolTip(wxT("either true or false, and determines if the loaded model should be automatically centered, otherwise the exact mesh positioning in the model file will be used"));
+
+			l5->SetLabel(wxT("Center X:"));
+
+			l6->SetLabel(wxT("Center Y:"));
+			l6->SetToolTip(wxT("The CenterY value is relative to the current floor's base"));
+
+			l7->SetLabel(wxT("Center Z:"));
+
+			l8->SetLabel(wxT("Rotation X:"));
+			t8->SetValue(wxT("0"));
+
+			l9->SetLabel(wxT("Rotation Y:"));
+			t9->SetValue(wxT("0"));
+
+			l10->SetLabel(wxT("Rotation Z:"));
+			t10->SetValue(wxT("0"));
+
+			l11->SetLabel(wxT("Max Render Distance::"));
+			t11->SetValue(wxT("0"));
+			l11->SetToolTip(wxT("the maximum distance in feet that the object will be shown (0 means unlimited)"));
+
+			l12->SetLabel(wxT("Scale Multiplier:"));
+			t12->SetValue(wxT("1"));
+			l12->SetToolTip(wxT("allows you to change the size of the object during the load - for example, set to 2 to double the size"));
+
+			l13->SetLabel(wxT("Enable Physics:"));
+			t13->SetValue(wxT("false"));
+			l13->SetToolTip(wxT("enables Bullet physics on the object (physics will only work if you don't provide a collider mesh)"));
+
+			l14->SetLabel(wxT("Physics Restitution:"));
+			t14->SetValue(wxT("0.1"));
+
+			l15->SetLabel(wxT("Physics Friction:"));
+			t15->SetValue(wxT("0.5"));
+
+			l16->SetLabel(wxT("Physics Mass:"));
+			t16->SetValue(wxT("0.1"));
+		}
+		if (objecttype == wxT("AddStairsModel") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddStairsModel"));
+
+			wxString newlabel = wxT("adds a 3D model to the specified stairwell, on the current floor.\nThe model's textures/materials must be defined in a separate '.material' file, and a separate collider mesh '.collider' will be loaded.\nIf a collider mesh isn't available, a simple box collider will be created.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Stairwell Number:"));
+
+			l3->SetLabel(wxT("Name:"));
+
+			l4->SetLabel(wxT("Filename:"));
+
+			l5->SetLabel(wxT("AutoCenter:"));
+			t5->SetValue(wxT("true"));
+			l5->SetToolTip(wxT("either true or false, and determines if the loaded model should be automatically centered, otherwise the exact mesh positioning in the model file will be used"));
+
+			l6->SetLabel(wxT("Center X:"));
+
+			l7->SetLabel(wxT("Center Y:"));
+			l7->SetToolTip(wxT("The CenterY value is relative to the current floor's base"));
+
+			l8->SetLabel(wxT("Center Z:"));
+
+			l9->SetLabel(wxT("Rotation X:"));
+			t9->SetValue(wxT("0"));
+
+			l10->SetLabel(wxT("Rotation Y:"));
+			t10->SetValue(wxT("0"));
+
+			l11->SetLabel(wxT("Rotation Z:"));
+			t11->SetValue(wxT("0"));
+
+			l12->SetLabel(wxT("Max Render Distance::"));
+			t12->SetValue(wxT("0"));
+			l12->SetToolTip(wxT("the maximum distance in feet that the object will be shown (0 means unlimited)"));
+
+			l13->SetLabel(wxT("Scale Multiplier:"));
+			t13->SetValue(wxT("1"));
+			l13->SetToolTip(wxT("allows you to change the size of the object during the load - for example, set to 2 to double the size"));
+
+			l14->SetLabel(wxT("Enable Physics:"));
+			t14->SetValue(wxT("false"));
+			l14->SetToolTip(wxT("enables Bullet physics on the object (physics will only work if you don't provide a collider mesh)"));
+
+			l15->SetLabel(wxT("Physics Restitution:"));
+			t15->SetValue(wxT("0.1"));
+
+			l16->SetLabel(wxT("Physics Friction:"));
+			t16->SetValue(wxT("0.5"));
+
+			l17->SetLabel(wxT("Physics Mass:"));
+			t17->SetValue(wxT("0.1"));
+		}
+		if (objecttype == wxT("AddShaftModel") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddShaftModel"));
+
+			wxString newlabel = wxT("adds a 3D model to the specified shaft, on the current floor.\nThe model's textures/materials must be defined in a separate '.material' file, and a separate collider mesh '.collider' will be loaded.\nIf a collider mesh isn't available, a simple box collider will be created.\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Shaft Number:"));
+
+			l3->SetLabel(wxT("Name:"));
+
+			l4->SetLabel(wxT("Filename:"));
+
+			l5->SetLabel(wxT("AutoCenter:"));
+			t5->SetValue(wxT("true"));
+			l5->SetToolTip(wxT("either true or false, and determines if the loaded model should be automatically centered, otherwise the exact mesh positioning in the model file will be used"));
+
+			l6->SetLabel(wxT("Center X:"));
+
+			l7->SetLabel(wxT("Center Y:"));
+			l7->SetToolTip(wxT("The CenterY value is relative to the current floor's base"));
+
+			l8->SetLabel(wxT("Center Z:"));
+
+			l9->SetLabel(wxT("Rotation X:"));
+			t9->SetValue(wxT("0"));
+
+			l10->SetLabel(wxT("Rotation Y:"));
+			t10->SetValue(wxT("0"));
+
+			l11->SetLabel(wxT("Rotation Z:"));
+			t11->SetValue(wxT("0"));
+
+			l12->SetLabel(wxT("Max Render Distance::"));
+			t12->SetValue(wxT("0"));
+			l12->SetToolTip(wxT("the maximum distance in feet that the object will be shown (0 means unlimited)"));
+
+			l13->SetLabel(wxT("Scale Multiplier:"));
+			t13->SetValue(wxT("1"));
+			l13->SetToolTip(wxT("allows you to change the size of the object during the load - for example, set to 2 to double the size"));
+
+			l14->SetLabel(wxT("Enable Physics:"));
+			t14->SetValue(wxT("false"));
+			l14->SetToolTip(wxT("enables Bullet physics on the object (physics will only work if you don't provide a collider mesh)"));
+
+			l15->SetLabel(wxT("Physics Restitution:"));
+			t15->SetValue(wxT("0.1"));
+
+			l16->SetLabel(wxT("Physics Friction:"));
+			t16->SetValue(wxT("0.5"));
+
+			l17->SetLabel(wxT("Physics Mass:"));
+			t17->SetValue(wxT("0.1"));
+		}
 
 		if (l1->GetLabel() == wxT("1"))
 		{
