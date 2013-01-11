@@ -36,7 +36,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//set verbosity level
 	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
@@ -96,16 +96,12 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	if (disable_depth_buffer == true)
-	{
-		mMat->setDepthCheckEnabled(false);
-		mMat->setDepthWriteEnabled(false);
-	}
-
 	//enable alpha blending for related textures
 	if (has_alpha == true)
 	{
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+		//mMat->setDepthWriteEnabled(false);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
@@ -122,7 +118,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	return true;
 }
 
-bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *name, float duration, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *name, float duration, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//set verbosity level
 	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
@@ -196,16 +192,12 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	if (disable_depth_buffer == true)
-	{
-		mMat->setDepthCheckEnabled(false);
-		mMat->setDepthWriteEnabled(false);
-	}
-
 	//enable alpha blending for related textures
 	if (has_alpha == true)
 	{
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+		//mMat->setDepthWriteEnabled(false);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
@@ -235,7 +227,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	return true;
 }
 
-bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filename, const char *blend_filename, const char *name, bool spherical, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
+bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filename, const char *blend_filename, const char *name, bool spherical, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
 	//set verbosity level
 	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
@@ -341,16 +333,12 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	if (disable_depth_buffer == true)
-	{
-		mMat->setDepthCheckEnabled(false);
-		mMat->setDepthWriteEnabled(false);
-	}
-
 	//enable alpha blending for related textures
 	if (has_alpha == true)
 	{
-		mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+		//mMat->setDepthWriteEnabled(false);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
@@ -367,7 +355,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	return true;
 }
 
-bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, bool disable_depth_buffer)
+bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//set verbosity level
 	Ogre::MaterialManager::getSingleton().setVerbose(Verbose);
@@ -388,12 +376,6 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	if (disable_depth_buffer == true)
-	{
-		mMat->setDepthCheckEnabled(false);
-		mMat->setDepthWriteEnabled(false);
-	}
 
 	Report("Loaded material " + matname);
 
@@ -519,9 +501,14 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//enable alpha blending for related textures
-	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-	//enable hard alpha for alpha mask values 128 and above
-	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	if (has_alpha == true)
+	{
+		//mMat->setDepthWriteEnabled(false);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -817,6 +804,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		return false;
 	}
 
+	bool has_alpha = background->hasAlpha();
+
 	//get texture tiling info
 	float widthmult, heightmult;
 	GetTextureTiling(origname, widthmult, heightmult);
@@ -887,10 +876,14 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//enable alpha blending for related textures
-	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+	if (has_alpha == true)
+	{
+		//mMat->setDepthWriteEnabled(false);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
 
-	//enable hard alpha for alpha mask values 128 and above
-	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}
 
 	Report("AddTextToTexture: created texture " + Name);
 	CacheFilename(Name, Name);
@@ -920,6 +913,8 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
 		return false;
 	}
+
+	bool has_alpha = image1->hasAlpha();
 
 	//get overlay texture
 	ptr = Ogre::MaterialManager::getSingleton().getByName(Overlay);
@@ -975,10 +970,14 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//enable alpha blending for related textures
-	mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+	if (has_alpha == true)
+	{
+		//mMat->setDepthWriteEnabled(false);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
 
-	//enable hard alpha for alpha mask values 128 and above
-	mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -1168,7 +1167,7 @@ void SBS::GetAutoSize(bool &x, bool &y)
 	y = AutoY;
 }
 
-Ogre::Vector2 SBS::CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::Vector2 y, Ogre::Vector2 z, float tw, float th)
+Ogre::Vector2 SBS::CalculateSizing(const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, int direction, float tw, float th)
 {
 	//calculate texture autosizing based on polygon extents
 
@@ -1178,43 +1177,17 @@ Ogre::Vector2 SBS::CalculateSizing(const char *texture, Ogre::Vector2 x, Ogre::V
 	bool force_enable = false, force_mode = false;
 	bool result = GetTextureForce(texture, force_enable, force_mode);
 
-	bool is_wall = true;
-	if (fabs(y.y - y.x) < fabs(x.y - x.x) && fabs(y.y - y.x) < fabs(z.y - z.x))
-	is_wall = false;
+	float width = v1.distance(v2);
+	float height = v2.distance(v3);
 
-	if (is_wall)
-	{
-		if (z.x == z.y)
-			tw2 = AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
-		if (x.x == x.y)
-			tw2 = AutoSize(z.x, z.y, true, tw, force_enable, force_mode);
-		if ((z.x != z.y) && (x.x != x.y))
-		{
-			//calculate diagonals
-			float tempw1, tempw2;
-			if (x.x > x.y)
-				tempw1 = x.x - x.y;
-			else
-				tempw1 = x.y - x.x;
-			if (z.x > z.y)
-				tempw2 = z.x - z.y;
-			else
-				tempw2 = z.y - z.x;
-			tw2 = AutoSize(0, sqrt(pow(tempw1, 2) + pow(tempw2, 2)), true, tw, force_enable, force_mode);
-		}
-		th2 = AutoSize(y.x, y.y, false, th, force_enable, force_mode);
-	}
-	else
-	{
-		tw2 = sbs->AutoSize(x.x, x.y, true, tw, force_enable, force_mode);
-		th2 = sbs->AutoSize(z.x, z.y, false, th, force_enable, force_mode);
-	}
+	tw2 = AutoSize(0, width, true, tw, force_enable, force_mode);
+	th2 = AutoSize(0, height, false, th, force_enable, force_mode);
 
 	//return results
 	return Ogre::Vector2(tw2, th2);
 }
 
-void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3)
+void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction)
 {
 	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
@@ -1237,14 +1210,14 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		Ogre::Plane plane = Ogre::Plane(varray1[0], varray1[1], varray1[2]);
 		Ogre::Vector3 normal = plane.normal;
 
-		int projDimension = 0; //x; faces left/right
+		direction = 0; //x; faces left/right
 
 		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
-			projDimension = 1; //y biggest; faces up/down
+			direction = 1; //y biggest; faces up/down
 		else if (fabsf (normal.z) > fabsf (normal.x))
-			projDimension = 2; //z biggest; faces front/back
+			direction = 2; //z biggest; faces front/back
 
-		size_t selX = (1 << projDimension) & 0x3;
+		size_t selX = (1 << direction) & 0x3;
 		size_t selY = (1 << selX) & 0x3;
 
 		varray2.reserve(varray1.size());
@@ -1266,7 +1239,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		b = GetExtents(varray2, 2);
 
 		//set the result 2D coordinates
-		if (projDimension == 0)
+		if (direction == 0)
 		{
 			if (rev_z == false)
 			{
@@ -1293,7 +1266,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				v3.y = a.y; //top
 			}
 		}
-		if (projDimension == 1)
+		if (direction == 1)
 		{
 			if (rev_x == false)
 			{
@@ -1320,7 +1293,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				v3.z = a.x; //bottom
 			}
 		}
-		if (projDimension == 2)
+		if (direction == 2)
 		{
 			if (rev_x == false)
 			{
@@ -1349,7 +1322,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		}
 
 		//use the plane equation to get the coordinate values of the dropped dimension
-		if (projDimension == 0)
+		if (direction == 0)
 		{
 			v1.x = -((normal.y * v1.y) + (normal.z * v1.z) + plane.d) / normal.x; //get X
 			v2.x = -((normal.y * v2.y) + (normal.z * v2.z) + plane.d) / normal.x; //get X
@@ -1358,7 +1331,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 			if (PlanarFlat == true)
 				v3.x = v2.x;
 		}
-		if (projDimension == 1)
+		if (direction == 1)
 		{
 			v1.y = -((normal.x * v1.x) + (normal.z * v1.z) + plane.d) / normal.y; //get Y
 			v2.y = -((normal.x * v2.x) + (normal.z * v2.z) + plane.d) / normal.y; //get Y
@@ -1367,7 +1340,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 			if (PlanarFlat == true)
 				v3.y = v2.y;
 		}
-		if (projDimension == 2)
+		if (direction == 2)
 		{
 			v1.z = -((normal.x * v1.x) + (normal.y * v1.y) + plane.d) / normal.z; //get Z
 			v2.z = -((normal.x * v2.x) + (normal.y * v2.y) + plane.d) / normal.z; //get Z
@@ -1383,6 +1356,18 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		v1 = vertices[MapIndex[0]];
 		v2 = vertices[MapIndex[1]];
 		v3 = vertices[MapIndex[2]];
+
+		//determine the largest projection dimension (the dimension that the polygon is generally on;
+		//with a floor Y would be biggest)
+		Ogre::Plane plane = Ogre::Plane(v1, v2, v3);
+		Ogre::Vector3 normal = plane.normal;
+
+		direction = 0; //x; faces left/right
+
+		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
+			direction = 1; //y biggest; faces up/down
+		else if (fabsf (normal.z) > fabsf (normal.x))
+			direction = 2; //z biggest; faces front/back
 	}
 	if (MapMethod == 2)
 	{
@@ -1465,6 +1450,18 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				}
 			}
 		}
+
+		//determine the largest projection dimension (the dimension that the polygon is generally on;
+		//with a floor Y would be biggest)
+		Ogre::Plane plane = Ogre::Plane(v1, v2, v3);
+		Ogre::Vector3 normal = plane.normal;
+
+		direction = 0; //x; faces left/right
+
+		if (fabsf (normal.y) > fabsf (normal.x) && fabsf (normal.y) > fabsf (normal.z))
+			direction = 1; //y biggest; faces up/down
+		else if (fabsf (normal.z) > fabsf (normal.x))
+			direction = 2; //z biggest; faces front/back
 	}
 }
 
@@ -1650,10 +1647,10 @@ std::string SBS::ListTextures()
      Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename) 
  */ 
 void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
- { 
-     using namespace Ogre; 
-     using std::fabs; 
-     Image srcImg; 
+{
+     using namespace Ogre;
+     using std::fabs;
+     Image srcImg;
 	 Ogre::ColourValue keyCol2 = keyCol;
 
 	 String strExt;
@@ -1664,7 +1661,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 		strExt = filename.substr(pos+1);
 	 }
 
-	 //srcImg.load(filename, resGroup); 
+	 //srcImg.load(filename, resGroup);
 	 DataStreamPtr encoded = ResourceGroupManager::getSingleton().openResource(filename, resGroup);
 	 SetCase(strExt, false);
 	 if (strExt == "gif")
@@ -1702,24 +1699,24 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
      unsigned int width = srcImg.getWidth(), height = srcImg.getHeight();
      // Since Ogre 1.6 Shoggoth, the OGRE_ALLOC_T memory macro must be used:
      uchar* pixelData = OGRE_ALLOC_T(uchar, PixelUtil::getMemorySize(width, height, 1, PF_A8R8G8B8), MEMCATEGORY_GENERAL);
-     unsigned long pxDataIndex = 0, pxDataIndexStep = PixelUtil::getNumElemBytes(PF_A8R8G8B8); 
- 
-     for(unsigned int y = 0; y < height; ++y) 
+     unsigned long pxDataIndex = 0, pxDataIndexStep = PixelUtil::getNumElemBytes(PF_A8R8G8B8);
+
+     for(unsigned int y = 0; y < height; ++y)
      { 
-         for(unsigned int x = 0; x < width; ++x) 
-         { 
-             ColourValue pixCol = srcImg.getColourAt(x, y, 0); 
-             ColourValue diffCol = pixCol - keyCol2; 
-             pixCol.a = ((fabs(diffCol.r) < threshold) && (fabs(diffCol.g) < threshold) && (fabs(diffCol.b) < threshold)) ? 0 : 1; 
-             Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex)); 
-             pxDataIndex += pxDataIndexStep; 
-         } 
-     } 
+         for(unsigned int x = 0; x < width; ++x)
+         {
+             ColourValue pixCol = srcImg.getColourAt(x, y, 0);
+             ColourValue diffCol = pixCol - keyCol2;
+             pixCol.a = ((fabs(diffCol.r) < threshold) && (fabs(diffCol.g) < threshold) && (fabs(diffCol.b) < threshold)) ? 0 : 1;
+             Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex));
+             pxDataIndex += pxDataIndexStep;
+         }
+     }
  
      Image chromaKeyedImg;
-     chromaKeyedImg.loadDynamicImage(pixelData, width, height, 1, PF_A8R8G8B8, true); 
+     chromaKeyedImg.loadDynamicImage(pixelData, width, height, 1, PF_A8R8G8B8, true);
      // You could save the chroma keyed image at this point for caching:
-     // chromaKeyedImg.save(resName); 
+     // chromaKeyedImg.save(resName);
      TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
      IncrementTextureCount();
 }

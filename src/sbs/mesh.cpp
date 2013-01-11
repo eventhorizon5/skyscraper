@@ -1245,35 +1245,33 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	if (!result)
 		texname = "Default";
 
+	//convert to remote positioning
+	std::vector<std::vector<Ogre::Vector3> > vertices2;
+	vertices2.resize(1);
+
+	vertices2[0].reserve(vertices.size());
+	for (int i = 0; i < (int)vertices.size(); i++)
+		vertices2[0].push_back(sbs->ToRemote(vertices[i]));
+
+	//texture mapping
+	Ogre::Vector3 v1, v2, v3;
+	int direction;
+
+	//get texture mapping coordinates
+	sbs->GetTextureMapping(vertices2[0], v1, v2, v3, direction);
+
 	if (tw == 0)
 		tw = 1;
 	if (th == 0)
 		th = 1;
 
-	/*if (Shaders == true)
-	{
-		csRef<iStringSet> strset = csQueryRegistryTagInterface<iStringSet> (object_reg, "crystalspace.shared.stringset");
-		csRef<iShaderManager> shadermgr = csQueryRegistry<iShaderManager> (object_reg);
-		iMaterial* mat = material->GetMaterial();
-		//Ogre::StringID t = strset->Request("ambient");
-		Ogre::StringID t = strset->Request("diffuse");
-		//iShader* sh = shadermgr->GetShader("fullbright");
-		//iShader* sh = shadermgr->GetShader("ambient");
-		iShader* sh = shadermgr->GetShader("light");
-		mat->SetShader(t, sh);
-	}*/
-
 	//get autosize information
-	Ogre::Vector2 xextents = sbs->GetExtents(vertices, 1);
-	Ogre::Vector2 yextents = sbs->GetExtents(vertices, 2);
-	Ogre::Vector2 zextents = sbs->GetExtents(vertices, 3);
-
 	Ogre::Vector2 sizing;
 	sizing.x = tw;
 	sizing.y = th;
 
 	if (autosize == true)
-		sizing = sbs->CalculateSizing(texture, xextents, yextents, zextents, tw, th);
+		sizing = sbs->CalculateSizing(texture, sbs->ToLocal(v1), sbs->ToLocal(v2), sbs->ToLocal(v3), direction, tw, th);
 
 	//get texture tiling information
 	float tw2 = sizing.x, th2 = sizing.y;
@@ -1286,18 +1284,6 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 		th2 = sizing.y * mh;
 	}
 
-	//convert to remote positioning
-	std::vector<std::vector<Ogre::Vector3> > vertices2;
-	vertices2.resize(1);
-
-	vertices2[0].reserve(vertices.size());
-	for (int i = 0; i < (int)vertices.size(); i++)
-		vertices2[0].push_back(sbs->ToRemote(vertices[i]));
-
-	//texture mapping
-	Ogre::Vector3 v1, v2, v3;
-
-	sbs->GetTextureMapping(vertices2[0], v1, v2, v3);
 	if (!ComputeTextureMap(t_matrix, t_vector, vertices2[0],
 			v1,
 			Ogre::Vector2 (sbs->MapUV[0].x * tw2, sbs->MapUV[0].y * th2),
