@@ -351,6 +351,10 @@ void Camera::CheckElevator()
 	for (int i = 1; i <= sbs->Elevators(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(i);
+
+		if (!elevator)
+			continue;
+
 		if (elevator->IsInElevator(GetPosition()) == true)
 		{
 			test = true;
@@ -484,6 +488,10 @@ void Camera::CheckStairwell()
 	for (int i = 1; i <= sbs->StairsNum(); i++)
 	{
 		Stairs *stairs = sbs->GetStairs(i);
+
+		if (!stairs)
+			continue;
+
 		if (stairs->IsInStairwell(GetPosition()) == true)
 		{
 			if (stairs->InsideStairwell == false)
@@ -676,25 +684,32 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		int index2 = meshname.find(":", index + 1);
 		int floor = atoi(meshname.substr(12, index - 12).c_str());
 		int number = atoi(meshname.substr(index + 1, index2 - index - 1).c_str());
-		CallButton *buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
-		std::string direction = meshname.substr(index2 + 1);
-		TrimString(direction);
 
-		if (shift == false)
+		CallButton *buttonref = 0;
+		if (sbs->GetFloor(floor))
+			buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
+
+		if (buttonref)
 		{
-			//press button
-			if (direction == "Up")
-				buttonref->Call(true);
+			std::string direction = meshname.substr(index2 + 1);
+			TrimString(direction);
+
+			if (shift == false)
+			{
+				//press button
+				if (direction == "Up")
+					buttonref->Call(true);
+				else
+					buttonref->Call(false);
+			}
 			else
-				buttonref->Call(false);
-		}
-		else
-		{
-			//if shift is held, change button status instead
-			if (direction == "Up")
-				buttonref->UpLight(!buttonref->UpStatus);
-			else
-				buttonref->DownLight(!buttonref->DownStatus);
+			{
+				//if shift is held, change button status instead
+				if (direction == "Up")
+					buttonref->UpLight(!buttonref->UpStatus);
+				else
+					buttonref->DownLight(!buttonref->DownStatus);
+			}
 		}
 	}
 
@@ -722,10 +737,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		int index2 = meshname.find(":", index);
 		int number = atoi(meshname.substr(index + 10, index2 - (index + 10)).c_str());
 		int floor = atoi(meshname.substr(index2 + 1, meshname.length() - index2 - 2).c_str());
-		if (sbs->GetElevator(elevator)->AreShaftDoorsOpen(number, floor) == false)
-			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 3, floor);
-		else
-			sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 3, floor);
+		if (sbs->GetElevator(elevator))
+		{
+			if (sbs->GetElevator(elevator)->AreShaftDoorsOpen(number, floor) == false)
+				sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 3, floor);
+			else
+				sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 3, floor);
+		}
 	}
 
 	//check elevator doors
@@ -734,10 +752,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		//user clicked on an elevator door
 		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13).c_str());
 		int number = atoi(meshname.substr(meshname.find(":") + 1, meshname.length() - meshname.find(":") - 1).c_str());
-		if (sbs->GetElevator(elevator)->AreDoorsOpen(number) == false)
-			sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 2);
-		else
-			sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 2);
+		if (sbs->GetElevator(elevator))
+		{
+			if (sbs->GetElevator(elevator)->AreDoorsOpen(number) == false)
+				sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 2);
+			else
+				sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 2);
+		}
 	}
 
 	//check doors
@@ -750,19 +771,22 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			int floornumber = atoi(meshname.substr(5, marker - 5).c_str());
 			int doornumber = atoi(meshname.substr(marker + 5).c_str());
 			Floor *floor = sbs->GetFloor(floornumber);
-			if (floor->IsDoorOpen(doornumber) == false)
+			if (floor)
 			{
-				if (floor->IsDoorMoving(doornumber) == false)
-					floor->OpenDoor(doornumber);
+				if (floor->IsDoorOpen(doornumber) == false)
+				{
+					if (floor->IsDoorMoving(doornumber) == false)
+						floor->OpenDoor(doornumber);
+					else
+						floor->CloseDoor(doornumber);
+				}
 				else
-					floor->CloseDoor(doornumber);
-			}
-			else
-			{
-				if (floor->IsDoorMoving(doornumber) == false)
-					floor->CloseDoor(doornumber);
-				else
-					floor->OpenDoor(doornumber);
+				{
+					if (floor->IsDoorMoving(doornumber) == false)
+						floor->CloseDoor(doornumber);
+					else
+						floor->OpenDoor(doornumber);
+				}
 			}
 		}
 		if (meshname.substr(0, 9) == "Stairwell")
@@ -771,19 +795,22 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			int stairsnumber = atoi(meshname.substr(9, marker - 9).c_str());
 			int doornumber = atoi(meshname.substr(marker + 5).c_str());
 			Stairs *stairs = sbs->GetStairs(stairsnumber);
-			if (stairs->IsDoorOpen(doornumber) == false)
+			if (stairs)
 			{
-				if (stairs->IsDoorMoving(doornumber) == false)
-					stairs->OpenDoor(doornumber);
+				if (stairs->IsDoorOpen(doornumber) == false)
+				{
+					if (stairs->IsDoorMoving(doornumber) == false)
+						stairs->OpenDoor(doornumber);
+					else
+						stairs->CloseDoor(doornumber);
+				}
 				else
-					stairs->CloseDoor(doornumber);
-			}
-			else
-			{
-				if (stairs->IsDoorMoving(doornumber) == false)
-					stairs->CloseDoor(doornumber);
-				else
-					stairs->OpenDoor(doornumber);
+				{
+					if (stairs->IsDoorMoving(doornumber) == false)
+						stairs->CloseDoor(doornumber);
+					else
+						stairs->OpenDoor(doornumber);
+				}
 			}
 		}
 		if (meshname.substr(0, 8) == "Elevator" && (int)meshname.find("Shaft Door") == -1 && (int)meshname.find("ElevatorDoor") == -1)
@@ -792,19 +819,22 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			int elevnumber = atoi(meshname.substr(8, marker - 8).c_str());
 			int doornumber = atoi(meshname.substr(marker + 5).c_str());
 			Elevator *elevator = sbs->GetElevator(elevnumber);
-			if (elevator->IsDoorOpen(doornumber) == false)
+			if (elevator)
 			{
-				if (elevator->IsDoorMoving(doornumber) == false)
-					elevator->OpenDoor(doornumber);
+				if (elevator->IsDoorOpen(doornumber) == false)
+				{
+					if (elevator->IsDoorMoving(doornumber) == false)
+						elevator->OpenDoor(doornumber);
+					else
+						elevator->CloseDoor(doornumber);
+				}
 				else
-					elevator->CloseDoor(doornumber);
-			}
-			else
-			{
-				if (elevator->IsDoorMoving(doornumber) == false)
-					elevator->CloseDoor(doornumber);
-				else
-					elevator->OpenDoor(doornumber);
+				{
+					if (elevator->IsDoorMoving(doornumber) == false)
+						elevator->CloseDoor(doornumber);
+					else
+						elevator->OpenDoor(doornumber);
+				}
 			}
 		}
 	}

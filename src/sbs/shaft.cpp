@@ -282,10 +282,13 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 			for (size_t i = 0; i < elevators.size(); i++)
 			{
 				Elevator *elevator = sbs->GetElevator(elevators[i]);
-				for(size_t j = 0; j < elevator->ServicedFloors.size(); j++)
+				if (elevator)
 				{
-					if (elevator->ServicedFloors[j] == floor)
-						elevator->ShaftDoorsEnabled(0, elevator->ServicedFloors[j], value);
+					for(size_t j = 0; j < elevator->ServicedFloors.size(); j++)
+					{
+						if (elevator->ServicedFloors[j] == floor)
+							elevator->ShaftDoorsEnabled(0, elevator->ServicedFloors[j], value);
+					}
 				}
 			}
 		}
@@ -371,9 +374,15 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	cutstart = start;
 	cutend = end;
 
+	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
+		return;
+
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		Floor *floorptr = sbs->GetFloor(i);
+		if (!floorptr)
+			continue;
+
 		voffset1 = 0;
 		voffset2 = floorptr->FullHeight() + 1;
 
@@ -417,6 +426,9 @@ bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const 
 		return false;
 	}
 
+	if (!sbs->GetFloor(floor))
+		return false;
+
 	float base = sbs->GetFloor(floor)->Altitude;
 
 	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
@@ -441,6 +453,9 @@ void Shaft::EnableRange(int floor, int range, bool value, bool EnableShaftDoors)
 
 	//exit if ShowFullShaft is true
 	if (ShowFullShaft == true)
+		return;
+
+	if (!sbs->GetFloor(floor))
 		return;
 
 	SBS_PROFILE("Shaft::EnableRange");

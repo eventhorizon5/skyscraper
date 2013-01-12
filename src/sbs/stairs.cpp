@@ -379,6 +379,9 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 		checkfirstrun == false)
 		return lastcheckresult;
 
+	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
+		return false;
+
 	bool hit = false;
 	bool hittmp = false;
 	float bottom = sbs->GetFloor(startfloor)->GetBase();
@@ -396,6 +399,8 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	lastfloorset = true;
 
 	Floor *floorptr = sbs->GetFloor(floor);
+	if (!floorptr)
+		return false;
 
 	if (position.y > bottom && position.y < top)
 	{
@@ -432,6 +437,9 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	}
 
 	Floor *floorptr = sbs->GetFloor(floor);
+	if (!floorptr)
+		return 0;
+
 	float x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
@@ -485,9 +493,15 @@ void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Ve
 	cutstart = start;
 	cutend = end;
 
+	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
+		return;
+
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		Floor *floorptr = sbs->GetFloor(i);
+		if (!floorptr)
+			continue;
+
 		voffset1 = 0;
 		voffset2 = sbs->GetFloor(i)->FullHeight() + 1;
 
@@ -530,6 +544,9 @@ bool Stairs::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const
 		return false;
 	}
 
+	if (!sbs->GetFloor(floor))
+		return false;
+
 	float base = sbs->GetFloor(floor)->GetBase();
 
 	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
@@ -552,6 +569,9 @@ void Stairs::EnableRange(int floor, int range)
 	//turn on a range of floors
 	//if range is 3, show stairwell on current floor (floor), and 1 floor below and above (3 total floors)
 	//if range is 1, show only the current floor (floor)
+
+	if (!sbs->GetFloor(floor))
+		return;
 
 	SBS_PROFILE("Stairs::EnableRange");
 
@@ -595,8 +615,11 @@ void Stairs::EnableDoor(int floor, bool value)
 
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
-		if (DoorArray[i].floornumber == floor && DoorArray[i].object)
-			DoorArray[i].object->Enabled(value);
+		if (DoorArray[i].object)
+		{
+			if (DoorArray[i].floornumber == floor && DoorArray[i].object)
+				DoorArray[i].object->Enabled(value);
+		}
 	}
 }
 

@@ -364,7 +364,8 @@ void DebugPanel::Timer::Notify()
 		{
 			dp->bEditElevator->Enable(true);
 			dp->t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
-			dp->t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
+			if (Simcore->GetElevator(Simcore->ElevatorNumber))
+				dp->t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
 		}
 		else
 			dp->bEditElevator->Enable(false);

@@ -984,6 +984,10 @@ void editelevator::Loop()
 	elevator_count = Simcore->Elevators();
 	floor_count = Simcore->TotalFloors();
 	elevator = Simcore->GetElevator(elev_num);
+
+	if (!elevator)
+		return;
+
 	door = elevator->GetDoor(door_num);
 
 	if (elev_num != last_elevator)

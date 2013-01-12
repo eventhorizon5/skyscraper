@@ -524,7 +524,10 @@ void SBS::MainLoop()
 			if (ProcessElevators == true)
 			{
 				for (int i = 1; i <= Elevators(); i++)
-					GetElevator(i)->MonitorLoop();
+				{
+					if (GetElevator(i))
+						GetElevator(i)->MonitorLoop();
+				}
 
 				//check if the user is in an elevator
 				camera->CheckElevator();
