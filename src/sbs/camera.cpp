@@ -139,8 +139,6 @@ Camera::~Camera()
 	//Destructor
 	if (mCharacter)
 		delete mCharacter;
-	if (mShape)
-		delete mShape;
 	std::string nodename = CameraNode->getChild(0)->getName();
 	CameraNode->detachAllObjects();
 	CameraNode->getParent()->removeChild(CameraNode);

@@ -73,7 +73,7 @@ SetPlanarMapping true, false, false, false
     Load data/callbutton.gif, ButtonDown, 1, -1
     Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
     Load data/granite_0007e.jpg, Wall1, 0.25, 0.25
-    Load data/text13.jpg, Stairs, 0.269, 0.25
+    Load data/metal072b.jpg, Stairs, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
     Load data/darrow_unlit.gif, ArrowUp, 1, 1
@@ -82,7 +82,7 @@ SetPlanarMapping true, false, false, false
     Load data/darrow_lit.gif, ArrowDown_Lit, 1, -1
     Load data/downtown.jpg, Downtown, 1, 1
     Load data/grndroad1mid.jpg, Helipad, 0.25, 0.25
-    Load data/grate.gif, Grate, 0.5, 0.5
+    Load data/grate.png, Grate, 0.5, 0.5
     Load data/stucco3.jpg, HeliWalls, 0.25, 0.25
     Load data/metal072b.jpg, Landing, 0.25, 0.25
 
