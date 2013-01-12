@@ -496,6 +496,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		AddServicedFloor(floor);
 
 	//set data
+	if (!sbs->GetFloor(floor))
+	{
+		std::string num = Ogre::StringConverter::toString(floor);
+		ReportError(std::string("Floor " + num + " doesn't exist").c_str());
+		return 0;
+	}
+
 	Origin.y = sbs->GetFloor(floor)->GetBase();
 	if (relative == false)
 	{
@@ -550,7 +557,15 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
 		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
 	else
-		motorsound->SetPositionY(sbs->GetFloor(sbs->GetShaft(AssignedShaft)->endfloor)->GetBase());
+	{
+		Shaft* shaft = sbs->GetShaft(AssignedShaft);
+		if (shaft)
+		{
+			Floor *floor = sbs->GetFloor(shaft->endfloor);
+			if (floor)
+				motorsound->SetPositionY(floor->GetBase());
+		}
+	}
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
 	alarm = new Sound(this->object, "Alarm", true);
 	alarm->SetPosition(Origin);
@@ -588,6 +603,14 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		return;
 	}
 
+	Floor *floorobj = sbs->GetFloor(floor);
+
+	if (!floorobj)
+	{
+		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
+		return;
+	}
+
 	//if doors are open or moving in independent service mode, quit
 	if (IndependentService == true && (AreDoorsOpen() == false || CheckOpenDoor() == true))
 	{
@@ -619,7 +642,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (loc != -1)
 		{
 			//exit if entry already exits
-			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
+			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
 			return;
 		}
 
@@ -628,7 +651,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
-		Report("adding route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
+		Report("adding route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction up");
 	}
 	else
 	{
@@ -642,7 +665,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (loc != -1)
 		{
 			//exit if entry already exits
-			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") already exists");
+			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
 			return;
 		}
 		
@@ -651,7 +674,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
-		Report("adding route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
+		Report("adding route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction down");
 	}
 
 	//turn on button lights
@@ -688,6 +711,14 @@ void Elevator::DeleteRoute(int floor, int direction)
 		return;
 	}
 
+	Floor *floorobj = sbs->GetFloor(floor);
+
+	if (!floorobj)
+	{
+		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
+		return;
+	}
+
 	if (direction == 1)
 	{
 		//delete floor entry from up queue
@@ -696,7 +727,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 			if (UpQueue[i] == floor)
 				UpQueue.erase(UpQueue.begin() + i);
 		}
-		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction up");
+		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction up");
 	}
 	else
 	{
@@ -706,7 +737,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 			if (DownQueue[i] == floor)
 				DownQueue.erase(DownQueue.begin() + i);
 		}
-		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ") direction down");
+		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction down");
 	}
 
 	//turn off button lights
@@ -933,7 +964,7 @@ void Elevator::ProcessCallQueue()
 					if (GotoFloor != UpQueue[i])
 					{
 						float tmpdestination = GetDestinationAltitude(UpQueue[i]);
-						if (BeyondDecelMarker(1, tmpdestination) == false)
+						if (BeyondDecelMarker(1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 						{
 							ActiveCallFloor = UpQueue[i];
 							GotoFloor = UpQueue[i];
@@ -1021,7 +1052,7 @@ void Elevator::ProcessCallQueue()
 					if (GotoFloor != DownQueue[i])
 					{
 						float tmpdestination = GetDestinationAltitude(DownQueue[i]);
-						if (BeyondDecelMarker(-1, tmpdestination) == false)
+						if (BeyondDecelMarker(-1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 						{
 							ActiveCallFloor = DownQueue[i];
 							GotoFloor = DownQueue[i];
@@ -1370,6 +1401,9 @@ void Elevator::MoveElevatorToFloor()
 		if (ElevatorFloor == GotoFloor && InspectionService == false)
 		{
 			sbs->Report("Elevator already on specified floor");
+			Direction = 0;
+			MoveElevator = false;
+			ElevatorIsRunning = false;
 			DeleteActiveRoute();
 			goto finish; //skip main processing and run cleanup section
 		}
@@ -1378,6 +1412,18 @@ void Elevator::MoveElevatorToFloor()
 		if (IsServicedFloor(GotoFloor) == false && InspectionService == false)
 		{
 			sbs->Report("Destination floor not in ServicedFloors list");
+			Direction = 0;
+			MoveElevator = false;
+			ElevatorIsRunning = false;
+			DeleteActiveRoute();
+			return;
+		}
+
+		//exit if floor doesn't exist
+		if (!sbs->GetFloor(GotoFloor))
+		{
+			sbs->Report("Destination floor does not exist");
+			Direction = 0;
 			MoveElevator = false;
 			ElevatorIsRunning = false;
 			DeleteActiveRoute();
@@ -1485,7 +1531,8 @@ void Elevator::MoveElevatorToFloor()
 		UpdateDirectionalIndicators();
 
 		//set external active-direction indicators
-		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
+		if (sbs->GetFloor(sbs->camera->CurrentFloor))
+			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 		//notify about movement
 		if (InspectionService == false)
@@ -1842,7 +1889,8 @@ void Elevator::MoveElevatorToFloor()
 		UpdateFloorIndicators();
 
 		//update floor indicators on current camera floor
-		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
+		if (sbs->GetFloor(sbs->camera->CurrentFloor))
+			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 	}
 
 	oldfloor = GetFloor();
@@ -1994,12 +2042,14 @@ void Elevator::FinishMove()
 	UpdateDirectionalIndicators();
 
 	//update external active-direction indicators
-	sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
+	if (sbs->GetFloor(sbs->camera->CurrentFloor))
+		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 	if (EmergencyStop == false && InspectionService == false)
 	{
 		//update floor indicators on current camera floor
-		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
+		if (sbs->GetFloor(sbs->camera->CurrentFloor))
+			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
 
 		UpdateFloorIndicators();
 
@@ -2022,8 +2072,11 @@ void Elevator::FinishMove()
 			//reset shaft doors
 			for (int i = 1; i <= sbs->Shafts(); i++)
 			{
-				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
-				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
+				if (sbs->GetShaft(i))
+				{
+					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
+					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
+				}
 			}
 		}
 		else if (sbs->Verbose)
@@ -2040,12 +2093,15 @@ void Elevator::FinishMove()
 				{
 					CallButton *button =  sbs->GetFloor(GotoFloor)->CallButtonArray[buttons[0]];
 					//only reverse the queue direction if no related active call is on the floor
-					if ((button->UpStatus == false && QueuePositionDirection == 1) || (button->DownStatus == false && QueuePositionDirection == -1))
+					if (button)
 					{
-						if (sbs->Verbose)
-							Report("reversing queue search direction");
-						LastQueueDirection = QueuePositionDirection;
-						QueuePositionDirection = -QueuePositionDirection;
+						if ((button->UpStatus == false && QueuePositionDirection == 1) || (button->DownStatus == false && QueuePositionDirection == -1))
+						{
+							if (sbs->Verbose)
+								Report("reversing queue search direction");
+							LastQueueDirection = QueuePositionDirection;
+							QueuePositionDirection = -QueuePositionDirection;
+						}
 					}
 				}
 			}
@@ -2077,8 +2133,11 @@ void Elevator::FinishMove()
 			//reset shaft doors
 			for (int i = 1; i <= sbs->Shafts(); i++)
 			{
-				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
-				sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
+				if (sbs->GetShaft(i))
+				{
+					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
+					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
+				}
 			}
 		}
 	}
@@ -2396,12 +2455,15 @@ void Elevator::UpdateFloorIndicators()
 		{
 			for (int i = 0; i < DisplayFloors.size(); i++)
 			{
-				if (GetFloor() == DisplayFloors[i])
+				if (GetFloor() == DisplayFloors[i] && sbs->GetFloor(GetFloor()))
 					value = sbs->GetFloor(GetFloor())->ID;
 			}
 		}
 		else
-			value = sbs->GetFloor(GetFloor())->ID;
+		{
+			if (sbs->GetFloor(GetFloor()))
+				value = sbs->GetFloor(GetFloor())->ID;
+		}
 	}
 	TrimString(value);
 
@@ -2593,7 +2655,7 @@ void Elevator::EnableUpPeak(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		if (IsMoving == false && GetFloor() == GetBottomFloor())
+		if (IsMoving == false && GetFloor() == GetBottomFloor() && sbs->GetFloor(GetFloor()))
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
 			SetDirectionalIndicators(true, false);
@@ -2635,7 +2697,7 @@ void Elevator::EnableDownPeak(bool value)
 		EnableInspectionService(false);
 		EnableFireService1(0);
 		EnableFireService2(0);
-		if (IsMoving == false && GetFloor() == GetTopFloor())
+		if (IsMoving == false && GetFloor() == GetTopFloor() && sbs->GetFloor(GetFloor()))
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
 			SetDirectionalIndicators(false, true);
@@ -2731,8 +2793,11 @@ void Elevator::EnableInspectionService(bool value)
 				Report("user in elevator - turning on objects");
 
 			//turn on floor
-			sbs->GetFloor(GetFloor())->Enabled(true);
-			sbs->GetFloor(GetFloor())->EnableGroup(true);
+			if (sbs->GetFloor(GetFloor()))
+			{
+				sbs->GetFloor(GetFloor())->Enabled(true);
+				sbs->GetFloor(GetFloor())->EnableGroup(true);
+			}
 
 			//Turn on sky, buildings, and landscape
 			sbs->EnableSkybox(true);
@@ -2743,8 +2808,11 @@ void Elevator::EnableInspectionService(bool value)
 			//reset shaft doors
 			for (int i = 1; i <= sbs->Shafts(); i++)
 			{
-				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, false, true);
-				sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
+				if (sbs->GetShaft(i))
+				{
+					sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, false, true);
+					sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
+				}
 			}
 		}
 
@@ -3053,7 +3121,10 @@ void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bo
 		Report("adding directional indicators");
 
 	for (size_t i = 0; i < ServicedFloors.size(); i++)
-		sbs->GetFloor(ServicedFloors[i])->AddDirectionalIndicator(Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	{
+		if (sbs->GetFloor(ServicedFloors[i]))
+			sbs->GetFloor(ServicedFloors[i])->AddDirectionalIndicator(Number, relative, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	}
 }
 
 Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
@@ -3628,7 +3699,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 		if (door_number != 0)
 			door_result = GetDoor(door_number)->ShaftDoorsExist(ServicedFloors[i]);
 
-		if (door_number == 0 || door_result == true)
+		if ((door_number == 0 || door_result == true) && sbs->GetFloor(ServicedFloors[i]))
 		{
 			std::string texture = texture_prefix + sbs->GetFloor(ServicedFloors[i])->ID;
 			std::string tmpdirection = direction;
@@ -3658,6 +3729,9 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 	//get call buttons associated with this elevator
 	if (sbs->Verbose)
 		Report("SetCallButtons: getting associated call buttons");
+
+	if (!sbs->GetFloor(floor))
+		return;
 
 	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
 
@@ -4279,13 +4353,15 @@ void Elevator::NotifyArrival(int floor)
 	if (LightDirection == true)
 	{
 		Chime(0, floor, true);
-		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, true, false);
+		if (sbs->GetFloor(floor))
+			sbs->GetFloor(floor)->SetDirectionalIndicators(Number, true, false);
 		SetDirectionalIndicators(true, false);
 	}
 	else
 	{
 		Chime(0, floor, false);
-		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, false, true);
+		if (sbs->GetFloor(floor))
+			sbs->GetFloor(floor)->SetDirectionalIndicators(Number, false, true);
 		SetDirectionalIndicators(false, true);
 	}
 

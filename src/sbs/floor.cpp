@@ -661,6 +661,10 @@ void Floor::UpdateFloorIndicators(int elevator)
 			if (FloorIndicatorArray[i]->elev == elevator)
 			{
 				Elevator *elev = sbs->GetElevator(elevator);
+
+				if (!elev)
+					return;
+
 				if (elev->UseFloorSkipText == true && elev->IsServicedFloor(elev->GetFloor()) == false)
 					value = elev->GetFloorSkipText();
 				else
@@ -677,7 +681,8 @@ void Floor::UpdateFloorIndicators(int elevator)
 						value = sbs->GetFloor(elev->GetFloor())->ID;
 				}
 				TrimString(value);
-				FloorIndicatorArray[i]->Update(value.c_str());
+				if (value != "")
+					FloorIndicatorArray[i]->Update(value.c_str());
 			}
 		}
 	}
@@ -694,6 +699,10 @@ void Floor::UpdateFloorIndicators()
 		if (FloorIndicatorArray[i])
 		{
 			Elevator *elevator = sbs->GetElevator(FloorIndicatorArray[i]->elev);
+
+			if (!elevator)
+				continue;
+
 			if (elevator->UseFloorSkipText == true && elevator->IsServicedFloor(elevator->GetFloor()) == false)
 				value = elevator->GetFloorSkipText();
 			else
@@ -738,8 +747,11 @@ std::vector<int> Floor::GetCallButtons(int elevator)
 	for (int i = 0; i < (int)CallButtonArray.size(); i++)
 	{
 		//put button number onto the array if it serves the elevator
-		if (CallButtonArray[i]->ServicesElevator(elevator) == true)
-			buttons.push_back(i);
+		if (CallButtonArray[i])
+		{
+			if (CallButtonArray[i]->ServicesElevator(elevator) == true)
+				buttons.push_back(i);
+		}
 	}
 	return buttons;
 }
@@ -925,10 +937,13 @@ void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == false)
+		if (DirIndicatorArray[i])
 		{
-			DirIndicatorArray[i]->DownLight(DownLight);
-			DirIndicatorArray[i]->UpLight(UpLight);
+			if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == false)
+			{
+				DirIndicatorArray[i]->DownLight(DownLight);
+				DirIndicatorArray[i]->UpLight(UpLight);
+			}
 		}
 	}
 }
@@ -945,6 +960,10 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 			if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == true)
 			{
 				Elevator *elev = sbs->GetElevator(elevator);
+
+				if (!elev)
+					return;
+
 				if (elev->ActiveDirection == 1)
 				{
 					DirIndicatorArray[i]->UpLight(true);
@@ -978,6 +997,10 @@ void Floor::UpdateDirectionalIndicators()
 			if (DirIndicatorArray[i]->ActiveDirection == true)
 			{
 				Elevator *elev = sbs->GetElevator(DirIndicatorArray[i]->elevator_num);
+
+				if (!elev)
+					return;
+
 				if (elev->ActiveDirection == 1)
 				{
 					DirIndicatorArray[i]->UpLight(true);
