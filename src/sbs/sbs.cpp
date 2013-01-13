@@ -2602,7 +2602,7 @@ Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale)
 
 float SBS::ToRemote(float local_value)
 {
-	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+	//convert local (SBS) vertex positions to remote (OGRE) positions
 
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
@@ -2612,7 +2612,7 @@ float SBS::ToRemote(float local_value)
 
 Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 {
-	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+	//convert local (SBS) vertex positions to remote (OGRE) positions
 
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
@@ -2622,7 +2622,7 @@ Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 
 Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale)
 {
-	//convert local (SBS) vertex positions to remote (Crystal Space) positions
+	//convert local (SBS) vertex positions to remote (OGRE) positions
 	
 	Ogre::Vector3 newvalue;
 	newvalue.x = local_value.x;
