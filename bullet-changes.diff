@@ -1,5 +1,5 @@
 diff -urN a/src/BulletDynamics/Character/btCharacterControllerInterface.h b/src/BulletDynamics/Character/btCharacterControllerInterface.h
---- a/src/BulletDynamics/Character/btCharacterControllerInterface.h	2013-01-12 22:47:48.526165566 -0600
+--- a/src/BulletDynamics/Character/btCharacterControllerInterface.h	2013-01-13 01:17:33.574335233 -0600
 +++ b/src/BulletDynamics/Character/btCharacterControllerInterface.h	2011-04-28 12:53:37.000000000 -0500
 @@ -31,7 +31,7 @@
  	
@@ -19,8 +19,8 @@ diff -urN a/src/BulletDynamics/Character/btCharacterControllerInterface.h b/src/
  
  #endif //BT_CHARACTER_CONTROLLER_INTERFACE_H
 diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/src/BulletDynamics/Character/btKinematicCharacterController.cpp
---- a/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-12 22:47:48.526165566 -0600
-+++ b/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-12 22:46:43.652736609 -0600
+--- a/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-13 01:17:33.562334987 -0600
++++ b/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-13 01:15:43.216048539 -0600
 @@ -14,6 +14,7 @@
  */
  
@@ -124,76 +124,101 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
  		}
  	}
  
-@@ -397,7 +414,7 @@
+@@ -397,7 +414,8 @@
  
  void btKinematicCharacterController::stepDown ( btCollisionWorld* collisionWorld, btScalar dt)
  {
 -	btTransform start, end;
-+	btTransform start, end, start2, end2;
++	btTransform start, end, end_double;
++	bool runonce = false;
  
  	// phase 3: down
  	/*btScalar additionalDownStep = (m_wasOnGround && !onGround()) ? m_stepHeight : 0.0;
-@@ -407,11 +424,17 @@
+@@ -406,44 +424,116 @@
+ 	btVector3 gravity_drop = getUpAxisDirections()[m_upAxis] * downVelocity; 
  	m_targetPosition -= (step_drop + gravity_drop);*/
  
++	btVector3 orig_position = m_targetPosition;
++	
  	btScalar downVelocity = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
+-	if(downVelocity > 0.0 && downVelocity < m_stepHeight
 +
-+#ifdef BT_USE_DOUBLE_PRECISION
 +	if(downVelocity > 0.0 && downVelocity > m_fallSpeed
-+		&& (m_wasOnGround || !m_wasJumping))
-+		downVelocity = m_fallSpeed;
-+
-+#else
- 	if(downVelocity > 0.0 && downVelocity < m_stepHeight
  		&& (m_wasOnGround || !m_wasJumping))
 -	{
- 		downVelocity = m_stepHeight;
+-		downVelocity = m_stepHeight;
 -	}
-+#endif
++		downVelocity = m_fallSpeed;
  
  	btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
  	m_targetPosition -= step_drop;
-@@ -419,9 +442,16 @@
+ 
++	btKinematicClosestNotMeConvexResultCallback callback (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
++        callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
++        callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
++
++        btKinematicClosestNotMeConvexResultCallback callback2 (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
++        callback2.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
++        callback2.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
++
++redotests:
  	start.setIdentity ();
  	end.setIdentity ();
  
-+	start2.setIdentity ();
-+	end2.setIdentity ();
++	end_double.setIdentity ();
 +
  	start.setOrigin (m_currentPosition);
  	end.setOrigin (m_targetPosition);
  
-+	//secondary test, with slight offset - this overcomes situations where the standard test misses the polygon due to large polygon rounding errors
-+	start2.setOrigin (m_currentPosition - btVector3(0.02, 0.0, 0.02));
-+	end2.setOrigin (m_targetPosition- btVector3(0.02, 0.0, 0.02));
+-	btKinematicClosestNotMeConvexResultCallback callback (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
+-	callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
+-	callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
+-	
++	//set double test for 2x the step drop, to check for a large drop vs small drop
++	end_double.setOrigin (m_targetPosition - step_drop);
 +
- 	btKinematicClosestNotMeConvexResultCallback callback (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
- 	callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
- 	callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
-@@ -429,22 +459,67 @@
  	if (m_useGhostObjectSweepTest)
  	{
  		m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
-+#ifndef BT_USE_DOUBLE_PRECISION
++
 +		if (!callback.hasHit())
 +		{
-+			//perform second sweep test to prevent check errors
-+			m_ghostObject->convexSweepTest (m_convexShape, start2, end2, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++			//test a double fall height, to see if the character should interpolate it's fall (full) or not (partial)
++			m_ghostObject->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 +		}
-+#endif
  	} else
  	{
  		collisionWorld->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
-+#ifndef BT_USE_DOUBLE_PRECISION
++
 +		if (!callback.hasHit())
-+		{
-+			//perform second sweep test to prevent check errors
-+			collisionWorld->convexSweepTest (m_convexShape, start2, end2, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
-+		}
-+#endif
++                {
++                        //test a double fall height, to see if the character should interpolate it's fall (large) or not (small)
++                        collisionWorld->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++                }
  	}
  
- 	if (callback.hasHit())
+-	if (callback.hasHit())
++	btScalar downVelocity2 = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
++#ifdef BT_USE_DOUBLE_PRECISION
++	if(downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && callback2.hasHit() && runonce == false
++#else
++	if(downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && (callback.hasHit() || callback2.hasHit()) && runonce == false
++#endif
++                && (m_wasOnGround || !m_wasJumping))
++	{
++		//redo the velocity calculation when falling a small amount, for fast stairs motion
++		//for larger falls, use the smoother/slower interpolated movement by not touching the target position
++
++		m_targetPosition = orig_position;
++               	downVelocity = m_stepHeight;
++
++	        btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
++		m_targetPosition -= step_drop;
++		runonce = true;
++		goto redotests; //re-run previous tests
++	}
++
++	if (callback.hasHit() || runonce == true)
  	{
  		// we dropped a fraction of the height -> hit floor
 +
@@ -231,14 +256,11 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
 +		}
 +#endif
 +		//printf("full drop - %g, %g\n", m_currentPosition.getY(), m_targetPosition.getY());
- 		m_currentPosition = m_targetPosition;
 +
-+		//btScalar fraction = (m_currentPosition.getY() - m_targetPosition.getY()) * 2;
-+		//m_currentPosition.setInterpolate3 (m_currentPosition, m_targetPosition, fraction);
+ 		m_currentPosition = m_targetPosition;
  	}
  }
- 
-@@ -479,10 +554,21 @@
+@@ -479,10 +569,21 @@
  	m_velocityTimeInterval = timeInterval;
  }
  
@@ -263,7 +285,7 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
  }
  
  void btKinematicCharacterController::warp (const btVector3& origin)
-@@ -653,3 +739,8 @@
+@@ -653,3 +754,8 @@
  void btKinematicCharacterController::debugDraw(btIDebugDraw* debugDrawer)
  {
  }
@@ -273,7 +295,7 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
 +	m_interpolateUp = value;
 +}
 diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.h b/src/BulletDynamics/Character/btKinematicCharacterController.h
---- a/src/BulletDynamics/Character/btKinematicCharacterController.h	2013-01-12 22:47:48.522165468 -0600
+--- a/src/BulletDynamics/Character/btKinematicCharacterController.h	2013-01-13 01:17:33.562334987 -0600
 +++ b/src/BulletDynamics/Character/btKinematicCharacterController.h	2012-12-04 15:57:45.616032733 -0600
 @@ -81,6 +81,8 @@
  	int m_upAxis;
