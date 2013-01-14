@@ -270,8 +270,8 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     SetAutoSize = true, true
 <EndFloors>
 
-# floors 111 to 137
-<Floors 110 To 136>
+# floors 111 to 134
+<Floors 110 To 133>
     ID = %floor% + 1
     Name = Residential
     Type = Residential
@@ -297,18 +297,27 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     ID = %floor% + 1
     Name = Promenade Room
     Type = Ballroom
+    Height = 12
+    InterfloorHeight = 0
+    Group = 135, 136
 <EndFloor>
 
 <Floor 135>
     ID = %floor% + 1
     Name = Utility Room
     Type = Service
+    Height = 9.5
+    InterfloorHeight = 2.5
+    Group = 135, 136
 <EndFloor>
 
 <Floor 136>
     ID = %floor% + 1
     Name = Tank Storage Room
     Type = Service
+    Height = 12
+    InterfloorHeight = 0
+    Group = 136, 137
 <EndFloor>
 
 # Roof
@@ -318,6 +327,7 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     Type = Roof
     Height = 12
     InterfloorHeight = 0
+    Group = 136, 137
 <EndFloor>
 
 SetAutoSize = false, false
@@ -814,8 +824,10 @@ DrawWalls = true, true, false, false, false, false
     
     DrawWalls = true, false, false, false, false, false
     if[%floor% < 110] AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
-    if[%floor% > 109 & %floor% < 137] AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
-    if[%floor% = 137] AddCustomWall floor, MainFloor, Gravel2, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    if[%floor% > 109 & %floor% < 135] AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    if[%floor% > 135 & %floor% < 137] AddCustomWall floor, MainFloor, Carpet1, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    if[%floor% = 137] AddCustomWall floor, MainFloor1, Gravel2, -10.61, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -10.61, %1%, -36.8, -10.61, %1%, 36.64, 0, 0
+    if[%floor% = 137] AddCustomWall floor, MainFloor2, Gravel2, -18.88, %1%, -36.8, -35.5, %1%, -30.9, -10.61, %1%, 5, -10.61, %1%, -36.8, 0, 0
 
     #Ceiling
     Set 1 = Floor(%floor%).Base + Floor(%floor%).Height
@@ -833,8 +845,12 @@ DrawWalls = true, true, false, false, false, false
     Set 9 = %maxz%
 
     DrawWalls = false, true, false, false, false, false
-    if[%floor% < 110] AddCustomWall floor, MainFloor, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
-    if[%floor% > 109 & %floor% < 137] AddCustomWall floor, MainFloor, Marble3, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    if[%floor% < 110] AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, -84.32, %1%, 7.84, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    if[%floor% > 109 & %floor% < 134] AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    if[%floor% > 134 & %floor% < 136] AddCustomWall floor, MainCeiling, Marble3, -79.2, %1%, -15.2, %6%, %1%, %7%, %8%, %1%, %9%, -43.36, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -18.88, %1%, -36.8, -79.2, %1%, -15.2, 0, 0
+    Set 1 = Floor(%floor%).Base + Floor(%floor%).Height - 0.01
+    if[%floor% = 136] AddCustomWall floor, MainCeiling1, Marble3, -10.61, %1%, 36.64, 37.28, %1%, 36.64, 58.08, %1%, 21.44, %4%, %1%, %5%, %2%, %1%, %3%, 18.4, %1%, -36.8, -10.61, %1%, -36.8, -10.61, %1%, 36.64, 0, 0
+    if[%floor% = 136] AddCustomWall floor, MainCeiling2, Marble3, -18.88, %1%, -36.8, -35.5, %1%, -30.9, -10.61, %1%, 5, -10.61, %1%, -36.8, 0, 0
 <EndFloors>
 
 #Plaza Base
@@ -1573,6 +1589,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall PenthouseShaftFront, Concrete, 0, -6.63, 14.59, 17.42, 14.59, 11.5, 10, 10, 10, 0, 0, false
     AddWall MainCover, HeliWalls, 0, -32, -25.8, -10.61, 5, 15, 15, 0, 0, 0, 0, false
     AddWall MainCover2, HeliWalls, 0, -10.61, 14.59, -10.61, 5, 15, 15, 0, 0, 0, 0, false
+    AddWall InteriorCover, HeliWalls, 0, -10.61, 36.64, -10.61, 14.59, 10, 10, 0, 0, 0, 0, false
     AddWall StairCover, Concrete, 0, 8.43, 14.59, 8.43, 9.78, 10, 10, 0, 0, 0, 0, false
     AddWall StairCover, Concrete, 0, 8.43, 9.78, 17.42, 9.78, 10, 10, 0, 0, 0, 0, false
 
@@ -1618,7 +1635,7 @@ ShaftCut 3, -4, -4.125 + 0.33, 4, 4.125, 0, 5
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -15.25, -4.25, 15.25, 4.25, -0.1, -0.1, 0, 0
     DrawWalls = true, true, false, false, false, false
-    if[%floor% = 134] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0
+    if[%floor% = 135] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0
     if[%floor% = 137] AddShaftFloor 1, Shaft1Top, Gravel, 0, -18.64, 3.25, 18.64, 4.25, 10, 10, 0, 0
     SetAutoSize = true, false
     DrawWalls = true, true, true, true, false, false
@@ -1631,9 +1648,9 @@ ShaftCut 3, -4, -4.125 + 0.33, 4, 4.125, 0, 5
     SetAutoSize = true, true
     if[%floor% < 137] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 4.25, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
-    if[%floor% > 134] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 3.25, 18.64, 3.25, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% > 134] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 3.25, -18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% > 134] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64, 3.25, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% > 135] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 3.25, 18.64, 3.25, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% > 135] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 3.25, -18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% > 135] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64, 3.25, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
 <EndFloors>
 
 #Executive elevator
@@ -1792,7 +1809,7 @@ DrawWalls = true, true, false, false, false, false
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 0, 2, 64 - 69, 80, 99, 131 - 137
+    ServicedFloors = 0, 2, 64 - 69, 80, 99, 131 - 134, 136 - 137
     AssignedShaft = 2
     CreateElevator true, 0, -0.294, 0
     
