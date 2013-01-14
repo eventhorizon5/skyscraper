@@ -1544,9 +1544,11 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     DrawWalls = false, true, true, true, true, true
     FloorOrientation = bottom
     AddFloor Shaft Top, Gravel, 2.5, -0.11, 15.68, 8.37, 22.2, 20, 20, 0, 0, false
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    AddFloor Landing, Landing, 0.5, -0.11, 5, 8.43, 14.6 + 0.33, 10, 10, 0, 0, false
     DrawWalls = true, true, false, false, false, false
-    AddFloor Landing, Landing, 0, -0.11, 5, 8.43, 14.6 + 0.33, 10, 10, 0, 0, false
-    AddFloor Landing2, Landing, 0, 8.43, 9.78, 17.42, 14.6, 10, 10, 0, 0, false
+    AddFloor Landing2, Landing, 0.5, 8.43, 9.78, 17.42, 14.6, 10, 10, 0, 0, false
     AddFloor DuckboardLanding, Grate, 0, -0.11, 5, 8.43, 14.6, 0.25, 0.25, 0, 0, false
     AddFloor LeftWalkway, Grate, 0, -9.83, 5, -6.63, -16.38, 5, 5, 0, 0, false
     SetAutoSize = false, false
@@ -1569,9 +1571,13 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall StairsRailingLeftSteps4, Railing, 0, -6.63, 5, -0.11, 5, 3.5, 3.5, 5, 10, 0, 0, false
     SetAutoSize = true, true
     ResetTextureMapping = true
-    AddFloor LeftLanding, Landing, 0, -10.61, -16.38, -6.63, -20.4, 5, 5, 0, 0, false
-    AddFloor StairsLandingLower, Landing, 0, -10.61, 14.59, -6.63, 5, 5, 5, 0, 0, false
-    AddFloor StairsLandingUpper, Landing, 0, -10.61, 14.59, -6.63, 5, 15, 15, 0, 0, false
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+<break>
+    AddFloor LeftLanding, Landing, 0.5, -10.61, -16.38, -6.63, -20.4, 5, 5, 0, 0, false
+    AddFloor StairsLandingLower, Landing, 0.5, -10.61, 14.59, -6.63, 5, 5, 5, 0, 0, false
+    AddFloor StairsLandingUpper, Landing, 0.5, -10.61, 14.59, -6.63, 5, 15, 15, 0, 0, false
+    DrawWalls = true, true, false, false, false, false
     AddWall SideCover, Concrete, 0, 17.42, 36.64, 17.42, 9.78, 10, 10, 0, 0, 0, 0, false
     AddWall MidCover, Concrete, 0, -10.61, 14.59, 8.43, 14.59, 10, 10, 0, 0, 0, 0, false
     AddWall LeftCover, HeliWalls, 0, -35.5, -30.9, -32, -25.8, 10, 10, 0, 0, 0, 0, false
@@ -1592,6 +1598,17 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall InteriorCover, HeliWalls, 0, -10.61, 36.64, -10.61, 14.59, 10, 10, 0, 0, 0, 0, false
     AddWall StairCover, Concrete, 0, 8.43, 14.59, 8.43, 9.78, 10, 10, 0, 0, 0, 0, false
     AddWall StairCover, Concrete, 0, 8.43, 9.78, 17.42, 9.78, 10, 10, 0, 0, 0, 0, false
+    AddCustomWall External, TopCover, HeliWalls, -6.63, Floor(137).Altitude + 14.5, 5, -6.63, Floor(137).Altitude + 14.5, 14.59, -10.61, Floor(137).Altitude + 12.5, 14.59, -10.61, Floor(137).Altitude + 12.5, 5, 0, 0
+    AddCustomWall External, TopCoverSide, HeliWalls, -10.61, Floor(137).Altitude + 14.5, 5, -6.63, Floor(137).Altitude + 14.5, 5, -10.61, Floor(137).Altitude + 12.5, 5, 0, 0
+    AddCustomWall External, TopCoverSide, HeliWalls, -10.61, Floor(137).Altitude + 14.5, 14.59, -6.63, Floor(137).Altitude + 14.5, 14.59, -10.61, Floor(137).Altitude + 12.5, 14.59, 0, 0
+
+    AddCustomWall External, WireMeshRight, Grate, -10.61, Floor(137).Altitude + 16, 5, -7.28, Floor(137).Altitude + 18, 3.88, -28.63, Floor(137).Altitude + 18, -27.11, -32, Floor(137).Altitude + 16, -25.8, 0, 0
+    AddCustomWall External, WireMeshRightFill, Grate, -28.63, Floor(137).Altitude + 18, -27.11, -34.02, Floor(137).Altitude + 18, -28.74, -32, Floor(137).Altitude + 16, -25.8, 0, 0
+    AddCustomWall External, WireMeshLower, Grate, -70.15, Floor(137).Altitude + 16, -12.2, -32, Floor(137).Altitude + 16, -25.8, -34.02, Floor(137).Altitude + 18, -28.74, -72.20, Floor(137).Altitude + 18, -15.19, -70.15, Floor(137).Altitude + 16, -12.2, 0, 0
+    AddCustomWall External, WireMeshLowerFill, Grate, -72.20, Floor(137).Altitude + 18, -15.19, -73.5, Floor(137).Altitude + 18, -11, -70.15, Floor(137).Altitude + 16, -12.2, 0, 0
+    AddCustomWall External, WireMeshLeft, Grate, -70.15, Floor(137).Altitude + 16, -12.2, -73.5, Floor(137).Altitude + 18, -11, -43.8, Floor(137).Altitude + 18, 31.8, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
+    AddCustomWall External, WireMeshLeftFill, Grate, -43.8, Floor(137).Altitude + 18, 31.8, -40.4, Floor(137).Altitude + 18, 34.13, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
+    AddCustomWall External, WireMeshTop, Grate, -40.4, Floor(137).Altitude + 18, 34.13, -10.61, Floor(137).Altitude + 18, 34.13, -10.61, Floor(137).Altitude + 16, 30.63, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
 
     AddCustomWall External, Helipad, Helipad, -40.4, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 5, -32, Floor(137).Altitude + 15, -25.8, -70.15, Floor(137).Altitude + 15, -12.2, -40.4, Floor(137).Altitude + 15, 30.61, 0, 0
     AddCustomWall External, ElevatorRoomCeiling, Gravel, -14.18, Floor(137).Altitude + 10, -20.4, 10.41, Floor(137).Altitude + 10, -20.4, 18.4, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -20.4, 0, 0
@@ -1603,6 +1620,11 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddCustomWall External, SideDuckboards1, Grate, 7.46, Floor(137).Altitude + 0.25, -16.38, 24.08, Floor(137).Altitude + 0.25, 5.38, 27.25, Floor(137).Altitude + 0.25, 3, 10.41, Floor(137).Altitude + 0.25, -20.4, 7.46, Floor(137).Altitude + 0.25, -16.38, 0, 0
     AddCustomWall External, SideDuckboards2, Grate, 25.52, Floor(137).Altitude + 0.25, 9.32, 41.57, Floor(137).Altitude + 0.25, -2.86, 39.37, Floor(137).Altitude + 0.25, -6.08, 24.08, Floor(137).Altitude + 0.25, 5.38, 25.52, Floor(137).Altitude + 0.25, 9.32, 0, 0
     AddCustomWall External, SideDuckboards3, Grate, 8.43, Floor(137).Altitude + 0.25, 9.32, 25.52, Floor(137).Altitude + 0.25, 9.32, 24.08, Floor(137).Altitude + 0.25, 5.38, 8.43, Floor(137).Altitude + 0.25, 5.38, 8.43, Floor(137).Altitude + 0.25, 9.32, 0, 0
+
+    AddWall HelipadCover1, HeliWalls, 0, -10.61, 5, -32, -25.8, 1, 1, 15, 15, 0, 0, true
+    AddWall HelipadCover2, HeliWalls, 0, -32, -25.8, -70.15, -12.2, 1, 1, 15, 15, 0, 0, true
+    AddWall HelipadCover3, HeliWalls, 0, -70.15, -12.2, -40.4, 30.61, 1, 1, 15, 15, 0, 0, true
+    AddWall HelipadCover4, HeliWalls, 0, -40.4, 30.61, -10.61, 30.63, 1, 1, 15, 15, 0, 0, true
 
     #stairs
     Set 1 = 15 / 24 #determine riser size
