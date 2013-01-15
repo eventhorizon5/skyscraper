@@ -91,7 +91,6 @@ bool ScriptProcessor::LoadBuilding()
 	ReplaceLine = false;
 	nonexistent_files.clear();
 	floorcache_firstrun = true;
-	ReverseAxis = false;
 
 	while (line < (int)BuildingData.size())
 	{
@@ -1201,7 +1200,7 @@ int ScriptProcessor::ProcCommands()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), ReverseAxis, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
+			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
 		else
 			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 	}
@@ -1828,7 +1827,7 @@ int ScriptProcessor::ProcCommands()
 					Ogre::StringConverter::parseBool(tempdata[3]));
 	}
 
-	//ReverseAxis command (deprecated)
+	//ReverseAxis command
 	if (linecheck.substr(0, 11) == "reverseaxis")
 	{
 		int temp2check = LineData.find("=", 0);
@@ -1836,7 +1835,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Syntax Error");
 		temp2 = GetAfterEquals(LineData.c_str());
 
-		ReverseAxis = Ogre::StringConverter::parseBool(temp2);
+		Simcore->ReverseAxis(Ogre::StringConverter::parseBool(temp2));
 	}
 
 	//Intersection points
@@ -2682,7 +2681,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), true));
+			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), true));
 		else
 			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12])));
 	}
@@ -2732,7 +2731,7 @@ int ScriptProcessor::ProcFloors()
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
 			if (compat == true)
-				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), ReverseAxis, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
+				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
 			else
 				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 		}
@@ -2785,7 +2784,7 @@ int ScriptProcessor::ProcFloors()
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
 			if (compat == true)
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), ReverseAxis, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
 			else
 				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 		}
@@ -2832,7 +2831,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
+			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
 		else
 			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 	}
@@ -5084,7 +5083,7 @@ int ScriptProcessor::ProcElevators()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
+			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
 		else
 			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
 	}

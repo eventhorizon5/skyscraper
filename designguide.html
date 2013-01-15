@@ -695,20 +695,19 @@ Group = 4 - 10</font></p>
 specified dimensions to the current floor/level<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloor <em>name,
 texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
-<em>z2</em>, <em>voffset1</em>, <em>voffset2, direction, tw</em>, <em>th,
-isexternal</em></font><br>
+<em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction, tw</em>,
+<em>th, isexternal</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddFloor My Floor,
-brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0, False</font></p>
+brick, 0.5, -10, -10, 10, 10, 0, 0, False, 0, 0, False</font></p>
 
 <p align="left"><em>Voffset1</em> and <em>voffset2</em> are the height in feet
 above the current floor's altitude; <em>tw</em> and <em>th</em> are to
 size/tile the texture (0 lets the app autosize them), and <em>isexternal</em>
 determines if the floor is part of the building's external framework, or is
 part of the current floor (is either True or False). <em>Name</em> is a
-user-defined name for the object. If the voffsets are different (to make a
-sloping floor), if <em>direction</em> is true, the floor will slope from left
-to right (x1 at voffset1, x2 at voffset2). If <em>direction</em> is false, the
-floor will slope from near to far (z1at voffset1, z2 at voffset2).</p>
+user-defined name for the object. If <em>texture_direction</em> is false, the
+texture will be mapped horizontally on the floor; if true, it'll be mapped
+vertically.</p>
 
 <p align="left"><strong>3. AddWall</strong> - adds a textured wall with the
 specified dimensions to the current floor/level<br>
@@ -754,10 +753,10 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddInterfloorWall
 the specified shaft, on the current floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftFloor
 <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
-<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, direction, tw</em>,
-<em>th</em></font><br>
+<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction,
+tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddShaftFloor 1, My
-Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
+Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, and the
 <em>number</em> value is the shaft number to use. The x1, z1, x2, and z2
@@ -780,10 +779,10 @@ walls and floors)</p>
 the specified stairwell, on the current floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsFloor
 <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
-<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, direction, tw</em>,
-<em>th</em></font><br>
+<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction,
+tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddStairsFloor 1, My
-Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
+Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, and the
 <em>number</em> value is the stairwell number to use</p>
@@ -1715,10 +1714,10 @@ floor to place the elevator on.</p>
 specified dimensions for the elevator<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloor <em>name,
 texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
-<em>z2</em>, <em>voffset1</em>, <em>voffset2, direction, tw</em>,
+<em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction, tw</em>,
 <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddFloor Floor1,
-Wood2, 0.5, -3.5, -3, 3.5, 3, 0, 0, 0, 0</font></p>
+Wood2, 0.5, -3.5, -3, 3.5, 3, 0, 0, false, 0, 0</font></p>
 
 <p align="left"><strong>3. AddWall</strong> - adds a textured wall for the
 elevator<br>
@@ -2228,8 +2227,8 @@ AddWall command.</p>
 <p align="left"><strong>c. AddFloor</strong> - adds a textured floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloor
 <em>destobject, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
-<em>x2</em>, <em>z2</em>, <em>altitude1</em>, <em>altitude2</em>, direction,
-<em>tw</em>, <em>th</em></font></p>
+<em>x2</em>, <em>z2</em>, <em>altitude1</em>, <em>altitude2</em>,
+texture_direction, <em>tw</em>, <em>th</em></font></p>
 
 <p align="left">The command's parameters are the same as the Floor section's
 AddFloor command.</p>

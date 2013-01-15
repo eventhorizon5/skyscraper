@@ -297,7 +297,7 @@ int Stairs::AddWall(WallObject *wall, int floor, const char *name, const char *t
 	return sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, tw, th, true);
 }
 
-WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool direction, float tw, float th, bool legacy_behavior)
+WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -307,13 +307,13 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	}
 
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
-	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, direction, tw, th, legacy_behavior);
+	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
 
-int Stairs::AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool direction, float tw, float th, bool legacy_behavior)
+int Stairs::AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
-	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, direction, tw, th, true, legacy_behavior);
+	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, texture_direction, tw, th, true, legacy_behavior);
 }
 
 void Stairs::Enabled(int floor, bool value)
