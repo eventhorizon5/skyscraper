@@ -1227,11 +1227,22 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 			varray2.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
 		}
 
-		if (RevX == true || (normal.x < 0.001 && normal.z < 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.z < -0.999)
+		//automatically flip texture based on largest normal (corrects some situations where the texture is incorrectly reversed)
+		if (direction == 0 && normal.x > 0)
+			rev_z = true;
+
+		if (direction == 1 && normal.y > 0)
 			rev_x = true;
 
-		if (RevZ == true || (normal.x > 0.001 && normal.z > 0.001 && fabs(normal.x) > 0.999 && fabs(normal.z) > 0.999) || normal.x > 0.999)
-			rev_z = true;
+		if (direction == 2 && normal.z < 0)
+			rev_x = true;
+
+		//force a texture flip based on parameters
+		if (RevX == true)
+			rev_x = !rev_x;
+
+		if (RevZ == true)
+			rev_z = !rev_z;
 
 		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
 		Ogre::Vector2 a, b;
