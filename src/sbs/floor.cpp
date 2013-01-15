@@ -209,7 +209,7 @@ void Floor::SetCameraFloor()
 	sbs->camera->SetPosition(Ogre::Vector3(camlocation.x, GetBase() + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
 }
 
-WallObject* Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool texture_direction, float tw, float th, bool isexternal, bool legacy_behavior)
+WallObject* Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool isexternal, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
@@ -218,22 +218,22 @@ WallObject* Floor::AddFloor(const char *name, const char *texture, float thickne
 	if (isexternal == false)
 	{
 		wall = Level->CreateWallObject(this->object, name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, texture_direction, tw, th, true, legacy_behavior);
+		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	else
 	{
 		wall = sbs->External->CreateWallObject(this->object, name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, texture_direction, tw, th, true, legacy_behavior);
+		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	return wall;
 }
 
-WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool texture_direction, float tw, float th, bool legacy_behavior)
+WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
 	WallObject *wall = Interfloor->CreateWallObject(this->object, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, texture_direction, tw, th, true, legacy_behavior);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -815,7 +815,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	{
 		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	}
-	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, tw, th, false);
+	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, false);
 	sbs->ResetWalls();
 }
 

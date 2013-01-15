@@ -188,8 +188,8 @@ public:
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	int AddWallMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
-	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior = false);
-	int AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior = false);
+	int AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior = false);
+	int AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior = false);
 	void CalculateFrameRate();
 	void MainLoop();
 	int CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
@@ -226,8 +226,6 @@ public:
 	void SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, Ogre::Vector2 uv2, int vertindex3, Ogre::Vector2 uv3);
 	void SetTextureMapping2(std::string x1, std::string y1, std::string z1, Ogre::Vector2 uv1, std::string x2, std::string y2, std::string z2, Ogre::Vector2 uv2, std::string x3, std::string y3, std::string z3, Ogre::Vector2 uv3);
 	void ResetTextureMapping(bool todefaults = false);
-	void ReverseAxis(bool value);
-	bool GetReverseAxis();
 	void SetAutoSize(bool x, bool y);
 	void GetAutoSize(bool &x, bool &y);
 	int GetDrawWallsCount();
@@ -239,7 +237,7 @@ public:
 	void SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom);
 	void SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom);
 	WallObject* AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
-	WallObject* AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool texture_direction, float tw, float th, bool legacy_behavior = false);
+	WallObject* AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	WallObject* AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
 	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0);
 	bool RegisterDoorCallback(Door *door);
@@ -278,7 +276,7 @@ public:
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);
 	void GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction);
-	void SetPlanarMapping(bool flat, bool X, bool Y, bool Z);
+	void SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate);
 	Ogre::Vector2 CalculateSizing(const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, int direction, float tw, float th);
 	//WallObject* GetWallObject(std::vector<WallObject*> &wallarray, int polygon_index);
 	//std::string TruncateNumber(double value, int decimals);
@@ -386,7 +384,6 @@ private:
 	bool DrawSideP;
 	bool DrawTop; //or back, if floor
 	bool DrawBottom; //or front, if floor
-	bool ReverseAxisValue;
 
 	//old wall/floor sides
 	bool DrawMainNOld; //or top, if floor
@@ -413,6 +410,7 @@ private:
 	bool RevX, RevY, RevZ; //extent reversals (planar texture mapping)
 	bool OldRevX, OldRevY, OldRevZ;
 	bool PlanarFlat, OldPlanarFlat;
+	bool PlanarRotate, OldPlanarRotate;
 	int DefaultMapper; //default texture mapper
 
 	//global object array (only pointers to actual objects)

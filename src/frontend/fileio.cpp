@@ -91,6 +91,7 @@ bool ScriptProcessor::LoadBuilding()
 	ReplaceLine = false;
 	nonexistent_files.clear();
 	floorcache_firstrun = true;
+	ReverseAxis = false;
 
 	while (line < (int)BuildingData.size())
 	{
@@ -1170,7 +1171,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 12 || params > 13)
+		if (params < 12 || params > 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -1188,10 +1189,10 @@ int ScriptProcessor::ProcCommands()
 		}
 		else
 		{
-			for (int i = 3; i <= 12; i++)
+			for (int i = 3; i <= 13; i++)
 			{
 				if (i == 10)
-					i++;
+					i = 12;
 
 				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
@@ -1200,9 +1201,9 @@ int ScriptProcessor::ProcCommands()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
+			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), ReverseAxis, false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
 		else
-			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 	}
 
 	//AddGround
@@ -1818,13 +1819,24 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
 
-		if (params != 4)
+		if (params < 4 || params > 5)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->SetPlanarMapping(Ogre::StringConverter::parseBool(tempdata[0]),
+		if (params == 4)
+		{
+			Simcore->SetPlanarMapping(Ogre::StringConverter::parseBool(tempdata[0]),
 					Ogre::StringConverter::parseBool(tempdata[1]),
 					Ogre::StringConverter::parseBool(tempdata[2]),
-					Ogre::StringConverter::parseBool(tempdata[3]));
+					Ogre::StringConverter::parseBool(tempdata[3]), false);
+		}
+		else
+		{
+			Simcore->SetPlanarMapping(Ogre::StringConverter::parseBool(tempdata[0]),
+					Ogre::StringConverter::parseBool(tempdata[1]),
+					Ogre::StringConverter::parseBool(tempdata[2]),
+					Ogre::StringConverter::parseBool(tempdata[3]),
+					Ogre::StringConverter::parseBool(tempdata[4]));
+		}
 	}
 
 	//ReverseAxis command
@@ -1835,7 +1847,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Syntax Error");
 		temp2 = GetAfterEquals(LineData.c_str());
 
-		Simcore->ReverseAxis(Ogre::StringConverter::parseBool(temp2));
+		ReverseAxis = Ogre::StringConverter::parseBool(temp2);
 	}
 
 	//Intersection points
@@ -2647,7 +2659,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 12 || params > 13)
+		if (params < 12 || params > 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -2667,10 +2679,10 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 		{
-			for (int i = 2; i <= 11; i++)
+			for (int i = 2; i <= 12; i++)
 			{
 				if (i == 9)
-					i++;
+					i = 11;
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
@@ -2681,9 +2693,9 @@ int ScriptProcessor::ProcFloors()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), true));
+			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), true));
 		else
-			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12])));
+			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), Ogre::StringConverter::parseBool(tempdata[13])));
 	}
 
 	//AddShaftFloor command
@@ -2692,7 +2704,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
-		if (params < 12 || params > 13)
+		if (params < 12 || params > 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -2714,12 +2726,12 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 		{
-			for (int i = 3; i <= 12; i++)
+			for (int i = 3; i <= 13; i++)
 			{
 				if (i == 1)
 					i = 3; //skip non-numeric parameters
 				if (i == 10)
-					i++;
+					i = 12;
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
@@ -2731,9 +2743,9 @@ int ScriptProcessor::ProcFloors()
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
 			if (compat == true)
-				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
+				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), ReverseAxis, false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
 			else
-				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+				StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 		}
 		else
 			return ScriptError("Invalid shaft");
@@ -2745,7 +2757,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
-		if (params < 12 || params > 13)
+		if (params < 12 || params > 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -2767,12 +2779,12 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 		{
-			for (int i = 3; i <= 12; i++)
+			for (int i = 3; i <= 13; i++)
 			{
 				if (i == 1)
 					i = 3; //skip non-numeric parameters
 				if (i == 10)
-					i++;
+					i = 12;
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
@@ -2784,9 +2796,9 @@ int ScriptProcessor::ProcFloors()
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
 			if (compat == true)
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), ReverseAxis, false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
 			else
-				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+				StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddFloor(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 		}
 		else
 			return ScriptError("Invalid stairwell");
@@ -2798,7 +2810,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 19);
 
-		if (params < 11 || params > 12)
+		if (params < 11 || params > 13)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -2818,10 +2830,10 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 		{
-			for (int i = 2; i <= 11; i++)
+			for (int i = 2; i <= 12; i++)
 			{
 				if (i == 9)
-					i++;
+					i = 11;
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
@@ -2831,9 +2843,9 @@ int ScriptProcessor::ProcFloors()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
+			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
 		else
-			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
+			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 	}
 
 	//AddWall command
@@ -5050,7 +5062,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 11 || params > 12)
+		if (params < 11 || params > 13)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -5070,10 +5082,10 @@ int ScriptProcessor::ProcElevators()
 		}
 		else
 		{
-			for (int i = 2; i <= 11; i++)
+			for (int i = 2; i <= 12; i++)
 			{
 				if (i == 9)
-					i++;
+					i = 11;
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
@@ -5083,9 +5095,9 @@ int ScriptProcessor::ProcElevators()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
+			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
 		else
-			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str())));
+			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 	}
 
 	//AddWall command

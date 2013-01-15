@@ -380,17 +380,25 @@ bool ParameterViewer::Setup()
 			l10->SetLabel(wxT("Vertical Offset2:"));
 			l10->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
 
-			l11->SetLabel(wxT("Texture Tiling Width:"));
-			l11->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
-			t11->SetValue(wxT("0"));
+			l11->SetLabel(wxT("Reverse Axis:"));
+			l11->SetToolTip(wxT("If this is false, a difference in voffset will cause the floor to angle from back to front; otherwise it'll angle from left to right."));
+			t11->SetValue(wxT("false"));
 
-			l12->SetLabel(wxT("Texture Tiling Height:"));
-			l12->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
-			t12->SetValue(wxT("0"));
+			l12->SetLabel(wxT("Texture Direction:"));
+			l12->SetToolTip(wxT("If this is false, the texture will be mapped horizontally; otherwise it'll be mapped vertically"));
+			t12->SetValue(wxT("false"));
 
-			l13->SetLabel(wxT("Is External:"));
-			l13->SetToolTip(wxT("isexternal determines if the wall is part of the building's external framework (true) or if it's part of the current floor (false)"));
-			t13->SetValue(wxT("false"));
+			l13->SetLabel(wxT("Texture Tiling Width:"));
+			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t13->SetValue(wxT("0"));
+
+			l14->SetLabel(wxT("Texture Tiling Height:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
+
+			l15->SetLabel(wxT("Is External:"));
+			l15->SetToolTip(wxT("isexternal determines if the wall is part of the building's external framework (true) or if it's part of the current floor (false)"));
+			t15->SetValue(wxT("false"));
 		}
 
 		if (objecttype == wxT("AddWall") && objectparent == wxT("Floor"))
@@ -482,13 +490,21 @@ bool ParameterViewer::Setup()
 			l10->SetLabel(wxT("Vertical Offset2:"));
 			l10->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
 
-			l11->SetLabel(wxT("Texture Tiling Width:"));
-			l11->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
-			t11->SetValue(wxT("0"));
+			l11->SetLabel(wxT("Reverse Axis:"));
+			l11->SetToolTip(wxT("If this is false, a difference in voffset will cause the floor to angle from back to front; otherwise it'll angle from left to right."));
+			t11->SetValue(wxT("false"));
 
-			l12->SetLabel(wxT("Texture Tiling Height:"));
-			l12->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
-			t12->SetValue(wxT("0"));
+			l12->SetLabel(wxT("Texture Direction:"));
+			l12->SetToolTip(wxT("If this is false, the texture will be mapped horizontally; otherwise it'll be mapped vertically"));
+			t12->SetValue(wxT("false"));
+
+			l13->SetLabel(wxT("Texture Tiling Width:"));
+			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t13->SetValue(wxT("0"));
+
+			l14->SetLabel(wxT("Texture Tiling Height:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
 		}
 
 		if (objecttype == wxT("AddInterfloorWall") && objectparent == wxT("Floor"))
@@ -578,13 +594,21 @@ bool ParameterViewer::Setup()
 			l11->SetLabel(wxT("Vertical Offset2:"));
 			l11->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
 
-			l12->SetLabel(wxT("Texture Tiling Width:"));
-			l12->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
-			t12->SetValue(wxT("0"));
+			l11->SetLabel(wxT("Reverse Axis:"));
+			l11->SetToolTip(wxT("If this is false, a difference in voffset will cause the floor to angle from back to front; otherwise it'll angle from left to right."));
+			t11->SetValue(wxT("false"));
 
-			l13->SetLabel(wxT("Texture Tiling Height:"));
+			l12->SetLabel(wxT("Texture Direction:"));
+			l12->SetToolTip(wxT("If this is false, the texture will be mapped horizontally; otherwise it'll be mapped vertically"));
+			t12->SetValue(wxT("false"));
+
+			l13->SetLabel(wxT("Texture Tiling Width:"));
 			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
 			t13->SetValue(wxT("0"));
+
+			l14->SetLabel(wxT("Texture Tiling Height:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
 		}
 
 		if (objecttype == wxT("AddStairsWall") && objectparent == wxT("Floor"))
@@ -676,13 +700,21 @@ bool ParameterViewer::Setup()
 			l11->SetLabel(wxT("Vertical Offset2:"));
 			l11->SetToolTip(wxT("Voffset1 and voffset2 are the height in feet above the current floor's altitude"));
 
-			l12->SetLabel(wxT("Texture Tiling Width:"));
-			l12->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
-			t12->SetValue(wxT("0"));
+			l11->SetLabel(wxT("Reverse Axis:"));
+			l11->SetToolTip(wxT("If this is false, a difference in voffset will cause the floor to angle from back to front; otherwise it'll angle from left to right."));
+			t11->SetValue(wxT("false"));
 
-			l13->SetLabel(wxT("Texture Tiling Height:"));
+			l12->SetLabel(wxT("Texture Direction:"));
+			l12->SetToolTip(wxT("If this is false, the texture will be mapped horizontally; otherwise it'll be mapped vertically"));
+			t12->SetValue(wxT("false"));
+
+			l13->SetLabel(wxT("Texture Tiling Width:"));
 			l13->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
 			t13->SetValue(wxT("0"));
+
+			l14->SetLabel(wxT("Texture Tiling Height:"));
+			l14->SetToolTip(wxT("tw and th are to size/tile the texture (0 lets the app autosize them), and isexternal determines if the floor is part of the building's external framework, or is part of the current floor (is either True or False)"));
+			t14->SetValue(wxT("0"));
 		}
 
 		if (objecttype == wxT("AddShaftWall") && objectparent == wxT("Floor"))

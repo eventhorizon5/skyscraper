@@ -1198,7 +1198,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 
 		Ogre::Vector2 x, y, z;
 		std::vector<Ogre::Vector3> varray1, varray2;
-		bool rev_x = false, rev_z = false;
+		bool rev_x = false, rev_y = false, rev_z = false;
 
 		//copy vertices into polygon object
 		varray1.reserve(vertices.size());
@@ -1228,18 +1228,44 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		}
 
 		//automatically flip texture based on largest normal (corrects some situations where the texture is incorrectly reversed)
-		if (direction == 0 && normal.x > 0)
-			rev_z = true;
+		if (PlanarRotate == false)
+		{
+			if (direction == 0 && normal.x > 0)
+				rev_z = true;
 
-		if (direction == 1 && normal.y > 0)
-			rev_x = true;
+			if (direction == 1 && normal.y > 0)
+				rev_x = true;
 
-		if (direction == 2 && normal.z < 0)
-			rev_x = true;
+			if (direction == 2 && normal.z < 0)
+				rev_x = true;
+		}
+		else
+		{
+			if (direction == 0 && normal.x < 0)
+				rev_z = true;
+
+			if (direction == 0)
+				rev_y = true;
+
+			if (direction == 1 && normal.y > 0)
+				rev_z = true;
+
+			if (direction == 1)
+				rev_x = true;
+
+			if (direction == 2)
+				rev_y = true;
+
+			if (direction == 2 && normal.z > 0)
+				rev_x = true;
+		}
 
 		//force a texture flip based on parameters
 		if (RevX == true)
 			rev_x = !rev_x;
+
+		if (RevY == true)
+			rev_y = !rev_y;
 
 		if (RevZ == true)
 			rev_z = !rev_z;
@@ -1252,83 +1278,101 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//set the result 2D coordinates
 		if (direction == 0)
 		{
+			Ogre::Vector2 pos, pos2;
+
 			if (rev_z == false)
+				pos = Ogre::Vector2(b.y, b.x);
+			else
+				pos = Ogre::Vector2(b.x, b.y);
+
+			if (rev_y == false)
+				pos2 = Ogre::Vector2(a.y, a.x);
+			else
+				pos2 = Ogre::Vector2(a.x, a.y);
+
+			if (PlanarRotate == false)
 			{
-				v1.z = b.y; //right
-				v2.z = b.x; //left
-				v3.z = b.x; //left
+				v1.z = pos.x; //right
+				v2.z = pos.y; //left
+				v3.z = pos.y; //left
+				v1.y = pos2.x; //top
+				v2.y = pos2.x; //top
+				v3.y = pos2.y; //bottom
 			}
 			else
 			{
-				v1.z = b.x; //left
-				v2.z = b.y; //right
-				v3.z = b.y; //right
-			}
-			if (RevY == false)
-			{
-				v1.y = a.y; //top
-				v2.y = a.y; //top
-				v3.y = a.x; //bottom
-			}
-			else
-			{
-				v1.y = a.x; //bottom
-				v2.y = a.x; //bottom
-				v3.y = a.y; //top
+				v1.z = pos.y; //left
+				v2.z = pos.y; //left
+				v3.z = pos.x; //right
+				v1.y = pos2.x; //top
+				v2.y = pos2.y; //bottom
+				v3.y = pos2.y; //bottom
 			}
 		}
 		if (direction == 1)
 		{
+			Ogre::Vector2 pos, pos2;
+
 			if (rev_x == false)
-			{
-				v1.x = b.x; //left
-				v2.x = b.y; //right
-				v3.x = b.y; //right
-			}
+				pos = Ogre::Vector2(b.x, b.y);
 			else
-			{
-				v1.x = b.y; //right
-				v2.x = b.x; //left
-				v3.x = b.x; //left
-			}
+				pos = Ogre::Vector2(b.y, b.x);
+
 			if (rev_z == false)
+				pos2 = Ogre::Vector2(a.x, a.y);
+			else
+				pos2 = Ogre::Vector2(a.y, a.x);
+
+			if (PlanarRotate == false)
 			{
-				v1.z = a.x; //bottom
-				v2.z = a.x; //bottom
-				v3.z = a.y; //top
+				v1.x = pos.x; //left
+				v2.x = pos.y; //right
+				v3.x = pos.y; //right
+				v1.z = pos2.x; //bottom
+				v2.z = pos2.x; //bottom
+				v3.z = pos2.y; //top
 			}
 			else
 			{
-				v1.z = a.y; //top
-				v2.z = a.y; //top
-				v3.z = a.x; //bottom
+				v1.x = pos.y; //left
+				v2.x = pos.y; //left
+				v3.x = pos.x; //right
+				v1.z = pos2.y; //bottom
+				v2.z = pos2.x; //top
+				v3.z = pos2.x; //top
 			}
 		}
 		if (direction == 2)
 		{
+			Ogre::Vector2 pos, pos2;
+
 			if (rev_x == false)
+				pos = Ogre::Vector2(a.y, a.x);
+			else
+				pos = Ogre::Vector2(a.x, a.y);
+
+			if (rev_y == false)
+				pos2 = Ogre::Vector2(b.y, b.x);
+			else
+				pos2 = Ogre::Vector2(b.x, b.y);
+
+			if (PlanarRotate == false)
 			{
-				v1.x = a.y; //right
-				v2.x = a.x; //left
-				v3.x = a.x; //left
+				v1.x = pos.x; //right
+				v2.x = pos.y; //left
+				v3.x = pos.y; //left
+				v1.y = pos2.x; //top
+				v2.y = pos2.x; //top
+				v3.y = pos2.y; //bottom
 			}
 			else
 			{
-				v1.x = a.x; //left
-				v2.x = a.y; //right
-				v3.x = a.y; //right
-			}
-			if (RevY == false)
-			{
-				v1.y = b.y; //top
-				v2.y = b.y; //top
-				v3.y = b.x; //bottom
-			}
-			else
-			{
-				v1.y = b.x; //bottom
-				v2.y = b.x; //bottom
-				v3.y = b.y; //top
+				v1.x = pos.y; //left
+				v2.x = pos.y; //left
+				v3.x = pos.x; //right
+				v1.y = pos2.x; //top
+				v2.y = pos2.y; //bottom
+				v3.y = pos2.y; //bottom
 			}
 		}
 
@@ -1482,7 +1526,7 @@ void SBS::ResetTextureMapping(bool todefaults)
 	if (todefaults == true)
 	{
 		if (DefaultMapper == 0)
-			SetPlanarMapping(false, false, false, false);
+			SetPlanarMapping(false, false, false, false, false);
 		if (DefaultMapper == 1)
 			SetTextureMapping(0, Ogre::Vector2(0, 0), 1, Ogre::Vector2(1, 0), 2, Ogre::Vector2(1, 1));
 		if (DefaultMapper == 2)
@@ -1491,7 +1535,7 @@ void SBS::ResetTextureMapping(bool todefaults)
 	else
 	{
 		if (OldMapMethod == 0)
-			SetPlanarMapping(OldPlanarFlat, OldRevX, OldRevY, OldRevZ);
+			SetPlanarMapping(OldPlanarFlat, OldRevX, OldRevY, OldRevZ, OldPlanarRotate);
 		if (OldMapMethod == 1)
 			SetTextureMapping(OldMapIndex[0], OldMapUV[0], OldMapIndex[1], OldMapUV[1], OldMapIndex[2], OldMapUV[2]);
 		if (OldMapMethod == 2)
@@ -1499,7 +1543,7 @@ void SBS::ResetTextureMapping(bool todefaults)
 	}
 }
 
-void SBS::SetPlanarMapping(bool flat, bool X, bool Y, bool Z)
+void SBS::SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate)
 {
 	//sets planar texture mapping parameters
 	//X, Y and Z reverse planar texture mapping per axis
@@ -1509,14 +1553,15 @@ void SBS::SetPlanarMapping(bool flat, bool X, bool Y, bool Z)
 	BackupMapping();
 
 	//now set new parameters
-	RevX = X;
-	RevY = Y;
-	RevZ = Z;
+	RevX = FlipX;
+	RevY = FlipY;
+	RevZ = FlipZ;
 	MapUV[0] = Ogre::Vector2(0, 0);
 	MapUV[1] = Ogre::Vector2(1, 0);
 	MapUV[2] = Ogre::Vector2(1, 1);
 	PlanarFlat = flat;
 	MapMethod = 0;
+	PlanarRotate = rotate;
 }
 
 void SBS::SetTextureMapping(int vertindex1, Ogre::Vector2 uv1, int vertindex2, Ogre::Vector2 uv2, int vertindex3, Ogre::Vector2 uv3)
@@ -1566,6 +1611,7 @@ void SBS::BackupMapping()
 		OldRevY = RevY;
 		OldRevZ = RevZ;
 		OldPlanarFlat = PlanarFlat;
+		OldPlanarRotate = PlanarRotate;
 	}
 	else
 	{

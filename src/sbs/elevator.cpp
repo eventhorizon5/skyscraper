@@ -2158,12 +2158,12 @@ WallObject* Elevator::AddWall(const char *name, const char *texture, float thick
 	return wall;
 }
 
-WallObject* Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool texture_direction, float tw, float th, bool legacy_behavior)
+WallObject* Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
 	WallObject *wall = ElevatorMesh->CreateWallObject(this->object, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, texture_direction, tw, th, true, legacy_behavior);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 

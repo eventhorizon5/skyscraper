@@ -106,11 +106,11 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     
     #create a basic carpeted floor
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, false, 0, 0, False
+    AddFloor Floor, Carpet1, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, False
 
     #create a ceiling
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, false, 0, 0, False
+    AddFloor Ceiling, Ceiling1, 0.5, -20, -20, 20, 20, %height% - 0.05, %height% - 0.05, false, false, 0, 0, False
 
     #External windows - this creates the outside versions of the windows, and also the walls outside the
     #interfloor areas
@@ -170,7 +170,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     Height = 10
     InterfloorHeight = 2.24
     DrawWalls = false, true, false, false, false, false
-    AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, 0, 0, True #roof
+    AddFloor Roof, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0, True #roof
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -251,12 +251,12 @@ DrawWalls = true, true, false, false, false, false
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
     TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Floor, ElevFloor, 0.2, -3.5, -3, 3.5, 3, 0, 0, false, 0, 0
+    AddFloor Floor, ElevFloor, 0.2, -3.5, -3, 3.5, 3, 0, 0, false, false, 0, 0
     
     #elevator's ceiling
     FloorOrientation = bottom
     TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
-    AddFloor Ceiling, ElevCeiling, 0.2, -3.5, -3, 3.5, 3, 8, 8, false, 0, 0 #ceiling
+    AddFloor Ceiling, ElevCeiling, 0.2, -3.5, -3, 3.5, 3, 8, 8, false, false, 0, 0 #ceiling
     
     #elevator's back and right walls
     WallOrientation = right

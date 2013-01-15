@@ -2385,30 +2385,35 @@ the left, SidePositive the right, etc.</p>
 <p align="left"><strong>m. SetPlanarMapping</strong> - sets the planar texture
 mapper's parameters.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2">SetPlanarMapping Flat,
-X, Y, Z</font><br>
+FlipX, FlipY, FlipZ, Rotate</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping
-false, false, false, true</font></p>
+false, false, false, true, false</font></p>
 
-<p align="left">X, Y and Z reverse the texture mapping per axis, and Flat has
-it ignore depth. Skyscraper by default uses a simple planar texture mapper,
-which in simple terms draws the texture in a box around the object. With a
-basic wall, the top-left of the texture image is mapped to the top left of the
-wall, the top-right is mapped to the top-right of the wall, etc. If you want
-the top-right of the texture mapped to the top-left of the wall for example (to
-flip or change alignment), you'd set X to false. This command is mainly used to
-change alignment - since the top-left of the texture is mapped to the top-left
-of the object, that means that textures have a left/top alignment by default.
-If you change X to true, it'll be right-aligned. If you change Y to true, it'll
-be bottom-aligned. See this picture for an example:</p>
+<p align="left">FlipX, FlipY and FlipZ reverse the texture mapping per axis,
+and Flat has it ignore depth., Skyscraper by default uses a simple planar
+texture mapper, which in simple terms draws the texture in a box around the
+object. With a basic wall, the top-left of the texture image is mapped to the
+top left of the wall, the top-right is mapped to the top-right of the wall,
+etc. If you want the top-right of the texture mapped to the top-left of the
+wall for example (to flip or change alignment), you'd set FlipX to false. This
+command is mainly used to change alignment - since the top-left of the texture
+is mapped to the top-left of the object, that means that textures have a
+left/top alignment by default. If you change FlipX to true, it'll be
+right-aligned. If you change FlipY to true, it'll be bottom-aligned. Rotate has
+it rotate the texture mapping 90 degrees counterclockwise, so instead of the
+texture being mapped from the top left to bottom right, if Rotate is true,
+it'll be mapped from the bottom left to top right. See this picture for an
+example:</p>
 
 <p align="left"><img src="guide/extents.jpg"></p>
 
 <p align="left">In the above picture, I tiled a texture (a black box with
 yellow around it) 2.5 times on width and height. The bottom floor shows the
-default texture mapping (ReverseExtents false, false, false); you'll notice
-that it's aligned to the top-left. In the middle one, I set the X value to true
-(ReverseExtents true, false, false). In the top one, I set the Y value to true
-(ReverseExtents false, true, false).</p>
+default texture mapping (ReverseExtents false, false, false, false, false);
+you'll notice that it's aligned to the top-left. In the middle one, I set the
+FlipX value to true (ReverseExtents false, true, false, false, false). In the
+top one, I set the FlipY value to true (ReverseExtents false, false, true,
+false, false).</p>
 
 <p align="left"><strong>m. SetTextureMapping</strong> - manually sets UV
 texture mapping for all polygons generated after this command;
