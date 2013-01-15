@@ -661,6 +661,8 @@ int SBS::AddWallMain(Object *parent, MeshObject* mesh, const char *name, const c
 
 int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
+	//Adds a wall with the specified dimensions
+
 	//determine axis of wall
 	int axis = 0;
 	if (fabs(x1 - x2) > (fabs(z1 - z2) + 0.00001))
@@ -688,7 +690,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		height_in2 = temp;
 	}
 
-	//Adds a wall with the specified dimensions
+	//map coordinates
 	Ogre::Vector3 v1 (x1, altitude1 + height_in1, z1); //left top
 	Ogre::Vector3 v2 (x2, altitude2 + height_in2, z2); //right top
 	Ogre::Vector3 v3 (x2, altitude2, z2); //right base
@@ -714,14 +716,15 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		if (wall_orientation == 1)
 		{
 			//center
-			v1.z -= thickness / 2;
-			v2.z -= thickness / 2;
-			v3.z -= thickness / 2;
-			v4.z -= thickness / 2;
-			v5.z += thickness / 2;
-			v6.z += thickness / 2;
-			v7.z += thickness / 2;
-			v8.z += thickness / 2;
+			float half = thickness / 2;
+			v1.z -= half;
+			v2.z -= half;
+			v3.z -= half;
+			v4.z -= half;
+			v5.z += half;
+			v6.z += half;
+			v7.z += half;
+			v8.z += half;
 		}
 		if (wall_orientation == 2)
 		{
@@ -746,14 +749,15 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		if (wall_orientation == 1)
 		{
 			//center
-			v1.x -= thickness / 2;
-            v2.x -= thickness / 2;
-            v3.x -= thickness / 2;
-            v4.x -= thickness / 2;
-            v5.x += thickness / 2;
-            v6.x += thickness / 2;
-            v7.x += thickness / 2;
-            v8.x += thickness / 2;
+			float half = thickness / 2;
+			v1.x -= half;
+            v2.x -= half;
+            v3.x -= half;
+            v4.x -= half;
+            v5.x += half;
+            v6.x += half;
+            v7.x += half;
+            v8.x += half;
 		}
 		if (wall_orientation == 2)
 		{
@@ -896,21 +900,46 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	//false - left/right from altitude1 to altitude2, or legacy (broken) "ReverseAxis = false" behavior if legacy_behavior is true
 	//true - back/forwards from altitude1 to altitude2, or legacy (broken) "ReverseAxis = true" behavior if legacy_behavior is true
 
-	//determine axis of floor
-	int axis = 0;
-	if (fabs(x1 - x2) > (fabs(z1 - z2) + 0.00001))
-		//x axis
-		axis = 1;
-	else
-		//z axis
-		axis = 2;
-
 	//convert to clockwise coordinates
 	float temp;
 
-	if (legacy_behavior == true)
+	if (legacy_behavior == false)
 	{
-		//legacy behavior, for compatibility with previous versions
+		//current behavior
+
+		//reverse coordinates if specified backwards
+		if (x1 > x2)
+		{
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+		}
+		if (z1 > z2)
+		{
+			temp = z1;
+			z1 = z2;
+			z2 = temp;
+		}
+		if (direction == true)
+		{
+			temp = altitude1;
+			altitude1 = altitude2;
+			altitude2 = temp;
+		}
+	}
+	else
+	{
+		//legacy (broken) behavior, for compatibility with previous versions
+
+		//determine axis of floor
+		int axis = 0;
+		if (fabs(x1 - x2) > (fabs(z1 - z2) + 0.00001))
+			//x axis
+			axis = 1;
+		else
+			//z axis
+			axis = 2;
+
 		if (x1 > x2 && axis == 1)
 		{
 			//reverse coordinates if the difference between x coordinates is greater
@@ -938,82 +967,25 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 			altitude2 = temp;
 		}
 	}
-	else
-	{
-		//current behavior
-		if (axis == 1)
-		{
-			//reverse coordinates if the difference between x coordinates is greater
-			if (x1 > x2)
-			{
-				temp = x1;
-				x1 = x2;
-				x2 = temp;
-			}
-			if (z1 > z2)
-			{
-				temp = z1;
-				z1 = z2;
-				z2 = temp;
-			}
-			if (direction == true)
-			{
-				temp = altitude1;
-				altitude1 = altitude2;
-				altitude2 = temp;
-			}
-		}
-		if (axis == 2)
-		{
-			//reverse coordinates if the difference between z coordinates is greater
-			if (x1 > x2)
-			{
-				temp = x1;
-				x1 = x2;
-				x2 = temp;
-			}
-			if (z1 > z2)
-			{
-				temp = z1;
-				z1 = z2;
-				z2 = temp;
-			}
-			if (direction == true)
-			{
-				temp = altitude1;
-				altitude1 = altitude2;
-				altitude2 = temp;
-			}
-		}
-	}
 
+	//map coordinates
 	Ogre::Vector3 v1, v2, v3, v4;
 
-	if (legacy_behavior == true)
+	if (direction == false)
 	{
-		if (direction == false)
-		{
-			v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
-			v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
-			v3 = Ogre::Vector3(x2, altitude2, z2); //top right
-			v4 = Ogre::Vector3(x1, altitude2, z2); //top left
-		}
-		else
+		v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
+		v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
+		v3 = Ogre::Vector3(x2, altitude2, z2); //top right
+		v4 = Ogre::Vector3(x1, altitude2, z2); //top left
+	}
+	else
+	{
+		if (legacy_behavior == true)
 		{
 			v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
 			v2 = Ogre::Vector3(x1, altitude1, z2); //top left
 			v3 = Ogre::Vector3(x2, altitude2, z2); //top right
 			v4 = Ogre::Vector3(x2, altitude2, z1); //bottom right
-		}
-	}
-	else
-	{
-		if (direction == false)
-		{
-			v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
-			v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
-			v3 = Ogre::Vector3(x2, altitude2, z2); //top right
-			v4 = Ogre::Vector3(x1, altitude2, z2); //top left
 		}
 		else
 		{
@@ -1041,14 +1013,15 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 	if (floor_orientation == 1)
 	{
 		//center
-		v1.y -= thickness / 2;
-		v2.y -= thickness / 2;
-		v3.y -= thickness / 2;
-		v4.y -= thickness / 2;
-		v5.y += thickness / 2;
-		v6.y += thickness / 2;
-		v7.y += thickness / 2;
-		v8.y += thickness / 2;
+		float half = thickness / 2;
+		v1.y -= half;
+		v2.y -= half;
+		v3.y -= half;
+		v4.y -= half;
+		v5.y += half;
+		v6.y += half;
+		v7.y += half;
+		v8.y += half;
 	}
 	if (floor_orientation == 2)
 	{
