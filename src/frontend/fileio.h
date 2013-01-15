@@ -75,6 +75,7 @@ class ScriptProcessor
 	bool ReplaceLine;
 	std::vector<std::string> nonexistent_files;
 	bool CalcError;
+	bool ReverseAxis; //emulation of SBS ReverseExtents parameter for old AddFloors syntax
 
 	int ScriptError(std::string message);
 	int ScriptError();

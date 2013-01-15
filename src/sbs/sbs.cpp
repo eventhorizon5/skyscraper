@@ -106,7 +106,6 @@ SBS::SBS()
 	wall2b = false;
 	AutoX = true;
 	AutoY = true;
-	ReverseAxisValue = false;
 	TextureOverride = false;
 	ProcessElevators = true;
 	FlipTexture = false;
@@ -881,62 +880,148 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 	return 0;
 }
 
-int SBS::AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
 	WallObject *object = new WallObject(mesh, parent, true);
-	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, autosize);
+	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, direction, tw, th, autosize, legacy_behavior);
 	delete object;
 	return result;
 }
 
-int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th, bool autosize)
+int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
+	//direction determines the direction of slope (for different altitude values):
+	//false - left/right from altitude1 to altitude2, or legacy (broken) "ReverseAxis = false" behavior if legacy_behavior is true
+	//true - back/forwards from altitude1 to altitude2, or legacy (broken) "ReverseAxis = true" behavior if legacy_behavior is true
+
+	//determine axis of floor
+	int axis = 0;
+	if (fabs(x1 - x2) > (fabs(z1 - z2) + 0.00001))
+		//x axis
+		axis = 1;
+	else
+		//z axis
+		axis = 2;
+
 	//convert to clockwise coordinates
 	float temp;
-	if (x1 > x2 && fabs(x1 - x2) > fabs(z1 - z2))
+
+	if (legacy_behavior == true)
 	{
-		//reverse coordinates if the difference between x coordinates is greater
-		temp = x1;
-		x1 = x2;
-		x2 = temp;
-		temp = z1;
-		z1 = z2;
-		z2 = temp;
-		temp = altitude1;
-		altitude1 = altitude2;
-		altitude2 = temp;
+		//legacy behavior, for compatibility with previous versions
+		if (x1 > x2 && axis == 1)
+		{
+			//reverse coordinates if the difference between x coordinates is greater
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+			temp = z1;
+			z1 = z2;
+			z2 = temp;
+			temp = altitude1;
+			altitude1 = altitude2;
+			altitude2 = temp;
+		}
+		if (z1 > z2 && axis == 2)
+		{
+			//reverse coordinates if the difference between z coordinates is greater
+			temp = x1;
+			x1 = x2;
+			x2 = temp;
+			temp = z1;
+			z1 = z2;
+			z2 = temp;
+			temp = altitude1;
+			altitude1 = altitude2;
+			altitude2 = temp;
+		}
 	}
-	if (z1 > z2 && fabs(z1 - z2) > fabs(x1 - x2))
+	else
 	{
-		//reverse coordinates if the difference between z coordinates is greater
-		temp = x1;
-		x1 = x2;
-		x2 = temp;
-		temp = z1;
-		z1 = z2;
-		z2 = temp;
-		temp = altitude1;
-		altitude1 = altitude2;
-		altitude2 = temp;
+		//current behavior
+		if (axis == 1)
+		{
+			//reverse coordinates if the difference between x coordinates is greater
+			if (x1 > x2)
+			{
+				temp = x1;
+				x1 = x2;
+				x2 = temp;
+			}
+			if (z1 > z2)
+			{
+				temp = z1;
+				z1 = z2;
+				z2 = temp;
+			}
+			if (direction == true)
+			{
+				temp = altitude1;
+				altitude1 = altitude2;
+				altitude2 = temp;
+			}
+		}
+		if (axis == 2)
+		{
+			//reverse coordinates if the difference between z coordinates is greater
+			if (x1 > x2)
+			{
+				temp = x1;
+				x1 = x2;
+				x2 = temp;
+			}
+			if (z1 > z2)
+			{
+				temp = z1;
+				z1 = z2;
+				z2 = temp;
+			}
+			if (direction == true)
+			{
+				temp = altitude1;
+				altitude1 = altitude2;
+				altitude2 = temp;
+			}
+		}
 	}
 
 	Ogre::Vector3 v1, v2, v3, v4;
 
-	if (ReverseAxisValue == false)
+	if (legacy_behavior == true)
 	{
-		v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
-		v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
-		v3 = Ogre::Vector3(x2, altitude2, z2); //top right
-		v4 = Ogre::Vector3(x1, altitude2, z2); //top left
+		if (direction == false)
+		{
+			v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
+			v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
+			v3 = Ogre::Vector3(x2, altitude2, z2); //top right
+			v4 = Ogre::Vector3(x1, altitude2, z2); //top left
+		}
+		else
+		{
+			v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
+			v2 = Ogre::Vector3(x1, altitude1, z2); //top left
+			v3 = Ogre::Vector3(x2, altitude2, z2); //top right
+			v4 = Ogre::Vector3(x2, altitude2, z1); //bottom right
+		}
 	}
 	else
 	{
-		v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
-		v2 = Ogre::Vector3(x1, altitude1, z2); //top left
-		v3 = Ogre::Vector3(x2, altitude2, z2); //top right
-		v4 = Ogre::Vector3(x2, altitude2, z1); //bottom right
+		if (direction == false)
+		{
+			v1 = Ogre::Vector3(x1, altitude1, z1); //bottom left
+			v2 = Ogre::Vector3(x2, altitude1, z1); //bottom right
+			v3 = Ogre::Vector3(x2, altitude2, z2); //top right
+			v4 = Ogre::Vector3(x1, altitude2, z2); //top left
+		}
+		else
+		{
+			v1 = Ogre::Vector3(x2, altitude1, z1); //bottom right
+			v2 = Ogre::Vector3(x2, altitude1, z2); //top right
+			v3 = Ogre::Vector3(x1, altitude2, z2); //top left
+			v4 = Ogre::Vector3(x1, altitude2, z1); //bottom left
+		}
 	}
 
 	Ogre::Vector3 v5 = v1;
@@ -2011,14 +2096,14 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 			//doorway is facing forward/backward
 			index = AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
 			AddWallMain(wallobject, "DoorwayRight", texture, 0, wall_extents_x.y, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
-			AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th, true);
+			AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, false, tw, th, true);
 		}
 		else
 		{
 			//doorway is facing left/right
 			AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.y, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
 			AddWallMain(wallobject, "DoorwayRight", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
-			AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, tw, th, true);
+			AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, false, tw, th, true);
 		}
 		ResetWalls();
 		ResetDoorwayWalls();
@@ -2035,17 +2120,6 @@ void SBS::ResetDoorwayWalls()
 	wall_extents_x = 0;
 	wall_extents_y = 0;
 	wall_extents_z = 0;
-}
-
-void SBS::ReverseAxis(bool value)
-{
-	//reverse wall/floor altitude axis
-	ReverseAxisValue = value;
-}
-
-bool SBS::GetReverseAxis()
-{
-	return ReverseAxisValue;
 }
 
 void SBS::SetListenerPosition(const Ogre::Vector3 &position)
@@ -2104,7 +2178,7 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 	return wall;
 }
 
-WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, float tw, float th)
+WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool direction, float tw, float th, bool legacy_behavior)
 {
 	//meshname can either be:
 	//external, landscape, or buildings
@@ -2122,7 +2196,7 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 	if (mesh == "landscape")
 		wall = Landscape->CreateWallObject(this->object, name);
 
-	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, tw, th, true);
+	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -2179,7 +2253,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 				sizez = tile_z;
 
 			DrawWalls(false, true, false, false, false, false);
-			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, 1, 1, false);
+			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, 1, 1, false);
 			ResetWalls(false);
 		}
 	}

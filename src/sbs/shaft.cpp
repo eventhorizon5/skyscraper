@@ -184,7 +184,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 	return wall;
 }
 
-WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, float tw, float th)
+WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool direction, float tw, float th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -206,7 +206,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 		top = altitude + voffset2;
 
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, tw, th, true);
+	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
