@@ -114,7 +114,7 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     void DynamicsWorld::addRigidBody (RigidBody *rb, short collisionGroup, short collisionMask)
     {
-        mObjects.push_back (static_cast <Object *> (rb));
+    	mObjects.push_back (static_cast <Object *> (rb));
 
 		if (collisionGroup == 0 && collisionMask == 0)
 		{
@@ -129,10 +129,12 @@ namespace OgreBulletDynamics
     // -------------------------------------------------------------------------
     void DynamicsWorld::removeRigidBody (RigidBody *rb)
     {
-		//int loc = mObjects.find(mObjects.begin(), mObjects.end(), static_cast <Object *> rb);
-		//mObjects.erase(mObjects.begin() + loc);
+    	std::deque<Object*>::iterator it = find(mObjects.begin(), mObjects.end(), static_cast <Object *> (rb));
+    	if (it == mObjects.end())
+    		return;
+   		mObjects.erase(it);
 
-		static_cast <btDiscreteDynamicsWorld *> (mWorld)->removeRigidBody(rb->getBulletRigidBody());      
+    	static_cast <btDiscreteDynamicsWorld *> (mWorld)->removeRigidBody(rb->getBulletRigidBody());
     }
     // -------------------------------------------------------------------------
     int DynamicsWorld::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep)
