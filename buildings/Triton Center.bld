@@ -79,6 +79,7 @@
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/cinderblocks.jpg, StairsWall, 0.25, 1
     Load data/cem_tr_b.jpg, Stairs, 0.25, 0.25
+    Load data/metal072b.jpg, StairsLanding, 0.25, 0.25
     Load data/servicedoor2b.jpg, StairsDoor, 1, 1
     Load data/miscdoor8.jpg, StairsDoor2, 1, 1
     Load data/miscdoor9b.jpg, HotelDoor, 1, 1
@@ -7446,18 +7447,18 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 1, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 1, StairsMiddle, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
-    AddStairsFloor 1, LandingMiddle, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 1, LandingMiddle, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 8, %1% * 8, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 1, LandingMiddleCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 1, LandingMiddleCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -7467,14 +7468,14 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 1, LandingLowerCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7483,14 +7484,14 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, 0, 0, 0
     AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 1, LandingLowerCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -7499,27 +7500,27 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 1, StairsLower1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     AddStairs 1, StairsUpper1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708 - 0.43, 4.5, -5, 0, 0, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708 - 0.43, 4.5, -5, 0, 0, 1, 1
+    AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 1, LandingLowerCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 
     AddStairs 1, StairsLower2, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 20, 0, 0
     AddStairs 1, StairsUpper2, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 30, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 20, %1% * 20, 1, 1
-    AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 30, %1% * 30, 1, 1
+    AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 20, %1% * 20, 1, 1
+    AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 30, %1% * 30, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 20) - 0.5, (%1% * 20) - 0.5, 0, 1
+    AddStairsWall 1, LandingLowerCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 20) - 0.5, (%1% * 20) - 0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 30) - 0.5, (%1% * 30) - 0.5, 0, 1
+    AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 30) - 0.5, (%1% * 30) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -7528,14 +7529,14 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < 38] AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     if[%floor% < 38] AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 1, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
-    if[%floor% < 38] AddStairsFloor 1, LandingUpper, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
+    if[%floor% < 38] AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 1, LandingLowerCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 1, LandingLowerCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    if[%floor% < 38] AddStairsWall 1, LandingUpperCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    if[%floor% < 38] AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7612,18 +7613,18 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 2, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 2, StairsMiddle, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
-    AddStairsFloor 2, LandingMiddle, Brick, 0.5, -4.5, 4, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingMiddle, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    AddStairsWall 2, LandingMiddleCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 2, LandingMiddleCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
-    AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -7633,14 +7634,14 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
-    AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 2, LandingLowerCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7649,14 +7650,14 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 2, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, 0, 0, 0
     AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
-    AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 8, %1% * 8, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 2, LandingLowerCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -7665,27 +7666,27 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
-    AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 2, LandingLowerCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 
     AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 20, 0, 0
     AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 30, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, %1% * 20, %1% * 20, 1, 1
-    AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 30, %1% * 30, 1, 1
+    AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 20, %1% * 20, 1, 1
+    AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 30, %1% * 30, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 20) - 0.5, (%1% * 20) - 0.5, 0, 1
+    AddStairsWall 2, LandingLowerCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 20) - 0.5, (%1% * 20) - 0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 30) - 0.5, (%1% * 30) - 0.5, 0, 1
+    AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 30) - 0.5, (%1% * 30) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -7694,14 +7695,14 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < 38] AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     if[%floor% < 38] AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 2, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
-    if[%floor% < 38] AddStairsFloor 2, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
+    if[%floor% < 38] AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 2, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 2, LandingLowerCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    if[%floor% < 38] AddStairsWall 2, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    if[%floor% < 38] AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7781,18 +7782,18 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     AddStairs 3, StairsLower, Stairs, back, -2.501, 0, 5.003, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 3, StairsMiddle, Stairs, front, 2.501, 0, 5.003, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 3, LandingLower, Brick, 0.5, -5.333, -9.708, 5.333, 9.708, 0, 0, 1, 1
-    AddStairsFloor 3, LandingMiddle, Brick, 0.5, -5.333, -9.708, 5.333, -4, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -5.333, -9.708, 5.333, 9.708, 0, 0, 1, 1
+    AddStairsFloor 3, LandingMiddle, StairsLanding, 0.5, -5.333, -9.708, 5.333, -4, %1% * 8, %1% * 8, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 3, LandingMiddleCover, Brick, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 3, LandingMiddleCover, StairsLanding, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 3, StairsUpper, Stairs, back, -2.501, 0, 5.003, %1%, 8 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 3, LandingUpper, Brick, 0.5, -5.333, 4, 5.333, 9.708, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 3, LandingUpper, StairsLanding, 0.5, -5.333, 4, 5.333, 9.708, %1% * 16, %1% * 16, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 3, LandingUpperCover, Brick, 0.1, -5.333, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 3, LandingUpperCover, StairsLanding, 0.1, -5.333, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -7802,19 +7803,19 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     AddStairs 3, StairsLower, Stairs, front, 2.501, 0, 5.003, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 3, StairsMiddle, Stairs, back, -2.501, 0, 5.003, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 3, LandingLower, Brick, 0.5, -5.333, -9.708, 5.333, -4, 0, 0, 1, 1
-    AddStairsFloor 3, LandingMiddle, Brick, 0.5, -5.333, 4, 5.333, 9.708, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -5.333, -9.708, 5.333, -4, 0, 0, 1, 1
+    AddStairsFloor 3, LandingMiddle, StairsLanding, 0.5, -5.333, 4, 5.333, 9.708, %1% * 8, %1% * 8, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 3, LandingMiddleCover, Brick, 0.1, -5.333, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 3, LandingMiddleCover, StairsLanding, 0.1, -5.333, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 3, StairsUpper, Stairs, front, 2.501, 0, 5.003, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 3, LandingUpper, Brick, 0.5, -5.333, -9.708, 5.333, -4, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 3, LandingUpper, StairsLanding, 0.5, -5.333, -9.708, 5.333, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 3, LandingLowerCover, Brick, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
-    AddStairsWall 3, LandingUpperCover, Brick, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 3, LandingLowerCover, StairsLanding, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 3, LandingUpperCover, StairsLanding, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -7824,14 +7825,14 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     if[%floor% < 79] AddStairs 3, StairsLower1, Stairs, back, -2.501, 0, 5.003, %1%, 10 / 9, 10, 0, 0, 0
     if[%floor% < 79] AddStairs 3, StairsUpper1, Stairs, front, 2.501, 0, 5.003, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 3, LandingLower, Brick, 0.5, -5.333, 5, 5.333, 9.708, 0, 0, 1, 1
-    if[%floor% < 79] AddStairsFloor 3, LandingUpper, Brick, 0.5, -5.333, -9.708, 5.333, -5, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -5.333, 5, 5.333, 9.708, 0, 0, 1, 1
+    if[%floor% < 79] AddStairsFloor 3, LandingUpper, StairsLanding, 0.5, -5.333, -9.708, 5.333, -5, %1% * 10, %1% * 10, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 3, LandingLowerCover, Brick, 0.1, -5.333, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 3, LandingLowerCover, StairsLanding, 0.1, -5.333, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    if[%floor% < 79] AddStairsWall 3, LandingUpperCover, Brick, 0.1, 0, -5, 5.333, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    if[%floor% < 79] AddStairsWall 3, LandingUpperCover, StairsLanding, 0.1, 0, -5, 5.333, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
 <EndFloors>
 
 <Floors 38 to 79>
@@ -7882,18 +7883,18 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 4, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 4, StairsMiddle, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 4, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
-    AddStairsFloor 4, LandingMiddle, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 4, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
+    AddStairsFloor 4, LandingMiddle, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 8, %1% * 8, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 4, LandingMiddleCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 4, LandingMiddleCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 4, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 4, LandingUpper, Brick, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 4, LandingUpper, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 4, LandingUpperCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 4, LandingUpperCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -7903,19 +7904,19 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairs 4, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 4, StairsMiddle, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 4, LandingLower, Brick, 0.5, -4.5, -9.708, 4.5, -4, 0, 0, 1, 1
-    AddStairsFloor 4, LandingMiddle, Brick, 0.5, -4.5, 4, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 4, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, 0, 0, 1, 1
+    AddStairsFloor 4, LandingMiddle, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 4, LandingMiddleCover, Brick, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 4, LandingMiddleCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 4, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 4, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 4, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 4, LandingLowerCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
-    AddStairsWall 4, LandingUpperCover, Brick, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 4, LandingLowerCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 4, LandingUpperCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -7925,14 +7926,14 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     if[%floor% < 79] AddStairs 4, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
     if[%floor% < 79] AddStairs 4, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
-    AddStairsFloor 4, LandingLower, Brick, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
-    if[%floor% < 79] AddStairsFloor 4, LandingUpper, Brick, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
+    AddStairsFloor 4, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
+    if[%floor% < 79] AddStairsFloor 4, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 4, LandingLowerCover, Brick, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 4, LandingLowerCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    if[%floor% < 79] AddStairsWall 4, LandingUpperCover, Brick, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    if[%floor% < 79] AddStairsWall 4, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7996,18 +7997,18 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
     AddStairs 5, StairsLower, Stairs, back, -3.255, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 5, StairsMiddle, Stairs, front, 3.255, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 5, LandingLower, Brick, 0.5, -5.67, -8.5, 5.67, 8.5, 0, 0, 1, 1
-    AddStairsFloor 5, LandingMiddle, Brick, 0.5, -5.67, -8.5, 5.67, -4, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 5, LandingLower, StairsLanding, 0.5, -5.67, -8.5, 5.67, 8.5, 0, 0, 1, 1
+    AddStairsFloor 5, LandingMiddle, StairsLanding, 0.5, -5.67, -8.5, 5.67, -4, %1% * 8, %1% * 8, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 5, LandingMiddleCover, Brick, 0.1, -1.17, -4, 5.67, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 5, LandingMiddleCover, StairsLanding, 0.1, -1.17, -4, 5.67, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 5, StairsUpper, Stairs, back, -3.255, 0, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 5, LandingUpper, Brick, 0.5, -5.67, 4, 5.67, 8.5, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 5, LandingUpper, StairsLanding, 0.5, -5.67, 4, 5.67, 8.5, %1% * 16, %1% * 16, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 5, LandingUpperCover, Brick, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 5, LandingUpperCover, StairsLanding, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -8017,14 +8018,14 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
     if[%floor% < 119] AddStairs 5, StairsLower, Stairs, front, 3.255, 0, 4.17, %1%, 8 / 8, 9, 0, 0, 0
     if[%floor% < 119] AddStairs 5, StairsUpper, Stairs, back, -3.255, 0, 4.17, %1%, 8 / 8, 9, %1% * 9, 0, 0
     FloorOrientation = top
-    AddStairsFloor 5, LandingLower, Brick, 0.5, -5.67, -8.5, 5.67, -4, 0, 0, 1, 1
-    if[%floor% < 119] AddStairsFloor 5, LandingUpper, Brick, 0.5, -5.67, 4, 5.67, 8.5, %1% * 9, %1% * 9, 1, 1
+    AddStairsFloor 5, LandingLower, StairsLanding, 0.5, -5.67, -8.5, 5.67, -4, 0, 0, 1, 1
+    if[%floor% < 119] AddStairsFloor 5, LandingUpper, StairsLanding, 0.5, -5.67, 4, 5.67, 8.5, %1% * 9, %1% * 9, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 5, LandingLowerCover, Brick, 0.1, -1.17, -4, 5.67, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
+    AddStairsWall 5, LandingLowerCover, StairsLanding, 0.1, -1.17, -4, 5.67, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    if[%floor% < 119] AddStairsWall 5, LandingUpperCover, Brick, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
+    if[%floor% < 119] AddStairsWall 5, LandingUpperCover, StairsLanding, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -8095,18 +8096,18 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     AddStairs 6, StairsLower, Stairs, left, 0, -2.085, 4.17, %1%, 8 / 7, 8, 0, 0, 0
     AddStairs 6, StairsMiddle, Stairs, right, 0, 2.085, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
-    AddStairsFloor 6, LandingLower, Brick, 0.5, -9.0815, -4.5, 9.0815, 4.5, 0, 0, 1, 1
-    AddStairsFloor 6, LandingMiddle, Brick, 0.5, 4, -4.5, 9.0815, 4.5, %1% * 8, %1% * 8, 1, 1
+    AddStairsFloor 6, LandingLower, StairsLanding, 0.5, -9.0815, -4.5, 9.0815, 4.5, 0, 0, 1, 1
+    AddStairsFloor 6, LandingMiddle, StairsLanding, 0.5, 4, -4.5, 9.0815, 4.5, %1% * 8, %1% * 8, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    AddStairsWall 6, LandingMiddleCover, Brick, 0.1, 4, 0, 4, 4.5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    AddStairsWall 6, LandingMiddleCover, StairsLanding, 0.1, 4, 0, 4, 4.5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
     AddStairs 6, StairsUpper, Stairs, left, 0, -2.085, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
-    AddStairsFloor 6, LandingUpper, Brick, 0.5, -9.0815, -4.5, -4, 4.5, %1% * 16, %1% * 16, 1, 1
+    AddStairsFloor 6, LandingUpper, StairsLanding, 0.5, -9.0815, -4.5, -4, 4.5, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    AddStairsWall 6, LandingUpperCover, Brick, 0.1, -4, -4.5, -4, 0, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
+    AddStairsWall 6, LandingUpperCover, StairsLanding, 0.1, -4, -4.5, -4, 0, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
@@ -8117,15 +8118,15 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairs 6, StairsLower, Stairs, right, -4, 2.085, 4.17, %1%, 16 / 11, 12, 0, 0, 0
     if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairs 6, StairsUpper, Stairs, left, -4, -2.085, 4.17, %1%, 16 / 11, 12, %1% * 12, 0, 0
     FloorOrientation = top
-    if[%floor% = 119 | %floor% > 137] AddStairsFloor 6, LandingLower, Brick, 0.5, 4, -4.5, 9.0815, 4.5, 0, 0, 1, 1
+    if[%floor% = 119 | %floor% > 137] AddStairsFloor 6, LandingLower, StairsLanding, 0.5, 4, -4.5, 9.0815, 4.5, 0, 0, 1, 1
     if[%floor% = 119 | %floor% = 138] AddStairsFloor 6, LandingLower2, Brick, 0.5, -17, -4.5, -9.0815 + 0.33, 4.5, 0, 0, 1, 1
-    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairsFloor 6, LandingUpper, Brick, 0.5, -17, -4.5, -12, 4.5, %1% * 12, %1% * 12, 1, 1
+    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairsFloor 6, LandingUpper, StairsLanding, 0.5, -17, -4.5, -12, 4.5, %1% * 12, %1% * 12, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    if[%floor% = 119 | %floor% > 137] AddStairsWall 6, LandingLowerCover, Brick, 0.1, 4, 0, 4, 4.5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    if[%floor% = 119 | %floor% > 137] AddStairsWall 6, LandingLowerCover, StairsLanding, 0.1, 4, 0, 4, 4.5, 0.5, 0.5, -0.5, -0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairsWall 6, LandingUpperCover, Brick, 0.1, -12, -4.5, -12, 0, 0.5, 0.5, (%1% * 12) - 0.5, (%1% * 12) - 0.5, 0, 1
+    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairsWall 6, LandingUpperCover, StairsLanding, 0.1, -12, -4.5, -12, 0, 0.5, 0.5, (%1% * 12) - 0.5, (%1% * 12) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -8135,15 +8136,15 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     if[%floor% ! 119] AddStairs 6, StairsLower, Stairs, right, 0, 2.085, 4.17, %1%, 8 / 8, 9, 0, 0, 0
     if[%floor% ! 119] AddStairs 6, StairsUpper, Stairs, left, 0, -2.085, 4.17, %1%, 8 / 8, 9, %1% * 9, 0, 0
     FloorOrientation = top
-    if[%floor% ! 119] AddStairsFloor 6, LandingLower, Brick, 0.5, 4, -4.5, 9.0815, 4.5, 0, 0, 1, 1
-    if[%floor% ! 119] AddStairsFloor 6, LandingUpper, Brick, 0.5, -9.0815, -4.5, -4, 4.5, %1% * 9, %1% * 9, 1, 1
+    if[%floor% ! 119] AddStairsFloor 6, LandingLower, StairsLanding, 0.5, 4, -4.5, 9.0815, 4.5, 0, 0, 1, 1
+    if[%floor% ! 119] AddStairsFloor 6, LandingUpper, StairsLanding, 0.5, -9.0815, -4.5, -4, 4.5, %1% * 9, %1% * 9, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
-    if[%floor% ! 119] AddStairsWall 6, LandingLowerCover, Brick, 0.1, 4, 0, 4, 4.5, 0.5, 0.5, -0.5, -0.5, 0, 1
-    if[%floor% = 120] AddStairsWall 6, LandingUpperCover2, Brick, 0.1, -9.0815, -4.5, -9.0815, 4.5, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
+    if[%floor% ! 119] AddStairsWall 6, LandingLowerCover, StairsLanding, 0.1, 4, 0, 4, 4.5, 0.5, 0.5, -0.5, -0.5, 0, 1
+    if[%floor% = 120] AddStairsWall 6, LandingUpperCover2, StairsLanding, 0.1, -9.0815, -4.5, -9.0815, 4.5, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
-    if[%floor% ! 119] AddStairsWall 6, LandingUpperCover, Brick, 0.1, -4, -4.5, -4, 0, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
+    if[%floor% ! 119] AddStairsWall 6, LandingUpperCover, StairsLanding, 0.1, -4, -4.5, -4, 0, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
