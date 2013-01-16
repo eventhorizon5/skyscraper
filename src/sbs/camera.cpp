@@ -323,10 +323,11 @@ Ogre::Vector3 Camera::GetStartRotation()
 	return StartRotation;
 }
 
-void Camera::SetToStartPosition()
+void Camera::SetToStartPosition(bool disable_current_floor)
 {
 	if (sbs->GetFloor(StartFloor))
-		SetPosition(Ogre::Vector3(StartPositionX, sbs->GetFloor(StartFloor)->GetBase() + GetHeight(), StartPositionZ));
+		SetPosition(Ogre::Vector3(StartPositionX, 0, StartPositionZ));
+	GotoFloor(StartFloor, disable_current_floor);
 }
 
 void Camera::SetToStartDirection()
@@ -1121,4 +1122,29 @@ void Camera::ResetCollisions()
 {
 	//queue a collision reset for next loop cycle
 	collision_reset = true;
+}
+
+void Camera::GotoFloor(int floor, bool disable_current)
+{
+	//have camera warp to specified floor
+
+	if (sbs->IsValidFloor(floor) == true)
+	{
+		Floor* origfloor = sbs->GetFloor(CurrentFloor);
+		if (disable_current == true && origfloor)
+		{
+			origfloor->Enabled(false);
+			origfloor->EnableGroup(false);
+		}
+
+		Floor* floorobj = sbs->GetFloor(floor);
+		if (floorobj)
+		{
+			Ogre::Vector3 pos = GetPosition();
+			pos.y = floorobj->GetBase() + GetHeight();
+			SetPosition(pos);
+			floorobj->Enabled(true);
+			floorobj->EnableGroup(true);
+		}
+	}
 }

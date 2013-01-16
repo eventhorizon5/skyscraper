@@ -79,6 +79,9 @@ const long CameraControl::ID_bFreelook = wxNewId();
 const long CameraControl::ID_STATICTEXT20 = wxNewId();
 const long CameraControl::ID_txtFreelookSpeed = wxNewId();
 const long CameraControl::ID_bFreelookSpeed = wxNewId();
+const long CameraControl::ID_STATICTEXT18 = wxNewId();
+const long CameraControl::ID_txtGotoFloor = wxNewId();
+const long CameraControl::ID_bGotoFloor = wxNewId();
 const long CameraControl::ID_STATICTEXT1 = wxNewId();
 const long CameraControl::ID_STATICTEXT2 = wxNewId();
 const long CameraControl::ID_lblPosition = wxNewId();
@@ -156,7 +159,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	wxFlexGridSizer* FlexGridSizer12;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxStaticBoxSizer* StaticBoxSizer1;
-	
+
 	Create(parent, wxID_ANY, _("Camera Control"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(2, 2, 0, 0);
 	FlexGridSizer8 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -250,6 +253,12 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer3->Add(txtFreelookSpeed, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFreelookSpeed = new wxButton(this, ID_bFreelookSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFreelookSpeed"));
 	FlexGridSizer3->Add(bFreelookSpeed, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText18 = new wxStaticText(this, ID_STATICTEXT18, _("Goto Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT18"));
+	FlexGridSizer3->Add(StaticText18, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	txtGotoFloor = new wxTextCtrl(this, ID_txtGotoFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtGotoFloor"));
+	FlexGridSizer3->Add(txtGotoFloor, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bGotoFloor = new wxButton(this, ID_bGotoFloor, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bGotoFloor"));
+	FlexGridSizer3->Add(bGotoFloor, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3->Add(FlexGridSizer3, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer8->Add(StaticBoxSizer3, 1, wxBOTTOM|wxLEFT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer8, 1, wxTOP|wxALIGN_LEFT|wxALIGN_TOP, 5);
@@ -383,12 +392,13 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_bGravity,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGravity_Click);
 	Connect(ID_bGravityEnabled,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGravityEnabled_Click);
 	Connect(ID_bCollisions,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bCollisions_Click);
 	Connect(ID_bFreelook,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelook_Click);
 	Connect(ID_bFreelookSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelookSpeed_Click);
+	Connect(ID_bGotoFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGotoFloor_Click);
 	Connect(ID_rPosition,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&CameraControl::On_rPosition_Select);
 	Connect(ID_rRotation,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&CameraControl::On_rRotation_Select);
 	Connect(ID_bZPlus,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bZPlus_Click);
@@ -552,7 +562,7 @@ void CameraControl::On_bYNeg_Click(wxCommandEvent& event)
 
 void CameraControl::On_bStartPosition_Click(wxCommandEvent& event)
 {
-	Simcore->camera->SetToStartPosition();
+	Simcore->camera->SetToStartPosition(true);
 }
 
 void CameraControl::On_bStartRotation_Click(wxCommandEvent& event)
@@ -638,5 +648,10 @@ void CameraControl::On_bResetFOV_Click(wxCommandEvent& event)
 
 void CameraControl::On_bSetSkyMult_Click(wxCommandEvent& event)
 {
-	skyscraper->SkyMult = (atoi(txtSetSkyMult->GetValue().ToAscii()));
+	skyscraper->SkyMult = atoi(txtSetSkyMult->GetValue().ToAscii());
+}
+
+void CameraControl::On_bGotoFloor_Click(wxCommandEvent& event)
+{
+	Simcore->camera->GotoFloor(atoi(txtGotoFloor->GetValue().ToAscii()), true);
 }

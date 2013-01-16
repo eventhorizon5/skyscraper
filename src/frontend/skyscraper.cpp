@@ -720,7 +720,7 @@ void Skyscraper::GetInput()
 			Simcore->GetFloor(Simcore->camera->CurrentFloor)->EnableGroup(false);
 			Simcore->camera->EnableGravity(true);
 			Simcore->camera->EnableCollisions(true);
-			Simcore->camera->SetToStartPosition();
+			Simcore->camera->SetToStartPosition(true);
 			Simcore->camera->SetToStartRotation();
 			Simcore->camera->SetToDefaultFOV();
 			Simcore->GetFloor(Simcore->camera->StartFloor)->Enabled(true);

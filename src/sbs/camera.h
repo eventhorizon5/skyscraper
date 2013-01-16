@@ -91,7 +91,7 @@ public:
 	Ogre::Vector3 GetStartDirection();
 	void SetStartRotation(const Ogre::Vector3 &vector);
 	Ogre::Vector3 GetStartRotation();
-	void SetToStartPosition();
+	void SetToStartPosition(bool disable_current_floor);
 	void SetToStartDirection();
 	void SetToStartRotation();
 	void CheckElevator();
@@ -131,6 +131,7 @@ public:
 	void ShowDebugShape(bool value);
 	void MoveCharacter();
 	void ResetCollisions();
+	void GotoFloor(int floor, bool disable_current = true);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

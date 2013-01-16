@@ -403,22 +403,17 @@ bool SBS::Start()
 		free(textureboxes[i].buffer);
 	textureboxes.clear();
 
-	//move camera to start location
-	camera->SetToStartPosition();
-	camera->SetToStartDirection();
-	camera->SetToStartRotation();
-
 	//set sound listener object to initial position
-	if (DisableSound == false)
+	/*if (DisableSound == false)
 	{
-		/*if (sndrenderer->GetListener())
+		if (sndrenderer->GetListener())
 			SetListenerLocation(camera->GetPosition());
 		else
 		{
 			ReportError("Sound listener object not available. Sound support disabled");
 			DisableSound = true;
-		}*/
-	}
+		}
+	}*/
 
 	//turn on main objects
 	EnableBuildings(true);
@@ -426,8 +421,6 @@ bool SBS::Start()
 	EnableExternal(true);
 	EnableSkybox(true);
 	
-	//area->SetLightCulling(true);
-
 	//turn off floors
 	for (int i = 0; i < TotalFloors(); i++)
 		FloorArray[i].object->Enabled(false);
@@ -453,12 +446,10 @@ bool SBS::Start()
 			ElevatorArray[i].object->Init();
 	}
 
-	//turn on start floor
-	if (GetFloor(camera->StartFloor))
-	{
-		GetFloor(camera->StartFloor)->Enabled(true);
-		GetFloor(camera->StartFloor)->EnableGroup(true);
-	}
+	//move camera to start location
+	camera->SetToStartPosition(false); //also turns on start floor
+	camera->SetToStartDirection();
+	camera->SetToStartRotation();
 
 	return true;
 }
