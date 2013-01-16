@@ -75,7 +75,8 @@ SetPlanarMapping true, false, false, false
     Load data/granite_0007e.jpg, Wall1, 0.25, 0.25
     Load data/metal072b.jpg, Stairs, 0.269, 0.25
     Load data/servicedoor2.jpg, StairsDoor, 1, 1
-    Load data/cinderblocks.jpg, StairsWall, 0.25, 1
+    Load data/cinderblocks.jpg, StairsWall, 0.25, 0.25
+    Load data/brick1.jpg, StairsLanding, 0.25, 0.25
     Load data/darrow_unlit.gif, ArrowUp, 1, 1
     Load data/darrow_unlit.gif, ArrowDown, 1, -1
     Load data/darrow_lit.gif, ArrowUp_Lit, 1, 1
@@ -85,6 +86,11 @@ SetPlanarMapping true, false, false, false
     Load data/grate.png, Grate, 0.5, 0.5
     Load data/stucco3.jpg, HeliWalls, 0.25, 0.25
     Load data/metal072b.jpg, Landing, 0.25, 0.25
+    Load data/floorsign.jpg, FloorSign, 1, 1
+    Load data/triton_signs/lobby.png, SignLobby, 1, 1
+    Load data/triton_signs/mez.png, SignMez, 1, 1
+    Load data/triton_signs/office.png, SignOffice, 1, 1
+    Load data/triton_signs/res.png, SignRes, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -2152,4 +2158,69 @@ DrawWalls = true, true, false, false, false, false
     CallButtonElevators = 4
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.13 + 3, 18.715 - 4.125 - 0.33 - 0.1, 14, front, 0.5, 1, true, 0, 0
 <EndFloor>
+
+CreateStairwell 3, 12.9, 22.365, 0, 137
+CutStairwell 3, -4.5, -7.75, 4.5, 7.75, 0, 5
+
+<Floors 0 to 137>
+    Set 1 = %fullheight% / 16 #determine riser size
+    if[%floor% = 137] Set 1 = 10 / 16
+    AddStairs 3, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 3, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    FloorOrientation = top
+    if[%floor% > 0] AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -4.5, -7.75, 4.5, -4, 0, 0, 1, 1
+    if[%floor% = 137] AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -4.5, -7.75, 4.5, -4, 10, 10, 1, 1
+    AddStairsFloor 3, LandingUpper, StairsLanding, 0.5, -4.5, 4, 4.5, 7.75, %1% * 8, %1% * 8, 1, 1
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 3, LandingLowerCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
+    if[%floor% = 137] AddStairsWall 3, LandingLowerCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, 10 - 0.5, 10 - 0.5, 0, 1
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = left
+    AddStairsWall 3, LandingUpperCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
+
+<Floors 0 to 137>
+    SetAutoSize = true, true
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = left
+    if[%floor% < 137] AddStairsWall 3, StairsLeft, StairsWall, 0.33, -4.5, -7.75, -4.5, 7.75, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% = 137] AddStairsWall 3, StairsLeft, StairsWall, 0.33, -4.5, -7.75, -4.5, 7.75, %fullheight% + 20, %fullheight% + 20, 0, 0, 0, 0
+    if[%floor% < 137] AddStairsWall 3, StairsFront, StairsWall, 0.33, -4.5, -7.75, 4.5, -7.75, %fullheight%, %fullheight%, 0, 0, 0, 0
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = right
+    AddStairsWall 3, StairsBack, StairsWall, 0.33, -4.5, 7.75, 4.5, 7.75, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% < 137] AddStairsWall 3, StairsRight, StairsWall, 0.33, 4.5, -7.75, 4.5, 7.75, %fullheight%, %fullheight%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    FloorOrientation = top
+    if[%floor% = 0] AddStairsFloor 3, StairsFloor, Brick, 0.5, -4.5, -7.75, 4.5, 7.75, 0, 0, 0, 0
+    FloorOrientation = bottom
+    #if[%floor% < 137] AddStairsFloor 3, StairsCeiling, Ceiling1, 0.5, -4.5, -7.75, 4.5, 7.75, 12, 12, 0, 0
+
+    DrawWalls = true, false, false, false, false, false
+    WallOrientation = right
+    if[%floor% < 137] AddWall StairsFrontE, Wall1, 0.33, -4.5 + 12.9 - 0.33, -7.75 + 22.365, 4.5 + 12.9 + 0.33, -7.75 + 22.365, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < 137] AddWall StairsLeftE, Wall1, 0.33, -4.5 + 12.9, -7.75 + 22.365 - 0.33, -4.5 + 12.9, 7.75 + 22.365 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = false, true, false, false, false, false
+    WallOrientation = left
+    if[%floor% < 137] AddWall StairsBackE, Wall1, 0.33, -4.5 + 12.9 - 0.33, 7.75 + 22.365, 4.5 + 12.9 + 0.33, 7.75 + 22.365, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% < 137] AddWall StairsRightE, Wall1, 0.33, 4.5 + 12.9, -7.75 + 22.365 - 0.33, 4.5 + 12.9, 7.75 + 22.365 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+
+    #doors
+    if[%floor% > 1 & %floor% < 135] AddStairsDoor 3, StairsDoor, 0.2, 5, 0, -7.75, 3.5, 8, 0, 1, 1
+    if[%floor% = 136] AddStairsDoor 3, StairsDoor, 0.2, 5, 0, -7.75, 3.5, 8, 0, 1, 1
+    if[%floor% = 0] AddStairsDoor 3, StairsDoor, 0.2, 5, 0, -7.75, 3.5, 8, 0, 1, 1
+    if[%floor% = 137] AddStairsDoor 3, StairsDoor, 0.2, 5, 0, -7.75, 3.5, 8, 10, 1, 1
+    
+    #signs
+    SetAutoSize = false, false
+    DrawWalls = false, true, false, false, false, false
+    AddStairsWall 3, SignTop, FloorSign, 0, -3.5, -7.75 + 0.335, -2.5, -7.75 + 0.335, 0.25, 0.25, 5, 5, 1, 1
+    if[%floor% > 0] AddStairsWall 3, SignTop, Button(%floor% + 1), 0, -3.5, -7.75 + 0.335, -2.5, -7.75 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = 0] AddStairsWall 3, SignTop, ButtonL, 0, -3.5, -7.75 + 0.335, -2.5, -7.75 + 0.335, 0.75, 0.75, 4.25, 4.25, 1, 1
+    
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
+<EndFloors>
 
