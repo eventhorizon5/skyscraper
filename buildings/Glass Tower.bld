@@ -54,7 +54,9 @@ SetPlanarMapping true, false, false, false
     Load data/track1.jpg, Track, 1, 1
     Load data/cutston2.jpg, Backing2, 0.1, 0.1
     Load data/cutston2.jpg, Gravel, 0.25, 0.25
+    Load data/cutston2.jpg, Gravelb, 0.5, 0.5
     Load data/cutston3.jpg, Gravel2, 0.25, 0.25
+    Load data/cutston3.jpg, Gravel2b, 0.5, 0.5
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/metal1.jpg, ElevExt, 0.25, 0.25
     Load data/otis4_aluminumdoor.jpg, ElevDoors, 1, 1
@@ -74,7 +76,7 @@ SetPlanarMapping true, false, false, false
     Load data/callbutton_lit.gif, ButtonDownLit, 1, -1
     Load data/granite_0007e.jpg, Wall1, 0.25, 0.25
     Load data/metal072b.jpg, Stairs, 0.269, 0.25
-    Load data/servicedoor2.jpg, StairsDoor, 1, 1
+    Load data/servicedoor2b.jpg, StairsDoor, 1, 1
     Load data/cinderblocks.jpg, StairsWall, 0.25, 0.25
     Load data/brick1.jpg, StairsLanding, 0.25, 0.25
     Load data/darrow_unlit.gif, ArrowUp, 1, 1
@@ -86,6 +88,7 @@ SetPlanarMapping true, false, false, false
     Load data/grate.png, Grate, 0.5, 0.5
     Load data/stucco3.jpg, HeliWalls, 0.25, 0.25
     Load data/metal072b.jpg, Landing, 0.25, 0.25
+    Load data/windows11h_inside-grey.png, WireMesh, 0.25, 1
     Load data/floorsign.jpg, FloorSign, 1, 1
     Load data/triton_signs/lobby.png, SignLobby, 1, 1
     Load data/triton_signs/mez.png, SignMez, 1, 1
@@ -1120,6 +1123,16 @@ AddCustomWall external, Rear Atrium Filler, Backing2, -85.25, Floor(6).Altitude,
     AddWall external, Column 4, Entrance Columns, 0, %param1%, %param2% + 2, %param1% + 2, %param2%, 32, 32, 0, 0, 0, 0
 <EndFunction>
 
+<Function misc_column>
+    SetAutoSize = true, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Column 1, %param5%, 0, %param1% - %param4%, %param2%, %param1%, %param2% - %param4%, %param3%, %param3%, 0, 0, 0, 0, false
+    AddWall Column 3, %param5%, 0, %param1% - %param4%, %param2%, %param1%, %param2% + %param4%, %param3%, %param3%, 0, 0, 0, 0, false
+    DrawWalls = false, true, false, false, false, false
+    AddWall Column 2, %param5%, 0, %param1%, %param2% - %param4%, %param1% + %param4%, %param2%, %param3%, %param3%, 0, 0, 0, 0, false
+    AddWall Column 4, %param5%, 0, %param1%, %param2% + %param4%, %param1% + %param4%, %param2%, %param3%, %param3%, 0, 0, 0, 0, false
+<EndFunction>
+
 
 #Right Complex
 DrawWalls = true, true, false, false, false, false
@@ -1562,6 +1575,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall LeftWalkwayRailingLeft, Railing, 0, -9.83, 5, -9.83, -16.38, 3.5, 3.5, 5, 5, 8, 1, false
     AddWall LeftWalkwayRailingRight, Railing, 0, -6.63, 5, -6.63, -16.38, 3.5, 3.5, 5, 5, 8, 1, false
     AddWall LeftWalkwayRailingLeftLanding, Railing, 0, -10.61, -16.38, -10.61, -20.4, 3.5, 3.5, 5, 5, 2, 1, false
+    AddWall LeftWalkwayRailingLeftLanding2, Railing, 0, -10.61, -20.4, -6.63, -20.4, 3.5, 3.5, 5, 5, 2, 1, false
     AddWall StairsRailingUpper1, Railing, 0, -10.61, 5, -6.63, 5, 3.5, 3.5, 15, 15, 2, 1, false
     AddWall StairsRailingUpper2, Railing, 0, -6.63, 9.8, -6.63, 5, 3.5, 3.5, 15, 15, 2, 1, false
     AddWall StairsRailingUpper3, Railing, 0, -10.61, 14.6, -6.63, 14.6, 3.5, 3.5, 15, 15, 2, 1, false
@@ -1572,6 +1586,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall HeliportRailing1, Railing, 0, -10.61, 30.61, -10.61, 14.59, 3.5, 3.5, 15, 15, 6, 1, false
     SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
     AddWall LeftWalkwayRailingLeftLandingSteps, Railing, 0, -6.63, -16.38, 0.37, -16.38, 3.5, 3.5, 5, 0, 0, 0, false
+    AddWall LeftWalkwayRailingLeftLandingSteps2, Railing, 0, -6.63, -16.38 - 4, 0.37, -16.38 - 4, 3.5, 3.5, 5, 0, 0, 0, false
     AddWall StairsRailingLeftSteps1, Railing, 0, -6.63, 9.8, -0.11, 9.8, 3.5, 3.5, 5, 10, 0, 0, false
     AddWall StairsRailingLeftSteps2, Railing, 0, -6.63, 9.8, -0.11, 9.8, 3.5, 3.5, 5, 0, 0, 0, false
     AddWall StairsRailingLeftSteps3, Railing, 0, -6.63, 9.8, -0.11, 9.8, 3.5, 3.5, 15, 10, 0, 0, false
@@ -1587,11 +1602,15 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall SideCover, Concrete, 0, 17.42, 36.64, 17.42, 9.78, 10.5, 10.5, -0.5, -0.5, 0, 0, false
     AddWall MidCover, Concrete, 0, -10.61, 14.59, 8.43, 14.59, 10, 10, 0, 0, 0, 0, false
     AddWall LeftCover, HeliWalls, 0, -35.5, -30.9, -32, -25.8, 10, 10, 0, 0, 0, 0, false
-    AddWall FrontLeft, Concrete, 0, -14.18, -20.4, -14.18, -37.8, 10, 10, 0, 0, 0, 0, false
+    AddWall FrontLeft, Concrete, 0, -14.18, -20.4 - 4, -14.18, -37.8, 9, 9, 0, 0, 0, 0, false
+    AddWall FrontLeft2, Concrete, 0, -14.18, -20.4, -14.18, -37.8, 2, 2, 9, 9, 0, 0, false
     WallOrientation = right
-    AddWall Front, Concrete, 0.33, -14.18, -20.4, 10.41, -20.4, 10, 10, 0, 0, 0, 0, false
-    AddWall FrontMid, Concrete, 0, 10.41, -20.4, 12.43, -17.6, 10, 10, 0, 0, 0, 0, false
-    AddWall FrontSide, Concrete, 0, 12.43, -17.6, 25.11, -27, 10, 10, 0, 0, 0, 0, false
+    AddWall Front, Concrete, 0.33, -14.18, -20.4, 10.41, -20.4, 2, 2, 9, 9, 0, 0, false
+    AddWall Front2, Concrete, 0.33, -14.18, -20.4 - 4, 10.41 - 1 + 0.33, -20.4 - 4, 9, 9, 0, 0, 0, 0, false
+    AddWall Front3, Concrete, 0.33, 10.41 - 1, -20.4, 10.41, -20.4, 11, 11, 0, 0, 0, 0, false
+    AddWall Front4, Concrete, 0.33, 10.41 - 1 + 0.33, -20.4 - 4 - 0.33, 10.41 - 1 + 0.33, -20.4, 9, 9, 0, 0, 0, 0, false
+    AddWall FrontMid, Concrete, 0, 10.41, -20.4, 12.43, -17.6, 11, 11, 0, 0, 0, 0, false
+    AddWall FrontSide, Concrete, 0, 12.43, -17.6, 25.11, -27, 11, 11, 0, 0, 0, 0, false
     AddWall Back6, Gravel, 0, -40.4, 30.61, -10.61, 30.61, 5, 5, 10, 10, 0, 0, false
     AddWall Back7, Gravel, 0, -10.61, 30.61, -10.61, 14.59, 5, 5, 10, 10, 0, 0, false
     AddWall Back8, Gravel, 0, -40.4, 30.61, -70.15, -12.2, 5, 5, 10, 10, 0, 0, false
@@ -1609,17 +1628,19 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddCustomWall External, TopCoverSide, HeliWalls, -10.61, Floor(137).Altitude + 14.5, 5, -6.63, Floor(137).Altitude + 14.5, 5, -10.61, Floor(137).Altitude + 12.5, 5, 0, 0
     AddCustomWall External, TopCoverSide, HeliWalls, -10.61, Floor(137).Altitude + 14.5, 14.59, -6.63, Floor(137).Altitude + 14.5, 14.59, -10.61, Floor(137).Altitude + 12.5, 14.59, 0, 0
 
-    AddCustomWall External, WireMeshRight, Grate, -10.61, Floor(137).Altitude + 16, 5, -7.28, Floor(137).Altitude + 18, 3.88, -28.63, Floor(137).Altitude + 18, -27.11, -32, Floor(137).Altitude + 16, -25.8, 0, 0
-    AddCustomWall External, WireMeshRightFill, Grate, -28.63, Floor(137).Altitude + 18, -27.11, -34.02, Floor(137).Altitude + 18, -28.74, -32, Floor(137).Altitude + 16, -25.8, 0, 0
-    AddCustomWall External, WireMeshLower, Grate, -70.15, Floor(137).Altitude + 16, -12.2, -32, Floor(137).Altitude + 16, -25.8, -34.02, Floor(137).Altitude + 18, -28.74, -72.20, Floor(137).Altitude + 18, -15.19, -70.15, Floor(137).Altitude + 16, -12.2, 0, 0
-    AddCustomWall External, WireMeshLowerFill, Grate, -72.20, Floor(137).Altitude + 18, -15.19, -73.5, Floor(137).Altitude + 18, -11, -70.15, Floor(137).Altitude + 16, -12.2, 0, 0
-    AddCustomWall External, WireMeshLeft, Grate, -70.15, Floor(137).Altitude + 16, -12.2, -73.5, Floor(137).Altitude + 18, -11, -43.8, Floor(137).Altitude + 18, 31.8, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
-    AddCustomWall External, WireMeshLeftFill, Grate, -43.8, Floor(137).Altitude + 18, 31.8, -40.4, Floor(137).Altitude + 18, 34.13, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
-    AddCustomWall External, WireMeshTop, Grate, -40.4, Floor(137).Altitude + 18, 34.13, -10.61, Floor(137).Altitude + 18, 34.13, -10.61, Floor(137).Altitude + 16, 30.63, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
+    AddCustomWall External, WireMeshRight, WireMesh, -10.61, Floor(137).Altitude + 16, 5, -7.28, Floor(137).Altitude + 18, 3.88, -28.63, Floor(137).Altitude + 18, -27.11, -32, Floor(137).Altitude + 16, -25.8, 0, 0
+    AddCustomWall External, WireMeshRightFill, WireMesh, -28.63, Floor(137).Altitude + 18, -27.11, -34.02, Floor(137).Altitude + 18, -28.74, -32, Floor(137).Altitude + 16, -25.8, 0, 0
+    AddCustomWall External, WireMeshLower, WireMesh, -70.15, Floor(137).Altitude + 16, -12.2, -32, Floor(137).Altitude + 16, -25.8, -34.02, Floor(137).Altitude + 18, -28.74, -72.20, Floor(137).Altitude + 18, -15.19, -70.15, Floor(137).Altitude + 16, -12.2, 0, 0
+    AddCustomWall External, WireMeshLowerFill, WireMesh, -72.20, Floor(137).Altitude + 18, -15.19, -73.5, Floor(137).Altitude + 18, -11, -70.15, Floor(137).Altitude + 16, -12.2, 0, 0
+    AddCustomWall External, WireMeshLeft, WireMesh, -70.15, Floor(137).Altitude + 16, -12.2, -73.5, Floor(137).Altitude + 18, -11, -43.8, Floor(137).Altitude + 18, 31.8, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
+    AddCustomWall External, WireMeshLeftFill, WireMesh, -43.8, Floor(137).Altitude + 18, 31.8, -40.4, Floor(137).Altitude + 18, 34.13, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
+    AddCustomWall External, WireMeshTop, WireMesh, -40.4, Floor(137).Altitude + 18, 34.13, -10.61, Floor(137).Altitude + 18, 34.13, -10.61, Floor(137).Altitude + 16, 30.63, -40.4, Floor(137).Altitude + 16, 30.61, 0, 0
 
     AddCustomWall External, Helipad, Helipad, -40.4, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 30.61, -10.61, Floor(137).Altitude + 15, 5, -32, Floor(137).Altitude + 15, -25.8, -70.15, Floor(137).Altitude + 15, -12.2, -40.4, Floor(137).Altitude + 15, 30.61, 0, 0
-    AddCustomWall External, ElevatorRoomCeiling, Gravel, -14.18, Floor(137).Altitude + 10, -20.4, 10.41, Floor(137).Altitude + 10, -20.4, 18.4, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -36.8, -14.18, Floor(137).Altitude + 10, -20.4, 0, 0
-    AddCustomWall External, ElevatorRoomCeiling2, Gravel, 10.41, Floor(137).Altitude + 10, -20.4, 12.43, Floor(137).Altitude + 10, -17.6, 25.11, Floor(137).Altitude + 10, -27, 18.4, Floor(137).Altitude + 10, -36.8, 10.41, Floor(137).Altitude + 10, -20.4, 0, 0
+    AddCustomWall External, ElevatorRoomCeiling, Gravel, -14.18, Floor(137).Altitude + 11, -20.4, 10.41, Floor(137).Altitude + 11, -20.4, 18.4, Floor(137).Altitude + 11, -36.8, -14.18, Floor(137).Altitude + 11, -36.8, -14.18, Floor(137).Altitude + 11, -20.4, 0, 0
+    AddCustomWall External, ElevatorRoomCeiling2, Gravel, 10.41, Floor(137).Altitude + 11, -20.4, 12.43, Floor(137).Altitude + 11, -17.6, 25.11, Floor(137).Altitude + 11, -27, 18.4, Floor(137).Altitude + 11, -36.8, 10.41, Floor(137).Altitude + 11, -20.4, 0, 0
+    AddCustomWall External, ElevatorRoomCeilingInside, Gravel, -14.18, Floor(137).Altitude + 9, -20.4, 10.41, Floor(137).Altitude + 9, -20.4, 18.4, Floor(137).Altitude + 9, -36.8, -14.18, Floor(137).Altitude + 9, -36.8, -14.18, Floor(137).Altitude + 9, -20.4, 0, 0
+    AddCustomWall External, ElevatorRoomCeilingInside2, Gravel, 10.41, Floor(137).Altitude + 9, -20.4, 12.43, Floor(137).Altitude + 9, -17.6, 25.11, Floor(137).Altitude + 9, -27, 18.4, Floor(137).Altitude + 9, -36.8, 10.41, Floor(137).Altitude + 9, -20.4, 0, 0
     AddCustomWall External, Back3, Gravel, -43.36, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 30.61, -40.4, Floor(137).Altitude + 10, 30.61, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
     AddCustomWall External, Back4, Gravel, -43.36, Floor(137).Altitude + 10, 36.64, -40.4, Floor(137).Altitude + 10, 30.61, -70.15, Floor(137).Altitude + 10, -12.2, -79.2, Floor(137).Altitude + 10, -15.2, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
     AddCustomWall External, Back5, Gravel, -70.15, Floor(137).Altitude + 10, -12.2, -32, Floor(137).Altitude + 10, -25.8, -35.5, Floor(137).Altitude + 10, -30.9, -79.2, Floor(137).Altitude + 10, -15.2, -70.15, Floor(137).Altitude + 10, -12.2, 0, 0
@@ -1633,6 +1654,17 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall HelipadCover3, HeliWalls, 0, -70.15, -12.2, -40.4, 30.61, 1, 1, 15, 15, 0, 0, true
     AddWall HelipadCover4, HeliWalls, 0, -40.4, 30.61, -10.61, 30.63, 1, 1, 15, 15, 0, 0, true
 
+    #columns
+    misc_column(-14.18 + 0.7 + 4, -20.4 - 0.5, 9, 0.25, Gravel2b)
+    misc_column(-14.18 + 0.7 + 8, -20.4 - 0.5, 9, 0.25, Gravel2b)
+    misc_column(-14.18 + 0.7 + 12, -20.4 - 0.5, 9, 0.25, Gravel2b)
+    misc_column(-14.18 + 0.7 + 16, -20.4 - 0.5, 9, 0.25, Gravel2b)
+
+    FloorOrientation = bottom
+    DrawWalls = true, true, true, true, true, true
+    AddFloor CornerColumn, Gravelb, 9, -14.18 + 0.2, -20.4 - 0.2, -14.18 + 0.2 + 0.5, -20.4 - 0.2 - 0.5, 0, 0, false, false, 0, 0, false
+    DrawWalls = true, true, false, false, false, false
+
     #stairs
     Set 1 = 15 / 24 #determine riser size
     AddStairs 1, StairsTop, Stairs, right, 0, 2.405, 4.7, %1%, 6.74 / 7, 8, 10, 0, 0
@@ -1641,9 +1673,9 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddStairs 2, StairsFront, Stairs, right, 0, 0, 4, %1%, 6.74 / 7, 8, 0, 0, 0
 
     #door
-    AddDoor , , false, StairsDoor, 0.2, 8, 0, 0.37 + 5 - 1.25, -20.4, 2.5, 8, 0, 0, 0
-    AddDoor , , false, StairsDoor, 0.2, 5, 0, 0.37 + 5 + 1.25, -20.4, 2.5, 8, 0, 0, 0
-    AddFillerWalls ConnectionWall, 0.33, 0.37 + 5, -20.4, 5, 8, 0, true, 0, 0
+    AddDoor , , false, StairsDoor, 0.2, 8, 0, 0.37 + 5 - 1.25, -20.4 - 4, 2.5, 8, 0, 0, 0
+    AddDoor , , false, StairsDoor, 0.2, 5, 0, 0.37 + 5 + 1.25, -20.4 - 4, 2.5, 8, 0, 0, 0
+    AddFillerWalls ConnectionWall, 0.33, 0.37 + 5, -20.4 - 4, 5, 8, 0, true, 0, 0
 <EndFloor>
 
 
@@ -2141,7 +2173,7 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
     AddShaftDoor 4, 1, ElevDoors, ElevDoors2, 0.2, 0, -3.301, 10, 0, 0 #shaft doors
-    AddDirectionalIndicator 4, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162, 16, front, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 4, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162 + 0.33, 16, front, 0.5, 1, true, 0, 0
     WallOrientation = left
 <EndFloor>
 
@@ -2166,7 +2198,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Floor 137>
     CallButtonElevators = 4
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.13 + 3, 18.715 - 4.125 - 0.33 - 0.1, 14, front, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.13 + 3, 18.715 - 4.125 - 0.1, 14, front, 0.5, 1, true, 0, 0
 <EndFloor>
 
 CreateStairwell 3, 4.13, 26.7 + 0.66, 0, 137
@@ -2196,9 +2228,19 @@ CutStairwell 3, -10.76, -12.77, -4.24, 4.5, 0, 5
 <EndFloors>
 
 <Floors 0 to 137>
-    SetAutoSize = true, true
-    DrawWalls = false, true, false, false, false, false
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
     WallOrientation = left
+    if[%floor% = 137] AddStairsWall 3, Railing1, Railing, 0, 4.24 + 0.33, -4.5 + 0.33, 7.76, -4.5 + 0.33, 3.5, 3.5, 10, 10, 2, 1
+    if[%floor% = 137] AddStairsWall 3, Railing2, Railing, 0, 7.76, 0, 7.76, 2.78, 3.5, 3.5, 10, 10, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% < 137] AddStairsWall 3, Railing3, Railing, 0, -4, -0.1, 4, -0.1, 3.5, 3.5, 0, %fullheight% / 2, 1, 1
+    if[%floor% < 137] AddStairsWall 3, Railing4, Railing, 0, -4, 0.1, 4, 0.1, 3.5, 3.5, %fullheight%, %fullheight% / 2, 1, 1
+    if[%floor% = 137] AddStairsWall 3, Railing5, Railing, 0, -4, -0.1, 7.76, -0.1, 3.5, 3.5, 0, 10, 2, 1
+    ResetTextureMapping = true
+
+    DrawWalls = false, true, false, false, false, false
+    SetAutoSize = true, true
     if[%floor% < 137] AddStairsWall 3, StairsLeft, StairsWall, 0.33, -10.76, -12.11 - 0.33, -10.76, 4.5, %fullheight%, %fullheight%, 0, 0, 0, 0
     if[%floor% = 137] AddStairsWall 3, StairsLeft, StairsWall, 0.33, -10.76, -12.11 - 0.33, -10.76, 4.5, 10, 10, 0, 0, 0, 0
     if[%floor% = 137] AddStairsWall 3, StairsLeft, StairsWall, 0.33, -10.76, -12.11 - 0.33, -10.76, 2.78, 10, 10, 10, 10, 0, 0
@@ -2244,7 +2286,7 @@ CutStairwell 3, -10.76, -12.77, -4.24, 4.5, 0, 5
     if[%floor% > 1 & %floor% < 135] AddStairsDoor 3, , , false, StairsDoor, 0.2, 7, 0, -7.3, -12.77, 3.5, 8, 0, 1, 1
     if[%floor% = 136] AddStairsDoor 3, , , false, StairsDoor, 0.2, 7, 0, -7.3, -12.77, 3.5, 8, 0, 1, 1
     if[%floor% = 0] AddStairsDoor 3, , , false, StairsDoor, 0.2, 7, 0, -7.3, -12.77, 3.5, 8, 0, 1, 1
-    if[%floor% = 137] AddStairsDoor 3, , , false, StairsDoor, 0.2, 7, 0, 8.765, -12.77 + 0.165, 3.5, 8, 10, 1, 1
+    if[%floor% = 137] AddStairsDoor 3, , , false, StairsDoor, 0.2, 7, 0, 8.765, -12.77 + 0.25, 3.5, 8, 10, 1, 1
     if[%floor% = 137] AddFillerWalls ConnectionWall, 0.33, 4.13 + 8.765, 26.7 + 0.66 + -12.77 + 0.33, 3.5, 8, 10, true, 0, 0
 
     #signs
@@ -2267,6 +2309,13 @@ CutStairwell 4, -6.74, -12.82, 2.25, -8, 0, 5
     AddStairs 4, StairsLower, Stairs, back, 0, 0, 4.17, %1%, 16 / 15, 16, 0, 0, 0
     AddStairsFloor 4, StairsFloor, Brick, 0, -6.74, -12.82, 2.24, -8, 0, 0, 0, 0
     AddStairsFloor 4, StairsFloor, Brick, 0, -2.25, -8, 2.25, 8, 0, 0, 0, 0
+
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    SetAutoSize = false, false
+    AddStairsWall 4, Railing1, Railing, 0, -2.25, -8, -2.25, 8, 3.5, 3.5, %fullheight%, 0, 3, 1
+    AddStairsWall 4, Railing2, Railing, 0, 2.25 - 0.05, -8, 2.25 - 0.05, 8, 3.5, 3.5, %fullheight%, 0, 3, 1
+    SetAutoSize = true, true
+    ResetTextureMapping = true
 <EndFloor>
 
 <Floor 137>
