@@ -51,6 +51,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	lastfloorset = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
+	lastposition = 0;
 
 	std::string buffer, buffer2, buffer3;
 

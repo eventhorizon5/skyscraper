@@ -170,6 +170,7 @@ Elevator::Elevator(int number)
 	messagesnd = 0;
 	musicsound = 0;
 	elevposition = 0;
+	lastposition = 0;
 
 	//create timers
 	timer = new Timer(this, 0);

@@ -92,6 +92,16 @@ bool ScriptProcessor::LoadBuilding()
 	nonexistent_files.clear();
 	floorcache_firstrun = true;
 	ReverseAxis = false;
+	cache_current = 0;
+	cache_current_s = "";
+	cache_height = 0;
+	cache_height_s = "";
+	cache_fullheight = 0;
+	cache_fullheight_s = "";
+	cache_interfloorheight = 0;
+	cache_interfloorheight_s = "";
+	cache_base = 0;
+	cache_base_s = "";
 
 	while (line < (int)BuildingData.size())
 	{

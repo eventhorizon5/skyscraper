@@ -69,6 +69,7 @@ Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor
 	EnableCheck = false;
 	lastcheckresult = false;
 	checkfirstrun = true;
+	lastposition = 0;
 
 	std::string buffer, buffer2, buffer3;
 
