@@ -102,6 +102,7 @@ bool ScriptProcessor::LoadBuilding()
 	cache_interfloorheight_s = "";
 	cache_base = 0;
 	cache_base_s = "";
+	int progress_marker = 0;
 
 	while (line < (int)BuildingData.size())
 	{
@@ -142,6 +143,17 @@ bool ScriptProcessor::LoadBuilding()
 			{
 				std::string num = _itoa(i + 1, intbuffer, 10);
 				ReplaceAll(LineData, std::string("%param" + num + "%").c_str(), FunctionParams[i].c_str());
+			}
+		}
+		else
+		{
+			int percent = ((float)line / (float)BuildingData.size()) * 100.0;
+			std::string percent_s = _itoa(percent, intbuffer, 10);
+			int marker = percent / 10;
+			if (marker > progress_marker)
+			{
+				progress_marker = marker;
+				skyscraper->Report(percent_s + "%");
 			}
 		}
 

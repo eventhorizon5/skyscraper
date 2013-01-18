@@ -2436,8 +2436,13 @@ coordinate 1,1 (really "width, height") being mapped to the bottom right. For a
 standard wall, the valid vertex values are from 0 to 3. If a wall or floor is
 created with AddCustomWall, and if it has for example 7 vertex points, the
 valid values for this command would then be 0 to 6 (but only 3 vertices can be
-used for mapping purposes). Textures can also be cropped with this command -
-for example, to map only a central square of a texture, you'd use:<br>
+used for mapping purposes). One caveat with manual texture mapping is that
+sometimes the simulator will automatically reverse the vertices to keep the
+wall faces oriented properly, so if you set your texture mapping this way and
+notice issues, try reversing the coordinates (u3 would be u1 for a 3-point
+triangular wall, etc) and see if that helps. Textures can also be cropped with
+this command - for example, to map only a central square of a texture, you'd
+use:<br>
 <font face="Courier New, Courier, mono" size="2">SetTextureMapping 0, 0.25,
 0.25, 1, 0.75, 0.25, 2, 0.75, 0.75</font></p>
 
