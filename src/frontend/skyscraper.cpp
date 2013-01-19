@@ -216,6 +216,7 @@ void Skyscraper::UnloadSim()
 	//delete simulator object
 	delete Simcore;
 	Simcore = 0;
+	Report("SBS unloaded\n");
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
@@ -1388,7 +1389,7 @@ bool Skyscraper::Start()
 	Simcore->Shaders = Shaders;
 
 	//load building data file
-	Simcore->Report("\nLoading building data from " + BuildingFile + "...\n");
+	Report("\nLoading building data from " + BuildingFile + "...\n");
 	Simcore->BuildingFilename = BuildingFile;
 
 	//Pause for 1 second
@@ -1481,7 +1482,7 @@ bool Skyscraper::Start()
 	//AllowResize(GetConfigBool("Skyscraper.Frontend.AllowResize", true));
 
 	//run simulation
-	Simcore->Report("Running simulation...");
+	Report("Running simulation...");
 	StopSound();
 	Simcore->IsRunning = true;
 	IsRunning = true;

@@ -208,7 +208,7 @@ SBS::~SBS()
 {
 	//engine destructor
 
-	Report("Deleting SBS objects...");
+	Report("Deleting simulator objects...");
 
 	FastDelete = true;
 
