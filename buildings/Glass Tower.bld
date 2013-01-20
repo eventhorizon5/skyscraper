@@ -118,6 +118,7 @@ SetPlanarMapping true, false, false, false
 
 # Ground
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
+Cut Landscape, -75, -1, -73.14, 134.3, 1, 71.9, false, true
 
 # Lobby
 <Floor 0>
@@ -1717,7 +1718,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
 
 #Glass Elevator Shaft
 AddShaft 1, 2, -0.24, -41.05, 0, 137
-ShaftCut 1, -18.64, -4.25 + 0.33, 18.64, 4.25, 0, 5
+ShaftCut 1, -18.64, -4.25 + 0.33, 18.64, 4.25 + 1 - 0.33, 0, 5
 ShaftShowFloors 1 = 0 - 12
 ShaftShowOutside 1 = 0 - 137
 ShowFullShaft 1 = true
@@ -1735,39 +1736,47 @@ ShaftCut 3, -4, -4.125 + 0.33, 4, 4.125, 0, 5
     SetAutoSize = true, true
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -15.25, -4.25, 15.25, 4.25, -0.1, -0.1, 0, 0
+    if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -18.64, -4.25, 18.64, 4.25 + 1, -6, -6, 0, 0
     DrawWalls = true, true, false, false, false, false
-    if[%floor% = 135] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0
-    if[%floor% = 137] AddShaftFloor 1, Shaft1Top, Gravel, 0, -18.64, 3.25, 18.64, 4.25, 10, 10, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseLeft, Brick, 0, -18.64, -4.25 + 0.33, -18.64, 4.25, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseRight, Brick, 0, 18.64, -4.25 + 0.33, 18.64, 4.25, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseFront, Brick, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, 6, 6, -6, -6, 0, 0
+    if[%floor% = 135] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25 + 1, %fullheight%, %fullheight%, 0, 0
+    if[%floor% = 137] AddShaftFloor 1, Shaft1Top, Gravel, 0, -18.64, 3.25, 18.64, 4.25 + 1, 10, 10, 0, 0
+    SetAutoSize = false, false
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseLeftRailing, Railing, 0, -18.64, -4.25 + 0.33, -18.64, 4.25 - 1, 3.5, 3.5, 0, 0, 2, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseRightRailing, Railing, 0, 18.64, -4.25 + 0.33, 18.64, 4.25 - 1, 3.5, 3.5, 0, 0, 2, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseFrontRailing, Railing, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, 3.5, 3.5, 0, 0, 9, 0
     SetAutoSize = true, false
     DrawWalls = true, true, true, true, false, false
     WallOrientation = right
     #AddShaftWall 1, Shaft1Right, Brick, 0.33, 4, -4.25, 4, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 1
     SetAutoSize = true, true
     DrawWalls = true, false, false, false, false, false
-    if[%floor% < 137] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0
+    if[%floor% > 0] Set 1 = %fullheight%
+    if[%floor% = 0] Set 1 = %fullheight% + 6
+    if[%floor% > 0] Set 2 = 0
+    if[%floor% = 0] Set 2 = -6
+    if[%floor% < 137] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
     DrawWalls = false, true, false, false, false, false
-    if[%floor% < 137] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    #if[%floor% < 137] AddWall Shaft1BackInside, Gravel, 0, -0.24 + -18.64, -41.05 + 4.25 + 1, -0.24 + 18.64, -41.05 + 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0, false
+    #if[%floor% < 137] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 137] AddWall Shaft1BackInside, Gravel, 0, -0.24 + -18.64, -41.05 + 4.25 + 1, -0.24 + 18.64, -41.05 + 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0, false
     DrawWalls = true, true, false, false, false, false
-    if[%floor% > 135] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 4.25 - 1, 18.64, 4.25 - 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% > 135] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 4.25 - 1, -18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% > 135] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64, 4.25 - 1, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 4.25 - 1, -18.64 + 3, 4.25 - 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64 + 12.42 - 3, 4.25 - 1, -18.64 + 12.42 + 3, 4.25 - 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64 - 12.42 - 3, 4.25 - 1, 18.64 - 12.42 + 3, 4.25 - 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64 - 3, 4.25 - 1, 18.64, 4.25 - 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64, 4.25 - 1, 18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64, 4.25 - 1, -18.64, 4.25, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64 + 3, 4.25 - 1, -18.64 + 3, 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64 + 12.42 - 3, 4.25 - 1, -18.64 + 12.42 - 3, 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, -18.64 + 12.42 + 3, 4.25 - 1, -18.64 + 12.42 + 3, 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64 - 12.42 - 3, 4.25 - 1, 18.64 - 12.42 - 3, 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64 - 12.42 + 3, 4.25 - 1, 18.64 - 12.42 + 3, 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% < 136] AddShaftWall 1, Shaft1Back, Gravel, 0, 18.64 - 3, 4.25 - 1, 18.64 - 3, 4.25 + 1, %fullheight%, %fullheight%, 0, 0, 0, 0
-    if[%floor% = 0] AddFillerWalls ConnectionWall, 0.33, -0.24 - 10, -40.426 - 0.33 + 3.426, 3.5, 8, 0, true, 0, 0
-    if[%floor% = 0] AddFillerWalls ConnectionWall, 0.33, -0.24, -40.426 - 0.33 + 3.426, 3.5, 8, 0, true, 0, 0
-    if[%floor% = 0] AddFillerWalls ConnectionWall, 0.33, -0.24 + 10, -40.426 - 0.33 + 3.426, 3.5, 8, 0, true, 0, 0
+    if[%floor% > 135] AddShaftWall 1, Shaft1Back1, Gravel, 0, -18.64, 4.25 - 1, 18.64, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% > 135] AddShaftWall 1, Shaft1Back2, Gravel, 0, -18.64, 4.25 - 1, -18.64, 4.25, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% > 135] AddShaftWall 1, Shaft1Back3, Gravel, 0, 18.64, 4.25 - 1, 18.64, 4.25, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back4, Gravel, 0, -18.64, 4.25 - 1, -18.64 + 3, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back5, Gravel, 0, -18.64 + 12.42 - 3, 4.25 - 1, -18.64 + 12.42 + 3, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back6, Gravel, 0, 18.64 - 12.42 - 3, 4.25 - 1, 18.64 - 12.42 + 3, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back7, Gravel, 0, 18.64 - 3, 4.25 - 1, 18.64, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back8, Gravel, 0, 18.64, 4.25 - 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back9, Gravel, 0, -18.64, 4.25 - 1, -18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back10, Gravel, 0, -18.64 + 3, 4.25 - 1, -18.64 + 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back11, Gravel, 0, -18.64 + 12.42 - 3, 4.25 - 1, -18.64 + 12.42 - 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back12, Gravel, 0, -18.64 + 12.42 + 3, 4.25 - 1, -18.64 + 12.42 + 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back13, Gravel, 0, 18.64 - 12.42 - 3, 4.25 - 1, 18.64 - 12.42 - 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back14, Gravel, 0, 18.64 - 12.42 + 3, 4.25 - 1, 18.64 - 12.42 + 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
+    if[%floor% < 136] AddShaftWall 1, Shaft1Back15, Gravel, 0, 18.64 - 3, 4.25 - 1, 18.64 - 3, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
 <EndFloors>
 
 #Executive elevator
@@ -1839,7 +1848,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 134
     AssignedShaft = 1
-    CreateElevator false, -0.24 - 10, -40.426 - 0.33, 0
+    CreateElevator false, -0.24 - 12.43, -40.426 + 1 - 0.33, 0
 <EndElevator>
 
 <Elevator 2>
@@ -1850,7 +1859,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 134
     AssignedShaft = 1
-    CreateElevator false, -0.24, -40.426 - 0.33, 0
+    CreateElevator false, -0.24, -40.426 + 1 - 0.33, 0
 <EndElevator>
 
 <Elevator 3>
@@ -1861,7 +1870,7 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 134
     AssignedShaft = 1
-    CreateElevator false, -0.24 + 10, -40.426 - 0.33, 134
+    CreateElevator false, -0.24 + 12.43, -40.426 + 1 - 0.33, 134
 <EndElevator>
 
 <Elevators 1 to 3>    
@@ -2230,14 +2239,20 @@ DrawWalls = true, true, false, false, false, false
 
 <Floor 0>
     CallButtonElevators = 1, 2, 3
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 - 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 + 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 - 6.215, -41.05 + 4.345 + 1 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 + 6.215, -41.05 + 4.345 + 1 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 1, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.151, 8.5, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 2, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.151, 8.5, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 3, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.151, 8.5, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floor 134>
     CallButtonElevators = 1, 2, 3
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 - 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 + 4.4, -41.05 + 4.345 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 - 6.215, -41.05 + 4.345 + 1 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -0.24 + 6.215, -41.05 + 4.345 + 1 + 0.1, 4, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 1, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.151, 8.5, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 2, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.151, 8.5, back, 0.5, 1, true, 0, 0
+    AddDirectionalIndicator 3, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.151, 8.5, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
 <Floors 0 to 136>
