@@ -90,7 +90,7 @@ SetPlanarMapping true, false, false, false
     Load data/metal072b.jpg, Landing, 0.25, 0.25
     Load data/windows11h_inside-grey.png, WireMesh, 0.25, 1
     Load data/floorsign.jpg, FloorSign, 1, 1
-    Load data/brick1.jpg, TopWalls, 0.25, 0.25
+    Load data/windows11j.jpg, TopWalls, 1, 1
     Load data/triton_signs/lobby.png, SignLobby, 1, 1
     Load data/triton_signs/mez.png, SignMez, 1, 1
     Load data/triton_signs/office.png, SignOffice, 1, 1
@@ -665,68 +665,68 @@ SetPlanarMapping false, false, false, false
 SetTextureMapping2 x0, y2, z0, 0.17, 0, x2, y2, z2, 10.08, 0, x1, y1, z1, 3.665, 1
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Right - Main, MainWindows2, 20.633, Floor(136).Altitude, -35.707, 77.6, Floor(85).Altitude, -7.84, 59, Floor(136).Altitude, 20.07, 0, 51
-SetTextureMapping2 x2, y2, z2, 0, -0.5, x0, y2, z0, 10.333, -0.5, x1, y1, z1, 3.665, 1
-AddCustomWall external, Right - MainTop, TopWalls, 18.4, Floor(137).Altitude + 12, -36.8, 20.633, Floor(136).Altitude, -35.707, 59, Floor(136).Altitude, 20.07, 58.08, Floor(137).Altitude + 18, 21.44, 0, 2.5
+SetTextureMapping2 x0, y0, z0, 0, -0.5, x1, y1, z1, 0.17, 2, x2, y2, z2, 10.08, 2
+AddCustomWall external, Right - MainTop, TopWalls, 18.4, Floor(137).Altitude + 12, -36.8, 20.633, Floor(136).Altitude, -35.707, 59, Floor(136).Altitude, 20.07, 58.08, Floor(137).Altitude + 18, 21.44, 0, 1
 SetTextureMapping2 x0, y2, z0, 10.08, 0, x2, y2, z2, 0.17, 0, x1, y1, z1, 3.665, 1
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Right - Main, MainWindowsInside, 20.633, Floor(136).Altitude, -35.707, 77.6, Floor(85).Altitude, -7.84, 59, Floor(136).Altitude, 20.07, 0, 51
-SetTextureMapping2 x2, y2, z2, 0, -0.5, x0, y2, z0, 10.333, -0.5, x1, y1, z1, 3.665, 1
-AddCustomWall external, Right - MainTop, TopWalls, 18.4, Floor(137).Altitude + 12, -36.8, 20.633, Floor(136).Altitude, -35.707, 59, Floor(136).Altitude, 20.07, 58.08, Floor(137).Altitude + 18, 21.44, 0, 2.5
+SetTextureMapping2 x3, y3, z3, 0, -0.5, x2, y2, z2, 0.17, 2, x1, y1, z1, 10.08, 2
+AddCustomWall external, Right - MainTop, TopWalls, 18.4, Floor(137).Altitude + 12, -36.8, 20.633, Floor(136).Altitude, -35.707, 59, Floor(136).Altitude, 20.07, 58.08, Floor(137).Altitude + 18, 21.44, 0, 1
 
 SetTextureMapping2 x0, y0, z0, 6.333, 0, x2, y0, z2, -0.333, 0, x2, y2, z2, -0.333, 51
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Right - Front, MainWindows2, 20.633, Floor(136).Altitude, -35.707, 18.4, Floor(136).Altitude, -36.8, 18.4, Floor(85).Altitude, -36.8, 77.6, Floor(85).Altitude, -7.84, 0, 0
-SetTextureMapping2 x0, y0, z0, -0.333, 0, x2, y0, z2, 6.333, 0, x2, y2, z2, 6.333, 2
+SetTextureMapping2 x0, y0, z0, -0.333, 2, x2, y0, z2, 0, 2, x2, y2, z2, 0, 0
 AddCustomWall external, Right - FrontTop, TopWalls, 18.4, Floor(137).Altitude + 12, -36.8, 18.4, Floor(136).Altitude, -36.8, 20.633, Floor(136).Altitude, -35.707, 0, 0
 DrawWalls = false, true, false, false, false, false
 SetTextureMapping2 x0, y0, z0, -0.333, 0, x2, y0, z2, 6.333, 0, x2, y2, z2, 6.333, 51
 AddCustomWall external, Right - Front, MainWindowsInside, 18.4, Floor(136).Altitude, -36.8, 18.4, Floor(85).Altitude, -36.8, 77.6, Floor(85).Altitude, -7.84, 20.633, Floor(136).Altitude, -35.707, 0, 0
-SetTextureMapping2 x0, y0, z0, -0.333, 0, x2, y0, z2, 6.333, 0, x2, y2, z2, 6.333, 2
+SetTextureMapping2 x2, y2, z2, -0.333, 2, x0, y2, z0, 0, 2, x0, y0, z0, 0, 0
 AddCustomWall external, Right - FrontTop, TopWalls, 18.4, Floor(137).Altitude + 12, -36.8, 18.4, Floor(136).Altitude, -36.8, 20.633, Floor(136).Altitude, -35.707, 0, 0
 
 SetTextureMapping2 x2, y0, z2, -0.666, 0, x0, y0, z0, 3, -0, x1, y1, z1, 3, 51
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Right - Back, MainWindows2, 58.08, Floor(136).Altitude, 21.44, 58.08, Floor(85).Altitude, 21.44, 77.6, Floor(85).Altitude, -7.84, 59, Floor(136).Altitude, 20.07, 0, 0
-SetTextureMapping2 x2, y0, z2, -0.666, -0.5, x0, y0, z0, 3, -0.5, x1, y1, z1, 3, 2
+SetTextureMapping2 x0, y0, z0, 0, -0.5, x1, y1, z1, 0, 2, x2, y2, z2, 0.17, 2
 AddCustomWall external, Right - BackTop, TopWalls, 58.08, Floor(137).Altitude + 18, 21.44, 58.08, Floor(136).Altitude, 21.44, 59, Floor(136).Altitude, 20.07, 0, 0
 SetTextureMapping2 x0, y0, z0, 3.666, 0, x2, y0, z2, 0, 0, x2, y2, z2, 0, 51
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Right - Back, MainWindowsInside, 59, Floor(136).Altitude, 20.07, 58.08, Floor(136).Altitude, 21.44, 58.08, Floor(85).Altitude, 21.44, 77.6, Floor(85).Altitude, -7.84, 0, 0
-SetTextureMapping2 x0, y0, z0, 3.666, 0, x2, y0, z2, 0, 0, x2, y2, z2, 0, 2.5
+SetTextureMapping2 x2, y2, z2, 0, -0.5, x1, y1, z1, 0, 2, x0, y0, z0, 0.17, 2
 AddCustomWall external, Right - BackTop, TopWalls, 58.08, Floor(137).Altitude + 18, 21.44, 58.08, Floor(136).Altitude, 21.44, 59, Floor(136).Altitude, 20.07, 0, 0
 
 # left setback
 SetTextureMapping2 x0, y0, z0, -0.06, 0, x2, y0, z2, 8.208, 0, x1, y1, z1, 2.33, 26
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Left - Main, MainWindows2, -48.22, Floor(136).Altitude, 33.223, -84.32, Floor(110).Altitude, 7.84, -79.73, Floor(136).Altitude, -12.816, 0, 0
-SetTextureMapping2 x0, y0, z0, -0.333, 0, x2, y0, z2, 9, 0, x1, y1, z1, 2.33, 3
+SetTextureMapping2 x0, y0, z0, -0.3, 3, x1, y1, z1, -0.06, 0, x3, y3, z3, 9.04, 3.5
 AddCustomWall external, Left - MainTop, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -48.22, Floor(136).Altitude, 33.223, -79.73, Floor(136).Altitude, -12.816, -79.2, Floor(137).Altitude + 24, -15.2, 0, 0
 SetTextureMapping2 x2, y2, z2, -0.06, 0, x0, y2, z0, 8.208, 0, x1, y1, z1, 2.33, 26
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Left - Main, MainWindowsInside, -48.22, Floor(136).Altitude, 33.223, -84.32, Floor(110).Altitude, 7.84, -79.73, Floor(136).Altitude, -12.816, 0, 0
-SetTextureMapping2 x2, y2, z2, -0.333, 0, x0, y2, z0, 9, 0, x1, y1, z1, 2.33, 3
+SetTextureMapping2 x3, y3, z3, -0.3, 3, x2, y2, z2, -0.06, 0, x0, y0, z0, 9.04, 3.5
 AddCustomWall external, Left - MainTop, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -48.22, Floor(136).Altitude, 33.223, -79.73, Floor(136).Altitude, -12.816, -79.2, Floor(137).Altitude + 24, -15.2, 0, 0
 
 SetTextureMapping2 x2, y0, z2, -0.333, 0, x0, y0, z0, 2.333, 0, x1, y1, z1, 2.333, 26
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Left - Front, MainWindows2, -79.2, Floor(136).Altitude, -15.2, -79.2, Floor(110).Altitude, -15.2, -84.32, Floor(110).Altitude, 7.84, -79.73, Floor(136).Altitude, -12.816, 0, 0
-SetTextureMapping2 x2, y0, z2, -0.333, 0, x0, y0, z0, 2.333, 0, x1, y1, z1, 2.333, 3
+SetTextureMapping2 x0, y0, z0, 0.66, 3, x1, y1, z1, 0.66, 0, x2, y2, z2, 0.4, 0
 AddCustomWall external, Left - FrontTop, TopWalls, -79.2, Floor(137).Altitude + 24, -15.2, -79.2, Floor(136).Altitude, -15.2, -79.73, Floor(136).Altitude, -12.816, 0, 0
 SetTextureMapping2 x0, y2, z0, -0.333, 0, x2, y2, z2, 2.333, 0, x1, y1, z1, 2.333, 26
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Left - Front, MainWindowsInside, -79.73, Floor(136).Altitude, -12.816, -79.2, Floor(136).Altitude, -15.2, -79.2, Floor(110).Altitude, -15.2, -84.32, Floor(110).Altitude, 7.84, 0, 0
-SetTextureMapping2 x0, y2, z0, -0.333, 0, x2, y2, z2, 2.333, 0, x1, y1, z1, 2.333, 3
+SetTextureMapping2 x2, y2, z2, 0.66, 3, x1, y1, z1, 0.66, 0, x0, y0, z0, 0.4, 0
 AddCustomWall external, Left - FrontTop, TopWalls, -79.2, Floor(137).Altitude + 24, -15.2, -79.2, Floor(136).Altitude, -15.2, -79.73, Floor(136).Altitude, -12.816, 0, 0
 
 SetTextureMapping2 x2, y2, z2, 0, 0, x0, y2, z0, 6.666, 0, x0, y0, z0, 6.666, 26
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Left - Back, MainWindows2, -48.22, Floor(136).Altitude, 33.223, -43.36, Floor(136).Altitude, 36.64, -43.36, Floor(110).Altitude, 36.64, -84.32, Floor(110).Altitude, 7.84, 0, 0
-SetTextureMapping2 x2, y2, z2, 0, 0.5, x0, y2, z0, 6.666, 0.5, x0, y0, z0, 6.666, 4
+SetTextureMapping2 x2, y2, z2, 0, 0.5, x0, y2, z0, 0.79, 0.5, x0, y0, z0, 0.79, 4
 AddCustomWall external, Left - Back, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -43.36, Floor(136).Altitude, 36.64, -48.22, Floor(136).Altitude, 33.223, 0, 0
 SetTextureMapping2 x0, y0, z0, 0, 0, x2, y0, z2, 6.666, 0, x2, y2, z2, 6.666, 26
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Left - Back, MainWindowsInside, -43.36, Floor(136).Altitude, 36.64, -43.36, Floor(110).Altitude, 36.64, -84.32, Floor(110).Altitude, 7.84, -48.22, Floor(136).Altitude, 33.223, 0, 0
-SetTextureMapping2 x0, y0, z0, 0, 0.5, x2, y0, z2, 6.666, 0.5, x2, y2, z2, 6.666, 4
+SetTextureMapping2 x0, y0, z0, 0, 0.5, x2, y0, z2, 0.79, 0.5, x2, y2, z2, 0.79, 4
 AddCustomWall external, Left - Back, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -43.36, Floor(136).Altitude, 36.64, -48.22, Floor(136).Altitude, 33.223, 0, 0
 
 SetAutoSize = true, true
