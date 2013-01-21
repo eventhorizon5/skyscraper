@@ -118,7 +118,7 @@ SetPlanarMapping true, false, false, false
 
 # Ground
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
-Cut Landscape, -75, -1, -73.14, 134.3, 1, 71.9, false, true
+Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
 
 # Lobby
 <Floor 0>
@@ -464,19 +464,19 @@ SetTextureMapping 0, -0.333, 0, 1, 2.333, 0, 2, 2.333, 1
 <Floors 57 to 137>
     SetTextureMapping 0, -0.333, 0, 1, 8, 0, 2, 8, 1
     if[%floor% = 57] SetTextureMapping 0, -0.333, 0, 1, 8, 0, 2, 8, 0.5
-    if[%floor% = 137] SetTextureMapping 0, -0.333, -1, 1, 8, -1.5, 2, 8, 1
+    if[%floor% = 137] SetTextureMapping 0, -0.333, -1, 1, 8, -2, 2, 8, 1
     DrawWalls = false, true, false, false, false, false
     if[%floor% < 136 & %floor% > 57] AddWall Back, MainWindows2, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     if[%floor% = 136] AddWall Back, TopWalls, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    if[%floor% = 137] AddWall Back, TopWalls, 0, -43.36, 36.64, 37.28, 36.64, %fullheight% * 2.5, %fullheight% * 2, 0, 0, 0, 0, True
+    if[%floor% = 137] AddWall Back, TopWalls, 0, -43.36, 36.64, 37.28, 36.64, %fullheight% * 3, %fullheight% * 2, 0, 0, 0, 0, True
     if[%floor% = 57] AddWall Back, MainWindows2, 0, -43.36, 36.64, 37.28, 36.64, %fullheight% / 2, %fullheight% / 2, %fullheight% / 2, %fullheight% / 2, 0, 0, True
     SetTextureMapping 0, 0, 0, 1, 8.333, 0, 2, 8.333, 1
     if[%floor% = 57] SetTextureMapping 0, 0, 0, 1, 8.333, 0, 2, 8.333, 0.5
-    if[%floor% = 137] SetTextureMapping 0, 0, -1.5, 1, 8.333, -1, 2, 8.333, 1
+    if[%floor% = 137] SetTextureMapping 0, 0, -2, 1, 8.333, -1, 2, 8.333, 1
     DrawWalls = true, false, false, false, false, false
     if[%floor% < 136 & %floor% > 57] AddWall Back, MainWindowsInside, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, false
     if[%floor% = 136] AddWall Back, TopWalls, 0, -43.36, 36.64, 37.28, 36.64, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    if[%floor% = 137] AddWall Back, TopWalls, 0, -43.36, 36.64, 37.28, 36.64, %fullheight% * 2.5, %fullheight% * 2, 0, 0, 0, 0, True
+    if[%floor% = 137] AddWall Back, TopWalls, 0, -43.36, 36.64, 37.28, 36.64, %fullheight% * 3, %fullheight% * 2, 0, 0, 0, 0, True
     if[%floor% = 57] AddWall Back, MainWindowsInside, 0, -43.36, 36.64, 37.28, 36.64, %fullheight% / 2, %fullheight% / 2, %fullheight% / 2, %fullheight% / 2, 0, 0, false
 <EndFloors>
 
@@ -700,13 +700,13 @@ AddCustomWall external, Right - BackTop, TopWalls, 58.08, Floor(137).Altitude + 
 SetTextureMapping2 x0, y0, z0, -0.06, 0, x2, y0, z2, 8.208, 0, x1, y1, z1, 2.33, 26
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Left - Main, MainWindows2, -48.22, Floor(136).Altitude, 33.223, -84.32, Floor(110).Altitude, 7.84, -79.73, Floor(136).Altitude, -12.816, 0, 0
-SetTextureMapping2 x0, y0, z0, -0.3, 3, x1, y1, z1, -0.06, 0, x3, y3, z3, 9.04, 3.5
-AddCustomWall external, Left - MainTop, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -48.22, Floor(136).Altitude, 33.223, -79.73, Floor(136).Altitude, -12.816, -79.2, Floor(137).Altitude + 24, -15.2, 0, 0
+SetTextureMapping2 x0, y0, z0, -0.3, 3, x1, y1, z1, -0.06, 0, x3, y3, z3, 9.04, 4
+AddCustomWall external, Left - MainTop, TopWalls, -43.36, Floor(137).Altitude + 36, 36.64, -48.22, Floor(136).Altitude, 33.223, -79.73, Floor(136).Altitude, -12.816, -79.2, Floor(137).Altitude + 24, -15.2, 0, 0
 SetTextureMapping2 x2, y2, z2, -0.06, 0, x0, y2, z0, 8.208, 0, x1, y1, z1, 2.33, 26
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Left - Main, MainWindowsInside, -48.22, Floor(136).Altitude, 33.223, -84.32, Floor(110).Altitude, 7.84, -79.73, Floor(136).Altitude, -12.816, 0, 0
-SetTextureMapping2 x3, y3, z3, -0.3, 3, x2, y2, z2, -0.06, 0, x0, y0, z0, 9.04, 3.5
-AddCustomWall external, Left - MainTop, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -48.22, Floor(136).Altitude, 33.223, -79.73, Floor(136).Altitude, -12.816, -79.2, Floor(137).Altitude + 24, -15.2, 0, 0
+SetTextureMapping2 x3, y3, z3, -0.3, 3, x2, y2, z2, -0.06, 0, x0, y0, z0, 9.04, 4
+AddCustomWall external, Left - MainTop, TopWalls, -43.36, Floor(137).Altitude + 36, 36.64, -48.22, Floor(136).Altitude, 33.223, -79.73, Floor(136).Altitude, -12.816, -79.2, Floor(137).Altitude + 24, -15.2, 0, 0
 
 SetTextureMapping2 x2, y0, z2, -0.333, 0, x0, y0, z0, 2.333, 0, x1, y1, z1, 2.333, 26
 DrawWalls = true, false, false, false, false, false
@@ -722,13 +722,13 @@ AddCustomWall external, Left - FrontTop, TopWalls, -79.2, Floor(137).Altitude + 
 SetTextureMapping2 x2, y2, z2, 0, 0, x0, y2, z0, 6.666, 0, x0, y0, z0, 6.666, 26
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Left - Back, MainWindows2, -48.22, Floor(136).Altitude, 33.223, -43.36, Floor(136).Altitude, 36.64, -43.36, Floor(110).Altitude, 36.64, -84.32, Floor(110).Altitude, 7.84, 0, 0
-SetTextureMapping2 x2, y2, z2, 0, 0.5, x0, y2, z0, 0.79, 0.5, x0, y0, z0, 0.79, 4
-AddCustomWall external, Left - Back, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -43.36, Floor(136).Altitude, 36.64, -48.22, Floor(136).Altitude, 33.223, 0, 0
+SetTextureMapping2 x2, y2, z2, 0, 0, x0, y2, z0, 0.79, 0, x0, y0, z0, 0.79, 4
+AddCustomWall external, Left - Back, TopWalls, -43.36, Floor(137).Altitude + 36, 36.64, -43.36, Floor(136).Altitude, 36.64, -48.22, Floor(136).Altitude, 33.223, 0, 0
 SetTextureMapping2 x0, y0, z0, 0, 0, x2, y0, z2, 6.666, 0, x2, y2, z2, 6.666, 26
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Left - Back, MainWindowsInside, -43.36, Floor(136).Altitude, 36.64, -43.36, Floor(110).Altitude, 36.64, -84.32, Floor(110).Altitude, 7.84, -48.22, Floor(136).Altitude, 33.223, 0, 0
-SetTextureMapping2 x0, y0, z0, 0, 0.5, x2, y0, z2, 0.79, 0.5, x2, y2, z2, 0.79, 4
-AddCustomWall external, Left - Back, TopWalls, -43.36, Floor(137).Altitude + 30, 36.64, -43.36, Floor(136).Altitude, 36.64, -48.22, Floor(136).Altitude, 33.223, 0, 0
+SetTextureMapping2 x0, y0, z0, 0, 0, x2, y0, z2, 0.79, 0, x2, y2, z2, 0.79, 4
+AddCustomWall external, Left - Back, TopWalls, -43.36, Floor(137).Altitude + 36, 36.64, -43.36, Floor(136).Altitude, 36.64, -48.22, Floor(136).Altitude, 33.223, 0, 0
 
 SetAutoSize = true, true
 ResetTextureMapping = True
@@ -1760,7 +1760,7 @@ ShaftCut 3, -4, -4.125 + 0.33, 4, 4.125, 0, 5
     if[%floor% < 137] AddShaftWall 1, Shaft1BackOutside, Gravel2, 0, -18.64, 4.25 + 1 - 0.33, 18.64, 4.25 + 1 - 0.33, %1%, %1%, %2%, %2%, 0, 0
     DrawWalls = false, true, false, false, false, false
     #if[%floor% < 137] AddShaftWall 1, Shaft1BackInside, Gravel, 0, -18.64, 4.25 + 1, 18.64, 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0
-    if[%floor% < 137] AddWall Shaft1BackInside, Gravel, 0, -0.24 + -18.64, -41.05 + 4.25 + 1, -0.24 + 18.64, -41.05 + 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0, false
+    if[%floor% < 136] AddWall Shaft1BackInside, Gravel, 0, -0.24 + -18.64, -41.05 + 4.25 + 1, -0.24 + 18.64, -41.05 + 4.25 + 1, %1%, %1%, %2%, %2%, 0, 0, false
     DrawWalls = true, true, false, false, false, false
     if[%floor% > 135] AddShaftWall 1, Shaft1Back1, Gravel, 0, -18.64, 4.25 - 1, 18.64, 4.25 - 1, %1%, %1%, %2%, %2%, 0, 0
     if[%floor% > 135] AddShaftWall 1, Shaft1Back2, Gravel, 0, -18.64, 4.25 - 1, -18.64, 4.25, %1%, %1%, %2%, %2%, 0, 0
