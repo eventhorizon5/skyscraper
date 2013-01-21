@@ -90,7 +90,7 @@ SetPlanarMapping true, false, false, false
     Load data/metal072b.jpg, Landing, 0.25, 0.25
     Load data/windows11h_inside-grey.png, WireMesh, 0.25, 1
     Load data/floorsign.jpg, FloorSign, 1, 1
-    Load data/windows11j.jpg, TopWalls, 1, 1
+    Load data/windows11j-filled.jpg, TopWalls, 1, 1
     Load data/triton_signs/lobby.png, SignLobby, 1, 1
     Load data/triton_signs/mez.png, SignMez, 1, 1
     Load data/triton_signs/office.png, SignOffice, 1, 1
@@ -1638,7 +1638,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     DrawWalls = true, true, false, false, false, false
     AddWall SideCover, Concrete, 0, 17.42, 36.64, 17.42, 9.78, 10.5, 10.5, -0.5, -0.5, 0, 0, false
     AddWall MidCover, Concrete, 0, -10.61, 14.59, 8.43, 14.59, 10, 10, 0, 0, 0, 0, false
-    AddWall LeftCover, HeliWalls, 0, -35.5, -30.9, -32, -25.8, 10, 10, 0, 0, 0, 0, false
+    AddWall LeftCover, HeliWalls, 0, -35.5, -30.8, -32, -25.8, 10, 10, 0, 0, 0, 0, false
     AddWall FrontLeft, Concrete, 0, -14.18, -20.4 - 4, -14.18, -37.8, 9, 9, 0, 0, 0, 0, false
     AddWall FrontLeft2, Concrete, 0, -14.18, -20.4, -14.18, -37.8, 2, 2, 9, 9, 0, 0, false
     WallOrientation = right
@@ -1680,7 +1680,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddCustomWall External, ElevatorRoomCeilingInside2, Gravel, 10.41, Floor(137).Altitude + 9, -20.4, 12.43, Floor(137).Altitude + 9, -17.6, 25.11, Floor(137).Altitude + 9, -27, 18.4, Floor(137).Altitude + 9, -36.8, 10.41, Floor(137).Altitude + 9, -20.4, 0, 0
     AddCustomWall External, Back3, Gravel, -43.36, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 36.64, -10.61, Floor(137).Altitude + 10, 30.61, -40.4, Floor(137).Altitude + 10, 30.61, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
     AddCustomWall External, Back4, Gravel, -43.36, Floor(137).Altitude + 10, 36.64, -40.4, Floor(137).Altitude + 10, 30.61, -70.15, Floor(137).Altitude + 10, -12.2, -79.2, Floor(137).Altitude + 10, -15.2, -43.36, Floor(137).Altitude + 10, 36.64, 0, 0
-    AddCustomWall External, Back5, Gravel, -70.15, Floor(137).Altitude + 10, -12.2, -32, Floor(137).Altitude + 10, -25.8, -35.5, Floor(137).Altitude + 10, -30.9, -79.2, Floor(137).Altitude + 10, -15.2, -70.15, Floor(137).Altitude + 10, -12.2, 0, 0
+    AddCustomWall External, Back5, Gravel, -70.15, Floor(137).Altitude + 10, -12.2, -32, Floor(137).Altitude + 10, -25.8, -35.5, Floor(137).Altitude + 10, -30.8, -79.2, Floor(137).Altitude + 10, -15.2, -70.15, Floor(137).Altitude + 10, -12.2, 0, 0
     AddCustomWall External, FrontDuckboards, Grate, 0.37, Floor(137).Altitude + 0.25, -16.38, 7.46, Floor(137).Altitude + 0.25, -16.38, 10.41, Floor(137).Altitude + 0.25, -20.4, 0.37, Floor(137).Altitude + 0.25, -20.4, 0.37, Floor(137).Altitude + 0.25, -16.38, 0, 0
     AddCustomWall External, SideDuckboards1, Grate, 7.46, Floor(137).Altitude + 0.25, -16.38, 24.08, Floor(137).Altitude + 0.25, 5.38, 27.25, Floor(137).Altitude + 0.25, 3, 10.41, Floor(137).Altitude + 0.25, -20.4, 7.46, Floor(137).Altitude + 0.25, -16.38, 0, 0
     AddCustomWall External, SideDuckboards2, Grate, 25.52, Floor(137).Altitude + 0.25, 9.32, 41.57, Floor(137).Altitude + 0.25, -2.86, 39.37, Floor(137).Altitude + 0.25, -6.08, 24.08, Floor(137).Altitude + 0.25, 5.38, 25.52, Floor(137).Altitude + 0.25, 9.32, 0, 0
