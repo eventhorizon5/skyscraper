@@ -1466,7 +1466,6 @@ int ScriptProcessor::ProcCommands()
 		}
 		else if (buffer == "elevator")
 		{
-			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
 			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1].c_str());
 		}
