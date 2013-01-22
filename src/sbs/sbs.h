@@ -31,10 +31,21 @@
 #include <OgreVector3.h>
 #include <OgreMesh.h>
 #include <OgreConfigFile.h>
-#include <OgreBulletDynamicsRigidBody.h>
 #include <OgreFont.h>
 #include <OgreTimer.h>
+#include <OgreSceneManager.h>
 #include <fmod.hpp>
+
+//external class declarations
+namespace OgreBulletDynamics {
+        class DynamicsWorld;
+        class RigidBody;
+	class CharacterController;
+}
+namespace OgreBulletCollisions {
+        class DebugDrawer;
+        class CollisionShape;
+}
 
 #include "light.h"
 #include "mesh.h"

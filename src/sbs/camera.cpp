@@ -24,7 +24,6 @@
 */
 
 #include <OgreCamera.h>
-#include <OgreSceneManager.h>
 #include <OgreBulletDynamicsCharacter.h>
 #include <OgreBulletCollisionsRay.h>
 #include <OgreBulletCollisionsCapsuleShape.h>
