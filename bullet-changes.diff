@@ -1,5 +1,5 @@
 diff -urN a/src/BulletDynamics/Character/btCharacterControllerInterface.h b/src/BulletDynamics/Character/btCharacterControllerInterface.h
---- a/src/BulletDynamics/Character/btCharacterControllerInterface.h	2013-01-13 14:32:04.196822086 -0600
+--- a/src/BulletDynamics/Character/btCharacterControllerInterface.h	2013-01-22 17:54:25.468670949 -0600
 +++ b/src/BulletDynamics/Character/btCharacterControllerInterface.h	2011-04-28 12:53:37.000000000 -0500
 @@ -31,7 +31,7 @@
  	
@@ -19,8 +19,8 @@ diff -urN a/src/BulletDynamics/Character/btCharacterControllerInterface.h b/src/
  
  #endif //BT_CHARACTER_CONTROLLER_INTERFACE_H
 diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/src/BulletDynamics/Character/btKinematicCharacterController.cpp
---- a/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-13 14:32:04.196822086 -0600
-+++ b/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-13 14:33:51.915096581 -0600
+--- a/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-22 17:54:25.444670455 -0600
++++ b/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2013-01-22 17:17:47.583541659 -0600
 @@ -14,6 +14,7 @@
  */
  
@@ -51,45 +51,6 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
  }
  
  btKinematicCharacterController::~btKinematicCharacterController ()
-@@ -160,22 +168,22 @@
- 
- bool btKinematicCharacterController::recoverFromPenetration ( btCollisionWorld* collisionWorld)
- {
--	// Here we must refresh the overlapping paircache as the penetrating movement itself or the
--	// previous recovery iteration might have used setWorldTransform and pushed us into an object
--	// that is not in the previous cache contents from the last timestep, as will happen if we
--	// are pushed into a new AABB overlap. Unhandled this means the next convex sweep gets stuck.
--	//
--	// Do this by calling the broadphase's setAabb with the moved AABB, this will update the broadphase
--	// paircache and the ghostobject's internal paircache at the same time.    /BW
--
--	btVector3 minAabb, maxAabb;
--	m_convexShape->getAabb(m_ghostObject->getWorldTransform(), minAabb,maxAabb);
--	collisionWorld->getBroadphase()->setAabb(m_ghostObject->getBroadphaseHandle(), 
--						 minAabb, 
--						 maxAabb, 
--						 collisionWorld->getDispatcher());
--						 
--	bool penetration = false;
-+        // Here we must refresh the overlapping paircache as the penetrating movement itself or the
-+        // previous recovery iteration might have used setWorldTransform and pushed us into an object
-+        // that is not in the previous cache contents from the last timestep, as will happen if we
-+        // are pushed into a new AABB overlap. Unhandled this means the next convex sweep gets stuck.
-+        //
-+        // Do this by calling the broadphase's setAabb with the moved AABB, this will update the broadphase
-+        // paircache and the ghostobject's internal paircache at the same time.    /BW
-+
-+        btVector3 minAabb, maxAabb;
-+        m_convexShape->getAabb(m_ghostObject->getWorldTransform(), minAabb,maxAabb);
-+        collisionWorld->getBroadphase()->setAabb(m_ghostObject->getBroadphaseHandle(),
-+                                                 minAabb,
-+                                                 maxAabb,
-+                                                 collisionWorld->getDispatcher());
-+
-+        bool penetration = false;
- 
- 	collisionWorld->getDispatcher()->dispatchAllCollisionPairs(m_ghostObject->getOverlappingPairCache(), collisionWorld->getDispatchInfo(), collisionWorld->getDispatcher());
- 
 @@ -187,6 +195,12 @@
  		m_manifoldArray.resize(0);
  
@@ -135,7 +96,7 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
  
  	// phase 3: down
  	/*btScalar additionalDownStep = (m_wasOnGround && !onGround()) ? m_stepHeight : 0.0;
-@@ -406,44 +425,121 @@
+@@ -406,44 +425,124 @@
  	btVector3 gravity_drop = getUpAxisDirections()[m_upAxis] * downVelocity; 
  	m_targetPosition -= (step_drop + gravity_drop);*/
  
@@ -154,73 +115,85 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
  	btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
  	m_targetPosition -= step_drop;
  
+-	start.setIdentity ();
+-	end.setIdentity ();
 +	btKinematicClosestNotMeConvexResultCallback callback (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
 +        callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
 +        callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
-+
+ 
+-	start.setOrigin (m_currentPosition);
+-	end.setOrigin (m_targetPosition);
 +        btKinematicClosestNotMeConvexResultCallback callback2 (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
 +        callback2.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
 +        callback2.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
-+
-+redotests:
- 	start.setIdentity ();
- 	end.setIdentity ();
- 
-+	end_double.setIdentity ();
-+
- 	start.setOrigin (m_currentPosition);
- 	end.setOrigin (m_targetPosition);
  
 -	btKinematicClosestNotMeConvexResultCallback callback (m_ghostObject, getUpAxisDirections()[m_upAxis], m_maxSlopeCosine);
 -	callback.m_collisionFilterGroup = getGhostObject()->getBroadphaseHandle()->m_collisionFilterGroup;
 -	callback.m_collisionFilterMask = getGhostObject()->getBroadphaseHandle()->m_collisionFilterMask;
 -	
-+	//set double test for 2x the step drop, to check for a large drop vs small drop
-+	end_double.setOrigin (m_targetPosition - step_drop);
-+
- 	if (m_useGhostObjectSweepTest)
+-	if (m_useGhostObjectSweepTest)
++	while (1)
  	{
- 		m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+-		m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
+-	} else
+-	{
+-		collisionWorld->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++		start.setIdentity ();
++		end.setIdentity ();
 +
-+		if (!callback.hasHit())
++		end_double.setIdentity ();
++
++		start.setOrigin (m_currentPosition);
++		end.setOrigin (m_targetPosition);
++
++		//set double test for 2x the step drop, to check for a large drop vs small drop
++		end_double.setOrigin (m_targetPosition - step_drop);
++
++		if (m_useGhostObjectSweepTest)
 +		{
-+			//test a double fall height, to see if the character should interpolate it's fall (full) or not (partial)
-+			m_ghostObject->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
-+		}
- 	} else
- 	{
- 		collisionWorld->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++			m_ghostObject->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
 +
-+		if (!callback.hasHit())
-+                {
-+                        //test a double fall height, to see if the character should interpolate it's fall (large) or not (small)
-+                        collisionWorld->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
-+                }
++			if (!callback.hasHit())
++			{
++				//test a double fall height, to see if the character should interpolate it's fall (full) or not (partial)
++				m_ghostObject->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++			}
++		} else
++		{
++			collisionWorld->convexSweepTest (m_convexShape, start, end, callback, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++
++			if (!callback.hasHit())
++					{
++							//test a double fall height, to see if the character should interpolate it's fall (large) or not (small)
++							collisionWorld->convexSweepTest (m_convexShape, start, end_double, callback2, collisionWorld->getDispatchInfo().m_allowedCcdPenetration);
++					}
++		}
++	
++		btScalar downVelocity2 = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
++		bool has_hit = false;
++		if (bounce_fix == true)
++			has_hit = callback.hasHit() || callback2.hasHit();
++		else
++			has_hit = callback2.hasHit();
++
++		if(downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && has_hit == true && runonce == false
++					&& (m_wasOnGround || !m_wasJumping))
++		{
++			//redo the velocity calculation when falling a small amount, for fast stairs motion
++			//for larger falls, use the smoother/slower interpolated movement by not touching the target position
++
++			m_targetPosition = orig_position;
++					downVelocity = m_stepHeight;
++
++				btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
++			m_targetPosition -= step_drop;
++			runonce = true;
++			continue; //re-run previous tests
++		}
++		break;
  	}
  
 -	if (callback.hasHit())
-+	btScalar downVelocity2 = (m_verticalVelocity<0.f?-m_verticalVelocity:0.f) * dt;
-+	bool has_hit = false;
-+	if (bounce_fix == true)
-+		has_hit = callback.hasHit() || callback2.hasHit();
-+	else
-+		has_hit = callback2.hasHit();
-+	
-+	if(downVelocity2 > 0.0 && downVelocity2 < m_stepHeight && has_hit == true && runonce == false
-+                && (m_wasOnGround || !m_wasJumping))
-+	{
-+		//redo the velocity calculation when falling a small amount, for fast stairs motion
-+		//for larger falls, use the smoother/slower interpolated movement by not touching the target position
-+
-+		m_targetPosition = orig_position;
-+               	downVelocity = m_stepHeight;
-+
-+	        btVector3 step_drop = getUpAxisDirections()[m_upAxis] * (m_currentStepOffset + downVelocity);
-+		m_targetPosition -= step_drop;
-+		runonce = true;
-+		goto redotests; //re-run previous tests
-+	}
-+
 +	if (callback.hasHit() || runonce == true)
  	{
  		// we dropped a fraction of the height -> hit floor
@@ -267,7 +240,7 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
  		m_currentPosition = m_targetPosition;
  	}
  }
-@@ -479,10 +575,21 @@
+@@ -479,10 +578,21 @@
  	m_velocityTimeInterval = timeInterval;
  }
  
@@ -292,7 +265,7 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
  }
  
  void btKinematicCharacterController::warp (const btVector3& origin)
-@@ -653,3 +760,8 @@
+@@ -653,3 +763,8 @@
  void btKinematicCharacterController::debugDraw(btIDebugDraw* debugDrawer)
  {
  }
@@ -302,7 +275,7 @@ diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.cpp b/sr
 +	m_interpolateUp = value;
 +}
 diff -urN a/src/BulletDynamics/Character/btKinematicCharacterController.h b/src/BulletDynamics/Character/btKinematicCharacterController.h
---- a/src/BulletDynamics/Character/btKinematicCharacterController.h	2013-01-13 14:32:04.192821994 -0600
+--- a/src/BulletDynamics/Character/btKinematicCharacterController.h	2013-01-22 17:54:25.440670373 -0600
 +++ b/src/BulletDynamics/Character/btKinematicCharacterController.h	2013-01-13 14:33:42.262892731 -0600
 @@ -81,6 +81,9 @@
  	int m_upAxis;
