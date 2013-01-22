@@ -744,7 +744,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	this->mass = mass;
 	no_collider = false;
 	tricollider = true;
-	can_move = false;
 
 	Ogre::MeshPtr collidermesh;
 
@@ -919,12 +918,8 @@ MeshObject::~MeshObject()
 	std::string nodename;
 	if (SceneNode)
 	{
-		if (can_move == true && SceneNode->numChildren() > 0)
-			nodename = SceneNode->getChild(0)->getName();
 		SceneNode->detachAllObjects();
 		SceneNode->getParent()->removeChild(SceneNode);
-		if (can_move == true && SceneNode->numChildren() > 0)
-			sbs->mSceneManager->destroySceneNode(nodename);
 		sbs->mSceneManager->destroySceneNode(SceneNode->getName());
 		sbs->mSceneManager->destroyEntity(Movable->getName());
 	}
@@ -1840,7 +1835,7 @@ void MeshObject::CreateCollider()
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1890,7 +1885,7 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 		std::string name = SceneNode->getName();
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1919,7 +1914,7 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)
-			mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, can_move);
+			mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
 		else
 			mBody->setShape(SceneNode, shape, restitution, friction, mass);
 		mShape = shape;

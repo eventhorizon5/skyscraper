@@ -119,7 +119,6 @@ public:
 
 private:
 	bool enabled;
-	bool can_move;
 	float rotX, rotY, rotZ;
 	bool IsPhysical;
 	float restitution, friction, mass;
