@@ -38,13 +38,13 @@
 
 //external class declarations
 namespace OgreBulletDynamics {
-        class DynamicsWorld;
-        class RigidBody;
+	class DynamicsWorld;
+	class RigidBody;
 	class CharacterController;
 }
 namespace OgreBulletCollisions {
-        class DebugDrawer;
-        class CollisionShape;
+	class DebugDrawer;
+	class CollisionShape;
 }
 
 #include "light.h"

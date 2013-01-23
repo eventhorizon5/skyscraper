@@ -2620,7 +2620,7 @@ void SBS::DecrementSoundCount()
 
 float SBS::ToLocal(float remote_value)
 {
-	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+	//convert remote (OGRE) vertex positions to local (SBS) positions
 
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
@@ -2630,7 +2630,7 @@ float SBS::ToLocal(float remote_value)
 
 Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
 {
-	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+	//convert remote (OGRE) vertex positions to local (SBS) positions
 
 	//note - OGRE uses a right-hand coordinate system, while SBS uses left-hand.
 	//this means that all Z values that use this function must be inverted.
@@ -2640,7 +2640,7 @@ Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
 
 Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale)
 {
-	//convert remote (Crystal Space) vertex positions to local (SBS) positions
+	//convert remote (OGRE) vertex positions to local (SBS) positions
 	//also convert Z value to OGRE's right-hand coordinate system
 
 	Ogre::Vector3 newvalue;
