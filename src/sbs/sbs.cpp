@@ -632,7 +632,7 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	//load default textures
 	Report("Loading default textures...");
 	SetLighting();
-	LoadTexture("data/brick1.jpg", "Default", 1, 1);
+	LoadTexture("data/default.png", "Default", 1, 1);
 	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
 	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
 	ResetLighting();
