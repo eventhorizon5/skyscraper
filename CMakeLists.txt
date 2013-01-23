@@ -18,8 +18,8 @@ endif ()
  
 find_package(OGRE REQUIRED)
  
-if(NOT "${OGRE_VERSION_NAME}" STREQUAL "Cthugha")
-  message(SEND_ERROR "You need Ogre 1.7 Cthugha to build this.")
+if(NOT OGRE_FOUND)
+  message(SEND_ERROR "Failed to find OGRE.")
 endif()
  
 find_package(OIS REQUIRED)
