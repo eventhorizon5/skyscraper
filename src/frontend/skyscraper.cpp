@@ -34,6 +34,7 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
+#include "unix.h"
 #include "revmain.h"
 
 #if defined(__WXGTK__)
@@ -121,6 +122,8 @@ bool Skyscraper::OnInit(void)
 	SkyName = "DefaultSky";
 	SkyMult = 1;
 	mCaelumSystem = 0;
+	buttons = 0;
+	buttoncount = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -142,7 +145,7 @@ bool Skyscraper::OnInit(void)
 	window->Center();
 
 	//show menu
-	if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
+	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
 	{
 		//draw background
 		DrawBackground();
@@ -943,13 +946,79 @@ void Skyscraper::DrawBackground()
 	int w = mRenderWindow->getWidth();
 	int h = mRenderWindow->getHeight();
 
-	DrawImage("data/menu.png", 0, -1, -1, false);
+	DrawImage(std::string("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png")).c_str(), 0, -1, -1, false);
 
-	DrawImage("data/button_triton.png", &button1, 0, -0.08, true, "data/button_triton_selected.png", "data/button_triton_pressed.png");
-	DrawImage("data/button_searstower.png", &button2, 0, 0.125, true, "data/button_searstower_selected.png", "data/button_searstower_pressed.png");
-	DrawImage("data/button_glasstower.png", &button3, 0, 0.333, true, "data/button_glasstower_selected.png", "data/button_glasstower_pressed.png");
-	DrawImage("data/button_simple.png", &button4, 0, 0.541, true, "data/button_simple_selected.png", "data/button_simple_pressed.png");
-	DrawImage("data/button_other.png", &button5, 0, 0.75, true, "data/button_other_selected.png", "data/button_other_pressed.png");
+	if (buttoncount == 0)
+	{
+		buttoncount = GetConfigInt("Skyscraper.Frontend.Menu.Buttons", 5);
+		buttons = new buttondata[buttoncount];
+	}
+
+	for (int i = 0; i < buttoncount; i++)
+	{
+		std::string b1, b2, b3;
+		float x = 0, y = 0;
+		bool center = false;
+		char intbuffer[20];
+		std::string number = _itoa(i + 1, intbuffer, 10);
+
+		if (i == 0)
+		{
+			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button1.Image", "button_triton.png");
+			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button1.Selected", "button_triton_selected.png");
+			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button1.Pressed", "button_triton_pressed.png");
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button1.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button1.Y", -0.08);
+			center = GetConfigBool("Skyscraper.Frontend.Menu.Button1.Center", true);
+		}
+		if (i == 1)
+		{
+			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button2.Image", "button_glasstower.png");
+			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button2.Selected", "button_glasstower_selected.png");
+			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button2.Pressed", "button_glasstower_pressed.png");
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button2.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button2.Y", 0.125);
+			center = GetConfigBool("Skyscraper.Frontend.Menu.Button2.Center", true);
+		}
+		if (i == 2)
+		{
+			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button3.Image", "button_searstower.png");
+			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button3.Selected", "button_searstower_selected.png");
+			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button3.Pressed", "button_searstower_pressed.png");
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button3.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button3.Y", 0.333);
+			center = GetConfigBool("Skyscraper.Frontend.Menu.Button3.Center", true);
+		}
+		if (i == 3)
+		{
+			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button4.Image", "button_simple.png");
+			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button4.Selected", "button_simple_selected.png");
+			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button4.Pressed", "button_simple_pressed.png");
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button4.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button4.Y", 0.541);
+			center = GetConfigBool("Skyscraper.Frontend.Menu.Button4.Center", true);
+		}
+		if (i == 4)
+		{
+			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button5.Image", "button_other.png");
+			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button5.Selected", "button_other_selected.png");
+			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button5.Pressed", "button_other_pressed.png");
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button5.X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button5.Y", 0.75);
+			center = GetConfigBool("Skyscraper.Frontend.Menu.Button5.Center", true);
+		}
+		if (i > 4)
+		{
+			b1 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".Image", "");
+			b2 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".Selected", "");
+			b3 = "data/" + GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".Pressed", "");
+			x = GetConfigFloat("Skyscraper.Frontend.Menu.Button" + number + ".X", 0.0);
+			y = GetConfigFloat("Skyscraper.Frontend.Menu.Button" + number + ".Y", 0.0);
+			center = GetConfigBool("Skyscraper.Frontend.Menu.Button" + number + ".Center", true);
+		}
+
+		DrawImage(b1.c_str(), &buttons[i], x, y, center, b2.c_str(), b3.c_str());
+	}
 }
 
 void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, float y, bool center, const char *filename_selected, const char *filename_pressed)
@@ -1158,23 +1227,17 @@ void Skyscraper::GetMenuInput()
 	if (Starting == true)
 		return;
 
+	//exit if there aren't any buttons
+	if (!buttons || buttoncount == 0)
+		return;
+
 	//get mouse coordinates
 	int mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
 	int mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
-	for (int i = 1; i <= 5; i++)
+	for (int i = 0; i < buttoncount; i++)
 	{
-		buttondata *button;
-		if (i == 1)
-			button = &button1;
-		if (i == 2)
-			button = &button2;
-		if (i == 3)
-			button = &button3;
-		if (i == 4)
-			button = &button4;
-		if (i == 5)
-			button = &button5;
+		buttondata *button = &buttons[i];
 
 	    //only process buttons if main window is selected
         if (window->Active != false)
@@ -1219,26 +1282,27 @@ void Skyscraper::Click(int index)
 {
 	//user clicked a button
 
-	if (index == 5)
+	char intbuffer[20];
+	std::string number = _itoa(index + 1, intbuffer, 10);
+
+	if (index == 0)
+		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
+	if (index == 1)
+		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
+	if (index == 2)
+		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
+	if (index == 3)
+		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
+	if (index > 3)
+		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".File", "");
+
+	if (BuildingFile == "")
 	{
 		//show file selection dialog
-		if (SelectBuilding() == true)
-		{
-			DeleteButtons();
-			Start();
-		}
-		return;
+		SelectBuilding();
 	}
 
-	if (index == 1)
-		BuildingFile = "Triton Center.bld";
-	if (index == 2)
-		BuildingFile = "Sears Tower.bld";
-	if (index == 3)
-		BuildingFile = "Glass Tower.bld";
-	if (index == 4)
-		BuildingFile = "Simple.bld";
-	if (index > 0 && BuildingFile != "")
+	if (BuildingFile != "")
 	{
 		DeleteButtons();
 		Start();
@@ -1247,36 +1311,27 @@ void Skyscraper::Click(int index)
 
 void Skyscraper::DeleteButtons()
 {
-	buttondata *button;
-	for (int i = 0; i < 5; i++)
+	if (buttoncount > 0)
 	{
-		if (i == 0)
-			button = &button1;
-		if (i == 1)
-			button = &button2;
-		if (i == 2)
-			button = &button3;
-		if (i == 3)
-			button = &button4;
-		if (i == 4)
-			button = &button5;
-	
-		if (button->node)
+		for (int i = 0; i < buttoncount; i++)
 		{
-			button->node->detachAllObjects();
-			button->node->getParent()->removeChild(button->node);
-			button->node = 0;
+			buttondata *button = &buttons[i];
+
+			if (button->node)
+			{
+				button->node->detachAllObjects();
+				button->node->getParent()->removeChild(button->node);
+				button->node = 0;
+			}
+			if (button->rect)
+				delete button->rect;
+			button->rect = 0;
 		}
-		if (button->rect)
-			delete button->rect;
-		button->rect = 0;
-		button->filename = "";
-		button->filename_pressed = "";
-		button->filename_selected = "";
-		button->drawn_pressed = false;
-		button->drawn_selected = false;
-		button->active_button = 0;
+		delete [] buttons;
+		buttoncount = 0;
 	}
+	buttons = 0;
+
 	if (background_node)
 	{
 		background_node->detachAllObjects();
@@ -1516,7 +1571,7 @@ void Skyscraper::Unload()
 	StopSound();
 
 	//return to main menu
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
+	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
 	window->Center();
 
 	DrawBackground();

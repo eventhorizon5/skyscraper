@@ -141,7 +141,8 @@ private:
 		Ogre::SceneNode* node;
 		Ogre::Rectangle2D* rect;
 	};
-	buttondata button1, button2, button3, button4, button5;
+	buttondata *buttons;
+	int buttoncount;
 
 	Ogre::Rectangle2D* background_rect;
 	Ogre::SceneNode* background_node;

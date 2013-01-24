@@ -1665,15 +1665,11 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 	int deleted_size = (int)deleted_v.size();
 	int *deleted = new int[deleted_size];
 	for (int i = 0; i < deleted_size; i++)
-	{
 		deleted[i] = deleted_v[i];
-	}
 
 	//delete specified vertices
 	for (int i = deleted_size - 1; i >= 0; i--)
-	{
 		MeshGeometry.erase(MeshGeometry.begin() + deleted[i]);
-	}
 
 	//reindex triangle indices in all submeshes
 	for (int submesh = 0; submesh < (int)Triangles.size(); submesh++)
