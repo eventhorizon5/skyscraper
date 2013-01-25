@@ -4707,3 +4707,16 @@ void Elevator::Init()
 	//move elevator to starting position
 	SetFloor(OriginFloor);
 }
+
+void Elevator::LockDoor(int number, Ogre::Vector3 &position)
+{
+	//lock specified door
+	if (number < (int)DoorArray.size())
+	{
+		if (StdDoorArray[number])
+			StdDoorArray[number]->Lock(position);
+	}
+	else
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+
+}

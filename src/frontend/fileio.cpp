@@ -3324,8 +3324,8 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid stairwell");
 	}
 
-	//AddStdShaftDoor command
-	if (linecheck.substr(0, 16) == "addstdshaftdoor ")
+	//AddShaftStdDoor command
+	if (linecheck.substr(0, 16) == "addshaftstddoor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);

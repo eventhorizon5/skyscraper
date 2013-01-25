@@ -279,6 +279,7 @@ public:
 	void SetAltitude(float altitude);
 	void SetFloor(int floor);
 	void Init();
+	void LockDoor(int number, Ogre::Vector3 &position);
 
 private:
 

@@ -308,16 +308,35 @@ void Door::SetLocked(int side)
 	Locked = side;
 }
 
-void Door::Lock()
+void Door::Lock(const Ogre::Vector3 &position)
 {
-	//fully lock door
+	//lock side of door of the given position
 
-	Locked = 3;
+	if (Locked == 3)
+		return;
+
+	bool side = GetSide(position);
+
+	if (Locked == 0)
+	{
+		if (side == false)
+			Locked = 1; //lock left side
+		else
+			Locked = 2; //lock right side
+	}
+	else
+	{
+		//fully lock door if standing opposite of a locked side
+		if ((side == false && Locked == 2) || (side == true && Locked == 1))
+			Locked = 3;
+	}
+
+	sbs->Report(std::string("Locked door " + Name).c_str());
 }
 
-void Door::Unlock()
+void Door::Unlock(const Ogre::Vector3 &position)
 {
-	//fully unlock door
+	//unlock side of door of the given position
 
 	Locked = 0;
 }

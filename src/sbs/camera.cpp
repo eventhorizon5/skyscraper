@@ -775,20 +775,25 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			Floor *floor = sbs->GetFloor(floornumber);
 			if (floor)
 			{
-				if (floor->IsDoorOpen(doornumber) == false)
+				if (shift == false)
 				{
-					if (floor->IsDoorMoving(doornumber) == false)
-						floor->OpenDoor(doornumber, pos);
+					if (floor->IsDoorOpen(doornumber) == false)
+					{
+						if (floor->IsDoorMoving(doornumber) == false)
+							floor->OpenDoor(doornumber, pos);
+						else
+							floor->CloseDoor(doornumber);
+					}
 					else
-						floor->CloseDoor(doornumber);
+					{
+						if (floor->IsDoorMoving(doornumber) == false)
+							floor->CloseDoor(doornumber);
+						else
+							floor->OpenDoor(doornumber, pos);
+					}
 				}
 				else
-				{
-					if (floor->IsDoorMoving(doornumber) == false)
-						floor->CloseDoor(doornumber);
-					else
-						floor->OpenDoor(doornumber, pos);
-				}
+					floor->LockDoor(doornumber, pos);
 			}
 		}
 		if (meshname.substr(0, 9) == "Stairwell")
@@ -799,20 +804,25 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			Stairs *stairs = sbs->GetStairs(stairsnumber);
 			if (stairs)
 			{
-				if (stairs->IsDoorOpen(doornumber) == false)
+				if (shift == false)
 				{
-					if (stairs->IsDoorMoving(doornumber) == false)
-						stairs->OpenDoor(doornumber, pos);
+					if (stairs->IsDoorOpen(doornumber) == false)
+					{
+						if (stairs->IsDoorMoving(doornumber) == false)
+							stairs->OpenDoor(doornumber, pos);
+						else
+							stairs->CloseDoor(doornumber);
+					}
 					else
-						stairs->CloseDoor(doornumber);
+					{
+						if (stairs->IsDoorMoving(doornumber) == false)
+							stairs->CloseDoor(doornumber);
+						else
+							stairs->OpenDoor(doornumber, pos);
+					}
 				}
 				else
-				{
-					if (stairs->IsDoorMoving(doornumber) == false)
-						stairs->CloseDoor(doornumber);
-					else
-						stairs->OpenDoor(doornumber, pos);
-				}
+					stairs->LockDoor(doornumber, pos);
 			}
 		}
 		if (meshname.substr(0, 8) == "Elevator" && (int)meshname.find("Shaft Door") == -1 && (int)meshname.find("ElevatorDoor") == -1)
@@ -823,20 +833,25 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			Elevator *elevator = sbs->GetElevator(elevnumber);
 			if (elevator)
 			{
-				if (elevator->IsDoorOpen(doornumber) == false)
+				if (shift == false)
 				{
-					if (elevator->IsDoorMoving(doornumber) == false)
-						elevator->OpenDoor(doornumber, pos);
+					if (elevator->IsDoorOpen(doornumber) == false)
+					{
+						if (elevator->IsDoorMoving(doornumber) == false)
+							elevator->OpenDoor(doornumber, pos);
+						else
+							elevator->CloseDoor(doornumber);
+					}
 					else
-						elevator->CloseDoor(doornumber);
+					{
+						if (elevator->IsDoorMoving(doornumber) == false)
+							elevator->CloseDoor(doornumber);
+						else
+							elevator->OpenDoor(doornumber, pos);
+					}
 				}
 				else
-				{
-					if (elevator->IsDoorMoving(doornumber) == false)
-						elevator->CloseDoor(doornumber);
-					else
-						elevator->OpenDoor(doornumber, pos);
-				}
+					elevator->LockDoor(doornumber, pos);
 			}
 		}
 		if (meshname.substr(0, 5) == "Shaft")
@@ -847,20 +862,25 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			Shaft *shaft = sbs->GetShaft(shaftnumber);
 			if (shaft)
 			{
-				if (shaft->IsDoorOpen(doornumber) == false)
+				if (shift == false)
 				{
-					if (shaft->IsDoorMoving(doornumber) == false)
-						shaft->OpenDoor(doornumber, pos);
+					if (shaft->IsDoorOpen(doornumber) == false)
+					{
+						if (shaft->IsDoorMoving(doornumber) == false)
+							shaft->OpenDoor(doornumber, pos);
+						else
+							shaft->CloseDoor(doornumber);
+					}
 					else
-						shaft->CloseDoor(doornumber);
+					{
+						if (shaft->IsDoorMoving(doornumber) == false)
+							shaft->CloseDoor(doornumber);
+						else
+							shaft->OpenDoor(doornumber, pos);
+					}
 				}
 				else
-				{
-					if (shaft->IsDoorMoving(doornumber) == false)
-						shaft->CloseDoor(doornumber);
-					else
-						shaft->OpenDoor(doornumber, pos);
-				}
+					shaft->LockDoor(doornumber, pos);
 			}
 		}
 	}

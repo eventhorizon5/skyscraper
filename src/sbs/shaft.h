@@ -91,6 +91,7 @@ public:
 	bool IsDoorOpen(int number);
 	bool IsDoorMoving(int number);
 	void RemoveDoor(Door *door);
+	void LockDoor(int number, Ogre::Vector3 &position);
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array

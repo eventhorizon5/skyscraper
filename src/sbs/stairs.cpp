@@ -850,3 +850,16 @@ void Stairs::Init()
 	//startup initialization of stairs
 	EnableWholeStairwell(false);
 }
+
+void Stairs::LockDoor(int number, Ogre::Vector3 &position)
+{
+	//lock specified door
+	if (number < (int)DoorArray.size())
+	{
+		if (DoorArray[number].object)
+			DoorArray[number].object->Lock(position);
+	}
+	else
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+
+}

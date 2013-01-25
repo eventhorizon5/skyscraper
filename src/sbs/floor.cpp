@@ -1241,3 +1241,15 @@ Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector
 	return trigger->object;
 }
 
+void Floor::LockDoor(int number, Ogre::Vector3 &position)
+{
+	//lock specified door
+	if (number < (int)DoorArray.size())
+	{
+		if (DoorArray[number])
+			DoorArray[number]->Lock(position);
+	}
+	else
+		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+
+}

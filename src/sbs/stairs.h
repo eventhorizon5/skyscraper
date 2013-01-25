@@ -77,6 +77,7 @@ public:
 	Object* AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	void Init();
+	void LockDoor(int number, Ogre::Vector3 &position);
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array

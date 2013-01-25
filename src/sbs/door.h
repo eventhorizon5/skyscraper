@@ -55,8 +55,8 @@ public:
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	Ogre::Vector3 GetPosition();
 	void SetLocked(int side);
-	void Lock();
-	void Unlock();
+	void Lock(const Ogre::Vector3 &position);
+	void Unlock(const Ogre::Vector3 &position);
 	bool GetSide(const Ogre::Vector3 &position);
 	bool IsLocked(const Ogre::Vector3 &position);
 
