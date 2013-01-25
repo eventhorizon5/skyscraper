@@ -314,11 +314,11 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 	SBS_PROFILE("WallObject::IntersectsWall");
 	float pr, best_pr = 2000000000.;
 	int best_i = -1;
-	Ogre::Vector3 cur_isect;
+	Ogre::Vector3 cur_isect, normal;
 
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
-		if (handles[i].IntersectSegment(meshwrapper, start, end, cur_isect, &pr, convert))
+		if (handles[i].IntersectSegment(meshwrapper, start, end, cur_isect, &pr, normal, convert))
 		{
 			if (pr < best_pr)
 			{

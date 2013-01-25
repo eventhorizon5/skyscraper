@@ -476,7 +476,7 @@ bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre:
 	return true;
 }
 
-bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, bool convert, bool rescale)
+bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal, bool convert, bool rescale)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -488,13 +488,13 @@ bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start,
 		if (!IntersectRay(vertices[i], start, end))
 			continue;
 
-		if (IntersectSegmentPlane(vertices[i], start, end, isect, pr))
+		if (IntersectSegmentPlane(vertices[i], start, end, isect, pr, normal))
 			return true;
 	}
 	return false;
 }
 
-bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr)
+bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -553,5 +553,6 @@ bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, co
 	if (r < 0 /*-SMALL_EPSILON*/ || r > 1)
 		return false;
 
+	normal = norm;
 	return true;
 }

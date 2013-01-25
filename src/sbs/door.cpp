@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -46,6 +46,12 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	//7 = faces back, opens back
 	//8 = faces back, opens front
 
+	//lock table:
+	//0 = unlocked
+	//1 = negative (left/front) side locked
+	//2 = positive (right/back) side locked
+	//3 = both sides locked
+
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, parent, "Door", name, false);
@@ -53,6 +59,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	IsEnabled = true;
 	Name = name;
 	Direction = direction;
+	Locked = locked;
 	OpenState = false;
 	IsMoving = false;
 	float x1 = 0, z1 = 0, x2 = 0, z2 = 0;
@@ -132,7 +139,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//open door on startup (without sound) if specified
 	if (open_state == true)
-		Open(false);
+		Open(origin, false, true);
 }
 
 Door::~Door()
@@ -168,13 +175,29 @@ Door::~Door()
 	delete object;
 }
 
-void Door::Open(bool playsound)
+void Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 {
+	//position is the camera position, used to check if the door is locked
+	//if force is true, locking/position check will be bypassed
+
 	sbs->Report(std::string("Opening door " + Name).c_str());
+
 	if (!sbs->RegisterDoorCallback(this))
 		return;
+
+	if (force == false)
+	{
+		//check lock state
+		if (IsLocked(position) == true)
+		{
+			sbs->Report(std::string("Door " + Name + " is locked").c_str());
+			return;
+		}
+	}
+
 	if (IsMoving == false)
 		OpenDoor = true;
+
 	if (playsound == true)
 	{
 		sound->Load(OpenSound.c_str());
@@ -186,10 +209,13 @@ void Door::Open(bool playsound)
 void Door::Close(bool playsound)
 {
 	sbs->Report(std::string("Closing door " + Name).c_str());
+
 	if (!sbs->RegisterDoorCallback(this))
 		return;
+
 	if (IsMoving == false)
 		OpenDoor = false;
+
 	if (playsound == true)
 	{
 		sound->Load(CloseSound.c_str());
@@ -266,4 +292,62 @@ Ogre::Vector3 Door::GetPosition()
 	//return the door's position
 
 	return DoorMesh->GetPosition();
+}
+
+void Door::SetLocked(int side)
+{
+	//lock table:
+	//0 = unlocked
+	//1 = negative (left/front) side locked
+	//2 = positive (right/back) side locked
+	//3 = both sides locked
+
+	if (side < 0 || side > 3)
+		return;
+
+	Locked = side;
+}
+
+void Door::Lock()
+{
+	//fully lock door
+
+	Locked = 3;
+}
+
+void Door::Unlock()
+{
+	//fully unlock door
+
+	Locked = 0;
+}
+
+bool Door::GetSide(const Ogre::Vector3 &position)
+{
+	//return which side of the door the position is (false for negative/left/front, true for positive/right/back)
+
+	if ((Direction >= 1 && Direction <= 4) && position.x > origin.x)
+		return true;
+
+	if ((Direction >= 5 && Direction <= 8) && position.z > origin.z)
+		return true;
+
+	return false;
+}
+
+bool Door::IsLocked(const Ogre::Vector3 &position)
+{
+	//returns if the door's side (in relation to the given position) is locked or not
+
+	if (Locked == 0)
+		return false;
+
+	if (Locked == 3)
+		return true;
+
+	bool side = GetSide(position);
+
+	if ((Locked == 1 && side == false) || (Locked == 2 && side == true))
+		return true;
+	return false;
 }

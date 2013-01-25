@@ -45,15 +45,20 @@ public:
 	std::string OpenSound; //opening sound
 	std::string CloseSound; //closing sound
 
-	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
+	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
-	void Open(bool playsound = true);
+	void Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
 	void Close(bool playsound = true);
 	bool IsOpen();
 	void Enabled(bool value);
 	void MoveDoor();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	Ogre::Vector3 GetPosition();
+	void SetLocked(int side);
+	void Lock();
+	void Unlock();
+	bool GetSide(const Ogre::Vector3 &position);
+	bool IsLocked(const Ogre::Vector3 &position);
 
 private:
 	MeshObject* DoorMesh; //door mesh
@@ -62,9 +67,16 @@ private:
 	Sound *sound;
 
 	float rotation;
+	int Locked;
 
 	char intbuffer[65];
 	char buffer[20];
+};
+
+struct DoorMap
+{
+	int floornumber; //associated floor number
+	Door *object; //door object reference
 };
 
 #endif

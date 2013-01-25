@@ -571,6 +571,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	MeshObject* bestmesh = 0;
 	int best_i = -1;
 	std::string prevmesh = "";
+	Ogre::Vector3 pos = GetPosition();
 
 	//get collided collision object
 	//for (int i = 0; i < callback.getCollisionCount(); i++)
@@ -603,7 +604,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 
 		Ogre::Vector3 isect;
 		float distance = best_distance;
-		int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, distance, false, false);
+		Ogre::Vector3 normal = Ogre::Vector3::ZERO;
+		int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, distance, normal, false, false);
 
 		/*if (distance < best_distance)
 		{
@@ -776,7 +778,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 				if (floor->IsDoorOpen(doornumber) == false)
 				{
 					if (floor->IsDoorMoving(doornumber) == false)
-						floor->OpenDoor(doornumber);
+						floor->OpenDoor(doornumber, pos);
 					else
 						floor->CloseDoor(doornumber);
 				}
@@ -785,7 +787,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					if (floor->IsDoorMoving(doornumber) == false)
 						floor->CloseDoor(doornumber);
 					else
-						floor->OpenDoor(doornumber);
+						floor->OpenDoor(doornumber, pos);
 				}
 			}
 		}
@@ -800,7 +802,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 				if (stairs->IsDoorOpen(doornumber) == false)
 				{
 					if (stairs->IsDoorMoving(doornumber) == false)
-						stairs->OpenDoor(doornumber);
+						stairs->OpenDoor(doornumber, pos);
 					else
 						stairs->CloseDoor(doornumber);
 				}
@@ -809,7 +811,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					if (stairs->IsDoorMoving(doornumber) == false)
 						stairs->CloseDoor(doornumber);
 					else
-						stairs->OpenDoor(doornumber);
+						stairs->OpenDoor(doornumber, pos);
 				}
 			}
 		}
@@ -824,7 +826,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 				if (elevator->IsDoorOpen(doornumber) == false)
 				{
 					if (elevator->IsDoorMoving(doornumber) == false)
-						elevator->OpenDoor(doornumber);
+						elevator->OpenDoor(doornumber, pos);
 					else
 						elevator->CloseDoor(doornumber);
 				}
@@ -833,7 +835,31 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 					if (elevator->IsDoorMoving(doornumber) == false)
 						elevator->CloseDoor(doornumber);
 					else
-						elevator->OpenDoor(doornumber);
+						elevator->OpenDoor(doornumber, pos);
+				}
+			}
+		}
+		if (meshname.substr(0, 5) == "Shaft")
+		{
+			int marker = meshname.find(":");
+			int shaftnumber = atoi(meshname.substr(9, marker - 9).c_str());
+			int doornumber = atoi(meshname.substr(marker + 5).c_str());
+			Shaft *shaft = sbs->GetShaft(shaftnumber);
+			if (shaft)
+			{
+				if (shaft->IsDoorOpen(doornumber) == false)
+				{
+					if (shaft->IsDoorMoving(doornumber) == false)
+						shaft->OpenDoor(doornumber, pos);
+					else
+						shaft->CloseDoor(doornumber);
+				}
+				else
+				{
+					if (shaft->IsDoorMoving(doornumber) == false)
+						shaft->CloseDoor(doornumber);
+					else
+						shaft->OpenDoor(doornumber, pos);
 				}
 			}
 		}

@@ -4123,7 +4123,7 @@ void Elevator::HoldDoors(int number)
 	}
 }
 
-Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -4160,17 +4160,17 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 	StdDoorArray.resize(StdDoorArray.size() + 1);
 	std::string elevnum = _itoa(Number, intbuffer, 10);
 	std::string num = _itoa((int)StdDoorArray.size() - 1, intbuffer, 10);
-	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, locked, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.size() - 1]->object;
 }
 
-void Elevator::OpenDoor(int number)
+void Elevator::OpenDoor(int number, Ogre::Vector3 &position)
 {
 	//open door
 	if (number < (int)StdDoorArray.size())
 	{
 		if (StdDoorArray[number])
-			StdDoorArray[number]->Open();
+			StdDoorArray[number]->Open(position);
 	}
 	else
 		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));

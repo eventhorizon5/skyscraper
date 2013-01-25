@@ -153,14 +153,7 @@ Stairs::~Stairs()
 			delete StairArray[i];
 		StairArray[i] = 0;
 	}
-	for (int i = 0; i < (int)StairDoorArray.size(); i++)
-	{
-		if (StairDoorArray[i])
-			delete StairDoorArray[i];
-		StairDoorArray[i] = 0;
-	}
 	StairArray.clear();
-	StairDoorArray.clear();
 
 	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)
@@ -426,7 +419,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	return hit;
 }
 
-Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//add a door
 
@@ -479,7 +472,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string stairsnum = _itoa(StairsNum, intbuffer, 10);
 	std::string num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
-	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, locked, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }
@@ -624,13 +617,13 @@ void Stairs::EnableDoor(int floor, bool value)
 	}
 }
 
-void Stairs::OpenDoor(int number)
+void Stairs::OpenDoor(int number, Ogre::Vector3 &position)
 {
 	//open door
 	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number].object)
-			DoorArray[number].object->Open();
+			DoorArray[number].object->Open(position);
 	}
 	else
 		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
