@@ -902,11 +902,11 @@ staircase containing 10 steps, the total staircase width would be comprised of
 specified location, and performs a wall cut on that area (this must be called
 after the associated wall is created)<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddDoor <em>opensound,
-closesound, open, texturename, thickness</em>, <em>direction, locked, speed,
+closesound, open, texturename, thickness</em>, <em>direction, speed,
 CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>,
 <em>voffset</em>, <em>tw</em>, <em>th<br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddDoor 1,
-, , False, DoorTexture, 0.2, 1, 0, -8.5, 0, 3.5, 8, 0, 1, 1</font></p>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddDoor
+1, , , False, DoorTexture, 0.2, 1, 0, -8.5, 0, 3.5, 8, 0, 1, 1</font></p>
 
 <p align="left"><em>Direction</em> specifies the direction the door faces (the
 side in which the handle is on the left) and also the direction it opens. These
@@ -920,13 +920,6 @@ are the values:<br>
 7 - faces back, opens back<br>
 8 - faces back, opens front</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><em>Locked</em>
-specifies which sides (directions) are locked. Values are:<br>
-0 - unlocked<br>
-1 - negative-facing (left/front) side locked<br>
-2 - positive-facing (right/back) side locked<br>
-3 - both sides locked</p>
-
 <p align="left">The default door speed is 75; you can also specify 0 for the
 speed to use the system default. The <em>open</em> parameter determines if the
 door should be opened on start; default is false. Leave the sound fields blank
@@ -939,7 +932,7 @@ also performs a wall cut on that area (this must be called after the associated
 wall is created)<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsDoor
 <em>number, opensound, closesound, open, texturename, thickness</em>,
-<em>direction, locked, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
+<em>direction, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
 <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
 
 <p align="left"><em>Number</em> specifies the stairwell number.
@@ -955,7 +948,7 @@ This shouldn't be confused with the AddShaftDoor command, which creates
 elevator shaft doors.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftStdDoor
 <em>number, opensound, closesound, open, texturename, thickness</em>,
-<em>direction, locked, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
+<em>direction, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
 <em>height</em>, <em>voffset</em>, <em>tw</em>,
 <em>th</em></font><em>Number</em> specifies the stairwell number.
 <em>Direction</em> specifies the direction the door faces and also the
@@ -970,7 +963,7 @@ size="2">AddDirectionalIndicator<em> Elevator, Relative, ActiveDirection,
 Single, Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit,
 DownTexture, DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth,
 BackHeight, ShowBack, tw, th<br>
-</em></font>Example:<font face="Courier New, Courier, mono"
+</em></font>Example: <font face="Courier New, Courier, mono"
 size="2"><em>AddDirectionalIndicator 1, true, false, false, true, Metal,
 UpLight, UpLightOn, DownLight, DownLightOn, -3, -4.162, 6, front, 0.5, 1, true,
 0, 0</em></font></p>
@@ -1166,9 +1159,9 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em> name,
 filename, center, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
 MaxRenderDistance, ScaleMultiplier, EnablePhysics, Restitution, Friction,
 Mass</em><em><br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
 MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font><br>
-Example:<font face="Courier New, Courier, mono" size="2">AddModel MyModel,
+Example:<font face="Courier New, Courier, mono" size="2"> AddModel MyModel,
 cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
 
 <p></p>
@@ -1192,7 +1185,7 @@ Syntax: <font face="Courier New, Courier, mono"
 size="2">AddStairsModel<em> number, name, filename, center, CenterX, CenterY,
 CenterZ, RotationX, RotationY, RotationZ, MaxRenderDistance, ScaleMultiplier,
 EnablePhysics, Restitution, Friction, Mass</em><em><br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
 1, MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
 <p align="left">The CenterY value is relative to the current floor's altitude.
@@ -1205,7 +1198,7 @@ Syntax: <font face="Courier New, Courier, mono"
 size="2">AddShaftModel<em> number, name, filename, center, CenterX, CenterY,
 CenterZ, RotationX, RotationY, RotationZ, MaxRenderDistance, ScaleMultiplier,
 EnablePhysics, Restitution, Friction, Mass</em><em><br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
 1, MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
 <p align="left">The CenterY value is relative to the current floor's altitude.
@@ -1277,11 +1270,11 @@ sound field blank for no sound to be played.<strong></strong></p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
 the user's camera enters or leaves the defined area.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,
+Syntax: <font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,
 sound, start_x, start_y, start_z, end_x, end_y, end_z, action_names(s)<br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddTrigger
-MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction,
-MyAction</font><br>
+</em></font>Example:<font face="Courier New, Courier, mono"
+size="2"> AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20,
+UndoMyAction, MyAction</font><br>
 <br>
 AddTrigger creates a trigger similar to action controls (AddActionControl) and
 elevator controls. The action_names(s) parameter allows you to specify a list
@@ -1716,7 +1709,22 @@ only be played while elevator is moving or not. Default is false.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">MusicOnMove =
 true</font></p>
 
-<p align="left"><strong></strong></p>
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>59.
+Interlocks</strong> - Enables or disables automatic creation of elevator door
+interlocks. This can be switched during elevator commands to turn on and off
+certain interlocks (for example, specific shaft doors only). Default is
+true.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Interlocks =
+false</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>60.
+InterlockTexture</strong> - Sets the texture used for interlocks. The default
+is Connection.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">InterlockTexture =
+mytexture</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><font
+face="Courier New, Courier, mono" size="2"></font></p>
 
 <p align="left"><strong>Commands:</strong></p>
 
@@ -1912,7 +1920,7 @@ size="2">AddDirectionalIndicator<em> ActiveDirection, Single, Vertical,
 BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture,
 DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight,
 ShowBack, tw, th<br>
-</em></font>Example:<font face="Courier New, Courier, mono"
+</em></font>Example: <font face="Courier New, Courier, mono"
 size="2"><em>AddDirectionalIndicator false, false, true, Metal, UpLight,
 UpLightOn, DownLight, DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0,
 0</em></font></p>
@@ -1969,9 +1977,9 @@ Vertical, BackTexture</em>, <em>UpTexture</em>, <em>UpTextureLit, DownTexture,
 DownTextureLit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight,
 ShowBack, tw, th<br>
 </em></font>Example:<font face="Courier New, Courier, mono"
-size="2"><em>AddDirectionalIndicators true, false, false, true, Metal, UpLight,
-UpLightOn, DownLight, DownLightOn, -3, -4.162, 6, front, 0.5, 1, true, 0,
-0</em></font></p>
+size="2"><em> AddDirectionalIndicators true, false, false, true, Metal,
+UpLight, UpLightOn, DownLight, DownLightOn, -3, -4.162, 6, front, 0.5, 1, true,
+0, 0</em></font></p>
 
 <p align="left">This command will create directional indicators on all floors
 the elevator serves. It'll also automatically create the up and down lights
@@ -2133,7 +2141,7 @@ walls (shaft and outer floor walls) must contain the word "Shaft".</p>
 <p align="left"><strong>19. AddDoor</strong> - adds a textured door in the
 specified location, which moves with the elevator<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddDoor <em>opensound,
-closesound, texturename, open, thickness</em>, <em>direction, locked, speed,
+closesound, texturename, open, thickness</em>, <em>direction, speed,
 CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>,
 <em>voffset</em>, <em>tw</em>, <em>th</em></font></p>
 
@@ -2149,7 +2157,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em> name,
 filename, center, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
 MaxRenderDistance, ScaleMultiplier, EnablePhysics, Restitution, Friction,
 Mass</em><em><br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddModel
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
 MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
 <p align="left">The Center value is either true or false, and determines if the
@@ -2188,11 +2196,11 @@ the sound field blank for no sound to be played.<strong></strong></p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
 the user's camera enters or leaves the defined area.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,
+Syntax:<font face="Courier New, Courier, mono" size="2"> AddTrigger <em>name,
 sound, start_x, start_y, start_z, end_x, end_y, end_z, action_names(s)<br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddTrigger
-MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction,
-MyAction</font><br>
+</em></font>Example:<font face="Courier New, Courier, mono"
+size="2"> AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20,
+UndoMyAction, MyAction</font><br>
 <br>
 AddTrigger creates a trigger similar to action controls (AddActionControl) and
 elevator controls. The action_names(s) parameter allows you to specify a list
@@ -2337,7 +2345,7 @@ and does not create the actual walls.</p>
 <p align="left"><strong>j. WallOrientation</strong> - changes the internal wall
 orientation parameter, which is used for determining the wall thickness
 boundaries in relation to their coordinates.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">WallOrientation =
+Syntax:<font face="Courier New, Courier, mono" size="2"> WallOrientation =
 <em>direction</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">WallOrientation =
 left</font></p>
@@ -2361,7 +2369,7 @@ larger.</p>
 <p align="left"><strong>k. FloorOrientation</strong> - changes the internal
 floor orientation parameter, which is used for determining the floor thickness
 boundaries in relation to their coordinates.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">FloorOrientation =
+Syntax:<font face="Courier New, Courier, mono" size="2"> FloorOrientation =
 <em>direction</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">FloorOrientation =
 bottom</font></p>
@@ -2376,7 +2384,7 @@ full thickness is the bottom (negative).</p>
 
 <p align="left"><strong>l. DrawWalls</strong> - specifies which parts of a wall
 or floor should be drawn.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">DrawWalls =
+Syntax:<font face="Courier New, Courier, mono" size="2"> DrawWalls =
 <em>MainNegative, MainPositive, SideNegative, SidePositive, Top,
 Bottom</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">DrawWalls = true,
@@ -2398,7 +2406,7 @@ the left, SidePositive the right, etc.</p>
 
 <p align="left"><strong>m. SetPlanarMapping</strong> - sets the planar texture
 mapper's parameters.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">SetPlanarMapping Flat,
+Syntax: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping Flat,
 FlipX, FlipY, FlipZ, Rotate</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping
 false, false, false, true, false</font></p>
@@ -2432,7 +2440,7 @@ false, false).</p>
 <p align="left"><strong>m. SetTextureMapping</strong> - manually sets UV
 texture mapping for all polygons generated after this command;
 ResetTextureMapping restores the values to the defaults or previous<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">SetTextureMapping
+Syntax:<font face="Courier New, Courier, mono" size="2"> SetTextureMapping
 vertex1, u1, v1, vertex2, u2, v2, vertex3, u3, v3</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetTextureMapping 0,
 0, 0, 1, 1, 0, 2, 1, 1</font></p>
@@ -2478,8 +2486,8 @@ height="300"></p>
 SetTextureMapping - manually sets UV texture mapping for all polygons generated
 after this command; ResetTextureMapping restores the values to the defaults or
 previous<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">SetTextureMapping2 v1x,
-v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y, v3z, u3, v3</font><br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> SetTextureMapping2
+v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y, v3z, u3, v3</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetTextureMapping2
 x0, y0, z0, 0, 0, x1, y1, z1, 1, 0, x2, y2, z2, 1, 1</font></p>
 
@@ -2504,7 +2512,7 @@ x2, y2, z2 -&gt; 1, 1</font></p>
 
 <p align="left"><strong>o. ResetTextureMapping</strong> - resets the texture
 mapping parameters to either the default or previous values<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">ResetTextureMapping =
+Syntax:<font face="Courier New, Courier, mono" size="2"> ResetTextureMapping =
 default</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ResetTextureMapping =
 true </font></p>
@@ -2519,13 +2527,13 @@ command, there are parameters for specifying two different altitudes. By
 default, if the altitudes are different, the floor will angle upward/downward
 along the Z axis (front/back), but if this is set to true, the floor will angle
 along the X axis (left/right).<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">ReverseAxis =
+Syntax:<font face="Courier New, Courier, mono" size="2"> ReverseAxis =
 value</font></p>
 
 <p align="left"><strong>q. ShaftCut</strong> - used in conjunction with a shaft
 object - performs a vertical box cut on all floor objects (floors, ceilings,
 interfloor, etc) in the specified range.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">ShaftCut number,
+Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftCut number,
 startx, startz, endx, endz, start_voffset, end_voffset</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShaftCut 1, -4, -3.5,
 4, 3.5, 0, 5</font></p>
@@ -2552,7 +2560,7 @@ Example: <font face="Courier New, Courier, mono" size="2">CutStairwell 1, -4,
 <p align="left"><strong>s. Isect</strong> - the Isect function calculates the
 position that a line intersects with a certain object, such as a floor. Since
 this is a function, it can be used in-line anywhere.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">isect(destobject,
+Syntax:<font face="Courier New, Courier, mono" size="2"> isect(destobject,
 objectname, startx, starty, startz, endx, endy, endz)</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">isect(external,
 wall1, 10, 10, 0, -10, 10, 0)</font></p>
@@ -2566,7 +2574,7 @@ position. The first intersection of the named object is the return value, in
 
 <p align="left"><strong>t. SetAutoSize</strong> - enables or disables texture
 autosizing<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">SetAutoSize =
+Syntax:<font face="Courier New, Courier, mono" size="2"> SetAutoSize =
 <em>AutoWidth, AutoHeight </em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetAutoSize = true,
 true</font></p>
@@ -2588,7 +2596,7 @@ related stored texture value and then autoadjusted.</p>
 <p align="left"><strong>u. TextureOverride</strong> - overrides textures for
 the next command. Currently only works with the different AddWall, AddFloor and
 AddInterFloor commands.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">TextureOverride
+Syntax:<font face="Courier New, Courier, mono" size="2"> TextureOverride
 <em>MainNegativeTex, MainPositiveTex, SideNegativeTex, SidePositiveTex, TopTex,
 Bottom</em></font><font face="Courier New, Courier, mono"
 size="2"><em>Tex</em></font><br>
@@ -2603,7 +2611,7 @@ have the texture "ElevFloor", but all other sides will use "Metal1".</p>
 <p align="left"><strong>v. ShaftShowFloors</strong> - allows a range of floors
 to be shown either while inside the specified shaft or while inside an elevator
 in the shaft - primarily for glass elevators.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">ShaftShowFloors
+Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftShowFloors
 <em>ShaftNumber</em> = <em>range/list</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShaftShowFloors 1 = 1
 - 10</font></p>
@@ -2618,7 +2626,7 @@ that floor will be invisible/disabled.</p>
 the building (sky, landscape, etc) to be enabled while the user is both inside
 the specified shaft and on one of the specified floors - primarily for glass
 elevators.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">ShowShaftOutside
+Syntax:<font face="Courier New, Courier, mono" size="2"> ShowShaftOutside
 <em>ShaftNumber</em> = <em>range/list</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShowShaftOutside 1 =
 1 - 10</font></p>
@@ -2636,7 +2644,7 @@ be specified using <em>ShaftShowOutside</em> (such as 11-20).</p>
 
 <p align="left"><strong>x. ShowFullShaft</strong> - determines if an entire
 shaft should always be shown, such as a glass elevator track.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">ShowFullShaft
+Syntax:<font face="Courier New, Courier, mono" size="2"> ShowFullShaft
 <em>ShaftNumber</em> = <em>value</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShowFullShaft 1 =
 true</font></p>
@@ -2646,7 +2654,7 @@ the next command.. Currently only works with the different AddWall, AddFloor
 and AddInterFloor commands. The values available are 0 for no flipping, 1 for
 horizontal flip, 2 for vertical flip, and 3 for both horizontal and
 vertical.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">TextureFlip
+Syntax:<font face="Courier New, Courier, mono" size="2"> TextureFlip
 <em>MainNegative, MainPositive, SideNegative, SidePositive, Top,
 Bottom</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">TextureFlip 1, 1, 0,
@@ -2724,7 +2732,7 @@ sound cone.</p>
 command returns the X and Z extents (minimum and maximum values) of a wall, at
 the specified altitude. The command will return the results in the MinX, MinZ,
 MaxX and MaxZ variables.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">GetWallExtents
+Syntax:<font face="Courier New, Courier, mono" size="2"> GetWallExtents
 destobject, wallname, altitude</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">GetWallExtents
 external, wall1:front, 10</font></p>
@@ -2750,11 +2758,11 @@ result, you'd use %minx%.</p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ae.
 AddAction</strong> - defines an action, to be used by custom controls and
 triggers.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">AddAction <em>name,
+Syntax:<font face="Courier New, Courier, mono" size="2"> AddAction <em>name,
 parent_object, command[, parameters</em></font><em>]<br>
-</em>Example:<font face="Courier New, Courier, mono" size="2">AddAction
+</em>Example:<font face="Courier New, Courier, mono" size="2"> AddAction
 MyAction, Floor 2, ChangeTexture, OldTexture, NewTexture</font><br>
-Example:<font face="Courier New, Courier, mono" size="2">AddAction
+Example:<font face="Courier New, Courier, mono" size="2"> AddAction
 MySoundAction, Floor 2, PlaySound, Sound1, false</font><br>
 </p>
 
@@ -2807,11 +2815,11 @@ played.</p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ag.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
 the user's camera enters or leaves the defined area.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">AddTrigger <em>name,
+Syntax:<font face="Courier New, Courier, mono" size="2"> AddTrigger <em>name,
 sound, start_x, start_y, start_z, end_x, end_y, end_z, action_names(s)<br>
-</em></font>Example:<font face="Courier New, Courier, mono" size="2">AddTrigger
-MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20, UndoMyAction,
-MyAction</font><br>
+</em></font>Example:<font face="Courier New, Courier, mono"
+size="2"> AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20,
+UndoMyAction, MyAction</font><br>
 <br>
 AddTrigger creates a trigger similar to action controls (AddActionControl) and
 elevator controls. The action_names(s) parameter allows you to specify a list
@@ -2822,6 +2830,40 @@ specify the 3D box that defines the trigger area. Leave the sound field blank
 for no sound to be played.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
+SetKey</strong> - specifies that the next created model will be a key. The
+model will be tagged with a specific key ID number, and when clicked, the key
+ID will be added to the user's keyring and the model will be deleted. The value
+must be greater than 0.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> SetKey
+<em>keyid</em></font><br>
+Example: SetKey 1</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ai.
+SetLock</strong> - sets the lock and key parameters for subsequent doors and
+controls (including buttons) that are created.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> SetLock
+<em>locked</em>, <em>keyid</em></font><br>
+Example: SetLock 1, 3</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">For doors,
+<em>locked</em> specifies which sides (directions) are locked. Values are:<br>
+0 - unlocked<br>
+1 - negative-facing (left/front) side locked<br>
+2 - positive-facing (right/back) side locked<br>
+3 - both sides locked</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">For
+controls/buttons, the <em>locked</em> values are:<br>
+0 - unlocked<br>
+1 - locked</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">Locked objects can
+only be unlocked if the person has the key number specified as <em>keyid</em>.
+If <em>keyid</em> is 0, no key is needed to lock or unlock. To reset to the
+defaults, use 0 for the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
+</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aj.
 Print</strong> - prints the contents of a line to the console. This command
 will still convert variables and even math expressions, and output the
 results.<br>

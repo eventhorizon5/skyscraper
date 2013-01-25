@@ -45,10 +45,15 @@ public:
 	Ogre::Vector3 GetRotation();
 	bool IsEnabled();
 	void Enable(bool value);
+	bool IsKey();
+	int GetKeyID();
+	void SetKey(int keyid);
 
 private:
 
 	MeshObject* mesh;
+	bool is_key;
+	int KeyID;
 };
 
 #endif

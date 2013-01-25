@@ -363,7 +363,10 @@ public:
 	void IncrementMaterialCount();
 	void DecrementMaterialCount();
 	std::vector<Sound*> GetSound(const char *name);
-	
+	void AddKey(int keyid, std::string name);
+	bool CheckKey(int keyid);
+	void ListKeys();
+
 	//Meshes
 	MeshObject* Buildings;
 	MeshObject* External;
@@ -542,6 +545,15 @@ private:
 		unsigned char *buffer;
 	};
 	std::vector<TexturePixelBox> textureboxes;
+
+	//keys
+	struct Key
+	{
+		int id;
+		std::string name;
+	};
+
+	std::vector<Key> keys;
 
 	//function caching
 	Floor* getfloor_result;

@@ -76,6 +76,9 @@ class ScriptProcessor
 	std::vector<std::string> nonexistent_files;
 	bool CalcError;
 	bool ReverseAxis;
+	bool setkey;
+	int keyvalue;
+	int lockvalue;
 
 	int ScriptError(std::string message);
 	int ScriptError();

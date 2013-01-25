@@ -39,6 +39,9 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	object->SetValues(this, parent, "Model", name, false);
 	Origin = position;
 	Offset = 0;
+	is_key = false;
+	KeyID = 0;
+	Name = name;
 
 	load_error = false;
 	mesh = new MeshObject(object, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -116,4 +119,20 @@ void Model::Enable(bool value)
 bool Model::IsEnabled()
 {
 	return mesh->IsEnabled();
+}
+
+bool Model::IsKey()
+{
+	return is_key;
+}
+
+int Model::GetKeyID()
+{
+	return KeyID;
+}
+
+void Model::SetKey(int keyid)
+{
+	is_key = true;
+	KeyID = keyid;
 }

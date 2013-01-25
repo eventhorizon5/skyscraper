@@ -44,6 +44,7 @@ class CreateObject: public wxDialog
 		wxButton* bAddShaftWall;
 		wxButton* bAddWall;
 		wxButton* bColumnWallBox;
+		wxButton* bAddShaftStdDoor;
 		wxButton* bFloorAddModel;
 		wxButton* bFloorAddSound;
 		wxButton* bFinishShaftDoor;
@@ -102,6 +103,7 @@ class CreateObject: public wxDialog
 		static const long ID_bFloorAddModel;
 		static const long ID_bAddStairsModel;
 		static const long ID_bAddShaftModel;
+		static const long ID_bAddShaftStdDoor;
 		static const long ID_bElevator;
 		static const long ID_bShaft;
 		//*)
@@ -140,6 +142,7 @@ class CreateObject: public wxDialog
 		void On_bFloorAddModel_Click(wxCommandEvent& event);
 		void On_bAddStairsModel_Click(wxCommandEvent& event);
 		void On_bAddShaftModel_Click(wxCommandEvent& event);
+		void On_bAddShaftStdDoor_Click(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

@@ -952,6 +952,15 @@ void Skyscraper::DrawBackground()
 	{
 		buttoncount = GetConfigInt("Skyscraper.Frontend.Menu.Buttons", 5);
 		buttons = new buttondata[buttoncount];
+
+		for (int i = 0; i < buttoncount; i++)
+		{
+			buttons[i].node = 0;
+			buttons[i].drawn_selected = false;
+			buttons[i].drawn_pressed = false;
+			buttons[i].active_button = 0;
+			buttons[i].rect = 0;
+		}
 	}
 
 	for (int i = 0; i < buttoncount; i++)

@@ -65,6 +65,7 @@ const long CreateObject::ID_bFinishShaftDoor = wxNewId();
 const long CreateObject::ID_bFloorAddModel = wxNewId();
 const long CreateObject::ID_bAddStairsModel = wxNewId();
 const long CreateObject::ID_bAddShaftModel = wxNewId();
+const long CreateObject::ID_bAddShaftStdDoor = wxNewId();
 const long CreateObject::ID_bElevator = wxNewId();
 const long CreateObject::ID_bShaft = wxNewId();
 //*)
@@ -124,7 +125,7 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	GridSizer1->Add(bAddStairsDoor, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bAddDirectionalIndicator = new wxButton(this, ID_bAddDirectionalIndicator, _("Directional Indicator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddDirectionalIndicator"));
 	GridSizer1->Add(bAddDirectionalIndicator, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	bAddShaftDoor = new wxButton(this, ID_bAddShaftDoor, _("Shaft Door"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddShaftDoor"));
+	bAddShaftDoor = new wxButton(this, ID_bAddShaftDoor, _("Shaft Elevator Door"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddShaftDoor"));
 	GridSizer1->Add(bAddShaftDoor, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bAddFloorIndicator = new wxButton(this, ID_bAddFloorIndicator, _("Floor Indicator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddFloorIndicator"));
 	GridSizer1->Add(bAddFloorIndicator, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
@@ -146,6 +147,8 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	GridSizer1->Add(bAddStairsModel, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bAddShaftModel = new wxButton(this, ID_bAddShaftModel, _("Shaft Model"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddShaftModel"));
 	GridSizer1->Add(bAddShaftModel, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bAddShaftStdDoor = new wxButton(this, ID_bAddShaftStdDoor, _("Shaft Standard Door"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddShaftStdDoor"));
+	GridSizer1->Add(bAddShaftStdDoor, 1, wxALL|wxEXPAND|wxALIGN_TOP, 5);
 	StaticBoxSizer2->Add(GridSizer1, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Elevators"));
@@ -191,6 +194,7 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	Connect(ID_bFloorAddModel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bFloorAddModel_Click);
 	Connect(ID_bAddStairsModel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddStairsModel_Click);
 	Connect(ID_bAddShaftModel,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddShaftModel_Click);
+	Connect(ID_bAddShaftStdDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bAddShaftStdDoor_Click);
 	Connect(ID_bElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bElevator_Click);
 	Connect(ID_bShaft,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bShaft_Click);
 	//*)
@@ -474,4 +478,8 @@ void CreateObject::On_bAddShaftModel_Click(wxCommandEvent& event)
 	viewer = new ParameterViewer(this, wxT("AddShaftModel"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
+}
+
+void CreateObject::On_bAddShaftStdDoor_Click(wxCommandEvent& event)
+{
 }

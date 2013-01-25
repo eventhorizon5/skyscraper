@@ -62,6 +62,10 @@ public:
 	bool DoAction();
 	bool Press();
 	void ChangeLight(int floor, bool value);
+	void SetLocked(bool value, int keyid);
+	bool IsLocked();
+	void ToggleLock(bool force = false);
+	int GetKeyID();
 
 private:
 	MeshObject* ControlMesh; //control mesh object
@@ -70,6 +74,8 @@ private:
 	std::vector<std::string> Actions; //button actions
 
 	Sound *sound; //sound object
+	bool Locked;
+	int KeyID;
 
 };
 

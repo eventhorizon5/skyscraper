@@ -52,17 +52,14 @@ public:
 	void Enabled(int floor, bool value);
 	void EnableWholeStairwell(bool value);
 	bool IsInStairwell(const Ogre::Vector3 &position);
-	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset);
 	bool CutWall(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
 	void EnableDoor(int floor, bool value);
-	void OpenDoor(int number, Ogre::Vector3 &position);
-	void CloseDoor(int number);
-	bool IsDoorOpen(int number);
+	Door* GetDoor(int number);
 	bool IsEnabledFloor(int floor);
 	bool IsValidFloor(int floor);
-	bool IsDoorMoving(int number);
 	void Report(std::string message);
 	bool ReportError(std::string message);
 	void RemoveDoor(Door *door);
@@ -77,7 +74,6 @@ public:
 	Object* AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	void Init();
-	void LockDoor(int number, Ogre::Vector3 &position);
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array

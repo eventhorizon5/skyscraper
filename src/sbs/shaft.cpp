@@ -780,7 +780,7 @@ void Shaft::Init()
 		EnableWholeShaft(true, true, true);
 }
 
-Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//add a door
 
@@ -833,7 +833,7 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string shaftnum = _itoa(ShaftNumber, intbuffer, 10);
 	std::string num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
-	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, locked, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }
@@ -852,54 +852,16 @@ void Shaft::EnableDoor(int floor, bool value)
 	}
 }
 
-void Shaft::OpenDoor(int number, Ogre::Vector3 &position)
+Door* Shaft::GetDoor(int number)
 {
-	//open door
+	//get door object
 	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number].object)
-			DoorArray[number].object->Open(position);
+			return DoorArray[number].object;
 	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-}
 
-void Shaft::CloseDoor(int number)
-{
-	//close door
-	if (number < (int)DoorArray.size())
-	{
-		if (DoorArray[number].object)
-			DoorArray[number].object->Close();
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-}
-
-bool Shaft::IsDoorOpen(int number)
-{
-	//check to see if door is open
-	if (number < (int)DoorArray.size())
-	{
-		if (DoorArray[number].object)
-			return DoorArray[number].object->IsOpen();
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-	return false;
-}
-
-bool Shaft::IsDoorMoving(int number)
-{
-	//check to see if door is moving
-	if (number < (int)DoorArray.size())
-	{
-		if (DoorArray[number].object)
-			return DoorArray[number].object->IsMoving;
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-	return false;
+	return 0;
 }
 
 void Shaft::RemoveDoor(Door *door)
@@ -913,17 +875,4 @@ void Shaft::RemoveDoor(Door *door)
 			return;
 		}
 	}
-}
-
-void Shaft::LockDoor(int number, Ogre::Vector3 &position)
-{
-	//lock specified door
-	if (number < (int)DoorArray.size())
-	{
-		if (DoorArray[number].object)
-			DoorArray[number].object->ToggleLock(position);
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-
 }

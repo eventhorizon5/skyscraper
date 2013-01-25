@@ -171,6 +171,8 @@ Elevator::Elevator(int number)
 	musicsound = 0;
 	elevposition = 0;
 	lastposition = 0;
+	Interlocks = true;
+	InterlockTexture = "Connection";
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -4123,7 +4125,7 @@ void Elevator::HoldDoors(int number)
 	}
 }
 
-Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -4160,60 +4162,21 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 	StdDoorArray.resize(StdDoorArray.size() + 1);
 	std::string elevnum = _itoa(Number, intbuffer, 10);
 	std::string num = _itoa((int)StdDoorArray.size() - 1, intbuffer, 10);
-	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, locked, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.size() - 1]->object;
 }
 
-void Elevator::OpenDoor(int number, Ogre::Vector3 &position)
+Door* Elevator::GetStdDoor(int number)
 {
-	//open door
+	//get door object
 	if (number < (int)StdDoorArray.size())
 	{
 		if (StdDoorArray[number])
-			StdDoorArray[number]->Open(position);
+			return StdDoorArray[number];
 	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-}
 
-void Elevator::CloseDoor(int number)
-{
-	//close door
-	if (number < (int)StdDoorArray.size())
-	{
-		if (StdDoorArray[number])
-			StdDoorArray[number]->Close();
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+	return 0;
 }
-
-bool Elevator::IsDoorOpen(int number)
-{
-	//check to see if door is open
-	if (number < (int)StdDoorArray.size())
-	{
-		if (StdDoorArray[number])
-			return StdDoorArray[number]->IsOpen();
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-	return false;
-}
-
-bool Elevator::IsDoorMoving(int number)
-{
-	//check to see if door is moving
-	if (number < (int)StdDoorArray.size())
-	{
-		if (StdDoorArray[number])
-			return StdDoorArray[number]->IsMoving;
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-	return false;
-}
-
 void Elevator::RemovePanel(ButtonPanel* panel)
 {
 	//remove a button panel reference (does not delete the object itself)
@@ -4706,17 +4669,4 @@ void Elevator::Init()
 
 	//move elevator to starting position
 	SetFloor(OriginFloor);
-}
-
-void Elevator::LockDoor(int number, Ogre::Vector3 &position)
-{
-	//lock specified door
-	if (number < (int)DoorArray.size())
-	{
-		if (StdDoorArray[number])
-			StdDoorArray[number]->ToggleLock(position);
-	}
-	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
-
 }

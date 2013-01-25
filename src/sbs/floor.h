@@ -74,7 +74,7 @@ public:
 	void RemoveGroupFloor(int number);
 	void EnableGroup(bool value);
 	bool IsInGroup(int floor);
-	Object* AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Object* AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	bool CalculateAltitude();
 	void EnableColumnFrame(bool value);
 	WallObject* ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
@@ -93,10 +93,7 @@ public:
 	void Report(std::string message);
 	bool ReportError(std::string message);
 	float GetBase(bool relative = false);
-	void OpenDoor(int number, Ogre::Vector3 &position);
-	void CloseDoor(int number);
-	bool IsDoorOpen(int number);
-	bool IsDoorMoving(int number);
+	Door* GetDoor(int number);
 	void RemoveCallButton(CallButton *callbutton);
 	void RemoveFloorIndicator(FloorIndicator *indicator);
 	void RemoveDirectionalIndicator(DirectionalIndicator *indicator);
@@ -112,7 +109,6 @@ public:
 	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	std::vector<Sound*> GetSound(const char *name);
-	void LockDoor(int number, Ogre::Vector3 &position);
 
 private:
 	char intbuffer[65];

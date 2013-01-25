@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -46,12 +46,6 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	//7 = faces back, opens back
 	//8 = faces back, opens front
 
-	//lock table:
-	//0 = unlocked
-	//1 = negative (left/front) side locked
-	//2 = positive (right/back) side locked
-	//3 = both sides locked
-
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, parent, "Door", name, false);
@@ -59,7 +53,6 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	IsEnabled = true;
 	Name = name;
 	Direction = direction;
-	Locked = locked;
 	OpenState = false;
 	IsMoving = false;
 	float x1 = 0, z1 = 0, x2 = 0, z2 = 0;
@@ -68,6 +61,8 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	OpenSound = open_sound;
 	CloseSound = close_sound;
 	Speed = speed;
+	Locked = 0;
+	KeyID = 0;
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
@@ -294,7 +289,7 @@ Ogre::Vector3 Door::GetPosition()
 	return DoorMesh->GetPosition();
 }
 
-void Door::SetLocked(int side)
+void Door::SetLocked(int side, int keyid)
 {
 	//lock table:
 	//0 = unlocked
@@ -306,13 +301,27 @@ void Door::SetLocked(int side)
 		return;
 
 	Locked = side;
+	KeyID = keyid;
 }
 
-void Door::ToggleLock(const Ogre::Vector3 &position)
+void Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 {
 	//toggle lock state of the related door side
+	//if force is true, bypass key check
 
 	bool replocked = false;
+
+	//quit if user doesn't have key, if force is false
+	if (KeyID != 0)
+	{
+		if (sbs->CheckKey(KeyID) == false && force == false)
+		{
+			char intbuffer[10];
+			std::string id = _itoa(KeyID, intbuffer, 10);
+			sbs->Report(std::string("Need key " + id + " to lock/unlock door " + Name).c_str());
+			return;
+		}
+	}
 
 	if (GetSide(position) == false)
 	{
@@ -321,12 +330,12 @@ void Door::ToggleLock(const Ogre::Vector3 &position)
 			Locked = 1;
 			replocked = true;
 		}
-		if (Locked == 1)
+		else if (Locked == 1)
 		{
 			Locked = 0;
 			replocked = false;
 		}
-		if (Locked == 2)
+		else if (Locked == 2)
 		{
 			Locked = 3;
 			replocked = true;
@@ -339,12 +348,12 @@ void Door::ToggleLock(const Ogre::Vector3 &position)
 			Locked = 2;
 			replocked = true;
 		}
-		if (Locked == 1)
+		else if (Locked == 1)
 		{
 			Locked = 3;
 			replocked = true;
 		}
-		if (Locked == 2)
+		else if (Locked == 2)
 		{
 			Locked = 1;
 			replocked = false;
@@ -385,4 +394,9 @@ bool Door::IsLocked(const Ogre::Vector3 &position)
 	if ((Locked == 1 && side == false) || (Locked == 2 && side == true))
 		return true;
 	return false;
+}
+
+int Door::GetKeyID()
+{
+	return KeyID;
 }

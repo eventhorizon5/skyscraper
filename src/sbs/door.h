@@ -45,7 +45,7 @@ public:
 	std::string OpenSound; //opening sound
 	std::string CloseSound; //closing sound
 
-	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
+	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
 	void Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
 	void Close(bool playsound = true);
@@ -54,10 +54,11 @@ public:
 	void MoveDoor();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
 	Ogre::Vector3 GetPosition();
-	void SetLocked(int side);
+	void SetLocked(int side, int keyid);
 	bool GetSide(const Ogre::Vector3 &position);
 	bool IsLocked(const Ogre::Vector3 &position);
-	void ToggleLock(const Ogre::Vector3 &position);
+	void ToggleLock(const Ogre::Vector3 &position, bool force = false);
+	int GetKeyID();
 
 private:
 	MeshObject* DoorMesh; //door mesh
@@ -67,6 +68,7 @@ private:
 
 	float rotation;
 	int Locked;
+	int KeyID;
 
 	char intbuffer[65];
 	char buffer[20];

@@ -124,7 +124,7 @@ ButtonPanel::~ButtonPanel()
 	delete object;
 }
 
-void ButtonPanel::AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
+Object* ButtonPanel::AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
 {
 	//create a standard button at specified row/column position
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%.
@@ -156,11 +156,11 @@ void ButtonPanel::AddButton(const char *sound, const char *texture, const char *
 	}
 	else
 		names.push_back(newtype);
-	AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 
+	return AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 }
 
-void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -230,9 +230,12 @@ void ButtonPanel::AddControl(const char *sound, int row, int column, float bwidt
 		actions.push_back(newname);
 	}
 
-	controls[control_index] = new Control(this->object, buffer.c_str(), sound, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	Control *control = controls[control_index] = new Control(this->object, buffer.c_str(), sound, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+
 	//move control
 	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
+
+	return control->object;
 }
 
 void ButtonPanel::DeleteButton(int row, int column)

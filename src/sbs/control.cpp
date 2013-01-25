@@ -51,6 +51,8 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	IsEnabled = true;
 	TextureArray = textures;
 	current_position = 1;
+	Locked = false;
+	KeyID = 0;
 
 	//create object mesh
 	ControlMesh = new MeshObject(object, Name2.c_str(), false, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -324,6 +326,13 @@ bool Control::Press()
 	//play sound
 	PlaySound();
 
+	//check lock state
+	if (IsLocked() == true)
+	{
+		sbs->Report(std::string("Control " + Name + " is locked").c_str());
+		return false;
+	}
+
 	//get action name of next position state
 	std::string name = GetPositionAction(GetNextSelectPosition());
 
@@ -369,4 +378,48 @@ void Control::Move(const Ogre::Vector3 position, bool relative_x, bool relative_
 
 	//move sound
 	sound->SetPosition(GetPosition());
+}
+
+void Control::SetLocked(bool value, int keyid)
+{
+	//set locked state
+	Locked = value;
+	KeyID = keyid;
+}
+
+void Control::ToggleLock(bool force)
+{
+	//toggle lock state
+	//if force is true, bypass key check
+
+	bool replocked = false;
+
+	//quit if user doesn't have key, if force is false
+	if (KeyID != 0)
+	{
+		if (sbs->CheckKey(KeyID) == false && force == false)
+		{
+			char intbuffer[10];
+			std::string id = _itoa(KeyID, intbuffer, 10);
+			sbs->Report(std::string("Need key " + id + " to lock/unlock control " + Name).c_str());
+			return;
+		}
+	}
+
+	Locked = !Locked;
+
+	if (Locked == true)
+		sbs->Report(std::string("Locked control " + Name).c_str());
+	else
+		sbs->Report(std::string("Unlocked control " + Name).c_str());
+}
+
+bool Control::IsLocked()
+{
+	return Locked;
+}
+
+int Control::GetKeyID()
+{
+	return KeyID;
 }

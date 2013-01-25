@@ -665,16 +665,83 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	else
 		sbs->Report("Clicked on object " + number + ": " + meshname);
 
-	//delete wall if ctrl is pressed
-	if (wall && ctrl == true && object_number > 0)
+	//object checks and actions
+	if (obj)
 	{
-		if (obj)
+		//delete wall if ctrl is pressed
+		if (wall && ctrl == true && object_number > 0)
 		{
 			if (std::string(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
 			else
 				sbs->Report("Cannot delete object " + number);
 			return;
+		}
+
+		//get original object (parent object of clicked mesh)
+		if (obj->GetParent())
+		{
+			std::string type = obj->GetParent()->GetType();
+
+			//check controls
+			if (type == "Control")
+			{
+				Control *control = (Control*)obj->GetParent()->GetRawObject();
+
+				if (control)
+				{
+					if (shift == false)
+						control->Press();
+					else
+						control->ToggleLock();
+				}
+			}
+
+			//check doors
+			if (type == "Door")
+			{
+				Door *door = (Door*)obj->GetParent()->GetRawObject();
+
+				if (door)
+				{
+					if (shift == false)
+					{
+						if (door->IsOpen() == false)
+						{
+							if (door->IsMoving == false)
+								door->Open(pos);
+							else
+								door->Close();
+						}
+						else
+						{
+							if (door->IsMoving == false)
+								door->Close();
+							else
+								door->Open(pos);
+						}
+					}
+					else
+						door->ToggleLock(pos);
+				}
+			}
+
+			//check models
+			if (type == "Model")
+			{
+				Model *model = (Model*)obj->GetParent()->GetRawObject();
+
+				if (model)
+				{
+					//if model is a key, add key to keyring and delete model
+					if (model->IsKey() == true)
+					{
+						sbs->AddKey(model->GetKeyID(), model->Name);
+						sbs->DeleteObject(obj->GetParent());
+						return;
+					}
+				}
+			}
 		}
 	}
 
@@ -715,21 +782,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		}
 	}
 
-	//check controls
-	if ((int)meshname.find("Control") != -1)
-	{
-		//user clicked on a control object
-		if (obj)
-		{
-			if (obj->GetParent())
-			{
-				Control *control = (Control*)obj->GetParent()->GetRawObject();
-				if (control)
-					control->Press();
-			}
-		}
-	}
-
 	//check shaft doors
 	if ((int)meshname.find("Shaft Door") != -1 && shift == true)
 	{
@@ -760,128 +812,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 				sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 2);
 			else
 				sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 2);
-		}
-	}
-
-	//check doors
-	if ((int)meshname.find(":Door") != -1)
-	{
-		//user clicked on a door
-		if (meshname.substr(0, 5) == "Floor")
-		{
-			int marker = meshname.find(":");
-			int floornumber = atoi(meshname.substr(5, marker - 5).c_str());
-			int doornumber = atoi(meshname.substr(marker + 5).c_str());
-			Floor *floor = sbs->GetFloor(floornumber);
-			if (floor)
-			{
-				if (shift == false)
-				{
-					if (floor->IsDoorOpen(doornumber) == false)
-					{
-						if (floor->IsDoorMoving(doornumber) == false)
-							floor->OpenDoor(doornumber, pos);
-						else
-							floor->CloseDoor(doornumber);
-					}
-					else
-					{
-						if (floor->IsDoorMoving(doornumber) == false)
-							floor->CloseDoor(doornumber);
-						else
-							floor->OpenDoor(doornumber, pos);
-					}
-				}
-				else
-					floor->LockDoor(doornumber, pos);
-			}
-		}
-		if (meshname.substr(0, 9) == "Stairwell")
-		{
-			int marker = meshname.find(":");
-			int stairsnumber = atoi(meshname.substr(9, marker - 9).c_str());
-			int doornumber = atoi(meshname.substr(marker + 5).c_str());
-			Stairs *stairs = sbs->GetStairs(stairsnumber);
-			if (stairs)
-			{
-				if (shift == false)
-				{
-					if (stairs->IsDoorOpen(doornumber) == false)
-					{
-						if (stairs->IsDoorMoving(doornumber) == false)
-							stairs->OpenDoor(doornumber, pos);
-						else
-							stairs->CloseDoor(doornumber);
-					}
-					else
-					{
-						if (stairs->IsDoorMoving(doornumber) == false)
-							stairs->CloseDoor(doornumber);
-						else
-							stairs->OpenDoor(doornumber, pos);
-					}
-				}
-				else
-					stairs->LockDoor(doornumber, pos);
-			}
-		}
-		if (meshname.substr(0, 8) == "Elevator" && (int)meshname.find("Shaft Door") == -1 && (int)meshname.find("ElevatorDoor") == -1)
-		{
-			int marker = meshname.find(":");
-			int elevnumber = atoi(meshname.substr(8, marker - 8).c_str());
-			int doornumber = atoi(meshname.substr(marker + 5).c_str());
-			Elevator *elevator = sbs->GetElevator(elevnumber);
-			if (elevator)
-			{
-				if (shift == false)
-				{
-					if (elevator->IsDoorOpen(doornumber) == false)
-					{
-						if (elevator->IsDoorMoving(doornumber) == false)
-							elevator->OpenDoor(doornumber, pos);
-						else
-							elevator->CloseDoor(doornumber);
-					}
-					else
-					{
-						if (elevator->IsDoorMoving(doornumber) == false)
-							elevator->CloseDoor(doornumber);
-						else
-							elevator->OpenDoor(doornumber, pos);
-					}
-				}
-				else
-					elevator->LockDoor(doornumber, pos);
-			}
-		}
-		if (meshname.substr(0, 5) == "Shaft")
-		{
-			int marker = meshname.find(":");
-			int shaftnumber = atoi(meshname.substr(9, marker - 9).c_str());
-			int doornumber = atoi(meshname.substr(marker + 5).c_str());
-			Shaft *shaft = sbs->GetShaft(shaftnumber);
-			if (shaft)
-			{
-				if (shift == false)
-				{
-					if (shaft->IsDoorOpen(doornumber) == false)
-					{
-						if (shaft->IsDoorMoving(doornumber) == false)
-							shaft->OpenDoor(doornumber, pos);
-						else
-							shaft->CloseDoor(doornumber);
-					}
-					else
-					{
-						if (shaft->IsDoorMoving(doornumber) == false)
-							shaft->CloseDoor(doornumber);
-						else
-							shaft->OpenDoor(doornumber, pos);
-					}
-				}
-				else
-					shaft->LockDoor(doornumber, pos);
-			}
 		}
 	}
 }

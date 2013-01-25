@@ -176,7 +176,7 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bAddShaftDoor" variable="bAddShaftDoor" member="yes">
-									<label>Shaft Door</label>
+									<label>Shaft Elevator Door</label>
 									<handler function="On_bAddShaftDoor_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -270,6 +270,15 @@
 									<handler function="On_bAddShaftModel_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_bAddShaftStdDoor" variable="bAddShaftStdDoor" member="yes">
+									<label>Shaft Standard Door</label>
+									<handler function="On_bAddShaftStdDoor_Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxEXPAND|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>

@@ -84,14 +84,10 @@ public:
 	Object* AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	void Init();
-	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, int locked, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
+	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void EnableDoor(int floor, bool value);
-	void OpenDoor(int number, Ogre::Vector3 &position);
-	void CloseDoor(int number);
-	bool IsDoorOpen(int number);
-	bool IsDoorMoving(int number);
+	Door* GetDoor(int number);
 	void RemoveDoor(Door *door);
-	void LockDoor(int number, Ogre::Vector3 &position);
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array

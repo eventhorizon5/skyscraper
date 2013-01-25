@@ -3534,3 +3534,40 @@ bool SBS::RunAction(int index)
 		return action->DoAction();
 	return false;
 }
+
+void SBS::AddKey(int keyid, std::string name)
+{
+	//adds key 'keyid' to the user's keyring
+	Key key;
+	key.id = keyid;
+	key.name = name;
+	keys.push_back(key);
+
+	std::string id = _itoa(keyid, intbuffer, 10);
+	Report("Added key " + id + " (" + name + ") to keyring");
+}
+
+bool SBS::CheckKey(int keyid)
+{
+	//checks to see if the user has the specified key
+
+	for (int i = 0; i < keys.size(); i++)
+	{
+		if (keys[i].id == keyid)
+			return true;
+	}
+	return false;
+}
+
+void SBS::ListKeys()
+{
+	//list all keys
+
+	Report("--- Keys ---\n");
+
+	for (int i = 0; i < keys.size(); i++)
+	{
+		std::string id = _itoa(keys[i].id, intbuffer, 10);
+		Report(id + " - " + keys[i].name);
+	}
+}

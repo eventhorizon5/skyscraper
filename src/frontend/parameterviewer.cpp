@@ -1085,6 +1085,64 @@ bool ParameterViewer::Setup()
 			t16->SetValue(wxT("0"));
 		}
 
+		if (objecttype == wxT("AddShaftStdDoor") && objectparent == wxT("Floor"))
+		{
+			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
+
+			SetTitle(wxT("Floor - AddShaftStdDoor"));
+
+			wxString newlabel = wxT("adds a textured door for the specified shaft, in a location relative to the stairwell's center.\nThis also performs a wall cut on that area (this must be called after the associated wall is created)\n");
+			newlabel = newlabel + wxT("Items with an asterisk (*) are optional.\nMove mouse over parameter name for help");
+
+			tDesc->SetLabel(newlabel);
+			tVariables->SetLabel(wxT("Parameters:\n%floor% - contains the current floor number\n%height% - contains the current floor's ceiling height\n%interfloorheight% - contains the current floor's interfloor height (spacing between floors)\n%fullheight% - contains the current floor's total height, including the interfloor height\n%base% - if the InterfloorOnTop parameter in the Globals section is set to 'false' (the default),\n    then Base refers to the floor's altitude plus interfloor height; otherwise it's the floor's altitude\n"));
+
+			l1->SetLabel(wxT("Floor Number:"));
+			l1->SetToolTip(wxT("Number of floor (such as 1), or a range of floors (such as 5 to 10)"));
+
+			l2->SetLabel(wxT("Shaft Number:"));
+
+			l3->SetLabel(wxT("Open Sound*:"));
+			l3->SetToolTip(wxT("filename of the door open sound"));
+
+			l4->SetLabel(wxT("Close Sound*:"));
+			l4->SetToolTip(wxT("filename of the door close sound"));
+
+			l5->SetLabel(wxT("Open:"));
+			l5->SetToolTip(wxT("determines if the door should be opened on start; default is false."));
+			t5->SetValue(wxT("false"));
+
+			l6->SetLabel(wxT("Texture:"));
+
+			l7->SetLabel(wxT("Thickness:"));
+
+			l8->SetLabel(wxT("Direction:"));
+			l8->SetToolTip(wxT("Direction specifies the direction the door faces (the side in which the handle is on the left) and also the direction it opens. These are the values:\n1 - faces left, opens left\n2 - faces left, opens right\n3 - faces right, opens right\n4 - faces right, opens left\n5 - faces front, opens front\n6 - faces front, opens back\n7 - faces back, opens back\n8 - faces back, opens front"));
+
+			l9->SetLabel(wxT("Speed:"));
+			t9->SetValue(wxT("75"));
+			l9->SetToolTip(wxT("The default door speed is 75; you can also specify 0 for the speed to use the system default."));
+
+			l10->SetLabel(wxT("CenterX:"));
+
+			l11->SetLabel(wxT("CenterZ:"));
+
+			l12->SetLabel(wxT("Width:"));
+			l12->SetToolTip(wxT("the door width"));
+
+			l13->SetLabel(wxT("Height:"));
+			l13->SetToolTip(wxT("the door width"));
+
+			l14->SetLabel(wxT("Vertical Offset:"));
+			l14->SetToolTip(wxT("altitude offset that the object is above each floor"));
+
+			l15->SetLabel(wxT("Texture Tiling Width:"));
+			t15->SetValue(wxT("0"));
+
+			l16->SetLabel(wxT("Texture Tiling Height:"));
+			t16->SetValue(wxT("0"));
+		}
+
 		if (objecttype == wxT("AddShaftDoor") && objectparent == wxT("Floor"))
 		{
 			//t1->SetValue(wxVariant((int)Simcore->Floors).GetString());
