@@ -1247,7 +1247,7 @@ void Floor::LockDoor(int number, Ogre::Vector3 &position)
 	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number])
-			DoorArray[number]->Lock(position);
+			DoorArray[number]->ToggleLock(position);
 	}
 	else
 		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));

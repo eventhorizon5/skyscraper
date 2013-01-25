@@ -4714,7 +4714,7 @@ void Elevator::LockDoor(int number, Ogre::Vector3 &position)
 	if (number < (int)DoorArray.size())
 	{
 		if (StdDoorArray[number])
-			StdDoorArray[number]->Lock(position);
+			StdDoorArray[number]->ToggleLock(position);
 	}
 	else
 		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));

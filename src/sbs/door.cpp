@@ -308,37 +308,53 @@ void Door::SetLocked(int side)
 	Locked = side;
 }
 
-void Door::Lock(const Ogre::Vector3 &position)
+void Door::ToggleLock(const Ogre::Vector3 &position)
 {
-	//lock side of door of the given position
+	//toggle lock state of the related door side
 
-	if (Locked == 3)
-		return;
+	bool replocked = false;
 
-	bool side = GetSide(position);
-
-	if (Locked == 0)
+	if (GetSide(position) == false)
 	{
-		if (side == false)
-			Locked = 1; //lock left side
-		else
-			Locked = 2; //lock right side
+		if (Locked == 0)
+		{
+			Locked = 1;
+			replocked = true;
+		}
+		if (Locked == 1)
+		{
+			Locked = 0;
+			replocked = false;
+		}
+		if (Locked == 2)
+		{
+			Locked = 3;
+			replocked = true;
+		}
 	}
 	else
 	{
-		//fully lock door if standing opposite of a locked side
-		if ((side == false && Locked == 2) || (side == true && Locked == 1))
+		if (Locked == 0)
+		{
+			Locked = 2;
+			replocked = true;
+		}
+		if (Locked == 1)
+		{
 			Locked = 3;
+			replocked = true;
+		}
+		if (Locked == 2)
+		{
+			Locked = 1;
+			replocked = false;
+		}
 	}
 
-	sbs->Report(std::string("Locked door " + Name).c_str());
-}
-
-void Door::Unlock(const Ogre::Vector3 &position)
-{
-	//unlock side of door of the given position
-
-	Locked = 0;
+	if (replocked == true)
+		sbs->Report(std::string("Locked door " + Name).c_str());
+	else
+		sbs->Report(std::string("Unlocked door " + Name).c_str());
 }
 
 bool Door::GetSide(const Ogre::Vector3 &position)

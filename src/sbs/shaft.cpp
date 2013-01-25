@@ -921,7 +921,7 @@ void Shaft::LockDoor(int number, Ogre::Vector3 &position)
 	if (number < (int)DoorArray.size())
 	{
 		if (DoorArray[number].object)
-			DoorArray[number].object->Lock(position);
+			DoorArray[number].object->ToggleLock(position);
 	}
 	else
 		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
