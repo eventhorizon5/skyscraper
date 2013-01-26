@@ -884,6 +884,40 @@ void Camera::Loop()
 		//report name of mesh
 		if (ReportCollisions == true)
 			sbs->Report(LastHitMesh);
+
+		std::string name = LastHitMesh;
+
+		if (name != "")
+		{
+			int index = name.find(")");
+			int number = atoi(name.substr(1, index - 1).c_str());
+			name.erase(name.begin(), name.begin() + index + 1);
+			std::string num = Ogre::StringConverter::toString(number);
+
+			//get SBS object
+			Object *obj = sbs->GetObject(number);
+
+			//get original object (parent object of clicked mesh)
+			if (obj->GetParent())
+			{
+				std::string type = obj->GetParent()->GetType();
+
+				//check elevator doors (door bumpers feature)
+				if (type == "DoorWrapper")
+				{
+					ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
+					ElevatorDoor* door = wrapper->parent;
+
+					if (door)
+					{
+						int whichdoors = door->elev->GetDoor(door->Number)->GetWhichDoors();
+
+						if (door->elev->GetDoor(door->Number)->OpenDoor == -1 && whichdoors == 1)
+							door->elev->OpenDoors(door->Number, 1);
+					}
+				}
+			}
+		}
 	}
 
 	//sync sound listener object to camera position
