@@ -598,6 +598,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
+
 	//SBS_PROFILE("Elevator::AddRoute");
 
 	if (Running == false)
@@ -706,6 +707,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
+
 	//SBS_PROFILE("Elevator::DeleteRoute");
 
 	if (Running == false)
@@ -753,7 +755,6 @@ void Elevator::DeleteRoute(int floor, int direction)
 void Elevator::CancelLastRoute()
 {
 	//cancels the last added route
-
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
 
 	if (Running == false)
@@ -1119,6 +1120,7 @@ void Elevator::ProcessCallQueue()
 int Elevator::GetFloor()
 {
 	//Determine floor that the elevator is on
+
 	//SBS_PROFILE("Elevator::GetFloor");
 
 	int newlastfloor;
@@ -1136,6 +1138,7 @@ int Elevator::GetFloor()
 void Elevator::MonitorLoop()
 {
 	//Monitors elevator and starts actions if needed
+
 	SBS_PROFILE("Elevator::MonitorLoop");
 
 	//make sure height value is set
@@ -1334,6 +1337,7 @@ void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
 	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
+
 	SBS_PROFILE("Elevator::MoveElevatorToFloor");
 
 	Ogre::Vector3 movement = Ogre::Vector3(0, 0, 0);
@@ -3943,6 +3947,7 @@ void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *
 Object* Elevator::FinishDoors(int number)
 {
 	//finishes elevator door
+
 	if (GetDoor(number))
 		return GetDoor(number)->FinishDoors();
 	else
@@ -3965,6 +3970,7 @@ Object* Elevator::FinishShaftDoor(int number, int floor)
 bool Elevator::FinishShaftDoors(int number)
 {
 	//finishes all shaft doors
+
 	if (GetDoor(number))
 		return GetDoor(number)->FinishShaftDoors();
 	else

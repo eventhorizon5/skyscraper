@@ -270,7 +270,6 @@ public:
 	int GetMeshCount();
 	int GetTextureCount();
 	int GetMaterialCount();
-	int GetMeshFactoryCount();
 	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop = true, float volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 0.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	int GetSoundCount();
 	void IncrementSoundCount();

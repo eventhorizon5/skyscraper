@@ -92,7 +92,6 @@ Camera::Camera(Ogre::Camera *camera)
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
-	//FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 73.7397);
 	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
 	object_number = 0;
 	object_line = 0;
@@ -106,7 +105,6 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
 	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0));
-	//MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote(((cfg_body_height + cfg_legs_height) / 2) + 0.5), 0));
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
 	SetFOVAngle(FOV);
@@ -269,7 +267,6 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 	//rotates the camera in a relative amount in world space
 
 	Ogre::Vector3 rot = GetRotation() + (vector.x * speed);
-
 	SetRotation(rot);
 }
 

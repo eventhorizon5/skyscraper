@@ -288,6 +288,7 @@ DirectionalIndicator::~DirectionalIndicator()
 void DirectionalIndicator::Enabled(bool value)
 {
 	//turns panel on/off
+
 	if (value == IsEnabled)
 		return;
 
@@ -305,6 +306,7 @@ void DirectionalIndicator::Enabled(bool value)
 void DirectionalIndicator::UpLight(bool value)
 {
 	//turn on the 'up' directional light
+
 	if (value == UpStatus)
 		return;
 
@@ -324,6 +326,7 @@ void DirectionalIndicator::UpLight(bool value)
 void DirectionalIndicator::DownLight(bool value)
 {
 	//turn on the 'down' directional light
+
 	if (value == DownStatus)
 		return;
 

@@ -1733,9 +1733,6 @@ Floor* SBS::GetFloor(int number)
 {
 	//return pointer to floor object
 
-	/*if (Basements + number < 0)
-		return 0;*/
-
 	//return previous cached entry if the same
 	if (getfloor_number == number && getfloor_result)
 		return getfloor_result;
@@ -2552,13 +2549,6 @@ int SBS::GetMeshCount()
 	return meshes.size();
 }
 
-int SBS::GetMeshFactoryCount()
-{
-	//return total number of mesh factories
-	//return engine->GetMeshFactories()->GetCount();
-	return 0;
-}
-
 Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
@@ -2742,13 +2732,6 @@ bool SBS::UnregisterObject(int number)
 		}
 	}
 	return 0;
-}*/
-
-/*std::string SBS::TruncateNumber(double value, int decimals)
-{
-	//truncates the numeric value to the specified number of decimal places (does not round)
-
-	return Ogre::StringConverter::toString(value, decimals);
 }*/
 
 std::string SBS::TruncateNumber(float value, int decimals)
