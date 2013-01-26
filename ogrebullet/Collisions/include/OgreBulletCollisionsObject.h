@@ -99,6 +99,7 @@ namespace OgreBulletCollisions
 		void setCollisionMask(short CollisionGroup, short CollisionMask);
 
 		Ogre::SceneNode *getRootNode() { return mRootNode; }
+	Object* getLastCollision();
 
     protected:
 

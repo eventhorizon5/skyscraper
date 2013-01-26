@@ -862,6 +862,10 @@ void Camera::Loop()
 		mCharacter->resetCollisions();
 	collision_reset = false;
 
+	//get name of the last hit mesh object
+	if (mCharacter->getLastCollision())
+		LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
+
 	//calculate acceleration
 	InterpolateMovement();
 

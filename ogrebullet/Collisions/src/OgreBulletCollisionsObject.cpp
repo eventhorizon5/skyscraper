@@ -42,13 +42,17 @@ using namespace OgreBulletCollisions;
 
 #include "BulletCollision/CollisionDispatch/btInternalEdgeUtility.h"
 extern ContactAddedCallback             gContactAddedCallback;
+static Object* last_collision;
 
 static bool CustomMaterialCombinerCallback(btManifoldPoint& cp, const btCollisionObjectWrapper* colObj0,int partId0,int index0,const btCollisionObjectWrapper* colObj1,int partId1,int index1)
 {
 
-        btAdjustInternalEdgeContacts(cp, colObj1, colObj0, partId1, index1);
+        //btAdjustInternalEdgeContacts(cp, colObj1, colObj0, partId1, index1);
         //btAdjustInternalEdgeContacts(cp,colObj1,colObj0, partId1,index1, BT_TRIANGLE_CONVEX_BACKFACE_MODE);
         //btAdjustInternalEdgeContacts(cp,colObj1,colObj0, partId1,index1, BT_TRIANGLE_CONVEX_DOUBLE_SIDED+BT_TRIANGLE_CONCAVE_DOUBLE_SIDED);
+
+	last_collision = (Object*)colObj1->getCollisionObject()->getUserPointer();
+
 	return true;
 }
 
@@ -74,6 +78,7 @@ namespace OgreBulletCollisions
         {
             mObject = new btCollisionObject();
             mState = new ObjectState(this);
+	    mObject->setUserPointer(this);
         }
 	gContactAddedCallback = CustomMaterialCombinerCallback;
     }
@@ -251,6 +256,11 @@ namespace OgreBulletCollisions
 		//mObject->setCollisionFlags(mObject->getCollisionFlags() & ~btCollisionObject::CF_NO_CONTACT_RESPONSE);
 		mObject->getBroadphaseHandle()->m_collisionFilterGroup = CollisionGroup;
 		mObject->getBroadphaseHandle()->m_collisionFilterMask = CollisionMask;
+	}
+
+	Object* Object::getLastCollision()
+	{
+		return last_collision;
 	}
 }
 

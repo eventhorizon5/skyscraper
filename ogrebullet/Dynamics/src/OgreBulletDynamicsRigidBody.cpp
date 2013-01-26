@@ -95,6 +95,7 @@ namespace OgreBulletDynamics
 
         mObject = body;
 		mObject->setContactProcessingThreshold(0); //eliminates bouncing when moving over interior mesh triangles
+		mObject->setUserPointer(this);
 
 		updateTransform(true, true, true);
 
@@ -134,6 +135,7 @@ namespace OgreBulletDynamics
 
         mObject = body;
 		updateTransform(true, true, true);
+		mObject->setUserPointer(this);
 
 		if (add == true)
 			addToWorld();
@@ -169,6 +171,7 @@ namespace OgreBulletDynamics
 
         mObject = body;
 		updateTransform(true, true, true);
+		mObject->setUserPointer(this);
 		addToWorld();
 	}
 
