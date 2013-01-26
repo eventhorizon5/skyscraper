@@ -88,6 +88,7 @@ Camera::Camera(Ogre::Camera *camera)
 	lastfloor = 0;
 	lastfloorset = false;
 	MouseDown = false;
+	ReportCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.ReportCollisions", false);
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
 	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
 	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
@@ -877,6 +878,13 @@ void Camera::Loop()
 
 	RotateLocal(angle_velocity, delta * speed);
 	Move(velocity, delta * speed);
+
+	if (CollisionsEnabled() == true)
+	{
+		//report name of mesh
+		if (ReportCollisions == true)
+			sbs->Report(LastHitMesh);
+	}
 
 	//sync sound listener object to camera position
 	sbs->SetListenerPosition(GetPosition());

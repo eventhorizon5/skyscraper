@@ -73,6 +73,9 @@ const long CameraControl::ID_bGravityEnabled = wxNewId();
 const long CameraControl::ID_STATICTEXT17 = wxNewId();
 const long CameraControl::ID_txtCollisions = wxNewId();
 const long CameraControl::ID_bCollisions = wxNewId();
+const long CameraControl::ID_STATICTEXT32 = wxNewId();
+const long CameraControl::ID_txtReportCollisions = wxNewId();
+const long CameraControl::ID_bReportCollisions = wxNewId();
 const long CameraControl::ID_STATICTEXT19 = wxNewId();
 const long CameraControl::ID_txtFreelook = wxNewId();
 const long CameraControl::ID_bFreelook = wxNewId();
@@ -241,6 +244,12 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer3->Add(txtCollisions, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bCollisions = new wxButton(this, ID_bCollisions, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bCollisions"));
 	FlexGridSizer3->Add(bCollisions, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText32 = new wxStaticText(this, ID_STATICTEXT32, _("Report Collisions:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT32"));
+	FlexGridSizer3->Add(StaticText32, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	txtReportCollisions = new wxTextCtrl(this, ID_txtReportCollisions, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtReportCollisions"));
+	FlexGridSizer3->Add(txtReportCollisions, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bReportCollisions = new wxButton(this, ID_bReportCollisions, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bReportCollisions"));
+	FlexGridSizer3->Add(bReportCollisions, 1, wxLEFT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	StaticText19 = new wxStaticText(this, ID_STATICTEXT19, _("Freelook:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT19"));
 	FlexGridSizer3->Add(StaticText19, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtFreelook = new wxTextCtrl(this, ID_txtFreelook, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_txtFreelook"));
@@ -396,6 +405,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bGravity,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGravity_Click);
 	Connect(ID_bGravityEnabled,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGravityEnabled_Click);
 	Connect(ID_bCollisions,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bCollisions_Click);
+	Connect(ID_bReportCollisions,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bReportCollisions_Click);
 	Connect(ID_bFreelook,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelook_Click);
 	Connect(ID_bFreelookSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelookSpeed_Click);
 	Connect(ID_bGotoFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGotoFloor_Click);
@@ -456,6 +466,7 @@ void CameraControl::Loop()
 	txtStartPosition->SetValue(TruncateNumber(Simcore->camera->StartPositionX, 2) + wxT(", ") + TruncateNumber(Simcore->camera->StartPositionZ, 2));
 	txtGravityEnabled->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->GetGravityStatus())));
 	txtCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->CollisionsEnabled())));
+	txtReportCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->ReportCollisions)));
 	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook)));
 	lblPosition->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	lblRotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
@@ -654,4 +665,9 @@ void CameraControl::On_bSetSkyMult_Click(wxCommandEvent& event)
 void CameraControl::On_bGotoFloor_Click(wxCommandEvent& event)
 {
 	Simcore->camera->GotoFloor(atoi(txtGotoFloor->GetValue().ToAscii()), true);
+}
+
+void CameraControl::On_bReportCollisions_Click(wxCommandEvent& event)
+{
+	Simcore->camera->ReportCollisions = !Simcore->camera->ReportCollisions;
 }

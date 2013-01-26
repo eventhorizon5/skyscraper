@@ -79,6 +79,9 @@ class CameraControl: public wxDialog
 		static const long ID_STATICTEXT17;
 		static const long ID_txtCollisions;
 		static const long ID_bCollisions;
+		static const long ID_STATICTEXT32;
+		static const long ID_txtReportCollisions;
+		static const long ID_bReportCollisions;
 		static const long ID_STATICTEXT19;
 		static const long ID_txtFreelook;
 		static const long ID_bFreelook;
@@ -170,6 +173,7 @@ class CameraControl: public wxDialog
 		void On_bResetFOV_Click(wxCommandEvent& event);
 		void On_bSetSkyMult_Click(wxCommandEvent& event);
 		void On_bGotoFloor_Click(wxCommandEvent& event);
+		void On_bReportCollisions_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -192,12 +196,14 @@ class CameraControl: public wxDialog
 		wxStaticLine* StaticLine2;
 		wxTextCtrl* txtFOV;
 		wxCheckBox* chkHold;
+		wxStaticText* StaticText32;
 		wxStaticText* StaticText17;
 		wxTextCtrl* txtGotoFloor;
 		wxTextCtrl* txtRotationY;
 		wxStaticText* StaticText28;
 		wxTextCtrl* txtVelocity;
 		wxButton* bPositionX;
+		wxTextCtrl* txtReportCollisions;
 		wxTextCtrl* txtFreelookSpeed;
 		wxTextCtrl* txtDirectionFront;
 		wxTextCtrl* txtMouseDown;
@@ -227,6 +233,7 @@ class CameraControl: public wxDialog
 		wxButton* bXNeg;
 		wxTextCtrl* txtPositionX;
 		wxStaticLine* StaticLine1;
+		wxButton* bReportCollisions;
 		wxStaticText* StaticText8;
 		wxStaticText* StaticText12;
 		wxTextCtrl* txtStartPosition;
