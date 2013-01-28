@@ -5226,19 +5226,6 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MusicPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
-	if (linecheck.substr(0, 10) == "interlocks")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-		elev->Interlocks = Ogre::StringConverter::parseBool(temp2);
-	}
-	if (linecheck.substr(0, 16) == "interlocktexture")
-	{
-		if (temp2check < 0)
-			return ScriptError("Syntax error");
-
-		elev->InterlockTexture = temp2;
-	}
 
 	//Print command
 	if (linecheck.substr(0, 5) == "print")

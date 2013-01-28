@@ -171,8 +171,6 @@ Elevator::Elevator(int number)
 	musicsound = 0;
 	elevposition = 0;
 	lastposition = 0;
-	Interlocks = true;
-	InterlockTexture = "Connection";
 
 	//create timers
 	timer = new Timer(this, 0);

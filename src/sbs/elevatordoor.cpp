@@ -941,32 +941,29 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	//create interlocks
 	sbs->ResetTextureMapping(true);
 
-	if (elev->Interlocks == true)
+	std::string name1, name2;
+	if (ShaftDoor == false)
 	{
-		std::string name1, name2;
-		if (ShaftDoor == false)
-		{
-			WallObject *wall;
-			wall = elev->ElevatorMesh->CreateWallObject(elev->object, "Interlock");
-			name1 = "DoorLowerInterlock";
-			name2 = "DoorUpperInterlock";
-			sbs->CreateWallBox(wall, name1.c_str(), elev->InterlockTexture.c_str(), x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2.c_str(), elev->InterlockTexture.c_str(), x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
-		}
-		else
-		{
-			WallObject *wall;
-			Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
-			wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, "Interlock");
-			name1 = "ShaftDoorLowerInterlock";
-			name2 = "ShaftDoorUpperInterlock";
-			x1 += elev->Origin.x;
-			x2 += elev->Origin.x;
-			z1 += elev->Origin.z;
-			z2 += elev->Origin.z;
-			sbs->CreateWallBox(wall, name1.c_str(), elev->InterlockTexture.c_str(), x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2.c_str(), elev->InterlockTexture.c_str(), x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
-		}
+		WallObject *wall;
+		wall = elev->ElevatorMesh->CreateWallObject(elev->object, "Connection");
+		name1 = "DoorF1";
+		name2 = "DoorF2";
+		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
+	}
+	else
+	{
+		WallObject *wall;
+		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
+		wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, "Connection");
+		name1 = "ShaftDoorF1";
+		name2 = "ShaftDoorF2";
+		x1 += elev->Origin.x;
+		x2 += elev->Origin.x;
+		z1 += elev->Origin.z;
+		z2 += elev->Origin.z;
+		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
 	}
 
 	sbs->ResetTextureMapping();
