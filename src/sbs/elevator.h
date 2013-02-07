@@ -101,6 +101,8 @@ public:
 	int RecallFloorAlternate; //Fire service alternate recall floor
 	bool OnFloor; //true if elevator is stopped on a floor, false if not
 	bool ManualGo; //go toggle for inspection service mode
+	bool ManualUp; //up toggle for inspection service mode
+	bool ManualDown;  //down toggle for inspection service mode
 	bool AlarmActive; //true if alarm is active
 	bool UseFloorBeeps; //true if floor beeps should be used
 	bool UseFloorSounds; //true if floor sounds should be used
@@ -187,6 +189,8 @@ public:
 	bool MoveUp();
 	bool MoveDown();
 	void SetGoButton(bool value);
+	void SetUpButton(bool value);
+	void SetDownButton(bool value);
 	int GetTopFloor();
 	int GetBottomFloor();
 	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);

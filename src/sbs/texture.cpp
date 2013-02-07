@@ -778,7 +778,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 			font->setSource(font_filename2);
 			font->setTrueTypeSize(font_size);
 			font->setTrueTypeResolution(96);
-			font->setAntialiasColour(true);
+			//font->setAntialiasColour(true);
 			font->addCodePointRange(Ogre::Font::CodePointRange(48, 122));
 			font->load();
 		}
@@ -859,7 +859,11 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		valign = 'b';
 
 	//write text
-	bool result = WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(ColorR, ColorG, ColorB, 1.0), align, valign);
+	float red = (float)ColorR / 255;
+	float green = (float)ColorG / 255;
+	float blue = (float)ColorB / 255;
+
+	bool result = WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(red, green, blue, 1.0), align, valign);
 	if (result == false)
 		return false;
 

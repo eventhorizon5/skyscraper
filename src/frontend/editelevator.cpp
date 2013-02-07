@@ -1298,10 +1298,7 @@ void editelevator::On_bUp_Toggle(wxCommandEvent& event)
 		if (elevator->InspectionService == false)
 			return;
 
-		if (bUp->GetValue() == true)
-			elevator->MoveUp();
-		else
-			elevator->Stop(false);
+		elevator->SetUpButton(bUp->GetValue());
 	}
 }
 
@@ -1313,13 +1310,6 @@ void editelevator::On_bGoToggle_Toggle(wxCommandEvent& event)
 			return;
 
 		elevator->SetGoButton(bGoToggle->GetValue());
-
-		if (bUp->GetValue() == true)
-			elevator->MoveUp();
-		else if (bDown->GetValue() == true)
-			elevator->MoveDown();
-		else
-			elevator->Stop(false);
 	}
 }
 
@@ -1330,10 +1320,7 @@ void editelevator::On_bDown_Toggle(wxCommandEvent& event)
 		if (elevator->InspectionService == false)
 			return;
 
-		if (bDown->GetValue() == true)
-			elevator->MoveDown();
-		else
-			elevator->Stop(false);
+		elevator->SetDownButton(bDown->GetValue());
 	}
 }
 

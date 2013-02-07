@@ -59,9 +59,11 @@ public:
 	void PlaySound();
 	void SetTexture(int position, const char *texture);
 	int FindActionPosition(const char *name);
+	int FindNumericActionPosition();
 	bool DoAction();
 	bool Press();
-	void ChangeLight(int floor, bool value);
+	void ChangeFloorLight(int floor, bool value);
+	void ChangeLight(bool value);
 	void SetLocked(bool value, int keyid);
 	bool IsLocked();
 	void ToggleLock(bool force = false);
@@ -76,6 +78,7 @@ private:
 	Sound *sound; //sound object
 	bool Locked;
 	int KeyID;
+	bool light_status; //light on/off value, used for floor buttons
 
 };
 

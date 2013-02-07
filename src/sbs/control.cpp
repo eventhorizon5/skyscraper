@@ -53,6 +53,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	current_position = 1;
 	Locked = false;
 	KeyID = 0;
+	light_status = false;
 
 	//create object mesh
 	ControlMesh = new MeshObject(object, Name2.c_str(), false, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -299,6 +300,20 @@ int Control::FindActionPosition(const char *name)
 	return 0;
 }
 
+int Control::FindNumericActionPosition()
+{
+	//returns the position number that the first numeric action
+	//otherwise 0 if not found
+
+	for (int i = 1; i <= GetPositions(); i++)
+	{
+		if (IsNumeric(GetPositionAction(i)))
+			return i;
+	}
+
+	return 0;
+}
+
 bool Control::DoAction()
 {
 	//perform object's action
@@ -355,9 +370,12 @@ bool Control::Press()
 	return result;
 }
 
-void Control::ChangeLight(int floor, bool value)
+void Control::ChangeFloorLight(int floor, bool value)
 {
 	//change light status on control if it calls the specified floor
+
+	if (light_status == value)
+		return;
 
 	std::string floornum = Ogre::StringConverter::toString(floor);
 	int index = FindActionPosition(floornum.c_str());
@@ -369,6 +387,27 @@ void Control::ChangeLight(int floor, bool value)
 		else
 			ChangeSelectPosition(index);
 	}
+	light_status = value;
+}
+
+void Control::ChangeLight(bool value)
+{
+	//change light status on control
+
+	if (light_status == value)
+		return;
+
+	std::string floornum = Ogre::StringConverter::toString(floor);
+	int index = FindNumericActionPosition();
+	int index2 = FindActionPosition("off");
+	if (index > 0 && index2 > 0)
+	{
+		if (value == false)
+			ChangeSelectPosition(index2);
+		else
+			ChangeSelectPosition(index);
+	}
+	light_status = value;
 }
 
 void Control::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)

@@ -54,6 +54,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	Columns = columns;
 	SpacingX = ButtonWidth * spacingX;
 	SpacingY = ButtonHeight * spacingY;
+	off_action = false;
 
 	//total spacing plus total button widths
 	Width = ((Columns + 1) * SpacingX) + (Columns * ButtonWidth);
@@ -226,7 +227,11 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 		newname += ":" + action_names[i];
 		std::vector<Object*> parents;
 		parents.push_back(sbs->GetElevator(elevator)->object);
-		sbs->AddAction(newname, parents, action_names[i]);
+		if ((off_action == false && action_names[i] == "off") || action_names[i] != "off")
+		{
+			sbs->AddAction(newname, parents, action_names[i]);
+			off_action = true;
+		}
 		actions.push_back(newname);
 	}
 
@@ -319,7 +324,17 @@ void ButtonPanel::ChangeLight(int floor, bool value)
 	std::string floornum = Ogre::StringConverter::toString(floor);
 	for (int i = 0; i < (int)controls.size(); i++)
 	{
-		controls[i]->ChangeLight(floor, value);
+		controls[i]->ChangeFloorLight(floor, value);
+	}
+}
+
+void ButtonPanel::ChangeAllLights(bool value)
+{
+	//turns on or off all lights (for floor buttons)
+
+	for (int i = 0; i < (int)controls.size(); i++)
+	{
+		controls[i]->ChangeLight(value);
 	}
 }
 

@@ -171,6 +171,8 @@ Elevator::Elevator(int number)
 	musicsound = 0;
 	elevposition = 0;
 	lastposition = 0;
+	ManualUp = false;
+	ManualDown = false;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -3104,6 +3106,74 @@ void Elevator::SetGoButton(bool value)
 		else
 			Report("setting go button status to false");
 	}
+
+	if (ManualGo == true)
+	{
+		if (ManualUp == true)
+			MoveUp();
+		if (ManualDown == true)
+			MoveDown();
+	}
+}
+
+void Elevator::SetUpButton(bool value)
+{
+	//sets the value of the Up button (for Inspection Service mode)
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
+	if (InspectionService == false)
+		return;
+
+	if (ManualUp == true && value == false)
+		Stop(false);
+
+	ManualUp = value;
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("setting up button status to true");
+		else
+			Report("setting up button status to false");
+	}
+
+	if (ManualGo == true && value == true)
+		MoveUp();
+}
+
+void Elevator::SetDownButton(bool value)
+{
+	//sets the value of the Go button (for Inspection Service mode)
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
+	if (InspectionService == false)
+		return;
+
+	if (ManualDown == true && value == false)
+		Stop(false);
+
+	ManualDown = value;
+
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("setting down button status to true");
+		else
+			Report("setting down button status to false");
+	}
+
+	if (ManualGo == true && value == true)
+		MoveDown();
 }
 
 int Elevator::GetTopFloor()
@@ -3784,11 +3854,9 @@ void Elevator::ResetQueue(bool up, bool down)
 	//turn off button lights
 	if (sbs->Verbose)
 		Report("QueueReset: turning off button lights for queue reset");
-	for (int i = 0; i < (int)ServicedFloors.size(); i++)
-	{
-		for (int j = 0; j < (int)PanelArray.size(); j++)
-			PanelArray[j]->ChangeLight(ServicedFloors[i], false);
-	}
+
+	for (int i = 0; i < (int)PanelArray.size(); i++)
+		PanelArray[i]->ChangeAllLights(false);
 }
 
 void Elevator::SetBeepSound(const char *filename)
