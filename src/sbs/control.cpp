@@ -397,7 +397,6 @@ void Control::ChangeLight(bool value)
 	if (light_status == value)
 		return;
 
-	std::string floornum = Ogre::StringConverter::toString(floor);
 	int index = FindNumericActionPosition();
 	int index2 = FindActionPosition("off");
 	if (index > 0 && index2 > 0)
