@@ -386,8 +386,9 @@ void Control::ChangeFloorLight(int floor, bool value)
 			ChangeSelectPosition(index2);
 		else
 			ChangeSelectPosition(index);
+
+		light_status = value;
 	}
-	light_status = value;
 }
 
 void Control::ChangeLight(bool value)
