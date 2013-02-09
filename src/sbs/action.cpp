@@ -267,12 +267,18 @@ bool Action::DoAction()
 				elevator->MusicOn = true;
 			if (command_name == "musicoff")
 				elevator->MusicOn = false;
-			if (command_name == "up")
-				elevator->SetUpButton(!elevator->ManualUp);
-			if (command_name == "down")
-				elevator->SetDownButton(!elevator->ManualDown);
-			if (command_name == "go")
-				elevator->SetGoButton(!elevator->ManualGo);
+			if (command_name == "upon")
+				elevator->SetUpButton(true);
+			if (command_name == "upoff")
+				elevator->SetUpButton(false);
+			if (command_name == "down_on")
+				elevator->SetDownButton(true);
+			if (command_name == "downoff")
+				elevator->SetDownButton(false);
+			if (command_name == "goon")
+				elevator->SetGoButton(true);
+			if (command_name == "gooff")
+				elevator->SetGoButton(false);
 
 			if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
 			{
