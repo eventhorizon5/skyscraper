@@ -81,6 +81,7 @@ namespace OgreBulletCollisions
 	    mObject->setUserPointer(this);
         }
 	gContactAddedCallback = CustomMaterialCombinerCallback;
+	last_collision = 0;
     }
     // -------------------------------------------------------------------------
     Object::~Object()
