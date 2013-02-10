@@ -117,9 +117,12 @@ bool Action::DoAction()
 	//MusicOn
 	//MusicOff
 	//Hold
-	//Up
-	//Down
-	//Go
+	//UpOn
+	//UpOff
+	//DownOn
+	//DownOff
+	//GoOn
+	//GoOff
 
 	for (int i = 0; i < parent_objects.size(); i++)
 	{
@@ -271,7 +274,7 @@ bool Action::DoAction()
 				elevator->SetUpButton(true);
 			if (command_name == "upoff")
 				elevator->SetUpButton(false);
-			if (command_name == "down_on")
+			if (command_name == "downon")
 				elevator->SetDownButton(true);
 			if (command_name == "downoff")
 				elevator->SetDownButton(false);
