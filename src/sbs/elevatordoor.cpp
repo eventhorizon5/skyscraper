@@ -1233,7 +1233,7 @@ void ElevatorDoor::Chime(int floor, bool direction)
 		chime->Load(DownChimeSound.c_str());
 		chimesound_loaded = -1;
 	}
-	else if (chimesound_loaded != 1)
+	else if (direction == true && chimesound_loaded != 1)
 	{
 		chime->Load(UpChimeSound.c_str());
 		chimesound_loaded = 1;
