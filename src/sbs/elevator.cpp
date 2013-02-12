@@ -1785,8 +1785,11 @@ void Elevator::MoveElevatorToFloor()
 			{
 				CalculateStoppingDistance = false;
 				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-				//TempDeceleration = Deceleration;
-				TempDeceleration = Deceleration * (StoppingDistance / ((Destination - LevelingOffset) - elevposition.y));
+				if ((Destination - LevelingOffset) >= elevposition.y)
+					TempDeceleration = Deceleration * (StoppingDistance / ((Destination - LevelingOffset) - elevposition.y));
+				else //if elevator is beyond leveling offset, ignore the offset
+					TempDeceleration = Deceleration * (StoppingDistance / (Destination - elevposition.y));
+
 				//start deceleration
 				Direction = -1;
 				Brakes = true;
@@ -1800,8 +1803,11 @@ void Elevator::MoveElevatorToFloor()
 			{
 				CalculateStoppingDistance = false;
 				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-				//TempDeceleration = Deceleration;
-				TempDeceleration = Deceleration * (StoppingDistance / (elevposition.y - (Destination + LevelingOffset)));
+				if ((Destination + LevelingOffset) <= elevposition.y)
+					TempDeceleration = Deceleration * (StoppingDistance / (elevposition.y - (Destination + LevelingOffset)));
+				else //if elevator is beyond leveling offset, ignore the offset
+					TempDeceleration = Deceleration * (StoppingDistance / (elevposition.y - Destination));
+
 				//start deceleration
 				Direction = 1;
 				Brakes = true;
