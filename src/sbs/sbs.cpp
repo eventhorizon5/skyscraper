@@ -3413,7 +3413,8 @@ void SBS::ResetLighting()
 Object* SBS::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
-	Control* control = new Control(object, name, sound, action_names, textures, direction, width, height, voffset);
+	std::vector<Action*> actionnull; //not used
+	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset);
 	control->SetPosition(Ogre::Vector3(CenterX, 0, CenterZ));
 	ControlArray.push_back(control);
 	return control->object;
@@ -3452,10 +3453,7 @@ std::vector<Action*> SBS::GetAction(const std::string name)
 	for (int i = 0; i < ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
-		std::string Name = name;
-		SetCase(actionname, false);
-		SetCase(Name, false);
-		if (actionname == Name)
+		if (actionname == name)
 			actionlist.push_back(ActionArray[i]);
 	}
 	return actionlist;

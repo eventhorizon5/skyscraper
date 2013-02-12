@@ -238,12 +238,7 @@ int Trigger::FindActionPosition(const char *name)
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		std::string position = GetPositionAction(i);
-		SetCase(position, false);
-		std::string Name = name;
-		SetCase(Name, false);
-
-		if (position == Name)
+		if (std::string(GetPositionAction(i)) == std::string(name))
 			return i;
 	}
 

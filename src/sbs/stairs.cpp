@@ -783,7 +783,8 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, bool
 Object* Stairs::AddControl(int floor, const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
-	Control* control = new Control(object, name, sound, action_names, textures, direction, width, height, voffset);
+	std::vector<Action*> actionnull; //not used
+	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset);
 	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
 	ControlArray[floor - startfloor].push_back(control);
 	return control->object;
@@ -804,7 +805,7 @@ Object* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, 
 void Stairs::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
 	for (int i = startfloor; i <= endfloor; i++)
-	        GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
+		GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
 }
 
 void Stairs::Init()

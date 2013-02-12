@@ -38,7 +38,7 @@ public:
 	bool IsEnabled;
 
 	//functions
-	Control(Object *parent, const char *name, const char *sound, const std::vector<std::string> &action_names, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset);
+	Control(Object *parent, const char *name, const char *sound, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset);
 	~Control();
 	void Enabled(bool value);
 	Ogre::Vector3 GetPosition();
@@ -73,7 +73,8 @@ private:
 	MeshObject* ControlMesh; //control mesh object
 	int current_position; //current control position
 	std::vector<std::string> TextureArray; //selection texture array
-	std::vector<std::string> Actions; //button actions
+	std::vector<std::string> ActionNames; //control actions (uses name-based searches, slower and for dynamic controls)
+	std::vector<Action*> Actions; //control actions (faster and for static controls, uses pointer storage)
 
 	Sound *sound; //sound object
 	bool Locked;

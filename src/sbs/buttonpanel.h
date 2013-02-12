@@ -67,7 +67,7 @@ public:
 private:
 	MeshObject* ButtonPanelMesh; //button panel mesh object
 
-	bool off_action;
+	Action* off_action;
 
 	std::vector<Control*> controls; //control objects
 

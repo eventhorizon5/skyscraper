@@ -4644,7 +4644,8 @@ void Elevator::AddDisplayFloor(int floor)
 Object* Elevator::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
-	Control* control = new Control(object, name, sound, action_names, textures, direction, width, height, voffset);
+	std::vector<Action*> actionnull; //not used
+	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset);
 	control->SetPosition(Ogre::Vector3(CenterX + Origin.x, Origin.y, CenterZ + Origin.z));
 	ControlArray.push_back(control);
 	return control->object;

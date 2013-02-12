@@ -31,9 +31,11 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, const char *sound_file, const std::vector<std::string> &action_names, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, const char *name, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
 {
 	//create a control at the specified location
+
+	//actions can either be given as a name list (dynamic action lists) or pointer list (static action lists) - don't use both
 
 	//set up SBS object
 	object = new Object();
@@ -46,7 +48,8 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	if ((int)Name.find("Control", 0) == -1)
 		Name2 = "Control " + Name;
 
-	Actions = action_names;
+	ActionNames = action_names;
+	Actions = actions;
 	Direction = direction;
 	IsEnabled = true;
 	TextureArray = textures;
@@ -253,7 +256,11 @@ const char* Control::GetPositionAction(int position)
 	//return action's command name associated with the specified selection position
 
 	std::vector<Action*> actionlist;
-	actionlist = sbs->GetAction(Actions[position - 1]);
+
+	if (ActionNames.size() > 0)
+		actionlist = sbs->GetAction(ActionNames[position - 1]);
+	else
+		actionlist.push_back(Actions[position - 1]);
 
 	//return command of first action in list
 	if (actionlist.size() > 0)
@@ -283,7 +290,10 @@ void Control::SetTexture(int position, const char *texture)
 int Control::GetPositions()
 {
 	//return number of available positions, based on size of Actions array
-	return (int)Actions.size();
+	if (ActionNames.size() > 0)
+		return (int)ActionNames.size();
+	else
+		return (int)Actions.size();
 }
 
 int Control::FindActionPosition(const char *name)
@@ -293,12 +303,7 @@ int Control::FindActionPosition(const char *name)
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		std::string position = GetPositionAction(i);
-		SetCase(position, false);
-		std::string Name = name;
-		SetCase(Name, false);
-
-		if (position == Name)
+		if (std::string(GetPositionAction(i)) == std::string(name))
 			return i;
 	}
 
@@ -323,7 +328,12 @@ bool Control::DoAction()
 {
 	//perform object's action
 
-	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
+	std::vector<Action*> actionlist;
+
+	if (ActionNames.size() > 0)
+		actionlist = sbs->GetAction(ActionNames[current_position - 1]);
+	else
+		actionlist.push_back(Actions[current_position - 1]);
 
 	bool result = true;
 	for (int i = 0; i < actionlist.size(); i++)

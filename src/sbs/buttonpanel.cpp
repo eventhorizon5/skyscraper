@@ -54,7 +54,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	Columns = columns;
 	SpacingX = ButtonWidth * spacingX;
 	SpacingY = ButtonHeight * spacingY;
-	off_action = false;
+	off_action = 0;
 
 	//total spacing plus total button widths
 	Width = ((Columns + 1) * SpacingX) + (Columns * ButtonWidth);
@@ -220,22 +220,27 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 	TrimString(buffer);
 
 	//register actions
-	std::vector<std::string> actions;
+	std::vector<Action*> actions;
+	std::vector<std::string> actionsnull; //not used
+
 	for (int i = 0; i < action_names.size(); i++)
 	{
 		std::string newname = sbs->GetElevator(elevator)->object->GetName();
 		newname += ":" + action_names[i];
 		std::vector<Object*> parents;
 		parents.push_back(sbs->GetElevator(elevator)->object);
-		if ((off_action == false && action_names[i] == "off") || action_names[i] != "off")
+		if ((off_action == 0 && action_names[i] == "off") || action_names[i] != "off")
 		{
-			sbs->AddAction(newname, parents, action_names[i]);
-			off_action = true;
+			Action* action = sbs->AddAction(newname, parents, action_names[i]);
+			actions.push_back(action);
+			if (action_names[i] == "off")
+				off_action = action;
 		}
-		actions.push_back(newname);
+		else
+			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(this->object, buffer.c_str(), sound, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	Control *control = controls[control_index] = new Control(this->object, buffer.c_str(), sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
 
 	//move control
 	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
