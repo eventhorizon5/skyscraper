@@ -173,6 +173,7 @@ Elevator::Elevator(int number)
 	lastposition = 0;
 	ManualUp = false;
 	ManualDown = false;
+	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -1709,7 +1710,7 @@ void Elevator::MoveElevatorToFloor()
 		if (InspectionService == false)
 			limit = ElevatorSpeed;
 		else
-			limit = ElevatorSpeed * 0.6;
+			limit = ElevatorSpeed * InspectionSpeed;
 
 		if (Direction == 1 && ElevatorRate < limit)
 			ElevatorRate += ElevatorSpeed * ((Acceleration * JerkRate) * sbs->delta);
@@ -1792,7 +1793,7 @@ void Elevator::MoveElevatorToFloor()
 				if (InspectionService == false)
 					ElevatorRate -= ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 				else
-					ElevatorRate -= (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
+					ElevatorRate -= (ElevatorSpeed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
 			}
 			//down movement
 			else if (Direction == -1)
@@ -1807,7 +1808,7 @@ void Elevator::MoveElevatorToFloor()
 				if (InspectionService == false)
 					ElevatorRate += ElevatorSpeed * ((TempDeceleration * JerkRate) * sbs->delta);
 				else
-					ElevatorRate += (ElevatorSpeed * 0.6) * ((TempDeceleration * JerkRate) * sbs->delta);
+					ElevatorRate += (ElevatorSpeed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
 			}
 
 			//stop sounds

@@ -5226,6 +5226,13 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MusicPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 	}
+	if (linecheck.substr(0, 15) == "inspectionspeed")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		if (!IsNumeric(temp2.c_str(), elev->InspectionSpeed))
+			return ScriptError("Invalid value");
+	}
 
 	//Print command
 	if (linecheck.substr(0, 5) == "print")

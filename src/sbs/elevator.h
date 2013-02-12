@@ -133,6 +133,7 @@ public:
 	float ArrivalDelay; //delay in seconds between elevator arrival and door opening
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
+	float InspectionSpeed; //inspection service speed multiplier
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 

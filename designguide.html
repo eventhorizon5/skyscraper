@@ -1630,30 +1630,36 @@ service mode for this elevator.<br>
 Example: <font face="Courier New, Courier, mono" size="2">InspectionService =
 true</font></p>
 
-<p align="left"><strong>46. Parking</strong> - enables automatic elevator
-parking. If this option is used, the elevator will automatically send itself to
-the specified parking floor after the number of seconds specified in
-<em>delay</em>. <br>
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>46.
+InspectionSpeed</strong> - speed multiplier for inspection service (if set to
+0.6, would be 60% of elevator speed)<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">InspectionSpeed =
+<em>multiplier</em></font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>47.
+Parking</strong> - enables automatic elevator parking. If this option is used,
+the elevator will automatically send itself to the specified parking floor
+after the number of seconds specified in <em>delay</em>. <br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Parking = <em>floor,
 delay</em></font></p>
 
-<p align="left"><strong>47. LevelingSpeed</strong> - elevator's leveling speed.
+<p align="left"><strong>48. LevelingSpeed</strong> - elevator's leveling speed.
 Default is 0.2<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingSpeed =
 <em>speed</em></font></p>
 
-<p align="left"><strong>48. LevelingOffset</strong> - distance in feet from the
+<p align="left"><strong>49. LevelingOffset</strong> - distance in feet from the
 destination floor that the elevator will switch into leveling mode. Default is
 0.5<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingOffset =
 <em>distance</em></font></p>
 
-<p align="left"><strong>49. LevelingOpen</strong> - distance in feet from the
+<p align="left"><strong>50. LevelingOpen</strong> - distance in feet from the
 destination floor that the elevator will open the doors. Default is 0.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">LevelingOpen =
 <em>distance</em></font></p>
 
-<p align="left"><strong>50. NotifyEarly</strong> - changes behavior of arrival
+<p align="left"><strong>51. NotifyEarly</strong> - changes behavior of arrival
 notifications (chime and lighting of directional indicator). 0 is the default
 and notifies when the elevator stops on the floor. 1 notifies when the elevator
 starts the leveling process, and 2 notifies when the elevator starts
@@ -1661,7 +1667,7 @@ decelerating.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">NotifyEarly =
 <em>value</em></font></p>
 
-<p align="left"><strong>51. MusicPosition</strong> - sets the position of the
+<p align="left"><strong>52. MusicPosition</strong> - sets the position of the
 music sound emitter relative of the elevator's position. If this command is not
 specified, it'll be placed in the center of the elevator on the ceiling.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">MusicPosition = x, y,
@@ -1669,42 +1675,42 @@ z<br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">MusicPosition
 = 0, 8, 0</font></p>
 
-<p align="left"><strong>52. DepartureDelay</strong> - sets the time in seconds
+<p align="left"><strong>53. DepartureDelay</strong> - sets the time in seconds
 that the elevator waits before proceeding to the next floor. Default is 0.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DepartureDelay =
 <em>1</em> </font></p>
 
-<p align="left"><strong>53. ArrivalDelay</strong> - sets the time in seconds
+<p align="left"><strong>54. ArrivalDelay</strong> - sets the time in seconds
 that the elevator waits before opening the doors after arriving at a floor. The
 default is 0. Note that a value greater than 0 will switch off the LevelingOpen
 setting.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">ArrivalDelay =
 <em>0.5</em></font></p>
 
-<p align="left"><strong>54. DisplayFloors</strong> - sets the floors that will
+<p align="left"><strong>55. DisplayFloors</strong> - sets the floors that will
 be displayed by the elevator's indicators. This command uses the same syntax as
 the ServicedFloors command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DisplayFloors = <em>0,
 9, 19, 29</em></font></p>
 
-<p align="left"><strong>55. FireService1</strong> - sets the fire service phase
+<p align="left"><strong>56. FireService1</strong> - sets the fire service phase
 1 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
 for on, 2 for bypass.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService1 =
 2</font></p>
 
-<p align="left"><strong>56. FireService2</strong> - sets the fire service phase
+<p align="left"><strong>57. FireService2</strong> - sets the fire service phase
 2 mode that the elevator will start with. Default is 0. Values are 0 for off, 1
 for on, 2 for hold.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FireService2 =
 1</font></p>
 
-<p align="left"><strong>57. MusicOn</strong> - Enables or disables music on
+<p align="left"><strong>58. MusicOn</strong> - Enables or disables music on
 start. Default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">MusicOn =
 false</font></p>
 
-<p align="left"><strong>58. MusicOnMove</strong> - Determines if music should
+<p align="left"><strong>59. MusicOnMove</strong> - Determines if music should
 only be played while elevator is moving or not. Default is false.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">MusicOnMove =
 true</font></p>
