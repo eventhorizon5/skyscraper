@@ -3452,7 +3452,10 @@ std::vector<Action*> SBS::GetAction(const std::string name)
 	for (int i = 0; i < ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
-		if (actionname == name)
+		std::string Name = name;
+		SetCase(actionname, false);
+		SetCase(Name, false);
+		if (actionname == Name)
 			actionlist.push_back(ActionArray[i]);
 	}
 	return actionlist;
