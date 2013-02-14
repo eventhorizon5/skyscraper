@@ -778,7 +778,7 @@ void Skyscraper::GetInput()
 			//enable/disable freelook mode
 			Simcore->camera->Freelook = !Simcore->camera->Freelook;
 			if (Simcore->camera->Freelook == true)
-				window->SetCursor(wxCURSOR_BLANK);
+				window->SetCursor(wxCURSOR_CROSS);
 			else
 				window->SetCursor(wxNullCursor);
 			wait = true;
