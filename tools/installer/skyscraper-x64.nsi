@@ -164,6 +164,17 @@ Section "Required libraries" SEC04
   File /r "${LOCAL_FILES}\data\caelum\*.*"
 SectionEnd
 
+Section "DirectX Install" SEC_DIRECTX
+  SectionIn RO
+  SetOutPath "$TEMP"
+  File "dxwebsetup.exe"
+  DetailPrint "Running DirectX Setup..."
+  ExecWait '"$TEMP\dxwebsetup.exe" /Q' $DirectXSetupError
+  DetailPrint "Finished DirectX Setup"
+  Delete "$TEMP\dxwebsetup.exe"
+  SetOutPath "$INSTDIR"
+SectionEnd
+
 Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
@@ -188,6 +199,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Source code"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Visual C++ runtime"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Required libraries"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_DIRECTX} "DirectX runtime"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onUninstSuccess
@@ -201,15 +213,15 @@ Function un.onInit
 FunctionEnd
 
 ;-------------------------------
-; Test if Visual Studio Redistributables 2005+ SP1 installed
+; Test if Visual Studio Redistributables 2008 SP1 installed
 Function CheckVCRedist
    Push $R0
    ClearErrors
-   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{770657D0-A123-3C07-8E44-1C83EC895118}" "Version"
+   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{6AFCA4E1-9B78-3640-8F72-A7BF33448200}" "Version"
 
-   ; if VS 2005+ redist SP1 not installed, install it
+   ; if VS 2008 redist SP1 not installed, install it
    IfErrors 0 VSRedistInstalled
-   ExecWait '"$INSTDIR\vcredist_x86.exe" /Q'
+   ExecWait '"$INSTDIR\vcredist_x64.exe" /Q'
    ;StrCpy $R0 "-1"
 
 VSRedistInstalled:
