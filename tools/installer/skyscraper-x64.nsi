@@ -70,7 +70,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "skyscraper20alpha8.exe"
+OutFile "skyscraper20alpha8-x64.exe"
 InstallDir "$PROGRAMFILES\Skyscraper"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -149,7 +149,7 @@ Section "Required libraries" SEC04
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\Caelum.dll"
   File "${LOCAL_FILES}\cg.dll"
-  File "${LOCAL_FILES}\fmodex.dll"
+  File "${LOCAL_FILES}\fmodex64.dll"
   File "${LOCAL_FILES}\OgreMain.dll"
   File "${LOCAL_FILES}\Plugin_CgProgramManager.dll"
   File "${LOCAL_FILES}\Plugin_OctreeSceneManager.dll"
