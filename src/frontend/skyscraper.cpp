@@ -380,8 +380,7 @@ bool Skyscraper::Initialize()
 		if(!mRoot->restoreConfig())
 		{
 			//show dialog if load failed
-			if(!mRoot->showConfigDialog())
-				OGRE_EXCEPT(Ogre::Exception::ERR_INVALIDPARAMS, "No RenderSystem chosen", "Skyscraper::Initialize");
+			mRoot->showConfigDialog();
 		}
 	}
 
