@@ -158,18 +158,20 @@ bool Action::DoAction()
 			int floor = atoi(command_name.c_str());
 			int elev_floor = elevator->GetFloor();
 
+			bool result = false;
+
 			//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
 			if (elevator->IsQueueActive() && elevator->QueueResets == true)
-				elevator->AddRoute(floor, elevator->QueuePositionDirection, true);
+				result = elevator->AddRoute(floor, elevator->QueuePositionDirection, true);
 			else
 			{
 				//elevator is above floor
 				if (elev_floor > floor)
-					elevator->AddRoute(floor, -1, true);
+					result = elevator->AddRoute(floor, -1, true);
 
 				//elevator is below floor
 				if (elev_floor < floor)
-					elevator->AddRoute(floor, 1, true);
+					result = elevator->AddRoute(floor, 1, true);
 
 				//elevator is on floor
 				if (elev_floor == floor)
@@ -191,12 +193,12 @@ bool Action::DoAction()
 					else
 					{
 						//add a route to the current floor if elevator is moving
-						elevator->AddRoute(floor, -elevator->Direction, true);
+						result = elevator->AddRoute(floor, -elevator->Direction, true);
 					}
 				}
 			}
 
-			return true;
+			return result;
 		}
 
 		if (elevator)

@@ -175,6 +175,7 @@ Elevator::Elevator(int number)
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
 	ReverseQueue = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ReverseQueue", false);
+	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", true);
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -596,7 +597,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	return object;
 }
 
-void Elevator::AddRoute(int floor, int direction, bool change_light)
+bool Elevator::AddRoute(int floor, int direction, bool change_light)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
@@ -606,7 +607,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	Floor *floorobj = sbs->GetFloor(floor);
@@ -614,26 +615,33 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	if (!floorobj)
 	{
 		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
-		return;
+		return false;
 	}
 
 	//if doors are open or moving in independent service mode, quit
 	if (IndependentService == true && (AreDoorsOpen() == false || CheckOpenDoor() == true))
 	{
 		Report("floor button must be pressed before closing doors while in independent service");
-		return;
+		return false;
 	}
 
 	//do not add routes if in inspection service or fire phase 1 modes
 	if (InspectionService == true)
 	{
 		Report("cannot add route while in inspection service mode");
-		return;
+		return false;
 	}
 	if (FireServicePhase2 == 2)
 	{
 		Report("cannot add route while in held state");
-		return;
+		return false;
+	}
+
+	//discard route if direction opposite queue search direction
+	if (LimitQueue == true && direction != QueuePositionDirection && QueuePositionDirection != 0)
+	{
+		Report("cannot add route in opposite direction of queue search");
+		return false;
 	}
 
 	if (direction == 1)
@@ -649,9 +657,10 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		{
 			//exit if entry already exits
 			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
-			return;
+			return false;
 		}
 
+		//add floor to up queue
 		UpQueue.push_back(floor);
 		std::sort(UpQueue.begin(), UpQueue.end());
 
@@ -672,9 +681,10 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		{
 			//exit if entry already exits
 			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
-			return;
+			return false;
 		}
 		
+		//add floor to down queue
 		DownQueue.push_back(floor);
 		std::sort(DownQueue.begin(), DownQueue.end());
 		
@@ -703,9 +713,10 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 			AddRoute(ACPFloor, direction, false);
 		}
 	}
+	return true;
 }
 
-void Elevator::DeleteRoute(int floor, int direction)
+bool Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
@@ -715,7 +726,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	Floor *floorobj = sbs->GetFloor(floor);
@@ -723,7 +734,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 	if (!floorobj)
 	{
 		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
-		return;
+		return false;
 	}
 
 	if (direction == 1)
@@ -752,9 +763,10 @@ void Elevator::DeleteRoute(int floor, int direction)
 		Report("DeleteRoute: turning off button lights for floor " + std::string(_itoa(floor, intbuffer, 10)));
 	for (int i = 0; i < (int)PanelArray.size(); i++)
 		PanelArray[i]->ChangeLight(floor, false);
+	return true;
 }
 
-void Elevator::CancelLastRoute()
+bool Elevator::CancelLastRoute()
 {
 	//cancels the last added route
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
@@ -762,20 +774,21 @@ void Elevator::CancelLastRoute()
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	if (LastQueueFloor[1] == 0)
 	{
 		if (sbs->Verbose)
 			Report("CancelLastRoute: route not valid");
-		return;
+		return false;
 	}
 
 	Report("canceling last route");
 	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
+	return true;
 }
 
 void Elevator::Alarm()

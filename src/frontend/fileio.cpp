@@ -5097,6 +5097,12 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		elev->ReverseQueue = Ogre::StringConverter::parseBool(temp2);
 	}
+	if (linecheck.substr(0, 10) == "limitqueue")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->LimitQueue = Ogre::StringConverter::parseBool(temp2);
+	}
 	if (linecheck.substr(0, 3) == "acp")
 	{
 		if (temp2check < 0)

@@ -135,6 +135,7 @@ public:
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	float InspectionSpeed; //inspection service speed multiplier
 	bool ReverseQueue; //reverse elevator queue at end of run
+	bool LimitQueue; //true to only allow floor selections in the same queue direction
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -142,9 +143,9 @@ public:
 	Elevator(int number);
 	~Elevator();
 	Object* CreateElevator(bool relative, float x, float z, int floor);
-	void AddRoute(int floor, int direction, bool change_light);
-	void DeleteRoute(int floor, int direction);
-	void CancelLastRoute();
+	bool AddRoute(int floor, int direction, bool change_light);
+	bool DeleteRoute(int floor, int direction);
+	bool CancelLastRoute();
 	void Alarm();
 	void Stop(bool emergency);
 	void OpenHatch();
