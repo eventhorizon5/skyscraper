@@ -174,6 +174,7 @@ Elevator::Elevator(int number)
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
+	ReverseQueue = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ReverseQueue", false);
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -1030,7 +1031,7 @@ void Elevator::ProcessCallQueue()
 	}
 	else if (QueuePositionDirection == -1)
 	{
-		//search through down queue (search order is reversed since calls need to be processed in decending order)
+		//search through down queue (search order is reversed since calls need to be processed in descending order)
 		for (int i = (int)DownQueue.size() - 1; i >= 0; i--)
 		{
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
@@ -2099,27 +2100,31 @@ void Elevator::FinishMove()
 		//notify arrival and disable call button light
 		if (InServiceMode() == false)
 		{
-			//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
-			if ((QueuePositionDirection == 1 && UpQueue.size() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.size() == 0 && ElevatorFloor > GotoFloor))
+			if (ReverseQueue == true)
 			{
-				std::vector<int> buttons = sbs->GetFloor(GotoFloor)->GetCallButtons(Number);
-				if (buttons.size() > 0)
+				//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
+				if ((QueuePositionDirection == 1 && UpQueue.size() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.size() == 0 && ElevatorFloor > GotoFloor))
 				{
-					CallButton *button =  sbs->GetFloor(GotoFloor)->CallButtonArray[buttons[0]];
-					//only reverse the queue direction if no related active call is on the floor
-					if (button)
+					std::vector<int> buttons = sbs->GetFloor(GotoFloor)->GetCallButtons(Number);
+					if (buttons.size() > 0)
 					{
-						if ((button->UpStatus == false && QueuePositionDirection == 1) || (button->DownStatus == false && QueuePositionDirection == -1))
+						CallButton *button =  sbs->GetFloor(GotoFloor)->CallButtonArray[buttons[0]];
+						//only reverse the queue direction if no related active call is on the floor
+						if (button)
 						{
-							if (sbs->Verbose)
-								Report("reversing queue search direction");
-							LastQueueDirection = QueuePositionDirection;
-							QueuePositionDirection = -QueuePositionDirection;
+							if ((button->UpStatus == false && QueuePositionDirection == 1) || (button->DownStatus == false && QueuePositionDirection == -1))
+							{
+								if (sbs->Verbose)
+									Report("reversing queue search direction");
+								LastQueueDirection = QueuePositionDirection;
+								QueuePositionDirection = -QueuePositionDirection;
+							}
 						}
 					}
 				}
 			}
 
+			//notify on arrival
 			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
 				NotifyArrival(GotoFloor);
 
