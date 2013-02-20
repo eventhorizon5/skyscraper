@@ -147,6 +147,10 @@ const long editelevator::ID_STATICTEXT41 = wxNewId();
 const long editelevator::ID_txtQueueLastDown = wxNewId();
 const long editelevator::ID_STATICTEXT51 = wxNewId();
 const long editelevator::ID_txtQueueLastDirection = wxNewId();
+const long editelevator::ID_STATICTEXT68 = wxNewId();
+const long editelevator::ID_txtQueueResets = wxNewId();
+const long editelevator::ID_STATICTEXT69 = wxNewId();
+const long editelevator::ID_txtLimitQueue = wxNewId();
 const long editelevator::ID_bResetQueues = wxNewId();
 const long editelevator::ID_STATICTEXT21 = wxNewId();
 const long editelevator::ID_txtSpeed = wxNewId();
@@ -257,7 +261,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	wxStaticBoxSizer* StaticBoxSizer6;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxBoxSizer* BoxSizer5;
-	
+
 	Create(parent, wxID_ANY, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
@@ -551,7 +555,17 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer3->Add(StaticText51, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtQueueLastDirection = new wxTextCtrl(this, ID_txtQueueLastDirection, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtQueueLastDirection"));
 	txtQueueLastDirection->SetToolTip(_("Queue Last Direction"));
-	FlexGridSizer3->Add(txtQueueLastDirection, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer3->Add(txtQueueLastDirection, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticText68 = new wxStaticText(this, ID_STATICTEXT68, _("Resets:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT68"));
+	FlexGridSizer3->Add(StaticText68, 1, wxALIGN_CENTER_VERTICAL, 5);
+	txtQueueResets = new wxTextCtrl(this, ID_txtQueueResets, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtQueueResets"));
+	txtQueueResets->SetToolTip(_("Queue Last Direction"));
+	FlexGridSizer3->Add(txtQueueResets, 1, wxLEFT|wxRIGHT|wxALIGN_TOP, 5);
+	StaticText69 = new wxStaticText(this, ID_STATICTEXT69, _("Limit:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT69"));
+	FlexGridSizer3->Add(StaticText69, 1, wxALIGN_CENTER_VERTICAL, 5);
+	txtLimitQueue = new wxTextCtrl(this, ID_txtLimitQueue, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtLimitQueue"));
+	txtLimitQueue->SetToolTip(_("Queue Last Direction"));
+	FlexGridSizer3->Add(txtLimitQueue, 1, wxLEFT|wxRIGHT|wxALIGN_TOP, 5);
 	FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bResetQueues = new wxButton(this, ID_bResetQueues, _("Reset"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bResetQueues"));
 	FlexGridSizer3->Add(bResetQueues, 1, wxTOP|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -794,7 +808,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_bACPMode,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bACPMode_Toggle);
 	Connect(ID_bUpPeak,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bUpPeak_Toggle);
 	Connect(ID_bDownPeak,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDownPeak_Toggle);
@@ -1073,6 +1087,8 @@ void editelevator::Loop()
 	txtManualGo->SetValue(wxString::FromAscii(BoolToString(elevator->ManualGo)));
 	txtLeveling->SetValue(wxString::FromAscii(BoolToString(elevator->Leveling)));
 	txtParking->SetValue(wxString::FromAscii(BoolToString(elevator->Parking)));
+	txtQueueResets->SetValue(wxString::FromAscii(BoolToString(elevator->QueueResets)));
+	txtLimitQueue->SetValue(wxString::FromAscii(BoolToString(elevator->LimitQueue)));
 }
 
 void editelevator::SetMainValues()

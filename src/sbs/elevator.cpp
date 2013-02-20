@@ -174,7 +174,6 @@ Elevator::Elevator(int number)
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
-	ReverseQueue = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ReverseQueue", false);
 	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", true);
 
 	//create timers
@@ -2113,30 +2112,6 @@ void Elevator::FinishMove()
 		//notify arrival and disable call button light
 		if (InServiceMode() == false)
 		{
-			if (ReverseQueue == true)
-			{
-				//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
-				if ((QueuePositionDirection == 1 && UpQueue.size() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.size() == 0 && ElevatorFloor > GotoFloor))
-				{
-					std::vector<int> buttons = sbs->GetFloor(GotoFloor)->GetCallButtons(Number);
-					if (buttons.size() > 0)
-					{
-						CallButton *button =  sbs->GetFloor(GotoFloor)->CallButtonArray[buttons[0]];
-						//only reverse the queue direction if no related active call is on the floor
-						if (button)
-						{
-							if ((button->UpStatus == false && QueuePositionDirection == 1) || (button->DownStatus == false && QueuePositionDirection == -1))
-							{
-								if (sbs->Verbose)
-									Report("reversing queue search direction");
-								LastQueueDirection = QueuePositionDirection;
-								QueuePositionDirection = -QueuePositionDirection;
-							}
-						}
-					}
-				}
-			}
-
 			//notify on arrival
 			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
 				NotifyArrival(GotoFloor);

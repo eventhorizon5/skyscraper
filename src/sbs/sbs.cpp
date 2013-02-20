@@ -2422,14 +2422,14 @@ void SBS::ProcessCallButtons()
 	{
 		//process up calls
 		if (buttoncallbacks[i])
-			buttoncallbacks[i]->Loop(true);
+			buttoncallbacks[i]->Loop(1);
 	}
 
 	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
 		//process down calls
 		if (buttoncallbacks[i])
-			buttoncallbacks[i]->Loop(false);
+			buttoncallbacks[i]->Loop(-1);
 	}
 }
 

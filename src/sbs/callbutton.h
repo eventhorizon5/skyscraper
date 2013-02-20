@@ -48,7 +48,7 @@ public:
 	void DownLight(bool value);
 	void SetLights(int up, int down);
 	bool ServicesElevator(int elevator);
-	void Loop(bool direction);
+	void Loop(int direction);
 	void Report(const char *message);
 	bool ReportError(const char *message);
 

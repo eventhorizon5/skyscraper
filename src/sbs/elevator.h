@@ -134,7 +134,6 @@ public:
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	float InspectionSpeed; //inspection service speed multiplier
-	bool ReverseQueue; //reverse elevator queue at end of run
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
 
 	MeshObject* ElevatorMesh; //elevator mesh object

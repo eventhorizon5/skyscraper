@@ -1057,7 +1057,43 @@
 													<tooltip>Queue Last Direction</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
-												<flag>wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT68" variable="StaticText68" member="yes">
+													<label>Resets:</label>
+												</object>
+												<flag>wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtQueueResets" variable="txtQueueResets" member="yes">
+													<size>75,-1</size>
+													<tooltip>Queue Last Direction</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_TOP</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT69" variable="StaticText69" member="yes">
+													<label>Limit:</label>
+												</object>
+												<flag>wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtLimitQueue" variable="txtLimitQueue" member="yes">
+													<size>75,-1</size>
+													<tooltip>Queue Last Direction</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_TOP</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>

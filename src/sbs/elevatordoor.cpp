@@ -659,7 +659,7 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	//if direction is false, doors are on the left/right side; otherwise front/back
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
-	float spacing = 0.025f; //spacing between doors
+	float spacing = 0.01f; //spacing between doors
 
 	//set up coordinates
 	if (direction == false)
