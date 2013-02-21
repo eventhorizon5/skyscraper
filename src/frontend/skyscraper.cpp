@@ -380,7 +380,15 @@ bool Skyscraper::Initialize()
 		if(!mRoot->restoreConfig())
 		{
 			//show dialog if load failed
-			mRoot->showConfigDialog();
+			try
+			{
+				mRoot->showConfigDialog();
+			}
+			catch (Ogre::Exception &e)
+			{
+				ReportFatalError("Error displaying configuration dialog\nDetails:" + e.getDescription());
+				return false;
+			}
 		}
 	}
 
