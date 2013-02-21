@@ -374,22 +374,22 @@ bool Skyscraper::Initialize()
 	}
 
 	//configure render system
-	if(!mRoot->getRenderSystem())
+	try
 	{
-		//if no render systems are loaded, try to load previous config
-		if(!mRoot->restoreConfig())
+		if(!mRoot->getRenderSystem())
 		{
-			//show dialog if load failed
-			try
+			//if no render systems are loaded, try to load previous config
+			if(!mRoot->restoreConfig())
 			{
+				//show dialog if load failed
 				mRoot->showConfigDialog();
 			}
-			catch (Ogre::Exception &e)
-			{
-				ReportFatalError("Error displaying configuration dialog\nDetails:" + e.getDescription());
-				return false;
-			}
 		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error configuring render system\nDetails:" + e.getDescription());
+		return false;
 	}
 
 	//initialize render window
