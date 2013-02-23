@@ -282,6 +282,7 @@ public:
 	void SetAltitude(float altitude);
 	void SetFloor(int floor);
 	void Init();
+	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 
 private:
 
@@ -328,6 +329,8 @@ private:
 	bool Running; //is elevator in run mode?
 	bool UpQueueEmpty;
 	bool DownQueueEmpty;
+	bool UpCall;
+	bool DownCall;
 
 	//functions
 	void MoveElevatorToFloor();

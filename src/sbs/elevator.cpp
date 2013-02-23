@@ -177,6 +177,8 @@ Elevator::Elevator(int number)
 	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", false);
 	UpQueueEmpty = false;
 	DownQueueEmpty = false;
+	UpCall = false;
+	DownCall = false;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -942,21 +944,29 @@ void Elevator::ProcessCallQueue()
 	//reverse queues if related queue empty flag is set
 	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.size() > 0)
 	{
-		if (sbs->Verbose)
-			Report("ProcessCallQueue: setting search direction to down");
-		LastQueueDirection = QueuePositionDirection;
-		QueuePositionDirection = -1;
+		if (UpCall == false)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: setting search direction to down");
+			LastQueueDirection = QueuePositionDirection;
+			QueuePositionDirection = -1;
+		}
 	}
 	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.size() > 0)
 	{
-		if (sbs->Verbose)
-			Report("ProcessCallQueue: setting search direction to up");
-		LastQueueDirection = QueuePositionDirection;
-		QueuePositionDirection = 1;
+		if (DownCall == false)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: setting search direction to up");
+			LastQueueDirection = QueuePositionDirection;
+			QueuePositionDirection = 1;
+		}
 	}
 
 	UpQueueEmpty = false;
 	DownQueueEmpty = false;
+	UpCall = false;
+	DownCall = false;
 
 	//set search direction to 0 if any related queue is empty, and if doors are not open or moving
 	if (AreDoorsOpen() == false && CheckOpenDoor() == false)
@@ -2142,6 +2152,9 @@ void Elevator::FinishMove()
 			//notify on arrival
 			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
 				NotifyArrival(GotoFloor);
+
+			//get status of call buttons before switching off
+			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
 
 			//disable call button lights
 			SetCallButtons(GotoFloor, GetArrivalDirection(GotoFloor), false);
@@ -4441,6 +4454,14 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (floor == GetBottomFloor())
 		return true; //turn on up light if on bottom floor
 
+	//check for active hall calls
+	bool UpStatus, DownStatus;
+	GetCallButtonStatus(floor, UpStatus, DownStatus);
+	if (UpStatus == true && QueuePositionDirection == 1)
+		return true;
+	if (DownStatus == true && QueuePositionDirection == -1)
+		return false;
+
 	if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
 		newfloor = UpQueue[0];
 
@@ -4785,4 +4806,28 @@ void Elevator::Init()
 
 	//move elevator to starting position
 	SetFloor(OriginFloor);
+}
+
+bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
+{
+	//returns status of associated call buttons on specified floor in UpStatus and DownStatus variables
+
+	if (sbs->GetFloor(floor))
+	{
+		std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
+		if (buttons.size() > 0)
+		{
+			CallButton *button =  sbs->GetFloor(floor)->CallButtonArray[buttons[0]];
+			if (button)
+			{
+				Up = button->UpStatus;
+				Down = button->DownStatus;
+				return true;
+			}
+		}
+	}
+
+	Up = false;
+	Down = false;
+	return false;
 }
