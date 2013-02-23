@@ -174,7 +174,9 @@ Elevator::Elevator(int number)
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
-	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", true);
+	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", false);
+	UpQueueEmpty = false;
+	DownQueueEmpty = false;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -745,6 +747,8 @@ bool Elevator::DeleteRoute(int floor, int direction)
 				UpQueue.erase(UpQueue.begin() + i);
 		}
 		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction up");
+		if (UpQueue.size() == 0)
+			UpQueueEmpty = true;
 	}
 	else
 	{
@@ -755,6 +759,8 @@ bool Elevator::DeleteRoute(int floor, int direction)
 				DownQueue.erase(DownQueue.begin() + i);
 		}
 		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction down");
+		if (DownQueue.size() == 0)
+			DownQueueEmpty = true;
 	}
 
 	//turn off button lights
@@ -883,6 +889,9 @@ void Elevator::ProcessCallQueue()
 		int TopFloor = GetTopFloor();
 		int BottomFloor = GetBottomFloor();
 
+		UpQueueEmpty = false;
+		DownQueueEmpty = false;
+
 		if (DownPeak == true || UpPeak == true)
 		{
 			//if DownPeak mode is active, send elevator to the top serviced floor if not already there
@@ -915,21 +924,39 @@ void Elevator::ProcessCallQueue()
 	}
 	else if (QueuePositionDirection == 0)
 	{
-		LastQueueDirection = 0;
-
 		if (UpQueue.size() != 0)
 		{
 			if (sbs->Verbose)
 				Report("ProcessCallQueue: setting search direction to up");
 			QueuePositionDirection = 1;
 		}
-		if (DownQueue.size() != 0)
+		else if (DownQueue.size() != 0)
 		{
 			if (sbs->Verbose)
 				Report("ProcessCallQueue: setting search direction to down");
 			QueuePositionDirection = -1;
 		}
+		LastQueueDirection = 0;
 	}
+
+	//reverse queues if related queue empty flag is set
+	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.size() > 0)
+	{
+		if (sbs->Verbose)
+			Report("ProcessCallQueue: setting search direction to down");
+		LastQueueDirection = QueuePositionDirection;
+		QueuePositionDirection = -1;
+	}
+	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.size() > 0)
+	{
+		if (sbs->Verbose)
+			Report("ProcessCallQueue: setting search direction to up");
+		LastQueueDirection = QueuePositionDirection;
+		QueuePositionDirection = 1;
+	}
+
+	UpQueueEmpty = false;
+	DownQueueEmpty = false;
 
 	//set search direction to 0 if any related queue is empty, and if doors are not open or moving
 	if (AreDoorsOpen() == false && CheckOpenDoor() == false)
@@ -4383,10 +4410,8 @@ void Elevator::NotifyArrival(int floor)
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
 
-	bool LightDirection = GetArrivalDirection(floor); //true for up, false for down
-
 	//play chime sound and change indicator
-	if (LightDirection == true)
+	if (GetArrivalDirection(floor) == true)
 	{
 		Chime(0, floor, true);
 		if (sbs->GetFloor(floor))
@@ -4407,19 +4432,37 @@ void Elevator::NotifyArrival(int floor)
 bool Elevator::GetArrivalDirection(int floor)
 {
 	//determine if the directional lantern should show up or down on arrival to the specified floor
+	//true for up, false for down
 
-	bool LightDirection = false; //true for up, false for down
+	int newfloor = floor;
 
 	if (floor == GetTopFloor())
-		LightDirection = false; //turn on down light if on top floor
-	else if (floor == GetBottomFloor())
-		LightDirection = true; //turn on up light if on bottom floor
-	else if (QueuePositionDirection == 1)
-		LightDirection = true; //turn on up light if queue direction is up
-	else if (QueuePositionDirection == -1)
-		LightDirection = false; //turn on down light if queue direction is down
+		return false; //turn on down light if on top floor
+	if (floor == GetBottomFloor())
+		return true; //turn on up light if on bottom floor
 
-	return LightDirection;
+	if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
+		newfloor = UpQueue[0];
+
+	if (QueuePositionDirection == -1 && DownQueue.size() > 0 && DownQueueEmpty == false)
+		newfloor = DownQueue[(int)DownQueue.size() - 1];
+
+	if (QueuePositionDirection == 1 && DownQueue.size() > 0 && UpQueueEmpty == true)
+		newfloor = DownQueue[(int)DownQueue.size() - 1];
+
+	if (QueuePositionDirection == -1 && UpQueue.size() > 0 && DownQueueEmpty == true)
+		newfloor = UpQueue[0];
+
+	if (QueuePositionDirection == 1 && UpQueue.size() == 0 && DownQueue.size() == 0)
+		return true;
+
+	if (QueuePositionDirection == -1 && UpQueue.size() == 0 && DownQueue.size() == 0)
+		return false;
+
+	if (newfloor >= floor)
+		return true; //turn on up for entry above current floor
+	else
+		return false; //turn on down for entry below current floor
 }
 
 void Elevator::SetRunState(bool value)

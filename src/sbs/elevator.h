@@ -326,6 +326,8 @@ private:
 	bool FirstRun; //used for setting first-run items in the run loop
 	int RandomLobby; //lobby level of elevator to use for random predictions
 	bool Running; //is elevator in run mode?
+	bool UpQueueEmpty;
+	bool DownQueueEmpty;
 
 	//functions
 	void MoveElevatorToFloor();
