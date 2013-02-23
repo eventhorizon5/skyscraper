@@ -449,10 +449,10 @@ void CallButton::Loop(int direction)
 						if (elevator->QueuePositionDirection == direction || elevator->IsIdle())
 						{
 							//and if nudge mode is off on all doors
-							if (sbs->GetElevator(Elevators[i])->IsNudgeModeActive() == false)
+							if (elevator->IsNudgeModeActive() == false)
 							{
 								//and if it's not in any service mode
-								if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
+								if (elevator->InServiceMode() == false)
 								{
 									if (sbs->Verbose)
 										Report("Marking - closest so far");
