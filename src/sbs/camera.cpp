@@ -864,9 +864,12 @@ void Camera::Loop()
 	collision_reset = false;
 
 	//get name of the last hit mesh object
-	if (mCharacter->getLastCollision())
-		if (mCharacter->getLastCollision()->getRootNode())
-			LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
+	if (sbs->GetRunTime() > 10) //due to initialization-related crashes, wait before checking
+	{
+		if (mCharacter->getLastCollision())
+			if (mCharacter->getLastCollision()->getRootNode())
+				LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
+	}
 
 	//calculate acceleration
 	InterpolateMovement();
