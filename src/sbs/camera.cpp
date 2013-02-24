@@ -772,10 +772,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			else
 			{
 				//if shift is held, change button status instead
-				if (direction == "Up")
+				/*if (direction == "Up")
 					buttonref->UpLight(!buttonref->UpStatus);
 				else
-					buttonref->DownLight(!buttonref->DownStatus);
+					buttonref->DownLight(!buttonref->DownStatus);*/
+
+				//if shift is held, toggle lock
+				buttonref->ToggleLock();
 			}
 		}
 	}
@@ -862,7 +865,8 @@ void Camera::Loop()
 
 	//get name of the last hit mesh object
 	if (mCharacter->getLastCollision())
-		LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
+		if (mCharacter->getLastCollision()->getRootNode())
+			LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
 
 	//calculate acceleration
 	InterpolateMovement();

@@ -78,6 +78,8 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	Direction = direction;
 	SetCase(Direction, false);
 	TrimString(Direction);
+	Locked = false;
+	KeyID = 0;
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -266,17 +268,24 @@ void CallButton::Enabled(bool value)
 	}
 }
 
-void CallButton::Call(bool direction)
+bool CallButton::Call(bool direction)
 {
 	//calls the closest elevator in the elevator array list to the current floor,
 	//and also depending on the direction it's traveling
+
+	//check lock state
+	if (IsLocked() == true)
+	{
+		ReportError("Call button is locked");
+		return false;
+	}
 
 	//exit if call has already been made
 	if ((direction == true && UpStatus == true) || (direction == false && DownStatus == true))
 	{
 		if (sbs->Verbose)
 			sbs->Report("Call has already been made");
-		return;
+		return false;
 	}
 
 	//set light and direction value
@@ -306,6 +315,7 @@ void CallButton::Call(bool direction)
 		Report("Registering callback");
 
 	sbs->RegisterCallButtonCallback(this);
+	return true;
 }
 
 void CallButton::UpLight(bool value)
@@ -582,4 +592,49 @@ bool CallButton::ReportError(const char *message)
 	//general reporting function
 	std::string msg = "Call button " + std::string(_itoa(floor, intbuffer, 10)) + ":" + std::string(_itoa(Number, intbuffer, 10)) + " - " + message;
 	return sbs->ReportError(msg.c_str());
+}
+
+void CallButton::SetLocked(bool value, int keyid)
+{
+	//set locked state
+	Locked = value;
+	KeyID = keyid;
+}
+
+void CallButton::ToggleLock(bool force)
+{
+	//toggle lock state
+	//if force is true, bypass key check
+
+	bool replocked = false;
+
+	//quit if user doesn't have key, if force is false
+	if (KeyID != 0)
+	{
+		if (sbs->CheckKey(KeyID) == false && force == false)
+		{
+			char intbuffer[10];
+			std::string id = _itoa(KeyID, intbuffer, 10);
+			std::string msg = "Need key " + id + "to lock/unlock";
+			ReportError(msg.c_str());
+			return;
+		}
+	}
+
+	Locked = !Locked;
+
+	if (Locked == true)
+		Report("Locked");
+	else
+		Report("Unlocked");
+}
+
+bool CallButton::IsLocked()
+{
+	return Locked;
+}
+
+int CallButton::GetKeyID()
+{
+	return KeyID;
 }

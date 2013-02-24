@@ -43,7 +43,7 @@ public:
 	CallButton(std::vector<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~CallButton();
 	void Enabled(bool value);
-	void Call(bool direction); //true is up, false is down
+	bool Call(bool direction); //true is up, false is down
 	void UpLight(bool value);
 	void DownLight(bool value);
 	void SetLights(int up, int down);
@@ -51,6 +51,10 @@ public:
 	void Loop(int direction);
 	void Report(const char *message);
 	bool ReportError(const char *message);
+	void SetLocked(bool value, int keyid);
+	bool IsLocked();
+	void ToggleLock(bool force = false);
+	int GetKeyID();
 
 private:
 	MeshObject* CallButtonBackMesh; //call button mesh object
@@ -62,6 +66,8 @@ private:
 
 	bool ProcessedUp;
 	bool ProcessedDown;
+	bool Locked;
+	int KeyID;
 
 	char intbuffer[65];
 	char buffer[20];
