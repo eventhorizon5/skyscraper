@@ -643,8 +643,12 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 	//discard route if direction opposite queue search direction
 	if (LimitQueue == true && direction != QueuePositionDirection && QueuePositionDirection != 0)
 	{
-		Report("cannot add route in opposite direction of queue search");
-		return false;
+		//only allow if any queue entries exist
+		if ((QueuePositionDirection == 1 && UpQueue.size() > 0) || (QueuePositionDirection == -1 && DownQueue.size() > 0))
+		{
+			Report("cannot add route in opposite direction of queue search");
+			return false;
+		}
 	}
 
 	if (direction == 1)
@@ -4829,5 +4833,53 @@ bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
 
 	Up = false;
 	Down = false;
+	return false;
+}
+
+bool Elevator::AvailableForCall(int floor, int direction)
+{
+	//return true or false if the elevator is available for the specified hall call
+
+	//if elevator is running
+	if (IsRunning() == true)
+	{
+		//and if elevator either has limitqueue off, or has limitqueue on and is eligible
+		if (LimitQueue == false || (LimitQueue == true && QueuePositionDirection == 0))
+		{
+			//and if it's above the current floor and should be called down, or below the
+			//current floor and called up, or idle
+			if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || IsIdle())
+			{
+				//and if it's either going the same direction as the call or idle
+				if (QueuePositionDirection == direction || IsIdle())
+				{
+					//and if nudge mode is off on all doors
+					if (IsNudgeModeActive() == false)
+					{
+						//and if it's not in any service mode
+						if (InServiceMode() == false)
+						{
+							if (sbs->Verbose)
+								Report("Available for call");
+							return true;
+						}
+						else if (sbs->Verbose == true)
+							Report("Not available for call - in service mode");
+					}
+					else if (sbs->Verbose == true)
+						Report("Not available for call - in nudge mode");
+				}
+				else if (sbs->Verbose == true)
+					Report("Not available for call - going a different direction and is not idle");
+			}
+			else if (sbs->Verbose == true)
+				Report("Not available for call - position/direction wrong for call");
+		}
+		else if (sbs->Verbose == true)
+			Report("Not available for call - limitqueue is on and queue is active");
+	}
+	else if (sbs->Verbose == true)
+		Report("Not available for call - elevator not running");
+
 	return false;
 }

@@ -440,68 +440,34 @@ void CallButton::Loop(int direction)
 		for (int i = 0; i < (int)Elevators.size(); i++)
 		{
 			Elevator *elevator = sbs->GetElevator(Elevators[i]);
-			int current = elevator->GetFloor();
 
 			if (sbs->Verbose)
 				Report(std::string("Checking elevator " + std::string(_itoa(elevator->Number, intbuffer, 10))).c_str());
 
-			//if elevator is running
-			if (elevator->IsRunning() == true)
+			//if elevator is closer than the previously checked one or we're starting the checks
+			if (abs(elevator->GetFloor() - floor) < closest || check == false)
 			{
-				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(current - floor) < closest || check == false)
+				//see if elevator is available for the call
+				bool result = elevator->AvailableForCall(floor, direction);
+
+				if (result == true)
 				{
-					//and if it's above the current floor and should be called down, or below the
-					//current floor and called up, or idle
-					if ((current > floor && direction == -1) || (current < floor && direction == 1) || elevator->IsIdle())
-					{
-						//and if it's either going the same direction as the call or idle
-						if (elevator->QueuePositionDirection == direction || elevator->IsIdle())
-						{
-							//and if nudge mode is off on all doors
-							if (elevator->IsNudgeModeActive() == false)
-							{
-								//and if it's not in any service mode
-								if (elevator->InServiceMode() == false)
-								{
-									if (sbs->Verbose)
-										Report("Marking - closest so far");
-									closest = abs(current - floor);
-									closest_elev = i;
-									check = true;
-								}
-								else if (sbs->Verbose == true)
-									Report("Skipping - in service mode");
-							}
-							else if (sbs->Verbose == true)
-								Report("Skipping - in nudge mode");
-						}
-						else if (sbs->Verbose == true)
-							Report("Skipping - going a different direction and is not idle");
-					}
-					else if (sbs->Verbose == true)
-						Report("Skipping - position/direction wrong for call");
+					if (sbs->Verbose)
+						Report("Marking - closest so far");
+					closest = abs(elevator->GetFloor() - floor);
+					closest_elev = i;
+					check = true;
 				}
-				else if (sbs->Verbose == true)
-					Report("Skipping - not closer than previous");
 			}
-			else if (sbs->Verbose == true)
-				Report("Skipping - elevator not running");
 		}
 	}
 	else
 	{
-		//set elevator to first elevator if call button only serves one, only if elevator is running
-		if (sbs->GetElevator(Elevators[0])->IsRunning() == true && sbs->GetElevator(Elevators[0])->IsNudgeModeActive() == false)
+		//set elevator to first elevator if call button only serves one, only if elevator is available for the call
+		if (sbs->GetElevator(Elevators[0])->AvailableForCall(floor, direction) == true)
 		{
 			closest_elev = 0;
 			check = true;
-		}
-		else
-		{
-			//otherwise turn off call buttons
-			UpLight(false);
-			DownLight(false);
 		}
 	}
 

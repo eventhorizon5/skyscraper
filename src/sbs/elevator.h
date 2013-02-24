@@ -283,6 +283,7 @@ public:
 	void SetFloor(int floor);
 	void Init();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
+	bool AvailableForCall(int floor, int direction);
 
 private:
 
