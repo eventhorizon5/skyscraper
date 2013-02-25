@@ -332,6 +332,7 @@ private:
 	bool DownQueueEmpty;
 	bool UpCall;
 	bool DownCall;
+	bool QueuePending; //true if either queue has changed, and needs to be processed
 
 	//functions
 	void MoveElevatorToFloor();
