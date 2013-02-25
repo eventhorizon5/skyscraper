@@ -78,6 +78,8 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	Direction = direction;
 	SetCase(Direction, false);
 	TrimString(Direction);
+	Locked = false;
+	KeyID = 0;
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -266,17 +268,24 @@ void CallButton::Enabled(bool value)
 	}
 }
 
-void CallButton::Call(bool direction)
+bool CallButton::Call(bool direction)
 {
 	//calls the closest elevator in the elevator array list to the current floor,
 	//and also depending on the direction it's traveling
+
+	//check lock state
+	if (IsLocked() == true)
+	{
+		ReportError("Call button is locked");
+		return false;
+	}
 
 	//exit if call has already been made
 	if ((direction == true && UpStatus == true) || (direction == false && DownStatus == true))
 	{
 		if (sbs->Verbose)
 			sbs->Report("Call has already been made");
-		return;
+		return false;
 	}
 
 	//set light and direction value
@@ -306,6 +315,7 @@ void CallButton::Call(bool direction)
 		Report("Registering callback");
 
 	sbs->RegisterCallButtonCallback(this);
+	return true;
 }
 
 void CallButton::UpLight(bool value)
@@ -401,7 +411,7 @@ bool CallButton::ServicesElevator(int elevator)
 	return false;
 }
 
-void CallButton::Loop(bool direction)
+void CallButton::Loop(int direction)
 {
 	//call button main loop
 	//this function runs for every registered call button via callback
@@ -410,21 +420,15 @@ void CallButton::Loop(bool direction)
 	//first exit if no call button is not processing a call for the current direction
 	//or if a call has already been processed
 	SBS_PROFILE("CallButton::Loop");
-	if ((UpStatus == false && direction == true) || (ProcessedUp == true && direction == true))
+	if ((UpStatus == false && direction == 1) || (ProcessedUp == true && direction == 1))
 		return;
-	if ((DownStatus == false && direction == false) || (ProcessedDown == true && direction == false))
+	if ((DownStatus == false && direction == -1) || (ProcessedDown == true && direction == -1))
 		return;
 
 	//initialize values
 	int closest = 0;
 	int closest_elev = 0;
-	int tmpdirection = 0;
 	bool check = false;
-
-	if (direction == true)
-		tmpdirection = 1;
-	else
-		tmpdirection = -1;
 
 	if (Elevators.size() > 1)
 	{
@@ -436,68 +440,34 @@ void CallButton::Loop(bool direction)
 		for (int i = 0; i < (int)Elevators.size(); i++)
 		{
 			Elevator *elevator = sbs->GetElevator(Elevators[i]);
-			int current = elevator->GetFloor();
 
 			if (sbs->Verbose)
 				Report(std::string("Checking elevator " + std::string(_itoa(elevator->Number, intbuffer, 10))).c_str());
 
-			//if elevator is running
-			if (elevator->IsRunning() == true)
+			//if elevator is closer than the previously checked one or we're starting the checks
+			if (abs(elevator->GetFloor() - floor) < closest || check == false)
 			{
-				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(current - floor) < closest || check == false)
+				//see if elevator is available for the call
+				bool result = elevator->AvailableForCall(floor, direction);
+
+				if (result == true)
 				{
-					//and if it's above the current floor and should be called down, or below the
-					//current floor and called up, or on the same floor, or idle
-					if ((current > floor && direction == false) || (current < floor && direction == true) || current == floor || elevator->IsIdle())
-					{
-						//and if it's either going the same direction as the call or idle
-						if (elevator->QueuePositionDirection == tmpdirection || elevator->IsIdle())
-						{
-							//and if nudge mode is off on all doors
-							if (sbs->GetElevator(Elevators[i])->IsNudgeModeActive() == false)
-							{
-								//and if it's not in any service mode
-								if (sbs->GetElevator(Elevators[i])->InServiceMode() == false)
-								{
-									if (sbs->Verbose)
-										Report("Marking - closest so far");
-									closest = abs(current - floor);
-									closest_elev = i;
-									check = true;
-								}
-								else if (sbs->Verbose == true)
-									Report("Skipping - in service mode");
-							}
-							else if (sbs->Verbose == true)
-								Report("Skipping - in nudge mode");
-						}
-						else if (sbs->Verbose == true)
-							Report("Skipping - going a different direction and is not idle");
-					}
-					else if (sbs->Verbose == true)
-						Report("Skipping - position/direction wrong for call");
+					if (sbs->Verbose)
+						Report("Marking - closest so far");
+					closest = abs(elevator->GetFloor() - floor);
+					closest_elev = i;
+					check = true;
 				}
-				else if (sbs->Verbose == true)
-					Report("Skipping - not closer than previous");
 			}
-			else if (sbs->Verbose == true)
-				Report("Skipping - elevator not running");
 		}
 	}
 	else
 	{
-		//set elevator to first elevator if call button only serves one, only if elevator is running
-		if (sbs->GetElevator(Elevators[0])->IsRunning() == true && sbs->GetElevator(Elevators[0])->IsNudgeModeActive() == false)
+		//set elevator to first elevator if call button only serves one, only if elevator is available for the call
+		if (sbs->GetElevator(Elevators[0])->AvailableForCall(floor, direction) == true)
 		{
 			closest_elev = 0;
 			check = true;
-		}
-		else
-		{
-			//otherwise turn off call buttons
-			UpLight(false);
-			DownLight(false);
 		}
 	}
 
@@ -511,7 +481,7 @@ void CallButton::Loop(bool direction)
 	}
 
 	//change processed state
-	if (direction == true)
+	if (direction == 1)
 		ProcessedUp = true;
 	else
 		ProcessedDown = true;
@@ -526,7 +496,7 @@ void CallButton::Loop(bool direction)
 		Report(std::string("Using elevator " + std::string(_itoa(elevator->Number, intbuffer, 10))).c_str());
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
-	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == tmpdirection && elevator->IsIdle() == false && elevator->IsMoving == false)
+	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == direction && elevator->IsIdle() == false && elevator->IsMoving == false)
 	{
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
@@ -537,13 +507,13 @@ void CallButton::Loop(bool direction)
 		//turn off all button lights in the group
 		for (int i = 0; i < (int)buttons.size(); i++)
 		{
-			if (direction == true)
+			if (direction == 1)
 				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->UpLight(false);
 			else
 				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->DownLight(false);
 		}
 
-		if (direction == false)
+		if (direction == -1)
 		{
 			//turn on directional indicator
 			sbs->GetFloor(floor)->SetDirectionalIndicators(elevator->Number, false, true);
@@ -588,4 +558,49 @@ bool CallButton::ReportError(const char *message)
 	//general reporting function
 	std::string msg = "Call button " + std::string(_itoa(floor, intbuffer, 10)) + ":" + std::string(_itoa(Number, intbuffer, 10)) + " - " + message;
 	return sbs->ReportError(msg.c_str());
+}
+
+void CallButton::SetLocked(bool value, int keyid)
+{
+	//set locked state
+	Locked = value;
+	KeyID = keyid;
+}
+
+void CallButton::ToggleLock(bool force)
+{
+	//toggle lock state
+	//if force is true, bypass key check
+
+	bool replocked = false;
+
+	//quit if user doesn't have key, if force is false
+	if (KeyID != 0)
+	{
+		if (sbs->CheckKey(KeyID) == false && force == false)
+		{
+			char intbuffer[10];
+			std::string id = _itoa(KeyID, intbuffer, 10);
+			std::string msg = "Need key " + id + "to lock/unlock";
+			ReportError(msg.c_str());
+			return;
+		}
+	}
+
+	Locked = !Locked;
+
+	if (Locked == true)
+		Report("Locked");
+	else
+		Report("Unlocked");
+}
+
+bool CallButton::IsLocked()
+{
+	return Locked;
+}
+
+int CallButton::GetKeyID()
+{
+	return KeyID;
 }

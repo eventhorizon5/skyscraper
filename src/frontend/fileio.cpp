@@ -2245,13 +2245,13 @@ int ScriptProcessor::ProcCommands()
 		if (params < 3)
 			return ScriptError("Incorrect number of parameters");
 
-		Object *obj;
+		std::vector<Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
-			obj = Simcore->object;
+			objects.push_back(Simcore->object);
 		else
-			obj = Simcore->GetObject(tempdata[1].c_str());
+			objects = Simcore->GetObjectRange(tempdata[1].c_str());
 
 		std::vector<std::string> actparams;
 		if (params > 3)
@@ -2262,16 +2262,15 @@ int ScriptProcessor::ProcCommands()
 			}
 		}
 
-		if (obj)
+		if (objects.size() > 0)
 		{
-			std::vector<Object*> parents;
-			parents.push_back(obj);
-
 			if (params > 3)
-				Simcore->AddAction(tempdata[0], parents, tempdata[2], actparams);
+				Simcore->AddAction(tempdata[0], objects, tempdata[2], actparams);
 			else
-				Simcore->AddAction(tempdata[0], parents, tempdata[2]);
+				Simcore->AddAction(tempdata[0], objects, tempdata[2]);
 		}
+		else
+			return ScriptError("Invalid parent object(s)");
 	}
 
 	//AddActionControl command
@@ -5091,6 +5090,12 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		elev->QueueResets = Ogre::StringConverter::parseBool(temp2);
 	}
+	if (linecheck.substr(0, 10) == "limitqueue")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		elev->LimitQueue = Ogre::StringConverter::parseBool(temp2);
+	}
 	if (linecheck.substr(0, 3) == "acp")
 	{
 		if (temp2check < 0)
@@ -5232,6 +5237,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->InspectionSpeed))
 			return ScriptError("Invalid value");
+	}
+	if (linecheck.substr(0, 10) == "autoenable")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		elev->AutoEnable = Ogre::StringConverter::parseBool(temp2);
 	}
 
 	//Print command

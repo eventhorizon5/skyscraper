@@ -154,6 +154,10 @@ class editelevator: public wxDialog
 		static const long ID_txtQueueLastDown;
 		static const long ID_STATICTEXT51;
 		static const long ID_txtQueueLastDirection;
+		static const long ID_STATICTEXT68;
+		static const long ID_txtQueueResets;
+		static const long ID_STATICTEXT69;
+		static const long ID_txtLimitQueue;
 		static const long ID_bResetQueues;
 		static const long ID_STATICTEXT21;
 		static const long ID_txtSpeed;
@@ -420,6 +424,7 @@ class editelevator: public wxDialog
 		wxStaticText* tElevator;
 		wxRadioButton* Fire1Bypass;
 		wxStaticText* StaticText55;
+		wxStaticText* StaticText69;
 		wxTextCtrl* txtLeveling;
 		wxTextCtrl* txtIsMoving;
 		wxScrollBar* sDoor;
@@ -455,6 +460,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText31;
 		wxScrollBar* sNumber;
 		wxButton* bChime;
+		wxStaticText* StaticText68;
 		wxButton* bSetArrivalDelay;
 		wxTextCtrl* txtParking;
 		wxButton* bSetDepartureDelay;
@@ -483,6 +489,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtHeight;
 		wxTextCtrl* txtNudgeMode;
 		wxStaticText* StaticText58;
+		wxTextCtrl* txtLimitQueue;
 		wxStaticText* StaticText19;
 		wxStaticText* StaticText38;
 		wxTextCtrl* txtAccelJerk;
@@ -520,6 +527,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText67;
 		wxStaticText* StaticText5;
 		wxTextCtrl* txtNumber;
+		wxTextCtrl* txtQueueResets;
 		wxTextCtrl* txtLevelingOpen;
 		wxTextCtrl* txtQueueDirection;
 		wxToggleButton* bDownPeak;

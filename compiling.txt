@@ -1,0 +1,105 @@
+Building from source on Linux:
+-------------------------------------
+
+Install required stuff:
+---
+sudo apt-get install subversion cmake gcc g++ wx2.8-headers libwxgtk2.8-dev libglut3-dev libglui-dev zlib1g-dev libfreeimage-dev libfreetype6-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev
+---
+
+
+Step 1 - build and install Bullet
+----------
+Get Bullet source (my custom-patched version):
+---
+wget http://www.skyscrapersim.com/downloads/dev/other_apps/bullet-current.tar.bz2
+---
+
+Extract Bullet:
+---
+tar xfvj bullet-current.tar.bz2
+---
+
+Build and install Bullet:
+---
+cd bullet
+cmake -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION
+make
+sudo make install
+cd
+---
+
+If you have a multi-core system, you can type "make -j2" for example to build using 2 cores, or "make -j4" for 4 cores.  If you want to play around with the Bullet demos, remove the "-DBUILD_DEMOS=OFF" portion when running cmake above and then build it.
+
+
+Step 2 - install the FMOD sound system
+----------
+Get the related Linux package from:
+http://www.fmod.org/index.php/download#FMODExProgrammersAPI
+
+(this download URL will change - http://www.fmod.org/fmod-downloads.html)
+---
+wget http://www.fmod.org/index.php/release/version/fmodapi44203linux.tar.gz
+tar xfvz fmodapi44203linux.tar.gz
+cd fmodapi44203linux/api
+sudo mkdir /usr/local/include/fmodex
+sudo cp -p inc/* /usr/local/include/fmodex/
+sudo cp -p lib/* /usr/local/lib/
+cd
+---
+
+
+Step 3 - build and install OGRE
+-----------
+
+First get the source:
+---
+wget http://www.skyscrapersim.com/downloads/dev/other_apps/ogre_src_v1-7-4.tar.bz2
+tar xfvj ogre_src_v1-7-4.tar.bz2
+cd ogre_src_v1-7-4
+cmake -DOGRE_BUILD_SAMPLES=OFF
+make
+sudo make install
+---
+
+(if you want to install the OGRE samples, for the cmake line above do "cmake -DINSTALL_SAMPLES=ON" instead)
+
+
+Step 4 - build and install Caelum (sky system)
+-----------
+wget http://www.skyscrapersim.com/downloads/dev/other_apps/caelum-0.6.1.tar.gz
+tar xfvz caelum-0.6.1.tar.gz
+cd caelum-0.6.1
+cmake .
+make
+sudo make install
+---
+
+
+Step 5 - build Skyscraper (this also builds the built-in OgreBullet libraries)
+-----------
+First grab the source via SVN, and build.
+---
+svn co http://svn.tliquest.net/skyscraper/skyscraper/trunk skyscraper
+cd skyscraper
+wget http://www.skyscrapersim.com/downloads/dev/other_apps/plugins.cfg
+cmake -DCMAKE_C_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION" -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION"
+make svnrev/svnrev
+./svnrev.sh
+make
+ln -s Skyscraper skyscraper
+---
+
+Finally, run Skyscraper:
+---
+./skyscraper
+---
+
+To update the app in the future, first do an SVN update, rebuild and run:
+---
+svn update
+./svnrev.sh
+make
+./skyscraper
+---
+
+

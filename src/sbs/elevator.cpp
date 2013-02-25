@@ -174,6 +174,13 @@ Elevator::Elevator(int number)
 	ManualUp = false;
 	ManualDown = false;
 	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
+	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", false);
+	UpQueueEmpty = false;
+	DownQueueEmpty = false;
+	UpCall = false;
+	DownCall = false;
+	QueuePending = false;
+	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoEnable", true);
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -595,7 +602,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	return object;
 }
 
-void Elevator::AddRoute(int floor, int direction, bool change_light)
+bool Elevator::AddRoute(int floor, int direction, bool change_light)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
@@ -605,7 +612,7 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	Floor *floorobj = sbs->GetFloor(floor);
@@ -613,26 +620,37 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 	if (!floorobj)
 	{
 		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
-		return;
+		return false;
 	}
 
 	//if doors are open or moving in independent service mode, quit
 	if (IndependentService == true && (AreDoorsOpen() == false || CheckOpenDoor() == true))
 	{
 		Report("floor button must be pressed before closing doors while in independent service");
-		return;
+		return false;
 	}
 
 	//do not add routes if in inspection service or fire phase 1 modes
 	if (InspectionService == true)
 	{
 		Report("cannot add route while in inspection service mode");
-		return;
+		return false;
 	}
 	if (FireServicePhase2 == 2)
 	{
 		Report("cannot add route while in held state");
-		return;
+		return false;
+	}
+
+	//discard route if direction opposite queue search direction
+	if (LimitQueue == true && direction != QueuePositionDirection && QueuePositionDirection != 0)
+	{
+		//only allow if any queue entries exist
+		if ((QueuePositionDirection == 1 && UpQueue.size() > 0) || (QueuePositionDirection == -1 && DownQueue.size() > 0))
+		{
+			Report("cannot add route in opposite direction of queue search");
+			return false;
+		}
 	}
 
 	if (direction == 1)
@@ -648,11 +666,13 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		{
 			//exit if entry already exits
 			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
-			return;
+			return false;
 		}
 
+		//add floor to up queue
 		UpQueue.push_back(floor);
 		std::sort(UpQueue.begin(), UpQueue.end());
+		QueuePending = true;
 
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
@@ -671,11 +691,13 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 		{
 			//exit if entry already exits
 			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
-			return;
+			return false;
 		}
 		
+		//add floor to down queue
 		DownQueue.push_back(floor);
 		std::sort(DownQueue.begin(), DownQueue.end());
+		QueuePending = true;
 		
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
@@ -702,9 +724,10 @@ void Elevator::AddRoute(int floor, int direction, bool change_light)
 			AddRoute(ACPFloor, direction, false);
 		}
 	}
+	return true;
 }
 
-void Elevator::DeleteRoute(int floor, int direction)
+bool Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
@@ -714,7 +737,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	Floor *floorobj = sbs->GetFloor(floor);
@@ -722,7 +745,7 @@ void Elevator::DeleteRoute(int floor, int direction)
 	if (!floorobj)
 	{
 		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
-		return;
+		return false;
 	}
 
 	if (direction == 1)
@@ -734,6 +757,8 @@ void Elevator::DeleteRoute(int floor, int direction)
 				UpQueue.erase(UpQueue.begin() + i);
 		}
 		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction up");
+		if (UpQueue.size() == 0)
+			UpQueueEmpty = true;
 	}
 	else
 	{
@@ -744,6 +769,8 @@ void Elevator::DeleteRoute(int floor, int direction)
 				DownQueue.erase(DownQueue.begin() + i);
 		}
 		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction down");
+		if (DownQueue.size() == 0)
+			DownQueueEmpty = true;
 	}
 
 	//turn off button lights
@@ -751,9 +778,10 @@ void Elevator::DeleteRoute(int floor, int direction)
 		Report("DeleteRoute: turning off button lights for floor " + std::string(_itoa(floor, intbuffer, 10)));
 	for (int i = 0; i < (int)PanelArray.size(); i++)
 		PanelArray[i]->ChangeLight(floor, false);
+	return true;
 }
 
-void Elevator::CancelLastRoute()
+bool Elevator::CancelLastRoute()
 {
 	//cancels the last added route
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
@@ -761,20 +789,21 @@ void Elevator::CancelLastRoute()
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	if (LastQueueFloor[1] == 0)
 	{
 		if (sbs->Verbose)
 			Report("CancelLastRoute: route not valid");
-		return;
+		return false;
 	}
 
 	Report("canceling last route");
 	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
+	return true;
 }
 
 void Elevator::Alarm()
@@ -870,6 +899,9 @@ void Elevator::ProcessCallQueue()
 		int TopFloor = GetTopFloor();
 		int BottomFloor = GetBottomFloor();
 
+		UpQueueEmpty = false;
+		DownQueueEmpty = false;
+
 		if (DownPeak == true || UpPeak == true)
 		{
 			//if DownPeak mode is active, send elevator to the top serviced floor if not already there
@@ -902,21 +934,47 @@ void Elevator::ProcessCallQueue()
 	}
 	else if (QueuePositionDirection == 0)
 	{
-		LastQueueDirection = 0;
-
 		if (UpQueue.size() != 0)
 		{
 			if (sbs->Verbose)
 				Report("ProcessCallQueue: setting search direction to up");
 			QueuePositionDirection = 1;
 		}
-		if (DownQueue.size() != 0)
+		else if (DownQueue.size() != 0)
 		{
 			if (sbs->Verbose)
 				Report("ProcessCallQueue: setting search direction to down");
 			QueuePositionDirection = -1;
 		}
+		LastQueueDirection = 0;
 	}
+
+	//reverse queues if related queue empty flag is set
+	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.size() > 0)
+	{
+		if (UpCall == false)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: setting search direction to down");
+			LastQueueDirection = QueuePositionDirection;
+			QueuePositionDirection = -1;
+		}
+	}
+	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.size() > 0)
+	{
+		if (DownCall == false)
+		{
+			if (sbs->Verbose)
+				Report("ProcessCallQueue: setting search direction to up");
+			LastQueueDirection = QueuePositionDirection;
+			QueuePositionDirection = 1;
+		}
+	}
+
+	UpQueueEmpty = false;
+	DownQueueEmpty = false;
+	UpCall = false;
+	DownCall = false;
 
 	//set search direction to 0 if any related queue is empty, and if doors are not open or moving
 	if (AreDoorsOpen() == false && CheckOpenDoor() == false)
@@ -962,6 +1020,7 @@ void Elevator::ProcessCallQueue()
 					}
 					MoveElevator = true;
 					LastQueueDirection = 1;
+					QueuePending = false;
 				}
 				else if (Leveling == false && ActiveDirection == 1)
 				{
@@ -1000,6 +1059,7 @@ void Elevator::ProcessCallQueue()
 					}
 					MoveElevator = true;
 					LastQueueDirection = 1;
+					QueuePending = false;
 					return;
 				}
 				//reset search direction or queue if it's the last entry
@@ -1030,7 +1090,7 @@ void Elevator::ProcessCallQueue()
 	}
 	else if (QueuePositionDirection == -1)
 	{
-		//search through down queue (search order is reversed since calls need to be processed in decending order)
+		//search through down queue (search order is reversed since calls need to be processed in descending order)
 		for (int i = (int)DownQueue.size() - 1; i >= 0; i--)
 		{
 			//if the queued floor number is a lower floor, dispatch the elevator to that floor
@@ -1050,6 +1110,7 @@ void Elevator::ProcessCallQueue()
 					}
 					MoveElevator = true;
 					LastQueueDirection = -1;
+					QueuePending = false;
 				}
 				else if (Leveling == false && ActiveDirection == -1)
 				{
@@ -1088,6 +1149,7 @@ void Elevator::ProcessCallQueue()
 					}
 					MoveElevator = true;
 					LastQueueDirection = -1;
+					QueuePending = false;
 					return;
 				}
 				//reset search direction or queue if it's the first entry
@@ -2099,29 +2161,12 @@ void Elevator::FinishMove()
 		//notify arrival and disable call button light
 		if (InServiceMode() == false)
 		{
-			//reverse queue if at end of current queue, and if elevator was moving in the correct direction (not moving up for a down call, etc)
-			if ((QueuePositionDirection == 1 && UpQueue.size() == 0 && ElevatorFloor < GotoFloor) || (QueuePositionDirection == -1 && DownQueue.size() == 0 && ElevatorFloor > GotoFloor))
-			{
-				std::vector<int> buttons = sbs->GetFloor(GotoFloor)->GetCallButtons(Number);
-				if (buttons.size() > 0)
-				{
-					CallButton *button =  sbs->GetFloor(GotoFloor)->CallButtonArray[buttons[0]];
-					//only reverse the queue direction if no related active call is on the floor
-					if (button)
-					{
-						if ((button->UpStatus == false && QueuePositionDirection == 1) || (button->DownStatus == false && QueuePositionDirection == -1))
-						{
-							if (sbs->Verbose)
-								Report("reversing queue search direction");
-							LastQueueDirection = QueuePositionDirection;
-							QueuePositionDirection = -QueuePositionDirection;
-						}
-					}
-				}
-			}
-
+			//notify on arrival
 			if ((NotifyEarly == 0 || Notified == false) && Parking == false)
 				NotifyArrival(GotoFloor);
+
+			//get status of call buttons before switching off
+			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
 
 			//disable call button lights
 			SetCallButtons(GotoFloor, GetArrivalDirection(GotoFloor), false);
@@ -2235,6 +2280,9 @@ void Elevator::Enabled(bool value)
 void Elevator::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
+
+	if (AutoEnable == false)
+		return;
 
 	//SBS_PROFILE("Elevator::EnableObjects");
 	if (sbs->Verbose)
@@ -3845,6 +3893,9 @@ bool Elevator::IsIdle()
 void Elevator::ResetQueue(bool up, bool down)
 {
 	//reset queues
+
+	QueuePending = false;
+
 	if (up == true)
 	{
 		if (sbs->Verbose)
@@ -4390,10 +4441,8 @@ void Elevator::NotifyArrival(int floor)
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
 
-	bool LightDirection = GetArrivalDirection(floor); //true for up, false for down
-
 	//play chime sound and change indicator
-	if (LightDirection == true)
+	if (GetArrivalDirection(floor) == true)
 	{
 		Chime(0, floor, true);
 		if (sbs->GetFloor(floor))
@@ -4414,19 +4463,45 @@ void Elevator::NotifyArrival(int floor)
 bool Elevator::GetArrivalDirection(int floor)
 {
 	//determine if the directional lantern should show up or down on arrival to the specified floor
+	//true for up, false for down
 
-	bool LightDirection = false; //true for up, false for down
+	int newfloor = floor;
 
 	if (floor == GetTopFloor())
-		LightDirection = false; //turn on down light if on top floor
-	else if (floor == GetBottomFloor())
-		LightDirection = true; //turn on up light if on bottom floor
-	else if (QueuePositionDirection == 1)
-		LightDirection = true; //turn on up light if queue direction is up
-	else if (QueuePositionDirection == -1)
-		LightDirection = false; //turn on down light if queue direction is down
+		return false; //turn on down light if on top floor
+	if (floor == GetBottomFloor())
+		return true; //turn on up light if on bottom floor
 
-	return LightDirection;
+	//check for active hall calls
+	bool UpStatus, DownStatus;
+	GetCallButtonStatus(floor, UpStatus, DownStatus);
+	if (UpStatus == true && QueuePositionDirection == 1)
+		return true;
+	if (DownStatus == true && QueuePositionDirection == -1)
+		return false;
+
+	if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
+		newfloor = UpQueue[0];
+
+	if (QueuePositionDirection == -1 && DownQueue.size() > 0 && DownQueueEmpty == false)
+		newfloor = DownQueue[(int)DownQueue.size() - 1];
+
+	if (QueuePositionDirection == 1 && DownQueue.size() > 0 && UpQueueEmpty == true)
+		newfloor = DownQueue[(int)DownQueue.size() - 1];
+
+	if (QueuePositionDirection == -1 && UpQueue.size() > 0 && DownQueueEmpty == true)
+		newfloor = UpQueue[0];
+
+	if (QueuePositionDirection == 1 && UpQueue.size() == 0 && DownQueue.size() == 0)
+		return true;
+
+	if (QueuePositionDirection == -1 && UpQueue.size() == 0 && DownQueue.size() == 0)
+		return false;
+
+	if (newfloor >= floor)
+		return true; //turn on up for entry above current floor
+	else
+		return false; //turn on down for entry below current floor
 }
 
 void Elevator::SetRunState(bool value)
@@ -4749,4 +4824,82 @@ void Elevator::Init()
 
 	//move elevator to starting position
 	SetFloor(OriginFloor);
+}
+
+bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
+{
+	//returns status of associated call buttons on specified floor in UpStatus and DownStatus variables
+
+	if (sbs->GetFloor(floor))
+	{
+		std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
+		if (buttons.size() > 0)
+		{
+			CallButton *button =  sbs->GetFloor(floor)->CallButtonArray[buttons[0]];
+			if (button)
+			{
+				Up = button->UpStatus;
+				Down = button->DownStatus;
+				return true;
+			}
+		}
+	}
+
+	Up = false;
+	Down = false;
+	return false;
+}
+
+bool Elevator::AvailableForCall(int floor, int direction)
+{
+	//return true or false if the elevator is available for the specified hall call
+
+	//if elevator is running
+	if (IsRunning() == true)
+	{
+		//and if no queue changes are pending
+		if (QueuePending == false)
+		{
+			//and if elevator either has limitqueue off, or has limitqueue on and is eligible
+			if (LimitQueue == false || (LimitQueue == true && QueuePositionDirection == 0))
+			{
+				//and if it's above the current floor and should be called down, or below the
+				//current floor and called up, or idle
+				if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || IsIdle())
+				{
+					//and if it's either going the same direction as the call or idle
+					if (QueuePositionDirection == direction || IsIdle())
+					{
+						//and if nudge mode is off on all doors
+						if (IsNudgeModeActive() == false)
+						{
+							//and if it's not in any service mode
+							if (InServiceMode() == false)
+							{
+								if (sbs->Verbose)
+									Report("Available for call");
+								return true;
+							}
+							else if (sbs->Verbose == true)
+								Report("Not available for call - in service mode");
+						}
+						else if (sbs->Verbose == true)
+							Report("Not available for call - in nudge mode");
+					}
+					else if (sbs->Verbose == true)
+						Report("Not available for call - going a different direction and is not idle");
+				}
+				else if (sbs->Verbose == true)
+					Report("Not available for call - position/direction wrong for call");
+			}
+			else if (sbs->Verbose == true)
+				Report("Not available for call - limitqueue is on and queue is active");
+		}
+		else if (sbs->Verbose == true)
+			Report("Not available for call - queue change is pending");
+	}
+	else if (sbs->Verbose == true)
+		Report("Not available for call - elevator not running");
+
+	return false;
 }

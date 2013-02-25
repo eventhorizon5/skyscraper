@@ -227,7 +227,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	Active = false;
 	this->Center();
 	wxString title;
-	title = wxT("Skyscraper 2.0 Alpha 8");
+	title = wxT("Skyscraper 1.8 Alpha");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	this->SetTitle(title);
 	//panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
@@ -374,14 +374,22 @@ bool Skyscraper::Initialize()
 	}
 
 	//configure render system
-	if(!mRoot->getRenderSystem())
+	try
 	{
-		//if no render systems are loaded, try to load previous config
-		if(!mRoot->restoreConfig())
+		if(!mRoot->getRenderSystem())
 		{
-			//show dialog if load failed
-			mRoot->showConfigDialog();
+			//if no render systems are loaded, try to load previous config
+			if(!mRoot->restoreConfig())
+			{
+				//show dialog if load failed
+				mRoot->showConfigDialog();
+			}
 		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error configuring render system\nDetails:" + e.getDescription());
+		return false;
 	}
 
 	//initialize render window

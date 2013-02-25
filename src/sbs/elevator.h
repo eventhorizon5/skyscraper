@@ -134,6 +134,8 @@ public:
 	bool WaitForTimer; //true if elevator is waiting for the arrival/departure timers to finish before moving
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	float InspectionSpeed; //inspection service speed multiplier
+	bool LimitQueue; //true to only allow floor selections in the same queue direction
+	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -141,9 +143,9 @@ public:
 	Elevator(int number);
 	~Elevator();
 	Object* CreateElevator(bool relative, float x, float z, int floor);
-	void AddRoute(int floor, int direction, bool change_light);
-	void DeleteRoute(int floor, int direction);
-	void CancelLastRoute();
+	bool AddRoute(int floor, int direction, bool change_light);
+	bool DeleteRoute(int floor, int direction);
+	bool CancelLastRoute();
 	void Alarm();
 	void Stop(bool emergency);
 	void OpenHatch();
@@ -281,6 +283,8 @@ public:
 	void SetAltitude(float altitude);
 	void SetFloor(int floor);
 	void Init();
+	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
+	bool AvailableForCall(int floor, int direction);
 
 private:
 
@@ -325,6 +329,11 @@ private:
 	bool FirstRun; //used for setting first-run items in the run loop
 	int RandomLobby; //lobby level of elevator to use for random predictions
 	bool Running; //is elevator in run mode?
+	bool UpQueueEmpty;
+	bool DownQueueEmpty;
+	bool UpCall;
+	bool DownCall;
+	bool QueuePending; //true if either queue has changed, and needs to be processed
 
 	//functions
 	void MoveElevatorToFloor();

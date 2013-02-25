@@ -1,11 +1,128 @@
 Version 1.8 (2.0 Alpha 8)
 -------------------------
--new internal mesh system
+-major work on elevator queue/arrival notification code
+-call button behavior fixes
+-changed freelook crosshair to cross
+-added elevator queue limit, to prevent calls opposite of queue direction from being placed
+-removed same-floor check in call button code, which broke calls when elevator was moving past current floor
+-decreased classic elevator door spacing
+-fixed logic that caused down calls to alternate chime direction
+-added inspection service speed multiplier setting
+-elevators now ignore the leveling offset if brakes are turned on while beyond that offset
+-fixed a floor check and positioning issue with in-elevator directional indicators, which caused only single indicators to be created
+-added default/error texture
+-added support for configuring the main menu from the INI file
+-reversed the Sears Tower and Glass Tower menu entries
+-shift-clicking on doors now locks them
+-added new command SetKey, which allows models to be specified as keys
+-added new command SetLock, which sets lock parameters when creating doors, controls and call buttons
+-fixed elevator door bumpers
+-added actions for inspection service up/down/go toggle options
+-added support for multiple parents per action
+-added ip20112.5 update for "The Spire" building
+-new Glass Tower roof, based on movie blueprints
+-fixed a name check bug in the cut function, which was causing elevator door filler walls (done by FinishDoor()) to sometimes fail
+-added support for elevator door vertical offsets
+-elevators now stop according to the shaft door's voffset instead of the floor's base, where applicable
+-added note to script guide mentioning that automatic filler walls needs all related walls to contain the word "shaft" for it to work
+-changed camera speed to half, for a more realistic walking speed
+-fixed texture autosizing quirks (diagonal walls/floors are now autosized correctly)
+-added ability to delete models, controls and triggers
+-limited object prepare on delete, speeds up object deletion
+-added a fog multiplier setting in the INI file (changes fog density)
+-Glass Tower - new test service elevator serving most floors
+-Glass Tower - changed executive elevator to use floors in movie depiction
+-new stairwells in Glass Tower, along with railings
+-work done on Glass Tower floors 135-137
+-updated AddFloor command, which fixes a number of issues with the old command
+-fixes for planar texture mapper's autoflip functionality - now appears to work properly (but might potentially cause minor breakage of existing buildings - need to check)
+-added ReverseAxis and texture direction parameters to AddFloor
+-added rotate option to the planar texture mapper (which the texture direction parameter now uses)
+-added GotoFloor function (mainly in camera controller window)
+-added percentage indicator to script startup
+-added note to the script guide about custom texture mapping and automatic reversals
+-new glass elevators in Glass Tower
+-fixed issue preventing custom walls from being made in elevators
+-separated elevator motor sounds between up and down movements
+-added comments in script guide about leaving sound fields blank
+-performance improvements
+-fixed volume bug in AddSound - volume parameter was specified as an int, preventing fractional volume values
+-added lobby ambient sound to Triton Center
+-added support for split car up/down elevator sounds
+-added support for playing multiple sounds with the same name from an action
+-added support for running multiple actions with the same name
+-added couch model to Simple building, with physics enabled
+-added centering support to models, and added parameter to AddModel commands
+-added second couch to Simple building, and couch to top of Triton Center
+-fixed object parent values for some new objects
+-some fixes to cascading object deletion
+-Triton Center antenna tiling fix
+-added texture animation
+-added support for direct loading of ogre materials in data/materials
+-added caching to GetFloor() and related functions
+-Triton Center external windows overhaul, using alpha blending
+-Glass Tower overhaul
+-added Action and Trigger objects
+-added action viewer (control panel window)
+-fixed global AddSound command which was overriding the per-object ones
+-updated AddSound command for FMOD and added loop option for new control/trigger commands
+-fixed texture and material counters
+-added changetexture, playsound and stopsound actions
+-disabled doppler effect (sounds) by default
+-default main sim window size now changed to 800x600, menu window size separated and kept at 640x480 (configurable)
+-added internal skip for wildcards in filenames (*) (fixes those bogus error messages)
+-started in-sim object creation (code constructor)
+-added building startup options to turn on/off collisions and gravity (listed in the designguide)
+-disable basement number conformity (fixes Cliveden Desmond Wharf)
+-added a file check for the include section (loading now fails if an included file cannot be found - this prevents serious and hard-to-diagnose errors later on)
+-added Empty building (not working properly, but is used to create buildings from scratch)
+-object colliders are now removed by default (for running performance) except for elevator doors (due to slowdowns when entering Triton Center elevators)
+-disabled backface polygons for ground
+-object info listbox now updates if you exit that window and re-enter
+-added new control aliases, mostly for Mac users
+-added support for setting the default sky time speed in the INI file for Caelum, and changed the default to 25 (you can now easily see the clouds moving, and a day moves much faster so you can more quickly see sunrises and sunsets)
+-switched Mac frontend to use Cocoa
+-switched from normal flipping to standard texture flip (for ogre coordinate system compatibility)
+-added the Caelum sky system
+-lowered default texture filtering anisotropy level to 4 (from 8 )
+-switched to 16-bit hardware indices; should fix geometry corruption on some older cards, and should improve performance somewhat
+-if a cut operation eliminated an entire polygon, the original polygon would not be deleted
+-added ability to only play elevator music while moving, and updated related INI file parameters
+-added advanced option to profiler
+-added profiler system
+-added check for duplicate entries in missing files list
+-added proper error reporting (and OGRE exception handling) to frontend initializer
+-fix for operational conflict between floor grouping and ShaftShowFloors command
+-added DisplayFloors parameters
+-added texel override
+-added physics support for models
+-added support for model colliders
+-added support for Ogre meshes (using converters for Google Sketchup)
+-added checks to ensure that starting floors are less than ending floors in AddShaft and AddStairwell commands
+-gravity reset fix and fix for IsInShaft() distance check
+-fixed an issue where shaft would rapidly turn on and off if on top of elevator
+-fixed issue involving reversed polygon faces resulting in some textures being reversed.  Put in a precision workaround for Alpha 7 compatibility.
+-sound fixes, added ability to view camera collider via F7, and fixed a line skip issue in the script interpreter
+-filler wall reset fix
+-added support for different open/close speeds for elevator doors
+-wxwidgets compatibility fix
+-added proper failures on numeric checks to report errors and prevent loops
+-added texture filtering options, and switched default to anisotropic (previously bilinear)
+-added ability to switch on and off collision detection and visible colliders via F7
+-split SBS into shared object on Linux, and restructured source files
+-removed AddGenWall and migrated items using it to AddWallMain
+-switched translator code to OGRE's right-hand coordinate system (SBS uses left-hand)
+-switched to FMOD for sound
+-switched to OGRE for graphics
+-switched to Bullet for collisions and physics
+-Triton Center renovation
+-fixed door filler walls
+-object deletion fixes
+-added geometry deletion support
+-fix crash that only happens if shafts are created out of order
+-new internal mesh object system (Skyscraper now generates it's own 3D geometry)
 -new horizon distance setting
 -added render distance limits for small objects
--port to the Ogre graphics engine
--added support for Ogre meshes (using converters for Google Sketchup)
--added the Caelum sky system
 
 Version 1.7 (2.0 Alpha 7)
 -------------------------
