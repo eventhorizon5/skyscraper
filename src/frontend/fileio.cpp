@@ -2269,6 +2269,8 @@ int ScriptProcessor::ProcCommands()
 			else
 				Simcore->AddAction(tempdata[0], objects, tempdata[2]);
 		}
+		else
+			return ScriptError("Invalid parent object(s)");
 	}
 
 	//AddActionControl command

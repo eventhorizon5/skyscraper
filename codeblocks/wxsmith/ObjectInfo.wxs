@@ -10,6 +10,15 @@
 					<cols>1</cols>
 					<object class="sizeritem">
 						<object class="wxTreeCtrl" name="ID_ObjectTree" variable="ObjectTree" member="yes">
+							<image_list></image_list>
+							<tree_items>
+								<item>ObjectTree</item>
+								<item></item>
+							</tree_items>
+							<items_text>
+								<item2>ObjectTree</item2>
+								<item2></item2>
+							</items_text>
 							<size>300,350</size>
 							<style>wxTR_DEFAULT_STYLE|wxSUNKEN_BORDER|wxVSCROLL</style>
 							<handler function="On_ObjectTree_SelectionChanged" entry="EVT_TREE_SEL_CHANGED" />
@@ -60,16 +69,17 @@
 									<label>View Script</label>
 									<handler function="On_bViewScript_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bSave" variable="bSave" member="yes">
 									<label>Save Script</label>
+									<enabled>0</enabled>
 									<handler function="On_bSave_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>

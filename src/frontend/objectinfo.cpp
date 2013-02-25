@@ -91,7 +91,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	wxFlexGridSizer* FlexGridSizer3;
 	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer5;
-	
+
 	Create(parent, wxID_ANY, _("Object Manager"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -110,6 +110,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	bViewScript = new wxButton(this, ID_bViewScript, _("View Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bViewScript"));
 	BoxSizer3->Add(bViewScript, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bSave = new wxButton(this, ID_bSave, _("Save Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
+	bSave->Disable();
 	BoxSizer3->Add(bSave, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer3->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -173,7 +174,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_ObjectTree,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
 	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
 	Connect(ID_bModify,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bModify_Click);
