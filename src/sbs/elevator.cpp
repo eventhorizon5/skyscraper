@@ -180,6 +180,7 @@ Elevator::Elevator(int number)
 	UpCall = false;
 	DownCall = false;
 	QueuePending = false;
+	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoEnable", true);
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -2279,6 +2280,9 @@ void Elevator::Enabled(bool value)
 void Elevator::EnableObjects(bool value)
 {
 	//enable or disable interior objects, such as floor indicators and button panels
+
+	if (AutoEnable == false)
+		return;
 
 	//SBS_PROFILE("Elevator::EnableObjects");
 	if (sbs->Verbose)

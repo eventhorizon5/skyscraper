@@ -5239,6 +5239,13 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), elev->InspectionSpeed))
 			return ScriptError("Invalid value");
 	}
+	if (linecheck.substr(0, 10) == "autoenable")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		elev->AutoEnable = Ogre::StringConverter::parseBool(temp2);
+	}
 
 	//Print command
 	if (linecheck.substr(0, 5) == "print")

@@ -135,6 +135,7 @@ public:
 	std::vector<int> DisplayFloors; //list of floors to only display when updating floor indicators
 	float InspectionSpeed; //inspection service speed multiplier
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
+	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
