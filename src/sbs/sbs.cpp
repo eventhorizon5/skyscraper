@@ -3498,8 +3498,8 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 			type = "elevator";
 		if (expression.substr(0, 6) == "Shafts")
 			type = "shaft";
-		if (expression.substr(0, 6) == "Stairs")
-			type = "stair";
+		if (expression.substr(0, 6) == "Stairwells")
+			type = "stairwell";
 
 		std::string str1 = expression.substr(type.size() + 1, temp - (type.size() + 1));
 		std::string str2 = expression.substr(temp + 2, expression.length() - (temp + 2));
@@ -3533,9 +3533,9 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 					if (tmpname == "Shaft " + number)
 						objects.push_back(ObjectArray[i]);
 				}
-				if (type == "stair")
+				if (type == "stairwell")
 				{
-					if (tmpname == "Stairs " + number)
+					if (tmpname == "Stairwell " + number)
 						objects.push_back(ObjectArray[i]);
 				}
 			}
