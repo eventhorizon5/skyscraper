@@ -3482,6 +3482,76 @@ Object* SBS::GetObject(const std::string name)
 	return 0;
 }
 
+std::vector<Object*> SBS::GetObjectRange(std::string expression)
+{
+	//get object by name range expression (ex. "Floors 1 to 3")
+
+	std::vector<Object*> objects;
+	int temp = expression.find("to", 0);
+	std::string type;
+
+	if (temp > 0)
+	{
+		if (expression.substr(0, 6) == "Floors")
+			type = "floor";
+		if (expression.substr(0, 9) == "Elevators")
+			type = "elevator";
+		if (expression.substr(0, 6) == "Shafts")
+			type = "shaft";
+		if (expression.substr(0, 6) == "Stairs")
+			type = "stair";
+
+		std::string str1 = expression.substr(type.size() + 1, temp - (type.size() + 1));
+		std::string str2 = expression.substr(temp + 2, expression.length() - (temp + 2));
+		TrimString(str1);
+		TrimString(str2);
+		int RangeL = 0, RangeH = 0;
+		if (!IsNumeric(str1.c_str(), RangeL) || !IsNumeric(str2.c_str(), RangeH))
+		{
+			ReportError("GetObjectRange: Invalid range");
+			return objects;
+		}
+
+		for (int i = 0; i < ObjectArray.size(); i++)
+		{
+			std::string tmpname = ObjectArray[i]->GetName();
+			for (int j = RangeL; j <= RangeH; j++)
+			{
+				std::string number = _itoa(j, intbuffer, 10);
+				if (type == "floor")
+				{
+					if (tmpname == "Floor " + number)
+						objects.push_back(ObjectArray[i]);
+				}
+				if (type == "elevator")
+				{
+					if (tmpname == "Elevator " + number)
+						objects.push_back(ObjectArray[i]);
+				}
+				if (type == "shaft")
+				{
+					if (tmpname == "Shaft " + number)
+						objects.push_back(ObjectArray[i]);
+				}
+				if (type == "stair")
+				{
+					if (tmpname == "Stairs " + number)
+						objects.push_back(ObjectArray[i]);
+				}
+			}
+		}
+	}
+	else
+	{
+		//return single result
+		Object *obj = GetObject(expression);
+		if (obj)
+			objects.push_back(obj);
+	}
+
+	return objects;
+}
+
 Action* SBS::GetAction(int index)
 {
 	if (index >= 0 && index < ActionArray.size())

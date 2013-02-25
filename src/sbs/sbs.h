@@ -283,6 +283,7 @@ public:
 	int GetObjectCount();
 	Object* GetObject(int number);
 	Object* GetObject(const std::string name);
+	std::vector<Object*> GetObjectRange(std::string expression);
 	int RegisterObject(Object *object);
 	bool UnregisterObject(int number);
 	void GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction);

@@ -2245,13 +2245,13 @@ int ScriptProcessor::ProcCommands()
 		if (params < 3)
 			return ScriptError("Incorrect number of parameters");
 
-		Object *obj;
+		std::vector<Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
-			obj = Simcore->object;
+			objects.push_back(Simcore->object);
 		else
-			obj = Simcore->GetObject(tempdata[1].c_str());
+			objects = Simcore->GetObjectRange(tempdata[1].c_str());
 
 		std::vector<std::string> actparams;
 		if (params > 3)
@@ -2262,15 +2262,12 @@ int ScriptProcessor::ProcCommands()
 			}
 		}
 
-		if (obj)
+		if (objects.size() > 0)
 		{
-			std::vector<Object*> parents;
-			parents.push_back(obj);
-
 			if (params > 3)
-				Simcore->AddAction(tempdata[0], parents, tempdata[2], actparams);
+				Simcore->AddAction(tempdata[0], objects, tempdata[2], actparams);
 			else
-				Simcore->AddAction(tempdata[0], parents, tempdata[2]);
+				Simcore->AddAction(tempdata[0], objects, tempdata[2]);
 		}
 	}
 
