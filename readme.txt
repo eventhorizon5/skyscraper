@@ -247,6 +247,8 @@ SetKey
 SetLock
 InspectionSpeed
 LimitQueue
+AutoEnable
+ReOpen
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
