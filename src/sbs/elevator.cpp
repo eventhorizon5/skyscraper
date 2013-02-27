@@ -182,6 +182,7 @@ Elevator::Elevator(int number)
 	QueuePending = false;
 	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoEnable", true);
 	ReOpen = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ReOpen", true);
+	LastChimeDirection = 0;
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -951,7 +952,7 @@ void Elevator::ProcessCallQueue()
 	}
 
 	//reverse queues if related queue empty flag is set
-	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.size() > 0)
+	if (QueuePositionDirection == 1 && UpQueueEmpty == true && DownQueue.size() > 0 && NotifyEarly == 0)
 	{
 		if (UpCall == false)
 		{
@@ -961,7 +962,7 @@ void Elevator::ProcessCallQueue()
 			QueuePositionDirection = -1;
 		}
 	}
-	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.size() > 0)
+	if (QueuePositionDirection == -1 && DownQueueEmpty == true && UpQueue.size() > 0 && NotifyEarly == 0)
 	{
 		if (DownCall == false)
 		{
@@ -3647,6 +3648,7 @@ void Elevator::Chime(int number, int floor, bool direction)
 		else
 			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
 	}
+	LastChimeDirection = direction;
 }
 
 void Elevator::ResetDoorTimer(int number)
@@ -4481,17 +4483,44 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (DownStatus == true && QueuePositionDirection == -1)
 		return false;
 
-	if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
-		newfloor = UpQueue[0];
+	if (NotifyEarly == 0)
+	{
+		if (QueuePositionDirection == 1 && UpQueue.size() > 0 && UpQueueEmpty == false)
+			newfloor = UpQueue[0];
 
-	if (QueuePositionDirection == -1 && DownQueue.size() > 0 && DownQueueEmpty == false)
-		newfloor = DownQueue[(int)DownQueue.size() - 1];
+		if (QueuePositionDirection == -1 && DownQueue.size() > 0 && DownQueueEmpty == false)
+			newfloor = DownQueue[(int)DownQueue.size() - 1];
 
-	if (QueuePositionDirection == 1 && DownQueue.size() > 0 && UpQueueEmpty == true)
-		newfloor = DownQueue[(int)DownQueue.size() - 1];
+		if (QueuePositionDirection == 1 && DownQueue.size() > 0 && UpQueueEmpty == true)
+			newfloor = DownQueue[(int)DownQueue.size() - 1];
 
-	if (QueuePositionDirection == -1 && UpQueue.size() > 0 && DownQueueEmpty == true)
-		newfloor = UpQueue[0];
+		if (QueuePositionDirection == -1 && UpQueue.size() > 0 && DownQueueEmpty == true)
+			newfloor = UpQueue[0];
+	}
+	else
+	{
+		if (QueuePositionDirection == 1 && UpQueue.size() > 1)
+			newfloor = UpQueue[1];
+
+		if (QueuePositionDirection == -1 && DownQueue.size() > 1)
+			newfloor = DownQueue[(int)DownQueue.size() - 2];
+
+		if (QueuePositionDirection == 1 && UpQueue.size() == 1)
+		{
+			if (DownQueue.size() > 0)
+				newfloor = DownQueue[(int)DownQueue.size() - 1];
+			else
+				return true;
+		}
+
+		if (QueuePositionDirection == -1 && DownQueue.size() == 1)
+		{
+			if (UpQueue.size() > 0)
+				newfloor = UpQueue[0];
+			else
+				return false;
+		}
+	}
 
 	if (QueuePositionDirection == 1 && UpQueue.size() == 0 && DownQueue.size() == 0)
 		return true;
@@ -4938,9 +4967,18 @@ bool Elevator::SelectFloor(int floor)
 				{
 					if (InServiceMode() == false)
 					{
-						if (LastQueueDirection == -1)
+						int dir = 0;
+
+						if (IsQueueActive() == true)
+						{
+							dir = LastChimeDirection;
+							if (dir == 0)
+								dir = LastQueueDirection;
+						}
+
+						if (dir == -1)
 							Chime(0, floor, false);
-						else if (LastQueueDirection == 1)
+						else if (dir == 1)
 							Chime(0, floor, true);
 					}
 					if (FireServicePhase2 == 0)

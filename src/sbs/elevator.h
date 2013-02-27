@@ -137,6 +137,7 @@ public:
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
+	int LastChimeDirection; //direction of last arrival chime
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
