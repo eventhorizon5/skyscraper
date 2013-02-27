@@ -3648,7 +3648,10 @@ void Elevator::Chime(int number, int floor, bool direction)
 		else
 			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
 	}
-	LastChimeDirection = direction;
+	if (direction == true)
+		LastChimeDirection = 1;
+	else
+		LastChimeDirection = -1;
 }
 
 void Elevator::ResetDoorTimer(int number)
@@ -4610,7 +4613,7 @@ bool Elevator::PlayMessageSound()
 	//play message sound
 	//if direction is true, play up sound; otherwise play down sound
 
-	if (InServiceMode() == false)
+	if (InServiceMode() == true)
 		return false;
 
 	if (IsQueueActive() == false)
@@ -4623,14 +4626,14 @@ bool Elevator::PlayMessageSound()
 
 	if (UseMessageSounds == false)
 		return false;
-	if (direction == true && UpMessageSound == "")
+	if (direction == 1 && UpMessageSound == "")
 		return false;
-	if (direction == false && DownMessageSound == "")
+	if (direction == -1 && DownMessageSound == "")
 		return false;
 
 	std::string newsound;
 
-	if (direction == true)
+	if (direction == 1)
 	{
 		if (sbs->Verbose)
 			Report("playing up message sound");
