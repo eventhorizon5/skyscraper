@@ -1064,25 +1064,14 @@ void Elevator::ProcessCallQueue()
 					QueuePending = false;
 					return;
 				}
-				//reset search direction or queue if it's the last entry
-				if (i == UpQueue.size() - 1)
+				//reset search direction if it's the last entry and idle
+				if (i == UpQueue.size() - 1 && IsIdle() == true && QueuePositionDirection != 0)
 				{
-					if (QueueResets == true)
-					{
-						if (sbs->Verbose)
-							Report("ProcessCallQueue up: last entry (" + std::string(_itoa(UpQueue[i], intbuffer, 10)) + ") is lower; resetting queue");
-						ResetQueue(true, false);
-						return;
-					}
-					else if (IsIdle() == true && QueuePositionDirection != 0)
-					{
-						//set search direction to 0 if idle
-						if (sbs->Verbose)
-							Report("ProcessCallQueue up: resetting search direction since last entry is lower");
-						LastQueueDirection = QueuePositionDirection;
-						QueuePositionDirection = 0;
-						return;
-					}
+					if (sbs->Verbose)
+						Report("ProcessCallQueue up: resetting search direction since last entry is lower");
+					LastQueueDirection = QueuePositionDirection;
+					QueuePositionDirection = 0;
+					return;
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
@@ -1154,25 +1143,14 @@ void Elevator::ProcessCallQueue()
 					QueuePending = false;
 					return;
 				}
-				//reset search direction or queue if it's the last entry
-				if (i == 0)
+				//reset search direction if it's the last entry and idle
+				if (i == 0 && IsIdle() == true && QueuePositionDirection != 0)
 				{
-					if (QueueResets == true)
-					{
-						if (sbs->Verbose)
-							Report("ProcessCallQueue down: last entry (" + std::string(_itoa(DownQueue[i], intbuffer, 10)) + ") is higher; resetting queue");
-						ResetQueue(false, true);
-						return;
-					}
-					else if (IsIdle() == true && QueuePositionDirection != 0)
-					{
-						//set search direction to 0 if idle
-						if (sbs->Verbose)
-							Report("ProcessCallQueue down: resetting search direction since last entry is higher");
-						LastQueueDirection = QueuePositionDirection;
-						QueuePositionDirection = 0;
-						return;
-					}
+					if (sbs->Verbose)
+						Report("ProcessCallQueue down: resetting search direction since last entry is higher");
+					LastQueueDirection = QueuePositionDirection;
+					QueuePositionDirection = 0;
+					return;
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
@@ -2172,6 +2150,16 @@ void Elevator::FinishMove()
 
 			//disable call button lights
 			SetCallButtons(GotoFloor, GetArrivalDirection(GotoFloor), false);
+		}
+
+		//reset queues if specified
+		if (QueueResets == true)
+		{
+			//if last entry in current queue, reset opposite queue
+			if (QueuePositionDirection == 1 && UpQueue.size() == 0 && DownQueue.size() > 0)
+				ResetQueue(false, true);
+			else if (QueuePositionDirection == -1 && DownQueue.size() == 0 && UpQueue.size() > 0)
+				ResetQueue(true, false);
 		}
 
 		//open doors
@@ -4479,6 +4467,15 @@ bool Elevator::GetArrivalDirection(int floor)
 	if (floor == GetBottomFloor())
 		return true; //turn on up light if on bottom floor
 
+	//chime queue direction if queue resets are on
+	if (QueueResets == true)
+	{
+		if (QueuePositionDirection == 1)
+			return true;
+		else if (QueuePositionDirection == -1)
+			return false;
+	}
+
 	//check for active hall calls
 	bool UpStatus, DownStatus;
 	GetCallButtonStatus(floor, UpStatus, DownStatus);
@@ -4908,34 +4905,40 @@ bool Elevator::AvailableForCall(int floor, int direction)
 			//and if elevator either has limitqueue off, or has limitqueue on and is eligible
 			if (LimitQueue == false || (LimitQueue == true && QueuePositionDirection == 0))
 			{
-				//and if it's above the current floor and should be called down, or below the
-				//current floor and called up, or idle
-				if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || IsIdle())
+				//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
+				if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 				{
-					//and if it's either going the same direction as the call or idle
-					if (QueuePositionDirection == direction || IsIdle())
+					//and if it's above the current floor and should be called down, or below the
+					//current floor and called up, or idle
+					if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || IsIdle())
 					{
-						//and if nudge mode is off on all doors
-						if (IsNudgeModeActive() == false)
+						//and if it's either going the same direction as the call or idle
+						if (QueuePositionDirection == direction || IsIdle())
 						{
-							//and if it's not in any service mode
-							if (InServiceMode() == false)
+							//and if nudge mode is off on all doors
+							if (IsNudgeModeActive() == false)
 							{
-								if (sbs->Verbose)
-									Report("Available for call");
-								return true;
+								//and if it's not in any service mode
+								if (InServiceMode() == false)
+								{
+									if (sbs->Verbose)
+										Report("Available for call");
+									return true;
+								}
+								else if (sbs->Verbose == true)
+									Report("Not available for call - in service mode");
 							}
 							else if (sbs->Verbose == true)
-								Report("Not available for call - in service mode");
+								Report("Not available for call - in nudge mode");
 						}
 						else if (sbs->Verbose == true)
-							Report("Not available for call - in nudge mode");
+							Report("Not available for call - going a different direction and is not idle");
 					}
 					else if (sbs->Verbose == true)
-						Report("Not available for call - going a different direction and is not idle");
+						Report("Not available for call - position/direction wrong for call");
 				}
 				else if (sbs->Verbose == true)
-					Report("Not available for call - position/direction wrong for call");
+					Report("Not available for call - queueresets is on and opposite queue direction is active");
 			}
 			else if (sbs->Verbose == true)
 				Report("Not available for call - limitqueue is on and queue is active");
@@ -4959,53 +4962,47 @@ bool Elevator::SelectFloor(int floor)
 
 	bool result = false;
 
-	//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
-	if (IsQueueActive() && QueueResets == true)
-		result = AddRoute(floor, QueuePositionDirection, true);
-	else
+	//elevator is above floor
+	if (GetFloor() > floor)
+		result = AddRoute(floor, -1, true);
+
+	//elevator is below floor
+	if (GetFloor() < floor)
+		result = AddRoute(floor, 1, true);
+
+	//elevator is on floor
+	if (GetFloor() == floor)
 	{
-		//elevator is above floor
-		if (GetFloor() > floor)
-			result = AddRoute(floor, -1, true);
-
-		//elevator is below floor
-		if (GetFloor() < floor)
-			result = AddRoute(floor, 1, true);
-
-		//elevator is on floor
-		if (GetFloor() == floor)
+		if (Direction == 0)
 		{
-			if (Direction == 0)
+			//stopped - play chime and reopen doors
+			if (ReOpen == true)
 			{
-				//stopped - play chime and reopen doors
-				if (ReOpen == true)
+				if (InServiceMode() == false)
 				{
-					if (InServiceMode() == false)
+					int dir = 0;
+
+					if (IsQueueActive() == true)
 					{
-						int dir = 0;
-
-						if (IsQueueActive() == true)
-						{
-							dir = LastChimeDirection;
-							if (dir == 0)
-								dir = LastQueueDirection;
-						}
-
-						if (dir == -1)
-							Chime(0, floor, false);
-						else if (dir == 1)
-							Chime(0, floor, true);
+						dir = LastChimeDirection;
+						if (dir == 0)
+							dir = LastQueueDirection;
 					}
-					if (FireServicePhase2 == 0)
-						OpenDoors();
-					return false;
+
+					if (dir == -1)
+						Chime(0, floor, false);
+					else if (dir == 1)
+						Chime(0, floor, true);
 				}
+				if (FireServicePhase2 == 0)
+					OpenDoors();
+				return false;
 			}
-			else
-			{
-				//add a route to the current floor if elevator is moving
-				result = AddRoute(floor, -Direction, true);
-			}
+		}
+		else
+		{
+			//add a route to the current floor if elevator is moving
+			result = AddRoute(floor, -Direction, true);
 		}
 	}
 
