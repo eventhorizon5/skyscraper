@@ -268,7 +268,7 @@ public:
 	bool GetArrivalDirection(int floor);
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
-	bool PlayMessageSound(bool direction);
+	bool PlayMessageSound();
 	bool DoorExists(int number);
 	bool IsNudgeModeActive(int number = 0);
 	void EnableNudgeMode(bool value, int number = 0);

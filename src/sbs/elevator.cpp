@@ -4605,10 +4605,21 @@ bool Elevator::PlayFloorSound()
 	return true;
 }
 
-bool Elevator::PlayMessageSound(bool direction)
+bool Elevator::PlayMessageSound()
 {
 	//play message sound
 	//if direction is true, play up sound; otherwise play down sound
+
+	if (InServiceMode() == false)
+		return false;
+
+	if (IsQueueActive() == false)
+		return false;
+
+	int direction = LastChimeDirection;
+
+	if (LastChimeDirection == 0)
+		direction = LastQueueDirection;
 
 	if (UseMessageSounds == false)
 		return false;
