@@ -86,6 +86,7 @@ Section "Application" SEC01
   File "${LOCAL_FILES}\OgreBulletCollisions.dll"
   File "${LOCAL_FILES}\OgreBulletDynamics.dll"
   File "${LOCAL_FILES}\skyscraper.ini"
+  File "${LOCAL_FILES}\D3DX9_42.dll"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
   CreateShortCut "$DESKTOP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
@@ -124,13 +125,19 @@ Section /o "Source Code" SEC02
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\skyscraper.ico"
   File "${LOCAL_FILES}\gpl.txt"
+  File "${LOCAL_FILES}\Doxyfile"
+  File "${LOCAL_FILES}\CMakeLists.txt"
+  File "${LOCAL_FILES}\compiling.txt"
+  File "${LOCAL_FILES}\svnrev.*"
   File "${LOCAL_FILES}\*.patch"
+  SetOutPath "$INSTDIR\ogrebullet"
+  File /r "${LOCAL_FILES}\ogrebullet\*.*"
+  SetOutPath "$INSTDIR\svnrev"
+  File "${LOCAL_FILES}\svnrev\*.*"
   SetOutPath "$INSTDIR\src"
   File /r "${LOCAL_FILES}\src\*.*"
   SetOutPath "$INSTDIR\codeblocks"
-  File "${LOCAL_FILES}\codeblocks\*.*"
-  SetOutPath "$INSTDIR\codeblocks\wxsmith"
-  File "${LOCAL_FILES}\codeblocks\wxsmith\*.*"
+  File /r "${LOCAL_FILES}\codeblocks\*.*"
   SetOutPath "$INSTDIR\msvc"
   File "${LOCAL_FILES}\msvc\*.*"
   SetOutPath "$INSTDIR\tools"
@@ -160,19 +167,9 @@ Section "Required libraries" SEC04
   File "${LOCAL_FILES}\wxbase28_vc_custom.dll"
   File "${LOCAL_FILES}\wxmsw28_core_vc_custom.dll"
   File "${LOCAL_FILES}\wxmsw28_gl_vc_custom.dll"
+  File "${LOCAL_FILES}\D3DX9_42.dll"
   SetOutPath "$INSTDIR\data\caelum"
   File /r "${LOCAL_FILES}\data\caelum\*.*"
-SectionEnd
-
-Section "DirectX Install" SEC_DIRECTX
-  SectionIn RO
-  SetOutPath "$TEMP"
-  File "dxwebsetup.exe"
-  DetailPrint "Running DirectX Setup..."
-  ExecWait '"$TEMP\dxwebsetup.exe" /Q' $DirectXSetupError
-  DetailPrint "Finished DirectX Setup"
-  Delete "$TEMP\dxwebsetup.exe"
-  SetOutPath "$INSTDIR"
 SectionEnd
 
 Section -AdditionalIcons
@@ -199,7 +196,6 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Source code"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Visual C++ runtime"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Required libraries"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_DIRECTX} "DirectX runtime"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onUninstSuccess

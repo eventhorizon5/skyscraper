@@ -27,7 +27,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxTextCtrl" name="ID_txtDirectionFront" variable="txtDirectionFront" member="yes">
-											<minsize>150,-1</minsize>
+											<minsize>125,-1</minsize>
 											<style>wxTE_READONLY</style>
 										</object>
 										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

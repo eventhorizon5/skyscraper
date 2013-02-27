@@ -427,26 +427,12 @@ void DebugPanel::Timer::Notify()
 	}
 }
 
-wxString TruncateNumber(double value, int decimals)
-{
-	//truncates the numeric value to the specified number of decimal places (does not round)
-	wxString number = wxVariant(value).GetString();
-	if ((int)value == value)
-		return number; //exit if value is an integer
-	if (decimals < 1)
-		return number;
-	return number.Truncate(number.find('.') + decimals + 1);
-}
-
 wxString TruncateNumber(float value, int decimals)
 {
-	//truncates the numeric value to the specified number of decimal places (does not round)
-	wxString number = wxVariant(value).GetString();
-	if ((int)value == value)
-		return number; //exit if value is an integer
-	if (decimals < 1)
-		return number;
-	return number.Truncate(number.find('.') + decimals + 1);
+	std::string number = Simcore->TruncateNumber(value, decimals);
+	wxString number2 = wxString::FromAscii(number.c_str());
+
+	return number2;
 }
 
 void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)

@@ -148,57 +148,11 @@ bool Action::DoAction()
 		//report the action used
 		sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");
 
-		//numeric commands for elevator routes
+		//numeric commands for elevator floor selections
 		if (IsNumeric(command_name.c_str()) == true && elevator)
 		{
-			//exit if in inspection mode or in fire service phase 1 mode
-			if (elevator->InspectionService == true || elevator->FireServicePhase1 == 1)
-				return false;
-
 			int floor = atoi(command_name.c_str());
-			int elev_floor = elevator->GetFloor();
-
-			bool result = false;
-
-			//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
-			if (elevator->IsQueueActive() && elevator->QueueResets == true)
-				result = elevator->AddRoute(floor, elevator->QueuePositionDirection, true);
-			else
-			{
-				//elevator is above floor
-				if (elev_floor > floor)
-					result = elevator->AddRoute(floor, -1, true);
-
-				//elevator is below floor
-				if (elev_floor < floor)
-					result = elevator->AddRoute(floor, 1, true);
-
-				//elevator is on floor
-				if (elev_floor == floor)
-				{
-					if (elevator->Direction == 0)
-					{
-						//stopped - play chime and open doors
-						if (elevator->InServiceMode() == false)
-						{
-							if (elevator->LastQueueDirection == -1)
-								elevator->Chime(0, floor, false);
-							else if (elevator->LastQueueDirection == 1)
-								elevator->Chime(0, floor, true);
-						}
-						if (elevator->FireServicePhase2 == 0)
-							elevator->OpenDoors();
-						return false;
-					}
-					else
-					{
-						//add a route to the current floor if elevator is moving
-						result = elevator->AddRoute(floor, -elevator->Direction, true);
-					}
-				}
-			}
-
-			return result;
+			return elevator->SelectFloor(floor);
 		}
 
 		if (elevator)

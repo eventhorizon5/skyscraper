@@ -180,7 +180,6 @@ class DebugPanel: public wxFrame
 		DECLARE_EVENT_TABLE()
 };
 
-wxString TruncateNumber(double value, int decimals);
 wxString TruncateNumber(float value, int decimals);
 
 #endif

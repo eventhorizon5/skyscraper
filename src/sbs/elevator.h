@@ -136,6 +136,8 @@ public:
 	float InspectionSpeed; //inspection service speed multiplier
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
+	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
+	int LastChimeDirection; //direction of last arrival chime
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -246,7 +248,7 @@ public:
 	ButtonPanel* GetPanel(int index);
 	int GetRandomLobby();
 	void SetRandomLobby(int floor);
-	void SelectFloor(int floor);
+	void PressFloorButton(int floor);
 	bool IsQueued(int floor);
 	Object* AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	Door* GetStdDoor(int number);
@@ -266,7 +268,7 @@ public:
 	bool GetArrivalDirection(int floor);
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
-	bool PlayMessageSound(bool direction);
+	bool PlayMessageSound();
 	bool DoorExists(int number);
 	bool IsNudgeModeActive(int number = 0);
 	void EnableNudgeMode(bool value, int number = 0);
@@ -285,6 +287,7 @@ public:
 	void Init();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	bool AvailableForCall(int floor, int direction);
+	bool SelectFloor(int floor);
 
 private:
 
