@@ -1154,7 +1154,7 @@ void Elevator::ProcessCallQueue()
 					QueuePending = false;
 					return;
 				}
-				//reset search direction or queue if it's the first entry
+				//reset search direction or queue if it's the last entry
 				if (i == 0)
 				{
 					if (QueueResets == true)
@@ -2180,8 +2180,6 @@ void Elevator::FinishMove()
 		{
 			if (Parking == false)
 				OpenDoors();
-
-			PlayFloorSound();
 		}
 	}
 	else
@@ -4462,6 +4460,9 @@ void Elevator::NotifyArrival(int floor)
 			sbs->GetFloor(floor)->SetDirectionalIndicators(Number, false, true);
 		SetDirectionalIndicators(false, true);
 	}
+
+	if (FireServicePhase2 == 0)
+		PlayFloorSound();
 
 	Notified = true;
 }
