@@ -1627,14 +1627,17 @@ z<br>
 the elevator to reset the related queue (up or down) after it reaches the last
 valid entry. If the elevator is moving up for example with this setting on, and
 you press buttons for floors below you, the elevator will remove those entries
-after it reaches the highest selected floor.<br>
+after it reaches the highest selected floor. The elevator will only be
+available for hall calls in the active queue direction.<br>
 Example: <font face="Courier New, Courier, mono" size="2">QueueResets =
 true</font></p>
 
 <p align="left"><strong>42. LimitQueue</strong> - set this to true to only
 allow floor selections in the same direction as the active elevator queue
 direction to be placed. For example, if the elevator is moving up, and a button
-is pressed for a lower floor, this will prevent that from being queued.<br>
+is pressed for a lower floor, this will prevent that from being queued. The
+elevator will only be available for hall calls in the active queue
+direction.<br>
 Example: <font face="Courier New, Courier, mono" size="2">LimitQueue =
 true</font></p>
 
@@ -1688,10 +1691,10 @@ Syntax: <font face="Courier New, Courier, mono" size="2">LevelingOpen =
 <em>distance</em></font></p>
 
 <p align="left"><strong>52. NotifyEarly</strong> - changes behavior of arrival
-notifications (chime and lighting of directional indicator). 0 is the default
-and notifies when the elevator stops on the floor. 1 notifies when the elevator
-starts the leveling process, and 2 notifies when the elevator starts
-decelerating.<br>
+notifications (chime, lighting of directional indicator, and floor announcement
+sound). 0 is the default and notifies when the elevator stops on the floor. 1
+notifies when the elevator starts the leveling process, and 2 notifies when the
+elevator starts decelerating.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">NotifyEarly =
 <em>value</em></font></p>
 
@@ -1751,8 +1754,8 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AutoEnable =
 false</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>62.
-ReOpen</strong> - if this is set to true (the default), if the elevator is
-idle, the doors will reopen if the same floor is selected.<br>
+ReOpen</strong> - if this is set to true, if the elevator is idle, the doors
+will reopen if the same floor is selected. The default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">ReOpen =
 false</font></p>
 

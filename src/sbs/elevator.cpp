@@ -4611,7 +4611,7 @@ bool Elevator::PlayMessageSound()
 	//play message sound
 	//if direction is true, play up sound; otherwise play down sound
 
-	if (InServiceMode() == true || IsQueueActive() == false)
+	if (InServiceMode() == true || IsQueueActive() == false || UseMessageSounds == false)
 		return false;
 
 	int direction = LastChimeDirection;
@@ -4619,8 +4619,6 @@ bool Elevator::PlayMessageSound()
 	if (LastChimeDirection == 0)
 		direction = LastQueueDirection;
 
-	if (UseMessageSounds == false)
-		return false;
 	if (direction == 1 && UpMessageSound == "")
 		return false;
 	if (direction == -1 && DownMessageSound == "")
