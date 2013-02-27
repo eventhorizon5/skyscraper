@@ -4150,7 +4150,7 @@ void Elevator::Timer::Notify()
 
 		//if probability number matched, press selected floor button
 		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
-			elevator->SelectFloor(floor);
+			elevator->PressFloorButton(floor);
 	}
 	else if (type > 1)
 	{
@@ -4182,7 +4182,7 @@ void Elevator::SetRandomLobby(int floor)
 	RandomLobbySet = true;
 }
 
-void Elevator::SelectFloor(int floor)
+void Elevator::PressFloorButton(int floor)
 {
 	//press a floor button
 
@@ -4909,8 +4909,8 @@ bool Elevator::SelectFloor(int floor)
 {
 	//select a floor (in-elevator floor selections)
 
-	//exit if in inspection mode or in fire service phase 1 mode
-	if (InspectionService == true || FireServicePhase1 == 1)
+	//exit if in inspection mode or in fire service phase 1 mode or is not running
+	if (InspectionService == true || FireServicePhase1 == 1 || Running == false)
 		return false;
 
 	bool result = false;
