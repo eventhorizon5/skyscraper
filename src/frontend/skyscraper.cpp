@@ -405,7 +405,6 @@ bool Skyscraper::Initialize()
 		return false;
 	}
 
-
 	//load resource configuration
 	Ogre::ConfigFile cf;
 	try
@@ -450,16 +449,32 @@ bool Skyscraper::Initialize()
 	}
 	
 	//create scene manager
-	mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
+	try
+	{
+		mSceneMgr = mRoot->createSceneManager(Ogre::ST_GENERIC);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error creating scene manager\nDetails:" + e.getDescription());
+		return false;
+	}
 
 	//set ambient light
 	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
 
-	mCamera = mSceneMgr->createCamera("Main Camera");
-	mViewport = mRenderWindow->addViewport(mCamera);
-	//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
-	mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
+	try
+	{
+		mCamera = mSceneMgr->createCamera("Main Camera");
+		mViewport = mRenderWindow->addViewport(mCamera);
+		//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
+		mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error creating camera and viewport\nDetails:" + e.getDescription());
+		return false;
+	}
 
 	//setup texture filtering
 	int filtermode = GetConfigInt("Skyscraper.Frontend.TextureFilter", 3);
@@ -504,7 +519,6 @@ bool Skyscraper::Initialize()
 		else
 			Report("Sound initialized");
 	}
-
 
 	//load Caelum plugin
 	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
@@ -1635,15 +1649,7 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 #endif
 
 	//create the render window
-	try
-	{
-		mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-	}
-	catch (Ogre::Exception &e)
-	{
-		ReportError("Error creating render window\n" + e.getDescription());
-		return 0;
-	}
+	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
 
 	mRenderWindow->setActive(true);
 	mRenderWindow->windowMovedOrResized();
@@ -1752,7 +1758,7 @@ bool Skyscraper::InitSky()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error initializing sky:" + e.getDescription());
+		ReportError("Error initializing Caelum:" + e.getDescription());
 		//return false;
 	}
 

@@ -86,6 +86,7 @@ Section "Application" SEC01
   File "${LOCAL_FILES}\OgreBulletCollisions.dll"
   File "${LOCAL_FILES}\OgreBulletDynamics.dll"
   File "${LOCAL_FILES}\skyscraper.ini"
+  File "${LOCAL_FILES}\D3DX9_42.dll"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
   CreateShortCut "$DESKTOP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
@@ -164,17 +165,6 @@ Section "Required libraries" SEC04
   File /r "${LOCAL_FILES}\data\caelum\*.*"
 SectionEnd
 
-Section "DirectX Install" SEC_DIRECTX
-  SectionIn RO
-  SetOutPath "$TEMP"
-  File "dxwebsetup.exe"
-  DetailPrint "Running DirectX Setup..."
-  ExecWait '"$TEMP\dxwebsetup.exe" /Q' $DirectXSetupError
-  DetailPrint "Finished DirectX Setup"
-  Delete "$TEMP\dxwebsetup.exe"
-  SetOutPath "$INSTDIR"
-SectionEnd
-
 Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Website.lnk" "$INSTDIR\${PRODUCT_NAME}.url"
@@ -199,7 +189,6 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Source code"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Visual C++ runtime"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Required libraries"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC_DIRECTX} "DirectX runtime"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onUninstSuccess
