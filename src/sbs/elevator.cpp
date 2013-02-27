@@ -181,6 +181,7 @@ Elevator::Elevator(int number)
 	DownCall = false;
 	QueuePending = false;
 	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoEnable", true);
+	ReOpen = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ReOpen", true);
 
 	//create timers
 	timer = new Timer(this, 0);
@@ -4902,4 +4903,58 @@ bool Elevator::AvailableForCall(int floor, int direction)
 		Report("Not available for call - elevator not running");
 
 	return false;
+}
+
+bool Elevator::SelectFloor(int floor)
+{
+	//select a floor (in-elevator floor selections)
+
+	//exit if in inspection mode or in fire service phase 1 mode
+	if (InspectionService == true || FireServicePhase1 == 1)
+		return false;
+
+	bool result = false;
+
+	//if elevator is processing a queue, add floor to the queue (if auto queue resets are active)
+	if (IsQueueActive() && QueueResets == true)
+		result = AddRoute(floor, QueuePositionDirection, true);
+	else
+	{
+		//elevator is above floor
+		if (GetFloor() > floor)
+			result = AddRoute(floor, -1, true);
+
+		//elevator is below floor
+		if (GetFloor() < floor)
+			result = AddRoute(floor, 1, true);
+
+		//elevator is on floor
+		if (GetFloor() == floor)
+		{
+			if (Direction == 0)
+			{
+				//stopped - play chime and reopen doors
+				if (ReOpen == true)
+				{
+					if (InServiceMode() == false)
+					{
+						if (LastQueueDirection == -1)
+							Chime(0, floor, false);
+						else if (LastQueueDirection == 1)
+							Chime(0, floor, true);
+					}
+					if (FireServicePhase2 == 0)
+						OpenDoors();
+					return false;
+				}
+			}
+			else
+			{
+				//add a route to the current floor if elevator is moving
+				result = AddRoute(floor, -Direction, true);
+			}
+		}
+	}
+
+	return result;
 }

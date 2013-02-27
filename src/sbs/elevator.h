@@ -136,6 +136,7 @@ public:
 	float InspectionSpeed; //inspection service speed multiplier
 	bool LimitQueue; //true to only allow floor selections in the same queue direction
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
+	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -285,6 +286,7 @@ public:
 	void Init();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	bool AvailableForCall(int floor, int direction);
+	bool SelectFloor(int floor);
 
 private:
 
