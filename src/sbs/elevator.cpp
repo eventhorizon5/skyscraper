@@ -1373,7 +1373,6 @@ void Elevator::MonitorLoop()
 	//elevator movement
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
-
 }
 
 void Elevator::MoveElevatorToFloor()
@@ -3870,7 +3869,6 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 				button->DownLight(value);
 		}
 	}
-
 }
 
 bool Elevator::IsIdle()
@@ -4018,7 +4016,6 @@ void Elevator::Report(std::string message)
 {
 	//general reporting function
 	sbs->Report("Elevator " + std::string(_itoa(Number, intbuffer, 10)) + ": " + message);
-
 }
 
 bool Elevator::ReportError(std::string message)
@@ -4904,8 +4901,8 @@ bool Elevator::AvailableForCall(int floor, int direction)
 				if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 				{
 					//and if it's above the current floor and should be called down, or below the
-					//current floor and called up, or idle
-					if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || IsIdle())
+					//current floor and called up, or on the same floor and not moving, or idle
+					if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 					{
 						//and if it's either going the same direction as the call or idle
 						if (QueuePositionDirection == direction || IsIdle())

@@ -2738,7 +2738,14 @@ std::string SBS::TruncateNumber(float value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 	
-	return Ogre::StringConverter::toString(value, decimals);
+	if ((int)value == value)
+		decimals = 0; //value is an integer
+
+	std::stringstream buffer;
+	buffer.precision(decimals);
+	buffer << std::fixed << value;
+
+	return buffer.str();
 }
 
 std::string SBS::TruncateNumber(const char *value, int decimals)
@@ -3488,18 +3495,29 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 
 	std::vector<Object*> objects;
 	int temp = expression.find("to", 0);
+
+	//the name 'elevator' matches the previous search - in this case, detect it and undo
+	int temp2 = expression.find("tor", 0);
+	if (temp == temp2)
+		temp = 0;
+
 	std::string type;
 
 	if (temp > 0)
 	{
 		if (expression.substr(0, 6) == "Floors")
 			type = "floor";
-		if (expression.substr(0, 9) == "Elevators")
+		else if (expression.substr(0, 9) == "Elevators")
 			type = "elevator";
-		if (expression.substr(0, 6) == "Shafts")
+		else if (expression.substr(0, 6) == "Shafts")
 			type = "shaft";
-		if (expression.substr(0, 6) == "Stairwells")
+		else if (expression.substr(0, 6) == "Stairwells")
 			type = "stairwell";
+		else
+		{
+			ReportError("GetObjectRange: Invalid object type");
+			return objects;
+		}
 
 		std::string str1 = expression.substr(type.size() + 1, temp - (type.size() + 1));
 		std::string str2 = expression.substr(temp + 2, expression.length() - (temp + 2));

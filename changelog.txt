@@ -1,5 +1,8 @@
 Version 1.8 (2.0 Alpha 8)
 -------------------------
+-elevators now report as available if on the same floor as the call and not moving, regardless of the door state - fixes an issue where pressing call buttons more than once would open additional elevators
+-fixed TruncateNumber function, to return correct floating point precision without exponent
+-dialog text box resizes
 -remade queueresets feature
 -floor announcement sound is now played along with the other arrival notifications, and so is affected by NotifyEarly
 -up/down message sounds now play according to last chime direction

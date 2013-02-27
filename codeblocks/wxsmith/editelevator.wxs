@@ -840,7 +840,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtFloor" variable="txtFloor" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -854,7 +854,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtPosition" variable="txtPosition" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Position</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -869,7 +869,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOrigin" variable="txtOrigin" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -883,7 +883,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOriginFloor" variable="txtOriginFloor" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Origin Floor</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -898,7 +898,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtElevStart" variable="txtElevStart" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Elevator Start</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -913,7 +913,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtDoorOrigin" variable="txtDoorOrigin" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Door Origin</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -928,7 +928,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtShaftDoorOrigin" variable="txtShaftDoorOrigin" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Shaft Door Origin</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -945,7 +945,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOnFloor" variable="txtOnFloor" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -962,7 +962,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtMotor" variable="txtMotor" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -979,7 +979,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtCameraOffset" variable="txtCameraOffset" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1006,7 +1006,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueDirection" variable="txtQueueDirection" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Queue Direction</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -1021,7 +1021,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueLastUp" variable="txtQueueLastUp" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Queue Last Up</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -1036,7 +1036,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueLastDown" variable="txtQueueLastDown" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Queue Last Down</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -1053,7 +1053,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueLastDirection" variable="txtQueueLastDirection" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Queue Last Direction</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
@@ -1065,17 +1065,17 @@
 												<object class="wxStaticText" name="ID_STATICTEXT68" variable="StaticText68" member="yes">
 													<label>Resets:</label>
 												</object>
-												<flag>wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtQueueResets" variable="txtQueueResets" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Queue Last Direction</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
-												<flag>wxLEFT|wxRIGHT|wxALIGN_TOP</flag>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
@@ -1083,17 +1083,17 @@
 												<object class="wxStaticText" name="ID_STATICTEXT69" variable="StaticText69" member="yes">
 													<label>Limit:</label>
 												</object>
-												<flag>wxALIGN_CENTER_VERTICAL</flag>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtLimitQueue" variable="txtLimitQueue" member="yes">
-													<size>75,-1</size>
+													<size>100,-1</size>
 													<tooltip>Queue Last Direction</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
-												<flag>wxLEFT|wxRIGHT|wxALIGN_TOP</flag>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>
