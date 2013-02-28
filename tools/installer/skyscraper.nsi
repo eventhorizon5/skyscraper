@@ -164,6 +164,7 @@ Section "Required libraries" SEC04
   File "${LOCAL_FILES}\RenderSystem_GL.dll"
   File "${LOCAL_FILES}\plugins.cfg"
   File "${LOCAL_FILES}\resources.cfg"
+  FILE "${LOCAL_FILES}\ogre.cfg"
   File "${LOCAL_FILES}\wxbase28_vc_custom.dll"
   File "${LOCAL_FILES}\wxmsw28_core_vc_custom.dll"
   File "${LOCAL_FILES}\wxmsw28_gl_vc_custom.dll"
