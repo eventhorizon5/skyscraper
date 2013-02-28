@@ -54,8 +54,8 @@ var ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-;!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"
-!define MUI_FINISHPAGE_RUN "$INSTDIR\Skyscraper.exe"
+!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"
+;!define MUI_FINISHPAGE_RUN "$INSTDIR\Skyscraper.exe"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages

@@ -86,19 +86,19 @@
     #11. is shaft door? (true/false)
     
     if[%param9% = front | %param9% = back] Set 200 = -(%param7% / 2) + %param5%
-    if[%param9% = front | %param9% = back] Set 201 = -0.01 + %param5%
+    if[%param9% = front | %param9% = back] Set 201 = -0.025 + %param5%
     if[%param9% = front | %param9% = back] Set 202 = %param6%
     if[%param9% = front | %param9% = back] Set 203 = %param6%
-    if[%param9% = front | %param9% = back] Set 204 = 0.01 + %param5%
+    if[%param9% = front | %param9% = back] Set 204 = 0.025 + %param5%
     if[%param9% = front | %param9% = back] Set 205 = (%param7% / 2) + %param5%
     if[%param9% = front | %param9% = back] Set 206 = %param6%
     if[%param9% = front | %param9% = back] Set 207 = %param6%
 
     if[%param9% = left | %param9% = right] Set 202 = -(%param7% / 2) + %param6%
-    if[%param9% = left | %param9% = right] Set 203 = -0.01 + %param6%
+    if[%param9% = left | %param9% = right] Set 203 = -0.025 + %param6%
     if[%param9% = left | %param9% = right] Set 200 = %param5%
     if[%param9% = left | %param9% = right] Set 201 = %param5%
-    if[%param9% = left | %param9% = right] Set 206 = 0.01 + %param6%
+    if[%param9% = left | %param9% = right] Set 206 = 0.025 + %param6%
     if[%param9% = left | %param9% = right] Set 207 = (%param7% / 2) + %param6%
     if[%param9% = left | %param9% = right] Set 204 = %param5%
     if[%param9% = left | %param9% = right] Set 205 = %param5%

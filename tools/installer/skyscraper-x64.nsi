@@ -54,8 +54,8 @@ var ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-;!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"
-!define MUI_FINISHPAGE_RUN "$INSTDIR\Skyscraper.exe"
+!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\readme.txt"
+;!define MUI_FINISHPAGE_RUN "$INSTDIR\Skyscraper.exe"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -146,10 +146,10 @@ SectionEnd
 
 Section "Visual C++ runtime" SEC03
   SetOutPath "$INSTDIR"
-  File "${LOCAL_FILES}\vcredist_x86.exe"
+  File "${LOCAL_FILES}\vcredist_x64.exe"
   ;Call CheckVCRedist
-  ExecWait '"$INSTDIR\vcredist_x86.exe" /Q'
-  Delete "${LOCAL_FILES}\vcredist_x86.exe"
+  ExecWait '"$INSTDIR\vcredist_x64.exe" /Q'
+  Delete "${LOCAL_FILES}\vcredist_x64.exe"
 SectionEnd
 
 Section "Required libraries" SEC04

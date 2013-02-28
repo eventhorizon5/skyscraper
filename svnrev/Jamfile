@@ -1,5 +1,0 @@
-SubDir TOP svnrev ;
-
-LOCATE_TARGET = svnrev ;
-
-Main svnrev : svnrev.c ;
