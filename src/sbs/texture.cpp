@@ -50,7 +50,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	if (extension == "gif")
 		use_alpha_color = true;
 
-	// Load the texture
+	//load the texture
 	std::string path = GetMountPath(filename2.c_str(), filename2);
 	Ogre::TexturePtr mTex;
 	std::string texturename;

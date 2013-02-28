@@ -41,18 +41,6 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-void SBS::DumpVertices(WallObject* wallobject)
-{
-	//dumps a list of vertices from a mesh object to the console/logfile
-
-	Report("--- Polygon Vertex Dump ---\n");
-	/*for (int i = 0; i < mesh->getVertexCount(); i++)
-	{
-		Ogre::Vector3 vertex = mesh->GetVertices()[i];
-		Report(std::string(_itoa(i, intbuffer, 10)) + ": " + std::string(_gcvt(vertex.x, 6, buffer)) + ", " + std::string(_gcvt(vertex.y, 6, buffer)) + ", " + std::string(_gcvt(vertex.z, 6, buffer)));
-	}*/
-}
-
 Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z)
 {
 	//returns the smallest and largest values from a specified coordinate type
