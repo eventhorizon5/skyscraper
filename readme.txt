@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 8
+Skyscraper 2.0 Alpha 9
 Copyright (C)2003-2013 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
@@ -54,7 +54,7 @@ files.
 
 3. Release Notes
 
-This release is the eighth development relase of the 2.0 series (which is a complete rewrite of
+This release is the ninth development relase of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
 This software requires both the OGRE graphics engine library (version 1.7 or later) which

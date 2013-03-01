@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Proximity Trigger Class
-	The Skyscraper Project - Version 1.8 Alpha
+	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2013 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

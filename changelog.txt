@@ -1,3 +1,6 @@
+Version 1.9 (2.0 Alpha 9)
+-------------------------
+
 Version 1.8 (2.0 Alpha 8)
 -------------------------
 -elevators now report as available if on the same floor as the call and not moving, regardless of the door state - fixes an issue where pressing call buttons more than once would open additional elevators

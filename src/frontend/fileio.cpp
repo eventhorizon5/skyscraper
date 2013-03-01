@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.8 Alpha - File I/O and Script Processing Routines
+	Skyscraper 1.9 Alpha - File I/O and Script Processing Routines
 	Copyright (C)2003-2013 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
