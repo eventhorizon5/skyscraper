@@ -1287,8 +1287,8 @@ void Skyscraper::GetMenuInput()
         			if (button->drawn_pressed == true)
         			{
         				//user clicked on button
+					button->drawn_selected = true;
         				Click(i);
-	        			button->drawn_selected = true;
         				return;
         			}
         			button->drawn_selected = true;
