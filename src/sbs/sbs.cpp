@@ -43,7 +43,7 @@ SBS *sbs; //self reference
 SBS::SBS()
 {
 	sbs = this;
-	version = "0.8.0." + std::string(SVN_REVSTR);
+	version = "0.9.0." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//set up SBS object
