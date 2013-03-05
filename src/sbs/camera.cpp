@@ -702,6 +702,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 
 				if (door)
 				{
+					//delete door if ctrl key is pressed
+					if (ctrl == true)
+					{
+						sbs->DeleteObject(obj->GetParent());
+						return;
+					}
+
 					if (shift == false)
 					{
 						if (door->IsOpen() == false)
@@ -731,6 +738,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 
 				if (model)
 				{
+					//delete model if ctrl key is pressed
+					if (ctrl == true)
+					{
+						sbs->DeleteObject(obj->GetParent());
+						return;
+					}
+
 					//if model is a key, add key to keyring and delete model
 					if (model->IsKey() == true)
 					{
