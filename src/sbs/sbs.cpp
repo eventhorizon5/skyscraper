@@ -2772,59 +2772,59 @@ bool SBS::IsValidFloor(int floor)
 
 std::string SBS::DumpState()
 {
-	//dump basic simulator state to a character array
+	//dump basic simulator state to a string
 
 	std::string output = "SBS version: " + version + "\n";
 	output.append("Building Name: " + BuildingName + "\n");
 	output.append("Building Filename: " + BuildingFilename + "\n");
 	output.append("Building Version: " + BuildingVersion + "\n");
 	output.append("InStairwell: ");
-	output.append(wxString::FromAscii(BoolToString(InStairwell)).ToAscii());
+	output.append(std::string(BoolToString(InStairwell)).c_str());
 	output.append("\n");
 	output.append("InElevator: ");
-	output.append(wxString::FromAscii(BoolToString(InElevator)).ToAscii());
+	output.append(std::string(BoolToString(InElevator)).c_str());
 	output.append("\n");
 	output.append("InShaft: ");
-	output.append(wxString::FromAscii(BoolToString(InShaft)).ToAscii());
+	output.append(std::string(BoolToString(InShaft)).c_str());
 	output.append("\n");
 	output.append("CameraFloor: ");
 	if (camera)
-		output.append(wxVariant((int)camera->CurrentFloor).GetString().ToAscii());
+		output.append(_itoa(camera->CurrentFloor, intbuffer, 10));
 	output.append("\n");
 	output.append("ElevatorNumber: ");
-	output.append(wxVariant((int)ElevatorNumber).GetString().ToAscii());
+	output.append(_itoa(ElevatorNumber, intbuffer, 10));
 	output.append("\n");
 	output.append("ElevatorSync: ");
-	output.append(wxString::FromAscii(BoolToString(ElevatorSync)).ToAscii());
+	output.append(std::string(BoolToString(ElevatorSync)).c_str());
 	output.append("\n");
 	output.append("Running Time: ");
 	output.append(TruncateNumber(running_time, 2));
 	output.append("\n");
 	output.append("BuildingsEnabled: ");
-	output.append(wxString::FromAscii(BoolToString(IsBuildingsEnabled)).ToAscii());
+	output.append(std::string(BoolToString(IsBuildingsEnabled)).c_str());
 	output.append("\n");
 	output.append("ExternalEnabled: ");
-	output.append(wxString::FromAscii(BoolToString(IsExternalEnabled)).ToAscii());
+	output.append(std::string(BoolToString(IsExternalEnabled)).c_str());
 	output.append("\n");
 	output.append("LandscapeEnabled: ");
-	output.append(wxString::FromAscii(BoolToString(IsLandscapeEnabled)).ToAscii());
+	output.append(std::string(BoolToString(IsLandscapeEnabled)).c_str());
 	output.append("\n");
 	output.append("SkyboxEnabled: ");
-	output.append(wxString::FromAscii(BoolToString(IsSkyboxEnabled)).ToAscii());
+	output.append(std::string(BoolToString(IsSkyboxEnabled)).c_str());
 	output.append("\n");
 	output.append("Verbose: ");
-	output.append(wxString::FromAscii(BoolToString(Verbose)).ToAscii());
+	output.append(std::string(BoolToString(Verbose)).c_str());
 	output.append("\n");
 	output.append("InterfloorOnTop: ");
-	output.append(wxString::FromAscii(BoolToString(InterfloorOnTop)).ToAscii());
+	output.append(std::string(BoolToString(InterfloorOnTop)).c_str());
 	output.append("\n");
 	output.append("Object Count: ");
-	output.append(wxVariant((int)ObjectCount).GetString().ToAscii());
+	output.append(_itoa(ObjectCount, intbuffer, 10));
 	output.append("\n");
 	if (camera)
 	{
 		output.append("Camera Floor: ");
-		output.append(wxVariant((int)camera->CurrentFloor).GetString().ToAscii());
+		output.append(_itoa(camera->CurrentFloor, intbuffer, 10));
 		output.append("\n");
 		output.append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2) + ", " + TruncateNumber(camera->GetPosition().y, 2) + ", " + TruncateNumber(camera->GetPosition().z, 2) + "\n");
 	}

@@ -1871,6 +1871,7 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 		std::string name = SceneNode->getName();
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
+		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
 		mShape = shape;
 	}
