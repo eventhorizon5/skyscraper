@@ -54,7 +54,7 @@ public:
 	bool IsInStairwell(const Ogre::Vector3 &position);
 	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset);
-	bool CutWall(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, int checkwallnumber = 0, const char *checkstring = "");
+	bool Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, const char *checkstring = "");
 	void EnableRange(int floor, int range);
 	void EnableDoor(int floor, bool value);
 	Door* GetDoor(int number);

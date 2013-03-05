@@ -416,24 +416,14 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 	for (int i = 1; i <= sbs->Shafts(); i++)
 	{
 		if (sbs->GetShaft(i))
-		{
-			if (cutwalls == true)
-				sbs->GetShaft(i)->CutWall(false, Number, start, end);
-			if (cutfloors == true)
-				sbs->GetShaft(i)->CutFloors(false, Ogre::Vector2(start.x, start.z), Ogre::Vector2(end.x, end.z), Altitude, Altitude + FullHeight());
-		}
+			sbs->GetShaft(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
 	}
 
 	//cut stairs
 	for (int i = 1; i <= sbs->StairsNum(); i++)
 	{
 		if (sbs->GetStairs(i))
-		{
-			if (cutwalls == true)
-				sbs->GetStairs(i)->CutWall(false, Number, start, end);
-			if (cutfloors == true)
-				sbs->GetStairs(i)->CutFloors(false, Ogre::Vector2(start.x, start.z), Ogre::Vector2(end.x, end.z), Altitude, Altitude + FullHeight());
-		}
+			sbs->GetStairs(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
 	}
 
 	//cut external

@@ -422,7 +422,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	}
 }
 
-bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, int checkwallnumber, const char *checkstring)
+bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber, const char *checkstring)
 {
 	//Cut through a wall segment
 	//the Y values in start and end are both relative to the floor's altitude
@@ -431,9 +431,9 @@ bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const 
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			ReportError("CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+			ReportError("Cut: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
 		else
-			sbs->LastError = "CutWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range";
+			sbs->LastError = "Cut: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range";
 		return false;
 	}
 
@@ -449,9 +449,9 @@ bool Shaft::CutWall(bool relative, int floor, const Ogre::Vector3 &start, const 
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(origin.x + start.x, base + start.y, origin.z + start.z), Ogre::Vector3(origin.x + end.x, base + end.y, origin.z + end.z), true, false, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(origin.x + start.x, base + start.y, origin.z + start.z), Ogre::Vector3(origin.x + end.x, base + end.y, origin.z + end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, base + start.y, start.z), Ogre::Vector3(end.x, base + end.y, end.z), true, false, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, base + start.y, start.z), Ogre::Vector3(end.x, base + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, checkstring, reset);
 	}
 	return true;
 }
@@ -817,12 +817,12 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	sbs->ResetDoorwayWalls();
 	if (direction < 5)
 	{
-		CutWall(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), 1, "Shaft");
+		Cut(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1, "Shaft");
 		floorptr->Cut(Ogre::Vector3(origin.x + x1 - 0.5, floorptr->GetBase(true) + voffset, origin.z + z1), Ogre::Vector3(origin.x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, origin.z + z2), true, false, true, 2, "Shaft");
 	}
 	else
 	{
-		CutWall(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), 1, "Shaft");
+		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1, "Shaft");
 		floorptr->Cut(Ogre::Vector3(origin.x + x1, floorptr->GetBase(true) + voffset, origin.z + z1 - 0.5), Ogre::Vector3(origin.x + x2, floorptr->GetBase(true) + voffset + height, origin.z + z2 + 0.5), true, false, true, 2, "Shaft");
 	}
 
