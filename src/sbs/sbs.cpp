@@ -1439,7 +1439,13 @@ void SBS::EnableExternal(bool value)
 void SBS::EnableSkybox(bool value)
 {
 	//turns skybox on/off
-	IsSkyboxEnabled = value;
+	if (SkyBox)
+	{
+		SkyBox->Enable(value);
+		IsSkyboxEnabled = value;
+	}
+	else
+		IsSkyboxEnabled = true;
 }
 
 void SBS::CreateSky(const char *filenamebase)
