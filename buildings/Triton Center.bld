@@ -1513,7 +1513,6 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Name = Residential
     Type = Condominium
     Description = Condominium level %floor%
-
 <EndFloors>
 
 #residential service floor
@@ -1522,7 +1521,6 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Name = Maintenance
     Type = Service
     Description = Residential service floor
-
 <EndFloor>
 
 <Floor 131>
@@ -1530,7 +1528,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Name = Maintenance
     Type = Service
     Description = Maintenance for pool and general
-
+    Group = 132
 <EndFloor>
 
 <Floor 132>
@@ -1538,7 +1536,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Name = Pool
     Type = Recreation
     Description = SkyPool, for residential use
-
+    Group = 131
 <EndFloor>
 
 <Floor 133>
@@ -1546,7 +1544,6 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Name = Maintenance
     Type = Service
     Description = Restaurant service
-
 <EndFloor>
 
 <Floor 134>
@@ -1554,7 +1551,6 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Name = Restaurant
     Type = Restaurant
     Description = The Overlook Restaurant
-
 <EndFloor>
 
 #Ballroom
@@ -8355,3 +8351,10 @@ AddWall Landscape, Filler, ParkingCeiling, 0, -76.5, 106.5, -46, 106.5, 0.5, 0.5
 
 #auto area for ramps
 AddFloorAutoArea -76.5, Floor(-7).Altitude, 100, -16, 0, 220
+
+#pool model
+<Floor 132>
+    CutAll -13, -1, -68, 25, %interfloorheight% + 1, -16, false, true
+    AddModel PoolModel, pool/swimmingpool.mesh, 9.45, -0.45, -38.05, 0, 90, 0, 0, 0.1, false, 0, 0, 0
+<EndFloor>
+
