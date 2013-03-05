@@ -902,22 +902,25 @@ void Camera::Loop()
 			Object *obj = sbs->GetObject(number);
 
 			//get original object (parent object of clicked mesh)
-			if (obj->GetParent())
+			if (obj)
 			{
-				std::string type = obj->GetParent()->GetType();
-
-				//check elevator doors (door bumpers feature)
-				if (type == "DoorWrapper")
+				if (obj->GetParent())
 				{
-					ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
-					ElevatorDoor* door = wrapper->parent;
+					std::string type = obj->GetParent()->GetType();
 
-					if (door)
+					//check elevator doors (door bumpers feature)
+					if (type == "DoorWrapper")
 					{
-						int whichdoors = door->elev->GetDoor(door->Number)->GetWhichDoors();
+						ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
+						ElevatorDoor* door = wrapper->parent;
 
-						if (door->elev->GetDoor(door->Number)->OpenDoor == -1 && whichdoors == 1)
-							door->elev->OpenDoors(door->Number, 1);
+						if (door)
+						{
+							int whichdoors = door->elev->GetDoor(door->Number)->GetWhichDoors();
+
+							if (door->elev->GetDoor(door->Number)->OpenDoor == -1 && whichdoors == 1)
+								door->elev->OpenDoors(door->Number, 1);
+						}
 					}
 				}
 			}
