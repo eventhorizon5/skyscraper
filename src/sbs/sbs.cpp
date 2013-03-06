@@ -526,12 +526,10 @@ void SBS::MainLoop()
 			}
 
 			//check if the user is in a shaft
-			if (AutoShafts == true)
-				camera->CheckShaft();
+			camera->CheckShaft();
 
 			//check if the user is in a stairwell
-			if (AutoStairs == true)
-				camera->CheckStairwell();
+			camera->CheckStairwell();
 
 			//open/close doors by using door callback
 			ProcessDoors();
@@ -587,8 +585,6 @@ bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSce
 	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
 	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
 	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
-	ShowFullShafts = GetConfigBool("Skyscraper.SBS.ShowFullShafts", false);
-	ShowFullStairs = GetConfigBool("Skyscraper.SBS.ShowFullStairs", false);
 	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
 	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
 	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
@@ -1603,7 +1599,7 @@ void SBS::ListAltitudes()
 		Report(std::string(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + std::string(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + std::string(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
 }
 
-Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
@@ -1639,7 +1635,7 @@ Object* SBS::CreateShaft(int number, int type, float CenterX, float CenterZ, int
 
 	ShaftArray.resize(ShaftArray.size() + 1);
 	ShaftArray[ShaftArray.size() - 1].number = number;
-	ShaftArray[ShaftArray.size() - 1].object = new Shaft(number, type, CenterX, CenterZ, _startfloor, _endfloor);
+	ShaftArray[ShaftArray.size() - 1].object = new Shaft(number, CenterX, CenterZ, _startfloor, _endfloor);
 	return ShaftArray[ShaftArray.size() - 1].object->object;
 }
 
@@ -2243,7 +2239,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 	return wall;
 }
 
-void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber)
+void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber, int stairsnumber)
 {
 	//turn on/off a range of floors
 	//if range is 3, show shaft on current floor (floor), and 1 floor below and above (3 total floors)
@@ -2291,6 +2287,31 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 					for (int j = 0; j < (int)GetShaft(shaftnumber)->ShowFloorsList.size(); j++)
 					{
 						if (GetShaft(shaftnumber)->ShowFloorsList[j] == i)
+							index = j;
+					}
+					if (index != -1 && value == true)
+					{
+						GetFloor(i)->Enabled(true);
+						if (enablegroups == true)
+							GetFloor(i)->EnableGroup(true);
+					}
+					else
+					{
+						GetFloor(i)->Enabled(false);
+						if (enablegroups == true)
+							GetFloor(i)->EnableGroup(false);
+					}
+				}
+			}
+			else if (stairsnumber > 0)
+			{
+				//if a stairwell is specified, only show the floor if it is in the related stairwell's ShowFloorsList array
+				if (GetStairs(stairsnumber)->ShowFloors == true)
+				{
+					int index = -1;
+					for (int j = 0; j < (int)GetStairs(stairsnumber)->ShowFloorsList.size(); j++)
+					{
+						if (GetStairs(stairsnumber)->ShowFloorsList[j] == i)
 							index = j;
 					}
 					if (index != -1 && value == true)

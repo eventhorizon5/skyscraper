@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Shaft Subsystem Class
+	Scalable Building Simulator - Shaft Class
 	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2013 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -31,21 +31,16 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Shaft::Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//constructor
 	//creates a shaft in the location specified by x1, x2, z1, and z2
 	//and that spans the altitude range specified by startalt and endalt
-	//types are currently:
-	//1 = pipe/utility shaft
-	//2 = elevator shaft
-	//3 = stairwell shaft
 
 	//set up SBS object
 	object = new Object();
 	object->SetValues(this, sbs->object, "Shaft", "", false);
 
-	ShaftType = type;
 	ShaftNumber = number;
 	startfloor = _startfloor;
 	endfloor = _endfloor;
@@ -875,5 +870,81 @@ void Shaft::RemoveDoor(Door *door)
 			DoorArray.erase(DoorArray.begin() + i);
 			return;
 		}
+	}
+}
+
+void Shaft::Check(Ogre::Vector3 position, int current_floor)
+{
+	if (IsInShaft(position) == true)
+	{
+		if (InsideShaft == false && sbs->InElevator == false)
+		{
+			//user is in the shaft
+			InsideShaft = true;
+			sbs->InShaft = true;
+
+			//turn on entire shaft
+			EnableWholeShaft(true, true);
+		}
+		else if (InsideShaft == true && sbs->InElevator == true)
+		{
+			//user has moved from the shaft to an elevator
+			InsideShaft = false;
+			sbs->InShaft = false;
+
+			EnableWholeShaft(ShowFullShaft, true);
+		}
+		else if (InsideShaft == false && sbs->InElevator == true && ShowFullShaft == false)
+		{
+			//if user is in an elevator, show a range of the shaft at a time (while it's moving)
+			EnableRange(current_floor, sbs->ShaftDisplayRange, true, false);
+			sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
+		}
+
+		if (InsideShaft == false && sbs->InElevator == true && sbs->GetElevator(sbs->ElevatorNumber)->IsMoving == true)
+		{
+			//if specified, show floors or outside if user is in a moving elevator
+			if (ShowFloors == true)
+				sbs->EnableFloorRange(current_floor, sbs->FloorDisplayRange, true, true, ShaftNumber);
+
+			if (ShowOutside == true)
+			{
+				int loc = -1;
+				for (int i = 0; i < (int)ShowOutsideList.size(); i++)
+				{
+					if (ShowOutsideList[i] == current_floor)
+						loc = i;
+				}
+
+				if (loc != -1)
+				{
+					sbs->EnableSkybox(true);
+					sbs->EnableBuildings(true);
+					sbs->EnableLandscape(true);
+					sbs->EnableExternal(true);
+				}
+				else
+				{
+					sbs->EnableSkybox(false);
+					sbs->EnableBuildings(false);
+					sbs->EnableLandscape(false);
+					sbs->EnableExternal(false);
+				}
+			}
+		}
+	}
+	else if (InsideShaft == true)
+	{
+		//user has moved out of the shaft
+		InsideShaft = false;
+		sbs->InShaft = false;
+
+		//turn off shaft
+		EnableWholeShaft(false, true);
+	}
+	else if (InsideShaft == false)
+	{
+		//show specified shaft range if outside the shaft
+		EnableRange(current_floor, sbs->ShaftOutsideDisplayRange, true, true);
 	}
 }

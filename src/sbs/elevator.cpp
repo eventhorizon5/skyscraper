@@ -5000,3 +5000,31 @@ bool Elevator::SelectFloor(int floor)
 
 	return result;
 }
+
+bool Elevator::Check(Ogre::Vector3 position)
+{
+	//check to see if user (camera) is in the elevator
+
+	if (IsInElevator(position) == true)
+	{
+		if (sbs->InElevator == false || sbs->ElevatorNumber != Number)
+		{
+			EnableObjects(true);
+			UpdateFloorIndicators();
+		}
+		sbs->InElevator = true;
+		sbs->ElevatorNumber = Number;
+		sbs->ElevatorSync = true;
+		return true;
+	}
+	else if (sbs->InElevator == true && sbs->ElevatorNumber == Number)
+		EnableObjects(false); //turn off objects if user is not in the checked elevator
+	else if (CameraOffset > Height && CameraOffset < Height * 2)
+	{
+		//if camera is within vertical elevator range, turn on syncing to allow things like elevator surfing
+		sbs->ElevatorNumber = Number;
+		sbs->ElevatorSync = true;
+		return true;
+	}
+	return false;
+}

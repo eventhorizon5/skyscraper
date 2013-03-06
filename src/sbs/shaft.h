@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Shaft Subsystem Class
+	Scalable Building Simulator - Shaft Class
 	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2013 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -33,13 +33,11 @@ class SBSIMPEXP Shaft
 public:
 
 	Object *object; //SBS object
-	int ShaftType; //type of shaft
 	int ShaftNumber; //shaft number
 	Ogre::Vector3 origin; //origin vector
 	int startfloor; //starting floor
 	int endfloor; //ending floor
-	std::vector<int> elevators; //if elevator shaft, this is the list of elevators that use this shaft
-	std::vector<int> stairs; //if stairwell, this lists the stairs that use this shaft
+	std::vector<int> elevators; //list of elevators that use this shaft
 	bool InsideShaft; //true if user/camera is in the shaft
 	float bottom; //shaft base
 	float top; //shaft top
@@ -52,7 +50,7 @@ public:
 	std::vector<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
 
-	Shaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
 	WallObject* AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	WallObject* AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
@@ -88,6 +86,7 @@ public:
 	void EnableDoor(int floor, bool value);
 	Door* GetDoor(int number);
 	void RemoveDoor(Door *door);
+	void Check(Ogre::Vector3 position, int current_floor);
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array

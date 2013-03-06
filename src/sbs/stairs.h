@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Stairs Subsystem Class
+	Scalable Building Simulator - Stairwell Class
 	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2013 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -41,6 +41,9 @@ public:
 	Ogre::Vector2 cutend; //cut ending vector
 	bool InsideStairwell; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
+	bool ShowFloors; //true if floors should be shown while inside the stairwell; floor list in ShowFloorsList
+	std::vector<int> ShowFloorsList; //list of floors to enable while inside the stairwell
+	bool ShowFullStairs; //if true, always show full stairwell instead of only a selected range
 
 	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Stairs();
@@ -50,12 +53,12 @@ public:
 	WallObject* AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	int AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	void Enabled(int floor, bool value);
-	void EnableWholeStairwell(bool value);
+	void EnableWholeStairwell(bool value, bool force = false);
 	bool IsInStairwell(const Ogre::Vector3 &position);
 	Object* AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset);
 	bool Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, const char *checkstring = "");
-	void EnableRange(int floor, int range);
+	void EnableRange(int floor, int range, bool value);
 	void EnableDoor(int floor, bool value);
 	Door* GetDoor(int number);
 	bool IsEnabledFloor(int floor);
@@ -74,6 +77,9 @@ public:
 	Object* AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	void Init();
+	void AddShowFloor(int floor);
+	void RemoveShowFloor(int floor);
+	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array

@@ -147,10 +147,8 @@ public:
 	bool AutoShafts; //true if shafts should turn on and off automatically
 	bool AutoStairs; //true if stairwells should turn on and off automatically
 	bool ProcessElevators; //true if elevator system should be enabled
-	bool ShowFullShafts; //true if entire shaft should be displayed while user is in an elevator
-	bool ShowFullStairs; //true if entire stairwell should be displayed while user is in it
-	int ShaftDisplayRange; //number of shaft floors to display while in elevator; has no effect if ShowFullShafts is true
-	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if ShowFullStairs is true
+	int ShaftDisplayRange; //number of shaft floors to display while in elevator; has no effect if shaft's ShowFullShaft is true
+	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if stairwell's ShowFullStairs is true
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
 	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
@@ -215,7 +213,7 @@ public:
 	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
 	void ListAltitudes();
-	Object* CreateShaft(int number, int type, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Object* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	std::string GetTextureMaterial(const char *name, bool &result, bool report = true, const char *polygon_name = 0);
 	bool NewElevator(int number);
@@ -250,7 +248,7 @@ public:
 	WallObject* AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
 	WallObject* AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	WallObject* AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z);
-	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0);
+	void EnableFloorRange(int floor, int range, bool value, bool enablegroups, int shaftnumber = 0, int stairsnumber = 0);
 	bool RegisterDoorCallback(Door *door);
 	bool UnregisterDoorCallback(Door *door);
 	bool RegisterCallButtonCallback(CallButton *button);

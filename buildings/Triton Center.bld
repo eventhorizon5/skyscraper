@@ -103,6 +103,7 @@
     Load data/metal080.jpg, MainPanelBack, 0.5, 0.5
     Load data/daley.jpg, Daley, 0.04, 1
     Load data/searstower.jpg, SearsTower, 0.067, 1
+    Load data/glasselevator1.gif, Railing, 0.25, 1
 
     #signs
     Load data/triton_signs/2-14.png, Sign2-14, 1, 1
@@ -7440,8 +7441,8 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
 
 <Floor -8>
     Set 1 = (%height% + Floor(-7).InterfloorHeight) / 24 #determine riser size
-    AddStairs 1, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
-    AddStairs 1, StairsMiddle, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    AddStairs 1, StairsLower, Stairs, back, -2.085, 0, 4.1, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 1, StairsMiddle, Stairs, front, 2.085, 0, 4.1, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 1, LandingMiddle, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 8, %1% * 8, 1, 1
@@ -7449,20 +7450,29 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 1, LandingMiddleCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
+    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 1, Railing1, Railing, 0, 0.01, -4, 0.01, 4, 3.5, 3.5, %1% * 8, 0, 1, 1
+    AddStairsWall 1, Railing2, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, %1% * 8, %1% * 16, 1, 1
+    AddStairsWall 1, Railing3, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 24, %1% * 16, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floors -7 to -1>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
     AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
@@ -7472,13 +7482,22 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 1, Railing1, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, 0, %1% * 10, 1, 1
+    AddStairsWall 1, Railing2, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 20, %1% * 10, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
 <Floor 0>
     Set 1 = (%height% + Floor(1).InterfloorHeight) / 16 #determine riser size
-    AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, 0, 0, 0
-    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 8, 0, 0
+    AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 7, 8, 0, 0, 0
+    AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
     AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
@@ -7489,12 +7508,22 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 1, Railing1, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, 0, %1% * 8, 1, 1
+    AddStairsWall 1, Railing2, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 16, %1% * 8, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floor 1>
     Set 1 = (%height% + Floor(2).InterfloorHeight) / 40 #determine riser size
-    AddStairs 1, StairsLower1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    AddStairs 1, StairsUpper1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    AddStairs 1, StairsLower1, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, 0, 0, 0
+    AddStairs 1, StairsUpper1, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708 - 0.43, 4.5, -5, 0, 0, 1, 1
     AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
@@ -7506,8 +7535,8 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 
-    AddStairs 1, StairsLower2, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 20, 0, 0
-    AddStairs 1, StairsUpper2, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 30, 0, 0
+    AddStairs 1, StairsLower2, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 20, 0, 0
+    AddStairs 1, StairsUpper2, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 30, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 20, %1% * 20, 1, 1
     AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 30, %1% * 30, 1, 1
@@ -7518,12 +7547,24 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 30) - 0.5, (%1% * 30) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 1, Railing1, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, 0, %1% * 10, 1, 1
+    AddStairsWall 1, Railing2, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 20, %1% * 10, 1, 1
+    AddStairsWall 1, Railing3, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 20, %1% * 30, 1, 1
+    AddStairsWall 1, Railing4, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 40, %1% * 30, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floors 2 to 38>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    if[%floor% < 38] AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 38] AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    if[%floor% < 38] AddStairs 1, StairsLower, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 38] AddStairs 1, StairsUpper, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 1, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, 0, 0, 1, 1
     if[%floor% < 38] AddStairsFloor 1, LandingUpper, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 10, %1% * 10, 1, 1
@@ -7533,6 +7574,18 @@ CutStairwell 1, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     if[%floor% < 38] AddStairsWall 1, LandingUpperCover, StairsLanding, 0.1, -4.5, 5, 0, 5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% < 38] AddStairsWall 1, Railing1, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, 0, %1% * 10, 1, 1
+    if[%floor% < 38] AddStairsWall 1, Railing2, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 20, %1% * 10, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 2, 0, 2, 2, 1
+    if[%floor% = 38] AddStairsWall 1, Railing1, Railing, 0, 0, -5, 4.5 - 0.33, -5, 3.5, 3.5, 0, 0, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7606,8 +7659,8 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
 
 <Floor -8>
     Set 1 = (%height% + Floor(-7).InterfloorHeight) / 24 #determine riser size
-    AddStairs 2, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
-    AddStairs 2, StairsMiddle, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    AddStairs 2, StairsLower, Stairs, front, 2.085, 0, 4.1, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 2, StairsMiddle, Stairs, back, -2.085, 0, 4.1, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 2, LandingMiddle, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
@@ -7615,20 +7668,29 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 2, LandingMiddleCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
+    AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
     AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 2, Railing1, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, 0, %1% * 8, 1, 1
+    AddStairsWall 2, Railing2, Railing, 0, 0.01, -4, 0.01, 4, 3.5, 3.5, %1% * 16, %1% * 8, 1, 1
+    AddStairsWall 2, Railing3, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 16, %1% * 24, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floors -7 to -1>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, 0, 0, 0
+    AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
@@ -7639,12 +7701,22 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 2, Railing1, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 10, 0, 1, 1
+    AddStairsWall 2, Railing2, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 10, %1% * 20, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
 <Floor 0>
     Set 1 = (%height% + Floor(1).InterfloorHeight) / 16 #determine riser size
-    AddStairs 2, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 7, 8, 0, 0, 0
-    AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 8, 0, 0
+    AddStairs 2, StairsLower, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 7, 8, 0, 0, 0
+    AddStairs 2, StairsUpper, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 8, %1% * 8, 1, 1
@@ -7655,12 +7727,22 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 2, Railing1, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 8, 0, 1, 1
+    AddStairsWall 2, Railing2, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 8, %1% * 16, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floor 1>
     Set 1 = (%height% + Floor(2).InterfloorHeight) / 40 #determine riser size
-    AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, 0, 0, 0
+    AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
@@ -7672,8 +7754,8 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
 
-    AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 20, 0, 0
-    AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 30, 0, 0
+    AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 20, 0, 0
+    AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 30, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, %1% * 20, %1% * 20, 1, 1
     AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 30, %1% * 30, 1, 1
@@ -7684,12 +7766,24 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 30) - 0.5, (%1% * 30) - 0.5, 0, 1
     DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 2, Railing1, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 10, 0, 1, 1
+    AddStairsWall 2, Railing2, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 10, %1% * 20, 1, 1
+    AddStairsWall 2, Railing3, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 30, %1% * 20, 1, 1
+    AddStairsWall 2, Railing4, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 30, %1% * 40, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floors 2 to 38>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    if[%floor% < 38] AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 38] AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    if[%floor% < 38] AddStairs 2, StairsLower1, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 38] AddStairs 2, StairsUpper1, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 2, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
     if[%floor% < 38] AddStairsFloor 2, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
@@ -7699,6 +7793,18 @@ CutStairwell 2, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     if[%floor% < 38] AddStairsWall 2, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% < 38] AddStairsWall 2, Railing1, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 10, 0, 1, 1
+    if[%floor% < 38] AddStairsWall 2, Railing2, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 10, %1% * 20, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 2, 0, 2, 2, 1
+    if[%floor% = 38] AddStairsWall 2, Railing1, Railing, 0, 0, 5, -4.5 + 0.33, 5, 3.5, 3.5, 0, 0, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7775,8 +7881,8 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
 
 <Floor 38>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
-    AddStairs 3, StairsLower, Stairs, back, -2.501, 0, 5.003, %1%, 8 / 7, 8, 0, 0, 0
-    AddStairs 3, StairsMiddle, Stairs, front, 2.501, 0, 5.003, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    AddStairs 3, StairsLower, Stairs, back, -2.501, 0, 5, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 3, StairsMiddle, Stairs, front, 2.501, 0, 5, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -5.333, -9.708, 5.333, 9.708, 0, 0, 1, 1
     AddStairsFloor 3, LandingMiddle, StairsLanding, 0.5, -5.333, -9.708, 5.333, -4, %1% * 8, %1% * 8, 1, 1
@@ -7791,13 +7897,22 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 3, LandingUpperCover, StairsLanding, 0.1, -5.333, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 3, Railing1, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, %1% * 8, 0, 1, 1
+    AddStairsWall 3, Railing2, Railing, 0, 0.01, -4, 0.01, 4, 3.5, 3.5, %1% * 8, %1% * 16, 1, 1
+    AddStairsWall 3, Railing3, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, %1% * 24, %1% * 16, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floor 39>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
-    AddStairs 3, StairsLower, Stairs, front, 2.501, 0, 5.003, %1%, 8 / 7, 8, 0, 0, 0
-    AddStairs 3, StairsMiddle, Stairs, back, -2.501, 0, 5.003, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    AddStairs 3, StairsLower, Stairs, front, 2.501, 0, 5, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 3, StairsMiddle, Stairs, back, -2.501, 0, 5, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -5.333, -9.708, 5.333, -4, 0, 0, 1, 1
     AddStairsFloor 3, LandingMiddle, StairsLanding, 0.5, -5.333, 4, 5.333, 9.708, %1% * 8, %1% * 8, 1, 1
@@ -7813,13 +7928,22 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     AddStairsWall 3, LandingLowerCover, StairsLanding, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
     AddStairsWall 3, LandingUpperCover, StairsLanding, 0.1, 0, -4, 5.333, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 3, Railing1, Railing, 0, 0.01, -4, 0.01, 4, 3.5, 3.5, 0, %1% * 8, 1, 1
+    AddStairsWall 3, Railing2, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, %1% * 16, %1% * 8, 1, 1
+    AddStairsWall 3, Railing3, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 16, %1% * 24, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floors 40 to 79>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    if[%floor% < 79] AddStairs 3, StairsLower1, Stairs, back, -2.501, 0, 5.003, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 79] AddStairs 3, StairsUpper1, Stairs, front, 2.501, 0, 5.003, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    if[%floor% < 79] AddStairs 3, StairsLower1, Stairs, back, -2.501, 0, 5, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 79] AddStairs 3, StairsUpper1, Stairs, front, 2.501, 0, 5, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 3, LandingLower, StairsLanding, 0.5, -5.333, 5, 5.333, 9.708, 0, 0, 1, 1
     if[%floor% < 79] AddStairsFloor 3, LandingUpper, StairsLanding, 0.5, -5.333, -9.708, 5.333, -5, %1% * 10, %1% * 10, 1, 1
@@ -7829,6 +7953,18 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     if[%floor% < 79] AddStairsWall 3, LandingUpperCover, StairsLanding, 0.1, 0, -5, 5.333, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% < 79] AddStairsWall 3, Railing1, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 10, 0, 1, 1
+    if[%floor% < 79] AddStairsWall 3, Railing2, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 10, %1% * 20, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 2, 0, 2, 2, 1
+    if[%floor% = 79] AddStairsWall 3, Railing1, Railing, 0, -5.333 + 0.33, 5, 0, 5, 3.5, 3.5, 0, 0, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
 <Floors 38 to 79>
@@ -7876,8 +8012,8 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
 
 <Floor 38>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
-    AddStairs 4, StairsLower, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
-    AddStairs 4, StairsMiddle, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    AddStairs 4, StairsLower, Stairs, back, -2.085, 0, 4.1, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 4, StairsMiddle, Stairs, front, 2.085, 0, 4.1, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 4, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, 9.708, 0, 0, 1, 1
     AddStairsFloor 4, LandingMiddle, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 8, %1% * 8, 1, 1
@@ -7885,20 +8021,29 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = right
     AddStairsWall 4, LandingMiddleCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 4, StairsUpper, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 4, StairsUpper, Stairs, back, -2.085, 0, 4.1, %1%, 8 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 4, LandingUpper, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 16, %1% * 16, 1, 1
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     AddStairsWall 4, LandingUpperCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 4, Railing1, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, %1% * 8, 0, 1, 1
+    AddStairsWall 4, Railing2, Railing, 0, 0.01, -4, 0.01, 4, 3.5, 3.5, %1% * 8, %1% * 16, 1, 1
+    AddStairsWall 4, Railing3, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, %1% * 24, %1% * 16, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floor 39>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
-    AddStairs 4, StairsLower, Stairs, front, 2.085, 0, 4.17, %1%, 8 / 7, 8, 0, 0, 0
-    AddStairs 4, StairsMiddle, Stairs, back, -2.085, 0, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    AddStairs 4, StairsLower, Stairs, front, 2.085, 0, 4.1, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 4, StairsMiddle, Stairs, back, -2.085, 0, 4.1, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 4, LandingLower, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, 0, 0, 1, 1
     AddStairsFloor 4, LandingMiddle, StairsLanding, 0.5, -4.5, 4, 4.5, 9.708, %1% * 8, %1% * 8, 1, 1
@@ -7906,7 +8051,7 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     WallOrientation = left
     AddStairsWall 4, LandingMiddleCover, StairsLanding, 0.1, -4.5, 4, 0, 4, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 4, StairsUpper, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 7, 8, %1% * 16, 0, 0
+    AddStairs 4, StairsUpper, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 4, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -4, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
@@ -7914,13 +8059,22 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     AddStairsWall 4, LandingLowerCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, -0.5, -0.5, 0, 1
     AddStairsWall 4, LandingUpperCover, StairsLanding, 0.1, 0, -4, 4.5, -4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 4, Railing1, Railing, 0, 0.01, -4, 0.01, 4, 3.5, 3.5, 0, %1% * 8, 1, 1
+    AddStairsWall 4, Railing2, Railing, 0, -0.01, -4, -0.01, 4, 3.5, 3.5, %1% * 16, %1% * 8, 1, 1
+    AddStairsWall 4, Railing3, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 16, %1% * 24, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 <Floors 40 to 79>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 20 #determine riser size
-    if[%floor% < 79] AddStairs 4, StairsLower1, Stairs, back, -2.085, 0, 4.17, %1%, 10 / 9, 10, 0, 0, 0
-    if[%floor% < 79] AddStairs 4, StairsUpper1, Stairs, front, 2.085, 0, 4.17, %1%, 10 / 9, 10, %1% * 10, 0, 0
+    if[%floor% < 79] AddStairs 4, StairsLower1, Stairs, back, -2.085, 0, 4.1, %1%, 10 / 9, 10, 0, 0, 0
+    if[%floor% < 79] AddStairs 4, StairsUpper1, Stairs, front, 2.085, 0, 4.1, %1%, 10 / 9, 10, %1% * 10, 0, 0
     FloorOrientation = top
     AddStairsFloor 4, LandingLower, StairsLanding, 0.5, -4.5, 5, 4.5, 9.708, 0, 0, 1, 1
     if[%floor% < 79] AddStairsFloor 4, LandingUpper, StairsLanding, 0.5, -4.5, -9.708, 4.5, -5, %1% * 10, %1% * 10, 1, 1
@@ -7930,6 +8084,18 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     if[%floor% < 79] AddStairsWall 4, LandingUpperCover, StairsLanding, 0.1, 0, -5, 4.5, -5, 0.5, 0.5, (%1% * 10) - 0.5, (%1% * 10) - 0.5, 0, 1
+    DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% < 79] AddStairsWall 4, Railing1, Railing, 0, -0.01, -5, -0.01, 5, 3.5, 3.5, %1% * 10, 0, 1, 1
+    if[%floor% < 79] AddStairsWall 4, Railing2, Railing, 0, 0.01, -5, 0.01, 5, 3.5, 3.5, %1% * 10, %1% * 20, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 2, 0, 2, 2, 1
+    if[%floor% = 79] AddStairsWall 4, Railing1, Railing, 0, -4.5 + 0.33, 5, 0, 5, 3.5, 3.5, 0, 0, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -7987,6 +8153,7 @@ CutStairwell 4, -4.5, -9.708, 4.5, 9.708, 0, 5
 #West Stairwell
 CreateStairwell 5, 0, -13.5, 79, 119
 CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
+ShowFullStairs 5 = true
 
 <Floor 79>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
@@ -8006,6 +8173,18 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
     WallOrientation = left
     AddStairsWall 5, LandingUpperCover, StairsLanding, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 5, Railing1, Railing, 0, -1.16, -4, -1.16, 4, 3.5, 3.5, %1% * 8, 0, 1, 1
+    AddStairsWall 5, Railing2, Railing, 0, 1.16, -4, 1.16, 4, 3.5, 3.5, %1% * 8, %1% * 16, 1, 1
+    AddStairsWall 5, Railing3, Railing, 0, -1.16, -4, -1.16, 4, 3.5, 3.5, %1% * 24, %1% * 16, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 1, 0, 2, 1, 1
+    AddStairsWall 5, Railing5, Railing, 0, -1.16, -4, 1.16, -4, 3.5, 3.5, %1% * 8, %1% * 8, 1, 1
+    AddStairsWall 5, Railing6, Railing, 0, -1.16, 4, 1.16, 4, 3.5, 3.5, %1% * 16, %1% * 16, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -8022,6 +8201,20 @@ CutStairwell 5, -5.67, -8.5, 5.67, 8.5, 0, 5
     DrawWalls = true, false, false, false, false, false
     WallOrientation = left
     if[%floor% < 119] AddStairsWall 5, LandingUpperCover, StairsLanding, 0.1, -5.67, 4, 1.17, 4, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% < 119] AddStairsWall 5, Railing1, Railing, 0, 1.16, -4, 1.16, 4, 3.5, 3.5, 0, %1% * 9, 1, 1
+    if[%floor% < 119] AddStairsWall 5, Railing2, Railing, 0, -1.16, -4, -1.16, 4, 3.5, 3.5, %1% * 18, %1% * 9, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 2, 0, 2, 2, 1
+    if[%floor% = 119] AddStairsWall 5, Railing1, Railing, 0, 5.67 - 0.33, -4, -1.16, -4, 3.5, 3.5, 0, 0, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 1, 0, 2, 1, 1
+    if[%floor% < 119] AddStairsWall 5, Railing3, Railing, 0, -1.16, -4, 1.16, -4, 3.5, 3.5, 0, 0, 1, 1
+    if[%floor% < 119] AddStairsWall 5, Railing4, Railing, 0, -1.16, 4, 1.16, 4, 3.5, 3.5, %1% * 9, %1% * 9, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 
@@ -8089,8 +8282,8 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
 #79th floor double stairs
 <Floor 79>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
-    AddStairs 6, StairsLower, Stairs, left, 0, -2.085, 4.17, %1%, 8 / 7, 8, 0, 0, 0
-    AddStairs 6, StairsMiddle, Stairs, right, 0, 2.085, 4.17, %1%, 8 / 7, 8, %1% * 8, 0, 0
+    AddStairs 6, StairsLower, Stairs, left, 0, -2.085, 4.1, %1%, 8 / 7, 8, 0, 0, 0
+    AddStairs 6, StairsMiddle, Stairs, right, 0, 2.085, 4.1, %1%, 8 / 7, 8, %1% * 8, 0, 0
     FloorOrientation = top
     AddStairsFloor 6, LandingLower, StairsLanding, 0.5, -9.0815, -4.5, 9.0815, 4.5, 0, 0, 1, 1
     AddStairsFloor 6, LandingMiddle, StairsLanding, 0.5, 4, -4.5, 9.0815, 4.5, %1% * 8, %1% * 8, 1, 1
@@ -8098,21 +8291,30 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     WallOrientation = left
     AddStairsWall 6, LandingMiddleCover, StairsLanding, 0.1, 4, 0, 4, 4.5, 0.5, 0.5, (%1% * 8) - 0.5, (%1% * 8) - 0.5, 0, 1
 
-    AddStairs 6, StairsUpper, Stairs, left, 0, -2.085, 4.17, %1%, 8 / 7, 8, %1% * 16, 0, 0
+    AddStairs 6, StairsUpper, Stairs, left, 0, -2.085, 4.1, %1%, 8 / 7, 8, %1% * 16, 0, 0
     FloorOrientation = top
     AddStairsFloor 6, LandingUpper, StairsLanding, 0.5, -9.0815, -4.5, -4, 4.5, %1% * 16, %1% * 16, 1, 1
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     AddStairsWall 6, LandingUpperCover, StairsLanding, 0.1, -4, -4.5, -4, 0, 0.5, 0.5, (%1% * 16) - 0.5, (%1% * 16) - 0.5, 0, 1
 
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    AddStairsWall 6, Railing1, Railing, 0, -4, 0.01, 4, 0.01, 3.5, 3.5, 0, %1% * 8, 1, 1
+    AddStairsWall 6, Railing2, Railing, 0, -4, -0.01, 4, -0.01, 3.5, 3.5, %1% * 16, %1% * 8, 1, 1
+    AddStairsWall 6, Railing3, Railing, 0, -4, 0.01, 4, 0.01, 3.5, 3.5, %1% * 16, %1% * 24, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
 #expanded stairs (on 119, and 138-141)
 <Floors 119 to 141>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 24 #determine riser size
-    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairs 6, StairsLower, Stairs, right, -4, 2.085, 4.17, %1%, 16 / 11, 12, 0, 0, 0
-    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairs 6, StairsUpper, Stairs, left, -4, -2.085, 4.17, %1%, 16 / 11, 12, %1% * 12, 0, 0
+    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairs 6, StairsLower, Stairs, right, -4, 2.085, 4.1, %1%, 16 / 11, 12, 0, 0, 0
+    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairs 6, StairsUpper, Stairs, left, -4, -2.085, 4.1, %1%, 16 / 11, 12, %1% * 12, 0, 0
     FloorOrientation = top
     if[%floor% = 119 | %floor% > 137] AddStairsFloor 6, LandingLower, StairsLanding, 0.5, 4, -4.5, 9.0815, 4.5, 0, 0, 1, 1
     if[%floor% = 119 | %floor% = 138] AddStairsFloor 6, LandingLower2, Brick, 0.5, -17, -4.5, -9.0815 + 0.33, 4.5, 0, 0, 1, 1
@@ -8123,14 +8325,27 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairsWall 6, LandingUpperCover, StairsLanding, 0.1, -12, -4.5, -12, 0, 0.5, 0.5, (%1% * 12) - 0.5, (%1% * 12) - 0.5, 0, 1
+
+    #railings
+    SetAutoSize = false, false
     DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 4, 0, 2, 4, 1
+    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairsWall 6, Railing1, Railing, 0, -12, 0.01, 4, 0.01, 3.5, 3.5, %1% * 12, 0, 1, 1
+    if[%floor% = 119 | (%floor% > 137 & %floor% < 141)] AddStairsWall 6, Railing2, Railing, 0, -12, -0.01, 4, -0.01, 3.5, 3.5, %1% * 12, %1% * 24, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 2, 0, 2, 2, 1
+    if[%floor% = 141] AddStairsWall 6, Railing1, Railing, 0, 4, 4.5 - 0.33, 4, 0, 3.5, 3.5, 0, 0, 1, 1
+    SetTextureMapping 0, 0, 0, 1, 4, 0, 2, 4, 1
+    if[%floor% = 120] AddStairsWall 6, Railing3, Railing, 0, -9.0815, -4.5 + 0.33, -9.0815, 4.5 - 0.33, 3.5, 3.5, %1% * 12, %1% * 12, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
+    DrawWalls = true, true, false, false, false, false 
 <EndFloors>
 
 #standard stairs
 <Floors 80 to 137>
     Set 1 = (%height% + Floor(%floor% + 1).InterfloorHeight) / 18 #determine riser size
-    if[%floor% ! 119] AddStairs 6, StairsLower, Stairs, right, 0, 2.085, 4.17, %1%, 8 / 8, 9, 0, 0, 0
-    if[%floor% ! 119] AddStairs 6, StairsUpper, Stairs, left, 0, -2.085, 4.17, %1%, 8 / 8, 9, %1% * 9, 0, 0
+    if[%floor% ! 119] AddStairs 6, StairsLower, Stairs, right, 0, 2.085, 4.1, %1%, 8 / 8, 9, 0, 0, 0
+    if[%floor% ! 119] AddStairs 6, StairsUpper, Stairs, left, 0, -2.085, 4.1, %1%, 8 / 8, 9, %1% * 9, 0, 0
     FloorOrientation = top
     if[%floor% ! 119] AddStairsFloor 6, LandingLower, StairsLanding, 0.5, 4, -4.5, 9.0815, 4.5, 0, 0, 1, 1
     if[%floor% ! 119] AddStairsFloor 6, LandingUpper, StairsLanding, 0.5, -9.0815, -4.5, -4, 4.5, %1% * 9, %1% * 9, 1, 1
@@ -8141,6 +8356,15 @@ CutStairwell 6, -9.0815, -4.5, 9.0815, 4.5, 0, 5
     DrawWalls = false, true, false, false, false, false
     WallOrientation = right
     if[%floor% ! 119] AddStairsWall 6, LandingUpperCover, StairsLanding, 0.1, -4, -4.5, -4, 0, 0.5, 0.5, (%1% * 9) - 0.5, (%1% * 9) - 0.5, 0, 1
+
+    #railings
+    SetAutoSize = false, false
+    DrawWalls = true, true, false, false, false, false
+    SetTextureMapping 0, 0, 0, 1, 3, 0, 2, 3, 1
+    if[%floor% ! 119] AddStairsWall 6, Railing1, Railing, 0, -4, 0.01, 4, 0.01, 3.5, 3.5, %1% * 9, 0, 1, 1
+    if[%floor% ! 119] AddStairsWall 6, Railing2, Railing, 0, -4, -0.01, 4, -0.01, 3.5, 3.5, %1% * 9, %1% * 18, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
 

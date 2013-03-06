@@ -1505,22 +1505,54 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params != 6)
+		if (params < 5 || params > 6)
 			return ScriptError("Incorrect number of parameters");
 
+		bool compat = false;
+		if (params == 6)
+			compat = true;
+
 		//check numeric values
-		for (int i = 0; i <= 5; i++)
+		if (compat == true)
 		{
-			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			for (int i = 0; i <= 5; i++)
+			{
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+		}
+		else
+		{
+			for (int i = 0; i <= 4; i++)
+			{
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
 		}
 
-		if (atoi(tempdata[4].c_str()) < -Simcore->Basements)
+		int startfloor, endfloor;
+		if (compat == true)
+		{
+			startfloor = atoi(tempdata[4].c_str());
+			endfloor = atoi(tempdata[5].c_str());
+		}
+		else
+		{
+			startfloor = atoi(tempdata[3].c_str());
+			endfloor = atoi(tempdata[4].c_str());
+		}
+
+		if (startfloor < -Simcore->Basements)
 			return ScriptError("Invalid starting floor");
-		if (atoi(tempdata[5].c_str()) > Simcore->Floors - 1)
+		if (endfloor > Simcore->Floors - 1)
 			return ScriptError("Invalid ending floor");
 
-		Object *object = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atoi(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
+		Object *object;
+		if (compat == true)
+			object = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
+		else
+			object = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
+
 		if (!object)
 			return ScriptError();
 
@@ -1735,6 +1767,86 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid stairwell");
 
 		Simcore->GetStairs(stairwell)->CutFloors(true, Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
+	}
+
+	//StairsShowFloors command
+	if (linecheck.substr(0, 16) == "stairsshowfloors")
+	{
+		//get stairwell number
+		int loc = LineData.find("=");
+		if (loc < 0)
+			return ScriptError("Syntax error");
+		int stairnum;
+		std::string str = LineData.substr(16, loc - 17);
+		TrimString(str);
+		if (!IsNumeric(str.c_str(), stairnum))
+			return ScriptError("Invalid stairwell number");
+
+		if (stairnum < 1 || stairnum > Simcore->StairsNum())
+			return ScriptError("Invalid stairwell number");
+
+		Simcore->GetStairs(stairnum)->ShowFloors = true;
+
+		int params = SplitAfterEquals(LineData.c_str(), false);
+		if (params == -1)
+			return ScriptError("Syntax Error");
+
+		for (int line = 0; line < params; line++)
+		{
+			std::string tmpstring = tempdata[line];
+			TrimString(tmpstring);
+			if (tmpstring.find("-", 1) > 0)
+			{
+				int start, end;
+				//found a range marker
+				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
+				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				TrimString(str1);
+				TrimString(str2);
+				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
+					return ScriptError("Invalid value");
+
+				if (end < start)
+				{
+					int temp = start;
+					start = end;
+					end = temp;
+				}
+
+				for (int k = start; k <= end; k++)
+					Simcore->GetStairs(stairnum)->AddShowFloor(k);
+			}
+			else
+			{
+				int showfloor;
+				std::string str = tempdata[line];
+				TrimString(str);
+				if (!IsNumeric(str.c_str(), showfloor))
+					return ScriptError("Invalid value");
+				Simcore->GetStairs(stairnum)->AddShowFloor(showfloor);
+			}
+		}
+	}
+
+	//ShowFullStairs command
+	if (linecheck.substr(0, 14) == "showfullstairs")
+	{
+		//get shaft number
+		int loc = LineData.find("=");
+		if (loc < 0)
+			return ScriptError("Syntax error");
+		int stairnum;
+		std::string str = LineData.substr(14, loc - 15);
+		TrimString(str);
+		if (!IsNumeric(str.c_str(), stairnum))
+			return ScriptError("Invalid stairwell number");
+		if (stairnum < 1 || stairnum > Simcore->StairsNum())
+			return ScriptError("Invalid stairwell number");
+
+		//get text after equal sign
+		temp2 = GetAfterEquals(LineData.c_str());
+
+		Simcore->GetStairs(stairnum)->ShowFullStairs = Ogre::StringConverter::parseBool(temp2);
 	}
 
 	//WallOrientation command

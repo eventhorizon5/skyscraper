@@ -288,6 +288,7 @@ public:
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	bool AvailableForCall(int floor, int direction);
 	bool SelectFloor(int floor);
+	bool Check(Ogre::Vector3 position);
 
 private:
 

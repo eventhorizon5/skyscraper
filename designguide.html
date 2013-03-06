@@ -2356,18 +2356,16 @@ external, My Wall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
 
 <p align="left"><strong>h. AddShaft</strong> - creates a shaft at a specified
 location and floor range<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">AddShaft number, type,
+Syntax: <font face="Courier New, Courier, mono" size="2">AddShaft number,
 centerx, centerz, startfloor, endfloor</font><br>
-Example: <font face="Courier New, Courier, mono" size="2">AddShaft 1, 2, 10,
-10, 0, 9</font></p>
+Example: <font face="Courier New, Courier, mono" size="2">AddShaft 1, 10, 10,
+0, 9</font></p>
 
-<p align="left">The number parameter specifies the shaft number to create.
-<em>Type</em> is either 1 for a pipe/utility shaft, 2 for an elevator shaft,
-and 3 for a stairwell shaft. This command just tells the simulator the area
-that the shaft will take up, and does not create the actual shaft walls. Later
-on when you create the walls/floors for the shaft, make sure that you make a
-floor at the very bottom and very top of the shaft (they can extend beyond the
-walls).</p>
+<p align="left">The number parameter specifies the shaft number to create. This
+command just tells the simulator the area that the shaft will take up, and does
+not create the actual shaft walls. Later on when you create the walls/floors
+for the shaft, make sure that you make a floor at the very bottom and very top
+of the shaft (they can extend beyond the walls).</p>
 
 <p align="left"><strong>i. CreateStairwell</strong> - creates a stairwell at a
 specified location and floor range<br>
@@ -2687,7 +2685,28 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> ShowFullShaft
 Example: <font face="Courier New, Courier, mono" size="2">ShowFullShaft 1 =
 true</font></p>
 
-<p align="left"><strong>y. TextureFlip</strong> - flips specified textures for
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>y.
+StairsShowFloors</strong> - allows a range of floors to be shown while inside
+the specified stairwell.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> StairsShowFloors
+<em>StairwellNumber</em> = <em>range/list</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">StairsShowFloors 1 =
+1 - 10</font><br>
+In the above example, let's say the user is in stairwell 1, and is walking
+upwards from the 2nd floor. In this situation, the 2nd floor will be
+visible/enabled while they're walking up (since it was in the range specified
+with this command), but when they reach the 11th floor, that floor will be
+invisible/disabled.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>z.
+ShowFullStairs</strong> - determines if an entire stairwell should be shown
+while the user is inside - useful for stairwells that have a gap in the center
+between the actual stairs.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> ShowFullStairs
+<em>StairwellNumber</em> = <em>value</em></font><br>
+Example: ShowFullStairs 1 = true</p>
+
+<p align="left"><strong>aa. TextureFlip</strong> - flips specified textures for
 the next command.. Currently only works with the different AddWall, AddFloor
 and AddInterFloor commands. The values available are 0 for no flipping, 1 for
 horizontal flip, 2 for vertical flip, and 3 for both horizontal and
@@ -2704,7 +2723,7 @@ the command immediately after this one. In the above example, the Main Positive
 and Main Negative sides of the object will have their textures flipped
 horizontally.</p>
 
-<p align="left"><strong>z. Cut</strong> - performs a manual box cut on an
+<p align="left"><strong>ab. Cut</strong> - performs a manual box cut on an
 object<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Cut
 <em>destobject</em>, x1, y1, z1, x2, y2, z2, cutwalls, cutfloors<br>
@@ -2715,7 +2734,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">Cut
 the box cut. If cutwalls is true, the function will cut walls; if cutfloors is
 true, it'll cut floors.</p>
 
-<p align="left"><strong>aa. Mount</strong> - mounts a zip file in the data
+<p align="left"><strong>ac. Mount</strong> - mounts a zip file in the data
 directory into a virtual path.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Mount
 <em>filename</em>, <em>path</em></font><br>
@@ -2726,7 +2745,7 @@ mydirectory</font></p>
 data directory will be mounted as "mydirectory", and so a file such as test.jpg
 inside that zip file will appear as "mydirectory/test.jpg".</p>
 
-<p align="left"><strong>ab. AddFloorAutoArea</strong> - defines an area that
+<p align="left"><strong>ad. AddFloorAutoArea</strong> - defines an area that
 will automatically enable and disable floors when the user moves within it,
 similar to a stairwell<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
@@ -2734,7 +2753,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
 Example: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
 -100, 0, -100, 100, 100, 100</font></p>
 
-<p align="left"><strong>ac. AddSound</strong> - creates a user-defined sound at
+<p align="left"><strong>ae. AddSound</strong> - creates a user-defined sound at
 the specified position<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddSound <em>name,
 filename, x, y, z, loop[, volume, speed, min_distance, max_distance,
@@ -2766,7 +2785,7 @@ sound outside (0.0 to 1.0, default 1.0)<em>. Direction_x</em>,
 <em>direction_y</em> and <em>direction_z</em> specify the direction of the
 sound cone.</p>
 
-<p align="left"><strong>ad. GetWallExtents</strong> - the GetWallExtents
+<p align="left"><strong>af. GetWallExtents</strong> - the GetWallExtents
 command returns the X and Z extents (minimum and maximum values) of a wall, at
 the specified altitude. The command will return the results in the MinX, MinZ,
 MaxX and MaxZ variables.<br>
@@ -2793,7 +2812,7 @@ the endpoints. The command will store the results in the MinX, MinZ, MaxX and
 MaxZ variables, which can be used anywhere in the script - to get the minimum X
 result, you'd use %minx%.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ae.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ag.
 AddAction</strong> - defines an action, to be used by custom controls and
 triggers.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> AddAction <em>name,
@@ -2830,7 +2849,7 @@ parameters)</p>
 command, if multiple sounds have the same name, all of those sounds will be
 played simultaneously when the related action is run.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>af.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
 AddActionControl</strong> - creates a custom control that uses a specific
 action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
@@ -2851,7 +2870,7 @@ action, and switches to the next actions in sequence when it's clicked.
 (front, left, right, back). Leave the sound field blank for no sound to be
 played.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ag.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ai.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
 the user's camera enters or leaves the defined area.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> AddTrigger <em>name,
@@ -2868,7 +2887,7 @@ consecutive action when the users enters/leaves. The X, Y and Z parameters
 specify the 3D box that defines the trigger area. Leave the sound field blank
 for no sound to be played.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aj.
 SetKey</strong> - specifies that the next created model will be a key. The
 model will be tagged with a specific key ID number, and when clicked, the key
 ID will be added to the user's keyring and the model will be deleted. The value
@@ -2877,7 +2896,7 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> SetKey
 <em>keyid</em></font><br>
 Example: SetKey 1</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ai.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ak.
 SetLock</strong> - sets the lock and key parameters for subsequent doors,
 controls/buttons, and call buttons that are created.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetLock
@@ -2902,7 +2921,7 @@ If <em>keyid</em> is 0, no key is needed to lock or unlock. To reset to the
 defaults, use 0 for the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
 </p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aj.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
 Print</strong> - prints the contents of a line to the console. This command
 will still convert variables and even math expressions, and output the
 results.<br>

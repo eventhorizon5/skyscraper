@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Stairs Subsystem Class
+	Scalable Building Simulator - Stairwell Class
 	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2013 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -52,6 +52,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	lastcheckresult = false;
 	checkfirstrun = true;
 	lastposition = 0;
+	ShowFloors = false;
+	ShowFullStairs = false;
 
 	std::string buffer, buffer2, buffer3;
 
@@ -346,13 +348,21 @@ void Stairs::Enabled(int floor, bool value)
 	}
 }
 
-void Stairs::EnableWholeStairwell(bool value)
+void Stairs::EnableWholeStairwell(bool value, bool force)
 {
 	//turn on/off entire stairwell
+
+	if (force == true)
+		IsEnabled = false;
+
 	if ((value == false && IsEnabled == true) || (value == true && IsEnabled == false))
 	{
 		for (int i = startfloor; i <= endfloor; i++)
+		{
+			if (force == true)
+				EnableArray[i - startfloor] = false;
 			Enabled(i, value);
+		}
 	}
 	IsEnabled = value;
 }
@@ -377,7 +387,6 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 		return false;
 
 	bool hit = false;
-	bool hittmp = false;
 	float bottom = sbs->GetFloor(startfloor)->GetBase();
 	float top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
 
@@ -398,15 +407,26 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 
 	if (position.y > bottom && position.y < top)
 	{
-		//check both the current floor and floor below
-		float distance = floorptr->FullHeight();
-		if (floor > startfloor)
-			hit = (GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0);
-		if (floor >= startfloor && floor <= endfloor)
+		//determine if camera has X and Z values within the current floor's bounding box
+		if (StairArray[floor - startfloor]->InBoundingBox(position, false) == true)
 		{
-			hittmp = (GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0);
-			if (hittmp == true)
-				hit = true;
+			//if within bounding box, check for hit with current floor
+			float distance = floorptr->FullHeight();
+			hit = GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+
+			//if no hit, check hit against lower floor
+			if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
+			{
+				distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
+				hit = GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			}
+
+			//if no hit, check hit against starting floor
+			if (hit == false && sbs->GetFloor(startfloor))
+			{
+				distance = position.y - sbs->GetFloor(startfloor)->Altitude;
+				hit = GetMeshObject(startfloor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			}
 		}
 	}
 	floorptr = 0;
@@ -558,7 +578,7 @@ bool Stairs::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogr
 	return true;
 }
 
-void Stairs::EnableRange(int floor, int range)
+void Stairs::EnableRange(int floor, int range, bool value)
 {
 	//turn on a range of floors
 	//if range is 3, show stairwell on current floor (floor), and 1 floor below and above (3 total floors)
@@ -584,22 +604,25 @@ void Stairs::EnableRange(int floor, int range)
 		additionalfloors = 0;
 
 	//disable floors 1 floor outside of range
-	if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
+	if (value == true)
 	{
-		if (sbs->GetFloor(floor)->IsInGroup(floor - additionalfloors - 1) == false) //only disable if not in group
-			Enabled(floor - additionalfloors - 1, false);
-	}
-	if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
-	{
-		if (sbs->GetFloor(floor)->IsInGroup(floor + additionalfloors + 1) == false) //only disable if not in group
-			Enabled(floor + additionalfloors + 1, false);
+		if (floor - additionalfloors - 1 >= startfloor && floor - additionalfloors - 1 <= endfloor)
+		{
+			if (sbs->GetFloor(floor)->IsInGroup(floor - additionalfloors - 1) == false) //only disable if not in group
+				Enabled(floor - additionalfloors - 1, false);
+		}
+		if (floor + additionalfloors + 1 >= startfloor && floor + additionalfloors + 1 <= endfloor)
+		{
+			if (sbs->GetFloor(floor)->IsInGroup(floor + additionalfloors + 1) == false) //only disable if not in group
+				Enabled(floor + additionalfloors + 1, false);
+		}
 	}
 
 	//enable floors within range
 	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
 	{
 		if (i >= startfloor && i <= endfloor)
-			Enabled(i, true);
+			Enabled(i, value);
 	}
 }
 
@@ -812,4 +835,111 @@ void Stairs::Init()
 {
 	//startup initialization of stairs
 	EnableWholeStairwell(false);
+}
+
+void Stairs::AddShowFloor(int floor)
+{
+	//adds a floor number to the ShowFloors array
+
+	int index = -1;
+	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			index = i;
+	}
+	if (index == -1)
+	{
+		ShowFloorsList.push_back(floor);
+		std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
+	}
+}
+
+void Stairs::RemoveShowFloor(int floor)
+{
+	//removes a floor number from the ShowFloors array
+
+	int index = -1;
+	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			index = i;
+	}
+	if (index != -1)
+	{
+		for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+		{
+			if (ShowFloorsList[i] == floor)
+				ShowFloorsList.erase(ShowFloorsList.begin() + i);
+		}
+	}
+}
+
+void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor)
+{
+	//check to see if user (camera) is in the stairwell
+
+	if (IsInStairwell(position) == true)
+	{
+		if (InsideStairwell == false)
+		{
+			InsideStairwell = true;
+
+			//turn on entire stairwell if ShowFullStairs is true
+			if (ShowFullStairs == true)
+				EnableWholeStairwell(true);
+		}
+
+		//show specified stairwell range while in the stairwell
+		if (ShowFullStairs == false)
+			EnableRange(current_floor, sbs->StairsDisplayRange, true);
+
+		//if user walked to a different floor, enable new floor and disable previous
+		if (current_floor != previous_floor)
+		{
+			if (sbs->GetFloor(current_floor)->IsInGroup(previous_floor) == false)
+			{
+				//only disable other floor if it's not in a group list
+				sbs->GetFloor(previous_floor)->Enabled(false);
+				sbs->GetFloor(previous_floor)->EnableGroup(false);
+			}
+			sbs->GetFloor(current_floor)->Enabled(true);
+			sbs->GetFloor(current_floor)->EnableGroup(true);
+
+			//turn on related floors if ShowFloors is true
+			if (ShowFloors == true)
+			{
+				for (int i = 0; i < ShowFloorsList.size(); i++)
+				{
+					sbs->GetFloor(ShowFloorsList[i])->Enabled(true);
+					sbs->GetFloor(ShowFloorsList[i])->EnableGroup(true);
+				}
+			}
+		}
+	}
+	else if (InsideStairwell == true)
+	{
+		InsideStairwell = false;
+
+		//turn off stairwell if ShowFullStairs is true
+		if (ShowFullStairs == true)
+			EnableWholeStairwell(false);
+
+		//turn off related floors if outside stairwell
+		if (ShowFloors == true)
+		{
+			for (int i = 0; i < ShowFloorsList.size(); i++)
+			{
+				if (ShowFloorsList[i] != current_floor)
+				{
+					sbs->GetFloor(ShowFloorsList[i])->Enabled(false);
+					sbs->GetFloor(ShowFloorsList[i])->EnableGroup(false);
+				}
+			}
+		}
+	}
+	else if (InsideStairwell == false)
+	{
+		//show specified stairwell range if outside the stairwell
+		EnableRange(current_floor, sbs->StairsOutsideDisplayRange, true);
+	}
 }
