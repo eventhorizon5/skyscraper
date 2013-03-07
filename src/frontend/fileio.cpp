@@ -2225,7 +2225,7 @@ int ScriptProcessor::ProcCommands()
 			return 0;
 
 		//get data
-		int params = SplitData(LineData.c_str(), 9);
+		int params = SplitData(LineData.c_str(), 9, true, 1);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -3746,7 +3746,7 @@ int ScriptProcessor::ProcFloors()
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9);
+		int params = SplitData(LineData.c_str(), 9, true, 1);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -6107,7 +6107,7 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9);
+		int params = SplitData(LineData.c_str(), 9, true, 1);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -6367,7 +6367,7 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9);
+		int params = SplitData(LineData.c_str(), 9, true, 1);
 
 		if (params < 14 || params > 15)
 			return ScriptError("Incorrect number of parameters");
