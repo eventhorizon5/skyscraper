@@ -87,8 +87,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 	IncrementMaterialCount();
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	mMat->setLightingEnabled(false);
+	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
@@ -183,8 +183,8 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 	IncrementMaterialCount();
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	mMat->setLightingEnabled(false);
+	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind first texture to material
 	Ogre::TextureUnitState* state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(filenames2[0]);
@@ -310,8 +310,8 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	TrimString(matname);
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
 	IncrementMaterialCount();
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	mMat->setLightingEnabled(false);
+	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
 	Ogre::TextureUnitState* state1 = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
@@ -491,8 +491,8 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
 	IncrementMaterialCount();
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	mMat->setLightingEnabled(false);
+	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
@@ -870,8 +870,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
 	IncrementMaterialCount();
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	mMat->setLightingEnabled(false);
+	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
@@ -964,8 +964,8 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
 	IncrementMaterialCount();
-	mMat->setLightingEnabled(true);
-	mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	mMat->setLightingEnabled(false);
+	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
 	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);

@@ -8,6 +8,12 @@ material swimmingpool/YELLOW_EGG_YOLK
 			ambient 0.615686 0.411765 0.0313726 1
 			diffuse 0.615686 0.411765 0.0313726 1
 			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/yellow.jpg
+                        }
 		}
 
 	}
@@ -38,6 +44,12 @@ material swimmingpool/GRAY_(DARK)_NS2S
 			ambient 0.0784314 0.0784314 0.0784314 1
 			diffuse 0.0784314 0.0784314 0.0784314 1
 			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray2-sm.jpg
+                        }
 		}
 
 	}
@@ -115,6 +127,12 @@ material swimmingpool/0_WHITE_PLASTIC
 		{
 			ambient 0.6 0.6 0.6 1
 			diffuse 0.6 0.6 0.6 1
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray3.jpg
+                        }
 		}
 
 	}
@@ -210,6 +228,12 @@ material swimmingpool/DARK_BROWN_MATTE
 		{
 			ambient 0.113725 0.0196078 0.00392157 1
 			diffuse 0.113725 0.0196078 0.00392157 1
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray2-sm.jpg
+                        }
 		}
 
 	}
@@ -225,6 +249,12 @@ material swimmingpool/BLACK_MATTE
 			ambient 0.0470588 0.0470588 0.0470588 1
 			diffuse 0.0470588 0.0470588 0.0470588 1
 			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/gray3.jpg
+                        }
 		}
 
 	}
@@ -302,6 +332,12 @@ material swimmingpool/GRAY_(MED)_NS2S
 			ambient 0.254902 0.254902 0.254902 1
 			diffuse 0.254902 0.254902 0.254902 1
 			cull_hardware none
+
+			texture_unit
+                        {
+                                texture_alias 0
+                                texture data/stucco3.jpg
+                        }
 		}
 
 	}

@@ -350,7 +350,15 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     DrawWalls = true, false, false, false, false, false
     if[%floor% > -7] AddWall ARight, ParkingWalls, 0.5, 37, -50, 37, 50, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
     if[%floor% > -7] AddWall ABack, ParkingWalls, 0.5, -37, 4, 37, 4, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
-       
+    DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = true, false
+    AddWall Railing1, Railing, 0, -37, -50, 37, -50, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing2, Railing, 0, -37, 4, 37, 4, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing3, Railing, 0, -37, -50, -37, 4, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing4, Railing, 0, 37, -50, 37, 4, 3.5, 3.5, 0, 0, 1, 1, false
+    SetAutoSize = true, true
 <EndFloors>
 
 
@@ -364,11 +372,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     InterfloorHeight = 2.24
     Altitude = -2.24
     Group = 1 #enable mezzanine also, since both are merged
-	
-	AddSound ambient, ambient.ogg, -60, 30, -60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
-	AddSound ambient, ambient.ogg, 60, 30, -60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
-	AddSound ambient, ambient.ogg, -60, 30, 60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
-	AddSound ambient, ambient.ogg, 60, 30, 60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+
+    #ambient lobby sounds
+    AddSound ambient, ambient.ogg, -60, 30, -60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound ambient, ambient.ogg, 60, 30, -60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound ambient, ambient.ogg, -60, 30, 60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
+    AddSound ambient, ambient.ogg, 60, 30, 60, true, 0.25, 100, 1, -1, 0, 360, 360, 1, 0, 0, 0
 
     #Floor
     FloorOrientation = top
@@ -564,6 +573,23 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddFloor RRFloor, Carpet1, 0.5, 33.5, -42.33, 42.37, -24 + 0.33, 0, 0, 0, 0, False
 
     DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = true, false
+    AddWall Railing1, Railing, 0, -48.5, -66.5, -48.5, -50, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing2, Railing, 0, 48.5, -66.5, 48.5, -50, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing3, Railing, 0, -48.5, -50, -33.5, -50, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing4, Railing, 0, 48.5, -50, 33.5, -50, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing5, Railing, 0, -33.5, -50, -33.5, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing6, Railing, 0, 33.5, -50, 33.5, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing7, Railing, 0, -33.5, -23.833, -22.25, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing8, Railing, 0, -32.7, -13.833, -22.6, -13.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing9, Railing, 0, 33.5, -23.833, 22.25, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing10, Railing, 0, 32.7, -13.833, 22.6, -13.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing11, Railing, 0, -7.5, -23.833, 7.5, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing12, Railing, 0, -48.5, 14, -48.5, 66.8, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing13, Railing, 0, 48.5, 14, 48.5, 66.8, 3.5, 3.5, 0, 0, 1, 1, false
+    SetAutoSize = true, true
 <EndFloor>
 
 #Parking ramps
@@ -1673,6 +1699,11 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddInterfloorWall IRight, Brick, 0.5, 39 - 0.01, 0, 39 - 0.01, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     DrawWalls = true, true, false, false, false, false
+
+    #railing
+    SetAutoSize = true, false
+    AddWall Railing, Railing, 0, -39, 0, 39, 0, 3.5, 3.5, 0, 0, 1, 1, false
+    SetAutoSize = true, true
 <EndFloor>
 
 #Skydeck
@@ -1937,6 +1968,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddInterfloorWall IRight, Brick, 0.5, 39, 5, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     DrawWalls = true, true, false, false, false, false
+
+    SetAutoSize = true, false
+    AddWall Railing1, Railing, 0, -39, 5, -12.4, 5, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing2, Railing, 0, -6.4, 5, 6.4, 5, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing3, Railing, 0, 12.4, 5, 39, 5, 3.5, 3.5, 0, 0, 1, 1, false 
+    SetAutoSize = true, true
 <EndFloor>
 
 #floor signs
@@ -8426,15 +8463,31 @@ CreateStairwell 7, 0, -5, 141, 143
 CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, 5, 5, 5
 
 <Floor 141>
-    #shorter stairs going from 141 to 142
+    #stairs going from 141 to 142
     Set 1 = (%height% + Floor(142).InterfloorHeight) / 16 #determine riser size
-    AddStairs 7, Stairs, Stairs, front, 9.4, -0.01, 6, %1%, 20 / 15, 16, 0, 0, 0
+    AddStairs 7, Stairs, Stairs, front, 9.4, -0.01, 5.9, %1%, 20 / 15, 16, 0, 0, 0
+
+    #railings
+    SetAutoSize = false, false
+    SetTextureMapping 0, 0, 0, 1, 6, 0, 2, 6, 1
+    AddStairsWall 7, Railing1, Railing, 0, 9.4 - 3, -10, 9.4 - 3, 10, 3.5, 3.5, 0, %1% * 16, 1, 1
+    AddStairsWall 7, Railing2, Railing, 0, 9.4 + 3, -10, 9.4 + 3, 10, 3.5, 3.5, 0, %1% * 16, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
 <EndFloor>
 
 <Floor 142>
-    #longer stairs going from 142 to the roof
+    #stairs going from 142 to the roof
     Set 1 = (%height% + Floor(143).InterfloorHeight) / 20 #determine riser size
-    AddStairs 7, Stairs, Stairs, back, -9.4, -2.5 + 0.01, 6, %1%, 25 / 19, 20, 0, 0, 0
+    AddStairs 7, Stairs, Stairs, back, -9.4, -2.5 + 0.01, 5.9, %1%, 25 / 19, 20, 0, 0, 0
+
+    #railings
+    SetAutoSize = false, false
+    SetTextureMapping 0, 0, 0, 1, 8, 0, 2, 8, 1
+    AddStairsWall 7, Railing1, Railing, 0, -9.4 - 3 + 0.01, -12.5 - 2.5, -9.4 - 3 + 0.01, 12.5 - 2.5, 3.5, 3.5, %1% * 20, 0, 1, 1
+    AddStairsWall 7, Railing2, Railing, 0, -9.4 + 3 - 0.01, -12.5 - 2.5, -9.4 + 3 - 0.01, 12.5 - 2.5, 3.5, 3.5, %1% * 20, 0, 1, 1
+    ResetTextureMapping = true
+    SetAutoSize = true, true
 <EndFloor>
 
 #interfloor filler walls for roof
@@ -8450,6 +8503,13 @@ CutStairwell 7, -9.4 - 3, -15, -9.4 + 3, 5, 5, 5
     AddStairsWall 7, Back, Brick, 0, -9.4 - 3, 5, -9.4 + 3, 5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0
 
     DrawWalls = true, true, false, false, false, false
+
+    #railings
+    SetAutoSize = true, false
+    AddStairsWall 7, Railing1, Railing, 0, -9.4 - 3, -15, -9.4 - 3, 5, 3.5, 3.5, 0, 0, 1, 1
+    AddStairsWall 7, Railing2, Railing, 0, -9.4 - 3, 5, -9.4 + 3, 5, 3.5, 3.5, 0, 0, 1, 1
+    AddStairsWall 7, Railing3, Railing, 0, -9.4 + 3, -15, -9.4 + 3, 5, 3.5, 3.5, 0, 0, 1, 1
+    SetAutoSize = true, true
 <EndFloor>
 
 
