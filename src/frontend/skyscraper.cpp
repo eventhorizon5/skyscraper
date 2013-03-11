@@ -1515,10 +1515,13 @@ bool Skyscraper::Start()
 	}
 
 	//the sky needs to be created before Prepare() is called
-	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == false)
+	bool sky_result = false;
+	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+		sky_result = InitSky();
+
+	//create old sky if Caelum is turned off, or failed to initialize
+	if (sky_result == false)
 		Simcore->CreateSky(Simcore->SkyName.c_str());
-	else
-		InitSky();
 
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
@@ -1759,7 +1762,6 @@ bool Skyscraper::InitSky()
 	catch (Ogre::Exception &e)
 	{
 		ReportError("Error initializing Caelum:" + e.getDescription());
-		//return false;
 	}
 
 	if (mCaelumSystem)
@@ -1778,6 +1780,8 @@ bool Skyscraper::InitSky()
 			ReportError("Error setting Caelum parameters:" + e.getDescription());
 		}
 	}
+	else
+		return false;
 
 	SkyMult = GetConfigInt("Skyscraper.Frontend.SkyMult", 50);
 
