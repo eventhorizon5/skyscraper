@@ -142,11 +142,64 @@ bool ScriptProcessor::LoadBuilding()
 		//function parameter variables
 		if (InFunction == true)
 		{
-			for (int i = 0; i < (int)FunctionParams.size(); i++)
+			startpos = 0;
+			do
 			{
-				std::string num = _itoa(i + 1, intbuffer, 10);
-				ReplaceAll(LineData, std::string("%param" + num + "%").c_str(), FunctionParams[i].c_str());
-			}
+				//Function parameter conversion
+				temp1 = LineData.find("%param", startpos);
+				if (temp1 >= startpos)
+				{
+					temp3 = LineData.find("%", temp1 + 6);
+					if (temp3 >= (int)LineData.length() || temp3 < 0)
+					{
+						temp1 = 0;
+						temp3 = 0;
+						break;
+					}
+				}
+				else
+				{
+					//none (or no more) variables found
+					temp1 = 0;
+					temp3 = 0;
+					break;
+				}
+
+				if (temp1 + temp3 > 0)
+				{
+					std::string str = LineData.substr(temp1 + 6, temp3 - (temp1 + 6));
+					TrimString(str);
+					temp2 = str;
+					if (IsNumeric(temp2.c_str()) == true)
+					{
+						temp4 = atoi(temp2.c_str());
+
+						//replace all occurrences of the variable with it's value
+						std::string replacement;
+						if (temp4 > 0 && temp4 <= (int)FunctionParams.size())
+							replacement = FunctionParams[temp4 - 1].c_str();
+						else
+							replacement = "";
+
+						ReplaceAll(LineData, std::string("%param" + temp2 + "%").c_str(), replacement.c_str());
+						startpos = temp1;
+					}
+					else
+						startpos = temp3 + 1;
+				}
+				else
+					startpos++;
+			} while (true);
+
+			/*int loc = LineData.find("%param", 0);
+			if (loc > 0)
+			{
+				for (int i = 0; i < (int)FunctionParams.size(); i++)
+				{
+					std::string num = _itoa(i + 1, intbuffer, 10);
+					ReplaceAll(LineData, std::string("%param" + num + "%").c_str(), FunctionParams[i].c_str());
+				}
+			}*/
 		}
 		else
 		{
@@ -414,9 +467,11 @@ breakpoint:
 		{
 			//end function and return to original line
 			InFunction = false;
+			FunctionName = "";
 			FunctionParams.clear();
 			ReplaceLine = true;
 			line = FunctionCallLine - 1;
+			FunctionCallLine = 0;
 			goto Nextline;
 		}
 
@@ -428,7 +483,7 @@ breakpoint:
 			if (temp1 >= startpos)
 			{
 				temp3 = LineData.find("%", temp1 + 1);
-				if (temp3 >= (int)LineData.length())
+				if (temp3 >= (int)LineData.length() || temp3 < 0)
 				{
 					temp1 = 0;
 					temp3 = 0;
@@ -465,7 +520,7 @@ breakpoint:
 			}
 			else
 				startpos++;
-		} while (1 == 1);
+		} while (true);
 
 		//////////////////////////
 		//Floor object conversion
@@ -986,6 +1041,7 @@ int ScriptProcessor::ScriptError(std::string message)
 	//first see if the current line is from an included file
 
 	int linenum = line;
+	int function_line = FunctionCallLine;
 	int included_lines = 0;
 	bool isinclude = false;
 	std::string includefile;
@@ -1008,13 +1064,37 @@ int ScriptProcessor::ScriptError(std::string message)
 		}
 	}
 
+	for (int i = 0; i < (int)includes.size(); i++)
+	{
+		if (function_line < includes[i].start_line)
+			break;
+
+		//keep track of original script position (keep a count of how many lines are "included" lines)
+		if (function_line > includes[i].end_line)
+			included_lines += (includes[i].end_line - includes[i].start_line);
+
+		//line is part of an included file
+		if (function_line >= includes[i].start_line && function_line <= includes[i].end_line)
+			function_line = function_line - includes[i].start_line + 1;
+	}
+
 	//Script error reporting function
 	char intbuffer[65];
 	std::string error;
 	if (isinclude == false)
-		error = "Script error on line " + std::string(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+	{
+		if (InFunction == false)
+			error = "Script error on line " + std::string(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		else
+			error = "Script error on line " + std::string(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + std::string(_itoa(function_line - included_lines + 1, intbuffer, 10)) + "\nLine Text: " + LineData;
+	}
 	else
-		error = "Script error in included file " + includefile + " on line " + std::string(_itoa(linenum, intbuffer, 10)) + ": " + std::string(message) + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+	{
+		if (InFunction == false)
+			error = "Script error in included file " + includefile + " on line " + std::string(_itoa(linenum, intbuffer, 10)) + ": " + std::string(message) + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		else
+			error = "Script error in included file " + includefile + " on line " + std::string(_itoa(linenum, intbuffer, 10)) + ": " + std::string(message) + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + std::string(_itoa(function_line - included_lines + 1, intbuffer, 10)) + "\nLine Text: " + LineData;
+	}
 
 	skyscraper->ReportError(error.c_str());
 
@@ -7209,9 +7289,10 @@ bool ScriptProcessor::FunctionProc()
 			//store info
 			InFunction = true;
 			FunctionCallLine = line;
+			FunctionName = functions[i].name;
 
 			//get function parameters
-			int location2 = location + (int)functions[i].name.length() + 1;
+			int location2 = location + (int)FunctionName.length() + 1;
 			int end_loc = LineData.find(")", location);
 			std::string newdata = LineData.substr(location2, end_loc - location2);
 			SplitString(tempdata, newdata.c_str(), ',');

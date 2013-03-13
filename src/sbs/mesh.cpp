@@ -232,7 +232,8 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 			bool polycheck2 = false;
 
 			//copy source polygon vertices
-			temppoly.reserve(origpolys[j].size());
+			if (temppoly.capacity() < origpolys[j].size())
+				temppoly.reserve(origpolys[j].size());
 			for (int k = 0; k < (int)origpolys[j].size(); k++)
 				temppoly.push_back(origpolys[j][k]);
 
@@ -732,6 +733,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	this->mass = mass;
 	no_collider = false;
 	tricollider = true;
+	MeshGeometry.reserve(128); //reserve vertex space
 
 	Ogre::MeshPtr collidermesh;
 
@@ -1156,13 +1158,6 @@ Ogre::Vector3 MeshObject::GetRotation()
 	return Ogre::Vector3(rotX, rotY, rotZ);
 }
 
-void MeshObject::ReserveVertices(int count)
-{
-	//reserve memory for the specified number of vertices,
-	//which are in addition to the existing vertices
-	MeshGeometry.reserve(MeshGeometry.size() + count);
-}
-
 void MeshObject::AddVertex(Geometry &vertex_geom)
 {
 	//add a vertex to the mesh
@@ -1182,12 +1177,6 @@ void MeshObject::RemoveVertex(int index)
 	//TODO: reindex triangles here
 
 	prepared = false; //need to re-prepare mesh
-}
-
-void MeshObject::ReserveTriangles(int submesh, int count)
-{
-	//reserve memory for the specified number of triangles
-	Triangles[submesh].triangles.reserve(Triangles[submesh].triangles.size() + count);
 }
 
 void MeshObject::AddTriangle(int submesh, TriangleType &triangle)
@@ -1294,10 +1283,10 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2, tw, th);
 
 	//triangulate mesh
-	std::vector<TriangleMesh> trimesh;
-	trimesh.resize(vertices2.size());
+	TriangleMesh *trimesh = new TriangleMesh[vertices2.size()];
+	int trimesh_size = vertices2.size();
 
-	for (int i = 0; i < (int)trimesh.size(); i++)
+	for (int i = 0; i < trimesh_size; i++)
 	{
 		//first fill triangle mesh with polygon's vertices
 		trimesh[i].vertices.reserve(vertices2[i].size());
@@ -1312,13 +1301,13 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	}
 
 	//set up geometry array
-	std::vector<Geometry> mesh_geometry;
+	Geometry *mesh_geometry = 0;
 
 	//initialize geometry arrays
 	int size = 0;
-	for (int i = 0; i < (int)trimesh.size(); i++)
+	for (int i = 0; i < trimesh_size; i++)
 		size += (int)trimesh[i].vertices.size();
-	mesh_geometry.resize(size);
+	mesh_geometry = new Geometry[size];
 
 	//get number of existing vertices
 	int count = (int)MeshGeometry.size();
@@ -1326,11 +1315,12 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	//populate vertices, normals, and texels for mesh data
 	int k = 0;
 
-	mesh_indices.reserve(mesh_indices.size() + trimesh.size());
-	for (int i = 0; i < (int)trimesh.size(); i++)
+	if (mesh_indices.capacity() < mesh_indices.size() + trimesh_size)
+		mesh_indices.reserve(mesh_indices.size() + trimesh_size);
+
+	for (int i = 0; i < trimesh_size; i++)
 	{
 		int min = count + k;
-		ReserveVertices(trimesh[i].vertices.size());
 		for (int j = 0; j < (int)trimesh[i].vertices.size(); j++)
 		{
 			mesh_geometry[k].normal = mesh_geometry[k].vertex = trimesh[i].vertices[j];
@@ -1351,13 +1341,15 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	table = 0;
 
 	//delete geometry array
-	mesh_geometry.clear();
+	delete [] mesh_geometry;
+	mesh_geometry = 0;
 
 	//add triangles to single array, to be passed to the submesh
 	int location = 0;
-	for (int i = 0; i < (int)trimesh.size(); i++)
+	for (int i = 0; i < trimesh_size; i++)
 	{
-		triangles.reserve(trimesh[i].triangles.size());
+		if (triangles.capacity() < trimesh[i].triangles.size())
+			triangles.reserve(trimesh[i].triangles.size());
 		for (int j = 0; j < (int)trimesh[i].triangles.size(); j++)
 		{
 			TriangleType tri = trimesh[i].triangles[j];
@@ -1368,6 +1360,10 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 		}
 		location += (int)trimesh[i].vertices.size();
 	}
+
+	//delete trimesh array
+	delete [] trimesh;
+	trimesh = 0;
 
 	//create submesh and set material
 	ProcessSubMesh(triangles, material, name, true);
@@ -1475,7 +1471,11 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	//add triangles
 	if (add == true)
 	{
-		ReserveTriangles(index, index_count);
+		//reserve triangles
+		int size = Triangles[index].triangles.size() + index_count;
+		if (Triangles[index].triangles.capacity() < size)
+			Triangles[index].triangles.reserve(size);
+
 		for (int i = 0; i < index_count; i++)
 			AddTriangle(index, indexarray[i]);
 	}
@@ -1693,7 +1693,8 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 		int element = 0;
 		int size = (int)indiceslist->triangles.size();
 		indiceslist->triangles.clear();
-		indiceslist->triangles.reserve(size);
+		if (indiceslist->triangles.capacity() < size)
+			indiceslist->triangles.reserve(size);
 
 		for (int i = 0; i < size; i++)
 		{
@@ -1744,7 +1745,8 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 			int element = 0;
 			int size = (int)poly->triangles.size();
 			poly->triangles.clear();
-			poly->triangles.reserve(size);
+			if (poly->triangles.capacity() < size)
+				poly->triangles.reserve(size);
 
 			for (int ii = 0; ii < size; ii++)
 			{

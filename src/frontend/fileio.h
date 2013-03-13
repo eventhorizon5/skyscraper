@@ -69,6 +69,7 @@ class ScriptProcessor
 	Ogre::Vector3 MinExtent;
 	Ogre::Vector3 MaxExtent;
 	bool InFunction;
+	std::string FunctionName;
 	int FunctionCallLine;
 	std::string FunctionCallLineData;
 	std::vector<std::string> FunctionParams;
