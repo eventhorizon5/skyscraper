@@ -561,6 +561,7 @@ private:
 	int getshaft_number;
 	Stairs* getstairs_result;
 	int getstairs_number;
+	std::string prev_material;
 };
 
 #endif

@@ -1003,6 +1003,13 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, bool report,
 	//use material_name value instead of name, if loaded as a material script instead of a direct texture
 	//if report is true and texture is not found, issue warning
 	std::string matname = name;
+
+	if (matname == prev_material)
+	{
+		result = true;
+		return matname;
+	}
+
 	int size = (int)textureinfo.size();
 	for (int i = 0; i < size; i++)
 	{
@@ -1016,8 +1023,6 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, bool report,
 		}
 	}
 	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(matname);
-
-	std::string final_material = matname;
 
 	if (!material.get())
 	{
@@ -1033,12 +1038,14 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, bool report,
 		}
 
 		//set to default material
-		final_material = "Default";
+		matname = "Default";
 		result = false;
 	}
 	else
 		result = true;
-	return final_material;
+
+	prev_material = matname;
+	return matname;
 }
 
 void SBS::ProcessTextureFlip(float tw, float th)
