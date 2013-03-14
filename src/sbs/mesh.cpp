@@ -1204,7 +1204,7 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	//get texture material
 	std::string texname = texture;
 	bool result;
-	std::string material = sbs->GetTextureMaterial(texture, result, name);
+	std::string material = sbs->GetTextureMaterial(texture, result, true, name);
 	if (!result)
 		texname = "Default";
 

@@ -86,7 +86,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 		return 0;
 
 	bool result;
-	std::string material = sbs->GetTextureMaterial(texture, result, name2.c_str());
+	std::string material = sbs->GetTextureMaterial(texture, result, true, name2.c_str());
 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
@@ -113,7 +113,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 		return 0;
 
 	bool result;
-	std::string material = sbs->GetTextureMaterial(texture, result, name2.c_str());
+	std::string material = sbs->GetTextureMaterial(texture, result, true, name2.c_str());
 
 	//compute plane from first 3 vertices
 	Ogre::Plane plane(vertices[0], vertices[1], vertices[2]);
