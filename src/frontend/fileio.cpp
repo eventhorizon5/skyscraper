@@ -638,101 +638,46 @@ checkfloors:
 		ReplaceAll(LineData, "%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
 		ReplaceAll(LineData, "%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
 
+		//reset temporary states
+		Simcore->TextureOverride = false;
+		Simcore->FlipTexture = false;
+
 		//Global commands
 		returncode = ProcCommands();
 
+		if (returncode == 0)
+		{
+			//Global parameters
+			if (Section == 1)
+				returncode = ProcGlobals();
+
+			//Process floors
+			else if (Section == 2)
+			{
+				//create floor if not created already
+				Simcore->NewFloor(Current);
+recalc:
+				returncode = ProcFloors();
+			}
+
+			//process elevators
+			else if (Section == 4)
+				returncode = ProcElevators();
+
+			//Process textures
+			else if (Section == 5)
+				returncode = ProcTextures();
+		}
+
 		//handle return values
-		if (returncode == sNextLine)
-			goto Nextline;
 		if (returncode == sError)
 			return false;
-		if (returncode == sCheckFloors)
+		else if (returncode == sCheckFloors)
 			goto checkfloors;
-		if (returncode == sBreak)
+		else if (returncode == sBreak)
 			goto breakpoint;
-		if (returncode == sRecalc)
+		else if (returncode == sRecalc)
 			goto recalc;
-
-		//Global parameters
-		if (Section == 1)
-		{
-			returncode = ProcGlobals();
-
-			//handle return values
-			if (returncode == sNextLine)
-				goto Nextline;
-			if (returncode == sError)
-				return false;
-			if (returncode == sCheckFloors)
-				goto checkfloors;
-			if (returncode == sBreak)
-				goto breakpoint;
-			if (returncode == sRecalc)
-				goto recalc;
-		}
-
-		//Process floors
-		if (Section == 2)
-		{
-			//create floor if not created already
-			Simcore->NewFloor(Current);
-recalc:
-			returncode = ProcFloors();
-
-			//handle return values
-			if (returncode == sNextLine)
-				goto Nextline;
-			if (returncode == sError)
-				return false;
-			if (returncode == sCheckFloors)
-				goto checkfloors;
-			if (returncode == sBreak)
-				goto breakpoint;
-			if (returncode == sRecalc)
-				goto recalc;
-		}
-
-		//process elevators
-		if (Section == 4)
-		{
-			returncode = ProcElevators();
-
-			//handle return values
-			if (returncode == sNextLine)
-				goto Nextline;
-			if (returncode == sError)
-				return false;
-			if (returncode == sCheckFloors)
-				goto checkfloors;
-			if (returncode == sBreak)
-				goto breakpoint;
-			if (returncode == sRecalc)
-				goto recalc;
-		}
-
-		//Process textures
-		if (Section == 5)
-		{
-			returncode = ProcTextures();
-
-			//handle return values
-			if (returncode == sNextLine)
-				goto Nextline;
-			if (returncode == sError)
-				return false;
-			if (returncode == sCheckFloors)
-				goto checkfloors;
-			if (returncode == sBreak)
-				goto breakpoint;
-			if (returncode == sRecalc)
-				goto recalc;
-		}
-
-		//reset texture override status
-		Simcore->TextureOverride = false;
-
-		//reset texture flip status
-		Simcore->FlipTexture = false;
 
 Nextline:
 		line++;
@@ -1175,6 +1120,8 @@ int ScriptProcessor::ProcCommands()
 
 		//print line
 		skyscraper->Report(buffer.c_str());
+
+		return sNextLine;
 	}
 
 	//AddTriangleWall command
@@ -1248,6 +1195,7 @@ int ScriptProcessor::ProcCommands()
 
 		//create triangle wall
 		Simcore->AddTriangleWall(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), voffset1, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), voffset2, atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+		return sNextLine;
 	}
 
 	//AddWall command
@@ -1268,6 +1216,7 @@ int ScriptProcessor::ProcCommands()
 
 		//create wall
 		StoreCommand(Simcore->AddWall(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		return sNextLine;
 	}
 
 	//AddFloor
@@ -1309,6 +1258,7 @@ int ScriptProcessor::ProcCommands()
 			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), ReverseAxis, false, atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), true));
 		else
 			StoreCommand(Simcore->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
+		return sNextLine;
 	}
 
 	//AddGround
@@ -1329,6 +1279,7 @@ int ScriptProcessor::ProcCommands()
 
 		//create tiled ground
 		StoreCommand(Simcore->AddGround(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str())));
+		return sNextLine;
 	}
 
 	//Cut command
@@ -1363,6 +1314,7 @@ int ScriptProcessor::ProcCommands()
 		//perform cut
 		for (int i = 0; i < (int)wallarray->size(); i++)
 			Simcore->Cut(wallarray->at(i), Ogre::Vector3(atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str())), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
+		return sNextLine;
 	}
 
 	//Set command
@@ -1380,6 +1332,7 @@ int ScriptProcessor::ProcCommands()
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+		return sNextLine;
 	}
 
 	//CreateWallBox2 command
@@ -1447,6 +1400,7 @@ int ScriptProcessor::ProcCommands()
 			voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 
 		Simcore->CreateWallBox2(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), voffset, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		return sNextLine;
 	}
 
 	//CreateWallBox command
@@ -1514,6 +1468,7 @@ int ScriptProcessor::ProcCommands()
 			voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 
 		Simcore->CreateWallBox(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), voffset, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		return sNextLine;
 	}
 
 	//AddCustomWall command
@@ -1577,6 +1532,7 @@ int ScriptProcessor::ProcCommands()
 		StoreCommand(wall);
 
 		Simcore->AddCustomWall(wall, tempdata[1].c_str(), tempdata[2].c_str(), varray, atof(tempdata[params - 2].c_str()), atof(tempdata[params - 1].c_str()));
+		return sNextLine;
 	}
 
 	//AddShaft command
@@ -1637,6 +1593,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError();
 
 		StoreCommand(object);
+		return sNextLine;
 	}
 
 	//ShaftCut command
@@ -1661,6 +1618,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid shaft " + std::string(tempdata[0]));
 
 		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
+		return sNextLine;
 	}
 
 	//ShaftShowFloors command
@@ -1720,6 +1678,7 @@ int ScriptProcessor::ProcCommands()
 				Simcore->GetShaft(shaftnum)->AddShowFloor(showfloor);
 			}
 		}
+		return sNextLine;
 	}
 
 	//ShaftShowOutside command
@@ -1776,6 +1735,7 @@ int ScriptProcessor::ProcCommands()
 				Simcore->GetShaft(shaftnum)->AddShowOutside(showfloor);
 			}
 		}
+		return sNextLine;
 	}
 
 	//ShowFullShaft command
@@ -1797,6 +1757,7 @@ int ScriptProcessor::ProcCommands()
 		temp2 = GetAfterEquals(LineData.c_str());
 
 		Simcore->GetShaft(shaftnum)->ShowFullShaft = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 
 	//CreateStairwell command
@@ -1822,6 +1783,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError();
 
 		StoreCommand(object);
+		return sNextLine;
 	}
 
 	//CutStairwell command
@@ -1847,6 +1809,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid stairwell");
 
 		Simcore->GetStairs(stairwell)->CutFloors(true, Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
+		return sNextLine;
 	}
 
 	//StairsShowFloors command
@@ -1906,6 +1869,7 @@ int ScriptProcessor::ProcCommands()
 				Simcore->GetStairs(stairnum)->AddShowFloor(showfloor);
 			}
 		}
+		return sNextLine;
 	}
 
 	//ShowFullStairs command
@@ -1927,6 +1891,7 @@ int ScriptProcessor::ProcCommands()
 		temp2 = GetAfterEquals(LineData.c_str());
 
 		Simcore->GetStairs(stairnum)->ShowFullStairs = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 
 	//WallOrientation command
@@ -1937,6 +1902,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (!Simcore->SetWallOrientation(temp2.c_str()))
 			return ScriptError();
+		return sNextLine;
 	}
 
 	//FloorOrientation command
@@ -1947,6 +1913,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (!Simcore->SetFloorOrientation(temp2.c_str()))
 			return ScriptError();
+		return sNextLine;
 	}
 
 	//DrawWalls command
@@ -1964,6 +1931,7 @@ int ScriptProcessor::ProcCommands()
 					Ogre::StringConverter::parseBool(tempdata[3]),
 					Ogre::StringConverter::parseBool(tempdata[4]),
 					Ogre::StringConverter::parseBool(tempdata[5]));
+		return sNextLine;
 	}
 
 	//SetTextureMapping command
@@ -1987,6 +1955,7 @@ int ScriptProcessor::ProcCommands()
 		Simcore->SetTextureMapping(atoi(tempdata[0].c_str()), Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())),
 									atoi(tempdata[3].c_str()), Ogre::Vector2(atof(tempdata[4].c_str()), atof(tempdata[5].c_str())),
 									atoi(tempdata[6].c_str()), Ogre::Vector2(atof(tempdata[7].c_str()), atof(tempdata[8].c_str())));
+		return sNextLine;
 	}
 
 	//SetTextureMapping2 command
@@ -2014,6 +1983,7 @@ int ScriptProcessor::ProcCommands()
 		Simcore->SetTextureMapping2(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())),
 									tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), Ogre::Vector2(atof(tempdata[8].c_str()), atof(tempdata[9].c_str())),
 									tempdata[10].c_str(), tempdata[11].c_str(), tempdata[12].c_str(), Ogre::Vector2(atof(tempdata[13].c_str()), atof(tempdata[14].c_str())));
+		return sNextLine;
 	}
 
 	//ResetTextureMapping command
@@ -2027,6 +1997,7 @@ int ScriptProcessor::ProcCommands()
 		temp2 = GetAfterEquals(LineData.c_str());
 
 		Simcore->ResetTextureMapping(Ogre::StringConverter::parseBool(temp2));
+		return sNextLine;
 	}
 
 	//SetPlanarMapping command
@@ -2053,6 +2024,7 @@ int ScriptProcessor::ProcCommands()
 					Ogre::StringConverter::parseBool(tempdata[3]),
 					Ogre::StringConverter::parseBool(tempdata[4]));
 		}
+		return sNextLine;
 	}
 
 	//ReverseAxis command
@@ -2064,10 +2036,11 @@ int ScriptProcessor::ProcCommands()
 		temp2 = GetAfterEquals(LineData.c_str());
 
 		ReverseAxis = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 
 	//Intersection points
-	temp5 = SetCaseCopy(LineData, false).find("isect(", 0);
+	temp5 = linecheck.find("isect(", 0);
 	while (temp5 > -1)
 	{
 		if (Section == 2 && getfloordata == false)
@@ -2123,6 +2096,7 @@ int ScriptProcessor::ProcCommands()
 		buffer = std::string(LineData).substr(0, temp5) + std::string(wxVariant(isect.x).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(isect.y).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(isect.z).GetString().ToAscii()) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
 		linecheck = SetCaseCopy(LineData, false);
+		temp5 = linecheck.find("isect(", 0);
 	}
 
 	//GetWallExtents command
@@ -2158,10 +2132,11 @@ int ScriptProcessor::ProcCommands()
 
 		MinExtent = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), false);
 		MaxExtent = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), true);
+		return sNextLine;
 	}
 
 	//GetWallExtents function
-	temp5 = SetCaseCopy(LineData, false).find("getwallextents(", 0);
+	temp5 = linecheck.find("getwallextents(", 0);
 	while (temp5 > -1)
 	{
 		if (Section == 2 && getfloordata == false)
@@ -2214,6 +2189,7 @@ int ScriptProcessor::ProcCommands()
 		buffer = std::string(LineData).substr(0, temp5) + std::string(wxVariant(result.x).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.y).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.z).GetString().ToAscii()) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
 		linecheck = SetCaseCopy(LineData, false);
+		temp5 = linecheck.find("getwallextents(", 0);
 	}
 
 	//SetAutoSize command
@@ -2227,6 +2203,7 @@ int ScriptProcessor::ProcCommands()
 
 		Simcore->SetAutoSize(Ogre::StringConverter::parseBool(tempdata[0]),
 					Ogre::StringConverter::parseBool(tempdata[1]));
+		return sNextLine;
 	}
 
 	//TextureOverride command
@@ -2296,6 +2273,7 @@ int ScriptProcessor::ProcCommands()
 
 		//create floor auto area
 		Simcore->AddFloorAutoArea(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())));
+		return sNextLine;
 	}
 
 	//AddSound
@@ -2366,6 +2344,7 @@ int ScriptProcessor::ProcCommands()
 			else
 				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5]), atof(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::Vector3(atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()))));
 		}
+		return sNextLine;
 	}
 
 	//AddModel command
@@ -2426,6 +2405,7 @@ int ScriptProcessor::ProcCommands()
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddAction command
@@ -2463,6 +2443,7 @@ int ScriptProcessor::ProcCommands()
 		}
 		else
 			return ScriptError("Invalid parent object(s)");
+		return sNextLine;
 	}
 
 	//AddActionControl command
@@ -2513,6 +2494,7 @@ int ScriptProcessor::ProcCommands()
 			control->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddTrigger command
@@ -2548,6 +2530,7 @@ int ScriptProcessor::ProcCommands()
 		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()));
 		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 		StoreCommand(Simcore->AddTrigger(tempdata[0].c_str(), tempdata[1].c_str(), min, max, action_array));
+		return sNextLine;
 	}
 
 	//SetKey command
@@ -2573,6 +2556,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		setkey = true;
+		return sNextLine;
 	}
 
 	//SetLock command
@@ -2608,6 +2592,7 @@ int ScriptProcessor::ProcCommands()
 			keyvalue = 0;
 			return ScriptError("Incorrect key ID number");
 		}
+		return sNextLine;
 	}
 
 	return 0;
@@ -2625,19 +2610,40 @@ int ScriptProcessor::ProcGlobals()
 
 	//store variable values
 	if (linecheck.substr(0, 4) == "name")
+	{
 		Simcore->BuildingName = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 8) == "designer")
+	{
 		Simcore->BuildingDesigner = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 8) == "location")
+	{
 		Simcore->BuildingLocation = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 11) == "description")
+	{
 		Simcore->BuildingDescription = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 7) == "version")
+	{
 		Simcore->BuildingVersion = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 3) == "sky")
+	{
 		Simcore->SkyName = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 10) == "dynamicsky")
+	{
 		skyscraper->SkyName = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 10) == "collisions")
 	{
 		SetCase(temp2, false);
@@ -2645,6 +2651,7 @@ int ScriptProcessor::ProcGlobals()
 			Simcore->camera->EnableCollisions(false);
 		else
 			Simcore->camera->EnableCollisions(true);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "gravity")
 	{
@@ -2653,6 +2660,7 @@ int ScriptProcessor::ProcGlobals()
 			Simcore->camera->EnableGravity(false);
 		else
 			Simcore->camera->EnableGravity(true);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "camerafloor")
 	{
@@ -2661,6 +2669,7 @@ int ScriptProcessor::ProcGlobals()
 			return ScriptError("Invalid floor");
 
 		Simcore->camera->StartFloor = data;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "cameraposition")
 	{
@@ -2674,6 +2683,7 @@ int ScriptProcessor::ProcGlobals()
 
 		Simcore->camera->StartPositionX  = x;
 		Simcore->camera->StartPositionZ  = z;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "cameradirection")
 	{
@@ -2690,6 +2700,7 @@ int ScriptProcessor::ProcGlobals()
 			return ScriptError("Invalid direction");
 
 		Simcore->camera->SetStartDirection(Ogre::Vector3(x, y, z));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "camerarotation")
 	{
@@ -2706,10 +2717,12 @@ int ScriptProcessor::ProcGlobals()
 			return ScriptError("Invalid direction");
 
 		Simcore->camera->SetStartRotation(Ogre::Vector3(x, y, z));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "interfloorontop")
 	{
 		Simcore->InterfloorOnTop = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	return 0;
 }
@@ -2834,36 +2847,42 @@ int ScriptProcessor::ProcFloors()
 		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->Altitude))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 2) == "id")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->ID = Calc(temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 4) == "name")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->Name = Calc(temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 4) == "type")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->FloorType = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "description")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->Description = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "indicatortexture")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		floor->IndicatorTexture = Calc(temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "group")
 	{
@@ -2907,6 +2926,7 @@ int ScriptProcessor::ProcFloors()
 				floor->AddGroupFloor(data);
 			}
 		}
+		return sNextLine;
 	}
 
 	//calculate altitude
@@ -2915,6 +2935,7 @@ int ScriptProcessor::ProcFloors()
 		FloorCheck = 0;
 		if (floor->CalculateAltitude() == false)
 			return ScriptError();
+		return sNextLine;
 	}
 
 	//Print command
@@ -2925,6 +2946,7 @@ int ScriptProcessor::ProcFloors()
 
 		//print line
 		skyscraper->Report(buffer);
+		return sNextLine;
 	}
 
 	//Exit command
@@ -2986,6 +3008,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), true));
 		else
 			StoreCommand(floor->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), Ogre::StringConverter::parseBool(tempdata[13])));
+		return sNextLine;
 	}
 
 	//AddShaftFloor command
@@ -3039,6 +3062,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
 	}
 
 	//AddStairsFloor command
@@ -3092,6 +3116,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid stairwell");
+		return sNextLine;
 	}
 
 	//AddInterFloorFloor command
@@ -3136,6 +3161,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
 		else
 			StoreCommand(floor->AddInterfloorFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+		return sNextLine;
 	}
 
 	//AddWall command
@@ -3158,6 +3184,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create wall
 		StoreCommand(floor->AddWall(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), Ogre::StringConverter::parseBool(tempdata[13])));
+		return sNextLine;
 	}
 
 	//AddShaftWall command
@@ -3185,6 +3212,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddWall(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
 	}
 
 	//AddStairsWall command
@@ -3212,6 +3240,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddWall(Current, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str())));
 		else
 			return ScriptError("Invalid stairwell");
+		return sNextLine;
 	}
 
 	//AddInterFloorWall command
@@ -3234,6 +3263,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create wall
 		StoreCommand(floor->AddInterfloorWall(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+		return sNextLine;
 	}
 
 	//ColumnWallBox command
@@ -3255,6 +3285,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		StoreCommand(floor->ColumnWallBox(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		return sNextLine;
 	}
 
 	//ColumnWallBox2 command
@@ -3276,6 +3307,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		StoreCommand(floor->ColumnWallBox2(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		return sNextLine;
 	}
 
 	//Set command
@@ -3297,6 +3329,7 @@ int ScriptProcessor::ProcFloors()
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+		return sNextLine;
 	}
 
 	//CallButtonElevators command
@@ -3321,6 +3354,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid elevator number");
 			callbutton_elevators[line] = elevnumber;
 		}
+		return sNextLine;
 	}
 
 	//CreateCallButtons command
@@ -3379,6 +3413,7 @@ int ScriptProcessor::ProcFloors()
 			callbutton->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddStairs command
@@ -3406,6 +3441,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddStairs(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atoi(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
 		else
 			return ScriptError("Invalid stairwell");
+		return sNextLine;
 	}
 
 	//AddDoor command
@@ -3489,6 +3525,7 @@ int ScriptProcessor::ProcFloors()
 			door->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddStairsDoor command
@@ -3588,6 +3625,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid stairwell");
+		return sNextLine;
 	}
 
 	//AddShaftStdDoor command
@@ -3629,6 +3667,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
 	}
 
 	//AddDirectionalIndicator command
@@ -3684,6 +3723,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), false, Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), tempdata[12].c_str(), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16].c_str()), atof(tempdata[17].c_str())));
 		else
 			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::StringConverter::parseBool(tempdata[4]), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), tempdata[9].c_str(), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), tempdata[13].c_str(), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), Ogre::StringConverter::parseBool(tempdata[16]), atof(tempdata[17].c_str()), atof(tempdata[18].c_str())));
+		return sNextLine;
 	}
 
 	//AddShaftDoor command
@@ -3752,6 +3792,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetElevator(atoi(tempdata[0].c_str()))->AddShaftDoor(Current, atoi(tempdata[1].c_str()), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())));
 		if (compat == 2)
 			StoreCommand(Simcore->GetElevator(atoi(tempdata[0].c_str()))->AddShaftDoor(Current, atoi(tempdata[1].c_str()), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())));
+		return sNextLine;
 	}
 
 	//AddFloorIndicator command
@@ -3797,6 +3838,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())));
 		else
 			StoreCommand(floor->AddFloorIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), "Button", tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())));
+		return sNextLine;
 	}
 
 	//AddFillerWalls command
@@ -3820,6 +3862,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		floor->AddFillerWalls(tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()));
+		return sNextLine;
 	}
 
 	//AddSound
@@ -3887,6 +3930,7 @@ int ScriptProcessor::ProcFloors()
 			else
 				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5]), atof(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::Vector3(atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()))));
 		}
+		return sNextLine;
 	}
 
 	//AddShaftDoorComponent command
@@ -3923,6 +3967,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1].c_str()), Current, tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()), atof(tempdata[17].c_str())));
 		else
 			StoreCommand(elev->AddShaftDoorComponent(atoi(tempdata[1].c_str()), Current, tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()), atof(tempdata[17].c_str()), atof(tempdata[18].c_str())));
+		return sNextLine;
 	}
 
 	//FinishShaftDoor command
@@ -3948,6 +3993,7 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid elevator");
 
 		StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current));
+		return sNextLine;
 	}
 
 	//AddModel command
@@ -4005,6 +4051,7 @@ int ScriptProcessor::ProcFloors()
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddStairsModel command
@@ -4068,6 +4115,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid stairwell");
+		return sNextLine;
 	}
 
 	//AddShaftModel command
@@ -4130,6 +4178,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
 	}
 
 	//AddActionControl command
@@ -4177,6 +4226,7 @@ int ScriptProcessor::ProcFloors()
 			control->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddShaftActionControl command
@@ -4231,6 +4281,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
 	}
 
 	//AddStairsActionControl command
@@ -4285,6 +4336,7 @@ int ScriptProcessor::ProcFloors()
 		}
 		else
 			return ScriptError("Invalid stairwell");
+		return sNextLine;
 	}
 
 	//AddTrigger command
@@ -4317,6 +4369,7 @@ int ScriptProcessor::ProcFloors()
 		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()));
 		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 		StoreCommand(floor->AddTrigger(tempdata[0].c_str(), tempdata[1].c_str(), min, max, action_array));
+		return sNextLine;
 	}
 
 	//AddShaftTrigger command
@@ -4354,6 +4407,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddTrigger(Current, tempdata[1].c_str(), tempdata[2].c_str(), min, max, action_array));
 		else
 			return ScriptError("Invalid shaft");
+		return sNextLine;
 	}
 
 	//AddStairsTrigger command
@@ -4391,6 +4445,7 @@ int ScriptProcessor::ProcFloors()
 			StoreCommand(Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddTrigger(Current, tempdata[1].c_str(), tempdata[2].c_str(), min, max, action_array));
 		else
 			return ScriptError("Invalid stairwell");
+		return sNextLine;
 	}*/
 
 	//Cut command
@@ -4413,6 +4468,7 @@ int ScriptProcessor::ProcFloors()
 
 		//perform cut on floor
 		Simcore->GetFloor(Current)->Cut(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), false);
+		return sNextLine;
 	}
 
 	//CutAll command
@@ -4435,6 +4491,7 @@ int ScriptProcessor::ProcFloors()
 
 		//perform cut on all objects related to the current floor
 		Simcore->GetFloor(Current)->CutAll(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]));
+		return sNextLine;
 	}
 
 	//handle floor range
@@ -4530,6 +4587,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		TrimString(temp2);
 		elev->Name = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "speed")
 	{
@@ -4537,6 +4595,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->ElevatorSpeed))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "acceleration")
 	{
@@ -4544,6 +4603,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->Acceleration))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "deceleration")
 	{
@@ -4551,6 +4611,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->Deceleration))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "openspeed")
 	{
@@ -4566,6 +4627,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->OpenSpeed))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "doors")
 	{
@@ -4573,6 +4635,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->NumDoors))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "acceljerk")
 	{
@@ -4580,6 +4643,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->AccelJerk))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "deceljerk")
 	{
@@ -4587,6 +4651,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->DecelJerk))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "servicedfloors")
 	{
@@ -4633,6 +4698,7 @@ int ScriptProcessor::ProcElevators()
 					return ScriptError();
 			}
 		}
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "displayfloors")
 	{
@@ -4677,6 +4743,7 @@ int ScriptProcessor::ProcElevators()
 				elev->AddDisplayFloor(data);
 			}
 		}
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "assignedshaft")
 	{
@@ -4684,6 +4751,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->AssignedShaft))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "doortimer")
 	{
@@ -4699,6 +4767,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->DoorTimer))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "quickclose")
 	{
@@ -4714,6 +4783,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->QuickClose))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "nudgetimer")
 	{
@@ -4729,6 +4799,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->NudgeTimer))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "slowspeed")
 	{
@@ -4744,6 +4815,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->SlowSpeed))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "manualspeed")
 	{
@@ -4759,6 +4831,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->ManualSpeed))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "opensound")
 	{
@@ -4777,6 +4850,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->OpenSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "closesound")
 	{
@@ -4795,6 +4869,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "nudgesound")
 	{
@@ -4813,6 +4888,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->NudgeSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "startsound")
 	{
@@ -4834,6 +4910,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorUpStopSound = "";
 		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "movesound")
 	{
@@ -4855,6 +4932,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorUpStopSound = "";
 		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "stopsound")
 	{
@@ -4876,6 +4954,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorUpStopSound = "";
 		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "idlesound")
 	{
@@ -4896,6 +4975,7 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorUpStopSound = "";
 		elev->MotorDownStopSound = "";
 		elev->MotorIdleSound = "";
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "carstartsound")
 	{
@@ -4907,6 +4987,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarUpStartSound = temp2;
 		elev->CarDownStartSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "carupstartsound")
 	{
@@ -4917,6 +4998,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarUpStartSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "cardownstartsound")
 	{
@@ -4927,6 +5009,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarDownStartSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "carmovesound")
 	{
@@ -4938,6 +5021,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarUpMoveSound = temp2;
 		elev->CarDownMoveSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "carupmovesound")
 	{
@@ -4948,6 +5032,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarUpMoveSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "cardownmovesound")
 	{
@@ -4958,6 +5043,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarDownMoveSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "carstopsound")
 	{
@@ -4969,6 +5055,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->CarUpStopSound = temp2;
 		elev->CarDownStopSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "carupstopsound")
 	{
@@ -4979,6 +5066,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarUpStopSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "cardownstopsound")
 	{
@@ -4989,6 +5077,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarDownStopSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "caridlesound")
 	{
@@ -4999,6 +5088,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->CarIdleSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "motorstartsound")
 	{
@@ -5010,6 +5100,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorUpStartSound = temp2;
 		elev->MotorDownStartSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "motorupstartsound")
 	{
@@ -5020,6 +5111,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorUpStartSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 19) == "motordownstartsound")
 	{
@@ -5030,6 +5122,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorDownStartSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "motorrunsound")
 	{
@@ -5041,6 +5134,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorUpRunSound = temp2;
 		elev->MotorDownRunSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "motoruprunsound")
 	{
@@ -5051,6 +5145,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorUpRunSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "motordownrunsound")
 	{
@@ -5061,6 +5156,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorDownRunSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "motorstopsound")
 	{
@@ -5072,6 +5168,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->MotorUpStopSound = temp2;
 		elev->MotorDownStopSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 16) == "motorupstopsound")
 	{
@@ -5082,6 +5179,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorUpStopSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 18) == "motordownstopsound")
 	{
@@ -5092,6 +5190,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->MotorDownStopSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "chimesound")
 	{
@@ -5111,6 +5210,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "upchimesound")
 	{
@@ -5129,6 +5229,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "downchimesound")
 	{
@@ -5147,6 +5248,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "alarmsound")
 	{
@@ -5157,6 +5259,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->AlarmSound = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "alarmsoundstop")
 	{
@@ -5167,6 +5270,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->AlarmSoundStop = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "beepsound")
 	{
@@ -5177,6 +5281,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetBeepSound(temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "floorsound")
 	{
@@ -5187,6 +5292,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetFloorSound(temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "upmessage")
 	{
@@ -5197,6 +5303,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetMessageSound(true, temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "downmessage")
 	{
@@ -5207,6 +5314,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->SetMessageSound(false, temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "music ")
 	{
@@ -5217,6 +5325,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + temp2).c_str());
 
 		elev->Music = temp2;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "musicon ")
 	{
@@ -5224,6 +5333,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		elev->MusicOn = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "musiconmove")
 	{
@@ -5237,6 +5347,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->SetFloorSkipText(temp2.c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "recallfloor")
 	{
@@ -5246,6 +5357,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetRecallFloor(floortemp);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 20) == "alternaterecallfloor")
 	{
@@ -5255,6 +5367,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetAlternateRecallFloor(floortemp);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "acpfloor")
 	{
@@ -5264,6 +5377,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetACPFloor(floortemp);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "motorposition")
 	{
@@ -5283,60 +5397,70 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		elev->MotorPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "queueresets")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->QueueResets = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "limitqueue")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->LimitQueue = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 3) == "acp")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->ACP = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "uppeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->UpPeak = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "downpeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->DownPeak = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 18) == "independentservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->IndependentService = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "inspectionservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->InspectionService = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "fireservice1")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->FireServicePhase1 = Ogre::StringConverter::parseInt(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "fireservice2")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		elev->FireServicePhase2 = Ogre::StringConverter::parseInt(temp2);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "parking")
 	{
@@ -5357,6 +5481,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->ParkingFloor = atoi(tempdata[0].c_str());
 		elev->ParkingDelay = atof(tempdata[1].c_str());
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "levelingspeed")
 	{
@@ -5366,6 +5491,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingSpeed = leveling;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "levelingoffset")
 	{
@@ -5375,6 +5501,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOffset = leveling;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "levelingopen")
 	{
@@ -5384,6 +5511,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOpen = leveling;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "notifyearly")
 	{
@@ -5393,6 +5521,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), notify))
 			return ScriptError("Invalid value");
 		elev->NotifyEarly = notify;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "departuredelay")
 	{
@@ -5402,6 +5531,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), delay))
 			return ScriptError("Invalid value");
 		elev->DepartureDelay = delay;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "arrivaldelay")
 	{
@@ -5411,6 +5541,7 @@ int ScriptProcessor::ProcElevators()
 		if (!IsNumeric(temp2.c_str(), delay))
 			return ScriptError("Invalid value");
 		elev->ArrivalDelay = delay;
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 13) == "musicposition")
 	{
@@ -5430,6 +5561,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		elev->MusicPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 15) == "inspectionspeed")
 	{
@@ -5437,6 +5569,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 		if (!IsNumeric(temp2.c_str(), elev->InspectionSpeed))
 			return ScriptError("Invalid value");
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "autoenable")
 	{
@@ -5444,6 +5577,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		elev->AutoEnable = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
 	}
 
 	//Print command
@@ -5454,6 +5588,7 @@ int ScriptProcessor::ProcElevators()
 
 		//print line
 		skyscraper->Report(buffer);
+		return sNextLine;
 	}
 
 	if (linecheck.substr(0, 7) == "<break>")
@@ -5481,6 +5616,7 @@ int ScriptProcessor::ProcElevators()
 		if (!object)
 			return ScriptError();
 		StoreCommand(object);
+		return sNextLine;
 	}
 
 	//AddFloor command
@@ -5525,6 +5661,7 @@ int ScriptProcessor::ProcElevators()
 			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), ReverseAxis, false, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), true));
 		else
 			StoreCommand(elev->AddFloor(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+		return sNextLine;
 	}
 
 	//AddWall command
@@ -5547,6 +5684,7 @@ int ScriptProcessor::ProcElevators()
 
 		//create wall
 		StoreCommand(elev->AddWall(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+		return sNextLine;
 	}
 
 	//AddDoors command
@@ -5596,6 +5734,7 @@ int ScriptProcessor::ProcElevators()
 			StoreCommand(elev->AddDoors(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]), atof(tempdata[9].c_str()), atof(tempdata[10].c_str())));
 		else
 			StoreCommand(elev->AddDoors(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())));
+		return sNextLine;
 	}
 
 	//SetShaftDoors command
@@ -5618,6 +5757,7 @@ int ScriptProcessor::ProcElevators()
 
 		elev->SetShaftDoors(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		setshaftdoors = true;
+		return sNextLine;
 	}
 
 	//AddShaftDoors command
@@ -5683,6 +5823,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (result == false)
 			return ScriptError();
+		return sNextLine;
 	}
 
 	//CreatePanel command
@@ -5706,6 +5847,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		StoreCommand(elev->CreateButtonPanel(tempdata[0].c_str(), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
+		return sNextLine;
 	}
 
 	//AddFloorButton command
@@ -5822,6 +5964,7 @@ int ScriptProcessor::ProcElevators()
 			control->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddControlButton command
@@ -5937,6 +6080,7 @@ int ScriptProcessor::ProcElevators()
 			control->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddButton command
@@ -5982,6 +6126,7 @@ int ScriptProcessor::ProcElevators()
 			control->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddControl command
@@ -6034,6 +6179,7 @@ int ScriptProcessor::ProcElevators()
 			control->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddFloorIndicator command
@@ -6075,6 +6221,7 @@ int ScriptProcessor::ProcElevators()
 			StoreCommand(elev->AddFloorIndicator(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())));
 		else
 			StoreCommand(elev->AddFloorIndicator("Button", tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())));
+		return sNextLine;
 	}
 
 	//AddDirectionalIndicators command
@@ -6119,6 +6266,7 @@ int ScriptProcessor::ProcElevators()
 			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), tempdata[12].c_str(), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16].c_str()), atof(tempdata[17].c_str()));
 		else
 			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), false, Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), tempdata[11].c_str(), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()));
+		return sNextLine;
 	}
 
 	//AddFloorSigns command
@@ -6181,6 +6329,7 @@ int ScriptProcessor::ProcElevators()
 			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), "Button", tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 		else if (compat == 2)
 			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
+		return sNextLine;
 	}
 
 	//AddSound
@@ -6248,6 +6397,7 @@ int ScriptProcessor::ProcElevators()
 			else
 				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::StringConverter::parseBool(tempdata[5]), atof(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::Vector3(atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()))));
 		}
+		return sNextLine;
 	}
 
 	//AddDoorComponent command
@@ -6280,6 +6430,7 @@ int ScriptProcessor::ProcElevators()
 			StoreCommand(elev->AddDoorComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str())));
 		else
 			StoreCommand(elev->AddDoorComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()), atof(tempdata[17].c_str())));
+		return sNextLine;
 	}
 
 	//AddShaftDoorsComponent command
@@ -6312,6 +6463,7 @@ int ScriptProcessor::ProcElevators()
 			elev->AddShaftDoorsComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()));
 		else
 			elev->AddShaftDoorsComponent(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), atof(tempdata[16].c_str()), atof(tempdata[17].c_str()));
+		return sNextLine;
 	}
 
 	//FinishDoors command
@@ -6330,6 +6482,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value: " + std::string(tempdata[0]));
 
 		StoreCommand(elev->FinishDoors(atoi(tempdata[0].c_str())));
+		return sNextLine;
 	}
 
 	//FinishShaftDoors command
@@ -6352,6 +6505,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (result == false)
 			return ScriptError();
+		return sNextLine;
 	}
 
 	//AddDirectionalIndicator command
@@ -6375,6 +6529,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		StoreCommand(elev->AddDirectionalIndicator(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), tempdata[11].c_str(), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15].c_str()), atof(tempdata[16].c_str())));
+		return sNextLine;
 	}
 
 	//AddDoor command
@@ -6441,6 +6596,7 @@ int ScriptProcessor::ProcElevators()
 			door->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddModel command
@@ -6498,6 +6654,7 @@ int ScriptProcessor::ProcElevators()
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddActionControl command
@@ -6545,6 +6702,7 @@ int ScriptProcessor::ProcElevators()
 			control->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
+		return sNextLine;
 	}
 
 	//AddTrigger command
@@ -6577,6 +6735,7 @@ int ScriptProcessor::ProcElevators()
 		Ogre::Vector3 min = Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()));
 		Ogre::Vector3 max = Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 		StoreCommand(elev->AddTrigger(tempdata[0].c_str(), tempdata[1].c_str(), min, max, action_array));
+		return sNextLine;
 	}
 
 	//Set command
@@ -6600,6 +6759,7 @@ int ScriptProcessor::ProcElevators()
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
 			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+		return sNextLine;
 	}
 
 	//handle elevator range
@@ -6652,6 +6812,7 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		else
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "loadanimated")
 	{
@@ -6714,6 +6875,7 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 4].c_str(), atof(tempdata[params - 3].c_str()), atof(tempdata[params - 2].c_str()), atof(tempdata[params - 1].c_str()));
 		else
 			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 5].c_str(), atof(tempdata[params - 4].c_str()), atof(tempdata[params - 3].c_str()), atof(tempdata[params - 2].c_str()), true, Ogre::StringConverter::parseBool(tempdata[params - 1]));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 14) == "loadalphablend")
 	{
@@ -6742,6 +6904,7 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadAlphaBlendTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), Ogre::StringConverter::parseBool(tempdata[4]), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 		else
 			Simcore->LoadAlphaBlendTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), Ogre::StringConverter::parseBool(tempdata[4]), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), true, Ogre::StringConverter::parseBool(tempdata[7]));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "loadmaterial")
 	{
@@ -6764,6 +6927,7 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		else
 			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "loadrange")
 	{
@@ -6799,6 +6963,7 @@ int ScriptProcessor::ProcTextures()
 			else
 				Simcore->LoadTexture(temp2.c_str(), temp6.c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), true, Ogre::StringConverter::parseBool(tempdata[6]));
 		}
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "addtext ")
 	{
@@ -6829,6 +6994,7 @@ int ScriptProcessor::ProcTextures()
 			Simcore->AddTextToTexture(tempdata[0].c_str(), tempdata[1].c_str(), buffer.c_str(), atof(tempdata[3].c_str()), tempdata[4].c_str(), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), tempdata[9].c_str(), tempdata[10].c_str(), atoi(tempdata[11].c_str()), atoi(tempdata[12].c_str()), atoi(tempdata[13].c_str()));
 		else
 			Simcore->AddTextToTexture(tempdata[0].c_str(), tempdata[1].c_str(), buffer.c_str(), atof(tempdata[3].c_str()), tempdata[4].c_str(), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), tempdata[9].c_str(), tempdata[10].c_str(), atoi(tempdata[11].c_str()), atoi(tempdata[12].c_str()), atoi(tempdata[13].c_str()), true, Ogre::StringConverter::parseBool(tempdata[14]));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 12) == "addtextrange")
 	{
@@ -6876,6 +7042,7 @@ int ScriptProcessor::ProcTextures()
 				Simcore->AddTextToTexture(tempdata[2].c_str(), tempdata[3].c_str(), buffer.c_str(), atof(tempdata[5].c_str()), tempdata[6].c_str(), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), atoi(tempdata[9].c_str()), atoi(tempdata[10].c_str()), tempdata[11].c_str(), tempdata[12].c_str(), atoi(tempdata[13].c_str()), atoi(tempdata[14].c_str()), atoi(tempdata[15].c_str()), true, Ogre::StringConverter::parseBool(tempdata[16]));
 		}
 		linecheck = SetCaseCopy(LineData, false);
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "loadcropped")
 	{
@@ -6900,6 +7067,7 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 		else
 			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "addoverlay")
 	{
@@ -6921,6 +7089,7 @@ int ScriptProcessor::ProcTextures()
 			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
 		else
 			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), true, Ogre::StringConverter::parseBool(tempdata[9]));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "setlighting")
 	{
@@ -6939,6 +7108,7 @@ int ScriptProcessor::ProcTextures()
 				return ScriptError("Invalid value: " + std::string(tempdata[i]));
 		}
 		Simcore->SetLighting(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "rotate ")
 	{
@@ -6956,6 +7126,7 @@ int ScriptProcessor::ProcTextures()
 
 		buffer = tempdata[0];
 		Simcore->RotateTexture(buffer.c_str(), atof(tempdata[1].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "rotateanim")
 	{
@@ -6973,6 +7144,7 @@ int ScriptProcessor::ProcTextures()
 
 		buffer = tempdata[0];
 		Simcore->RotateAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "scroll ")
 	{
@@ -6993,6 +7165,7 @@ int ScriptProcessor::ProcTextures()
 
 		buffer = tempdata[0];
 		Simcore->ScrollTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "scrollanim")
 	{
@@ -7013,6 +7186,7 @@ int ScriptProcessor::ProcTextures()
 
 		buffer = tempdata[0];
 		Simcore->ScrollAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 5) == "scale")
 	{
@@ -7033,6 +7207,7 @@ int ScriptProcessor::ProcTextures()
 
 		buffer = tempdata[0];
 		Simcore->ScaleTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "transform")
 	{
@@ -7053,6 +7228,7 @@ int ScriptProcessor::ProcTextures()
 
 		buffer = tempdata[0];
 		Simcore->TransformTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
+		return sNextLine;
 	}
 	return 0;
 }
