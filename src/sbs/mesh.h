@@ -93,7 +93,7 @@ public:
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th);
 	int ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add);
 	int FindMatchingSubMesh(std::string material);
-	void DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<TriangleType> &deleted_indices);
+	void DeleteVertices(std::vector<TriangleType> &deleted_indices);
 	void Prepare();
 	void EnableDebugView(bool value);
 	void CreateCollider();
@@ -105,10 +105,10 @@ public:
 	void CreateBoxCollider(float scale_multiplier);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
-	std::vector<Geometry> MeshGeometry;
-	std::vector<TriangleIndices> Triangles;
-	std::vector<Ogre::SubMesh*> Submeshes;
-	std::vector<WallObject*> Walls;
+	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
+	std::vector<TriangleIndices> Triangles; //per-submesh triangles
+	std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
+	std::vector<WallObject*> Walls; //associated wall (polygon container) objects
 
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;

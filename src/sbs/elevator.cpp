@@ -824,7 +824,7 @@ void Elevator::Alarm()
 			alarm->Play();
 		}
 	}
-	if (AlarmActive == true && sbs->camera->MouseDown == false)
+	else if (AlarmActive == true && sbs->camera->MouseDown == false)
 	{
 		//stop alarm
 		AlarmActive = false;
@@ -1357,7 +1357,7 @@ void Elevator::MonitorLoop()
 	}
 
 	//enable random call timer
-	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true)
+	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false)
 		random_timer->Start(RandomFrequency * 1000, false);
 
 	//process triggers
@@ -4104,16 +4104,18 @@ void Elevator::Timer::Notify()
 		if (elevator->ParkingDelay > 0 && elevator->IsIdle() == true)
 		{
 			int floor = elevator->GetFloor();
+			if (elevator->ParkingFloor != floor)
+			{
+				char intbuffer[65];
+				elevator->Report("parking to floor " + std::string(_itoa(elevator->ParkingFloor, intbuffer, 10)));
+				elevator->Parking = true;
+			}
+
 			if (elevator->ParkingFloor > floor)
-			{
 				elevator->AddRoute(elevator->ParkingFloor, 1, false);
-				elevator->Parking = true;
-			}
 			else if (elevator->ParkingFloor < floor)
-			{
 				elevator->AddRoute(elevator->ParkingFloor, -1, false);
-				elevator->Parking = true;
-			}
+
 			Stop();
 		}
 	}

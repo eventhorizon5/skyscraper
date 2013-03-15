@@ -207,7 +207,7 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 		meshwrapper->ProcessSubMesh(handles[index].triangles, handles[index].material, handles[index].name.c_str(), false);
 
 		//delete related mesh vertices
-		meshwrapper->DeleteVertices(*parent_array, handles[index].triangles);
+		meshwrapper->DeleteVertices(handles[index].triangles);
 
 		//delete polygon
 		handles.erase(handles.begin() + index);

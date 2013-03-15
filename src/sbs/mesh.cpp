@@ -1626,15 +1626,14 @@ int MeshObject::FindMatchingSubMesh(std::string material)
 	return -1;
 }
 
-void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector<TriangleType> &deleted_indices)
+void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
 	//this should be done after a polygon is deleted
-	//also, all wall objects in wall arrays must have the same mesh state
 
-	//exit if wall array is empty
-	if (wallarray.size() == 0)
+	//exit if index array is empty
+	if (deleted_indices.size() == 0)
 		return;
 
 	//construct new sorted and compressed index array
@@ -1707,16 +1706,16 @@ void MeshObject::DeleteVertices(std::vector<WallObject*> &wallarray, std::vector
 	}
 
 	//reindex triangle indices in all wall objects
-	for (int i = 0; i < (int)wallarray.size(); i++)
+	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		if (!wallarray[i])
+		if (!Walls[i])
 			continue;
 
-		for (int j = 0; j < (int)wallarray[i]->handles.size(); j++)
+		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
 		{
 			//reindex triangle indices
 
-			WallPolygon *poly = &wallarray[i]->handles[j];
+			WallPolygon *poly = &Walls[i]->handles[j];
 
 			int elements_size = poly->triangles.size() * 3;
 			int *elements = new int[elements_size];
