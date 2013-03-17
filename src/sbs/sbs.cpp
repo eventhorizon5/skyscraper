@@ -2174,7 +2174,7 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 	if (mesh == "landscape")
 		wall = Landscape->CreateWallObject(this->object, name);
 
-	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, texture_direction, tw, th, true, legacy_behavior);
+	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
