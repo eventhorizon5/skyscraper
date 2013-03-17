@@ -106,12 +106,12 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	skyscraper->Pause = true;
 
 	//print exception notice
-	TCHAR lString[500];
-	_stprintf_s(lString,
-	_T("*** Unhandled Exception\n")
-	_T("   ExpCode: 0x%8.8X\n")
-    _T("   ExpFlags: %d\n")
-    _T("   ExpAddress: 0x%8.8X\n\n"),
+	CHAR lString[500];
+	sprintf_s(lString,
+	"*** Unhandled Exception\n"
+	"   ExpCode: 0x%8.8X\n"
+    "   ExpFlags: %d\n"
+    "   ExpAddress: 0x%8.8X\n\n",
     pExPtrs->ExceptionRecord->ExceptionCode,
     pExPtrs->ExceptionRecord->ExceptionFlags,
     pExPtrs->ExceptionRecord->ExceptionAddress);
