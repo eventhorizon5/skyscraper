@@ -1143,23 +1143,13 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 void SBS::Report(std::string message)
 {
-	ReplaceAll(message, "%", "%%"); //allow percent signs
-
 	printf("%s\n", message.c_str());
-	printf("\n");
-	fflush (stdout);
-
 	LastNotification = message;
 }
 
 bool SBS::ReportError(std::string message)
 {
-	ReplaceAll(message, "%", "%%"); //allow percent signs
-
 	printf("%s\n", message.c_str());
-	printf("\n");
-	fflush (stdout);
-
 	LastError = message;
 	return false;
 }

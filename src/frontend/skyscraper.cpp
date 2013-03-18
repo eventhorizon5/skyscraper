@@ -836,31 +836,18 @@ void Skyscraper::GetInput()
 
 void Skyscraper::Report(std::string message, ...)
 {
-	ReplaceAll(message, "%", "%%"); //allow percent signs
-
 	printf("%s\n", message.c_str());
-	printf("\n");
-	fflush(stdout);
 }
 
 bool Skyscraper::ReportError(std::string message, ...)
 {
-	ReplaceAll(message, "%", "%%"); //allow percent signs
-
 	printf("%s\n", message.c_str());
-	printf("\n");
-	fflush(stdout);
-
 	return false;
 }
 
 bool Skyscraper::ReportFatalError(std::string message, ...)
 {
-	ReplaceAll(message, "%", "%%"); //allow percent signs
-
 	printf("%s\n", message.c_str());
-	printf("\n");
-	fflush(stdout);
 
 	//show error dialog
 	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
