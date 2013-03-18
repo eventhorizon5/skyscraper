@@ -244,7 +244,7 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 	if (skyscraper->IsRunning == false)
 		return;
 
-	skyscraper->Pause = event.Iconized();
+	skyscraper->Pause = event.IsIconized();
 
 	if (skyscraper->Pause == true)
 		skyscraper->Report("Pausing simulator...");
@@ -619,7 +619,7 @@ void Skyscraper::GetInput()
 	}
 
 	//check if the user clicked on an object, and process it
-	if (wxGetMouseState().LeftDown() == true && MouseDown == false)
+	if (wxGetMouseState().LeftIsDown() == true && MouseDown == false)
 	{
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
@@ -627,7 +627,7 @@ void Skyscraper::GetInput()
 	}
 
 	//reset mouse state
-	if (wxGetMouseState().LeftDown() == false)
+	if (wxGetMouseState().LeftIsDown() == false)
 	{
 		MouseDown = false;
 		Simcore->camera->MouseDown = MouseDown;
@@ -1282,7 +1282,7 @@ void Skyscraper::GetMenuInput()
         	//change button status based on mouse position and button press status
         	if (mouse_x_rel > button->x && mouse_x_rel < button->x + button->size_x && mouse_y_rel > button->y && mouse_y_rel < button->y + button->size_y)
         	{
-        		if (button->drawn_selected == false && wxGetMouseState().LeftDown() == false)
+        		if (button->drawn_selected == false && wxGetMouseState().LeftIsDown() == false)
         		{
         			if (button->drawn_pressed == true)
         			{
@@ -1293,7 +1293,7 @@ void Skyscraper::GetMenuInput()
         			}
         			button->drawn_selected = true;
         		}
-        		if (button->drawn_pressed == false && wxGetMouseState().LeftDown() == true)
+        		if (button->drawn_pressed == false && wxGetMouseState().LeftIsDown() == true)
         		{
         			button->drawn_pressed = true;
         			button->drawn_selected = false;
