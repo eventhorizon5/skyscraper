@@ -2491,7 +2491,10 @@ int ScriptProcessor::ProcCommands()
 		if (obj)
 		{
 			Control* control = (Control*)obj->GetRawObject();
-			control->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				control->SetLocked(false, keyvalue);
+			else
+				control->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
@@ -3410,7 +3413,10 @@ int ScriptProcessor::ProcFloors()
 		if (obj)
 		{
 			CallButton* callbutton = (CallButton*)obj->GetRawObject();
-			callbutton->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				callbutton->SetLocked(false, keyvalue);
+			else
+				callbutton->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
@@ -4223,7 +4229,10 @@ int ScriptProcessor::ProcFloors()
 		if (obj)
 		{
 			Control* control = (Control*)obj->GetRawObject();
-			control->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				control->SetLocked(false, keyvalue);
+			else
+				control->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
@@ -4275,7 +4284,10 @@ int ScriptProcessor::ProcFloors()
 			if (obj)
 			{
 				Control* control = (Control*)obj->GetRawObject();
-				control->SetLocked(lockvalue, keyvalue);
+				if (lockvalue == 0)
+					control->SetLocked(false, keyvalue);
+				else
+					control->SetLocked(true, keyvalue);
 			}
 			StoreCommand(obj);
 		}
@@ -4330,7 +4342,10 @@ int ScriptProcessor::ProcFloors()
 			if (obj)
 			{
 				Control* control = (Control*)obj->GetRawObject();
-				control->SetLocked(lockvalue, keyvalue);
+				if (lockvalue == 0)
+					control->SetLocked(false, keyvalue);
+				else
+					control->SetLocked(true, keyvalue);
 			}
 			StoreCommand(obj);
 		}
@@ -5961,7 +5976,10 @@ int ScriptProcessor::ProcElevators()
 		if (obj)
 		{
 			Control* control = (Control*)obj->GetRawObject();
-			control->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				control->SetLocked(false, keyvalue);
+			else
+				control->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
@@ -6077,7 +6095,10 @@ int ScriptProcessor::ProcElevators()
 		if (obj)
 		{
 			Control* control = (Control*)obj->GetRawObject();
-			control->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				control->SetLocked(false, keyvalue);
+			else
+				control->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
@@ -6123,7 +6144,10 @@ int ScriptProcessor::ProcElevators()
 		if (obj)
 		{
 			Control* control = (Control*)obj->GetRawObject();
-			control->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				control->SetLocked(false, keyvalue);
+			else
+				control->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
@@ -6176,7 +6200,10 @@ int ScriptProcessor::ProcElevators()
 		if (obj)
 		{
 			Control* control = (Control*)obj->GetRawObject();
-			control->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				control->SetLocked(false, keyvalue);
+			else
+				control->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
@@ -6699,7 +6726,10 @@ int ScriptProcessor::ProcElevators()
 		if (obj)
 		{
 			Control* control = (Control*)obj->GetRawObject();
-			control->SetLocked(lockvalue, keyvalue);
+			if (lockvalue == 0)
+				control->SetLocked(false, keyvalue);
+			else
+				control->SetLocked(true, keyvalue);
 		}
 		StoreCommand(obj);
 		return sNextLine;
