@@ -2335,7 +2335,7 @@ int ScriptProcessor::ProcCommands()
 			if (partial == true)
 				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
 			else
-				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), NULL, NULL, NULL, NULL, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
+				StoreCommand(Simcore->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), 0.0, 360, 360, 1.0, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
 		}
 		else
 		{
@@ -3921,7 +3921,7 @@ int ScriptProcessor::ProcFloors()
 			if (partial == true)
 				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
 			else
-				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), NULL, NULL, NULL, NULL, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
+				StoreCommand(floor->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), 0.0, 360, 360, 1.0, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
 		}
 		else
 		{
@@ -6388,7 +6388,7 @@ int ScriptProcessor::ProcElevators()
 			if (partial == true)
 				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()))));
 			else
-				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), NULL, NULL, NULL, NULL, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
+				StoreCommand(elev->AddSound(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), true, atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), 0.0, 360, 360, 1.0, Ogre::Vector3(atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()))));
 		}
 		else
 		{
