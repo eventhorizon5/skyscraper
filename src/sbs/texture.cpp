@@ -1735,14 +1735,14 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	 if (strExt == "gif")
 	 {
 		//get chroma transparency color from GIF file data
-	    uchar enabled = 0;
+	    	uchar enabled = 0;
 		uchar trans_color = 0;
 		encoded->seek(784); //transparency enabled if value is 0x1
 		encoded->read(&enabled, 1);
 		encoded->seek(787); //transparency color
 		encoded->read(&trans_color, 1);
 
-		if (enabled == 1 && trans_color <= 255)
+		if (enabled == 1)
 		{
 			//get color value from image palette
 			uchar r, g, b;
@@ -1753,12 +1753,9 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 			encoded->read(&g, 1);
 			encoded->seek(pos + 2);
 			encoded->read(&b, 1);
-			if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 00 && b <= 255)
-			{
-				keyCol2.r = r / 255;
-				keyCol2.g = g / 255;
-				keyCol2.b = b / 255;
-			}
+			keyCol2.r = r / 255;
+			keyCol2.g = g / 255;
+			keyCol2.b = b / 255;
 		}
 		encoded->seek(0);
 	 }
