@@ -361,7 +361,7 @@ void SBSProfileManager::dumpAll()
 
 	std::string output;
 	dumpRecursive(output, profileIterator,0);
-	printf(output.c_str());
+	printf("%s\n", output.c_str());
 
 	SBSProfileManager::Release_Iterator(profileIterator);
 }

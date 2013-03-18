@@ -838,7 +838,7 @@ void Skyscraper::Report(std::string message, ...)
 {
 	ReplaceAll(message, "%", "%%"); //allow percent signs
 
-	printf(message.c_str());
+	printf("%s\n", message.c_str());
 	printf("\n");
 	fflush(stdout);
 }
@@ -847,7 +847,7 @@ bool Skyscraper::ReportError(std::string message, ...)
 {
 	ReplaceAll(message, "%", "%%"); //allow percent signs
 
-	printf(message.c_str());
+	printf("%s\n", message.c_str());
 	printf("\n");
 	fflush(stdout);
 
@@ -858,7 +858,7 @@ bool Skyscraper::ReportFatalError(std::string message, ...)
 {
 	ReplaceAll(message, "%", "%%"); //allow percent signs
 
-	printf(message.c_str());
+	printf("%s\n", message.c_str());
 	printf("\n");
 	fflush(stdout);
 
