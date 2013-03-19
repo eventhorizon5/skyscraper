@@ -48,6 +48,7 @@ extern Skyscraper *skyscraper;
 #define sCheckFloors 3
 #define sBreak 4
 #define sRecalc 5
+#define sSkipReset 6
 
 ScriptProcessor::ScriptProcessor()
 {
@@ -638,10 +639,6 @@ checkfloors:
 		ReplaceAll(LineData, "%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
 		ReplaceAll(LineData, "%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
 
-		//reset temporary states
-		Simcore->TextureOverride = false;
-		Simcore->FlipTexture = false;
-
 		//Global commands
 		returncode = ProcCommands();
 
@@ -678,6 +675,12 @@ recalc:
 			goto breakpoint;
 		else if (returncode == sRecalc)
 			goto recalc;
+		else if (returncode == sSkipReset)
+			goto Nextline;
+
+		//reset temporary states
+		Simcore->TextureOverride = false;
+		Simcore->FlipTexture = false;
 
 Nextline:
 		line++;
@@ -2215,7 +2218,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Incorrect number of parameters");
 
 		Simcore->SetTextureOverride(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str());
-		return sNextLine;
+		return sSkipReset;
 	}
 
 	//TextureFlip command
@@ -2236,7 +2239,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		Simcore->SetTextureFlip(atoi(tempdata[0].c_str()), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
-		return sNextLine;
+		return sSkipReset;
 	}
 
 	//Mount command
