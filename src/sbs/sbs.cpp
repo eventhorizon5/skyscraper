@@ -486,7 +486,7 @@ void SBS::MainLoop()
 	int steps = mWorld->stepSimulation(step, 1);
 	SBSProfileManager::Stop_Profile();
 
-	//only move character if Bullet processed a step (within it's 60fps timestep
+	//only move character if Bullet processed a step (within it's 60fps timestep)
 	if (steps >= 1)
 		camera->MoveCharacter();
 
