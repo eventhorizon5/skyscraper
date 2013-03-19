@@ -191,7 +191,7 @@ Elevator::Elevator(int number)
 	departure_delay = new Timer(this,3);
 
 	//create object meshes
-	buffer = Ogre::StringConverter::toString(Number);
+	buffer = ToString(Number);
 	buffer.insert(0, "Elevator ");
 	TrimString(buffer);
 	object->SetName(buffer.c_str());
@@ -493,13 +493,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	if (!sbs->GetShaft(AssignedShaft))
 	{
-		std::string num = Ogre::StringConverter::toString(AssignedShaft);
+		std::string num = ToString(AssignedShaft);
 		ReportError(std::string("Shaft " + num + " doesn't exist").c_str());
 		return 0;
 	}
 	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
 	{
-		std::string num = Ogre::StringConverter::toString(floor);
+		std::string num = ToString(floor);
 		ReportError(std::string("Invalid starting floor " + num).c_str());
 		return 0;
 	}
@@ -511,7 +511,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//set data
 	if (!sbs->GetFloor(floor))
 	{
-		std::string num = Ogre::StringConverter::toString(floor);
+		std::string num = ToString(floor);
 		ReportError(std::string("Floor " + num + " doesn't exist").c_str());
 		return 0;
 	}
@@ -600,7 +600,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	Created = true;
 
-	Report("created at " + std::string(sbs->TruncateNumber(x, 4)) + ", " + std::string(sbs->TruncateNumber(x, 4)) + ", " + std::string(_itoa(floor, buffer, 12)));
+	Report("created at " + sbs->TruncateNumber(x, 4) + ", " + sbs->TruncateNumber(x, 4) + ", " + ToString2(floor));
 	return object;
 }
 
@@ -621,7 +621,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 
 	if (!floorobj)
 	{
-		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
+		Report("Invalid floor " + ToString2(floor));
 		return false;
 	}
 
@@ -667,7 +667,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (loc != -1)
 		{
 			//exit if entry already exits
-			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
+			Report("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
 			return false;
 		}
 
@@ -678,7 +678,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = 1;
-		Report("adding route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction up");
+		Report("adding route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction up");
 	}
 	else
 	{
@@ -692,7 +692,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (loc != -1)
 		{
 			//exit if entry already exits
-			Report("route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") already exists");
+			Report("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
 			return false;
 		}
 		
@@ -703,14 +703,14 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
-		Report("adding route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction down");
+		Report("adding route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
 	}
 
 	//turn on button lights
 	if (change_light == true)
 	{
 		if (sbs->Verbose)
-			Report("AddRoute: turning on button lights for floor " + std::string(_itoa(floor, intbuffer, 10)));
+			Report("AddRoute: turning on button lights for floor " + ToString2(floor));
 		for (int i = 0; i < (int)PanelArray.size(); i++)
 			PanelArray[i]->ChangeLight(floor, true);
 	}
@@ -746,7 +746,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 
 	if (!floorobj)
 	{
-		Report("Invalid floor " + std::string(_itoa(floor, intbuffer, 10)));
+		Report("Invalid floor " + ToString2(floor));
 		return false;
 	}
 
@@ -758,7 +758,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 			if (UpQueue[i] == floor)
 				UpQueue.erase(UpQueue.begin() + i);
 		}
-		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction up");
+		Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction up");
 		if (UpQueue.size() == 0)
 			UpQueueEmpty = true;
 	}
@@ -770,14 +770,14 @@ bool Elevator::DeleteRoute(int floor, int direction)
 			if (DownQueue[i] == floor)
 				DownQueue.erase(DownQueue.begin() + i);
 		}
-		Report("deleting route to floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + floorobj->ID + ") direction down");
+		Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
 		if (DownQueue.size() == 0)
 			DownQueueEmpty = true;
 	}
 
 	//turn off button lights
 	if (sbs->Verbose)
-		Report("DeleteRoute: turning off button lights for floor " + std::string(_itoa(floor, intbuffer, 10)));
+		Report("DeleteRoute: turning off button lights for floor " + ToString2(floor));
 	for (int i = 0; i < (int)PanelArray.size(); i++)
 		PanelArray[i]->ChangeLight(floor, false);
 	return true;
@@ -1011,7 +1011,7 @@ void Elevator::ProcessCallQueue()
 				if (MoveElevator == false)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue up: standard dispatch, floor " + std::string(_itoa(UpQueue[i], intbuffer, 10)));
+						Report("ProcessCallQueue up: standard dispatch, floor " + ToString2(UpQueue[i]));
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
@@ -1035,10 +1035,10 @@ void Elevator::ProcessCallQueue()
 							ActiveCallFloor = UpQueue[i];
 							GotoFloor = UpQueue[i];
 							Destination = tmpdestination;
-							Report("changing destination floor to " + std::string(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							Report("changing destination floor to " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 						}
 						else if (sbs->Verbose)
-							Report("ProcessCallQueue up: cannot change destination floor to " + std::string(_itoa(UpQueue[i], intbuffer, 10)));
+							Report("ProcessCallQueue up: cannot change destination floor to " + ToString2(UpQueue[i]));
 					}
 				}
 				return;
@@ -1050,7 +1050,7 @@ void Elevator::ProcessCallQueue()
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + std::string(_itoa(UpQueue[i], intbuffer, 10)));
+						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + ToString2(UpQueue[i]));
 					ActiveCallFloor = UpQueue[i];
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i];
@@ -1075,7 +1075,7 @@ void Elevator::ProcessCallQueue()
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
-					Report("ProcessCallQueue up: skipping floor entry " + std::string(_itoa(UpQueue[i], intbuffer, 10)));
+					Report("ProcessCallQueue up: skipping floor entry " + ToString2(UpQueue[i]));
 			}
 		}
 	}
@@ -1090,7 +1090,7 @@ void Elevator::ProcessCallQueue()
 				if (MoveElevator == false)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue down: standard dispatch, floor " + std::string(_itoa(DownQueue[i], intbuffer, 10)));
+						Report("ProcessCallQueue down: standard dispatch, floor " + ToString2(DownQueue[i]));
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
@@ -1114,10 +1114,10 @@ void Elevator::ProcessCallQueue()
 							ActiveCallFloor = DownQueue[i];
 							GotoFloor = DownQueue[i];
 							Destination = tmpdestination;
-							Report("changing destination floor to " + std::string(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+							Report("changing destination floor to " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 						}
 						else if (sbs->Verbose)
-							Report("ProcessCallQueue down: cannot change destination floor to " + std::string(_itoa(DownQueue[i], intbuffer, 10)));
+							Report("ProcessCallQueue down: cannot change destination floor to " + ToString2(DownQueue[i]));
 					}
 				}
 				return;
@@ -1129,7 +1129,7 @@ void Elevator::ProcessCallQueue()
 				if (IsIdle() == true && LastQueueDirection == 0)
 				{
 					if (sbs->Verbose)
-						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + std::string(_itoa(DownQueue[i], intbuffer, 10)));
+						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + ToString2(DownQueue[i]));
 					ActiveCallFloor = DownQueue[i];
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i];
@@ -1154,7 +1154,7 @@ void Elevator::ProcessCallQueue()
 				}
 				//otherwise skip it if it's not the last entry
 				if (sbs->Verbose)
-					Report("ProcessCallQueue down: skipping floor entry " + std::string(_itoa(DownQueue[i], intbuffer, 10)));
+					Report("ProcessCallQueue down: skipping floor entry " + ToString2(DownQueue[i]));
 			}
 		}
 	}
@@ -1585,7 +1585,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//notify about movement
 		if (InspectionService == false)
-			Report("moving " + dir_string + " to floor " + std::string(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+			Report("moving " + dir_string + " to floor " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 		else
 			Report("moving " + dir_string);
 		IsMoving = true;
@@ -1934,7 +1934,7 @@ void Elevator::MoveElevatorToFloor()
 	if (GetFloor() != oldfloor)
 	{
 		if (sbs->Verbose)
-			Report("on floor " + std::string(_itoa(GetFloor(), intbuffer, 10)));
+			Report("on floor " + ToString2(GetFloor()));
 
 		//play floor beep sound if floor is a serviced floor
 		if (IsServicedFloor(GetFloor()) == true)
@@ -2086,7 +2086,7 @@ void Elevator::FinishMove()
 	{
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
-		Report("arrived at floor " + std::string(_itoa(GotoFloor, intbuffer, 10)) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
+		Report("arrived at floor " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 
 		//dequeue floor route
 		DeleteActiveRoute();
@@ -2234,13 +2234,13 @@ void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
 
-	sbs->Report("--- Elevator " + std::string(_itoa(Number, intbuffer, 10)) + " Queues ---\n");
+	sbs->Report("--- Elevator " + ToString2(Number) + " Queues ---\n");
 	sbs->Report("Up:");
 	for (int i = 0; i < (int)UpQueue.size(); i++)
-		sbs->Report(std::string(_itoa(i, intbuffer, 10)) + " - " + std::string(_itoa(UpQueue[i], intbuffer, 10)));
+		sbs->Report(ToString2(i) + " - " + ToString2(UpQueue[i]));
 	sbs->Report("Down:");
 	for (int i = 0; i < (int)DownQueue.size(); i++)
-		sbs->Report(std::string(_itoa(i, intbuffer, 10)) + " - " + std::string(_itoa(DownQueue[i], intbuffer, 10)));
+		sbs->Report(ToString2(i) + " - " + ToString2(DownQueue[i]));
 }
 
 void Elevator::Enabled(bool value)
@@ -2434,20 +2434,20 @@ void Elevator::DumpServicedFloors()
 {
 	//dump serviced floors list
 
-	sbs->Report("--- Elevator " + std::string(_itoa(Number, intbuffer, 10)) + "'s Serviced Floors ---\n");
+	sbs->Report("--- Elevator " + ToString2(Number) + "'s Serviced Floors ---\n");
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
-		sbs->Report(std::string(_itoa(i, intbuffer, 10)) + " - " + std::string(_itoa(ServicedFloors[i], intbuffer, 10)));
+		sbs->Report(ToString2(i) + " - " + ToString2(ServicedFloors[i]));
 }
 
 bool Elevator::AddServicedFloor(int number)
 {
 	if (sbs->Verbose)
-		Report("adding serviced floor " + std::string(_itoa(number, intbuffer, 10)));
+		Report("adding serviced floor " + ToString2(number));
 
 	//check if floor is outside valid floor range
 	if (sbs->IsValidFloor(number) == false)
 	{
-		std::string floor = Ogre::StringConverter::toString(number);
+		std::string floor = ToString(number);
 		return ReportError("AddServicedFloor: Invalid floor " + floor);
 	}
 
@@ -2462,7 +2462,7 @@ bool Elevator::AddServicedFloor(int number)
 void Elevator::RemoveServicedFloor(int number)
 {
 	if (sbs->Verbose)
-		Report("removing serviced floor " + std::string(_itoa(number, intbuffer, 10)));
+		Report("removing serviced floor " + ToString2(number));
 	if (IsServicedFloor(number) == true)
 	{
 		int index = GetFloorIndex(number);
@@ -2476,7 +2476,7 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 	//create a new button panel object and store the pointer
 
 	int index = (int)PanelArray.size();
-	std::string number = Ogre::StringConverter::toString(index + 1);
+	std::string number = ToString(index + 1);
 	TrimString(number);
 	PanelArray.resize(index + 1);
 
@@ -2562,13 +2562,13 @@ bool Elevator::IsServicedFloor(int floor)
 	if (index == -1)
 	{
 		if (sbs->Verbose)
-			Report("Floor " + std::string(_itoa(floor, intbuffer, 10)) + " is not a serviced floor");
+			Report("Floor " + ToString2(floor) + " is not a serviced floor");
 		return false;
 	}
 	else
 	{
 		if (sbs->Verbose)
-			Report("Floor " + std::string(_itoa(floor, intbuffer, 10)) + " is a serviced floor");
+			Report("Floor " + ToString2(floor) + " is a serviced floor");
 		return true;
 	}
 }
@@ -2601,7 +2601,7 @@ void Elevator::Go(int floor)
 	}
 
 	if (sbs->Verbose)
-		Report("Go: proceeding to floor " + std::string(_itoa(floor, intbuffer, 10)));
+		Report("Go: proceeding to floor " + ToString2(floor));
 	GotoFloor = floor;
 	WaitForDoors = true;
 	CloseDoors();
@@ -2999,7 +2999,7 @@ bool Elevator::SetRecallFloor(int floor)
 	}
 
 	if (sbs->Verbose)
-		Report("setting recall floor to " + std::string(_itoa(floor, intbuffer, 10)));
+		Report("setting recall floor to " + ToString2(floor));
 	RecallFloor = floor;
 	RecallSet = true;
 	return true;
@@ -3020,7 +3020,7 @@ bool Elevator::SetAlternateRecallFloor(int floor)
 	}
 
 	if (sbs->Verbose)
-		Report("setting alternate recall floor to " + std::string(_itoa(floor, intbuffer, 10)));
+		Report("setting alternate recall floor to " + ToString2(floor));
 	RecallFloorAlternate = floor;
 	RecallAltSet = true;
 	return true;
@@ -3041,7 +3041,7 @@ bool Elevator::SetACPFloor(int floor)
 	}
 
 	if (sbs->Verbose)
-		Report("setting ACP floor to " + std::string(_itoa(floor, intbuffer, 10)));
+		Report("setting ACP floor to " + ToString2(floor));
 	ACPFloor = floor;
 	ACPFloorSet = true;
 	return true;
@@ -3404,7 +3404,7 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual)
 		if (GetDoor(i))
 			GetDoor(i)->OpenDoors(whichdoors, floor, manual);
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3433,7 +3433,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual)
 		if (GetDoor(i))
 			GetDoor(i)->CloseDoors(whichdoors, floor, manual);
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3458,7 +3458,7 @@ void Elevator::StopDoors(int number)
 		if (GetDoor(i))
 			GetDoor(i)->StopDoors();
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3470,7 +3470,7 @@ Object* Elevator::AddDoors(int number, const char *lefttexture, const char *righ
 	if (GetDoor(number))
 		return GetDoor(number)->AddDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, width, height, direction, tw, th);
 	else
-		ReportError("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+		ReportError("Invalid door " + ToString2(number));
 	return 0;
 }
 
@@ -3482,7 +3482,7 @@ bool Elevator::AddShaftDoors(int number, const char *lefttexture, const char *ri
 	if (GetDoor(number))
 		return GetDoor(number)->AddShaftDoors(lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
-		ReportError("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+		ReportError("Invalid door " + ToString2(number));
 	return false;
 }
 
@@ -3534,7 +3534,7 @@ void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 		if (door)
 			door->ShaftDoorsEnabled(floor, value);
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3562,7 +3562,7 @@ void Elevator::ShaftDoorsEnabledRange(int number, int floor, int range)
 		if (door)
 			door->ShaftDoorsEnabledRange(floor, range);
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3591,7 +3591,7 @@ bool Elevator::AreDoorsOpen(int number)
 				return true;
 		}
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 	return false;
 }
@@ -3605,7 +3605,7 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 	if (door)
 		return door->AreShaftDoorsOpen(floor);
 	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + ToString2(number));
 	return false;
 }
 
@@ -3631,7 +3631,7 @@ void Elevator::Chime(int number, int floor, bool direction)
 		if (door)
 			door->Chime(floor, direction);
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 	if (direction == true)
 		LastChimeDirection = 1;
@@ -3660,7 +3660,7 @@ void Elevator::ResetDoorTimer(int number)
 		if (door)
 			door->ResetDoorTimer();
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3683,7 +3683,7 @@ bool Elevator::DoorsStopped(int number)
 		if (door)
 			return door->DoorsStopped();
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 	return false;
 }
@@ -3804,7 +3804,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	{
 		if (DoorExists(door_number) == false)
 		{
-			std::string doornum = Ogre::StringConverter::toString(door_number);
+			std::string doornum = ToString(door_number);
 			ReportError("AddFloorSigns: door " + doornum + " does not exist");
 			return false;
 		}
@@ -4015,13 +4015,13 @@ bool Elevator::BeyondDecelMarker(int direction, float destination)
 void Elevator::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Elevator " + std::string(_itoa(Number, intbuffer, 10)) + ": " + message);
+	sbs->Report("Elevator " + ToString2(Number) + ": " + message);
 }
 
 bool Elevator::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Elevator " + std::string(_itoa(Number, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Elevator " + ToString2(Number) + ": " + message);
 }
 
 Object* Elevator::AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
@@ -4031,7 +4031,7 @@ Object* Elevator::AddDoorComponent(int number, const char *name, const char *tex
 	if (GetDoor(number))
 		return GetDoor(number)->AddDoorComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + ToString2(number));
 	return 0;
 }
 
@@ -4054,7 +4054,7 @@ void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *
 	if (GetDoor(number))
 		GetDoor(number)->AddShaftDoorsComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + ToString2(number));
 }
 
 Object* Elevator::FinishDoors(int number)
@@ -4064,7 +4064,7 @@ Object* Elevator::FinishDoors(int number)
 	if (GetDoor(number))
 		return GetDoor(number)->FinishDoors();
 	else
-		Report("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+		Report("Invalid door " + ToString2(number));
 	return 0;
 }
 
@@ -4087,7 +4087,7 @@ bool Elevator::FinishShaftDoors(int number)
 	if (GetDoor(number))
 		return GetDoor(number)->FinishShaftDoors();
 	else
-		ReportError("Invalid door " + std::string(_itoa(number, intbuffer, 10)));
+		ReportError("Invalid door " + ToString2(number));
 	return false;
 }
 
@@ -4106,8 +4106,7 @@ void Elevator::Timer::Notify()
 			int floor = elevator->GetFloor();
 			if (elevator->ParkingFloor != floor)
 			{
-				char intbuffer[65];
-				elevator->Report("parking to floor " + std::string(_itoa(elevator->ParkingFloor, intbuffer, 10)));
+				elevator->Report("parking to floor " + ToString2(elevator->ParkingFloor));
 				elevator->Parking = true;
 			}
 
@@ -4242,7 +4241,7 @@ void Elevator::HoldDoors(int number)
 		if (GetDoor(i))
 			GetDoor(i)->Hold();
 		else
-			Report("Invalid door " + std::string(_itoa(i, intbuffer, 10)));
+			Report("Invalid door " + ToString2(i));
 	}
 }
 
@@ -4281,8 +4280,8 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 	*/
 
 	StdDoorArray.resize(StdDoorArray.size() + 1);
-	std::string elevnum = _itoa(Number, intbuffer, 10);
-	std::string num = _itoa((int)StdDoorArray.size() - 1, intbuffer, 10);
+	std::string elevnum = ToString(Number);
+	std::string num = ToString((int)StdDoorArray.size() - 1);
 	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	return StdDoorArray[StdDoorArray.size() - 1]->object;
 }
@@ -4575,7 +4574,7 @@ bool Elevator::PlayFloorBeep()
 
 	std::string newsound = BeepSound;
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", _itoa(GetFloor(), intbuffer, 10));
+	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
 	floorbeep->Stop();
 	floorbeep->Load(newsound.c_str());
@@ -4596,7 +4595,7 @@ bool Elevator::PlayFloorSound()
 
 	std::string newsound = FloorSound;
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", _itoa(GotoFloor, intbuffer, 10));
+	ReplaceAll(newsound, "*", ToString(GotoFloor));
 	TrimString(newsound);
 	floorsound->Stop();
 	floorsound->Load(newsound.c_str());
@@ -4641,7 +4640,7 @@ bool Elevator::PlayMessageSound()
 	}
 
 	//change the asterisk into the current floor number
-	ReplaceAll(newsound, "*", _itoa(GetFloor(), intbuffer, 10));
+	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
 	messagesnd->Stop();
 	messagesnd->Load(newsound.c_str());

@@ -43,20 +43,20 @@ Floor::Floor(int number)
 	Number = number;
 
 	//Create primary level mesh
-	buffer = Ogre::StringConverter::toString(Number);
+	buffer = ToString(Number);
 	object->SetName(std::string("Floor " + buffer).c_str());
 	buffer.insert(0, "Level ");
 	TrimString(buffer);
 	Level = new MeshObject(object, buffer.c_str());
 
 	//Create interfloor mesh
-	buffer = Ogre::StringConverter::toString(Number);
+	buffer = ToString(Number);
 	buffer.insert(0, "Interfloor ");
 	TrimString(buffer);
 	Interfloor = new MeshObject(object, buffer.c_str());
 
 	//Create columnframe mesh
-	buffer = Ogre::StringConverter::toString(Number);
+	buffer = ToString(Number);
 	buffer.insert(0, "ColumnFrame ");
 	TrimString(buffer);
 	ColumnFrame = new MeshObject(object, buffer.c_str());
@@ -550,8 +550,8 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
 	DoorArray.resize(DoorArray.size() + 1);
-	std::string floornum = _itoa(Number, intbuffer, 10);
-	std::string num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
+	std::string floornum = ToString(Number);
+	std::string num = ToString((int)DoorArray.size() - 1);
 	DoorArray[DoorArray.size() - 1] = new Door(this->object, std::string("Floor " + floornum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
 	return DoorArray[DoorArray.size() - 1]->object;
 }
@@ -856,13 +856,13 @@ std::vector<Sound*> Floor::GetSound(const char *name)
 void Floor::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Floor " + std::string(_itoa(Number, intbuffer, 10)) + ": " + message);
+	sbs->Report("Floor " + ToString2(Number) + ": " + message);
 }
 
 bool Floor::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Floor " + std::string(_itoa(Number, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Floor " + ToString2(Number) + ": " + message);
 }
 
 float Floor::GetBase(bool relative)

@@ -143,8 +143,6 @@ private:
 	int object_line; //script line number of last clicked object
 	std::string object_cmd; //original script command of last clicked object
 	std::string object_cmd_processed; //processed script command of last clicked object
-	char intbuffer[65];
-	char buffer[20];
 	int FloorTemp; //previous floor check value
 	float Gravity;
 	bool GravityStatus;

@@ -344,9 +344,6 @@ private:
 	void FinishMove();
 	bool CheckOpenDoor();
 
-	char intbuffer[65];
-	char buffer[20];
-
 	//sound objects
 	Sound *mainsound;
 	Sound *idlesound;

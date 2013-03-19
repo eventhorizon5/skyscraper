@@ -739,7 +739,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	std::string buffer;
 	std::string Name = name;
-	buffer = Ogre::StringConverter::toString(object->GetNumber());
+	buffer = ToString(object->GetNumber());
 	Name.insert(0, "(" + buffer + ")");
 	this->name = Name;
 	std::string filename2;

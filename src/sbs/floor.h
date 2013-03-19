@@ -111,9 +111,6 @@ public:
 	std::vector<Sound*> GetSound(const char *name);
 
 private:
-	char intbuffer[65];
-	char buffer[20];
-
 	//sound objects
 	std::vector<Sound*> sounds;
 

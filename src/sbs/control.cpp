@@ -41,7 +41,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	object = new Object();
 	object->SetValues(this, parent, "Control", name, false);
 
-	std::string objnum = Ogre::StringConverter::toString(object->GetNumber());
+	std::string objnum = ToString(object->GetNumber());
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 	std::string Name2 = Name;
@@ -392,7 +392,7 @@ void Control::ChangeFloorLight(int floor, bool value)
 	if (light_status == value)
 		return;
 
-	std::string floornum = Ogre::StringConverter::toString(floor);
+	std::string floornum = ToString(floor);
 	int index = FindActionPosition(floornum.c_str());
 	int index2 = FindActionPosition("off");
 	if (index > 0 && index2 > 0)
@@ -453,8 +453,7 @@ void Control::ToggleLock(bool force)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
 		{
-			char intbuffer[10];
-			std::string id = _itoa(KeyID, intbuffer, 10);
+			std::string id = ToString(KeyID);
 			sbs->Report(std::string("Need key " + id + " to lock/unlock control " + Name).c_str());
 			return;
 		}

@@ -86,7 +86,6 @@ bool ScriptProcessor::LoadBuilding()
 	int returncode = 0;
 	MinExtent = 0;
 	MaxExtent = 0;
-	char buffer2[20];
 	InFunction = false;
 	FunctionCallLine = 0;
 	ReplaceLine = false;
@@ -197,7 +196,7 @@ bool ScriptProcessor::LoadBuilding()
 			{
 				for (int i = 0; i < (int)FunctionParams.size(); i++)
 				{
-					std::string num = _itoa(i + 1, intbuffer, 10);
+					std::string num = ToString(i + 1);
 					ReplaceAll(LineData, std::string("%param" + num + "%").c_str(), FunctionParams[i].c_str());
 				}
 			}*/
@@ -205,7 +204,7 @@ bool ScriptProcessor::LoadBuilding()
 		else
 		{
 			int percent = ((float)line / (float)BuildingData.size()) * 100.0;
-			std::string percent_s = _itoa(percent, intbuffer, 10);
+			std::string percent_s = ToString(percent);
 			int marker = percent / 10;
 			if (marker > progress_marker)
 			{
@@ -269,10 +268,10 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid range");
 				return false;
 			}
-			Context = "Floor range " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10));
+			Context = "Floor range " + ToString2(RangeL) + " to " + ToString2(RangeH);
 			Current = RangeL;
 			RangeStart = line;
-			skyscraper->Report("Processing floors " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing floors " + ToString2(RangeL) + " to " + ToString2(RangeH) + "...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 7) == "<floor ")
@@ -292,8 +291,8 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid floor");
 				return false;
 			}
-			Context = "Floor " + std::string(_itoa(Current, intbuffer, 10));
-			skyscraper->Report("Processing floor " + std::string(_itoa(Current, intbuffer, 10)) + "...");
+			Context = "Floor " + ToString2(Current);
+			skyscraper->Report("Processing floor " + ToString2(Current) + "...");
 			goto Nextline;
 		}
 		if (linecheck == "<endfloor>" && RangeL == RangeH)
@@ -331,10 +330,10 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid range");
 				return false;
 			}
-			Context = "Elevator range " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10));
+			Context = "Elevator range " + ToString2(RangeL) + " to " + ToString2(RangeH);
 			Current = RangeL;
 			RangeStart = line;
-			skyscraper->Report("Processing elevators " + std::string(_itoa(RangeL, intbuffer, 10)) + " to " + std::string(_itoa(RangeH, intbuffer, 10)) + "...");
+			skyscraper->Report("Processing elevators " + ToString2(RangeL) + " to " + ToString2(RangeH) + "...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 10) == "<elevator ")
@@ -359,8 +358,8 @@ bool ScriptProcessor::LoadBuilding()
 				ScriptError("Invalid elevator");
 				return false;
 			}
-			Context = "Elevator " + std::string(_itoa(Current, intbuffer, 10));
-			skyscraper->Report("Processing elevator " + std::string(_itoa(Current, intbuffer, 10)) + "...");
+			Context = "Elevator " + ToString2(Current);
+			skyscraper->Report("Processing elevator " + ToString2(Current) + "...");
 			goto Nextline;
 		}
 		if (linecheck == "<endelevator>" && RangeL == RangeH)
@@ -561,7 +560,7 @@ checkfloors:
 			}
 
 			//fullheight parameter
-			buffer = Ogre::StringConverter::toString(temp4);
+			buffer = ToString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").fullheight";
 			buffer = LineData;
@@ -569,13 +568,13 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->FullHeight());
+				buffer = ToString(Simcore->GetFloor(temp4)->FullHeight());
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 
 			//height parameter
-			buffer = Ogre::StringConverter::toString(temp4);
+			buffer = ToString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").height";
 			buffer = LineData;
@@ -583,13 +582,13 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->Height);
+				buffer = ToString(Simcore->GetFloor(temp4)->Height);
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 
 			//altitude parameter
-			buffer = Ogre::StringConverter::toString(temp4);
+			buffer = ToString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").altitude";
 			buffer = LineData;
@@ -597,13 +596,13 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->Altitude);
+				buffer = ToString(Simcore->GetFloor(temp4)->Altitude);
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 
 			//interfloorheight parameter
-			buffer = Ogre::StringConverter::toString(temp4);
+			buffer = ToString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").interfloorheight";
 			buffer = LineData;
@@ -611,14 +610,14 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->InterfloorHeight);
+				buffer = ToString(Simcore->GetFloor(temp4)->InterfloorHeight);
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
 			temp5 = SetCaseCopy(LineData, false).find("floor(", 0);
 
 			//base parameter
-			buffer = Ogre::StringConverter::toString(temp4);
+			buffer = ToString(temp4);
 			TrimString(buffer);
 			temp6 = "floor(" + buffer + ").base";
 			buffer = LineData;
@@ -626,7 +625,7 @@ checkfloors:
 			temp1 = buffer.find(temp6, 0);
 			if (temp1 > 0)
 			{
-				buffer = Ogre::StringConverter::toString(Simcore->GetFloor(temp4)->GetBase());
+				buffer = ToString(Simcore->GetFloor(temp4)->GetBase());
 				TrimString(buffer);
 				LineData = LineData.substr(0, temp1) + buffer + LineData.substr(temp1 + temp6.length());
 			}
@@ -634,10 +633,10 @@ checkfloors:
 		}
 
 		//Extent variables
-		ReplaceAll(LineData, "%minx%", _gcvt(MinExtent.x, 12, buffer2));
-		ReplaceAll(LineData, "%minz%", _gcvt(MinExtent.z, 12, buffer2));
-		ReplaceAll(LineData, "%maxx%", _gcvt(MaxExtent.x, 12, buffer2));
-		ReplaceAll(LineData, "%maxz%", _gcvt(MaxExtent.z, 12, buffer2));
+		ReplaceAll(LineData, "%minx%", ToString(MinExtent.x, 12));
+		ReplaceAll(LineData, "%minz%", ToString(MinExtent.z, 12));
+		ReplaceAll(LineData, "%maxx%", ToString(MaxExtent.x, 12));
+		ReplaceAll(LineData, "%maxz%", ToString(MaxExtent.z, 12));
 
 		//Global commands
 		returncode = ProcCommands();
@@ -1027,21 +1026,20 @@ int ScriptProcessor::ScriptError(std::string message)
 	}
 
 	//Script error reporting function
-	char intbuffer[65];
 	std::string error;
 	if (isinclude == false)
 	{
 		if (InFunction == false)
-			error = "Script error on line " + std::string(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+			error = "Script error on line " + ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
 		else
-			error = "Script error on line " + std::string(_itoa(linenum - included_lines + 1, intbuffer, 10)) + ": " + message + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + std::string(_itoa(function_line - included_lines + 1, intbuffer, 10)) + "\nLine Text: " + LineData;
+			error = "Script error on line " + ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
 	}
 	else
 	{
 		if (InFunction == false)
-			error = "Script error in included file " + includefile + " on line " + std::string(_itoa(linenum, intbuffer, 10)) + ": " + std::string(message) + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nLine Text: " + LineData;
+			error = "Script error in included file " + includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
 		else
-			error = "Script error in included file " + includefile + " on line " + std::string(_itoa(linenum, intbuffer, 10)) + ": " + std::string(message) + "\nSection: " + std::string(_itoa(Section, intbuffer, 10)) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + std::string(_itoa(function_line - included_lines + 1, intbuffer, 10)) + "\nLine Text: " + LineData;
+			error = "Script error in included file " + includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
 	}
 
 	skyscraper->ReportError(error.c_str());
@@ -1334,7 +1332,7 @@ int ScriptProcessor::ProcCommands()
 
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable " + ToString2(temp3) + " set to " + UserVariable[temp3]);
 		return sNextLine;
 	}
 
@@ -2743,7 +2741,7 @@ int ScriptProcessor::ProcFloors()
 	if (!floor)
 	{
 		std::string floornum;
-		floornum = Ogre::StringConverter::toString(Current);
+		floornum = ToString(Current);
 		return ScriptError("Invalid floor " + floornum);
 	}
 
@@ -2751,27 +2749,27 @@ int ScriptProcessor::ProcFloors()
 	if (cache_current != Current || floorcache_firstrun == true)
 	{
 		cache_current = Current;
-		cache_current_s = Ogre::StringConverter::toString(cache_current);
+		cache_current_s = ToString(cache_current);
 	}
 	if (cache_height != floor->Height || floorcache_firstrun == true)
 	{
 		cache_height = floor->Height;
-		cache_height_s = Ogre::StringConverter::toString(cache_height);
+		cache_height_s = ToString(cache_height);
 	}
 	if (cache_fullheight != floor->FullHeight() || floorcache_firstrun == true)
 	{
 		cache_fullheight = floor->FullHeight();
-		cache_fullheight_s = Ogre::StringConverter::toString(cache_fullheight);
+		cache_fullheight_s = ToString(cache_fullheight);
 	}
 	if (cache_interfloorheight != floor->InterfloorHeight || floorcache_firstrun == true)
 	{
 		cache_interfloorheight = floor->InterfloorHeight;
-		cache_interfloorheight_s = Ogre::StringConverter::toString(cache_interfloorheight);
+		cache_interfloorheight_s = ToString(cache_interfloorheight);
 	}
 	if (cache_base != floor->GetBase() || floorcache_firstrun == true)
 	{
 		cache_base = floor->GetBase();
-		cache_base_s = Ogre::StringConverter::toString(cache_base);
+		cache_base_s = ToString(cache_base);
 	}
 
 	floorcache_firstrun = false;
@@ -3334,7 +3332,7 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid variable number");
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable " + ToString2(temp3) + " set to " + UserVariable[temp3]);
 		return sNextLine;
 	}
 
@@ -4561,7 +4559,7 @@ int ScriptProcessor::ProcElevators()
 	Simcore->NewElevator(Current);
 
 	//replace variables with actual values
-	buffer = Ogre::StringConverter::toString(Current);
+	buffer = ToString(Current);
 	ReplaceAll(LineData, "%elevator%", buffer.c_str());
 
 	//IF statement
@@ -6791,7 +6789,7 @@ int ScriptProcessor::ProcElevators()
 
 		UserVariable[temp3] = Calc(temp2.c_str());
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + std::string(_itoa(temp3, intbuffer, 10)) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable " + ToString2(temp3) + " set to " + UserVariable[temp3]);
 		return sNextLine;
 	}
 
@@ -6985,7 +6983,7 @@ int ScriptProcessor::ProcTextures()
 		for (Current = RangeL; Current <= RangeH; Current++)
 		{
 			temp2 = tempdata[2];
-			buffer = Ogre::StringConverter::toString(Current);
+			buffer = ToString(Current);
 			TrimString(buffer);
 			ReplaceAll(temp2, "%number%", buffer.c_str());
 			temp6 = tempdata[3];
@@ -7057,7 +7055,7 @@ int ScriptProcessor::ProcTextures()
 		temp6 = LineData;
 		for (Current = RangeL; Current <= RangeH; Current++)
 		{
-			buffer = Ogre::StringConverter::toString(Current);
+			buffer = ToString(Current);
 			TrimString(buffer);
 			LineData = temp6;
 			ReplaceAll(LineData, "%number%", buffer.c_str());
@@ -7477,7 +7475,7 @@ void ScriptProcessor::StoreCommand(Object *object)
 		object->linenum = line + 1;
 		object->context = Context;
 		std::string current;
-		current = Ogre::StringConverter::toString(Current);
+		current = ToString(Current);
 		if (Section == 2)
 			object->context = "Floor " + current;
 		if (Section == 4)

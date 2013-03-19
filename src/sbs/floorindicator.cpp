@@ -44,7 +44,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	elev = elevator;
 	Prefix = texture_prefix;
 
-	std::string buffer = Ogre::StringConverter::toString(elevator);
+	std::string buffer = ToString(elevator);
 	object->SetName(std::string("Floor Indicator " + buffer).c_str());
 	TrimString(buffer);
 	FloorIndicatorMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));

@@ -173,7 +173,7 @@ std::string WallObject::ProcessName(const char *name)
 
 	//construct name
 	std::string newname = "(";
-	std::string num = Ogre::StringConverter::toString(Number);
+	std::string num = ToString(Number);
 	newname.append(num + ")");
 	newname.append(name_modified);
 	return newname;
@@ -282,7 +282,7 @@ void WallObject::SetPolygonName(int index, const char *name)
 
         //construct name
         std::string newname = "(";
-        std::string num = Ogre::StringConverter::toString(Number);
+        std::string num = ToString(Number);
         newname.append(num + ")");
         newname.append(name_modified);
 

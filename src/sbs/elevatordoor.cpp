@@ -36,7 +36,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	object = new Object();
 	object->SetValues(this, elevator->object, "ElevatorDoor", "", false);
 
-	std::string buffer = Ogre::StringConverter::toString(number);
+	std::string buffer = ToString(number);
 	object->SetName(std::string("Elevator Door " + buffer).c_str());
 
 	//create a new elevator door
@@ -194,20 +194,20 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
-		doornumber = doornumber + _itoa(Number, intbuffer, 10);
+		doornumber = doornumber + ToString(Number);
 	}
 
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; doors manually stopped");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot open doors" + doornumber + "; doors manually stopped");
 		return;
 	}
 
 	//exit if in nudge mode
 	if (GetNudgeStatus() == true)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; nudge mode enabled");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot open doors" + doornumber + "; nudge mode enabled");
 		return;
 	}
 
@@ -218,7 +218,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//don't open doors if emergency stop is enabled
 	if (elev->OnFloor == false && whichdoors != 3 && manual == false)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": cannot open doors" + doornumber + "; emergency stop enabled");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot open doors" + doornumber + "; emergency stop enabled");
 		return;
 	}
 
@@ -228,18 +228,18 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//reset timer if not in a service mode
 		if (elev->InServiceMode() == false)
 		{
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already open; resetting timer");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already open; resetting timer");
 			ResetDoorTimer();
 		}
 		else
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already open");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already open");
 		return;
 	}
 
 	//exit if doors are manually opening
 	if (OpenDoor == 2 && DoorIsRunning == true)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
 		return;
 	}
 
@@ -253,23 +253,23 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
+			sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == true)
 		{
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + " already open on floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": shaft doors" + doornumber + " already open on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": opening shaft doors" + doornumber + " on floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": manually opening shaft doors" + doornumber + " on floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": manually opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": opening doors" + doornumber);
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": opening doors" + doornumber);
 	else
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": manually opening doors" + doornumber);
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": manually opening doors" + doornumber);
 
 	if (manual == false)
 		OpenDoor = 1;
@@ -294,7 +294,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": can't open doors" + doornumber + " - no shaft doors on " + std::string(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": can't open doors" + doornumber + " - no shaft doors on " + ToString2(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -317,34 +317,34 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
-		doornumber = doornumber + _itoa(Number, intbuffer, 10);
+		doornumber = doornumber + ToString(Number);
 	}
 
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + "; doors manually stopped");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + "; doors manually stopped");
 		return;
 	}
 
 	//do not close doors while fire service mode 1 is on and the elevator is waiting at the parking floor
 	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
 		return;
 	}
 
 	//do not close doors while fire service mode 2 is set to hold
 	if (manual == false && elev->FireServicePhase2 == 2)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
 		return;
 	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (OpenDoor != 0 && manual == false)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": will close doors" + doornumber + " in quick-close mode");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": will close doors" + doornumber + " in quick-close mode");
 		quick_close = true;
 		return;
 	}
@@ -352,14 +352,14 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//check if elevator doors are already closed
 	if (Doors->Open == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " already closed");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already closed");
 		return;
 	}
 
 	//exit if doors are manually closing
 	if (OpenDoor == -2 && DoorIsRunning == true)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": doors" + doornumber + " in use");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
 		return;
 	}
 
@@ -373,23 +373,23 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": invalid shaft doors");
+			sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": shaft doors" + doornumber + "already closed on floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": shaft doors" + doornumber + "already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": closing shaft doors" + doornumber + " on floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": manually closing shaft doors" + doornumber + " on floor " + std::string(_itoa(floor, intbuffer, 10)) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": manually closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": closing doors" + doornumber);
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": closing doors" + doornumber);
 	else
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": manually closing doors" + doornumber);
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": manually closing doors" + doornumber);
 
 	if (manual == false)
 		OpenDoor = -1;
@@ -407,7 +407,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": can't close doors" + doornumber + " - no shaft doors on " + std::string(_itoa(floor, intbuffer, 10)));
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": can't close doors" + doornumber + " - no shaft doors on " + ToString2(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -431,15 +431,15 @@ void ElevatorDoor::StopDoors()
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
-		doornumber = doornumber + _itoa(Number, intbuffer, 10);
+		doornumber = doornumber + ToString(Number);
 	}
 
 	if (OpenDoor == -2 || OpenDoor == 2)
 	{
 		if (WhichDoors == 3)
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": stopping shaft doors" + doornumber + " on floor " + std::string(_itoa(ShaftDoorFloor, intbuffer, 10)) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": stopping shaft doors" + doornumber + " on floor " + ToString2(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
 		else
-			sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": stopping doors" + doornumber);
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": stopping doors" + doornumber);
 
 		if (WhichDoors == 1 || WhichDoors == 2)
 			Doors->StopDoors();
@@ -456,9 +456,9 @@ void ElevatorDoor::StopDoors()
 		doors_stopped = true;
 	}
 	else if (OpenDoor != 0)
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": can only stop doors" + doornumber + " in manual/emergency mode");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": can only stop doors" + doornumber + " in manual/emergency mode");
 	else
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": cannot stop doors" + doornumber + "; no doors moving");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot stop doors" + doornumber + "; no doors moving");
 }
 
 void ElevatorDoor::MoveDoors(bool open, bool manual)
@@ -758,9 +758,9 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 	//adds an elevator door component; remake of AddDoors command
 
 	std::string elevnumber, doornumber, Name, buffer;
-	elevnumber = Ogre::StringConverter::toString(elev->Number);
+	elevnumber = ToString(elev->Number);
 	TrimString(elevnumber);
-	doornumber = Ogre::StringConverter::toString(Number);
+	doornumber = ToString(Number);
 	TrimString(doornumber);
 	Name = name;
 	TrimString(Name);
@@ -788,11 +788,11 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 		return 0;
 
 	std::string elevnumber, floornumber, doornumber, Name, buffer;
-	elevnumber = Ogre::StringConverter::toString(elev->Number);
+	elevnumber = ToString(elev->Number);
 	TrimString(elevnumber);
-	floornumber = Ogre::StringConverter::toString(floor);
+	floornumber = ToString(floor);
 	TrimString(floornumber);
-	doornumber = Ogre::StringConverter::toString(Number);
+	doornumber = ToString(Number);
 	TrimString(doornumber);
 	Name = name;
 	TrimString(Name);
@@ -809,9 +809,9 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
 	std::string elevnumber, floornumber, doornumber, Name;
-	elevnumber = Ogre::StringConverter::toString(elev->Number);
+	elevnumber = ToString(elev->Number);
 	TrimString(elevnumber);
-	doornumber = Ogre::StringConverter::toString(Number);
+	doornumber = ToString(Number);
 	TrimString(doornumber);
 	Name = name;
 	TrimString(Name);
@@ -820,7 +820,7 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 	{
 		int floor = elev->ServicedFloors[i];
-		floornumber = Ogre::StringConverter::toString(floor);
+		floornumber = ToString(floor);
 		TrimString(floornumber);
 		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
@@ -991,7 +991,7 @@ Object* ElevatorDoor::FinishShaftDoor(int floor)
 {
 	//finish shaft door on a specified floor
 
-	std::string floornum = Ogre::StringConverter::toString(floor);
+	std::string floornum = ToString(floor);
 
 	//exit if floor is not serviced by the elevator
 	if (!elev->IsServicedFloor(floor))
@@ -1531,7 +1531,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		old_difference = tempposition - temporigin;
 
 	//debug - show current section as function is running
-	//sbs->Report("Door section: " + std::string(_itoa(door_section, parent->intbuffer, 10)));
+	//sbs->Report("Door section: " + ToString2(door_section));
 
 	if (parent->door_changed == false && door_section == 0)
 	{
@@ -1746,7 +1746,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//report on what section preceded the finishing code (should be 4)
-	//sbs->Report("Door section: " + std::string(_itoa(door_section, parent->intbuffer, 10)));
+	//sbs->Report("Door section: " + ToString2(door_section));
 
 	//place doors in positions (fixes any overrun errors)
 	float ypos;
@@ -1926,14 +1926,14 @@ void ElevatorDoor::Hold()
         if (elev->NumDoors > 1)
         {
                 doornumber = " ";
-                doornumber = doornumber + _itoa(Number, intbuffer, 10);
+                doornumber = doornumber + ToString(Number);
         }
 
 	//exit if nudge mode is active
 	if (GetNudgeStatus() == true)
 		return;
 
-	sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + ": holding doors" + doornumber);
+	sbs->Report("Elevator " + ToString2(elev->Number) + ": holding doors" + doornumber);
 
 	nudgetimer->Stop();
 	timer->Stop();
@@ -1947,14 +1947,14 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	if (elev->NumDoors > 1)
 	{
 		doornumber = " ";
-		doornumber = doornumber + _itoa(Number, intbuffer, 10);
+		doornumber = doornumber + ToString(Number);
 	}
 
 	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->ParkingFloor)))
 	{
 		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
 			return;
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode activated");
+		sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)
 			nudgesound->Load(NudgeSound.c_str());
@@ -1965,7 +1965,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	}
 	else if (nudge_enabled == true)
 	{
-		sbs->Report("Elevator " + std::string(_itoa(elev->Number, intbuffer, 10)) + " Doors" + doornumber + ": nudge mode disabled");
+		sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": nudge mode disabled");
 		nudge_enabled = false;
 		nudgesound->Stop();
 	}

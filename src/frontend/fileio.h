@@ -59,7 +59,6 @@ class ScriptProcessor
 	int RangeH;
 	long RangeStart;
 	WallObject *wall;
-	char intbuffer[65];
 	std::string buffer;
 	int startpos;
 	bool getfloordata;

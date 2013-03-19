@@ -316,8 +316,7 @@ void Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
 		{
-			char intbuffer[10];
-			std::string id = _itoa(KeyID, intbuffer, 10);
+			std::string id = ToString(KeyID);
 			sbs->Report(std::string("Need key " + id + " to lock/unlock door " + Name).c_str());
 			return;
 		}

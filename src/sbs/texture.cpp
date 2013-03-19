@@ -765,7 +765,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//load font
 	Ogre::FontPtr font;
-	Ogre::String fontname = font_filename2 + Ogre::StringConverter::toString(font_size);
+	Ogre::String fontname = font_filename2 + ToString(font_size);
 	font = Ogre::FontManager::getSingleton().getByName(fontname, "General");
 
 	//load if font is not already loaded
@@ -1459,7 +1459,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("x" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].x, 12, buffer));
+						ReplaceAll(string, std::string("x" + number).c_str(), ToString(vertices[atoi(number.c_str())].x, 12));
 					else
 						ReplaceAll(string, std::string("x" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -1470,7 +1470,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("y" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].y, 12, buffer));
+						ReplaceAll(string, std::string("y" + number).c_str(), ToString(vertices[atoi(number.c_str())].y, 12));
 					else
 						ReplaceAll(string, std::string("y" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -1481,7 +1481,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("z" + number).c_str(), _gcvt(vertices[atoi(number.c_str())].z, 12, buffer));
+						ReplaceAll(string, std::string("z" + number).c_str(), ToString(vertices[atoi(number.c_str())].z, 12));
 					else
 						ReplaceAll(string, std::string("z" + number).c_str(), "0"); //number value out of bounds
 				}

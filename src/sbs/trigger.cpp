@@ -38,7 +38,7 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre:
 	object = new Object();
 	object->SetValues(this, parent, "Trigger", name, false);
 
-	std::string objnum = Ogre::StringConverter::toString(object->GetNumber());
+	std::string objnum = ToString(object->GetNumber());
 	//Name = "(" + objnum + ")" + name;
 	Name = name;
 
@@ -288,8 +288,7 @@ bool Trigger::Check()
 	{
 		if (sbs->Verbose == true)
 		{
-			char intbuffer[65];
-			std::string objectnum = _itoa(object->GetNumber(), intbuffer, 10);
+			std::string objectnum = ToString(object->GetNumber());
 			if (IsInside == true)
 				sbs->Report("Inside trigger area '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
 			else

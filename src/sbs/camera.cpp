@@ -518,7 +518,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			object_number = atoi(meshname.substr(1, index - 1).c_str());
 		meshname.erase(meshname.begin(), meshname.begin() + index + 1);
 	}
-	number = Ogre::StringConverter::toString(object_number);
+	number = ToString(object_number);
 
 	//store parameters of object
 	Object *obj = sbs->GetObject(object_number);
@@ -782,7 +782,7 @@ void Camera::Loop()
 			int index = name.find(")");
 			int number = atoi(name.substr(1, index - 1).c_str());
 			name.erase(name.begin(), name.begin() + index + 1);
-			std::string num = Ogre::StringConverter::toString(number);
+			std::string num = ToString(number);
 
 			//get SBS object
 			Object *obj = sbs->GetObject(number);

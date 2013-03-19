@@ -57,9 +57,7 @@ Object::~Object()
 		Parent->RemoveChild(this);
 
 	sbs->UnregisterObject(Number);
-
-	std::string number = Ogre::StringConverter::toString(Number);
-	sbs->Report("Deleted object " + number + ": " + Name);
+	sbs->Report("Deleted object " + ToString2(Number) + ": " + Name);
 }
 
 void Object::SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent)

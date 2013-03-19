@@ -245,8 +245,7 @@ void Sound::Stop()
 {
 	if (sbs->Verbose == true)
 	{
-		char intbuffer[65];
-		std::string objectnum = _itoa(object->GetNumber(), intbuffer, 10);
+		std::string objectnum = ToString(object->GetNumber());
 		sbs->Report("Stopping sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
 	}
 
@@ -269,8 +268,7 @@ void Sound::Play(bool reset)
 {
 	if (sbs->Verbose == true)
 	{
-		char intbuffer[65];
-		std::string objectnum = _itoa(object->GetNumber(), intbuffer, 10);
+		std::string objectnum = ToString(object->GetNumber());
 		sbs->Report("Playing sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
 	}
 

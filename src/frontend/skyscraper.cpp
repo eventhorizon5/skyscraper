@@ -976,8 +976,7 @@ void Skyscraper::DrawBackground()
 		std::string b1, b2, b3;
 		float x = 0, y = 0;
 		bool center = false;
-		char intbuffer[20];
-		std::string number = _itoa(i + 1, intbuffer, 10);
+		std::string number = ToString(i + 1);
 
 		if (i == 0)
 		{
@@ -1299,8 +1298,7 @@ void Skyscraper::Click(int index)
 {
 	//user clicked a button
 
-	char intbuffer[20];
-	std::string number = _itoa(index + 1, intbuffer, 10);
+	std::string number = ToString(index + 1);
 
 	if (index == 0)
 		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");

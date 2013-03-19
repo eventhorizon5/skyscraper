@@ -57,7 +57,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 
 	std::string buffer, buffer2, buffer3;
 
-	buffer = Ogre::StringConverter::toString(number);
+	buffer = ToString(number);
 	object->SetName(std::string("Stairwell " + buffer).c_str());
 
 	StairArray.resize(endfloor - startfloor + 1);
@@ -69,8 +69,8 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create stairwell meshes
-		buffer2 = Ogre::StringConverter::toString(number);
-		buffer3 = Ogre::StringConverter::toString(i);
+		buffer2 = ToString(number);
+		buffer3 = ToString(i);
 		buffer = "Stairwell " + buffer2 + ":" + buffer3;
 		TrimString(buffer);
 		StairArray[i - startfloor] = new MeshObject(object, buffer.c_str());
@@ -172,7 +172,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddStairs: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddStairs: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
 
@@ -194,7 +194,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	for (int i = 1; i <= num_stairs; i++)
 	{
 		float pos = 0;
-		buffer2 = Ogre::StringConverter::toString(i);
+		buffer2 = ToString(i);
 		float thickness = 0;
 		if (i < num_stairs - 1)
 			thickness = treadsize * 2;
@@ -279,7 +279,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
 
@@ -298,7 +298,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddFloor: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
 
@@ -446,7 +446,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddDoor: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddDoor: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
 
@@ -490,8 +490,8 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
-	std::string stairsnum = _itoa(StairsNum, intbuffer, 10);
-	std::string num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
+	std::string stairsnum = ToString(StairsNum);
+	std::string num = ToString((int)DoorArray.size() - 1);
 	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
@@ -501,7 +501,7 @@ void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Ve
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for stairwell " + std::string(_itoa(StairsNum, intbuffer, 10)) + "...");
+	sbs->Report("Cutting for stairwell " + ToString2(StairsNum) + "...");
 
 	float voffset1, voffset2;
 	cutstart = start;
@@ -552,9 +552,9 @@ bool Stairs::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogr
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			ReportError("Cut: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+			ReportError("Cut: Floor " + ToString2(floor) + " out of range");
 		else
-			sbs->LastError = "Cut: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range";
+			sbs->LastError = "Cut: Floor " + ToString2(floor) + " out of range";
 		return false;
 	}
 
@@ -676,13 +676,13 @@ bool Stairs::IsValidFloor(int floor)
 void Stairs::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Stairwell " + std::string(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+	sbs->Report("Stairwell " + ToString2(StairsNum) + ": " + message);
 }
 
 bool Stairs::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Stairwell " + std::string(_itoa(StairsNum, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Stairwell " + ToString2(StairsNum) + ": " + message);
 }
 
 void Stairs::RemoveDoor(Door *door)

@@ -68,9 +68,6 @@ private:
 	bool ProcessedDown;
 	bool Locked;
 	int KeyID;
-
-	char intbuffer[65];
-	char buffer[20];
 };
 
 #endif

@@ -68,6 +68,10 @@ SBSIMPEXP void TrimString(std::string &string);
 SBSIMPEXP void ReplaceAll(std::string &string, const char *original, const char *replacement);
 SBSIMPEXP bool StartsWith(std::string &string, const char *check_string, bool ignore_case = false);
 SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const char *original_string, char separator);
+SBSIMPEXP const char* ToString(int number);
+SBSIMPEXP std::string ToString2(int number);
+SBSIMPEXP const char* ToString(float number, int digits = 6);
+SBSIMPEXP std::string ToString2(float number, int digits = 6);
 
 //const double pi = 3.14159265;
 

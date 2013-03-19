@@ -68,7 +68,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 
 	std::string buffer, buffer2, buffer3;
 
-	buffer = Ogre::StringConverter::toString(number);
+	buffer = ToString(number);
 	object->SetName(std::string("Shaft " + buffer).c_str());
 
 	ShaftArray.resize(endfloor - startfloor + 1);
@@ -81,8 +81,8 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create shaft meshes
-		buffer2 = Ogre::StringConverter::toString(number);
-		buffer3 = Ogre::StringConverter::toString(i);
+		buffer2 = ToString(number);
+		buffer3 = ToString(i);
 		buffer = "Shaft " + buffer2 + ":" + buffer3;
 		TrimString(buffer);
 		ShaftArray[i - startfloor] = new MeshObject(object, buffer.c_str());
@@ -183,7 +183,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
 
@@ -197,7 +197,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + " - AddFloor: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		sbs->ReportError("Shaft " + ToString2(ShaftNumber) + " - AddFloor: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
 
@@ -374,7 +374,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + "...");
+	sbs->Report("Cutting for shaft " + ToString2(ShaftNumber) + "...");
 
 	float voffset1, voffset2;
 	cutstart = start;
@@ -426,9 +426,9 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			ReportError("Cut: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+			ReportError("Cut: Floor " + ToString2(floor) + " out of range");
 		else
-			sbs->LastError = "Cut: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range";
+			sbs->LastError = "Cut: Floor " + ToString2(floor) + " out of range";
 		return false;
 	}
 
@@ -692,13 +692,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 void Shaft::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+	sbs->Report("Shaft " + ToString2(ShaftNumber) + ": " + message);
 }
 
 bool Shaft::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Shaft " + std::string(_itoa(ShaftNumber, intbuffer, 10)) + ": " + message);
+	return sbs->ReportError("Shaft " + ToString2(ShaftNumber) + ": " + message);
 }
 
 Object* Shaft::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
@@ -783,7 +783,7 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddDoor: Floor " + std::string(_itoa(floor, intbuffer, 10)) + " out of range");
+		ReportError("AddDoor: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
 
@@ -827,8 +827,8 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
-	std::string shaftnum = _itoa(ShaftNumber, intbuffer, 10);
-	std::string num = _itoa((int)DoorArray.size() - 1, intbuffer, 10);
+	std::string shaftnum = ToString(ShaftNumber);
+	std::string num = ToString((int)DoorArray.size() - 1);
 	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;

@@ -59,8 +59,8 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 	//create object mesh
 	std::string buffer, buffer2, buffer3;
-	buffer2 = Ogre::StringConverter::toString(floornum);
-	buffer3 = Ogre::StringConverter::toString(number);
+	buffer2 = ToString(floornum);
+	buffer3 = ToString(number);
 	buffer = "Call Panel " + buffer2 + ":" + buffer3;
 	TrimString(buffer);
 	object->SetName(buffer.c_str());
@@ -404,7 +404,7 @@ bool CallButton::ServicesElevator(int elevator)
 		if (Elevators[i] == elevator)
 		{
 			if (sbs->Verbose)
-				Report(std::string("Services elevator " + std::string(_itoa(elevator, intbuffer, 10))).c_str());
+				Report(std::string("Services elevator " + ToString2(elevator)).c_str());
 			return true;
 		}
 	}
@@ -442,7 +442,7 @@ void CallButton::Loop(int direction)
 			Elevator *elevator = sbs->GetElevator(Elevators[i]);
 
 			if (sbs->Verbose)
-				Report(std::string("Checking elevator " + std::string(_itoa(elevator->Number, intbuffer, 10))).c_str());
+				Report(std::string("Checking elevator " + ToString2(elevator->Number)).c_str());
 
 			//if elevator is closer than the previously checked one or we're starting the checks
 			if (abs(elevator->GetFloor() - floor) < closest || check == false)
@@ -493,7 +493,7 @@ void CallButton::Loop(int direction)
 		return;
 
 	if (sbs->Verbose)
-		Report(std::string("Using elevator " + std::string(_itoa(elevator->Number, intbuffer, 10))).c_str());
+		Report(std::string("Using elevator " + ToString2(elevator->Number)).c_str());
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == direction && elevator->IsIdle() == false && elevator->IsMoving == false)
@@ -548,7 +548,7 @@ void CallButton::Loop(int direction)
 void CallButton::Report(const char *message)
 {
 	//general reporting function
-	std::string msg = "Call button " + std::string(_itoa(floor, intbuffer, 10)) + ":" + std::string(_itoa(Number, intbuffer, 10)) + " - " + message;
+	std::string msg = "Call button " + ToString2(floor) + ":" + ToString2(Number) + " - " + message;
 	sbs->Report(msg.c_str());
 
 }
@@ -556,7 +556,7 @@ void CallButton::Report(const char *message)
 bool CallButton::ReportError(const char *message)
 {
 	//general reporting function
-	std::string msg = "Call button " + std::string(_itoa(floor, intbuffer, 10)) + ":" + std::string(_itoa(Number, intbuffer, 10)) + " - " + message;
+	std::string msg = "Call button " + ToString2(floor) + ":" + ToString2(Number) + " - " + message;
 	return sbs->ReportError(msg.c_str());
 }
 
@@ -579,8 +579,7 @@ void CallButton::ToggleLock(bool force)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
 		{
-			char intbuffer[10];
-			std::string id = _itoa(KeyID, intbuffer, 10);
+			std::string id = ToString(KeyID);
 			std::string msg = "Need key " + id + "to lock/unlock";
 			ReportError(msg.c_str());
 			return;

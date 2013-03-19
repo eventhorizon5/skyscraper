@@ -26,7 +26,6 @@
 #ifndef _SBS_H
 #define _SBS_H
 
-#include <OgreStringConverter.h>
 #include <OgreVector2.h>
 #include <OgreVector3.h>
 #include <OgreMesh.h>
@@ -379,10 +378,6 @@ private:
 	int fps_frame_count;
 	int fps_tottime;
 	float remaining_delta;
-
-	//conversion buffers
-	char intbuffer[65];
-	char buffer[20];
 
 	//orientations
 	int wall_orientation;

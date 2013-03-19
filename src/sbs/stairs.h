@@ -87,9 +87,6 @@ private:
 
 	std::vector<DoorMap> DoorArray; //door object array
 
-	char intbuffer[65];
-	char buffer[20];
-
 	int lastfloor;
 	bool lastfloorset;
 

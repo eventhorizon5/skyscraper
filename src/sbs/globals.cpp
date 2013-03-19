@@ -30,6 +30,7 @@
 #include <errno.h>
 #include <limits.h>
 #include <OgreString.h>
+#include "unix.h"
 #include "globals.h"
 
 const double pi = 3.14159265;
@@ -50,74 +51,27 @@ bool IsNumeric(const char *string)
 {
 	//test to see if a string is numeric
 
-	float a;
-	return IsNumeric(string, a);
+	float num;
+	return IsNumeric(string, num);
 }
 
 bool IsNumeric(const char *string, int &number)
 {
 	//test to see if a string is numeric, and return number as integer
 
-	int base = 10;
-	char *endptr;
-	long val;
-
-	errno = 0;
-	val = strtol(string, &endptr, base);
-
-	//check for errors
-	if ((errno == ERANGE && (val == LONG_MAX || val == LONG_MIN)) || (errno != 0 && val == 0))
-	{
-		//perror("strtol");
-		return false;
-	}
-
-	//no digits found
-	if (endptr == string)
-		return false;
-
-	//if extra characters were found after a number
-	if (*endptr != '\0')
-		return false;
-
-	//returned a number
-	number = (int)val;
-	return true;
+	float num;
+	bool result = IsNumeric(string, num);
+	number = (int)num;
+	return result;
 }
 
 bool IsNumeric(const char *string, float &number)
 {
 	//test to see if a string is numeric, and return number as float
 
-	char *endptr;
-	float val;
-
-	errno = 0;
-#ifdef _WIN32
-	val = (float)strtod(string, &endptr);
-#else
-	val = strtof(string, &endptr);
-#endif
-
-	//check for errors
-	//if ((errno == ERANGE && (val == FLOAT_MAX || val == FLOAT_MIN)) || (errno != 0 && val == 0))
-	if (errno == ERANGE || (errno != 0 && val == 0))
-	{
-		//perror("strtol");
-		return false;
-	}
-
-	//no digits found
-	if (endptr == string)
-		return false;
-
-	//if extra characters were found after a number
-	if (*endptr != '\0')
-		return false;
-
-	//returned a number
-	number = val;
-	return true;
+	char* end = 0;
+	number = (float)std::strtod(string, &end);
+	return end != 0 && *end == 0;
 }
 
 const char *BoolToString(bool item)
@@ -263,4 +217,26 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
             dest_array.push_back(newstring);
         }
     }
+}
+
+const char* ToString(int number)
+{
+	static char buffer[50];
+	return _itoa(number, buffer, 10);
+}
+
+std::string ToString2(int number)
+{
+	return ToString(number);
+}
+
+const char* ToString(float number, int digits)
+{
+	static char buffer[50];
+	return _gcvt(number, digits, buffer);
+}
+
+std::string ToString2(float number, int digits)
+{
+	return ToString(number, digits);
 }

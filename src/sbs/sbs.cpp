@@ -30,6 +30,7 @@
 #include <OgreFontManager.h>
 #include <OgreFont.h>
 #include <OgreHardwarePixelBuffer.h>
+#include <OgreStringConverter.h>
 #include <fmod.hpp>
 #include <OgreBulletDynamicsRigidBody.h>
 #include "globals.h"
@@ -1586,7 +1587,7 @@ void SBS::ListAltitudes()
 
 	Report("--- Floor Altitudes ---\n");
 	for (int i = -Basements; i < Floors; i++)
-		Report(std::string(_itoa(i, intbuffer, 10)) + "(" + GetFloor(i)->ID + ")\t----\t" + std::string(_gcvt(GetFloor(i)->FullHeight(), 6, buffer)) + "\t----\t" + std::string(_gcvt(GetFloor(i)->Altitude, 6, buffer)));
+		Report(ToString2(i) + "(" + GetFloor(i)->ID + ")\t----\t" + ToString2(GetFloor(i)->FullHeight()) + "\t----\t" + ToString2(GetFloor(i)->Altitude));
 }
 
 Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
@@ -1597,7 +1598,7 @@ Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startflo
 	{
 		if (ShaftArray[i].number == number)
 		{
-			std::string num = Ogre::StringConverter::toString(number);
+			std::string num = ToString(number);
 			ReportError("Shaft " + num + " already exists");
 			return 0;
 		}
@@ -1612,13 +1613,13 @@ Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startflo
 
 	if (IsValidFloor(_startfloor) == false)
 	{
-		std::string num = Ogre::StringConverter::toString(_startfloor);
+		std::string num = ToString(_startfloor);
 		ReportError("CreateShaft: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		std::string num = Ogre::StringConverter::toString(_endfloor);
+		std::string num = ToString(_endfloor);
 		ReportError("CreateShaft: Invalid ending floor " + num);
 		return 0;
 	}
@@ -1637,7 +1638,7 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	{
 		if (StairsArray[i].number == number)
 		{
-			std::string num = Ogre::StringConverter::toString(number);
+			std::string num = ToString(number);
 			ReportError("Stairwell " + num + " already exists");
 			return 0;
 		}
@@ -1651,13 +1652,13 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	}
 	if (IsValidFloor(_startfloor) == false)
 	{
-		std::string num = Ogre::StringConverter::toString(_startfloor);
+		std::string num = ToString(_startfloor);
 		ReportError("CreateStairwell: Invalid starting floor " + num);
 		return 0;
 	}
 	if (IsValidFloor(_endfloor) == false)
 	{
-		std::string num = Ogre::StringConverter::toString(_endfloor);
+		std::string num = ToString(_endfloor);
 		ReportError("CreateStairwell: Invalid ending floor " + num);
 		return 0;
 	}
@@ -2806,10 +2807,10 @@ std::string SBS::DumpState()
 	output.append("\n");
 	output.append("CameraFloor: ");
 	if (camera)
-		output.append(_itoa(camera->CurrentFloor, intbuffer, 10));
+		output.append(ToString(camera->CurrentFloor));
 	output.append("\n");
 	output.append("ElevatorNumber: ");
-	output.append(_itoa(ElevatorNumber, intbuffer, 10));
+	output.append(ToString(ElevatorNumber));
 	output.append("\n");
 	output.append("ElevatorSync: ");
 	output.append(std::string(BoolToString(ElevatorSync)).c_str());
@@ -2836,12 +2837,12 @@ std::string SBS::DumpState()
 	output.append(std::string(BoolToString(InterfloorOnTop)).c_str());
 	output.append("\n");
 	output.append("Object Count: ");
-	output.append(_itoa(ObjectCount, intbuffer, 10));
+	output.append(ToString(ObjectCount));
 	output.append("\n");
 	if (camera)
 	{
 		output.append("Camera Floor: ");
-		output.append(_itoa(camera->CurrentFloor, intbuffer, 10));
+		output.append(ToString(camera->CurrentFloor));
 		output.append("\n");
 		output.append("Camera Position: " + TruncateNumber(camera->GetPosition().x, 2) + ", " + TruncateNumber(camera->GetPosition().y, 2) + ", " + TruncateNumber(camera->GetPosition().z, 2) + "\n");
 	}
@@ -2860,7 +2861,7 @@ bool SBS::DeleteObject(Object *object)
 		return false;
 	}
 
-	std::string number = Ogre::StringConverter::toString(object->GetNumber());
+	std::string number = ToString(object->GetNumber());
 	bool deleted = false;
 
 	if (!object->GetRawObject())
@@ -3266,7 +3267,7 @@ Object* SBS::AddModel(const char *name, const char *filename, bool center, Ogre:
 
 int SBS::GetConfigInt(std::string key, int default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
@@ -3277,13 +3278,13 @@ std::string SBS::GetConfigString(std::string key, std::string default_value)
 
 bool SBS::GetConfigBool(std::string key, bool default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
 float SBS::GetConfigFloat(std::string key, float default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }
 
@@ -3552,7 +3553,7 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 			std::string tmpname = ObjectArray[i]->GetName();
 			for (int j = RangeL; j <= RangeH; j++)
 			{
-				std::string number = _itoa(j, intbuffer, 10);
+				std::string number = ToString(j);
 				if (type == "floor")
 				{
 					if (tmpname == "Floor " + number)
@@ -3632,7 +3633,7 @@ void SBS::AddKey(int keyid, std::string name)
 	key.name = name;
 	keys.push_back(key);
 
-	std::string id = _itoa(keyid, intbuffer, 10);
+	std::string id = ToString(keyid);
 	Report("Added key " + id + " (" + name + ") to keyring");
 }
 
@@ -3656,7 +3657,7 @@ void SBS::ListKeys()
 
 	for (int i = 0; i < keys.size(); i++)
 	{
-		std::string id = _itoa(keys[i].id, intbuffer, 10);
+		std::string id = ToString(keys[i].id);
 		Report(id + " - " + keys[i].name);
 	}
 }

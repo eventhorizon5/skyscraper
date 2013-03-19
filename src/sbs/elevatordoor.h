@@ -172,9 +172,6 @@ private:
 
 	void MoveDoors(bool open, bool manual);
 
-	char intbuffer[65];
-	char buffer[20];
-
 	//door autoclose timer
 	class Timer : public wxTimer
 	{

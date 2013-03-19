@@ -111,9 +111,6 @@ private:
 
 	//Triggers
 	//std::vector<std::vector<Trigger*> > TriggerArray;
-
-	char intbuffer[65];
-	char buffer[20];
 };
 
 #endif
