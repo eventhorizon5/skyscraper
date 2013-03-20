@@ -183,7 +183,7 @@ void WallObject::DeletePolygons(bool recreate_collider)
 {
 	//delete polygons and handles
 	
-	for (int i = 0; i < (int)handles.size(); i++)
+	for (int i = (int)handles.size() - 1; i >= 0; i--)
 		DeletePolygon(i, false);
 
 	//recreate colliders
