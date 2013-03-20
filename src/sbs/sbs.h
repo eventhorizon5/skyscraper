@@ -166,7 +166,6 @@ public:
 	std::string LastNotification; //most recent notification message, from Report()
 	int WallCount; //wall object count
 	int PolygonCount; //wall polygon object count
-	bool Shaders; //true if shaders are enabled
 	bool enable_profiling; //enable general profiling
 	bool enable_advanced_profiling;
 
@@ -174,7 +173,7 @@ public:
 	int mouse_x, mouse_y;
 
 	//public functions
-	SBS();
+	SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem);
 	~SBS();
 	void Report(std::string message);
 	bool ReportError(std::string message);
@@ -191,7 +190,6 @@ public:
 	bool ScaleTexture(const char *name, float x_scale, float y_scale);
 	bool TransformTexture(const char *name, const char *type, const char *wave_type, float base, float frequency, float phase, float amplitude);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
-	bool Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem);
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	int AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);

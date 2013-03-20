@@ -110,7 +110,6 @@ bool Skyscraper::OnInit(void)
 	Shutdown = false;
 	PositionOverride = false;
 	Reload = false;
-	Shaders = false;
 	mRoot = 0;
 	mRenderWindow = 0;
 	mViewport = 0;
@@ -1451,12 +1450,8 @@ bool Skyscraper::Start()
 	
 	Starting = true;
 
-	//Create new simulator object
-	Simcore = new SBS();
-
-	//initialize SBS
-	Simcore->Initialize(mRenderWindow, mSceneMgr, mCamera, root_dir.c_str(), dir_char.c_str(), soundsys);
-	Simcore->Shaders = Shaders;
+	//Create and initialize simulator
+	Simcore = new SBS(mRenderWindow, mSceneMgr, mCamera, root_dir.c_str(), dir_char.c_str(), soundsys);
 
 	//load building data file
 	Report("\nLoading building data from " + BuildingFile + "...\n");

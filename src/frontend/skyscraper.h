@@ -67,7 +67,6 @@ public:
 	bool PositionOverride;
 	Ogre::Vector3 override_position;
 	Ogre::Vector3 override_rotation;
-	bool Shaders;
 	int SkyMult; //sky time multiplier
 
 	unsigned int elapsed_time, current_time;

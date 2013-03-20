@@ -41,7 +41,7 @@
 
 SBS *sbs; //self reference
 
-SBS::SBS()
+SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem)
 {
 	sbs = this;
 	version = "0.9.0." + std::string(SVN_REVSTR);
@@ -57,7 +57,16 @@ SBS::SBS()
 	//Pause for 2 seconds
 	wxSleep(2);
 
-	//initialize other variables
+	mRoot = Ogre::Root::getSingletonPtr();
+	this->mSceneManager = mSceneManager;
+
+	root_dir = rootdirectory;
+	dir_char = directory_char;
+
+	//load config file
+	configfile.load("skyscraper.ini");
+
+	//initialize variables
 	BuildingName = "";
 	BuildingDesigner = "";
 	BuildingLocation = "";
@@ -80,8 +89,8 @@ SBS::SBS()
 	FPS = 0;
 	FrameRate = 30;
 	FrameLimiter = false;
-	AutoShafts = true;
-	AutoStairs = true;
+	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
+	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
 	ElevatorSync = false;
 	ElevatorNumber = 1;
 	mouse_x = 0;
@@ -108,7 +117,7 @@ SBS::SBS()
 	AutoX = true;
 	AutoY = true;
 	TextureOverride = false;
-	ProcessElevators = true;
+	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);;
 	FlipTexture = false;
 	mainnegflip = 0;
 	mainposflip = 0;
@@ -122,7 +131,7 @@ SBS::SBS()
 	start_time = 0;
 	running_time = 0;
 	InShaft = false;
-	DisableSound = false;
+	DisableSound = GetConfigBool("Skyscraper.SBS.DisableSound", false);;
 	MapIndex.resize(3);
 	MapUV.resize(3);
 	OldMapIndex.resize(3);
@@ -154,15 +163,14 @@ SBS::SBS()
 	}
 	RecreateColliders = false;
 	soundcount = 0;
-	UnitScale = 1;
-	Verbose = false;
+	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
+	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
-	DefaultMapper = 0;
+	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
 	ObjectCount = 0;
 	FastDelete = false;
 	WallCount = 0;
 	PolygonCount = 0;
-	Shaders = false;
 	SkyBox = 0;
 	Landscape = 0;
 	External = 0;
@@ -203,6 +211,56 @@ SBS::SBS()
 	getstairs_number = 0;
 	texturecount = 0;
 	materialcount = 0;
+	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
+	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
+	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
+	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
+	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
+	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
+
+	if (UnitScale <= 0)
+		UnitScale = 1;
+
+	//set default texture map values
+	ResetTextureMapping(true);
+
+	//disable sound if system is not available
+	if (!fmodsystem)
+		DisableSound = true;
+	soundsys = fmodsystem;
+
+	//set up sound options (mainly to set sound distance factor to feet instead of meters)
+	if (DisableSound == false)
+		soundsys->set3DSettings(1.0, 3.28, 1.0);
+
+	//set up physics
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true);
+	mWorld->setAllowedCcdPenetration(0);
+
+	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
+	debugDrawer->setDrawWireframe(true);
+	mWorld->setDebugDrawer(debugDrawer);
+	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Ogre::Vector3::ZERO);
+	node->attachObject(static_cast<Ogre::SimpleRenderable*> (debugDrawer));
+	*/
+
+	//mount sign texture packs
+	Mount("signs-sans.zip", "signs/sans");
+	Mount("signs-sans_bold.zip", "signs/sans_bold");
+	Mount("signs-sans_cond.zip", "signs/sans_cond");
+	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
+
+	//load default textures
+	Report("Loading default textures...");
+	SetLighting();
+	LoadTexture("data/default.png", "Default", 1, 1);
+	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
+	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
+	ResetLighting();
+	Report("Done");
+
+	//create camera object
+	this->camera = new Camera(camera);
 }
 
 SBS::~SBS()
@@ -569,76 +627,6 @@ void SBS::CalculateFrameRate()
 		fps_frame_count = 0;
 		fps_tottime = 0;
 	}
-}
-
-bool SBS::Initialize(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem)
-{
-	mRoot = Ogre::Root::getSingletonPtr();
-	this->mSceneManager = mSceneManager;
-
-	root_dir = rootdirectory;
-	dir_char = directory_char;
-
-	//load config file
-	configfile.load("skyscraper.ini");
-
-	//load default values from config file
-	SkyName = GetConfigString("Skyscraper.SBS.SkyName", "noon");
-	AutoShafts = GetConfigBool("Skyscraper.SBS.AutoShafts", true);
-	AutoStairs = GetConfigBool("Skyscraper.SBS.AutoStairs", true);
-	ShaftDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftDisplayRange", 3);
-	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
-	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
-	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
-	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
-	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
-	DisableSound = GetConfigBool("Skyscraper.SBS.DisableSound", false);
-	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
-	if (UnitScale <= 0)
-		UnitScale = 1;
-	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
-	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
-	ResetTextureMapping(true); //set default texture map values
-
-	//disable sound if system is not available
-	if (!fmodsystem)
-		DisableSound = true;
-	soundsys = fmodsystem;
-
-	//set up sound options (mainly to set sound distance factor to feet instead of meters)
-	if (DisableSound == false)
-		soundsys->set3DSettings(1.0, 3.28, 1.0);
-
-	//set up physics
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true);
-	mWorld->setAllowedCcdPenetration(0);
-
-	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
-	debugDrawer->setDrawWireframe(true);
-	mWorld->setDebugDrawer(debugDrawer);
-	Ogre::SceneNode *node = mSceneManager->getRootSceneNode()->createChildSceneNode("debugDrawer", Ogre::Vector3::ZERO);
-	node->attachObject(static_cast<Ogre::SimpleRenderable*> (debugDrawer));
-	*/
-
-	//mount sign texture packs
-	Mount("signs-sans.zip", "signs/sans");
-	Mount("signs-sans_bold.zip", "signs/sans_bold");
-	Mount("signs-sans_cond.zip", "signs/sans_cond");
-	Mount("signs-sans_cond_bold.zip", "signs/sans_cond_bold");
-
-	//load default textures
-	Report("Loading default textures...");
-	SetLighting();
-	LoadTexture("data/default.png", "Default", 1, 1);
-	LoadTexture("data/gray2-sm.jpg", "ConnectionWall", 1, 1);
-	LoadTexture("data/metal1-sm.jpg", "Connection", 1, 1);
-	ResetLighting();
-	Report("Done");
-
-	//create camera object
-	this->camera = new Camera(camera);
-	
-	return true;
 }
 
 int SBS::AddWallMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
