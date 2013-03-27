@@ -504,7 +504,7 @@ bool Skyscraper::Initialize()
 	FMOD_RESULT result = FMOD::System_Create(&soundsys);
 	if (result != FMOD_OK)
 	{
-		printf("Error initializing sound\n");
+		ReportFatalError("Error initializing sound");
 		DisableSound = true;
 	}
 	else
@@ -512,7 +512,7 @@ bool Skyscraper::Initialize()
 		result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
 		if (result != FMOD_OK)
 		{
-			printf("Error initializing sound\n");
+			ReportFatalError("Error initializing sound");
 			DisableSound = true;
 		}
 		else
@@ -1469,7 +1469,7 @@ bool Skyscraper::Start()
 	if (!processor->LoadDataFile(BuildingFile.c_str()))
 	{
 		loaderror = true;
-		ReportError("Error loading building file\n");
+		ReportFatalError("Error loading building file\n");
 	}
 	if (loaderror == false)
 	{
@@ -1728,6 +1728,14 @@ bool Skyscraper::InitSky()
 	//initialize sky
 
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
+
+	bool vprogs = mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_VERTEX_PROGRAM);
+	bool fprogs = mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_FRAGMENT_PROGRAM);
+
+	if (!vprogs)
+		return ReportError("Error initializing Caelum: GPU vertex programs not supported");
+	if (!fprogs)
+		return ReportError("Error initializing Caelum: GPU fragment programs not supported");
 
 	try
 	{
