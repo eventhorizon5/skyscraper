@@ -1,0 +1,38 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OgreBulletCollisions", "OgreBulletCollisions.vcxproj", "{791F594F-FF44-49D1-A882-FF4DB0DCD92A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OgreBulletDynamics", "OgreBulletDynamics.vcxproj", "{022634CE-F06A-4F71-AA07-3CE7BB1841AE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A} = {791F594F-FF44-49D1-A882-FF4DB0DCD92A}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Debug|x64 = Debug|x64
+		Release|Win32 = Release|Win32
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|Win32.Build.0 = Debug|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|x64.ActiveCfg = Debug|x64
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|x64.Build.0 = Debug|x64
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|Win32.ActiveCfg = Release|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|Win32.Build.0 = Release|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|x64.ActiveCfg = Release|x64
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|x64.Build.0 = Release|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|Win32.Build.0 = Debug|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|x64.ActiveCfg = Debug|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|x64.Build.0 = Debug|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|Win32.ActiveCfg = Release|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|Win32.Build.0 = Release|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|x64.ActiveCfg = Release|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
