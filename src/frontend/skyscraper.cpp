@@ -522,10 +522,6 @@ bool Skyscraper::Initialize()
 		{
 			return ReportFatalError("Error initializing Caelum plugin:\nDetails:" + e.getDescription());
 		}
-		catch (Caelum::UnsupportedException& e)
-		{
-			return ReportFatalError("Error initializing Caelum:\nDetails:" + e.getDescription());
-		}
 	}
 
 	//set platform name
@@ -1745,10 +1741,6 @@ bool Skyscraper::InitSky()
 	{
 		ReportError("Error initializing Caelum:\nDetails:" + e.getDescription());
 	}
-	catch (Caelum::UnsupportedException& e)
-	{
-		ReportError("Error initializing Caelum:\nDetails:" + e.getDescription());
-	}
 
 	if (mCaelumSystem)
 	{
@@ -1762,10 +1754,6 @@ bool Skyscraper::InitSky()
 			mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
 		}
 		catch (Ogre::Exception &e)
-		{
-			ReportError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
-		}
-		catch (Caelum::UnsupportedException& e)
 		{
 			ReportError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
 		}
