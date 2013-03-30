@@ -779,7 +779,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 			font->setTrueTypeSize(font_size);
 			font->setTrueTypeResolution(96);
 			//font->setAntialiasColour(true);
-			font->addCodePointRange(Ogre::Font::CodePointRange(48, 122));
+			font->addCodePointRange(Ogre::Font::CodePointRange(32, 126));
 			font->load();
 		}
 		catch (Ogre::Exception &e)
