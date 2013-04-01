@@ -25,8 +25,6 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 
-class ScriptProcessor;
-
 class ScriptProcessor
 {
 	public:
@@ -64,7 +62,6 @@ class ScriptProcessor
 	bool getfloordata;
 	bool setshaftdoors;
 	std::vector<std::string> BuildingData;
-	std::vector<std::string> UserVariable;
 	Ogre::Vector3 MinExtent;
 	Ogre::Vector3 MaxExtent;
 	bool InFunction;
@@ -109,6 +106,14 @@ class ScriptProcessor
 	};
 
 	std::vector<IncludeInfo> includes; //stored include mappings
+
+	struct VariableMap
+	{
+		std::string name;
+		std::string value;
+	};
+
+	std::vector<VariableMap> variables; //named user variables
 
 	bool floorcache_firstrun;
 	int cache_current;

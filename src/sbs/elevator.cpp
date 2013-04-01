@@ -185,7 +185,7 @@ Elevator::Elevator(int number)
 	LastChimeDirection = 0;
 
 	//create timers
-	timer = new Timer(this, 0);
+	parking_timer = new Timer(this, 0);
 	random_timer = new Timer(this, 1);
 	arrival_delay = new Timer(this, 2);
 	departure_delay = new Timer(this,3);
@@ -251,12 +251,12 @@ Elevator::~Elevator()
 	if (sbs->Verbose)
 		Report("deleting timers");
 
-	if (timer)
+	if (parking_timer)
 	{
-		timer->Stop();
-		delete timer;
+		parking_timer->Stop();
+		delete parking_timer;
 	}
-	timer = 0;
+	parking_timer = 0;
 
 	if (random_timer)
 	{
@@ -1350,11 +1350,8 @@ void Elevator::MonitorLoop()
 	}
 
 	//enable auto-park timer if specified
-	if (ParkingDelay > 0 && Running == true && IsIdle() == true)
-	{
-		if (timer->IsRunning() == false)
-			timer->Start(ParkingDelay * 1000, true);
-	}
+	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false)
+		parking_timer->Start(ParkingDelay * 1000, true);
 
 	//enable random call timer
 	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false)
@@ -2159,6 +2156,22 @@ void Elevator::FinishMove()
 				ResetQueue(false, true);
 			else if (QueuePositionDirection == -1 && DownQueue.size() == 0 && UpQueue.size() > 0)
 				ResetQueue(true, false);
+		}
+
+		//reverse queues if at either top or bottom of serviced floors
+		if (QueuePositionDirection == 1 && GotoFloor == GetTopFloor())
+		{
+			if (sbs->Verbose)
+				Report("at top floor; setting queue search direction to down");
+			LastQueueDirection = QueuePositionDirection;
+			QueuePositionDirection = -1;
+		}
+		else if (QueuePositionDirection == -1 && GotoFloor == GetBottomFloor())
+		{
+			if (sbs->Verbose)
+				Report("at bottom floor; setting queue search direction to up");
+			LastQueueDirection = QueuePositionDirection;
+			QueuePositionDirection = 1;
 		}
 
 		//open doors
@@ -4101,7 +4114,7 @@ void Elevator::Timer::Notify()
 	{
 		//parking timer
 
-		if (elevator->ParkingDelay > 0 && elevator->IsIdle() == true)
+		if (elevator->ParkingDelay > 0 && elevator->IsIdle() == true && elevator->InServiceMode() == false)
 		{
 			int floor = elevator->GetFloor();
 			if (elevator->ParkingFloor != floor)
@@ -4117,29 +4130,36 @@ void Elevator::Timer::Notify()
 
 			Stop();
 		}
+		else if (elevator->InServiceMode() == true)
+			Stop(); //stop timer if in service mode
 	}
-	else if (type == 1 && elevator->RandomActivity == true)
+	else if (type == 1)
 	{
 		//random call timer
-		
-		RandomGen rnd_main(time(0) + elevator->Number);
-		RandomGen rnd_floor(sbs->GetRunTime() + elevator->Number);
 
-		int num, floor;
+		if (elevator->RandomActivity == true && elevator->InServiceMode() == false)
+		{
+			RandomGen rnd_main(time(0) + elevator->Number);
+			RandomGen rnd_floor(sbs->GetRunTime() + elevator->Number);
 
-		//get call probability
-		if (elevator->RandomProbability > 1)
-			num = rnd_main.Get(elevator->RandomProbability - 1);
-		else
-			num = 0;
+			int num, floor;
 
-		//get call floor
-		int index = rnd_floor.Get(elevator->ServicedFloors.size());
-		floor = elevator->ServicedFloors[index];
+			//get call probability
+			if (elevator->RandomProbability > 1)
+				num = rnd_main.Get(elevator->RandomProbability - 1);
+			else
+				num = 0;
 
-		//if probability number matched, press selected floor button
-		if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
-			elevator->PressFloorButton(floor);
+			//get call floor
+			int index = rnd_floor.Get(elevator->ServicedFloors.size());
+			floor = elevator->ServicedFloors[index];
+
+			//if probability number matched, press selected floor button
+			if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
+				elevator->PressFloorButton(floor);
+		}
+		else if (elevator->InServiceMode() == true)
+			Stop(); //stop timer if in service mode
 	}
 	else if (type > 1)
 	{
@@ -4895,8 +4915,8 @@ bool Elevator::AvailableForCall(int floor, int direction)
 		//and if no queue changes are pending
 		if (QueuePending == false)
 		{
-			//and if elevator either has limitqueue off, or has limitqueue on and is eligible
-			if (LimitQueue == false || (LimitQueue == true && QueuePositionDirection == 0))
+			//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
+			if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 			{
 				//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
 				if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
@@ -4905,7 +4925,7 @@ bool Elevator::AvailableForCall(int floor, int direction)
 					//current floor and called up, or on the same floor and not moving, or idle
 					if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 					{
-						//and if it's either going the same direction as the call or idle
+						//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
 						if (QueuePositionDirection == direction || IsIdle())
 						{
 							//and if nudge mode is off on all doors

@@ -307,7 +307,7 @@ private:
 	};
 
 	//parking timer object
-	Timer *timer;
+	Timer *parking_timer;
 
 	//random call timer object
 	Timer *random_timer;

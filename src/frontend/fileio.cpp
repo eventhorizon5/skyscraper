@@ -52,19 +52,6 @@ extern Skyscraper *skyscraper;
 
 ScriptProcessor::ScriptProcessor()
 {
-	//set variable array size
-	UserVariable.resize(256);
-}
-
-ScriptProcessor::~ScriptProcessor()
-{
-
-}
-
-bool ScriptProcessor::LoadBuilding()
-{
-	//building loader/script interpreter
-
 	line = 0; //line number
 	LineData = "";  //line contents
 	Current = 0;
@@ -83,7 +70,6 @@ bool ScriptProcessor::LoadBuilding()
 	startpos = 0;
 	getfloordata = false;
 	setshaftdoors = false;
-	int returncode = 0;
 	MinExtent = 0;
 	MaxExtent = 0;
 	InFunction = false;
@@ -102,10 +88,22 @@ bool ScriptProcessor::LoadBuilding()
 	cache_interfloorheight_s = "";
 	cache_base = 0;
 	cache_base_s = "";
-	int progress_marker = 0;
 	setkey = false;
 	keyvalue = 0;
 	lockvalue = 0;
+}
+
+ScriptProcessor::~ScriptProcessor()
+{
+
+}
+
+bool ScriptProcessor::LoadBuilding()
+{
+	//building loader/script interpreter
+
+	int returncode = 0;
+	int progress_marker = 0;
 
 	while (line < (int)BuildingData.size())
 	{
@@ -503,19 +501,22 @@ breakpoint:
 				std::string str = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
 				TrimString(str);
 				temp2 = str;
-				if (IsNumeric(temp2.c_str()) == true)
+
+				bool found = false;
+				for (int i = 0; i < variables.size(); i++)
 				{
-					temp4 = atoi(temp2.c_str());
-					if (temp4 < 0 || temp4 > (int)UserVariable.size() - 1)
+					if (variables[i].name == temp2)
 					{
-						ScriptError("Invalid variable number");
-						return false;
+						found = true;
+
+						//replace all occurrences of the variable with it's value
+						ReplaceAll(LineData, std::string("%" + temp2 + "%").c_str(), variables[i].value.c_str());
+						startpos = temp1;
+						break;
 					}
-					//replace all occurrences of the variable with it's value
-					ReplaceAll(LineData, std::string("%" + temp2 + "%").c_str(), UserVariable[temp4].c_str());
-					startpos = temp1;
 				}
-				else
+
+				if (found == false)
 					startpos = temp3 + 1;
 			}
 			else
@@ -1322,17 +1323,51 @@ int ScriptProcessor::ProcCommands()
 	if (linecheck.substr(0, 4) == "set " && Section != 2 && Section != 4)
 	{
 		temp1 = LineData.find("=", 0);
-		temp3 = atoi(LineData.substr(4, temp1 - 5).c_str());
+		if (temp1 < 0)
+			return ScriptError("Syntax Error");
+
+		std::string str = LineData.substr(4, temp1 - 5);
+		TrimString(str);
+
+		//reserved keywords
+		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param")
+			return ScriptError("Cannot use system variable name");
 
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData.c_str());
 
-		if (temp3 < 0 || temp3 > UserVariable.size() - 1)
-			return ScriptError("Invalid variable number");
+		//find existing variable by name
+		int index = -1;
+		for (int i = 0; i < variables.size(); i++)
+		{
+			if (variables[i].name == str)
+			{
+				index = i;
+				break;
+			}
+		}
 
-		UserVariable[temp3] = Calc(temp2.c_str());
+		std::string value = Calc(temp2.c_str());
+
+		if (index == -1)
+		{
+			//create new variable
+			VariableMap variable;
+			variable.name = str;
+			variable.value = value;
+			variables.push_back(variable);
+			value = variable.value;
+		}
+		else
+		{
+			//set existing variable
+			variables[index].name = str;
+			variables[index].value = value;
+			value = variables[index].value;
+		}
+
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + ToString2(temp3) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable '" + str + "' set to " + value);
 		return sNextLine;
 	}
 
@@ -3320,19 +3355,49 @@ int ScriptProcessor::ProcFloors()
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
 			return ScriptError("Syntax Error");
+
 		std::string str = LineData.substr(4, temp1 - 5);
 		TrimString(str);
-		if (!IsNumeric(str.c_str(), temp3))
-			return ScriptError("Invalid variable number");
+
+		//reserved keywords
+		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param")
+			return ScriptError("Cannot use system variable name");
 
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData.c_str());
 
-		if (temp3 < 0 || temp3 > (int)UserVariable.size() - 1)
-			return ScriptError("Invalid variable number");
-		UserVariable[temp3] = Calc(temp2.c_str());
+		//find existing variable by name
+		int index = -1;
+		for (int i = 0; i < variables.size(); i++)
+		{
+			if (variables[i].name == str)
+			{
+				index = i;
+				break;
+			}
+		}
+
+		std::string value = Calc(temp2.c_str());
+
+		if (index == -1)
+		{
+			//create new variable
+			VariableMap variable;
+			variable.name = str;
+			variable.value = value;
+			variables.push_back(variable);
+			value = variable.value;
+		}
+		else
+		{
+			//set existing variable
+			variables[index].name = str;
+			variables[index].value = value;
+			value = variables[index].value;
+		}
+
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + ToString2(temp3) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable '" + str + "' set to " + value);
 		return sNextLine;
 	}
 
@@ -6774,22 +6839,50 @@ int ScriptProcessor::ProcElevators()
 	{
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
-			return ScriptError("Syntax error");
+			return ScriptError("Syntax Error");
 
 		std::string str = LineData.substr(4, temp1 - 5);
 		TrimString(str);
-		if (!IsNumeric(str.c_str(), temp3))
-			return ScriptError("Invalid variable number");
+
+		//reserved keywords
+		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param")
+			return ScriptError("Cannot use system variable name");
 
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData.c_str());
 
-		if (temp3 < 0 || temp3 > (int)UserVariable.size() - 1)
-			return ScriptError("Invalid variable number");
+		//find existing variable by name
+		int index = -1;
+		for (int i = 0; i < variables.size(); i++)
+		{
+			if (variables[i].name == str)
+			{
+				index = i;
+				break;
+			}
+		}
 
-		UserVariable[temp3] = Calc(temp2.c_str());
+		std::string value = Calc(temp2.c_str());
+
+		if (index == -1)
+		{
+			//create new variable
+			VariableMap variable;
+			variable.name = str;
+			variable.value = value;
+			variables.push_back(variable);
+			value = variable.value;
+		}
+		else
+		{
+			//set existing variable
+			variables[index].name = str;
+			variables[index].value = value;
+			value = variables[index].value;
+		}
+
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable " + ToString2(temp3) + " set to " + UserVariable[temp3]);
+			skyscraper->Report("Variable '" + str + "' set to " + value);
 		return sNextLine;
 	}
 

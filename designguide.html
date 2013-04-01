@@ -82,13 +82,13 @@ at the top of your building file. The Triton Center file has this header:<br>
 <strong>2. Variables</strong></p>
 
 <p align="left">Variables are marked with percent signs (%), and most system
-variables will be described later. There are 256 user variables (0-255) which
-can be set using the Set command:<font face="Courier New, Courier, mono"
-size="2"><br>
-Set 2 = 100<br>
+variables will be described later. Variables can be set using the Set
+command:<font face="Courier New, Courier, mono" size="2"><br>
+Set myvariable = 100<br>
 </font>and then can be used later:<font face="Courier New, Courier, mono"
 size="2"><br>
-Height = %2%<br>
+Height = %myvariable%<br>
+<br>
 </font></p>
 
 <p align="left"><strong>3. IF statements</strong></p>
@@ -115,6 +115,7 @@ less than 82:<br>
 <p align="left">In the above example, the statement will be true if the
 <em>floor</em> value is less than 82 and if the <em>height</em> value is either
 3 or 5.<br>
+<br>
 </p>
 
 <p align="left"><strong>4. Inline calculations</strong></p>
