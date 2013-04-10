@@ -118,7 +118,6 @@ bool Skyscraper::OnInit(void)
 	mCamera = 0;
 	sound = 0;
 	channel = 0;
-	SkyName = "DefaultSky";
 	SkyMult = 1;
 	mCaelumSystem = 0;
 	buttons = 0;
@@ -133,6 +132,9 @@ bool Skyscraper::OnInit(void)
 	//start and initialize OGRE
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
+
+	//set sky name
+	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	//autoload a building file if specified
 	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
@@ -1716,8 +1718,6 @@ float Skyscraper::GetConfigFloat(std::string key, float default_value)
 bool Skyscraper::InitSky()
 {
 	//initialize sky
-
-	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	bool vprogs = mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_VERTEX_PROGRAM);
 	bool fprogs = mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_FRAGMENT_PROGRAM);

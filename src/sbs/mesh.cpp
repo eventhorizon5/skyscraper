@@ -425,28 +425,32 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 					if (temppoly.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						newpolys[newpolys.size() - 1].reserve(temppoly.size());
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly.size());
 						for (int k = 0; k < (int)temppoly.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly[k]);
 					}
 					if (temppoly2.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						newpolys[newpolys.size() - 1].reserve(temppoly2.size());
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly2.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly2.size());
 						for (int k = 0; k < (int)temppoly2.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly2[k]);
 					}
 					if (temppoly3.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						newpolys[newpolys.size() - 1].reserve(temppoly3.size());
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly3.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly3.size());
 						for (int k = 0; k < (int)temppoly3.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly3[k]);
 					}
 					if (temppoly4.size() > 2)
 					{
 						newpolys.resize(newpolys.size() + 1);
-						newpolys[newpolys.size() - 1].reserve(temppoly4.size());
+						if (newpolys[newpolys.size() - 1].capacity() < temppoly4.size())
+							newpolys[newpolys.size() - 1].reserve(temppoly4.size());
 						for (int k = 0; k < (int)temppoly4.size(); k++)
 							newpolys[newpolys.size() - 1].push_back(temppoly4[k]);
 					}
@@ -653,7 +657,8 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 	{
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
-		vertices[i].reserve(vertices[i].size() + max - min + 1);
+		int newsize = vertices[i].size() + max - min + 1;
+		vertices[i].reserve(newsize);
 		if (reverse == false)
 		{
 			for (int j = min; j <= max; j++)
