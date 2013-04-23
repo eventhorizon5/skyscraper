@@ -1719,17 +1719,47 @@ bool Skyscraper::InitSky()
 {
 	//initialize sky
 
-	bool vprogs = mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_VERTEX_PROGRAM);
-	bool fprogs = mRoot->getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_FRAGMENT_PROGRAM);
+	//ensure graphics card and render system are capable of Caelum's shaders
+	if (mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName() == "Direct3D9 Rendering Subsystem")
+	{
+		//on DirectX, Caelum requires a card capable of 3.0 shader levels, which would be
+		//an ATI Radeon HD 2000, nVidia Geforce 6, Intel G965 or newer
+		//Intel cards: http://www.intel.com/support/graphics/sb/cs-014257.htm
+		Ogre::RenderSystemCapabilities::ShaderProfiles profiles = mRoot->getRenderSystem()->getCapabilities()->getSupportedShaderProfiles();
 
-	if (!vprogs)
-		return ReportError("Error initializing Caelum: GPU vertex programs not supported");
-	if (!fprogs)
-		return ReportError("Error initializing Caelum: GPU fragment programs not supported");
+		//for general sky, require both DirectX pixel and vertex shaders 2.0
+		if (profiles.find("ps_2_0") == profiles.end() ||
+			profiles.find("vs_2_0") == profiles.end())
+				return ReportError("Error initializing Caelum: 2.0 shaders not supported");
 
+		//for clouds, require either DirectX pixel shaders 3.0 or nVidia fragment shaders 4.0
+		if (profiles.find("ps_3_0") == profiles.end() ||
+			profiles.find("fp40") == profiles.end())
+				return ReportError("Error initializing Caelum: 3.0 fragment shaders not supported");
+
+		//for clouds, require either DirectX vetex shaders 3.0 or nVidia vertex shaders 4.0
+		if (profiles.find("vs_3_0") == profiles.end() ||
+			profiles.find("vp40") == profiles.end())
+				return ReportError("Error initializing Caelum: 3.0 vertex shaders not supported");
+	}
+
+	if (mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName() == "OpenGL Rendering Subsystem")
+	{
+		//on OpenGL, Caelum requires hardware support for shaders (OpenGL 2.0 or newer)
+		Ogre::RenderSystemCapabilities::ShaderProfiles profiles = mRoot->getRenderSystem()->getCapabilities()->getSupportedShaderProfiles();
+
+		//require OpenGL ARB fragment programs
+		if (profiles.find("arbfp1") == profiles.end())
+			return ReportError("Error initializing Caelum: fragment programs not supported");
+
+		//require OpenGL ARB vertex programs
+		if (profiles.find("arbvp1") == profiles.end())
+			return ReportError("Error initializing Caelum: vertex programs not supported");
+	}
+
+	//load Caelum resources
 	try
 	{
-		//load Caelum resources
 		Ogre::ResourceGroupManager::getSingleton().addResourceLocation("data/caelum", "FileSystem", "Caelum", false);
 		Ogre::ResourceGroupManager::getSingleton().initialiseResourceGroup("Caelum");
 
@@ -1742,6 +1772,7 @@ bool Skyscraper::InitSky()
 		ReportError("Error initializing Caelum:\nDetails:" + e.getDescription());
 	}
 
+	//attach caelum to running viewport
 	if (mCaelumSystem)
 	{
 		try
