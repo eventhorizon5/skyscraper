@@ -57,7 +57,6 @@ class ObjectInfo: public wxDialog
 		wxStaticLine* StaticLine1;
 		wxStaticText* StaticText8;
 		wxTextCtrl* tParentType;
-		wxButton* bModify;
 		wxStaticText* StaticText7;
 		wxButton* bSave;
 		wxTextCtrl* tPermanent;
@@ -73,6 +72,7 @@ class ObjectInfo: public wxDialog
 		wxTextCtrl* tParentName;
 		wxStaticText* StaticText9;
 		wxStaticText* StaticText11;
+		wxButton* bMove;
 		//*)
 		void Loop();
 		void PopulateTree();
@@ -84,7 +84,7 @@ class ObjectInfo: public wxDialog
 		//(*Identifiers(ObjectInfo)
 		static const long ID_ObjectTree;
 		static const long ID_bDelete;
-		static const long ID_bModify;
+		static const long ID_bMove;
 		static const long ID_bCreate;
 		static const long ID_bViewScript;
 		static const long ID_bSave;
@@ -125,6 +125,7 @@ class ObjectInfo: public wxDialog
 		void On_bModify_Click(wxCommandEvent& event);
 		void On_bSave_Click(wxCommandEvent& event);
 		void On_bViewScript_Click(wxCommandEvent& event);
+		void On_bMove_Click(wxCommandEvent& event);
 		//*)
 		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
 		bool changed;

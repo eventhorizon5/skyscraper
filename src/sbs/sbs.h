@@ -360,6 +360,10 @@ public:
 	void AddKey(int keyid, std::string name);
 	bool CheckKey(int keyid);
 	void ListKeys();
+	bool MoveObject(Object *object, Ogre::Vector3 position, bool relative);
+	bool RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative);
+	Ogre::Vector3 GetObjectPosition(Object *object);
+	Ogre::Vector3 GetObjectRotation(Object *object);
 
 	//Meshes
 	MeshObject* Buildings;

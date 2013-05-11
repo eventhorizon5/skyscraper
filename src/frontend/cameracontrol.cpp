@@ -474,7 +474,12 @@ void CameraControl::Loop()
 
 	//move if hold vector is not zero
 	if (hold_vector != Ogre::Vector3(0, 0, 0))
-		Simcore->camera->Move(hold_vector, 1);
+	{
+		if (rPosition->GetValue() == true)
+			Simcore->camera->Move(hold_vector, 1);
+		else
+			Simcore->camera->Rotate(hold_vector, 1);
+	}
 }
 
 void CameraControl::On_rPosition_Select(wxCommandEvent& event)

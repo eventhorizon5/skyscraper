@@ -63,6 +63,7 @@ public:
 	void ChangeAllLights(bool value);
 	int GetFloorButtonIndex(int floor);
 	void RemoveControl(Control *control);
+	Ogre::Vector3 GetPosition();
 
 private:
 	MeshObject* ButtonPanelMesh; //button panel mesh object

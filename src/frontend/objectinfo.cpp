@@ -36,16 +36,18 @@
 #include "createobject.h"
 #include "parameterviewer.h"
 #include "textwindow.h"
+#include "moveobject.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
 extern Skyscraper *skyscraper;
 CreateObject *createobject;
 ParameterViewer *modifyobject;
+MoveObject *moveobject;
 
 //(*IdInit(ObjectInfo)
 const long ObjectInfo::ID_ObjectTree = wxNewId();
 const long ObjectInfo::ID_bDelete = wxNewId();
-const long ObjectInfo::ID_bModify = wxNewId();
+const long ObjectInfo::ID_bMove = wxNewId();
 const long ObjectInfo::ID_bCreate = wxNewId();
 const long ObjectInfo::ID_bViewScript = wxNewId();
 const long ObjectInfo::ID_bSave = wxNewId();
@@ -100,9 +102,8 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
 	BoxSizer2->Add(bDelete, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bModify = new wxButton(this, ID_bModify, _("Modify"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bModify"));
-	bModify->Disable();
-	BoxSizer2->Add(bModify, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bMove = new wxButton(this, ID_bMove, _("Move"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMove"));
+	BoxSizer2->Add(bMove, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bCreate = new wxButton(this, ID_bCreate, _("Create"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCreate"));
 	BoxSizer2->Add(bCreate, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer4->Add(BoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -177,7 +178,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 
 	Connect(ID_ObjectTree,wxEVT_COMMAND_TREE_SEL_CHANGED,(wxObjectEventFunction)&ObjectInfo::On_ObjectTree_SelectionChanged);
 	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bDelete_Click);
-	Connect(ID_bModify,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bModify_Click);
+	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bMove_Click);
 	Connect(ID_bCreate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
 	Connect(ID_bViewScript,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
 	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
@@ -212,6 +213,9 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 
 void ObjectInfo::Loop()
 {
+	if (moveobject)
+		moveobject->Loop();
+
 	int number;
 	if (changed == false)
 	{
@@ -369,4 +373,19 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	for (int i = 0; i < skyscraper->runtime_script.size(); i++)
 			twindow->tMain->WriteText(wxString::FromAscii(skyscraper->runtime_script[i].c_str()) + wxT("\n"));
 	twindow->tMain->SetInsertionPoint(0);
+}
+
+void ObjectInfo::On_bMove_Click(wxCommandEvent& event)
+{
+	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(ObjectTree->GetSelection());
+	wxString num;
+	num = data->GetDesc();
+	int number = atoi(num.ToAscii());
+
+	if (moveobject)
+		delete moveobject;
+	moveobject = 0;
+
+	moveobject = new MoveObject(this, -1, number);
+	moveobject->Show();
 }

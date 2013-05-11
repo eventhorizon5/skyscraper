@@ -2955,6 +2955,244 @@ bool SBS::DeleteObject(int object)
 	return DeleteObject(GetObject(object));
 }
 
+bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
+{
+	//move an object by reference
+
+	if (!object)
+	{
+		sbs->Report("Invalid object");
+		return false;
+	}
+
+	std::string number = ToString(object->GetNumber());
+
+	if (!object->GetRawObject())
+	{
+		sbs->Report("Invalid raw object " + number);
+		return false;
+	}
+
+	std::string type = object->GetType();
+
+	if (type == "Mesh")
+	{
+		MeshObject* mesh = (MeshObject*)object->GetRawObject();
+		mesh->Move(position, relative, relative, relative);
+	}
+	if (type == "ButtonPanel")
+	{
+		ButtonPanel* panel = (ButtonPanel*)object->GetRawObject();
+		if (relative == true)
+			panel->Move(position);
+	}
+	if (type == "DirectionalIndicator")
+	{
+		DirectionalIndicator* ind = (DirectionalIndicator*)object->GetRawObject();
+		if (relative == true)
+			ind->Move(position);
+		else
+			ind->SetPosition(position);
+	}
+	if (type == "Door")
+	{
+		Door* door = (Door*)object->GetRawObject();
+		door->Move(position, relative, relative, relative);
+	}
+	if (type == "ElevatorDoor")
+	{
+		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
+		door->Move(position, relative, relative, relative);
+	}
+	if (type == "FloorIndicator")
+	{
+		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
+		if (relative == true)
+			ind->MovePosition(position);
+	}
+	if (type == "Sound")
+	{
+		Sound* sound = (Sound*)object->GetRawObject();
+		if (relative == false)
+			sound->SetPosition(position);
+		else
+		{
+			Ogre::Vector3 newpos = sound->GetPosition() + position;
+			sound->SetPosition(newpos);
+		}
+	}
+	if (type == "Model")
+	{
+		Model* model = (Model*)object->GetRawObject();
+		model->Move(position, relative, relative, relative);
+	}
+	if (type == "Control")
+	{
+		Control* control = (Control*)object->GetRawObject();
+		if (relative == true)
+			control->Move(position);
+		else
+			control->SetPosition(position);
+	}
+	if (type == "Trigger")
+	{
+		Trigger* trigger = (Trigger*)object->GetRawObject();
+		if (relative == true)
+			trigger->Move(position);
+		else
+			trigger->SetPosition(position);
+	}
+
+	return true;
+}
+
+bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative)
+{
+	//rotate an object by reference
+
+	if (!object)
+	{
+		sbs->Report("Invalid object");
+		return false;
+	}
+
+	std::string number = ToString(object->GetNumber());
+
+	if (!object->GetRawObject())
+	{
+		sbs->Report("Invalid raw object " + number);
+		return false;
+	}
+
+	std::string type = object->GetType();
+
+	if (type == "Mesh")
+	{
+		MeshObject* mesh = (MeshObject*)object->GetRawObject();
+		if (relative == true)
+			mesh->Rotate(rotation, speed);
+		else
+			mesh->SetRotation(rotation);
+	}
+	if (type == "Model")
+	{
+		Model* model = (Model*)object->GetRawObject();
+		if (relative == true)
+			model->Rotate(rotation, speed);
+		else
+			model->SetRotation(rotation);
+	}
+
+	return true;
+}
+
+Ogre::Vector3 SBS::GetObjectPosition(Object *object)
+{
+	//get object's position
+
+	if (!object)
+	{
+		sbs->Report("Invalid object");
+		return Ogre::Vector3::ZERO;
+	}
+
+	std::string number = ToString(object->GetNumber());
+
+	if (!object->GetRawObject())
+	{
+		sbs->Report("Invalid raw object " + number);
+		return Ogre::Vector3::ZERO;
+	}
+
+	std::string type = object->GetType();
+
+	if (type == "Mesh")
+	{
+		MeshObject* mesh = (MeshObject*)object->GetRawObject();
+		return mesh->GetPosition();
+	}
+	if (type == "ButtonPanel")
+	{
+		ButtonPanel* panel = (ButtonPanel*)object->GetRawObject();
+		return panel->GetPosition();
+	}
+	if (type == "DirectionalIndicator")
+	{
+		DirectionalIndicator* ind = (DirectionalIndicator*)object->GetRawObject();
+		return ind->GetPosition();
+	}
+	if (type == "Door")
+	{
+		Door* door = (Door*)object->GetRawObject();
+		return door->GetPosition();
+	}
+	/*if (type == "ElevatorDoor")
+	{
+		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
+	}*/
+	if (type == "FloorIndicator")
+	{
+		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
+		return ind->GetPosition();
+	}
+	if (type == "Sound")
+	{
+		Sound* sound = (Sound*)object->GetRawObject();
+		return sound->GetPosition();
+	}
+	if (type == "Model")
+	{
+		Model* model = (Model*)object->GetRawObject();
+		return model->GetPosition();
+	}
+	if (type == "Control")
+	{
+		Control* control = (Control*)object->GetRawObject();
+		return control->GetPosition();
+	}
+	if (type == "Trigger")
+	{
+		Trigger* trigger = (Trigger*)object->GetRawObject();
+		return trigger->GetPosition();
+	}
+
+	return Ogre::Vector3::ZERO;
+}
+
+Ogre::Vector3 SBS::GetObjectRotation(Object *object)
+{
+	//rotate an object by reference
+
+	if (!object)
+	{
+		sbs->Report("Invalid object");
+		return Ogre::Vector3::ZERO;
+	}
+
+	std::string number = ToString(object->GetNumber());
+
+	if (!object->GetRawObject())
+	{
+		sbs->Report("Invalid raw object " + number);
+		return Ogre::Vector3::ZERO;
+	}
+
+	std::string type = object->GetType();
+
+	if (type == "Mesh")
+	{
+		MeshObject* mesh = (MeshObject*)object->GetRawObject();
+		return mesh->GetRotation();
+	}
+	if (type == "Model")
+	{
+		Model* model = (Model*)object->GetRawObject();
+		return model->GetRotation();
+	}
+
+	return Ogre::Vector3::ZERO;
+}
+
 void SBS::RemoveFloor(Floor *floor)
 {
 	//remove a floor (does not delete the object)

@@ -135,6 +135,7 @@
 					<wxDialog wxs="wxsmith/CreateObject.wxs" src="../src/frontend/createobject.cpp" hdr="../src/frontend/createobject.h" name="CreateObject" language="CPP" />
 					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/frontend/parameterviewer.cpp" hdr="../src/frontend/parameterviewer.h" name="ParameterViewer" language="CPP" />
 					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/frontend/actionviewer.cpp" hdr="../src/frontend/actionviewer.h" name="ActionViewer" language="CPP" />
+					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/frontend/moveobject.cpp" hdr="../src/frontend/moveobject.h" name="MoveObject" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />
