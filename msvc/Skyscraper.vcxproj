@@ -344,6 +344,7 @@ rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..
     <ClCompile Include="..\src\frontend\fileio.cpp" />
     <ClCompile Include="..\src\frontend\keydialog.cpp" />
     <ClCompile Include="..\src\frontend\meshcontrol.cpp" />
+    <ClCompile Include="..\src\frontend\moveobject.cpp" />
     <ClCompile Include="..\src\frontend\objectinfo.cpp" />
     <ClCompile Include="..\src\frontend\parameterviewer.cpp" />
     <ClCompile Include="..\src\frontend\profilergui.cpp" />
@@ -362,6 +363,7 @@ rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..
     <ClInclude Include="..\src\frontend\fileio.h" />
     <ClInclude Include="..\src\frontend\keydialog.h" />
     <ClInclude Include="..\src\frontend\meshcontrol.h" />
+    <ClInclude Include="..\src\frontend\moveobject.h" />
     <ClInclude Include="..\src\frontend\objectinfo.h" />
     <ClInclude Include="..\src\frontend\parameterviewer.h" />
     <ClInclude Include="..\src\frontend\profilergui.h" />
