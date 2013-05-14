@@ -1733,12 +1733,12 @@ bool Skyscraper::InitSky()
 				return ReportError("Error initializing Caelum: 2.0 shaders not supported");
 
 		//for clouds, require either DirectX pixel shaders 3.0 or nVidia fragment shaders 4.0
-		if (profiles.find("ps_3_0") == profiles.end() ||
+		if (profiles.find("ps_3_0") == profiles.end() &&
 			profiles.find("fp40") == profiles.end())
 				return ReportError("Error initializing Caelum: 3.0 fragment shaders not supported");
 
 		//for clouds, require either DirectX vetex shaders 3.0 or nVidia vertex shaders 4.0
-		if (profiles.find("vs_3_0") == profiles.end() ||
+		if (profiles.find("vs_3_0") == profiles.end() &&
 			profiles.find("vp40") == profiles.end())
 				return ReportError("Error initializing Caelum: 3.0 vertex shaders not supported");
 	}
