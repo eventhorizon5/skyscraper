@@ -202,7 +202,9 @@ ObjectInfo::~ObjectInfo()
 	if (modifyobject)
 		modifyobject->Destroy();
 	modifyobject = 0;
-
+	if (moveobject)
+		moveobject->Destroy();
+	moveobject = 0;
 }
 
 
