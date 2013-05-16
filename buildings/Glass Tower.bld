@@ -249,7 +249,7 @@ Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
     Name = Residential
     Type = Residential
     Height = 9.5
-    InterfloorHeight = 3.5
+    InterfloorHeight = 2.5
 
     #Floor
     Set 1 = Floor(%floor%).Base
