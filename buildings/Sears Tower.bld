@@ -3444,14 +3444,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
 <EndElevators>
 
-#Zone2 Locals 42 - 49
+#Zone2 Locals 42 - 48
 <Elevator 44>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 32, 41 - 48
+    ServicedFloors = 32, 41 - 47
     AssignedShaft = 16
     CreateElevator false, 13.68, 23.283, 32
 <EndElevator>
@@ -3462,7 +3462,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 32, 41 - 48
+    ServicedFloors = 32, 41 - 47
     AssignedShaft = 16
     CreateElevator false, 13.68, 14.212, 32
 <EndElevator>
@@ -3473,7 +3473,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 32, 41 - 48
+    ServicedFloors = 32, 41 - 47
     AssignedShaft = 16
     CreateElevator false, 13.68, 5.131, 32
 <EndElevator>
@@ -3547,7 +3547,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 32, 41 - 48
+    ServicedFloors = 32, 41 - 47
     AssignedShaft = 17
     CreateElevator false, 31.782, 23.283, 32
 <EndElevator>
@@ -3558,7 +3558,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 32, 41 - 48
+    ServicedFloors = 32, 41 - 47
     AssignedShaft = 17
     CreateElevator false, 31.782, 14.212, 32
 <EndElevator>
@@ -3569,7 +3569,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     Deceleration = 0.2
     AccelJerk = 0.3
     DecelJerk = 0.3
-    ServicedFloors = 32, 41 - 48
+    ServicedFloors = 32, 41 - 47
     AssignedShaft = 17
     CreateElevator false, 31.782, 5.131, 32
 <EndElevator>
@@ -3616,21 +3616,20 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     SetAutoSize = true, true
 
     #panel
-    CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button49, ButtonLit49, 2, 4, 48, 1, 1
-    AddFloorButton 1, Button48, ButtonLit48, 2, 2, 47, 1, 1
-    AddFloorButton 1, Button47, ButtonLit47, 3, 4, 46, 1, 1
-    AddFloorButton 1, Button46, ButtonLit46, 3, 2, 45, 1, 1
-    AddFloorButton 1, Button45, ButtonLit45, 4, 4, 44, 1, 1
-    AddFloorButton 1, Button44, ButtonLit44, 4, 2, 43, 1, 1
-    AddFloorButton 1, Button43, ButtonLit43, 5, 4, 42, 1, 1
-    AddFloorButton 1, Button42, ButtonLit42, 5, 2, 41, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddFloorButton 1, Button49, ButtonLit49, 2, 4, 47, 1, 1
+    AddFloorButton 1, Button48, ButtonLit48, 2, 2, 46, 1, 1
+    AddFloorButton 1, Button47, ButtonLit47, 3, 4, 45, 1, 1
+    AddFloorButton 1, Button46, ButtonLit46, 3, 2, 44, 1, 1
+    AddFloorButton 1, Button45, ButtonLit45, 4, 4, 43, 1, 1
+    AddFloorButton 1, Button44, ButtonLit44, 4, 2, 42, 1, 1
+    AddFloorButton 1, Button43, ButtonLit43, 5, 4, 41, 1, 1
+    AddFloorButton 1, Button33, ButtonLit33, 5, 2, 32, 1, 1
+    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
+    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
+    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
