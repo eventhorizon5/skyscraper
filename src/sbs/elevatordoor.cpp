@@ -222,6 +222,13 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		return;
 	}
 
+	//exit if doors are manually moving, or automatically moving and a manual open is requested
+	if (DoorIsRunning == true && (abs(OpenDoor) == 2 || (abs(OpenDoor) == 1 && manual == true)))
+	{
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
+		return;
+	}
+
 	//check if elevator doors are already open
 	if (Doors->Open == true && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
@@ -233,13 +240,6 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		}
 		else
 			sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already open");
-		return;
-	}
-
-	//exit if doors are manually opening
-	if (OpenDoor == 2 && DoorIsRunning == true)
-	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
 		return;
 	}
 
@@ -341,6 +341,13 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		return;
 	}
 
+	//exit if doors are manually moving, or automatically moving and a manual close is requested
+	if (DoorIsRunning == true && (abs(OpenDoor) == 2 || (abs(OpenDoor) == 1 && manual == true)))
+	{
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
+		return;
+	}
+
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (OpenDoor != 0 && manual == false)
 	{
@@ -353,13 +360,6 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	if (Doors->Open == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
 		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already closed");
-		return;
-	}
-
-	//exit if doors are manually closing
-	if (OpenDoor == -2 && DoorIsRunning == true)
-	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
 		return;
 	}
 
