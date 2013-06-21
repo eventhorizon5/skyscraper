@@ -123,6 +123,7 @@ bool Action::DoAction()
 	//DownOff
 	//GoOn
 	//GoOff
+	//Return
 
 	for (int i = 0; i < parent_objects.size(); i++)
 	{
@@ -238,6 +239,8 @@ bool Action::DoAction()
 				elevator->SetGoButton(true);
 			if (command_name == "gooff")
 				elevator->SetGoButton(false);
+			if (command_name == "return")
+				elevator->ReturnToNearestFloor();
 
 			if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
 			{

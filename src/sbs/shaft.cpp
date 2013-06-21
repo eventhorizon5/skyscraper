@@ -736,7 +736,7 @@ Object* Shaft::AddControl(int floor, const char *name, const char *sound, const 
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset);
+	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
 	ControlArray[floor - startfloor].push_back(control);
 	return control->object;

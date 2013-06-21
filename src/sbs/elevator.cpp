@@ -868,7 +868,7 @@ void Elevator::Stop(bool emergency)
 		ResetQueue(true, true);
 	}
 	else
-		Report("Stopping elevator");
+		Report("stopping elevator");
 }
 
 void Elevator::OpenHatch()
@@ -1419,15 +1419,49 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorFloor = GetFloor();
 		oldfloor = ElevatorFloor;
 
+		//exit if floor doesn't exist
+		if (!sbs->GetFloor(GotoFloor))
+		{
+			sbs->Report("Destination floor does not exist");
+			Direction = 0;
+			MoveElevator = false;
+			ElevatorIsRunning = false;
+			DeleteActiveRoute();
+			return;
+		}
+
+		//if destination floor is not a serviced floor, reset and exit
+		if (IsServicedFloor(GotoFloor) == false && InspectionService == false)
+		{
+			sbs->Report("Destination floor not in ServicedFloors list");
+			Direction = 0;
+			MoveElevator = false;
+			ElevatorIsRunning = false;
+			DeleteActiveRoute();
+			return;
+		}
+
+		//If elevator is already on specified floor, open doors and exit
+		if (ElevatorFloor == GotoFloor && InspectionService == false && IsLeveled() == true)
+		{
+			sbs->Report("Elevator already on specified floor");
+			Direction = 0;
+			MoveElevator = false;
+			ElevatorIsRunning = false;
+			DeleteActiveRoute();
+			goto finish; //skip main processing and run cleanup section
+		}
+
 		//Determine direction
 		if (InspectionService == false)
 		{
-			if (GotoFloor < ElevatorFloor)
+			Destination = GetDestinationAltitude(GotoFloor);
+			if (Destination < ElevatorStart)
 			{
 				Direction = -1;
 				dir_string = "down";
 			}
-			if (GotoFloor > ElevatorFloor)
+			if (Destination > ElevatorStart)
 			{
 				Direction = 1;
 				dir_string = "up";
@@ -1443,45 +1477,9 @@ void Elevator::MoveElevatorToFloor()
 
 		ActiveDirection = Direction;
 
-		//If elevator is already on specified floor, open doors and exit
-		if (ElevatorFloor == GotoFloor && InspectionService == false)
-		{
-			sbs->Report("Elevator already on specified floor");
-			Direction = 0;
-			MoveElevator = false;
-			ElevatorIsRunning = false;
-			DeleteActiveRoute();
-			goto finish; //skip main processing and run cleanup section
-		}
-
-		//if destination floor is not a serviced floor, reset and exit
-		if (IsServicedFloor(GotoFloor) == false && InspectionService == false)
-		{
-			sbs->Report("Destination floor not in ServicedFloors list");
-			Direction = 0;
-			MoveElevator = false;
-			ElevatorIsRunning = false;
-			DeleteActiveRoute();
-			return;
-		}
-
-		//exit if floor doesn't exist
-		if (!sbs->GetFloor(GotoFloor))
-		{
-			sbs->Report("Destination floor does not exist");
-			Direction = 0;
-			MoveElevator = false;
-			ElevatorIsRunning = false;
-			DeleteActiveRoute();
-			return;
-		}
-
 		//Determine distance to destination floor
 		if (InspectionService == false)
-		{
-			Destination = GetDestinationAltitude(GotoFloor);
 			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
-		}
 		else
 		{
 			//otherwise if inspection service is on, choose the altitude of the top/bottom floor
@@ -2840,6 +2838,7 @@ void Elevator::EnableInspectionService(bool value)
 		if (IsMoving == true)
 			Stop(false);
 		Report("Inspection Service mode enabled");
+		InspectionService = true;
 	}
 	else
 	{
@@ -2878,11 +2877,13 @@ void Elevator::EnableInspectionService(bool value)
 			}
 		}
 
+		InspectionService = false;
+
 		if (IsMoving == true)
 			Stop(false);
+		else
+			ReturnToNearestFloor();
 	}
-
-	InspectionService = value;
 }
 
 void Elevator::EnableFireService1(int value)
@@ -4775,7 +4776,7 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset);
+	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX + Origin.x, Origin.y, CenterZ + Origin.z));
 	ControlArray.push_back(control);
 	return control->object;
@@ -5046,6 +5047,84 @@ bool Elevator::Check(Ogre::Vector3 position)
 		sbs->ElevatorNumber = Number;
 		sbs->ElevatorSync = true;
 		return true;
+	}
+	return false;
+}
+
+int Elevator::GetNearestServicedFloor()
+{
+	//return number of closest serviced floor
+
+	if (IsServicedFloor(GetFloor()) == true)
+		return GetFloor();
+
+	if (ServicedFloors.size() == 0)
+		return 0;
+
+	bool firstrun = true;
+	int nearest = 0;
+	float nearest_difference = 0;
+
+	for (int i = 0; i < (int)ServicedFloors.size() - 1; i++)
+	{
+		if (firstrun == true)
+		{
+			if (sbs->GetFloor(ServicedFloors[i]))
+			{
+				nearest_difference = fabs(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+				nearest = i;
+				firstrun = false;
+			}
+		}
+		else
+		{
+			if (sbs->GetFloor(ServicedFloors[i]))
+			{
+				float difference = fabs(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+				if (difference < nearest_difference)
+				{
+					//mark closest
+					nearest_difference = fabs(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+					nearest = i;
+				}
+			}
+		}
+	}
+
+	return ServicedFloors[nearest];
+}
+
+bool Elevator::ReturnToNearestFloor()
+{
+	//return and relevel to nearest floor
+
+	if (IsIdle() == true && InServiceMode() == false)
+	{
+		int floor = GetNearestServicedFloor();
+		Report("returning to nearest floor");
+		Parking = true; //enable parking mode to prevent arrival notification
+
+		if (floor >= GetFloor())
+			AddRoute(floor, 1, false);
+		else
+			AddRoute(floor, -1, false);
+		return true;
+	}
+	return false;
+}
+
+bool Elevator::IsLeveled()
+{
+	//return true if elevator is leveled at a serviced floor
+
+	int floor = GetFloor();
+	if (IsServicedFloor(floor) == true)
+	{
+		if (sbs->GetFloor(floor))
+		{
+			if (GetPosition().y == sbs->GetFloor(floor)->Altitude)
+				return true;
+		}
 	}
 	return false;
 }

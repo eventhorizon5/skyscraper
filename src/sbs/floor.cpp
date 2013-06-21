@@ -1180,7 +1180,7 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset);
+	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX, GetBase(), CenterZ));
 	ControlArray.push_back(control);
 	return control->object;

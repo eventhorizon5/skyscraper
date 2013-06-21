@@ -240,7 +240,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(this->object, buffer.c_str(), sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos);
+	Control *control = controls[control_index] = new Control(this->object, buffer.c_str(), sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos, false);
 
 	//move control
 	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));

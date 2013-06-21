@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset)
+Control::Control(Object *parent, const char *name, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset, bool center)
 {
 	//create a control at the specified location
 
@@ -65,27 +65,51 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	WallObject *wall;
 	if (Direction == "front")
 	{
+		float x = 0, y = width;
+		if (center == true)
+		{
+			x = -width / 2;
+			y = width / 2;
+		}
 		sbs->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, width, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
+		float x = 0, y = -width;
+		if (center == true)
+		{
+			x = width / 2;
+			y = -width / 2;
+		}
 		sbs->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, -width, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
+		float x = 0, y = -width;
+		if (center == true)
+		{
+			x = width / 2;
+			y = -width / 2;
+		}
 		sbs->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, 0, -width, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
+		float x = 0, y = width;
+		if (center == true)
+		{
+			x = -width / 2;
+			y = width / 2;
+		}
 		sbs->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, 0, 0, width, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	sbs->TexelOverride = false;

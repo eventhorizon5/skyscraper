@@ -289,6 +289,9 @@ public:
 	bool AvailableForCall(int floor, int direction);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
+	int GetNearestServicedFloor();
+	bool ReturnToNearestFloor();
+	bool IsLeveled();
 
 private:
 
