@@ -598,11 +598,11 @@ AddCustomWall external, Front Fin Extension Left Upper 2, Backing, -79.2, Floor(
 
 SetAutoSize = false, false
 DrawWalls = false, true, false, false, false, false
-SetPlanarMapping false, true, true, false
+SetPlanarMapping false, false, true, false
 AddCustomWall external, Front Fin Extension Left Lower, MainWindows2single, -83.04, Floor(77).Altitude, -20.64, -83.04, Floor(78).Altitude + 6, -20.64, -79.36, Floor(77).Altitude, -21.92, 0.75, 1.5
 DrawWalls = true, false, false, false, false, false
 SetPlanarMapping false, true, true, false
-AddCustomWall external, Front Fin Extension Left Lower, MainWindows2single, -83.04, Floor(77).Altitude, -20.64, -83.04, Floor(78).Altitude + 6, -20.64, -79.36, Floor(77).Altitude, -21.92, 0.75, 1.5
+AddCustomWall external, Front Fin Extension Left Lower, MainWindowsInsideSingle, -83.04, Floor(77).Altitude, -20.64, -83.04, Floor(78).Altitude + 6, -20.64, -79.36, Floor(77).Altitude, -21.92, 0.75, 1.5
 
 # back setback
 SetTextureMapping2 x2, y2, z2, 0, 0.5, x1, y1, z1, 8.333, 0.5, x0, y0, z0, 8.333, 25.5

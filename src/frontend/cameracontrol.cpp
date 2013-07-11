@@ -524,12 +524,15 @@ void CameraControl::On_bXNeg_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		if (rPosition->GetValue() == true)
+			hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		else
+			hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
 		Simcore->camera->Rotate(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
@@ -538,12 +541,15 @@ void CameraControl::On_bXPlus_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == true)
 	{
-		hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		if (rPosition->GetValue() == true)
+			hold_vector -= Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
+		else
+			hold_vector += Ogre::Vector3(atof(txtMoveSpeed->GetValue().ToAscii()), 0, 0);
 		return;
 	}
 
 	if (rPosition->GetValue() == true)
-		Simcore->camera->Move(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
+		Simcore->camera->Move(Ogre::Vector3(-1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 	else
 		Simcore->camera->Rotate(Ogre::Vector3(1, 0, 0), atof(txtMoveSpeed->GetValue().ToAscii()));
 }
