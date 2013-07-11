@@ -241,7 +241,7 @@ void Camera::UpdateCameraFloor()
 		CurrentFloorID = sbs->GetFloor(CurrentFloor)->ID;
 }
 
-bool Camera::Move(Ogre::Vector3 vector, float speed)
+bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 {
 	//moves the camera in a relative amount specified by a vector
 
@@ -252,6 +252,9 @@ bool Camera::Move(Ogre::Vector3 vector, float speed)
 
 	if (vector == Ogre::Vector3::ZERO)
 		MovementStopped = true;
+
+	if (flip == true)
+		vector = vector * Ogre::Vector3(-1, 1, 1);
 
 	//multiply vector with camera's orientation, and flip X axis
 	vector = mCharacter->getRootNode()->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
@@ -767,7 +770,7 @@ void Camera::Loop()
 		delta = .3f;
 
 	RotateLocal(angle_velocity, delta * speed);
-	Move(velocity, delta * speed);
+	Move(velocity, delta * speed, false);
 
 	if (CollisionsEnabled() == true)
 	{

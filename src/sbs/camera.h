@@ -83,7 +83,7 @@ public:
 	void GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top);
 	Ogre::Vector3 GetRotation();
 	void UpdateCameraFloor();
-	bool Move(Ogre::Vector3 vector, float speed);
+	bool Move(Ogre::Vector3 vector, float speed, bool flip = true);
 	void Rotate(const Ogre::Vector3 &vector, float speed);
 	void RotateLocal(const Ogre::Vector3 &vector, float speed);
 	void SetStartDirection(const Ogre::Vector3 &vector);
