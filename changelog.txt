@@ -1,5 +1,67 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-updated to OGRE 1.8, and updated meshes to newer format
+-Glass Tower texture mapping fix for top of front setback pinnacle
+-fixed camera control X axis reversal
+-fixed action control centering
+-added functions to support elevator returning/releveling to nearest floor after disabling inspection mode
+-added 'return' function in elevator actions list which returns to the nearest floor after a stop
+-added more checks to door "in use" status - fixes issues where elevator doors would misbehave if automatically moving and a manual open/close was run
+-removed OIS requirement from cmake
+-minor correction to local elevator range in Sears Tower
+-fixed Glass Tower floor height typo in the floors 80 to 85 section (it erroneously added an extra foot to those floors)
+-added dialog for moving objects
+-fixed "hold" option for camera relative rotation in dialog
+-fixed rotation quirk in dialog that allowed values outside of correct range
+-array cache tweaks
+-fixed DynamicSky script parameter
+-added additional check to elevator service modes to prevent random activity
+-elevator parking is no longer run while in a service mode
+-fixed elevator availability check for LimitQueue
+-added elevator queue reversal when arriving at top/bottom floor; fixes call quirks on those floors
+-fixed issue in elevator_doors.txt script that prevented dual-speed left doors from closing properly
+-switched user variable system over to named variables
+-extended range of characters supported by the text-to-texture system
+-Updated Visual Studio project files for VS2010
+-added popup error messages for sound errors
+-added gpu program checks for Caelum initialization; should switch off Caelum on problematic graphics cards to prevent reported crashes
+-moved SBS initialization code into contructor
+-removed obsolete shaders variables
+-fixed issue where some wall handles wouldn't be deleted, due to a changing handle array size
+-replaced IsNumeric code with smaller, faster code
+-centralized number conversion into new ToString functions
+-fix for textureoverride/textureflip states
+-console output fix
+-INI parameter fixes
+-AddFloor parameter fix
+-removed tchar for wxwidgets unicode compatibility
+-random activity is now ignored if related elevator is in service mode
+-added parking notification
+-script interpreter performance improvements
+-performance fix for GetTextureMaterial function
+-fix for material polygon reporting
+-fixed misuse of vector preallocation, performance improvement (fixes bottleneck when creating thousands of floors)
+-function speed improvements in script interpreter
+-added function name and calling line to script error message
+-misc performance tweaks and cleanups
+-old sky is now used if Caelum fails to start (previously the sky would end up being black in this case)
+-fixed crash that would happen if Caelum wasn't initialized properly
+-swimming pool model material fixes
+-turned off texture lighting option by default
+-added calc ignore checks for other filename parameters
+-added StairsShowFloors and ShowFullStairs commands
+-moved stairs, shaft and elevator checks into respective classes
+-some tweaks to IsInStairwell checks
+-removed some obsolete stuff (including shaft type parameter)
+-added ShowFullStairs to Triton Center's West Stairwell
+-added railings to Triton Center
+-fix for disabling old skybox
+-added ability to delete models and doors with ctrl-click
+-added pool to Triton Center
+-fixed a defect in the CutAll floors operation - was cutting through all floors associated with shafts/stairwells - now only cuts through current floor as described
+-added check to prevent crashes when deleting an object user is standing on
+-fixed creation of collider body which was causing crashes when loading collider meshes
+-added support for skipping calculations on model filenames - fixes an infinite loop
 
 Version 1.8 (2.0 Alpha 8)
 -------------------------
