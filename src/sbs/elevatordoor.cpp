@@ -1289,6 +1289,14 @@ void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool rel
 	}
 }
 
+Ogre::Vector3 ElevatorDoor::GetPosition()
+{
+	//get position of first door mesh
+	if ((int)Doors->doors.size() > 0)
+		return Doors->doors[0]->mesh->GetPosition();
+	return Ogre::Vector3::ZERO;
+}
+
 void ElevatorDoor::Enabled(bool value)
 {
 	Doors->Enable(value);

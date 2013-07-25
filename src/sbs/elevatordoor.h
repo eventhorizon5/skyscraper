@@ -137,6 +137,7 @@ public:
 	void Loop();
 	void Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
+	Ogre::Vector3 GetPosition();
 	void Enabled(bool value);
 	bool IsEnabled();
 	bool GetDoorsOpen();

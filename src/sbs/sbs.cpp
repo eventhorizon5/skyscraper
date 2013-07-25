@@ -2955,9 +2955,10 @@ bool SBS::DeleteObject(int object)
 	return DeleteObject(GetObject(object));
 }
 
-bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
+bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool X, bool Y, bool Z)
 {
 	//move an object by reference
+	//if relative is false, the X, Y and Z values determine which position axes should be set
 
 	if (!object)
 	{
@@ -2978,6 +2979,15 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
 	if (type == "Mesh")
 	{
 		MeshObject* mesh = (MeshObject*)object->GetRawObject();
+		if (relative == false)
+		{
+			if (X == false)
+				position.x = mesh->GetPosition().x;
+			if (Y == false)
+				position.y = mesh->GetPosition().y;
+			if (Z == false)
+				position.z = mesh->GetPosition().z;
+		}
 		mesh->Move(position, relative, relative, relative);
 	}
 	if (type == "ButtonPanel")
@@ -2992,16 +3002,42 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
 		if (relative == true)
 			ind->Move(position);
 		else
+		{
+			if (X == false)
+				position.x = ind->GetPosition().x;
+			if (Y == false)
+				position.y = ind->GetPosition().y;
+			if (Z == false)
+				position.z = ind->GetPosition().z;
 			ind->SetPosition(position);
+		}
 	}
 	if (type == "Door")
 	{
 		Door* door = (Door*)object->GetRawObject();
+		if (relative == false)
+		{
+			if (X == false)
+				position.x = door->GetPosition().x;
+			if (Y == false)
+				position.y = door->GetPosition().y;
+			if (Z == false)
+				position.z = door->GetPosition().z;
+		}
 		door->Move(position, relative, relative, relative);
 	}
 	if (type == "ElevatorDoor")
 	{
 		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
+		if (relative == false)
+		{
+			if (X == false)
+				position.x = door->GetPosition().x;
+			if (Y == false)
+				position.y = door->GetPosition().y;
+			if (Z == false)
+				position.z = door->GetPosition().z;
+		}
 		door->Move(position, relative, relative, relative);
 	}
 	if (type == "FloorIndicator")
@@ -3014,7 +3050,15 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
 	{
 		Sound* sound = (Sound*)object->GetRawObject();
 		if (relative == false)
+		{
+			if (X == false)
+				position.x = sound->GetPosition().x;
+			if (Y == false)
+				position.y = sound->GetPosition().y;
+			if (Z == false)
+				position.z = sound->GetPosition().z;
 			sound->SetPosition(position);
+		}
 		else
 		{
 			Ogre::Vector3 newpos = sound->GetPosition() + position;
@@ -3024,6 +3068,15 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
 	if (type == "Model")
 	{
 		Model* model = (Model*)object->GetRawObject();
+		if (relative == false)
+		{
+			if (X == false)
+				position.x = model->GetPosition().x;
+			if (Y == false)
+				position.y = model->GetPosition().y;
+			if (Z == false)
+				position.z = model->GetPosition().z;
+		}
 		model->Move(position, relative, relative, relative);
 	}
 	if (type == "Control")
@@ -3032,7 +3085,15 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
 		if (relative == true)
 			control->Move(position);
 		else
+		{
+			if (X == false)
+				position.x = control->GetPosition().x;
+			if (Y == false)
+				position.y = control->GetPosition().y;
+			if (Z == false)
+				position.z = control->GetPosition().z;
 			control->SetPosition(position);
+		}
 	}
 	if (type == "Trigger")
 	{
@@ -3040,15 +3101,24 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative)
 		if (relative == true)
 			trigger->Move(position);
 		else
+		{
+			if (X == false)
+				position.x = trigger->GetPosition().x;
+			if (Y == false)
+				position.y = trigger->GetPosition().y;
+			if (Z == false)
+				position.z = trigger->GetPosition().z;
 			trigger->SetPosition(position);
+		}
 	}
 
 	return true;
 }
 
-bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative)
+bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative, bool X, bool Y, bool Z)
 {
 	//rotate an object by reference
+	//if relative is false, the X, Y and Z values determine which position axes should be set
 
 	if (!object)
 	{
@@ -3072,7 +3142,15 @@ bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool
 		if (relative == true)
 			mesh->Rotate(rotation, speed);
 		else
+		{
+			if (X == false)
+				rotation.x = mesh->GetRotation().x;
+			if (Y == false)
+				rotation.y = mesh->GetRotation().y;
+			if (Z == false)
+				rotation.z = mesh->GetRotation().z;
 			mesh->SetRotation(rotation);
+		}
 	}
 	if (type == "Model")
 	{
@@ -3080,7 +3158,15 @@ bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool
 		if (relative == true)
 			model->Rotate(rotation, speed);
 		else
+		{
+			if (X == false)
+				rotation.x = model->GetRotation().x;
+			if (Y == false)
+				rotation.y = model->GetRotation().y;
+			if (Z == false)
+				rotation.z = model->GetRotation().z;
 			model->SetRotation(rotation);
+		}
 	}
 
 	return true;
