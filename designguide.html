@@ -1915,29 +1915,56 @@ AddButton command does) and example 4 shows a fire service mode knob being
 created with 3 positions. Leave the sound field blank for no sound to be
 played.</p>
 
-<p align="left">Available action names: <em>Off</em> (no action), [floor
-number], <em>Open</em> (open doors), <em>Close</em> (close doors),
-<em>Cancel</em> (call cancel), <em>Run</em> (put elevator in run state),
-<em></em><em>Stop</em> (put elevator in stop state), <em>EStop</em> (emergency
-stop), <em></em><em>Alarm</em>, <em>Fire1Off</em> (fire service phase 1 off),
-<em>Fire1On</em> (fire service phase 1 on), <em>Fire1Bypass</em> (fire service
-phase 1 bypass), <em>Fire2Off</em> (fire service phase 2 off), <em>Fire2On</em>
-(fire service phase 2 on), <em>Fire2Hold</em> (fire service phase 2 hold),
-<em>UpPeakOn</em> (enable up peak), <em>UpPeakOff</em> (disable up peak),
-<em>DownPeakOn</em> (enable down peak), <em>DownPeakOff</em> (disable down
-peak), <em>IndOn</em> (enable independent service mode), <em>IndOff</em>
-(disable independent service), <em>InsOn</em> (enable inspection service mode),
-<em>InsOff</em> (disable inspection service), <em>AcpOn</em> (enable ACP mode),
-<em>AcpOff</em> (disable ACP mode), <em>FanOn</em> (enable fan/idle sound),
-<em>FanOff</em> (disable fan/idle sound), <em>Hold</em> (hold door),
-<em>MusicOn</em>, <em>MusicOff</em>, <em>UpOn</em> (inspection mode up on),
-<em>UpOff (inspection mode up off), DownOn</em> (inspection mode down on),
-<em>DownOff</em> (inspection mode down off), <em>GoOn</em> (inspection mode go
-on), <em>GoOff</em> (inspection mode go off), and <em>Return</em> (return to nearest serviced floor after stop).</p>
+<p align="left">Available action names:</p>
 
-<p align="left">In the above list, <em>Open</em>, <em>Close</em>, and
-<em>Hold</em> can have the door number after the name - for example,
-<em>Open2</em> will open door 2, while <em>Open</em> will open all doors.<br>
+<p align="left"><em>Off</em> (no action)<br>
+[floor number]<br>
+<em>Open</em> (open doors)<br>
+<em>Close</em> (close doors)<br>
+OpenInt (open interior/car doors)<br>
+CloseInt (close interior/car doors)<br>
+OpenManual (open doors manually)<br>
+CloseManual (close doors manually)<br>
+OpenIntManual (open interior/car doors manually)<br>
+CloseIntManual (close interior/car doors manually)<br>
+<em>Cancel</em> (call cancel)<br>
+<em>Run</em> (put elevator in run state)<br>
+<em>Stop</em> (put elevator in stop state)<br>
+<em>EStop</em> (emergency stop)<br>
+<em>Alarm</em><br>
+<em>Fire1Off</em> (fire service phase 1 off)<br>
+<em>Fire1On</em> (fire service phase 1 on)<br>
+<em>Fire1Bypass</em> (fire service phase 1 bypass)<br>
+<em>Fire2Off</em> (fire service phase 2 off)<br>
+<em>Fire2On</em> (fire service phase 2 on)<br>
+<em>Fire2Hold</em> (fire service phase 2 hold)<br>
+<em>UpPeakOn</em> (enable up peak)<br>
+<em>UpPeakOff</em> (disable up peak)<br>
+<em>DownPeakOn</em> (enable down peak)<br>
+<em>DownPeakOff</em> (disable down peak)<br>
+<em>IndOn</em> (enable independent service mode)<br>
+<em>IndOff</em> (disable independent service)<br>
+<em>InsOn</em> (enable inspection service mode)<br>
+<em>InsOff</em> (disable inspection service)<br>
+<em>AcpOn</em> (enable ACP mode)<br>
+<em>AcpOff</em> (disable ACP mode)<br>
+<em>FanOn</em> (enable fan/idle sound)<br>
+<em>FanOff</em> (disable fan/idle sound)<br>
+<em>Hold</em> (hold door)<br>
+<em>MusicOn</em><br>
+<em>MusicOff</em><br>
+<em>UpOn</em> (inspection mode up on)<br>
+<em>UpOff (inspection mode up off)<br>
+DownOn</em> (inspection mode down on)<br>
+<em>DownOff</em> (inspection mode down off)<br>
+<em>GoOn</em> (inspection mode go on)<br>
+<em>GoOff</em> (inspection mode go off)<br>
+<em>Return</em> (return to nearest serviced floor after stop).</p>
+
+<p align="left">In the above list, <em>Open</em>, <em>Close</em>, related
+commands such as <em>OpenInt</em> and <em>OpenManual</em>, and <em>Hold</em>
+can have the door number after the name - for example, <em>Open2</em> will open
+door 2, while <em>Open</em> will open all doors.<br>
 <br>
 <strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
 Syntax: <font face="Courier New, Courier, mono"
@@ -2841,15 +2868,30 @@ parameters:</p>
 <p style="text-align:left;margin-left:0;margin-right:auto;">(General)<br>
 ChangeTexture: oldtexture, newtexture<br>
 PlaySound: name, loop true/false<br>
+OpenShaftDoor: door number (0 for all), floor number (parent needs to be the
+elevator object)<br>
+CloseShaftDoor: door number (0 for all), floor number (parent needs to be the
+elevator object)<br>
+OpenShaftDoorManual: door number (0 for all), floor number (parent needs to be
+elevator object)<br>
+CloseShaftDoorManual: door number (0 for all), floor number (parent needs to be
+elevator object)<br>
 </p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;">(Elevator commands,
-see AddControl command in elevator section for commands, these have no
+<p style="text-align:left;margin-left:0;margin-right:auto;">(for other elevator
+commands, see AddControl command in elevator section; these have no
 parameters)</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;">With the PlaySound
 command, if multiple sounds have the same name, all of those sounds will be
 played simultaneously when the related action is run.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">OpenShaftDoor
+example, to open elevator 1's shaft doors on floor 2:</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><font
+face="Courier New, Courier, mono" size="2">AddAction MyDoorOpen, Elevator 1,
+OpenShaftDoor, 0, 2</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
 AddActionControl</strong> - creates a custom control that uses a specific

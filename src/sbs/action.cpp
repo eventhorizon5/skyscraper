@@ -163,14 +163,63 @@ bool Action::DoAction()
 			if (command_name == "off")
 				return true;
 
-			if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0)
+			bool mark = false;
+			if (StartsWith(command_name, "openintmanual", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 4)
+					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				elevator->OpenDoors(number, 2, 0, true);
+				mark = true;
+			}
+			if (StartsWith(command_name, "closeintmanual", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 5)
+					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				elevator->CloseDoors(number, 2, 0, true);
+				mark = true;
+			}
+			if (StartsWith(command_name, "openmanual", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 4)
+					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				elevator->OpenDoors(number, 1, 0, true);
+				mark = true;
+			}
+			if (StartsWith(command_name, "closemanual", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 5)
+					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				elevator->CloseDoors(number, 1, 0, true);
+				mark = true;
+			}
+			if (StartsWith(command_name, "openint", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 4)
+					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				elevator->OpenDoors(number, 2, 0, false);
+				mark = true;
+			}
+			if (StartsWith(command_name, "closeint", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 5)
+					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				elevator->CloseDoors(number, 2, 0, false);
+				mark = true;
+			}
+			if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0 && mark == false)
 			{
 				int number = 0;
 				if (command_name.length() > 4)
 					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
 				elevator->OpenDoors(number);
 			}
-			if (StartsWith(command_name, "close", false) == true && elevator->Direction == 0)
+			if (StartsWith(command_name, "close", false) == true && elevator->Direction == 0 && mark == false)
 			{
 				int number = 0;
 				if (command_name.length() > 5)
@@ -249,7 +298,42 @@ bool Action::DoAction()
 					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
 				elevator->HoldDoors(number);
 			}
-
+			if (command_name == "openshaftdoor")
+			{
+				if (command_parameters.size() == 2)
+				{
+					int param1 = 0, param2 = 0;
+					if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+						elevator->OpenDoors(param1, 3, param2, false);
+				}
+			}
+			if (command_name == "closeshaftdoor")
+			{
+				if (command_parameters.size() == 2)
+				{
+					int param1 = 0, param2 = 0;
+					if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+						elevator->CloseDoors(param1, 3, param2, false);
+				}
+			}
+			if (command_name == "openshaftdoormanual")
+			{
+				if (command_parameters.size() == 2)
+				{
+					int param1 = 0, param2 = 0;
+					if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+						elevator->OpenDoors(param1, 3, param2, true);
+				}
+			}
+			if (command_name == "closeshaftdoormanual")
+			{
+				if (command_parameters.size() == 2)
+				{
+					int param1 = 0, param2 = 0;
+					if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+						elevator->CloseDoors(param1, 3, param2, true);
+				}
+			}
 		}
 
 		if (command_name == "changetexture")
