@@ -180,6 +180,22 @@ bool Action::DoAction()
 				elevator->CloseDoors(number, 2, 0, true);
 				mark = true;
 			}
+			if (StartsWith(command_name, "openextmanual", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 4)
+					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				elevator->OpenDoors(number, 3, 0, true);
+				mark = true;
+			}
+			if (StartsWith(command_name, "closeextmanual", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 5)
+					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				elevator->CloseDoors(number, 3, 0, true);
+				mark = true;
+			}
 			if (StartsWith(command_name, "openmanual", false) == true && elevator->Direction == 0 && mark == false)
 			{
 				int number = 0;
@@ -210,6 +226,22 @@ bool Action::DoAction()
 				if (command_name.length() > 5)
 					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 				elevator->CloseDoors(number, 2, 0, false);
+				mark = true;
+			}
+			if (StartsWith(command_name, "openext", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 4)
+					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				elevator->OpenDoors(number, 3, elevator->GetFloor(), false);
+				mark = true;
+			}
+			if (StartsWith(command_name, "closeext", false) == true && elevator->Direction == 0 && mark == false)
+			{
+				int number = 0;
+				if (command_name.length() > 5)
+					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				elevator->CloseDoors(number, 3, elevator->GetFloor(), false);
 				mark = true;
 			}
 			if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0 && mark == false)
