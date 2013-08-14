@@ -1390,8 +1390,8 @@ Example: <font face="Courier New, Courier, mono" size="2">AssignedShaft =
 
 <p align="left"><strong>10. DoorTimer</strong> - the length of time (in
 milliseconds) that the elevator doors should stay open before automatically
-closing. The default is 5000, or 5 seconds. This must be specified after the
-CreateElevator command.<br>
+closing. Specify 0 to disable. The default is 5000, or 5 seconds. This must be
+specified after the CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DoorTimer
 <em>doornumber</em> = <em>value</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">DoorTimer 1 =
@@ -1399,8 +1399,8 @@ Example: <font face="Courier New, Courier, mono" size="2">DoorTimer 1 =
 
 <p align="left"><strong>11. QuickClose</strong> - the length of time (in
 milliseconds) that the elevator doors should stay open before automatically
-closing, in quick-close mode. The default is 3000, or 3seconds. This must be
-specified after the CreateElevator command.<br>
+closing, in quick-close mode. Specify 0 to disable. The default is 3000, or
+3seconds. This must be specified after the CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">QuickClose
 <em>doornumber</em> = <em>value</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">QuickClose 1 =
@@ -1759,6 +1759,19 @@ false</font></p>
 ReOpen</strong> - if this is set to true, if the elevator is idle, the doors
 will reopen if the same floor is selected. The default is true.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">ReOpen =
+false</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>63.
+AutoOpen</strong> - if this is set to true, the elevator doors will
+automatically open if instructed (for example, when arriving at a floor). The
+default is true.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AutoOpen =
+false</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>64.
+OpenOnStart</strong> - if this is set to true, the elevator doors will
+automatically open on startup. The default is false.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">OpenOnStart =
 false</font></p>
 
 <p></p>

@@ -183,6 +183,8 @@ Elevator::Elevator(int number)
 	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoEnable", true);
 	ReOpen = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ReOpen", true);
 	LastChimeDirection = 0;
+	AutoOpen = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoOpen", true);
+	OpenOnStart = sbs->GetConfigBool("Skyscraper.SBS.Elevator.OpenOnStart", false);
 
 	//create timers
 	parking_timer = new Timer(this, 0);
@@ -1250,6 +1252,9 @@ void Elevator::MonitorLoop()
 			ACPFloor = 0;
 			SetACPFloor(tmp);
 		}
+		if (OpenOnStart == true)
+			OpenDoors();
+
 		UpdateFloorIndicators();
 	}
 
@@ -2177,7 +2182,8 @@ void Elevator::FinishMove()
 		if (FireServicePhase2 == 0)
 		{
 			if (Parking == false)
-				OpenDoors();
+				if (AutoOpen == true)
+					OpenDoors();
 		}
 	}
 	else
@@ -2719,7 +2725,8 @@ void Elevator::EnableUpPeak(bool value)
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
 			SetDirectionalIndicators(true, false);
-			OpenDoors();
+			if (AutoOpen == true)
+				OpenDoors();
 		}
 		Report("Up Peak mode enabled");
 	}
@@ -2761,7 +2768,8 @@ void Elevator::EnableDownPeak(bool value)
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
 			SetDirectionalIndicators(false, true);
-			OpenDoors();
+			if (AutoOpen == true)
+				OpenDoors();
 		}
 		Report("Down Peak mode enabled");
 	}
@@ -2803,7 +2811,8 @@ void Elevator::EnableIndependentService(bool value)
 		ResetQueue(true, true);
 		EnableNudgeMode(false);
 		if (IsMoving == false)
-			OpenDoors();
+			if (AutoOpen == true)
+				OpenDoors();
 		Report("Independent Service mode enabled");
 	}
 	else
@@ -2986,7 +2995,8 @@ void Elevator::EnableFireService2(int value)
 		else
 		{
 			if (IsMoving == false)
-				OpenDoors();
+				if (AutoOpen == true)
+					OpenDoors();
 			Report("Fire Service Phase 2 mode set to Hold");
 		}
 	}
@@ -5009,7 +5019,8 @@ bool Elevator::SelectFloor(int floor)
 						Chime(0, floor, true);
 				}
 				if (FireServicePhase2 == 0)
-					OpenDoors();
+					if (AutoOpen == true)
+						OpenDoors();
 				return false;
 			}
 		}

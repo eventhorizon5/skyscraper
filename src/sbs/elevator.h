@@ -138,6 +138,8 @@ public:
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
 	int LastChimeDirection; //direction of last arrival chime
+	bool AutoOpen; //true if doors should automatically open when reaching destination
+	bool OpenOnStart; //true if doors should automatically open on simulator start
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 

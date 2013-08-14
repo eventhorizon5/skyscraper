@@ -1247,9 +1247,15 @@ void ElevatorDoor::ResetDoorTimer()
 {
 	//reset elevator door timer
 	if (quick_close == false)
-		timer->Start(DoorTimer, true);
+	{
+		if (DoorTimer > 0)
+			timer->Start(DoorTimer, true);
+	}
 	else
-		timer->Start(QuickClose, true);
+	{
+		if (QuickClose > 0)
+			timer->Start(QuickClose, true);
+	}
 	quick_close = false;
 }
 
