@@ -71,6 +71,8 @@
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
+    AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpenInt, nimbus_sans.ttf, 28, OpenI, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonCloseInt, nimbus_sans.ttf, 28, CloseI, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpenExt, nimbus_sans.ttf, 28, OpenE, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -332,7 +334,9 @@ DrawWalls = true, true, false, false, false, false
     AddButton 1, switch.wav, ButtonCloseExt, ButtonCloseExt, 9, 4, closeext, 1, 1
     AddButton 1, switch.wav, ButtonOpenInt, ButtonOpenInt, 10, 2, openint, 1, 1
     AddButton 1, switch.wav, ButtonCloseInt, ButtonCloseInt, 10, 4, closeint, 1, 1
-    AddButton 1, , ButtonAlarm, ButtonAlarm, 11, 3, alarm, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 11, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 11, 4, close, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 12, 3, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
