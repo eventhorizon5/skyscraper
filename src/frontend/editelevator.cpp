@@ -1071,7 +1071,7 @@ void editelevator::Loop()
 	txtQueueLastUp->SetValue(wxVariant((long)elevator->LastQueueFloor[1]).GetString());
 	txtRate->SetValue(TruncateNumber(elevator->ElevatorRate, 2));
 	txtShaft->SetValue(wxVariant((long)elevator->AssignedShaft).GetString());
-	txtStop->SetValue(wxString::FromAscii(BoolToString(elevator->GetEmergencyStopStatus())));
+	txtStop->SetValue(wxVariant((long)elevator->GetEmergencyStopStatus()).GetString());
 	txtStopDistance->SetValue(TruncateNumber(elevator->GetStoppingDistance(), 2));
 	txtTempDecel->SetValue(TruncateNumber(elevator->TempDeceleration, 2));
 	txtJerkRate->SetValue(TruncateNumber(elevator->GetJerkRate(), 4));

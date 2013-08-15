@@ -138,8 +138,9 @@ public:
 	bool AutoEnable; //true if interior objects should automatically be enabled/disabled
 	bool ReOpen; //true if elevator should reopen doors if the same floor is selected
 	int LastChimeDirection; //direction of last arrival chime
-	bool AutoOpen; //true if doors should automatically open when reaching destination
+	bool AutoDoors; //true if doors should be automatic (automatically open when reaching destination and refuse to open if off floor)
 	bool OpenOnStart; //true if doors should automatically open on simulator start
+	int ManualMove; //0 if manual movement is off; -1 for down, 1 for up
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -170,7 +171,7 @@ public:
 	float GetDestination();
 	float GetStoppingDistance();
 	bool GetBrakeStatus();
-	bool GetEmergencyStopStatus();
+	int GetEmergencyStopStatus();
 	void DumpServicedFloors();
 	bool AddServicedFloor(int number);
 	void RemoveServicedFloor(int number);
@@ -294,6 +295,8 @@ public:
 	int GetNearestServicedFloor();
 	bool ReturnToNearestFloor();
 	bool IsLeveled();
+	void Up();
+	void Down();
 
 private:
 
@@ -330,7 +333,7 @@ private:
 	float StoppingDistance; //distance needed to stop the elevator
 	bool CalculateStoppingDistance;
 	bool Brakes; //internal brake status
-	bool EmergencyStop; //internal stop status
+	int EmergencyStop; //internal stop status; 0 for off, 1 for standard stop, 2 for emergency stop
 	double JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
 	double JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)

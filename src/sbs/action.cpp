@@ -322,6 +322,10 @@ bool Action::DoAction()
 				elevator->SetGoButton(false);
 			if (command_name == "return")
 				elevator->ReturnToNearestFloor();
+			if (command_name == "up")
+				elevator->Up();
+			if (command_name == "down")
+				elevator->Down();
 
 			if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
 			{

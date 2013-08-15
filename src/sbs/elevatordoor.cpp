@@ -216,7 +216,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		return;
 
 	//don't open doors if emergency stop is enabled
-	if (elev->OnFloor == false && whichdoors != 3 && manual == false)
+	if (elev->OnFloor == false && whichdoors != 3 && manual == false && elev->AutoDoors == true)
 	{
 		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot open doors" + doornumber + "; emergency stop enabled");
 		return;
@@ -378,7 +378,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": shaft doors" + doornumber + "already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			sbs->Report("Elevator " + ToString2(elev->Number) + ": shaft doors" + doornumber + " already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
@@ -613,10 +613,29 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	if (WhichDoors == 3)
 	{
 		//turn off related floor
+
 		if (open == false && (sbs->InShaft == true || sbs->InElevator == true))
 		{
-			sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
-			sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
+			if (sbs->GetShaft(elev->AssignedShaft)->ShowFloors == false)
+			{
+				sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
+				sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
+			}
+			else
+			{
+				int loc = -1;
+				for (int i = 0; i < (int)sbs->GetShaft(elev->AssignedShaft)->ShowFloorsList.size(); i++)
+				{
+					if (sbs->GetShaft(elev->AssignedShaft)->ShowFloorsList[i] == ShaftDoorFloor)
+						loc = i;
+				}
+
+				if (loc == -1)
+				{
+					sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
+					sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
+				}
+			}
 		}
 	}
 

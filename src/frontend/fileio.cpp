@@ -5660,12 +5660,12 @@ int ScriptProcessor::ProcElevators()
 		elev->AutoEnable = Ogre::StringConverter::parseBool(temp2);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "autoopen")
+	if (linecheck.substr(0, 9) == "autodoors")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->AutoOpen = Ogre::StringConverter::parseBool(temp2);
+		elev->AutoDoors = Ogre::StringConverter::parseBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "openonstart")

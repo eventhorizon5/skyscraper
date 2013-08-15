@@ -69,7 +69,7 @@ Elevator::Elevator(int number)
 	StoppingDistance = 0;
 	CalculateStoppingDistance = false;
 	Brakes = false;
-	EmergencyStop = false;
+	EmergencyStop = 0;
 	AssignedShaft = 0;
 	IsEnabled = true;
 	Height = 0;
@@ -183,8 +183,9 @@ Elevator::Elevator(int number)
 	AutoEnable = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoEnable", true);
 	ReOpen = sbs->GetConfigBool("Skyscraper.SBS.Elevator.ReOpen", true);
 	LastChimeDirection = 0;
-	AutoOpen = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoOpen", true);
+	AutoDoors = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoDoors", true);
 	OpenOnStart = sbs->GetConfigBool("Skyscraper.SBS.Elevator.OpenOnStart", false);
+	ManualMove = 0;
 
 	//create timers
 	parking_timer = new Timer(this, 0);
@@ -860,17 +861,19 @@ void Elevator::Stop(bool emergency)
 		return;
 	}
 
-	EmergencyStop = true;
-
 	if (emergency == true)
 	{
+		EmergencyStop = 2;
 		Report("emergency stop");
 
 		//clear elevator queues
 		ResetQueue(true, true);
 	}
 	else
+	{
+		EmergencyStop = 1;
 		Report("stopping elevator");
+	}
 }
 
 void Elevator::OpenHatch()
@@ -894,7 +897,11 @@ void Elevator::ProcessCallQueue()
 		return;
 
 	//exit if stopping
-	if (EmergencyStop == true)
+	if (EmergencyStop > 0)
+		return;
+
+	//exit if moving manually
+	if (ManualMove > 0)
 		return;
 
 	//if both queues are empty
@@ -1330,6 +1337,12 @@ void Elevator::MonitorLoop()
 	if (AlarmActive == true)
 		Alarm();
 
+	//process up/down buttons
+	if (ManualMove == 1)
+		Up();
+	if (ManualMove == -1)
+		Down();
+
 	//call queue processor
 	ProcessCallQueue();
 
@@ -1380,7 +1393,7 @@ void Elevator::MonitorLoop()
 void Elevator::MoveElevatorToFloor()
 {
 	//Main processing routine; sends elevator to floor specified in GotoFloor
-	//if InspectionService is enabled, this function ignores GotoFloor values, since the elevator is manually moved
+	//if InspectionService or manual movements are enabled, this function ignores GotoFloor values, since the elevator is manually moved
 
 	SBS_PROFILE("Elevator::MoveElevatorToFloor");
 
@@ -1436,7 +1449,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//if destination floor is not a serviced floor, reset and exit
-		if (IsServicedFloor(GotoFloor) == false && InspectionService == false)
+		if (IsServicedFloor(GotoFloor) == false && InspectionService == false && ManualMove == 0)
 		{
 			sbs->Report("Destination floor not in ServicedFloors list");
 			Direction = 0;
@@ -1447,7 +1460,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//If elevator is already on specified floor, open doors and exit
-		if (ElevatorFloor == GotoFloor && InspectionService == false && IsLeveled() == true)
+		if (ElevatorFloor == GotoFloor && InspectionService == false && IsLeveled() == true && ManualMove == 0)
 		{
 			sbs->Report("Elevator already on specified floor");
 			Direction = 0;
@@ -1458,7 +1471,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//Determine direction
-		if (InspectionService == false)
+		if (InspectionService == false && ManualMove == 0)
 		{
 			Destination = GetDestinationAltitude(GotoFloor);
 			if (Destination < ElevatorStart)
@@ -1483,7 +1496,7 @@ void Elevator::MoveElevatorToFloor()
 		ActiveDirection = Direction;
 
 		//Determine distance to destination floor
-		if (InspectionService == false)
+		if (InspectionService == false && ManualMove == 0)
 			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
 		else
 		{
@@ -1523,7 +1536,7 @@ void Elevator::MoveElevatorToFloor()
 		CalculateStoppingDistance = true;
 
 		//If user is riding this elevator, then turn off objects
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && InspectionService == false)
+		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number && InspectionService == false && ManualMove == 0)
 		{
 			if (sbs->Verbose)
 				Report("user in elevator - turning off objects");
@@ -1584,7 +1597,7 @@ void Elevator::MoveElevatorToFloor()
 			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
 		//notify about movement
-		if (InspectionService == false)
+		if (InspectionService == false && ManualMove == 0)
 			Report("moving " + dir_string + " to floor " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 		else
 			Report("moving " + dir_string);
@@ -1635,11 +1648,16 @@ void Elevator::MoveElevatorToFloor()
 		motorsound->Play();
 	}
 
-	if (EmergencyStop == true && Brakes == false)
+	if (EmergencyStop > 0 && Brakes == false)
 	{
-		//emergency stop
+		//stop
 		if (sbs->Verbose)
-			Report("handling emergency stop");
+		{
+			if (EmergencyStop == 2)
+				Report("handling emergency stop");
+			else
+				Report("handling stop");
+		}
 		CalculateStoppingDistance = false;
 		TempDeceleration = Deceleration;
 		if (Direction == 1)
@@ -1893,7 +1911,7 @@ void Elevator::MoveElevatorToFloor()
 				NotifyArrival(GotoFloor);
 		}
 	}
-	else if (Leveling == false && EmergencyStop == false)
+	else if (Leveling == false && EmergencyStop == 0)
 	{
 		if (fabs(ElevatorRate) <= LevelingSpeed)
 		{
@@ -1974,7 +1992,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 
 	//finish move
-	if (EmergencyStop == false)
+	if (EmergencyStop == 0)
 	{
 		if (sbs->Verbose)
 			Report("storing error offset");
@@ -2082,7 +2100,7 @@ void Elevator::FinishMove()
 {
 	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
-	if (EmergencyStop == false)
+	if (EmergencyStop == 0)
 	{
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
@@ -2100,7 +2118,7 @@ void Elevator::FinishMove()
 	if (sbs->GetFloor(sbs->camera->CurrentFloor))
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
-	if (EmergencyStop == false && InspectionService == false)
+	if (EmergencyStop == 0 && InspectionService == false)
 	{
 		//update floor indicators on current camera floor
 		if (sbs->GetFloor(sbs->camera->CurrentFloor))
@@ -2182,7 +2200,7 @@ void Elevator::FinishMove()
 		if (FireServicePhase2 == 0)
 		{
 			if (Parking == false)
-				if (AutoOpen == true)
+				if (AutoDoors == true)
 					OpenDoors();
 		}
 	}
@@ -2190,7 +2208,7 @@ void Elevator::FinishMove()
 	{
 		if (sbs->Verbose)
 			Report("stop complete");
-		EmergencyStop = false;
+		EmergencyStop = 0;
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
 			//reset shaft doors
@@ -2441,7 +2459,7 @@ bool Elevator::GetBrakeStatus()
 	return Brakes;
 }
 
-bool Elevator::GetEmergencyStopStatus()
+int  Elevator::GetEmergencyStopStatus()
 {
 	//returns the internal emergency stop status
 	return EmergencyStop;
@@ -2725,7 +2743,7 @@ void Elevator::EnableUpPeak(bool value)
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
 			SetDirectionalIndicators(true, false);
-			if (AutoOpen == true)
+			if (AutoDoors == true)
 				OpenDoors();
 		}
 		Report("Up Peak mode enabled");
@@ -2768,7 +2786,7 @@ void Elevator::EnableDownPeak(bool value)
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
 			SetDirectionalIndicators(false, true);
-			if (AutoOpen == true)
+			if (AutoDoors == true)
 				OpenDoors();
 		}
 		Report("Down Peak mode enabled");
@@ -2811,7 +2829,7 @@ void Elevator::EnableIndependentService(bool value)
 		ResetQueue(true, true);
 		EnableNudgeMode(false);
 		if (IsMoving == false)
-			if (AutoOpen == true)
+			if (AutoDoors == true)
 				OpenDoors();
 		Report("Independent Service mode enabled");
 	}
@@ -2995,7 +3013,7 @@ void Elevator::EnableFireService2(int value)
 		else
 		{
 			if (IsMoving == false)
-				if (AutoOpen == true)
+				if (AutoDoors == true)
 					OpenDoors();
 			Report("Fire Service Phase 2 mode set to Hold");
 		}
@@ -5019,7 +5037,7 @@ bool Elevator::SelectFloor(int floor)
 						Chime(0, floor, true);
 				}
 				if (FireServicePhase2 == 0)
-					if (AutoOpen == true)
+					if (AutoDoors == true)
 						OpenDoors();
 				return false;
 			}
@@ -5138,4 +5156,64 @@ bool Elevator::IsLeveled()
 		}
 	}
 	return false;
+}
+
+void Elevator::Up()
+{
+	//move elevator up (manual)
+	//this function also stops the up movement when button is depressed
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
+	if (ManualMove == 0)
+	{
+		ManualMove = 1;
+
+		//set direction
+		Direction = 1;
+		MoveElevator = true;
+		if (sbs->Verbose)
+			Report("Up: moving elevator");
+		return;
+	}
+	else if (ManualMove == 1 && sbs->camera->MouseDown == false)
+	{
+		//stop movement
+		ManualMove = 0;
+		Stop(false);
+	}
+}
+
+void Elevator::Down()
+{
+	//move elevator down (manual)
+	//this function also stops the down movement when button is depressed
+
+	if (Running == false)
+	{
+		Report("Elevator not running");
+		return;
+	}
+
+	if (ManualMove == 0)
+	{
+		ManualMove = -1;
+
+		//set direction
+		Direction = -1;
+		MoveElevator = true;
+		if (sbs->Verbose)
+			Report("Up: moving elevator");
+		return;
+	}
+	else if (ManualMove == -1 && sbs->camera->MouseDown == false)
+	{
+		//stop movement
+		ManualMove = 0;
+		Stop(false);
+	}
 }
