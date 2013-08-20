@@ -1,0 +1,5 @@
+New Otis Fixture Set
+
+Information:
+-For the chimes you can use NewOtisChime1.wav or NewOtisChime2.wav for newer elevators, and Mitsubishi chimes for older elevators.
+-Feel free to use this fixture. You don't have to give a credit.

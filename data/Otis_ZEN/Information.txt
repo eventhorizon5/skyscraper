@@ -1,0 +1,8 @@
+Otis ZEN Fixture Set
+Feel free to use this fixture. You don't have to give a credit.
+
+Chimes:
+-OtisZEN_ArriveChime.wav is supposed to sound when the lanterns appear, and the NewOtisChime2.wav is supposed to sound when the doors open.
+-Skyscraper doesn't support double-stage chimes yet, although you can use them in elevator animations.
+-OtisZEN_ArriveChime.wav only plays if there are lanterns (If you want to use them in elevator animations). For outside lanterns, you can use Otis Series 3 lanterns (No arrow version).
+ Note: Please put in both lanterns and indicators outside.
