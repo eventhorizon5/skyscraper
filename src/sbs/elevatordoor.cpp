@@ -648,7 +648,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		EnableNudgeMode(false);
 
 	//turn on nudge mode timer if doors are open
-	if (open == true && NudgeTimer > 0 && nudgetimer->IsRunning() == false)
+	if (open == true && NudgeTimer > 0 && nudgetimer->IsRunning() == false && elev->AutoDoors == true)
 		nudgetimer->Start(NudgeTimer * 1000, true);
 
 	//reset values
@@ -1265,6 +1265,10 @@ void ElevatorDoor::Chime(int floor, bool direction)
 void ElevatorDoor::ResetDoorTimer()
 {
 	//reset elevator door timer
+
+	if (elev->AutoDoors == false)
+		return;
+
 	if (quick_close == false)
 	{
 		if (DoorTimer > 0)

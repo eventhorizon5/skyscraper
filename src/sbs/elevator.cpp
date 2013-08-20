@@ -190,6 +190,7 @@ Elevator::Elevator(int number)
 	doorhold_whichdoors = 0;
 	doorhold_floor = 0;
 	doorhold_manual = 0;
+	Interlocks = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Interlocks", true);
 
 	//create timers
 	parking_timer = new Timer(this, 0);
@@ -1385,11 +1386,11 @@ void Elevator::MonitorLoop()
 	}
 
 	//enable auto-park timer if specified
-	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false)
+	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
 		parking_timer->Start(ParkingDelay * 1000, true);
 
 	//enable random call timer
-	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false)
+	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false && AutoDoors == true)
 		random_timer->Start(RandomFrequency * 1000, false);
 
 	//process triggers
@@ -1428,6 +1429,13 @@ void Elevator::MoveElevatorToFloor()
 	//exit if waiting for arrival or departure timers
 	if (WaitForTimer == true)
 		return;
+
+	//exit if doors are not fully closed while interlocks enabled
+	if (Interlocks == true && (AreDoorsOpen() == true || CheckOpenDoor() == true))
+	{
+		Report("Doors must be closed before moving when interlocks are enabled");
+		return;
+	}
 
 	if (ElevatorIsRunning == false)
 	{
@@ -2117,14 +2125,21 @@ void Elevator::FinishMove()
 {
 	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
-	if (EmergencyStop == 0)
+	//manualstop is true if elevator is stopped within 18 inches of the nearest landing
+	bool manualstop = EmergencyStop == 1 && fabs(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5;
+
+	if (EmergencyStop == 0 || manualstop == true)
 	{
+		if (manualstop == true)
+			GotoFloor = GetFloor();
+
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
 		Report("arrived at floor " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
 
 		//dequeue floor route
-		DeleteActiveRoute();
+		if (manualstop == false)
+			DeleteActiveRoute();
 	}
 
 	//turn off interior directional indicators
@@ -2135,7 +2150,7 @@ void Elevator::FinishMove()
 	if (sbs->GetFloor(sbs->camera->CurrentFloor))
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
-	if (EmergencyStop == 0 && InspectionService == false)
+	if ((EmergencyStop == 0 || manualstop == true) && InspectionService == false)
 	{
 		//update floor indicators on current camera floor
 		if (sbs->GetFloor(sbs->camera->CurrentFloor))
@@ -3486,6 +3501,20 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	//require open button to be held for fire service phase 2 if not on recall floor
 	if (FireServicePhase2 == 1 && (GetFloor() != RecallFloor) && (GetFloor() != RecallFloorAlternate))
 		hold = true;
+
+	if (Interlocks == true)
+	{
+		if (IsMoving == true)
+		{
+			Report("Cannot open doors while moving if interlocks are enabled");
+			return;
+		}
+		if (OnFloor == false || (whichdoors == 3 && floor != GetFloor()))
+		{
+			Report("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
+			return;
+		}
+	}
 
 	int start, end;
 	if (number == 0)
@@ -5397,4 +5426,14 @@ CallButton* Elevator::GetPrimaryCallButton()
 	if (floor)
 		return floor->GetCallButton(Number);
 	return 0;
+}
+
+int Elevator::GetActiveCallFloor()
+{
+	return ActiveCallFloor;
+}
+
+int Elevator::GetActiveCallDirection()
+{
+	return ActiveCallDirection;
 }

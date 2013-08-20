@@ -115,7 +115,7 @@ V - Toggle noclip mode (gravity and collisions off)
 Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 --- Mouse actions ---
--elevator shaft doors can be manually opened and closed by holding down the Shift key and clicking on them
+-elevator shaft doors can be manually opened and closed by holding down the Shift key and clicking on them - note that this only works when the interlocks are released, which can be done in the elevator editor by clicking "Set" next to "Interlocks" on the related elevator
 -polygons (wall/floor sides) can be deleted by holding down Ctrl and clicking on the object
 -doors, controls/buttons, and call buttons can be locked/unlocked by holding down the Shift key and clicking on the side to lock, if you have the associated key
 

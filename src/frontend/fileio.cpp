@@ -5676,6 +5676,14 @@ int ScriptProcessor::ProcElevators()
 		elev->OpenOnStart = Ogre::StringConverter::parseBool(temp2);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 10) == "interlocks")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		elev->Interlocks = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
+	}
 
 	//Print command
 	if (linecheck.substr(0, 5) == "print")

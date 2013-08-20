@@ -142,6 +142,7 @@ public:
 	bool AutoDoors; //true if doors should be automatic (automatically open when reaching destination and refuse to open if off floor)
 	bool OpenOnStart; //true if doors should automatically open on simulator start
 	int ManualMove; //0 if manual movement is off; -1 for down, 1 for up
+	bool Interlocks; //lock doors during movement
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -300,6 +301,8 @@ public:
 	void Down();
 	Shaft* GetShaft();
 	CallButton* GetPrimaryCallButton();
+	int GetActiveCallFloor();
+	int GetActiveCallDirection();
 
 private:
 

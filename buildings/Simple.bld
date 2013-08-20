@@ -347,7 +347,7 @@ DrawWalls = true, true, false, false, false, false
     AddButton 1, switch.wav, Button1, ButtonLit1, 12, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 13, 2, open, 2, 2
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 13, 4, close, 2, 2
-    AddControl 1, switch.wav, 14, 2, 2, 2, 0, 0, off, stop, StopStop, StopRun
+    AddControl 1, switch.wav, 14, 2, 2, 2, 0, 0, run, stop, StopRun, StopStop
     AddButton 1, , ButtonAlarm, ButtonAlarm, 14, 4, alarm, 2, 2
 
     #Floor Indicator

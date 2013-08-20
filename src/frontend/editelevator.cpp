@@ -120,6 +120,55 @@ const long editelevator::ID_STATICTEXT28 = wxNewId();
 const long editelevator::ID_txtWaitForDoors = wxNewId();
 const long editelevator::ID_STATICTEXT67 = wxNewId();
 const long editelevator::ID_txtNudgeMode = wxNewId();
+const long editelevator::ID_bSetNudge = wxNewId();
+const long editelevator::ID_STATICTEXT86 = wxNewId();
+const long editelevator::ID_txtActiveCallFloor = wxNewId();
+const long editelevator::ID_STATICTEXT87 = wxNewId();
+const long editelevator::ID_txtActiveCallDirection = wxNewId();
+const long editelevator::ID_STATICTEXT70 = wxNewId();
+const long editelevator::ID_txtNotified = wxNewId();
+const long editelevator::ID_STATICTEXT75 = wxNewId();
+const long editelevator::ID_txtWaitForTimer = wxNewId();
+const long editelevator::ID_STATICTEXT76 = wxNewId();
+const long editelevator::ID_txtLastChimeDirection = wxNewId();
+const long editelevator::ID_STATICTEXT56 = wxNewId();
+const long editelevator::ID_txtLevelingSpeed = wxNewId();
+const long editelevator::ID_bSetLevelingSpeed = wxNewId();
+const long editelevator::ID_STATICTEXT57 = wxNewId();
+const long editelevator::ID_txtLevelingOffset = wxNewId();
+const long editelevator::ID_bSetLevelingOffset = wxNewId();
+const long editelevator::ID_STATICTEXT88 = wxNewId();
+const long editelevator::ID_txtLevelingOpen = wxNewId();
+const long editelevator::ID_bLevelingOpen = wxNewId();
+const long editelevator::ID_STATICTEXT58 = wxNewId();
+const long editelevator::ID_txtMusicOn = wxNewId();
+const long editelevator::ID_bSetMusicOn = wxNewId();
+const long editelevator::ID_STATICTEXT77 = wxNewId();
+const long editelevator::ID_txtMusicOnMove = wxNewId();
+const long editelevator::ID_bSetMusicOnMove = wxNewId();
+const long editelevator::ID_STATICTEXT78 = wxNewId();
+const long editelevator::ID_txtFloorSounds = wxNewId();
+const long editelevator::ID_bSetFloorSounds = wxNewId();
+const long editelevator::ID_STATICTEXT79 = wxNewId();
+const long editelevator::ID_txtFloorBeeps = wxNewId();
+const long editelevator::ID_bSetFloorBeeps = wxNewId();
+const long editelevator::ID_STATICTEXT80 = wxNewId();
+const long editelevator::ID_txtMessageSounds = wxNewId();
+const long editelevator::ID_bSetMessageSounds = wxNewId();
+const long editelevator::ID_STATICTEXT81 = wxNewId();
+const long editelevator::ID_txtAutoEnable = wxNewId();
+const long editelevator::ID_bSetAutoEnable = wxNewId();
+const long editelevator::ID_STATICTEXT82 = wxNewId();
+const long editelevator::ID_txtReOpen = wxNewId();
+const long editelevator::ID_bSetReOpen = wxNewId();
+const long editelevator::ID_STATICTEXT83 = wxNewId();
+const long editelevator::ID_txtAutoDoors = wxNewId();
+const long editelevator::ID_bSetAutoDoors = wxNewId();
+const long editelevator::ID_STATICTEXT84 = wxNewId();
+const long editelevator::ID_txtOpenOnStart = wxNewId();
+const long editelevator::ID_STATICTEXT85 = wxNewId();
+const long editelevator::ID_txtInterlocks = wxNewId();
+const long editelevator::ID_bInterlocks = wxNewId();
 const long editelevator::ID_STATICTEXT14 = wxNewId();
 const long editelevator::ID_txtFloor = wxNewId();
 const long editelevator::ID_STATICTEXT15 = wxNewId();
@@ -140,6 +189,8 @@ const long editelevator::ID_STATICTEXT25 = wxNewId();
 const long editelevator::ID_txtMotor = wxNewId();
 const long editelevator::ID_STATICTEXT54 = wxNewId();
 const long editelevator::ID_txtCameraOffset = wxNewId();
+const long editelevator::ID_STATICTEXT71 = wxNewId();
+const long editelevator::ID_txtMusicPosition = wxNewId();
 const long editelevator::ID_STATICTEXT38 = wxNewId();
 const long editelevator::ID_txtQueueDirection = wxNewId();
 const long editelevator::ID_STATICTEXT40 = wxNewId();
@@ -172,6 +223,8 @@ const long editelevator::ID_STATICTEXT26 = wxNewId();
 const long editelevator::ID_txtRate = wxNewId();
 const long editelevator::ID_STATICTEXT27 = wxNewId();
 const long editelevator::ID_txtDirection = wxNewId();
+const long editelevator::ID_STATICTEXT72 = wxNewId();
+const long editelevator::ID_txtActiveDirection = wxNewId();
 const long editelevator::ID_STATICTEXT2 = wxNewId();
 const long editelevator::ID_txtJerkRate = wxNewId();
 const long editelevator::ID_STATICTEXT49 = wxNewId();
@@ -182,23 +235,19 @@ const long editelevator::ID_STATICTEXT24 = wxNewId();
 const long editelevator::ID_txtManualGo = wxNewId();
 const long editelevator::ID_STATICTEXT55 = wxNewId();
 const long editelevator::ID_txtLeveling = wxNewId();
-const long editelevator::ID_STATICTEXT56 = wxNewId();
-const long editelevator::ID_txtLevelingSpeed = wxNewId();
-const long editelevator::ID_bSetLevelingSpeed = wxNewId();
-const long editelevator::ID_STATICTEXT57 = wxNewId();
-const long editelevator::ID_txtLevelingOffset = wxNewId();
-const long editelevator::ID_bSetLevelingOffset = wxNewId();
-const long editelevator::ID_STATICTEXT58 = wxNewId();
-const long editelevator::ID_txtLevelingOpen = wxNewId();
-const long editelevator::ID_bSetLevelingOpen = wxNewId();
 const long editelevator::ID_STATICTEXT60 = wxNewId();
 const long editelevator::ID_txtParking = wxNewId();
+const long editelevator::ID_STATICTEXT73 = wxNewId();
+const long editelevator::ID_txtManualMove = wxNewId();
 const long editelevator::ID_STATICTEXT63 = wxNewId();
 const long editelevator::ID_txtSlowSpeed = wxNewId();
 const long editelevator::ID_bSetSlowSpeed = wxNewId();
 const long editelevator::ID_STATICTEXT64 = wxNewId();
 const long editelevator::ID_txtManualSpeed = wxNewId();
 const long editelevator::ID_bSetManualSpeed = wxNewId();
+const long editelevator::ID_STATICTEXT74 = wxNewId();
+const long editelevator::ID_txtInspectionSpeed = wxNewId();
+const long editelevator::ID_bSetInspectionSpeed = wxNewId();
 const long editelevator::ID_STATICTEXT30 = wxNewId();
 const long editelevator::ID_txtDestFloor = wxNewId();
 const long editelevator::ID_STATICTEXT43 = wxNewId();
@@ -255,7 +304,9 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	wxFlexGridSizer* FlexGridSizer8;
 	wxStaticBoxSizer* StaticBoxSizer10;
 	wxBoxSizer* BoxSizer7;
+	wxBoxSizer* BoxSizer11;
 	wxFlexGridSizer* FlexGridSizer4;
+	wxFlexGridSizer* FlexGridSizer9;
 	wxBoxSizer* BoxSizer4;
 	wxStaticBoxSizer* StaticBoxSizer4;
 	wxStaticBoxSizer* StaticBoxSizer9;
@@ -380,6 +431,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer1->Add(BoxSizer2, 0, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("General"));
+	BoxSizer11 = new wxBoxSizer(wxHORIZONTAL);
 	FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Number:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer1->Add(StaticText3, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
@@ -468,22 +520,140 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer1->Add(bSetSkipFloorText, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText52 = new wxStaticText(this, ID_STATICTEXT52, _("Alarm On:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT52"));
 	FlexGridSizer1->Add(StaticText52, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtAlarm = new wxTextCtrl(this, ID_txtAlarm, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtAlarm"));
+	txtAlarm = new wxTextCtrl(this, ID_txtAlarm, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtAlarm"));
 	FlexGridSizer1->Add(txtAlarm, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText28 = new wxStaticText(this, ID_STATICTEXT28, _("WaitDoors:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT28"));
 	FlexGridSizer1->Add(StaticText28, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtWaitForDoors = new wxTextCtrl(this, ID_txtWaitForDoors, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtWaitForDoors"));
+	txtWaitForDoors = new wxTextCtrl(this, ID_txtWaitForDoors, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtWaitForDoors"));
 	txtWaitForDoors->SetToolTip(_("Wait for Doors"));
 	FlexGridSizer1->Add(txtWaitForDoors, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText67 = new wxStaticText(this, ID_STATICTEXT67, _("Nudge:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT67"));
 	FlexGridSizer1->Add(StaticText67, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtNudgeMode = new wxTextCtrl(this, ID_txtNudgeMode, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtNudgeMode"));
+	txtNudgeMode = new wxTextCtrl(this, ID_txtNudgeMode, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtNudgeMode"));
 	txtNudgeMode->SetToolTip(_("Nudge Mode"));
 	FlexGridSizer1->Add(txtNudgeMode, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer1->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticBoxSizer2->Add(FlexGridSizer1, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	bSetNudge = new wxButton(this, ID_bSetNudge, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetNudge"));
+	FlexGridSizer1->Add(bSetNudge, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer11->Add(FlexGridSizer1, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	FlexGridSizer9 = new wxFlexGridSizer(0, 3, 0, 0);
+	StaticText86 = new wxStaticText(this, ID_STATICTEXT86, _("ActCallFloor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT86"));
+	FlexGridSizer9->Add(StaticText86, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtActiveCallFloor = new wxTextCtrl(this, ID_txtActiveCallFloor, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtActiveCallFloor"));
+	txtActiveCallFloor->SetToolTip(_("Active Call Floor"));
+	FlexGridSizer9->Add(txtActiveCallFloor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer9->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticText87 = new wxStaticText(this, ID_STATICTEXT87, _("ActCallDir:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT87"));
+	FlexGridSizer9->Add(StaticText87, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtActiveCallDirection = new wxTextCtrl(this, ID_txtActiveCallDirection, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtActiveCallDirection"));
+	txtActiveCallDirection->SetToolTip(_("Active Call Direction"));
+	FlexGridSizer9->Add(txtActiveCallDirection, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer9->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticText70 = new wxStaticText(this, ID_STATICTEXT70, _("Notified:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT70"));
+	FlexGridSizer9->Add(StaticText70, 0, wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 0);
+	txtNotified = new wxTextCtrl(this, ID_txtNotified, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtNotified"));
+	FlexGridSizer9->Add(txtNotified, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer9->Add(-1,-1,1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	StaticText75 = new wxStaticText(this, ID_STATICTEXT75, _("WaitTimer:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT75"));
+	FlexGridSizer9->Add(StaticText75, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtWaitForTimer = new wxTextCtrl(this, ID_txtWaitForTimer, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtWaitForTimer"));
+	txtWaitForTimer->SetToolTip(_("WaitForTimer"));
+	FlexGridSizer9->Add(txtWaitForTimer, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer9->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticText76 = new wxStaticText(this, ID_STATICTEXT76, _("ChimeDir:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT76"));
+	FlexGridSizer9->Add(StaticText76, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtLastChimeDirection = new wxTextCtrl(this, ID_txtLastChimeDirection, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtLastChimeDirection"));
+	txtLastChimeDirection->SetToolTip(_("LastChimeDirection"));
+	FlexGridSizer9->Add(txtLastChimeDirection, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer9->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticText56 = new wxStaticText(this, ID_STATICTEXT56, _("LevSpeed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT56"));
+	FlexGridSizer9->Add(StaticText56, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtLevelingSpeed = new wxTextCtrl(this, ID_txtLevelingSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtLevelingSpeed"));
+	txtLevelingSpeed->SetToolTip(_("Leveling Speed"));
+	FlexGridSizer9->Add(txtLevelingSpeed, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetLevelingSpeed = new wxButton(this, ID_bSetLevelingSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLevelingSpeed"));
+	FlexGridSizer9->Add(bSetLevelingSpeed, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText57 = new wxStaticText(this, ID_STATICTEXT57, _("LevOffset:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT57"));
+	FlexGridSizer9->Add(StaticText57, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtLevelingOffset = new wxTextCtrl(this, ID_txtLevelingOffset, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtLevelingOffset"));
+	txtLevelingOffset->SetToolTip(_("Leveling Offset"));
+	FlexGridSizer9->Add(txtLevelingOffset, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetLevelingOffset = new wxButton(this, ID_bSetLevelingOffset, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLevelingOffset"));
+	FlexGridSizer9->Add(bSetLevelingOffset, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText88 = new wxStaticText(this, ID_STATICTEXT88, _("LevOpen:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT88"));
+	FlexGridSizer9->Add(StaticText88, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtLevelingOpen = new wxTextCtrl(this, ID_txtLevelingOpen, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtLevelingOpen"));
+	txtLevelingOpen->SetToolTip(_("Leveling Open Offset"));
+	FlexGridSizer9->Add(txtLevelingOpen, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bLevelingOpen = new wxButton(this, ID_bLevelingOpen, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bLevelingOpen"));
+	FlexGridSizer9->Add(bLevelingOpen, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText58 = new wxStaticText(this, ID_STATICTEXT58, _("MusicOn:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT58"));
+	FlexGridSizer9->Add(StaticText58, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtMusicOn = new wxTextCtrl(this, ID_txtMusicOn, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMusicOn"));
+	FlexGridSizer9->Add(txtMusicOn, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetMusicOn = new wxButton(this, ID_bSetMusicOn, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetMusicOn"));
+	FlexGridSizer9->Add(bSetMusicOn, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText77 = new wxStaticText(this, ID_STATICTEXT77, _("MusicMove:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT77"));
+	FlexGridSizer9->Add(StaticText77, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtMusicOnMove = new wxTextCtrl(this, ID_txtMusicOnMove, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMusicOnMove"));
+	txtMusicOnMove->SetToolTip(_("MusicOnMove"));
+	FlexGridSizer9->Add(txtMusicOnMove, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetMusicOnMove = new wxButton(this, ID_bSetMusicOnMove, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetMusicOnMove"));
+	FlexGridSizer9->Add(bSetMusicOnMove, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText78 = new wxStaticText(this, ID_STATICTEXT78, _("FlrSounds:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT78"));
+	FlexGridSizer9->Add(StaticText78, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtFloorSounds = new wxTextCtrl(this, ID_txtFloorSounds, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtFloorSounds"));
+	txtFloorSounds->SetToolTip(_("FloorSounds"));
+	FlexGridSizer9->Add(txtFloorSounds, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetFloorSounds = new wxButton(this, ID_bSetFloorSounds, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetFloorSounds"));
+	FlexGridSizer9->Add(bSetFloorSounds, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText79 = new wxStaticText(this, ID_STATICTEXT79, _("FlrBeeps:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT79"));
+	FlexGridSizer9->Add(StaticText79, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtFloorBeeps = new wxTextCtrl(this, ID_txtFloorBeeps, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtFloorBeeps"));
+	txtFloorBeeps->SetToolTip(_("FloorBeeps"));
+	FlexGridSizer9->Add(txtFloorBeeps, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetFloorBeeps = new wxButton(this, ID_bSetFloorBeeps, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetFloorBeeps"));
+	FlexGridSizer9->Add(bSetFloorBeeps, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText80 = new wxStaticText(this, ID_STATICTEXT80, _("MsgSounds:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT80"));
+	FlexGridSizer9->Add(StaticText80, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtMessageSounds = new wxTextCtrl(this, ID_txtMessageSounds, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMessageSounds"));
+	txtMessageSounds->SetToolTip(_("MessageSounds"));
+	FlexGridSizer9->Add(txtMessageSounds, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetMessageSounds = new wxButton(this, ID_bSetMessageSounds, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetMessageSounds"));
+	FlexGridSizer9->Add(bSetMessageSounds, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText81 = new wxStaticText(this, ID_STATICTEXT81, _("AutoEnable:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT81"));
+	FlexGridSizer9->Add(StaticText81, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtAutoEnable = new wxTextCtrl(this, ID_txtAutoEnable, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtAutoEnable"));
+	FlexGridSizer9->Add(txtAutoEnable, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetAutoEnable = new wxButton(this, ID_bSetAutoEnable, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetAutoEnable"));
+	FlexGridSizer9->Add(bSetAutoEnable, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText82 = new wxStaticText(this, ID_STATICTEXT82, _("ReOpen:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT82"));
+	FlexGridSizer9->Add(StaticText82, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtReOpen = new wxTextCtrl(this, ID_txtReOpen, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtReOpen"));
+	FlexGridSizer9->Add(txtReOpen, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetReOpen = new wxButton(this, ID_bSetReOpen, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetReOpen"));
+	FlexGridSizer9->Add(bSetReOpen, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText83 = new wxStaticText(this, ID_STATICTEXT83, _("AutoDoors:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT83"));
+	FlexGridSizer9->Add(StaticText83, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtAutoDoors = new wxTextCtrl(this, ID_txtAutoDoors, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtAutoDoors"));
+	FlexGridSizer9->Add(txtAutoDoors, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetAutoDoors = new wxButton(this, ID_bSetAutoDoors, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetAutoDoors"));
+	FlexGridSizer9->Add(bSetAutoDoors, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText84 = new wxStaticText(this, ID_STATICTEXT84, _("OpenStart:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT84"));
+	FlexGridSizer9->Add(StaticText84, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtOpenOnStart = new wxTextCtrl(this, ID_txtOpenOnStart, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtOpenOnStart"));
+	txtOpenOnStart->SetToolTip(_("OpenOnStart"));
+	FlexGridSizer9->Add(txtOpenOnStart, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer9->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticText85 = new wxStaticText(this, ID_STATICTEXT85, _("Interlocks:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT85"));
+	FlexGridSizer9->Add(StaticText85, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtInterlocks = new wxTextCtrl(this, ID_txtInterlocks, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtInterlocks"));
+	FlexGridSizer9->Add(txtInterlocks, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bInterlocks = new wxButton(this, ID_bInterlocks, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bInterlocks"));
+	FlexGridSizer9->Add(bInterlocks, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer11->Add(FlexGridSizer9, 0, wxLEFT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	StaticBoxSizer2->Add(BoxSizer11, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer2, 0, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
 	StaticBoxSizer5 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Position"));
@@ -532,7 +702,12 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	StaticText54 = new wxStaticText(this, ID_STATICTEXT54, _("Camera:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT54"));
 	FlexGridSizer2->Add(StaticText54, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtCameraOffset = new wxTextCtrl(this, ID_txtCameraOffset, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtCameraOffset"));
+	txtCameraOffset->SetToolTip(_("Camera Offset"));
 	FlexGridSizer2->Add(txtCameraOffset, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText71 = new wxStaticText(this, ID_STATICTEXT71, _("Music:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT71"));
+	FlexGridSizer2->Add(StaticText71, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtMusicPosition = new wxTextCtrl(this, ID_txtMusicPosition, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtMusicPosition"));
+	FlexGridSizer2->Add(txtMusicPosition, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer5->Add(FlexGridSizer2, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer10->Add(StaticBoxSizer5, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Queues"));
@@ -560,12 +735,12 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	StaticText68 = new wxStaticText(this, ID_STATICTEXT68, _("Resets:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT68"));
 	FlexGridSizer3->Add(StaticText68, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtQueueResets = new wxTextCtrl(this, ID_txtQueueResets, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtQueueResets"));
-	txtQueueResets->SetToolTip(_("Queue Last Direction"));
+	txtQueueResets->SetToolTip(_("Queue Resets"));
 	FlexGridSizer3->Add(txtQueueResets, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticText69 = new wxStaticText(this, ID_STATICTEXT69, _("Limit:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT69"));
 	FlexGridSizer3->Add(StaticText69, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtLimitQueue = new wxTextCtrl(this, ID_txtLimitQueue, wxEmptyString, wxDefaultPosition, wxSize(100,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtLimitQueue"));
-	txtLimitQueue->SetToolTip(_("Queue Last Direction"));
+	txtLimitQueue->SetToolTip(_("Limit Queue"));
 	FlexGridSizer3->Add(txtLimitQueue, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer3->Add(-1,-1,1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bResetQueues = new wxButton(this, ID_bResetQueues, _("Reset"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bResetQueues"));
@@ -619,6 +794,12 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	txtDirection = new wxTextCtrl(this, ID_txtDirection, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtDirection"));
 	FlexGridSizer6->Add(txtDirection, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer6->Add(-1,-1,0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	StaticText72 = new wxStaticText(this, ID_STATICTEXT72, _("ActiveDir:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT72"));
+	FlexGridSizer6->Add(StaticText72, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtActiveDirection = new wxTextCtrl(this, ID_txtActiveDirection, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtActiveDirection"));
+	txtActiveDirection->SetToolTip(_("Active Direction"));
+	FlexGridSizer6->Add(txtActiveDirection, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("JerkRate:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer6->Add(StaticText2, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtJerkRate = new wxTextCtrl(this, ID_txtJerkRate, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtJerkRate"));
@@ -645,31 +826,15 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	txtLeveling = new wxTextCtrl(this, ID_txtLeveling, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtLeveling"));
 	FlexGridSizer6->Add(txtLeveling, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText56 = new wxStaticText(this, ID_STATICTEXT56, _("LevSpeed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT56"));
-	FlexGridSizer6->Add(StaticText56, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtLevelingSpeed = new wxTextCtrl(this, ID_txtLevelingSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtLevelingSpeed"));
-	txtLevelingSpeed->SetToolTip(_("Leveling Speed"));
-	FlexGridSizer6->Add(txtLevelingSpeed, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bSetLevelingSpeed = new wxButton(this, ID_bSetLevelingSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLevelingSpeed"));
-	FlexGridSizer6->Add(bSetLevelingSpeed, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText57 = new wxStaticText(this, ID_STATICTEXT57, _("LvOffset:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT57"));
-	FlexGridSizer6->Add(StaticText57, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtLevelingOffset = new wxTextCtrl(this, ID_txtLevelingOffset, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtLevelingOffset"));
-	txtLevelingOffset->SetToolTip(_("Leveling Offset"));
-	FlexGridSizer6->Add(txtLevelingOffset, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bSetLevelingOffset = new wxButton(this, ID_bSetLevelingOffset, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLevelingOffset"));
-	FlexGridSizer6->Add(bSetLevelingOffset, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText58 = new wxStaticText(this, ID_STATICTEXT58, _("LevOpen:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT58"));
-	FlexGridSizer6->Add(StaticText58, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtLevelingOpen = new wxTextCtrl(this, ID_txtLevelingOpen, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtLevelingOpen"));
-	txtLevelingOpen->SetToolTip(_("Leveling Open"));
-	FlexGridSizer6->Add(txtLevelingOpen, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bSetLevelingOpen = new wxButton(this, ID_bSetLevelingOpen, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLevelingOpen"));
-	FlexGridSizer6->Add(bSetLevelingOpen, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText60 = new wxStaticText(this, ID_STATICTEXT60, _("Parking:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT60"));
 	FlexGridSizer6->Add(StaticText60, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtParking = new wxTextCtrl(this, ID_txtParking, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtParking"));
 	FlexGridSizer6->Add(txtParking, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText73 = new wxStaticText(this, ID_STATICTEXT73, _("ManualMove:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT73"));
+	FlexGridSizer6->Add(StaticText73, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtManualMove = new wxTextCtrl(this, ID_txtManualMove, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtManualMove"));
+	FlexGridSizer6->Add(txtManualMove, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer6->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText63 = new wxStaticText(this, ID_STATICTEXT63, _("SlowSpd:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT63"));
 	FlexGridSizer6->Add(StaticText63, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -685,6 +850,13 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer6->Add(txtManualSpeed, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetManualSpeed = new wxButton(this, ID_bSetManualSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetManualSpeed"));
 	FlexGridSizer6->Add(bSetManualSpeed, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText74 = new wxStaticText(this, ID_STATICTEXT74, _("InsSpeed:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT74"));
+	FlexGridSizer6->Add(StaticText74, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtInspectionSpeed = new wxTextCtrl(this, ID_txtInspectionSpeed, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtInspectionSpeed"));
+	txtInspectionSpeed->SetToolTip(_("Inspection Mode Speed Multiplier"));
+	FlexGridSizer6->Add(txtInspectionSpeed, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSetInspectionSpeed = new wxButton(this, ID_bSetInspectionSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetInspectionSpeed"));
+	FlexGridSizer6->Add(bSetInspectionSpeed, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer7->Add(FlexGridSizer6, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	BoxSizer3->Add(StaticBoxSizer7, 0, wxBOTTOM|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
@@ -735,7 +907,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	txtErrorOffset->SetToolTip(_("Error Offset"));
 	FlexGridSizer7->Add(txtErrorOffset, 0, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer7->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText59 = new wxStaticText(this, ID_STATICTEXT59, _("Notify:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT59"));
+	StaticText59 = new wxStaticText(this, ID_STATICTEXT59, _("NotifyEarly:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT59"));
 	FlexGridSizer7->Add(StaticText59, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtNotifyEarly = new wxTextCtrl(this, ID_txtNotifyEarly, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtNotifyEarly"));
 	txtNotifyEarly->SetToolTip(_("Notify Early"));
@@ -795,9 +967,10 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer5->Add(txtParkingDelay, 1, wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetParkingDelay = new wxButton(this, ID_bSetParkingDelay, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetParkingDelay"));
 	FlexGridSizer5->Add(bSetParkingDelay, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText62 = new wxStaticText(this, ID_STATICTEXT62, _("NudgeTimer:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT62"));
+	StaticText62 = new wxStaticText(this, ID_STATICTEXT62, _("NudgeTmr:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT62"));
 	FlexGridSizer5->Add(StaticText62, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtNudgeTimer = new wxTextCtrl(this, ID_txtNudgeTimer, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtNudgeTimer"));
+	txtNudgeTimer->SetToolTip(_("Nudge Timer"));
 	FlexGridSizer5->Add(txtNudgeTimer, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	bSetNudgeTimer = new wxButton(this, ID_bSetNudgeTimer, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetNudgeTimer"));
 	FlexGridSizer5->Add(bSetNudgeTimer, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
@@ -849,17 +1022,28 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetDoorTimer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDoorTimer_Click);
 	Connect(ID_bSetQuickClose,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetQuickClose_Click);
 	Connect(ID_bSetSkipFloorText,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSkipFloorText_Click);
+	Connect(ID_bSetNudge,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetNudge_Click);
+	Connect(ID_bSetLevelingSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingSpeed_Click);
+	Connect(ID_bSetLevelingOffset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOffset_Click);
+	Connect(ID_bLevelingOpen,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOpen_Click);
+	Connect(ID_bSetMusicOn,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetMusicOn_Click);
+	Connect(ID_bSetMusicOnMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetMusicOnMove_Click);
+	Connect(ID_bSetFloorSounds,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetFloorSounds_Click);
+	Connect(ID_bSetFloorBeeps,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetFloorBeeps_Click);
+	Connect(ID_bSetMessageSounds,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetMessageSounds_Click);
+	Connect(ID_bSetAutoEnable,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAutoEnable_Click);
+	Connect(ID_bSetReOpen,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetReOpen_Click);
+	Connect(ID_bSetAutoDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAutoDoors_Click);
+	Connect(ID_bInterlocks,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bInterlocks_Click);
 	Connect(ID_bResetQueues,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bResetQueues_Click);
 	Connect(ID_bSetSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSpeed_Click);
 	Connect(ID_bSetAcceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAcceleration_Click);
 	Connect(ID_bSetDeceleration,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDeceleration_Click);
 	Connect(ID_bSetAccelJerk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetAccelJerk_Click);
 	Connect(ID_bSetDecelJerk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDecelJerk_Click);
-	Connect(ID_bSetLevelingSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingSpeed_Click);
-	Connect(ID_bSetLevelingOffset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOffset_Click);
-	Connect(ID_bSetLevelingOpen,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOpen_Click);
 	Connect(ID_bSetSlowSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSlowSpeed_Click);
 	Connect(ID_bSetManualSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetManualSpeed_Click);
+	Connect(ID_bSetInspectionSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetInspectionSpeed_Click);
 	Connect(ID_bNotifyEarly,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bNotifyEarly_Click);
 	Connect(ID_bSetDepartureDelay,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetDepartureDelay_Click);
 	Connect(ID_bSetArrivalDelay,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetArrivalDelay_Click);
@@ -1057,7 +1241,6 @@ void editelevator::Loop()
 		txtDoorWidth->SetValue(TruncateNumber(door->GetDoorWrapper()->Width, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
 		txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
-		txtNudgeMode->SetValue(wxString::FromAscii(BoolToString(door->GetNudgeStatus())));
 	}
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));
@@ -1092,6 +1275,25 @@ void editelevator::Loop()
 	txtParking->SetValue(wxString::FromAscii(BoolToString(elevator->Parking)));
 	txtQueueResets->SetValue(wxString::FromAscii(BoolToString(elevator->QueueResets)));
 	txtLimitQueue->SetValue(wxString::FromAscii(BoolToString(elevator->LimitQueue)));
+	txtNudgeMode->SetValue(wxString::FromAscii(BoolToString(elevator->IsNudgeModeActive())));
+	txtNotified->SetValue(wxString::FromAscii(BoolToString(elevator->Notified)));
+	txtWaitForTimer->SetValue(wxString::FromAscii(BoolToString(elevator->WaitForTimer)));
+	txtMusicOn->SetValue(wxString::FromAscii(BoolToString(elevator->MusicOn)));
+	txtMusicOnMove->SetValue(wxString::FromAscii(BoolToString(elevator->MusicOnMove)));
+	txtFloorSounds->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorSounds)));
+	txtFloorBeeps->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorBeeps)));
+	txtMessageSounds->SetValue(wxString::FromAscii(BoolToString(elevator->UseMessageSounds)));
+	txtAutoEnable->SetValue(wxString::FromAscii(BoolToString(elevator->AutoEnable)));
+	txtReOpen->SetValue(wxString::FromAscii(BoolToString(elevator->ReOpen)));
+	txtAutoDoors->SetValue(wxString::FromAscii(BoolToString(elevator->AutoDoors)));
+	txtOpenOnStart->SetValue(wxString::FromAscii(BoolToString(elevator->OpenOnStart)));
+	txtInterlocks->SetValue(wxString::FromAscii(BoolToString(elevator->Interlocks)));
+	txtLastChimeDirection->SetValue(wxVariant((long)elevator->LastChimeDirection).GetString());
+	txtActiveCallFloor->SetValue(wxVariant((long)elevator->GetActiveCallFloor()).GetString());
+	txtActiveCallDirection->SetValue(wxVariant((long)elevator->GetActiveCallDirection()).GetString());
+	txtActiveDirection->SetValue(wxVariant((long)elevator->ActiveDirection).GetString());
+	txtManualMove->SetValue(wxVariant((long)elevator->ManualMove).GetString());
+	txtMusicPosition->SetValue(TruncateNumber(elevator->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.z, 2));
 }
 
 void editelevator::SetMainValues()
@@ -1130,6 +1332,7 @@ void editelevator::SetMainValues()
 	txtNotifyEarly->SetValue(wxVariant((int)elevator->NotifyEarly).GetString());
 	txtDepartureDelay->SetValue(TruncateNumber(elevator->DepartureDelay, 4));
 	txtArrivalDelay->SetValue(TruncateNumber(elevator->ArrivalDelay, 4));
+	txtInspectionSpeed->SetValue(TruncateNumber(elevator->InspectionSpeed, 4));
 	if (elevator->FireServicePhase2 == 0)
 		Fire2Off->SetValue(true);
 	if (elevator->FireServicePhase2 == 1)
@@ -1441,3 +1644,68 @@ void editelevator::On_bSetArrivalDelay_Click(wxCommandEvent& event)
 		elevator->ArrivalDelay = atof(txtArrivalDelay->GetValue().ToAscii());
 }
 
+void editelevator::On_bSetInspectionSpeed_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->InspectionSpeed = atof(txtInspectionSpeed->GetValue().ToAscii());
+}
+
+void editelevator::On_bSetMusicOn_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->MusicOn = !elevator->MusicOn;
+}
+
+void editelevator::On_bSetMusicOnMove_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->MusicOnMove = !elevator->MusicOnMove;
+}
+
+void editelevator::On_bSetFloorSounds_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->UseFloorSounds = !elevator->UseFloorSounds;
+}
+
+void editelevator::On_bSetFloorBeeps_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->UseFloorBeeps = !elevator->UseFloorBeeps;
+}
+
+void editelevator::On_bSetMessageSounds_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->UseMessageSounds = !elevator->UseMessageSounds;
+}
+
+void editelevator::On_bSetAutoEnable_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->AutoEnable = !elevator->AutoEnable;
+}
+
+void editelevator::On_bSetReOpen_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->ReOpen = !elevator->ReOpen;
+}
+
+void editelevator::On_bSetAutoDoors_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->AutoDoors = !elevator->AutoDoors;
+}
+
+void editelevator::On_bInterlocks_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->Interlocks = !elevator->Interlocks;
+}
+
+void editelevator::On_bSetNudge_Click(wxCommandEvent& event)
+{
+	if (elevator)
+		elevator->EnableNudgeMode(!elevator->IsNudgeModeActive());
+}

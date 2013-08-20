@@ -323,6 +323,10 @@ bool Action::DoAction()
 				elevator->Up();
 			if (command_name == "down")
 				elevator->Down();
+			if (command_name == "interlockson")
+				elevator->Interlocks = true;
+			if (command_name == "interlocksoff")
+				elevator->Interlocks = false;
 
 			if (callbutton)
 			{

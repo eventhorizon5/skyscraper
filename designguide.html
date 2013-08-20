@@ -1775,6 +1775,14 @@ automatically open on startup. The default is false.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">OpenOnStart =
 false</font></p>
 
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>65.
+Interlocks</strong> - if this is set to true, the elevator doors will remain
+locked while the elevator is moving, will refuse to open unless the elevator is
+within a landing zone, and the elevator will not move unless the doors are
+closed. The default is true.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Interlocks =
+false</font></p>
+
 <p></p>
 
 <p align="left"><strong>Commands:</strong></p>
@@ -1977,7 +1985,9 @@ DownOn</em> (inspection mode down on)<br>
 <em>DownOff</em> (inspection mode down off)<br>
 <em>GoOn</em> (inspection mode go on)<br>
 <em>GoOff</em> (inspection mode go off)<br>
-<em>Return</em> (return to nearest serviced floor after stop).</p>
+<em>Return</em> (return to nearest serviced floor after stop)<br>
+<em>InterlocksOn</em> (enable interlocks)<br>
+<em>InterlocksOff</em> (disable interlocks)</p>
 
 <p align="left">In the above list, <em>Open</em>, <em>Close</em>, related
 commands such as <em>OpenInt</em> and <em>OpenManual</em>, and <em>Hold</em>

@@ -1,5 +1,22 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-fixed button/control texture multipliers - this fix will break previous buildings' buttons and controls if they use size multipliers other than 0 or 1.  Previously changing the size would mess up the button positioning
+-updated Simple building with internal and external fire switches
+-added more texture content
+-added fire service enable function to call button code; switching one elevator to fire service phase 1 now switches all elevators in same bank (all being serviced by the first call button on recall floor) into fire service mode
+-added elevator door open/close button hold feature (constant pressure support), for certain modes such as independent service and fire modes
+-renamed CancelLastRoute to CallCancel
+-major reworking of fire service modes to make them more realistic
+-added reversals to door opening, used in fire modes to reclose the doors if open button is released
+-major Glass Tower lobby changes; atrium base is now the Atrium level (previously mezzanine) to match movie depictions of the Hyatt Regency and Bank of America buildings
+-added full support for manual elevators
+-fixed issue where floor would turn off when closing shaft doors even if ShaftShowFloors is enabled
+-added "0 to disable" options for DoorTimer and QuickClose parameters
+-added AutoOpen parameter
+-added OpenOnStart parameter
+-added new Simple building with manual doors
+-added OpenExt and CloseExt actions
+-added more elevator and shaft door actions
 -updated to OGRE 1.8, and updated meshes to newer format
 -Glass Tower texture mapping fix for top of front setback pinnacle
 -fixed camera control X axis reversal
