@@ -1431,9 +1431,11 @@ void Elevator::MoveElevatorToFloor()
 		return;
 
 	//exit if doors are not fully closed while interlocks enabled
-	if (Interlocks == true && (AreDoorsOpen() == true || CheckOpenDoor() == true))
+	if (Interlocks == true && AreDoorsOpen() == true)
 	{
 		Report("Doors must be closed before moving when interlocks are enabled");
+		MoveElevator = false;
+		Direction = 0;
 		return;
 	}
 
@@ -2240,7 +2242,7 @@ void Elevator::FinishMove()
 	{
 		if (sbs->Verbose)
 			Report("stop complete");
-		EmergencyStop = 0;
+
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		{
 			//reset shaft doors
@@ -2258,6 +2260,7 @@ void Elevator::FinishMove()
 	//update elevator's floor number
 	ElevatorFloor = GotoFloor;
 
+	EmergencyStop = 0;
 	Parking = false;
 	FinishedMove = true;
 }
@@ -3504,7 +3507,7 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 
 	if (Interlocks == true)
 	{
-		if (IsMoving == true)
+		if (IsMoving == true && OnFloor == false)
 		{
 			Report("Cannot open doors while moving if interlocks are enabled");
 			return;
