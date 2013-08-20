@@ -1,6 +1,0 @@
-Otis 3200 (Concave) Fixture Set
-Feel free to use this fixture. You don't have to give a credit.
-
-Chimes:
--Otis3200Chime.wav is supposed to sound when the lanterns appear, and the door chime (you can use Mitsubishi chime) is supposed to sound when the doors open.
--Skyscraper doesn't support double-stage chimes yet, although you can use them in elevator animations.

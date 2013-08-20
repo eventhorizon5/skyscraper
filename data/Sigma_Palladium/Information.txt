@@ -1,0 +1,11 @@
+Sigma Palladium Fixture Set
+
+Information:
+-All photos (Except Call.png and Call-Lit.png) were taken by Kan and were edited by Vector.
+-Call.png and Call-Lit.png are made by Samuel.
+-Feel free to use this fixture. You don't have to give a credit.
+
+T2T Coordinates:
+-Font: nimbus_sans_bold.ttf
+-Size: 45
+-Color: 154, 0, 14 (Unlit), 255, 0, 108 (Lit)
