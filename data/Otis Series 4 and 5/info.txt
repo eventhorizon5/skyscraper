@@ -1,8 +1,0 @@
-Otis Series 4 and 5 Info
-
-CREDITS
--"OtisELDInd", "S4_Ind", "S4_IndDown", and "S4_IndUp" were genreated on MS Powerpoint by escalatorgeek881.
--All other photographs were taken by thssenelevator95 and have been edited by escalatorgeek881. 
--On the button textures, credit is given to thyssenelevator95 for the brailles and epco_rules for the button.
--Credit is given to epco_rules for C_SideWall, C_BackWallTemp, otis4_downlightceilingsilver, B_ElevCeiling2 and B_ElevCeiling
--The "blank" texture is a universal texture used on all fixture sets.
