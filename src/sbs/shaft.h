@@ -87,7 +87,6 @@ public:
 	Door* GetDoor(int number);
 	void RemoveDoor(Door *door);
 	void Check(Ogre::Vector3 position, int current_floor);
-	void EnableFireService(int value);
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array

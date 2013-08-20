@@ -299,6 +299,7 @@ public:
 	void Up();
 	void Down();
 	Shaft* GetShaft();
+	CallButton* GetPrimaryCallButton();
 
 private:
 

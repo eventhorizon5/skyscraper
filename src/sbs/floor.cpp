@@ -746,6 +746,21 @@ std::vector<int> Floor::GetCallButtons(int elevator)
 	return buttons;
 }
 
+CallButton* Floor::GetCallButton(int elevator)
+{
+	//returns the first call button object that services the specified elevator
+
+	for (int i = 0; i < (int)CallButtonArray.size(); i++)
+	{
+		if (CallButtonArray[i])
+		{
+			if (CallButtonArray[i]->ServicesElevator(elevator) == true)
+				return CallButtonArray[i];
+		}
+	}
+	return 0;
+}
+
 void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, float CenterZ, float width, float height, float voffset, bool direction, float tw, float th)
 {
 	//convenience function for adding filler walls around doors

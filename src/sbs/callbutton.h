@@ -55,6 +55,7 @@ public:
 	bool IsLocked();
 	void ToggleLock(bool force = false);
 	int GetKeyID();
+	void FireService(int value);
 
 private:
 	MeshObject* CallButtonBackMesh; //call button mesh object

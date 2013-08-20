@@ -36,7 +36,7 @@
 extern SBS *Simcore; //external pointer to the SBS engine
 Elevator *elevator;
 ElevatorDoor *door;
-Shaft *shaft;
+CallButton *callbutton;
 
 //(*IdInit(editelevator)
 const long editelevator::ID_tElevator = wxNewId();
@@ -1003,7 +1003,7 @@ void editelevator::Loop()
 	if (!elevator)
 		return;
 
-	shaft = elevator->GetShaft();
+	callbutton = elevator->GetPrimaryCallButton();
 
 	door = elevator->GetDoor(door_num);
 
@@ -1270,20 +1270,20 @@ void editelevator::On_bSetRecallAlternate_Click(wxCommandEvent& event)
 
 void editelevator::On_Fire1Off_Select(wxCommandEvent& event)
 {
-	if (shaft)
-		shaft->EnableFireService(0);
+	if (callbutton)
+		callbutton->FireService(0);
 }
 
 void editelevator::On_Fire1On_Select(wxCommandEvent& event)
 {
-	if (shaft)
-		shaft->EnableFireService(1);
+	if (callbutton)
+		callbutton->FireService(1);
 }
 
 void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 {
-	if (shaft)
-		shaft->EnableFireService(2);
+	if (callbutton)
+		callbutton->FireService(2);
 }
 
 void editelevator::On_Fire2Off_Select(wxCommandEvent& event)

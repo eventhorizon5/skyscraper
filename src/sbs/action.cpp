@@ -160,7 +160,8 @@ bool Action::DoAction()
 		{
 			//elevator-specific commands
 
-			Shaft *shaft = elevator->GetShaft();
+			//get first callbutton on recall floor
+			CallButton *callbutton = elevator->GetPrimaryCallButton();
 
 			if (command_name == "off")
 				return true;
@@ -270,12 +271,6 @@ bool Action::DoAction()
 				elevator->Stop(true);
 			if (command_name == "alarm")
 				elevator->Alarm();
-			if (command_name == "fire1off")
-				shaft->EnableFireService(0);
-			if (command_name == "fire1on")
-				shaft->EnableFireService(1);
-			if (command_name == "fire1bypass")
-				shaft->EnableFireService(2);
 			if (command_name == "fire2off")
 				elevator->EnableFireService2(0);
 			if (command_name == "fire2on")
@@ -328,6 +323,16 @@ bool Action::DoAction()
 				elevator->Up();
 			if (command_name == "down")
 				elevator->Down();
+
+			if (callbutton)
+			{
+				if (command_name == "fire1off")
+					callbutton->FireService(0);
+				if (command_name == "fire1on")
+					callbutton->FireService(1);
+				if (command_name == "fire1bypass")
+					callbutton->FireService(2);
+			}
 
 			if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
 			{
@@ -500,22 +505,6 @@ bool Action::DoAction()
 			}
 			else
 				return false;
-		}
-
-		if (command_name == "fireservice")
-		{
-			if (command_parameters.size() == 1)
-			{
-				if (parent_type == "Shaft")
-				{
-					int param1 = 0;
-					if (IsNumeric(command_parameters[0].c_str(), param1))
-					{
-						if (shaft)
-							shaft->EnableFireService(param1);
-					}
-				}
-			}
 		}
 	}
 

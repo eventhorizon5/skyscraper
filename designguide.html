@@ -1948,12 +1948,11 @@ CloseIntManual (close interior/car doors manually)<br>
 <em>Stop</em> (put elevator in stop state)<br>
 <em>EStop</em> (emergency stop)<br>
 <em>Alarm</em><br>
-<em>Fire1Off</em> (fire service phase 1 off for all elevators in related
-shaft)<br>
-<em>Fire1On</em> (fire service phase 1 on for all elevators in related
-shaft)<br>
-<em>Fire1Bypass</em> (fire service phase 1 bypass for all elevators in related
-shaft)<br>
+<em>Fire1Off</em> (fire service phase 1 off for all elevators in same bank, aka
+all served by first call button on recall floor)<br>
+<em>Fire1On</em> (fire service phase 1 on for all elevators in same bank)<br>
+<em>Fire1Bypass</em> (fire service phase 1 bypass for all elevators in same
+bank)<br>
 <em>Fire2Off</em> (fire service phase 2 off)<br>
 <em>Fire2On</em> (fire service phase 2 on)<br>
 <em>Fire2Hold</em> (fire service phase 2 hold)<br>
@@ -2895,14 +2894,8 @@ OpenShaftDoorManual: door number (0 for all), floor number (parent needs to be
 elevator object)<br>
 CloseShaftDoorManual: door number (0 for all), floor number (parent needs to be
 elevator object)<br>
-FireService: mode number (parent needs to be shaft object; enables fire service
-phase 1 on all elevators in specified shaft; mode numbers are 0 for off, 1 for
-on, 2 for bypass)<br>
-</p>
-
-<p style="text-align:left;margin-left:0;margin-right:auto;">(for other elevator
-commands, see AddControl command in elevator section; these have no
-parameters)</p>
+(for other elevator commands, see AddControl command in elevator section; these
+have no parameters)</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;">With the PlaySound
 command, if multiple sounds have the same name, all of those sounds will be
@@ -2914,14 +2907,6 @@ example, to open elevator 1's shaft doors on floor 2:</p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><font
 face="Courier New, Courier, mono" size="2">AddAction MyDoorOpen, Elevator 1,
 OpenShaftDoor, 0, 2</font></p>
-
-<p style="text-align:left;margin-left:0;margin-right:auto;">FireService
-example, to turn on fire service phase 1 (recall) for all elevators in shaft
-1:</p>
-
-<p style="text-align:left;margin-left:0;margin-right:auto;"><font
-face="Courier New, Courier, mono" size="2">AddAction MyFireAlarm, Shaft 1,
-FireService, 1</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
 AddActionControl</strong> - creates a custom control that uses a specific
