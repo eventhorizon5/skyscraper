@@ -175,37 +175,37 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 		bheight = 1;
 
 	//vertical position is the top of the panel, minus the total spacing above it,
-	//minus the total button spaces above (and including) it, minus half of the extra height
-	ypos = (Origin.y + Height) - (SpacingY * row) - (ButtonHeight * row) - ((bheight - 1) / 2);
+	//minus the total button spaces above (and including) it, minus half of the extra height multiplier
+	ypos = (Origin.y + Height) - (SpacingY * row) - (ButtonHeight * row) - ((ButtonHeight * (bheight - 1)) / 2);
 	ypos += voffset * ButtonHeight;
 
 	if (Direction == "front")
 	{
 		//horizontal position is the left-most edge of the panel (origin aka center minus
 		//half the width), plus total spacing to the left of it, plus total button spaces
-		//to the left of it, plus half of the extra width
-		xpos = (Origin.x - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) + ((bwidth - 1) / 2);
+		//to the left of it, plus half of the extra width multiplier
+		xpos = (Origin.x - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
 		zpos = Origin.z - 0.01;
 		xpos += hoffset * ButtonWidth;
 	}
 	if (Direction == "back")
 	{
 		//back
-		xpos = (Origin.x + (Width / 2)) - (SpacingX * column) - (ButtonWidth * (column - 1)) - ((bwidth - 1) / 2);
+		xpos = (Origin.x + (Width / 2)) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
 		zpos = Origin.z + 0.01;
 		xpos -= hoffset * ButtonWidth;
 	}
 	if (Direction == "left")
 	{
 		xpos = Origin.x - 0.01;
-		zpos = (Origin.z + (Width / 2))  - (SpacingX * column) - (ButtonWidth * (column - 1)) - ((bwidth - 1) / 2);
+		zpos = (Origin.z + (Width / 2))  - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
 		zpos -= hoffset * ButtonWidth;
 	}
 	if (Direction == "right")
 	{
 		//right
 		xpos = Origin.x + 0.01;
-		zpos = (Origin.z - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) + ((bwidth - 1) / 2);
+		zpos = (Origin.z - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
 		zpos += hoffset * ButtonWidth;
 	}
 
