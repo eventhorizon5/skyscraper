@@ -26,6 +26,7 @@
 #ifndef _SBS_ELEVATOR_H
 #define _SBS_ELEVATOR_H
 
+#include "shaft.h"
 #include "buttonpanel.h"
 #include "sound.h"
 #include "directional.h"
@@ -297,6 +298,7 @@ public:
 	bool IsLeveled();
 	void Up();
 	void Down();
+	Shaft* GetShaft();
 
 private:
 

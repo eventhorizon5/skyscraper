@@ -5382,3 +5382,10 @@ void Elevator::Down()
 		Stop(false);
 	}
 }
+
+Shaft* Elevator::GetShaft()
+{
+	//get associated shaft object
+	Shaft *shaft = sbs->GetShaft(AssignedShaft);
+	return shaft;
+}

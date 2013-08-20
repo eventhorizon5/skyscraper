@@ -160,6 +160,8 @@ bool Action::DoAction()
 		{
 			//elevator-specific commands
 
+			Shaft *shaft = elevator->GetShaft();
+
 			if (command_name == "off")
 				return true;
 
@@ -269,11 +271,11 @@ bool Action::DoAction()
 			if (command_name == "alarm")
 				elevator->Alarm();
 			if (command_name == "fire1off")
-				elevator->EnableFireService1(0);
+				shaft->EnableFireService1(0);
 			if (command_name == "fire1on")
-				elevator->EnableFireService1(1);
+				shaft->EnableFireService1(1);
 			if (command_name == "fire1bypass")
-				elevator->EnableFireService1(2);
+				shaft->EnableFireService1(2);
 			if (command_name == "fire2off")
 				elevator->EnableFireService2(0);
 			if (command_name == "fire2on")

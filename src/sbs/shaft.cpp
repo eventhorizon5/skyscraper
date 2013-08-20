@@ -948,3 +948,18 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		EnableRange(current_floor, sbs->ShaftOutsideDisplayRange, true, true);
 	}
 }
+
+void Shaft::EnableFireService1(int value)
+{
+	//sets fire service phase 1 on all elevators associated with this shaft
+
+	if (elevators.size() == 0)
+		return;
+
+	for (int i = 0; i < elevators.size(); i++)
+	{
+		Elevator *elev = sbs->GetElevator(elevators[i]);
+		if (elev)
+			elev->EnableFireService1(value);
+	}
+}
