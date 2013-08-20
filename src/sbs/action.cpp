@@ -271,11 +271,11 @@ bool Action::DoAction()
 			if (command_name == "alarm")
 				elevator->Alarm();
 			if (command_name == "fire1off")
-				shaft->EnableFireService1(0);
+				shaft->EnableFireService(0);
 			if (command_name == "fire1on")
-				shaft->EnableFireService1(1);
+				shaft->EnableFireService(1);
 			if (command_name == "fire1bypass")
-				shaft->EnableFireService1(2);
+				shaft->EnableFireService(2);
 			if (command_name == "fire2off")
 				elevator->EnableFireService2(0);
 			if (command_name == "fire2on")
@@ -500,6 +500,22 @@ bool Action::DoAction()
 			}
 			else
 				return false;
+		}
+
+		if (command_name == "fireservice")
+		{
+			if (command_parameters.size() == 1)
+			{
+				if (parent_type == "Shaft")
+				{
+					int param1 = 0;
+					if (IsNumeric(command_parameters[0].c_str(), param1))
+					{
+						if (shaft)
+							shaft->EnableFireService(param1);
+					}
+				}
+			}
 		}
 	}
 

@@ -949,7 +949,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 	}
 }
 
-void Shaft::EnableFireService1(int value)
+void Shaft::EnableFireService(int value)
 {
 	//sets fire service phase 1 on all elevators associated with this shaft
 

@@ -1271,19 +1271,19 @@ void editelevator::On_bSetRecallAlternate_Click(wxCommandEvent& event)
 void editelevator::On_Fire1Off_Select(wxCommandEvent& event)
 {
 	if (shaft)
-		shaft->EnableFireService1(0);
+		shaft->EnableFireService(0);
 }
 
 void editelevator::On_Fire1On_Select(wxCommandEvent& event)
 {
 	if (shaft)
-		shaft->EnableFireService1(1);
+		shaft->EnableFireService(1);
 }
 
 void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 {
 	if (shaft)
-		shaft->EnableFireService1(2);
+		shaft->EnableFireService(2);
 }
 
 void editelevator::On_Fire2Off_Select(wxCommandEvent& event)
