@@ -186,6 +186,10 @@ Elevator::Elevator(int number)
 	AutoDoors = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoDoors", true);
 	OpenOnStart = sbs->GetConfigBool("Skyscraper.SBS.Elevator.OpenOnStart", false);
 	ManualMove = 0;
+	doorhold_direction = 0;
+	doorhold_whichdoors = 0;
+	doorhold_floor = 0;
+	doorhold_manual = 0;
 
 	//create timers
 	parking_timer = new Timer(this, 0);
@@ -643,7 +647,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 	}
 	if (FireServicePhase2 == 2)
 	{
-		Report("cannot add route while in held state");
+		Report("cannot add route while hold is enabled");
 		return false;
 	}
 
@@ -786,7 +790,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 	return true;
 }
 
-bool Elevator::CancelLastRoute()
+bool Elevator::CallCancel()
 {
 	//cancels the last added route
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
@@ -800,11 +804,11 @@ bool Elevator::CancelLastRoute()
 	if (LastQueueFloor[1] == 0)
 	{
 		if (sbs->Verbose)
-			Report("CancelLastRoute: route not valid");
+			Report("CallCancel: route not valid");
 		return false;
 	}
 
-	Report("canceling last route");
+	Report("cancelled last call");
 	DeleteRoute(LastQueueFloor[0], LastQueueFloor[1]);
 	LastQueueFloor[0] = 0;
 	LastQueueFloor[1] = 0;
@@ -851,6 +855,13 @@ void Elevator::Stop(bool emergency)
 	{
 		if (sbs->Verbose)
 			Report("cannot stop while in inspection service");
+		return;
+	}
+
+	//exit if in fire service phase 1 recall
+	if (FireServicePhase1 == 1 && FireServicePhase2 == 0)
+	{
+		Report("cannot stop while in fire service 1 recall mode");
 		return;
 	}
 
@@ -1342,6 +1353,12 @@ void Elevator::MonitorLoop()
 		Up();
 	if (ManualMove == -1)
 		Down();
+
+	//process door open/close holds
+	if (doorhold_direction == 1)
+		OpenDoors();
+	if (doorhold_direction == -1)
+		CloseDoors();
 
 	//call queue processor
 	ProcessCallQueue();
@@ -2196,8 +2213,8 @@ void Elevator::FinishMove()
 		}
 
 		//open doors
-		//do not automatically open doors if in fire service phase 2
-		if (FireServicePhase2 == 0)
+		//do not automatically open doors if fire service phase 2 is on
+		if (FireServicePhase2 != 1 || GetFloor() == RecallFloor || GetFloor() == RecallFloorAlternate)
 		{
 			if (Parking == false)
 				if (AutoDoors == true)
@@ -2611,7 +2628,7 @@ bool Elevator::IsServicedFloor(int floor)
 bool Elevator::InServiceMode()
 {
 	//report if an elevator is in a service mode
-	if (IndependentService == true || InspectionService == true || FireServicePhase1 == 1 || FireServicePhase2 != 0)
+	if (IndependentService == true || InspectionService == true || FireServicePhase1 == 1 || FireServicePhase2 > 0)
 		return true;
 	else
 		return false;
@@ -2932,12 +2949,18 @@ void Elevator::EnableFireService1(int value)
 		return;
 	}
 
+	//exit if in inspection modeno change
+	if (InspectionService == true)
+	{
+		Report("EnableFireService1: cannot enable while in inspection mode");
+		return;
+	}
+
 	if (value >= 0 && value <= 2)
 		FireServicePhase1 = value;
 	else
 	{
-		if (sbs->Verbose)
-			Report("EnableFireService1: invalid value");
+		Report("EnableFireService1: invalid value");
 		return;
 	}
 
@@ -2948,24 +2971,32 @@ void Elevator::EnableFireService1(int value)
 		EnableDownPeak(false);
 		EnableIndependentService(false);
 		EnableInspectionService(false);
-		EnableFireService2(0);
 		if (value == 1)
 		{
 			Report("Fire Service Phase 1 mode set to On");
 			
-			//enable nudge mode on all doors if any are open
-			if (GetFloor() != RecallFloor)
-				EnableNudgeMode(true);
+			//recall elevator if not in phase 2 hold
+			if (FireServicePhase2 != 2)
+			{
+				//enable nudge mode on all doors if any are open
+				if (GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
+					EnableNudgeMode(true);
 
-			//goto recall floor
-			GoToRecallFloor();
+				//goto recall floor
+				GoToRecallFloor();
+			}
 		}
 		else
+		{
+			if (FireServicePhase2 == 0)
+				ResetDoorTimer();
 			Report("Fire Service Phase 1 mode set to Bypass");
+		}
 	}
 	else
 	{
-		ResetDoorTimer();
+		if (FireServicePhase2 == 0)
+			ResetDoorTimer();
 		Report("Fire Service Phase 1 mode set to Off");
 	}
 }
@@ -2981,6 +3012,27 @@ void Elevator::EnableFireService2(int value)
 		return;
 	}
 
+	//exit if in inspection mode
+	if (InspectionService == true)
+	{
+		Report("EnableFireService2: cannot enable while in inspection mode");
+		return;
+	}
+
+	//require fire service phase 1 to be enabled first
+	if (FireServicePhase1 != 1 && FireServicePhase2 == 0 && value > 0)
+	{
+		Report("EnableFireService2: not in fire service phase 1 mode");
+		return;
+	}
+
+	//require doors to be open to change modes
+	if (AreDoorsOpen() == false)
+	{
+		Report("EnableFireService2: doors must be open to change phase 2 modes");
+		return;
+	}
+
 	//exit if no change
 	if (FireServicePhase2 == value)
 	{
@@ -2993,8 +3045,7 @@ void Elevator::EnableFireService2(int value)
 		FireServicePhase2 = value;
 	else
 	{
-		if (sbs->Verbose)
-			Report("EnableFireService2: invalid value");
+		Report("EnableFireService2: invalid value");
 		return;
 	}
 
@@ -3005,24 +3056,25 @@ void Elevator::EnableFireService2(int value)
 		EnableDownPeak(false);
 		EnableIndependentService(false);
 		EnableInspectionService(false);
-		EnableFireService1(0);
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
-		{
-			if (IsMoving == false)
-				if (AutoDoors == true)
-					OpenDoors();
 			Report("Fire Service Phase 2 mode set to Hold");
-		}
 	}
 	else
 	{
-		ResetDoorTimer();
 		Report("Fire Service Phase 2 mode set to Off");
-		GoToRecallFloor();
+		if (FireServicePhase1 == 0)
+			ResetDoorTimer();
+		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
+		{
+			//enable nudge mode on all doors if any are open
+			EnableNudgeMode(true);
+			//recall elevator
+			GoToRecallFloor();
+		}
 	}
 }
 
@@ -3389,7 +3441,7 @@ ElevatorDoor* Elevator::GetDoor(int number)
 	return 0;
 }
 
-void Elevator::OpenDoorsEmergency(int number, int whichdoors, int floor)
+void Elevator::OpenDoorsEmergency(int number, int whichdoors, int floor, bool hold)
 {
 	//Simulates manually prying doors open.
 	//Slowly opens the elevator doors no matter where elevator is.
@@ -3400,10 +3452,10 @@ void Elevator::OpenDoorsEmergency(int number, int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	OpenDoors(number, whichdoors, floor, true);
+	OpenDoors(number, whichdoors, floor, true, hold);
 }
 
-void Elevator::CloseDoorsEmergency(int number, int whichdoors, int floor)
+void Elevator::CloseDoorsEmergency(int number, int whichdoors, int floor, bool hold)
 {
 	//Simulates manually closing doors.
 	//Slowly closes the elevator doors no matter where elevator is.
@@ -3414,21 +3466,26 @@ void Elevator::CloseDoorsEmergency(int number, int whichdoors, int floor)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	CloseDoors(number, whichdoors, floor, true);
+	CloseDoors(number, whichdoors, floor, true, hold);
 }
 
-void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual)
+void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, bool hold)
 {
 	//Opens elevator doors
 
 	//if manual is true, then it simulates manually prying doors open,
 	//Slowly opens the elevator doors no matter where elevator is,
-	//and if lined up with shaft doors, then opens the shaft doors also
+	//and if lined up with shaft doors, then opens the shaft doors also.
+	//if hold is true, sets 'hold' state requiring button to be held to keep doors opening
 
 	//WhichDoors is the doors to move:
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
+
+	//require open button to be held for fire service phase 2 if not on recall floor
+	if (FireServicePhase2 == 1 && (GetFloor() != RecallFloor) && (GetFloor() != RecallFloorAlternate))
+		hold = true;
 
 	int start, end;
 	if (number == 0)
@@ -3441,23 +3498,76 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual)
 		start = number;
 		end = number;
 	}
-	for (int i = start; i <= end; i++)
+	if (doorhold_direction == 0)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->OpenDoors(whichdoors, floor, manual);
-		else
-			Report("Invalid door " + ToString2(i));
+		for (int i = start; i <= end; i++)
+		{
+			if (GetDoor(i))
+				GetDoor(i)->OpenDoors(whichdoors, floor, manual);
+			else
+				Report("Invalid door " + ToString2(i));
+		}
+
+		if (hold == true)
+		{
+			//set persistent values
+			doorhold_direction = 1;
+			doorhold_whichdoors = whichdoors;
+			doorhold_floor = floor;
+			doorhold_manual = manual;
+		}
+	}
+	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
+	{
+		bool closedstate = false;
+
+		for (int i = start; i <= end; i++)
+		{
+			//check door states first
+			if (GetDoor(i))
+			{
+				if (GetDoor(i)->AreDoorsOpen() == false)
+					closedstate = true;
+			}
+			else
+				Report("Invalid door " + ToString2(i));
+		}
+
+		for (int i = start; i <= end; i++)
+		{
+			//close doors using persistent values, if button is released before doors are fully closed
+			if (GetDoor(i))
+			{
+				if (closedstate == true)
+					GetDoor(i)->CloseDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+				else
+					GetDoor(i)->Hold();
+			}
+			else
+				Report("Invalid door " + ToString2(i));
+		}
+
+		//reset persistent values
+		doorhold_direction = 0;
+		doorhold_whichdoors = 0;
+		doorhold_floor = 0;
+		doorhold_manual = false;
 	}
 }
 
-void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual)
+void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bool hold)
 {
 	//Closes elevator doors
+	//if hold is true, sets 'hold' state requiring button to be held to keep doors closing
 
 	//WhichDoors is the doors to move:
 	//1 = both shaft and elevator doors
 	//2 = only elevator doors
 	//3 = only shaft doors
+
+	//turn on hold option for certain modes
+	if (IndependentService == true || FireServicePhase2 == 1)
+		hold = true;
 
 	int start, end;
 	if (number == 0)
@@ -3470,12 +3580,57 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual)
 		start = number;
 		end = number;
 	}
-	for (int i = start; i <= end; i++)
+	if (doorhold_direction == 0)
 	{
-		if (GetDoor(i))
-			GetDoor(i)->CloseDoors(whichdoors, floor, manual);
-		else
-			Report("Invalid door " + ToString2(i));
+		for (int i = start; i <= end; i++)
+		{
+			if (GetDoor(i))
+				GetDoor(i)->CloseDoors(whichdoors, floor, manual);
+			else
+				Report("Invalid door " + ToString2(i));
+		}
+
+		if (hold == true)
+		{
+			//set persistent values
+			doorhold_direction = -1;
+			doorhold_whichdoors = whichdoors;
+			doorhold_floor = floor;
+			doorhold_manual = manual;
+		}
+	}
+	else if (doorhold_direction == -1 && sbs->camera->MouseDown == false)
+	{
+		bool openstate = false;
+		for (int i = start; i <= end; i++)
+		{
+			//check door states first
+			if (GetDoor(i))
+			{
+				if (GetDoor(i)->AreDoorsOpen() == true)
+					openstate = true;
+			}
+			else
+				Report("Invalid door " + ToString2(i));
+		}
+
+		if (openstate == true)
+		{
+			for (int i = start; i <= end; i++)
+			{
+				//close doors using persistent values, if button is released before doors are fully open
+				if (GetDoor(i))
+					GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+				else
+					Report("Invalid door " + ToString2(i));
+			}
+		}
+
+		//reset persistent values
+		doorhold_direction = 0;
+		doorhold_whichdoors = 0;
+		doorhold_floor = 0;
+		doorhold_manual = false;
 	}
 }
 
@@ -4496,7 +4651,7 @@ void Elevator::NotifyArrival(int floor)
 		SetDirectionalIndicators(false, true);
 	}
 
-	if (FireServicePhase2 == 0)
+	if (FireServicePhase1 == 0 && FireServicePhase2 == 0)
 		PlayFloorSound();
 
 	Notified = true;
@@ -4998,8 +5153,18 @@ bool Elevator::SelectFloor(int floor)
 {
 	//select a floor (in-elevator floor selections)
 
-	//exit if in inspection mode or in fire service phase 1 mode or is not running
-	if (InspectionService == true || FireServicePhase1 == 1 || Running == false)
+	//exit if in inspection mode or in fire service mode or is not running
+	if (InspectionService == true)
+	{
+		Report("Cannot select floor while in inspection mode");
+		return false;
+	}
+	else if (FireServicePhase1 == 1 && FireServicePhase2 == 0)
+	{
+		Report("Cannot select floor while in fire service recall mode");
+		return false;
+	}
+	else if (Running == false)
 		return false;
 
 	bool result = false;

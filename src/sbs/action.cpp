@@ -259,7 +259,7 @@ bool Action::DoAction()
 				elevator->CloseDoors(number);
 			}
 			if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
-				elevator->CancelLastRoute();
+				elevator->CallCancel();
 			if (command_name == "run")
 				elevator->SetRunState(true);
 			if (command_name == "stop")

@@ -150,7 +150,7 @@ public:
 	Object* CreateElevator(bool relative, float x, float z, int floor);
 	bool AddRoute(int floor, int direction, bool change_light);
 	bool DeleteRoute(int floor, int direction);
-	bool CancelLastRoute();
+	bool CallCancel();
 	void Alarm();
 	void Stop(bool emergency);
 	void OpenHatch();
@@ -207,10 +207,10 @@ public:
 	void UpdateDirectionalIndicators();
 	void EnableDirectionalIndicators(bool value);
 	ElevatorDoor* GetDoor(int number);
-	void OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
-	void CloseDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0);
-	void OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false);
-	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false);
+	void OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0, bool hold = false);
+	void CloseDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0, bool hold = false);
+	void OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
+	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
 	void StopDoors(int number = 0);
 	void HoldDoors(int number = 0);
 	void ShaftDoorsEnabled(int number, int floor, bool value);
@@ -407,6 +407,12 @@ private:
 	bool FinishedMove;
 	bool RandomLobbySet;
 	bool SoundsQueued;
+
+	//internal data for door open/close hold feature
+	int doorhold_direction;
+	int doorhold_whichdoors;
+	int doorhold_floor;
+	bool doorhold_manual;
 
 	//cache objects for IsInElevator()
 	Ogre::Vector3 lastposition;

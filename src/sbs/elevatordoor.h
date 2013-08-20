@@ -66,6 +66,7 @@ public:
 		float old_difference;
 		float offset;
 		bool recheck_difference;
+		bool reversed;
 	};
 
 	//wrapper that represents the entire set of doors

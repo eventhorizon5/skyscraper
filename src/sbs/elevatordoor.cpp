@@ -327,10 +327,10 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		return;
 	}
 
-	//do not close doors while fire service mode 1 is on and the elevator is waiting at the parking floor
-	if (manual == false && elev->FireServicePhase1 == 1 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
+	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the parking floor
+	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is on");
+		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is in recall mode");
 		return;
 	}
 
@@ -349,7 +349,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
-	if (OpenDoor != 0 && manual == false)
+	if (OpenDoor != 0 && manual == false && elev->FireServicePhase2 == 0)
 	{
 		sbs->Report("Elevator " + ToString2(elev->Number) + ": will close doors" + doornumber + " in quick-close mode");
 		quick_close = true;
@@ -1433,6 +1433,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	sign_changed = false;
 	old_difference = 0;
 	recheck_difference = false;
+	reversed = false;
 }
 
 ElevatorDoor::DoorObject::~DoorObject()
@@ -1693,10 +1694,10 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				active_speed = -parent->ManualSpeed;
 		}
 	}
-	else if (parent->previous_open != open && parent->door_changed == true)
+	else if (parent->previous_open != open && parent->door_changed == true && reversed == false)
 	{
 		//if a different direction was specified during movement
-		//only change directions immediately if re-opening (closing, then opening)
+		//change directions immediately
 		if (open == true)
 		{
 			//relocate marker 1 to the door's current position, in order to stop it
@@ -1708,6 +1709,18 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				//place marker to the right based on the offset, to bring door back to full speed
 				marker1 = difference + offset;
 		}
+		else //closing
+		{
+			//relocate marker 2 to the door's current position, in order to stop it
+			float offset = difference - marker2;
+			if (difference <= marker2)
+				//place marker at door position
+				marker2 = difference;
+			else
+				//place marker to the left based on the offset, to bring door back to full speed
+				marker2 = difference - offset;
+		}
+		reversed = true;
 	}
 
 	//Speed up doors (only if manual is false)
@@ -1715,7 +1728,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	{
 		//if door is opening and is left of marker 1
 		//or if door is closing and is to the right of marker 2
-		if ((difference <= marker1 && open == true) || (difference > marker2 && open == false))
+		if ((difference <= marker1 && open == true) || (difference >= marker2 && open == false))
 		{
 			accelerating = true;
 			if (parent->door_changed == false)
@@ -1728,12 +1741,13 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			}
 			else
 			{
-				//reverse movement if transitioning from close to open
+				//reverse movement if transitioning from close to open, or open to close
 				//this will trigger if door is closing, and is told to open while left of relocated marker 1
-				if (difference <= marker1)
-				{
+				//or will trigger if door is opening, and is told to close while right of relocated marker 2
+				if (difference <= marker1 && open == true)
 					active_speed += openchange;
-				}
+				else if (difference >= marker2 && open == false)
+					active_speed -= openchange;
 			}
 
 			//move elevator doors
@@ -1834,6 +1848,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	sign_changed = false;
 	old_difference = 0;
 	stopping_distance = 0;
+	reversed = false;
 }
 
 void ElevatorDoor::DoorObject::Move()

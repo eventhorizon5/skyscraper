@@ -284,7 +284,21 @@ bool CallButton::Call(bool direction)
 	if ((direction == true && UpStatus == true) || (direction == false && DownStatus == true))
 	{
 		if (sbs->Verbose)
-			sbs->Report("Call has already been made");
+			Report("Call has already been made");
+		return false;
+	}
+
+	//reject call if all elevators are in fire phase 1 mode
+	bool bypass = true;
+	for (int i = 0; i < (int)Elevators.size(); i++)
+	{
+		Elevator *elevator = sbs->GetElevator(Elevators[i]);
+		if (elevator->FireServicePhase1 != 1)
+			bypass = false;
+	}
+	if (bypass == true)
+	{
+		Report("Elevators are in fire phase 1 recall mode");
 		return false;
 	}
 
