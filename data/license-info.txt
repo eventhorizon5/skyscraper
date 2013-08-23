@@ -60,6 +60,7 @@ textures:
 -granite_000*.jpg and graniteTExture_00*.jpg modified from www.grungetexturereference.com
 -square_offices.jpg, marble1-4, rose_marble, and stone.jpg from mayang.com/textures/
 -marble5 and marble6 from www.public-domain-image.com
+-fire1 and fire2 textures by inskeemr
 
 sounds:
 -chime1.wav made by me
