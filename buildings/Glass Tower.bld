@@ -95,12 +95,21 @@ SetPlanarMapping true, false, false, false
     Load data/triton_signs/mez.png, SignMez, 1, 1
     Load data/triton_signs/office.png, SignOffice, 1, 1
     Load data/triton_signs/res.png, SignRes, 1, 1
+    Load data/fire2keyoff.png, Fire2Off, 1, 1
+    Load data/fire2keyon.png, Fire2On, 1, 1
+    Load data/fire2keyhold.png, Fire2Hold, 1, 1
+    Load data/fire1keyoff.png, Fire1Off, 1, 1
+    Load data/fire1keyon.png, Fire1On, 1, 1
+    Load data/fire1keybypass.png, Fire1Bypass, 1, 1
+    Load data/runkey.png, RunKey, 1, 1
+    Load data/stopkey.png, StopKey, 1, 1
+    Load data/indservkeyon.png, IndOn, 1, 1
+    Load data/indservkeyoff.png, IndOff, 1, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
     AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
@@ -2017,15 +2026,17 @@ DrawWalls = true, true, false, false, false, false
     #AddFloorSigns true, right, -3.5 / 2 + 0.01, 3.426 + 0.2 + 0.33, 0.5, 0.42, 5.5
 
     #panel
-    CreatePanel ElevPanel, 7, 3, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button135, ButtonLit135, 2, 2, 134, 1, 1
-    AddFloorButton 1, ButtonA, ButtonLitA, 3, 2, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 4, 2, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 5, 1, open, 1, 1
-    AddControlButton 1, ButtonClose, 5, 3, close, 1, 1
-    AddControlButton 1, ButtonCancel, 6, 1, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 6, 2, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 6, 3, alarm, 1, 1
+    CreatePanel ElevPanel, 10, 3, left, 2.24 - 0.1, 1.962, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 2, 1, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 3, cancel, 1, 1
+    AddFloorButton 1, Button135, ButtonLit135, 4, 2, 134, 1, 1
+    AddFloorButton 1, ButtonA, ButtonLitA, 5, 2, 1, 1, 1
+    AddFloorButton 1, ButtonL, ButtonLitL, 6, 2, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 8, 1, open, 1, 1
+    AddControlButton 1, ButtonClose, 8, 3, close, 1, 1
+    AddControl 1, switch.wav, 9, 1, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 9, 2, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddControlButton 1, ButtonAlarm, 9, 3, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.24 - 0.1, 1.962, 0.7, 0.5, 6.5
@@ -2085,28 +2096,30 @@ DrawWalls = true, true, false, false, false, false
 
     #panel
     SetAutoSize = false, false
-    CreatePanel ElevPanel, 13, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, ButtonR, ButtonLitR, 2, 4, 137, 1, 1
-    AddFloorButton 1, Button137, ButtonLit137, 2, 2, 136, 1, 1
-    AddFloorButton 1, Button136, ButtonLit136, 3, 4, 135, 1, 1
-    AddFloorButton 1, Button135, ButtonLit135, 3, 2, 134, 1, 1
-    AddFloorButton 1, Button134, ButtonLit134, 4, 4, 133, 1, 1
-    AddFloorButton 1, Button133, ButtonLit133, 4, 2, 132, 1, 1
-    AddFloorButton 1, Button132, ButtonLit132, 5, 4, 131, 1, 1
-    AddFloorButton 1, Button100, ButtonLit100, 5, 2, 99, 1, 1
-    AddFloorButton 1, Button81, ButtonLit81, 6, 4, 80, 1, 1
-    AddFloorButton 1, Button70, ButtonLit70, 6, 2, 69, 1, 1
-    AddFloorButton 1, Button68, ButtonLit68, 7, 2, 67, 1, 1
-    AddFloorButton 1, Button67, ButtonLit67, 7, 4, 66, 1, 1
-    AddFloorButton 1, Button66, ButtonLit66, 8, 2, 65, 1, 1
-    AddFloorButton 1, Button65, ButtonLit65, 8, 4, 64, 1, 1
-    AddFloorButton 1, Button3, ButtonLit3, 9, 2, 2, 1, 1
-    AddFloorButton 1, Button1, ButtonLit1, 9, 4, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 11, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 12, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 12, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 12, 4, alarm, 1, 1
+    CreatePanel ElevPanel, 15, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
+    AddFloorButton 1, ButtonR, ButtonLitR, 4, 4, 137, 1, 1
+    AddFloorButton 1, Button137, ButtonLit137, 4, 2, 136, 1, 1
+    AddFloorButton 1, Button136, ButtonLit136, 5, 4, 135, 1, 1
+    AddFloorButton 1, Button135, ButtonLit135, 5, 2, 134, 1, 1
+    AddFloorButton 1, Button134, ButtonLit134, 6, 4, 133, 1, 1
+    AddFloorButton 1, Button133, ButtonLit133, 6, 2, 132, 1, 1
+    AddFloorButton 1, Button132, ButtonLit132, 7, 4, 131, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 7, 2, 99, 1, 1
+    AddFloorButton 1, Button81, ButtonLit81, 8, 4, 80, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 8, 2, 69, 1, 1
+    AddFloorButton 1, Button68, ButtonLit68, 9, 2, 67, 1, 1
+    AddFloorButton 1, Button67, ButtonLit67, 9, 4, 66, 1, 1
+    AddFloorButton 1, Button66, ButtonLit66, 10, 2, 65, 1, 1
+    AddFloorButton 1, Button65, ButtonLit65, 10, 4, 64, 1, 1
+    AddFloorButton 1, Button3, ButtonLit3, 11, 2, 2, 1, 1
+    AddFloorButton 1, Button1, ButtonLit1, 11, 4, 0, 1, 1
+    AddControlButton 1, ButtonOpen, 13, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 13, 4, close, 1, 1
+    AddControl 1, switch.wav, 14, 2, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 14, 3, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
+    AddControlButton 1, ButtonAlarm, 14, 4, alarm, 1, 1
 
     SetAutoSize = true, true
 
@@ -2170,75 +2183,77 @@ DrawWalls = true, true, false, false, false, false
     #panel
     SetAutoSize = false, false
     CreatePanel ElevPanel, 17, 7, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
-    AddFloorButton 1, Button132, ButtonLit132, 2, 6, 131, 1, 1
-    AddFloorButton 1, Button131, ButtonLit131, 2, 5, 130, 1, 1
-    AddFloorButton 1, Button130, ButtonLit130, 2, 4, 129, 1, 1
-    AddFloorButton 1, Button129, ButtonLit129, 2, 3, 128, 1, 1
-    AddFloorButton 1, Button128, ButtonLit128, 2, 2, 127, 1, 1
-    AddFloorButton 1, Button127, ButtonLit127, 3, 6, 126, 1, 1
-    AddFloorButton 1, Button126, ButtonLit126, 3, 5, 125, 1, 1
-    AddFloorButton 1, Button125, ButtonLit125, 3, 4, 124, 1, 1
-    AddFloorButton 1, Button124, ButtonLit124, 3, 3, 123, 1, 1
-    AddFloorButton 1, Button123, ButtonLit123, 3, 2, 122, 1, 1
-    AddFloorButton 1, Button122, ButtonLit122, 4, 6, 121, 1, 1
-    AddFloorButton 1, Button121, ButtonLit121, 4, 5, 120, 1, 1
-    AddFloorButton 1, Button120, ButtonLit120, 4, 4, 119, 1, 1
-    AddFloorButton 1, Button119, ButtonLit119, 4, 3, 118, 1, 1
-    AddFloorButton 1, Button118, ButtonLit118, 4, 2, 117, 1, 1
-    AddFloorButton 1, Button117, ButtonLit117, 5, 6, 116, 1, 1
-    AddFloorButton 1, Button116, ButtonLit116, 5, 5, 115, 1, 1
-    AddFloorButton 1, Button115, ButtonLit115, 5, 4, 114, 1, 1
-    AddFloorButton 1, Button114, ButtonLit114, 5, 3, 113, 1, 1
-    AddFloorButton 1, Button113, ButtonLit113, 5, 2, 112, 1, 1
-    AddFloorButton 1, Button112, ButtonLit112, 6, 6, 111, 1, 1
-    AddFloorButton 1, Button111, ButtonLit111, 6, 5, 110, 1, 1
-    AddFloorButton 1, Button110, ButtonLit110, 6, 4, 109, 1, 1
-    AddFloorButton 1, Button109, ButtonLit109, 6, 3, 108, 1, 1
-    AddFloorButton 1, Button108, ButtonLit108, 6, 2, 107, 1, 1
-    AddFloorButton 1, Button107, ButtonLit107, 7, 6, 106, 1, 1
-    AddFloorButton 1, Button106, ButtonLit106, 7, 5, 105, 1, 1
-    AddFloorButton 1, Button105, ButtonLit105, 7, 4, 104, 1, 1
-    AddFloorButton 1, Button104, ButtonLit104, 7, 3, 103, 1, 1
-    AddFloorButton 1, Button103, ButtonLit103, 7, 2, 102, 1, 1
-    AddFloorButton 1, Button102, ButtonLit102, 8, 6, 101, 1, 1
-    AddFloorButton 1, Button101, ButtonLit101, 8, 5, 100, 1, 1
-    AddFloorButton 1, Button100, ButtonLit100, 8, 4, 99, 1, 1
-    AddFloorButton 1, Button99, ButtonLit99, 8, 3, 98, 1, 1
-    AddFloorButton 1, Button98, ButtonLit98, 8, 2, 97, 1, 1
-    AddFloorButton 1, Button97, ButtonLit97, 9, 6, 96, 1, 1
-    AddFloorButton 1, Button96, ButtonLit96, 9, 5, 95, 1, 1
-    AddFloorButton 1, Button95, ButtonLit95, 9, 4, 94, 1, 1
-    AddFloorButton 1, Button94, ButtonLit94, 9, 3, 93, 1, 1
-    AddFloorButton 1, Button93, ButtonLit93, 9, 2, 92, 1, 1
-    AddFloorButton 1, Button92, ButtonLit92, 10, 6, 91, 1, 1
-    AddFloorButton 1, Button91, ButtonLit91, 10, 5, 90, 1, 1
-    AddFloorButton 1, Button90, ButtonLit90, 10, 4, 89, 1, 1
-    AddFloorButton 1, Button89, ButtonLit89, 10, 3, 88, 1, 1
-    AddFloorButton 1, Button88, ButtonLit88, 10, 2, 87, 1, 1
-    AddFloorButton 1, Button87, ButtonLit87, 11, 6, 86, 1, 1
-    AddFloorButton 1, Button86, ButtonLit86, 11, 5, 85, 1, 1
-    AddFloorButton 1, Button85, ButtonLit85, 11, 4, 84, 1, 1
-    AddFloorButton 1, Button84, ButtonLit84, 11, 3, 83, 1, 1
-    AddFloorButton 1, Button83, ButtonLit83, 11, 2, 82, 1, 1
-    AddFloorButton 1, Button82, ButtonLit82, 12, 6, 81, 1, 1
-    AddFloorButton 1, Button81, ButtonLit81, 12, 5, 80, 1, 1
-    AddFloorButton 1, Button80, ButtonLit80, 12, 4, 79, 1, 1
-    AddFloorButton 1, Button79, ButtonLit79, 12, 3, 78, 1, 1
-    AddFloorButton 1, Button78, ButtonLit78, 12, 2, 77, 1, 1
-    AddFloorButton 1, Button77, ButtonLit77, 13, 6, 76, 1, 1
-    AddFloorButton 1, Button76, ButtonLit76, 13, 5, 75, 1, 1
-    AddFloorButton 1, Button75, ButtonLit75, 13, 4, 74, 1, 1
-    AddFloorButton 1, Button74, ButtonLit74, 13, 3, 73, 1, 1
-    AddFloorButton 1, Button73, ButtonLit73, 13, 2, 72, 1, 1
-    AddFloorButton 1, Button72, ButtonLit72, 14, 6, 71, 1, 1
-    AddFloorButton 1, Button71, ButtonLit71, 14, 5, 70, 1, 1
-    AddFloorButton 1, Button70, ButtonLit70, 14, 4, 69, 1, 1
-    AddFloorButton 1, Button69, ButtonLit69, 14, 3, 68, 1, 1
-    AddFloorButton 1, Button68, ButtonLit68, 14, 2, 67, 1, 1
+    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 6, cancel, 1, 1
+    AddFloorButton 1, Button132, ButtonLit132, 3, 6, 131, 1, 1
+    AddFloorButton 1, Button131, ButtonLit131, 3, 5, 130, 1, 1
+    AddFloorButton 1, Button130, ButtonLit130, 3, 4, 129, 1, 1
+    AddFloorButton 1, Button129, ButtonLit129, 3, 3, 128, 1, 1
+    AddFloorButton 1, Button128, ButtonLit128, 3, 2, 127, 1, 1
+    AddFloorButton 1, Button127, ButtonLit127, 4, 6, 126, 1, 1
+    AddFloorButton 1, Button126, ButtonLit126, 4, 5, 125, 1, 1
+    AddFloorButton 1, Button125, ButtonLit125, 4, 4, 124, 1, 1
+    AddFloorButton 1, Button124, ButtonLit124, 4, 3, 123, 1, 1
+    AddFloorButton 1, Button123, ButtonLit123, 4, 2, 122, 1, 1
+    AddFloorButton 1, Button122, ButtonLit122, 5, 6, 121, 1, 1
+    AddFloorButton 1, Button121, ButtonLit121, 5, 5, 120, 1, 1
+    AddFloorButton 1, Button120, ButtonLit120, 5, 4, 119, 1, 1
+    AddFloorButton 1, Button119, ButtonLit119, 5, 3, 118, 1, 1
+    AddFloorButton 1, Button118, ButtonLit118, 5, 2, 117, 1, 1
+    AddFloorButton 1, Button117, ButtonLit117, 6, 6, 116, 1, 1
+    AddFloorButton 1, Button116, ButtonLit116, 6, 5, 115, 1, 1
+    AddFloorButton 1, Button115, ButtonLit115, 6, 4, 114, 1, 1
+    AddFloorButton 1, Button114, ButtonLit114, 6, 3, 113, 1, 1
+    AddFloorButton 1, Button113, ButtonLit113, 6, 2, 112, 1, 1
+    AddFloorButton 1, Button112, ButtonLit112, 7, 6, 111, 1, 1
+    AddFloorButton 1, Button111, ButtonLit111, 7, 5, 110, 1, 1
+    AddFloorButton 1, Button110, ButtonLit110, 7, 4, 109, 1, 1
+    AddFloorButton 1, Button109, ButtonLit109, 7, 3, 108, 1, 1
+    AddFloorButton 1, Button108, ButtonLit108, 7, 2, 107, 1, 1
+    AddFloorButton 1, Button107, ButtonLit107, 8, 6, 106, 1, 1
+    AddFloorButton 1, Button106, ButtonLit106, 8, 5, 105, 1, 1
+    AddFloorButton 1, Button105, ButtonLit105, 8, 4, 104, 1, 1
+    AddFloorButton 1, Button104, ButtonLit104, 8, 3, 103, 1, 1
+    AddFloorButton 1, Button103, ButtonLit103, 8, 2, 102, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 9, 6, 101, 1, 1
+    AddFloorButton 1, Button101, ButtonLit101, 9, 5, 100, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 9, 4, 99, 1, 1
+    AddFloorButton 1, Button99, ButtonLit99, 9, 3, 98, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 9, 2, 97, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 10, 6, 96, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 10, 5, 95, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 10, 4, 94, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 10, 3, 93, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 10, 2, 92, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 11, 6, 91, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 11, 5, 90, 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 11, 4, 89, 1, 1
+    AddFloorButton 1, Button89, ButtonLit89, 11, 3, 88, 1, 1
+    AddFloorButton 1, Button88, ButtonLit88, 11, 2, 87, 1, 1
+    AddFloorButton 1, Button87, ButtonLit87, 12, 6, 86, 1, 1
+    AddFloorButton 1, Button86, ButtonLit86, 12, 5, 85, 1, 1
+    AddFloorButton 1, Button85, ButtonLit85, 12, 4, 84, 1, 1
+    AddFloorButton 1, Button84, ButtonLit84, 12, 3, 83, 1, 1
+    AddFloorButton 1, Button83, ButtonLit83, 12, 2, 82, 1, 1
+    AddFloorButton 1, Button82, ButtonLit82, 13, 6, 81, 1, 1
+    AddFloorButton 1, Button81, ButtonLit81, 13, 5, 80, 1, 1
+    AddFloorButton 1, Button80, ButtonLit80, 13, 4, 79, 1, 1
+    AddFloorButton 1, Button79, ButtonLit79, 13, 3, 78, 1, 1
+    AddFloorButton 1, Button78, ButtonLit78, 13, 2, 77, 1, 1
+    AddFloorButton 1, Button77, ButtonLit77, 14, 6, 76, 1, 1
+    AddFloorButton 1, Button76, ButtonLit76, 14, 5, 75, 1, 1
+    AddFloorButton 1, Button75, ButtonLit75, 14, 4, 74, 1, 1
+    AddFloorButton 1, Button74, ButtonLit74, 14, 3, 73, 1, 1
+    AddFloorButton 1, Button73, ButtonLit73, 14, 2, 72, 1, 1
+    AddFloorButton 1, Button72, ButtonLit72, 15, 6, 71, 1, 1
+    AddFloorButton 1, Button71, ButtonLit71, 15, 5, 70, 1, 1
+    AddFloorButton 1, Button70, ButtonLit70, 15, 4, 69, 1, 1
+    AddFloorButton 1, Button69, ButtonLit69, 15, 3, 68, 1, 1
+    AddFloorButton 1, Button68, ButtonLit68, 15, 2, 67, 1, 1
     AddControlButton 1, ButtonOpen, 16, 2, open, 1, 1
     AddControlButton 1, ButtonClose, 16, 3, close, 1, 1
-    AddControlButton 1, ButtonCancel, 16, 4, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 16, 5, stop, 1, 1
+    AddControl 1, switch.wav, 16, 4, 1, 1, 0, 0, run, stop, RunKey, StopKey
+    AddControl 1, switch.wav, 16, 5, 1, 1, 0, 0, IndOff, IndOn, IndOff, IndOn
     AddControlButton 1, ButtonAlarm, 16, 6, alarm, 1, 1
 
     CreatePanel ElevPanel, 17, 7, back, 1.75 + 0.875 - 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 1, 1
@@ -2310,9 +2325,7 @@ DrawWalls = true, true, false, false, false, false
     AddFloorButton 2, ButtonA, ButtonLitA, 15, 6, 1, 1, 1
     AddFloorButton 2, ButtonL, ButtonLitL, 15, 2, 0, 1, 1
     AddControlButton 2, ButtonOpen, 16, 6, open, 1, 1
-    AddControlButton 2, ButtonClose, 16, 5, close, 1, 1
-    AddControlButton 2, ButtonCancel, 16, 4, cancel, 1, 1
-    AddControlButton 2, ButtonStop, 16, 3, stop, 1, 1
+    AddControlButton 2, ButtonClose, 16, 4, close, 1, 1
     AddControlButton 2, ButtonAlarm, 16, 2, alarm, 1, 1
 
     SetAutoSize = true, true
@@ -2357,6 +2370,14 @@ DrawWalls = true, true, false, false, false, false
     AddDirectionalIndicator 3, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 0, 4.151, 8.5, back, 0.5, 1, true, 0, 0
 <EndFloor>
 
+AddAction FireServiceOn1, Elevator1, Fire1On
+AddAction FireServiceOff1, Elevator1, Fire1Off
+AddAction FireServiceBypass1, Elevator1, Fire1Bypass
+
+<Floor 0>
+    AddActionControl FireSwitch1, switch.wav, back, -0.24 - 6.215, -41.05 + 4.345 + 1 + 0.1, 0.25, 0.25, 3.5, FireServiceOff1, FireServiceBypass1, FireServiceOn1, Fire1Off, Fire1Bypass, Fire1On
+<EndFloor>
+
 <Floors 0 to 136>
     CallButtonElevators = 4
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.13 + 3, 18.715 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
@@ -2367,6 +2388,18 @@ DrawWalls = true, true, false, false, false, false
 <Floor 137>
     CallButtonElevators = 4
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 4.13 + 3, 18.715 - 4.125 - 0.1, 14, front, 0.5, 1, true, 0, 0
+<EndFloor>
+
+AddAction FireServiceOn4, Elevator4, Fire1On
+AddAction FireServiceOff4, Elevator4, Fire1Off
+AddAction FireServiceBypass4, Elevator4, Fire1Bypass
+AddAction FireServiceOn5, Elevator5, Fire1On
+AddAction FireServiceOff5, Elevator5, Fire1Off
+AddAction FireServiceBypass5, Elevator5, Fire1Bypass
+
+<Floor 0>
+    AddActionControl FireSwitch4, switch.wav, front, 4.13 + 3, 18.715 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, FireServiceOff4, FireServiceBypass4, FireServiceOn4, Fire1Off, Fire1Bypass, Fire1On
+    AddActionControl FireSwitch5, switch.wav, front, -15 + 3, 18.715 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, FireServiceOff5, FireServiceBypass5, FireServiceOn5, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
 CreateStairwell 3, 4.13, 26.7 + 0.66, 0, 137
