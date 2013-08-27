@@ -1,5 +1,9 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-added fire switch keys to Simple, Triton Center and Glass Tower elevators
+-added landing zone area for automatic releasing of interlocks
+-added new section of items to elevator editor, and added some other misc things
+-added basic elevator interlocks, along with actions
 -fixed button/control texture multipliers - this fix will break previous buildings' buttons and controls if they use size multipliers other than 0 or 1.  Previously changing the size would mess up the button positioning
 -updated Simple building with internal and external fire switches
 -added more texture content
