@@ -5539,6 +5539,14 @@ int ScriptProcessor::ProcElevators()
 		elev->Interlocks = Ogre::StringConverter::parseBool(temp2);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 9) == "floorhold")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		elev->FloorHold = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
+	}
 
 	//CreateElevator command
 	if (linecheck.substr(0, 14) == "createelevator")

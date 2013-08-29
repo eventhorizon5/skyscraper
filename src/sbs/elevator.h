@@ -143,6 +143,8 @@ public:
 	bool OpenOnStart; //true if doors should automatically open on simulator start
 	int ManualMove; //0 if manual movement is off; -1 for down, 1 for up
 	bool Interlocks; //lock doors during movement
+	bool GoActive; //true if go function is in use (mouse hold is active)
+	bool FloorHold; //true if floor buttons need to be held for the elevator to proceed to the floor (modern manual mode)
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -154,7 +156,7 @@ public:
 	bool DeleteRoute(int floor, int direction);
 	bool CallCancel();
 	void Alarm();
-	void Stop(bool emergency);
+	void Stop(bool emergency = false);
 	void OpenHatch();
 	void ProcessCallQueue();
 	int GetFloor();
@@ -184,7 +186,7 @@ public:
 	const char* GetFloorSkipText();
 	bool IsServicedFloor(int floor);
 	bool InServiceMode();
-	void Go(int floor);
+	bool Go(int floor, bool hold = false);
 	void EnableACP(bool value);
 	void EnableUpPeak(bool value);
 	void EnableDownPeak(bool value);
@@ -303,6 +305,8 @@ public:
 	CallButton* GetPrimaryCallButton();
 	int GetActiveCallFloor();
 	int GetActiveCallDirection();
+	void ResetLights();
+	void ChangeLight(int floor, bool value);
 
 private:
 
@@ -352,6 +356,7 @@ private:
 	bool UpCall;
 	bool DownCall;
 	bool QueuePending; //true if either queue has changed, and needs to be processed
+	int GoActiveFloor; //associated floor number for GoActive flag
 
 	//functions
 	void MoveElevatorToFloor();

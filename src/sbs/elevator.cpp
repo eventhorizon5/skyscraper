@@ -191,6 +191,9 @@ Elevator::Elevator(int number)
 	doorhold_floor = 0;
 	doorhold_manual = 0;
 	Interlocks = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Interlocks", true);
+	GoActive = false;
+	GoActiveFloor = 0;
+	FloorHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.FloorHold", false);
 
 	//create timers
 	parking_timer = new Timer(this, 0);
@@ -719,8 +722,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 	{
 		if (sbs->Verbose)
 			Report("AddRoute: turning on button lights for floor " + ToString2(floor));
-		for (int i = 0; i < (int)PanelArray.size(); i++)
-			PanelArray[i]->ChangeLight(floor, true);
+		ChangeLight(floor, true);
 	}
 
 	//add ACP route recursively if mode is enabled
@@ -786,8 +788,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 	//turn off button lights
 	if (sbs->Verbose)
 		Report("DeleteRoute: turning off button lights for floor " + ToString2(floor));
-	for (int i = 0; i < (int)PanelArray.size(); i++)
-		PanelArray[i]->ChangeLight(floor, false);
+	ChangeLight(floor, false);
 	return true;
 }
 
@@ -1360,6 +1361,10 @@ void Elevator::MonitorLoop()
 		OpenDoors();
 	if (doorhold_direction == -1)
 		CloseDoors();
+
+	//process Go function hold
+	if (GoActive == true)
+		Go(GoActiveFloor, true);
 
 	//call queue processor
 	ProcessCallQueue();
@@ -2652,14 +2657,14 @@ bool Elevator::InServiceMode()
 		return false;
 }
 
-void Elevator::Go(int floor)
+bool Elevator::Go(int floor, bool hold)
 {
 	//go to specified floor, bypassing the queuing system
 
 	if (Running == false)
 	{
 		Report("Elevator not running");
-		return;
+		return false;
 	}
 
 	//exit if in inspection mode
@@ -2667,15 +2672,35 @@ void Elevator::Go(int floor)
 	{
 		if (sbs->Verbose)
 			Report("Go: in inspection mode");
-		return;
+		return false;
 	}
 
-	if (sbs->Verbose)
+	if (GoActive == false || hold == false)
+	{
+		if (hold == true)
+		{
+			GoActive = true;
+			GoActiveFloor = floor;
+		}
 		Report("Go: proceeding to floor " + ToString2(floor));
-	GotoFloor = floor;
-	WaitForDoors = true;
-	CloseDoors();
-	MoveElevator = true;
+		ChangeLight(floor, true);
+		GotoFloor = floor;
+		if (AutoDoors == true)
+		{
+			WaitForDoors = true;
+			CloseDoors();
+		}
+		MoveElevator = true;
+	}
+	else if (GoActive == true && hold == true && sbs->camera->MouseDown == false)
+	{
+		//stop go movement
+		GoActive = false;
+		GoActiveFloor = 0;
+		Stop();
+		ChangeLight(floor, false);
+	}
+	return true;
 }
 
 void Elevator::GoToRecallFloor()
@@ -2691,7 +2716,7 @@ void Elevator::GoToRecallFloor()
 
 	//stop elevator if moving
 	if (IsMoving == true)
-		Stop(false);
+		Stop();
 
 	//reset queues
 	ResetQueue(true, true);
@@ -2898,7 +2923,7 @@ void Elevator::EnableInspectionService(bool value)
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		if (IsMoving == true)
-			Stop(false);
+			Stop();
 		Report("Inspection Service mode enabled");
 		InspectionService = true;
 	}
@@ -2942,7 +2967,7 @@ void Elevator::EnableInspectionService(bool value)
 		InspectionService = false;
 
 		if (IsMoving == true)
-			Stop(false);
+			Stop();
 		else
 			ReturnToNearestFloor();
 	}
@@ -3161,6 +3186,8 @@ bool Elevator::SetACPFloor(int floor)
 
 bool Elevator::MoveUp()
 {
+	//manual up movement for inspection service mode
+
 	if (Running == false)
 	{
 		Report("Elevator not running");
@@ -3199,6 +3226,8 @@ bool Elevator::MoveUp()
 
 bool Elevator::MoveDown()
 {
+	//manual down movement for inspection service mode
+
 	if (Running == false)
 	{
 		Report("Elevator not running");
@@ -3249,7 +3278,7 @@ void Elevator::SetGoButton(bool value)
 		return;
 
 	if (ManualGo == true && value == false)
-		Stop(false);
+		Stop();
 
 	ManualGo = value;
 
@@ -3284,7 +3313,7 @@ void Elevator::SetUpButton(bool value)
 		return;
 
 	if (ManualUp == true && value == false)
-		Stop(false);
+		Stop();
 
 	ManualUp = value;
 
@@ -3314,7 +3343,7 @@ void Elevator::SetDownButton(bool value)
 		return;
 
 	if (ManualDown == true && value == false)
-		Stop(false);
+		Stop();
 
 	ManualDown = value;
 
@@ -4128,12 +4157,24 @@ void Elevator::ResetQueue(bool up, bool down)
 		DownQueue.clear();
 	}
 
+	ResetLights();
+}
+
+void Elevator::ResetLights()
+{
 	//turn off button lights
 	if (sbs->Verbose)
-		Report("QueueReset: turning off button lights for queue reset");
+		Report("turning off button lights");
 
 	for (int i = 0; i < (int)PanelArray.size(); i++)
 		PanelArray[i]->ChangeAllLights(false);
+}
+
+void Elevator::ChangeLight(int floor, bool value)
+{
+	//turn off specified button lights
+	for (int i = 0; i < (int)PanelArray.size(); i++)
+		PanelArray[i]->ChangeLight(floor, value);
 }
 
 void Elevator::SetBeepSound(const char *filename)
@@ -4779,7 +4820,7 @@ void Elevator::SetRunState(bool value)
 	if (value == false && IsMoving == true)
 	{
 		if (InspectionService == true)
-			Stop(false);
+			Stop();
 		else
 			Stop(true);
 	}
@@ -5199,6 +5240,13 @@ bool Elevator::SelectFloor(int floor)
 	else if (Running == false)
 		return false;
 
+	//use Go routine instead if floorhold parameter is enabled
+	if (FloorHold == true)
+	{
+		Go(floor, true);
+		return true;
+	}
+
 	bool result = false;
 
 	//elevator is above floor
@@ -5381,7 +5429,7 @@ void Elevator::Up()
 	{
 		//stop movement
 		ManualMove = 0;
-		Stop(false);
+		Stop();
 	}
 }
 
@@ -5411,7 +5459,7 @@ void Elevator::Down()
 	{
 		//stop movement
 		ManualMove = 0;
-		Stop(false);
+		Stop();
 	}
 }
 
