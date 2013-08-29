@@ -102,7 +102,7 @@ bool ScriptProcessor::LoadBuilding()
 {
 	//building loader/script interpreter
 
-	int returncode = 0;
+	int returncode = sContinue;
 	int progress_marker = 0;
 
 	while (line < (int)BuildingData.size())
@@ -639,32 +639,33 @@ checkfloors:
 		ReplaceAll(LineData, "%maxx%", ToString(MaxExtent.x, 12));
 		ReplaceAll(LineData, "%maxz%", ToString(MaxExtent.z, 12));
 
-		//Global commands
-		returncode = ProcCommands();
+		//reset return code
+		returncode = sContinue;
 
-		if (returncode == 0)
+		//Global parameters
+		if (Section == 1)
+			returncode = ProcGlobals();
+
+		//Process floors
+		else if (Section == 2)
 		{
-			//Global parameters
-			if (Section == 1)
-				returncode = ProcGlobals();
-
-			//Process floors
-			else if (Section == 2)
-			{
-				//create floor if not created already
-				Simcore->NewFloor(Current);
+			//create floor if not created already
+			Simcore->NewFloor(Current);
 recalc:
-				returncode = ProcFloors();
-			}
-
-			//process elevators
-			else if (Section == 4)
-				returncode = ProcElevators();
-
-			//Process textures
-			else if (Section == 5)
-				returncode = ProcTextures();
+			returncode = ProcFloors();
 		}
+
+		//process elevators
+		else if (Section == 4)
+			returncode = ProcElevators();
+
+		//Process textures
+		else if (Section == 5)
+			returncode = ProcTextures();
+
+		//Global commands
+		if (returncode == sContinue)
+			returncode = ProcCommands();
 
 		//handle return values
 		if (returncode == sError)
@@ -1114,8 +1115,29 @@ int ScriptProcessor::ProcCommands()
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
 
+	//IF statement
+	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
+	{
+		temp1 = LineData.find("[", 0);
+		temp3 = LineData.find("]", 0);
+		if (temp1 + temp3 > 0)
+			temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
+		else
+			temp2 = "";
+		TrimString(temp2);
+		if (IfProc(temp2.c_str()) == true)
+		{
+			//trim off IF statement
+			LineData = LineData.substr(temp3 + 1);
+			TrimString(LineData);
+			return sCheckFloors;
+		}
+		else
+			return sNextLine; //skip line
+	}
+
 	//Print command
-	if (linecheck.substr(0, 5) == "print" && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 5) == "print")
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(6).c_str());
@@ -1129,15 +1151,6 @@ int ScriptProcessor::ProcCommands()
 	//AddTriangleWall command
 	if (linecheck.substr(0, 15) == "addtrianglewall")
 	{
-		if (Section == 2 && getfloordata == false)
-		{
-			//process floor-specific variables if in a floor section
-			getfloordata = true;
-			return sRecalc;
-		}
-		else
-			getfloordata = false;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
 
@@ -1201,7 +1214,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddWall command
-	if (linecheck.substr(0, 7) == "addwall" && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 7) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -1222,7 +1235,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddFloor
-	if (linecheck.substr(0, 9) == "addfloor " && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 9) == "addfloor ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -1285,7 +1298,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Cut command
-	if (linecheck.substr(0, 4) == "cut " && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 4) == "cut ")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 4);
@@ -1320,7 +1333,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Set command
-	if (linecheck.substr(0, 4) == "set " && Section != 2 && Section != 4)
+	if (linecheck.substr(0, 4) == "set ")
 	{
 		temp1 = LineData.find("=", 0);
 		if (temp1 < 0)
@@ -1374,15 +1387,6 @@ int ScriptProcessor::ProcCommands()
 	//CreateWallBox2 command
 	if (linecheck.substr(0, 14) == "createwallbox2")
 	{
-		if (Section == 2 && getfloordata == false)
-		{
-			//process floor-specific variables if in a floor section
-			getfloordata = true;
-			return sRecalc;
-		}
-		else
-			getfloordata = false;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
 
@@ -1442,15 +1446,6 @@ int ScriptProcessor::ProcCommands()
 	//CreateWallBox command
 	if (linecheck.substr(0, 14) == "createwallbox ")
 	{
-		if (Section == 2 && getfloordata == false)
-		{
-			//process floor-specific variables if in a floor section
-			getfloordata = true;
-			return sRecalc;
-		}
-		else
-			getfloordata = false;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
@@ -1510,15 +1505,6 @@ int ScriptProcessor::ProcCommands()
 	//AddCustomWall command
 	if (linecheck.substr(0, 14) == "addcustomwall ")
 	{
-		if (Section == 2 && getfloordata == false)
-		{
-			//process floor-specific variables if in a floor section
-			getfloordata = true;
-			return sRecalc;
-		}
-		else
-			getfloordata = false;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
@@ -2079,15 +2065,6 @@ int ScriptProcessor::ProcCommands()
 	temp5 = linecheck.find("isect(", 0);
 	while (temp5 > -1)
 	{
-		if (Section == 2 && getfloordata == false)
-		{
-			//process floor-specific variables if in a floor section
-			getfloordata = true;
-			return sRecalc;
-		}
-		else
-			getfloordata = false;
-
 		temp1 = LineData.find("(", 0);
 		temp4 = LineData.find(")", 0);
 		if (temp1 < 0 || temp4 < 0)
@@ -2175,15 +2152,6 @@ int ScriptProcessor::ProcCommands()
 	temp5 = linecheck.find("getwallextents(", 0);
 	while (temp5 > -1)
 	{
-		if (Section == 2 && getfloordata == false)
-		{
-			//process floor-specific variables if in a floor section
-			getfloordata = true;
-			return sRecalc;
-		}
-		else
-			getfloordata = false;
-
 		temp1 = LineData.find("(", 0);
 		temp4 = LineData.find(")", 0);
 		if (temp1 < 0 || temp4 < 0)
@@ -2315,9 +2283,6 @@ int ScriptProcessor::ProcCommands()
 	//AddSound
 	if (linecheck.substr(0, 8) == "addsound")
 	{
-		if (Section == 2 || Section == 4)
-			return 0;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true, 1);
 
@@ -2386,9 +2351,6 @@ int ScriptProcessor::ProcCommands()
 	//AddModel command
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
-		if (Section == 2 || Section == 4)
-			return 0;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true, 1);
 
@@ -2485,9 +2447,6 @@ int ScriptProcessor::ProcCommands()
 	//AddActionControl command
 	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{
-		if (Section == 2 || Section == 4)
-			return 0;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
 
@@ -2539,9 +2498,6 @@ int ScriptProcessor::ProcCommands()
 	//AddTrigger command
 	if (linecheck.substr(0, 10) == "addtrigger")
 	{
-		if (Section == 2 || Section == 4)
-			return 0;
-
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
 
@@ -2634,7 +2590,7 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
-	return 0;
+	return sContinue;
 }
 
 int ScriptProcessor::ProcGlobals()
@@ -2763,7 +2719,7 @@ int ScriptProcessor::ProcGlobals()
 		Simcore->InterfloorOnTop = Ogre::StringConverter::parseBool(temp2);
 		return sNextLine;
 	}
-	return 0;
+	return sContinue;
 }
 
 int ScriptProcessor::ProcFloors()
@@ -2819,26 +2775,9 @@ int ScriptProcessor::ProcFloors()
 	if (getfloordata == true)
 		return sCheckFloors;
 
-	//IF statement
+	//IF statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
-	{
-		temp1 = LineData.find("[", 0);
-		temp3 = LineData.find("]", 0);
-		if (temp1 + temp3 > 0)
-			temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
-		else
-			temp2 = "";
-		TrimString(temp2);
-		if (IfProc(temp2.c_str()) == true)
-		{
-			//trim off IF statement
-			LineData = LineData.substr(temp3 + 1);
-			TrimString(LineData);
-			return sCheckFloors;
-		}
-		else
-			return sNextLine; //skip line
-	}
+		return sContinue;
 
 	//process functions
 	if (FunctionProc() == true)
@@ -2977,17 +2916,6 @@ int ScriptProcessor::ProcFloors()
 		return sNextLine;
 	}
 
-	//Print command
-	if (linecheck.substr(0, 5) == "print")
-	{
-		//calculate inline math
-		buffer = Calc(LineData.substr(6).c_str());
-
-		//print line
-		skyscraper->Report(buffer);
-		return sNextLine;
-	}
-
 	//Exit command
 	if (linecheck.substr(0, 4) == "exit")
 	{
@@ -2999,10 +2927,6 @@ int ScriptProcessor::ProcFloors()
 		//update linecheck
 		linecheck = SetCaseCopy(LineData, false);
 	}
-
-	//Break command
-	if (linecheck.substr(0, 7) == "<break>")
-		return sBreak;
 
 	//AddFloor command
 	if (linecheck.substr(0, 9) == "addfloor ")
@@ -3346,58 +3270,6 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		StoreCommand(floor->ColumnWallBox2(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
-		return sNextLine;
-	}
-
-	//Set command
-	if (linecheck.substr(0, 4) == "set ")
-	{
-		temp1 = LineData.find("=", 0);
-		if (temp1 < 0)
-			return ScriptError("Syntax Error");
-
-		std::string str = LineData.substr(4, temp1 - 5);
-		TrimString(str);
-
-		//reserved keywords
-		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param")
-			return ScriptError("Cannot use system variable name");
-
-		//get text after equal sign
-		temp2 = GetAfterEquals(LineData.c_str());
-
-		//find existing variable by name
-		int index = -1;
-		for (int i = 0; i < variables.size(); i++)
-		{
-			if (variables[i].name == str)
-			{
-				index = i;
-				break;
-			}
-		}
-
-		std::string value = Calc(temp2.c_str());
-
-		if (index == -1)
-		{
-			//create new variable
-			VariableMap variable;
-			variable.name = str;
-			variable.value = value;
-			variables.push_back(variable);
-			value = variable.value;
-		}
-		else
-		{
-			//set existing variable
-			variables[index].name = str;
-			variables[index].value = value;
-			value = variables[index].value;
-		}
-
-		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable '" + str + "' set to " + value);
 		return sNextLine;
 	}
 
@@ -4613,7 +4485,7 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 	}
-	return 0;
+	return sContinue;
 }
 
 int ScriptProcessor::ProcElevators()
@@ -4627,26 +4499,9 @@ int ScriptProcessor::ProcElevators()
 	buffer = ToString(Current);
 	ReplaceAll(LineData, "%elevator%", buffer.c_str());
 
-	//IF statement
+	//IF statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
-	{
-		temp1 = LineData.find("[", 0);
-		temp3 = LineData.find("]", 0);
-		if (temp1 + temp3 > 0)
-			temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
-		else
-			temp2 = "";
-		TrimString(temp2);
-		if (IfProc(temp2.c_str()) == true)
-		{
-			std::string str = LineData.substr(temp3 + 1);
-			TrimString(str);
-			LineData = str; //trim off IF statement
-			return sCheckFloors;
-		}
-		else
-			return sNextLine; //skip line
-	}
+		return sContinue;
 
 	//process functions
 	if (FunctionProc() == true)
@@ -5684,20 +5539,6 @@ int ScriptProcessor::ProcElevators()
 		elev->Interlocks = Ogre::StringConverter::parseBool(temp2);
 		return sNextLine;
 	}
-
-	//Print command
-	if (linecheck.substr(0, 5) == "print")
-	{
-		//calculate inline math
-		buffer = Calc(LineData.substr(6).c_str());
-
-		//print line
-		skyscraper->Report(buffer);
-		return sNextLine;
-	}
-
-	if (linecheck.substr(0, 7) == "<break>")
-		return sBreak;
 
 	//CreateElevator command
 	if (linecheck.substr(0, 14) == "createelevator")
@@ -6858,58 +6699,6 @@ int ScriptProcessor::ProcElevators()
 		return sNextLine;
 	}
 
-	//Set command
-	if (linecheck.substr(0, 4) == "set ")
-	{
-		temp1 = LineData.find("=", 0);
-		if (temp1 < 0)
-			return ScriptError("Syntax Error");
-
-		std::string str = LineData.substr(4, temp1 - 5);
-		TrimString(str);
-
-		//reserved keywords
-		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param")
-			return ScriptError("Cannot use system variable name");
-
-		//get text after equal sign
-		temp2 = GetAfterEquals(LineData.c_str());
-
-		//find existing variable by name
-		int index = -1;
-		for (int i = 0; i < variables.size(); i++)
-		{
-			if (variables[i].name == str)
-			{
-				index = i;
-				break;
-			}
-		}
-
-		std::string value = Calc(temp2.c_str());
-
-		if (index == -1)
-		{
-			//create new variable
-			VariableMap variable;
-			variable.name = str;
-			variable.value = value;
-			variables.push_back(variable);
-			value = variable.value;
-		}
-		else
-		{
-			//set existing variable
-			variables[index].name = str;
-			variables[index].value = value;
-			value = variables[index].value;
-		}
-
-		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable '" + str + "' set to " + value);
-		return sNextLine;
-	}
-
 	//handle elevator range
 	if (RangeL != RangeH && linecheck.substr(0, 12) == "<endelevator")
 	{
@@ -6928,7 +6717,7 @@ int ScriptProcessor::ProcElevators()
 			return sNextLine;
 		}
 	}
-	return 0;
+	return sContinue;
 }
 
 int ScriptProcessor::ProcTextures()
@@ -7378,7 +7167,7 @@ int ScriptProcessor::ProcTextures()
 		Simcore->TransformTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 		return sNextLine;
 	}
-	return 0;
+	return sContinue;
 }
 
 std::string ScriptProcessor::Calc(const char *expression)
