@@ -77,6 +77,8 @@
     AddText Black, ButtonCloseInt, nimbus_sans.ttf, 28, CloseI, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpenExt, nimbus_sans.ttf, 28, OpenE, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonCloseExt, nimbus_sans.ttf, 28, CloseE, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, IntOn, nimbus_sans.ttf, 28, I On, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, IntOff, nimbus_sans.ttf, 28, I Off, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
@@ -336,7 +338,8 @@ DrawWalls = true, true, false, false, false, false
     AddButton 1, switch.wav, ButtonCloseInt, ButtonCloseInt, 10, 4, closeint, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 11, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 11, 4, close, 1, 1
-    AddButton 1, , ButtonAlarm, ButtonAlarm, 12, 3, alarm, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 12, 4, alarm, 1, 1
+    AddControl 1, switch.wav, 12, 2, 1, 1, 0, 0, InterlocksOn, InterlocksOff, IntOn, IntOff
 
     #Floor Indicator
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
@@ -432,10 +435,17 @@ AddAction ElevOpenExt, Elevator 1, OpenExt
 AddAction ElevCloseExt, Elevator 1, CloseExt
 AddAction ElevOpenInt, Elevator 1, OpenInt
 AddAction ElevCloseInt, Elevator 1, CloseInt
+AddAction ElevOpen, Elevator 1, Open
+AddAction ElevClose, Elevator 1, Close
+AddAction ElevUp, Elevator 1, Up
+AddAction ElevDown, Elevator 1, Down
 
 <Floors 0 to 9>
-    AddActionControl ElevOpenExt, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.5, 0.5, 4 + 0.5, ElevCloseExt, ElevOpenExt, ButtonOpenExt, ButtonCloseExt
-    AddActionControl ElevOpenExt, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.5, 0.5, 4 - 0.5, ElevCloseInt, ElevOpenInt, ButtonOpenInt, ButtonCloseInt
+    AddActionControl ElevOpenExt, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.3, 0.3, 4, ElevCloseExt, ElevOpenExt, ButtonOpenExt, ButtonCloseExt
+    AddActionControl ElevOpenInt, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.3, 0.3, 4 - 0.5, ElevCloseInt, ElevOpenInt, ButtonOpenInt, ButtonCloseInt
+    AddActionControl ElevOpen, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.3, 0.3, 4 - 1, ElevClose, ElevOpen, ButtonOpen, ButtonClose
+    AddActionControl ElevUp, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.3, 0.3, 4 + 1, ElevUp, ButtonUp
+    AddActionControl ElevDown, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.3, 0.3, 4 + 0.5, ElevDown, ButtonDown
 <EndFloors>
 
 ShaftShowFloors 1 = 0 - 9

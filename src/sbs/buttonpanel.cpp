@@ -131,13 +131,7 @@ Object* ButtonPanel::AddButton(const char *sound, const char *texture, const cha
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%.
 	//hoffset and voffset are the optional horizontal and vertical offsets to place the button (in order to place it outside of the default grid position)
 
-	//type is one of these:
-	//floor number
-	//open = Open Doors
-	//close = Close Doors
-	//cancel = Call Cancel
-	//stop = Emergency Stop
-	//alarm = Alarm
+	//type is an elevator action, defined in action.cpp
 
 	std::vector<std::string> textures, names;
 	std::string newtype = type;
@@ -147,7 +141,6 @@ Object* ButtonPanel::AddButton(const char *sound, const char *texture, const cha
 	if (newtype == "stop")
 		newtype = "estop";
 
-	int positions = 1;
 	textures.push_back(texture);
 	textures.push_back(texture_lit);
 	if (IsNumeric(newtype.c_str()) == true)
