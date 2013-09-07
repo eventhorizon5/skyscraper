@@ -2721,6 +2721,9 @@ void Elevator::GoToRecallFloor()
 	//reset queues
 	ResetQueue(true, true);
 
+	if (RecallFloor == GetFloor())
+		return;
+
 	if (RecallUnavailable == false)
 	{
 		Report("Proceeding to recall floor");
@@ -2888,6 +2891,7 @@ void Elevator::EnableIndependentService(bool value)
 		EnableFireService2(0);
 		ResetQueue(true, true);
 		EnableNudgeMode(false);
+		HoldDoors(); //turn off door timers
 		if (IsMoving == false)
 			if (AutoDoors == true)
 				OpenDoors();
@@ -2922,6 +2926,7 @@ void Elevator::EnableInspectionService(bool value)
 		EnableFireService2(0);
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
+		HoldDoors(); //turn off door timers
 		if (IsMoving == true)
 			Stop();
 		Report("Inspection Service mode enabled");
@@ -2999,9 +3004,7 @@ void Elevator::EnableFireService1(int value)
 		return;
 	}
 
-	if (value >= 0 && value <= 2)
-		FireServicePhase1 = value;
-	else
+	if (value < 0 || value > 2)
 	{
 		Report("EnableFireService1: invalid value");
 		return;
@@ -3021,6 +3024,9 @@ void Elevator::EnableFireService1(int value)
 			//recall elevator if not in phase 2 hold
 			if (FireServicePhase2 != 2)
 			{
+				//turn off all door timers
+				HoldDoors();
+
 				//enable nudge mode on all doors if any are open
 				if (GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
 					EnableNudgeMode(true);
@@ -3032,16 +3038,18 @@ void Elevator::EnableFireService1(int value)
 		else
 		{
 			if (FireServicePhase2 == 0)
-				ResetDoorTimer();
+				ResetDoorTimer(); //enable door timers
 			Report("Fire Service Phase 1 mode set to Bypass");
 		}
 	}
 	else
 	{
 		if (FireServicePhase2 == 0)
-			ResetDoorTimer();
+			ResetDoorTimer(); //enable door timers
 		Report("Fire Service Phase 1 mode set to Off");
 	}
+
+	FireServicePhase1 = value;
 }
 
 void Elevator::EnableFireService2(int value)
@@ -3101,6 +3109,7 @@ void Elevator::EnableFireService2(int value)
 		EnableInspectionService(false);
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
+		HoldDoors(); //disable all door timers
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
@@ -3110,7 +3119,7 @@ void Elevator::EnableFireService2(int value)
 	{
 		Report("Fire Service Phase 2 mode set to Off");
 		if (FireServicePhase1 == 0)
-			ResetDoorTimer();
+			ResetDoorTimer(); //enable door timers
 		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
 		{
 			//enable nudge mode on all doors if any are open
@@ -5049,7 +5058,7 @@ Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vec
 
 void Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-        ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
+	ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
 }
 
 std::vector<Sound*> Elevator::GetSound(const char *name)

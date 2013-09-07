@@ -1857,36 +1857,36 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 void ElevatorDoor::DoorObject::Move()
 {
-		//move elevator doors
+	//move elevator doors
 
-		//up movement
-		if (direction == 0)
-			mesh->Move(Ogre::Vector3(0, active_speed * sbs->delta, 0), true, true, true);
+	//up movement
+	if (direction == 0)
+		mesh->Move(Ogre::Vector3(0, active_speed * sbs->delta, 0), true, true, true);
 
-		//down movement
-		if (direction == 1)
-			mesh->Move(Ogre::Vector3(0, -active_speed * sbs->delta, 0), true, true, true);
+	//down movement
+	if (direction == 1)
+		mesh->Move(Ogre::Vector3(0, -active_speed * sbs->delta, 0), true, true, true);
 
-		if (parent->DoorDirection == false)
-		{
-			//left movement
-			if (direction == 2)
-				mesh->Move(Ogre::Vector3(0, 0, -active_speed * sbs->delta), true, true, true);
+	if (parent->DoorDirection == false)
+	{
+		//left movement
+		if (direction == 2)
+			mesh->Move(Ogre::Vector3(0, 0, -active_speed * sbs->delta), true, true, true);
 
-			//right movement
-			if (direction == 3)
-				mesh->Move(Ogre::Vector3(0, 0, active_speed * sbs->delta), true, true, true);
-		}
-		else
-		{
-			//left movement
-			if (direction == 2)
-				mesh->Move(Ogre::Vector3(-active_speed * sbs->delta, 0, 0), true, true, true);
+		//right movement
+		if (direction == 3)
+			mesh->Move(Ogre::Vector3(0, 0, active_speed * sbs->delta), true, true, true);
+	}
+	else
+	{
+		//left movement
+		if (direction == 2)
+			mesh->Move(Ogre::Vector3(-active_speed * sbs->delta, 0, 0), true, true, true);
 
-			//right movement
-			if (direction == 3)
-				mesh->Move(Ogre::Vector3(active_speed * sbs->delta, 0, 0), true, true, true);
-		}
+		//right movement
+		if (direction == 3)
+			mesh->Move(Ogre::Vector3(active_speed * sbs->delta, 0, 0), true, true, true);
+	}
 }
 
 void ElevatorDoor::DoorWrapper::MoveDoors(bool open, bool manual)
@@ -1975,11 +1975,11 @@ void ElevatorDoor::Hold()
 	//hold door (basically turn off timer)
 
 	std::string doornumber;
-        if (elev->NumDoors > 1)
-        {
-                doornumber = " ";
-                doornumber = doornumber + ToString(Number);
-        }
+	if (elev->NumDoors > 1)
+    {
+		doornumber = " ";
+		doornumber = doornumber + ToString(Number);
+	}
 
 	//exit if nudge mode is active
 	if (GetNudgeStatus() == true)
@@ -2002,7 +2002,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 		doornumber = doornumber + ToString(Number);
 	}
 
-	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->ParkingFloor)))
+	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->RecallFloor)))
 	{
 		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
 			return;
