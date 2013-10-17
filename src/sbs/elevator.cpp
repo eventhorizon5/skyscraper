@@ -2736,7 +2736,11 @@ void Elevator::GoToRecallFloor()
 	ResetQueue(true, true);
 
 	if (RecallFloor == GetFloor())
+	{
+		if (AutoDoors == true)
+			OpenDoors();
 		return;
+	}
 
 	if (RecallUnavailable == false)
 	{
