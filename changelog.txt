@@ -1,5 +1,11 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-ACP mode now uses the elevator's Go function, and now works properly
+-Elevator "Go" function now turns off elevator floor light when reaching destination
+-fixed some door closing issues in Fire Phase 1 mode
+-added exterior up/down controls to Simple - Manual building, and interlock switch for testing
+-added support for modern manual lifts, that require the floor button to be held to proceed to that floor, via the FloorHold parameter
+-script interpreter section reordering and cleanups, fixes variable processing issues, and duplicate functions have been removed
 -added fire switch keys to Simple, Triton Center and Glass Tower elevators
 -added landing zone area for automatic releasing of interlocks
 -added new section of items to elevator editor, and added some other misc things
@@ -49,7 +55,6 @@ Version 1.9 (2.0 Alpha 9)
 -moved SBS initialization code into contructor
 -removed obsolete shaders variables
 -fixed issue where some wall handles wouldn't be deleted, due to a changing handle array size
--replaced IsNumeric code with smaller, faster code
 -centralized number conversion into new ToString functions
 -fix for textureoverride/textureflip states
 -console output fix
