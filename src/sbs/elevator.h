@@ -145,6 +145,7 @@ public:
 	bool Interlocks; //lock doors during movement
 	bool GoActive; //true if go function is in use (mouse hold is active)
 	bool FloorHold; //true if floor buttons need to be held for the elevator to proceed to the floor (modern manual mode)
+	bool GoPending; //true if Go() function is active
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 

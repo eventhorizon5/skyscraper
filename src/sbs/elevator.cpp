@@ -194,6 +194,7 @@ Elevator::Elevator(int number)
 	GoActive = false;
 	GoActiveFloor = 0;
 	FloorHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.FloorHold", false);
+	GoPending = false;
 
 	//create timers
 	parking_timer = new Timer(this, 0);
@@ -666,6 +667,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		}
 	}
 
+	//add route in related direction queue
 	if (direction == 1)
 	{
 		int loc = -1;
@@ -725,7 +727,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		ChangeLight(floor, true);
 	}
 
-	//add ACP route recursively if mode is enabled
+	//go to ACP floor if ACP mode is enabled
 	if (ACP == true && floor != ACPFloor)
 	{
 		//only add ACP route if original route will pass ACP floor
@@ -733,9 +735,10 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		{
 			if (sbs->Verbose)
 				Report("Adding ACP route");
-			AddRoute(ACPFloor, direction, false);
+			Go(ACPFloor, false);
 		}
 	}
+
 	return true;
 }
 
@@ -915,6 +918,10 @@ void Elevator::ProcessCallQueue()
 
 	//exit if moving manually
 	if (ManualMove > 0)
+		return;
+
+	//exit if Go function is active
+	if (GoPending == true)
 		return;
 
 	//if both queues are empty
@@ -2052,6 +2059,12 @@ void Elevator::MoveElevatorToFloor()
 finish:
 	if (sbs->Verbose)
 		Report("resetting elevator motion values");
+
+	if (GoPending == true)
+	{
+		GoPending = false;
+		ChangeLight(GetFloor(), false);
+	}
 	ElevatorRate = 0;
 	JerkRate = 0;
 	Direction = 0;
@@ -2685,6 +2698,7 @@ bool Elevator::Go(int floor, bool hold)
 		Report("Go: proceeding to floor " + ToString2(floor));
 		ChangeLight(floor, true);
 		GotoFloor = floor;
+		GoPending = true;
 		if (AutoDoors == true)
 		{
 			WaitForDoors = true;
