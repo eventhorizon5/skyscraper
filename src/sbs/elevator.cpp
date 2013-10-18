@@ -3561,6 +3561,12 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	if (FireServicePhase2 == 1 && (GetFloor() != RecallFloor) && (GetFloor() != RecallFloorAlternate))
 		hold = true;
 
+	if (FireServicePhase1 == 1)
+	{
+		Report("Cannot open doors while in Fire Service Phase 1 recall mode");
+		return;
+	}
+
 	if (Interlocks == true)
 	{
 		if (IsMoving == true && OnFloor == false)
@@ -3656,6 +3662,12 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 	//turn on hold option for certain modes
 	if (IndependentService == true || FireServicePhase2 == 1)
 		hold = true;
+
+	if (FireServicePhase1 == 1)
+	{
+		Report("Cannot close doors while in Fire Service Phase 1 recall mode");
+		return;
+	}
 
 	int start, end;
 	if (number == 0)
