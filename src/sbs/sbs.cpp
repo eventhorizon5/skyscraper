@@ -3811,10 +3811,13 @@ Object* SBS::GetObject(const std::string name)
 
 	for (int i = 0; i < ObjectArray.size(); i++)
 	{
-		std::string tmpname = ObjectArray[i]->GetName();
-		ReplaceAll(tmpname, " ", "");
-		if (tmpname == name2)
-			return ObjectArray[i];
+		if (ObjectArray[i])
+		{
+			std::string tmpname = ObjectArray[i]->GetName();
+			ReplaceAll(tmpname, " ", "");
+			if (tmpname == name2)
+				return ObjectArray[i];
+		}
 	}
 	return 0;
 }
@@ -3862,29 +3865,32 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 
 		for (int i = 0; i < ObjectArray.size(); i++)
 		{
-			std::string tmpname = ObjectArray[i]->GetName();
-			for (int j = RangeL; j <= RangeH; j++)
+			if (ObjectArray[i])
 			{
-				std::string number = ToString(j);
-				if (type == "floor")
+				std::string tmpname = ObjectArray[i]->GetName();
+				for (int j = RangeL; j <= RangeH; j++)
 				{
-					if (tmpname == "Floor " + number)
-						objects.push_back(ObjectArray[i]);
-				}
-				if (type == "elevator")
-				{
-					if (tmpname == "Elevator " + number)
-						objects.push_back(ObjectArray[i]);
-				}
-				if (type == "shaft")
-				{
-					if (tmpname == "Shaft " + number)
-						objects.push_back(ObjectArray[i]);
-				}
-				if (type == "stairwell")
-				{
-					if (tmpname == "Stairwell " + number)
-						objects.push_back(ObjectArray[i]);
+					std::string number = ToString(j);
+					if (type == "floor")
+					{
+						if (tmpname == "Floor " + number)
+							objects.push_back(ObjectArray[i]);
+					}
+					if (type == "elevator")
+					{
+						if (tmpname == "Elevator " + number)
+							objects.push_back(ObjectArray[i]);
+					}
+					if (type == "shaft")
+					{
+						if (tmpname == "Shaft " + number)
+							objects.push_back(ObjectArray[i]);
+					}
+					if (type == "stairwell")
+					{
+						if (tmpname == "Stairwell " + number)
+							objects.push_back(ObjectArray[i]);
+					}
 				}
 			}
 		}
