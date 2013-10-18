@@ -3561,12 +3561,6 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	if (FireServicePhase2 == 1 && (GetFloor() != RecallFloor) && (GetFloor() != RecallFloorAlternate))
 		hold = true;
 
-	if (FireServicePhase1 == 1)
-	{
-		Report("Cannot open doors while in Fire Service Phase 1 recall mode");
-		return;
-	}
-
 	if (Interlocks == true)
 	{
 		if (IsMoving == true && OnFloor == false)
@@ -3662,12 +3656,6 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 	//turn on hold option for certain modes
 	if (IndependentService == true || FireServicePhase2 == 1)
 		hold = true;
-
-	if (FireServicePhase1 == 1)
-	{
-		Report("Cannot close doors while in Fire Service Phase 1 recall mode");
-		return;
-	}
 
 	int start, end;
 	if (number == 0)
@@ -4747,6 +4735,10 @@ void Elevator::NotifyArrival(int floor)
 {
 	//notify on elevator arrival (play chime and turn on related directional indicator lantern)
 
+	//do not notify if in a service mode
+	if (InServiceMode() == true)
+		return;
+
 	//play chime sound and change indicator
 	if (GetArrivalDirection(floor) == true)
 	{
@@ -4882,7 +4874,7 @@ bool Elevator::PlayFloorBeep()
 {
 	//play floor beep sound
 
-	if (BeepSound == "" || UseFloorBeeps == false)
+	if (InServiceMode() == true || BeepSound == "" || UseFloorBeeps == false)
 		return false;
 
 	if (sbs->Verbose)
@@ -4903,7 +4895,7 @@ bool Elevator::PlayFloorSound()
 {
 	//play floor sound
 
-	if (FloorSound == "" || UseFloorSounds == false)
+	if (InServiceMode() == true || FloorSound == "" || UseFloorSounds == false)
 		return false;
 
 	if (sbs->Verbose)
