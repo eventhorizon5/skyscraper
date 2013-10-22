@@ -52,7 +52,7 @@ bool IsNumeric(const char *string)
 {
 	//test to see if a string is numeric
 
-	float num;
+	float num = 0;
 	return IsNumeric(string, num);
 }
 
@@ -60,9 +60,9 @@ bool IsNumeric(const char *string, int &number)
 {
 	//test to see if a string is numeric, and return number as integer
 
-	std::string a = string;
-	bool result = Ogre::StringConverter::isNumber(a);
-	number = Ogre::StringConverter::parseInt(a);
+	float num = 0;
+	bool result = IsNumeric(string, num);
+	number = (int)num;
 	return result;
 }
 
@@ -70,10 +70,15 @@ bool IsNumeric(const char *string, float &number)
 {
 	//test to see if a string is numeric, and return number as float
 
-	std::string a = string;
-	bool result = Ogre::StringConverter::isNumber(a);
-	number = Ogre::StringConverter::parseReal(a);
-	return result;
+	char* end = 0;
+
+#ifdef _WIN32
+	number = (float)std::strtod(string, &end);
+#else
+	number = std::strtof(string, &end);
+#endif
+
+	return end != 0 && *end == 0;
 }
 
 const char *BoolToString(bool item)
