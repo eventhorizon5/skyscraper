@@ -1771,6 +1771,10 @@ bool Skyscraper::InitSky()
 	{
 		ReportError("Error initializing Caelum:\nDetails:" + e.getDescription());
 	}
+	catch (...)
+	{
+		ReportError("Error initializing Caelum");
+	}
 
 	//attach caelum to running viewport
 	if (mCaelumSystem)
@@ -1787,6 +1791,10 @@ bool Skyscraper::InitSky()
 		catch (Ogre::Exception &e)
 		{
 			ReportError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
+		}
+		catch (...)
+		{
+			ReportError("Error setting Caelum parameters");
 		}
 	}
 	else
