@@ -1730,17 +1730,17 @@ bool Skyscraper::InitSky()
 		//for general sky, require both DirectX pixel and vertex shaders 2.0
 		if (profiles.find("ps_2_0") == profiles.end() ||
 			profiles.find("vs_2_0") == profiles.end())
-				return ReportError("Error initializing Caelum: 2.0 shaders not supported");
+				return ReportFatalError("Error initializing Caelum: 2.0 shaders not supported");
 
 		//for clouds, require either DirectX pixel shaders 3.0 or nVidia fragment shaders 4.0
 		if (profiles.find("ps_3_0") == profiles.end() &&
 			profiles.find("fp40") == profiles.end())
-				return ReportError("Error initializing Caelum: 3.0 fragment shaders not supported");
+				return ReportFatalError("Error initializing Caelum: 3.0 fragment shaders not supported");
 
 		//for clouds, require either DirectX vetex shaders 3.0 or nVidia vertex shaders 4.0
 		if (profiles.find("vs_3_0") == profiles.end() &&
 			profiles.find("vp40") == profiles.end())
-				return ReportError("Error initializing Caelum: 3.0 vertex shaders not supported");
+				return ReportFatalError("Error initializing Caelum: 3.0 vertex shaders not supported");
 	}
 
 	if (mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName() == "OpenGL Rendering Subsystem")
@@ -1750,11 +1750,11 @@ bool Skyscraper::InitSky()
 
 		//require OpenGL ARB fragment programs
 		if (profiles.find("arbfp1") == profiles.end())
-			return ReportError("Error initializing Caelum: fragment programs not supported");
+			return ReportFatalError("Error initializing Caelum: fragment programs not supported");
 
 		//require OpenGL ARB vertex programs
 		if (profiles.find("arbvp1") == profiles.end())
-			return ReportError("Error initializing Caelum: vertex programs not supported");
+			return ReportFatalError("Error initializing Caelum: vertex programs not supported");
 	}
 
 	//load Caelum resources
@@ -1769,11 +1769,11 @@ bool Skyscraper::InitSky()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportError("Error initializing Caelum:\nDetails:" + e.getDescription());
+		ReportFatalError("Error initializing Caelum:\nDetails:" + e.getDescription());
 	}
 	catch (...)
 	{
-		return ReportError("Error initializing Caelum");
+		ReportFatalError("Error initializing Caelum");
 	}
 
 	//attach caelum to running viewport
@@ -1790,11 +1790,11 @@ bool Skyscraper::InitSky()
 		}
 		catch (Ogre::Exception &e)
 		{
-			return ReportError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
+			ReportFatalError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
 		}
 		catch (...)
 		{
-			return ReportError("Error setting Caelum parameters");
+			ReportFatalError("Error setting Caelum parameters");
 		}
 	}
 	else
