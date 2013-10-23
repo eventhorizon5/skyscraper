@@ -3635,7 +3635,7 @@ void SBS::AdvanceClock()
 		elapsed_time = current_time - last;
 	current_virtual_time += elapsed_time;
 	frame_times.push_back(current_time);
-	CalculateElapsedTime();
+	CalculateAverageTime();
 }
 
 unsigned long SBS::GetCurrentTime()
@@ -3656,13 +3656,13 @@ unsigned long SBS::GetElapsedTime()
 	return elapsed_time;
 }
 
-unsigned long SBS::GetElapsedTimeAverage()
+unsigned long SBS::GetAverageTime()
 {
 	//returns the average elapsed time between frames
 	return average_time;
 }
 
-void SBS::CalculateElapsedTime()
+void SBS::CalculateAverageTime()
 {
 	//calculates the average frame processing time for a specified number of frames
 

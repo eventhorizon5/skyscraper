@@ -332,7 +332,7 @@ public:
 	unsigned long GetCurrentTime();
 	unsigned long GetRunTime();
 	unsigned long GetElapsedTime();
-	unsigned long GetElapsedTimeAverage();
+	unsigned long GetAverageTime();
 	std::string GetMountPath(const char *filename, std::string &newfilename);
 	void EnableVSync(bool value);
 	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
@@ -438,7 +438,7 @@ private:
 	void CheckAutoAreas();
 	void BackupMapping();
 	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
-	void CalculateElapsedTime();
+	void CalculateAverageTime();
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
