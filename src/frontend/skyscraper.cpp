@@ -1769,11 +1769,11 @@ bool Skyscraper::InitSky()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error initializing Caelum:\nDetails:" + e.getDescription());
+		return ReportError("Error initializing Caelum:\nDetails:" + e.getDescription());
 	}
 	catch (...)
 	{
-		ReportError("Error initializing Caelum");
+		return ReportError("Error initializing Caelum");
 	}
 
 	//attach caelum to running viewport
@@ -1790,11 +1790,11 @@ bool Skyscraper::InitSky()
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
+			return ReportError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
 		}
 		catch (...)
 		{
-			ReportError("Error setting Caelum parameters");
+			return ReportError("Error setting Caelum parameters");
 		}
 	}
 	else
