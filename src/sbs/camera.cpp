@@ -100,6 +100,7 @@ Camera::Camera(Ogre::Camera *camera)
 	MovementStopped = false;
 	accum_movement = 0;
 	collision_reset = false;
+	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 
 	//set up camera and scene nodes
 	MainCamera = camera;
@@ -150,8 +151,13 @@ Camera::~Camera()
 void Camera::SetPosition(const Ogre::Vector3 &vector)
 {
 	//sets the camera to an absolute position in 3D space
-	mCharacter->setPosition(sbs->ToRemote(vector) - MainCamera->getPosition());
-	mCharacter->updateTransform(true, false, false);
+	if (EnableBullet == true)
+	{
+		mCharacter->setPosition(sbs->ToRemote(vector) - MainCamera->getPosition());
+		mCharacter->updateTransform(true, false, false);
+	}
+	else
+		MainCamera->setPosition(sbs->ToRemote(vector));
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &vector)
@@ -184,9 +190,13 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	Ogre::Quaternion camrot = x * z;
 	Ogre::Quaternion bodyrot = y;
 	rotation = vector;
-	MainCamera->setOrientation(camrot);
-	mCharacter->setOrientation(bodyrot);
-	mCharacter->updateTransform(false, true, true);
+	if (EnableBullet == true)
+	{
+		mCharacter->setOrientation(bodyrot);
+		mCharacter->updateTransform(false, true, true);
+	}
+	else
+		MainCamera->setOrientation(camrot);
 }
 
 Ogre::Vector3 Camera::GetPosition()
@@ -257,9 +267,16 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 		vector = vector * Ogre::Vector3(-1, 1, 1);
 
 	//multiply vector with camera's orientation, and flip X axis
-	vector = mCharacter->getRootNode()->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
-
-	accum_movement += (sbs->ToRemote(vector) * speed);
+	if (EnableBullet == true)
+	{
+		vector = mCharacter->getRootNode()->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
+		accum_movement += (sbs->ToRemote(vector) * speed);
+	}
+	else
+	{
+		vector = MainCamera->getOrientation() * sbs->ToRemote(vector);
+		accum_movement += (vector * speed);
+	}
 	//mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
 
 	return true;
@@ -295,12 +312,20 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 		rotation.y += 360;
 
 	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	mCharacter->setOrientation(rot);
-	mCharacter->updateTransform(false, true, true);
+	if (EnableBullet == true)
+	{
+		mCharacter->setOrientation(rot);
+		mCharacter->updateTransform(false, true, true);
+	}
+	else
+		MainCamera->setOrientation(rot);
 
 	//rotate camera
-	MainCamera->pitch(Ogre::Radian(vector.x) * speed);
-	MainCamera->roll(Ogre::Radian(vector.z) * speed);
+	if (EnableBullet == true)
+	{
+		MainCamera->pitch(Ogre::Radian(vector.x) * speed);
+		MainCamera->roll(Ogre::Radian(vector.z) * speed);
+	}
 }
 
 void Camera::SetStartDirection(const Ogre::Vector3 &vector)
@@ -748,16 +773,19 @@ void Camera::Loop()
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
-	if (collision_reset == true)
+	if (collision_reset == true && EnableBullet == true)
 		mCharacter->resetCollisions();
 	collision_reset = false;
 
 	//get name of the last hit mesh object
 	if (sbs->GetRunTime() > 10) //due to initialization-related crashes, wait before checking
 	{
-		if (mCharacter->getLastCollision())
-			if (mCharacter->getLastCollision()->getRootNode())
-				LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
+		if (EnableBullet == true)
+		{
+			if (mCharacter->getLastCollision())
+				if (mCharacter->getLastCollision()->getRootNode())
+					LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
+		}
 	}
 
 	//calculate acceleration
@@ -848,8 +876,11 @@ void Camera::Float(float speed)
 
 void Camera::Jump()
 {
-	//velocity.y = cfg_jumpspeed;
-	//desired_velocity.y = 0.0f;
+	if (EnableBullet == false)
+		return;
+
+	velocity.y = cfg_jumpspeed;
+	desired_velocity.y = 0.0f;
 	if (mCharacter->getGravity() != 0)
 		mCharacter->jump();
 }
@@ -916,8 +947,11 @@ void Camera::SetGravity(float gravity, bool save_value)
 {
 	if (save_value == true)
 		Gravity = gravity;
-	sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
-	mCharacter->setGravity(sbs->ToRemote(gravity));
+	if (EnableBullet == true)
+	{
+		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
+		mCharacter->setGravity(sbs->ToRemote(gravity));
+	}
 }
 
 float Camera::GetGravity()
@@ -935,7 +969,8 @@ void Camera::EnableGravity(bool value)
 		velocity.y = 0;
 		desired_velocity.y = 0;
 	}
-	mCharacter->reset();
+	if (EnableBullet == true)
+		mCharacter->reset();
 	GravityStatus = value;
 }
 
@@ -993,7 +1028,8 @@ void Camera::EnableCollisions(bool value)
 		return;
 
 	Collisions = value;
-	mCharacter->enableCollisions(value);
+	if (EnableBullet)
+		mCharacter->enableCollisions(value);
 }
 
 bool Camera::CollisionsEnabled()
@@ -1003,13 +1039,17 @@ bool Camera::CollisionsEnabled()
 
 bool Camera::IsOnGround()
 {
-	return mCharacter->onGround();
+	if (EnableBullet == true)
+		return mCharacter->onGround();
+	else
+		return false;
 }
 
 void Camera::Sync()
 {
 	//sync scene node with bullet object
-	mCharacter->sync();
+	if (EnableBullet == true)
+		mCharacter->sync();
 }
 
 void Camera::SetMaxRenderDistance(float value)
@@ -1026,12 +1066,16 @@ float Camera::GetMaxRenderDistance()
 
 void Camera::ShowDebugShape(bool value)
 {
-	mCharacter->showDebugShape(value);
+	if (EnableBullet == true)
+		mCharacter->showDebugShape(value);
 }
 
 void Camera::MoveCharacter()
 {
-	mCharacter->setWalkDirection(accum_movement, 1);
+	if (EnableBullet == true)
+		mCharacter->setWalkDirection(accum_movement, 1);
+	else
+		MainCamera->move(accum_movement);
 	accum_movement = 0;
 }
 

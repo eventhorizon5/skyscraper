@@ -72,6 +72,7 @@ public:
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	float Freelook_speed; //freelook speed
 	Ogre::Vector3 HitPosition; //last hit position
+	bool EnableBullet;
 
 	//functions
 	Camera(Ogre::Camera *camera);
