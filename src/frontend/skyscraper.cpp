@@ -492,7 +492,7 @@ void Skyscraper::GetInput()
 {
 	SBS_PROFILE_MAIN("GetInput");
 
-	Simcore->camera->Turn(-Simcore->camera->cfg_speed);
+	//Simcore->camera->Turn(-Simcore->camera->cfg_speed);
 	return;
 
 	//quit if main window isn't selected

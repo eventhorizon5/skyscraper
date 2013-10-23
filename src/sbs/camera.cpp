@@ -793,7 +793,7 @@ void Camera::Loop()
 
 	//general movement
 
-	float delta = sbs->GetElapsedTime() / 1000.0f
+	float delta = sbs->GetElapsedTime() / 1000.0f;
 	if (delta > .3f)
 		delta = .3f;
 

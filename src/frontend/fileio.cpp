@@ -37,7 +37,6 @@
 #include "shaft.h"
 #include "callbutton.h"
 #include "unix.h"
-#include "textwindow.h"
 
 extern SBS *Simcore;
 extern Skyscraper *skyscraper;
@@ -1079,7 +1078,7 @@ bool ScriptProcessor::ReportMissingFiles()
 			Simcore->Report(nonexistent_files[i]);
 
 		//create text window
-		TextWindow *twindow = new TextWindow(NULL, -1);
+		/*TextWindow *twindow = new TextWindow(NULL, -1);
 		twindow->SetMinSize(wxSize(300, 200));
 		twindow->tMain->SetMinSize(wxSize(300, 200));
 		twindow->Fit();
@@ -1094,7 +1093,7 @@ bool ScriptProcessor::ReportMissingFiles()
 			message.Append(wxT("\n"));
 		}
 		twindow->tMain->WriteText(message);
-		twindow->tMain->SetInsertionPoint(0);
+		twindow->tMain->SetInsertionPoint(0);*/
 		return true;
 	}
 	else
