@@ -34,7 +34,7 @@
 
 int main (int argc, char* argv[]);
 
-class Skyscraper : public wxApp
+class Skyscraper : public Ogre::WindowEventListener, public Ogre::FrameListener
 {
 public:
 
@@ -53,6 +53,7 @@ public:
 	std::string Platform;
 	std::string SkyName;
 
+	bool frameStarted(const Ogre::FrameEvent& evt);
 	bool RenderOnly; //skip sim processing and only render graphics
 	bool InputOnly; //skip sim processing and only run input and rendering code
 	bool IsRunning;
@@ -72,17 +73,14 @@ public:
 	unsigned int elapsed_time, current_time;
 
 	void Loop();
-	virtual bool OnInit(void);
-	virtual int OnExit(void);
 	void DrawBackground();
 
 	std::string BuildingFile;
 	std::vector<std::string> runtime_script;
 
 	//engine related stuff
-	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = std::string(""));
-	void destroyRenderWindow();
-	const std::string getOgreHandle() const;
+	bool OnInit();
+	int OnExit();
 	void Render();
 	void GetInput();
 	void Report(std::string message, ...);
@@ -110,10 +108,6 @@ private:
 	//app directory
 	std::string root_dir;
 	std::string dir_char;
-
-	//canvas data
-	int canvas_width, canvas_height;
-	wxPanel* canvas;
 
 	//sound data
 	FMOD::System *soundsys;
@@ -153,27 +147,6 @@ private:
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
-};
-
-class MainScreen : public wxFrame
-{
-public:
-	MainScreen(int width, int height);
-	~MainScreen();
-	void OnIconize(wxIconizeEvent& event);
-	void OnSize(wxSizeEvent& event);
-	void OnClose(wxCloseEvent& event);
-	void ShowWindow();
-	void OnIdle(wxIdleEvent& event);
-	void OnPaint(wxPaintEvent& event);
-	void OnActivate(wxActivateEvent & event);
-	void OnEnterWindow(wxMouseEvent& event);
-	void OnLeaveWindow(wxMouseEvent& event);
-	wxPanel *panel;
-	bool Active;
-
-	DECLARE_EVENT_TABLE()
-
 };
 
 DECLARE_APP(Skyscraper)

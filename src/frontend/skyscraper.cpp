@@ -33,60 +33,32 @@
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
-#include "debugpanel.h"
 #include "unix.h"
 #include "revmain.h"
 
-#if defined(__WXGTK__)
-   // NOTE: Find the GTK install config with `pkg-config --cflags gtk+-2.0`
-   #include "gtk/gtk.h"
-   #include "gdk/gdk.h"
-   #include "gdk/gdkx.h"
-   #include "wx/gtk/win_gtk.h"
-   #include "GL/glx.h"
-#endif
-
-IMPLEMENT_APP_NO_MAIN(Skyscraper)
-//IMPLEMENT_CLASS(Skyscraper, wxApp)
-//BEGIN_EVENT_TABLE(Skyscraper, wxApp)
-//END_EVENT_TABLE()
-
-
-BEGIN_EVENT_TABLE(MainScreen, wxFrame)
-  EVT_ICONIZE(MainScreen::OnIconize)
-  EVT_SIZE(MainScreen::OnSize)
-  EVT_CLOSE(MainScreen::OnClose)
-  EVT_IDLE(MainScreen::OnIdle)
-  EVT_PAINT(MainScreen::OnPaint)
-  EVT_ACTIVATE(MainScreen::OnActivate)
-  EVT_ENTER_WINDOW(MainScreen::OnEnterWindow)
-  EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
-END_EVENT_TABLE()
-
 SBS *Simcore;
 Skyscraper *skyscraper;
-DebugPanel *dpanel;
-MainScreen *window;
-
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-#include "uexception.h"
-#endif
 
 #ifndef SW_SHOWNORMAL
 	#define SW_SHOWNORMAL 1
 #endif
 
-int main (int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	//initialize top-level exception handler
-	InitUnhandledExceptionFilter();
-#endif
-
-	//main wxWidgets entry point
-	wxEntry(argc, argv);
-
-	return 0;
+	Skyscraper skyscraper;
+	skyscraper.OnInit();
+	if ((skyscraper.IsRunning == true && skyscraper.Pause == false) || skyscraper.StartupRunning == true)
+	{
+		while (true)
+		{
+			Ogre::WindowEventUtilities::messagePump();
+			if(skyscraper.mRenderWindow->isClosed())
+			{
+			    return false;
+			}
+			skyscraper.Render();
+		}
+	}
 }
 
 bool Skyscraper::OnInit(void)
@@ -99,8 +71,6 @@ bool Skyscraper::OnInit(void)
 	MouseDown = false;
 	RenderOnly = false;
 	//InputOnly = false;
-	canvas_width = 0;
-	canvas_height = 0;
 	IsRunning = false;
 	StartupRunning = false;
 	Starting = false;
@@ -114,7 +84,6 @@ bool Skyscraper::OnInit(void)
 	mRenderWindow = 0;
 	mViewport = 0;
 	mSceneMgr = 0;
-	canvas = 0;
 	mCamera = 0;
 	sound = 0;
 	channel = 0;
@@ -122,12 +91,6 @@ bool Skyscraper::OnInit(void)
 	mCaelumSystem = 0;
 	buttons = 0;
 	buttoncount = 0;
-
-	//Create main window
-	window = new MainScreen(640, 480);
-	//AllowResize(false);
-	window->ShowWindow();
-	window->CenterOnScreen();
 
 	//start and initialize OGRE
 	if (!Initialize())
@@ -140,10 +103,6 @@ bool Skyscraper::OnInit(void)
 	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
 	if (BuildingFile != "")
 		return Start();
-
-	//set size of menu window from INI file defaults
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
-	window->Center();
 
 	//show menu
 	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
@@ -183,31 +142,14 @@ int Skyscraper::OnExit()
 	if (soundsys)
 		soundsys->release();
 
-	//delete wx canvas
-	if (canvas)
-		canvas->Destroy();
-	canvas = 0;
-
-	window->Destroy();
-	window = 0;
 	skyscraper = 0;
 
 	delete mRoot;
-	return wxApp::OnExit();
-	//return 0;
+	return 0;
 }
 
 void Skyscraper::UnloadSim()
 {
-	//delete control panel object
-	if(dpanel)
-	{
-		if(dpanel->timer)
-			dpanel->timer->Stop();
-		dpanel->Destroy();
-	}
-	dpanel = 0;
-
 	if (mCaelumSystem)
 	{
 		mCaelumSystem->clear();
@@ -223,7 +165,7 @@ void Skyscraper::UnloadSim()
 	Report("SBS unloaded\n");
 }
 
-MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
+/*MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
 	Active = false;
 	this->Center();
@@ -322,7 +264,7 @@ void MainScreen::OnEnterWindow(wxMouseEvent& event)
 void MainScreen::OnLeaveWindow(wxMouseEvent& event)
 {
 
-}
+}*/
 
 void Skyscraper::Render()
 {
@@ -330,11 +272,6 @@ void Skyscraper::Render()
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
-
-#if defined(__WXGTK__)
-	if (skyscraper->mRenderWindow)
-		skyscraper->mRenderWindow->update(true);
-#endif
 }
 
 bool Skyscraper::Initialize()
@@ -392,14 +329,16 @@ bool Skyscraper::Initialize()
 	//initialize render window
 	try
 	{
-		mRoot->initialise(false);
-		mRenderWindow = CreateRenderWindow();
+		mRenderWindow = mRoot->initialise(true, "Skyscraper");
+		mRenderWindow->setActive(true);
+		mRenderWindow->windowMovedOrResized();
 		//mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
 	}
 	catch (Ogre::Exception &e)
 	{
 		return ReportFatalError("Error initializing render window\nDetails:" + e.getDescription());
 	}
+	mRoot->addFrameListener(this);
 
 	//load resource configuration
 	Ogre::ConfigFile cf;
@@ -553,8 +492,11 @@ void Skyscraper::GetInput()
 {
 	SBS_PROFILE_MAIN("GetInput");
 
+	Simcore->camera->Turn(-Simcore->camera->cfg_speed);
+	return;
+
 	//quit if main window isn't selected
-	if (window->Active == false)
+	/*if (window->Active == false)
 		return;
 
 	static int wireframe;
@@ -821,8 +763,8 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'o'))
 			Simcore->camera->Float(speed_normal);
 		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'k'))
-			Simcore->camera->Float(-speed_normal);
-	}
+			Simcore->camera->Float(-speed_normal);*
+	}*/
 }
 
 void Skyscraper::Report(std::string message, ...)
@@ -841,9 +783,9 @@ bool Skyscraper::ReportFatalError(std::string message, ...)
 	printf("%s\n", message.c_str());
 
 	//show error dialog
-	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
-	dialog->ShowModal();
-	delete dialog;
+	//wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+	//dialog->ShowModal();
+	//delete dialog;
 
 	return false;
 }
@@ -867,20 +809,9 @@ void Skyscraper::Loop()
 	if (!Simcore)
 		return;
 
-	Simcore->AdvanceClock();
-	if (IsRunning == true)
-		Simcore->CalculateFrameRate();
-
-	//resize canvas if needed
-	/*if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
-	{
-		//update canvas size values
-		canvas_width = canvas->GetSize().GetWidth();
-		canvas_height = canvas->GetSize().GetHeight();
-
-		//resize viewport
-		//wxwin->GetWindow()->resize(canvas->size());
-	}*/
+	//Simcore->AdvanceClock();
+	//if (IsRunning == true)
+		//Simcore->CalculateFrameRate();
 
 	//RenderOnly = GetConfigBool("Skyscraper.Frontend.RenderOnly", false);
 	//InputOnly = GetConfigBool("Skyscraper.Frontend.InputOnly", false);
@@ -896,7 +827,7 @@ void Skyscraper::Loop()
 		GetInput();
 
 	//process camera loop
-	Simcore->camera->Loop();
+	//Simcore->camera->Loop();
 
 	//update Caelum
 	if (mCaelumSystem)
@@ -905,9 +836,6 @@ void Skyscraper::Loop()
 		mCaelumSystem->setTimeScale(SkyMult);
 		mCaelumSystem->updateSubcomponents(float(Simcore->GetElapsedTime()) / 1000);
 	}
-
-	//render graphics
-	Render();
 
 	//exit if shutdown request received
 	if (Shutdown == true)
@@ -1230,12 +1158,13 @@ void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
+	return;
 	//exit if simulator is starting
 	if (Starting == true)
 		return;
 
 	//exit if there aren't any buttons
-	if (!buttons || buttoncount == 0)
+	/*if (!buttons || buttoncount == 0)
 		return;
 
 	//get mouse coordinates
@@ -1282,7 +1211,7 @@ void Skyscraper::GetMenuInput()
         		button->drawn_pressed = false;
         	}
         }
-	}
+	}*/
 }
 
 void Skyscraper::Click(int index)
@@ -1399,7 +1328,7 @@ void Skyscraper::StopSound()
 bool Skyscraper::SelectBuilding()
 {
 	//choose a building from a script file
-	BuildingFile = "";
+	/*BuildingFile = "";
 	srand (time (0));
 
 	//set building file
@@ -1425,7 +1354,7 @@ bool Skyscraper::SelectBuilding()
 
 	//delete dialog
 	delete Selector;
-	Selector = 0;
+	Selector = 0;*/
 
 	return true;
 }
@@ -1499,16 +1428,6 @@ bool Skyscraper::Start()
 	Simcore->Prepare();
 
 	//resize main window
-	window->SetBackgroundColour(*wxBLACK);
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
-	window->Center();
-
-	//switch to fullscreen mode if specified
-	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
-	{
-		FullScreen = true;
-		window->ShowFullScreen(FullScreen);
-	}
 
 	//clear screen
 	mRoot->renderOneFrame();
@@ -1525,19 +1444,6 @@ bool Skyscraper::Start()
 		Simcore->camera->SetRotation(override_rotation);
 	}
 
-	//load control panel
-	if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
-	{
-		dpanel = new DebugPanel(NULL, -1);
-		dpanel->Show(true);
-		dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
-	}
-
-	window->Raise();
-
-	//show main window
-	window->ShowWindow();
-
 	//turn on window resizing, if specified
 	//AllowResize(GetConfigBool("Skyscraper.Frontend.AllowResize", true));
 
@@ -1552,17 +1458,6 @@ bool Skyscraper::Start()
 	return true;
 }
 
-void Skyscraper::AllowResize(bool value)
-{
-	//changes the window style to either allow or disallow resizing
-	
-	if (value)
-		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE | wxMAXIMIZE);
-	else
-		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE & ~wxMAXIMIZE);
-	window->Refresh();
-}
-
 void Skyscraper::Unload()
 {
 	//unload sim
@@ -1575,10 +1470,6 @@ void Skyscraper::Unload()
 	//cleanup sound
 	StopSound();
 
-	//return to main menu
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
-	window->Center();
-
 	DrawBackground();
 	StartSound();
 	StartupRunning = true;
@@ -1588,108 +1479,6 @@ void Skyscraper::Unload()
 void Skyscraper::Quit()
 {
 	//exit app
-	if(dpanel)
-	{
-		if(dpanel->timer)
-			dpanel->timer->Stop();
-	}
-	wxGetApp().Exit();
-}
-
-Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList* miscParams, const std::string& windowName)
-{
-	std::string name = windowName;
-
-	//do not clear background
-	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-
-	int width, height;
-	window->GetClientSize(&width, &height);
-
-	Ogre::NameValuePairList params;
-	if (miscParams)
-		params = *miscParams;
-
-	bool vsync = GetConfigBool("Skyscraper.Frontend.Vsync", true);
-	if (vsync == true)
-		params["vsync"] = "true";
-	else
-		params["vsync"] = "false";
-	params["vsyncInterval"] = "1";
-	params["externalWindowHandle"] = getOgreHandle();
-
-#if defined(__WXMAC__)
-	params["macAPI"] = "cocoa";
-	params["macAPICocoaUseNSView"] = "true";
-#endif
-
-	//create the render window
-	mRenderWindow = Ogre::Root::getSingleton().createRenderWindow(name, width, height, false, &params);
-
-	mRenderWindow->setActive(true);
-	mRenderWindow->windowMovedOrResized();
-
-	return mRenderWindow;
-}
-
-void Skyscraper::destroyRenderWindow()
-{
-	if (mRenderWindow)
-	   Ogre::Root::getSingleton().detachRenderTarget(mRenderWindow);
-
-	mRenderWindow->destroy();
-	mRenderWindow = 0;
-
-	//restore background
-	//window->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
-}
-
-const std::string Skyscraper::getOgreHandle() const
-{
-#if defined(__WXMSW__)
-   // Handle for Windows systems
-   return Ogre::StringConverter::toString((size_t)((HWND)window->GetHandle()));
-#elif defined(__WXGTK__)
-   // Handle for GTK-based systems
-
-   // wxWidgets uses several internal GtkWidgets, the GetHandle method
-   // returns a different one than this, but wxWidgets's GLCanvas uses this
-   // one to interact with GLX, so we do the same.
-   // NOTE: this method relies on implementation details in wxGTK and could
-   //      change without any notification from the developers.
-   GtkWidget* privHandle = window->m_wxwindow;
-
-   // prevents flickering
-   gtk_widget_set_double_buffered(privHandle, false);
-
-   gtk_widget_realize(privHandle);
-
-   // grab the window object
-   GdkWindow* gdkWin = GTK_PIZZA(privHandle)->bin_window;
-   Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
-   Window wid = GDK_WINDOW_XWINDOW(gdkWin);
-
-   // screen (returns "display.screen")
-   std::string screenStr = DisplayString(display);
-   screenStr = screenStr.substr(screenStr.find(".") + 1, screenStr.size());
-
-   std::stringstream handleStream;
-   handleStream << (unsigned long)display << ':' << screenStr << ':' << wid;
-
-   // retrieve XVisualInfo
-   // NOTE: '-lGL' linker flag must be specified.
-   int attrlist[] = { GLX_RGBA, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 16, GLX_STENCIL_SIZE, 8, None };
-   XVisualInfo* vi = glXChooseVisual(display, DefaultScreen(display), attrlist);
-   handleStream << ':' << (unsigned long)vi;
-
-   return std::string(handleStream.str());
-
-#elif defined(__WXMAC__)
-   return Ogre::StringConverter::toString((size_t)window->GetHandle());
-
-#else
-   #error Not supported on this platform!
-#endif
 }
 
 int Skyscraper::GetConfigInt(std::string key, int default_value)
@@ -1802,5 +1591,15 @@ bool Skyscraper::InitSky()
 
 	SkyMult = GetConfigInt("Skyscraper.Frontend.SkyMult", 50);
 
+	return true;
+}
+
+bool Skyscraper::frameStarted(const Ogre::FrameEvent& evt)
+{
+	if (Simcore)
+		Simcore->elapsed_time = evt.timeSinceLastFrame * 1000;
+
+	if (IsRunning == true)
+		Loop();
 	return true;
 }

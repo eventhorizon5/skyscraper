@@ -117,6 +117,8 @@ public:
 	std::string BuildingDescription;
 	std::string BuildingVersion;
 
+	unsigned long elapsed_time;
+
 	//physics objects
 	OgreBulletDynamics::DynamicsWorld *mWorld;
 	OgreBulletCollisions::DebugDrawer *debugDrawer;
@@ -517,7 +519,6 @@ private:
 	//internal clock
 	unsigned long current_time;
 	unsigned long current_virtual_time;
-	unsigned long elapsed_time;
 	unsigned long average_time;
 	std::deque<unsigned long> frame_times;
 	Ogre::Timer *timer;

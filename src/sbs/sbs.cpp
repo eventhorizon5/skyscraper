@@ -550,13 +550,13 @@ void SBS::MainLoop()
 	}
 
 	//only move character if Bullet processed a step (within it's 60fps timestep)
-	if (camera->EnableBullet == true)
+	/*if (camera->EnableBullet == true)
 	{
 		if (steps >= 1)
 			camera->MoveCharacter();
 	}
 	else
-		camera->MoveCharacter();
+		camera->MoveCharacter();*/
 
 	//sync camera to physics
 	camera->Sync();
@@ -573,10 +573,14 @@ void SBS::MainLoop()
 	if (elapsed > 0.5)
 		elapsed = 0.5;
 	SBSProfileManager::Start_Profile("Simulator Loop");
+
 	while (elapsed >= delta)
 	{
 		if (RenderOnly == false && InputOnly == false)
 		{
+			camera->Loop();
+
+			/*
 			//Determine floor that the camera is on
 			camera->UpdateCameraFloor();
 
@@ -617,7 +621,7 @@ void SBS::MainLoop()
 			{
 				if (TriggerArray[i])
 					TriggerArray[i]->Check();
-			}
+			}*/
 		}
 		elapsed -= delta;
 	}
