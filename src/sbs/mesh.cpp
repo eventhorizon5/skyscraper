@@ -1050,50 +1050,6 @@ int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
 	return -1;
 }
 
-int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert, bool rescale)
-{
-	//find a wall from a 3D point
-
-	SBS_PROFILE("MeshObject::FindWallIntersect");
-	float pr, best_pr = 2000000000.;
-	float dist, best_dist = 2000000000.;
-	int best_i = -1;
-	int best_j = -1;
-	Ogre::Vector3 cur_isect;
-	Ogre::Vector3 tmpnormal;
-
-	for (int i = 0; i < (int)Walls.size(); i++)
-	{
-		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
-		{
-			if (Walls[i]->handles[j].IntersectSegment(this, start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
-			{
-				if (pr < best_pr)
-				{
-					//currently test against previous camera intersection test to fix some weird issues
-					Ogre::Vector3 orig_start = sbs->ToRemote(sbs->camera->HitPosition);
-					dist = orig_start.distance(cur_isect);
-
-					if (dist < best_dist)
-					{
-						//calculate distance to intersection
-						distance = start.distance(cur_isect);
-
-						best_dist = dist;
-						best_pr = pr;
-						best_i = i;
-						best_j = j;
-						isect = cur_isect;
-						normal = tmpnormal;
-					}
-				}
-			}
-		}
-	}
-
-	return best_i;
-}
-
 void MeshObject::RescaleVertices(float multiplier)
 {
 	//rescale all mesh vertices to the default SBS value (using ToRemote()), times the given multiplier
