@@ -151,12 +151,12 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.5, -20, -20, 20, 20, 0, 0, false, false, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.5, -20, -20, 20, 20, %interfloorheight% - 0.05, %interfloorheight% - 0.05, false, false, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -194,7 +194,7 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 #Now since the main portion of the building is done, it would be nice to have an elevator.
 #First we'll have to create an elevator shaft:
 
-AddShaft 1, 2, 0, 6, 0, 9
+AddShaft 1, 0, 6, 0, 9
 ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 
 #in the above code, I added a regular shaft with the number of "1" at the position (0, 6), and told it to
@@ -210,9 +210,9 @@ ShaftCut 1, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 <Floors 0 to 9>
 	FloorOrientation = top
 	DrawWalls = false, true, false, false, false, false
-	if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4, -4.125, 4, 4.125, 0, 0, 0, 0
+	if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -4, -4.125, 4, 4.125, 0, 0, false, false, 0, 0
 	DrawWalls = true, false, false, false, false, false
-	if[%floor% = 9] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, 0, 0
+	if[%floor% = 9] AddShaftFloor 1, Shaft1Top, Brick, 0.5, -4, -4.125, 4, 4.125, %fullheight%, %fullheight%, false, false, 0, 0
 	DrawWalls = true, true, false, false, false, false
 	WallOrientation = left
 	AddShaftWall 1, Shaft1Left, Brick, 0.33, -4, -4.125, -4, 4.125, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -396,9 +396,9 @@ CutStairwell 1, -8.5, -3.5, 8.5, 3.5, 0, 5
     #5 feet in each direction (-5 to 5).  So the lower landing would reach from the left side of the staircase (-8.5) to the left side of the stairs (-5),
     #and the upper landing would be the opposite (go from the stairs top, 5, to the right side of the staircase, 8.5).
     
-    if[%floor% > 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -5, 3.5, 0, 0, 1, 1
-    if[%floor% = 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, 8.5, 3.5, 0, 0, 1, 1
-    if[%floor% < 9] AddStairsFloor 1, LandingUpper, Brick, 0.5, 5, -3.5, 8.5, 3.5, %1% * 10, %1% * 10, 1, 1
+    if[%floor% > 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, -5, 3.5, 0, 0, false, false, 1, 1
+    if[%floor% = 0] AddStairsFloor 1, LandingLower, Brick, 0.5, -8.5, -3.5, 8.5, 3.5, 0, 0, false, false, 1, 1
+    if[%floor% < 9] AddStairsFloor 1, LandingUpper, Brick, 0.5, 5, -3.5, 8.5, 3.5, %1% * 10, %1% * 10, false, false, 1, 1
 
     #the landing covers simply cover the portion of the landing that isn't covered up by the stairs.  You can see this cover if you're underneath a staircase,
     #and it's the small wall piece just below it (fills in the gap between the lower floor's ceiling, and the landing above it).  In this example, the

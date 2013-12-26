@@ -76,9 +76,11 @@ class ScriptProcessor
 	bool setkey;
 	int keyvalue;
 	int lockvalue;
+	bool warn_deprecated;
 
-	int ScriptError(std::string message);
+	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
+	int ScriptWarning(std::string message);
 	std::string Calc(const char *expression);
 	bool IfProc(const char *expression);
 	void StoreCommand(Object *object);
