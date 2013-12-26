@@ -77,7 +77,6 @@ public:
 	void DrawBackground();
 
 	std::string BuildingFile;
-	std::vector<std::string> runtime_script;
 
 	//engine related stuff
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = std::string(""));
@@ -102,6 +101,7 @@ public:
 	bool GetConfigBool(std::string key, bool default_value);
 	float GetConfigFloat(std::string key, float default_value);
 	bool InitSky();
+	ScriptProcessor* GetScriptProcessor();
 
 private:
 	//mouse status

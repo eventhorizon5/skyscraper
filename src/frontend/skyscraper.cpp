@@ -133,6 +133,9 @@ bool Skyscraper::OnInit(void)
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
 
+	//load script processor
+	processor = new ScriptProcessor();
+
 	//set sky name
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
@@ -177,6 +180,10 @@ int Skyscraper::OnExit()
 	//delete Caelum
 	if (mCaelumSystem)
 		delete mCaelumSystem;
+
+	//unload script processor
+	delete processor;
+	processor = 0;
 
 	//cleanup sound
 	StopSound();
@@ -1457,7 +1464,9 @@ bool Skyscraper::Start()
 
 	//load script processor object and load building
 	bool loaderror = false;
-	processor = new ScriptProcessor();
+
+	processor->Reset();
+
 	if (!processor->LoadDataFile(BuildingFile.c_str()))
 	{
 		loaderror = true;
@@ -1465,7 +1474,7 @@ bool Skyscraper::Start()
 	}
 	if (loaderror == false)
 	{
-		if (!processor->LoadBuilding())
+		if (!processor->Run())
 		{
 			loaderror = true;
 			ReportError("Error processing building\n");
@@ -1475,10 +1484,6 @@ bool Skyscraper::Start()
 	//report on missing files, if any
 	if (loaderror == false)
 		processor->ReportMissingFiles();
-
-	//unload script processor
-	delete processor;
-	processor = 0;
 
 	if (loaderror == true)
 	{
@@ -1803,4 +1808,9 @@ bool Skyscraper::InitSky()
 	SkyMult = GetConfigInt("Skyscraper.Frontend.SkyMult", 50);
 
 	return true;
+}
+
+ScriptProcessor* Skyscraper::GetScriptProcessor()
+{
+	return processor;
 }

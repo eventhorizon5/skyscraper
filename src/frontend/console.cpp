@@ -92,11 +92,15 @@ Console::~Console()
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
 	Simcore->RecreateColliders = true;
-	ScriptProcessor *processor = new ScriptProcessor();
+	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
+
+	if (!processor)
+		return;
+
+	//load new commands into script interpreter, and run
 	processor->LoadFromText(tCommand->GetValue().ToAscii());
-	processor->LoadBuilding();
-	delete processor;
-	processor = 0;
+	processor->Run();
+
 	Simcore->Prepare();
 	Simcore->RecreateColliders = false;
 }

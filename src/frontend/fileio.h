@@ -30,13 +30,15 @@ class ScriptProcessor
 	public:
 	ScriptProcessor();
 	~ScriptProcessor();
-	bool LoadBuilding();
+	bool Run();
 	bool LoadDataFile(const char *filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const char *text);
 	bool ReportMissingFiles();
 	int SplitData(const char *string, int start, bool calc = true, int calc_skip = -1);
 	int SplitAfterEquals(const char *string, bool calc = true);
 	std::string GetAfterEquals(const char *string);
+	void Reset();
+	std::vector<std::string> *GetBuildingData();
 
 	private:
 	int line; //line number
@@ -71,7 +73,6 @@ class ScriptProcessor
 	std::vector<std::string> FunctionParams;
 	bool ReplaceLine;
 	std::vector<std::string> nonexistent_files;
-	bool CalcError;
 	bool ReverseAxis;
 	bool setkey;
 	int keyvalue;

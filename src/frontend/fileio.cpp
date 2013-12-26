@@ -52,6 +52,16 @@ extern Skyscraper *skyscraper;
 
 ScriptProcessor::ScriptProcessor()
 {
+	Reset();
+}
+
+ScriptProcessor::~ScriptProcessor()
+{
+
+}
+
+void ScriptProcessor::Reset()
+{
 	line = 0; //line number
 	LineData = "";  //line contents
 	Current = 0;
@@ -63,21 +73,36 @@ ScriptProcessor::ScriptProcessor()
 	temp4 = 0;
 	temp5 = 0;
 	temp6 = "";
+	tempdata.clear();
+	callbutton_elevators.clear();
 	FloorCheck = 0;
 	RangeL = 0;
 	RangeH = 0;
 	RangeStart = 0;
+	wall = 0;
+	buffer = "";
 	startpos = 0;
 	getfloordata = false;
 	setshaftdoors = false;
+	BuildingData.clear();
 	MinExtent = 0;
 	MaxExtent = 0;
 	InFunction = false;
+	FunctionName = "";
 	FunctionCallLine = 0;
+	FunctionCallLineData = "";
+	FunctionParams.clear();
 	ReplaceLine = false;
 	nonexistent_files.clear();
-	floorcache_firstrun = true;
 	ReverseAxis = false;
+	setkey = false;
+	keyvalue = 0;
+	lockvalue = 0;
+	warn_deprecated = skyscraper->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
+	functions.clear();
+	includes.clear();
+	variables.clear();
+	floorcache_firstrun = true;
 	cache_current = 0;
 	cache_current_s = "";
 	cache_height = 0;
@@ -88,18 +113,9 @@ ScriptProcessor::ScriptProcessor()
 	cache_interfloorheight_s = "";
 	cache_base = 0;
 	cache_base_s = "";
-	setkey = false;
-	keyvalue = 0;
-	lockvalue = 0;
-	warn_deprecated = skyscraper->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
 }
 
-ScriptProcessor::~ScriptProcessor()
-{
-
-}
-
-bool ScriptProcessor::LoadBuilding()
+bool ScriptProcessor::Run()
 {
 	//building loader/script interpreter
 
@@ -718,18 +734,14 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 
 	Ogre::DataStreamPtr file(OGRE_NEW Ogre::MemoryDataStream(filename, filedata));
 
-	//clear array
-	if (insert == false)
-		BuildingData.clear();
-
 	while (file->eof() == false)
 	{
 		//push next line of data onto the tail end of the BuildingData array
 		std::string line = file->getLine(true);
 		if (insert == false)
 		{
+			//append data to building array
 			BuildingData.push_back(line);
-			skyscraper->runtime_script.push_back(line);
 		}
 		else
 		{
@@ -758,15 +770,12 @@ bool ScriptProcessor::LoadFromText(const char *text)
 	std::vector<std::string> textarray;
 	SplitString(textarray, text, '\n');
 
-	//clear building data
-	BuildingData.clear();
-
 	//feed each line of text into the script array
-	BuildingData.reserve(textarray.size());
+	BuildingData.reserve(BuildingData.size() + textarray.size());
 	for (int i = 0; i < (int)textarray.size(); i++)
 	{
+		//append data to building array
 		BuildingData.push_back(textarray[i]);
-		skyscraper->runtime_script.push_back(textarray[i]);
 	}
 	return true;
 }
@@ -7282,7 +7291,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 	std::string one;
 	std::string two;
 	int start, end;
-	CalcError = false;
+	bool CalcError = false;
 
 	//first remove all whitespace from the string
 	ReplaceAll(tmpcalc, " ", "");
@@ -7647,3 +7656,7 @@ std::string ScriptProcessor::GetAfterEquals(const char *string)
 	return temp;
 }
 
+std::vector<std::string> *ScriptProcessor::GetBuildingData()
+{
+	return &BuildingData;
+}
