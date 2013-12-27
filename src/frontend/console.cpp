@@ -38,6 +38,7 @@ extern Skyscraper *skyscraper;
 //*)
 
 //(*IdInit(Console)
+const long Console::ID_tConsole = wxNewId();
 const long Console::ID_tCommand = wxNewId();
 const long Console::ID_bSend = wxNewId();
 const long Console::ID_bClose = wxNewId();
@@ -52,34 +53,37 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 {
 	//(*Initialize(Console)
 	wxFlexGridSizer* FlexGridSizer1;
-	wxBoxSizer* BoxSizer2;
+	wxFlexGridSizer* FlexGridSizer2;
 	wxBoxSizer* BoxSizer1;
-	
-	Create(parent, id, _("Script Console"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
+
+	Create(parent, id, _("Script Console"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);
-	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
-	FlexGridSizer1 = new wxFlexGridSizer(0, 3, 0, 0);
-	FlexGridSizer1->AddGrowableCol(0);
-	FlexGridSizer1->AddGrowableCol(1);
-	FlexGridSizer1->AddGrowableRow(0);
-	tCommand = new wxTextCtrl(this, ID_tCommand, wxEmptyString, wxDefaultPosition, wxSize(400,100), wxTE_MULTILINE|wxHSCROLL|wxTE_DONTWRAP, wxDefaultValidator, _T("ID_tCommand"));
-	FlexGridSizer1->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer2 = new wxBoxSizer(wxVERTICAL);
+	FlexGridSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
+	tConsole = new wxTextCtrl(this, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_tConsole"));
+	FlexGridSizer1->Add(tConsole, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2 = new wxFlexGridSizer(0, 2, 0, 0);
+	tCommand = new wxTextCtrl(this, ID_tCommand, wxEmptyString, wxDefaultPosition, wxSize(500,100), wxTE_MULTILINE, wxDefaultValidator, _T("ID_tCommand"));
+	FlexGridSizer2->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	bSend = new wxButton(this, ID_bSend, _("Send"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSend"));
-	BoxSizer2->Add(bSend, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1->Add(bSend, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bClose = new wxButton(this, ID_bClose, _("Close"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bClose"));
-	BoxSizer2->Add(bClose, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer1->Add(FlexGridSizer1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	SetSizer(BoxSizer1);
-	BoxSizer1->Fit(this);
-	BoxSizer1->SetSizeHints(this);
+	BoxSizer1->Add(bClose, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(BoxSizer1, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer1->Add(FlexGridSizer2, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	SetSizer(FlexGridSizer1);
+	FlexGridSizer1->Fit(this);
+	FlexGridSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
 	Connect(ID_bClose,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bClose_Click);
 	//*)
+
+	std::vector<std::string> *data = skyscraper->GetScriptProcessor()->GetBuildingData();
+	for (int i = 0; i < data->size(); i++)
+		tConsole->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));
 }
 
 Console::~Console()
@@ -88,9 +92,11 @@ Console::~Console()
 	//*)
 }
 
-
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
+	if (!Simcore)
+		return;
+
 	Simcore->RecreateColliders = true;
 	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
 
@@ -99,6 +105,7 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 
 	//load new commands into script interpreter, and run
 	processor->LoadFromText(tCommand->GetValue().ToAscii());
+	tConsole->AppendText(tCommand->GetValue() + wxT("\n"));
 	processor->Run();
 
 	Simcore->Prepare();

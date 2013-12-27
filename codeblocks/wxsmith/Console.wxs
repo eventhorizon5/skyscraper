@@ -5,31 +5,40 @@
 		<centered>1</centered>
 		<pos_arg>1</pos_arg>
 		<size_arg>1</size_arg>
-		<style>wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX</style>
-		<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+		<style>wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX</style>
+		<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
+			<cols>1</cols>
+			<rows>2</rows>
 			<object class="sizeritem">
-				<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
-					<cols>3</cols>
-					<growablecols>0,1</growablecols>
-					<growablerows>0</growablerows>
+				<object class="wxTextCtrl" name="ID_tConsole" variable="tConsole" member="yes">
+					<size>600,400</size>
+					<style>wxTE_MULTILINE|wxTE_READONLY</style>
+				</object>
+				<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+				<border>5</border>
+				<option>1</option>
+			</object>
+			<object class="sizeritem">
+				<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
+					<cols>2</cols>
 					<object class="sizeritem">
 						<object class="wxTextCtrl" name="ID_tCommand" variable="tCommand" member="yes">
-							<size>400,100</size>
-							<style>wxTE_MULTILINE|wxHSCROLL|wxTE_DONTWRAP</style>
+							<size>500,100</size>
+							<style>wxTE_MULTILINE</style>
 						</object>
-						<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 					<object class="sizeritem">
-						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
+						<object class="wxBoxSizer" variable="BoxSizer1" member="no">
 							<orient>wxVERTICAL</orient>
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bSend" variable="bSend" member="yes">
 									<label>Send</label>
 									<handler function="On_bSend_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -38,17 +47,17 @@
 									<label>Close</label>
 									<handler function="On_bClose_Click" entry="EVT_BUTTON" />
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
 				</object>
-				<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+				<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>

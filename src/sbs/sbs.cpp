@@ -1143,13 +1143,13 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 void SBS::Report(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message);
 	LastNotification = message;
 }
 
 bool SBS::ReportError(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
 	LastError = message;
 	return false;
 }

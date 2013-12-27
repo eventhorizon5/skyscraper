@@ -122,6 +122,7 @@ bool Skyscraper::OnInit(void)
 	mCaelumSystem = 0;
 	buttons = 0;
 	buttoncount = 0;
+	logger = 0;
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -173,7 +174,7 @@ int Skyscraper::OnExit()
 	//clean up
 
 	//cleanup
-	printf("Cleaning up...\n");
+	Report("Cleaning up...");
 
 	UnloadSim();
 
@@ -200,6 +201,7 @@ int Skyscraper::OnExit()
 	skyscraper = 0;
 
 	delete mRoot;
+	delete logger;
 	return wxApp::OnExit();
 	//return 0;
 }
@@ -346,6 +348,16 @@ void Skyscraper::Render()
 
 bool Skyscraper::Initialize()
 {
+	//load config file
+	try
+	{
+		configfile.load("skyscraper.ini");
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
+	}
+
 	//initialize OGRE
 	try
 	{
@@ -360,6 +372,15 @@ bool Skyscraper::Initialize()
 	{
 		try
 		{
+			//set up custom logger
+			if (!logger)
+			{
+				logger = new Ogre::LogManager();
+				Ogre::Log *log = logger->createLog("skyscraper.log", true, GetConfigBool("Skyscraper.Frontend.Debug", false), false);
+				log->addListener(this);
+			}
+
+			//load OGRE
 			mRoot = new Ogre::Root();
 		}
 		catch (Ogre::Exception &e)
@@ -368,16 +389,6 @@ bool Skyscraper::Initialize()
 		}
 	}
 	
-	//load config file
-	try
-	{
-		configfile.load("skyscraper.ini");
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
-	}
-
 	//configure render system
 	try
 	{
@@ -832,20 +843,20 @@ void Skyscraper::GetInput()
 	}
 }
 
-void Skyscraper::Report(std::string message, ...)
+void Skyscraper::Report(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message);
 }
 
-bool Skyscraper::ReportError(std::string message, ...)
+bool Skyscraper::ReportError(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
 	return false;
 }
 
-bool Skyscraper::ReportFatalError(std::string message, ...)
+bool Skyscraper::ReportFatalError(std::string message)
 {
-	printf("%s\n", message.c_str());
+	ReportError(message);
 
 	//show error dialog
 	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
@@ -1813,4 +1824,9 @@ bool Skyscraper::InitSky()
 ScriptProcessor* Skyscraper::GetScriptProcessor()
 {
 	return processor;
+}
+
+void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage)
+{
+	//callback function that receives OGRE log messages
 }

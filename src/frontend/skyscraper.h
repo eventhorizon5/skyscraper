@@ -34,7 +34,7 @@
 
 int main (int argc, char* argv[]);
 
-class Skyscraper : public wxApp
+class Skyscraper : public wxApp, public Ogre::LogListener
 {
 public:
 
@@ -84,9 +84,9 @@ public:
 	const std::string getOgreHandle() const;
 	void Render();
 	void GetInput();
-	void Report(std::string message, ...);
-	bool ReportError(std::string message, ...);
-	bool ReportFatalError(std::string message, ...);
+	void Report(std::string message);
+	bool ReportError(std::string message);
+	bool ReportFatalError(std::string message);
 	bool Initialize();
 	void GetMenuInput();
 	void StartSound();
@@ -150,9 +150,11 @@ private:
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();
+	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
+	Ogre::LogManager* logger;
 };
 
 class MainScreen : public wxFrame

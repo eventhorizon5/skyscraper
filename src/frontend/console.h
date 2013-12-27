@@ -42,6 +42,7 @@ class Console: public wxDialog
 
 		//(*Declarations(Console)
 		wxButton* bClose;
+		wxTextCtrl* tConsole;
 		wxButton* bSend;
 		wxTextCtrl* tCommand;
 		//*)
@@ -49,6 +50,7 @@ class Console: public wxDialog
 	protected:
 
 		//(*Identifiers(Console)
+		static const long ID_tConsole;
 		static const long ID_tCommand;
 		static const long ID_bSend;
 		static const long ID_bClose;
