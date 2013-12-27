@@ -327,7 +327,7 @@
 								</object>
 								<object class="sizeritem">
 									<object class="wxButton" name="ID_bConsole" variable="bConsole" member="yes">
-										<label>Script Console</label>
+										<label>Console</label>
 										<handler function="On_bConsole_Click" entry="EVT_BUTTON" />
 									</object>
 									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>

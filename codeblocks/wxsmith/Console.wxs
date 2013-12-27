@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
 	<object class="wxFrame" name="Console">
-		<title>Script Console</title>
+		<title>Console</title>
 		<pos>0,0</pos>
 		<pos_arg>1</pos_arg>
 		<size_arg>1</size_arg>

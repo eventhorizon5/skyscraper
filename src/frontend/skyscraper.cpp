@@ -1472,8 +1472,8 @@ bool Skyscraper::Start()
 	mSceneMgr->clearScene();
 
 	//clear screen
-	mRoot->renderOneFrame();
-	
+	mRenderWindow->update();
+
 	Starting = true;
 
 	//Create and initialize simulator
