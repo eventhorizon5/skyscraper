@@ -1862,12 +1862,12 @@ void ParameterViewer::On_bCancel_Click(wxCommandEvent& event)
 
 void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 {
-	Simcore->RecreateColliders = true;
+	Simcore->DeleteColliders = true;
 	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
 	processor->LoadFromText(command.ToAscii());
 	processor->Run();
 	Simcore->Prepare();
-	Simcore->RecreateColliders = false;
+	Simcore->DeleteColliders = false;
 	objectinfo->PopulateTree();
 	this->Close();
 }

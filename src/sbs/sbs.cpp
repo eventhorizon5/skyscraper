@@ -161,7 +161,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 		OldMapUV[i] = 0;
 		MapUV[i] = 0;
 	}
-	RecreateColliders = false;
+	DeleteColliders = false;
 	soundcount = 0;
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
@@ -860,14 +860,6 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
 	}
 
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		wallobject->meshwrapper->Prepare();
-		wallobject->meshwrapper->DeleteCollider();
-		wallobject->meshwrapper->CreateCollider();
-	}
-
 	return 0;
 }
 
@@ -1130,14 +1122,6 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 	PlanarRotate = old_planarrotate;
 
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		wallobject->meshwrapper->Prepare();
-		wallobject->meshwrapper->DeleteCollider();
-		wallobject->meshwrapper->CreateCollider();
-	}
-
 	return 0;
 }
 
@@ -1371,14 +1355,6 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 		NewName = name;
 		NewName.append(":1");
 		wallobject->AddPolygon(NewName.c_str(), texture, varray2, tw2, th2, true);
-	}
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		wallobject->meshwrapper->Prepare();
-		wallobject->meshwrapper->DeleteCollider();
-		wallobject->meshwrapper->CreateCollider();
 	}
 
 	return 0;

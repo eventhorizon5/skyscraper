@@ -1388,12 +1388,8 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	MeshWrapper->load();
 
 	//recreate colliders if specified
-	if (sbs->RecreateColliders == true)
-	{
-		Prepare();
+	if (sbs->DeleteColliders == true)
 		DeleteCollider();
-		CreateCollider();
-	}
 
 	return true;
 }
@@ -1841,6 +1837,12 @@ void MeshObject::CreateCollider()
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
 		mShape = shape;
+
+		if (sbs->DeleteColliders == true)
+		{
+			Enable(false, false);
+			Enable(true, false);
+		}
 	}
 	catch (Ogre::Exception &e)
 	{

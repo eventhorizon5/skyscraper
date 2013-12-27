@@ -157,7 +157,7 @@ public:
 	std::string root_dir; //app directory
 	std::string dir_char;
 	bool DisableSound; //disable sound system if true
-	bool RecreateColliders; //true if system should recreate mesh colliders on each modification
+	bool DeleteColliders; //true if system should delete mesh colliders on each modification
 	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
 	bool Verbose; //set to true to enable verbose mode
 	bool InterfloorOnTop; //set to true to have interfloor area on top (it's on the bottom by default)

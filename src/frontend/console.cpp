@@ -97,7 +97,7 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 	if (!Simcore)
 		return;
 
-	Simcore->RecreateColliders = true;
+	Simcore->DeleteColliders = true;
 	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
 
 	if (!processor)
@@ -108,9 +108,8 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 	if (chkEcho->GetValue() == true)
 		tConsole->AppendText(tCommand->GetValue());
 	processor->Run();
-
 	Simcore->Prepare(false);
-	Simcore->RecreateColliders = false;
+	Simcore->DeleteColliders = false;
 	tCommand->Clear();
 }
 
