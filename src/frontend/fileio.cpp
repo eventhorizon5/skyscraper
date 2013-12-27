@@ -85,6 +85,7 @@ void ScriptProcessor::Reset()
 	getfloordata = false;
 	setshaftdoors = false;
 	BuildingData.clear();
+	BuildingDataOrig.clear();
 	MinExtent = 0;
 	MaxExtent = 0;
 	InFunction = false;
@@ -747,6 +748,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 		{
 			//append data to building array
 			BuildingData.push_back(line);
+			BuildingDataOrig.push_back(line);
 		}
 		else
 		{
@@ -777,10 +779,12 @@ bool ScriptProcessor::LoadFromText(const char *text)
 
 	//feed each line of text into the script array
 	BuildingData.reserve(BuildingData.size() + textarray.size());
+	BuildingDataOrig.reserve(BuildingDataOrig.size() + textarray.size());
 	for (int i = 0; i < (int)textarray.size(); i++)
 	{
 		//append data to building array
 		BuildingData.push_back(textarray[i]);
+		BuildingDataOrig.push_back(textarray[i]);
 	}
 	return true;
 }
@@ -7663,5 +7667,5 @@ std::string ScriptProcessor::GetAfterEquals(const char *string)
 
 std::vector<std::string> *ScriptProcessor::GetBuildingData()
 {
-	return &BuildingData;
+	return &BuildingDataOrig;
 }

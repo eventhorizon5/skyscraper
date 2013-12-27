@@ -64,6 +64,7 @@ class ScriptProcessor
 	bool getfloordata;
 	bool setshaftdoors;
 	std::vector<std::string> BuildingData;
+	std::vector<std::string> BuildingDataOrig;
 	Ogre::Vector3 MinExtent;
 	Ogre::Vector3 MaxExtent;
 	bool InFunction;

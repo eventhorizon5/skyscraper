@@ -1866,7 +1866,7 @@ void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
 	processor->LoadFromText(command.ToAscii());
 	processor->Run();
-	Simcore->Prepare();
+	Simcore->Prepare(false);
 	Simcore->DeleteColliders = false;
 	objectinfo->PopulateTree();
 	this->Close();
