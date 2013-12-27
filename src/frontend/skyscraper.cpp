@@ -34,6 +34,7 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "debugpanel.h"
+#include "console.h"
 #include "unix.h"
 #include "revmain.h"
 
@@ -67,6 +68,7 @@ SBS *Simcore;
 Skyscraper *skyscraper;
 DebugPanel *dpanel;
 MainScreen *window;
+Console *console;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "uexception.h"
@@ -123,6 +125,23 @@ bool Skyscraper::OnInit(void)
 	buttons = 0;
 	buttoncount = 0;
 	logger = 0;
+	console = 0;
+
+	//load config file
+	try
+	{
+		configfile.load("skyscraper.ini");
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
+	}
+
+	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
+
+	//create console window
+	if (showconsole == true)
+		ShowConsole(false);
 
 	//Create main window
 	window = new MainScreen(640, 480);
@@ -196,6 +215,10 @@ int Skyscraper::OnExit()
 		canvas->Destroy();
 	canvas = 0;
 
+	if (console)
+		console->Destroy();
+	console = 0;
+
 	window->Destroy();
 	window = 0;
 	skyscraper = 0;
@@ -225,6 +248,9 @@ void Skyscraper::UnloadSim()
 		mCaelumSystem = 0;
 		Ogre::ResourceGroupManager::getSingleton().destroyResourceGroup("Caelum");
 	}
+
+	if (console)
+		console->bSend->Enable(false);
 
 	//delete simulator object
 	delete Simcore;
@@ -348,16 +374,6 @@ void Skyscraper::Render()
 
 bool Skyscraper::Initialize()
 {
-	//load config file
-	try
-	{
-		configfile.load("skyscraper.ini");
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
-	}
-
 	//initialize OGRE
 	try
 	{
@@ -376,7 +392,7 @@ bool Skyscraper::Initialize()
 			if (!logger)
 			{
 				logger = new Ogre::LogManager();
-				Ogre::Log *log = logger->createLog("skyscraper.log", true, GetConfigBool("Skyscraper.Frontend.Debug", false), false);
+				Ogre::Log *log = logger->createLog("skyscraper.log", true, !showconsole, false);
 				log->addListener(this);
 			}
 
@@ -1565,6 +1581,8 @@ bool Skyscraper::Start()
 	Starting = false;
 	StartupRunning = false;
 	Reload = false;
+	if (console)
+		console->bSend->Enable(true);
 	return true;
 }
 
@@ -1829,4 +1847,18 @@ ScriptProcessor* Skyscraper::GetScriptProcessor()
 void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage)
 {
 	//callback function that receives OGRE log messages
+	if (console)
+	{
+		console->tConsole->AppendText(wxString::FromAscii(message.c_str()) + wxT("\n"));
+		console->Update();
+	}
+}
+
+void Skyscraper::ShowConsole(bool send_button)
+{
+	if (!console)
+		console = new Console(window, -1);
+	console->Show();
+	console->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ConsoleX", 10), GetConfigInt("Skyscraper.Frontend.ConsoleY", 25)));
+	console->bSend->Enable(send_button);
 }

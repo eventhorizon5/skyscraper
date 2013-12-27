@@ -31,6 +31,7 @@
 
 extern SBS *Simcore;
 extern Skyscraper *skyscraper;
+extern Console *console;
 
 //(*InternalHeaders(Console)
 #include <wx/string.h>
@@ -41,10 +42,9 @@ extern Skyscraper *skyscraper;
 const long Console::ID_tConsole = wxNewId();
 const long Console::ID_tCommand = wxNewId();
 const long Console::ID_bSend = wxNewId();
-const long Console::ID_bClose = wxNewId();
 //*)
 
-BEGIN_EVENT_TABLE(Console,wxDialog)
+BEGIN_EVENT_TABLE(Console,wxFrame)
 	//(*EventTable(Console)
 	//*)
 END_EVENT_TABLE()
@@ -56,34 +56,34 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 	wxFlexGridSizer* FlexGridSizer2;
 	wxBoxSizer* BoxSizer1;
 
-	Create(parent, id, _("Script Console"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
+	Create(parent, id, _("Script Console"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX, _T("id"));
 	SetClientSize(wxDefaultSize);
-	Move(wxDefaultPosition);
+	Move(wxPoint(0,0));
 	FlexGridSizer1 = new wxFlexGridSizer(2, 1, 0, 0);
+	FlexGridSizer1->AddGrowableCol(1);
+	FlexGridSizer1->AddGrowableRow(1);
 	tConsole = new wxTextCtrl(this, ID_tConsole, wxEmptyString, wxDefaultPosition, wxSize(600,400), wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_tConsole"));
 	FlexGridSizer1->Add(tConsole, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	FlexGridSizer2 = new wxFlexGridSizer(0, 2, 0, 0);
+	FlexGridSizer2 = new wxFlexGridSizer(1, 2, 0, 0);
+	FlexGridSizer2->AddGrowableRow(1);
 	tCommand = new wxTextCtrl(this, ID_tCommand, wxEmptyString, wxDefaultPosition, wxSize(500,100), wxTE_MULTILINE, wxDefaultValidator, _T("ID_tCommand"));
 	FlexGridSizer2->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	bSend = new wxButton(this, ID_bSend, _("Send"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSend"));
 	BoxSizer1->Add(bSend, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	bClose = new wxButton(this, ID_bClose, _("Close"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bClose"));
-	BoxSizer1->Add(bClose, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer2->Add(BoxSizer1, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer2, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
-	Center();
 
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
-	Connect(ID_bClose,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bClose_Click);
+	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&Console::On_Close);
 	//*)
 
-	std::vector<std::string> *data = skyscraper->GetScriptProcessor()->GetBuildingData();
+	/*std::vector<std::string> *data = skyscraper->GetScriptProcessor()->GetBuildingData();
 	for (int i = 0; i < data->size(); i++)
-		tConsole->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));
+		tConsole->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));*/
 }
 
 Console::~Console()
@@ -105,10 +105,9 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 
 	//load new commands into script interpreter, and run
 	processor->LoadFromText(tCommand->GetValue().ToAscii());
-	tConsole->AppendText(tCommand->GetValue() + wxT("\n"));
 	processor->Run();
 
-	Simcore->Prepare();
+	Simcore->Prepare(false);
 	Simcore->RecreateColliders = false;
 }
 
@@ -116,3 +115,9 @@ void Console::On_bClose_Click(wxCommandEvent& event)
 {
 	this->Close();
 }
+
+void Console::On_Close(wxCloseEvent& event)
+{
+	this->Hide();
+}
+

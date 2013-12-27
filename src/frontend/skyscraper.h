@@ -102,6 +102,7 @@ public:
 	float GetConfigFloat(std::string key, float default_value);
 	bool InitSky();
 	ScriptProcessor* GetScriptProcessor();
+	void ShowConsole(bool send_button = true);
 
 private:
 	//mouse status
@@ -155,6 +156,7 @@ private:
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
 	Ogre::LogManager* logger;
+	bool showconsole;
 };
 
 class MainScreen : public wxFrame

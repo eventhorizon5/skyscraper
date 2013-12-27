@@ -128,7 +128,7 @@
 					<wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/frontend/meshcontrol.cpp" hdr="../src/frontend/meshcontrol.h" name="MeshControl" language="CPP" />
 					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/frontend/keydialog.cpp" hdr="../src/frontend/keydialog.h" name="KeyDialog" language="CPP" />
 					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/frontend/stats.cpp" hdr="../src/frontend/stats.h" name="Stats" language="CPP" />
-					<wxDialog wxs="wxsmith/Console.wxs" src="../src/frontend/console.cpp" hdr="../src/frontend/console.h" name="Console" language="CPP" />
+					<wxFrame wxs="wxsmith/Console.wxs" src="../src/frontend/console.cpp" hdr="../src/frontend/console.h" name="Console" language="CPP" />
 					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/frontend/objectinfo.cpp" hdr="../src/frontend/objectinfo.h" name="ObjectInfo" language="CPP" />
 					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/frontend/textwindow.cpp" hdr="../src/frontend/textwindow.h" name="TextWindow" language="CPP" />
 					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/frontend/profilergui.cpp" hdr="../src/frontend/profilergui.h" name="Profiler" language="CPP" />

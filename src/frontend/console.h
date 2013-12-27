@@ -27,13 +27,13 @@
 
 #include <wx/app.h>
 //(*Headers(Console)
-#include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
+#include <wx/frame.h>
 #include <wx/textctrl.h>
 //*)
 
-class Console: public wxDialog
+class Console: public wxFrame
 {
 	public:
 
@@ -41,7 +41,6 @@ class Console: public wxDialog
 		virtual ~Console();
 
 		//(*Declarations(Console)
-		wxButton* bClose;
 		wxTextCtrl* tConsole;
 		wxButton* bSend;
 		wxTextCtrl* tCommand;
@@ -53,7 +52,6 @@ class Console: public wxDialog
 		static const long ID_tConsole;
 		static const long ID_tCommand;
 		static const long ID_bSend;
-		static const long ID_bClose;
 		//*)
 
 	private:
@@ -61,6 +59,7 @@ class Console: public wxDialog
 		//(*Handlers(Console)
 		void On_bSend_Click(wxCommandEvent& event);
 		void On_bClose_Click(wxCommandEvent& event);
+		void On_Close(wxCloseEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

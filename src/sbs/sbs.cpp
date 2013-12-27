@@ -3504,17 +3504,24 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-void SBS::Prepare()
+void SBS::Prepare(bool report)
 {
 	//prepare objects for run
 	
-	Report("Preparing objects...");
-	Report("Processing geometry...");
+	if (report == true)
+	{
+		Report("Preparing objects...");
+		Report("Processing geometry...");
+	}
+
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
 	}
-	Report("Creating colliders...");
+
+	if (report == true)
+		Report("Creating colliders...");
+
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i]->tricollider == true)
@@ -3522,7 +3529,9 @@ void SBS::Prepare()
 		else
 			meshes[i]->CreateBoxCollider(1);
 	}
-	Report("Finished prepare");
+
+	if (report == true)
+		Report("Finished prepare");
 }
 
 Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)

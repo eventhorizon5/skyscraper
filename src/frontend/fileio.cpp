@@ -99,6 +99,7 @@ void ScriptProcessor::Reset()
 	keyvalue = 0;
 	lockvalue = 0;
 	warn_deprecated = skyscraper->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
+	show_percent = true;
 	functions.clear();
 	includes.clear();
 	variables.clear();
@@ -121,6 +122,10 @@ bool ScriptProcessor::Run()
 
 	int returncode = sContinue;
 	int progress_marker = 0;
+
+	//don't show percent signs if not starting a new building file
+	if (line > 0)
+		show_percent = false;
 
 	while (line < (int)BuildingData.size())
 	{
@@ -216,7 +221,7 @@ bool ScriptProcessor::Run()
 				}
 			}*/
 		}
-		else
+		else if (show_percent == true)
 		{
 			int percent = ((float)line / (float)BuildingData.size()) * 100.0;
 			std::string percent_s = ToString(percent);

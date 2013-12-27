@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <wxsmith>
-	<object class="wxDialog" name="Console">
+	<object class="wxFrame" name="Console">
 		<title>Script Console</title>
-		<centered>1</centered>
+		<pos>0,0</pos>
 		<pos_arg>1</pos_arg>
 		<size_arg>1</size_arg>
-		<style>wxCAPTION|wxDEFAULT_DIALOG_STYLE|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX</style>
+		<style>wxCAPTION|wxSYSTEM_MENU|wxRESIZE_BORDER|wxCLOSE_BOX|wxMAXIMIZE_BOX|wxMINIMIZE_BOX</style>
+		<handler function="On_Close" entry="EVT_CLOSE" />
 		<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
 			<cols>1</cols>
 			<rows>2</rows>
+			<growablecols>1</growablecols>
+			<growablerows>1</growablerows>
 			<object class="sizeritem">
 				<object class="wxTextCtrl" name="ID_tConsole" variable="tConsole" member="yes">
 					<size>600,400</size>
@@ -21,6 +24,8 @@
 			<object class="sizeritem">
 				<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
 					<cols>2</cols>
+					<rows>1</rows>
+					<growablerows>1</growablerows>
 					<object class="sizeritem">
 						<object class="wxTextCtrl" name="ID_tCommand" variable="tCommand" member="yes">
 							<size>500,100</size>
@@ -37,15 +42,6 @@
 								<object class="wxButton" name="ID_bSend" variable="bSend" member="yes">
 									<label>Send</label>
 									<handler function="On_bSend_Click" entry="EVT_BUTTON" />
-								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
-							<object class="sizeritem">
-								<object class="wxButton" name="ID_bClose" variable="bClose" member="yes">
-									<label>Close</label>
-									<handler function="On_bClose_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>

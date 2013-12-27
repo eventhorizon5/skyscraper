@@ -42,8 +42,10 @@
 #include "cameracontrol.h"
 #include "console.h"
 #include "objectinfo.h"
+#include "skyscraper.h"
 
 extern SBS *Simcore; //external pointer to the SBS engine
+extern Skyscraper *skyscraper;
 extern DebugPanel *dpanel;
 DebugPanel *dp; //self pointer
 MeshControl *mc;
@@ -51,7 +53,7 @@ editelevator *ee;
 CameraControl *cc;
 KeyDialog *kd;
 Stats *stats;
-Console *console;
+extern Console *console;
 ObjectInfo *objectinfo;
 Profiler *profiler;
 ActionViewer *actionviewer;
@@ -267,9 +269,6 @@ DebugPanel::~DebugPanel()
 	if (stats)
 		stats->Destroy();
 	stats = 0;
-	if (console)
-		console->Destroy();
-	console = 0;
 	if (objectinfo)
 		objectinfo->Destroy();
 	objectinfo = 0;
@@ -343,7 +342,6 @@ void DebugPanel::OnInit()
 	cc = new CameraControl(dp, -1);
 	kd = new KeyDialog(dp, -1);
 	stats = new Stats(dp, -1);
-	console = new Console(dp, -1);
 	objectinfo = new ObjectInfo(dp, -1);
 	profiler = new Profiler(dp, -1);
 	actionviewer = new ActionViewer(dp, -1);
@@ -475,11 +473,7 @@ void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 {
-	if (console)
-	{
-		console->CenterOnScreen();
-		console->Show();
-	}
+	skyscraper->ShowConsole();
 }
 
 void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
