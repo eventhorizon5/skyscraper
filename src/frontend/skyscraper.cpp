@@ -126,6 +126,7 @@ bool Skyscraper::OnInit(void)
 	buttoncount = 0;
 	logger = 0;
 	console = 0;
+	raised = false;
 
 	//load config file
 	try
@@ -899,8 +900,11 @@ void Skyscraper::Loop()
 		return;
 
 	//force window raise on startup
-	if (Simcore->GetCurrentTime() > 10)
+	if (Simcore->GetCurrentTime() > 0 && raised == false)
+	{
 		window->Raise();
+		raised = true;
+	}
 
 	Simcore->AdvanceClock();
 	if (IsRunning == true)
@@ -1586,6 +1590,7 @@ void Skyscraper::Unload()
 	IsRunning = false;
 	Starting = false;
 	Pause = false;
+	raised = false;
 	UnloadSim();
 
 	//cleanup sound

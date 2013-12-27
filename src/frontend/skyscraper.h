@@ -157,6 +157,7 @@ private:
 	Caelum::CaelumSystem *mCaelumSystem;
 	Ogre::LogManager* logger;
 	bool showconsole;
+	bool raised;
 };
 
 class MainScreen : public wxFrame
