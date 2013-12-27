@@ -47,6 +47,14 @@
 								<border>5</border>
 								<option>1</option>
 							</object>
+							<object class="sizeritem">
+								<object class="wxCheckBox" name="ID_chkEcho" variable="chkEcho" member="yes">
+									<label>Echo</label>
+								</object>
+								<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
 						</object>
 						<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>

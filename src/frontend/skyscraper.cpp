@@ -237,7 +237,7 @@ void Skyscraper::UnloadSim()
 	{
 		if(dpanel->timer)
 			dpanel->timer->Stop();
-		dpanel->Destroy();
+		delete dpanel;
 	}
 	dpanel = 0;
 
@@ -1846,6 +1846,7 @@ void Skyscraper::ShowConsole(bool send_button)
 	if (!console)
 		console = new Console(window, -1);
 	console->Show();
+	console->Raise();
 	console->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ConsoleX", 10), GetConfigInt("Skyscraper.Frontend.ConsoleY", 25)));
 	console->bSend->Enable(send_button);
 }

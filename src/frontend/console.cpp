@@ -42,6 +42,7 @@ extern Console *console;
 const long Console::ID_tConsole = wxNewId();
 const long Console::ID_tCommand = wxNewId();
 const long Console::ID_bSend = wxNewId();
+const long Console::ID_chkEcho = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(Console,wxFrame)
@@ -71,6 +72,9 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	bSend = new wxButton(this, ID_bSend, _("Send"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSend"));
 	BoxSizer1->Add(bSend, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	chkEcho = new wxCheckBox(this, ID_chkEcho, _("Echo"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkEcho"));
+	chkEcho->SetValue(false);
+	BoxSizer1->Add(chkEcho, 1, wxALL|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
 	FlexGridSizer2->Add(BoxSizer1, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer2, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	SetSizer(FlexGridSizer1);
@@ -80,10 +84,6 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&Console::On_Close);
 	//*)
-
-	/*std::vector<std::string> *data = skyscraper->GetScriptProcessor()->GetBuildingData();
-	for (int i = 0; i < data->size(); i++)
-		tConsole->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));*/
 }
 
 Console::~Console()
@@ -105,10 +105,13 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 
 	//load new commands into script interpreter, and run
 	processor->LoadFromText(tCommand->GetValue().ToAscii());
+	if (chkEcho->GetValue() == true)
+		tConsole->AppendText(tCommand->GetValue());
 	processor->Run();
 
 	Simcore->Prepare(false);
 	Simcore->RecreateColliders = false;
+	tCommand->Clear();
 }
 
 void Console::On_bClose_Click(wxCommandEvent& event)

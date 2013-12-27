@@ -27,6 +27,7 @@
 
 #include <wx/app.h>
 //(*Headers(Console)
+#include <wx/checkbox.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
 #include <wx/frame.h>
@@ -42,6 +43,7 @@ class Console: public wxFrame
 
 		//(*Declarations(Console)
 		wxTextCtrl* tConsole;
+		wxCheckBox* chkEcho;
 		wxButton* bSend;
 		wxTextCtrl* tCommand;
 		//*)
@@ -52,6 +54,7 @@ class Console: public wxFrame
 		static const long ID_tConsole;
 		static const long ID_tCommand;
 		static const long ID_bSend;
+		static const long ID_chkEcho;
 		//*)
 
 	private:
