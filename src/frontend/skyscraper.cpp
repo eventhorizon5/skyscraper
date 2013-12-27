@@ -290,9 +290,6 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-	//if (panel)
-		//panel->SetSize(this->GetClientSize());
-
 	if (skyscraper->mRenderWindow)
 	{
 #if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
@@ -901,20 +898,13 @@ void Skyscraper::Loop()
 	if (!Simcore)
 		return;
 
+	//force window raise on startup
+	if (Simcore->GetCurrentTime() > 10)
+		window->Raise();
+
 	Simcore->AdvanceClock();
 	if (IsRunning == true)
 		Simcore->CalculateFrameRate();
-
-	//resize canvas if needed
-	/*if (canvas->GetSize().GetWidth() != canvas_width || canvas->GetSize().GetHeight() != canvas_height)
-	{
-		//update canvas size values
-		canvas_width = canvas->GetSize().GetWidth();
-		canvas_height = canvas->GetSize().GetHeight();
-
-		//resize viewport
-		//wxwin->GetWindow()->resize(canvas->size());
-	}*/
 
 	//RenderOnly = GetConfigBool("Skyscraper.Frontend.RenderOnly", false);
 	//InputOnly = GetConfigBool("Skyscraper.Frontend.InputOnly", false);
@@ -1564,14 +1554,6 @@ bool Skyscraper::Start()
 		dpanel->Show(true);
 		dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 	}
-
-	window->Raise();
-
-	//show main window
-	window->ShowWindow();
-
-	//turn on window resizing, if specified
-	//AllowResize(GetConfigBool("Skyscraper.Frontend.AllowResize", true));
 
 	//run simulation
 	Report("Running simulation...");
