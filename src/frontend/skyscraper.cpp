@@ -99,8 +99,6 @@ bool Skyscraper::OnInit(void)
 	version_frontend = version + ".0." + version_rev;
 	skyscraper = this;
 	MouseDown = false;
-	RenderOnly = false;
-	//InputOnly = false;
 	canvas_width = 0;
 	canvas_height = 0;
 	IsRunning = false;
@@ -910,18 +908,11 @@ void Skyscraper::Loop()
 	if (IsRunning == true)
 		Simcore->CalculateFrameRate();
 
-	//RenderOnly = GetConfigBool("Skyscraper.Frontend.RenderOnly", false);
-	//InputOnly = GetConfigBool("Skyscraper.Frontend.InputOnly", false);
-
-	Simcore->RenderOnly = RenderOnly;
-	//Simcore->InputOnly = this->InputOnly;
-
 	//run SBS main loop
 	Simcore->MainLoop();
 
 	//get input
-	if (RenderOnly == false)
-		GetInput();
+	GetInput();
 
 	//process camera loop
 	Simcore->camera->Loop();

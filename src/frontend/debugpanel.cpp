@@ -188,7 +188,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	chkVerbose->SetValue(false);
 	BoxSizer5->Add(chkVerbose, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer5, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
-	BoxSizer11->Add(BoxSizer2, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
+	BoxSizer11->Add(BoxSizer2, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
 	bListAltitudes = new wxButton(Panel1, ID_bListAltitudes, _("List Altitudes"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListAltitudes"));
 	BoxSizer3->Add(bListAltitudes, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -212,7 +212,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bProfiler, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bKeys = new wxButton(Panel1, ID_bKeys, _("List Keys"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bKeys"));
 	BoxSizer3->Add(bKeys, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer11->Add(BoxSizer3, 0, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
+	BoxSizer11->Add(BoxSizer3, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
 	BoxSizer11->SetSizeHints(Panel1);

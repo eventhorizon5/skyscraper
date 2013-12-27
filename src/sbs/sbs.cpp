@@ -75,8 +75,6 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
-	RenderOnly = false;
-	InputOnly = false;
 	IsFalling = false;
 	InStairwell = false;
 	InElevator = false;
@@ -575,49 +573,46 @@ void SBS::MainLoop()
 	SBSProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{
-		if (RenderOnly == false && InputOnly == false)
+		//Determine floor that the camera is on
+		camera->UpdateCameraFloor();
+
+		//run elevator handlers
+		if (ProcessElevators == true)
 		{
-			//Determine floor that the camera is on
-			camera->UpdateCameraFloor();
-
-			//run elevator handlers
-			if (ProcessElevators == true)
+			for (int i = 1; i <= Elevators(); i++)
 			{
-				for (int i = 1; i <= Elevators(); i++)
-				{
-					if (GetElevator(i))
-						GetElevator(i)->MonitorLoop();
-				}
-
-				//check if the user is in an elevator
-				camera->CheckElevator();
+				if (GetElevator(i))
+					GetElevator(i)->MonitorLoop();
 			}
 
-			//check if the user is in a shaft
-			camera->CheckShaft();
+			//check if the user is in an elevator
+			camera->CheckElevator();
+		}
 
-			//check if the user is in a stairwell
-			camera->CheckStairwell();
+		//check if the user is in a shaft
+		camera->CheckShaft();
 
-			//open/close doors by using door callback
-			ProcessDoors();
+		//check if the user is in a stairwell
+		camera->CheckStairwell();
 
-			//process call button callbacks
-			ProcessCallButtons();
+		//open/close doors by using door callback
+		ProcessDoors();
 
-			//process misc operations on current floor
-			if (GetFloor(camera->CurrentFloor))
-				GetFloor(camera->CurrentFloor)->Loop();
+		//process call button callbacks
+		ProcessCallButtons();
 
-			//process auto areas
-			CheckAutoAreas();
+		//process misc operations on current floor
+		if (GetFloor(camera->CurrentFloor))
+			GetFloor(camera->CurrentFloor)->Loop();
 
-			//process triggers
-			for (int i = 0; i < TriggerArray.size(); i++)
-			{
-				if (TriggerArray[i])
-					TriggerArray[i]->Check();
-			}
+		//process auto areas
+		CheckAutoAreas();
+
+		//process triggers
+		for (int i = 0; i < TriggerArray.size(); i++)
+		{
+			if (TriggerArray[i])
+				TriggerArray[i]->Check();
 		}
 		elapsed -= delta;
 	}

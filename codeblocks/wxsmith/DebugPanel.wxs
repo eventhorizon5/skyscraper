@@ -269,7 +269,7 @@
 									<flag>wxALL|wxALIGN_RIGHT|wxALIGN_TOP</flag>
 								</object>
 							</object>
-							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+							<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 							<border>10</border>
 						</object>
 						<object class="sizeritem">
@@ -371,7 +371,7 @@
 									<option>1</option>
 								</object>
 							</object>
-							<flag>wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+							<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 							<border>10</border>
 						</object>
 					</object>

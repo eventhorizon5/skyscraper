@@ -126,8 +126,6 @@ public:
 	int Floors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
 	Camera *camera; //camera object
-	bool RenderOnly; //skip sim processing and only render graphics
-	bool InputOnly; //skip sim processing and only run input and rendering code
 	bool IsFalling; //make user fall
 	bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true if user is in an elevator
