@@ -291,7 +291,7 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 	if (skyscraper->mRenderWindow)
 	{
-#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
 		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 #endif
 		skyscraper->mRenderWindow->windowMovedOrResized();
@@ -1828,6 +1828,7 @@ void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLeve
 	if (console)
 	{
 		console->tConsole->AppendText(wxString::FromAscii(message.c_str()) + wxT("\n"));
+		console->Refresh();
 		console->Update();
 	}
 }
