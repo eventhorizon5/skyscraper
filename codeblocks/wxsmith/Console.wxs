@@ -10,58 +10,72 @@
 		<object class="wxFlexGridSizer" variable="FlexGridSizer1" member="no">
 			<cols>1</cols>
 			<rows>2</rows>
-			<growablecols>1</growablecols>
-			<growablerows>1</growablerows>
+			<growablecols>0</growablecols>
+			<growablerows>0</growablerows>
 			<object class="sizeritem">
-				<object class="wxTextCtrl" name="ID_tConsole" variable="tConsole" member="yes">
-					<size>600,400</size>
-					<style>wxTE_MULTILINE|wxTE_READONLY</style>
-				</object>
-				<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
-				<border>5</border>
-				<option>1</option>
-			</object>
-			<object class="sizeritem">
-				<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
-					<cols>2</cols>
-					<rows>1</rows>
-					<growablerows>1</growablerows>
-					<object class="sizeritem">
-						<object class="wxTextCtrl" name="ID_tCommand" variable="tCommand" member="yes">
-							<size>500,100</size>
-							<style>wxTE_MULTILINE</style>
-						</object>
-						<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
-						<border>5</border>
-						<option>1</option>
-					</object>
-					<object class="sizeritem">
-						<object class="wxBoxSizer" variable="BoxSizer1" member="no">
-							<orient>wxVERTICAL</orient>
-							<object class="sizeritem">
-								<object class="wxButton" name="ID_bSend" variable="bSend" member="yes">
-									<label>Send</label>
-									<handler function="On_bSend_Click" entry="EVT_BUTTON" />
-								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
-								<border>5</border>
-								<option>1</option>
+				<object class="wxPanel" name="ID_PANEL1" variable="Panel1" member="yes">
+					<object class="wxFlexGridSizer" variable="FlexGridSizer3" member="no">
+						<cols>1</cols>
+						<rows>2</rows>
+						<growablecols>0</growablecols>
+						<growablerows>0</growablerows>
+						<object class="sizeritem">
+							<object class="wxTextCtrl" name="ID_tConsole" variable="tConsole" member="yes">
+								<size>600,400</size>
+								<style>wxTE_MULTILINE|wxTE_READONLY</style>
 							</object>
-							<object class="sizeritem">
-								<object class="wxCheckBox" name="ID_chkEcho" variable="chkEcho" member="yes">
-									<label>Echo</label>
-								</object>
-								<flag>wxALL|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
+							<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+							<border>5</border>
+							<option>1</option>
 						</object>
-						<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-						<border>5</border>
-						<option>1</option>
+						<object class="sizeritem">
+							<object class="wxFlexGridSizer" variable="FlexGridSizer2" member="no">
+								<cols>2</cols>
+								<rows>1</rows>
+								<growablecols>0</growablecols>
+								<growablerows>0</growablerows>
+								<object class="sizeritem">
+									<object class="wxTextCtrl" name="ID_tCommand" variable="tCommand" member="yes">
+										<size>500,100</size>
+										<style>wxTE_MULTILINE</style>
+									</object>
+									<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+									<border>5</border>
+									<option>1</option>
+								</object>
+								<object class="sizeritem">
+									<object class="wxBoxSizer" variable="BoxSizer1" member="no">
+										<orient>wxVERTICAL</orient>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bSend" variable="bSend" member="yes">
+												<label>Send</label>
+												<handler function="On_bSend_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxCheckBox" name="ID_chkEcho" variable="chkEcho" member="yes">
+												<label>Echo</label>
+											</object>
+											<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+									</object>
+									<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+									<border>5</border>
+									<option>1</option>
+								</object>
+							</object>
+							<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+							<border>5</border>
+							<option>1</option>
+						</object>
 					</object>
 				</object>
-				<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+				<flag>wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM</flag>
 				<border>5</border>
 				<option>1</option>
 			</object>
