@@ -673,12 +673,12 @@ void Skyscraper::GetInput()
 	float speed_slow = Simcore->camera->cfg_speedslow;
 
 	//crash test
-	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'c'))
+	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'C'))
 		throw;
 
 	if (wxGetKeyState(WXK_CONTROL))
 	{
-		if (wxGetKeyState((wxKeyCode)'r'))
+		if (wxGetKeyState((wxKeyCode)'R'))
 		{
 			Reload = true;
 			return;
@@ -691,22 +691,22 @@ void Skyscraper::GetInput()
 	if (wxGetKeyState(WXK_ALT))
 	{
 		//strafe movement
-		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
 			Simcore->camera->Strafe(speed_normal);
-		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
 			Simcore->camera->Strafe(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'w'))
+		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
 			Simcore->camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
+		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
 			Simcore->camera->Float(-speed_normal);
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'p'))
+		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
 			Simcore->camera->Spin(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'l'))
+		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
 			Simcore->camera->Spin(-speed_normal);
 	}
 	else
 	{
-		if (wxGetKeyState((wxKeyCode)'v') && wait == false)
+		if (wxGetKeyState((wxKeyCode)'V') && wait == false)
 		{
 			if (Simcore->camera->GetGravityStatus() == false)
 			{
@@ -724,25 +724,25 @@ void Skyscraper::GetInput()
 		}
 		if (Simcore->camera->Freelook == false)
 		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
 				Simcore->camera->Turn(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
 				Simcore->camera->Turn(-speed_normal);
 		}
 		else
 		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
 				Simcore->camera->Strafe(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
 				Simcore->camera->Strafe(-speed_normal);
 		}
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'p'))
+		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
 			Simcore->camera->Look(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'l'))
+		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
 			Simcore->camera->Look(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'w'))
+		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
 			Simcore->camera->Step(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
+		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
 			Simcore->camera->Step(-speed_normal);
 		if (wxGetKeyState(WXK_SPACE) && wait == false)
 		{
@@ -848,9 +848,9 @@ void Skyscraper::GetInput()
 		}
 
 		//values from old version
-		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'o'))
+		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
 			Simcore->camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'k'))
+		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'K'))
 			Simcore->camera->Float(-speed_normal);
 	}
 }
