@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.9 Alpha - Move Object Form
-	Copyright (C)2004-2013 Ryan Thoryk
+	Copyright (C)2004-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
