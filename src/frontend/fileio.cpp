@@ -23,7 +23,6 @@
 */
 
 #include <wx/app.h>
-#include <wx/variant.h>
 #include <wx/msgdlg.h>
 #include "globals.h"
 #include "sbs.h"

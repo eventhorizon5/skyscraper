@@ -26,7 +26,6 @@
 #define SKYSCRAPER_H
 
 #include <wx/app.h>
-#include <wx/panel.h>
 #include <wx/frame.h>
 #include <fmod.hpp>
 #include "Caelum.h"
@@ -110,10 +109,6 @@ private:
 	std::string root_dir;
 	std::string dir_char;
 
-	//canvas data
-	int canvas_width, canvas_height;
-	wxPanel* canvas;
-
 	//sound data
 	FMOD::System *soundsys;
 	FMOD::Sound *sound;
@@ -172,7 +167,6 @@ public:
 	void OnActivate(wxActivateEvent & event);
 	void OnEnterWindow(wxMouseEvent& event);
 	void OnLeaveWindow(wxMouseEvent& event);
-	wxPanel *panel;
 	bool Active;
 
 	DECLARE_EVENT_TABLE()

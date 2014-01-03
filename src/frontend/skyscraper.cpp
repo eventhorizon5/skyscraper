@@ -99,8 +99,6 @@ bool Skyscraper::OnInit(void)
 	version_frontend = version + ".0." + version_rev;
 	skyscraper = this;
 	MouseDown = false;
-	canvas_width = 0;
-	canvas_height = 0;
 	IsRunning = false;
 	StartupRunning = false;
 	Starting = false;
@@ -114,7 +112,6 @@ bool Skyscraper::OnInit(void)
 	mRenderWindow = 0;
 	mViewport = 0;
 	mSceneMgr = 0;
-	canvas = 0;
 	mCamera = 0;
 	sound = 0;
 	channel = 0;
@@ -209,11 +206,7 @@ int Skyscraper::OnExit()
 	if (soundsys)
 		soundsys->release();
 
-	//delete wx canvas
-	if (canvas)
-		canvas->Destroy();
-	canvas = 0;
-
+	//delete console window
 	if (console)
 		console->Destroy();
 	console = 0;
@@ -265,7 +258,6 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	title = wxT("Skyscraper 1.9 Alpha");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	this->SetTitle(title);
-	//panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
 }
 
 MainScreen::~MainScreen()
@@ -1434,7 +1426,11 @@ bool Skyscraper::SelectBuilding()
 		return false;
 	}
 
-	wxSleep(1);
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Sleep(1000);
+#else
+	sleep(1);
+#endif
 
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
 	BuildingFile = Selector->GetFilename().mb_str().data();
@@ -1469,7 +1465,11 @@ bool Skyscraper::Start()
 	Simcore->BuildingFilename = BuildingFile;
 
 	//Pause for 1 second
-	wxSleep(1);
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Sleep(1000);
+#else
+	sleep(1);
+#endif
 
 	if (Reload == false)
 		BuildingFile.insert(0, "buildings/");
