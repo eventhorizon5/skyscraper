@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.9 Alpha - File I/O and Script Processing Routines
-	Copyright (C)2004-2013 Ryan Thoryk
+	Copyright (C)2004-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -30,13 +30,15 @@ class ScriptProcessor
 	public:
 	ScriptProcessor();
 	~ScriptProcessor();
-	bool LoadBuilding();
+	bool Run();
 	bool LoadDataFile(const char *filename, bool insert = false, int insert_line = 0);
 	bool LoadFromText(const char *text);
 	bool ReportMissingFiles();
 	int SplitData(const char *string, int start, bool calc = true, int calc_skip = -1);
 	int SplitAfterEquals(const char *string, bool calc = true);
 	std::string GetAfterEquals(const char *string);
+	void Reset();
+	std::vector<std::string> *GetBuildingData();
 
 	private:
 	int line; //line number
@@ -62,6 +64,7 @@ class ScriptProcessor
 	bool getfloordata;
 	bool setshaftdoors;
 	std::vector<std::string> BuildingData;
+	std::vector<std::string> BuildingDataOrig;
 	Ogre::Vector3 MinExtent;
 	Ogre::Vector3 MaxExtent;
 	bool InFunction;
@@ -71,14 +74,16 @@ class ScriptProcessor
 	std::vector<std::string> FunctionParams;
 	bool ReplaceLine;
 	std::vector<std::string> nonexistent_files;
-	bool CalcError;
 	bool ReverseAxis;
 	bool setkey;
 	int keyvalue;
 	int lockvalue;
+	bool warn_deprecated;
+	bool show_percent;
 
-	int ScriptError(std::string message);
+	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
+	int ScriptWarning(std::string message);
 	std::string Calc(const char *expression);
 	bool IfProc(const char *expression);
 	void StoreCommand(Object *object);

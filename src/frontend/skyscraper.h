@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.9 Alpha - Simulation Frontend
-	Copyright (C)2004-2013 Ryan Thoryk
+	Copyright (C)2004-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -25,16 +25,13 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
-#include <wx/app.h>
-#include <wx/panel.h>
-#include <wx/frame.h>
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "fileio.h"
 
 int main (int argc, char* argv[]);
 
-class Skyscraper : public Ogre::WindowEventListener, public Ogre::FrameListener
+class Skyscraper : public Ogre::WindowEventListener, public Ogre::FrameListener, public Ogre::LogListener
 {
 public:
 
@@ -54,8 +51,6 @@ public:
 	std::string SkyName;
 
 	bool frameStarted(const Ogre::FrameEvent& evt);
-	bool RenderOnly; //skip sim processing and only render graphics
-	bool InputOnly; //skip sim processing and only run input and rendering code
 	bool IsRunning;
 	bool StartupRunning;
 	bool Starting;
@@ -76,16 +71,15 @@ public:
 	void DrawBackground();
 
 	std::string BuildingFile;
-	std::vector<std::string> runtime_script;
 
 	//engine related stuff
 	bool OnInit();
 	int OnExit();
 	void Render();
 	void GetInput();
-	void Report(std::string message, ...);
-	bool ReportError(std::string message, ...);
-	bool ReportFatalError(std::string message, ...);
+	void Report(std::string message);
+	bool ReportError(std::string message);
+	bool ReportFatalError(std::string message);
 	bool Initialize();
 	void GetMenuInput();
 	void StartSound();
@@ -100,6 +94,8 @@ public:
 	bool GetConfigBool(std::string key, bool default_value);
 	float GetConfigFloat(std::string key, float default_value);
 	bool InitSky();
+	ScriptProcessor* GetScriptProcessor();
+	void ShowConsole(bool send_button = true);
 
 private:
 	//mouse status
@@ -144,11 +140,13 @@ private:
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();
+	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
+	Ogre::LogManager* logger;
+	bool showconsole;
+	bool raised;
 };
-
-DECLARE_APP(Skyscraper)
 
 #endif

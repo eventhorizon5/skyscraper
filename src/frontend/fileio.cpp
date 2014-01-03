@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.9 Alpha - File I/O and Script Processing Routines
-	Copyright (C)2003-2013 Ryan Thoryk
+	Copyright (C)2003-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -22,9 +22,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/app.h>
-#include <wx/variant.h>
-#include <wx/msgdlg.h>
 #include "globals.h"
 #include "sbs.h"
 #include <OgreFileSystem.h>
@@ -51,6 +48,16 @@ extern Skyscraper *skyscraper;
 
 ScriptProcessor::ScriptProcessor()
 {
+	Reset();
+}
+
+ScriptProcessor::~ScriptProcessor()
+{
+
+}
+
+void ScriptProcessor::Reset()
+{
 	line = 0; //line number
 	LineData = "";  //line contents
 	Current = 0;
@@ -62,21 +69,38 @@ ScriptProcessor::ScriptProcessor()
 	temp4 = 0;
 	temp5 = 0;
 	temp6 = "";
+	tempdata.clear();
+	callbutton_elevators.clear();
 	FloorCheck = 0;
 	RangeL = 0;
 	RangeH = 0;
 	RangeStart = 0;
+	wall = 0;
+	buffer = "";
 	startpos = 0;
 	getfloordata = false;
 	setshaftdoors = false;
+	BuildingData.clear();
+	BuildingDataOrig.clear();
 	MinExtent = 0;
 	MaxExtent = 0;
 	InFunction = false;
+	FunctionName = "";
 	FunctionCallLine = 0;
+	FunctionCallLineData = "";
+	FunctionParams.clear();
 	ReplaceLine = false;
 	nonexistent_files.clear();
-	floorcache_firstrun = true;
 	ReverseAxis = false;
+	setkey = false;
+	keyvalue = 0;
+	lockvalue = 0;
+	warn_deprecated = skyscraper->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
+	show_percent = true;
+	functions.clear();
+	includes.clear();
+	variables.clear();
+	floorcache_firstrun = true;
 	cache_current = 0;
 	cache_current_s = "";
 	cache_height = 0;
@@ -87,22 +111,18 @@ ScriptProcessor::ScriptProcessor()
 	cache_interfloorheight_s = "";
 	cache_base = 0;
 	cache_base_s = "";
-	setkey = false;
-	keyvalue = 0;
-	lockvalue = 0;
 }
 
-ScriptProcessor::~ScriptProcessor()
-{
-
-}
-
-bool ScriptProcessor::LoadBuilding()
+bool ScriptProcessor::Run()
 {
 	//building loader/script interpreter
 
 	int returncode = sContinue;
 	int progress_marker = 0;
+
+	//don't show percent signs if not starting a new building file
+	if (line > 0)
+		show_percent = false;
 
 	while (line < (int)BuildingData.size())
 	{
@@ -198,7 +218,7 @@ bool ScriptProcessor::LoadBuilding()
 				}
 			}*/
 		}
-		else
+		else if (show_percent == true)
 		{
 			int percent = ((float)line / (float)BuildingData.size()) * 100.0;
 			std::string percent_s = ToString(percent);
@@ -716,18 +736,15 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 
 	Ogre::DataStreamPtr file(OGRE_NEW Ogre::MemoryDataStream(filename, filedata));
 
-	//clear array
-	if (insert == false)
-		BuildingData.clear();
-
 	while (file->eof() == false)
 	{
 		//push next line of data onto the tail end of the BuildingData array
 		std::string line = file->getLine(true);
 		if (insert == false)
 		{
+			//append data to building array
 			BuildingData.push_back(line);
-			skyscraper->runtime_script.push_back(line);
+			BuildingDataOrig.push_back(line);
 		}
 		else
 		{
@@ -756,15 +773,14 @@ bool ScriptProcessor::LoadFromText(const char *text)
 	std::vector<std::string> textarray;
 	SplitString(textarray, text, '\n');
 
-	//clear building data
-	BuildingData.clear();
-
 	//feed each line of text into the script array
-	BuildingData.reserve(textarray.size());
+	BuildingData.reserve(BuildingData.size() + textarray.size());
+	BuildingDataOrig.reserve(BuildingDataOrig.size() + textarray.size());
 	for (int i = 0; i < (int)textarray.size(); i++)
 	{
+		//append data to building array
 		BuildingData.push_back(textarray[i]);
-		skyscraper->runtime_script.push_back(textarray[i]);
+		BuildingDataOrig.push_back(textarray[i]);
 	}
 	return true;
 }
@@ -984,8 +1000,11 @@ bool ScriptProcessor::IfProc(const char *expression)
 		return false;
 }
 
-int ScriptProcessor::ScriptError(std::string message)
+int ScriptProcessor::ScriptError(std::string message, bool warning)
 {
+	//report a script error, with line and context information.
+	//reports a warning message (without window popup) if 'warning' is true
+
 	//first see if the current line is from an included file
 
 	int linenum = line;
@@ -1030,27 +1049,40 @@ int ScriptProcessor::ScriptError(std::string message)
 	std::string error;
 	if (isinclude == false)
 	{
-		if (InFunction == false)
-			error = "Script error on line " + ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		if (warning == false)
+			error = "Script error on line ";
 		else
-			error = "Script error on line " + ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
+			error = "Script warning on line ";
+
+		if (InFunction == false)
+			error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		else
+			error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
 	}
 	else
 	{
-		if (InFunction == false)
-			error = "Script error in included file " + includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		if (warning == false)
+			error = "Script error in included file ";
 		else
-			error = "Script error in included file " + includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
+			error = "Script warning in included file ";
+
+		if (InFunction == false)
+			error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
+		else
+			error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
 	}
 
 	skyscraper->ReportError(error.c_str());
 
 	//show error dialog
-	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
-	dialog->ShowModal();
+	if (warning == false)
+	{
+		/*wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+		dialog->ShowModal();
 
-	delete dialog;
-	dialog = 0;
+		delete dialog;
+		dialog = 0;*/
+	}
 	return sError;
 }
 
@@ -1064,6 +1096,11 @@ int ScriptProcessor::ScriptError()
 	std::string result = message.substr(loc + 1);
 	TrimString(result);
 	return ScriptError(result);
+}
+
+int ScriptProcessor::ScriptWarning(std::string message)
+{
+	return ScriptError(message, true);
 }
 
 bool ScriptProcessor::ReportMissingFiles()
@@ -1233,7 +1270,7 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
-	//AddFloor
+	//AddFloor command
 	if (linecheck.substr(0, 9) == "addfloor ")
 	{
 		//get data
@@ -1254,6 +1291,8 @@ int ScriptProcessor::ProcCommands()
 				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -1275,7 +1314,7 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
-	//AddGround
+	//AddGround command
 	if (linecheck.substr(0, 9) == "addground")
 	{
 		//get data
@@ -1577,6 +1616,8 @@ int ScriptProcessor::ProcCommands()
 				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -1661,7 +1702,7 @@ int ScriptProcessor::ProcCommands()
 		Simcore->GetShaft(shaftnum)->ShowFloors = true;
 
 		int params = SplitAfterEquals(LineData.c_str(), false);
-		if (params == -1)
+		if (params < 1)
 			return ScriptError("Syntax Error");
 
 		for (int line = 0; line < params; line++)
@@ -1719,7 +1760,7 @@ int ScriptProcessor::ProcCommands()
 		Simcore->GetShaft(shaftnum)->ShowOutside = true;
 
 		int params = SplitAfterEquals(LineData.c_str(), false);
-		if (params == -1)
+		if (params < 1)
 			return ScriptError("Syntax Error");
 
 		for (int line = 0; line < params; line++)
@@ -1852,7 +1893,7 @@ int ScriptProcessor::ProcCommands()
 		Simcore->GetStairs(stairnum)->ShowFloors = true;
 
 		int params = SplitAfterEquals(LineData.c_str(), false);
-		if (params == -1)
+		if (params < 1)
 			return ScriptError("Syntax Error");
 
 		for (int line = 0; line < params; line++)
@@ -1941,8 +1982,7 @@ int ScriptProcessor::ProcCommands()
 	if (linecheck.substr(0, 9) == "drawwalls")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
-		if (params == -1)
-			return ScriptError("Syntax Error");
+
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
@@ -2036,6 +2076,8 @@ int ScriptProcessor::ProcCommands()
 					Ogre::StringConverter::parseBool(tempdata[1]),
 					Ogre::StringConverter::parseBool(tempdata[2]),
 					Ogre::StringConverter::parseBool(tempdata[3]), false);
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -2051,6 +2093,9 @@ int ScriptProcessor::ProcCommands()
 	//ReverseAxis command
 	if (linecheck.substr(0, 11) == "reverseaxis")
 	{
+		//backwards compatibility
+		ScriptWarning("Command deprecated");
+
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
 			return ScriptError("Syntax Error");
@@ -2147,60 +2192,11 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
-	//GetWallExtents function
-	temp5 = linecheck.find("getwallextents(", 0);
-	while (temp5 > -1)
-	{
-		temp1 = LineData.find("(", 0);
-		temp4 = LineData.find(")", 0);
-		if (temp1 < 0 || temp4 < 0)
-			return ScriptError("Syntax error");
-		
-		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1).c_str(), ',');
-		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
-		{
-			buffer = Calc(tempdata[temp3].c_str());
-			tempdata[temp3] = buffer;
-		}
-		if (tempdata.size() < 4 || tempdata.size() > 4)
-			return ScriptError("Incorrect number of parameters");
-
-		//check numeric values
-		std::string str = tempdata[2];
-		TrimString(str);
-		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + std::string(tempdata[2]));
-
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-		std::vector<WallObject*> *wall_array;
-		if (buffer == "floor")
-			wall_array = &Simcore->GetFloor(Current)->Level->Walls;
-		else if (buffer == "elevator")
-			wall_array = &Simcore->GetElevator(Current)->ElevatorMesh->Walls;
-		else if (buffer == "external")
-			wall_array = &Simcore->External->Walls;
-		else if (buffer == "landscape")
-			wall_array = &Simcore->Landscape->Walls;
-		else if (buffer == "buildings")
-			wall_array = &Simcore->Buildings->Walls;
-		else
-			return ScriptError("Invalid object");
-
-		Ogre::Vector3 result = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), Ogre::StringConverter::parseBool(tempdata[3]));
-
-		buffer = std::string(LineData).substr(0, temp5) + std::string(wxVariant(result.x).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.y).GetString().ToAscii()) + std::string(", ") + std::string(wxVariant(result.z).GetString().ToAscii()) + std::string(LineData).substr(temp4 + 1);
-		LineData = buffer;
-		linecheck = SetCaseCopy(LineData, false);
-		temp5 = linecheck.find("getwallextents(", 0);
-	}
-
 	//SetAutoSize command
 	if (linecheck.substr(0, 11) == "setautosize")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
-		if (params == -1)
-			return ScriptError("Syntax Error");
+
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
@@ -2279,7 +2275,7 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
-	//AddSound
+	//AddSound command
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
@@ -2313,6 +2309,8 @@ int ScriptProcessor::ProcCommands()
 					if (!IsNumeric(tempdata[i].c_str()))
 						return ScriptError("Invalid value: " + std::string(tempdata[i]));
 				}
+				if (warn_deprecated == true)
+					ScriptWarning("Syntax deprecated");
 			}
 			else
 			{
@@ -2372,6 +2370,8 @@ int ScriptProcessor::ProcCommands()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -2866,7 +2866,7 @@ int ScriptProcessor::ProcFloors()
 		//copy string listing of group floors into array
 
 		int params = SplitAfterEquals(LineData.c_str(), false);
-		if (params == -1)
+		if (params < 1)
 			return ScriptError("Syntax Error");
 
 		for (int line = 0; line < params; line++)
@@ -2950,6 +2950,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -2998,6 +3000,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -3052,6 +3056,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -3104,6 +3110,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -3277,7 +3285,7 @@ int ScriptProcessor::ProcFloors()
 	{
 		//construct array containing floor numbers
 		int params = SplitAfterEquals(LineData.c_str(), false);
-		if (params == -1)
+		if (params < 1)
 			return ScriptError("Syntax Error");
 
 		callbutton_elevators.clear();
@@ -3306,11 +3314,11 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
 
-		bool compatibility = false;
+		bool compat = false;
 		if (params == 12)
-			compatibility = true;
+			compat = true;
 
-		if (compatibility == true)
+		if (compat == true)
 		{
 			//check numeric values
 			for (int i = 3; i <= 11; i++)
@@ -3322,6 +3330,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -3342,7 +3352,7 @@ int ScriptProcessor::ProcFloors()
 
 		//create call button
 		Object *obj = 0;
-		if (compatibility == true)
+		if (compat == true)
 			obj = floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
 		else
 			obj = floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
@@ -3450,6 +3460,9 @@ int ScriptProcessor::ProcFloors()
 			CheckFile(std::string("data/" + tempdata[1]).c_str());
 		}
 
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
 		//create door
 		Object *obj;
 
@@ -3545,6 +3558,9 @@ int ScriptProcessor::ProcFloors()
 			CheckFile(std::string("data/" + tempdata[2]).c_str());
 		}
 
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
 		//create door
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
@@ -3622,7 +3638,7 @@ int ScriptProcessor::ProcFloors()
 		if (params < 18 || params > 19)
 			return ScriptError("Incorrect number of parameters");
 
-		bool compatibility = false;
+		bool compat = false;
 
 		//check numeric values
 		if (params == 18)
@@ -3640,7 +3656,9 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
-			compatibility = true;
+			compat = true;
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		if (params == 19)
 		{
@@ -3662,7 +3680,7 @@ int ScriptProcessor::ProcFloors()
 		if (!Simcore->GetElevator(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid elevator");
 
-		if (compatibility == true)
+		if (compat == true)
 			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), false, Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), tempdata[12].c_str(), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), Ogre::StringConverter::parseBool(tempdata[15]), atof(tempdata[16].c_str()), atof(tempdata[17].c_str())));
 		else
 			StoreCommand(floor->AddDirectionalIndicator(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::StringConverter::parseBool(tempdata[4]), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), tempdata[8].c_str(), tempdata[9].c_str(), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), tempdata[13].c_str(), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()), Ogre::StringConverter::parseBool(tempdata[16]), atof(tempdata[17].c_str()), atof(tempdata[18].c_str())));
@@ -3726,6 +3744,9 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
 		if (!Simcore->GetElevator(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid elevator");
 
@@ -3752,24 +3773,26 @@ int ScriptProcessor::ProcFloors()
 			compat = true; //1.4 compatibility mode
 
 		//check numeric values
-		if (compat == false)
-		{
-			for (int i = 0; i <= 8; i++)
-			{
-				if (i == 1)
-					i = 4;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
-			}
-		}
-		else
+		if (compat == true)
 		{
 			for (int i = 0; i <= 7; i++)
 			{
 				if (i == 1)
 					i = 3;
+				std::string str = tempdata[i];
+				TrimString(str);
+				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
+		else
+		{
+			for (int i = 0; i <= 8; i++)
+			{
+				if (i == 1)
+					i = 4;
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
@@ -3808,7 +3831,7 @@ int ScriptProcessor::ProcFloors()
 		return sNextLine;
 	}
 
-	//AddSound
+	//AddSound command
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
@@ -3842,6 +3865,8 @@ int ScriptProcessor::ProcFloors()
 					if (!IsNumeric(tempdata[i].c_str()))
 						return ScriptError("Invalid value: " + std::string(tempdata[i]));
 				}
+				if (warn_deprecated == true)
+					ScriptWarning("Syntax deprecated");
 			}
 			else
 			{
@@ -3888,7 +3913,11 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		bool compat = false;
 		if (params == 18)
+		{
 			compat = true;
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		for (int i = 0; i <= params - 1; i++)
 		{
@@ -3964,6 +3993,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -4022,6 +4053,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -4086,6 +4119,8 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -4484,6 +4519,7 @@ int ScriptProcessor::ProcFloors()
 			}
 		}
 	}
+
 	return sContinue;
 }
 
@@ -4592,7 +4628,7 @@ int ScriptProcessor::ProcElevators()
 	{
 		//copy string listing of serviced floors into array
 		int params = SplitAfterEquals(LineData.c_str(), false);
-		if (params == -1)
+		if (params < 1)
 			return ScriptError("Syntax Error");
 
 		for (int line = 0; line < params; line++)
@@ -4639,7 +4675,7 @@ int ScriptProcessor::ProcElevators()
 	{
 		//copy string listing of serviced floors into array
 		int params = SplitAfterEquals(LineData.c_str(), false);
-		if (params == -1)
+		if (params < 1)
 			return ScriptError("Syntax Error");
 
 		for (int line = 0; line < params; line++)
@@ -4831,6 +4867,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
+		ScriptWarning("Command deprecated");
+
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
@@ -4852,6 +4890,8 @@ int ScriptProcessor::ProcElevators()
 		//backwards compatibility
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
+
+		ScriptWarning("Command deprecated");
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
@@ -4875,6 +4915,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
+		ScriptWarning("Command deprecated");
+
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
@@ -4896,6 +4938,8 @@ int ScriptProcessor::ProcElevators()
 		//backwards compatibility
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
+
+		ScriptWarning("Command deprecated");
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
@@ -5317,8 +5361,6 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 13) == "motorposition")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
-		if (params == -1)
-			return ScriptError("Syntax Error");
 		if (params != 3)
 			return ScriptError("Incorrect number of parameters");
 
@@ -5400,8 +5442,6 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 7) == "parking")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
-		if (params == -1)
-			return ScriptError("Syntax Error");
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
@@ -5481,8 +5521,6 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 13) == "musicposition")
 	{
 		int params = SplitAfterEquals(LineData.c_str());
-		if (params == -1)
-			return ScriptError("Syntax Error");
 		if (params != 3)
 			return ScriptError("Incorrect number of parameters");
 
@@ -5595,6 +5633,8 @@ int ScriptProcessor::ProcElevators()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -5654,21 +5694,7 @@ int ScriptProcessor::ProcElevators()
 			compat = true; //1.4 compatibility mode
 
 		//check numeric values
-		if (compat == false)
-		{
-			for (int i = 0; i <= 10; i++)
-			{
-				if (i == 1)
-					i = 3;
-				if (i == 8)
-					i = 9;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
-			}
-		}
-		else
+		if (compat == true)
 		{
 			for (int i = 0; i <= 9; i++)
 			{
@@ -5679,6 +5705,22 @@ int ScriptProcessor::ProcElevators()
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
+					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
+		else
+		{
+			for (int i = 0; i <= 10; i++)
+			{
+				if (i == 1)
+					i = 3;
+				if (i == 8)
+					i = 9;
+			std::string str = tempdata[i];
+			TrimString(str);
+			if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 		}
@@ -5693,6 +5735,9 @@ int ScriptProcessor::ProcElevators()
 	//SetShaftDoors command
 	if (linecheck.substr(0, 13) == "setshaftdoors")
 	{
+		//backwards compatibility
+		ScriptWarning("Command deprecated");
+
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
@@ -5766,6 +5811,9 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 		
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
 		bool result;
 		if (compat == 0)
 			result = elev->AddShaftDoors(atoi(tempdata[0].c_str()), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
@@ -5899,6 +5947,9 @@ int ScriptProcessor::ProcElevators()
 		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid panel number");
 
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
 		Object *obj;
 
 		if (compat == 0)
@@ -6017,6 +6068,9 @@ int ScriptProcessor::ProcElevators()
 
 		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
 			return ScriptError("Invalid panel number");
+
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
 
 		Object *obj;
 
@@ -6161,19 +6215,21 @@ int ScriptProcessor::ProcElevators()
 			compat = true; //1.4 compatibility mode
 
 		//check numeric values
-		if (compat == false)
+		if (compat == true)
 		{
-			for (int i = 2; i <= 6; i++)
+			for (int i = 1; i <= 5; i++)
 			{
 				std::string str = tempdata[i];
 				TrimString(str);
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
-			for (int i = 1; i <= 5; i++)
+			for (int i = 2; i <= 6; i++)
 			{
 				std::string str = tempdata[i];
 				TrimString(str);
@@ -6212,6 +6268,8 @@ int ScriptProcessor::ProcElevators()
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
 			compat = true;
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -6283,6 +6341,9 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
 		if (compat == 0)
 		{
 			bool result;
@@ -6297,7 +6358,7 @@ int ScriptProcessor::ProcElevators()
 		return sNextLine;
 	}
 
-	//AddSound
+	//AddSound command
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
@@ -6331,6 +6392,8 @@ int ScriptProcessor::ProcElevators()
 					if (!IsNumeric(tempdata[i].c_str()))
 						return ScriptError("Invalid value: " + std::string(tempdata[i]));
 				}
+				if (warn_deprecated == true)
+					ScriptWarning("Syntax deprecated");
 			}
 			else
 			{
@@ -6377,7 +6440,11 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		bool compat = false;
 		if (params == 17)
+		{
 			compat = true;
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		for (int i = 0; i <= params - 1; i++)
 		{
@@ -6410,7 +6477,11 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		bool compat = false;
 		if (params == 17)
+		{
 			compat = true;
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
 
 		for (int i = 0; i <= params - 1; i++)
 		{
@@ -6545,6 +6616,9 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + tempdata[0]).c_str());
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
+		if (compat > 0 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
+
 		//create door
 		Object *obj;
 
@@ -6589,6 +6663,8 @@ int ScriptProcessor::ProcElevators()
 				if (!IsNumeric(str.c_str()))
 					return ScriptError("Invalid value: " + std::string(tempdata[i]));
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
@@ -6734,6 +6810,7 @@ int ScriptProcessor::ProcTextures()
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
 
+	//Load command
 	if (linecheck.substr(0, 5) == "load ")
 	{
 		//get data
@@ -6758,6 +6835,8 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 		return sNextLine;
 	}
+
+	//LoadAnimated command
 	if (linecheck.substr(0, 12) == "loadanimated")
 	{
 		//get data
@@ -6821,6 +6900,8 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 5].c_str(), atof(tempdata[params - 4].c_str()), atof(tempdata[params - 3].c_str()), atof(tempdata[params - 2].c_str()), true, Ogre::StringConverter::parseBool(tempdata[params - 1]));
 		return sNextLine;
 	}
+
+	//LoadAlphaBlend command
 	if (linecheck.substr(0, 14) == "loadalphablend")
 	{
 		//get data
@@ -6850,6 +6931,8 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadAlphaBlendTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), Ogre::StringConverter::parseBool(tempdata[4]), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), true, Ogre::StringConverter::parseBool(tempdata[7]));
 		return sNextLine;
 	}
+
+	//LoadMaterial command
 	if (linecheck.substr(0, 12) == "loadmaterial")
 	{
 		//get data
@@ -6873,6 +6956,8 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 		return sNextLine;
 	}
+
+	//LoadRange command
 	if (linecheck.substr(0, 9) == "loadrange")
 	{
 		//get data
@@ -6909,6 +6994,8 @@ int ScriptProcessor::ProcTextures()
 		}
 		return sNextLine;
 	}
+
+	//AddText command
 	if (linecheck.substr(0, 8) == "addtext ")
 	{
 		//get data
@@ -6940,6 +7027,8 @@ int ScriptProcessor::ProcTextures()
 			Simcore->AddTextToTexture(tempdata[0].c_str(), tempdata[1].c_str(), buffer.c_str(), atof(tempdata[3].c_str()), tempdata[4].c_str(), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atoi(tempdata[7].c_str()), atoi(tempdata[8].c_str()), tempdata[9].c_str(), tempdata[10].c_str(), atoi(tempdata[11].c_str()), atoi(tempdata[12].c_str()), atoi(tempdata[13].c_str()), true, Ogre::StringConverter::parseBool(tempdata[14]));
 		return sNextLine;
 	}
+
+	//AddTextRange command
 	if (linecheck.substr(0, 12) == "addtextrange")
 	{
 		//get data
@@ -6988,6 +7077,8 @@ int ScriptProcessor::ProcTextures()
 		linecheck = SetCaseCopy(LineData, false);
 		return sNextLine;
 	}
+
+	//LoadCropped command
 	if (linecheck.substr(0, 11) == "loadcropped")
 	{
 		//get data
@@ -7013,6 +7104,8 @@ int ScriptProcessor::ProcTextures()
 			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]));
 		return sNextLine;
 	}
+
+	//AddOverlay command
 	if (linecheck.substr(0, 10) == "addoverlay")
 	{
 		//get data
@@ -7035,6 +7128,8 @@ int ScriptProcessor::ProcTextures()
 			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), true, Ogre::StringConverter::parseBool(tempdata[9]));
 		return sNextLine;
 	}
+
+	//SetLighting command
 	if (linecheck.substr(0, 11) == "setlighting")
 	{
 		//get data
@@ -7054,6 +7149,8 @@ int ScriptProcessor::ProcTextures()
 		Simcore->SetLighting(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
 	}
+
+	//Rotate command
 	if (linecheck.substr(0, 7) == "rotate ")
 	{
 		//get data
@@ -7072,6 +7169,8 @@ int ScriptProcessor::ProcTextures()
 		Simcore->RotateTexture(buffer.c_str(), atof(tempdata[1].c_str()));
 		return sNextLine;
 	}
+
+	//RotateAnim command
 	if (linecheck.substr(0, 10) == "rotateanim")
 	{
 		//get data
@@ -7090,6 +7189,8 @@ int ScriptProcessor::ProcTextures()
 		Simcore->RotateAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()));
 		return sNextLine;
 	}
+
+	//Scroll command
 	if (linecheck.substr(0, 7) == "scroll ")
 	{
 		//get data
@@ -7111,6 +7212,8 @@ int ScriptProcessor::ProcTextures()
 		Simcore->ScrollTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
 	}
+
+	//ScrollAnim command
 	if (linecheck.substr(0, 10) == "scrollanim")
 	{
 		//get data
@@ -7132,6 +7235,8 @@ int ScriptProcessor::ProcTextures()
 		Simcore->ScrollAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
 	}
+
+	//Scale command
 	if (linecheck.substr(0, 5) == "scale")
 	{
 		//get data
@@ -7153,6 +7258,8 @@ int ScriptProcessor::ProcTextures()
 		Simcore->ScaleTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
 	}
+
+	//Transform command
 	if (linecheck.substr(0, 9) == "transform")
 	{
 		//get data
@@ -7174,6 +7281,7 @@ int ScriptProcessor::ProcTextures()
 		Simcore->TransformTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 		return sNextLine;
 	}
+
 	return sContinue;
 }
 
@@ -7188,7 +7296,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 	std::string one;
 	std::string two;
 	int start, end;
-	CalcError = false;
+	bool CalcError = false;
 
 	//first remove all whitespace from the string
 	ReplaceAll(tmpcalc, " ", "");
@@ -7513,6 +7621,7 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 {
 	//get and split data after equal sign
 	//returns -1 if equal sign not found
+	//returns 0 if no parameters found
 
 	std::string data = string;
 	int loc = data.find("=", 0);
@@ -7521,6 +7630,9 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 
 	std::string temp = data.substr(loc + 1);
 	TrimString(temp);
+
+	if (temp == "")
+		return 0;
 
 	SplitString(tempdata, temp.c_str(), ',');
 	if (calc == true)
@@ -7549,3 +7661,7 @@ std::string ScriptProcessor::GetAfterEquals(const char *string)
 	return temp;
 }
 
+std::vector<std::string> *ScriptProcessor::GetBuildingData()
+{
+	return &BuildingDataOrig;
+}

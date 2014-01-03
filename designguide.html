@@ -10,7 +10,7 @@
 <div align="center">
 <p><strong><font size="+2">Skyscraper 1.9<br>
 Building Design Guide<br>
-</font></strong>Copyright (C)2005-2013 Ryan Thoryk</p>
+</font></strong>Copyright (C)2005-2014 Ryan Thoryk</p>
 <hr>
 
 <p align="left">This document describes how to create your own buildings for
@@ -717,19 +717,23 @@ Group = 4 - 10</font></p>
 specified dimensions to the current floor/level<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloor <em>name,
 texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
-<em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction, tw</em>,
-<em>th, isexternal</em></font><br>
+<em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis, texture_direction,
+tw</em>, <em>th, isexternal</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddFloor My Floor,
-brick, 0.5, -10, -10, 10, 10, 0, 0, False, 0, 0, False</font></p>
+brick, 0.5, -10, -10, 10, 10, 0, 0, False, False, 0, 0, False</font></p>
 
 <p align="left"><em>Voffset1</em> and <em>voffset2</em> are the height in feet
 above the current floor's altitude; <em>tw</em> and <em>th</em> are to
 size/tile the texture (0 lets the app autosize them), and <em>isexternal</em>
 determines if the floor is part of the building's external framework, or is
 part of the current floor (is either True or False). <em>Name</em> is a
-user-defined name for the object. If <em>texture_direction</em> is false, the
-texture will be mapped horizontally on the floor; if true, it'll be mapped
-vertically.</p>
+user-defined name for the object. The <em>reverse_axis</em> parameter reverses
+the axis that the difference in altitude/voffset for floors corresponds to. If
+this is false, and the altitude values are different, the floor will angle
+upward/downward along the Z axis (front/back), and if set to true, the floor
+will angle along the X axis (left/right). If <em>texture_direction</em> is
+false, the texture will be mapped horizontally on the floor; if true, it'll be
+mapped vertically.</p>
 
 <p align="left"><strong>3. AddWall</strong> - adds a textured wall with the
 specified dimensions to the current floor/level<br>
@@ -752,7 +756,7 @@ framework (true) or if it's part of the current floor (false).</p>
 below the floor of the current floor/level<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddInterfloorFloor
 <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
-<em>z2</em>, <em>voffset1</em>, <em>voffset2, direction, tw</em>,
+<em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis, texture_direction, tw</em>,
 <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddInterfloorFloor My
 IFloor, brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
@@ -775,10 +779,10 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddInterfloorWall
 the specified shaft, on the current floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftFloor
 <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
-<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction,
-tw</em>, <em>th</em></font><br>
+<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis,
+texture_direction, tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddShaftFloor 1, My
-Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, 0, 0</font></p>
+Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, false, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, and the
 <em>number</em> value is the shaft number to use. The x1, z1, x2, and z2
@@ -801,10 +805,10 @@ walls and floors)</p>
 the specified stairwell, on the current floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsFloor
 <em>number, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
-<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction,
-tw</em>, <em>th</em></font><br>
+<em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis,
+texture_direction, tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddStairsFloor 1, My
-Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, 0, 0</font></p>
+Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, false, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, and the
 <em>number</em> value is the stairwell number to use</p>
@@ -1785,9 +1789,9 @@ false</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>66.
 FloorHold</strong> - if this is set to true, the user must hold down the floor
-button in order to move to the desired floor.  When the button is released,
-the elevator will immediately stop.  This is used to mimic a modern manual
-elevator (platform lift). The default is false.<br>
+button in order to move to the desired floor. When the button is released, the
+elevator will immediately stop. This is used to mimic a modern manual elevator
+(platform lift). The default is false.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FloorHold =
 true</font></p>
 
@@ -1811,10 +1815,10 @@ floor to place the elevator on.</p>
 specified dimensions for the elevator<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloor <em>name,
 texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
-<em>z2</em>, <em>voffset1</em>, <em>voffset2, texture_direction, tw</em>,
-<em>th</em></font><br>
+<em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis, texture_direction,
+tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddFloor Floor1,
-Wood2, 0.5, -3.5, -3, 3.5, 3, 0, 0, false, 0, 0</font></p>
+Wood2, 0.5, -3.5, -3, 3.5, 3, 0, 0, false, false, 0, 0</font></p>
 
 <p align="left"><strong>3. AddWall</strong> - adds a textured wall for the
 elevator<br>
@@ -2354,7 +2358,7 @@ AddWall command.</p>
 <p align="left"><strong>c. AddFloor</strong> - adds a textured floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloor
 <em>destobject, name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>,
-<em>x2</em>, <em>z2</em>, <em>altitude1</em>, <em>altitude2</em>,
+<em>x2</em>, <em>z2</em>, <em>altitude1</em>, <em>altitude2</em>, reverse_axis,
 texture_direction, <em>tw</em>, <em>th</em></font></p>
 
 <p align="left">The command's parameters are the same as the Floor section's
@@ -2624,12 +2628,14 @@ true </font></p>
 reset to the default, which is shown above in the SetTextureMapping's example.
 If <em>default</em> is false, the previous values will be loaded and used.</p>
 
-<p align="left"><strong>p. ReverseAxis</strong> - reverses the axis that the
-difference in altitude/voffset for floors corresponds to. In the AddFloor
-command, there are parameters for specifying two different altitudes. By
-default, if the altitudes are different, the floor will angle upward/downward
-along the Z axis (front/back), but if this is set to true, the floor will angle
-along the X axis (left/right).<br>
+<p align="left"><strong>p. ReverseAxis</strong> - this command is deprecated,
+and only used for older versions of the AddFloor commands, since the current
+ones have this option built-in. This reverses the axis that the difference in
+altitude/voffset for floors corresponds to. In the AddFloor command, there are
+parameters for specifying two different altitudes. By default, if the altitudes
+are different, the floor will angle upward/downward along the Z axis
+(front/back), but if this is set to true, the floor will angle along the X axis
+(left/right).<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ReverseAxis =
 value</font></p>
 

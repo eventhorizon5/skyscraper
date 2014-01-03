@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.9 Alpha
-	Copyright (C)2004-2013 Ryan Thoryk
+	Copyright (C)2004-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -75,8 +75,6 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	IsRunning = false;
 	Floors = 0;
 	Basements = 0;
-	RenderOnly = false;
-	InputOnly = false;
 	IsFalling = false;
 	InStairwell = false;
 	InElevator = false;
@@ -161,7 +159,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 		OldMapUV[i] = 0;
 		MapUV[i] = 0;
 	}
-	RecreateColliders = false;
+	DeleteColliders = false;
 	soundcount = 0;
 	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
@@ -516,7 +514,7 @@ bool SBS::Start()
 void SBS::PrintBanner()
 {
 	Report("\n Scalable Building Simulator " + version + " " + version_state);
-	Report(" Copyright (C)2004-2013 Ryan Thoryk");
+	Report(" Copyright (C)2004-2014 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
 	Report(" conditions. For details, see the file gpl.txt\n");
@@ -573,55 +571,50 @@ void SBS::MainLoop()
 	if (elapsed > 0.5)
 		elapsed = 0.5;
 	SBSProfileManager::Start_Profile("Simulator Loop");
-
 	while (elapsed >= delta)
 	{
-		if (RenderOnly == false && InputOnly == false)
+		camera->Loop();
+
+		//Determine floor that the camera is on
+		camera->UpdateCameraFloor();
+
+		//run elevator handlers
+		if (ProcessElevators == true)
 		{
-			camera->Loop();
-
-			/*
-			//Determine floor that the camera is on
-			camera->UpdateCameraFloor();
-
-			//run elevator handlers
-			if (ProcessElevators == true)
+			for (int i = 1; i <= Elevators(); i++)
 			{
-				for (int i = 1; i <= Elevators(); i++)
-				{
-					if (GetElevator(i))
-						GetElevator(i)->MonitorLoop();
-				}
-
-				//check if the user is in an elevator
-				camera->CheckElevator();
+				if (GetElevator(i))
+					GetElevator(i)->MonitorLoop();
 			}
 
-			//check if the user is in a shaft
-			camera->CheckShaft();
+			//check if the user is in an elevator
+			camera->CheckElevator();
+		}
 
-			//check if the user is in a stairwell
-			camera->CheckStairwell();
+		//check if the user is in a shaft
+		camera->CheckShaft();
 
-			//open/close doors by using door callback
-			ProcessDoors();
+		//check if the user is in a stairwell
+		camera->CheckStairwell();
 
-			//process call button callbacks
-			ProcessCallButtons();
+		//open/close doors by using door callback
+		ProcessDoors();
 
-			//process misc operations on current floor
-			if (GetFloor(camera->CurrentFloor))
-				GetFloor(camera->CurrentFloor)->Loop();
+		//process call button callbacks
+		ProcessCallButtons();
 
-			//process auto areas
-			CheckAutoAreas();
+		//process misc operations on current floor
+		if (GetFloor(camera->CurrentFloor))
+			GetFloor(camera->CurrentFloor)->Loop();
 
-			//process triggers
-			for (int i = 0; i < TriggerArray.size(); i++)
-			{
-				if (TriggerArray[i])
-					TriggerArray[i]->Check();
-			}*/
+		//process auto areas
+		CheckAutoAreas();
+
+		//process triggers
+		for (int i = 0; i < TriggerArray.size(); i++)
+		{
+			if (TriggerArray[i])
+				TriggerArray[i]->Check();
 		}
 		elapsed -= delta;
 	}
@@ -862,14 +855,6 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		NewName = name;
 		NewName.append(":bottom");
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
-	}
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		wallobject->meshwrapper->Prepare();
-		wallobject->meshwrapper->DeleteCollider();
-		wallobject->meshwrapper->CreateCollider();
 	}
 
 	return 0;
@@ -1134,26 +1119,18 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 	PlanarRotate = old_planarrotate;
 
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		wallobject->meshwrapper->Prepare();
-		wallobject->meshwrapper->DeleteCollider();
-		wallobject->meshwrapper->CreateCollider();
-	}
-
 	return 0;
 }
 
 void SBS::Report(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message);
 	LastNotification = message;
 }
 
 bool SBS::ReportError(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
 	LastError = message;
 	return false;
 }
@@ -1375,14 +1352,6 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 		NewName = name;
 		NewName.append(":1");
 		wallobject->AddPolygon(NewName.c_str(), texture, varray2, tw2, th2, true);
-	}
-
-	//recreate colliders if specified
-	if (RecreateColliders == true)
-	{
-		wallobject->meshwrapper->Prepare();
-		wallobject->meshwrapper->DeleteCollider();
-		wallobject->meshwrapper->CreateCollider();
 	}
 
 	return 0;
@@ -3508,17 +3477,24 @@ int SBS::GetPolygonCount()
 	return PolygonCount;
 }
 
-void SBS::Prepare()
+void SBS::Prepare(bool report)
 {
 	//prepare objects for run
 	
-	Report("Preparing objects...");
-	Report("Processing geometry...");
+	if (report == true)
+	{
+		Report("Preparing objects...");
+		Report("Processing geometry...");
+	}
+
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
 	}
-	Report("Creating colliders...");
+
+	if (report == true)
+		Report("Creating colliders...");
+
 	for (int i = 0; i < meshes.size(); i++)
 	{
 		if (meshes[i]->tricollider == true)
@@ -3526,7 +3502,9 @@ void SBS::Prepare()
 		else
 			meshes[i]->CreateBoxCollider(1);
 	}
-	Report("Finished prepare");
+
+	if (report == true)
+		Report("Finished prepare");
 }
 
 Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)

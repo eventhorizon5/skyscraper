@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Camera Object Class
 	The Skyscraper Project - Version 1.9 Alpha
-	Copyright (C)2004-2013 Ryan Thoryk
+	Copyright (C)2004-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -190,13 +190,12 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	Ogre::Quaternion camrot = x * z;
 	Ogre::Quaternion bodyrot = y;
 	rotation = vector;
+	MainCamera->setOrientation(camrot);
 	if (EnableBullet == true)
 	{
 		mCharacter->setOrientation(bodyrot);
 		mCharacter->updateTransform(false, true, true);
 	}
-	else
-		MainCamera->setOrientation(camrot);
 }
 
 Ogre::Vector3 Camera::GetPosition()
@@ -877,12 +876,9 @@ void Camera::Float(float speed)
 
 void Camera::Jump()
 {
-	if (EnableBullet == false)
-		return;
-
-	velocity.y = cfg_jumpspeed;
-	desired_velocity.y = 0.0f;
-	if (mCharacter->getGravity() != 0)
+	//velocity.y = cfg_jumpspeed;
+	//desired_velocity.y = 0.0f;
+	if (mCharacter->getGravity() != 0 && EnableBullet == true)
 		mCharacter->jump();
 }
 
@@ -1029,7 +1025,7 @@ void Camera::EnableCollisions(bool value)
 		return;
 
 	Collisions = value;
-	if (EnableBullet)
+	if (EnableBullet == true)
 		mCharacter->enableCollisions(value);
 }
 

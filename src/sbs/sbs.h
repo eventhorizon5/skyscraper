@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Core
 	The Skyscraper Project - Version 1.9 Alpha
-	Copyright (C)2004-2013 Ryan Thoryk
+	Copyright (C)2004-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -128,8 +128,6 @@ public:
 	int Floors; //number of above-ground floors including 0
 	int Basements; //number of basement floors
 	Camera *camera; //camera object
-	bool RenderOnly; //skip sim processing and only render graphics
-	bool InputOnly; //skip sim processing and only run input and rendering code
 	bool IsFalling; //make user fall
 	bool InStairwell; //true if user is in a stairwell
 	bool InElevator; //true if user is in an elevator
@@ -159,7 +157,7 @@ public:
 	std::string root_dir; //app directory
 	std::string dir_char;
 	bool DisableSound; //disable sound system if true
-	bool RecreateColliders; //true if system should recreate mesh colliders on each modification
+	bool DeleteColliders; //true if system should delete mesh colliders on each modification
 	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
 	bool Verbose; //set to true to enable verbose mode
 	bool InterfloorOnTop; //set to true to have interfloor area on top (it's on the bottom by default)
@@ -309,7 +307,7 @@ public:
 	int GetPolygonCount();
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
-	void Prepare();
+	void Prepare(bool report = true);
 	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	MeshObject* FindMeshObject(Ogre::MeshPtr meshwrapper);
 	MeshObject* FindMeshObject(std::string name);

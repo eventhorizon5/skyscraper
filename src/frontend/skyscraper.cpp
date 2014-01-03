@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.9 Alpha - Simulation Frontend
-	Copyright (C)2003-2013 Ryan Thoryk
+	Copyright (C)2003-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -22,10 +22,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "wx/wxprec.h"
-#ifndef WX_PRECOMP
-#include "wx/wx.h"
-#endif
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
@@ -43,7 +39,7 @@ Skyscraper *skyscraper;
 	#define SW_SHOWNORMAL 1
 #endif
 
-int main(int argc, char *argv[])
+int main (int argc, char* argv[])
 {
 	Skyscraper skyscraper;
 	skyscraper.OnInit();
@@ -59,6 +55,7 @@ int main(int argc, char *argv[])
 			skyscraper.Render();
 		}
 	}
+	return 0;
 }
 
 bool Skyscraper::OnInit(void)
@@ -69,8 +66,6 @@ bool Skyscraper::OnInit(void)
 	version_frontend = version + ".0." + version_rev;
 	skyscraper = this;
 	MouseDown = false;
-	RenderOnly = false;
-	//InputOnly = false;
 	IsRunning = false;
 	StartupRunning = false;
 	Starting = false;
@@ -91,10 +86,28 @@ bool Skyscraper::OnInit(void)
 	mCaelumSystem = 0;
 	buttons = 0;
 	buttoncount = 0;
+	logger = 0;
+	raised = false;
+
+	//load config file
+	try
+	{
+		configfile.load("skyscraper.ini");
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
+	}
+
+	//showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
+	showconsole = false;
 
 	//start and initialize OGRE
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
+
+	//load script processor
+	processor = new ScriptProcessor();
 
 	//set sky name
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
@@ -129,13 +142,17 @@ int Skyscraper::OnExit()
 	//clean up
 
 	//cleanup
-	printf("Cleaning up...\n");
+	Report("Cleaning up...");
 
 	UnloadSim();
 
 	//delete Caelum
 	if (mCaelumSystem)
 		delete mCaelumSystem;
+
+	//unload script processor
+	delete processor;
+	processor = 0;
 
 	//cleanup sound
 	StopSound();
@@ -145,6 +162,7 @@ int Skyscraper::OnExit()
 	skyscraper = 0;
 
 	delete mRoot;
+	delete logger;
 	return 0;
 }
 
@@ -164,107 +182,6 @@ void Skyscraper::UnloadSim()
 	Simcore = 0;
 	Report("SBS unloaded\n");
 }
-
-/*MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
-{
-	Active = false;
-	this->Center();
-	wxString title;
-	title = wxT("Skyscraper 1.9 Alpha");
-	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
-	this->SetTitle(title);
-	//panel = new wxPanel(this, -1, wxPoint(0, 0), this->GetClientSize());
-}
-
-MainScreen::~MainScreen()
-{
-
-}
-
-void MainScreen::OnIconize(wxIconizeEvent& event)
-{
-	//pause simulator while minimized
-	if (skyscraper->IsRunning == false)
-		return;
-
-	skyscraper->Pause = event.IsIconized();
-
-	if (skyscraper->Pause == true)
-		skyscraper->Report("Pausing simulator...");
-	else
-		skyscraper->Report("Resuming simulator...");
-}
-
-void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-	//if (panel)
-		//panel->SetSize(this->GetClientSize());
-
-	if (skyscraper->mRenderWindow)
-	{
-#if OGRE_PLATFORM != OGRE_PLATFORM_WIN32
-		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
-#endif
-		skyscraper->mRenderWindow->windowMovedOrResized();
-	}
-	if (skyscraper->mCamera)
-		skyscraper->mCamera->setAspectRatio(Ogre::Real(skyscraper->mViewport->getActualWidth()) / Ogre::Real(skyscraper->mViewport->getActualHeight()));
-}
-
-void MainScreen::OnClose(wxCloseEvent& event)
-{
-	if (skyscraper->StartupRunning == false)
-	{
-		int result = wxMessageBox(wxT("Are you sure you want to exit?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
-		if (result == wxNO)
-			return;
-	}
-
-	if(dpanel)
-	{
-		if(dpanel->timer)
-			dpanel->timer->Stop();
-	}
-	wxGetApp().Exit();
-}
-
-void MainScreen::ShowWindow()
-{
-	Show(true);
-	//panel->Show(true);
-}
-
-void MainScreen::OnIdle(wxIdleEvent& event)
-{
-	if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true)
-		skyscraper->Loop(); //run simulator loop
-	if (skyscraper->Pause == false)
-		event.RequestMore(); //request more idles
-}
-
-void MainScreen::OnPaint(wxPaintEvent& event)
-{
-	wxPaintDC dc(this);
-
-	//if (skyscraper->mRenderWindow)
-		//skyscraper->mRenderWindow->update(true);
-}
-
-void MainScreen::OnActivate(wxActivateEvent &event)
-{
-	Active = event.GetActive();
-	event.Skip();
-}
-
-void MainScreen::OnEnterWindow(wxMouseEvent& event)
-{
-
-}
-
-void MainScreen::OnLeaveWindow(wxMouseEvent& event)
-{
-
-}*/
 
 void Skyscraper::Render()
 {
@@ -290,6 +207,15 @@ bool Skyscraper::Initialize()
 	{
 		try
 		{
+			//set up custom logger
+			if (!logger)
+			{
+				logger = new Ogre::LogManager();
+				Ogre::Log *log = logger->createLog("skyscraper.log", true, !showconsole, false);
+				log->addListener(this);
+			}
+
+			//load OGRE
 			mRoot = new Ogre::Root();
 		}
 		catch (Ogre::Exception &e)
@@ -298,16 +224,6 @@ bool Skyscraper::Initialize()
 		}
 	}
 	
-	//load config file
-	try
-	{
-		configfile.load("skyscraper.ini");
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
-	}
-
 	//configure render system
 	try
 	{
@@ -492,11 +408,12 @@ void Skyscraper::GetInput()
 {
 	SBS_PROFILE_MAIN("GetInput");
 
-	//Simcore->camera->Turn(-Simcore->camera->cfg_speed);
+	Simcore->camera->Turn(-Simcore->camera->cfg_speed);
 	return;
 
+	/*
 	//quit if main window isn't selected
-	/*if (window->Active == false)
+	if (window->Active == false)
 		return;
 
 	static int wireframe;
@@ -585,12 +502,12 @@ void Skyscraper::GetInput()
 	float speed_slow = Simcore->camera->cfg_speedslow;
 
 	//crash test
-	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'c'))
+	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'C'))
 		throw;
 
 	if (wxGetKeyState(WXK_CONTROL))
 	{
-		if (wxGetKeyState((wxKeyCode)'r'))
+		if (wxGetKeyState((wxKeyCode)'R'))
 		{
 			Reload = true;
 			return;
@@ -603,22 +520,22 @@ void Skyscraper::GetInput()
 	if (wxGetKeyState(WXK_ALT))
 	{
 		//strafe movement
-		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
 			Simcore->camera->Strafe(speed_normal);
-		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
 			Simcore->camera->Strafe(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'w'))
+		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
 			Simcore->camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
+		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
 			Simcore->camera->Float(-speed_normal);
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'p'))
+		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
 			Simcore->camera->Spin(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'l'))
+		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
 			Simcore->camera->Spin(-speed_normal);
 	}
 	else
 	{
-		if (wxGetKeyState((wxKeyCode)'v') && wait == false)
+		if (wxGetKeyState((wxKeyCode)'V') && wait == false)
 		{
 			if (Simcore->camera->GetGravityStatus() == false)
 			{
@@ -636,25 +553,25 @@ void Skyscraper::GetInput()
 		}
 		if (Simcore->camera->Freelook == false)
 		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
 				Simcore->camera->Turn(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
 				Simcore->camera->Turn(-speed_normal);
 		}
 		else
 		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'d'))
+			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
 				Simcore->camera->Strafe(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'a'))
+			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
 				Simcore->camera->Strafe(-speed_normal);
 		}
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'p'))
+		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
 			Simcore->camera->Look(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'l'))
+		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
 			Simcore->camera->Look(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'w'))
+		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
 			Simcore->camera->Step(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'s'))
+		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
 			Simcore->camera->Step(-speed_normal);
 		if (wxGetKeyState(WXK_SPACE) && wait == false)
 		{
@@ -760,27 +677,27 @@ void Skyscraper::GetInput()
 		}
 
 		//values from old version
-		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'o'))
+		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
 			Simcore->camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'k'))
-			Simcore->camera->Float(-speed_normal);*
+		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'K'))
+			Simcore->camera->Float(-speed_normal);
 	}*/
 }
 
-void Skyscraper::Report(std::string message, ...)
+void Skyscraper::Report(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message);
 }
 
-bool Skyscraper::ReportError(std::string message, ...)
+bool Skyscraper::ReportError(std::string message)
 {
-	printf("%s\n", message.c_str());
+	Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
 	return false;
 }
 
-bool Skyscraper::ReportFatalError(std::string message, ...)
+bool Skyscraper::ReportFatalError(std::string message)
 {
-	printf("%s\n", message.c_str());
+	ReportError(message);
 
 	//show error dialog
 	//wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
@@ -809,22 +726,22 @@ void Skyscraper::Loop()
 	if (!Simcore)
 		return;
 
+	//force window raise on startup
+	if (Simcore->GetCurrentTime() > 0 && raised == false)
+	{
+		//window->Raise();
+		raised = true;
+	}
+
 	//Simcore->AdvanceClock();
 	//if (IsRunning == true)
 		//Simcore->CalculateFrameRate();
-
-	//RenderOnly = GetConfigBool("Skyscraper.Frontend.RenderOnly", false);
-	//InputOnly = GetConfigBool("Skyscraper.Frontend.InputOnly", false);
-
-	Simcore->RenderOnly = RenderOnly;
-	//Simcore->InputOnly = this->InputOnly;
 
 	//run SBS main loop
 	Simcore->MainLoop();
 
 	//get input
-	if (RenderOnly == false)
-		GetInput();
+	GetInput();
 
 	//process camera loop
 	//Simcore->camera->Loop();
@@ -836,6 +753,9 @@ void Skyscraper::Loop()
 		mCaelumSystem->setTimeScale(SkyMult);
 		mCaelumSystem->updateSubcomponents(float(Simcore->GetElapsedTime()) / 1000);
 	}
+
+	//render graphics
+	//Render();
 
 	//exit if shutdown request received
 	if (Shutdown == true)
@@ -1159,6 +1079,7 @@ void Skyscraper::GetMenuInput()
 	//input handler for main menu
 
 	return;
+
 	//exit if simulator is starting
 	if (Starting == true)
 		return;
@@ -1367,8 +1288,8 @@ bool Skyscraper::Start()
 	mSceneMgr->clearScene();
 
 	//clear screen
-	mRoot->renderOneFrame();
-	
+	mRenderWindow->update();
+
 	Starting = true;
 
 	//Create and initialize simulator
@@ -1379,14 +1300,16 @@ bool Skyscraper::Start()
 	Simcore->BuildingFilename = BuildingFile;
 
 	//Pause for 1 second
-	wxSleep(1);
+	//wxSleep(1);
 
 	if (Reload == false)
 		BuildingFile.insert(0, "buildings/");
 
 	//load script processor object and load building
 	bool loaderror = false;
-	processor = new ScriptProcessor();
+
+	processor->Reset();
+
 	if (!processor->LoadDataFile(BuildingFile.c_str()))
 	{
 		loaderror = true;
@@ -1394,7 +1317,7 @@ bool Skyscraper::Start()
 	}
 	if (loaderror == false)
 	{
-		if (!processor->LoadBuilding())
+		if (!processor->Run())
 		{
 			loaderror = true;
 			ReportError("Error processing building\n");
@@ -1404,10 +1327,6 @@ bool Skyscraper::Start()
 	//report on missing files, if any
 	if (loaderror == false)
 		processor->ReportMissingFiles();
-
-	//unload script processor
-	delete processor;
-	processor = 0;
 
 	if (loaderror == true)
 	{
@@ -1427,8 +1346,6 @@ bool Skyscraper::Start()
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
 
-	//resize main window
-
 	//clear screen
 	mRoot->renderOneFrame();
 
@@ -1443,9 +1360,6 @@ bool Skyscraper::Start()
 		Simcore->camera->SetPosition(override_position);
 		Simcore->camera->SetRotation(override_rotation);
 	}
-
-	//turn on window resizing, if specified
-	//AllowResize(GetConfigBool("Skyscraper.Frontend.AllowResize", true));
 
 	//run simulation
 	Report("Running simulation...");
@@ -1465,6 +1379,7 @@ void Skyscraper::Unload()
 	IsRunning = false;
 	Starting = false;
 	Pause = false;
+	raised = false;
 	UnloadSim();
 
 	//cleanup sound
@@ -1594,6 +1509,16 @@ bool Skyscraper::InitSky()
 	return true;
 }
 
+ScriptProcessor* Skyscraper::GetScriptProcessor()
+{
+	return processor;
+}
+
+void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage)
+{
+	//callback function that receives OGRE log messages
+}
+
 bool Skyscraper::frameStarted(const Ogre::FrameEvent& evt)
 {
 	if (Simcore)
@@ -1603,3 +1528,4 @@ bool Skyscraper::frameStarted(const Ogre::FrameEvent& evt)
 		Loop();
 	return true;
 }
+

@@ -1,5 +1,5 @@
 Skyscraper 2.0 Alpha 9
-Copyright (C)2003-2013 Ryan Thoryk
+Copyright (C)2003-2014 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
 
@@ -112,6 +112,7 @@ Plus or ] - Zoom in (decrease FOV angle)
 Minus or [ - Zoom out (increase FOV angle)
 Esc - exit to main menu
 V - Toggle noclip mode (gravity and collisions off)
+Ctrl-R - Reload current building
 Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 --- Mouse actions ---

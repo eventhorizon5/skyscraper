@@ -3,7 +3,7 @@
 /*
 	Scalable Building Simulator - Mesh and Polygon Classes
 	The Skyscraper Project - Version 1.9 Alpha
-	Copyright (C)2004-2013 Ryan Thoryk
+	Copyright (C)2004-2014 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
@@ -1388,12 +1388,8 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	MeshWrapper->load();
 
 	//recreate colliders if specified
-	if (sbs->RecreateColliders == true)
-	{
-		Prepare();
+	if (sbs->DeleteColliders == true)
 		DeleteCollider();
-		CreateCollider();
-	}
 
 	return true;
 }
@@ -1841,6 +1837,12 @@ void MeshObject::CreateCollider()
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
 		mShape = shape;
+
+		if (sbs->DeleteColliders == true)
+		{
+			Enable(false, false);
+			Enable(true, false);
+		}
 	}
 	catch (Ogre::Exception &e)
 	{

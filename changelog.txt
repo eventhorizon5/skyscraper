@@ -1,7 +1,35 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-control panel sizing fix
+-removed unused RenderOnly and InputOnly options
+-script viewer no longer shows included code
+-rename and cleanups of collider recreation when adding/deleting objects during runtime
+-fixed issue where meshes wouldn't be immediately visible if walls were added to them during runtime
+-fixed an issue where control panel buttons failed to work upon a building reload
+-command box in console now clears on send
+-added echo option to console window (displays typed commands)
+-fixed an issue with the main window not raising properly on startup
+-fixed a startup clear screen issue
+-switched log output to new in-app console window
+-addition of main console text box in console window
+-moved system over to Ogre logging facility
+-all logging is now written to skyscraper.log
+-debug console (text) output can be turned on and off by INI file parameter
+-script processor is now persistent
+-added missing note about ctrl-r reloading current building to key commands list
+-added script deprecation warnings, which can be enabled in the INI file
+-removed unused GetWallExtents function since the command version is more useful
+-script interpreter cleanups
+-fixed a parameter check for parameters specified after equals signs; would previously treat empty text as a single parameter
+-updated syntax in Simple building
+-added ReverseAxis parameters to the script guide, which were missing
+-added ability to disable Bullet for testing
+-fail and switch to old sky system if Caelum fails to init
+-disabled elevator arrival notifications and floor sounds/beeps when in service modes
+-disabled elevator door open/close functions while in Fire Phase 1 recall
+-added needed object existence checks to functions that use the object array directly - without this, crashes were happening when doing an object scan after an object had been deleted
 -ACP mode now uses the elevator's Go function, and now works properly
--Elevator "Go" function now turns off elevator floor light when reaching destination
+-elevator "Go" function now turns off elevator floor light when reaching destination
 -fixed some door closing issues in Fire Phase 1 mode
 -added exterior up/down controls to Simple - Manual building, and interlock switch for testing
 -added support for modern manual lifts, that require the floor button to be held to proceed to that floor, via the FloorHold parameter
