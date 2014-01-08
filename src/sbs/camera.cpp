@@ -372,7 +372,6 @@ void Camera::CheckElevator()
 	//checks for a collision with the elevator's floor below
 
 	SBS_PROFILE("Camera::CheckElevator");
-	bool test = false;
 
 	for (int i = 1; i <= sbs->Elevators(); i++)
 	{
@@ -383,18 +382,12 @@ void Camera::CheckElevator()
 
 		bool result = elevator->Check(GetPosition());
 		if (result == true)
-		{
-			test = true;
 			return;
-		}
 	}
 
 	//user is not in an elevator if all elevators returned false
-	if (test == false)
-	{
-		sbs->InElevator = false;
-		sbs->ElevatorSync = false;
-	}
+	sbs->InElevator = false;
+	sbs->ElevatorSync = false;
 }
 
 void Camera::CheckShaft()

@@ -1058,7 +1058,6 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	float pr, best_pr = 2000000000.;
 	float dist, best_dist = 2000000000.;
 	int best_i = -1;
-	int best_j = -1;
 	Ogre::Vector3 cur_isect;
 	Ogre::Vector3 tmpnormal;
 
@@ -1082,7 +1081,6 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 						best_dist = dist;
 						best_pr = pr;
 						best_i = i;
-						best_j = j;
 						isect = cur_isect;
 						normal = tmpnormal;
 					}

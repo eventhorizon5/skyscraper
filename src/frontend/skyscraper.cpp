@@ -471,23 +471,15 @@ void Skyscraper::GetInput()
 	old_mouse_y = Simcore->mouse_y;
 
 	//get mouse pointer coordinates
-	if (Simcore->camera->Freelook == false)
-	{
-		Simcore->mouse_x = mMouse->getMouseState().X.abs;
-		Simcore->mouse_y = mMouse->getMouseState().Y.abs;
-	}
-	else
-	{
-		Simcore->mouse_x = mMouse->getMouseState().X.rel;
-		Simcore->mouse_y = mMouse->getMouseState().Y.rel;
-	}
+	Simcore->mouse_x = mMouse->getMouseState().X.abs;
+	Simcore->mouse_y = mMouse->getMouseState().Y.abs;
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
 		Ogre::Vector3 rotational;
-		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * ((float)Simcore->mouse_y / (mRenderWindow->getHeight() * 2)));
-		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * ((float)Simcore->mouse_x / (mRenderWindow->getWidth() * 2)));
+		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((float)mMouse->getMouseState().Y.rel / (mRenderWindow->getHeight() * 2)));
+		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * ((float)mMouse->getMouseState().X.rel / (mRenderWindow->getWidth() * 2)));
 		rotational.z = 0;
 		rotational *= 60;
 		Simcore->camera->desired_angle_velocity = rotational;
@@ -818,8 +810,8 @@ void Skyscraper::DrawBackground()
 {
 	//draw menu background
 
-	int w = mRenderWindow->getWidth();
-	int h = mRenderWindow->getHeight();
+	//int w = mRenderWindow->getWidth();
+	//int h = mRenderWindow->getHeight();
 
 	DrawImage(std::string("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png")).c_str(), 0, -1, -1, false);
 

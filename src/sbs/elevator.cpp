@@ -4559,7 +4559,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 		return 0;
 	}
 
-	float x1, z1, x2, z2;
+	/*float x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
 	{
@@ -4577,7 +4577,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 	}
 
 	//cut area
-	/*if (direction < 5)
+	if (direction < 5)
 		CutAll(Ogre::Vector3(x1 - 1, GetBase(true) + voffset, z1), Ogre::Vector3(x2 + 1, GetBase(true) + voffset + height, z2), true, false);
 	else
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
