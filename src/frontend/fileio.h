@@ -74,6 +74,7 @@ class ScriptProcessor
 	std::vector<std::string> FunctionParams;
 	bool ReplaceLine;
 	std::vector<std::string> nonexistent_files;
+	bool CalcError;
 	bool ReverseAxis;
 	bool setkey;
 	int keyvalue;

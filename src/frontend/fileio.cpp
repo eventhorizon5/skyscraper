@@ -7299,7 +7299,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 	std::string one;
 	std::string two;
 	int start, end;
-	bool CalcError = false;
+	CalcError = false;
 
 	//first remove all whitespace from the string
 	ReplaceAll(tmpcalc, " ", "");

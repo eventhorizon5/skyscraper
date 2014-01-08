@@ -1186,7 +1186,7 @@ Ogre::Vector2 SBS::CalculateSizing(const char *texture, const Ogre::Vector3 &v1,
 	float tw2 = tw, th2 = th;
 
 	bool force_enable = false, force_mode = false;
-	bool result = GetTextureForce(texture, force_enable, force_mode);
+	GetTextureForce(texture, force_enable, force_mode);
 
 	float width = v1.distance(v2);
 	float height = v2.distance(v3);
@@ -1894,7 +1894,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 
 	int cursorX = 0;
 	int cursorY = 0;
-	int lineend = destRectangle.getWidth();
+	//int lineend = destRectangle.getWidth();
 	bool carriagereturn = true;
 	for (unsigned int strindex = 0; strindex < str.size(); strindex++)
 	{
@@ -1965,17 +1965,17 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 					{
 						case 'c':
 							cursorX = destRectangle.left + (destRectangle.getWidth() / 2) - (textwidth / 2);
-							lineend = destRectangle.getWidth() - cursorX;
+							//lineend = destRectangle.getWidth() - cursorX;
 							break;
 
 						case 'r':
 							cursorX = destRectangle.right - textwidth;
-							lineend = destRectangle.getWidth();
+							//lineend = destRectangle.getWidth();
 							break;
 
 						default:
 							cursorX = destRectangle.right;
-							lineend = textwidth;
+							//lineend = textwidth;
 							break;
 					}
 

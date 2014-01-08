@@ -953,8 +953,8 @@ void Skyscraper::DrawBackground()
 {
 	//draw menu background
 
-	int w = mRenderWindow->getWidth();
-	int h = mRenderWindow->getHeight();
+	//int w = mRenderWindow->getWidth();
+	//int h = mRenderWindow->getHeight();
 
 	DrawImage(std::string("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png")).c_str(), 0, -1, -1, false);
 
