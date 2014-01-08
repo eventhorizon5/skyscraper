@@ -25,6 +25,10 @@
 #ifndef SKYSCRAPER_H
 #define SKYSCRAPER_H
 
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
+#include <OIS.h>
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "fileio.h"
@@ -112,6 +116,11 @@ private:
 
 	//script processor
 	ScriptProcessor* processor;
+
+	//input
+	OIS::InputManager *mInputManager;
+	OIS::Keyboard *mKeyboard;
+	OIS::Mouse *mMouse;
 
 	//button locations
 	struct buttondata

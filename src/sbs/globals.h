@@ -28,7 +28,6 @@
 
 #include <string>
 #include <vector>
-#include "wx/platform.h"
 
 //DLL Exporting
 #ifdef _WIN32

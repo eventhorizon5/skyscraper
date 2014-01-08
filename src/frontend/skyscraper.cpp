@@ -22,10 +22,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <OgreRoot.h>
-#include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
-#include <fmod.hpp>
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
@@ -158,6 +154,13 @@ int Skyscraper::OnExit()
 	StopSound();
 	if (soundsys)
 		soundsys->release();
+
+	/*if (mMouse)
+		delete mMouse;
+	if (mKeyboard)
+		delete mKeyboard;
+	if (mInputManager)
+		delete mInputManager;*/
 
 	skyscraper = 0;
 
@@ -346,6 +349,24 @@ bool Skyscraper::Initialize()
 	Ogre::MaterialManager::getSingleton().setDefaultTextureFiltering(filter);
 	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
+	//initialize OIS (input)
+	size_t hWnd = 0;
+	mRenderWindow->getCustomAttribute("WINDOW", &hWnd);
+	if (!hWnd)
+		return ReportFatalError("Error initializing OIS\n");
+
+	mInputManager = OIS::InputManager::createInputSystem(hWnd);
+	mMouse = static_cast<OIS::Mouse*>(mInputManager->createInputObject(OIS::OISMouse, false));
+	mKeyboard = static_cast<OIS::Keyboard*>(mInputManager->createInputObject(OIS::OISKeyboard, false));
+
+	//OIS mouse state window dimensions
+	unsigned int width, height, depth;
+	int top, left;
+	mRenderWindow->getMetrics(width, height, depth, left, top);
+	const OIS::MouseState &ms = mMouse->getMouseState();
+	ms.width = width;
+	ms.height = height;
+
 	//initialize FMOD (sound)
 	Report("\nFMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2010");
 
@@ -408,18 +429,15 @@ void Skyscraper::GetInput()
 {
 	SBS_PROFILE_MAIN("GetInput");
 
-	Simcore->camera->Turn(-Simcore->camera->cfg_speed);
-	return;
-
-	/*
 	//quit if main window isn't selected
-	if (window->Active == false)
-		return;
+	//if (window->Active == false)
+		//return;
 
 	static int wireframe;
 	static bool wait, waitcheck, colliders;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
+	mKeyboard->capture();
 
 	// First get elapsed time from the virtual clock.
 	elapsed_time = Simcore->GetElapsedTime();
@@ -452,11 +470,11 @@ void Skyscraper::GetInput()
 	old_mouse_y = Simcore->mouse_y;
 
 	//get mouse pointer coordinates
-	Simcore->mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
-	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
+	Simcore->mouse_x = mMouse->getMouseState().X.rel;
+	Simcore->mouse_y = mMouse->getMouseState().Y.rel;
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
-	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
+	/*if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
 		window->WarpPointer(window->GetClientSize().GetWidth() / 2, window->GetClientSize().GetHeight() / 2);
 		Ogre::Vector3 rotational;
@@ -466,33 +484,33 @@ void Skyscraper::GetInput()
 		rotational *= 60;
 		Simcore->camera->desired_angle_velocity = rotational;
 		Simcore->camera->angle_velocity = rotational;
-	}
+	}*/
 
 	//check if the user clicked on an object, and process it
-	if (wxGetMouseState().LeftIsDown() == true && MouseDown == false)
+	if (mMouse->getMouseState().buttonDown(OIS::MB_Left) == true && MouseDown == false)
 	{
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
-		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT));
+		Simcore->camera->ClickedObject(mKeyboard->isModifierDown(OIS::Keyboard::Shift), mKeyboard->isModifierDown(OIS::Keyboard::Ctrl), mKeyboard->isModifierDown(OIS::Keyboard::Alt));
 	}
 
 	//reset mouse state
-	if (wxGetMouseState().LeftIsDown() == false)
+	if (mMouse->getMouseState().buttonDown(OIS::MB_Left) == false)
 	{
 		MouseDown = false;
 		Simcore->camera->MouseDown = MouseDown;
 	}
 
-	if (wxGetKeyState(WXK_ESCAPE))
+	if (mKeyboard->isKeyDown(OIS::KC_ESCAPE))
 	{
-		int result = wxMessageBox(wxT("Exit and return to the main menu?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
-		if (result == wxYES)
+		//int result = wxMessageBox(wxT("Exit and return to the main menu?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
+		//if (result == wxYES)
 			Shutdown = true;
 	}
 
-	if (wxGetKeyState(WXK_F2) && wait == false)
+	if (mKeyboard->isKeyDown(OIS::KC_F2) && wait == false)
 	{
-		Report(std::string(wxVariant(Simcore->FPS).GetString().ToAscii()));
+		//Report(std::string(wxVariant(Simcore->FPS).GetString().ToAscii()));
 		wait = true;
 	}
 
@@ -502,40 +520,40 @@ void Skyscraper::GetInput()
 	float speed_slow = Simcore->camera->cfg_speedslow;
 
 	//crash test
-	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'C'))
+	if (mKeyboard->isModifierDown(OIS::Keyboard::Ctrl) && mKeyboard->isModifierDown(OIS::Keyboard::Alt) && mKeyboard->isKeyDown(OIS::KC_C))
 		throw;
 
-	if (wxGetKeyState(WXK_CONTROL))
+	if (mKeyboard->isModifierDown(OIS::Keyboard::Ctrl))
 	{
-		if (wxGetKeyState((wxKeyCode)'R'))
+		if (mKeyboard->isKeyDown(OIS::KC_R))
 		{
 			Reload = true;
 			return;
 		}
 		Simcore->camera->speed = speed_slow;
 	}
-	else if (wxGetKeyState(WXK_SHIFT))
+	else if (mKeyboard->isModifierDown(OIS::Keyboard::Shift))
 		Simcore->camera->speed = speed_fast;
 
-	if (wxGetKeyState(WXK_ALT))
+	if (mKeyboard->isModifierDown(OIS::Keyboard::Alt))
 	{
 		//strafe movement
-		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
+		if (mKeyboard->isKeyDown(OIS::KC_RIGHT) || mKeyboard->isKeyDown(OIS::KC_D))
 			Simcore->camera->Strafe(speed_normal);
-		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
+		if (mKeyboard->isKeyDown(OIS::KC_LEFT) || mKeyboard->isKeyDown(OIS::KC_A))
 			Simcore->camera->Strafe(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
+		if (mKeyboard->isKeyDown(OIS::KC_UP) || mKeyboard->isKeyDown(OIS::KC_W))
 			Simcore->camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
+		if (mKeyboard->isKeyDown(OIS::KC_DOWN) || mKeyboard->isKeyDown(OIS::KC_S))
 			Simcore->camera->Float(-speed_normal);
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
+		if (mKeyboard->isKeyDown(OIS::KC_PGUP) || mKeyboard->isKeyDown(OIS::KC_P))
 			Simcore->camera->Spin(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
+		if (mKeyboard->isKeyDown(OIS::KC_PGDOWN) || mKeyboard->isKeyDown(OIS::KC_L))
 			Simcore->camera->Spin(-speed_normal);
 	}
 	else
 	{
-		if (wxGetKeyState((wxKeyCode)'V') && wait == false)
+		if (mKeyboard->isKeyDown(OIS::KC_V) && wait == false)
 		{
 			if (Simcore->camera->GetGravityStatus() == false)
 			{
@@ -553,27 +571,27 @@ void Skyscraper::GetInput()
 		}
 		if (Simcore->camera->Freelook == false)
 		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
+			if (mKeyboard->isKeyDown(OIS::KC_RIGHT) || mKeyboard->isKeyDown(OIS::KC_D))
 				Simcore->camera->Turn(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
+			if (mKeyboard->isKeyDown(OIS::KC_LEFT) || mKeyboard->isKeyDown(OIS::KC_A))
 				Simcore->camera->Turn(-speed_normal);
 		}
 		else
 		{
-			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
+			if (mKeyboard->isKeyDown(OIS::KC_RIGHT) || mKeyboard->isKeyDown(OIS::KC_D))
 				Simcore->camera->Strafe(speed_normal);
-			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
+			if (mKeyboard->isKeyDown(OIS::KC_LEFT) || mKeyboard->isKeyDown(OIS::KC_A))
 				Simcore->camera->Strafe(-speed_normal);
 		}
-		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
+		if (mKeyboard->isKeyDown(OIS::KC_PGUP) || mKeyboard->isKeyDown(OIS::KC_P))
 			Simcore->camera->Look(speed_normal);
-		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
+		if (mKeyboard->isKeyDown(OIS::KC_PGDOWN) || mKeyboard->isKeyDown(OIS::KC_L))
 			Simcore->camera->Look(-speed_normal);
-		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
+		if (mKeyboard->isKeyDown(OIS::KC_UP) || mKeyboard->isKeyDown(OIS::KC_W))
 			Simcore->camera->Step(speed_normal);
-		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
+		if (mKeyboard->isKeyDown(OIS::KC_DOWN) || mKeyboard->isKeyDown(OIS::KC_S))
 			Simcore->camera->Step(-speed_normal);
-		if (wxGetKeyState(WXK_SPACE) && wait == false)
+		if (mKeyboard->isKeyDown(OIS::KC_SPACE) && wait == false)
 		{
 			if (Simcore->camera->IsOnGround() == true)
 			{
@@ -581,14 +599,14 @@ void Skyscraper::GetInput()
 				wait = true;
 			}
 		}
-		if (wxGetKeyState(WXK_F3))
+		if (mKeyboard->isKeyDown(OIS::KC_F3))
 		{
 			//reset view
 			Simcore->camera->SetToStartDirection();
 			Simcore->camera->SetToStartRotation();
 			Simcore->camera->SetToDefaultFOV();
 		}
-		if (wxGetKeyState(WXK_F6))
+		if (mKeyboard->isKeyDown(OIS::KC_F6))
 		{
 			//reset camera position and state
 			Simcore->GetFloor(Simcore->camera->CurrentFloor)->Enabled(false);
@@ -602,7 +620,7 @@ void Skyscraper::GetInput()
 			Simcore->GetFloor(Simcore->camera->StartFloor)->EnableGroup(true);
 		}
 
-		if (wxGetKeyState(WXK_F7) && wait == false)
+		if (mKeyboard->isKeyDown(OIS::KC_F7) && wait == false)
 		{
 			//show colliders
 			Simcore->ShowColliders(!colliders);
@@ -610,7 +628,7 @@ void Skyscraper::GetInput()
 			wait = true;
 		}
 
-		if (wxGetKeyState(WXK_F4) && wait == false)
+		if (mKeyboard->isKeyDown(OIS::KC_F4) && wait == false)
 		{
 			//enable/disable wireframe mode
 			if (wireframe == 0)
@@ -632,19 +650,19 @@ void Skyscraper::GetInput()
 			}
 			wait = true;
 		}
-		if (wxGetKeyState(WXK_F11) && wait == false)
+		if (mKeyboard->isKeyDown(OIS::KC_F11) && wait == false)
 		{
 			mRenderWindow->writeContentsToTimestampedFile("screenshots/skyscraper-", ".jpg");
 			wait = true;
 		}
-		if (wxGetKeyState(WXK_F12) && !dpanel)
+		/*if (mKeyboard->isKeyDown(OIS::KC_F12) && !dpanel)
 		{
 			//show control panel if closed
 			dpanel = new DebugPanel(NULL, -1);
 			dpanel->Show(true);
 			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
-		}
-		if (wxGetKeyState(WXK_F5) && wait == false)
+		}*/
+		/*if (mKeyboard->isKeyDown(WXK_F5) && wait == false)
 		{
 			//enable/disable freelook mode
 			Simcore->camera->Freelook = !Simcore->camera->Freelook;
@@ -653,23 +671,23 @@ void Skyscraper::GetInput()
 			else
 				window->SetCursor(wxNullCursor);
 			wait = true;
-		}
-		if (wxGetKeyState(WXK_F10) && wait == false)
+		}*/
+		if (mKeyboard->isKeyDown(OIS::KC_F10) && wait == false)
 		{
 			//enable/disable fullscreen mode
 			FullScreen = !FullScreen;
-			window->ShowFullScreen(FullScreen);
-			window->ToggleWindowStyle(wxSTAY_ON_TOP);
-			window->Refresh();
+			//window->ShowFullScreen(FullScreen);
+			//window->ToggleWindowStyle(wxSTAY_ON_TOP);
+			//window->Refresh();
 			wait = true;
 		}
-		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT) || wxGetKeyState((wxKeyCode)'['))
+		if (mKeyboard->isKeyDown(OIS::KC_SUBTRACT) || mKeyboard->isKeyDown(OIS::KC_LBRACKET))
 		{
 			//increase FOV angle
 			float angle = Simcore->camera->GetFOVAngle() + Simcore->camera->cfg_zoomspeed;
 			Simcore->camera->SetFOVAngle(angle);
 		}
-		if (wxGetKeyState(WXK_NUMPAD_ADD) || wxGetKeyState((wxKeyCode)']'))
+		if (mKeyboard->isKeyDown(OIS::KC_ADD) || mKeyboard->isKeyDown(OIS::KC_RBRACKET))
 		{
 			//decrease FOV angle
 			float angle = Simcore->camera->GetFOVAngle() - Simcore->camera->cfg_zoomspeed;
@@ -677,11 +695,11 @@ void Skyscraper::GetInput()
 		}
 
 		//values from old version
-		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
+		if (mKeyboard->isKeyDown(OIS::KC_HOME) || mKeyboard->isKeyDown(OIS::KC_O))
 			Simcore->camera->Float(speed_normal);
-		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'K'))
+		if (mKeyboard->isKeyDown(OIS::KC_END) || mKeyboard->isKeyDown(OIS::KC_K))
 			Simcore->camera->Float(-speed_normal);
-	}*/
+	}
 }
 
 void Skyscraper::Report(std::string message)

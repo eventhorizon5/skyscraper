@@ -23,8 +23,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include <wx/wx.h>
-#include <wx/variant.h>
 #include <OgreRoot.h>
 #include <OgreFileSystem.h>
 #include <OgreFontManager.h>
@@ -55,7 +53,11 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	PrintBanner();
 
 	//Pause for 2 seconds
-	wxSleep(2);
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Sleep(2000);
+#else
+	sleep(2);
+#endif
 
 	mRoot = Ogre::Root::getSingletonPtr();
 	this->mSceneManager = mSceneManager;

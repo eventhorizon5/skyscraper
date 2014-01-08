@@ -23,6 +23,8 @@ if(NOT OGRE_FOUND)
   message(SEND_ERROR "Failed to find OGRE.")
 endif()
  
+find_package(OIS REQUIRED)
+
 # Find Boost
 if (NOT OGRE_BUILD_PLATFORM_IPHONE)
 	if (APPLE)
