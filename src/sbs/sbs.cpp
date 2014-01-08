@@ -3781,6 +3781,7 @@ std::vector<Action*> SBS::GetAction(const std::string name)
 	for (int i = 0; i < ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
+		ReplaceAll(actionname, " ", "");
 		if (actionname == name)
 			actionlist.push_back(ActionArray[i]);
 	}

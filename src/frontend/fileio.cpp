@@ -100,6 +100,7 @@ void ScriptProcessor::Reset()
 	lockvalue = 0;
 	warn_deprecated = skyscraper->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
 	show_percent = true;
+	InWhile = false;
 	functions.clear();
 	includes.clear();
 	variables.clear();
@@ -129,9 +130,6 @@ bool ScriptProcessor::Run()
 
 	while (line < (int)BuildingData.size())
 	{
-		if (Simcore->GetFloor(0) == 0)
-			TrimString(LineData);
-
 		LineData = BuildingData[line];
 		TrimString(LineData);
 
@@ -464,6 +462,15 @@ breakpoint:
 			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
 
+			for (int i = 0; i < functions.size(); i++)
+			{
+				if (functions[i].name == function)
+				{
+					ScriptError("Function '" + function + "' already defined");
+					return false;
+				}
+			}
+
 			//store function info in array
 			FunctionInfo info;
 			info.name = function;
@@ -706,7 +713,10 @@ recalc:
 		Simcore->FlipTexture = false;
 
 Nextline:
-		line++;
+		if (InWhile == true && InFunction == false)
+			InWhile = false;
+		else
+			line++;
 	}
 
 	return true;
@@ -1144,18 +1154,16 @@ int ScriptProcessor::ProcCommands()
 {
 	//process global commands
 
-	if (Section != 2 && Section != 4)
-	{
-		//process any functions first
-		if (FunctionProc() == true)
-			return sNextLine;
-	}
-
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
 
-	//IF statement
+	//IF/While statement
+	int IsIf = 0;
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
+		IsIf = 1;
+	if (SetCaseCopy(LineData.substr(0, 5), false) == "while")
+		IsIf = 2;
+	if (IsIf > 0)
 	{
 		temp1 = LineData.find("[", 0);
 		temp3 = LineData.find("]", 0);
@@ -1166,13 +1174,24 @@ int ScriptProcessor::ProcCommands()
 		TrimString(temp2);
 		if (IfProc(temp2.c_str()) == true)
 		{
-			//trim off IF statement
+			//trim off IF/While statement
 			LineData = LineData.substr(temp3 + 1);
 			TrimString(LineData);
+
+			if (IsIf == 2)
+				InWhile = true;
+
 			return sCheckFloors;
 		}
 		else
 			return sNextLine; //skip line
+	}
+
+	if (Section != 2 && Section != 4)
+	{
+		//process any functions
+		if (FunctionProc() == true)
+			return sNextLine;
 	}
 
 	//Print command
@@ -2592,6 +2611,52 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//Delete command
+	if (linecheck.substr(0, 6) == "delete")
+	{
+		//calculate inline math
+		buffer = Calc(LineData.substr(7).c_str());
+		TrimString(buffer);
+
+		int obj;
+		if (!IsNumeric(buffer.c_str(), obj))
+			return ScriptError("Invalid value: " + buffer);
+
+		//delete object
+		Simcore->DeleteObject(obj);
+
+		return sNextLine;
+	}
+
+	//RunAction command
+	if (linecheck.substr(0, 9) == "runaction")
+	{
+		//calculate inline math
+		buffer = Calc(LineData.substr(10).c_str());
+		TrimString(buffer);
+
+		//run action
+		Simcore->RunAction(buffer);
+
+		return sNextLine;
+	}
+
+	//GotoFloor command
+	if (linecheck.substr(0, 9) == "gotofloor")
+	{
+		//calculate inline math
+		buffer = Calc(LineData.substr(10).c_str());
+		TrimString(buffer);
+
+		int num;
+		if (!IsNumeric(buffer.c_str(), num))
+			return ScriptError("Invalid value: " + buffer);
+
+		Simcore->camera->GotoFloor(num);
+
+		return sNextLine;
+	}
+
 	return sContinue;
 }
 
@@ -2777,8 +2842,8 @@ int ScriptProcessor::ProcFloors()
 	if (getfloordata == true)
 		return sCheckFloors;
 
-	//IF statement stub (continue to global commands for processing)
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
+	//IF/While statement stub (continue to global commands for processing)
+	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
 		return sContinue;
 
 	//process functions
@@ -4537,8 +4602,8 @@ int ScriptProcessor::ProcElevators()
 	buffer = ToString(Current);
 	ReplaceAll(LineData, "%elevator%", buffer.c_str());
 
-	//IF statement stub (continue to global commands for processing)
-	if (SetCaseCopy(LineData.substr(0, 2), false) == "if")
+	//IF/While statement stub (continue to global commands for processing)
+	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
 		return sContinue;
 
 	//process functions

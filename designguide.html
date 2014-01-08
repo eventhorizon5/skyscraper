@@ -91,17 +91,22 @@ Height = %myvariable%<br>
 <br>
 </font></p>
 
-<p align="left"><strong>3. IF statements</strong></p>
+<p align="left"><strong>3. IF/While statements</strong></p>
 
-<p align="left">Basic IF statements can be made, with the following syntax:<br>
+<p align="left">Basic IF and While statements can be made, with the following
+syntax:<br>
 <font face="Courier New, Courier, mono" size="2">if[<em>expression</em>]
-command</font></p>
+command<br>
+while[<em>expression</em>] command</font></p>
 
 <p align="left">Available signs are = (equals), &gt; (greater than), &lt; (less
 than), ! (is not), &amp; (and) and | (or). Expressions can also be enclosed in
-parenthesis. Note that the IF statement only works with the current line, and
-does not currently support multiple lines within an IF block, an "else"
-statement, or nesting.</p>
+parenthesis. Note that IF/While statements only work with the current line,
+and do not currently support multiple lines within an IF/While block, an "else"
+statement, or nesting. A While statement will loop the current line until the
+expression is false, so be careful with this because it can create an infinite
+loop if the expression is always true. See the <em>Functions</em> section below for an example of a While
+statement.</p>
 
 <p align="left">For example, to set the height to 9.5 if the floor number is
 less than 82:<br>
@@ -209,7 +214,31 @@ SetAutoSize = %param1%, %param2%<br>
 test(false, false)</font></p>
 
 <p>In the above example, the command that ends up being performed is
-"SetAutoSize = false, false".</p>
+"SetAutoSize = false, false".  Here is an example of using a While statement to loop a function:</p>
+
+<p><font face="Courier New, Courier, mono" size="2">set a = 0<br>
+&lt;Function testing&gt;<br>
+set a = %a% + 1<br>
+print %a%<br>
+&lt;EndFunction&gt;<br><br>
+while [%a% &lt; 5] testing()<br>
+print finished</font></p>
+
+<p>The console output of that ends up being:</p>
+<p><font face="Courier New, Courier, mono" size="2">1<br>
+2<br>
+3<br>
+4<br>
+5<br>
+finished</font></p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
 
 <p> </p>
 </div>
@@ -756,8 +785,8 @@ framework (true) or if it's part of the current floor (false).</p>
 below the floor of the current floor/level<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddInterfloorFloor
 <em>name, texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
-<em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis, texture_direction, tw</em>,
-<em>th</em></font><br>
+<em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis, texture_direction,
+tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddInterfloorFloor My
 IFloor, brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
 
@@ -3010,8 +3039,29 @@ defaults, use 0 for the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
 Print</strong> - prints the contents of a line to the console. This command
 will still convert variables and even math expressions, and output the
 results.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2">Print text</font><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Print text</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
+Delete</strong> - deletes an object.  This command is normally used after a building has loaded.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Delete object_number</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">Delete 12</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
+RunAction</strong> - runs an action by name.  This command is normally used after a building has loaded.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">RunAction name</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">RunAction myaction</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
+GotoFloor</strong> - jumps the user to the specified floor.  This command is normally used after a building has loaded.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">GotoFloor floor</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">GotoFloor 3</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
@@ -3026,7 +3076,7 @@ current script and start the simulation. This is optional.<br>
 Example: <font face="Courier New, Courier, mono" size="2">&lt;end&gt;</font></p>
 
 <p align="left"><br>
-<strong>10. BREAK command</strong></p>
+<strong>9. BREAK command</strong></p>
 
 <p align="left">The Break command triggers a break section in the script
 processor, and is used when running the simulator in debug mode. A debugger
