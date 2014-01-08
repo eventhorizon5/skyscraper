@@ -27,6 +27,9 @@
 
 #include <wx/app.h>
 #include <wx/frame.h>
+#include <OgreRoot.h>
+#include <OgreRenderWindow.h>
+#include <OgreConfigFile.h>
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "fileio.h"

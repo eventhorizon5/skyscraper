@@ -26,10 +26,6 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
-#include <OgreRoot.h>
-#include <OgreRenderWindow.h>
-#include <OgreConfigFile.h>
-#include <fmod.hpp>
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
