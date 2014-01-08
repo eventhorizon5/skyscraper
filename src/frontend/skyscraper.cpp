@@ -438,6 +438,7 @@ void Skyscraper::GetInput()
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 	mKeyboard->capture();
+	mMouse->capture();
 
 	// First get elapsed time from the virtual clock.
 	elapsed_time = Simcore->GetElapsedTime();
@@ -470,21 +471,28 @@ void Skyscraper::GetInput()
 	old_mouse_y = Simcore->mouse_y;
 
 	//get mouse pointer coordinates
-	Simcore->mouse_x = mMouse->getMouseState().X.rel;
-	Simcore->mouse_y = mMouse->getMouseState().Y.rel;
+	if (Simcore->camera->Freelook == false)
+	{
+		Simcore->mouse_x = mMouse->getMouseState().X.abs;
+		Simcore->mouse_y = mMouse->getMouseState().Y.abs;
+	}
+	else
+	{
+		Simcore->mouse_x = mMouse->getMouseState().X.rel;
+		Simcore->mouse_y = mMouse->getMouseState().Y.rel;
+	}
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
-	/*if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
+	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
-		window->WarpPointer(window->GetClientSize().GetWidth() / 2, window->GetClientSize().GetHeight() / 2);
 		Ogre::Vector3 rotational;
-		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (window->GetClientSize().GetHeight() / 2))) / (window->GetClientSize().GetHeight() * 2));
-		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((window->GetClientSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetClientSize().GetWidth() * 2));
+		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * ((float)Simcore->mouse_y / (mRenderWindow->getHeight() * 2)));
+		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * ((float)Simcore->mouse_x / (mRenderWindow->getWidth() * 2)));
 		rotational.z = 0;
 		rotational *= 60;
 		Simcore->camera->desired_angle_velocity = rotational;
 		Simcore->camera->angle_velocity = rotational;
-	}*/
+	}
 
 	//check if the user clicked on an object, and process it
 	if (mMouse->getMouseState().buttonDown(OIS::MB_Left) == true && MouseDown == false)
@@ -510,7 +518,7 @@ void Skyscraper::GetInput()
 
 	if (mKeyboard->isKeyDown(OIS::KC_F2) && wait == false)
 	{
-		//Report(std::string(wxVariant(Simcore->FPS).GetString().ToAscii()));
+		Report(Ogre::StringConverter::toString(Simcore->FPS));
 		wait = true;
 	}
 
@@ -662,23 +670,25 @@ void Skyscraper::GetInput()
 			dpanel->Show(true);
 			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 		}*/
-		/*if (mKeyboard->isKeyDown(WXK_F5) && wait == false)
+		if (mKeyboard->isKeyDown(OIS::KC_F5) && wait == false)
 		{
 			//enable/disable freelook mode
 			Simcore->camera->Freelook = !Simcore->camera->Freelook;
-			if (Simcore->camera->Freelook == true)
+			/*if (Simcore->camera->Freelook == true)
 				window->SetCursor(wxCURSOR_CROSS);
 			else
-				window->SetCursor(wxNullCursor);
+				window->SetCursor(wxNullCursor);*/
 			wait = true;
-		}*/
+		}
 		if (mKeyboard->isKeyDown(OIS::KC_F10) && wait == false)
 		{
 			//enable/disable fullscreen mode
 			FullScreen = !FullScreen;
-			//window->ShowFullScreen(FullScreen);
-			//window->ToggleWindowStyle(wxSTAY_ON_TOP);
-			//window->Refresh();
+			const Ogre::ConfigOptionMap::iterator opti = mRoot->getRenderSystem()->getConfigOptions().find("Video Mode");
+			Ogre::StringVector vmopts = Ogre::StringUtil::split(opti->second.currentValue, " x");
+			unsigned int w = Ogre::StringConverter::parseUnsignedInt(vmopts[0]);
+			unsigned int h = Ogre::StringConverter::parseUnsignedInt(vmopts[1]);
+			mRenderWindow->setFullscreen(FullScreen, w, h);
 			wait = true;
 		}
 		if (mKeyboard->isKeyDown(OIS::KC_SUBTRACT) || mKeyboard->isKeyDown(OIS::KC_LBRACKET))
@@ -735,9 +745,9 @@ void Skyscraper::Loop()
 	//main menu routine
 	if (IsRunning == false)
 	{
-		DrawBackground();
+		//DrawBackground();
 		GetMenuInput();
-		Render();
+		//Render();
 		return;
 	}
 
@@ -1096,49 +1106,48 @@ void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
-	return;
-
 	//exit if simulator is starting
 	if (Starting == true)
 		return;
 
 	//exit if there aren't any buttons
-	/*if (!buttons || buttoncount == 0)
+	if (!buttons || buttoncount == 0)
 		return;
 
 	//get mouse coordinates
-	int mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
-	int mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
+	mMouse->capture();
+	int mouse_x = mMouse->getMouseState().X.abs;
+	int mouse_y = mMouse->getMouseState().Y.abs;
 
 	for (int i = 0; i < buttoncount; i++)
 	{
 		buttondata *button = &buttons[i];
 
 	    //only process buttons if main window is selected
-        if (window->Active != false)
-        {
+        //if (window->Active != false)
+        //{
 			float mx = mouse_x;
 			float my = mouse_y;
-			float w = mx / window->GetClientSize().x;
-			float h = my / window->GetClientSize().y;
+			float w = mx / mRenderWindow->getWidth();
+			float h = my / mRenderWindow->getHeight();
 			float mouse_x_rel = (w * 2) - 1;
 			float mouse_y_rel = (h * 2) - 1;
 
         	//change button status based on mouse position and button press status
         	if (mouse_x_rel > button->x && mouse_x_rel < button->x + button->size_x && mouse_y_rel > button->y && mouse_y_rel < button->y + button->size_y)
         	{
-        		if (button->drawn_selected == false && wxGetMouseState().LeftIsDown() == false)
+        		if (button->drawn_selected == false && mMouse->getMouseState().buttonDown(OIS::MB_Left) == false)
         		{
         			if (button->drawn_pressed == true)
         			{
         				//user clicked on button
-					button->drawn_selected = true;
+        				button->drawn_selected = true;
         				Click(i);
         				return;
         			}
         			button->drawn_selected = true;
         		}
-        		if (button->drawn_pressed == false && wxGetMouseState().LeftIsDown() == true)
+        		if (button->drawn_pressed == false && mMouse->getMouseState().buttonDown(OIS::MB_Left) == true)
         		{
         			button->drawn_pressed = true;
         			button->drawn_selected = false;
@@ -1149,8 +1158,8 @@ void Skyscraper::GetMenuInput()
         		button->drawn_selected = false;
         		button->drawn_pressed = false;
         	}
-        }
-	}*/
+        //}
+	}
 }
 
 void Skyscraper::Click(int index)
@@ -1542,8 +1551,7 @@ bool Skyscraper::frameStarted(const Ogre::FrameEvent& evt)
 	if (Simcore)
 		Simcore->elapsed_time = evt.timeSinceLastFrame * 1000;
 
-	if (IsRunning == true)
-		Loop();
+	Loop();
 	return true;
 }
 
