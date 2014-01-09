@@ -85,7 +85,7 @@
     <ClCompile>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>false</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(WXWIN)\\lib\vc_dll\mswu;$(WXWIN)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -110,7 +110,7 @@
     <Link>
       <AdditionalDependencies>OgreMain.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
-      <AdditionalLibraryDirectories>..\;$(OGRE_HOME)\lib\release;$(WXWIN)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\;$(OGRE_HOME)\lib\release;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>..\SBS.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -133,7 +133,7 @@
     <ClCompile>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(WXWIN_64)\\lib\vc_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -158,7 +158,7 @@
     <Link>
       <AdditionalDependencies>OgreMain.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
-      <AdditionalLibraryDirectories>..\;$(OGRE_HOME_64)\lib\release;$(WXWIN_64)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\;$(OGRE_HOME_64)\lib\release;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>..\SBS.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -179,7 +179,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(WXWIN)\\lib\vc_dll\mswu;$(WXWIN)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -201,7 +201,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     <Link>
       <AdditionalDependencies>OgreMain_d.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
-      <AdditionalLibraryDirectories>..\;$(OGRE_HOME)\lib\debug;$(WXWIN)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\;$(OGRE_HOME)\lib\debug;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/SBS.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -224,7 +224,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     </PreBuildEvent>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(WXWIN_64)\\lib\vc_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -246,7 +246,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     <Link>
       <AdditionalDependencies>OgreMain_d.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
-      <AdditionalLibraryDirectories>..\;$(OGRE_HOME_64)\lib\debug;$(WXWIN_64)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\;$(OGRE_HOME_64)\lib\debug;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/SBS.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -285,6 +285,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     <ClCompile Include="..\src\sbs\stairs.cpp" />
     <ClCompile Include="..\src\sbs\texmap.cpp" />
     <ClCompile Include="..\src\sbs\texture.cpp" />
+    <ClCompile Include="..\src\sbs\timer.cpp" />
     <ClCompile Include="..\src\sbs\trigger.cpp" />
     <ClCompile Include="..\src\sbs\unix.cpp" />
     <ClCompile Include="..\src\sbs\wall.cpp" />
@@ -312,6 +313,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     <ClInclude Include="..\src\sbs\shaft.h" />
     <ClInclude Include="..\src\sbs\sound.h" />
     <ClInclude Include="..\src\sbs\stairs.h" />
+    <ClInclude Include="..\src\sbs\timer.h" />
     <ClInclude Include="..\src\sbs\trigger.h" />
     <ClInclude Include="..\src\sbs\unix.h" />
     <ClInclude Include="..\src\sbs\wall.h" />

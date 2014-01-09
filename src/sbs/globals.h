@@ -31,7 +31,10 @@
 
 //DLL Exporting
 #ifdef _WIN32
-	#if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__GNUC__) || defined(__WATCOMC__)
+	#if defined(_MSC_VER)
+		#define __VISUALC__ _MSC_VER
+	#endif
+	#if defined(__VISUALC__) || defined(__GNUC__)
 		#ifdef SBS_DLL
 			#define SBSIMPEXP __declspec(dllexport)
 			#define SBSIMPEXP_DATA(type) __declspec(dllexport) type
