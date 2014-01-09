@@ -531,6 +531,13 @@ void SBS::MainLoop()
 	//depending on frame rate
 	float elapsed = remaining_delta + (GetElapsedTime() / 1000.0);
 
+	//limit the elapsed value to prevent major slowdowns during debugging
+	if (elapsed > .5f)
+		elapsed = .5f;
+
+	//process camera loop
+	camera->Loop(elapsed);
+
 	//calculate start and running time
 	if (start_time == 0)
 		start_time = GetRunTime() / 1000.0;
@@ -569,9 +576,6 @@ void SBS::MainLoop()
 	soundsys->update();
 	SBSProfileManager::Stop_Profile();
 
-	//limit the elapsed value to prevent major slowdowns during debugging
-	if (elapsed > 0.5)
-		elapsed = 0.5;
 	SBSProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{

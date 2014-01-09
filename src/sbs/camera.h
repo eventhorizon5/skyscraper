@@ -104,7 +104,7 @@ public:
 	int GetClickedObjectLine();
 	const char* GetClickedObjectCommand();
 	const char* GetClickedObjectCommandP();
-	void Loop();
+	void Loop(float delta);
 	void Strafe(float speed);
 	void Step(float speed);
 	void Float(float speed);
@@ -112,7 +112,7 @@ public:
 	void Look(float speed);
 	void Turn(float speed);
 	void Spin(float speed);
-	void InterpolateMovement();
+	void InterpolateMovement(float delta);
 	void SetGravity(float gravity, bool save_value = true);
 	float GetGravity();
 	void EnableGravity(bool value);

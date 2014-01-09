@@ -761,7 +761,7 @@ const char *Camera::GetClickedObjectCommandP()
 	return object_cmd_processed.c_str();
 }
 
-void Camera::Loop()
+void Camera::Loop(float delta)
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
@@ -781,13 +781,9 @@ void Camera::Loop()
 	}
 
 	//calculate acceleration
-	InterpolateMovement();
+	InterpolateMovement(delta);
 
 	//general movement
-
-	float delta = sbs->GetElapsedTime() / 1000.0f;
-	if (delta > .3f)
-		delta = .3f;
 
 	RotateLocal(angle_velocity, delta * speed);
 	Move(velocity, delta * speed, false);
@@ -892,24 +888,23 @@ void Camera::Spin(float speed)
 	desired_angle_velocity.z = cfg_spinspeed * speed * cfg_rotate_maxspeed;
 }
 
-void Camera::InterpolateMovement()
+void Camera::InterpolateMovement(float delta)
 {
 	//calculate acceleration
 
-	float elapsed = sbs->GetElapsedTime() / 1000.0f;
-	elapsed *= 1700.0f;
+	delta *= 1700.0f;
 
 	for (size_t i = 0; i < 3; i++)
 	{
 		if (velocity[i] < desired_velocity[i])
 		{
-			velocity[i] += cfg_walk_accelerate * elapsed;
+			velocity[i] += cfg_walk_accelerate * delta;
 			if (velocity[i] > desired_velocity[i])
 				velocity[i] = desired_velocity[i];
 		}
 		else
 		{
-			velocity[i] -= cfg_walk_accelerate * elapsed;
+			velocity[i] -= cfg_walk_accelerate * delta;
 			if (velocity[i] < desired_velocity[i])
 				velocity[i] = desired_velocity[i];
 		}
@@ -919,13 +914,13 @@ void Camera::InterpolateMovement()
 	{
 		if (angle_velocity[i] < desired_angle_velocity[i])
 		{
-			angle_velocity[i] += cfg_rotate_accelerate * elapsed;
+			angle_velocity[i] += cfg_rotate_accelerate * delta;
 			if (angle_velocity[i] > desired_angle_velocity[i])
 				angle_velocity[i] = desired_angle_velocity[i];
 		}
 		else
 		{
-			angle_velocity[i] -= cfg_rotate_accelerate * elapsed;
+			angle_velocity[i] -= cfg_rotate_accelerate * delta;
 			if (angle_velocity[i] < desired_angle_velocity[i])
 				angle_velocity[i] = desired_angle_velocity[i];
 		}

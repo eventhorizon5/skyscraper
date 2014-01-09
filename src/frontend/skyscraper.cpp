@@ -896,14 +896,11 @@ void Skyscraper::Loop()
 	if (IsRunning == true)
 		Simcore->CalculateFrameRate();
 
-	//run SBS main loop
-	Simcore->MainLoop();
-
 	//get input
 	GetInput();
 
-	//process camera loop
-	Simcore->camera->Loop();
+	//run SBS main loop
+	Simcore->MainLoop();
 
 	//update Caelum
 	if (mCaelumSystem)
