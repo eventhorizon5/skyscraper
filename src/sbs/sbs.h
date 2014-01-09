@@ -35,6 +35,9 @@
 #include <OgreSceneManager.h>
 #include <fmod.hpp>
 
+//fix naming collision on Windows
+#undef GetObject
+
 //external class declarations
 namespace OgreBulletDynamics {
 	class DynamicsWorld;
