@@ -510,7 +510,7 @@ void Skyscraper::GetInput()
 
 	if (mKeyboard->isKeyDown(OIS::KC_F2) && wait == false)
 	{
-		Report(Ogre::StringConverter::toString(Simcore->FPS));
+		Report(ToString2(Simcore->FPS));
 		wait = true;
 	}
 
