@@ -61,6 +61,7 @@ namespace OgreBulletCollisions {
 #include "control.h"
 #include "trigger.h"
 #include "action.h"
+#include "timer.h"
 
 //global functions
 
@@ -248,6 +249,8 @@ public:
 	bool UnregisterDoorCallback(Door *door);
 	bool RegisterCallButtonCallback(CallButton *button);
 	bool UnregisterCallButtonCallback(CallButton *button);
+	bool RegisterTimerCallback(TimerObject *timer);
+	bool UnregisterTimerCallback(TimerObject *timer);
 	void ProcessTextureFlip(float tw, float th);
 	bool GetTextureTiling(const char *texture, float &tw, float &th);
 	bool GetTextureForce(const char *texture, bool &enable_force, bool &force_mode);
@@ -255,8 +258,10 @@ public:
 	bool AddTextureOverlay(const char *orig_texture, const char *overlay_texture, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	void ProcessDoors();
 	void ProcessCallButtons();
+	void ProcessTimers();
 	int GetDoorCallbackCount();
 	int GetCallButtonCallbackCount();
+	int GetTimerCallbackCount();
 	bool Mount(const char *filename, const char *path);
 	void FreeTextureImages();
 	void AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end);
@@ -468,6 +473,9 @@ private:
 
 	//call button object array for callback
 	std::vector<CallButton*> buttoncallbacks;
+
+	//timer callback array
+	std::vector<TimerObject*> timercallbacks;
 
 	//auto area structure
 	struct AutoArea

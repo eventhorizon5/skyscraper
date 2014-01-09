@@ -603,6 +603,9 @@ void SBS::MainLoop()
 		//process call button callbacks
 		ProcessCallButtons();
 
+		//process timers
+		ProcessTimers();
+
 		//process misc operations on current floor
 		if (GetFloor(camera->CurrentFloor))
 			GetFloor(camera->CurrentFloor)->Loop();
@@ -616,6 +619,7 @@ void SBS::MainLoop()
 			if (TriggerArray[i])
 				TriggerArray[i]->Check();
 		}
+
 		elapsed -= delta;
 	}
 	remaining_delta = elapsed;
@@ -2399,6 +2403,50 @@ bool SBS::UnregisterCallButtonCallback(CallButton *button)
 	return true;
 }
 
+bool SBS::RegisterTimerCallback(TimerObject *timer)
+{
+	//register a timer object for callbacks
+
+	int index = -1;
+	for (int i = 0; i < (int)timercallbacks.size(); i++)
+	{
+		if (timercallbacks[i] == timer)
+			index = i;
+	}
+
+	if (index == -1)
+	{
+		//if timer isn't already in the array, add it
+		timercallbacks.push_back(timer);
+	}
+	else
+		return false;
+	return true;
+}
+
+bool SBS::UnregisterTimerCallback(TimerObject *timer)
+{
+	int index = -1;
+	for (int i = 0; i < (int)timercallbacks.size(); i++)
+	{
+		if (timercallbacks[i] == timer)
+			index = i;
+	}
+
+	if (index != -1 && timercallbacks[index])
+	{
+		//unregister existing call button callback
+		for (int i = 0; i < (int)timercallbacks.size(); i++)
+		{
+			if (timercallbacks[i] == timer)
+				timercallbacks.erase(timercallbacks.begin() + i);
+		}
+	}
+	else
+		return false;
+	return true;
+}
+
 void SBS::ProcessCallButtons()
 {
 	//process all registered call buttons
@@ -2436,6 +2484,16 @@ void SBS::ProcessDoors()
 	}
 }
 
+void SBS::ProcessTimers()
+{
+	//process all registered timers
+	for (int i = 0; i < (int)timercallbacks.size(); i++)
+	{
+		if (timercallbacks[i])
+			timercallbacks[i]->Check();
+	}
+}
+
 int SBS::GetDoorCallbackCount()
 {
 	//return the number of registered door callbacks
@@ -2446,6 +2504,12 @@ int SBS::GetCallButtonCallbackCount()
 {
 	//return the number of registered call button callbacks
 	return (int)buttoncallbacks.size();
+}
+
+int SBS::GetTimerCallbackCount()
+{
+	//return the number of registered call button callbacks
+	return (int)timercallbacks.size();
 }
 
 bool SBS::Mount(const char *filename, const char *path)
