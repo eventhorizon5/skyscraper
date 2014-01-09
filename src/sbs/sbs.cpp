@@ -529,7 +529,7 @@ void SBS::MainLoop()
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
-	float elapsed = remaining_delta + (GetElapsedTime() / 1000.0);
+	float elapsed = remaining_delta + (GetAverageTime() / 1000.0);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > .5f)
@@ -593,7 +593,7 @@ void SBS::MainLoop()
 	remaining_delta = elapsed;
 
 	//update physics
-	float step = float(GetElapsedTime()) / 1000.0;
+	float step = float(GetAverageTime()) / 1000.0;
 	int steps = 0;
 	if (camera->EnableBullet == true)
 	{
@@ -2072,7 +2072,7 @@ void SBS::SetListenerPosition(const Ogre::Vector3 &position)
 	//set position of sound listener object
 
 	//calculate sound velocity
-	if (GetElapsedTime() > 0)
+	if (GetAverageTime() > 0)
 	{
 		listener_velocity.x = (position.x - listener_position.x) * (1000 / GetElapsedTime());
 		listener_velocity.y = (position.y - listener_position.y) * (1000 / GetElapsedTime());
@@ -3718,7 +3718,7 @@ void SBS::CalculateAverageTime()
 		return;
 
 	//maximum number of milliseconds to hold timing info
-	unsigned int smoothing_limit = 150;
+	unsigned int smoothing_limit = 200;
 	
 	//find oldest time to keep
 	std::deque<unsigned long>::iterator it = frame_times.begin(), end = frame_times.end() - 2;

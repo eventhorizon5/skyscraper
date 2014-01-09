@@ -581,7 +581,6 @@ void Skyscraper::GetInput()
 	static int old_mouse_x, old_mouse_y;
 
 	// First get elapsed time from the virtual clock.
-	elapsed_time = Simcore->GetElapsedTime();
 	current_time = Simcore->GetRunTime();
 
 	//speed limit certain keys
@@ -598,9 +597,6 @@ void Skyscraper::GetInput()
 			wait = false;
 		}
 	}
-
-	// Now rotate the camera according to keyboard state
-	//float speed = elapsed_time / 1000.0f;
 
 	//fix for the camera velocities due to the non-event driven key system
 	Simcore->camera->desired_velocity = Ogre::Vector3(0, 0, 0);
