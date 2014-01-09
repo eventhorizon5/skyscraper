@@ -34,6 +34,7 @@
 #include "floorindicator.h"
 #include "door.h"
 #include "model.h"
+#include "timer.h"
 
 class SBSIMPEXP Elevator
 {
@@ -312,12 +313,12 @@ public:
 private:
 
 	//elevator parking timer
-	class Timer : public wxTimer
+	class Timer : public TimerObject
 	{
 	public:
 		Elevator *elevator;
 		int type; //0 = parking timer, 1 = random timer, 2 = arrival, 3 = departure
-		Timer(Elevator *elev, int Type)
+		Timer(std::string name, Elevator *elev, int Type) : TimerObject(elev->object, name.c_str(), false)
 		{
 			elevator = elev;
 			type = Type;

@@ -197,10 +197,10 @@ Elevator::Elevator(int number)
 	GoPending = false;
 
 	//create timers
-	parking_timer = new Timer(this, 0);
-	random_timer = new Timer(this, 1);
-	arrival_delay = new Timer(this, 2);
-	departure_delay = new Timer(this,3);
+	parking_timer = new Timer("Parking Timer", this, 0);
+	random_timer = new Timer("Random Timer", this, 1);
+	arrival_delay = new Timer("Arrival Delay Timer", this, 2);
+	departure_delay = new Timer("Departure Delay Timer", this,3);
 
 	//create object meshes
 	buffer = ToString(Number);
@@ -264,31 +264,19 @@ Elevator::~Elevator()
 		Report("deleting timers");
 
 	if (parking_timer)
-	{
-		parking_timer->Stop();
 		delete parking_timer;
-	}
 	parking_timer = 0;
 
 	if (random_timer)
-	{
-		random_timer->Stop();
 		delete random_timer;
-	}
 	random_timer = 0;
 
 	if (arrival_delay)
-	{
-		arrival_delay->Stop();
 		delete arrival_delay;
-	}
 	arrival_delay = 0;
 
 	if (departure_delay)
-	{
-		departure_delay->Stop();
 		delete departure_delay;
-	}
 	departure_delay = 0;
 
 	//delete directional indicators

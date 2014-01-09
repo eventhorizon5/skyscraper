@@ -26,7 +26,7 @@
 #ifndef _SBS_ELEVATORDOOR_H
 #define _SBS_ELEVATORDOOR_H
 
-#include <wx/timer.h>
+#include "timer.h"
 #include "sound.h"
 
 class Elevator;
@@ -175,13 +175,13 @@ private:
 	void MoveDoors(bool open, bool manual);
 
 	//door autoclose timer
-	class Timer : public wxTimer
+	class Timer : public TimerObject
 	{
 	public:
 		ElevatorDoor *door;
 		Elevator *elevator;
 		int type; //0 = autoclose, 1 = nudge
-		Timer(ElevatorDoor *parent, Elevator *elev, int Type)
+		Timer(std::string name, ElevatorDoor *parent, Elevator *elev, int Type) : TimerObject(parent->object, name.c_str(), false)
 		{
 			door = parent;
 			elevator = elev;

@@ -81,6 +81,7 @@ class ScriptProcessor
 	int lockvalue;
 	bool warn_deprecated;
 	bool show_percent;
+	bool InWhile;
 
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();

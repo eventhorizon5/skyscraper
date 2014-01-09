@@ -72,8 +72,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	Doors = new DoorWrapper(this, false);
 
 	//create timers
-	timer = new Timer(this, elev, 0);
-	nudgetimer = new Timer(this, elev, 1);
+	timer = new Timer("Door Close Timer", this, elev, 0);
+	nudgetimer = new Timer("Nudge Timer", this, elev, 1);
 
 	//create shaft door objects
 	ShaftDoors.resize(elev->ServicedFloors.size());
@@ -103,16 +103,11 @@ ElevatorDoor::~ElevatorDoor()
 
 	//Destructor
 	if (timer)
-	{
-		timer->Stop();
 		delete timer;
-	}
 	timer = 0;
+
 	if (nudgetimer)
-	{
-		nudgetimer->Stop();
 		delete nudgetimer;
-	}
 	nudgetimer = 0;
 
 	if (doorsound)
