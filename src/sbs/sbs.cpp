@@ -535,52 +535,16 @@ void SBS::MainLoop()
 	if (elapsed > .5f)
 		elapsed = .5f;
 
-	//process camera loop
-	camera->Loop(elapsed);
-
 	//calculate start and running time
 	if (start_time == 0)
 		start_time = GetRunTime() / 1000.0;
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
-	//update physics
-	float step = float(GetElapsedTime()) / 1000.0;
-	int steps = 0;
-	if (camera->EnableBullet == true)
-	{
-		if (enable_advanced_profiling == false)
-			SBSProfileManager::Start_Profile("Collisions/Physics");
-		else
-			SBSProfileManager::Start_Profile("Bullet");
-		steps = mWorld->stepSimulation(step, 1);
-		SBSProfileManager::Stop_Profile();
-	}
-
-	//only move character if Bullet processed a step (within it's 60fps timestep)
-	if (camera->EnableBullet == true)
-	{
-		if (steps >= 1)
-			camera->MoveCharacter();
-	}
-	else
-		camera->MoveCharacter();
-
-	//sync camera to physics
-	camera->Sync();
-
-	//update sound
-	if (enable_advanced_profiling == false)
-		SBSProfileManager::Start_Profile("Sound");
-	else
-		SBSProfileManager::Start_Profile("FMOD");
-	soundsys->update();
-	SBSProfileManager::Stop_Profile();
-
 	SBSProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{
-		//Determine floor that the camera is on
-		camera->UpdateCameraFloor();
+		//Process camera loop
+		camera->Loop(delta);
 
 		//run elevator handlers
 		if (ProcessElevators == true)
@@ -627,6 +591,40 @@ void SBS::MainLoop()
 		elapsed -= delta;
 	}
 	remaining_delta = elapsed;
+
+	//update physics
+	float step = float(GetElapsedTime()) / 1000.0;
+	int steps = 0;
+	if (camera->EnableBullet == true)
+	{
+		if (enable_advanced_profiling == false)
+			SBSProfileManager::Start_Profile("Collisions/Physics");
+		else
+			SBSProfileManager::Start_Profile("Bullet");
+		steps = mWorld->stepSimulation(step, 1);
+		SBSProfileManager::Stop_Profile();
+	}
+
+	//only move character if Bullet processed a step (within it's 60fps timestep)
+	if (camera->EnableBullet == true)
+	{
+		if (steps >= 1)
+			camera->MoveCharacter();
+	}
+	else
+		camera->MoveCharacter();
+
+	//sync camera to physics
+	camera->Sync();
+
+	//update sound
+	if (enable_advanced_profiling == false)
+		SBSProfileManager::Start_Profile("Sound");
+	else
+		SBSProfileManager::Start_Profile("FMOD");
+	soundsys->update();
+	SBSProfileManager::Stop_Profile();
+
 	SBSProfileManager::Stop_Profile();
 }
 
@@ -3720,7 +3718,7 @@ void SBS::CalculateAverageTime()
 		return;
 
 	//maximum number of milliseconds to hold timing info
-	unsigned int smoothing_limit = 1000;
+	unsigned int smoothing_limit = 150;
 	
 	//find oldest time to keep
 	std::deque<unsigned long>::iterator it = frame_times.begin(), end = frame_times.end() - 2;

@@ -842,6 +842,9 @@ void Camera::Loop(float delta)
 
 	//sync camera with collider
 	Sync();
+
+	//Determine floor that the camera is on
+	UpdateCameraFloor();
 }
 
 void Camera::Strafe(float speed)
