@@ -86,7 +86,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(WXWIN)\\lib\vc_dll\mswu;$(WXWIN)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -108,7 +108,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain.lib;wxbase29u.lib;wxmsw29u_core.lib;wxmsw29u_gl.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
       <AdditionalLibraryDirectories>..\;$(OGRE_HOME)\lib\release;$(WXWIN)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -134,7 +134,7 @@
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(WXWIN_64)\\lib\vc_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -156,7 +156,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain.lib;wxbase29u.lib;wxmsw29u_core.lib;wxmsw29u_gl.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
       <AdditionalLibraryDirectories>..\;$(OGRE_HOME_64)\lib\release;$(WXWIN_64)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -180,7 +180,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(BULLET_HOME)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(WXWIN)\\lib\vc_dll\mswu;$(WXWIN)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -199,7 +199,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
       <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain_d.lib;wxbase29ud.lib;wxmsw29ud_core.lib;wxmsw29ud_gl.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
       <AdditionalLibraryDirectories>..\;$(OGRE_HOME)\lib\debug;$(WXWIN)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -225,7 +225,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;..\ogrebullet\Dynamics\include\Prefab;..\ogrebullet\Dynamics\include\Constraints;..\ogrebullet\Dynamics\include;..\ogrebullet\Collisions\include\Utils;..\ogrebullet\Collisions\include\Shapes;..\ogrebullet\Collisions\include\Debug;..\ogrebullet\Collisions\include;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(WXWIN_64)\\lib\vc_dll\mswu;$(WXWIN_64)\include;$(FMOD_HOME)\api\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;SBS_DLL;_UNICODE;UNICODE;NOPCH;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -244,7 +244,7 @@ rem ..\svnrev\svnrev.exe -o..\src\sbs\revsbs.h -i ..\src\sbs\*.cpp ..\src\sbs\*.
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain_d.lib;wxbase29ud.lib;wxmsw29ud_core.lib;wxmsw29ud_gl.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../SBS.dll</OutputFile>
       <AdditionalLibraryDirectories>..\;$(OGRE_HOME_64)\lib\debug;$(WXWIN_64)\lib\vc_dll;$(FMOD_HOME)\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
