@@ -56,8 +56,9 @@ public:
 	std::string SkyName;
 
 	bool IsRunning;
+	bool IsLoading;
 	bool StartupRunning;
-	bool Starting;
+	bool LoadError;
 	bool Pause; //pause simulator
 	bool DisableSound;
 	bool IntroMusic;
@@ -92,6 +93,7 @@ public:
 	void StartSound();
 	void StopSound();
 	bool SelectBuilding();
+	bool Load();
 	bool Start();
 	void AllowResize(bool value);
 	void Unload();

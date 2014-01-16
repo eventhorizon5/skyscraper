@@ -1865,9 +1865,6 @@ void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 	Simcore->DeleteColliders = true;
 	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
 	processor->LoadFromText(command.ToAscii());
-	processor->Run();
-	Simcore->Prepare(false);
-	Simcore->DeleteColliders = false;
 	this->Close();
 }
 

@@ -96,8 +96,9 @@ bool Skyscraper::OnInit(void)
 	skyscraper = this;
 	MouseDown = false;
 	IsRunning = false;
+	IsLoading = false;
+	LoadError = false;
 	StartupRunning = false;
-	Starting = false;
 	Pause = false;
 	FullScreen = false;
 	Shutdown = false;
@@ -154,7 +155,7 @@ bool Skyscraper::OnInit(void)
 	//autoload a building file if specified
 	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
 	if (BuildingFile != "")
-		return Start();
+		return Load();
 
 	//set size of menu window from INI file defaults
 	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
@@ -172,7 +173,7 @@ bool Skyscraper::OnInit(void)
 	{
 		//or show building selection window if ShowMenu is false
 		if (SelectBuilding() == true)
-			return Start();
+			return Load();
 		else
 			return false;
 	}
@@ -311,7 +312,7 @@ void MainScreen::ShowWindow()
 
 void MainScreen::OnIdle(wxIdleEvent& event)
 {
-	if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true)
+	if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true || skyscraper->IsLoading == true)
 		skyscraper->Loop(); //run simulator loop
 	if (skyscraper->Pause == false)
 		event.RequestMore(); //request more idles
@@ -873,7 +874,7 @@ void Skyscraper::Loop()
 	SBSProfileManager::Increment_Frame_Counter();
 
 	//main menu routine
-	if (IsRunning == false)
+	if (IsRunning == false && IsLoading == false)
 	{
 		DrawBackground();
 		GetMenuInput();
@@ -881,6 +882,22 @@ void Skyscraper::Loop()
 		return;
 	}
 
+	//building script load loop
+	if (IsLoading == true)
+	{
+		if (!processor->Run())
+		{
+			ReportError("Error processing building\n");
+			LoadError = true;
+			Unload();
+		}
+		else if (processor->IsFinished == true)
+			Start();
+
+		return;
+	}
+
+	//main simulator loop
 	if (!Simcore)
 		return;
 
@@ -894,6 +911,17 @@ void Skyscraper::Loop()
 	Simcore->AdvanceClock();
 	if (IsRunning == true)
 		Simcore->CalculateFrameRate();
+
+	//run script processor
+	if (processor)
+	{
+		processor->Run();
+		if (processor->IsFinished == true)
+		{
+			Simcore->Prepare(false);
+			Simcore->DeleteColliders = false;
+		}
+	}
 
 	//get input
 	GetInput();
@@ -931,10 +959,10 @@ void Skyscraper::Loop()
 		override_position = Simcore->camera->GetPosition();
 		override_rotation = Simcore->camera->GetRotation();
 		IsRunning = false;
-		Starting = false;
+		IsLoading = false;
 		Pause = false;
 		UnloadSim();
-		Start();
+		Load();
 	}
 
 	//SBSProfileManager::dumpAll();
@@ -1232,8 +1260,8 @@ void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
-	//exit if simulator is starting
-	if (Starting == true)
+	//exit if simulator is loading
+	if (IsLoading == true)
 		return;
 
 	//exit if there aren't any buttons
@@ -1313,7 +1341,7 @@ void Skyscraper::Click(int index)
 	if (BuildingFile != "")
 	{
 		DeleteButtons();
-		Start();
+		Load();
 	}
 }
 
@@ -1436,9 +1464,9 @@ bool Skyscraper::SelectBuilding()
 	return true;
 }
 
-bool Skyscraper::Start()
+bool Skyscraper::Load()
 {
-	//start simulator
+	//load simulator and data file
 
 	//clear scene
 	mSceneMgr->clearScene();
@@ -1446,7 +1474,7 @@ bool Skyscraper::Start()
 	//clear screen
 	mRenderWindow->update();
 
-	Starting = true;
+	IsLoading = true;
 
 	//Create and initialize simulator
 	Simcore = new SBS(mRenderWindow, mSceneMgr, mCamera, root_dir.c_str(), dir_char.c_str(), soundsys);
@@ -1466,33 +1494,25 @@ bool Skyscraper::Start()
 		BuildingFile.insert(0, "buildings/");
 
 	//load script processor object and load building
-	bool loaderror = false;
 
 	processor->Reset();
 
 	if (!processor->LoadDataFile(BuildingFile.c_str()))
 	{
-		loaderror = true;
 		ReportFatalError("Error loading building file\n");
-	}
-	if (loaderror == false)
-	{
-		if (!processor->Run())
-		{
-			loaderror = true;
-			ReportError("Error processing building\n");
-		}
-	}
-
-	//report on missing files, if any
-	if (loaderror == false)
-		processor->ReportMissingFiles();
-
-	if (loaderror == true)
-	{
 		Unload();
 		return false;
 	}
+
+	return true;
+}
+
+bool Skyscraper::Start()
+{
+	//start simulator
+
+	//report on missing files, if any
+	processor->ReportMissingFiles();
 
 	//the sky needs to be created before Prepare() is called
 	bool sky_result = false;
@@ -1546,7 +1566,7 @@ bool Skyscraper::Start()
 	StopSound();
 	Simcore->IsRunning = true;
 	IsRunning = true;
-	Starting = false;
+	IsLoading = false;
 	StartupRunning = false;
 	Reload = false;
 	if (console)
@@ -1570,7 +1590,7 @@ void Skyscraper::Unload()
 	//unload sim
 	BuildingFile = "";
 	IsRunning = false;
-	Starting = false;
+	IsLoading = false;
 	Pause = false;
 	raised = false;
 	UnloadSim();

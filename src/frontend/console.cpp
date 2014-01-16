@@ -118,9 +118,6 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 	processor->LoadFromText(tCommand->GetValue().ToAscii());
 	if (chkEcho->GetValue() == true)
 		tConsole->AppendText(tCommand->GetValue());
-	processor->Run();
-	Simcore->Prepare(false);
-	Simcore->DeleteColliders = false;
 	tCommand->Clear();
 }
 

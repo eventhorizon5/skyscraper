@@ -40,6 +40,8 @@ class ScriptProcessor
 	void Reset();
 	std::vector<std::string> *GetBuildingData();
 
+	bool IsFinished;
+
 	private:
 	int line; //line number
 	std::string LineData; //line text
@@ -82,6 +84,7 @@ class ScriptProcessor
 	bool warn_deprecated;
 	bool show_percent;
 	bool InWhile;
+	int progress_marker;
 
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();

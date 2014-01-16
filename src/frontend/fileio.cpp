@@ -101,6 +101,8 @@ void ScriptProcessor::Reset()
 	warn_deprecated = skyscraper->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
 	show_percent = true;
 	InWhile = false;
+	IsFinished = false;
+	progress_marker = 0;
 	functions.clear();
 	includes.clear();
 	variables.clear();
@@ -122,13 +124,9 @@ bool ScriptProcessor::Run()
 	//building loader/script interpreter
 
 	int returncode = sContinue;
-	int progress_marker = 0;
+	IsFinished = false;
 
-	//don't show percent signs if not starting a new building file
-	if (line > 0)
-		show_percent = false;
-
-	while (line < (int)BuildingData.size())
+	if (line < (int)BuildingData.size())
 	{
 		LineData = BuildingData[line];
 		TrimString(LineData);
@@ -422,7 +420,9 @@ bool ScriptProcessor::Run()
 			Section = 0;
 			Context = "None";
 			skyscraper->Report("Exiting building script");
-			break; //exit data file parser
+			IsFinished = true;
+			show_percent = false;
+			return true; //exit data file parser
 		}
 		if (linecheck.substr(0, 7) == "<break>")
 		{
@@ -717,6 +717,11 @@ Nextline:
 			InWhile = false;
 		else
 			line++;
+	}
+	else
+	{
+		IsFinished = true;
+		show_percent = false;
 	}
 
 	return true;
