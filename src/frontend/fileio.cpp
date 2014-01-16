@@ -5354,7 +5354,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->SetMessageSound(true, temp2.c_str());
+		elev->SetMessageSound(true, true, temp2.c_str());
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "downmessage")
@@ -5365,7 +5365,29 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->SetMessageSound(false, temp2.c_str());
+		elev->SetMessageSound(true, false, temp2.c_str());
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "openmessage")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->SetMessageSound(false, true, temp2.c_str());
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "closemessage")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->SetMessageSound(false, false, temp2.c_str());
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "music ")

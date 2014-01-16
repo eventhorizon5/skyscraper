@@ -122,7 +122,8 @@ Elevator::Elevator(int number)
 	checkfirstrun = true;
 	UseFloorBeeps = false;
 	UseFloorSounds = false;
-	UseMessageSounds = false;
+	UseDirMessageSounds = false;
+	UseDoorMessageSounds = false;
 	MotorPosition = 0;
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
@@ -626,7 +627,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 	}
 
 	//if doors are open or moving in independent service mode, quit
-	if (IndependentService == true && (AreDoorsOpen() == false || CheckOpenDoor() == true))
+	if (IndependentService == true && (AreDoorsOpen() == false || AreDoorsMoving() != 0))
 	{
 		Report("floor button must be pressed before closing doors while in independent service");
 		return false;
@@ -996,7 +997,7 @@ void Elevator::ProcessCallQueue()
 	DownCall = false;
 
 	//set search direction to 0 if any related queue is empty, and if doors are not open or moving
-	if (AreDoorsOpen() == false && CheckOpenDoor() == false)
+	if (AreDoorsOpen() == false && AreDoorsMoving() == 0)
 	{
 		if (QueuePositionDirection == 1 && UpQueue.size() == 0)
 		{
@@ -1278,7 +1279,7 @@ void Elevator::MonitorLoop()
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
-			if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+			if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || AreDoorsMoving() != 0)
 			{
 				if (sbs->Verbose)
 					Report("playing idle sound");
@@ -1294,7 +1295,7 @@ void Elevator::MonitorLoop()
 					Report("stopping idle sound");
 				idlesound->Stop();
 			}
-			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
+			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping idle sound");
@@ -1310,7 +1311,7 @@ void Elevator::MonitorLoop()
 		{
 			if (InServiceMode() == false)
 			{
-				if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || CheckOpenDoor() == true)
+				if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || AreDoorsMoving() != 0)
 				{
 					if (sbs->Verbose)
 						Report("playing music");
@@ -1332,7 +1333,7 @@ void Elevator::MonitorLoop()
 					Report("stopping music");
 				musicsound->Pause();
 			}
-			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && CheckOpenDoor() == false)
+			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping music");
@@ -1374,7 +1375,7 @@ void Elevator::MonitorLoop()
 		//reset door timer if peak mode is enabled and a movement is pending
 		if ((UpPeak == true || DownPeak == true))
 		{
-			if ((UpQueue.size() != 0 || DownQueue.size() != 0) && (AreDoorsOpen() == true && CheckOpenDoor() == false))
+			if ((UpQueue.size() != 0 || DownQueue.size() != 0) && (AreDoorsOpen() == true && AreDoorsMoving() == 0))
 			{
 				if (door)
 				{
@@ -1420,7 +1421,7 @@ void Elevator::MoveElevatorToFloor()
 	//wait until doors are fully closed if WaitForDoors is true
 	if (WaitForDoors == true)
 	{
-		if (AreDoorsOpen() == true || CheckOpenDoor() == true)
+		if (AreDoorsOpen() == true || AreDoorsMoving() != 0)
 			return;
 		else
 			WaitForDoors = false;
@@ -3961,10 +3962,9 @@ bool Elevator::DoorsStopped(int number)
 	return false;
 }
 
-bool Elevator::CheckOpenDoor()
+int Elevator::AreDoorsMoving()
 {
-	//check each door's OpenDoor value and return true if any are not zero, or
-	//false if all are zero
+	//returns 1 if doors are opening, -1 if doors are closing, or 0 if doors are not moving
 
 	for (int i = 1; i <= NumDoors; i++)
 	{
@@ -3972,9 +3972,27 @@ bool Elevator::CheckOpenDoor()
 		if (door)
 		{
 			if (door->OpenDoor != 0)
-				return true;
+				return door->OpenDoor;
 		}
 	}
+	return 0;
+}
+
+bool Elevator::AreDoorsOpening()
+{
+	//returns true if doors are opening
+
+	if (AreDoorsMoving() == 1)
+		return true;
+	return false;
+}
+
+bool Elevator::AreDoorsClosing()
+{
+	//returns true if doors are closing
+
+	if (AreDoorsMoving() == -1)
+		return true;
 	return false;
 }
 
@@ -4147,7 +4165,7 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 bool Elevator::IsIdle()
 {
 	//return true if elevator is idle (not moving, doors are closed (unless in a peak mode) and not moving)
-	if (MoveElevator == false && (AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && CheckOpenDoor() == false && Running == true)
+	if (MoveElevator == false && (AreDoorsOpen() == false || UpPeak == true || DownPeak == true) && AreDoorsMoving() == 0 && Running == true)
 		return true;
 	else
 		return false;
@@ -4212,25 +4230,47 @@ void Elevator::SetFloorSound(const char *prefix)
 	UseFloorSounds = true;
 }
 
-void Elevator::SetMessageSound(bool direction, const char *filename)
+void Elevator::SetMessageSound(bool type, bool direction, const char *filename)
 {
+	//if type is true, sets up and down messages.  If false, sets open and close messages
 	//if direction is true, set up message sound; otherwise set down message sound
 
-	if (direction == true)
+	if (type == true)
 	{
-		if (sbs->Verbose)
-			Report("setting up message sound");
-		UpMessageSound = filename;
-		TrimString(UpMessageSound);
+		if (direction == true)
+		{
+			if (sbs->Verbose)
+				Report("setting up message sound");
+			UpMessageSound = filename;
+			TrimString(UpMessageSound);
+		}
+		else
+		{
+			if (sbs->Verbose)
+				Report("setting down message sound");
+			DownMessageSound = filename;
+			TrimString(DownMessageSound);
+		}
+		UseDirMessageSounds = true;
 	}
 	else
 	{
-		if (sbs->Verbose)
-			Report("setting down message sound");
-		DownMessageSound = filename;
-		TrimString(DownMessageSound);
+		if (direction == true)
+		{
+			if (sbs->Verbose)
+				Report("setting open message sound");
+			OpenMessageSound = filename;
+			TrimString(OpenMessageSound);
+		}
+		else
+		{
+			if (sbs->Verbose)
+				Report("setting close message sound");
+			CloseMessageSound = filename;
+			TrimString(CloseMessageSound);
+		}
+		UseDoorMessageSounds = true;
 	}
-	UseMessageSounds = true;
 }
 
 Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
@@ -4900,39 +4940,78 @@ bool Elevator::PlayFloorSound()
 	return true;
 }
 
-bool Elevator::PlayMessageSound()
+bool Elevator::PlayMessageSound(bool type)
 {
 	//play message sound
+	//if type is true, play up/down sounds, otherwise play door open/close sounds
 	//if direction is true, play up sound; otherwise play down sound
 
-	if (InServiceMode() == true || IsQueueActive() == false || UseMessageSounds == false)
+	if (InServiceMode() == true)
 		return false;
 
-	int direction = LastChimeDirection;
-
-	if (LastChimeDirection == 0)
-		direction = LastQueueDirection;
-
-	if (direction == 1 && UpMessageSound == "")
-		return false;
-	if (direction == -1 && DownMessageSound == "")
+	if (IsQueueActive() == false && type == true)
 		return false;
 
 	std::string newsound;
 
-	if (direction == 1)
+	if (type == true)
 	{
-		if (sbs->Verbose)
-			Report("playing up message sound");
+		if (UseDirMessageSounds == false)
+			return false;
 
-		newsound = UpMessageSound;
+		int direction = LastChimeDirection;
+
+		if (LastChimeDirection == 0)
+			direction = LastQueueDirection;
+
+		if (direction == 1)
+		{
+			if (UpMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing up message sound");
+
+			newsound = UpMessageSound;
+		}
+		else
+		{
+			if (DownMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing down message sound");
+
+			newsound = DownMessageSound;
+		}
 	}
 	else
 	{
-		if (sbs->Verbose)
-			Report("playing down message sound");
+		if (UseDoorMessageSounds == false)
+			return false;
 
-		newsound = DownMessageSound;
+		if (AreDoorsOpening() == true)
+		{
+			if (OpenMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing open message sound");
+
+			newsound = OpenMessageSound;
+		}
+		else if (AreDoorsClosing() == true)
+		{
+			if (CloseMessageSound == "")
+				return false;
+
+			if (sbs->Verbose)
+				Report("playing close message sound");
+
+			newsound = CloseMessageSound;
+		}
+		else
+			return false;
 	}
 
 	//change the asterisk into the current floor number

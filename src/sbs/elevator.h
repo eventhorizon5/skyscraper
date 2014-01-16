@@ -89,6 +89,8 @@ public:
 	std::string FloorSound; //prefix of sounds played when reaching a certain floor; usually used for voices
 	std::string UpMessageSound; //sound to play with message of elevator's direction if going up
 	std::string DownMessageSound; //sound to play with message of elevator's direction if going down
+	std::string OpenMessageSound; //sound to play with message of elevator's doors are opening
+	std::string CloseMessageSound; //sound to play with message of elevator's doors are closing
 	std::string Music; //elevator music sound to play
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
@@ -108,7 +110,8 @@ public:
 	bool AlarmActive; //true if alarm is active
 	bool UseFloorBeeps; //true if floor beeps should be used
 	bool UseFloorSounds; //true if floor sounds should be used
-	bool UseMessageSounds; //true if direction message sounds should be used
+	bool UseDirMessageSounds; //true if direction message sounds should be used
+	bool UseDoorMessageSounds; //true if door message sounds should be used
 	Ogre::Vector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
 	std::vector<WallObject*> elevator_walls;
@@ -240,7 +243,7 @@ public:
 	void ResetQueue(bool up, bool down);
 	void SetBeepSound(const char *filename);
 	void SetFloorSound(const char *prefix);
-	void SetMessageSound(bool direction, const char *filename);
+	void SetMessageSound(bool type, bool direction, const char *filename);
 	void SetMusic(const char *filename);
 	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop = true, float volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 0.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	void DeleteActiveRoute();
@@ -277,7 +280,7 @@ public:
 	bool GetArrivalDirection(int floor);
 	bool PlayFloorBeep();
 	bool PlayFloorSound();
-	bool PlayMessageSound();
+	bool PlayMessageSound(bool type);
 	bool DoorExists(int number);
 	bool IsNudgeModeActive(int number = 0);
 	void EnableNudgeMode(bool value, int number = 0);
@@ -309,6 +312,9 @@ public:
 	int GetActiveCallDirection();
 	void ResetLights();
 	void ChangeLight(int floor, bool value);
+	int AreDoorsMoving();
+	bool AreDoorsOpening();
+	bool AreDoorsClosing();
 
 private:
 
@@ -363,7 +369,6 @@ private:
 	//functions
 	void MoveElevatorToFloor();
 	void FinishMove();
-	bool CheckOpenDoor();
 
 	//sound objects
 	Sound *mainsound;

@@ -1282,7 +1282,7 @@ void editelevator::Loop()
 	txtMusicOnMove->SetValue(wxString::FromAscii(BoolToString(elevator->MusicOnMove)));
 	txtFloorSounds->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorSounds)));
 	txtFloorBeeps->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorBeeps)));
-	txtMessageSounds->SetValue(wxString::FromAscii(BoolToString(elevator->UseMessageSounds)));
+	txtMessageSounds->SetValue(wxString::FromAscii(BoolToString(elevator->UseDirMessageSounds)));
 	txtAutoEnable->SetValue(wxString::FromAscii(BoolToString(elevator->AutoEnable)));
 	txtReOpen->SetValue(wxString::FromAscii(BoolToString(elevator->ReOpen)));
 	txtAutoDoors->SetValue(wxString::FromAscii(BoolToString(elevator->AutoDoors)));
@@ -1677,7 +1677,7 @@ void editelevator::On_bSetFloorBeeps_Click(wxCommandEvent& event)
 void editelevator::On_bSetMessageSounds_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->UseMessageSounds = !elevator->UseMessageSounds;
+		elevator->UseDirMessageSounds = !elevator->UseDirMessageSounds;
 }
 
 void editelevator::On_bSetAutoEnable_Click(wxCommandEvent& event)

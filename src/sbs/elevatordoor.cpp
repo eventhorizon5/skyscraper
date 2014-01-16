@@ -523,6 +523,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				doorsound->Load(CloseSound.c_str());
 				doorsound->Play();
 			}
+			elev->PlayMessageSound(false);
 		}
 
 		if (WhichDoors == 3)
@@ -662,7 +663,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	//play direction message sound
 	if (manual == false && open == true)
-		elev->PlayMessageSound();
+		elev->PlayMessageSound(true);
 
 	DoorIsRunning = false;
 }
