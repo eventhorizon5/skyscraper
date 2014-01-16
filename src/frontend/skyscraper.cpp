@@ -99,7 +99,6 @@ bool Skyscraper::OnInit(void)
 	StartupRunning = false;
 	Starting = false;
 	Pause = false;
-	DisableSound = false;
 	FullScreen = false;
 	Shutdown = false;
 	PositionOverride = false;
@@ -118,6 +117,7 @@ bool Skyscraper::OnInit(void)
 	logger = 0;
 	console = 0;
 	raised = false;
+	soundsys = 0;
 
 	//load config file
 	try
@@ -214,7 +214,6 @@ int Skyscraper::OnExit()
 	delete mRoot;
 	delete logger;
 	return wxApp::OnExit();
-	//return 0;
 }
 
 void Skyscraper::UnloadSim()
@@ -308,7 +307,6 @@ void MainScreen::OnClose(wxCloseEvent& event)
 void MainScreen::ShowWindow()
 {
 	Show(true);
-	//panel->Show(true);
 }
 
 void MainScreen::OnIdle(wxIdleEvent& event)
@@ -478,7 +476,6 @@ bool Skyscraper::Initialize()
 	{
 		mCamera = mSceneMgr->createCamera("Main Camera");
 		mViewport = mRenderWindow->addViewport(mCamera);
-		//mViewport->setBackgroundColour(Ogre::ColourValue(0,0,0));
 		mCamera->setAspectRatio(Ogre::Real(mViewport->getActualWidth()) / Ogre::Real(mViewport->getActualHeight()));
 	}
 	catch (Ogre::Exception &e)
@@ -510,25 +507,31 @@ bool Skyscraper::Initialize()
 	Ogre::MaterialManager::getSingleton().setDefaultAnisotropy(maxanisotropy);
 
 	//initialize FMOD (sound)
-	Report("\nFMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2010");
+	DisableSound = GetConfigBool("Skyscraper.Frontend.DisableSound", false);
+	if (DisableSound == false)
+	{
+		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2010\n");
 
-	FMOD_RESULT result = FMOD::System_Create(&soundsys);
-	if (result != FMOD_OK)
-	{
-		ReportFatalError("Error initializing sound");
-		DisableSound = true;
-	}
-	else
-	{
-		result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
+		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)
 		{
 			ReportFatalError("Error initializing sound");
 			DisableSound = true;
 		}
 		else
-			Report("Sound initialized");
+		{
+			result = soundsys->init(100, FMOD_INIT_NORMAL, 0);
+			if (result != FMOD_OK)
+			{
+				ReportFatalError("Error initializing sound");
+				DisableSound = true;
+			}
+			else
+				Report("Sound initialized");
+		}
 	}
+	else
+		Report("Sound Disabled");
 
 	//load Caelum plugin
 	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
@@ -931,7 +934,6 @@ void Skyscraper::Loop()
 		Starting = false;
 		Pause = false;
 		UnloadSim();
-		//mouse->Reset();
 		Start();
 	}
 
@@ -1264,7 +1266,7 @@ void Skyscraper::GetMenuInput()
         			if (button->drawn_pressed == true)
         			{
         				//user clicked on button
-					button->drawn_selected = true;
+        				button->drawn_selected = true;
         				Click(i);
         				return;
         			}
@@ -1555,7 +1557,7 @@ bool Skyscraper::Start()
 void Skyscraper::AllowResize(bool value)
 {
 	//changes the window style to either allow or disallow resizing
-	
+
 	if (value)
 		window->SetWindowStyleFlag(wxDEFAULT_FRAME_STYLE | wxMAXIMIZE);
 	else
@@ -1577,13 +1579,13 @@ void Skyscraper::Unload()
 	StopSound();
 
 	//return to main menu
+	FullScreen = false;
+	window->ShowFullScreen(FullScreen);
 	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
 	window->Center();
 
-	DrawBackground();
 	StartSound();
 	StartupRunning = true;
-	//mouse->Reset();
 }
 
 void Skyscraper::Quit()

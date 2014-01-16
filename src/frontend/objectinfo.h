@@ -78,6 +78,7 @@ class ObjectInfo: public wxDialog
 		void PopulateTree();
 		int oldobject;
 		int oldcamobject;
+		bool deleted;
 
 	protected:
 
@@ -129,6 +130,7 @@ class ObjectInfo: public wxDialog
 		//*)
 		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
 		bool changed;
+		int lastcount;
 
 		DECLARE_EVENT_TABLE()
 };

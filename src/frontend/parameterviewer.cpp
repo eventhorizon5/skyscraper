@@ -1868,7 +1868,6 @@ void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 	processor->Run();
 	Simcore->Prepare(false);
 	Simcore->DeleteColliders = false;
-	objectinfo->PopulateTree();
 	this->Close();
 }
 

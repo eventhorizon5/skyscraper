@@ -44,13 +44,10 @@ public:
 	float cfg_rotate_accelerate; //rotate acceleration
 	float cfg_rotate_maxspeed; //rotate maximum speed
 	float cfg_rotate_brake; //rotate brake deceleration
-	float cfg_look_accelerate; //look acceleration
 	float cfg_body_height; //body height
 	float cfg_body_width; //body width
-	float cfg_body_depth; //body depth
 	float cfg_legs_height; //legs height
 	float cfg_legs_width; //legs width
-	float cfg_legs_depth; //legs depth
 	float cfg_lookspeed; //base look speed
 	float cfg_turnspeed; //base turn speed
 	float cfg_spinspeed; //base spin speed
@@ -157,6 +154,7 @@ private:
 	float FarClip;
 	Ogre::Vector3 accum_movement;
 	bool collision_reset;
+	bool use_startdirection;
 
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;

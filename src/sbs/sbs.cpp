@@ -131,7 +131,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	start_time = 0;
 	running_time = 0;
 	InShaft = false;
-	DisableSound = GetConfigBool("Skyscraper.SBS.DisableSound", false);;
+	DisableSound = false;
 	MapIndex.resize(3);
 	MapUV.resize(3);
 	OldMapIndex.resize(3);
@@ -461,18 +461,6 @@ bool SBS::Start()
 	for (int i = 0; i < textureboxes.size(); i++)
 		free(textureboxes[i].buffer);
 	textureboxes.clear();
-
-	//set sound listener object to initial position
-	/*if (DisableSound == false)
-	{
-		if (sndrenderer->GetListener())
-			SetListenerLocation(camera->GetPosition());
-		else
-		{
-			ReportError("Sound listener object not available. Sound support disabled");
-			DisableSound = true;
-		}
-	}*/
 
 	//turn on main objects
 	EnableBuildings(true);
@@ -3260,10 +3248,11 @@ Ogre::Vector3 SBS::GetObjectPosition(Object *object)
 		Door* door = (Door*)object->GetRawObject();
 		return door->GetPosition();
 	}
-	/*if (type == "ElevatorDoor")
+	if (type == "ElevatorDoor")
 	{
 		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
-	}*/
+		return door->GetPosition();
+	}
 	if (type == "FloorIndicator")
 	{
 		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();

@@ -66,13 +66,10 @@ Camera::Camera(Ogre::Camera *camera)
 	cfg_rotate_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005);
 	cfg_rotate_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015);
 	cfg_rotate_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015);
-	cfg_look_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookAccelerate", 0.028);
 	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 3.0);
 	cfg_body_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64);
-	cfg_body_depth = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyDepth", 1.64);
 	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 3.0);
 	cfg_legs_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
-	cfg_legs_depth = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsDepth", 1.312);
 	cfg_lookspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0);
 	cfg_turnspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0);
 	cfg_spinspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0);
@@ -101,6 +98,7 @@ Camera::Camera(Ogre::Camera *camera)
 	accum_movement = 0;
 	collision_reset = false;
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
+	use_startdirection = false;
 
 	//set up camera and scene nodes
 	MainCamera = camera;
@@ -163,7 +161,7 @@ void Camera::SetPosition(const Ogre::Vector3 &vector)
 void Camera::SetDirection(const Ogre::Vector3 &vector)
 {
 	//sets the camera's direction to an absolute position
-	//CameraNode->lookAt(vector);
+	//MainCamera->lookAt(sbs->ToRemote(vector));
 }
 
 void Camera::SetRotation(Ogre::Vector3 vector)
@@ -276,7 +274,6 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 		vector = MainCamera->getOrientation() * sbs->ToRemote(vector);
 		accum_movement += (vector * speed);
 	}
-	//mCharacter->setWalkDirection(sbs->ToRemote(vector), speed);
 
 	return true;
 }
@@ -285,7 +282,7 @@ void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in world space
 
-	Ogre::Vector3 rot = GetRotation() + (vector.x * speed);
+	Ogre::Vector3 rot = GetRotation() + (vector * speed);
 	SetRotation(rot);
 }
 
@@ -330,6 +327,7 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 void Camera::SetStartDirection(const Ogre::Vector3 &vector)
 {
 	StartDirection = vector;
+	use_startdirection = true;
 }
 
 Ogre::Vector3 Camera::GetStartDirection()
@@ -356,12 +354,14 @@ void Camera::SetToStartPosition(bool disable_current_floor)
 
 void Camera::SetToStartDirection()
 {
-	SetDirection(StartDirection);
+	if (use_startdirection == true)
+		SetDirection(StartDirection);
 }
 
 void Camera::SetToStartRotation()
 {
-	SetRotation(StartRotation);
+	if (use_startdirection == false)
+		SetRotation(StartRotation);
 }
 
 void Camera::CheckElevator()
@@ -907,7 +907,7 @@ void Camera::InterpolateMovement(float delta)
 		}
 		else
 		{
-			velocity[i] -= cfg_walk_accelerate * delta;
+			velocity[i] -= cfg_walk_brake * delta;
 			if (velocity[i] < desired_velocity[i])
 				velocity[i] = desired_velocity[i];
 		}
@@ -923,7 +923,7 @@ void Camera::InterpolateMovement(float delta)
 		}
 		else
 		{
-			angle_velocity[i] -= cfg_rotate_accelerate * delta;
+			angle_velocity[i] -= cfg_rotate_brake * delta;
 			if (angle_velocity[i] < desired_angle_velocity[i])
 				angle_velocity[i] = desired_angle_velocity[i];
 		}

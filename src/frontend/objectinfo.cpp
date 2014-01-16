@@ -189,6 +189,8 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	oldcamobject = -1;
 	createobject = 0;
 	changed = false;
+	lastcount = 0;
+	deleted = false;
 }
 
 ObjectInfo::~ObjectInfo()
@@ -215,6 +217,14 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 
 void ObjectInfo::Loop()
 {
+	if (Simcore->GetObjectCount() != lastcount)
+	{
+		lastcount = Simcore->GetObjectCount();
+		if (deleted == false)
+			PopulateTree();
+		deleted = false;
+	}
+
 	if (moveobject)
 		moveobject->Loop();
 
@@ -329,6 +339,7 @@ void ObjectInfo::On_bDelete_Click(wxCommandEvent& event)
 	{
 		//delete object from tree
 		ObjectTree->Delete(ObjectTree->GetSelection());
+		deleted = true;
 	}
 }
 
