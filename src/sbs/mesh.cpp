@@ -1153,11 +1153,11 @@ void MeshObject::Rotate(const Ogre::Vector3 rotation, float speed)
 	rotX += rotation.x * speed;
 	rotY += rotation.y * speed;
 	rotZ += rotation.z * speed;
-	if (rotX > 360)
+	if (rotX > 359)
 		rotX = rotX - 360;
-	if (rotY > 360)
+	if (rotY > 359)
 		rotY = rotY - 360;
-	if (rotZ > 360)
+	if (rotZ > 359)
 		rotZ = rotZ - 360;
 	if (rotX < 0)
 		rotX = rotX + 360;

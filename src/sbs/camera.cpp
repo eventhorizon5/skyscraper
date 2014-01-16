@@ -169,15 +169,15 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	//sets the camera's rotation in degrees
 
 	//keep rotation within 360 degree boundaries
-	if (vector.x > 360)
+	if (vector.x > 359)
 		vector.x -= 360;
 	if (vector.x < 0)
 		vector.x += 360;
-	if (vector.y > 360)
+	if (vector.y > 359)
 		vector.y -= 360;
 	if (vector.y < 0)
 		vector.y += 360;
-	if (vector.z > 360)
+	if (vector.z > 359)
 		vector.z -= 360;
 	if (vector.z < 0)
 		vector.z += 360;
@@ -302,7 +302,7 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
 	rotation.y += ydeg;
 
-	if (rotation.y > 360)
+	if (rotation.y > 359)
 		rotation.y -= 360;
 	if (rotation.y < 0)
 		rotation.y += 360;

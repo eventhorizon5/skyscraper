@@ -161,8 +161,8 @@ Elevator::Elevator(int number)
 	Parking = false;
 	MusicPosition = 0;
 	Music = sbs->GetConfigString("Skyscraper.SBS.Elevator.Music", "");
-	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOn", true);;
-	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOnMove", false);;
+	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOn", true);
+	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOnMove", false);
 	DepartureDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0);
 	ArrivalDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
 	WaitForTimer = false;

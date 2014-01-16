@@ -117,7 +117,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	AutoX = true;
 	AutoY = true;
 	TextureOverride = false;
-	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);;
+	ProcessElevators = GetConfigBool("Skyscraper.SBS.ProcessElevators", true);
 	FlipTexture = false;
 	mainnegflip = 0;
 	mainposflip = 0;

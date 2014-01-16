@@ -231,7 +231,7 @@ void ObjectInfo::Loop()
 	int number;
 	if (changed == false)
 	{
-		int newobject = Simcore->camera->GetClickedObjectNumber();;
+		int newobject = Simcore->camera->GetClickedObjectNumber();
 		if (newobject != oldcamobject)
 		{
 			number = Simcore->camera->GetClickedObjectNumber();

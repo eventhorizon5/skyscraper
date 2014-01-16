@@ -1134,8 +1134,8 @@ bool ScriptProcessor::ReportMissingFiles()
 
 		//create text window
 		TextWindow *twindow = new TextWindow(NULL, -1);
-		twindow->SetMinSize(wxSize(300, 200));
-		twindow->tMain->SetMinSize(wxSize(300, 200));
+		twindow->SetMinSize(wxSize(350, 250));
+		twindow->tMain->SetMinSize(wxSize(350, 250));
 		twindow->Fit();
 		twindow->Center();
 		twindow->SetTitle(wxT("Missing Files"));
