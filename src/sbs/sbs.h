@@ -170,6 +170,7 @@ public:
 	int PolygonCount; //wall polygon object count
 	bool enable_profiling; //enable general profiling
 	bool enable_advanced_profiling;
+	unsigned int SmoothFrames;
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

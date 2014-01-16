@@ -217,6 +217,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
 	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
 	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
+	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
@@ -517,7 +518,15 @@ void SBS::MainLoop()
 
 	//This makes sure all timer steps are the same size, in order to prevent the physics from changing
 	//depending on frame rate
-	float elapsed = remaining_delta + (GetAverageTime() / 1000.0);
+
+	unsigned long timing;
+
+	if (SmoothFrames > 0)
+		timing = GetAverageTime();
+	else
+		timing = GetElapsedTime();
+
+	float elapsed = remaining_delta + (timing / 1000.0);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > .5f)
@@ -581,7 +590,7 @@ void SBS::MainLoop()
 	remaining_delta = elapsed;
 
 	//update physics
-	float step = float(GetAverageTime()) / 1000.0;
+	float step = float(timing) / 1000.0;
 	int steps = 0;
 	if (camera->EnableBullet == true)
 	{
@@ -2059,12 +2068,18 @@ void SBS::SetListenerPosition(const Ogre::Vector3 &position)
 {
 	//set position of sound listener object
 
+	unsigned int timing;
+	if (SmoothFrames > 0)
+		timing = GetAverageTime();
+	else
+		timing = GetElapsedTime();
+
 	//calculate sound velocity
-	if (GetAverageTime() > 0)
+	if (timing > 0)
 	{
-		listener_velocity.x = (position.x - listener_position.x) * (1000 / GetElapsedTime());
-		listener_velocity.y = (position.y - listener_position.y) * (1000 / GetElapsedTime());
-		listener_velocity.z = (position.z - listener_position.z) * (1000 / GetElapsedTime());
+		listener_velocity.x = (position.x - listener_position.x) * (1000 / timing);
+		listener_velocity.y = (position.y - listener_position.y) * (1000 / timing);
+		listener_velocity.z = (position.z - listener_position.z) * (1000 / timing);
 	}
 
 	listener_position.x = position.x;
@@ -3706,15 +3721,14 @@ void SBS::CalculateAverageTime()
 	if (frame_times.size() <= 1)
 		return;
 
-	//maximum number of milliseconds to hold timing info
-	unsigned int smoothing_limit = 200;
+	//SmoothFrames is the maximum number of milliseconds to hold timing info
 	
 	//find oldest time to keep
 	std::deque<unsigned long>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
 
 	while (it != end)
 	{
-		if (frame_times.back() - *it > smoothing_limit)
+		if (frame_times.back() - *it > SmoothFrames)
 			++it;
 		else
 			break;
