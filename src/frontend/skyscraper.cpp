@@ -249,6 +249,7 @@ void Skyscraper::UnloadSim()
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
 {
 	Active = false;
+	InLoop = false;
 	this->Center();
 	wxString title;
 	title = wxT("Skyscraper 1.9 Alpha");
@@ -312,10 +313,19 @@ void MainScreen::ShowWindow()
 
 void MainScreen::OnIdle(wxIdleEvent& event)
 {
-	if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true || skyscraper->IsLoading == true)
-		skyscraper->Loop(); //run simulator loop
-	if (skyscraper->Pause == false)
-		event.RequestMore(); //request more idles
+	//prevent simultaneous executions - this fixes an issue with wxYield
+	if (InLoop == false)
+	{
+		InLoop = true;
+
+		if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true || skyscraper->IsLoading == true)
+			skyscraper->Loop(); //run simulator loop
+
+		if (skyscraper->Pause == false)
+			event.RequestMore(); //request more idles
+
+		InLoop = false;
+	}
 }
 
 void MainScreen::OnPaint(wxPaintEvent& event)

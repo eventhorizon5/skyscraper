@@ -173,6 +173,7 @@ public:
 	void OnEnterWindow(wxMouseEvent& event);
 	void OnLeaveWindow(wxMouseEvent& event);
 	bool Active;
+	bool InLoop;
 
 	DECLARE_EVENT_TABLE()
 
