@@ -206,16 +206,6 @@ bool ScriptProcessor::Run()
 				else
 					startpos++;
 			} while (true);
-
-			/*int loc = LineData.find("%param", 0);
-			if (loc > 0)
-			{
-				for (int i = 0; i < (int)FunctionParams.size(); i++)
-				{
-					std::string num = ToString(i + 1);
-					ReplaceAll(LineData, std::string("%param" + num + "%").c_str(), FunctionParams[i].c_str());
-				}
-			}*/
 		}
 		else if (show_percent == true)
 		{

@@ -887,11 +887,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 			CreateBoxCollider(sbs->ToRemote(scale_multiplier));
 		}
 	}
-
-	//State->SetLighting(false);
-	//State->SetShadowCasting(false);
-	//State->SetShadowReceiving(true);
-	//State->SetManualColors(false);
 }
 
 MeshObject::~MeshObject()

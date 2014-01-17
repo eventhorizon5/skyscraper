@@ -44,10 +44,6 @@
 #endif
 
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
-//IMPLEMENT_CLASS(Skyscraper, wxApp)
-//BEGIN_EVENT_TABLE(Skyscraper, wxApp)
-//END_EVENT_TABLE()
-
 
 BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_ICONIZE(MainScreen::OnIconize)
@@ -985,9 +981,6 @@ void Skyscraper::Loop()
 void Skyscraper::DrawBackground()
 {
 	//draw menu background
-
-	//int w = mRenderWindow->getWidth();
-	//int h = mRenderWindow->getHeight();
 
 	DrawImage(std::string("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png")).c_str(), 0, -1, -1, false);
 

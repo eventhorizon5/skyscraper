@@ -224,7 +224,6 @@ Ogre::Vector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
 
-	//return mBody->getWorldOrientation() * MainCamera->getOrientation();
 	return rotation;
 }
 
