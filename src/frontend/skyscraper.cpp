@@ -625,7 +625,8 @@ void Skyscraper::GetInput()
 	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
 	//adjust for different window client height
-	Simcore->mouse_y += GetOffset();
+	if (Simcore->camera->Freelook == false)
+		Simcore->mouse_y += GetOffset();
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
