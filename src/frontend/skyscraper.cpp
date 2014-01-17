@@ -136,8 +136,8 @@ bool Skyscraper::OnInit(void)
 	if (showconsole == true)
 		ShowConsole(false);
 
-	//Create main window
-	window = new MainScreen(640, 480);
+	//Create main window and set size from INI file defaults
+	window = new MainScreen(GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
 	//AllowResize(false);
 	window->ShowWindow();
 	window->CenterOnScreen();
@@ -156,10 +156,6 @@ bool Skyscraper::OnInit(void)
 	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
 	if (BuildingFile != "")
 		return Load();
-
-	//set size of menu window from INI file defaults
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
-	window->Center();
 
 	//show menu
 	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
@@ -246,15 +242,16 @@ void Skyscraper::UnloadSim()
 	Report("SBS unloaded\n");
 }
 
-MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxSize(width, height), wxDEFAULT_FRAME_STYLE)
+MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
 {
 	Active = false;
 	InLoop = false;
-	this->Center();
+	Center();
 	wxString title;
 	title = wxT("Skyscraper 1.9 Alpha");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
-	this->SetTitle(title);
+	SetTitle(title);
+	SetClientSize(width, height);
 }
 
 MainScreen::~MainScreen()
@@ -291,11 +288,14 @@ void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void MainScreen::OnClose(wxCloseEvent& event)
 {
-	if (skyscraper->StartupRunning == false)
+	if (skyscraper)
 	{
-		int result = wxMessageBox(wxT("Are you sure you want to exit?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
-		if (result == wxNO)
-			return;
+		if (skyscraper->StartupRunning == false)
+		{
+			int result = wxMessageBox(wxT("Are you sure you want to exit?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
+			if (result == wxNO)
+				return;
+		}
 	}
 
 	if(dpanel)
@@ -623,6 +623,9 @@ void Skyscraper::GetInput()
 	//get mouse pointer coordinates
 	Simcore->mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
 	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
+
+	//adjust for different window client height
+	Simcore->mouse_y += GetOffset();
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
@@ -1087,6 +1090,12 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 	if (background_image == Filename)
 		return;
 
+	//adjust for different window client height (Mac)
+	int offset, clientheight, height;
+	window->GetClientSize(&offset, &clientheight);
+	window->GetSize(&offset, &height);
+	y += (1 - ((float)clientheight / (float)height)) * 2;
+
 	Ogre::TextureManager::getSingleton().setVerbose(false);
 	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
 	if (tex.isNull() == false)
@@ -1282,6 +1291,9 @@ void Skyscraper::GetMenuInput()
 	int mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
 	int mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
+	//adjust for different window client height
+	mouse_y += GetOffset();
+
 	for (int i = 0; i < buttoncount; i++)
 	{
 		buttondata *button = &buttons[i];
@@ -1291,8 +1303,8 @@ void Skyscraper::GetMenuInput()
         {
 			float mx = mouse_x;
 			float my = mouse_y;
-			float w = mx / window->GetClientSize().x;
-			float h = my / window->GetClientSize().y;
+			float w = mx / window->GetSize().x;
+			float h = my / window->GetSize().y;
 			float mouse_x_rel = (w * 2) - 1;
 			float mouse_y_rel = (h * 2) - 1;
 
@@ -1538,7 +1550,7 @@ bool Skyscraper::Start()
 
 	//resize main window
 	window->SetBackgroundColour(*wxBLACK);
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
+	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
 	window->Center();
 
 	//switch to fullscreen mode if specified
@@ -1611,7 +1623,7 @@ void Skyscraper::Unload()
 	//return to main menu
 	FullScreen = false;
 	window->ShowFullScreen(FullScreen);
-	window->SetSize(wxDefaultCoord, wxDefaultCoord, GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
+	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
 	window->Center();
 
 	StartSound();
@@ -1862,4 +1874,13 @@ void Skyscraper::ShowConsole(bool send_button)
 	console->Raise();
 	console->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ConsoleX", 10), GetConfigInt("Skyscraper.Frontend.ConsoleY", 25)));
 	console->bSend->Enable(send_button);
+}
+
+int Skyscraper::GetOffset()
+{
+	int offset, clientheight, height;
+	window->GetClientSize(&offset, &clientheight);
+	window->GetSize(&offset, &height);
+	offset = height - clientheight;
+	return offset;
 }

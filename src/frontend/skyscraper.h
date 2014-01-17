@@ -150,6 +150,7 @@ private:
 	void UnloadSim();
 	void DeleteButtons();
 	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
+	int GetOffset();
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
