@@ -4,7 +4,9 @@ project(Skyscraper)
  
 if(UNIX)
 	set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
-	set(FRONTENDGLINC "-lGL")
+	if(NOT APPLE)
+		set(FRONTENDGLINC "-lGL")
+	endif()
 endif(UNIX)
  
 if (CMAKE_BUILD_TYPE STREQUAL "")
@@ -12,10 +14,6 @@ if (CMAKE_BUILD_TYPE STREQUAL "")
   # differentiation between debug and release builds.
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build, options are: None (CMAKE_CXX_FLAGS or CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel." FORCE)
 endif ()
- 
-#set(CMAKE_DEBUG_POSTFIX "_d")
- 
-#set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/dist")
  
 find_package(OGRE REQUIRED)
  
@@ -110,6 +108,10 @@ include(${wxWidgets_USE_FILE})
 
 #svnrev
 add_executable(svnrev/svnrev ${SVNREV_FILES})
+if(UNIX)
+	add_custom_target(MakeRev ALL ./svnrev.sh)
+	add_dependencies(MakeRev svnrev/svnrev)
+endif()
 
 #ogrebullet libraries
 add_library(OgreBulletCol SHARED ${OGREBULLET_COLL_FILES})
@@ -121,15 +123,10 @@ add_library(SBS SHARED ${SBS_FILES})
 #frontend executable
 add_executable(Skyscraper ${FRONTEND_FILES})
  
-#set_target_properties(Skyscraper PROPERTIES DEBUG_POSTFIX _d)
- 
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
-target_link_libraries(OgreBulletDyn ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
+target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${FMOD_LIBRARY})
 
 target_link_libraries(Skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
-#file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/bin)
-#file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist/media)
-
