@@ -621,8 +621,10 @@ void Skyscraper::GetInput()
 	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
 	//adjust for different window client height
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 	if (Simcore->camera->Freelook == false)
 		Simcore->mouse_y += GetOffset();
+#endif
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
@@ -1100,10 +1102,12 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 		return;
 
 	//adjust for different window client height (Mac)
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 	int offset, clientheight, height;
 	window->GetClientSize(&offset, &clientheight);
 	window->GetSize(&offset, &height);
 	y += (1 - ((float)clientheight / (float)height)) * 2;
+#endif
 
 	Ogre::TextureManager::getSingleton().setVerbose(false);
 	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
@@ -1301,7 +1305,9 @@ void Skyscraper::GetMenuInput()
 	int mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
 	//adjust for different window client height
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 	mouse_y += GetOffset();
+#endif
 
 	for (int i = 0; i < buttoncount; i++)
 	{
@@ -1312,8 +1318,13 @@ void Skyscraper::GetMenuInput()
         {
 			float mx = mouse_x;
 			float my = mouse_y;
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 			float w = mx / window->GetSize().x;
 			float h = my / window->GetSize().y;
+#else
+			float w = mx / window->GetClientSize().x;
+			float h = my / window->GetClientSize().y;
+#endif
 			float mouse_x_rel = (w * 2) - 1;
 			float mouse_y_rel = (h * 2) - 1;
 
