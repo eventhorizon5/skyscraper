@@ -1384,6 +1384,13 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	if (sbs->DeleteColliders == true)
 		DeleteCollider();
 
+	//if a mesh was attached and was empty, it needs to be reattached to be visible
+	if (count == 0 && IsEnabled() == true)
+	{
+		SceneNode->detachObject(Movable);
+		SceneNode->attachObject(Movable);
+	}
+
 	return true;
 }
 

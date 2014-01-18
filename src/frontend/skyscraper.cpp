@@ -1555,7 +1555,7 @@ bool Skyscraper::Start()
 	}
 
 	//clear screen
-	mRoot->renderOneFrame();
+	Render();
 
 	//start simulation
 	if (!Simcore->Start())
