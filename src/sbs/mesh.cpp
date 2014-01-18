@@ -1391,6 +1391,9 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 		SceneNode->attachObject(Movable);
 	}
 
+	if (sbs->RenderOnStartup == true)
+		Prepare();
+
 	return true;
 }
 

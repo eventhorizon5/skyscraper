@@ -707,11 +707,12 @@ Nextline:
 			InWhile = false;
 		else
 			line++;
-	}
-	else
-	{
-		IsFinished = true;
-		show_percent = false;
+
+		if (line == (int)BuildingData.size())
+		{
+			IsFinished = true;
+			show_percent = false;
+		}
 	}
 
 	return true;

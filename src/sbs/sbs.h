@@ -171,6 +171,7 @@ public:
 	bool enable_profiling; //enable general profiling
 	bool enable_advanced_profiling;
 	unsigned int SmoothFrames;
+	bool RenderOnStartup; //render objects on startup
 
 	//mouse coordinates
 	int mouse_x, mouse_y;

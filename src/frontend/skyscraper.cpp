@@ -883,6 +883,8 @@ void Skyscraper::Loop()
 	SBSProfileManager::Reset();
 	SBSProfileManager::Increment_Frame_Counter();
 
+	static unsigned long finish_time;
+
 	//main menu routine
 	if (IsRunning == false && IsLoading == false)
 	{
@@ -892,52 +894,65 @@ void Skyscraper::Loop()
 		return;
 	}
 
-	//building script load loop
-	if (IsLoading == true)
-	{
-		if (!processor->Run())
-		{
-			ReportError("Error processing building\n");
-			LoadError = true;
-			Unload();
-		}
-		else if (processor->IsFinished == true)
-			Start();
-
-		return;
-	}
-
 	//main simulator loop
 	if (!Simcore)
 		return;
 
-	//force window raise on startup
-	if (Simcore->GetCurrentTime() > 0 && raised == false)
-	{
-		window->Raise();
-		raised = true;
-	}
-
-	Simcore->AdvanceClock();
-	if (IsRunning == true)
-		Simcore->CalculateFrameRate();
-
 	//run script processor
 	if (processor)
 	{
-		processor->Run();
-		if (processor->IsFinished == true)
+		bool result = processor->Run();
+
+		if (IsLoading == true)
+		{
+			if (result == false)
+			{
+				ReportError("Error processing building\n");
+				LoadError = true;
+				Unload();
+				return;
+			}
+			else if (processor->IsFinished == true)
+			{
+				if (IsLoading == true)
+				{
+					Start();
+					finish_time = Simcore->GetCurrentTime();
+				}
+			}
+
+			if (Simcore->RenderOnStartup == false)
+				return;
+		}
+		else if (processor->IsFinished == true && result == true)
 		{
 			Simcore->Prepare(false);
 			Simcore->DeleteColliders = false;
 		}
 	}
+	else
+		return;
 
-	//get input
-	GetInput();
+	//force window raise on startup
+	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && IsLoading == false)
+	{
+		window->Raise();
+		raised = true;
+	}
 
-	//run SBS main loop
-	Simcore->MainLoop();
+	//process internal clock
+	Simcore->AdvanceClock();
+	if (IsRunning == true)
+		Simcore->CalculateFrameRate();
+
+	if (IsLoading == false)
+	{
+		//get input
+		GetInput();
+
+		//run SBS main loop
+		Simcore->MainLoop();
+	}
 
 	//update Caelum
 	if (mCaelumSystem)
@@ -1553,9 +1568,6 @@ bool Skyscraper::Start()
 		FullScreen = true;
 		window->ShowFullScreen(FullScreen);
 	}
-
-	//clear screen
-	Render();
 
 	//start simulation
 	if (!Simcore->Start())

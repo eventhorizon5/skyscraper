@@ -218,6 +218,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
 	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
+	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
@@ -455,8 +456,6 @@ SBS::~SBS()
 bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
-
-	timer->reset();
 
 	//free text texture memory
 	for (int i = 0; i < textureboxes.size(); i++)
