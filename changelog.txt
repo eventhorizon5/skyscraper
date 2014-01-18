@@ -1,5 +1,35 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-added RenderOnStartup option, which renders the building as the script is processing on startup
+-fixed an issue where most new meshes would need to be disabled and re-enabled to be visible
+-cmake script fixes, and svnrev is now run automatically
+-fixes to main window sizing
+-fixed issues with main menu and mouse clicks being off on Mac, due to client size being different than window size
+-fixed shutdown crash due to MainScreen::OnClose being called twice (mainly on Mac)
+-made missing files dialog larger
+-fixed issue where rotational degree values would show 360 instead of 0
+-added OpenMessage and CloseMessage elevator parameters
+-script processor now using main frontend loop for processing
+-fixed an issue where main window would not resize back when exiting from fullscreen to main menu
+-object list in objectinfo dialog now refreshes automatically
+-switched DisableSound to a frontend option, which now changes it for the whole app
+-removed unused options from INI file
+-WalkBrake and RotateBrake options now work
+-removed LookAccelerate, BodyDepth, LegsDepth options
+-fixed GetObjectPosition() for elevator doors, so now their position shows up in the MoveObject window
+-fixed Camera::Rotate() function; relative rotations now work in camera control window
+-Bullet: disabled penetration recovery, which fixes issues with stairs stepping
+-enabled frame smoothing, configurable in the INI file
+-removal of wxWidgets code from the SBS library
+-new SBS timer system
+-added while statements
+-added delete command
+-added runaction command
+-action names with spaces now work from scripts
+-functions can now be called properly from IF/While statements
+-added duplicate function check
+-keycode fix for Mac version - fixes some key recognition errors
+-switched to in-app console window
 -control panel sizing fix
 -removed unused RenderOnly and InputOnly options
 -script viewer no longer shows included code
