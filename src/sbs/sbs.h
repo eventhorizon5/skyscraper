@@ -371,6 +371,7 @@ public:
 	bool RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative, bool X, bool Y, bool Z);
 	Ogre::Vector3 GetObjectPosition(Object *object);
 	Ogre::Vector3 GetObjectRotation(Object *object);
+	void CameraLoop();
 
 	//Meshes
 	MeshObject* Buildings;

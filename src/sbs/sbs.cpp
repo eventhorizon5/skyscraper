@@ -525,22 +525,57 @@ void SBS::MainLoop()
 	else
 		timing = GetElapsedTime();
 
-	float elapsed = remaining_delta + (timing / 1000.0);
-
-	//limit the elapsed value to prevent major slowdowns during debugging
-	if (elapsed > .5f)
-		elapsed = .5f;
+	float elapsed = timing / 1000.0;
 
 	//calculate start and running time
 	if (start_time == 0)
 		start_time = GetRunTime() / 1000.0;
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
+	//update physics
+	float step = float(timing) / 1000.0;
+	int steps = 0;
+	if (camera->EnableBullet == true)
+	{
+		if (enable_advanced_profiling == false)
+			SBSProfileManager::Start_Profile("Collisions/Physics");
+		else
+			SBSProfileManager::Start_Profile("Bullet");
+		steps = mWorld->stepSimulation(step, 1);
+		SBSProfileManager::Stop_Profile();
+	}
+
+	//only move character if Bullet processed a step (within it's 60fps timestep)
+	if (camera->EnableBullet == true)
+	{
+		if (steps >= 1)
+			camera->MoveCharacter();
+	}
+	else
+		camera->MoveCharacter();
+
+	//sync camera to physics
+	camera->Sync();
+
+	//update sound
+	if (enable_advanced_profiling == false)
+		SBSProfileManager::Start_Profile("Sound");
+	else
+		SBSProfileManager::Start_Profile("FMOD");
+	soundsys->update();
+	SBSProfileManager::Stop_Profile();
+
+	elapsed = remaining_delta + (timing / 1000.0);
+
+	//limit the elapsed value to prevent major slowdowns during debugging
+	if (elapsed > .5f)
+		elapsed = .5f;
+
 	SBSProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{
-		//Process camera loop
-		camera->Loop(delta);
+		//Determine floor that the camera is on
+		camera->UpdateCameraFloor();
 
 		//run elevator handlers
 		if (ProcessElevators == true)
@@ -587,40 +622,6 @@ void SBS::MainLoop()
 		elapsed -= delta;
 	}
 	remaining_delta = elapsed;
-
-	//update physics
-	float step = float(timing) / 1000.0;
-	int steps = 0;
-	if (camera->EnableBullet == true)
-	{
-		if (enable_advanced_profiling == false)
-			SBSProfileManager::Start_Profile("Collisions/Physics");
-		else
-			SBSProfileManager::Start_Profile("Bullet");
-		steps = mWorld->stepSimulation(step, 1);
-		SBSProfileManager::Stop_Profile();
-	}
-
-	//only move character if Bullet processed a step (within it's 60fps timestep)
-	if (camera->EnableBullet == true)
-	{
-		if (steps >= 1)
-			camera->MoveCharacter();
-	}
-	else
-		camera->MoveCharacter();
-
-	//sync camera to physics
-	camera->Sync();
-
-	//update sound
-	if (enable_advanced_profiling == false)
-		SBSProfileManager::Start_Profile("Sound");
-	else
-		SBSProfileManager::Start_Profile("FMOD");
-	soundsys->update();
-	SBSProfileManager::Stop_Profile();
-
 	SBSProfileManager::Stop_Profile();
 }
 
@@ -4038,4 +4039,17 @@ void SBS::ListKeys()
 		std::string id = ToString(keys[i].id);
 		Report(id + " - " + keys[i].name);
 	}
+}
+
+void SBS::CameraLoop()
+{
+		unsigned long timing;
+		if (SmoothFrames > 0)
+			timing = GetAverageTime();
+		else
+			timing = GetElapsedTime();
+		float elapsed = timing / 1000.0;
+
+		//Process camera loop
+		camera->Loop(elapsed);
 }

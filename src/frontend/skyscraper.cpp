@@ -949,11 +949,14 @@ void Skyscraper::Loop()
 
 	if (IsLoading == false)
 	{
+		//run SBS main loop
+		Simcore->MainLoop();
+
 		//get input
 		GetInput();
 
-		//run SBS main loop
-		Simcore->MainLoop();
+		//process camera loop
+		Simcore->CameraLoop();
 	}
 
 	//update Caelum
