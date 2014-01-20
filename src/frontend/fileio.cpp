@@ -565,7 +565,6 @@ checkfloors:
 			else
 				getfloordata = false;
 			std::string tempdata = Calc(LineData.substr(temp1 + 1, temp3 - temp1 - 1).c_str());
-			TrimString(tempdata);
 			LineData = LineData.substr(0, temp1 + 1) + tempdata + LineData.substr(temp3);
 
 			if (!IsNumeric(tempdata.c_str(), temp4))
@@ -1215,7 +1214,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 13; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		buffer = tempdata[0];
@@ -1280,7 +1279,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 13; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create wall
@@ -1307,7 +1306,7 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 3; i <= 11; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -1320,7 +1319,7 @@ int ScriptProcessor::ProcCommands()
 					i = 12;
 
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -1345,7 +1344,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 2; i <= 8; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create tiled ground
@@ -1366,7 +1365,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 1; i <= 6; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		buffer = tempdata[0];
@@ -1453,7 +1452,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 10; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		buffer = tempdata[0];
@@ -1512,7 +1511,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i <= 10; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		buffer = tempdata[0];
@@ -1568,7 +1567,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 3; i < params - 2; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		buffer = tempdata[0];
@@ -1632,7 +1631,7 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 0; i <= 5; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -1642,7 +1641,7 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 0; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -1689,7 +1688,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 0; i <= 6; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//check for existence of shaft
@@ -1725,14 +1724,12 @@ int ScriptProcessor::ProcCommands()
 
 		for (int line = 0; line < params; line++)
 		{
-			std::string tmpstring = tempdata[line];
-			TrimString(tmpstring);
-			if (tmpstring.find("-", 1) > 0)
+			if (tempdata[line].find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -1751,9 +1748,7 @@ int ScriptProcessor::ProcCommands()
 			else
 			{
 				int showfloor;
-				std::string str = tempdata[line];
-				TrimString(str);
-				if (!IsNumeric(str.c_str(), showfloor))
+				if (!IsNumeric(tempdata[line].c_str(), showfloor))
 					return ScriptError("Invalid value");
 				Simcore->GetShaft(shaftnum)->AddShowFloor(showfloor);
 			}
@@ -1783,14 +1778,12 @@ int ScriptProcessor::ProcCommands()
 
 		for (int line = 0; line < params; line++)
 		{
-			std::string tmpstring = tempdata[line];
-			TrimString(tmpstring);
-			if (tmpstring.find("-", 1) > 0)
+			if (tempdata[line].find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -1808,9 +1801,7 @@ int ScriptProcessor::ProcCommands()
 			else
 			{
 				int showfloor;
-				std::string str = tempdata[line];
-				TrimString(str);
-				if (!IsNumeric(str.c_str(), showfloor))
+				if (!IsNumeric(tempdata[line].c_str(), showfloor))
 					return ScriptError("Invalid value");
 				Simcore->GetShaft(shaftnum)->AddShowOutside(showfloor);
 			}
@@ -1852,10 +1843,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 4; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		Object *object = Simcore->CreateStairwell(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
@@ -1878,10 +1867,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 6; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		int stairwell = atoi(tempdata[0].c_str());
@@ -1916,14 +1903,12 @@ int ScriptProcessor::ProcCommands()
 
 		for (int line = 0; line < params; line++)
 		{
-			std::string tmpstring = tempdata[line];
-			TrimString(tmpstring);
-			if (tmpstring.find("-", 1) > 0)
+			if (tempdata[line].find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -1942,9 +1927,7 @@ int ScriptProcessor::ProcCommands()
 			else
 			{
 				int showfloor;
-				std::string str = tempdata[line];
-				TrimString(str);
-				if (!IsNumeric(str.c_str(), showfloor))
+				if (!IsNumeric(tempdata[line].c_str(), showfloor))
 					return ScriptError("Invalid value");
 				Simcore->GetStairs(stairnum)->AddShowFloor(showfloor);
 			}
@@ -2025,10 +2008,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 8; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		Simcore->SetTextureMapping(atoi(tempdata[0].c_str()), Ogre::Vector2(atof(tempdata[1].c_str()), atof(tempdata[2].c_str())),
@@ -2053,10 +2034,8 @@ int ScriptProcessor::ProcCommands()
 				i = 8;
 			if (i == 10)
 				i = 13;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		Simcore->SetTextureMapping2(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), Ogre::Vector2(atof(tempdata[3].c_str()), atof(tempdata[4].c_str())),
@@ -2144,10 +2123,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		buffer = tempdata[0];
@@ -2184,10 +2161,8 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		std::string str = tempdata[2];
-		TrimString(str);
-		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + std::string(tempdata[2]));
+		if (!IsNumeric(tempdata[2].c_str()))
+			return ScriptError("Invalid value: " + tempdata[2]);
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
@@ -2246,10 +2221,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		Simcore->SetTextureFlip(atoi(tempdata[0].c_str()), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
@@ -2265,8 +2238,7 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		buffer = tempdata[1];
-		if (!Simcore->Mount(tempdata[0].c_str(), buffer.c_str()))
+		if (!Simcore->Mount(tempdata[0].c_str(), tempdata[1].c_str()))
 			return ScriptError();
 
 		return sNextLine;
@@ -2285,7 +2257,7 @@ int ScriptProcessor::ProcCommands()
 		for (int i = 0; i <= 5; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create floor auto area
@@ -2315,7 +2287,7 @@ int ScriptProcessor::ProcCommands()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		else
@@ -2325,7 +2297,7 @@ int ScriptProcessor::ProcCommands()
 				for (int i = 2; i <= 12; i++)
 				{
 					if (!IsNumeric(tempdata[i].c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 				if (warn_deprecated == true)
 					ScriptWarning("Syntax deprecated");
@@ -2338,7 +2310,7 @@ int ScriptProcessor::ProcCommands()
 						i = 6;
 
 					if (!IsNumeric(tempdata[i].c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 			}
 		}
@@ -2383,10 +2355,8 @@ int ScriptProcessor::ProcCommands()
 			{
 				if (i == 10)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -2397,10 +2367,8 @@ int ScriptProcessor::ProcCommands()
 			{
 				if (i == 11)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -2473,10 +2441,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 3; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array, tex_array;
@@ -2524,10 +2490,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array;
@@ -2555,10 +2519,8 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		std::string str = tempdata[0];
-		TrimString(str);
-		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + std::string(tempdata[0]));
+		if (!IsNumeric(tempdata[0].c_str()))
+			return ScriptError("Invalid value: " + tempdata[0]);
 
 		keyvalue = atoi(tempdata[0].c_str());
 		if (keyvalue < 1)
@@ -2583,10 +2545,8 @@ int ScriptProcessor::ProcCommands()
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		lockvalue = atoi(tempdata[0].c_str());
@@ -2612,7 +2572,6 @@ int ScriptProcessor::ProcCommands()
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(7).c_str());
-		TrimString(buffer);
 
 		int obj;
 		if (!IsNumeric(buffer.c_str(), obj))
@@ -2629,7 +2588,6 @@ int ScriptProcessor::ProcCommands()
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(10).c_str());
-		TrimString(buffer);
 
 		//run action
 		Simcore->RunAction(buffer);
@@ -2642,7 +2600,6 @@ int ScriptProcessor::ProcCommands()
 	{
 		//calculate inline math
 		buffer = Calc(LineData.substr(10).c_str());
-		TrimString(buffer);
 
 		int num;
 		if (!IsNumeric(buffer.c_str(), num))
@@ -2859,7 +2816,6 @@ int ScriptProcessor::ProcFloors()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		std::string str = Calc(temp2.c_str());
-		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->Height))
 			return ScriptError("Invalid value");
 		if (FloorCheck < 2)
@@ -2872,7 +2828,6 @@ int ScriptProcessor::ProcFloors()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		std::string str = Calc(temp2.c_str());
-		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->InterfloorHeight))
 			return ScriptError("Invalid value");
 		if (FloorCheck == 0)
@@ -2885,7 +2840,6 @@ int ScriptProcessor::ProcFloors()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		std::string str = Calc(temp2.c_str());
-		TrimString(str);
 		if (!IsNumeric(str.c_str(), floor->Altitude))
 			return ScriptError("Invalid value");
 		return sNextLine;
@@ -2935,14 +2889,12 @@ int ScriptProcessor::ProcFloors()
 
 		for (int line = 0; line < params; line++)
 		{
-			std::string tmpstring = tempdata[line];
-			TrimString(tmpstring);
-			if (tmpstring.find("-", 1) > 0)
+			if (tempdata[line].find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -2960,9 +2912,7 @@ int ScriptProcessor::ProcFloors()
 			else
 			{
 				int data;
-				std::string str = tempdata[line];
-				TrimString(str);
-				if (!IsNumeric(str.c_str(), data))
+				if (!IsNumeric(tempdata[line].c_str(), data))
 					return ScriptError("Invalid value");
 				floor->AddGroupFloor(data);
 			}
@@ -3009,10 +2959,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 2; i <= 10; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -3023,13 +2971,10 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 9)
 					i = 11;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
-
 
 		//create floor
 		if (compat == true)
@@ -3059,10 +3004,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 3; //skip non-numeric parameters
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -3075,10 +3018,8 @@ int ScriptProcessor::ProcFloors()
 					i = 3; //skip non-numeric parameters
 				if (i == 10)
 					i = 12;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3115,10 +3056,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 3; //skip non-numeric parameters
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -3131,10 +3070,8 @@ int ScriptProcessor::ProcFloors()
 					i = 3; //skip non-numeric parameters
 				if (i == 10)
 					i = 12;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3169,10 +3106,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 2; i <= 10; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -3183,10 +3118,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 9)
 					i = 11;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3210,10 +3143,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create wall
@@ -3235,10 +3166,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create wall
@@ -3263,10 +3192,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3; //skip non-numeric parameters
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create wall
@@ -3289,10 +3216,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create wall
@@ -3312,10 +3237,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		StoreCommand(floor->ColumnWallBox(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
@@ -3334,10 +3257,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 9; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		StoreCommand(floor->ColumnWallBox2(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
@@ -3358,9 +3279,7 @@ int ScriptProcessor::ProcFloors()
 		for (int line = 0; line < params; line++)
 		{
 			int elevnumber;
-			std::string str = tempdata[line];
-			TrimString(str);
-			if (!IsNumeric(str.c_str(), elevnumber))
+			if (!IsNumeric(tempdata[line].c_str(), elevnumber))
 				return ScriptError("Invalid elevator number");
 			if (elevnumber < 1 || elevnumber > Simcore->Elevators())
 				return ScriptError("Invalid elevator number");
@@ -3389,10 +3308,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 6 || i == 9) //skip non-numeric parameters
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -3407,10 +3324,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 8 || i == 11) //skip non-numeric parameters
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3447,10 +3362,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 4; //skip non-numeric parameters
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create stairs
@@ -3477,10 +3390,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 1; i <= 9; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 1;
 		}
@@ -3488,10 +3399,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 3; i <= 11; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 2;
 		}
@@ -3499,10 +3408,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 3; i <= 12; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 3;
 		}
@@ -3510,10 +3417,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			for (int i = 4; i <= 13; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3566,10 +3471,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 2; //skip non-numeric parameters
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 1;
 		}
@@ -3580,10 +3483,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 4; //skip non-numeric parameters
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 2;
 		}
@@ -3594,10 +3495,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 4; //skip non-numeric parameters
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 3;
 		}
@@ -3608,10 +3507,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 5; //skip non-numeric parameters
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3665,10 +3562,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 5; //skip non-numeric parameters
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//check to see if file exists
@@ -3715,10 +3610,8 @@ int ScriptProcessor::ProcFloors()
 					i = 13;
 				if (i == 15)
 					i = 16;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = true;
 			if (warn_deprecated == true)
@@ -3734,10 +3627,8 @@ int ScriptProcessor::ProcFloors()
 					i = 14;
 				if (i == 16)
 					i = 17;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3777,10 +3668,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 2)
 					i = 4;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		if (compat == 1)
@@ -3789,10 +3678,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 2)
 					i = 3;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		if (compat == 2)
@@ -3801,10 +3688,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 2)
 					i = 4;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3843,10 +3728,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 3;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -3857,10 +3740,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 1)
 					i = 4;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -3885,10 +3766,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 7)
 				i = 8;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		floor->AddFillerWalls(tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), Ogre::StringConverter::parseBool(tempdata[7]), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()));
@@ -3917,7 +3796,7 @@ int ScriptProcessor::ProcFloors()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		else
@@ -3927,7 +3806,7 @@ int ScriptProcessor::ProcFloors()
 				for (int i = 2; i <= 12; i++)
 				{
 					if (!IsNumeric(tempdata[i].c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 				if (warn_deprecated == true)
 					ScriptWarning("Syntax deprecated");
@@ -3940,7 +3819,7 @@ int ScriptProcessor::ProcFloors()
 						i = 6;
 
 					if (!IsNumeric(tempdata[i].c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 			}
 		}
@@ -3989,10 +3868,8 @@ int ScriptProcessor::ProcFloors()
 				i = 5;
 			if (i == 6)
 				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
@@ -4018,10 +3895,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
@@ -4052,10 +3927,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 10)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -4066,10 +3939,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 11)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -4112,10 +3983,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 11)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -4126,10 +3995,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 12)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -4178,10 +4045,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 11)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -4192,10 +4057,8 @@ int ScriptProcessor::ProcFloors()
 			{
 				if (i == 12)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -4235,10 +4098,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 3; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array, tex_array;
@@ -4288,10 +4149,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 4;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array, tex_array;
@@ -4346,10 +4205,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 4;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array, tex_array;
@@ -4402,10 +4259,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array;
@@ -4437,10 +4292,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array;
@@ -4475,10 +4328,8 @@ int ScriptProcessor::ProcFloors()
 		{
 			if (i == 1)
 				i = 3;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array;
@@ -4511,10 +4362,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//perform cut on floor
@@ -4534,10 +4383,8 @@ int ScriptProcessor::ProcFloors()
 		//check numeric values
 		for (int i = 0; i <= 5; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//perform cut on all objects related to the current floor
@@ -4620,7 +4467,6 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		TrimString(temp2);
 		elev->Name = temp2;
 		return sNextLine;
 	}
@@ -4697,14 +4543,12 @@ int ScriptProcessor::ProcElevators()
 
 		for (int line = 0; line < params; line++)
 		{
-			std::string tmpstring = tempdata[line];
-			TrimString(tmpstring);
-			if (tmpstring.find("-", 1) > 0)
+			if (tempdata[line].find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -4725,9 +4569,7 @@ int ScriptProcessor::ProcElevators()
 			else
 			{
 				int data;
-				std::string str = tempdata[line];
-				TrimString(str);
-				if (!IsNumeric(str.c_str(), data))
+				if (!IsNumeric(tempdata[line].c_str(), data))
 					return ScriptError("Invalid value");
 				if (!elev->AddServicedFloor(data))
 					return ScriptError();
@@ -4744,14 +4586,12 @@ int ScriptProcessor::ProcElevators()
 
 		for (int line = 0; line < params; line++)
 		{
-			std::string tmpstring = tempdata[line];
-			TrimString(tmpstring);
-			if (tmpstring.find("-", 1) > 0)
+			if (tempdata[line].find("-", 1) > 0)
 			{
 				int start, end;
 				//found a range marker
-				std::string str1 = tmpstring.substr(0, tmpstring.find("-", 1));
-				std::string str2 = tmpstring.substr(tmpstring.find("-", 1) + 1);
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
 				TrimString(str1);
 				TrimString(str2);
 				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
@@ -4771,9 +4611,7 @@ int ScriptProcessor::ProcElevators()
 			else
 			{
 				int data;
-				std::string str = tempdata[line];
-				TrimString(str);
-				if (!IsNumeric(str.c_str(), data))
+				if (!IsNumeric(tempdata[line].c_str(), data))
 					return ScriptError("Invalid value");
 				elev->AddDisplayFloor(data);
 			}
@@ -5453,10 +5291,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 2; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		elev->MotorPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
@@ -5534,10 +5370,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		elev->ParkingFloor = atoi(tempdata[0].c_str());
@@ -5613,10 +5447,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 2; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		elev->MusicPosition = Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
@@ -5683,10 +5515,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 1; i <= 3; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()));
@@ -5714,10 +5544,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 2; i <= 10; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -5728,10 +5556,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 9)
 					i = 11;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -5755,10 +5581,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 2; i <= 12; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		//create wall
@@ -5788,10 +5612,8 @@ int ScriptProcessor::ProcElevators()
 					i = 2;
 				if (i == 7)
 					i = 8;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -5804,10 +5626,8 @@ int ScriptProcessor::ProcElevators()
 					i = 3;
 				if (i == 8)
 					i = 9;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -5833,10 +5653,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 0; i <= 3; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		elev->SetShaftDoors(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
@@ -5866,10 +5684,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 3;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		if (compat == 1)
@@ -5878,10 +5694,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 2;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		if (compat == 2)
@@ -5890,10 +5704,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 3;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		
@@ -5927,10 +5739,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 3)
 				i = 4;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		StoreCommand(elev->CreateButtonPanel(tempdata[0].c_str(), atoi(tempdata[1].c_str()), atoi(tempdata[2].c_str()), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str())));
@@ -5957,18 +5767,14 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 2;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 1;
 		}
 		if (params == 9)
 		{
-			std::string str = tempdata[2];
-			TrimString(str);
-			if (IsNumeric(str.c_str()) == true)
+			if (IsNumeric(tempdata[2].c_str()) == true)
 			{
 				//1.5 compatibility mode
 				//check numeric values
@@ -5977,10 +5783,8 @@ int ScriptProcessor::ProcElevators()
 					if (i == 1 || i == 4)
 						i++;
 
-					std::string str = tempdata[i];
-					TrimString(str);
-					if (!IsNumeric(str.c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 				hoffset = atof(tempdata[7].c_str());
 				voffset = atof(tempdata[8].c_str());
@@ -5997,10 +5801,8 @@ int ScriptProcessor::ProcElevators()
 					i = 3;
 				if (i == 5)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (params == 10)
 			{
@@ -6018,10 +5820,8 @@ int ScriptProcessor::ProcElevators()
 					i = 4;
 				if (i == 6)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (params == 11)
 			{
@@ -6080,18 +5880,14 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1 || i == 4)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 1;
 		}
 		if (params == 9)
 		{
-			std::string str = tempdata[2];
-			TrimString(str);
-			if (IsNumeric(str.c_str()) == true)
+			if (IsNumeric(tempdata[2].c_str()) == true)
 			{
 				//1.5 compatibility mode
 				//check numeric values
@@ -6099,10 +5895,8 @@ int ScriptProcessor::ProcElevators()
 				{
 					if (i == 1 || i == 4)
 						i++;
-					std::string str = tempdata[i];
-					TrimString(str);
-					if (!IsNumeric(str.c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					if (!IsNumeric(tempdata[i].c_str()))
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 				hoffset = atof(tempdata[7].c_str());
 				voffset = atof(tempdata[8].c_str());
@@ -6119,10 +5913,8 @@ int ScriptProcessor::ProcElevators()
 					i = 3;
 				if (i == 5)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (params == 10)
 			{
@@ -6140,10 +5932,8 @@ int ScriptProcessor::ProcElevators()
 					i = 4;
 				if (i == 6)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (params == 11)
 			{
@@ -6200,10 +5990,8 @@ int ScriptProcessor::ProcElevators()
 				i = 4;
 			if (i == 6)
 				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		if (params == 11)
 		{
@@ -6245,10 +6033,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 1)
 				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		if (!elev->GetPanel(atoi(tempdata[0].c_str())))
@@ -6305,10 +6091,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 1; i <= 5; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -6317,10 +6101,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 2; i <= 6; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -6348,10 +6130,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 11 || i == 14)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = true;
 			if (warn_deprecated == true)
@@ -6364,10 +6144,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 12 || i == 15)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -6400,30 +6178,24 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 1)
 					i = 4;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		else if (compat == 1)
 		{
 			for (int i = 2; i <= 6; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		else if (compat == 2)
 		{
 			for (int i = 3; i <= 7; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -6466,7 +6238,7 @@ int ScriptProcessor::ProcElevators()
 			for (int i = 2; i <= 4; i++)
 			{
 				if (!IsNumeric(tempdata[i].c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		else
@@ -6476,7 +6248,7 @@ int ScriptProcessor::ProcElevators()
 				for (int i = 2; i <= 12; i++)
 				{
 					if (!IsNumeric(tempdata[i].c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 				if (warn_deprecated == true)
 					ScriptWarning("Syntax deprecated");
@@ -6489,7 +6261,7 @@ int ScriptProcessor::ProcElevators()
 						i = 6;
 
 					if (!IsNumeric(tempdata[i].c_str()))
-						return ScriptError("Invalid value: " + std::string(tempdata[i]));
+						return ScriptError("Invalid value: " + tempdata[i]);
 				}
 			}
 		}
@@ -6538,10 +6310,8 @@ int ScriptProcessor::ProcElevators()
 				i = 4;
 			if (i == 5)
 				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		if (compat == true)
@@ -6575,10 +6345,8 @@ int ScriptProcessor::ProcElevators()
 				i = 4;
 			if (i == 5)
 				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		if (compat == true)
@@ -6598,10 +6366,8 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		std::string str = tempdata[0];
-		TrimString(str);
-		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + std::string(tempdata[0]));
+		if (!IsNumeric(tempdata[0].c_str()))
+			return ScriptError("Invalid value: " + tempdata[0]);
 
 		StoreCommand(elev->FinishDoors(atoi(tempdata[0].c_str())));
 		return sNextLine;
@@ -6617,10 +6383,8 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		std::string str = tempdata[0];
-		TrimString(str);
-		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + std::string(tempdata[0]));
+		if (!IsNumeric(tempdata[0].c_str()))
+			return ScriptError("Invalid value: " + tempdata[0]);
 
 		bool result;
 		result = elev->FinishShaftDoors(atoi(tempdata[0].c_str()));
@@ -6644,10 +6408,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			if (i == 11 || i == 14)
 				i++;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		StoreCommand(elev->AddDirectionalIndicator(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), tempdata[6].c_str(), tempdata[7].c_str(), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), tempdata[11].c_str(), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), Ogre::StringConverter::parseBool(tempdata[14]), atof(tempdata[15].c_str()), atof(tempdata[16].c_str())));
@@ -6670,10 +6432,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 3; i <= 11; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 1;
 		}
@@ -6681,10 +6441,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 3; i <= 12; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			compat = 2;
 		}
@@ -6692,10 +6450,8 @@ int ScriptProcessor::ProcElevators()
 		{
 			for (int i = 4; i <= 13; i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -6744,10 +6500,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 10)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
@@ -6758,10 +6512,8 @@ int ScriptProcessor::ProcElevators()
 			{
 				if (i == 11)
 					i++;
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
@@ -6796,10 +6548,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 3; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array, tex_array;
@@ -6847,10 +6597,8 @@ int ScriptProcessor::ProcElevators()
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
 		std::vector<std::string> action_array;
@@ -6908,17 +6656,14 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 2; i <= 3; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		buffer = tempdata[0];
-		CheckFile(buffer.c_str());
+		CheckFile(tempdata[0].c_str());
 		if (params == 4)
-			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
+			Simcore->LoadTexture(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		else
-			Simcore->LoadTexture(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
+			Simcore->LoadTexture(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -6932,11 +6677,7 @@ int ScriptProcessor::ProcTextures()
 			return ScriptError("Incorrect number of parameters");
 
 		bool force;
-		std::string temp = tempdata[params - 1];
-		std::string temp2 = tempdata[params - 2];
-		TrimString(temp);
-		TrimString(temp2);
-		if (IsNumeric(temp.c_str()) == true && IsNumeric(temp2.c_str()) == true)
+		if (IsNumeric(tempdata[params - 1].c_str()) == true && IsNumeric(tempdata[params - 2].c_str()) == true)
 			force = false;
 		else
 			force = true;
@@ -6946,24 +6687,19 @@ int ScriptProcessor::ProcTextures()
 		{
 			for (int i = (params - 4); i <= (params - 2); i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 		else
 		{
 			for (int i = (params - 3); i <= (params - 1); i++)
 			{
-				std::string str = tempdata[i];
-				TrimString(str);
-				if (!IsNumeric(str.c_str()))
-					return ScriptError("Invalid value: " + std::string(tempdata[i]));
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
 
-		buffer = tempdata[0];
 		std::vector<std::string> filenames;
 		if (force == true)
 		{
@@ -6999,15 +6735,12 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 5; i <= 6; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		buffer = tempdata[0];
 
 		//check existence of files
-		CheckFile(buffer.c_str());
+		CheckFile(tempdata[0].c_str());
 		CheckFile(tempdata[1].c_str());
 		CheckFile(tempdata[2].c_str());
 
@@ -7030,16 +6763,13 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 2; i <= 3; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		buffer = tempdata[0];
 		if (params == 4)
-			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
+			Simcore->LoadMaterial(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
 		else
-			Simcore->LoadMaterial(buffer.c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
+			Simcore->LoadMaterial(tempdata[0].c_str(), tempdata[1].c_str(), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), true, Ogre::StringConverter::parseBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -7057,10 +6787,8 @@ int ScriptProcessor::ProcTextures()
 		{
 			if (i == 2)
 				i = 4;
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		RangeL = atoi(tempdata[0].c_str());
 		RangeH = atoi(tempdata[1].c_str());
@@ -7098,10 +6826,8 @@ int ScriptProcessor::ProcTextures()
 			if (i == 9)
 				i = 11;
 
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		buffer = tempdata[2];
 		TrimString(buffer);
@@ -7133,10 +6859,8 @@ int ScriptProcessor::ProcTextures()
 			if (i == 11)
 				i = 13;
 
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		RangeL = atoi(tempdata[0].c_str());
 		RangeH = atoi(tempdata[1].c_str());
@@ -7176,18 +6900,14 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 2; i <= 7; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
-		buffer = tempdata[0];
-		TrimString(buffer);
-		CheckFile(buffer.c_str());
+		CheckFile(tempdata[0].c_str());
 		if (params == 8)
-			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
+			Simcore->LoadTextureCropped(tempdata[0].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()));
 		else
-			Simcore->LoadTextureCropped(buffer.c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]));
+			Simcore->LoadTextureCropped(tempdata[0].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), Ogre::StringConverter::parseBool(tempdata[8]));
 		return sNextLine;
 	}
 
@@ -7203,10 +6923,8 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 3; i <= 8; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		if (params == 9)
 			Simcore->AddTextureOverlay(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()));
@@ -7227,10 +6945,8 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 0; i <= 2; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		Simcore->SetLighting(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
@@ -7246,13 +6962,10 @@ int ScriptProcessor::ProcTextures()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric value
-		std::string str = tempdata[1];
-		TrimString(str);
-		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + std::string(tempdata[1]));
+		if (!IsNumeric(tempdata[1].c_str()))
+			return ScriptError("Invalid value: " + tempdata[1]);
 
-		buffer = tempdata[0];
-		Simcore->RotateTexture(buffer.c_str(), atof(tempdata[1].c_str()));
+		Simcore->RotateTexture(tempdata[0].c_str(), atof(tempdata[1].c_str()));
 		return sNextLine;
 	}
 
@@ -7266,13 +6979,10 @@ int ScriptProcessor::ProcTextures()
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric value
-		std::string str = tempdata[1];
-		TrimString(str);
-		if (!IsNumeric(str.c_str()))
-			return ScriptError("Invalid value: " + std::string(tempdata[1]));
+		if (!IsNumeric(tempdata[1].c_str()))
+			return ScriptError("Invalid value: " + tempdata[1]);
 
-		buffer = tempdata[0];
-		Simcore->RotateAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()));
+		Simcore->RotateAnimTexture(tempdata[0].c_str(), atof(tempdata[1].c_str()));
 		return sNextLine;
 	}
 
@@ -7288,14 +6998,11 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 1; i <= 2; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		Simcore->ScrollTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		Simcore->ScrollTexture(tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
 	}
 
@@ -7311,14 +7018,11 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 1; i <= 2; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		Simcore->ScrollAnimTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		Simcore->ScrollAnimTexture(tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
 	}
 
@@ -7334,14 +7038,11 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 1; i <= 2; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		Simcore->ScaleTexture(buffer.c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
+		Simcore->ScaleTexture(tempdata[0].c_str(), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()));
 		return sNextLine;
 	}
 
@@ -7357,14 +7058,11 @@ int ScriptProcessor::ProcTextures()
 		//check numeric values
 		for (int i = 3; i <= 6; i++)
 		{
-			std::string str = tempdata[i];
-			TrimString(str);
-			if (!IsNumeric(str.c_str()))
-				return ScriptError("Invalid value: " + std::string(tempdata[i]));
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		Simcore->TransformTexture(buffer.c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
+		Simcore->TransformTexture(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()));
 		return sNextLine;
 	}
 
@@ -7481,7 +7179,10 @@ std::string ScriptProcessor::Calc(const char *expression)
 
 	//return value if none found
 	if (operators == 0)
+	{
+		TrimString(tmpcalc);
 		return tmpcalc;
+	}
 
 	//otherwise perform math
 	temp1 = tmpcalc.find("+", 1);
@@ -7493,6 +7194,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 		{
 			float tmpnum = atof(one.c_str()) + atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			TrimString(tmpcalc);
 			return tmpcalc;
 		}
 		else
@@ -7514,6 +7216,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 		{
 			float tmpnum = atof(one.c_str()) - atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			TrimString(tmpcalc);
 			return tmpcalc;
 		}
 		else
@@ -7535,6 +7238,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 		{
 			float tmpnum = atof(one.c_str()) / atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			TrimString(tmpcalc);
 			return tmpcalc;
 		}
 		else
@@ -7556,6 +7260,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 		{
 			float tmpnum = atof(one.c_str()) * atof(two.c_str());
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			TrimString(tmpcalc);
 			return tmpcalc;
 		}
 		else
@@ -7695,7 +7400,6 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc, int cal
 			if (i != calc_skip)
 			{
 				stringbuffer = Calc(tempdata[i].c_str());
-				TrimString(stringbuffer);
 				tempdata[i] = stringbuffer;
 			}
 		}
@@ -7726,7 +7430,6 @@ int ScriptProcessor::SplitAfterEquals(const char *string, bool calc)
 		for (int i = 0; i < (int)tempdata.size(); i++)
 		{
 			std::string buffer = Calc(tempdata[i].c_str());
-			TrimString(buffer);
 			tempdata[i] = buffer;
 		}
 	}
