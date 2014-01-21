@@ -228,7 +228,7 @@ void ObjectInfo::Loop()
 	if (moveobject)
 		moveobject->Loop();
 
-	int number;
+	int number = oldobject;
 	if (changed == false)
 	{
 		int newobject = Simcore->camera->GetClickedObjectNumber();
@@ -242,10 +242,14 @@ void ObjectInfo::Loop()
 	}
 	else
 	{
-		TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(ObjectTree->GetSelection());
-		wxString num;
-		num = data->GetDesc();
-		number = atoi(num.ToAscii());
+		wxTreeItemId id = ObjectTree->GetSelection();
+		if (id.IsOk())
+		{
+			TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(id);
+			wxString num;
+			num = data->GetDesc();
+			number = atoi(num.ToAscii());
+		}
 		changed = false;
 	}
 	if (number == oldobject)
