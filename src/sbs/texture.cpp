@@ -28,7 +28,6 @@
 #include <OgreTechnique.h>
 #include <OgreMaterialManager.h>
 #include <OgreFontManager.h>
-#include <OgreFont.h>
 #include <OgreHardwarePixelBuffer.h>
 #include "globals.h"
 #include "sbs.h"

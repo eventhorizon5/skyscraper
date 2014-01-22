@@ -26,7 +26,6 @@
 #include <OgreRoot.h>
 #include <OgreFileSystem.h>
 #include <OgreFontManager.h>
-#include <OgreFont.h>
 #include <OgreHardwarePixelBuffer.h>
 #include <OgreStringConverter.h>
 #include <fmod.hpp>
@@ -3490,7 +3489,11 @@ std::string SBS::VerifyFile(const char *filename)
 			return verify_results[i].result;
 	}
 
+#if OGRE_VERSION >= 0x00010900
+	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+#else
 	Ogre::FileSystemArchive filesystem(".","FileSystem");
+#endif
 	if (filesystem.exists(file))
 	{
 		CacheFilename(file, file);
@@ -3525,7 +3528,11 @@ bool SBS::FileExists(const char *filename)
 	std::string file = filename;
 	TrimString(file);
 
+#if OGRE_VERSION >= 0x00010900
+	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+#else
 	Ogre::FileSystemArchive filesystem(".","FileSystem");
+#endif
 	if (filesystem.exists(file))
 		return true;
 
@@ -3766,12 +3773,6 @@ std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
 		}
 	}
 	return "General";
-}
-
-void SBS::EnableVSync(bool value)
-{
-	//enable or disable vertical sync
-	mRoot->getRenderSystem()->setWaitForVerticalBlank(value);
 }
 
 void SBS::ShowColliders(bool value)

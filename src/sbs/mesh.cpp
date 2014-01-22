@@ -982,7 +982,7 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 	return wall;
 }
 
-Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, int submesh)
+bool MeshObject::ChangeTexture(const char *texture, bool matcheck, int submesh)
 {
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
@@ -993,13 +993,13 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	TrimString(tex);
 
 	if (MeshWrapper->getNumSubMeshes() == 0)
-		return Ogre::MaterialPtr(0);
+		return false;
 
 	//exit if old and new materials are the same
 	if (matcheck == true)
 	{
 		if (MeshWrapper->getSubMesh(submesh)->getMaterialName() == tex)
-			return Ogre::MaterialPtr(0);
+			return false;
 	}
 
 	//get new material
@@ -1007,7 +1007,7 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	if (!newmat.get())
 	{
 		sbs->ReportError("ChangeTexture: Invalid texture '" + tex + "'");
-		return Ogre::MaterialPtr(0);
+		return false;
 	}
 
 	//set material if valid
@@ -1016,20 +1016,17 @@ Ogre::MaterialPtr MeshObject::ChangeTexture(const char *texture, bool matcheck, 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();
 
-	return newmat;
+	return true;
 }
 
 bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
 	//replace submesh materials named oldtexture with newtexture
 	int submesh = FindMatchingSubMesh(oldtexture);
+	bool result = false;
 	if (submesh >= 0)
-	{
-		Ogre::MaterialPtr result = ChangeTexture(newtexture.c_str(), true, submesh);
-		if (!result.isNull())
-			return true;
-	}
-	return false;
+		result = ChangeTexture(newtexture.c_str(), true, submesh);
+	return result;
 }
 
 int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
