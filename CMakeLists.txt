@@ -21,32 +21,7 @@ if(NOT OGRE_FOUND)
   message(SEND_ERROR "Failed to find OGRE.")
 endif()
  
-# Find Boost
-if (NOT OGRE_BUILD_PLATFORM_IPHONE)
-	if (APPLE)
-		set(Boost_USE_STATIC_LIBS TRUE)
-	else ()
-		# Statically linking boost to a dynamic Ogre build doesn't work on Linux 64bit
-		set(Boost_USE_STATIC_LIBS ${OGRE_STATIC})
-	endif ()
-	set(Boost_ADDITIONAL_VERSIONS "1.42" "1.42.0" "1.41.0" "1.41" "1.40.0" "1.40" "1.39.0" "1.39" "1.38.0" "1.38" "1.37.0" "1.37" )
-	# Components that need linking (NB does not include header-only components like bind)
-	set(OGRE_BOOST_COMPONENTS thread date_time)
-	find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-	if (NOT Boost_FOUND)
-		# Try again with the other type of libs
-		set(Boost_USE_STATIC_LIBS NOT ${Boost_USE_STATIC_LIBS})
-		find_package(Boost COMPONENTS ${OGRE_BOOST_COMPONENTS} QUIET)
-	endif()
-	find_package(Boost QUIET)
- 
-	# Set up referencing of Boost
-	if (Boost_FOUND)
-		include_directories(${Boost_INCLUDE_DIR})
-		add_definitions(-DBOOST_ALL_NO_LIB)
-		set(OGRE_LIBRARIES ${OGRE_LIBRARIES} ${Boost_LIBRARIES})
-	endif()
-endif()
+set (OGRE_LIBRARIES ${OGRE_LIBRARIES} ${OGRE_Overlay_LIBRARIES})
 
 #find wxWidgets
 find_package(wxWidgets COMPONENTS core base gl REQUIRED)
@@ -90,6 +65,7 @@ file (GLOB OGREBULLET_DYN_FILES
 
 include_directories( ${OIS_INCLUDE_DIRS}
 	${OGRE_INCLUDE_DIRS}
+	${OGRE_Overlay_INCLUDE_DIRS}
 	${FMOD_INCLUDE_DIR}
 	${GTK2_INCLUDE_DIRS}
 	${BULLET_INCLUDE_DIRS}

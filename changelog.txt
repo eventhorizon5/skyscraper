@@ -19,7 +19,7 @@ Version 1.9 (2.0 Alpha 9)
 -fixed GetObjectPosition() for elevator doors, so now their position shows up in the MoveObject window
 -fixed Camera::Rotate() function; relative rotations now work in camera control window
 -Bullet: disabled penetration recovery, which fixes issues with stairs stepping
--enabled frame smoothing, configurable in the INI file
+-added frame smoothing feature, configurable in the INI file
 -removal of wxWidgets code from the SBS library
 -new SBS timer system
 -added while statements
