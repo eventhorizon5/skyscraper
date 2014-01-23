@@ -345,7 +345,7 @@ namespace OgreBulletCollisions
             HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY);
         bind->setBinding(COLOUR_BINDING, cbuf);
 
-        size_t charlen = mCaption.size();
+        //size_t charlen = mCaption.size();
         Real *pPCBuff = static_cast<Real*>(ptbuf->lock(HardwareBuffer::HBL_DISCARD));
 
         float largestWidth = 0;

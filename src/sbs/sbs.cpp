@@ -524,7 +524,7 @@ void SBS::MainLoop()
 	else
 		timing = GetElapsedTime();
 
-	float elapsed = timing / 1000.0;
+	float elapsed = float(timing) / 1000.0;
 
 	//calculate start and running time
 	if (start_time == 0)
@@ -532,7 +532,6 @@ void SBS::MainLoop()
 	running_time = (GetRunTime() / 1000.0) - start_time;
 
 	//update physics
-	float step = float(timing) / 1000.0;
 	int steps = 0;
 	if (camera->EnableBullet == true)
 	{
@@ -540,7 +539,7 @@ void SBS::MainLoop()
 			SBSProfileManager::Start_Profile("Collisions/Physics");
 		else
 			SBSProfileManager::Start_Profile("Bullet");
-		steps = mWorld->stepSimulation(step, 1);
+		steps = mWorld->stepSimulation(elapsed, 1);
 		SBSProfileManager::Stop_Profile();
 	}
 
@@ -564,7 +563,7 @@ void SBS::MainLoop()
 	soundsys->update();
 	SBSProfileManager::Stop_Profile();
 
-	elapsed = remaining_delta + (timing / 1000.0);
+	elapsed = remaining_delta + ((float)timing / 1000.0);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > .5f)

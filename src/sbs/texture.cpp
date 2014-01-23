@@ -313,20 +313,20 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
 
 	//bind texture to material
-	Ogre::TextureUnitState* state1 = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
-	Ogre::TextureUnitState* state2 = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(specular_texturename);
-	Ogre::TextureUnitState* state3 = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(blend_texturename);
+	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
+	Ogre::TextureUnitState* spec_state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(specular_texturename);
+	Ogre::TextureUnitState* blend_state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(blend_texturename);
 
-	if (state2)
-		state2->setColourOperation(Ogre::LBO_ALPHA_BLEND);
+	if (spec_state)
+		spec_state->setColourOperation(Ogre::LBO_ALPHA_BLEND);
 
-	if (state3)
+	if (blend_state)
 	{
-		state3->setColourOperationEx(Ogre::LBX_BLEND_CURRENT_ALPHA);
+		blend_state->setColourOperationEx(Ogre::LBX_BLEND_CURRENT_ALPHA);
 		if (spherical == true)
-			state3->setEnvironmentMap(true, Ogre::TextureUnitState::ENV_CURVED);
+			blend_state->setEnvironmentMap(true, Ogre::TextureUnitState::ENV_CURVED);
 		else
-			state3->setEnvironmentMap(true, Ogre::TextureUnitState::ENV_PLANAR);
+			blend_state->setEnvironmentMap(true, Ogre::TextureUnitState::ENV_PLANAR);
 	}
 
 	//show only clockwise side of material

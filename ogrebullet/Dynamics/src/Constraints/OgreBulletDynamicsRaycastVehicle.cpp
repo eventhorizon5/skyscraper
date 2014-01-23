@@ -145,7 +145,7 @@ namespace OgreBulletDynamics
             node->setPosition (connectionPoint);
 
             mWheelNodes.push_back ( node);
-            const size_t wheelCurrent = mWheelsInfo.size() - 1;
+            //const size_t wheelCurrent = mWheelsInfo.size() - 1;
 
             //mWheelsInfo[wheelCurrent]->
         }

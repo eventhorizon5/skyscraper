@@ -916,11 +916,8 @@ void Skyscraper::Loop()
 			}
 			else if (processor->IsFinished == true)
 			{
-				if (IsLoading == true)
-				{
-					Start();
-					finish_time = Simcore->GetCurrentTime();
-				}
+				Start();
+				finish_time = Simcore->GetCurrentTime();
 			}
 
 			if (Simcore->RenderOnStartup == false)
