@@ -70,15 +70,12 @@ bool IsNumeric(const char *string, float &number)
 {
 	//test to see if a string is numeric, and return number as float
 
-	char* end = 0;
+	float num = 0.0;
+	int result = sscanf(string, "%f", &num);
 
-#ifdef _WIN32
-	number = (float)std::strtod(string, &end);
-#else
-	number = std::strtof(string, &end);
-#endif
-
-	return end != 0 && *end == 0;
+	if (result == 1)
+		return true;
+	return false;
 }
 
 const char *BoolToString(bool item)
