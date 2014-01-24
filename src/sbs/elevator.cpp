@@ -610,8 +610,6 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
 
-	//SBS_PROFILE("Elevator::AddRoute");
-
 	if (Running == false)
 	{
 		Report("Elevator not running");
@@ -735,8 +733,6 @@ bool Elevator::DeleteRoute(int floor, int direction)
 {
 	//Delete call route from elevator routing table
 	//directions are either 1 for up, or -1 for down
-
-	//SBS_PROFILE("Elevator::DeleteRoute");
 
 	if (Running == false)
 	{
@@ -2634,7 +2630,6 @@ bool Elevator::IsServicedFloor(int floor)
 {
 	//returns true if floor is in serviced floor list, otherwise false
 
-	//SBS_PROFILE("Elevator::IsServicedFloor");
 	int index = GetFloorIndex(floor);
 	if (index == -1)
 	{

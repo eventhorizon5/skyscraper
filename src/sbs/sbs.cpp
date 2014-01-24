@@ -1301,12 +1301,11 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 {
 	//Adds a wall from a specified array of 3D vectors
 
-	int num;
 	std::vector<Ogre::Vector3> varray1 = varray;
 	std::vector<Ogre::Vector3> varray2;
 
 	//get number of stored vertices
-	num = (int)varray.size();
+	int num = (int)varray.size();
 
 	//create a second array with reversed vertices
 	varray2.reserve(num);

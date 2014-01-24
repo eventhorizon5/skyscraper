@@ -417,7 +417,6 @@ bool Skyscraper::Initialize()
 	{
 		mRoot->initialise(false);
 		mRenderWindow = CreateRenderWindow();
-		//mRoot->getRenderSystem()->setWaitForVerticalBlank(false); //disable vsync
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -1662,9 +1661,6 @@ Ogre::RenderWindow* Skyscraper::CreateRenderWindow(const Ogre::NameValuePairList
 {
 	std::string name = windowName;
 
-	//do not clear background
-	//window->SetBackgroundStyle(wxBG_STYLE_CUSTOM);
-
 	int width, height;
 	window->GetClientSize(&width, &height);
 
@@ -1701,9 +1697,6 @@ void Skyscraper::destroyRenderWindow()
 
 	mRenderWindow->destroy();
 	mRenderWindow = 0;
-
-	//restore background
-	//window->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 }
 
 const std::string Skyscraper::getOgreHandle() const
