@@ -70,8 +70,8 @@ bool IsNumeric(const char *string, float &number)
 {
 	//test to see if a string is numeric, and return number as float
 
-	float num = 0.0;
-	int result = sscanf(string, "%f", &num);
+	number = 0.0;
+	int result = sscanf(string, "%f", &number);
 
 	if (result == 1)
 		return true;
