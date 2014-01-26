@@ -71,6 +71,20 @@ bool IsNumeric(const char *string, float &number)
 	//test to see if a string is numeric, and return number as float
 
 	number = 0.0;
+	int pos = 0;
+	int check = -1;
+	while (true)
+	{
+		//scan for non-numeric characters
+		check = (int)string[pos];
+		if (check == 0)
+			break;
+		if (check == 47 || check < 45 || check > 57)
+			return false;
+		pos++;
+	}
+
+	//convert string to float and return result
 	int result = sscanf(string, "%f", &number);
 
 	if (result == 1)
