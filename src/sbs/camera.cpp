@@ -1055,9 +1055,6 @@ void Camera::ShowDebugShape(bool value)
 
 void Camera::MoveCharacter()
 {
-	if (accum_movement == Ogre::Vector3::ZERO)
-		return;
-
 	if (EnableBullet == true)
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
