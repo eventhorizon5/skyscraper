@@ -1,5 +1,8 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-IsNumeric function fixes
+-cmake and source fixes for Ogre 1.9 compatibility
+-orientation fix for old sky system
 -added RenderOnStartup option, which renders the building as the script is processing on startup
 -fixed an issue where most new meshes would need to be disabled and re-enabled to be visible
 -cmake script fixes, and svnrev is now run automatically
