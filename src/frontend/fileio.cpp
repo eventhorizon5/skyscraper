@@ -40,6 +40,7 @@
 
 extern SBS *Simcore;
 extern Skyscraper *skyscraper;
+SBSIMPEXP extern std::string debugout; //temporary debugging string
 
 #define sContinue 0
 #define sNextLine 1
@@ -6661,7 +6662,7 @@ int ScriptProcessor::ProcTextures()
 		for (int i = 2; i <= 3; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + tempdata[i]);
+				return ScriptError("Invalid value: " + tempdata[i] + "\n" + debugout);
 		}
 		CheckFile(tempdata[0].c_str());
 		if (params == 4)

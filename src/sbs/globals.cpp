@@ -35,6 +35,7 @@
 #include "globals.h"
 
 const double pi = 3.14159265;
+SBSIMPEXP std::string debugout; //temporary debugging string
 
 bool IsEven(int Number)
 {
@@ -73,14 +74,20 @@ bool IsNumeric(const char *string, float &number)
 	number = 0.0;
 	int pos = 0;
 	int check = -1;
+	debugout = "\nDebugging information:\n";
+	debugout += "string: " + std::string(string) + "\n";
 	while (true)
 	{
 		//scan for non-numeric characters
 		check = (int)string[pos];
+		debugout += std::string(ToString(pos)) + ": " + std::string(ToString(check)) + "\n";
 		if (check == 0)
 			break;
 		if (check == 47 || check < 45 || check > 57)
+		{
+			debugout += "invalid character\n";
 			return false;
+		}
 		pos++;
 	}
 
@@ -89,6 +96,9 @@ bool IsNumeric(const char *string, float &number)
 
 	if (result == 1)
 		return true;
+
+	debugout += std::string("sscanf returned ") + std::string(ToString(result)) + "\n";
+	debugout += "with number: " + std::string(ToString(number, 3)) + "\n";
 	return false;
 }
 
