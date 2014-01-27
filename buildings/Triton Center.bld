@@ -363,10 +363,10 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
 
     #railings
     SetAutoSize = true, false
-    AddWall Railing1, Railing, 0, -37, -50, 37, -50, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing2, Railing, 0, -37, 4, 37, 4, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing3, Railing, 0, -37, -50, -37, 4, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing4, Railing, 0, 37, -50, 37, 4, 3.5, 3.5, 0, 0, 1, 1, false
+    if[%floor% > -7] AddWall Railing1, Railing, 0, -37, -50, 37, -50, 3.5, 3.5, 0, 0, 1, 1, false
+    if[%floor% > -7] AddWall Railing2, Railing, 0, -37, 4, 37, 4, 3.5, 3.5, 0, 0, 1, 1, false
+    if[%floor% > -7] AddWall Railing3, Railing, 0, -37, -50, -37, 4, 3.5, 3.5, 0, 0, 1, 1, false
+    if[%floor% > -7] AddWall Railing4, Railing, 0, 37, -50, 37, 4, 3.5, 3.5, 0, 0, 1, 1, false
     SetAutoSize = true, true
 <EndFloors>
 
