@@ -1594,10 +1594,11 @@ Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startflo
 		return 0;
 	}
 
-	ShaftArray.resize(ShaftArray.size() + 1);
-	ShaftArray[ShaftArray.size() - 1].number = number;
-	ShaftArray[ShaftArray.size() - 1].object = new Shaft(number, CenterX, CenterZ, _startfloor, _endfloor);
-	return ShaftArray[ShaftArray.size() - 1].object->object;
+	ShaftMap shaft;
+	shaft.number = number;
+	shaft.object = new Shaft(number, CenterX, CenterZ, _startfloor, _endfloor);
+	ShaftArray.push_back(shaft);
+	return shaft.object->object;
 }
 
 Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
@@ -1633,10 +1634,11 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 		return 0;
 	}
 
-	StairsArray.resize(StairsArray.size() + 1);
-	StairsArray[StairsArray.size() - 1].number = number;
-	StairsArray[StairsArray.size() - 1].object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
-	return StairsArray[StairsArray.size() - 1].object->object;
+	StairsMap stairs;
+	stairs.number = number;
+	stairs.object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
+	StairsArray.push_back(stairs);
+	return stairs.object->object;
 }
 
 bool SBS::NewElevator(int number)
@@ -1645,9 +1647,11 @@ bool SBS::NewElevator(int number)
 	for (size_t i = 0; i < ElevatorArray.size(); i++)
 		if (ElevatorArray[i].number == number)
 			return false;
-	ElevatorArray.resize(ElevatorArray.size() + 1);
-	ElevatorArray[ElevatorArray.size() - 1].number = number;
-	ElevatorArray[ElevatorArray.size() - 1].object = new Elevator(number);
+
+	ElevatorMap elev;
+	elev.number = number;
+	elev.object = new Elevator(number);
+	ElevatorArray.push_back(elev);
 	return true;
 }
 
@@ -1657,9 +1661,11 @@ bool SBS::NewFloor(int number)
 	for (size_t i = 0; i < FloorArray.size(); i++)
 		if (FloorArray[i].number == number)
 			return false;
-	FloorArray.resize(FloorArray.size() + 1);
-	FloorArray[FloorArray.size() - 1].number = number;
-	FloorArray[FloorArray.size() - 1].object = new Floor(number);
+
+	FloorMap floor;
+	floor.number = number;
+	floor.object = new Floor(number);
+	FloorArray.push_back(floor);
 
 	if (number < 0)
 		Basements++;

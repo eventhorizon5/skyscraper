@@ -546,9 +546,8 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		Report("creating doors");
 	if (NumDoors > 0)
 	{
-		DoorArray.resize(NumDoors);
 		for (int i = 0; i < NumDoors; i++)
-			DoorArray[i] = new ElevatorDoor(i, this);
+			DoorArray.push_back(new ElevatorDoor(i, this));
 	}
 
 	//move objects to positions
@@ -2290,11 +2289,10 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 {
 	//Creates a floor indicator at the specified location
 
-	int size = (int)FloorIndicatorArray.size();
-	FloorIndicatorArray.resize(size + 1);
-	FloorIndicatorArray[size] = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
-	FloorIndicatorArray[size]->SetPosition(Origin);
-	return FloorIndicatorArray[size]->object;
+	FloorIndicator* indicator = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
+	indicator->SetPosition(Origin);
+	FloorIndicatorArray.push_back(indicator);
+	return indicator->object;
 }
 
 const Ogre::Vector3 Elevator::GetPosition()
@@ -2551,16 +2549,13 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 	int index = (int)PanelArray.size();
 	std::string number = ToString(index + 1);
 	TrimString(number);
-	PanelArray.resize(index + 1);
 
 	if (sbs->Verbose)
 		Report("creating button panel " + number);
 
-	PanelArray[index] = new ButtonPanel(Number, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
-	if (PanelArray[index])
-		return PanelArray[index]->object;
-	else
-		return 0;
+	ButtonPanel* panel = new ButtonPanel(Number, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	PanelArray.push_back(panel);
+	return panel->object;
 }
 
 void Elevator::UpdateFloorIndicators()
@@ -3406,11 +3401,10 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	float x = Origin.x + CenterX;
 	float z = Origin.z + CenterZ;
 
-	int index = (int)DirIndicatorArray.size();
-	DirIndicatorArray.resize(index + 1);
-	DirIndicatorArray[index] = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	DirIndicatorArray[index]->SetPosition(Ogre::Vector3(DirIndicatorArray[index]->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), DirIndicatorArray[index]->GetPosition().z));
-	return DirIndicatorArray[index]->object;
+	DirectionalIndicator *indicator = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	indicator->SetPosition(Ogre::Vector3(indicator->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), indicator->GetPosition().z));
+	DirIndicatorArray.push_back(indicator);
+	return indicator->object;
 }
 
 void Elevator::SetDirectionalIndicators(bool UpLight, bool DownLight)
@@ -4606,11 +4600,11 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 	*/
 
-	StdDoorArray.resize(StdDoorArray.size() + 1);
 	std::string elevnum = ToString(Number);
-	std::string num = ToString((int)StdDoorArray.size() - 1);
-	StdDoorArray[StdDoorArray.size() - 1] = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
-	return StdDoorArray[StdDoorArray.size() - 1]->object;
+	std::string num = ToString((int)StdDoorArray.size());
+	Door* door = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	StdDoorArray.push_back(door);
+	return door->object;
 }
 
 Door* Elevator::GetStdDoor(int number)

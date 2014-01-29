@@ -375,10 +375,10 @@ Object* Floor::AddCallButtons(std::vector<int> &elevators, const char *BackTextu
 		return 0;
 
 	//create call button
-	CallButtonArray.resize(CallButtonArray.size() + 1);
-	int Current = (int)CallButtonArray.size() - 1;
-	CallButtonArray[Current] = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	return CallButtonArray[Current]->object;
+	int Current = (int)CallButtonArray.size();
+	CallButton *button = new CallButton(elevators, Number, Current, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	CallButtonArray.push_back(button);
+	return button->object;
 }
 
 void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring, bool prepare)
@@ -549,11 +549,11 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 	else
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
-	DoorArray.resize(DoorArray.size() + 1);
 	std::string floornum = ToString(Number);
-	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1] = new Door(this->object, std::string("Floor " + floornum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
-	return DoorArray[DoorArray.size() - 1]->object;
+	std::string num = ToString((int)DoorArray.size());
+	Door* door = new Door(this->object, std::string("Floor " + floornum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	DoorArray.push_back(door);
+	return door->object;
 }
 
 bool Floor::CalculateAltitude()
@@ -617,21 +617,20 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 {
 	//Creates a floor indicator at the specified location
 
-	int size = (int)FloorIndicatorArray.size();
-	FloorIndicatorArray.resize(size + 1);
-
 	if (relative == false)
 	{
-		FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
-		return FloorIndicatorArray[size]->object;
+		FloorIndicator *ind = new FloorIndicator(object, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
+		FloorIndicatorArray.push_back(ind);
+		return ind->object;
 	}
 	else
 	{
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicatorArray[size] = new FloorIndicator(object, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
-			return FloorIndicatorArray[size]->object;
+			FloorIndicator *ind = new FloorIndicator(object, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
+			FloorIndicatorArray.push_back(ind);
+			return ind->object;
 		}
 		else
 			return 0;
@@ -931,10 +930,9 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 			return 0;
 	}
 
-	int index = (int)DirIndicatorArray.size();
-	DirIndicatorArray.resize(index + 1);
-	DirIndicatorArray[index] = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	return DirIndicatorArray[index]->object;
+	DirectionalIndicator *indicator = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirIndicatorArray.push_back(indicator);
+	return indicator->object;
 }
 
 void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
