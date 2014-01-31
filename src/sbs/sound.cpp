@@ -102,7 +102,9 @@ void Sound::SetPosition(const Ogre::Vector3& position, bool set_velocity)
 	}
 
 	Position = position;
-	Velocity = (vel.x, vel.y, vel.z);
+	Velocity.x = vel.x;
+	Velocity.y = vel.y;
+	Velocity.z = vel.z;
 	if (channel)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 }
