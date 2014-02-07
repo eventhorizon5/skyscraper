@@ -1022,8 +1022,11 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	int linenum = line;
 	int function_line = FunctionCallLine;
 	int included_lines = 0;
+	int included_lines_f = 0;
 	bool isinclude = false;
+	bool isinclude_f = false;
 	std::string includefile;
+	std::string isinclude_f_file;
 
 	for (int i = 0; i < (int)includes.size(); i++)
 	{
@@ -1040,6 +1043,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 			isinclude = true;
 			includefile = includes[i].filename;
 			linenum = linenum - includes[i].start_line + 1;
+			included_lines = 0;
 		}
 	}
 
@@ -1050,11 +1054,16 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 
 		//keep track of original script position (keep a count of how many lines are "included" lines)
 		if (function_line > includes[i].end_line)
-			included_lines += (includes[i].end_line - includes[i].start_line);
+			included_lines_f += (includes[i].end_line - includes[i].start_line);
 
 		//line is part of an included file
 		if (function_line >= includes[i].start_line && function_line <= includes[i].end_line)
+		{
+			isinclude_f = true;
+			isinclude_f_file = includes[i].filename;
 			function_line = function_line - includes[i].start_line + 1;
+			included_lines_f = 0;
+		}
 	}
 
 	//Script error reporting function
@@ -1069,7 +1078,12 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		if (InFunction == false)
 			error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
 		else
-			error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
+		{
+			if (isinclude_f == false)
+				error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
+			else
+				error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction included in file: " + isinclude_f_file + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
+		}
 	}
 	else
 	{
@@ -1081,7 +1095,12 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		if (InFunction == false)
 			error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
 		else
-			error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines + 1) + "\nLine Text: " + LineData;
+		{
+			if (isinclude_f == false)
+				error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
+			else
+				error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction included in file: " + isinclude_f_file + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
+		}
 	}
 
 	skyscraper->ReportError(error.c_str());
@@ -2095,7 +2114,8 @@ int ScriptProcessor::ProcCommands()
 	if (linecheck.substr(0, 11) == "reverseaxis")
 	{
 		//backwards compatibility
-		ScriptWarning("Command deprecated");
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
 
 		int temp2check = LineData.find("=", 0);
 		if (temp2check < 0)
@@ -4773,7 +4793,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		ScriptWarning("Command deprecated");
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
@@ -4797,7 +4818,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		ScriptWarning("Command deprecated");
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
@@ -4821,7 +4843,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		ScriptWarning("Command deprecated");
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
@@ -4845,7 +4868,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		ScriptWarning("Command deprecated");
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
@@ -5646,7 +5670,8 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 13) == "setshaftdoors")
 	{
 		//backwards compatibility
-		ScriptWarning("Command deprecated");
+		if (warn_deprecated == true)
+			ScriptWarning("Command deprecated");
 
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
