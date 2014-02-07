@@ -40,7 +40,6 @@
 
 extern SBS *Simcore;
 extern Skyscraper *skyscraper;
-SBSIMPEXP extern std::string debugout; //temporary debugging string
 
 #define sContinue 0
 #define sNextLine 1
@@ -2150,7 +2149,7 @@ int ScriptProcessor::ProcCommands()
 
 		Ogre::Vector3 isect = Simcore->GetPoint(*wall_array, tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())));
 
-		buffer = std::string(LineData).substr(0, temp5) + ToString2(isect.x, 2) + std::string(", ") + ToString2(isect.y) + std::string(", ") + ToString2(isect.z) + std::string(LineData).substr(temp4 + 1);
+		buffer = std::string(LineData).substr(0, temp5) + ToString2(isect.x) + std::string(", ") + ToString2(isect.y) + std::string(", ") + ToString2(isect.z) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
 		linecheck = SetCaseCopy(LineData, false);
 		temp5 = linecheck.find("isect(", 0);
@@ -6662,7 +6661,7 @@ int ScriptProcessor::ProcTextures()
 		for (int i = 2; i <= 3; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
-				return ScriptError("Invalid value: " + tempdata[i] + "\n" + debugout);
+				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 		CheckFile(tempdata[0].c_str());
 		if (params == 4)
