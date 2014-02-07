@@ -251,7 +251,7 @@ std::string ToString2(int number)
 const char* ToString(float number, int digits)
 {
 	static char buffer[50];
-	return _gcvt(number, digits, buffer);
+	return _gcvt((double)number, digits, buffer);
 }
 
 std::string ToString2(float number, int digits)
