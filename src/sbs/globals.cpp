@@ -249,14 +249,14 @@ std::string ToString2(int number)
 	return ToString(number);
 }
 
-const char* ToString(float number, int digits)
+const char* ToString(float number)
 {
 	static char buffer[50];
-	snprintf(buffer, sizeof(buffer), "%g", number);
+	snprintf(buffer, sizeof(buffer), "%g", (double)number);
 	return buffer;
 }
 
-std::string ToString2(float number, int digits)
+std::string ToString2(float number)
 {
-	return ToString(number, digits);
+	return ToString(number);
 }

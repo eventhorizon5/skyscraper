@@ -652,10 +652,10 @@ checkfloors:
 		}
 
 		//Extent variables
-		ReplaceAll(LineData, "%minx%", ToString(MinExtent.x, 12));
-		ReplaceAll(LineData, "%minz%", ToString(MinExtent.z, 12));
-		ReplaceAll(LineData, "%maxx%", ToString(MaxExtent.x, 12));
-		ReplaceAll(LineData, "%maxz%", ToString(MaxExtent.z, 12));
+		ReplaceAll(LineData, "%minx%", ToString(MinExtent.x));
+		ReplaceAll(LineData, "%minz%", ToString(MinExtent.z));
+		ReplaceAll(LineData, "%maxx%", ToString(MaxExtent.x));
+		ReplaceAll(LineData, "%maxz%", ToString(MaxExtent.z));
 
 		//reset return code
 		returncode = sContinue;

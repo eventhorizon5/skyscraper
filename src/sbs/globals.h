@@ -72,8 +72,8 @@ SBSIMPEXP bool StartsWith(std::string &string, const char *check_string, bool ig
 SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const char *original_string, char separator);
 SBSIMPEXP const char* ToString(int number);
 SBSIMPEXP std::string ToString2(int number);
-SBSIMPEXP const char* ToString(float number, int digits = 6);
-SBSIMPEXP std::string ToString2(float number, int digits = 6);
+SBSIMPEXP const char* ToString(float number);
+SBSIMPEXP std::string ToString2(float number);
 
 //const double pi = 3.14159265;
 

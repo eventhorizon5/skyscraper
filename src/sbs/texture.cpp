@@ -1458,7 +1458,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("x" + number).c_str(), ToString(vertices[atoi(number.c_str())].x, 12));
+						ReplaceAll(string, std::string("x" + number).c_str(), ToString(vertices[atoi(number.c_str())].x));
 					else
 						ReplaceAll(string, std::string("x" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -1469,7 +1469,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("y" + number).c_str(), ToString(vertices[atoi(number.c_str())].y, 12));
+						ReplaceAll(string, std::string("y" + number).c_str(), ToString(vertices[atoi(number.c_str())].y));
 					else
 						ReplaceAll(string, std::string("y" + number).c_str(), "0"); //number value out of bounds
 				}
@@ -1480,7 +1480,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("z" + number).c_str(), ToString(vertices[atoi(number.c_str())].z, 12));
+						ReplaceAll(string, std::string("z" + number).c_str(), ToString(vertices[atoi(number.c_str())].z));
 					else
 						ReplaceAll(string, std::string("z" + number).c_str(), "0"); //number value out of bounds
 				}
