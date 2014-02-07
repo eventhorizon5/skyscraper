@@ -8192,7 +8192,7 @@ CutStairwell 3, -5.333, -9.708, 5.333, 9.708, 0, 5
     if[%floor% < 40 | %floor% = 79] Set 5 = Stucco4
     DrawWalls = true, false, false, false, false, false
     WallOrientation = right
-    if[%floor% = 38 | %floor% > 62] AddWall StairsFrontE, %5%, 0.33, -5.333 + -29.083 - 0.33, -9.708 + 23.537, 5.333 + -29.083 - 0.33, -9.708 + 23.537, %height%, %height%, 0, 0, 0, 0, False
+    if[%floor% = 38 | %floor% > 62] AddWall StairsFrontE, %5%, 0.33, -5.333 + -29.083 + 0.33, -9.87 + 23.375, 5.333 + -29.083 - 0.33, -9.87 + 23.375, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
     WallOrientation = left
     AddWall StairsBackE, %5%, 0.33, -5.333 + -29.083, 9.708 + 23.537, 5.333 + -29.083, 9.708 + 23.537, %fullheight%, %fullheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
