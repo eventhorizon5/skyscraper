@@ -240,7 +240,11 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
 const char* ToString(int number)
 {
 	static char buffer[50];
+#if defined(__VISUALC__)
+	_snprintf_s(buffer, sizeof(buffer), 12, "%d", number);
+#else
 	snprintf(buffer, sizeof(buffer), "%d", number);
+#endif
 	return buffer;
 }
 
@@ -252,7 +256,11 @@ std::string ToString2(int number)
 const char* ToString(float number)
 {
 	static char buffer[50];
+#if defined(__VISUALC__)
+	_snprintf_s(buffer, sizeof(buffer), 12, "%g", number);
+#else
 	snprintf(buffer, sizeof(buffer), "%g", (double)number);
+#endif
 	return buffer;
 }
 
