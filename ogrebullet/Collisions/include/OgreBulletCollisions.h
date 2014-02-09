@@ -37,6 +37,9 @@ THE SOFTWARE.
 #ifdef _PRECOMP
 
 
+    #include "OgreString.h"
+    #include "OgreFontManager.h"
+
     #include "Utils/OgreBulletConverter.h"
 
 	//Debug Helpers
@@ -85,9 +88,6 @@ THE SOFTWARE.
 
 
 
-
-    #include "OgreString.h"
-    #include "OgreFontManager.h"
 
     #include "BulletCollision/CollisionShapes/btMinkowskiSumShape.h"
     #include "BulletCollision/CollisionShapes/btTriangleShape.h"
