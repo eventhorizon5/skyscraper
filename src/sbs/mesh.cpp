@@ -794,7 +794,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 									sbs->Report("Loading material " + match);
 				                    //materialPtr->compile();
 				                    materialPtr->load();
-									materialPtr->setLightingEnabled(true);
+									materialPtr->setLightingEnabled(false);
 									materialPtr->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
 				                }
 							}
