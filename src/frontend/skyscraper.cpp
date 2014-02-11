@@ -492,6 +492,10 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error creating scene manager\nDetails:" + e.getDescription());
 	}
 
+#if OGRE_VERSION >= 0x00010900
+	mSceneMgr->addRenderQueueListener(mOverlaySystem);
+#endif
+
 	//set ambient light
 	//mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5, 0.5, 0.5));
 	//mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_MODULATIVE);
