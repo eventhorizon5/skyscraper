@@ -49,6 +49,7 @@ namespace OgreBulletCollisions {
 	class CollisionShape;
 }
 
+#include "object.h"
 #include "light.h"
 #include "mesh.h"
 #include "model.h"

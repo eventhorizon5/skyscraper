@@ -179,6 +179,7 @@ void ReplaceAll(std::string &string, const char *original, const char *replaceme
 	std::string newstring = Ogre::StringUtil::replaceAll(string, original, replacement);
 	string = newstring;
 }
+
 bool StartsWith(std::string &string, const char *check_string, bool ignore_case)
 {
 	//check if a string starts with the contents of "check_string"

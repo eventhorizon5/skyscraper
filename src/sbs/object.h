@@ -26,9 +26,6 @@
 #ifndef _SBS_OBJECT_H
 #define _SBS_OBJECT_H
 
-#include <string>
-#include <vector>
-
 class SBSIMPEXP Object
 {
 public:

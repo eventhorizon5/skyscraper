@@ -75,6 +75,4 @@ SBSIMPEXP std::string ToString2(int number);
 SBSIMPEXP const char* ToString(float number);
 SBSIMPEXP std::string ToString2(float number);
 
-#include "object.h"
-
 #endif
