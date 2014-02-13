@@ -230,7 +230,7 @@ bool ScriptProcessor::Run()
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
-				return false;
+				goto Error;
 			}
 			Section = 1;
 			Context = "Globals";
@@ -242,7 +242,7 @@ bool ScriptProcessor::Run()
 			if (Section != 1)
 			{
 				ScriptError("Not in global section");
-				return false;
+				goto Error;
 			}
 			Simcore->InitMeshes();
 			Section = 0;
@@ -255,14 +255,14 @@ bool ScriptProcessor::Run()
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
-				return false;
+				goto Error;
 			}
 			Section = 2;
 			temp3 = linecheck.find("to", 0);
 			if (temp3 < 0)
 			{
 				ScriptError("Syntax error");
-				return false;
+				goto Error;
 
 			}
 			//get low and high range markers
@@ -273,7 +273,7 @@ bool ScriptProcessor::Run()
 			if (!IsNumeric(str1.c_str(), RangeL) || !IsNumeric(str2.c_str(), RangeH))
 			{
 				ScriptError("Invalid range");
-				return false;
+				goto Error;
 			}
 			Context = "Floor range " + ToString2(RangeL) + " to " + ToString2(RangeH);
 			Current = RangeL;
@@ -286,7 +286,7 @@ bool ScriptProcessor::Run()
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
-				return false;
+				goto Error;
 			}
 			Section = 2;
 			RangeL = 0;
@@ -296,7 +296,7 @@ bool ScriptProcessor::Run()
 			if (!IsNumeric(str.c_str(), Current))
 			{
 				ScriptError("Invalid floor");
-				return false;
+				goto Error;
 			}
 			Context = "Floor " + ToString2(Current);
 			skyscraper->Report("Processing floor " + ToString2(Current) + "...");
@@ -307,7 +307,7 @@ bool ScriptProcessor::Run()
 			if (Section != 2)
 			{
 				ScriptError("Not in floor section");
-				return false;
+				goto Error;
 			}
 			Section = 0;
 			Context = "None";
@@ -319,14 +319,14 @@ bool ScriptProcessor::Run()
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
-				return false;
+				goto Error;
 			}
 			Section = 4;
 			temp3 = linecheck.find("to", 10);
 			if (temp3 < 0)
 			{
 				ScriptError("Syntax error");
-				return false;
+				goto Error;
 			}
 			std::string str1 = LineData.substr(11, temp3 - 12);
 			std::string str2 = LineData.substr(temp3 + 2, LineData.length() - (temp3 + 2) - 1);
@@ -335,7 +335,7 @@ bool ScriptProcessor::Run()
 			if (!IsNumeric(str1.c_str(), RangeL) || !IsNumeric(str2.c_str(), RangeH))
 			{
 				ScriptError("Invalid range");
-				return false;
+				goto Error;
 			}
 			Context = "Elevator range " + ToString2(RangeL) + " to " + ToString2(RangeH);
 			Current = RangeL;
@@ -348,7 +348,7 @@ bool ScriptProcessor::Run()
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
-				return false;
+				goto Error;
 			}
 			Section = 4;
 			RangeL = 0;
@@ -358,12 +358,12 @@ bool ScriptProcessor::Run()
 			if (!IsNumeric(str.c_str(), Current))
 			{
 				ScriptError("Invalid elevator");
-				return false;
+				goto Error;
 			}
 			if (Current < 1 || Current > Simcore->Elevators() + 1)
 			{
 				ScriptError("Invalid elevator");
-				return false;
+				goto Error;
 			}
 			Context = "Elevator " + ToString2(Current);
 			skyscraper->Report("Processing elevator " + ToString2(Current) + "...");
@@ -374,7 +374,7 @@ bool ScriptProcessor::Run()
 			if (Section != 4)
 			{
 				ScriptError("Not in elevator section");
-				return false;
+				goto Error;
 			}
 			Section = 0;
 			Context = "None";
@@ -386,7 +386,7 @@ bool ScriptProcessor::Run()
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
-				return false;
+				goto Error;
 			}
 			Section = 5;
 			Context = "Textures";
@@ -398,7 +398,7 @@ bool ScriptProcessor::Run()
 			if (Section != 5)
 			{
 				ScriptError("Not in texture section");
-				return false;
+				goto Error;
 			}
 			Simcore->FreeTextureImages();
 			Section = 0;
@@ -438,7 +438,7 @@ breakpoint:
 			if (result == false)
 			{
 				ScriptError("File not found");
-				return false;
+				goto Error;
 			}
 
 			skyscraper->Report("Inserted file " + includefile);
@@ -458,7 +458,7 @@ breakpoint:
 				if (functions[i].name == function)
 				{
 					ScriptError("Function '" + function + "' already defined");
-					return false;
+					goto Error;
 				}
 			}
 
@@ -555,7 +555,7 @@ checkfloors:
 			if (temp3 < 0)
 			{
 				ScriptError("Syntax error");
-				return false;
+				goto Error;
 			}
 			if (Section == 2 && getfloordata == false)
 			{
@@ -571,12 +571,12 @@ checkfloors:
 			if (!IsNumeric(tempdata.c_str(), temp4))
 			{
 				ScriptError("Invalid floor " + tempdata);
-				return false;
+				goto Error;
 			}
 			if (Simcore->IsValidFloor(temp4) == false)
 			{
 				ScriptError("Invalid floor " + tempdata);
-				return false;
+				goto Error;
 			}
 
 			//fullheight parameter
@@ -688,7 +688,7 @@ recalc:
 
 		//handle return values
 		if (returncode == sError)
-			return false;
+			goto Error;
 		else if (returncode == sCheckFloors)
 			goto checkfloors;
 		else if (returncode == sBreak)
@@ -716,6 +716,10 @@ Nextline:
 	}
 
 	return true;
+
+Error:
+		line++;
+		return false;
 }
 
 bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert_line)
@@ -7625,7 +7629,7 @@ int ScriptProcessor::MathFunctions()
 		if (!IsNumeric(tempdata.c_str(), value))
 			return ScriptError("Invalid value: " + tempdata);
 
-		if (value < 1 || value > 1)
+		if (value < -1 || value > 1)
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = acosf(value);
@@ -7648,7 +7652,7 @@ int ScriptProcessor::MathFunctions()
 		if (!IsNumeric(tempdata.c_str(), value))
 			return ScriptError("Invalid value: " + tempdata);
 
-		if (value < 1 || value > 1)
+		if (value < -1 || value > 1)
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = asinf(value);
