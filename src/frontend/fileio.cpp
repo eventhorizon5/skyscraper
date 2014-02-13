@@ -28,6 +28,7 @@
 #include "sbs.h"
 #include <OgreFileSystem.h>
 #include <stdlib.h>
+#include <cmath>
 #include "fileio.h"
 #include "skyscraper.h"
 #include "camera.h"
@@ -1207,6 +1208,10 @@ int ScriptProcessor::ProcCommands()
 
 	if (Section != 2 && Section != 4)
 	{
+		//process math functions
+		if (MathFunctions() == false)
+			return false;
+
 		//process any functions
 		if (FunctionProc() == true)
 			return sNextLine;
@@ -2822,6 +2827,10 @@ int ScriptProcessor::ProcFloors()
 	//IF/While statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
 		return sContinue;
+
+	//process math functions
+	if (MathFunctions() == false)
+		return false;
 
 	//process functions
 	if (FunctionProc() == true)
@@ -4472,6 +4481,10 @@ int ScriptProcessor::ProcElevators()
 	//IF/While statement stub (continue to global commands for processing)
 	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
 		return sContinue;
+
+	//process math functions
+	if (MathFunctions() == false)
+		return false;
 
 	//process functions
 	if (FunctionProc() == true)
@@ -7103,6 +7116,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 	//performs a calculation operation on a string
 	//for example, the string "1 + 1" would output to "2"
 	//supports multiple and nested operations (within parenthesis)
+	//^ character is used as a 'power of' operator
 
 	int temp1;
 	std::string tmpcalc = expression;
@@ -7171,13 +7185,13 @@ std::string ScriptProcessor::Calc(const char *expression)
 		end = 0;
 		for (int i = 1; i < (int)tmpcalc.length(); i++)
 		{
-			if (tmpcalc.at(i) == '+' || tmpcalc.at(i) == '/' || tmpcalc.at(i) == '*')
+			if (tmpcalc.at(i) == '+' || tmpcalc.at(i) == '/' || tmpcalc.at(i) == '*' || tmpcalc.at(i) == '^')
 			{
 				operators++;
 				if (operators == 2)
 					end = i;
 			}
-			if (tmpcalc.at(i) == '-' && tmpcalc.at(i - 1) != '-' && tmpcalc.at(i - 1) != '+' && tmpcalc.at(i - 1) != '/' && tmpcalc.at(i - 1) != '*')
+			if (tmpcalc.at(i) == '-' && tmpcalc.at(i - 1) != '-' && tmpcalc.at(i - 1) != '+' && tmpcalc.at(i - 1) != '/' && tmpcalc.at(i - 1) != '*' && tmpcalc.at(i - 1) != '^')
 			{
 				operators++;
 				if (operators == 2)
@@ -7221,7 +7235,9 @@ std::string ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one.c_str()) + atof(two.c_str());
+			float first = atof(one.c_str());
+			float second = atof(two.c_str());
+			float tmpnum = first + second;
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -7243,7 +7259,9 @@ std::string ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one.c_str()) - atof(two.c_str());
+			float first = atof(one.c_str());
+			float second = atof(two.c_str());
+			float tmpnum = first - second;
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -7265,7 +7283,15 @@ std::string ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one.c_str()) / atof(two.c_str());
+			float first = atof(one.c_str());
+			float second = atof(two.c_str());
+			if (second == 0)
+			{
+				ScriptError("Division by zero in math operation: '" + tmpcalc + "' (might be nested)");
+				CalcError = true;
+				return "false";
+			}
+			float tmpnum = first / second;
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -7287,7 +7313,33 @@ std::string ScriptProcessor::Calc(const char *expression)
 		two = tmpcalc.substr(temp1 + 1);
 		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
 		{
-			float tmpnum = atof(one.c_str()) * atof(two.c_str());
+			float first = atof(one.c_str());
+			float second = atof(two.c_str());
+			float tmpnum = first * second;
+			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			TrimString(tmpcalc);
+			return tmpcalc;
+		}
+		else
+		{
+			/*if (IsNumeric(one.c_str()) == false)
+				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
+			else
+				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
+			CalcError = true;
+			return "false";*/
+		}
+	}
+	temp1 = tmpcalc.find("^", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.substr(0, temp1);
+		two = tmpcalc.substr(temp1 + 1);
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
+		{
+			float first = atof(one.c_str());
+			float second = atof(two.c_str());
+			float tmpnum = powf(first, second);
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
@@ -7482,4 +7534,336 @@ std::string ScriptProcessor::GetAfterEquals(const char *string)
 std::vector<std::string> *ScriptProcessor::GetBuildingData()
 {
 	return &BuildingDataOrig;
+}
+
+bool ScriptProcessor::MathFunctions()
+{
+	//functions for advanced math
+
+	int start, first, last;
+	float value, result;
+	std::string tempdata;
+
+	int check = LineData.find("(", 0);
+
+	if (check < 0)
+		return true;
+
+	//calculate cosine
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" cos(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = cosf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate sine
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" sin(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = sinf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate tangent
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" tan(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = tanf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate arc cosine
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" acos(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value < 1 || value > 1)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = acosf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate arc sine
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" asin(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value < 1 || value > 1)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = asinf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate arc tangent
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" atan(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = atanf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate arc tangent with 2 parameters
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" atan2(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		int mid = LineData.find(",", first);
+		last = LineData.find(")", start);
+		if (last < 0 || mid < 0)
+			return ScriptError("Syntax error");
+
+		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1).c_str());
+		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1).c_str());
+
+		float value1, value2;
+		if (!IsNumeric(tempdata1.c_str(), value1))
+			return ScriptError("Invalid value: " + tempdata1);
+		if (!IsNumeric(tempdata2.c_str(), value2))
+			return ScriptError("Invalid value: " + tempdata2);
+
+		result = atan2f(value1, value2);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate square root
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" sqrt(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = sqrtf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate absolute value
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" abs(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = fabsf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate exponential function
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" exp(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = expf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate natural logarithm
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" log(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value <= 0)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = logf(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate common logarithm
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" log10(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value <= 0)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = log10f(value);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate remainder
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" mod(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		int mid = LineData.find(",", first);
+		last = LineData.find(")", start);
+		if (last < 0 || mid < 0)
+			return ScriptError("Syntax error");
+
+		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1).c_str());
+		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1).c_str());
+
+		float value1, value2;
+		if (!IsNumeric(tempdata1.c_str(), value1))
+			return ScriptError("Invalid value: " + tempdata1);
+		if (!IsNumeric(tempdata2.c_str(), value2))
+			return ScriptError("Invalid value: " + tempdata2);
+
+		if (value2 == 0)
+			return ScriptError("Invalid value: " + tempdata2);
+
+		result = fmodf(value1, value2);
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate hypotenuse
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find(" hypot(", 0);
+		if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		int mid = LineData.find(",", first);
+		last = LineData.find(")", start);
+		if (last < 0 || mid < 0)
+			return ScriptError("Syntax error");
+
+		std::string tempdata1 = Calc(LineData.substr(first + 1, mid - first - 1).c_str());
+		std::string tempdata2 = Calc(LineData.substr(mid + 1, last - mid - 1).c_str());
+
+		float value1, value2;
+		if (!IsNumeric(tempdata1.c_str(), value1))
+			return ScriptError("Invalid value: " + tempdata1);
+		if (!IsNumeric(tempdata2.c_str(), value2))
+			return ScriptError("Invalid value: " + tempdata2);
+
+		if (value2 == 0)
+			return ScriptError("Invalid value: " + tempdata2);
+
+		result = sqrtf(powf(value1, 2) + powf(value2, 2));
+		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	return true;
 }

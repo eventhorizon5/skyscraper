@@ -101,12 +101,12 @@ while[<em>expression</em>] command</font></p>
 
 <p align="left">Available signs are = (equals), &gt; (greater than), &lt; (less
 than), ! (is not), &amp; (and) and | (or). Expressions can also be enclosed in
-parenthesis. Note that IF/While statements only work with the current line,
-and do not currently support multiple lines within an IF/While block, an "else"
+parenthesis. Note that IF/While statements only work with the current line, and
+do not currently support multiple lines within an IF/While block, an "else"
 statement, or nesting. A While statement will loop the current line until the
 expression is false, so be careful with this because it can create an infinite
-loop if the expression is always true. See the <em>Functions</em> section below for an example of a While
-statement.</p>
+loop if the expression is always true. See the <em>Functions</em> section below
+for an example of a While statement.</p>
 
 <p align="left">For example, to set the height to 9.5 if the floor number is
 less than 82:<br>
@@ -127,7 +127,7 @@ less than 82:<br>
 
 <p align="left">Values can be calculated inline by using the following math
 operators: <br>
-+ (plus), - (minus), / (divide), and * (multiply).</p>
++ (plus), - (minus), / (divide), * (multiply), and ^ (power of)</p>
 
 <p align="left">They can be used anywhere in the data file. Here's an example
 of one being used with the Set command:<br>
@@ -174,7 +174,7 @@ you would enter:<br>
 &lt;Include data/test.txt&gt;<br>
 </font></p>
 
-<p align="left"><strong>7. Functions</strong></p>
+<p align="left"><br><strong>7. Functions</strong></p>
 
 <p align="left">Functions can be created to share code between sections of
 scripts, and also between entire scripts when used in conjunction with
@@ -214,23 +214,46 @@ SetAutoSize = %param1%, %param2%<br>
 test(false, false)</font></p>
 
 <p>In the above example, the command that ends up being performed is
-"SetAutoSize = false, false".  Here is an example of using a While statement to loop a function:</p>
+"SetAutoSize = false, false". Here is an example of using a While statement to
+loop a function:</p>
 
 <p><font face="Courier New, Courier, mono" size="2">set a = 0<br>
 &lt;Function testing&gt;<br>
 set a = %a% + 1<br>
 print %a%<br>
-&lt;EndFunction&gt;<br><br>
+&lt;EndFunction&gt;<br>
+<br>
 while [%a% &lt; 5] testing()<br>
 print finished</font></p>
 
 <p>The console output of that ends up being:</p>
+
 <p><font face="Courier New, Courier, mono" size="2">1<br>
 2<br>
 3<br>
 4<br>
 5<br>
 finished</font></p>
+
+<p align="left"><br><strong>8. Advanced Math Functions</strong></p>
+
+<p align="left">Several built-in advanced math functions are provided, mostly for trigonometric calculations.</p>
+
+<p align="left">Syntax and descriptions:<br><br>
+cos(<em>x</em>) - calculate cosine, x is angle in radians<br>
+sine(<em>x</em>) - calculate sine, x is angle in radians<br>
+tan(<em>x</em>) - calculate tangent, x is angle in radians<br>
+acos(<em>x</em>) - calculate arc cosine, x is a value from -1 to 1<br>
+asin(<em>x</em>) - calculate arc sine, x is a value from -1 to 1<br>
+atan(<em>x</em>) - calculate arc tangent<br>
+atan2(<em>y</em>, <em>x</em>) - calculate arc tangent with two values, one for the y-coordinate and one for the x<br>
+sqrt(<em>x</em>) - calculate square root<br>
+abs(<em>x</em>) - calculate absolute value<br>
+exp(<em>x</em>) - calculate exponential function<br>
+log(<em>x</em>) - calculate natural logarithm<br>
+log10(<em>x</em>) - calculate common logarithm<br>
+mod(<em>number</em>, <em>denominator</em>) - calculate modulo (remainder) of a division<br>
+hypot(<em>x</em>, <em>y</em>) - calculate hypotenuse<br></p>
 
 <p></p>
 
@@ -1584,35 +1607,35 @@ current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">FloorSound =
 floor*.wav</font></p>
 
-<p align="left"><strong>30. UpMessage</strong> - the notification sound file(s) to play
-after the elevator arrives at a floor and the doors open - this tells the
-passengers that the elevator is going up. There is no default; if this is set,
-the sound will be automatically enabled. If an asterisk (*) is specified, it is
-replaced with the current floor number.<br>
+<p align="left"><strong>30. UpMessage</strong> - the notification sound file(s)
+to play after the elevator arrives at a floor and the doors open - this tells
+the passengers that the elevator is going up. There is no default; if this is
+set, the sound will be automatically enabled. If an asterisk (*) is specified,
+it is replaced with the current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">UpMessage =
 goingup.wav</font></p>
 
-<p align="left"><strong>31. DownMessage</strong> - the notification sound file(s) to play
-after the elevator arrives at a floor and the doors open - this tells the
-passengers that the elevator is going down. There is no default; if this is
-set, the sound will be automatically enabled. If an asterisk (*) is specified,
-it is replaced with the current floor number.<br>
+<p align="left"><strong>31. DownMessage</strong> - the notification sound
+file(s) to play after the elevator arrives at a floor and the doors open - this
+tells the passengers that the elevator is going down. There is no default; if
+this is set, the sound will be automatically enabled. If an asterisk (*) is
+specified, it is replaced with the current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">DownMessage =
 goingdown.wav</font></p>
 
-<p align="left"><strong>32. OpenMessage</strong> - the notification sound file(s) to play
-when the elevator doors begin opening - this tells the
-passengers that the doors are opening. There is no default; if this is set,
-the sound will be automatically enabled. If an asterisk (*) is specified, it is
+<p align="left"><strong>32. OpenMessage</strong> - the notification sound
+file(s) to play when the elevator doors begin opening - this tells the
+passengers that the doors are opening. There is no default; if this is set, the
+sound will be automatically enabled. If an asterisk (*) is specified, it is
 replaced with the current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">OpenMessage =
 doorsopening.wav</font></p>
 
-<p align="left"><strong>33. CloseMessage</strong> - the notification sound file(s) to play
-when the elevator doors begin closing - this tells the
-passengers that the doors are closing. There is no default; if this is
-set, the sound will be automatically enabled. If an asterisk (*) is specified,
-it is replaced with the current floor number.<br>
+<p align="left"><strong>33. CloseMessage</strong> - the notification sound
+file(s) to play when the elevator doors begin closing - this tells the
+passengers that the doors are closing. There is no default; if this is set, the
+sound will be automatically enabled. If an asterisk (*) is specified, it is
+replaced with the current floor number.<br>
 Example: <font face="Courier New, Courier, mono" size="2">CloseMessage =
 doorsclosing.wav</font></p>
 
@@ -3061,22 +3084,29 @@ Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
-Delete</strong> - deletes an object.  This command is normally used after a building has loaded.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">Delete object_number</font><br>
+Delete</strong> - deletes an object. This command is normally used after a
+building has loaded.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Delete
+object_number</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Delete 12</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
-RunAction</strong> - runs an action by name.  This command is normally used after a building has loaded.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">RunAction name</font><br>
-Example: <font face="Courier New, Courier, mono" size="2">RunAction myaction</font></p>
+RunAction</strong> - runs an action by name. This command is normally used
+after a building has loaded.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">RunAction
+name</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">RunAction
+myaction</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
-GotoFloor</strong> - jumps the user to the specified floor.  This command is normally used after a building has loaded.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">GotoFloor floor</font><br>
+GotoFloor</strong> - jumps the user to the specified floor. This command is
+normally used after a building has loaded.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">GotoFloor
+floor</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">GotoFloor 3</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
