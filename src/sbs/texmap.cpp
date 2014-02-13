@@ -71,7 +71,7 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	//compute determinant of matrix
 	float det = m11 * m22 - m12 * m21;
 
-	if (fabs(det) < SMALL_EPSILON)
+	if (fabsf(det) < SMALL_EPSILON)
 		return sbs->ReportError("ComputeTextureMap: Bad UV coordinates");
 	else
 	{
@@ -145,7 +145,7 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 	v = v_orig;
 
 	float det = m.Determinant();
-	if (fabs(det) < SMALL_EPSILON)
+	if (fabsf(det) < SMALL_EPSILON)
 	{
 		//m = m.IDENTITY;
 		//return sbs->ReportError("Error computing texture space");
@@ -266,7 +266,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	if (axis == 2)
 		sideA = ptA.z - value;
 
-	if (fabs(sideA) < SMALL_EPSILON)
+	if (fabsf(sideA) < SMALL_EPSILON)
 		sideA = 0;
 
 	int i;
@@ -280,7 +280,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 		if (axis == 2)
 			sideB = ptB.z - value;
 		
-		if (fabs(sideB) < SMALL_EPSILON)
+		if (fabsf(sideB) < SMALL_EPSILON)
 			sideB = 0;
 
 		if (sideB > 0)
@@ -451,7 +451,7 @@ bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre:
 	// If this vector is perpendicular to the plane of the polygon we
 	// need to catch this case here.
 	float dot2 = pl.d + pl.normal.x * end.x + pl.normal.y * end.y + pl.normal.z * end.z;
-	if (fabs(dot1 - dot2) < SMALL_EPSILON)
+	if (fabsf(dot1 - dot2) < SMALL_EPSILON)
 		return false;
 
 	// Now we generate a plane between the starting point of the ray and
@@ -530,7 +530,7 @@ bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, co
 			plane.normal.y * (y2 - y1) +
 			plane.normal.z * (z2 - z1);
 
-	if (fabs(denom) < SMALL_EPSILON)
+	if (fabsf(denom) < SMALL_EPSILON)
 		return false;  // Lines are parallel
 
 	num = -(plane.normal.x * x1 +

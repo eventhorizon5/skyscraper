@@ -1150,14 +1150,14 @@ float SBS::AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_
 	if (iswidth == true)
 	{
 		if ((AutoX == true && enable_force == false) || (enable_force == true && force_mode == true))
-			return fabs(n1 - n2) * offset;
+			return fabsf(n1 - n2) * offset;
 		else
 			return offset;
 	}
 	else
 	{
 		if ((AutoY == true && enable_force == false) || (enable_force == true && force_mode == true))
-			return fabs(n1 - n2) * offset;
+			return fabsf(n1 - n2) * offset;
 		else
 			return offset;
 	}
@@ -1771,7 +1771,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
          {
              ColourValue pixCol = srcImg.getColourAt(x, y, 0);
              ColourValue diffCol = pixCol - keyCol2;
-             pixCol.a = ((fabs(diffCol.r) < threshold) && (fabs(diffCol.g) < threshold) && (fabs(diffCol.b) < threshold)) ? 0 : 1;
+             pixCol.a = ((fabsf(diffCol.r) < threshold) && (fabsf(diffCol.g) < threshold) && (fabsf(diffCol.b) < threshold)) ? 0 : 1;
              Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex));
              pxDataIndex += pxDataIndexStep;
          }

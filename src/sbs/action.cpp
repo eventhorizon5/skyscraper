@@ -520,7 +520,7 @@ bool Action::DoAction()
 
 int Action::GetParentCount()
 {
-	return parent_objects.size();
+	return (int)parent_objects.size();
 }
 
 const Object* Action::GetParent(int number)
@@ -553,7 +553,7 @@ const char* Action::GetParentType(int number)
 
 int Action::GetParameterCount()
 {
-	return command_parameters.size();
+	return (int)command_parameters.size();
 }
 
 const char *Action::GetParameter(int index)

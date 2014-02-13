@@ -1383,7 +1383,7 @@ void Elevator::MonitorLoop()
 
 	//enable auto-park timer if specified
 	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
-		parking_timer->Start(ParkingDelay * 1000, true);
+		parking_timer->Start(ParkingDelay * 1000.0, true);
 
 	//enable random call timer
 	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false && AutoDoors == true)
@@ -1520,7 +1520,7 @@ void Elevator::MoveElevatorToFloor()
 
 		//Determine distance to destination floor
 		if (InspectionService == false && ManualMove == 0)
-			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
+			DistanceToTravel = fabsf(fabsf(Destination) - fabsf(ElevatorStart));
 		else
 		{
 			//otherwise if inspection service is on, choose the altitude of the top/bottom floor
@@ -1554,7 +1554,7 @@ void Elevator::MoveElevatorToFloor()
 					return;
 				}
 			}
-			DistanceToTravel = fabs(fabs(Destination) - fabs(ElevatorStart));
+			DistanceToTravel = fabsf(fabsf(Destination) - fabsf(ElevatorStart));
 		}
 		CalculateStoppingDistance = true;
 
@@ -1936,7 +1936,7 @@ void Elevator::MoveElevatorToFloor()
 	}
 	else if (Leveling == false && EmergencyStop == 0)
 	{
-		if (fabs(ElevatorRate) <= LevelingSpeed)
+		if (fabsf(ElevatorRate) <= LevelingSpeed)
 		{
 			//turn on leveling if elevator's rate is less than or equal to the leveling speed value
 			if (sbs->Verbose)
@@ -1992,7 +1992,7 @@ void Elevator::MoveElevatorToFloor()
 	oldfloor = GetFloor();
 
 	//exit if elevator's running
-	if (fabs(ElevatorRate) != 0)
+	if (fabsf(ElevatorRate) != 0)
 		return;
 
 	//start arrival timer
@@ -2130,7 +2130,7 @@ void Elevator::FinishMove()
 	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
 	//manualstop is true if elevator is stopped within 18 inches of the nearest landing
-	bool manualstop = EmergencyStop == 1 && fabs(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5;
+	bool manualstop = EmergencyStop == 1 && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5;
 
 	if (EmergencyStop == 0 || manualstop == true)
 	{
@@ -5432,7 +5432,7 @@ int Elevator::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				nearest_difference = fabs(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+				nearest_difference = fabsf(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
 				nearest = i;
 				firstrun = false;
 			}
@@ -5441,11 +5441,11 @@ int Elevator::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				float difference = fabs(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+				float difference = fabsf(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
 				if (difference < nearest_difference)
 				{
 					//mark closest
-					nearest_difference = fabs(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+					nearest_difference = fabsf(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
 					nearest = i;
 				}
 			}

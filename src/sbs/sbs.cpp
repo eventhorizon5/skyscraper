@@ -650,7 +650,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 
 	//determine axis of wall
 	int axis = 0;
-	if (fabs(x1 - x2) > (fabs(z1 - z2) + 0.00001))
+	if (fabsf(x1 - x2) > (fabsf(z1 - z2) + 0.00001))
 		//x axis
 		axis = 1;
 	else
@@ -882,7 +882,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 	//determine axis of floor
 	int axis = 0;
-	if (fabs(x1 - x2) > (fabs(z1 - z2) + 0.00001))
+	if (fabsf(x1 - x2) > (fabsf(z1 - z2) + 0.00001))
 		//x axis
 		axis = 1;
 	else
@@ -1543,11 +1543,11 @@ float SBS::GetDistance(float x1, float x2, float z1, float z2)
 	//returns the distance between 2 2D vectors
 
 	if (z1 == z2)
-		return fabs(x1 - x2);
+		return fabsf(x1 - x2);
 	if (x1 == x2)
-		return fabs(z1 - z2);
+		return fabsf(z1 - z2);
 	if ((x1 != x2) && (z2 != x2))
-		return sqrt(pow(fabs(x1 - x2), 2) + pow(fabs(z1 - z2), 2)); //calculate diagonals
+		return sqrtf(powf(fabsf(x1 - x2), 2) + powf(fabsf(z1 - z2), 2)); //calculate diagonals
 	return 0;
 }
 
@@ -2036,7 +2036,7 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 	if (wall1a == true && wall2a == true)
 	{
 		DrawWalls(true, true, false, false, false, false);
-		if (fabs(wall_extents_x.x - wall_extents_x.y) > fabs(wall_extents_z.x - wall_extents_z.y))
+		if (fabsf(wall_extents_x.x - wall_extents_x.y) > fabsf(wall_extents_z.x - wall_extents_z.y))
 		{
 			//doorway is facing forward/backward
 			index = AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);

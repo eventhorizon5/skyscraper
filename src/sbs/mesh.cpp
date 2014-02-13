@@ -258,7 +258,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 					if (cutwalls == true)
 					{
 						//wall
-						if (fabs(extentsx.x - extentsx.y) > fabs(extentsz.x - extentsz.y))
+						if (fabsf(extentsx.x - extentsx.y) > fabsf(extentsz.x - extentsz.y))
 						{
 							//wall is facing forward/backward
 
@@ -351,10 +351,10 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 										wall2b = true;
 									wall2a = true;
 									extent = GetExtents(temppoly5, 1).x + mesh_origin.x;
-									if (wall2b == false || (wall2b == true && fabs(extent - object_origin.x) > fabs(wall_extents_x.x - object_origin.x)))
+									if (wall2b == false || (wall2b == true && fabsf(extent - object_origin.x) > fabsf(wall_extents_x.x - object_origin.x)))
 										wall_extents_x.x = extent;
 									extent = GetExtents(temppoly5, 3).x + mesh_origin.z;
-									if (wall2b == false || (wall2b == true && fabs(extent - object_origin.z) > fabs(wall_extents_z.x - object_origin.z)))
+									if (wall2b == false || (wall2b == true && fabsf(extent - object_origin.z) > fabsf(wall_extents_z.x - object_origin.z)))
 										wall_extents_z.x = extent;
 									wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
 								}
@@ -365,10 +365,10 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 										wall1b = true;
 									wall1a = true;
 									extent = GetExtents(temppoly5, 1).y + mesh_origin.x;
-									if (wall1b == false || (wall1b == true && fabs(extent - object_origin.x) < fabs(wall_extents_x.y - object_origin.x)))
+									if (wall1b == false || (wall1b == true && fabsf(extent - object_origin.x) < fabsf(wall_extents_x.y - object_origin.x)))
 										wall_extents_x.y = extent;
 									extent = GetExtents(temppoly5, 3).y + mesh_origin.z;
-									if (wall1b == false || (wall1b == true && fabs(extent - object_origin.z) < fabs(wall_extents_z.y - object_origin.z)))
+									if (wall1b == false || (wall1b == true && fabsf(extent - object_origin.z) < fabsf(wall_extents_z.y - object_origin.z)))
 										wall_extents_z.y = extent;
 								}
 							}
@@ -795,7 +795,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 				                    //materialPtr->compile();
 				                    materialPtr->load();
 									materialPtr->setLightingEnabled(false);
-									materialPtr->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
+									//materialPtr->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
 				                }
 							}
 						}
