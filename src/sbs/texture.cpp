@@ -124,7 +124,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 
 	std::vector<std::string> filenames2;
 
-	int num_frames = filenames.size();
+	int num_frames = (int)filenames.size();
 
 	//first verify the filenames
 	for (int i = 0; i < filenames.size(); i++)
@@ -473,9 +473,9 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	if (height < 1)
 		height = mTex->getHeight();
 
-	if (x > mTex->getWidth() || y > mTex->getHeight())
+	if (x > (int)mTex->getWidth() || y > (int)mTex->getHeight())
 		return ReportError("LoadTextureCropped: invalid coordinates for '" + Name + "'");
-	if (x + width > mTex->getWidth() || y + height > mTex->getHeight())
+	if (x + width > (int)mTex->getWidth() || y + height > (int)mTex->getHeight())
 		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
 	//create new empty texture
@@ -944,9 +944,9 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	if (height < 1)
 		height = image2->getHeight();
 
-	if (x > image1->getWidth() || y > image1->getHeight())
+	if (x > (int)image1->getWidth() || y > (int)image1->getHeight())
 		return ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
-	if (x + width > image1->getWidth() || y + height > image1->getHeight())
+	if (x + width > (int)image1->getWidth() || y + height > (int)image1->getHeight())
 		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//create new empty texture
@@ -1453,7 +1453,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				SetCase(string, false);
 
 				//find X component
-				int location = string.find("x");
+				int location = (int)string.find("x");
 				if (location >= 0)
 				{
 					std::string number = string.substr(location + 1);
@@ -1464,7 +1464,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				}
 
 				//find Y component
-				location = string.find("y");
+				location = (int)string.find("y");
 				if (location >= 0)
 				{
 					std::string number = string.substr(location + 1);
@@ -1475,7 +1475,7 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				}
 
 				//find Z component
-				location = string.find("z");
+				location = (int)string.find("z");
 				if (location >= 0)
 				{
 					std::string number = string.substr(location + 1);
@@ -1489,29 +1489,29 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (i == 0)
 				{
 					if (j == 0)
-						v1.x = atof(string.c_str());
+						v1.x = (float)atof(string.c_str());
 					if (j == 1)
-						v2.x = atof(string.c_str());
+						v2.x = (float)atof(string.c_str());
 					if (j == 2)
-						v3.x = atof(string.c_str());
+						v3.x = (float)atof(string.c_str());
 				}
 				if (i == 1)
 				{
 					if (j == 0)
-						v1.y = atof(string.c_str());
+						v1.y = (float)atof(string.c_str());
 					if (j == 1)
-						v2.y = atof(string.c_str());
+						v2.y = (float)atof(string.c_str());
 					if (j == 2)
-						v3.y = atof(string.c_str());
+						v3.y = (float)atof(string.c_str());
 				}
 				if (i == 2)
 				{
 					if (j == 0)
-						v1.z = atof(string.c_str());
+						v1.z = (float)atof(string.c_str());
 					if (j == 1)
-						v2.z = atof(string.c_str());
+						v2.z = (float)atof(string.c_str());
 					if (j == 2)
-						v3.z = atof(string.c_str());
+						v3.z = (float)atof(string.c_str());
 				}
 			}
 		}
@@ -1752,9 +1752,9 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 			encoded->read(&g, 1);
 			encoded->seek(pos + 2);
 			encoded->read(&b, 1);
-			keyCol2.r = r / 255;
-			keyCol2.g = g / 255;
-			keyCol2.b = b / 255;
+			keyCol2.r = float(r / 255);
+			keyCol2.g = float(g / 255);
+			keyCol2.b = float(b / 255);
 		}
 		encoded->seek(0);
 	 }
@@ -1763,7 +1763,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
      unsigned int width = srcImg.getWidth(), height = srcImg.getHeight();
      // Since Ogre 1.6 Shoggoth, the OGRE_ALLOC_T memory macro must be used:
      uchar* pixelData = OGRE_ALLOC_T(uchar, PixelUtil::getMemorySize(width, height, 1, PF_A8R8G8B8), MEMCATEGORY_GENERAL);
-     unsigned long pxDataIndex = 0, pxDataIndexStep = PixelUtil::getNumElemBytes(PF_A8R8G8B8);
+     unsigned long pxDataIndex = 0, pxDataIndexStep = (unsigned long)PixelUtil::getNumElemBytes(PF_A8R8G8B8);
 
      for(unsigned int y = 0; y < height; ++y)
      { 
@@ -1771,7 +1771,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
          {
              ColourValue pixCol = srcImg.getColourAt(x, y, 0);
              ColourValue diffCol = pixCol - keyCol2;
-             pixCol.a = ((fabsf(diffCol.r) < threshold) && (fabsf(diffCol.g) < threshold) && (fabsf(diffCol.b) < threshold)) ? 0 : 1;
+             pixCol.a = ((fabsf(diffCol.r) < threshold) && (fabsf(diffCol.g) < threshold) && (fabsf(diffCol.b) < threshold)) ? 0.0f : 1.0f;
              Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex));
              pxDataIndex += pxDataIndexStep;
          }
@@ -1833,7 +1833,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	if (index == -1)
 	{
 		// create a buffer
-		index = textureboxes.size();
+		index = (int)textureboxes.size();
 		textureboxes.resize(textureboxes.size() + 1);
 		textureboxes[index].font = font;
 		size_t nBuffSize = fontBuffer->getSizeInBytes();
@@ -1848,11 +1848,11 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	unsigned char* fontData = static_cast<unsigned char*>(textureboxes[index].box.data);
 	unsigned char* destData = static_cast<unsigned char*>(destPb.data);
 
-	const int fontPixelSize = PixelUtil::getNumElemBytes(textureboxes[index].box.format);
-	const int destPixelSize = PixelUtil::getNumElemBytes(destPb.format);
+	const int fontPixelSize = (int)PixelUtil::getNumElemBytes(textureboxes[index].box.format);
+	const int destPixelSize = (int)PixelUtil::getNumElemBytes(destPb.format);
 
-	const int fontRowPitchBytes = textureboxes[index].box.rowPitch * fontPixelSize;
-	const int destRowPitchBytes = destPb.rowPitch * destPixelSize;
+	const int fontRowPitchBytes = (int)textureboxes[index].box.rowPitch * fontPixelSize;
+	const int destRowPitchBytes = (int)destPb.rowPitch * destPixelSize;
 
 	Box *GlyphTexCoords;
 	GlyphTexCoords = new Box[str.size()];
@@ -1866,27 +1866,27 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 		if ((str[i] != '\t') && (str[i] != '\n') && (str[i] != ' '))
 		{
 			glypheTexRect = font->getGlyphTexCoords(str[i]);
-			GlyphTexCoords[i].left = glypheTexRect.left * fontTexture->getSrcWidth();
-			GlyphTexCoords[i].top = glypheTexRect.top * fontTexture->getSrcHeight();
-			GlyphTexCoords[i].right = glypheTexRect.right * fontTexture->getSrcWidth();
-			GlyphTexCoords[i].bottom = glypheTexRect.bottom * fontTexture->getSrcHeight();
+			GlyphTexCoords[i].left = Ogre::uint32(glypheTexRect.left * fontTexture->getSrcWidth());
+			GlyphTexCoords[i].top = Ogre::uint32(glypheTexRect.top * fontTexture->getSrcHeight());
+			GlyphTexCoords[i].right = Ogre::uint32(glypheTexRect.right * fontTexture->getSrcWidth());
+			GlyphTexCoords[i].bottom = Ogre::uint32(glypheTexRect.bottom * fontTexture->getSrcHeight());
 
 			//get true bottom of character, since the previous routine doesn't seem to get an accurate result
 			int lastline = 0;
-			for (int j = 0; j < GlyphTexCoords[i].getHeight(); j++)
+			for (int j = 0; j < (int)GlyphTexCoords[i].getHeight(); j++)
 			{
-				for (int k = 0; k < GlyphTexCoords[i].getWidth(); k++)
+				for (int k = 0; k < (int)GlyphTexCoords[i].getWidth(); k++)
 				{
-					float alpha =  color.a * (fontData[(j + GlyphTexCoords[i].top) * fontRowPitchBytes + (k + GlyphTexCoords[i].left) * fontPixelSize + 1] / 255.0);
+					float alpha =  color.a * (fontData[(j + GlyphTexCoords[i].top) * fontRowPitchBytes + (k + GlyphTexCoords[i].left) * fontPixelSize + 1] / 255.0f);
 					if (alpha > 0.0)
 						lastline = j;
 				}
 			}
 			GlyphTexCoords[i].bottom = GlyphTexCoords[i].top + lastline + 1;
 
-			if (GlyphTexCoords[i].getHeight() > charheight)
+			if ((int)GlyphTexCoords[i].getHeight() > charheight)
 				charheight = GlyphTexCoords[i].getHeight();
-			if (GlyphTexCoords[i].getWidth() > charwidth)
+			if ((int)GlyphTexCoords[i].getWidth() > charwidth)
 				charwidth = GlyphTexCoords[i].getWidth();
 		}
 	}
@@ -1937,7 +1937,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 								wordwidth = charwidth *3; ++l;
 								break;
 							case '\n':
-								l = str.size();
+								l = (int)str.size();
 						}
 
 						if (wordwrap)
@@ -1994,7 +1994,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 				}
 
 				//abort - not enough space to draw
-				if ((cursorY + charheight) >= destTexture->getHeight())
+				if ((cursorY + charheight) >= (int)destTexture->getHeight())
 				{
 					Report("Text '" + str + "' out of bounds\n");
 					goto stop;
@@ -2002,12 +2002,12 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 				//printf("%d, %d\n", cursorX, cursorY);
 
 				//draw pixel by pixel
-				for (int i = 0; i < GlyphTexCoords[strindex].getHeight(); i++)
+				for (int i = 0; i < (int)GlyphTexCoords[strindex].getHeight(); i++)
 				{
-					for (int j = 0; j < GlyphTexCoords[strindex].getWidth(); j++)
+					for (int j = 0; j < (int)GlyphTexCoords[strindex].getWidth(); j++)
 					{
-						float alpha =  color.a * (fontData[(i + GlyphTexCoords[strindex].top) * fontRowPitchBytes + (j + GlyphTexCoords[strindex].left) * fontPixelSize + 1] / 255.0);
-						float invalpha = 1.0 - alpha;
+						float alpha =  color.a * (fontData[(i + GlyphTexCoords[strindex].top) * fontRowPitchBytes + (j + GlyphTexCoords[strindex].left) * fontPixelSize + 1] / 255.0f);
+						float invalpha = 1.0f - alpha;
 						int offset = (i + cursorY) * destRowPitchBytes + (j + cursorX) * destPixelSize;
 						if (offset >= 0)
 						{

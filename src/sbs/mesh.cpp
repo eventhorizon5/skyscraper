@@ -552,10 +552,10 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 				return Ogre::Vector3(0, 0, 0);
 
 			//get upper
-			sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001);
+			sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001f);
 
 			//get lower part of upper
-			sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001);
+			sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001f);
 
 			Ogre::Vector3 result;
 			if (get_max == false)
@@ -657,7 +657,7 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 	{
 		int min = index_extents[i].x;
 		int max = index_extents[i].y;
-		int newsize = vertices[i].size() + max - min + 1;
+		int newsize = (int)vertices[i].size() + max - min + 1;
 		vertices[i].reserve(newsize);
 		if (reverse == false)
 		{
@@ -871,7 +871,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 		if (collidermesh.get())
 		{
 			//create collider based on provided mesh collider
-			size_t vertex_count, index_count;
+			int vertex_count, index_count;
 			Ogre::Vector3* vertices;
 			long unsigned int* indices;
 			Ogre::AxisAlignedBox box;
@@ -1204,7 +1204,7 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 	prepared = false; //need to re-prepare mesh
 }
 
-bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles)
+bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -1266,7 +1266,7 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices)
+bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -1291,7 +1291,7 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 
 	//triangulate mesh
 	TriangleMesh *trimesh = new TriangleMesh[vertices2.size()];
-	int trimesh_size = vertices2.size();
+	int trimesh_size = (int)vertices2.size();
 
 	for (int i = 0; i < trimesh_size; i++)
 	{
@@ -1339,7 +1339,7 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 			k++;
 		}
 		int max = count + k - 1;
-		mesh_indices.push_back(Ogre::Vector2(min, max));
+		mesh_indices.push_back(Extents(min, max));
 	}
 
 	//delete texel array
@@ -1485,7 +1485,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	if (add == true)
 	{
 		//reserve triangles
-		int size = Triangles[index].triangles.size() + index_count;
+		int size = (int)Triangles[index].triangles.size() + index_count;
 		if (Triangles[index].triangles.capacity() < size)
 			Triangles[index].triangles.reserve(size);
 
@@ -1678,7 +1678,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 	{
 		TriangleIndices *indiceslist = &Triangles[submesh];
 
-		int elements_size = indiceslist->triangles.size() * 3;
+		int elements_size = (int)indiceslist->triangles.size() * 3;
 		int *elements = new int[elements_size];
 
 		int elements_pos = 0;
@@ -1730,7 +1730,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 
 			WallPolygon *poly = &Walls[i]->handles[j];
 
-			int elements_size = poly->triangles.size() * 3;
+			int elements_size = (int)poly->triangles.size() * 3;
 			int *elements = new int[elements_size];
 
 			int elements_pos = 0;
@@ -1774,7 +1774,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 				int size = (int)poly->index_extents.size();
 				for (int m = 0; m < size; m++)
 				{
-					Ogre::Vector2 extents = poly->index_extents[m];
+					Extents extents = poly->index_extents[m];
 					if (deleted[k] < extents.x)
 						extents.x--;
 					if (deleted[k] < extents.y)
@@ -1809,12 +1809,12 @@ void MeshObject::CreateCollider()
 
 	int tricount = 0;
 	for (int i = 0; i < Triangles.size(); i++)
-		tricount += Triangles[i].triangles.size();
+		tricount += (int)Triangles[i].triangles.size();
 
 	try
 	{
 		//initialize collider shape
-		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape(MeshGeometry.size(), tricount * 3);
+		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape((int)MeshGeometry.size(), tricount * 3);
 
 		//add vertices to shape
 		for (int i = 0; i < Submeshes.size(); i++)
@@ -1835,7 +1835,7 @@ void MeshObject::CreateCollider()
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
+		mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 
 		if (sbs->DeleteColliders == true)
@@ -1867,7 +1867,7 @@ void MeshObject::DeleteCollider()
 	mShape = 0;
 }
 
-void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices)
+void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices)
 {
 	//set up triangle collider based on loaded model geometry
 
@@ -1892,7 +1892,7 @@ void MeshObject::CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &v
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
+		mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1921,7 +1921,7 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)
-			mBody->setStaticShape(SceneNode, shape, 0.1, 0.5, false);
+			mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
 		else
 			mBody->setShape(SceneNode, shape, restitution, friction, mass);
 		mShape = shape;
@@ -1932,7 +1932,7 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	}
 }
 
-int MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance)
+float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, float max_distance)
 {
 	//cast a ray and return the collision distance to the mesh
 	//return -1 if no hit
@@ -1981,7 +1981,7 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 	return false;
 }
 
-void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents)
+void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents)
 {
     bool added_shared = false;
     size_t current_offset = 0;
@@ -2001,16 +2001,16 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex
         {
             if( !added_shared )
             {
-                vertex_count += mesh->sharedVertexData->vertexCount;
+                vertex_count += (int)mesh->sharedVertexData->vertexCount;
                 added_shared = true;
             }
         }
         else
         {
-            vertex_count += submesh->vertexData->vertexCount;
+            vertex_count += (int)submesh->vertexData->vertexCount;
         }
         // Add the indices
-        index_count += submesh->indexData->indexCount;
+        index_count += (int)submesh->indexData->indexCount;
     }
 
     // Allocate space for the vertices and indices

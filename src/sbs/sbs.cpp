@@ -232,7 +232,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	if (DisableSound == false)
-		soundsys->set3DSettings(1.0, 3.28, 1.0);
+		soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
 
 	//set up physics
 	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true);
@@ -524,12 +524,12 @@ void SBS::MainLoop()
 	else
 		timing = GetElapsedTime();
 
-	float elapsed = float(timing) / 1000.0;
+	float elapsed = float(timing) / 1000.0f;
 
 	//calculate start and running time
 	if (start_time == 0)
-		start_time = GetRunTime() / 1000.0;
-	running_time = (GetRunTime() / 1000.0) - start_time;
+		start_time = GetRunTime() / 1000.0f;
+	running_time = (GetRunTime() / 1000.0f) - start_time;
 
 	//update physics
 	int steps = 0;
@@ -563,7 +563,7 @@ void SBS::MainLoop()
 	soundsys->update();
 	SBSProfileManager::Stop_Profile();
 
-	elapsed = remaining_delta + ((float)timing / 1000.0);
+	elapsed = remaining_delta + ((float)timing / 1000.0f);
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > .5f)
@@ -630,7 +630,7 @@ void SBS::CalculateFrameRate()
 	fps_frame_count++;
 	if (fps_tottime > 500)
 	{
-		FPS = (float (fps_frame_count) * 1000.0) / float (fps_tottime);
+		FPS = (float (fps_frame_count) * 1000.0f) / float (fps_tottime);
 		fps_frame_count = 0;
 		fps_tottime = 0;
 	}
@@ -1426,7 +1426,7 @@ void SBS::CreateSky(const char *filenamebase)
 	SkyBox->no_collider = true;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
-	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280;
+	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0f;
 	sbs->ResetTextureMapping(true);
 	WallObject *wall = new WallObject(SkyBox, SkyBox->object, true);
 
@@ -2189,19 +2189,19 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 	//create polygon tiles
 	for (float i = minx; i < maxx; i += tile_x)
 	{
-		int sizex, sizez;
+		float sizex, sizez;
 
 		if (i + tile_x > maxx)
 			sizex = maxx - i;
 		else
-			sizex = tile_x;
+			sizex = (float)tile_x;
 
 		for (float j = minz; j < maxz; j += tile_z)
 		{
 			if (j + tile_z > maxz)
 				sizez = maxz - i;
 			else
-				sizez = tile_z;
+				sizez = (float)tile_z;
 
 			DrawWalls(false, true, false, false, false, false);
 			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false);
@@ -2606,7 +2606,7 @@ void SBS::CheckAutoAreas()
 int SBS::GetMeshCount()
 {
 	//return total number of mesh objects
-	return meshes.size();
+	return (int)meshes.size();
 }
 
 Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
@@ -3505,7 +3505,7 @@ std::string SBS::VerifyFile(const char *filename)
 	}
 
 	std::string directory;
-	int loc = file.find_last_of("/");
+	int loc = (int)file.find_last_of("/");
 	directory = file.substr(0, loc + 1);
 
 	Ogre::StringVectorPtr listing = filesystem.list();
@@ -3749,7 +3749,7 @@ void SBS::CalculateAverageTime()
 	frame_times.erase(frame_times.begin(), it);
 
 	//calculate average time
-	average_time = (frame_times.back() - frame_times.front()) / (frame_times.size() - 1);
+	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
 }
 
 std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
@@ -3865,7 +3865,7 @@ std::vector<Action*> SBS::GetAction(const std::string name)
 int SBS::GetActionCount()
 {
 	//get number of registered actions
-	return ActionArray.size();
+	return (int)ActionArray.size();
 }
 
 Object* SBS::GetObject(const std::string name)
@@ -3893,10 +3893,10 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 	//get object by name range expression (ex. "Floors 1 to 3")
 
 	std::vector<Object*> objects;
-	int temp = expression.find("to", 0);
+	int temp = (int)expression.find("to", 0);
 
 	//the name 'elevator' matches the previous search - in this case, detect it and undo
-	int temp2 = expression.find("tor", 0);
+	int temp2 = (int)expression.find("tor", 0);
 	if (temp == temp2)
 		temp = 0;
 
@@ -4053,7 +4053,7 @@ void SBS::CameraLoop()
 			timing = GetAverageTime();
 		else
 			timing = GetElapsedTime();
-		float elapsed = timing / 1000.0;
+		float elapsed = timing / 1000.0f;
 
 		//Process camera loop
 		camera->Loop(elapsed);

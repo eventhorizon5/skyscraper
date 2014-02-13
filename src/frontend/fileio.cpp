@@ -1209,8 +1209,8 @@ int ScriptProcessor::ProcCommands()
 	if (Section != 2 && Section != 4)
 	{
 		//process math functions
-		if (MathFunctions() == false)
-			return false;
+		if (MathFunctions() == sError)
+			return sError;
 
 		//process any functions
 		if (FunctionProc() == true)
@@ -2829,8 +2829,8 @@ int ScriptProcessor::ProcFloors()
 		return sContinue;
 
 	//process math functions
-	if (MathFunctions() == false)
-		return false;
+	if (MathFunctions() == sError)
+		return sError;
 
 	//process functions
 	if (FunctionProc() == true)
@@ -4483,8 +4483,8 @@ int ScriptProcessor::ProcElevators()
 		return sContinue;
 
 	//process math functions
-	if (MathFunctions() == false)
-		return false;
+	if (MathFunctions() == sError)
+		return sError;
 
 	//process functions
 	if (FunctionProc() == true)
@@ -7536,7 +7536,7 @@ std::vector<std::string> *ScriptProcessor::GetBuildingData()
 	return &BuildingDataOrig;
 }
 
-bool ScriptProcessor::MathFunctions()
+int ScriptProcessor::MathFunctions()
 {
 	//functions for advanced math
 

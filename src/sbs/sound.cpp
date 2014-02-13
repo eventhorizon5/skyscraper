@@ -361,7 +361,7 @@ float Sound::GetPlayPosition()
 	unsigned int position;
 	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
-	return position / length;
+	return float(position / length);
 }
 
 void Sound::SetPlayPosition(float percent)
@@ -376,7 +376,7 @@ void Sound::SetPlayPosition(float percent)
 	sound->getLength(&length, FMOD_TIMEUNIT_MS);
 
 	unsigned int position;
-	position = percent * length;
+	position = unsigned int(percent * length);
 	channel->setPosition(position, FMOD_TIMEUNIT_MS);
 }
 

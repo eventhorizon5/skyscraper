@@ -57,29 +57,29 @@ Camera::Camera(Ogre::Camera *camera)
 	desired_velocity = Ogre::Vector3(0, 0, 0);
 	angle_velocity = Ogre::Vector3(0, 0, 0);
 	desired_angle_velocity = Ogre::Vector3(0, 0, 0);
-	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 9.0);
-	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040);
-	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1);
-	cfg_walk_maxspeed_mult = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0);
-	cfg_walk_maxspeed_multreal = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_MultReal", 1.0);
-	cfg_walk_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkBrake", 0.040);
-	cfg_rotate_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005);
-	cfg_rotate_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015);
-	cfg_rotate_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015);
-	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 3.0);
-	cfg_body_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64);
-	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 3.0);
-	cfg_legs_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312);
-	cfg_lookspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0);
-	cfg_turnspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0);
-	cfg_spinspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0);
-	cfg_floatspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FloatSpeed", 140.0);
-	cfg_stepspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StepSpeed", 70.0);
-	cfg_strafespeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StrafeSpeed", 70.0);
-	cfg_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.Speed", 1.0);
-	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0);
-	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5);
-	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2);
+	cfg_jumpspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.JumpSpeed", 9.0f);
+	cfg_walk_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkAccelerate", 0.040f);
+	cfg_walk_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed", 0.1f);
+	cfg_walk_maxspeed_mult = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_Mult", 10.0f);
+	cfg_walk_maxspeed_multreal = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkMaxSpeed_MultReal", 1.0f);
+	cfg_walk_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.WalkBrake", 0.040f);
+	cfg_rotate_accelerate = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateAccelerate", 0.005f);
+	cfg_rotate_maxspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateMaxSpeed", 0.015f);
+	cfg_rotate_brake = sbs->GetConfigFloat("Skyscraper.SBS.Camera.RotateBrake", 0.015f);
+	cfg_body_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyHeight", 3.0f);
+	cfg_body_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BodyWidth", 1.64f);
+	cfg_legs_height = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsHeight", 3.0f);
+	cfg_legs_width = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LegsWidth", 1.312f);
+	cfg_lookspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.LookSpeed", 150.0f);
+	cfg_turnspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.TurnSpeed", 100.0f);
+	cfg_spinspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SpinSpeed", 150.0f);
+	cfg_floatspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FloatSpeed", 140.0f);
+	cfg_stepspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StepSpeed", 70.0f);
+	cfg_strafespeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.StrafeSpeed", 70.0f);
+	cfg_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.Speed", 1.0f);
+	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0f);
+	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5f);
+	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2f);
 	speed = 1;
 	Collisions = 0;
 	lastfloor = 0;
@@ -87,9 +87,9 @@ Camera::Camera(Ogre::Camera *camera)
 	MouseDown = false;
 	ReportCollisions = sbs->GetConfigBool("Skyscraper.SBS.Camera.ReportCollisions", false);
 	Freelook = sbs->GetConfigBool("Skyscraper.SBS.Camera.Freelook", false);
-	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0);
-	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794);
-	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0);
+	Freelook_speed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FreelookSpeed", 200.0f);
+	FOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FOV", 71.263794f);
+	FarClip = sbs->GetConfigFloat("Skyscraper.SBS.Camera.MaxDistance", 0.0f);
 	object_number = 0;
 	object_line = 0;
 	HitPosition = 0;
@@ -103,7 +103,7 @@ Camera::Camera(Ogre::Camera *camera)
 	//set up camera and scene nodes
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
-	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5) / 2), 0));
+	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0));
 	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
 	CameraNode->attachObject(MainCamera);
 	SetFOVAngle(FOV);
@@ -114,8 +114,8 @@ Camera::Camera(Ogre::Camera *camera)
 	if (cfg_body_width > cfg_legs_width)
 		width = cfg_body_width / 2;
 
-	float height = (cfg_body_height + cfg_legs_height - 0.5) - (width * 2);
-	float step_height = cfg_legs_height - 0.5;
+	float height = (cfg_body_height + cfg_legs_height - 0.5f) - (width * 2);
+	float step_height = cfg_legs_height - 0.5f;
 
 	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
@@ -126,8 +126,8 @@ Camera::Camera(Ogre::Camera *camera)
 
 	//other movement options
 	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
-	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65)));
-	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719)); // 9.806 m/s/s
+	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65f)));
+	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f)); // 9.806 m/s/s
 	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
 }
 
@@ -434,10 +434,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 
 	//cast a ray from the camera in the direction of the clicked position
 	SBS_PROFILE("Camera::ClickedObject");
-	float width = MainCamera->getViewport()->getActualWidth();
-	float height = MainCamera->getViewport()->getActualHeight();
-	float x = sbs->mouse_x / width;
-	float y = sbs->mouse_y / height;
+	int width = MainCamera->getViewport()->getActualWidth();
+	int height = MainCamera->getViewport()->getActualHeight();
+	float x = (float)sbs->mouse_x / (float)width;
+	float y = (float)sbs->mouse_y / (float)height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
 	//generate left-hand coordinate ray
@@ -526,13 +526,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	if (wall)
 	{
 		object_number = wall->GetNumber();
-		int index = polyname.find(")");
+		int index = (int)polyname.find(")");
 		if (index > -1)
 			polyname.erase(polyname.begin(), polyname.begin() + index + 1);
 	}
 	if ((int)meshname.find("(") == 0)
 	{
-		int index = meshname.find(")");
+		int index = (int)meshname.find(")");
 		if (object_number == 0)
 			object_number = atoi(meshname.substr(1, index - 1).c_str());
 		meshname.erase(meshname.begin(), meshname.begin() + index + 1);
@@ -652,8 +652,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	if ((int)meshname.find("Call Button") != -1)
 	{
 		//user clicked on a call button
-		int index = meshname.find(":");
-		int index2 = meshname.find(":", index + 1);
+		int index = (int)meshname.find(":");
+		int index2 = (int)meshname.find(":", index + 1);
 		int floor = atoi(meshname.substr(12, index - 12).c_str());
 		int number = atoi(meshname.substr(index + 1, index2 - index - 1).c_str());
 
@@ -693,8 +693,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	{
 		//user clicked on a shaft door
 		int elevator = atoi(meshname.substr(9, meshname.find(":") - 9).c_str());
-		int index = meshname.find("Shaft Door");
-		int index2 = meshname.find(":", index);
+		int index = (int)meshname.find("Shaft Door");
+		int index2 = (int)meshname.find(":", index);
 		int number = atoi(meshname.substr(index + 10, index2 - (index + 10)).c_str());
 		int floor = atoi(meshname.substr(index2 + 1, meshname.length() - index2 - 2).c_str());
 		if (sbs->GetElevator(elevator))
@@ -797,7 +797,7 @@ void Camera::Loop(float delta)
 
 		if (name != "")
 		{
-			int index = name.find(")");
+			int index = (int)name.find(")");
 			int number = atoi(name.substr(1, index - 1).c_str());
 			name.erase(name.begin(), name.begin() + index + 1);
 			std::string num = ToString(number);

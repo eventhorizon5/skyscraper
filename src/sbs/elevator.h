@@ -58,10 +58,10 @@ public:
 	float DecelJerk;
 	int OriginFloor; //elevator starting floor
 	Ogre::Vector3 Origin; //3D elevator origin vector
-	double TempDeceleration; //temporary deceleration value, used in overrun correction
+	float TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
-	double ElevatorRate;
+	float ElevatorRate;
 	std::vector<int> ServicedFloors; //list of floors this elevator services
 	int AssignedShaft; //shaft number this elevator is assigned to
 	bool IsEnabled; //true if elevator is enabled
@@ -185,8 +185,8 @@ public:
 	bool AddServicedFloor(int number);
 	void RemoveServicedFloor(int number);
 	void UpdateFloorIndicators();
-	double GetJerkRate();
-	double GetJerkPosition();
+	float GetJerkRate();
+	float GetJerkPosition();
 	void SetFloorSkipText(const char *id);
 	const char* GetFloorSkipText();
 	bool IsServicedFloor(int floor);
@@ -352,8 +352,8 @@ private:
 	bool CalculateStoppingDistance;
 	bool Brakes; //internal brake status
 	int EmergencyStop; //internal stop status; 0 for off, 1 for standard stop, 2 for emergency stop
-	double JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
-	double JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
+	float JerkRate; //current jerk value, used as an acceleration/deceleration multiplier
+	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
 	bool FirstRun; //used for setting first-run items in the run loop
@@ -421,7 +421,7 @@ private:
 	ElevatorDoor* lastdoor_result;
 	int lastdoor_number;
 	Ogre::Vector3 elevposition;
-	double tmpDecelJerk;
+	float tmpDecelJerk;
 	bool FinishedMove;
 	bool RandomLobbySet;
 	bool SoundsQueued;

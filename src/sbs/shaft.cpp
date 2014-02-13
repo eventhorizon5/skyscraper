@@ -812,13 +812,13 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	sbs->ResetDoorwayWalls();
 	if (direction < 5)
 	{
-		Cut(1, floor, Ogre::Vector3(x1 - 0.5, voffset, z1), Ogre::Vector3(x2 + 0.5, voffset + height, z2), true, false, 1, "Shaft");
-		floorptr->Cut(Ogre::Vector3(origin.x + x1 - 0.5, floorptr->GetBase(true) + voffset, origin.z + z1), Ogre::Vector3(origin.x + x2 + 0.5, floorptr->GetBase(true) + voffset + height, origin.z + z2), true, false, true, 2, "Shaft");
+		Cut(1, floor, Ogre::Vector3(x1 - 0.5f, voffset, z1), Ogre::Vector3(x2 + 0.5f, voffset + height, z2), true, false, 1, "Shaft");
+		floorptr->Cut(Ogre::Vector3(origin.x + x1 - 0.5f, floorptr->GetBase(true) + voffset, origin.z + z1), Ogre::Vector3(origin.x + x2 + 0.5f, floorptr->GetBase(true) + voffset + height, origin.z + z2), true, false, true, 2, "Shaft");
 	}
 	else
 	{
-		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5), Ogre::Vector3(x2, voffset + height, z2 + 0.5), true, false, 1, "Shaft");
-		floorptr->Cut(Ogre::Vector3(origin.x + x1, floorptr->GetBase(true) + voffset, origin.z + z1 - 0.5), Ogre::Vector3(origin.x + x2, floorptr->GetBase(true) + voffset + height, origin.z + z2 + 0.5), true, false, true, 2, "Shaft");
+		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5f), Ogre::Vector3(x2, voffset + height, z2 + 0.5f), true, false, 1, "Shaft");
+		floorptr->Cut(Ogre::Vector3(origin.x + x1, floorptr->GetBase(true) + voffset, origin.z + z1 - 0.5f), Ogre::Vector3(origin.x + x2, floorptr->GetBase(true) + voffset + height, origin.z + z2 + 0.5f), true, false, true, 2, "Shaft");
 	}
 
 	//create doorway walls

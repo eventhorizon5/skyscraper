@@ -463,7 +463,7 @@ bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre:
 	relend -= start;
 
 	int i, i1;
-	i1 = vertices.size() - 1;
+	i1 = (int)vertices.size() - 1;
 	for (i = 0; i < vertices.size() - 1; i++)
 	{
 		Ogre::Vector3 start2 = start - vertices[i1];

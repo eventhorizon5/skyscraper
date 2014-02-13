@@ -153,7 +153,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5);
+					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
 					if (floor < topfloor)
 						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
@@ -182,7 +182,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5);
+					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
 					if (floor < topfloor)
 						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
@@ -229,7 +229,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5);
+					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
 					if (floor < topfloor)
 						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
@@ -253,7 +253,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5);
+					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
 					if (floor < topfloor)
 						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)

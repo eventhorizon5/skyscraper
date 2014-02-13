@@ -48,7 +48,7 @@ RandomGen::RandomGen(unsigned int iSeed)
 void RandomGen::Initialize()
 {
 	//initialize generator using time() as seed
-	Initialize(time(0));
+	Initialize((unsigned int)time(0));
 }
 
 void RandomGen::Initialize(unsigned int iSeed)

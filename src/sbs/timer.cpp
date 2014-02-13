@@ -85,7 +85,7 @@ void TimerObject::Check()
 
 	CurrentTime = sbs->GetCurrentTime() - StartTime;
 
-	if (CurrentTime - LastHit >= Interval)
+	if (CurrentTime - LastHit >= (unsigned long)Interval)
 	{
 		if (sbs->Verbose)
 			Report("Notify");

@@ -43,7 +43,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	Number = number + 1;
 	elev = elevator;
 	OpenDoor = 0;
-	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3);
+	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3f);
 	WhichDoors = 0;
 	ShaftDoorFloor = 0;
 	DoorTimer = sbs->GetConfigInt("Skyscraper.SBS.Elevator.Door.Timer", 5000);
@@ -61,8 +61,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	ShaftDoorThickness = 0;
 	ShaftDoorOrigin = 0;
 	nudge_enabled = false;
-	ManualSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2);
-	SlowSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5);
+	ManualSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.ManualSpeed", 0.2f);
+	SlowSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.SlowSpeed", 0.5f);
 	QuickClose = sbs->GetConfigInt("Skyscraper.SBS.Elevator.Door.QuickClose", 3000);
 	NudgeTimer = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.NudgeTimer", 30);
 	nudgesound_loaded = false;
@@ -645,7 +645,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 	//turn on nudge mode timer if doors are open
 	if (open == true && NudgeTimer > 0 && nudgetimer->IsRunning() == false && elev->AutoDoors == true)
-		nudgetimer->Start(NudgeTimer * 1000, true);
+		nudgetimer->Start(int(NudgeTimer * 1000), true);
 
 	//reset values
 	OpenDoor = 0;
@@ -701,10 +701,10 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	}
 
 	//create left door
-	AddDoorComponent("Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, height, 0, tw, th, tw, th);
+	AddDoorComponent("Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75f, x1, z1, x2, z2, height, 0, tw, th, tw, th);
 
 	//create right door
-	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, height, 0, tw, th, tw, th);
+	AddDoorComponent("Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75f, x3, z3, x4, z4, height, 0, tw, th, tw, th);
 
 	//finish doors
 	return FinishDoors();
@@ -963,8 +963,8 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		wall = elev->ElevatorMesh->CreateWallObject(elev->object, "Connection");
 		name1 = "DoorF1";
 		name2 = "DoorF2";
-		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
-		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
 	}
 	else
 	{
@@ -977,8 +977,8 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		x2 += elev->Origin.x;
 		z1 += elev->Origin.z;
 		z2 += elev->Origin.z;
-		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
-		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001 + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
+		sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
 	}
 
 	sbs->ResetTextureMapping();
@@ -1112,10 +1112,10 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	//create doors
 
 	//create left door
-	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75, x1, z1, x2, z2, Doors->Height, voffset, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Left", lefttexture, lefttexture, thickness, "Left", OpenSpeed, OpenSpeed * 0.75f, x1, z1, x2, z2, Doors->Height, voffset, tw, th, tw, th);
 
 	//create right door
-	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75, x3, z3, x4, z4, Doors->Height, voffset, tw, th, tw, th);
+	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75f, x3, z3, x4, z4, Doors->Height, voffset, tw, th, tw, th);
 
 	//finish doors
 	Object *object = FinishShaftDoor(floor);

@@ -34,15 +34,14 @@
 #include "unix.h"
 #include "globals.h"
 
-const double pi = 3.14159265;
+const float pi = 3.14159265f;
 
 bool IsEven(int Number)
 {
 	//Determine if the passed number is even.
 	//If number divides evenly, return true
 
-	float temp = Number;
-	if ((temp / 2) == int(temp / 2))
+	if (((float)Number / 2) == int((float)Number / 2))
 		return true;
 	else
 		return false;
@@ -160,7 +159,7 @@ int FindWithCase(const char *string, bool uppercase, const char *key, int offset
 {
 	//change case of a string, and return location of search key
 	std::string newstring = SetCaseCopy(string, uppercase);
-	int loc = newstring.find(newstring, offset);
+	int loc = (int)newstring.find(newstring, offset);
 	if (loc == std::string::npos)
 		return -1;
 	else
@@ -184,20 +183,16 @@ bool StartsWith(std::string &string, const char *check_string, bool ignore_case)
 {
 	//check if a string starts with the contents of "check_string"
 
+	int result;
+
 	if (ignore_case == true)
-	{
-		int result = FindWithCase(string.c_str(), false, check_string, 0);
-		if (result == 0)
-			return true;
-		return false;
-	}
+		result = FindWithCase(string.c_str(), false, check_string, 0);
 	else
-	{
-		int result = string.find(check_string, 0);
-		if (result >= 0 && result != std::string::npos)
-			return true;
-		return false;
-	}
+		result = (int)string.find(check_string, 0);
+
+	if (result == 0)
+		return true;
+	return false;
 }
 
 void SplitString(std::vector<std::string> &dest_array, const char *original_string, char separator)
@@ -212,7 +207,7 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
 	std::string original = original_string;
 	TrimString(original);
 
-    endpos = original.find_first_of(separator, startpos);
+    endpos = (int)original.find_first_of(separator, startpos);
 	if (endpos == -1)
 	{
 		newstring = original.substr(startpos, endpos - startpos);
@@ -226,7 +221,7 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
     	TrimString(newstring);
         dest_array.push_back(newstring); //add to vector
         startpos = endpos + 1; //jump past separator
-        endpos = original.find_first_of(separator, startpos); //find next
+        endpos = (int)original.find_first_of(separator, startpos); //find next
         if(endpos == -1)
         {
             //last one, so no 2nd param required to go to end of string

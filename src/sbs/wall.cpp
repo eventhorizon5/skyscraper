@@ -56,7 +56,7 @@ WallObject::~WallObject()
 	}
 
 	sbs->WallCount--;
-	sbs->PolygonCount -= handles.size();
+	sbs->PolygonCount -= (int)handles.size();
 	handles.clear();
 }
 
@@ -74,7 +74,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	std::string name2 = ProcessName(name);
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
-	std::vector<Ogre::Vector2> index_extents;
+	std::vector<Extents> index_extents;
 	std::vector<TriangleType> triangles;
 	if (!meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents, triangles))
 	{
@@ -101,7 +101,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	std::string name2 = ProcessName(name);
 	Ogre::Matrix3 tm;
 	Ogre::Vector3 tv;
-	std::vector<Ogre::Vector2> index_extents;
+	std::vector<Extents> index_extents;
 	std::vector<TriangleType> triangles;
 	if (!meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles))
 	{
@@ -126,7 +126,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std:
 {
 	//add a set of polygons, providing the original material and texture mapping
 	std::string name2 = ProcessName(name);
-	std::vector<Ogre::Vector2> index_extents;
+	std::vector<Extents> index_extents;
 	std::vector<TriangleType> triangles;
 	if (!meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles, 0, 0))
 	{
@@ -144,7 +144,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std:
 	return &handles[index];
 }
 
-int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<Ogre::Vector2> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane)
+int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 	int i = (int)handles.size();
@@ -249,7 +249,7 @@ int WallObject::FindPolygon(const char *name)
 		if ((int)tmpname.find("(") == 0)
 		{
 			//strip object number
-			int loc = tmpname.find(")");
+			int loc = (int)tmpname.find(")");
 			tmpname.erase(0, loc + 1);
 		}
 		if (name2 == tmpname)

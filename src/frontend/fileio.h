@@ -39,7 +39,7 @@ class ScriptProcessor
 	std::string GetAfterEquals(const char *string);
 	void Reset();
 	std::vector<std::string> *GetBuildingData();
-	bool MathFunctions();
+	int MathFunctions();
 
 	bool IsFinished;
 

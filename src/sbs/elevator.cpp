@@ -135,8 +135,8 @@ Elevator::Elevator(int number)
 	ParkingFloor = 0;
 	ParkingDelay = 0;
 	Leveling = false;
-	LevelingSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingSpeed", 0.2);
-	LevelingOffset = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingOffset", 0.5);
+	LevelingSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingSpeed", 0.2f);
+	LevelingOffset = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingOffset", 0.5f);
 	LevelingOpen = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.LevelingOpen", 0);
 	tmpDecelJerk = 0;
 	FinishedMove = false;
@@ -163,8 +163,8 @@ Elevator::Elevator(int number)
 	Music = sbs->GetConfigString("Skyscraper.SBS.Elevator.Music", "");
 	MusicOn = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOn", true);
 	MusicOnMove = sbs->GetConfigBool("Skyscraper.SBS.Elevator.MusicOnMove", false);
-	DepartureDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0);
-	ArrivalDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0);
+	DepartureDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.DepartureDelay", 0.0f);
+	ArrivalDelay = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.ArrivalDelay", 0.0f);
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
@@ -174,7 +174,7 @@ Elevator::Elevator(int number)
 	lastposition = 0;
 	ManualUp = false;
 	ManualDown = false;
-	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6);
+	InspectionSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.InspectionSpeed", 0.6f);
 	LimitQueue = sbs->GetConfigBool("Skyscraper.SBS.Elevator.LimitQueue", false);
 	UpQueueEmpty = false;
 	DownQueueEmpty = false;
@@ -1383,11 +1383,11 @@ void Elevator::MonitorLoop()
 
 	//enable auto-park timer if specified
 	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
-		parking_timer->Start(ParkingDelay * 1000.0, true);
+		parking_timer->Start(int(ParkingDelay * 1000), true);
 
 	//enable random call timer
 	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false && AutoDoors == true)
-		random_timer->Start(RandomFrequency * 1000, false);
+		random_timer->Start(int(RandomFrequency * 1000), false);
 
 	//process triggers
 	if (IsEnabled == true)
@@ -1634,7 +1634,7 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("started departure delay");
 			WaitForTimer = true;
-			departure_delay->Start(DepartureDelay * 1000, false);
+			departure_delay->Start(int(DepartureDelay * 1000), false);
 			return;
 		}
 	}
@@ -1809,7 +1809,7 @@ void Elevator::MoveElevatorToFloor()
 		//check if the elevator rate is less than the amount that was stored in JerkPos
 		//(the elevator rate at the end of the JerkRate increments), adjusted to the ratio of acceljerk to deceljerk
 
-		double tmppos = JerkPos * (AccelJerk / DecelJerk);
+		float tmppos = JerkPos * (AccelJerk / DecelJerk);
 		if ((Direction == -1 && ElevatorRate <= tmppos) || (Direction == 1 && ElevatorRate >= tmppos))
 		{
 			if (tmpDecelJerk == 0)
@@ -2003,7 +2003,7 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("started arrival delay");
 			WaitForTimer = true;
-			arrival_delay->Start(ArrivalDelay * 1000, false);
+			arrival_delay->Start(int(ArrivalDelay * 1000), false);
 			return;
 		}
 		else
@@ -2594,12 +2594,12 @@ void Elevator::UpdateFloorIndicators()
 	}
 }
 
-double Elevator::GetJerkRate()
+float Elevator::GetJerkRate()
 {
 	return JerkRate;
 }
 
-double Elevator::GetJerkPosition()
+float Elevator::GetJerkPosition()
 {
 	return JerkPos;
 }
@@ -4440,8 +4440,8 @@ void Elevator::Timer::Notify()
 
 		if (elevator->RandomActivity == true && elevator->InServiceMode() == false)
 		{
-			RandomGen rnd_main(time(0) + elevator->Number);
-			RandomGen rnd_floor(sbs->GetRunTime() + elevator->Number);
+			RandomGen rnd_main(unsigned int(time(0) + elevator->Number));
+			RandomGen rnd_floor(unsigned int(sbs->GetRunTime() + elevator->Number));
 
 			int num, floor;
 
@@ -4452,7 +4452,7 @@ void Elevator::Timer::Notify()
 				num = 0;
 
 			//get call floor
-			int index = rnd_floor.Get(elevator->ServicedFloors.size());
+			int index = rnd_floor.Get(unsigned int(elevator->ServicedFloors.size()));
 			floor = elevator->ServicedFloors[index];
 
 			//if probability number matched, press selected floor button

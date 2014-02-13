@@ -45,6 +45,18 @@ struct TriangleType
 	}
 };
 
+struct Extents
+{
+	int x;
+	int y;
+
+	Extents(int min, int max)
+	{
+		x = min;
+		y = max;
+	}
+};
+
 class SBSIMPEXP MeshObject
 {
 public:
@@ -87,8 +99,8 @@ public:
 	void RemoveVertex(int index);
 	void AddTriangle(int submesh, TriangleType &triangle);
 	void RemoveTriangle(int submesh, int index);
-	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles);
-	bool PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Ogre::Vector2> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices = true);
+	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles);
+	bool PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th);
 	int ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add);
@@ -98,10 +110,10 @@ public:
 	void EnableDebugView(bool value);
 	void CreateCollider();
 	void DeleteCollider();
-	int HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, int max_distance);
+	float HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, float max_distance);
 	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
-	void GetMeshInformation(const Ogre::Mesh* const mesh, size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents);
-	void CreateColliderFromModel(size_t &vertex_count, Ogre::Vector3* &vertices, size_t &index_count, unsigned long* &indices);
+	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents);
+	void CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices);
 	void CreateBoxCollider(float scale_multiplier);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
@@ -138,7 +150,7 @@ public:
 	Ogre::Plane plane;
 
 	//array holding index extents, to get original geometry
-	std::vector<Ogre::Vector2> index_extents;
+	std::vector<Extents> index_extents;
 
 	//texture mapping matrix and vector
 	Ogre::Matrix3 t_matrix;
