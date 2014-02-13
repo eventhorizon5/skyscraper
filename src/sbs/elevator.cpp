@@ -4440,8 +4440,8 @@ void Elevator::Timer::Notify()
 
 		if (elevator->RandomActivity == true && elevator->InServiceMode() == false)
 		{
-			RandomGen rnd_main(unsigned int(time(0) + elevator->Number));
-			RandomGen rnd_floor(unsigned int(sbs->GetRunTime() + elevator->Number));
+			RandomGen rnd_main(time(0) + elevator->Number);
+			RandomGen rnd_floor(sbs->GetRunTime() + elevator->Number);
 
 			int num, floor;
 
@@ -4452,7 +4452,7 @@ void Elevator::Timer::Notify()
 				num = 0;
 
 			//get call floor
-			int index = rnd_floor.Get(unsigned int(elevator->ServicedFloors.size()));
+			int index = rnd_floor.Get(elevator->ServicedFloors.size());
 			floor = elevator->ServicedFloors[index];
 
 			//if probability number matched, press selected floor button
