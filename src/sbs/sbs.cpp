@@ -600,9 +600,6 @@ void SBS::MainLoop()
 		//process call button callbacks
 		ProcessCallButtons();
 
-		//process timers
-		ProcessTimers();
-
 		//process misc operations on current floor
 		if (GetFloor(camera->CurrentFloor))
 			GetFloor(camera->CurrentFloor)->Loop();
@@ -620,6 +617,10 @@ void SBS::MainLoop()
 		elapsed -= delta;
 	}
 	remaining_delta = elapsed;
+
+	//process timers
+	ProcessTimers();
+
 	SBSProfileManager::Stop_Profile();
 }
 
@@ -3759,7 +3760,7 @@ std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
 	
 	std::string file = filename;
 	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
-	newfilename = filename;
+	newfilename = file;
 
 	for (int i = 0; i < (int)list.size(); i++)
 	{

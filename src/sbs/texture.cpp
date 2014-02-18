@@ -1842,7 +1842,6 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 		fontBuffer->blitToMemory(textureboxes[index].box); //this is very slow
 	}
 
-
 	unsigned char* fontData = static_cast<unsigned char*>(textureboxes[index].box.data);
 	unsigned char* destData = static_cast<unsigned char*>(destPb.data);
 

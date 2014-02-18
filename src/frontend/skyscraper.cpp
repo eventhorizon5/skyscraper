@@ -538,7 +538,7 @@ bool Skyscraper::Initialize()
 	DisableSound = GetConfigBool("Skyscraper.Frontend.DisableSound", false);
 	if (DisableSound == false)
 	{
-		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2010\n");
+		Report("\n FMOD Sound System, copyright (C) Firelight Technologies Pty, Ltd., 1994-2013\n");
 
 		FMOD_RESULT result = FMOD::System_Create(&soundsys);
 		if (result != FMOD_OK)

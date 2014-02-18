@@ -518,9 +518,8 @@ breakpoint:
 
 			if (temp1 + temp3 > 0)
 			{
-				std::string str = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
-				TrimString(str);
-				temp2 = str;
+				temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
+				TrimString(temp2);
 
 				bool found = false;
 				for (int i = 0; i < (int)variables.size(); i++)
@@ -741,9 +740,9 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 
 	//load file
 #if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+	Ogre::FileSystemArchive filesystem(".", "FileSystem", true);
 #else
-	Ogre::FileSystemArchive filesystem(".","FileSystem");
+	Ogre::FileSystemArchive filesystem(".", "FileSystem");
 #endif
 	Ogre::DataStreamPtr filedata = filesystem.open(filename, true);
 
@@ -751,7 +750,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	if(filedata.isNull())
 		return false;
 
-	Ogre::DataStreamPtr file(OGRE_NEW Ogre::MemoryDataStream(filename, filedata));
+	Ogre::DataStreamPtr file(new Ogre::MemoryDataStream(filename, filedata, true, true));
 
 	while (file->eof() == false)
 	{
