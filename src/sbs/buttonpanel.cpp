@@ -216,7 +216,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 	std::vector<Action*> actions;
 	std::vector<std::string> actionsnull; //not used
 
-	for (int i = 0; i < action_names.size(); i++)
+	for (int i = 0; i < (int)action_names.size(); i++)
 	{
 		std::string newname = sbs->GetElevator(elevator)->object->GetName();
 		newname += ":" + action_names[i];

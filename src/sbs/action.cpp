@@ -40,7 +40,7 @@ Action::Action(const std::string name, std::vector<Object*> &action_parents, con
 	SetCase(command_name, false);
 
 	command_parameters.resize(parameters.size());
-	for (int i = 0; i < parameters.size(); i++)
+	for (int i = 0; i < (int)parameters.size(); i++)
 	{
 		command_parameters[i] = parameters[i];
 		TrimString(command_parameters[i]);
@@ -125,7 +125,7 @@ bool Action::DoAction()
 	//GoOff
 	//Return
 
-	for (int i = 0; i < parent_objects.size(); i++)
+	for (int i = 0; i < (int)parent_objects.size(); i++)
 	{
 		Elevator *elevator = 0;
 		Floor *floor = 0;
@@ -463,7 +463,7 @@ bool Action::DoAction()
 					std::string loop = command_parameters[1];
 					SetCase(loop, false);
 
-					for (int i = 0; i < soundlist.size(); i++)
+					for (int i = 0; i < (int)soundlist.size(); i++)
 					{
 						if (soundlist[i])
 						{
@@ -504,7 +504,7 @@ bool Action::DoAction()
 						return false;
 				}
 
-				for (int i = 0; i < soundlist.size(); i++)
+				for (int i = 0; i < (int)soundlist.size(); i++)
 				{
 					if (soundlist[i])
 						soundlist[i]->Stop();
@@ -525,7 +525,7 @@ int Action::GetParentCount()
 
 const Object* Action::GetParent(int number)
 {
-	if (number < 0 || number >= parent_objects.size())
+	if (number < 0 || number >= (int)parent_objects.size())
 		return 0;
 
 	return parent_objects[number];
@@ -533,7 +533,7 @@ const Object* Action::GetParent(int number)
 
 const char* Action::GetParentName(int number)
 {
-	if (number < 0 || number >= parent_objects.size())
+	if (number < 0 || number >= (int)parent_objects.size())
 		return 0;
 
 	if (parent_objects[number])
@@ -543,7 +543,7 @@ const char* Action::GetParentName(int number)
 
 const char* Action::GetParentType(int number)
 {
-	if (number < 0 || number >= parent_objects.size())
+	if (number < 0 || number >= (int)parent_objects.size())
 		return 0;
 
 	if (parent_objects[number])
@@ -558,7 +558,7 @@ int Action::GetParameterCount()
 
 const char *Action::GetParameter(int index)
 {
-	if (index >= 0 && index < command_parameters.size())
+	if (index >= 0 && index < (int)command_parameters.size())
 		return command_parameters[index].c_str();
 	return 0;
 }

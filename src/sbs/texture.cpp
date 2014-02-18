@@ -127,7 +127,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	int num_frames = (int)filenames.size();
 
 	//first verify the filenames
-	for (int i = 0; i < filenames.size(); i++)
+	for (int i = 0; i < (int)filenames.size(); i++)
 	{
 		TrimString(filenames[i]);
 		filenames2.push_back(VerifyFile(filenames[i].c_str()));
@@ -135,7 +135,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 
 	bool has_alpha = false;
 
-	for (int i = 0; i < filenames2.size(); i++)
+	for (int i = 0; i < (int)filenames2.size(); i++)
 	{
 		//determine if the file is a GIF image, to force keycolor alpha
 		std::string extension = filenames2[i].substr(filenames2[i].size() - 3);
@@ -1683,7 +1683,7 @@ std::string SBS::ListTextures()
 	//list loaded textures
 
 	std::string list;
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
 		list.append(textureinfo[i].name);
 		list.append("\n");
@@ -1822,7 +1822,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	// The font texture buffer was created write only...so we cannot read it back :o). One solution is to copy the buffer  instead of locking it. (Maybe there is a way to create a font texture which is not write_only ?)
 
 	int index = -1;
-	for (int i = 0; i < textureboxes.size(); i++)
+	for (int i = 0; i < (int)textureboxes.size(); i++)
 	{
 		if (textureboxes[i].font == font)
 		{
@@ -1924,7 +1924,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 					int textwidth = 0;
 					int wordwidth = 0;
 
-					while((l < str.size()) && (str[l] != '\n'))
+					while((l < (int)str.size()) && (str[l] != '\n'))
 					{
 						wordwidth = 0;
 
@@ -1942,7 +1942,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 
 						if (wordwrap)
 						{
-							while((l < str.size()) && (str[l] != ' ') && (str[l] != '\t') && (str[l] != '\n'))
+							while((l < (int)str.size()) && (str[l] != ' ') && (str[l] != '\t') && (str[l] != '\n'))
 							{
 								wordwidth += GlyphTexCoords[l].getWidth();
 								++l;

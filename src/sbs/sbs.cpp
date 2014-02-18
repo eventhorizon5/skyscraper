@@ -457,7 +457,7 @@ bool SBS::Start()
 	//Post-init startup code goes here, before the runloop
 
 	//free text texture memory
-	for (int i = 0; i < textureboxes.size(); i++)
+	for (int i = 0; i < (int)textureboxes.size(); i++)
 		free(textureboxes[i].buffer);
 	textureboxes.clear();
 
@@ -611,7 +611,7 @@ void SBS::MainLoop()
 		CheckAutoAreas();
 
 		//process triggers
-		for (int i = 0; i < TriggerArray.size(); i++)
+		for (int i = 0; i < (int)TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Check();
@@ -2639,7 +2639,7 @@ std::vector<Sound*> SBS::GetSound(const char *name)
 	std::string findname = name;
 	SetCase(findname, false);
 	std::vector<Sound*> soundlist;
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -3487,7 +3487,7 @@ std::string SBS::VerifyFile(const char *filename)
 	ReplaceAll(file, "\\", "/");
 
 	//check for a cached result
-	for (int i = 0; i < verify_results.size(); i++)
+	for (int i = 0; i < (int)verify_results.size(); i++)
 	{
 		if (verify_results[i].filename == file)
 			return verify_results[i].result;
@@ -3509,7 +3509,7 @@ std::string SBS::VerifyFile(const char *filename)
 	directory = file.substr(0, loc + 1);
 
 	Ogre::StringVectorPtr listing = filesystem.list();
-	for (int i = 0; i < listing->size(); i++)
+	for (int i = 0; i < (int)listing->size(); i++)
 	{
 		std::string check = listing->at(i);
 		std::string checkoriginal = SetCaseCopy(check, false);
@@ -3568,7 +3568,7 @@ void SBS::Prepare(bool report)
 		Report("Processing geometry...");
 	}
 
-	for (int i = 0; i < meshes.size(); i++)
+	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		meshes[i]->Prepare();
 	}
@@ -3576,7 +3576,7 @@ void SBS::Prepare(bool report)
 	if (report == true)
 		Report("Creating colliders...");
 
-	for (int i = 0; i < meshes.size(); i++)
+	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		if (meshes[i]->tricollider == true)
 			meshes[i]->CreateCollider();
@@ -3761,7 +3761,7 @@ std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
 	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
 	newfilename = filename;
 
-	for (int i = 0; i < list.size(); i++)
+	for (int i = 0; i < (int)list.size(); i++)
 	{
 		std::string check = file + "/";
 		if (StartsWith(check, list[i].c_str()) == true)
@@ -3852,7 +3852,7 @@ std::vector<Action*> SBS::GetAction(const std::string name)
 {
 	//get action by name
 	std::vector<Action*> actionlist;
-	for (int i = 0; i < ActionArray.size(); i++)
+	for (int i = 0; i < (int)ActionArray.size(); i++)
 	{
 		std::string actionname = ActionArray[i]->GetName();
 		ReplaceAll(actionname, " ", "");
@@ -3875,7 +3875,7 @@ Object* SBS::GetObject(const std::string name)
 	std::string name2 = name;
 	ReplaceAll(name2, " ", "");
 
-	for (int i = 0; i < ObjectArray.size(); i++)
+	for (int i = 0; i < (int)ObjectArray.size(); i++)
 	{
 		if (ObjectArray[i])
 		{
@@ -3929,7 +3929,7 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 			return objects;
 		}
 
-		for (int i = 0; i < ObjectArray.size(); i++)
+		for (int i = 0; i < (int)ObjectArray.size(); i++)
 		{
 			if (ObjectArray[i])
 			{
@@ -3974,7 +3974,7 @@ std::vector<Object*> SBS::GetObjectRange(std::string expression)
 
 Action* SBS::GetAction(int index)
 {
-	if (index >= 0 && index < ActionArray.size())
+	if (index >= 0 && index < (int)ActionArray.size())
 		return ActionArray[index];
 	return 0;
 }
@@ -3986,7 +3986,7 @@ bool SBS::RunAction(std::string name)
 	std::vector<Action*> actionlist = GetAction(name);
 
 	bool result = true;
-	for (int i = 0; i < actionlist.size(); i++)
+	for (int i = 0; i < (int)actionlist.size(); i++)
 	{
 		bool result2 = false;
 
@@ -4025,7 +4025,7 @@ bool SBS::CheckKey(int keyid)
 {
 	//checks to see if the user has the specified key
 
-	for (int i = 0; i < keys.size(); i++)
+	for (int i = 0; i < (int)keys.size(); i++)
 	{
 		if (keys[i].id == keyid)
 			return true;
@@ -4039,7 +4039,7 @@ void SBS::ListKeys()
 
 	Report("--- Keys ---\n");
 
-	for (int i = 0; i < keys.size(); i++)
+	for (int i = 0; i < (int)keys.size(); i++)
 	{
 		std::string id = ToString(keys[i].id);
 		Report(id + " - " + keys[i].name);

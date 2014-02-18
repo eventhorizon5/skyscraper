@@ -388,7 +388,7 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	twindow->SetTitle(wxT("Current Script"));
 	twindow->Show(true);
 	std::vector<std::string> *data = skyscraper->GetScriptProcessor()->GetBuildingData();
-	for (int i = 0; i < data->size(); i++)
+	for (int i = 0; i < (int)data->size(); i++)
 			twindow->tMain->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));
 	twindow->tMain->SetInsertionPoint(0);
 }

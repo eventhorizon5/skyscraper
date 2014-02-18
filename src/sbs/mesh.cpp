@@ -586,7 +586,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 
 	//convert to remote values for precision compatibility with Alpha 7 and earlier
 	std::vector<Ogre::Vector3> newpoly;
-	for (int i = 0; i < polygon.size(); i++)
+	for (int i = 0; i < (int)polygon.size(); i++)
 		newpoly.push_back(Ogre::Vector3(ToRemote(polygon[i].x), ToRemote(polygon[i].y), ToRemote(polygon[i].z)));
 
 	float D = 0;
@@ -1486,7 +1486,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	{
 		//reserve triangles
 		int size = (int)Triangles[index].triangles.size() + index_count;
-		if (Triangles[index].triangles.capacity() < size)
+		if ((int)Triangles[index].triangles.capacity() < size)
 			Triangles[index].triangles.reserve(size);
 
 		for (int i = 0; i < index_count; i++)
@@ -1581,7 +1581,7 @@ void MeshObject::Prepare()
 	data->vertexBufferBinding->setBinding(0, vbuffer);
 
 	//process index arrays for each submesh
-	for (int index = 0; index < Submeshes.size(); index++)
+	for (int index = 0; index < (int)Submeshes.size(); index++)
 	{
 		//get submesh object
 		Ogre::SubMesh *submesh = MeshWrapper->getSubMesh(index);
@@ -1705,7 +1705,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 		int element = 0;
 		int size = (int)indiceslist->triangles.size();
 		indiceslist->triangles.clear();
-		if (indiceslist->triangles.capacity() < size)
+		if ((int)indiceslist->triangles.capacity() < size)
 			indiceslist->triangles.reserve(size);
 
 		for (int i = 0; i < size; i++)
@@ -1757,7 +1757,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 			int element = 0;
 			int size = (int)poly->triangles.size();
 			poly->triangles.clear();
-			if (poly->triangles.capacity() < size)
+			if ((int)poly->triangles.capacity() < size)
 				poly->triangles.reserve(size);
 
 			for (int ii = 0; ii < size; ii++)
@@ -1808,7 +1808,7 @@ void MeshObject::CreateCollider()
 		return;
 
 	int tricount = 0;
-	for (int i = 0; i < Triangles.size(); i++)
+	for (int i = 0; i < (int)Triangles.size(); i++)
 		tricount += (int)Triangles[i].triangles.size();
 
 	try
@@ -1817,9 +1817,9 @@ void MeshObject::CreateCollider()
 		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape((int)MeshGeometry.size(), tricount * 3);
 
 		//add vertices to shape
-		for (int i = 0; i < Submeshes.size(); i++)
+		for (int i = 0; i < (int)Submeshes.size(); i++)
 		{
-			for (int j = 0; j < Triangles[i].triangles.size(); j++)
+			for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 			{
 				TriangleType tri(0, 0, 0);
 				tri.x = Triangles[i].triangles[j].x;
@@ -1940,9 +1940,9 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 	//cast a ray from the camera position downwards
 	SBS_PROFILE("MeshObject::HitBeam");
 	Ogre::Ray ray (sbs->ToRemote(origin) -  SceneNode->getPosition(), direction);
-	for (int i = 0; i < Triangles.size(); i++)
+	for (int i = 0; i < (int)Triangles.size(); i++)
 	{
-		for (int j = 0; j < Triangles[i].triangles.size(); j++)
+		for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 		{
 			Ogre::Vector3 tri_a, tri_b, tri_c;
 			tri_a = MeshGeometry[Triangles[i].triangles[j].x].vertex;

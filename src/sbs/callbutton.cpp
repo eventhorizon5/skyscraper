@@ -622,7 +622,7 @@ void CallButton::FireService(int value)
 {
 	//enables fire service phase 1 on all elevators associated with this call button
 
-	for (int i = 0; i < Elevators.size(); i++)
+	for (int i = 0; i < (int)Elevators.size(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)

@@ -660,7 +660,7 @@ void Floor::UpdateFloorIndicators(int elevator)
 				{
 					if (elev->DisplayFloors.size() > 0)
 					{
-						for (int i = 0; i < elev->DisplayFloors.size(); i++)
+						for (int i = 0; i < (int)elev->DisplayFloors.size(); i++)
 						{
 							if (elev->GetFloor() == elev->DisplayFloors[i])
 								value = sbs->GetFloor(elev->GetFloor())->ID;
@@ -698,7 +698,7 @@ void Floor::UpdateFloorIndicators()
 			{
 				if (elevator->DisplayFloors.size() > 0)
 				{
-					for (int i = 0; i < elevator->DisplayFloors.size(); i++)
+					for (int i = 0; i < (int)elevator->DisplayFloors.size(); i++)
 					{
 						if (elevator->GetFloor() == elevator->DisplayFloors[i])
 							value = sbs->GetFloor(elevator->GetFloor())->ID;
@@ -719,7 +719,7 @@ void Floor::Loop()
 
 	if (IsEnabled == true)
 	{
-		for (int i = 0; i < TriggerArray.size(); i++)
+		for (int i = 0; i < (int)TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Check();
@@ -854,7 +854,7 @@ std::vector<Sound*> Floor::GetSound(const char *name)
 	std::string findname = name;
 	SetCase(findname, false);
 	std::vector<Sound*> soundlist;
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
 		{

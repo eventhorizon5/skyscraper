@@ -1392,7 +1392,7 @@ void Elevator::MonitorLoop()
 	//process triggers
 	if (IsEnabled == true)
 	{
-		for (int i = 0; i < TriggerArray.size(); i++)
+		for (int i = 0; i < (int)TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Check();
@@ -2570,7 +2570,7 @@ void Elevator::UpdateFloorIndicators()
 	{
 		if (DisplayFloors.size() > 0)
 		{
-			for (int i = 0; i < DisplayFloors.size(); i++)
+			for (int i = 0; i < (int)DisplayFloors.size(); i++)
 			{
 				if (GetFloor() == DisplayFloors[i] && sbs->GetFloor(GetFloor()))
 					value = sbs->GetFloor(GetFloor())->ID;
@@ -5146,7 +5146,7 @@ std::vector<Sound*> Elevator::GetSound(const char *name)
 	std::string findname = name;
 	SetCase(findname, false);
 	std::vector<Sound*> soundlist;
-	for (int i = 0; i < sounds.size(); i++)
+	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
 		{
@@ -5183,7 +5183,7 @@ float Elevator::GetDestinationAltitude(int floor)
 
 	float result = 0;
 	bool found = false;
-	for (int i = 0; i < DoorArray.size(); i++)
+	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
 		if (DoorArray[i]->ShaftDoorsExist(floor) == true)
 		{

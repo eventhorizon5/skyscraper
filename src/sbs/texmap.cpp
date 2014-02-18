@@ -464,7 +464,7 @@ bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre:
 
 	int i, i1;
 	i1 = (int)vertices.size() - 1;
-	for (i = 0; i < vertices.size() - 1; i++)
+	for (i = 0; i < (int)vertices.size() - 1; i++)
 	{
 		Ogre::Vector3 start2 = start - vertices[i1];
 		normal = start2.crossProduct(start - vertices[i]);
@@ -483,7 +483,7 @@ bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start,
 	std::vector<std::vector<Ogre::Vector3> > vertices;
 	GetGeometry(mesh, vertices, false, convert, rescale, false, true);
 
-	for (int i = 0; i < vertices.size(); i++)
+	for (int i = 0; i < (int)vertices.size(); i++)
 	{
 		if (!IntersectRay(vertices[i], start, end))
 			continue;

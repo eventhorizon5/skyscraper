@@ -360,7 +360,7 @@ bool Control::DoAction()
 		actionlist.push_back(Actions[current_position - 1]);
 
 	bool result = true;
-	for (int i = 0; i < actionlist.size(); i++)
+	for (int i = 0; i < (int)actionlist.size(); i++)
 	{
 		bool result2 = false;
 

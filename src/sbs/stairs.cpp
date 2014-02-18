@@ -908,7 +908,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 			//turn on related floors if ShowFloors is true
 			if (ShowFloors == true)
 			{
-				for (int i = 0; i < ShowFloorsList.size(); i++)
+				for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 				{
 					sbs->GetFloor(ShowFloorsList[i])->Enabled(true);
 					sbs->GetFloor(ShowFloorsList[i])->EnableGroup(true);
@@ -927,7 +927,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 		//turn off related floors if outside stairwell
 		if (ShowFloors == true)
 		{
-			for (int i = 0; i < ShowFloorsList.size(); i++)
+			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 			{
 				if (ShowFloorsList[i] != current_floor)
 				{

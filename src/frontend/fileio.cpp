@@ -453,7 +453,7 @@ breakpoint:
 			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
 
-			for (int i = 0; i < functions.size(); i++)
+			for (int i = 0; i < (int)functions.size(); i++)
 			{
 				if (functions[i].name == function)
 				{
@@ -523,7 +523,7 @@ breakpoint:
 				temp2 = str;
 
 				bool found = false;
-				for (int i = 0; i < variables.size(); i++)
+				for (int i = 0; i < (int)variables.size(); i++)
 				{
 					if (variables[i].name == temp2)
 					{
@@ -730,7 +730,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
-		if (location > BuildingData.size() - 1 || location < 0)
+		if (location > (int)BuildingData.size() - 1 || location < 0)
 			return false;
 
 	//make sure file exists
@@ -1438,7 +1438,7 @@ int ScriptProcessor::ProcCommands()
 
 		//find existing variable by name
 		int index = -1;
-		for (int i = 0; i < variables.size(); i++)
+		for (int i = 0; i < (int)variables.size(); i++)
 		{
 			if (variables[i].name == str)
 			{
@@ -6759,7 +6759,7 @@ int ScriptProcessor::ProcTextures()
 		}
 
 		//check existence of files
-		for (int i = 0; i < filenames.size(); i++)
+		for (int i = 0; i < (int)filenames.size(); i++)
 			CheckFile(filenames[i].c_str());
 
 		if (force == false)
@@ -7455,7 +7455,7 @@ void ScriptProcessor::CheckFile(const char *filename)
 	if (Simcore->FileExists(file.c_str()) == false)
 	{
 		bool exists = false;
-		for (int i = 0; i < nonexistent_files.size(); i++)
+		for (int i = 0; i < (int)nonexistent_files.size(); i++)
 		{
 			if (nonexistent_files[i] == file)
 			{
