@@ -469,9 +469,9 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	if (y == -1)
 		y = 0;
 	if (width < 1)
-		width = mTex->getWidth();
+		width = (int)mTex->getWidth();
 	if (height < 1)
-		height = mTex->getHeight();
+		height = (int)mTex->getHeight();
 
 	if (x > (int)mTex->getWidth() || y > (int)mTex->getHeight())
 		return ReportError("LoadTextureCropped: invalid coordinates for '" + Name + "'");
@@ -810,17 +810,16 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	GetTextureTiling(origname, widthmult, heightmult);
 
 	//get height and width of texture
-	int width, height;
-	width = background->getWidth();
-	height = background->getHeight();
+	int width = (int)background->getWidth();
+	int height = (int)background->getHeight();
 
 	//create new empty texture
 	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//get new texture dimensions, if it was resized
-	width = texture->getWidth();
-	height = texture->getHeight();
+	width = (int)texture->getWidth();
+	height = (int)texture->getHeight();
 
 	//add texture multipliers for new texture
 	TextureInfo info;
@@ -940,9 +939,9 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	if (y == -1)
 		y = 0;
 	if (width < 1)
-		width = image2->getWidth();
+		width = (int)image2->getWidth();
 	if (height < 1)
-		height = image2->getHeight();
+		height = (int)image2->getHeight();
 
 	if (x > (int)image1->getWidth() || y > (int)image1->getHeight())
 		return ReportError("AddTextureOverlay: invalid coordinates for '" + Name + "'");
@@ -950,7 +949,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, image1->getWidth(), image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
@@ -1734,8 +1733,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	 if (strExt == "gif")
 	 {
 		//get chroma transparency color from GIF file data
-	    	uchar enabled = 0;
-		uchar trans_color = 0;
+	    uchar enabled = 0, trans_color = 0;
 		encoded->seek(784); //transparency enabled if value is 0x1
 		encoded->read(&enabled, 1);
 		encoded->seek(787); //transparency color
@@ -1760,7 +1758,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	 }
 	 srcImg.load(encoded, strExt);
 
-     unsigned int width = srcImg.getWidth(), height = srcImg.getHeight();
+     unsigned int width = (unsigned int)srcImg.getWidth(), height = (unsigned int)srcImg.getHeight();
      // Since Ogre 1.6 Shoggoth, the OGRE_ALLOC_T memory macro must be used:
      uchar* pixelData = OGRE_ALLOC_T(uchar, PixelUtil::getMemorySize(width, height, 1, PF_A8R8G8B8), MEMCATEGORY_GENERAL);
      unsigned long pxDataIndex = 0, pxDataIndexStep = (unsigned long)PixelUtil::getNumElemBytes(PF_A8R8G8B8);
@@ -1885,9 +1883,9 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 			GlyphTexCoords[i].bottom = GlyphTexCoords[i].top + lastline + 1;
 
 			if ((int)GlyphTexCoords[i].getHeight() > charheight)
-				charheight = GlyphTexCoords[i].getHeight();
+				charheight = (int)GlyphTexCoords[i].getHeight();
 			if ((int)GlyphTexCoords[i].getWidth() > charwidth)
-				charwidth = GlyphTexCoords[i].getWidth();
+				charwidth = (int)GlyphTexCoords[i].getWidth();
 		}
 	}
 
@@ -1944,13 +1942,13 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 						{
 							while((l < (int)str.size()) && (str[l] != ' ') && (str[l] != '\t') && (str[l] != '\n'))
 							{
-								wordwidth += GlyphTexCoords[l].getWidth();
+								wordwidth += (int)GlyphTexCoords[l].getWidth();
 								++l;
 							}
 						}
 						else
 						{
-							wordwidth += GlyphTexCoords[l].getWidth();
+							wordwidth += (int)GlyphTexCoords[l].getWidth();
 							l++;
 						}
 
@@ -1958,22 +1956,22 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 					}
 
 					if (textwidth == 0)
-						textwidth = destRectangle.getWidth();
+						textwidth = (int)destRectangle.getWidth();
 
 					switch (justify)
 					{
 						case 'c':
-							cursorX = destRectangle.left + (destRectangle.getWidth() / 2) - (textwidth / 2);
+							cursorX = (int)destRectangle.left + ((int)destRectangle.getWidth() / 2) - (textwidth / 2);
 							//lineend = destRectangle.getWidth() - cursorX;
 							break;
 
 						case 'r':
-							cursorX = destRectangle.right - textwidth;
+							cursorX = (int)destRectangle.right - textwidth;
 							//lineend = destRectangle.getWidth();
 							break;
 
 						default:
-							cursorX = destRectangle.right;
+							cursorX = (int)destRectangle.right;
 							//lineend = textwidth;
 							break;
 					}
@@ -1981,14 +1979,14 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 					switch (vert_justify)
 					{
 						case 'c':
-							cursorY = destRectangle.top + (destRectangle.getHeight() / 2) - (charheight / 2);
+							cursorY = (int)destRectangle.top + ((int)destRectangle.getHeight() / 2) - (charheight / 2);
 							break;
 
 						case 'b':
-							cursorY = destRectangle.bottom - charheight + cursorY;
+							cursorY = (int)destRectangle.bottom - charheight + cursorY;
 							break;
 						default:
-							cursorY = destRectangle.top;
+							cursorY = (int)destRectangle.top;
 					}
 					carriagereturn = false;
 				}
@@ -2019,7 +2017,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 					}
 				}
 
-				cursorX += GlyphTexCoords[strindex].getWidth();
+				cursorX += (int)GlyphTexCoords[strindex].getWidth();
 				break;
 			}//default
 		}//switch
