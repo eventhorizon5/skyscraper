@@ -564,7 +564,6 @@ void CallButton::Report(const char *message)
 	//general reporting function
 	std::string msg = "Call button " + ToString2(floor) + ":" + ToString2(Number) + " - " + message;
 	sbs->Report(msg.c_str());
-
 }
 
 bool CallButton::ReportError(const char *message)

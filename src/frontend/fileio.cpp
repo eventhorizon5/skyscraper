@@ -717,8 +717,8 @@ Nextline:
 	return true;
 
 Error:
-		line++;
-		return false;
+	line++;
+	return false;
 }
 
 bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert_line)

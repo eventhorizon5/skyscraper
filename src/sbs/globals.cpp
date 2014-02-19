@@ -189,15 +189,15 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
 {
 	//split a string into an array of strings, divided by "separator"
 
-    int startpos = 0;
-    int endpos = 0;
-    std::string newstring;
+	int startpos = 0;
+	int endpos = 0;
+	std::string newstring;
 
 	dest_array.clear();
 	std::string original = original_string;
 	TrimString(original);
 
-    endpos = (int)original.find_first_of(separator, startpos);
+	endpos = (int)original.find_first_of(separator, startpos);
 	if (endpos == -1)
 	{
 		newstring = original.substr(startpos, endpos - startpos);
@@ -205,21 +205,21 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
 		dest_array.push_back(newstring);
 	}
 
-    while (endpos != -1)
-    {
-    	newstring = original.substr(startpos, endpos - startpos);
-    	TrimString(newstring);
-        dest_array.push_back(newstring); //add to vector
-        startpos = endpos + 1; //jump past separator
-        endpos = (int)original.find_first_of(separator, startpos); //find next
-        if(endpos == -1)
-        {
-            //last one, so no 2nd param required to go to end of string
-        	newstring = original.substr(startpos);
-        	TrimString(newstring);
-            dest_array.push_back(newstring);
-        }
-    }
+	while (endpos != -1)
+	{
+		newstring = original.substr(startpos, endpos - startpos);
+		TrimString(newstring);
+		dest_array.push_back(newstring); //add to vector
+		startpos = endpos + 1; //jump past separator
+		endpos = (int)original.find_first_of(separator, startpos); //find next
+		if(endpos == -1)
+		{
+			//last one, so no 2nd param required to go to end of string
+			newstring = original.substr(startpos);
+			TrimString(newstring);
+			dest_array.push_back(newstring);
+		}
+	}
 }
 
 const char* ToString(int number)

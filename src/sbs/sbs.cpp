@@ -4049,13 +4049,13 @@ void SBS::ListKeys()
 
 void SBS::CameraLoop()
 {
-		unsigned long timing;
-		if (SmoothFrames > 0)
-			timing = GetAverageTime();
-		else
-			timing = GetElapsedTime();
-		float elapsed = timing / 1000.0f;
+	unsigned long timing;
+	if (SmoothFrames > 0)
+		timing = GetAverageTime();
+	else
+		timing = GetElapsedTime();
+	float elapsed = timing / 1000.0f;
 
-		//Process camera loop
-		camera->Loop(elapsed);
+	//Process camera loop
+	camera->Loop(elapsed);
 }

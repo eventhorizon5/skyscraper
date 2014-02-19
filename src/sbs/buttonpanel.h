@@ -66,10 +66,9 @@ public:
 	Ogre::Vector3 GetPosition();
 
 private:
+
 	MeshObject* ButtonPanelMesh; //button panel mesh object
-
 	Action* off_action;
-
 	std::vector<Control*> controls; //control objects
 
 };

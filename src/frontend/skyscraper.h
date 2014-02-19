@@ -170,7 +170,7 @@ class MainScreen : public wxFrame
 {
 public:
 	MainScreen(int width, int height);
-	~MainScreen();
+	virtual ~MainScreen();
 	void OnIconize(wxIconizeEvent& event);
 	void OnSize(wxSizeEvent& event);
 	void OnClose(wxCloseEvent& event);
@@ -184,7 +184,6 @@ public:
 	bool InLoop;
 
 	DECLARE_EVENT_TABLE()
-
 };
 
 DECLARE_APP(Skyscraper)

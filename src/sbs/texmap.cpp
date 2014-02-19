@@ -269,8 +269,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	if (fabsf(sideA) < SMALL_EPSILON)
 		sideA = 0;
 
-	int i;
-	for (i = -1; ++i < (int)orig.size();)
+	for (int i = -1; ++i < (int)orig.size();)
 	{
 		ptB = orig[i];
 		if (axis == 0)

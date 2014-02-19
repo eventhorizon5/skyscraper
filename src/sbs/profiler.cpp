@@ -132,7 +132,7 @@ bool	SBSProfileNode::Return( void )
 	if ( --RecursionCounter == 0 && TotalCalls != 0 ) {
 		unsigned long int time;
 		Profile_Get_Ticks(&time);
-		time-=StartTime;
+		time -= StartTime;
 		TotalTime += (float)time / Profile_Get_Tick_Rate();
 	}
 	return ( RecursionCounter == 0 );
@@ -265,7 +265,7 @@ void	SBSProfileManager::Reset( void )
 
 	gProfileClock.reset();
 	Root.Reset();
-    Root.Call();
+	Root.Call();
 	FrameCounter = 0;
 	Profile_Get_Ticks(&ResetTime);
 }
@@ -309,30 +309,30 @@ void SBSProfileManager::dumpRecursive(std::string &output, SBSProfileIterator* p
 	if (profileIterator->Is_Done())
 		return;
 
-	float accumulated_time=0,parent_time = profileIterator->Is_Root() ? SBSProfileManager::Get_Time_Since_Reset() : profileIterator->Get_Current_Parent_Total_Time();
-	int i;
+	float accumulated_time=0, parent_time = profileIterator->Is_Root() ? SBSProfileManager::Get_Time_Since_Reset() : profileIterator->Get_Current_Parent_Total_Time();
 	int frames_since_reset = SBSProfileManager::Get_Frame_Count_Since_Reset();
-	for (i=0;i<spacing;i++)	output.append(".");
+	for (int i = 0; i < spacing; i++)
+		output.append(".");
 	output.append("----------------------------------\n");
-	for (i=0;i<spacing;i++)	output.append(".");
+	for (int i = 0; i < spacing; i++)
+		output.append(".");
 	char buffer[1000];
-	_snprintf(buffer, 1000, "Profiling: %s (total running time: %.3f ms) ---\n",	profileIterator->Get_Current_Parent_Name(), parent_time );
+	_snprintf(buffer, 1000, "Profiling: %s (total running time: %.3f ms) ---\n",	profileIterator->Get_Current_Parent_Name(), parent_time);
 	output.append(buffer);
 	float totalTime = 0.f;
 
 
 	int numChildren = 0;
 
-	for (i = 0; !profileIterator->Is_Done(); i++,profileIterator->Next())
+	for (int i = 0; !profileIterator->Is_Done(); i++, profileIterator->Next())
 	{
 		numChildren++;
 		float current_total_time = profileIterator->Get_Current_Total_Time();
 		accumulated_time += current_total_time;
 		float fraction = parent_time > SIMD_EPSILON ? (current_total_time / parent_time) * 100 : 0.f;
-		{
-			int i;	for (i=0;i<spacing;i++)	output.append(".");
-		}
-		_snprintf(buffer, 1000, "%d -- %s (%.2f %%) :: %.3f ms / frame (%d calls)\n",i, profileIterator->Get_Current_Name(), fraction,(current_total_time / (double)frames_since_reset),profileIterator->Get_Current_Total_Calls());
+		for (int j = 0; j < spacing; j++)
+			output.append(".");
+		_snprintf(buffer, 1000, "%d -- %s (%.2f %%) :: %.3f ms / frame (%d calls)\n", i, profileIterator->Get_Current_Name(), fraction,(current_total_time / (double)frames_since_reset), profileIterator->Get_Current_Total_Calls());
 		output.append(buffer);
 		totalTime += current_total_time;
 		//recurse into children
@@ -342,14 +342,15 @@ void SBSProfileManager::dumpRecursive(std::string &output, SBSProfileIterator* p
 	{
 		output.append("what's wrong\n");
 	}
-	for (i=0;i<spacing;i++)	output.append(".");
-	_snprintf(buffer, 1000, "%s (%.3f %%) :: %.3f ms\n", "Unaccounted:",parent_time > SIMD_EPSILON ? ((parent_time - accumulated_time) / parent_time) * 100 : 0.f, parent_time - accumulated_time);
+	for (int i = 0; i < spacing; i++)
+		output.append(".");
+	_snprintf(buffer, 1000, "%s (%.3f %%) :: %.3f ms\n", "Unaccounted:", parent_time > SIMD_EPSILON ? ((parent_time - accumulated_time) / parent_time) * 100 : 0.f, parent_time - accumulated_time);
 	output.append(buffer);
 
-	for (i=0;i<numChildren;i++)
+	for (int i = 0; i < numChildren; i++)
 	{
 		profileIterator->Enter_Child(i);
-		dumpRecursive(output, profileIterator,spacing+3);
+		dumpRecursive(output, profileIterator, spacing + 3);
 		profileIterator->Enter_Parent();
 	}
 }
@@ -360,7 +361,7 @@ void SBSProfileManager::dumpAll()
 	profileIterator = SBSProfileManager::Get_Iterator();
 
 	std::string output;
-	dumpRecursive(output, profileIterator,0);
+	dumpRecursive(output, profileIterator, 0);
 	printf("%s\n", output.c_str());
 
 	SBSProfileManager::Release_Iterator(profileIterator);

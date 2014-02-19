@@ -74,7 +74,7 @@ void RandomGen::InitRANMAR(unsigned int ij, unsigned int kl)
 		each subsequence having a length of approximately 10^30.
 	*/
 
-	int i, j, k, l, ii, jj, m;
+	int i, j, k, l, m;
 	float s, t;
 
 	i = (ij / 177) % 177 + 2;
@@ -82,11 +82,11 @@ void RandomGen::InitRANMAR(unsigned int ij, unsigned int kl)
 	k = (kl / 169) % 178 + 1;
 	l = kl % 169;
 
-	for (ii = 1; ii <= 97; ii++)
+	for (int ii = 1; ii <= 97; ii++)
 	{
 		s = 0.0;
 		t = 0.5;
-		for (jj = 1; jj <= 24; jj++)
+		for (int jj = 1; jj <= 24; jj++)
 		{
 			m = (((i * j) % 179) * k) % 179;
 			i = j;
@@ -156,8 +156,7 @@ bool RandomGen::SelfTest ()
 			  6172232.0  8354498.0   10633180.0
 	*/
 	InitRANMAR(1802, 9373);
-	int i;
-	for (i = 0; i < 20000; i++)
+	for (int i = 0; i < 20000; i++)
 		RANMAR();
 	if ((RANMAR() * 4096 * 4096 != 6533892.0)
 		|| (RANMAR() * 4096 * 4096 != 14220222.0)

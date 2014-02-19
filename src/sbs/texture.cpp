@@ -524,6 +524,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 bool SBS::RotateTexture(const char *name, float angle)
 {
 	//set a fixed rotation value for a texture
+
 	bool result;
 	std::string texname = name;
 	TrimString(texname);
@@ -1000,6 +1001,7 @@ std::string SBS::GetTextureMaterial(const char *name, bool &result, bool report,
 
 	//use material_name value instead of name, if loaded as a material script instead of a direct texture
 	//if report is true and texture is not found, issue warning
+
 	std::string matname = name;
 
 	if (matname == prev_material)
@@ -1662,6 +1664,7 @@ void SBS::SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int
 void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const char *sideneg, const char *sidepos, const char *top, const char *bottom)
 {
 	//set override textures and enable override
+
 	mainnegtex = mainneg;
 	TrimString(mainnegtex);
 	mainpostex = mainpos;
@@ -1714,26 +1717,26 @@ std::string SBS::ListTextures()
  */ 
 void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
 {
-     using namespace Ogre;
-     using std::fabs;
-     Image srcImg;
-	 Ogre::ColourValue keyCol2 = keyCol;
+	using namespace Ogre;
+	using std::fabs;
+	Image srcImg;
+	Ogre::ColourValue keyCol2 = keyCol;
 
-	 String strExt;
+	String strExt;
 
-	 size_t pos = filename.find_last_of(".");
-	 if( pos != String::npos && pos < (filename.length() - 1))
-	 {
+	size_t pos = filename.find_last_of(".");
+	if( pos != String::npos && pos < (filename.length() - 1))
+	{
 		strExt = filename.substr(pos+1);
-	 }
+	}
 
-	 //srcImg.load(filename, resGroup);
-	 DataStreamPtr encoded = ResourceGroupManager::getSingleton().openResource(filename, resGroup);
-	 SetCase(strExt, false);
-	 if (strExt == "gif")
-	 {
+	//srcImg.load(filename, resGroup);
+	DataStreamPtr encoded = ResourceGroupManager::getSingleton().openResource(filename, resGroup);
+	SetCase(strExt, false);
+	if (strExt == "gif")
+	{
 		//get chroma transparency color from GIF file data
-	    uchar enabled = 0, trans_color = 0;
+		uchar enabled = 0, trans_color = 0;
 		encoded->seek(784); //transparency enabled if value is 0x1
 		encoded->read(&enabled, 1);
 		encoded->seek(787); //transparency color
@@ -1755,32 +1758,32 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 			keyCol2.b = float(b / 255);
 		}
 		encoded->seek(0);
-	 }
-	 srcImg.load(encoded, strExt);
+	}
+	srcImg.load(encoded, strExt);
 
-     unsigned int width = (unsigned int)srcImg.getWidth(), height = (unsigned int)srcImg.getHeight();
-     // Since Ogre 1.6 Shoggoth, the OGRE_ALLOC_T memory macro must be used:
-     uchar* pixelData = OGRE_ALLOC_T(uchar, PixelUtil::getMemorySize(width, height, 1, PF_A8R8G8B8), MEMCATEGORY_GENERAL);
-     unsigned long pxDataIndex = 0, pxDataIndexStep = (unsigned long)PixelUtil::getNumElemBytes(PF_A8R8G8B8);
+	unsigned int width = (unsigned int)srcImg.getWidth(), height = (unsigned int)srcImg.getHeight();
+	// Since Ogre 1.6 Shoggoth, the OGRE_ALLOC_T memory macro must be used:
+	uchar* pixelData = OGRE_ALLOC_T(uchar, PixelUtil::getMemorySize(width, height, 1, PF_A8R8G8B8), MEMCATEGORY_GENERAL);
+	unsigned long pxDataIndex = 0, pxDataIndexStep = (unsigned long)PixelUtil::getNumElemBytes(PF_A8R8G8B8);
 
-     for(unsigned int y = 0; y < height; ++y)
-     { 
-         for(unsigned int x = 0; x < width; ++x)
-         {
-             ColourValue pixCol = srcImg.getColourAt(x, y, 0);
-             ColourValue diffCol = pixCol - keyCol2;
-             pixCol.a = ((fabsf(diffCol.r) < threshold) && (fabsf(diffCol.g) < threshold) && (fabsf(diffCol.b) < threshold)) ? 0.0f : 1.0f;
-             Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex));
-             pxDataIndex += pxDataIndexStep;
-         }
-     }
+	for(unsigned int y = 0; y < height; ++y)
+	{
+		for(unsigned int x = 0; x < width; ++x)
+		{
+			ColourValue pixCol = srcImg.getColourAt(x, y, 0);
+			ColourValue diffCol = pixCol - keyCol2;
+			pixCol.a = ((fabsf(diffCol.r) < threshold) && (fabsf(diffCol.g) < threshold) && (fabsf(diffCol.b) < threshold)) ? 0.0f : 1.0f;
+			Ogre::PixelUtil::packColour(pixCol, PF_A8R8G8B8, static_cast<void*>(pixelData + pxDataIndex));
+			pxDataIndex += pxDataIndexStep;
+		}
+	}
  
-     Image chromaKeyedImg;
-     chromaKeyedImg.loadDynamicImage(pixelData, width, height, 1, PF_A8R8G8B8, true);
-     // You could save the chroma keyed image at this point for caching:
-     // chromaKeyedImg.save(resName);
-     TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
-     IncrementTextureCount();
+	Image chromaKeyedImg;
+	chromaKeyedImg.loadDynamicImage(pixelData, width, height, 1, PF_A8R8G8B8, true);
+	// You could save the chroma keyed image at this point for caching:
+	// chromaKeyedImg.save(resName);
+	TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
+	IncrementTextureCount();
 }
 
 bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
