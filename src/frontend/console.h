@@ -49,6 +49,7 @@ class Console: public wxFrame
 		wxButton* bSend;
 		wxTextCtrl* tCommand;
 		//*)
+		void Write(const char *message);
 
 	protected:
 

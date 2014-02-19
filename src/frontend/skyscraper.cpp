@@ -1892,8 +1892,7 @@ void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLeve
 	//callback function that receives OGRE log messages
 	if (console)
 	{
-		console->tConsole->AppendText(wxString::FromAscii(message.c_str()) + wxT("\n"));
-		console->Refresh();
+		console->Write(message.c_str());
 		console->Update();
 	}
 }

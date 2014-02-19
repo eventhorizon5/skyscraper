@@ -131,3 +131,7 @@ void Console::On_Close(wxCloseEvent& event)
 	this->Hide();
 }
 
+void Console::Write(const char *message)
+{
+	tConsole->AppendText(wxString::FromAscii(message) + wxT("\n"));
+}
