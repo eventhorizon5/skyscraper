@@ -105,7 +105,8 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	Report("Loaded texture " + filename2);
+	if (sbs->Verbose)
+		Report("Loaded texture " + filename2);
 
 	TextureInfo info;
 	info.name = matname;
@@ -174,7 +175,8 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 			return ReportError("Error loading texture " + filenames2[i] + "\n" + e.getDescription());
 		}
 
-		Report("Loaded texture " + filenames2[i]);
+		if (sbs->Verbose)
+			Report("Loaded texture " + filenames2[i]);
 	}
 
 	//create a new material
@@ -214,7 +216,8 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	else
 		return false;
 
-	Report("Loaded animated texture " + matname);
+	if (sbs->Verbose)
+		Report("Loaded animated texture " + matname);
 
 	TextureInfo info;
 	info.name = matname;
@@ -342,7 +345,8 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	Report("Loaded alpha blended texture " + filename2);
+	if (sbs->Verbose)
+		Report("Loaded alpha blended texture " + filename2);
 
 	TextureInfo info;
 	info.name = matname;
@@ -376,7 +380,8 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
-	Report("Loaded material " + matname);
+	if (sbs->Verbose)
+		Report("Loaded material " + matname);
 
 	TextureInfo info;
 	info.name = name;
@@ -888,7 +893,8 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	Report("AddTextToTexture: created texture " + Name);
+	if (sbs->Verbose)
+		Report("AddTextToTexture: created texture " + Name);
 	CacheFilename(Name, Name);
 	return true;
 }
