@@ -121,7 +121,11 @@ bool Skyscraper::OnInit(void)
 	soundsys = 0;
 
 	//set locale to default for conversion functions
+#ifdef OGRE_DEFAULT_LOCALE
 	setlocale(LC_ALL, OGRE_DEFAULT_LOCALE);
+#else
+	setlocale(LC_ALL, "C");
+#endif
 
 	//load config file
 	try
