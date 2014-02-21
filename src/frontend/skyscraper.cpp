@@ -26,6 +26,7 @@
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
+#include <locale>
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
@@ -118,6 +119,9 @@ bool Skyscraper::OnInit(void)
 	console = 0;
 	raised = false;
 	soundsys = 0;
+
+	//set locale to default for conversion functions
+	setlocale(LC_ALL, OGRE_DEFAULT_LOCALE);
 
 	//load config file
 	try
