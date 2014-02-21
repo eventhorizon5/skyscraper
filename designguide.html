@@ -174,7 +174,8 @@ you would enter:<br>
 &lt;Include data/test.txt&gt;<br>
 </font></p>
 
-<p align="left"><br><strong>7. Functions</strong></p>
+<p align="left"><br>
+<strong>7. Functions</strong></p>
 
 <p align="left">Functions can be created to share code between sections of
 scripts, and also between entire scripts when used in conjunction with
@@ -235,25 +236,31 @@ print finished</font></p>
 5<br>
 finished</font></p>
 
-<p align="left"><br><strong>8. Advanced Math Functions</strong></p>
+<p align="left"><br>
+<strong>8. Advanced Math Functions</strong></p>
 
-<p align="left">Several built-in advanced math functions are provided, mostly for trigonometric calculations.</p>
+<p align="left">Several built-in advanced math functions are provided, mostly
+for trigonometric calculations.</p>
 
-<p align="left">Syntax and descriptions:<br><br>
+<p align="left">Syntax and descriptions:<br>
+<br>
 cos(<em>x</em>) - calculate cosine, x is angle in radians<br>
 sine(<em>x</em>) - calculate sine, x is angle in radians<br>
 tan(<em>x</em>) - calculate tangent, x is angle in radians<br>
 acos(<em>x</em>) - calculate arc cosine, x is a value from -1 to 1<br>
 asin(<em>x</em>) - calculate arc sine, x is a value from -1 to 1<br>
 atan(<em>x</em>) - calculate arc tangent<br>
-atan2(<em>y</em>, <em>x</em>) - calculate arc tangent with two values, one for the y-coordinate and one for the x<br>
+atan2(<em>y</em>, <em>x</em>) - calculate arc tangent with two values, one for
+the y-coordinate and one for the x<br>
 sqrt(<em>x</em>) - calculate square root<br>
 abs(<em>x</em>) - calculate absolute value<br>
 exp(<em>x</em>) - calculate exponential function<br>
 log(<em>x</em>) - calculate natural logarithm<br>
 log10(<em>x</em>) - calculate common logarithm<br>
-mod(<em>number</em>, <em>denominator</em>) - calculate modulo (remainder) of a division<br>
-hypot(<em>x</em>, <em>y</em>) - calculate hypotenuse<br></p>
+mod(<em>number</em>, <em>denominator</em>) - calculate modulo (remainder) of a
+division<br>
+hypot(<em>x</em>, <em>y</em>) - calculate hypotenuse<br>
+</p>
 
 <p></p>
 
@@ -1220,7 +1227,7 @@ creation - use this after all related AddShaftDoorComponent commands are used,
 or specify it without the AddShaftDoorComponent commands if you're creating a
 manual shaft door.<br>
 Syntax: <font face="Courier New, Courier, mono"
-size="2">FinishShaftDoor<em> elevator, number</em></font></p>
+size="2">FinishShaftDoor<em> elevator, number[, create_walls]</em></font></p>
 
 <p align="left">This command is almost identical to the FinishDoors command (in
 the elevator section below - see that for more information) except that it's
@@ -2297,18 +2304,20 @@ command in the Floors section.</p>
 <p align="left"><strong>17. FinishDoors</strong> - finishes elevator door
 creation - use this after all related AddDoorComponent commands are used.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FinishDoors
-<em>number</em></font></p>
+<em>number[, create_walls]</em></font></p>
 
 <p align="left">This command completes the elevator door creation by storing
 the central location and shift factor, cutting walls for the door, creating
-side connection pieces for the cut, etc. </p>
+side connection pieces for the cut, etc. The optional <em>create_walls</em>
+option specifies if the command should create the side and top/bottom
+connection/filler walls.</p>
 
 <p align="left"><strong>18. FinishShaftDoors</strong> - finishes shaft door
 creation for all serviced floors - use this after all related
 AddShaftDoorsComponent commands are used, or specify it without the
 AddShaftDoorComponent commands if you're creating a manual shaft door.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FinishShaftDoors
-<em>number</em></font></p>
+<em>number[, create_walls]</em></font></p>
 
 <p align="left">This command is almost identical to the FinishDoors command
 except that it's used for finishing shaft doors on all serviced floors. Note
