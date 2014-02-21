@@ -1,6 +1,12 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
--IsNumeric function fixes
+-fixed default locale setting - this solves script error issues when running on machines with different locale settings
+-texture functions now report in verbose mode only
+-fixed StartsWith() function
+-added advanced math functions to script interpreter
+-added power-of operator to Calc function in script interpreter
+-added Ogre 1.9 compatibility
+-combined floors 65 and 66 in the Glass Tower
 -cmake and source fixes for Ogre 1.9 compatibility
 -orientation fix for old sky system
 -added RenderOnStartup option, which renders the building as the script is processing on startup
