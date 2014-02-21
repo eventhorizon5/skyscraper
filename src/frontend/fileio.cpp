@@ -7555,8 +7555,15 @@ int ScriptProcessor::MathFunctions()
 	//calculate cosine
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" cos(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("cos(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7569,14 +7576,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = cosf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate sine
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" sin(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("sin(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7589,14 +7603,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = sinf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate tangent
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" tan(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("tan(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7609,14 +7630,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = tanf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate arc cosine
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" acos(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("acos(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7632,14 +7660,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = acosf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate arc sine
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" asin(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("asin(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7655,14 +7690,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = asinf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate arc tangent
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" atan(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("atan(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7675,14 +7717,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = atanf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate arc tangent with 2 parameters
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" atan2(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("atan2(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7701,14 +7750,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata2);
 
 		result = atan2f(value1, value2);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate square root
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" sqrt(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("sqrt(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7721,14 +7777,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = sqrtf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate absolute value
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" abs(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("abs(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7741,14 +7804,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = fabsf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate exponential function
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" exp(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("exp(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7761,14 +7831,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = expf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate natural logarithm
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" log(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("log(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7784,14 +7861,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = logf(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate common logarithm
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" log10(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("log10(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7807,14 +7891,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata);
 
 		result = log10f(value);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate remainder
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" mod(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("mod(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7836,14 +7927,21 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata2);
 
 		result = fmodf(value1, value2);
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	//calculate hypotenuse
 	while(true)
 	{
-		start = SetCaseCopy(LineData, false).find(" hypot(", 0);
-		if (start < 0)
+		start = SetCaseCopy(LineData, false).find("hypot(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
 			break;
 
 		first = LineData.find("(", start);
@@ -7865,7 +7963,7 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata2);
 
 		result = sqrtf(powf(value1, 2) + powf(value2, 2));
-		LineData = LineData.substr(0, start + 1) + ToString(result) + LineData.substr(last + 1);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
 	return true;
