@@ -36,6 +36,7 @@
 #include "elevator.h"
 #include "shaft.h"
 #include "callbutton.h"
+#include "random.h"
 #include "unix.h"
 #include "textwindow.h"
 
@@ -7915,6 +7916,36 @@ int ScriptProcessor::MathFunctions()
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
+	//calculate binary logarithm
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find("log2(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value <= 0)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = Log2(value);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
+	}
+
 	//calculate remainder
 	while(true)
 	{
@@ -7984,6 +8015,97 @@ int ScriptProcessor::MathFunctions()
 			return ScriptError("Invalid value: " + tempdata2);
 
 		result = sqrtf(powf(value1, 2) + powf(value2, 2));
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate ceiling
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find("ceil(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value <= 0)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = ceilf(value);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate floor
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find("flr(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value <= 0)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = floorf(value);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
+	}
+
+	//calculate random number
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find("rnd(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value <= 0)
+			return ScriptError("Invalid value: " + tempdata);
+
+		RandomGen rnd(time(0));
+		result = rnd.Get(value);
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
