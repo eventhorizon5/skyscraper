@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
+#include <math.h>
 #include <OgreString.h>
 #include <OgreStringConverter.h>
 #include "unix.h"
@@ -252,4 +253,9 @@ const char* ToString(float number)
 std::string ToString2(float number)
 {
 	return ToString(number);
+}
+
+float Log2(float number)
+{
+	return log((double)number) / log(2.0);
 }

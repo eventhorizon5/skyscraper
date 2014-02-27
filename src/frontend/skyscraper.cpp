@@ -1118,6 +1118,7 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 	//center is at 0, 0
 
 	float w, h;
+	int w_orig = 0, h_orig = 0, w2 = 0, h2 = 0;
 	bool background = false;
 
 	std::string material = "";
@@ -1159,11 +1160,14 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 			if (i == 2)
 				Filename = filename_pressed;
 
-			Ogre::MaterialPtr mat;
+			//create new material
+			Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
+
+			//load image data from file
+			Ogre::Image img;
 			try
 			{
-				mat = Ogre::MaterialManager::getSingleton().create(Filename, "General");
-				tex = Ogre::TextureManager::getSingleton().load(Filename, "General", Ogre::TEX_TYPE_2D, 0);
+				img.load(Filename, "General");
 			}
 			catch (Ogre::Exception &e)
 			{
@@ -1171,11 +1175,28 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 				return;
 			}
 
-			mat->getTechnique(0)->getPass(0)->createTextureUnitState(Filename);
-			mat->getTechnique(0)->getPass(0)->setDepthCheckEnabled(false);
-			mat->getTechnique(0)->getPass(0)->setDepthWriteEnabled(false);
-			mat->getTechnique(0)->getPass(0)->setLightingEnabled(false);
-			mat->getTechnique(0)->getPass(0)->setTextureFiltering(Ogre::TFO_NONE);
+			w_orig = img.getWidth();
+			h_orig = img.getHeight();
+
+			//round up image size to power-of-2 value
+			w2 = pow(2, ceil(Log2((float)w_orig)));
+			h2 = pow(2, ceil(Log2((float)h_orig)));
+
+			//create texture and blit image onto it - this solves texture quality issues on mainly D3D9
+			tex = Ogre::TextureManager::getSingleton().createManual(Filename, "General", Ogre::TEX_TYPE_2D, w2, h2, 0, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC);
+			tex->getBuffer(0, 0)->blitFromMemory(img.getPixelBox(0, 0), Ogre::Box(0, 0, 0, w_orig, h_orig, img.getDepth()));
+
+			//bind texture to material and set options
+			Ogre::TextureUnitState *state = mat->getTechnique(0)->getPass(0)->createTextureUnitState(Filename);
+			Ogre::Pass *pass = mat->getTechnique(0)->getPass(0);
+			pass->setDepthCheckEnabled(false);
+			pass->setDepthWriteEnabled(false);
+			pass->setLightingEnabled(false);
+			pass->setTextureFiltering(Ogre::TFO_NONE);
+
+			//rescale texture
+			state->setTextureScale((float)w2 / (float)w_orig, (float)h2 / (float)h_orig);
+			state->setTextureScroll(-(float(w2 - w_orig) / (float)w2) / 2.0f, -(float(h2 - h_orig) / (float)h2) / 2.0f);
 
 			if (tex->hasAlpha() == true && button)
 			{
@@ -1183,7 +1204,7 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 				mat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 			}
 		}
-		material = filename;
+		material = Filename;
 		if (button)
 		{
 			button->node = 0;
@@ -1239,8 +1260,8 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 	//set values and draw button
 	if (material != "")
 	{
-		w = tex->getWidth() / (mRenderWindow->getWidth() / 2.0);
-		h = tex->getHeight() / (mRenderWindow->getHeight() / 2.0);
+		w = w_orig / (mRenderWindow->getWidth() / 2.0);
+		h = h_orig / (mRenderWindow->getHeight() / 2.0);
 		if (button)
 		{
 			//delete previous object
