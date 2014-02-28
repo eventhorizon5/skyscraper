@@ -8109,5 +8109,35 @@ int ScriptProcessor::MathFunctions()
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 
+	//round a number
+	while(true)
+	{
+		start = SetCaseCopy(LineData, false).find("round(", 0);
+		if (start > 0)
+		{
+			//break if preceding letter is found
+			char check = LineData[start - 1];
+			if (check >= 65 && check <= 122)
+				break;
+		}
+		else if (start < 0)
+			break;
+
+		first = LineData.find("(", start);
+		last = LineData.find(")", start);
+		if (last < 0)
+			return ScriptError("Syntax error");
+
+		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (value <= 0)
+			return ScriptError("Invalid value: " + tempdata);
+
+		result = Round(value);
+		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
+	}
+
 	return true;
 }

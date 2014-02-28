@@ -257,5 +257,10 @@ std::string ToString2(float number)
 
 float Log2(float number)
 {
-	return log((double)number) / log(2.0);
+	return logf(number) / logf(2.0f);
+}
+
+float Round(float number)
+{
+	return floorf(number + 0.5f);
 }

@@ -75,5 +75,6 @@ SBSIMPEXP std::string ToString2(int number);
 SBSIMPEXP const char* ToString(float number);
 SBSIMPEXP std::string ToString2(float number);
 SBSIMPEXP float Log2(float number);
+SBSIMPEXP float Round(float number);
 
 #endif

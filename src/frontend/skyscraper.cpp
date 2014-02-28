@@ -1179,8 +1179,8 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 			h_orig = img.getHeight();
 
 			//round up image size to power-of-2 value
-			w2 = pow(2, ceil(Log2((float)w_orig)));
-			h2 = pow(2, ceil(Log2((float)h_orig)));
+			w2 = powf(2, ceilf(Log2((float)w_orig)));
+			h2 = powf(2, ceilf(Log2((float)h_orig)));
 
 			//create texture and blit image onto it - this solves texture quality issues on mainly D3D9
 			tex = Ogre::TextureManager::getSingleton().createManual(Filename, "General", Ogre::TEX_TYPE_2D, w2, h2, 0, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC);
