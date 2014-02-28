@@ -3926,8 +3926,11 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
 
-		if (params < 2 || params > 3)
+		if (params < 2)
 			return ScriptError("Incorrect number of parameters");
+
+		if (params > 3 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
 
 		bool option = false;
 		if (params == 3)
@@ -6415,8 +6418,11 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 12);
 
-		if (params < 1 || params > 2)
+		if (params < 1)
 			return ScriptError("Incorrect number of parameters");
+
+		if (params > 2 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
 
 		bool option = false;
 		if (params == 2)
@@ -6439,8 +6445,11 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
 
-		if (params < 1 || params > 2)
+		if (params < 1)
 			return ScriptError("Incorrect number of parameters");
+
+		if (params > 2 && warn_deprecated == true)
+			ScriptWarning("Syntax deprecated");
 
 		bool option = false;
 		if (params == 2)
