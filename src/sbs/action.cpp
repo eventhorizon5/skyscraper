@@ -64,7 +64,8 @@ Action::Action(const std::string name, std::vector<Object*> &action_parents, con
 
 Action::~Action()
 {
-
+	if (sbs->FastDelete == false)
+		sbs->Report("Deleted action " + name);
 }
 
 const char *Action::GetName()
@@ -561,4 +562,35 @@ const char *Action::GetParameter(int index)
 	if (index >= 0 && index < (int)command_parameters.size())
 		return command_parameters[index].c_str();
 	return 0;
+}
+
+bool Action::AddParent(Object *parent)
+{
+	if (!parent)
+		return false;
+
+	for (int i = 0; i < (int)parent_objects.size(); i++)
+	{
+		if (parent_objects[i] == parent)
+			return false;
+	}
+
+	parent_objects.push_back(parent);
+	return true;
+}
+
+bool Action::RemoveParent(Object *parent)
+{
+	if (!parent)
+		return false;
+
+	for (int i = 0; i < (int)parent_objects.size(); i++)
+	{
+		if (parent_objects[i] == parent)
+		{
+			parent_objects.erase(parent_objects.begin() + i);
+			return true;
+		}
+	}
+	return false;
 }

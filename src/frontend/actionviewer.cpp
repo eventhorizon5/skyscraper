@@ -114,14 +114,25 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bOK_Click);
 	//*)
 
-	for (int i = 0; i < Simcore->GetActionCount(); i++)
-		ActionList->Append(wxVariant(i + 1).GetString() + wxT(" - ") + wxString::FromAscii(Simcore->GetAction(i)->GetName()));
+	lastcount = 0;
 }
 
 ActionViewer::~ActionViewer()
 {
 	//(*Destroy(ActionViewer)
 	//*)
+}
+
+void ActionViewer::Loop()
+{
+	if (Simcore->GetActionCount() != lastcount)
+	{
+		lastcount = Simcore->GetActionCount();
+		ActionList->Clear();
+
+		for (int i = 0; i < Simcore->GetActionCount(); i++)
+			ActionList->Append(wxVariant(i + 1).GetString() + wxT(" - ") + wxString::FromAscii(Simcore->GetAction(i)->GetName()));
+	}
 }
 
 void ActionViewer::On_bRun_Click(wxCommandEvent& event)

@@ -42,6 +42,8 @@ public:
 	int GetParentCount();
 	int GetParameterCount();
 	const char *GetParameter(int index);
+	bool AddParent(Object *parent);
+	bool RemoveParent(Object *parent);
 
 private:
 

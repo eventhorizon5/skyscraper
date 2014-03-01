@@ -56,6 +56,7 @@ class ActionViewer: public wxDialog
 		wxButton* bOK;
 		wxTextCtrl* tParentName;
 		//*)
+		void Loop();
 
 	protected:
 
@@ -82,6 +83,7 @@ class ActionViewer: public wxDialog
 		void On_bOK_Click(wxCommandEvent& event);
 		void On_ActionList_Select(wxCommandEvent& event);
 		//*)
+		int lastcount;
 
 		DECLARE_EVENT_TABLE()
 };

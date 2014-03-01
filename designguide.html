@@ -1157,8 +1157,8 @@ ID; for example if the indicator is on floor 3, and you specify a prefix of
 
 <p align="left"><strong>20. Cut</strong> - performs a manual box cut on an area
 within the current floor<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">Cut x1, y1, z1, x2,
-y2, z2, cutwalls, cutfloors<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Cut <em>x1, y1, z1, x2,
+y2, z2, cutwalls, cutfloors</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">Cut -5, -5,
 -5, 5, 5, 5, false, true</font></p>
 
@@ -1170,8 +1170,8 @@ floors.</p>
 <p align="left"><strong>21. CutAll</strong> - performs a manual box cut on all
 objects associated with the current floor (the level itself, interfloor,
 shafts, stairs and external)<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">CutAll x1, y1, z1, x2,
-y2, z2, cutwalls, cutfloors<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">CutAll <em>x1, y1, z1, x2,
+y2, z2, cutwalls, cutfloors</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">CutAll -5, -5,
 -5, 5, 5, 5, false, true</font></p>
 
@@ -1186,8 +1186,8 @@ location is cut to provide space; after the cut, the sides are open (if the
 wall has thickness) - this creates a covering wall on each side and a floor
 above the door frame to fill the area.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFillerWalls
-texture, thickness, CenterX, CenterZ, width, height, voffset, direction, tw,
-th<br>
+<em>texture, thickness, CenterX, CenterZ, width, height, voffset, direction, tw,
+th</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">AddFillerWalls
 ConnectionWall, 0.5, -10, 0, 3.5, 8, 0, true, 0, 0</font></p>
 
@@ -1704,8 +1704,8 @@ Example: <font face="Courier New, Courier, mono" size="2">Doors = 2</font></p>
 motor sound emitter; if this command is not specified, it'll be placed at the
 base (altitude + interfloor) of the highest floor in the corresponding shaft.
 The X and Z values are relative of the elevator center.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">MotorPosition = x, y,
-z<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">MotorPosition = <em>x, y,
+z</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">MotorPosition
 = 0, 100, 0</font></p>
 
@@ -1787,8 +1787,8 @@ Syntax: <font face="Courier New, Courier, mono" size="2">NotifyEarly =
 <p align="left"><strong>55. MusicPosition</strong> - sets the position of the
 music sound emitter relative of the elevator's position. If this command is not
 specified, it'll be placed in the center of the elevator on the ceiling.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">MusicPosition = x, y,
-z<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">MusicPosition = <em>x, y,
+z</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">MusicPosition
 = 0, 8, 0</font></p>
 
@@ -2035,14 +2035,14 @@ played.</p>
 [floor number]<br>
 <em>Open</em> (open doors)<br>
 <em>Close</em> (close doors)<br>
-OpenInt (open interior/car doors)<br>
-CloseInt (close interior/car doors)<br>
-OpenExt (open exterior/shaft doors)<br>
-CloseExt (close exterior/shaft doors)<br>
-OpenManual (open doors manually)<br>
-CloseManual (close doors manually)<br>
-OpenIntManual (open interior/car doors manually)<br>
-CloseIntManual (close interior/car doors manually)<br>
+<em>OpenInt</em> (open interior/car doors)<br>
+<em>CloseInt</em> (close interior/car doors)<br>
+<em>OpenExt</em> (open exterior/shaft doors)<br>
+<em>CloseExt</em> (close exterior/shaft doors)<br>
+<em>OpenManual</em> (open doors manually)<br>
+<em>CloseManual</em> (close doors manually)<br>
+<em>OpenIntManual</em> (open interior/car doors manually)<br>
+<em>CloseIntManual</em> (close interior/car doors manually)<br>
 <em>Cancel</em> (call cancel)<br>
 <em>Run</em> (put elevator in run state)<br>
 <em>Stop</em> (put elevator in stop state)<br>
@@ -2072,8 +2072,8 @@ bank)<br>
 <em>MusicOn</em><br>
 <em>MusicOff</em><br>
 <em>UpOn</em> (inspection mode up on)<br>
-<em>UpOff (inspection mode up off)<br>
-DownOn</em> (inspection mode down on)<br>
+<em>UpOff</em> (inspection mode up off)<br>
+<em>DownOn</em> (inspection mode down on)<br>
 <em>DownOff</em> (inspection mode down off)<br>
 <em>GoOn</em> (inspection mode go on)<br>
 <em>GoOff</em> (inspection mode go off)<br>
@@ -2509,8 +2509,8 @@ external, My Wall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
 
 <p align="left"><strong>h. AddShaft</strong> - creates a shaft at a specified
 location and floor range<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">AddShaft number,
-centerx, centerz, startfloor, endfloor</font><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddShaft <em>number,
+centerx, centerz, startfloor, endfloor</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddShaft 1, 10, 10,
 0, 9</font></p>
 
@@ -2523,7 +2523,7 @@ of the shaft (they can extend beyond the walls).</p>
 <p align="left"><strong>i. CreateStairwell</strong> - creates a stairwell at a
 specified location and floor range<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CreateStairwell
-number, centerx, centerz, startfloor, endfloor</font><br>
+<em>number, centerx, centerz, startfloor, endfloor</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">CreateStairwell 1,
 10, 10, 0, 9</font></p>
 
@@ -2595,8 +2595,8 @@ the left, SidePositive the right, etc.</p>
 
 <p align="left"><strong>m. SetPlanarMapping</strong> - sets the planar texture
 mapper's parameters.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping Flat,
-FlipX, FlipY, FlipZ, Rotate</font><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping <em>Flat,
+FlipX, FlipY, FlipZ, Rotate</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping
 false, false, false, true, false</font></p>
 
@@ -2630,7 +2630,7 @@ false, false).</p>
 texture mapping for all polygons generated after this command;
 ResetTextureMapping restores the values to the defaults or previous<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetTextureMapping
-vertex1, u1, v1, vertex2, u2, v2, vertex3, u3, v3</font><br>
+<em>vertex1, u1, v1, vertex2, u2, v2, vertex3, u3, v3</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetTextureMapping 0,
 0, 0, 1, 1, 0, 2, 1, 1</font></p>
 
@@ -2676,7 +2676,7 @@ SetTextureMapping - manually sets UV texture mapping for all polygons generated
 after this command; ResetTextureMapping restores the values to the defaults or
 previous<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetTextureMapping2
-v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y, v3z, u3, v3</font><br>
+<em>v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y, v3z, u3, v3</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetTextureMapping2
 x0, y0, z0, 0, 0, x1, y1, z1, 1, 0, x2, y2, z2, 1, 1</font></p>
 
@@ -2702,7 +2702,7 @@ x2, y2, z2 -&gt; 1, 1</font></p>
 <p align="left"><strong>o. ResetTextureMapping</strong> - resets the texture
 mapping parameters to either the default or previous values<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ResetTextureMapping =
-default</font><br>
+<em>default</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ResetTextureMapping =
 true </font></p>
 
@@ -2719,13 +2719,13 @@ are different, the floor will angle upward/downward along the Z axis
 (front/back), but if this is set to true, the floor will angle along the X axis
 (left/right).<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ReverseAxis =
-value</font></p>
+<em>value</em></font></p>
 
 <p align="left"><strong>q. ShaftCut</strong> - used in conjunction with a shaft
 object - performs a vertical box cut on all floor objects (floors, ceilings,
 interfloor, etc) in the specified range.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftCut number,
-startx, startz, endx, endz, start_voffset, end_voffset</font><br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftCut <em>number,
+startx, startz, endx, endz, start_voffset, end_voffset</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShaftCut 1, -4, -3.5,
 4, 3.5, 0, 5</font></p>
 
@@ -2744,15 +2744,15 @@ stairwell object - performs a vertical box cut on all floor objects (floors,
 ceilings, interfloor, etc) in the specified range. For the parameters, see the
 ShaftCut command.<strong><br>
 </strong>Syntax: <font face="Courier New, Courier, mono" size="2">CutStairwell
-number, startx, startz, endx, endz, start_voffset, end_voffset</font><br>
+<em>number, startx, startz, endx, endz, start_voffset, end_voffset</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">CutStairwell 1, -4,
 -3.5, 4, 3.5, 0, 5</font></p>
 
 <p align="left"><strong>s. Isect</strong> - the Isect function calculates the
 position that a line intersects with a certain object, such as a floor. Since
 this is a function, it can be used in-line anywhere.<br>
-Syntax:<font face="Courier New, Courier, mono" size="2"> isect(destobject,
-objectname, startx, starty, startz, endx, endy, endz)</font><br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> isect(<em>destobject,
+objectname, startx, starty, startz, endx, endy, endz</em>)</font><br>
 Example: <font face="Courier New, Courier, mono" size="2">isect(external,
 wall1, 10, 10, 0, -10, 10, 0)</font></p>
 
@@ -2881,7 +2881,7 @@ horizontally.</p>
 <p align="left"><strong>ab. Cut</strong> - performs a manual box cut on an
 object<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Cut
-<em>destobject</em>, x1, y1, z1, x2, y2, z2, cutwalls, cutfloors<br>
+<em>destobject, x1, y1, z1, x2, y2, z2, cutwalls, cutfloors</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">Cut external,
 -5, -5, -5, 5, 5, 5, false, true</font></p>
 
@@ -2945,7 +2945,7 @@ command returns the X and Z extents (minimum and maximum values) of a wall, at
 the specified altitude. The command will return the results in the MinX, MinZ,
 MaxX and MaxZ variables.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> GetWallExtents
-destobject, wallname, altitude</font><br>
+<em>destobject, wallname, altitude</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">GetWallExtents
 external, wall1:front, 10</font></p>
 
@@ -3092,7 +3092,7 @@ defaults, use 0 for the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
 Print</strong> - prints the contents of a line to the console. This command
 will still convert variables and even math expressions, and output the
 results.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">Print text</font><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Print <em>text</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
@@ -3101,7 +3101,7 @@ Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
 Delete</strong> - deletes an object. This command is normally used after a
 building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Delete
-object_number</font><br>
+<em>object_number</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Delete 12</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
@@ -3110,17 +3110,40 @@ Example: <font face="Courier New, Courier, mono" size="2">Delete 12</font></p>
 RunAction</strong> - runs an action by name. This command is normally used
 after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">RunAction
-name</font><br>
+<em>name</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">RunAction
 myaction</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
+AddActionParent</strong> - adds a parent object to an existing action. See the AddAction command for details on parent objects<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddActionParent
+<em>name, object</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">AddActionParent
+myaction, Elevator 2</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">AddActionParent
+myaction, Floors 2 to 5</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
+RemoveActionParent</strong> - removes a parent object from an existing action. See the AddAction command for details on parent objects.  This command is
+normally used after a building has loaded.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">RemoveActionParent
+<em>name, object</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">RemoveActionParent
+myaction, Elevator 2</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">RemoveActionParent
+myaction, Floors 2 to 5</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
 GotoFloor</strong> - jumps the user to the specified floor. This command is
 normally used after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">GotoFloor
-floor</font><br>
+<em>floor</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">GotoFloor 3</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>

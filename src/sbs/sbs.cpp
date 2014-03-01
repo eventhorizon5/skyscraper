@@ -2765,7 +2765,6 @@ bool SBS::UnregisterObject(int number)
 {
 	//remove object
 	//note - this doesn't delete the objects
-	ObjectCount--;
 
 	if (number < (int)ObjectArray.size())
 	{
@@ -2773,7 +2772,11 @@ bool SBS::UnregisterObject(int number)
 		{
 			if (ObjectArray[number]->GetNumber() == number)
 			{
+				std::vector<Object*> objects;
+				objects.push_back(ObjectArray[number]);
+				RemoveActionParent(objects);
 				ObjectArray[number] = 0;
+				ObjectCount--;
 				return true;
 			}
 		}
@@ -3848,7 +3851,7 @@ Object* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 
 	return trigger->object;
 }
 
-Action* SBS::AddAction(const std::string name, std::vector<Object*> action_parents, const std::string &command, const std::vector<std::string> &parameters)
+Action* SBS::AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//add a global action
 
@@ -3857,7 +3860,7 @@ Action* SBS::AddAction(const std::string name, std::vector<Object*> action_paren
 	return action;
 }
 
-Action* SBS::AddAction(const std::string name, std::vector<Object*> action_parents, const std::string &command)
+Action* SBS::AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command)
 {
 	//add a global action
 
@@ -3884,6 +3887,105 @@ int SBS::GetActionCount()
 {
 	//get number of registered actions
 	return (int)ActionArray.size();
+}
+
+bool SBS::AddActionParent(const std::string name, std::vector<Object*> &parents)
+{
+	//add parent to actions specified by 'name'
+
+	bool result = false;
+	std::vector<Action*> actionlist = GetAction(name);
+
+	for (int i = 0; i < (int)actionlist.size(); i++)
+	{
+		Action *action = actionlist[i];
+		for (int j = 0; j < action->GetParentCount(); j++)
+		{
+			if (action->AddParent(parents[j]))
+				result = true;
+		}
+	}
+	return result;
+}
+
+bool SBS::RemoveActionParent(const std::string name, std::vector<Object*> &parents)
+{
+	//remove parent object from actions specified by 'name'
+
+	bool result = false;
+	std::vector<Action*> actionlist = GetAction(name);
+
+	for (int i = 0; i < (int)actionlist.size(); i++)
+	{
+		Action *action = actionlist[i];
+		for (int j = 0; j < action->GetParentCount(); j++)
+		{
+			if (action->RemoveParent(parents[j]))
+				result = true;
+		}
+	}
+	return result;
+}
+
+bool SBS::RemoveActionParent(std::vector<Object*> &parents)
+{
+	//remove parent object from all action objects
+
+	bool result = false;
+	for (int i = 0; i < (int)ActionArray.size(); i++)
+	{
+		Action *action = ActionArray[i];
+		for (int j = 0; j < action->GetParentCount(); j++)
+		{
+			if (action->RemoveParent(parents[j]))
+				result = true;
+		}
+	}
+	return result;
+}
+
+bool SBS::RemoveAction(const std::string name)
+{
+	//remove action by name
+
+	bool result = false;
+	for (int i = 0; i < (int)ActionArray.size(); i++)
+	{
+		if (ActionArray[i])
+		{
+			std::string actionname = ActionArray[i]->GetName();
+			ReplaceAll(actionname, " ", "");
+			if (actionname == name)
+			{
+				delete ActionArray[i];
+				ActionArray.erase(ActionArray.begin() + i);
+				i--;
+				result = true;
+			}
+		}
+	}
+	return result;
+}
+
+bool SBS::RemoveAction(Action *action)
+{
+	//remove action
+
+	if (!action)
+		return false;
+
+	bool result = false;
+	for (int i = 0; i < (int)ActionArray.size(); i++)
+	{
+		if (ActionArray[i] == action)
+		{
+			delete ActionArray[i];
+			ActionArray.erase(ActionArray.begin() + i);
+			i--;
+			result = true;
+		}
+	}
+	return result;
 }
 
 Object* SBS::GetObject(const std::string name)

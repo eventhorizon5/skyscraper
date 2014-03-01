@@ -412,6 +412,7 @@ void DebugPanel::Timer::Notify()
 		if (objectinfo->IsShown() == true)
 			objectinfo->Loop();
 	}
+
 	if (profiler && Simcore)
 	{
 		if (profiler->IsShown() == true)
@@ -421,6 +422,12 @@ void DebugPanel::Timer::Notify()
 		}
 		else
 			Simcore->enable_profiling = false;
+	}
+
+	if (actionviewer)
+	{
+		if (actionviewer->IsShown() == true)
+			actionviewer->Loop();
 	}
 }
 

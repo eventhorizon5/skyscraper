@@ -2463,6 +2463,54 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//AddActionParent command
+	if (linecheck.substr(0, 16) == "addactionparent ")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 16);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		std::vector<Object*> objects;
+		std::string tmpname = tempdata[1];
+		SetCase(tmpname, false);
+		if (tmpname == "global")
+			objects.push_back(Simcore->object);
+		else
+			objects = Simcore->GetObjectRange(tempdata[1].c_str());
+
+		if (objects.size() > 0)
+			Simcore->AddActionParent(tempdata[0], objects);
+		else
+			return ScriptError("Invalid parent object(s)");
+		return sNextLine;
+	}
+
+	//RemoveActionParent command
+	if (linecheck.substr(0, 19) == "removeactionparent ")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 19);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		std::vector<Object*> objects;
+		std::string tmpname = tempdata[1];
+		SetCase(tmpname, false);
+		if (tmpname == "global")
+			objects.push_back(Simcore->object);
+		else
+			objects = Simcore->GetObjectRange(tempdata[1].c_str());
+
+		if (objects.size() > 0)
+			Simcore->RemoveActionParent(tempdata[0], objects);
+		else
+			return ScriptError("Invalid parent object(s)");
+		return sNextLine;
+	}
+
 	//AddActionControl command
 	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{

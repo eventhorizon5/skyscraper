@@ -118,9 +118,16 @@ ButtonPanel::~ButtonPanel()
 		delete ButtonPanelMesh;
 	ButtonPanelMesh = 0;
 
-	//unregister with parent floor object
-	if (sbs->FastDelete == false && object->parent_deleting == false)
-		sbs->GetElevator(elevator)->RemovePanel(this);
+	if (sbs->FastDelete == false)
+	{
+		//unregister with parent floor object
+		if (object->parent_deleting == false)
+			sbs->GetElevator(elevator)->RemovePanel(this);
+
+		//remove associated actions
+		for (int i = 0; i < (int)action_list.size(); i++)
+			sbs->RemoveAction(action_list[i]);
+	}
 
 	delete object;
 }
@@ -226,6 +233,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 		{
 			Action* action = sbs->AddAction(newname, parents, action_names[i]);
 			actions.push_back(action);
+			action_list.push_back(action);
 			if (action_names[i] == "off")
 				off_action = action;
 		}
