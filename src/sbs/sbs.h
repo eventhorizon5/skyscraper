@@ -377,6 +377,8 @@ public:
 	Ogre::Vector3 GetObjectPosition(Object *object);
 	Ogre::Vector3 GetObjectRotation(Object *object);
 	void CameraLoop();
+	void RegisterControl(Control *control);
+	void UnregisterControl(Control *control);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -564,6 +566,9 @@ private:
 	};
 
 	std::vector<Key> keys;
+
+	//index of all controls used for action deletion callback
+	std::vector<Control*> control_index;
 
 	//function caching
 	Floor* getfloor_result;

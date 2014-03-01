@@ -117,6 +117,9 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	//create sound object
 	sound = new Sound(this->object, name, true);
 	sound->Load(sound_file);
+
+	//register control
+	sbs->RegisterControl(this);
 }
 
 Control::~Control()
@@ -134,20 +137,27 @@ Control::~Control()
 	ControlMesh = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
+	if (sbs->FastDelete == false)
 	{
-		if (std::string(object->GetParent()->GetType()) == "ButtonPanel")
-			((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
-		if (std::string(object->GetParent()->GetType()) == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->RemoveControl(this);
-		if (std::string(object->GetParent()->GetType()) == "Floor")
-			((Floor*)object->GetParent()->GetRawObject())->RemoveControl(this);
-		if (std::string(object->GetParent()->GetType()) == "Shaft")
-			((Shaft*)object->GetParent()->GetRawObject())->RemoveControl(this);
-		if (std::string(object->GetParent()->GetType()) == "Stairs")
-			((Stairs*)object->GetParent()->GetRawObject())->RemoveControl(this);
-		if (std::string(object->GetParent()->GetType()) == "SBS")
-			sbs->RemoveControl(this);
+		//unregister control
+		sbs->UnregisterControl(this);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+		{
+			if (std::string(object->GetParent()->GetType()) == "ButtonPanel")
+				((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(object->GetParent()->GetType()) == "Elevator")
+				((Elevator*)object->GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(object->GetParent()->GetType()) == "Floor")
+				((Floor*)object->GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(object->GetParent()->GetType()) == "Shaft")
+				((Shaft*)object->GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(object->GetParent()->GetType()) == "Stairs")
+				((Stairs*)object->GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(object->GetParent()->GetType()) == "SBS")
+				sbs->RemoveControl(this);
+		}
 	}
 
 	delete object;
@@ -499,4 +509,13 @@ bool Control::IsLocked()
 int Control::GetKeyID()
 {
 	return KeyID;
+}
+
+void Control::RemoveAction(Action *action)
+{
+	for (int i = 0; i < (int)Actions.size(); i++)
+	{
+		if (Actions[i] == action)
+			Actions.erase(Actions.begin() + i);
+	}
 }

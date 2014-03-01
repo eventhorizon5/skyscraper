@@ -50,6 +50,7 @@ class ActionViewer: public wxDialog
 		wxTextCtrl* tCommand;
 		wxTextCtrl* tName;
 		wxStaticText* StaticText4;
+		wxButton* bDelete;
 		wxButton* bRun;
 		wxStaticText* StaticText5;
 		wxStaticText* StaticText2;
@@ -64,6 +65,7 @@ class ActionViewer: public wxDialog
 		static const long ID_ActionList;
 		static const long ID_bRun;
 		static const long ID_bOK;
+		static const long ID_bDelete;
 		static const long ID_STATICTEXT1;
 		static const long ID_tName;
 		static const long ID_STATICTEXT2;
@@ -82,6 +84,7 @@ class ActionViewer: public wxDialog
 		void On_bRun_Click(wxCommandEvent& event);
 		void On_bOK_Click(wxCommandEvent& event);
 		void On_ActionList_Select(wxCommandEvent& event);
+		void On_bDelete_Click(wxCommandEvent& event);
 		//*)
 		int lastcount;
 

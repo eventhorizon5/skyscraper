@@ -3983,6 +3983,12 @@ bool SBS::RemoveAction(Action *action)
 			ActionArray.erase(ActionArray.begin() + i);
 			i--;
 			result = true;
+
+			//remove reference to action in all control objects
+			for (int j = 0; j < (int)control_index.size(); j++)
+			{
+				control_index[j]->RemoveAction(action);
+			}
 		}
 	}
 	return result;
@@ -4177,4 +4183,24 @@ void SBS::CameraLoop()
 
 	//Process camera loop
 	camera->Loop(elapsed);
+}
+
+void SBS::RegisterControl(Control *control)
+{
+	//add control to index
+	control_index.push_back(control);
+}
+
+void SBS::UnregisterControl(Control *control)
+{
+	//remove control from index
+
+	for (int i = 0; i < (int)control_index.size(); i++)
+	{
+		if (control_index[i] == control)
+		{
+			control_index.erase(control_index.begin() + i);
+			i--;
+		};
+	}
 }

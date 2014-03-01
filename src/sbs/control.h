@@ -68,6 +68,7 @@ public:
 	bool IsLocked();
 	void ToggleLock(bool force = false);
 	int GetKeyID();
+	void RemoveAction(Action *action);
 
 private:
 	MeshObject* ControlMesh; //control mesh object

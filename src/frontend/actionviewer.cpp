@@ -40,6 +40,7 @@ extern SBS *Simcore; //external pointer to the SBS engine
 const long ActionViewer::ID_ActionList = wxNewId();
 const long ActionViewer::ID_bRun = wxNewId();
 const long ActionViewer::ID_bOK = wxNewId();
+const long ActionViewer::ID_bDelete = wxNewId();
 const long ActionViewer::ID_STATICTEXT1 = wxNewId();
 const long ActionViewer::ID_tName = wxNewId();
 const long ActionViewer::ID_STATICTEXT2 = wxNewId();
@@ -65,7 +66,7 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	wxBoxSizer* BoxSizer2;
 	wxFlexGridSizer* FlexGridSizer3;
 	wxBoxSizer* BoxSizer1;
-	
+
 	Create(parent, wxID_ANY, _("Action Viewer"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -77,6 +78,8 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	BoxSizer2->Add(bRun, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer2->Add(bOK, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
+	BoxSizer2->Add(bDelete, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	BoxSizer1->Add(FlexGridSizer1, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -108,10 +111,11 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
-	
+
 	Connect(ID_ActionList,wxEVT_COMMAND_LISTBOX_SELECTED,(wxObjectEventFunction)&ActionViewer::On_ActionList_Select);
 	Connect(ID_bRun,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bRun_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bOK_Click);
+	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bDelete_Click);
 	//*)
 
 	lastcount = 0;
@@ -166,4 +170,15 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 			tParameters->AppendText(wxString::FromAscii(action->GetParameter(i)) + wxT("\n"));
 	}
 
+}
+
+void ActionViewer::On_bDelete_Click(wxCommandEvent& event)
+{
+	int selection = ActionList->GetSelection();
+	if (selection < 0)
+		return;
+
+	Action *action = Simcore->GetAction(selection);
+	if (action)
+		Simcore->RemoveAction(action);
 }
