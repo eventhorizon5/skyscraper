@@ -63,9 +63,9 @@ class ActionViewer: public wxDialog
 
 		//(*Identifiers(ActionViewer)
 		static const long ID_ActionList;
+		static const long ID_bDelete;
 		static const long ID_bRun;
 		static const long ID_bOK;
-		static const long ID_bDelete;
 		static const long ID_STATICTEXT1;
 		static const long ID_tName;
 		static const long ID_STATICTEXT2;

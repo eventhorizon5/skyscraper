@@ -3899,7 +3899,7 @@ bool SBS::AddActionParent(const std::string name, std::vector<Object*> &parents)
 	for (int i = 0; i < (int)actionlist.size(); i++)
 	{
 		Action *action = actionlist[i];
-		for (int j = 0; j < action->GetParentCount(); j++)
+		for (int j = 0; j < (int)parents.size(); j++)
 		{
 			if (action->AddParent(parents[j]))
 				result = true;
@@ -3918,7 +3918,7 @@ bool SBS::RemoveActionParent(const std::string name, std::vector<Object*> &paren
 	for (int i = 0; i < (int)actionlist.size(); i++)
 	{
 		Action *action = actionlist[i];
-		for (int j = 0; j < action->GetParentCount(); j++)
+		for (int j = 0; j < (int)parents.size(); j++)
 		{
 			if (action->RemoveParent(parents[j]))
 				result = true;
@@ -3935,7 +3935,7 @@ bool SBS::RemoveActionParent(std::vector<Object*> &parents)
 	for (int i = 0; i < (int)ActionArray.size(); i++)
 	{
 		Action *action = ActionArray[i];
-		for (int j = 0; j < action->GetParentCount(); j++)
+		for (int j = 0; j < (int)parents.size(); j++)
 		{
 			if (action->RemoveParent(parents[j]))
 				result = true;

@@ -38,9 +38,9 @@ extern SBS *Simcore; //external pointer to the SBS engine
 
 //(*IdInit(ActionViewer)
 const long ActionViewer::ID_ActionList = wxNewId();
+const long ActionViewer::ID_bDelete = wxNewId();
 const long ActionViewer::ID_bRun = wxNewId();
 const long ActionViewer::ID_bOK = wxNewId();
-const long ActionViewer::ID_bDelete = wxNewId();
 const long ActionViewer::ID_STATICTEXT1 = wxNewId();
 const long ActionViewer::ID_tName = wxNewId();
 const long ActionViewer::ID_STATICTEXT2 = wxNewId();
@@ -74,12 +74,12 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	ActionList->SetMinSize(wxSize(300,300));
 	FlexGridSizer1->Add(ActionList, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
+	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
+	BoxSizer2->Add(bDelete, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bRun = new wxButton(this, ID_bRun, _("Run Action"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bRun"));
 	BoxSizer2->Add(bRun, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer2->Add(bOK, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
-	BoxSizer2->Add(bDelete, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer2, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	BoxSizer1->Add(FlexGridSizer1, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -88,22 +88,22 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	FlexGridSizer3->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tName = new wxTextCtrl(this, ID_tName, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tName"));
 	tName->SetMinSize(wxSize(200,-1));
-	FlexGridSizer3->Add(tName, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Parent Name:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+	FlexGridSizer3->Add(tName, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Parent Name(s):"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer3->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tParentName = new wxTextCtrl(this, ID_tParentName, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tParentName"));
-	FlexGridSizer3->Add(tParentName, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Parent Type:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+	tParentName = new wxTextCtrl(this, ID_tParentName, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_tParentName"));
+	FlexGridSizer3->Add(tParentName, 1, wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Parent Type(s):"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
 	FlexGridSizer3->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tType"));
-	FlexGridSizer3->Add(tType, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	tType = new wxTextCtrl(this, ID_tType, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_tType"));
+	FlexGridSizer3->Add(tType, 1, wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Command:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer3->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tCommand = new wxTextCtrl(this, ID_tCommand, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tCommand"));
-	FlexGridSizer3->Add(tCommand, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	FlexGridSizer2->Add(FlexGridSizer3, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer3->Add(tCommand, 1, wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	FlexGridSizer2->Add(FlexGridSizer3, 1, wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Parameters:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
-	FlexGridSizer2->Add(StaticText5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(StaticText5, 1, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tParameters = new wxTextCtrl(this, ID_tParameters, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxTE_READONLY, wxDefaultValidator, _T("ID_tParameters"));
 	tParameters->SetMinSize(wxSize(200,100));
 	FlexGridSizer2->Add(tParameters, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -113,9 +113,9 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	BoxSizer1->SetSizeHints(this);
 
 	Connect(ID_ActionList,wxEVT_COMMAND_LISTBOX_SELECTED,(wxObjectEventFunction)&ActionViewer::On_ActionList_Select);
+	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bDelete_Click);
 	Connect(ID_bRun,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bRun_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bOK_Click);
-	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bDelete_Click);
 	//*)
 
 	lastcount = 0;
@@ -161,8 +161,16 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 	if (action)
 	{
 		tName->SetValue(wxString::FromAscii(action->GetName()));
-		tParentName->SetValue(wxString::FromAscii(action->GetParentName(0)));
-		tType->SetValue(wxString::FromAscii(action->GetParentType(0)));
+		tParentName->Clear();
+		tType->Clear();
+
+		for (int i = 0; i < action->GetParentCount(); i++)
+		{
+			wxString index = wxVariant((int)i + 1).GetString();
+			tParentName->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentName(i)) + wxT("\n"));
+			tType->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentType(i)) + wxT("\n"));
+		}
+
 		tCommand->SetValue(wxString::FromAscii(action->GetCommandName()));
 
 		tParameters->Clear();

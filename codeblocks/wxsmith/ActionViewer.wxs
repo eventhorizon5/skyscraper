@@ -20,6 +20,15 @@
 					<object class="sizeritem">
 						<object class="wxBoxSizer" variable="BoxSizer2" member="no">
 							<object class="sizeritem">
+								<object class="wxButton" name="ID_bDelete" variable="bDelete" member="yes">
+									<label>Delete</label>
+									<handler function="On_bDelete_Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
 								<object class="wxButton" name="ID_bRun" variable="bRun" member="yes">
 									<label>Run Action</label>
 									<handler function="On_bRun_Click" entry="EVT_BUTTON" />
@@ -32,15 +41,6 @@
 								<object class="wxButton" name="ID_bOK" variable="bOK" member="yes">
 									<label>OK</label>
 									<handler function="On_bOK_Click" entry="EVT_BUTTON" />
-								</object>
-								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
-							<object class="sizeritem">
-								<object class="wxButton" name="ID_bDelete" variable="bDelete" member="yes">
-									<label>Delete</label>
-									<handler function="On_bDelete_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
@@ -75,13 +75,13 @@
 									<minsize>200,-1</minsize>
 									<style>wxTE_READONLY</style>
 								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
 								<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
-									<label>Parent Name:</label>
+									<label>Parent Name(s):</label>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -89,15 +89,15 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tParentName" variable="tParentName" member="yes">
-									<style>wxTE_READONLY</style>
+									<style>wxTE_MULTILINE|wxTE_READONLY</style>
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
 								<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
-									<label>Parent Type:</label>
+									<label>Parent Type(s):</label>
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
@@ -105,9 +105,9 @@
 							</object>
 							<object class="sizeritem">
 								<object class="wxTextCtrl" name="ID_tType" variable="tType" member="yes">
-									<style>wxTE_READONLY</style>
+									<style>wxTE_MULTILINE|wxTE_READONLY</style>
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
@@ -123,12 +123,12 @@
 								<object class="wxTextCtrl" name="ID_tCommand" variable="tCommand" member="yes">
 									<style>wxTE_READONLY</style>
 								</object>
-								<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
+								<flag>wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
 						</object>
-						<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
+						<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
@@ -136,7 +136,7 @@
 						<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
 							<label>Parameters:</label>
 						</object>
-						<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+						<flag>wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 						<border>5</border>
 						<option>1</option>
 					</object>
