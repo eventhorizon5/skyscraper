@@ -194,6 +194,10 @@ Floor::~Floor()
 		delete ColumnFrame;
 	ColumnFrame = 0;
 
+	//delete walls in external mesh
+	if (sbs->FastDelete == false)
+		sbs->External->DeleteWalls(object);
+
 	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)
 		sbs->RemoveFloor(this);

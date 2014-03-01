@@ -895,15 +895,7 @@ MeshObject::~MeshObject()
 	DeleteCollider();
 
 	//delete wall objects
-	for (int i = 0; i < (int)Walls.size(); i++)
-	{
-		if (Walls[i])
-		{
-			Walls[i]->parent_deleting = true;
-			delete Walls[i];
-		}
-		Walls[i] = 0;
-	}
+	DeleteWalls();
 
 	std::string nodename;
 	if (SceneNode)
@@ -1530,15 +1522,19 @@ void MeshObject::Prepare()
 	if (prepared == true)
 		return;
 
-	//exit if there's no submesh data
-	if (Submeshes.size() == 0)
+	//clear vertex data and exit if there's no associated submesh or geometry data
+	if (Submeshes.size() == 0 || MeshGeometry.size() == 0)
+	{
+		delete MeshWrapper->sharedVertexData;
+		MeshWrapper->sharedVertexData = new Ogre::VertexData();
 		return;
+	}
 
 	Ogre::Real radius = 0;
 	Ogre::AxisAlignedBox box;
 
 	//set up vertex buffer
-	OGRE_DELETE MeshWrapper->sharedVertexData;
+	delete MeshWrapper->sharedVertexData;
 	Ogre::VertexData* data = new Ogre::VertexData();
 	MeshWrapper->sharedVertexData = data;
 	data->vertexCount = MeshGeometry.size();
@@ -2087,5 +2083,42 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 
 		ibuf->unlock();
 		current_offset = next_offset;
+	}
+}
+
+void MeshObject::DeleteWalls()
+{
+	//delete all wall objects
+
+	for (int i = 0; i < (int)Walls.size(); i++)
+	{
+		WallObject *wall = Walls[i];
+		if (wall)
+		{
+			wall->parent_deleting = true;
+			delete wall;
+			Walls[i] = 0;
+		}
+	}
+}
+
+void MeshObject::DeleteWalls(Object *parent)
+{
+	//delete walls of specified parent object
+
+	for (int i = 0; i < (int)Walls.size(); i++)
+	{
+		WallObject *wall = Walls[i];
+		if (wall)
+		{
+			if (wall->GetParent() == parent)
+			{
+				wall->parent_deleting = true;
+				wall->DeletePolygons();
+				delete wall;
+				Walls.erase(Walls.begin() + i);
+				i--;
+			}
+		}
 	}
 }

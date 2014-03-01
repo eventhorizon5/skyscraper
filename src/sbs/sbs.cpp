@@ -3358,11 +3358,12 @@ void SBS::RemoveFloor(Floor *floor)
 	{
 		if (FloorArray[i].object == floor)
 		{
-			FloorArray.erase(FloorArray.begin() + i);
 			if (FloorArray[i].object->Number < 0)
 				Basements--;
 			else
 				Floors--;
+
+			FloorArray.erase(FloorArray.begin() + i);
 
 			//clear cached values
 			getfloor_result = 0;

@@ -115,6 +115,8 @@ public:
 	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents);
 	void CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices);
 	void CreateBoxCollider(float scale_multiplier);
+	void DeleteWalls();
+	void DeleteWalls(Object *parent);
 	
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
