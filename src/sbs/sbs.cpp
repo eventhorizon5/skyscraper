@@ -2120,11 +2120,11 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 
 	WallObject *wall;
 	if (mesh == "external")
-		wall = External->CreateWallObject(this->object, name);
+		wall = External->CreateWallObject(External->object, name);
 	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(this->object, name);
+		wall = Buildings->CreateWallObject(Buildings->object, name);
 	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(this->object, name);
+		wall = Landscape->CreateWallObject(Landscape->object, name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
 	return wall;
@@ -2142,11 +2142,11 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 
 	WallObject *wall;
 	if (mesh == "external")
-		wall = External->CreateWallObject(this->object, name);
+		wall = External->CreateWallObject(External->object, name);
 	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(this->object, name);
+		wall = Buildings->CreateWallObject(Buildings->object, name);
 	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(this->object, name);
+		wall = Landscape->CreateWallObject(Landscape->object, name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
@@ -2183,7 +2183,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 		maxz = z1;
 	}
 
-	WallObject *wall = Landscape->CreateWallObject(this->object, name);
+	WallObject *wall = Landscape->CreateWallObject(Landscape->object, name);
 
 	Report("Creating ground...");
 
