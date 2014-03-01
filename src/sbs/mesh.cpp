@@ -1572,6 +1572,7 @@ void MeshObject::Prepare()
 		radius = std::max(radius, MeshGeometry[i].vertex.length());
 		loc += 8;
 	}
+
 	//create vertex hardware buffer
 	Ogre::HardwareVertexBufferSharedPtr vbuffer = Ogre::HardwareBufferManager::getSingleton().createVertexBuffer(decl->getVertexSize(0), vsize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
 	vbuffer->writeData(0, vbuffer->getSizeInBytes(), mVertexElements, true);

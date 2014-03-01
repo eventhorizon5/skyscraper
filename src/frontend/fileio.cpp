@@ -414,6 +414,7 @@ bool ScriptProcessor::Run()
 			skyscraper->Report("Exiting building script");
 			IsFinished = true;
 			show_percent = false;
+			line = (int)BuildingData.size(); //jump to end of script
 			return true; //exit data file parser
 		}
 		if (linecheck.substr(0, 7) == "<break>")

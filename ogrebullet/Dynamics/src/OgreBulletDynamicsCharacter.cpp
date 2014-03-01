@@ -183,6 +183,7 @@ namespace OgreBulletDynamics
 		else
 			getDynamicsWorld()->getBulletDynamicsWorld()->addCollisionObject(mObject,btBroadphaseProxy::CharacterFilter, 0);
 		getDynamicsWorld()->getBulletDynamicsWorld()->addAction(m_character);
+		resetLastCollision();
 	}
 }
 

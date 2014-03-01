@@ -263,5 +263,10 @@ namespace OgreBulletCollisions
 	{
 		return last_collision;
 	}
+
+	void Object::resetLastCollision()
+	{
+		last_collision = 0;
+	}
 }
 

@@ -3121,6 +3121,7 @@ void Elevator::EnableFireService2(int value)
 		{
 			//enable nudge mode on all doors if any are open
 			EnableNudgeMode(true);
+
 			//recall elevator
 			GoToRecallFloor();
 		}
@@ -3478,7 +3479,7 @@ ElevatorDoor* Elevator::GetDoor(int number)
 	//get elevator door object
 
 	//return cached check if number is the same
-	if (lastdoor_number == number)
+	if (lastdoor_number == number && lastdoor_result)
 		return lastdoor_result;
 
 	if (number > 0 && number <= (int)DoorArray.size())
@@ -4652,6 +4653,11 @@ void Elevator::RemoveElevatorDoor(ElevatorDoor* door)
 		if (DoorArray[i] == door)
 		{
 			DoorArray.erase(DoorArray.begin() + i);
+			NumDoors--;
+
+			//reset cache values
+			lastdoor_number = 0;
+			lastdoor_result = 0;
 			return;
 		}
 	}

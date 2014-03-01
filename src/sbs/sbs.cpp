@@ -2925,7 +2925,21 @@ bool SBS::DeleteObject(Object *object)
 	//perform standard delete based on object type
 	if (type == "Floor")
 	{
-		delete (Floor*)object->GetRawObject();
+		Floor *floor = (Floor*)object->GetRawObject();
+
+		//restrict deletions to only lowest/highest floors
+		if (floor->Number >= 0 && GetFloor(floor->Number + 1))
+		{
+			sbs->Report("Only the highest floor can be deleted");
+			return false;
+		}
+		if (floor->Number < 0 && GetFloor(floor->Number - 1))
+		{
+			sbs->Report("Only the lowest basement can be deleted");
+			return false;
+		}
+
+		delete floor;
 		deleted = true;
 	}
 	if (type == "Elevator")
@@ -3000,6 +3014,8 @@ bool SBS::DeleteObject(Object *object)
 		delete (Trigger*)object->GetRawObject();
 		deleted = true;
 	}
+
+	camera->ResetCollisions();
 
 	return deleted;
 }
