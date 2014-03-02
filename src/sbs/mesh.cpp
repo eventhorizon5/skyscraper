@@ -1496,6 +1496,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 				{
 					//delete match
 					RemoveTriangle(index, i);
+					i--;
 					break;
 				}
 			}
@@ -1525,7 +1526,8 @@ void MeshObject::Prepare()
 	//clear vertex data and exit if there's no associated submesh or geometry data
 	if (Submeshes.size() == 0 || MeshGeometry.size() == 0)
 	{
-		delete MeshWrapper->sharedVertexData;
+		if (MeshWrapper->sharedVertexData)
+			delete MeshWrapper->sharedVertexData;
 		MeshWrapper->sharedVertexData = new Ogre::VertexData();
 		return;
 	}
@@ -1534,7 +1536,8 @@ void MeshObject::Prepare()
 	Ogre::AxisAlignedBox box;
 
 	//set up vertex buffer
-	delete MeshWrapper->sharedVertexData;
+	if (MeshWrapper->sharedVertexData)
+		delete MeshWrapper->sharedVertexData;
 	Ogre::VertexData* data = new Ogre::VertexData();
 	MeshWrapper->sharedVertexData = data;
 	data->vertexCount = MeshGeometry.size();
