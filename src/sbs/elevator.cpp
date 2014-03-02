@@ -559,12 +559,12 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//create sound objects
 	if (sbs->Verbose)
 		Report("creating sound objects");
-	mainsound = new Sound(this->object, "Main", true);
+	mainsound = new Sound(object, "Main", true);
 	mainsound->SetPosition(Origin);
-	idlesound = new Sound(this->object, "Idle", true);
+	idlesound = new Sound(object, "Idle", true);
 	idlesound->SetPosition(Origin);
 	idlesound->Load(CarIdleSound.c_str());
-	motorsound = new Sound(this->object, "Motor", true);
+	motorsound = new Sound(object, "Motor", true);
 	motorsound->SetPosition(Origin);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
@@ -580,15 +580,15 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		}
 	}
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
-	alarm = new Sound(this->object, "Alarm", true);
+	alarm = new Sound(object, "Alarm", true);
 	alarm->SetPosition(Origin);
-	floorbeep = new Sound(this->object, "Floor Beep", true);
+	floorbeep = new Sound(object, "Floor Beep", true);
 	floorbeep->SetPosition(Origin);
-	floorsound = new Sound(this->object, "Floor Sound", true);
+	floorsound = new Sound(object, "Floor Sound", true);
 	floorsound->SetPosition(Origin);
-	messagesnd = new Sound(this->object, "Message Sound", true);
+	messagesnd = new Sound(object, "Message Sound", true);
 	messagesnd->SetPosition(Origin);
-	musicsound = new Sound(this->object, "Music Sound", true);
+	musicsound = new Sound(object, "Music Sound", true);
 	musicsound->SetPosition(Origin + MusicPosition);
 	musicsound->Load(Music.c_str());
 
@@ -2271,7 +2271,7 @@ WallObject* Elevator::AddWall(const char *name, const char *texture, float thick
 {
 	//Adds a wall with the specified dimensions
 
-	WallObject *wall = ElevatorMesh->CreateWallObject(this->object, name);
+	WallObject *wall = ElevatorMesh->CreateWallObject(object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
@@ -2280,7 +2280,7 @@ WallObject* Elevator::AddFloor(const char *name, const char *texture, float thic
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	WallObject *wall = ElevatorMesh->CreateWallObject(this->object, name);
+	WallObject *wall = ElevatorMesh->CreateWallObject(object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
@@ -4603,7 +4603,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 
 	std::string elevnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
-	Door* door = new Door(this->object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	Door* door = new Door(object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	StdDoorArray.push_back(door);
 	return door->object;
 }

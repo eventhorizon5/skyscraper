@@ -177,7 +177,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	}
 
 	//create wall object
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
 
 	std::string buffer, buffer2, buffer3;
 	std::string Direction = direction;
@@ -283,7 +283,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -302,7 +302,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
@@ -492,7 +492,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string stairsnum = ToString(StairsNum);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }

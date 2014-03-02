@@ -81,10 +81,10 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 		ShaftDoors[i] = new DoorWrapper(this, true);
 
 	//create sound object
-	doorsound = new Sound(this->object, "Door Sound", true);
+	doorsound = new Sound(object, "Door Sound", true);
 	doorsound->SetPosition(elevator->Origin);
-	chime = new Sound(this->object, "Chime", true);
-	nudgesound = new Sound(this->object, "Nudge Sound", true);
+	chime = new Sound(object, "Chime", true);
+	nudgesound = new Sound(object, "Nudge Sound", true);
 	nudgesound->SetPosition(elevator->Origin);
 }
 

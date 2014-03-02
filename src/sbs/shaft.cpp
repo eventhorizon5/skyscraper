@@ -187,7 +187,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
 	sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, true);
 	return wall;
 }
@@ -213,7 +213,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this->object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
@@ -829,7 +829,7 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string shaftnum = ToString(ShaftNumber);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(this->object, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(object, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }

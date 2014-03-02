@@ -1292,9 +1292,9 @@ int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *te
 void SBS::InitMeshes()
 {
 	//create object meshes
-	Buildings = new MeshObject(this->object, "Buildings");
-	External = new MeshObject(this->object, "External");
-	Landscape = new MeshObject(this->object, "Landscape");
+	Buildings = new MeshObject(object, "Buildings");
+	External = new MeshObject(object, "External");
+	Landscape = new MeshObject(object, "Landscape");
 	//Landscape->tricollider = false;
 }
 
@@ -1423,7 +1423,7 @@ void SBS::CreateSky(const char *filenamebase)
 	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
 	ResetLighting();
 
-	SkyBox = new MeshObject(this->object, "SkyBox");
+	SkyBox = new MeshObject(object, "SkyBox");
 	SkyBox->no_collider = true;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction

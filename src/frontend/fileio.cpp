@@ -1268,17 +1268,21 @@ int ScriptProcessor::ProcCommands()
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+
+			if (Section == 2)
+				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
+			else
+				wall = tmpMesh->CreateWallObject(Simcore->External->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Landscape->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Buildings->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1506,17 +1510,21 @@ int ScriptProcessor::ProcCommands()
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+
+			if (Section == 2)
+				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
+			else
+				wall = tmpMesh->CreateWallObject(Simcore->External->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Landscape->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Buildings->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1565,17 +1573,21 @@ int ScriptProcessor::ProcCommands()
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+
+			if (Section == 2)
+				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
+			else
+				wall = tmpMesh->CreateWallObject(Simcore->External->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Landscape->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Buildings->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1620,17 +1632,21 @@ int ScriptProcessor::ProcCommands()
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+
+			if (Section == 2)
+				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
+			else
+				wall = tmpMesh->CreateWallObject(Simcore->External->object, tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Landscape->object, tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->object, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(Simcore->Buildings->object, tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");

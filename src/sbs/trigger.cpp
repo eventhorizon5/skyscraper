@@ -50,7 +50,7 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre:
 	IsInside = false;
 
 	//create sound object
-	sound = new Sound(this->object, name, true);
+	sound = new Sound(object, name, true);
 	sound->Load(sound_file);
 }
 
