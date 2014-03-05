@@ -105,6 +105,7 @@ SetPlanarMapping true, false, false, false
     Load data/stopkey.png, StopKey, 1, 1
     Load data/indservkeyon.png, IndOn, 1, 1
     Load data/indservkeyoff.png, IndOff, 1, 1
+    Load data/windows11.jpg, Peerless, 0.101, 1
 
     Load data/black.jpg, Black, 1, 1
     Load data/black_lit.jpg, BlackLit, 1, 1
@@ -127,7 +128,7 @@ SetPlanarMapping true, false, false, false
 
 # Ground
 AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
-Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
+#Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
 
 # Lobby
 <Floor 0>
@@ -139,7 +140,7 @@ Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
     Group = 0 - 12
 
     #Floor
-    Set 1 = Floor(%floor%).Base
+    Set 1 = Floor(%floor%).Base + 0.1
     DrawWalls = true, false, false, false, false, false
     AddCustomWall floor, MainFloor, Marble4, -153.31, %1%, -48.4, -166.3, %1%, -48.4, -166.3, %1%, 59.6, -136.8, %1%, 77.3, -119.7, %1%, 47.2, -13.6, %1%, 105.9, 49.6, %1%, 94.4, 62.2, %1%, 70.4, 117.5, %1%, 101.7, 140.5, %1%, 46.4, 140.5, %1%, -73.14, 85.6, %1%, -73.14, -19.32, %1%, -134.54, -113.3, %1%, -116.47, 0, 0
     SetAutoSize = true, true
@@ -2535,4 +2536,32 @@ CutStairwell 4, -6.74, -12.82, 2.25, -8, 0, 5
     AddStairsWall 4, StairsLeft, StairsWall, 0, -2.25, 8, 2.25, 8, 10.5, 10.5, -0.5, -0.5, 0, 0
 <EndFloor>
 
+
+#Peerless Building
+
+SetAutoSize = true, false
+DrawWalls = true, true, false, false, false, false
+AddWall buildings, Peerless, Peerless, 0, -245.8, -229.8, -228.8, -232.1, 1200, 1200, 0, 0, 0, 100
+AddWall buildings, Peerless, Peerless, 0, -228.8, -232.1, -166.8, -311.8, 1200, 1200, 0, 0, 0, 100
+AddWall buildings, Peerless, Peerless, 0, -166.8, -311.8, -169.1, -329.8, 1200, 1200, 0, 0, 0, 100
+AddWall buildings, Peerless, Peerless, 0, -169.1, -329.8, -288.8, -412.3, 1200, 1200, 0, 0, 0, 100
+AddWall buildings, Peerless, Peerless, 0, -288.8, -412.3, -304.8, -410.3, 1200, 1200, 0, 0, 0, 100
+AddWall buildings, Peerless, Peerless, 0, -304.8, -410.3, -356.9, -328.8, 1200, 1200, 0, 0, 0, 100
+AddWall buildings, Peerless, Peerless, 0, -356.9, -328.8, -354.8, -312.3, 1200, 1200, 0, 0, 0, 100
+AddWall buildings, Peerless, Peerless, 0, -354.8, -312.3, -245.8, -229.8, 1200, 1200, 0, 0, 0, 100
+AddCustomWall buildings, Peerless Roof, Backing, -245.8, 1200, -229.8, -228.8, 1200, -232.1, -166.8, 1200, -311.8, -169.1, 1200, -329.8, -288.8, 1200, -412.3, -304.8, 1200, -410.3, -356.9, 1200, -328.8, -354.8, 1200, -312.3, -245.8, 1200, -229.8, 0, 0
+SetAutoSize = true, true
+
+
+#Plazas
+SetAutoSize = true, true
+AddCustomWall landscape, Peerless Plaza, Backing, -411.372, 0, -143.772, -110.021, 0, -196.908, -163.157, 0, -498.259, -464.508, 0, -445.123, 0, 0
+AddCustomWall landscape, Empty Plaza, Backing, 232.692, 0, -257.338, 189.627, 0, -501.57, 102.74, 0, -545.145, -121.796, 0, -505.553, -68.6592, 0, -204.202, 0, 0
+AddCustomWall landscape, Glass Tower Plaza, Backing, -344.691, 0, 234.394, 299.373, 0, 120.828, 239.985, 0, -215.976, -404.079, 0, -102.41, 0, 0
+
+#Roads
+AddCustomWall landscape, Main, Brick, 239.985, 0, -215.976, 232.692, 0, -257.338, -411.372, 0, -143.772, -404.079, 0, -102.41, 0, 0
+AddCustomwall landscape, Mid, Brick, -68.6592, 0, -204.202, -121.796, 0, -505.553, -163.157, 0, -498.259, -110.021, 0, -196.908, 0, 0
+
+Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
 
