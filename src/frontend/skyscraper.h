@@ -27,6 +27,7 @@
 
 #include <wx/app.h>
 #include <wx/frame.h>
+#include <wx/progdlg.h>
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
 #include <OgreConfigFile.h>
@@ -112,6 +113,8 @@ public:
 	bool InitSky();
 	ScriptProcessor* GetScriptProcessor();
 	void ShowConsole(bool send_button = true);
+	void CreateProgressDialog();
+	void UpdateProgress(int percent);
 
 private:
 	//mouse status
@@ -164,6 +167,7 @@ private:
 	Ogre::LogManager* logger;
 	bool showconsole;
 	bool raised;
+	wxProgressDialog *progdialog;
 };
 
 class MainScreen : public wxFrame

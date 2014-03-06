@@ -207,6 +207,7 @@ public:
 	int CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside = true, bool outside = true, bool top = true, bool bottom = true, bool autosize = true);
 	int AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th);
 	int AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th);
+	int AddCustomFloor(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th);
 	void InitMeshes();
 	void EnableBuildings(bool value);
 	void EnableLandscape(bool value);
@@ -379,6 +380,7 @@ public:
 	void CameraLoop();
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
+	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);
 
 	//Meshes
 	MeshObject* Buildings;

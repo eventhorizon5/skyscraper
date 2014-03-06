@@ -135,8 +135,8 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     ID = L
     Name = Lobby
     Type = Lobby
-    Height = 12
-    InterfloorHeight = 0
+    Height = 10
+    InterfloorHeight = 2
     Group = 0 - 12
 
     #Floor
@@ -150,6 +150,15 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     DrawWalls = false, true, false, false, false, false
     AddCustomWall floor, MainFloor, Marble3, -119.7, %1%, 11.6, -119.7, %1%, 47.2, -13.6, %1%, 105.9, 49.6, %1%, 94.4, 76.24, %1%, 46.4, 85.6, %1%, 27.7, 85.6, %1%, -73.14, -19.32, %1%, -134.54, -113.3, %1%, -116.47, -119.7, %1%, -36.4, 0, 0
     AddCustomWall floor, AtriumCorner, Marble3, -142.94, %1%, -36.4, -119.7, %1%, -36.4, -113.3, %1%, -116.47, -142.94, %1%, -60.37, 0, 0
+
+    #Walls
+    SetAutoSize = true, false
+    DrawWalls = true, true, false, false, false, false
+    AddWall New1, Wall1, 0, -142.94, -36.4, -119.7, -36.4, %interfloorheight%, %interfloorheight%, %height%, %height%, 1, 1, False
+    AddWall New2, Wall1, 0, -119.7, -36.4, -119.7, 11.6, %interfloorheight%, %interfloorheight%, %height%, %height%, 1, 1, False
+    AddWall New3, Wall1, 0, 85.6, -73.14, 85.6, 27.7, %interfloorheight%, %interfloorheight%, %height%, %height%, 1, 1, False
+    AddWall New4, Wall1, 0, 85.6, 27.7, 76.24, 46.4, %interfloorheight%, %interfloorheight%, %height%, %height%, 1, 1, False
+    AddWall New5, Wall1, 0, -119.7, 47.2, -119.7, 11.6, %interfloorheight%, %interfloorheight%, %height%, %height%, 1, 1, False
 
     SetAutoSize = true, true   
 <EndFloor>
@@ -181,15 +190,15 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, -1, 7920, 7920
     #Walls
     SetAutoSize = false, false
     DrawWalls = true, true, false, false, false, false
-    AddWall New, MainWindowsInside, 0, -142.94, -36.4, -119.7, -36.4, 12, 12, 0, 0, 2, 1, False
-    AddWall New, MainWindowsInside, 0, -119.7, -36.4, -119.7, 11.6, 12, 12, 0, 0, 3, 1, False
-    AddWall New, MainWindowsInside, 0, 85.6, -73.14, 85.6, 27.7, 12, 12, 0, 0, 5, 1, False
-    AddWall New, MainWindowsInside, 0, 85.6, 27.7, 76.24, 46.4, 12, 12, 0, 0, 1, 1, False
+    AddWall New1, MainWindowsInside, 0, -142.94, -36.4, -119.7, -36.4, 12, 12, 0, 0, 2, 1, False
+    AddWall New2, MainWindowsInside, 0, -119.7, -36.4, -119.7, 11.6, 12, 12, 0, 0, 3, 1, False
+    AddWall New3, MainWindowsInside, 0, 85.6, -73.14, 85.6, 27.7, 12, 12, 0, 0, 5, 1, False
+    AddWall New4, MainWindowsInside, 0, 85.6, 27.7, 76.24, 46.4, 12, 12, 0, 0, 1, 1, False
     
-    AddWall New, MainWindowsInside, 0, -142.94, -36.4, -119.7, -36.4, 8, 8, 12, 12, 2, 1, False
-    AddWall New, MainWindowsInside, 0, -119.7, -36.4, -119.7, 11.6, 8, 8, 12, 12, 3, 1, False
-    AddWall New, MainWindowsInside, 0, 85.6, -73.14, 85.6, 27.7, 8, 8, 12, 12, 5, 1, False
-    AddWall New, MainWindowsInside, 0, 85.6, 27.7, 76.24, 46.4, 8, 8, 12, 12, 1, 1, False
+    AddWall New5, MainWindowsInside, 0, -142.94, -36.4, -119.7, -36.4, 8, 8, 12, 12, 2, 1, False
+    AddWall New6, MainWindowsInside, 0, -119.7, -36.4, -119.7, 11.6, 8, 8, 12, 12, 3, 1, False
+    AddWall New7, MainWindowsInside, 0, 85.6, -73.14, 85.6, 27.7, 8, 8, 12, 12, 5, 1, False
+    AddWall New8, MainWindowsInside, 0, 85.6, 27.7, 76.24, 46.4, 8, 8, 12, 12, 1, 1, False
 
     SetAutoSize = true, true
 <EndFloor>
@@ -1533,9 +1542,11 @@ AddCustomWall external, Left Complex Windows Back Under, MainWindowsInsideDouble
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Left Complex Windows Back Right Filler, MainWindows2, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(2).Altitude, 11.6, -119.7, Floor(1).Altitude + 12, 11.6, 3, 1
 DrawWalls = true, true, false, false, false, false
-AddCustomWall external, Left Complex Windows Back Right Filler, MainWindowsInside, -119.7, Floor(0).Altitude, 47.2, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(1).Altitude + 12, 11.6, -119.7, Floor(0).Altitude, 11.6, 3, 1
+AddCustomWall external, Left Complex Windows Back Right Filler, MainWindowsInside, -119.7, Floor(0).Altitude, 47.2, -119.7, Floor(1).Altitude - 2, 47.2, -119.7, Floor(1).Altitude - 2, 11.6, -119.7, Floor(0).Altitude, 11.6, 3, 1
 DrawWalls = false, true, false, false, false, false
 AddCustomWall external, Left Complex Windows Back Right Filler, MainWindowsInside, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(2).Altitude, 11.6, -119.7, Floor(1).Altitude + 12, 11.6, 3, 1
+DrawWalls = true, true, false, false, false, false
+AddCustomWall external, Left Complex Windows Back Right Filler, MainWindowsInside, -119.7, Floor(1).Altitude, 47.2, -119.7, Floor(1).Altitude + 12, 47.2, -119.7, Floor(1).Altitude + 12, 11.6, -119.7, Floor(1).Altitude, 11.6, 3, 1
 
 DrawWalls = true, false, false, false, false, false
 AddCustomWall external, Left Complex Windows Back Right Filler Top, MainWindows2, -119.7, Floor(2).Altitude, 47.2, -119.7, Floor(2).Altitude + 6.51, 41.38, -119.7, Floor(2).Altitude, 35.6, 0.66, 0
@@ -1818,9 +1829,12 @@ ShaftCut 3, -4, -4.125 + 0.33, 4, 4.125, 0, 5
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 0] AddShaftFloor 1, Shaft1Base, Brick, 0.5, -18.64, -4.25, 18.64, 4.25 + 1, -6, -6, 0, 0
     DrawWalls = true, true, false, false, false, false
-    if[%floor% = 0] AddShaftWall 1, Shaft1BaseLeft, Brick, 0, -18.64, -4.25 + 0.33, -18.64, 4.25, 6, 6, -6, -6, 0, 0
-    if[%floor% = 0] AddShaftWall 1, Shaft1BaseRight, Brick, 0, 18.64, -4.25 + 0.33, 18.64, 4.25, 6, 6, -6, -6, 0, 0
-    if[%floor% = 0] AddShaftWall 1, Shaft1BaseFront, Brick, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseLeft, Gravel2, 0, -18.64, -4.25 + 0.33, -18.64, 4.25, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseRight, Gravel2, 0, 18.64, -4.25 + 0.33, 18.64, 4.25, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1BaseFront, Gravel2, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, 6, 6, -6, -6, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1CoverLeft, Wall1, 0, -18.64, -4.25 + 0.33, -18.64, 4.25, %interfloorheight%, %interfloorheight%, %height%, %height%, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1CoverRight, Wall1, 0, 18.64, -4.25 + 0.33, 18.64, 4.25, %interfloorheight%, %interfloorheight%, %height%, %height%, 0, 0
+    if[%floor% = 0] AddShaftWall 1, Shaft1CoverFront, Wall1, 0, -18.64, -4.25 + 0.33, 18.64, -4.25 + 0.33, %interfloorheight%, %interfloorheight%, %height%, %height%, 0, 0
     if[%floor% = 135] AddShaftFloor 1, Shaft1Top, Brick, 0, -18.64, 3.25, 18.64, 4.25 + 1, %fullheight%, %fullheight%, 0, 0
     if[%floor% = 137] AddShaftFloor 1, Shaft1Top, Gravel, 0, -18.64, 3.25, 18.64, 4.25 + 1, 10, 10, 0, 0
     SetAutoSize = false, false
@@ -2549,19 +2563,19 @@ AddWall buildings, Peerless, Peerless, 0, -288.8, -412.3, -304.8, -410.3, 1200, 
 AddWall buildings, Peerless, Peerless, 0, -304.8, -410.3, -356.9, -328.8, 1200, 1200, 0, 0, 0, 100
 AddWall buildings, Peerless, Peerless, 0, -356.9, -328.8, -354.8, -312.3, 1200, 1200, 0, 0, 0, 100
 AddWall buildings, Peerless, Peerless, 0, -354.8, -312.3, -245.8, -229.8, 1200, 1200, 0, 0, 0, 100
-AddCustomWall buildings, Peerless Roof, Backing, -245.8, 1200, -229.8, -228.8, 1200, -232.1, -166.8, 1200, -311.8, -169.1, 1200, -329.8, -288.8, 1200, -412.3, -304.8, 1200, -410.3, -356.9, 1200, -328.8, -354.8, 1200, -312.3, -245.8, 1200, -229.8, 0, 0
 SetAutoSize = true, true
+AddCustomFloor buildings, Peerless Roof, Backing, -245.8, -229.8, -228.8, -232.1, -166.8, -311.8, -169.1, -329.8, -288.8, -412.3, -304.8, -410.3, -356.9, -328.8, -354.8, -312.3, -245.8, -229.8, 1200, 0, 0
 
 
 #Plazas
 SetAutoSize = true, true
-AddCustomWall landscape, Peerless Plaza, Backing, -411.372, 0, -143.772, -110.021, 0, -196.908, -163.157, 0, -498.259, -464.508, 0, -445.123, 0, 0
-AddCustomWall landscape, Empty Plaza, Backing, 232.692, 0, -257.338, 189.627, 0, -501.57, 102.74, 0, -545.145, -121.796, 0, -505.553, -68.6592, 0, -204.202, 0, 0
-AddCustomWall landscape, Glass Tower Plaza, Backing, -344.691, 0, 234.394, 299.373, 0, 120.828, 239.985, 0, -215.976, -404.079, 0, -102.41, 0, 0
+AddCustomFloor landscape, Peerless Plaza, Backing, -411.372, -143.772, -110.021, -196.908, -163.157, -498.259, -464.508, -445.123, 0, 0, 0
+AddCustomFloor landscape, Empty Plaza, Backing, 232.692, -257.338, 189.627, -501.57, 102.74, -545.145, -121.796, -505.553, -68.6592, -204.202, 0, 0, 0
+AddCustomFloor landscape, Glass Tower Plaza, Backing, -344.691, 234.394, 299.373, 120.828, 239.985, -215.976, -404.079, -102.41, 0, 0, 0
 
 #Roads
-AddCustomWall landscape, Main, Brick, 239.985, 0, -215.976, 232.692, 0, -257.338, -411.372, 0, -143.772, -404.079, 0, -102.41, 0, 0
-AddCustomwall landscape, Mid, Brick, -68.6592, 0, -204.202, -121.796, 0, -505.553, -163.157, 0, -498.259, -110.021, 0, -196.908, 0, 0
+AddCustomFloor landscape, Main, Brick, 239.985, -215.976, 232.692, -257.338, -411.372, -143.772, -404.079, -102.41, 0, 0, 0
+AddCustomFloor landscape, Mid, Brick, -68.6592, -204.202, -121.796, -505.553, -163.157, -498.259, -110.021, -196.908, 0, 0, 0
 
 Cut Landscape, -75, -1, -73.14, 130, 1, 71.9, false, true
 

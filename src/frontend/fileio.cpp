@@ -218,6 +218,7 @@ bool ScriptProcessor::Run()
 			{
 				progress_marker = marker;
 				skyscraper->Report(percent_s + "%");
+				skyscraper->UpdateProgress(percent);
 			}
 		}
 
@@ -1222,18 +1223,6 @@ int ScriptProcessor::ProcCommands()
 			return sNextLine;
 	}
 
-	//Print command
-	if (linecheck.substr(0, 5) == "print")
-	{
-		//calculate inline math
-		buffer = Calc(LineData.substr(6).c_str());
-
-		//print line
-		skyscraper->Report(buffer.c_str());
-
-		return sNextLine;
-	}
-
 	//AddTriangleWall command
 	if (linecheck.substr(0, 15) == "addtrianglewall")
 	{
@@ -1609,7 +1598,7 @@ int ScriptProcessor::ProcCommands()
 		int params = SplitData(LineData.c_str(), 14);
 
 		//check numeric values
-		for (int i = 3; i < params - 2; i++)
+		for (int i = 3; i < params; i++)
 		{
 			if (!IsNumeric(tempdata[i].c_str()))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1658,6 +1647,69 @@ int ScriptProcessor::ProcCommands()
 		StoreCommand(wall);
 
 		Simcore->AddCustomWall(wall, tempdata[1].c_str(), tempdata[2].c_str(), varray, atof(tempdata[params - 2].c_str()), atof(tempdata[params - 1].c_str()));
+		return sNextLine;
+	}
+
+	//AddCustomFloor command
+	if (linecheck.substr(0, 15) == "addcustomfloor ")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 15);
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		buffer = tempdata[0];
+		SetCase(buffer, false);
+		MeshObject* tmpMesh;
+
+		if (buffer == "floor")
+		{
+			tmpMesh = Simcore->GetFloor(Current)->Level;
+			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
+		}
+		else if (buffer == "elevator")
+		{
+			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
+			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current)->object, tempdata[1].c_str());
+		}
+		else if (buffer == "external")
+		{
+			tmpMesh = Simcore->External;
+
+			if (Section == 2)
+				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current)->object, tempdata[1].c_str());
+			else
+				wall = tmpMesh->CreateWallObject(Simcore->External->object, tempdata[1].c_str());
+		}
+		else if (buffer == "landscape")
+		{
+			tmpMesh = Simcore->Landscape;
+			wall = tmpMesh->CreateWallObject(Simcore->Landscape->object, tempdata[1].c_str());
+		}
+		else if (buffer == "buildings")
+		{
+			tmpMesh = Simcore->Buildings;
+			wall = tmpMesh->CreateWallObject(Simcore->Buildings->object, tempdata[1].c_str());
+		}
+		else
+			return ScriptError("Invalid object");
+
+		float altitude = atof(tempdata[params - 3].c_str());
+		if (Section == 2)
+			altitude += Simcore->GetFloor(Current)->GetBase();
+
+		std::vector<Ogre::Vector2> varray;
+		for (temp3 = 3; temp3 < params - 3; temp3 += 2)
+			varray.push_back(Ogre::Vector2(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str())));
+
+		StoreCommand(wall);
+
+		Simcore->AddCustomFloor(wall, tempdata[1].c_str(), tempdata[2].c_str(), varray, altitude, atof(tempdata[params - 2].c_str()), atof(tempdata[params - 1].c_str()));
 		return sNextLine;
 	}
 
@@ -2201,6 +2253,40 @@ int ScriptProcessor::ProcCommands()
 		temp5 = linecheck.find("isect(", 0);
 	}
 
+	//Endpoint function
+	temp5 = linecheck.find("endpoint(", 0);
+	while (temp5 > -1)
+	{
+		temp1 = LineData.find("(", 0);
+		temp4 = LineData.find(")", 0);
+		if (temp1 < 0 || temp4 < 0)
+			return ScriptError("Syntax error");
+
+		SplitString(tempdata, LineData.substr(temp1 + 1, temp4 - temp1 - 1).c_str(), ',');
+		for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
+		{
+			buffer = Calc(tempdata[temp3].c_str());
+			tempdata[temp3] = buffer;
+		}
+		if (tempdata.size() != 4)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 3; i++)
+		{
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		Ogre::Vector2 startpoint (atof(tempdata[0].c_str()), atof(tempdata[1].c_str()));
+		Ogre::Vector2 endpoint = Simcore->GetEndPoint(startpoint, atof(tempdata[2].c_str()), atof(tempdata[3].c_str()));
+
+		buffer = std::string(LineData).substr(0, temp5) + ToString2(endpoint.x) + std::string(", ") + ToString2(endpoint.y) + std::string(LineData).substr(temp4 + 1);
+		LineData = buffer;
+		linecheck = SetCaseCopy(LineData, false);
+		temp5 = linecheck.find("endpoint(", 0);
+	}
+
 	//GetWallExtents command
 	if (linecheck.substr(0, 14) == "getwallextents")
 	{
@@ -2704,6 +2790,18 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid value: " + buffer);
 
 		Simcore->camera->GotoFloor(num);
+
+		return sNextLine;
+	}
+
+	//Print command
+	if (linecheck.substr(0, 5) == "print")
+	{
+		//calculate inline math
+		buffer = Calc(LineData.substr(6).c_str());
+
+		//print line
+		skyscraper->Report(buffer.c_str());
 
 		return sNextLine;
 	}

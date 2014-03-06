@@ -119,6 +119,7 @@ bool Skyscraper::OnInit(void)
 	console = 0;
 	raised = false;
 	soundsys = 0;
+	progdialog = 0;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -210,6 +211,10 @@ int Skyscraper::OnExit()
 	if (console)
 		console->Destroy();
 	console = 0;
+
+	if (progdialog)
+		progdialog->Destroy();
+	progdialog = 0;
 
 	window->Destroy();
 	window = 0;
@@ -1596,12 +1601,20 @@ bool Skyscraper::Load()
 		return false;
 	}
 
+	//create progress dialog
+	CreateProgressDialog();
+
 	return true;
 }
 
 bool Skyscraper::Start()
 {
 	//start simulator
+
+	//close progress dialog
+	if (progdialog)
+		progdialog->Destroy();
+	progdialog = 0;
 
 	//report on missing files, if any
 	processor->ReportMissingFiles();
@@ -1943,4 +1956,14 @@ int Skyscraper::GetOffset()
 	window->GetSize(&offset, &height);
 	offset = height - clientheight;
 	return offset;
+}
+
+void Skyscraper::CreateProgressDialog()
+{
+	progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(BuildingFile.c_str()), 100, window);
+}
+
+void Skyscraper::UpdateProgress(int percent)
+{
+	progdialog->Update(percent);
 }

@@ -1358,6 +1358,22 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 	return 0;
 }
 
+int SBS::AddCustomFloor(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
+{
+	//Same as AddCustomWall, with only one altitude value value
+	std::vector<Ogre::Vector3> varray3;
+
+	//set up 3D vertex array
+	varray3.reserve(varray.size());
+	for (int i = 0; i < varray.size(); i++)
+	{
+		varray3.push_back(Ogre::Vector3(varray[i].x, altitude, varray[i].y));
+	}
+
+	//pass data on to AddCustomWall function
+	return AddCustomWall(wallobject, name, texture, varray3, tw, th);
+}
+
 int SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions

@@ -33,6 +33,7 @@
 #include <OgreMath.h>
 #include <Shapes/OgreBulletCollisionsTrimeshShape.h>
 #include <Shapes/OgreBulletCollisionsBoxShape.h>
+#include <math.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -623,6 +624,20 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 			return Ogre::Vector3(0, 0, -1);
 	}
 	return Ogre::Vector3(0, 0, 0);
+}
+
+Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance)
+{
+	//calculate 2D endpoint from given starting point, along with angle and distance (magnitude)
+	//angle is in degrees
+
+	angle -= 90;
+	float newangle = DegreesToRadians(angle);
+	float x = StartPoint.x + distance * cosf(newangle);
+	float y = -StartPoint.y + distance * sinf(newangle);
+	Ogre::Vector2 result (x, -y);
+	return result;
+
 }
 
 void WallPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)

@@ -2417,7 +2417,7 @@ will be used, and altitude/y values specified in these commands will be offsets
 of that altitude.</p>
 
 <p align="left"><br>
-<strong>a. AddTriangleWall</strong> - adds a textured triangular wall<br>
+<strong>a. AddTriangleWall</strong> - adds a textured triangular wall.  If specified in a floor section, the Y values are then relative to the floor base.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddTriangleWall
 <em>destobject, name, texturename</em>, <em>x1</em>, <em>y1</em>, <em>z1</em>,
 <em>x2</em>, <em>y2</em>, <em>z2</em>, <em>x3</em>, <em>y3</em>, <em>z3</em>,
@@ -2507,7 +2507,14 @@ Example: <font face="Courier New, Courier, mono" size="2">AddCustomWall
 external, My Wall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
 0</font></p>
 
-<p align="left"><strong>h. AddShaft</strong> - creates a shaft at a specified
+<p align="left"><strong>h. AddCustomFloor</strong> - the same as AddCustomWall, but with only one vertical parameter.  If specified while in a floor section, the altitude is relative to the current floor's base.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddCustomFloor
+<em>destobject, name, texturename, x1, z1, x2, z2, x3, z3, ..., altitude, tw,
+th</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">AddCustomFloor
+external, My Wall, brick, 0, 0, 0, 10, 10, 10, 10, 0, 0, 0, 0</font></p>
+
+<p align="left"><strong>i. AddShaft</strong> - creates a shaft at a specified
 location and floor range<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaft <em>number,
 centerx, centerz, startfloor, endfloor</em></font><br>
@@ -2520,7 +2527,7 @@ not create the actual shaft walls. Later on when you create the walls/floors
 for the shaft, make sure that you make a floor at the very bottom and very top
 of the shaft (they can extend beyond the walls).</p>
 
-<p align="left"><strong>i. CreateStairwell</strong> - creates a stairwell at a
+<p align="left"><strong>j. CreateStairwell</strong> - creates a stairwell at a
 specified location and floor range<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CreateStairwell
 <em>number, centerx, centerz, startfloor, endfloor</em></font><br>
@@ -2531,7 +2538,7 @@ Example: <font face="Courier New, Courier, mono" size="2">CreateStairwell 1,
 This command just tells the simulator the area that the stairwell will take up,
 and does not create the actual walls.</p>
 
-<p align="left"><strong>j. WallOrientation</strong> - changes the internal wall
+<p align="left"><strong>k. WallOrientation</strong> - changes the internal wall
 orientation parameter, which is used for determining the wall thickness
 boundaries in relation to their coordinates.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> WallOrientation =
@@ -2555,7 +2562,7 @@ and Z coordinates correspond to. The lower examples show the wall orientation
 as left or right, and if either the difference in x values or z values is
 larger.</p>
 
-<p align="left"><strong>k. FloorOrientation</strong> - changes the internal
+<p align="left"><strong>l. FloorOrientation</strong> - changes the internal
 floor orientation parameter, which is used for determining the floor thickness
 boundaries in relation to their coordinates.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> FloorOrientation =
@@ -2571,7 +2578,7 @@ define the floor's bottom edge, and the full thickness is the top (positive).
 If top is used, then again the coordinates define the floor's top edge, and the
 full thickness is the bottom (negative).</p>
 
-<p align="left"><strong>l. DrawWalls</strong> - specifies which parts of a wall
+<p align="left"><strong>m. DrawWalls</strong> - specifies which parts of a wall
 or floor should be drawn.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> DrawWalls =
 <em>MainNegative, MainPositive, SideNegative, SidePositive, Top,
@@ -2593,7 +2600,7 @@ horizontal from the left to the right), and that it has the same z values. With
 that, MainNegative would be the front wall, MainPositive the back, SideNegative
 the left, SidePositive the right, etc.</p>
 
-<p align="left"><strong>m. SetPlanarMapping</strong> - sets the planar texture
+<p align="left"><strong>n. SetPlanarMapping</strong> - sets the planar texture
 mapper's parameters.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping <em>Flat,
 FlipX, FlipY, FlipZ, Rotate</em></font><br>
@@ -2626,7 +2633,7 @@ FlipX value to true (ReverseExtents false, true, false, false, false). In the
 top one, I set the FlipY value to true (ReverseExtents false, false, true,
 false, false).</p>
 
-<p align="left"><strong>m. SetTextureMapping</strong> - manually sets UV
+<p align="left"><strong>o. SetTextureMapping</strong> - manually sets UV
 texture mapping for all polygons generated after this command;
 ResetTextureMapping restores the values to the defaults or previous<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetTextureMapping
@@ -2671,7 +2678,7 @@ vertex 1, etc:</p>
 <p align="left"><img src="guide/texture_mapping.jpg" width="300"
 height="300"></p>
 
-<p align="left"><strong>n. SetTextureMapping2</strong> - advanced version of
+<p align="left"><strong>p. SetTextureMapping2</strong> - advanced version of
 SetTextureMapping - manually sets UV texture mapping for all polygons generated
 after this command; ResetTextureMapping restores the values to the defaults or
 previous<br>
@@ -2699,7 +2706,7 @@ example:</p>
 x1, y1, z1 -&gt; 1, 0<br>
 x2, y2, z2 -&gt; 1, 1</font></p>
 
-<p align="left"><strong>o. ResetTextureMapping</strong> - resets the texture
+<p align="left"><strong>q. ResetTextureMapping</strong> - resets the texture
 mapping parameters to either the default or previous values<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ResetTextureMapping =
 <em>default</em></font><br>
@@ -2710,7 +2717,7 @@ true </font></p>
 reset to the default, which is shown above in the SetTextureMapping's example.
 If <em>default</em> is false, the previous values will be loaded and used.</p>
 
-<p align="left"><strong>p. ReverseAxis</strong> - this command is deprecated,
+<p align="left"><strong>r. ReverseAxis</strong> - this command is deprecated,
 and only used for older versions of the AddFloor commands, since the current
 ones have this option built-in. This reverses the axis that the difference in
 altitude/voffset for floors corresponds to. In the AddFloor command, there are
@@ -2721,7 +2728,7 @@ are different, the floor will angle upward/downward along the Z axis
 Syntax:<font face="Courier New, Courier, mono" size="2"> ReverseAxis =
 <em>value</em></font></p>
 
-<p align="left"><strong>q. ShaftCut</strong> - used in conjunction with a shaft
+<p align="left"><strong>s. ShaftCut</strong> - used in conjunction with a shaft
 object - performs a vertical box cut on all floor objects (floors, ceilings,
 interfloor, etc) in the specified range.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftCut <em>number,
@@ -2739,7 +2746,7 @@ the cut at. The example cuts a box for shaft 1, with a width from -4 to 4, and
 a length from -3.5 to 3.5, starting at the starting floor's altitude, and
 ending at 5 feet above the ending floor's altitude.</p>
 
-<p align="left"><strong>r. CutStairwell</strong> - used in conjunction with a
+<p align="left"><strong>t. CutStairwell</strong> - used in conjunction with a
 stairwell object - performs a vertical box cut on all floor objects (floors,
 ceilings, interfloor, etc) in the specified range. For the parameters, see the
 ShaftCut command.<strong><br>
@@ -2748,7 +2755,7 @@ ShaftCut command.<strong><br>
 Example: <font face="Courier New, Courier, mono" size="2">CutStairwell 1, -4,
 -3.5, 4, 3.5, 0, 5</font></p>
 
-<p align="left"><strong>s. Isect</strong> - the Isect function calculates the
+<p align="left"><strong>u. Isect</strong> - the Isect function calculates the
 position that a line intersects with a certain object, such as a floor. Since
 this is a function, it can be used in-line anywhere.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> isect(<em>destobject,
@@ -2763,7 +2770,7 @@ position, and <em>endx</em>, <em>endy</em> and <em>endz</em> make up the ending
 position. The first intersection of the named object is the return value, in
 "X, Y, Z" format (for example, "10, 1, 3").</p>
 
-<p align="left"><strong>t. SetAutoSize</strong> - enables or disables texture
+<p align="left"><strong>v. SetAutoSize</strong> - enables or disables texture
 autosizing<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetAutoSize =
 <em>AutoWidth, AutoHeight </em></font><br>
@@ -2784,7 +2791,7 @@ texture's stored "th" value is 1, then the texture will be tiled twice
 vertically. If either are true, the specified value will me multiplied by the
 related stored texture value and then autoadjusted.</p>
 
-<p align="left"><strong>u. TextureOverride</strong> - overrides textures for
+<p align="left"><strong>w. TextureOverride</strong> - overrides textures for
 the next command. Currently only works with the different AddWall, AddFloor and
 AddInterFloor commands.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> TextureOverride
@@ -2799,7 +2806,7 @@ single command such as AddWall. It will only work on the command immediately
 after this one. In the above example, the Main Positive side of the object will
 have the texture "ElevFloor", but all other sides will use "Metal1".</p>
 
-<p align="left"><strong>v. ShaftShowFloors</strong> - allows a range of floors
+<p align="left"><strong>x. ShaftShowFloors</strong> - allows a range of floors
 to be shown either while inside the specified shaft or while inside an elevator
 in the shaft - primarily for glass elevators.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftShowFloors
@@ -2813,7 +2820,7 @@ floor will be visible/enabled while they're in the elevator (since it was in
 the range specified with this command), but when they reach the 11th floor,
 that floor will be invisible/disabled.</p>
 
-<p align="left"><strong>w. ShaftShowOutside</strong> - allows objects outside
+<p align="left"><strong>y. ShaftShowOutside</strong> - allows objects outside
 the building (sky, landscape, etc) to be enabled while the user is both inside
 the specified shaft and on one of the specified floors - primarily for glass
 elevators.<br>
@@ -2833,14 +2840,14 @@ that comprise the lower (atrium) section would be specified using
 <em>ShaftShowFloors</em> (such as 1-10), while the upper (outdoor) floors would
 be specified using <em>ShaftShowOutside</em> (such as 11-20).</p>
 
-<p align="left"><strong>x. ShowFullShaft</strong> - determines if an entire
+<p align="left"><strong>z. ShowFullShaft</strong> - determines if an entire
 shaft should always be shown, such as a glass elevator track.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ShowFullShaft
 <em>ShaftNumber</em> = <em>value</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShowFullShaft 1 =
 true</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>y.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aa.
 StairsShowFloors</strong> - allows a range of floors to be shown while inside
 the specified stairwell.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> StairsShowFloors
@@ -2853,7 +2860,7 @@ visible/enabled while they're walking up (since it was in the range specified
 with this command), but when they reach the 11th floor, that floor will be
 invisible/disabled.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>z.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ab.
 ShowFullStairs</strong> - determines if an entire stairwell should be shown
 while the user is inside - useful for stairwells that have a gap in the center
 between the actual stairs.<br>
@@ -2861,7 +2868,7 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> ShowFullStairs
 <em>StairwellNumber</em> = <em>value</em></font><br>
 Example: ShowFullStairs 1 = true</p>
 
-<p align="left"><strong>aa. TextureFlip</strong> - flips specified textures for
+<p align="left"><strong>ac. TextureFlip</strong> - flips specified textures for
 the next command.. Currently only works with the different AddWall, AddFloor
 and AddInterFloor commands. The values available are 0 for no flipping, 1 for
 horizontal flip, 2 for vertical flip, and 3 for both horizontal and
@@ -2878,7 +2885,7 @@ the command immediately after this one. In the above example, the Main Positive
 and Main Negative sides of the object will have their textures flipped
 horizontally.</p>
 
-<p align="left"><strong>ab. Cut</strong> - performs a manual box cut on an
+<p align="left"><strong>ad. Cut</strong> - performs a manual box cut on an
 object<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Cut
 <em>destobject, x1, y1, z1, x2, y2, z2, cutwalls, cutfloors</em><br>
@@ -2889,7 +2896,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">Cut
 the box cut. If cutwalls is true, the function will cut walls; if cutfloors is
 true, it'll cut floors.</p>
 
-<p align="left"><strong>ac. Mount</strong> - mounts a zip file in the data
+<p align="left"><strong>ae. Mount</strong> - mounts a zip file in the data
 directory into a virtual path.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Mount
 <em>filename</em>, <em>path</em></font><br>
@@ -2900,7 +2907,7 @@ mydirectory</font></p>
 data directory will be mounted as "mydirectory", and so a file such as test.jpg
 inside that zip file will appear as "mydirectory/test.jpg".</p>
 
-<p align="left"><strong>ad. AddFloorAutoArea</strong> - defines an area that
+<p align="left"><strong>af. AddFloorAutoArea</strong> - defines an area that
 will automatically enable and disable floors when the user moves within it,
 similar to a stairwell<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
@@ -2908,7 +2915,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
 Example: <font face="Courier New, Courier, mono" size="2">AddFloorAutoArea
 -100, 0, -100, 100, 100, 100</font></p>
 
-<p align="left"><strong>ae. AddSound</strong> - creates a user-defined sound at
+<p align="left"><strong>ag. AddSound</strong> - creates a user-defined sound at
 the specified position<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddSound <em>name,
 filename, x, y, z, loop[, volume, speed, min_distance, max_distance,
@@ -2940,7 +2947,7 @@ sound outside (0.0 to 1.0, default 1.0)<em>. Direction_x</em>,
 <em>direction_y</em> and <em>direction_z</em> specify the direction of the
 sound cone.</p>
 
-<p align="left"><strong>af. GetWallExtents</strong> - the GetWallExtents
+<p align="left"><strong>ah. GetWallExtents</strong> - the GetWallExtents
 command returns the X and Z extents (minimum and maximum values) of a wall, at
 the specified altitude. The command will return the results in the MinX, MinZ,
 MaxX and MaxZ variables.<br>
@@ -2967,7 +2974,7 @@ the endpoints. The command will store the results in the MinX, MinZ, MaxX and
 MaxZ variables, which can be used anywhere in the script - to get the minimum X
 result, you'd use %minx%.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ag.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ai.
 AddAction</strong> - defines an action, to be used by custom controls and
 triggers.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> AddAction <em>name,
@@ -3016,7 +3023,7 @@ example, to open elevator 1's shaft doors on floor 2:</p>
 face="Courier New, Courier, mono" size="2">AddAction MyDoorOpen, Elevator 1,
 OpenShaftDoor, 0, 2</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ah.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aj.
 AddActionControl</strong> - creates a custom control that uses a specific
 action defined by AddAction.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionControl
@@ -3037,7 +3044,7 @@ action, and switches to the next actions in sequence when it's clicked.
 (front, left, right, back). Leave the sound field blank for no sound to be
 played.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ai.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ak.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
 the user's camera enters or leaves the defined area.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> AddTrigger <em>name,
@@ -3054,7 +3061,7 @@ consecutive action when the users enters/leaves. The X, Y and Z parameters
 specify the 3D box that defines the trigger area. Leave the sound field blank
 for no sound to be played.</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aj.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
 SetKey</strong> - specifies that the next created model will be a key. The
 model will be tagged with a specific key ID number, and when clicked, the key
 ID will be added to the user's keyring and the model will be deleted. The value
@@ -3063,7 +3070,7 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> SetKey
 <em>keyid</em></font><br>
 Example: SetKey 1</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ak.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
 SetLock</strong> - sets the lock and key parameters for subsequent doors,
 controls/buttons, and call buttons that are created.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetLock
@@ -3088,7 +3095,7 @@ If <em>keyid</em> is 0, no key is needed to lock or unlock. To reset to the
 defaults, use 0 for the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
 </p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
 Print</strong> - prints the contents of a line to the console. This command
 will still convert variables and even math expressions, and output the
 results.<br>
@@ -3097,7 +3104,7 @@ Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
 Delete</strong> - deletes an object. This command is normally used after a
 building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Delete
@@ -3106,7 +3113,7 @@ Example: <font face="Courier New, Courier, mono" size="2">Delete 12</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
 RunAction</strong> - runs an action by name. This command is normally used
 after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">RunAction
@@ -3116,7 +3123,7 @@ myaction</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
 AddActionParent</strong> - adds a parent object to an existing action. See the AddAction command for details on parent objects<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionParent
 <em>name, object</em></font><br>
@@ -3127,7 +3134,7 @@ myaction, Floors 2 to 5</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
 RemoveActionParent</strong> - removes a parent object from an existing action. See the AddAction command for details on parent objects.  This command is
 normally used after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">RemoveActionParent
@@ -3139,12 +3146,22 @@ myaction, Floors 2 to 5</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>as.
 GotoFloor</strong> - jumps the user to the specified floor. This command is
 normally used after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">GotoFloor
 <em>floor</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">GotoFloor 3</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"></p>
+
+<p align="left"><strong>at. EndPoint</strong> - the EndPoint function calculates
+endpoint coordinates given a starting point, direction (angle in degrees), and distance.<br>
+Syntax:<font face="Courier New, Courier, mono" size="2"> endpoint(<em>startx,
+starty, angle, distance</em>)</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">endpoint(-150,
+150, 180, 20)</font><br>
+Result: <font face="Courier New, Courier, mono" size="2">-150, 130</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
