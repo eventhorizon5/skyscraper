@@ -216,7 +216,7 @@ const char* Trigger::GetPositionAction(int position)
 		if (actionlist[0])
 			return actionlist[0]->GetCommandName();
 	}
-	return 0;
+	return "";
 }
 
 const char* Trigger::GetSelectPositionAction()

@@ -535,21 +535,21 @@ const Object* Action::GetParent(int number)
 const char* Action::GetParentName(int number)
 {
 	if (number < 0 || number >= (int)parent_objects.size())
-		return 0;
+		return "";
 
 	if (parent_objects[number])
 		return parent_objects[number]->GetName();
-	return 0;
+	return "";
 }
 
 const char* Action::GetParentType(int number)
 {
 	if (number < 0 || number >= (int)parent_objects.size())
-		return 0;
+		return "";
 
 	if (parent_objects[number])
 		return parent_objects[number]->GetType();
-	return 0;
+	return "";
 }
 
 int Action::GetParameterCount()
@@ -561,7 +561,7 @@ const char *Action::GetParameter(int index)
 {
 	if (index >= 0 && index < (int)command_parameters.size())
 		return command_parameters[index].c_str();
-	return 0;
+	return "";
 }
 
 bool Action::AddParent(Object *parent)

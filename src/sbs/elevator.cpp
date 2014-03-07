@@ -5559,8 +5559,7 @@ void Elevator::Down()
 Shaft* Elevator::GetShaft()
 {
 	//get associated shaft object
-	Shaft *shaft = sbs->GetShaft(AssignedShaft);
-	return shaft;
+	return sbs->GetShaft(AssignedShaft);
 }
 
 CallButton* Elevator::GetPrimaryCallButton()
