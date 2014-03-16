@@ -114,6 +114,7 @@ public:
 	ScriptProcessor* GetScriptProcessor();
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog();
+	void CloseProgressDialog();
 	void UpdateProgress(int percent);
 
 private:

@@ -212,9 +212,7 @@ int Skyscraper::OnExit()
 		console->Destroy();
 	console = 0;
 
-	if (progdialog)
-		progdialog->Destroy();
-	progdialog = 0;
+	CloseProgressDialog();
 
 	window->Destroy();
 	window = 0;
@@ -1700,6 +1698,8 @@ void Skyscraper::Unload()
 	//cleanup sound
 	StopSound();
 
+	CloseProgressDialog();
+
 	//return to main menu
 	FullScreen = false;
 	window->ShowFullScreen(FullScreen);
@@ -1961,6 +1961,14 @@ int Skyscraper::GetOffset()
 void Skyscraper::CreateProgressDialog()
 {
 	progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(BuildingFile.c_str()), 100, window);
+}
+
+void Skyscraper::CloseProgressDialog()
+{
+	//close progress dialog
+	if (progdialog)
+		progdialog->Destroy();
+	progdialog = 0;
 }
 
 void Skyscraper::UpdateProgress(int percent)
