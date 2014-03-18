@@ -436,15 +436,22 @@ breakpoint:
 			//delete current line
 			BuildingData.erase(BuildingData.begin() + line);
 
-			//insert file at current line
-			bool result = LoadDataFile(includefile.c_str(), true, line);
-			if (result == false)
+			//only load file if it hasn't already been included
+			if (IsIncluded(includefile.c_str()) == false)
 			{
-				ScriptError("File not found");
-				goto Error;
-			}
+				//insert file at current line
+				bool result = LoadDataFile(includefile.c_str(), true, line);
+				if (result == false)
+				{
+					ScriptError("File not found");
+					goto Error;
+				}
 
-			skyscraper->Report("Inserted file " + includefile);
+				skyscraper->Report("Inserted file " + includefile);
+			}
+			else
+				skyscraper->Report("File '" + includefile + "' already included");
+
 			line--;
 			goto Nextline;
 		}
@@ -456,20 +463,18 @@ breakpoint:
 			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
 
-			for (int i = 0; i < (int)functions.size(); i++)
-			{
-				if (functions[i].name == function)
-				{
-					ScriptError("Function '" + function + "' already defined");
-					goto Error;
-				}
-			}
+			bool defined = IsFunctionDefined(function.c_str());
 
-			//store function info in array
-			FunctionInfo info;
-			info.name = function;
-			info.line = line;
-			functions.push_back(info);
+			if (defined == true)
+				skyscraper->Report("Function '" + function + "' already defined");
+			else
+			{
+				//store function info in array
+				FunctionInfo info;
+				info.name = function;
+				info.line = line;
+				functions.push_back(info);
+			}
 
 			//skip to end of function
 			for (int i = line + 1; i < (int)BuildingData.size(); i++)
@@ -481,7 +486,8 @@ breakpoint:
 				}
 			}
 
-			skyscraper->Report("Defined function " + function);
+			if (defined == false)
+				skyscraper->Report("Defined function " + function);
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction == true)
@@ -7583,6 +7589,9 @@ bool ScriptProcessor::FunctionProc()
 		{
 			//found a function
 
+			if (InFunction == true)
+				return ScriptError("Nested functions not supported yet");
+
 			//store info
 			InFunction = true;
 			FunctionCallLine = line;
@@ -8312,4 +8321,29 @@ int ScriptProcessor::MathFunctions()
 	}
 
 	return true;
+}
+
+bool ScriptProcessor::IsIncluded(const char *filename)
+{
+	//return true if a file has already been included
+
+	for (int i = 0; i < (int)includes.size(); i++)
+	{
+		if (includes[i].filename == filename)
+			return true;
+	}
+	return false;
+
+}
+
+bool ScriptProcessor::IsFunctionDefined(const char *name)
+{
+	//return true if a function of the specified name has already been defined
+
+	for (int i = 0; i < (int)functions.size(); i++)
+	{
+		if (functions[i].name == name)
+			return true;
+	}
+	return false;
 }
