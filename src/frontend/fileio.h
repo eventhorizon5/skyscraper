@@ -40,7 +40,6 @@ class ScriptProcessor
 	void Reset();
 	std::vector<std::string> *GetBuildingData();
 	int MathFunctions();
-	bool IsIncluded(const char *filename);
 	bool IsFunctionDefined(const char *name);
 
 	bool IsFinished;

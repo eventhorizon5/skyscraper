@@ -162,7 +162,7 @@ Set 1 = Floor(5).Altitude</font></p>
 </font>6. Includes</strong></p>
 
 <p align="left">Other script files can be included (inserted) anywhere in the
-current script by using the &lt;Include&gt; command.</p>
+current script by using the &lt;Include&gt; command.  Scripts can be included multiple times.</p>
 
 <p align="left">Syntax:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Include
@@ -180,7 +180,7 @@ you would enter:<br>
 <p align="left">Functions can be created to share code between sections of
 scripts, and also between entire scripts when used in conjunction with
 includes. An unlimited number of parameters can be specified for each
-function.</p>
+function.  If a function is specified with the same name as a previously defined function, the function will be skipped and a warning will be printed.</p>
 
 <p align="left">Syntax:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Function

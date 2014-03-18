@@ -436,21 +436,14 @@ breakpoint:
 			//delete current line
 			BuildingData.erase(BuildingData.begin() + line);
 
-			//only load file if it hasn't already been included
-			if (IsIncluded(includefile.c_str()) == false)
+			//insert file at current line
+			bool result = LoadDataFile(includefile.c_str(), true, line);
+			if (result == false)
 			{
-				//insert file at current line
-				bool result = LoadDataFile(includefile.c_str(), true, line);
-				if (result == false)
-				{
-					ScriptError("File not found");
-					goto Error;
-				}
-
-				skyscraper->Report("Inserted file " + includefile);
+				ScriptError("File not found");
+				goto Error;
 			}
-			else
-				skyscraper->Report("File '" + includefile + "' already included");
+			skyscraper->Report("Inserted file " + includefile);
 
 			line--;
 			goto Nextline;
@@ -463,6 +456,7 @@ breakpoint:
 			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
 
+			//skip the function definition and show a warning if it's already been defined
 			bool defined = IsFunctionDefined(function.c_str());
 
 			if (defined == true)
@@ -8321,19 +8315,6 @@ int ScriptProcessor::MathFunctions()
 	}
 
 	return true;
-}
-
-bool ScriptProcessor::IsIncluded(const char *filename)
-{
-	//return true if a file has already been included
-
-	for (int i = 0; i < (int)includes.size(); i++)
-	{
-		if (includes[i].filename == filename)
-			return true;
-	}
-	return false;
-
 }
 
 bool ScriptProcessor::IsFunctionDefined(const char *name)
