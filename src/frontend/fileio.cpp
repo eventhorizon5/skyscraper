@@ -89,12 +89,10 @@ void ScriptProcessor::Reset()
 	BuildingDataOrig.clear();
 	MinExtent = 0;
 	MaxExtent = 0;
-	InFunction = false;
-	FunctionName = "";
-	FunctionCallLine = 0;
-	FunctionCallLineData = "";
-	FunctionParams.clear();
+	InFunction = 0;
+	FunctionStack.clear();
 	ReplaceLine = false;
+	ReplaceLineData = "";
 	nonexistent_files.clear();
 	ReverseAxis = false;
 	setkey = false;
@@ -135,7 +133,7 @@ bool ScriptProcessor::Run()
 
 		if (ReplaceLine == true)
 		{
-			LineData = FunctionCallLineData;
+			LineData = ReplaceLineData;
 			ReplaceLine = false;
 		}
 
@@ -158,7 +156,7 @@ bool ScriptProcessor::Run()
 			goto Nextline;
 
 		//function parameter variables
-		if (InFunction == true)
+		if (InFunction > 0)
 		{
 			startpos = 0;
 			do
@@ -194,8 +192,8 @@ bool ScriptProcessor::Run()
 
 						//replace all occurrences of the variable with it's value
 						std::string replacement;
-						if (temp4 > 0 && temp4 <= (int)FunctionParams.size())
-							replacement = FunctionParams[temp4 - 1].c_str();
+						if (temp4 > 0 && temp4 <= (int)FunctionStack[InFunction - 1].Params.size())
+							replacement = FunctionStack[InFunction - 1].Params[temp4 - 1].c_str();
 						else
 							replacement = "";
 
@@ -448,9 +446,9 @@ breakpoint:
 			line--;
 			goto Nextline;
 		}
-		if (linecheck.substr(0, 9) == "<function" && Section == 0)
+		if (linecheck.substr(0, 9) == "<function")
 		{
-			//define a function (only available outside sections)
+			//define a function
 
 			int endloc = LineData.find(">");
 			std::string function = LineData.substr(10, endloc - 10);
@@ -484,15 +482,14 @@ breakpoint:
 				skyscraper->Report("Defined function " + function);
 			goto Nextline;
 		}
-		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction == true)
+		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
 		{
 			//end function and return to original line
-			InFunction = false;
-			FunctionName = "";
-			FunctionParams.clear();
+			line = FunctionStack[InFunction - 1].CallLine - 1;
+			ReplaceLineData = FunctionStack[InFunction - 1].LineData;
+			FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
+			InFunction -= 1;
 			ReplaceLine = true;
-			line = FunctionCallLine - 1;
-			FunctionCallLine = 0;
 			goto Nextline;
 		}
 
@@ -705,7 +702,7 @@ recalc:
 		Simcore->FlipTexture = false;
 
 Nextline:
-		if (InWhile == true && InFunction == false)
+		if (InWhile == true && InFunction == 0)
 			InWhile = false;
 		else
 			line++;
@@ -796,10 +793,13 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 				functions[i].line += lines;
 		}
 
-		if (InFunction == true)
+		if (InFunction > 0)
 		{
-			if (FunctionCallLine > line)
-				FunctionCallLine += lines;
+			for (int i = 0; i < (int)FunctionStack.size(); i++)
+			{
+				if (FunctionStack[i].CallLine > line)
+					FunctionStack[i].CallLine += lines;
+			}
 		}
 
 		//store include info in array
@@ -1057,8 +1057,8 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	int linenum = line;
 	int newlinenum = line;
 	int linenum_start = 0;
-	int function_line = FunctionCallLine;
-	int newfunction_line = FunctionCallLine;
+	int function_line = 0;
+	int newfunction_line = 0;
 	int function_line_start = 0;
 	int included_lines = 0;
 	int included_lines_f = 0;
@@ -1068,6 +1068,12 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	bool isinclude_f = false;
 	std::string includefile;
 	std::string isinclude_f_file;
+
+	if (InFunction > 0)
+	{
+		function_line = FunctionStack[InFunction - 1].CallLine;
+		newfunction_line = function_line;
+	}
 
 	for (int i = 0; i < (int)includes.size(); i++)
 	{
@@ -1131,11 +1137,11 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 
 	error += "on line " + ToString2(linenum - included_lines) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context;
 
-	if (InFunction == false)
+	if (InFunction == 0)
 		error += "\nLine Text: " + LineData;
 	else
 	{
-		error += "\nFunction: " + FunctionName;
+		error += "\nFunction: " + FunctionStack[InFunction - 1].Name;
 
 		if (isinclude_f == true)
 			error += "\nFunction included in file: " + isinclude_f_file;
@@ -7616,35 +7622,35 @@ bool ScriptProcessor::FunctionProc()
 		{
 			//found a function
 
-			if (InFunction == true)
-				return ScriptError("Nested functions not supported yet");
-
 			//store info
-			InFunction = true;
-			FunctionCallLine = line;
-			FunctionName = functions[i].name;
+			InFunction += 1;
+
+			FunctionData data;
+			data.CallLine = line;
+			data.Name = functions[i].name;
 
 			//get function parameters
-			int location2 = location + (int)FunctionName.length() + 1;
+			int location2 = location + (int)data.Name.length() + 1;
 			int end_loc = LineData.find(")", location);
 			std::string newdata = LineData.substr(location2, end_loc - location2);
 			SplitString(tempdata, newdata.c_str(), ',');
 
 			//calculate inline math
-			FunctionParams.reserve(tempdata.size());
+			data.Params.reserve(tempdata.size());
 			for (temp3 = 0; temp3 < (int)tempdata.size(); temp3++)
 			{
 				buffer = Calc(tempdata[temp3].c_str());
 				TrimString(buffer);
-				FunctionParams.push_back(buffer);
+				data.Params.push_back(buffer);
 			}
 
 			//remove function statement
 			LineData = LineData.substr(0, location) + LineData.substr(end_loc + 1);
 
 			//switch to function line
-			FunctionCallLineData = LineData;
+			data.LineData = LineData;
 			line = functions[i].line;
+			FunctionStack.push_back(data);
 			return true;
 		}
 	}

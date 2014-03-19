@@ -162,7 +162,7 @@ Set 1 = Floor(5).Altitude</font></p>
 </font>6. Includes</strong></p>
 
 <p align="left">Other script files can be included (inserted) anywhere in the
-current script by using the &lt;Include&gt; command.  Scripts can be included multiple times.</p>
+current script by using the &lt;Include&gt; command.  Scripts can be included multiple times, and included scripts can include other scripts.</p>
 
 <p align="left">Syntax:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Include
@@ -188,9 +188,9 @@ function.  If a function is specified with the same name as a previously defined
 <em>(code)</em><br>
 &lt;EndFunction&gt; </font></p>
 
-<p align="left">The above is a function definition, and must be used outside of
-any sections (such as &lt;Floor&gt;) and also before the function call. To call
-the function later in your code, you use the function name followed by a list
+<p align="left">The above is a function definition, and must be used before the function call.
+Functions can be called from anywhere in the script, and can also call other functions, resulting in nested functions.
+To call the function later in your code, use the function name followed by a list
 of parameters contained within parenthesis, or just parenthesis if you're not
 passing any parameters:</p>
 

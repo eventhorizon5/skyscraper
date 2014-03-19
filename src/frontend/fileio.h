@@ -45,6 +45,15 @@ class ScriptProcessor
 	bool IsFinished;
 
 	private:
+
+	struct FunctionData
+	{
+		std::string Name;
+		int CallLine;
+		std::string LineData;
+		std::vector<std::string> Params;
+	};
+
 	int line; //line number
 	std::string LineData; //line text
 	int Current; //current range iteration
@@ -71,12 +80,10 @@ class ScriptProcessor
 	std::vector<std::string> BuildingDataOrig;
 	Ogre::Vector3 MinExtent;
 	Ogre::Vector3 MaxExtent;
-	bool InFunction;
-	std::string FunctionName;
-	int FunctionCallLine;
-	std::string FunctionCallLineData;
-	std::vector<std::string> FunctionParams;
+	int InFunction;
+	std::vector<FunctionData> FunctionStack;
 	bool ReplaceLine;
+	std::string ReplaceLineData;
 	std::vector<std::string> nonexistent_files;
 	bool CalcError;
 	bool ReverseAxis;
