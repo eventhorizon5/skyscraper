@@ -1540,12 +1540,6 @@ bool Skyscraper::SelectBuilding()
 		return false;
 	}
 
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Sleep(1000);
-#else
-	sleep(1);
-#endif
-
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
 	BuildingFile = Selector->GetFilename().mb_str().data();
 	#else
@@ -1577,13 +1571,6 @@ bool Skyscraper::Load()
 	//load building data file
 	Report("\nLoading building data from " + BuildingFile + "...\n");
 	Simcore->BuildingFilename = BuildingFile;
-
-	//Pause for 1 second
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Sleep(1000);
-#else
-	sleep(1);
-#endif
 
 	if (Reload == false)
 		BuildingFile.insert(0, "buildings/");
