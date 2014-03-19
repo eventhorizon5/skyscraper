@@ -775,11 +775,39 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 
 	if (insert == true)
 	{
+		int end = location - 1;
+		int lines = end - insert_line;
+		int parent = -1;
+
+		//adjust include end lines if included within another include
+		for (int i = 0; i < (int)includes.size(); i++)
+		{
+			if (includes[i].start_line < line && includes[i].end_line > line)
+			{
+				includes[i].end_line += lines;
+				parent = i;
+			}
+		}
+
+		//adjust function lines
+		for (int i = 0; i < (int)functions.size(); i++)
+		{
+			if (functions[i].line > line)
+				functions[i].line += lines;
+		}
+
+		if (InFunction == true)
+		{
+			if (FunctionCallLine > line)
+				FunctionCallLine += lines;
+		}
+
 		//store include info in array
 		IncludeInfo info;
 		info.filename = filename;
 		info.start_line = line;
-		info.end_line = location - 1;
+		info.end_line = end;
+		info.parent = parent;
 		includes.push_back(info);
 	}
 
@@ -1027,9 +1055,15 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//first see if the current line is from an included file
 
 	int linenum = line;
+	int newlinenum = line;
+	int linenum_start = 0;
 	int function_line = FunctionCallLine;
+	int newfunction_line = FunctionCallLine;
+	int function_line_start = 0;
 	int included_lines = 0;
 	int included_lines_f = 0;
+	int parent = -1;
+	int parent_f = -1;
 	bool isinclude = false;
 	bool isinclude_f = false;
 	std::string includefile;
@@ -1040,74 +1074,73 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		if (linenum < includes[i].start_line)
 			break;
 
-		//keep track of original script position (keep a count of how many lines are "included" lines)
-		if (linenum > includes[i].end_line)
-			included_lines += (includes[i].end_line - includes[i].start_line);
-
 		//line is part of an included file
 		if (linenum >= includes[i].start_line && linenum <= includes[i].end_line)
 		{
 			isinclude = true;
 			includefile = includes[i].filename;
-			linenum = linenum - includes[i].start_line + 1;
-			included_lines = 0;
+			newlinenum = linenum - includes[i].start_line;
+			parent = i;
+			linenum_start = includes[i].start_line;
 		}
-	}
 
-	for (int i = 0; i < (int)includes.size(); i++)
-	{
-		if (function_line < includes[i].start_line)
-			break;
-
-		//keep track of original script position (keep a count of how many lines are "included" lines)
-		if (function_line > includes[i].end_line)
-			included_lines_f += (includes[i].end_line - includes[i].start_line);
-
-		//line is part of an included file
+		//function call line is part of an included file
 		if (function_line >= includes[i].start_line && function_line <= includes[i].end_line)
 		{
 			isinclude_f = true;
 			isinclude_f_file = includes[i].filename;
-			function_line = function_line - includes[i].start_line + 1;
-			included_lines_f = 0;
+			newfunction_line = function_line - includes[i].start_line;
+			parent_f = i;
+			function_line_start = includes[i].start_line;
 		}
 	}
+
+	linenum = newlinenum;
+	function_line = newfunction_line;
+
+	//calculate number of included lines before the current line
+	for (int i = 0; i < (int)includes.size(); i++)
+	{
+		if (includes[i].parent == parent)
+		{
+			if (linenum + linenum_start > includes[i].end_line)
+				included_lines += includes[i].end_line - includes[i].start_line;
+		}
+
+		if (includes[i].parent == parent_f)
+		{
+			if (function_line + function_line_start > includes[i].end_line)
+				included_lines_f += includes[i].end_line - includes[i].start_line;
+		}
+	}
+
+	//have line numbers start from 1 instead of 0
+	linenum += 1;
+	function_line += 1;
 
 	//Script error reporting function
 	std::string error;
-	if (isinclude == false)
-	{
-		if (warning == false)
-			error = "Script error on line ";
-		else
-			error = "Script warning on line ";
 
-		if (InFunction == false)
-			error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
-		else
-		{
-			if (isinclude_f == false)
-				error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
-			else
-				error += ToString2(linenum - included_lines + 1) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction included in file: " + isinclude_f_file + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
-		}
-	}
+	if (warning == false)
+		error = "Script error ";
+	else
+		error = "Script warning ";
+
+	if (isinclude == true)
+		error += "in included file " + includefile + " ";
+
+	error += "on line " + ToString2(linenum - included_lines) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context;
+
+	if (InFunction == false)
+		error += "\nLine Text: " + LineData;
 	else
 	{
-		if (warning == false)
-			error = "Script error in included file ";
-		else
-			error = "Script warning in included file ";
+		error += "\nFunction: " + FunctionName;
 
-		if (InFunction == false)
-			error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nLine Text: " + LineData;
-		else
-		{
-			if (isinclude_f == false)
-				error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
-			else
-				error += includefile + " on line " + ToString2(linenum) + ": " + std::string(message) + "\nSection: " + ToString2(Section) + "\nContext: " + Context + "\nFunction: " + FunctionName + "\nFunction included in file: " + isinclude_f_file + "\nFunction call line: " + ToString2(function_line - included_lines_f + 1) + "\nLine Text: " + LineData;
-		}
+		if (isinclude_f == true)
+			error += "\nFunction included in file: " + isinclude_f_file;
+
+		error += "\nFunction call line: " + ToString2(function_line - included_lines_f) + "\nLine Text: " + LineData;
 	}
 
 	skyscraper->ReportError(error.c_str());

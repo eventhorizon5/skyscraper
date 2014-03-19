@@ -115,6 +115,7 @@ class ScriptProcessor
 		std::string filename;
 		int start_line;
 		int end_line;
+		int parent;
 	};
 
 	std::vector<IncludeInfo> includes; //stored include mappings
