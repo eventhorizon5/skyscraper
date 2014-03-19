@@ -450,6 +450,12 @@ breakpoint:
 		{
 			//define a function
 
+			if (Section != 0)
+			{
+				ScriptError("Cannot define a function within a section");
+				goto Error;
+			}
+
 			int endloc = LineData.find(">");
 			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
