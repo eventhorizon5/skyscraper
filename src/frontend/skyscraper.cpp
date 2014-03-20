@@ -199,7 +199,8 @@ int Skyscraper::OnExit()
 		delete mCaelumSystem;
 
 	//unload script processor
-	delete processor;
+	if (processor)
+		delete processor;
 	processor = 0;
 
 	//cleanup sound
@@ -214,7 +215,8 @@ int Skyscraper::OnExit()
 
 	CloseProgressDialog();
 
-	window->Destroy();
+	if (window)
+		window->Destroy();
 	window = 0;
 	skyscraper = 0;
 
@@ -250,9 +252,12 @@ void Skyscraper::UnloadSim()
 		console->bSend->Enable(false);
 
 	//delete simulator object
-	delete Simcore;
-	Simcore = 0;
-	Report("SBS unloaded\n");
+	if (Simcore)
+	{
+		delete Simcore;
+		Simcore = 0;
+		Report("SBS unloaded\n");
+	}
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
