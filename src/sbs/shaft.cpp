@@ -406,7 +406,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 
 	//cut external
 	voffset1 = sbs->GetFloor(startfloor)->Altitude + startvoffset;
-	voffset2 = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight() + endvoffset;
+	voffset2 = sbs->GetFloor(endfloor)->Altitude + endvoffset;
 
 	for (int i = 0; i < (int)sbs->External->Walls.size(); i++)
 	{
