@@ -1871,7 +1871,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Description = Zone 3 topside mechanical lower
     Height = 10
     InterfloorHeight = 4
-    Group = 142, 143
+    Group = 142, 143, 144
 <EndFloor>
 
 #topside mechanical upper
@@ -1882,7 +1882,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Description = Zone 3 topside mechanical upper
     Height = 15
     InterfloorHeight = 2.24
-    Group = 141, 143
+    Group = 141, 143, 144
 <EndFloor>
 
 <Floor 141>
@@ -2004,7 +2004,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     Description = Roof and mechanical penthouse
     Height = 12
     InterfloorHeight = 2.24
-    Group = 141, 142
+    Group = 141, 142, 144
 
     #Roof Base
     FloorOrientation = top
@@ -2047,11 +2047,6 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddWall ExtRight, Brick, 0.5, 20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     #SetAutoSize = true, true
 
-    #Penthouse roof
-    FloorOrientation = top
-    DrawWalls = false, true, false, false, false, false
-    AddFloor PRoof, Brick, 0.5, -20, -40, 20, 40, %fullheight%, %fullheight%, 0, 0, True
-
     #Interfloor External
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
@@ -2093,6 +2088,22 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     DrawWalls = true, true, false, false, false, false
 
     AddModel Couch, couch.mesh, true, 0, 0, -65, 0, 180, 0, 10000, 1, true, 0.1, 0.5, 0.1
+<EndFloor>
+
+<Floor 144>
+    ID = PR
+    Name = Penthouse Roof 
+    Type = Roof
+    Description = Mechanical penthouse roof
+    Height = 12
+    InterfloorHeight = 0
+    Group = 141, 142, 143
+
+    #Penthouse roof
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    AddFloor PRoof, Brick, 0.5, -20, -40, 20, 40, 0, 0, 0, 0, True
+ 
 <EndFloor>
 
 #cut roof area for penthouse floor
