@@ -435,7 +435,8 @@ breakpoint:
 			BuildingData.erase(BuildingData.begin() + line);
 
 			//insert file at current line
-			bool result = LoadDataFile(includefile.c_str(), true, line);
+			std::string filename = Simcore->VerifyFile(includefile.c_str());
+			bool result = LoadDataFile(filename.c_str(), true, line);
 			if (result == false)
 			{
 				ScriptError("File not found");
@@ -750,7 +751,16 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 #else
 	Ogre::FileSystemArchive filesystem(".", "FileSystem");
 #endif
-	Ogre::DataStreamPtr filedata = filesystem.open(filename, true);
+
+	Ogre::DataStreamPtr filedata;
+	try
+	{
+		filedata = filesystem.open(filename, true);
+	}
+	catch (Ogre::Exception &e)
+	{
+		return false;
+	}
 
 	//exit if an error occurred while loading
 	if(filedata.isNull())
