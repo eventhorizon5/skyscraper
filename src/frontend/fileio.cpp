@@ -1284,7 +1284,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
 
-		if (params < 14 || params > 14)
+		if (params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -1353,7 +1353,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
 
-		if (params < 14 || params > 14)
+		if (params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -1374,7 +1374,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 12 || params > 14)
+		if (params != 12 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -1418,7 +1418,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 10);
 
-		if (params < 9 || params > 9)
+		if (params != 9)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -1774,7 +1774,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 5 || params > 6)
+		if (params != 5 && params != 6)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -2220,7 +2220,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
 
-		if (params < 4 || params > 5)
+		if (params != 4 && params != 5)
 			return ScriptError("Incorrect number of parameters");
 
 		if (params == 4)
@@ -2532,7 +2532,7 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true, 1);
 
-		if (params < 14 || params > 15)
+		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -3202,7 +3202,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 12 || params > 14)
+		if (params != 12 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -3245,7 +3245,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
-		if (params < 12 || params > 14)
+		if (params != 12 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -3297,7 +3297,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
-		if (params < 12 || params > 14)
+		if (params != 12 && params != 14)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -3349,7 +3349,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 19);
 
-		if (params < 11 || params > 13)
+		if (params != 11 && params != 13)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -3714,7 +3714,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
 
-		if (params < 11 || params > 15)
+		if (params < 11 || params == 12 || params > 15)
 			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
@@ -3849,7 +3849,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 24);
 
-		if (params < 18 || params > 19)
+		if (params != 18 && params != 19)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -3903,7 +3903,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 13);
 
-		if (params < 5 || params > 10)
+		if (params != 5 && params != 6 && params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		int compat = 0;
@@ -3969,7 +3969,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
 
-		if (params < 8 || params > 9)
+		if (params != 8 && params != 9)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -4105,7 +4105,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 22);
 
-		if (params < 18 || params > 19)
+		if (params != 18 && params != 19)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -4178,7 +4178,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true, 1);
 
-		if (params < 14 || params > 15)
+		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -4234,7 +4234,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 15, true, 2);
 
-		if (params < 15 || params > 16)
+		if (params != 15 && params != 16)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -4296,7 +4296,7 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 14, true, 2);
 
-		if (params < 15 || params > 16)
+		if (params != 15 && params != 16)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -5805,7 +5805,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 11 || params > 13)
+		if (params != 11 && params != 13)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -5869,7 +5869,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
 
-		if (params < 10 || params > 11)
+		if (params != 10 && params != 11)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -6252,7 +6252,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 10);
 
-		if (params < 9 || params > 11)
+		if (params != 9 && params != 11)
 			return ScriptError("Incorrect number of parameters");
 
 		float hoffset = 0, voffset = 0;
@@ -6353,7 +6353,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
 
-		if (params < 6 || params > 7)
+		if (params != 6 && params != 7)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -6393,7 +6393,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 25);
 
-		if (params < 17 || params > 18)
+		if (params != 17 && params != 18)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -6566,7 +6566,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
 
-		if (params < 17 || params > 18)
+		if (params != 17 && params != 18)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -6601,7 +6601,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 23);
 
-		if (params < 17 || params > 18)
+		if (params != 17 && params != 18)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -6780,7 +6780,7 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true, 1);
 
-		if (params < 14 || params > 15)
+		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
 
 		bool compat = false;
@@ -6944,7 +6944,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 5, false);
 
-		if (params < 4 || params > 5)
+		if (params != 4 && params != 5)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7023,7 +7023,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 14, false);
 
-		if (params < 7 || params > 8)
+		if (params != 7 && params != 8)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7051,7 +7051,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
 
-		if (params < 4 || params > 5)
+		if (params != 4 && params != 5)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7073,7 +7073,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 9, false);
 
-		if (params < 6 || params > 7)
+		if (params != 6 && params != 7)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7109,7 +7109,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 8, false);
 
-		if (params < 14 || params > 15)
+		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7140,7 +7140,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 13, false);
 
-		if (params < 16 || params > 17)
+		if (params != 16 && params != 17)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7188,7 +7188,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
 
-		if (params < 8 || params > 9)
+		if (params != 8 && params != 9)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7211,7 +7211,7 @@ int ScriptProcessor::ProcTextures()
 		//get data
 		int params = SplitData(LineData.c_str(), 11, false);
 
-		if (params < 9 || params > 10)
+		if (params != 9 && params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
