@@ -51,7 +51,6 @@ class Stats: public wxDialog
 		wxStaticText* StaticText14;
 		wxStaticText* StaticText15;
 		wxTextCtrl* tSBSVersion;
-		wxTextCtrl* tStartTime;
 		wxStaticText* StaticText17;
 		wxTextCtrl* tElevators;
 		wxTextCtrl* tVersion;
@@ -88,7 +87,6 @@ class Stats: public wxDialog
 		wxStaticText* StaticText6;
 		wxTextCtrl* tShafts;
 		wxButton* bOK;
-		wxStaticText* StaticText19;
 		wxStaticText* StaticText9;
 		wxStaticText* StaticText11;
 		wxStaticText* StaticText25;
@@ -140,8 +138,6 @@ class Stats: public wxDialog
 		static const long ID_tInShaft;
 		static const long ID_STATICTEXT13;
 		static const long ID_tRunningTime;
-		static const long ID_STATICTEXT19;
-		static const long ID_tStartTime;
 		static const long ID_STATICTEXT20;
 		static const long ID_tFrontendVersion;
 		static const long ID_STATICTEXT23;

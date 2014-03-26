@@ -78,8 +78,6 @@ const long Stats::ID_STATICTEXT12 = wxNewId();
 const long Stats::ID_tInShaft = wxNewId();
 const long Stats::ID_STATICTEXT13 = wxNewId();
 const long Stats::ID_tRunningTime = wxNewId();
-const long Stats::ID_STATICTEXT19 = wxNewId();
-const long Stats::ID_tStartTime = wxNewId();
 const long Stats::ID_STATICTEXT20 = wxNewId();
 const long Stats::ID_tFrontendVersion = wxNewId();
 const long Stats::ID_STATICTEXT23 = wxNewId();
@@ -103,7 +101,7 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	wxFlexGridSizer* FlexGridSizer4;
 	wxFlexGridSizer* FlexGridSizer3;
 	wxStaticBoxSizer* StaticBoxSizer1;
-	
+
 	Create(parent, wxID_ANY, _("Simulator Statistics"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
@@ -202,10 +200,6 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText13, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tRunningTime = new wxTextCtrl(this, ID_tRunningTime, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tRunningTime"));
 	FlexGridSizer2->Add(tRunningTime, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText19 = new wxStaticText(this, ID_STATICTEXT19, _("Start Time:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT19"));
-	FlexGridSizer2->Add(StaticText19, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	tStartTime = new wxTextCtrl(this, ID_tStartTime, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tStartTime"));
-	FlexGridSizer2->Add(tStartTime, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText20 = new wxStaticText(this, ID_STATICTEXT20, _("Frontend Ver:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT20"));
 	FlexGridSizer2->Add(StaticText20, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tFrontendVersion = new wxTextCtrl(this, ID_tFrontendVersion, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tFrontendVersion"));
@@ -226,7 +220,7 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
-	
+
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Stats::On_bOK_Click);
 	//*)
 	OnInit();
@@ -267,7 +261,6 @@ void Stats::Loop()
 	tInElevator->SetValue(wxString::FromAscii(BoolToString(Simcore->InElevator)));
 	tInShaft->SetValue(wxString::FromAscii(BoolToString(Simcore->InShaft)));
 	tRunningTime->SetValue(TruncateNumber(Simcore->running_time, 2));
-	tStartTime->SetValue(TruncateNumber(Simcore->start_time, 2));
 	tObjects->SetValue(wxVariant(Simcore->GetObjectCount()).GetString());
 	tWalls->SetValue(wxVariant(Simcore->GetWallCount()).GetString());
 	tPolygons->SetValue(wxVariant(Simcore->GetPolygonCount()).GetString());
