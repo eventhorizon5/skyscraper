@@ -1731,10 +1731,8 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	String strExt;
 
 	size_t pos = filename.find_last_of(".");
-	if( pos != String::npos && pos < (filename.length() - 1))
-	{
+	if (pos != String::npos && pos < (filename.length() - 1))
 		strExt = filename.substr(pos+1);
-	}
 
 	//srcImg.load(filename, resGroup);
 	DataStreamPtr encoded = ResourceGroupManager::getSingleton().openResource(filename, resGroup);
@@ -1772,9 +1770,9 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	uchar* pixelData = OGRE_ALLOC_T(uchar, PixelUtil::getMemorySize(width, height, 1, PF_A8R8G8B8), MEMCATEGORY_GENERAL);
 	unsigned long pxDataIndex = 0, pxDataIndexStep = (unsigned long)PixelUtil::getNumElemBytes(PF_A8R8G8B8);
 
-	for(unsigned int y = 0; y < height; ++y)
+	for(unsigned int y = 0; y < height; y++)
 	{
-		for(unsigned int x = 0; x < width; ++x)
+		for(unsigned int x = 0; x < width; x++)
 		{
 			ColourValue pixCol = srcImg.getColourAt(x, y, 0);
 			ColourValue diffCol = pixCol - keyCol2;

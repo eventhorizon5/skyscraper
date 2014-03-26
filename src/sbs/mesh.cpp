@@ -805,13 +805,13 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 							{
 								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
 								if (!materialPtr.isNull())
-				                {
+								{
 									sbs->Report("Loading material " + match);
-				                    //materialPtr->compile();
-				                    materialPtr->load();
+									//materialPtr->compile();
+									materialPtr->load();
 									materialPtr->setLightingEnabled(false);
 									//materialPtr->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
-				                }
+								}
 							}
 						}
 					}
@@ -2007,14 +2007,14 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 	vertex_count = index_count = 0;
 
 	// Calculate how many vertices and indices we're going to need
-	for ( unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
+	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); i++)
 	{
 		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
 
 		// We only need to add the shared vertices once
-		if(submesh->useSharedVertices)
+		if (submesh->useSharedVertices)
 		{
-			if( !added_shared )
+			if (!added_shared)
 			{
 				vertex_count += (int)mesh->sharedVertexData->vertexCount;
 				added_shared = true;
@@ -2036,7 +2036,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 	added_shared = false;
 
 	// Run through the submeshes again, adding the data into the arrays
-	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); ++i)
+	for (unsigned short i = 0; i < mesh->getNumSubMeshes(); i++)
 	{
 		Ogre::SubMesh* submesh = mesh->getSubMesh(i);
 		Ogre::VertexData* vertex_data = submesh->useSharedVertices ? mesh->sharedVertexData : submesh->vertexData;
@@ -2060,7 +2060,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 
 			float* pReal;
 
-			for( size_t j = 0; j < vertex_data->vertexCount; ++j, vertex += vbuf->getVertexSize())
+			for (size_t j = 0; j < vertex_data->vertexCount; j++, vertex += vbuf->getVertexSize())
 			{
 				posElem->baseVertexPointerToElement(vertex, &pReal);
 				Ogre::Vector3 pt(pReal[0], pReal[1], pReal[2]);
@@ -2084,16 +2084,16 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 
 		size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset;
 
-		if ( use32bitindexes )
+		if (use32bitindexes)
 		{
-			for ( size_t k = 0; k < numTris*3; ++k)
+			for (size_t k = 0; k < numTris * 3; k++)
 			{
 				indices[index_offset++] = pLong[k] + static_cast<unsigned long>(offset);
 			}
 		}
 		else
 		{
-			for ( size_t k = 0; k < numTris*3; ++k)
+			for (size_t k = 0; k < numTris * 3; k++)
 			{
 				indices[index_offset++] = static_cast<unsigned long>(pShort[k]) + static_cast<unsigned long>(offset);
 			}

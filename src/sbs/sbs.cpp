@@ -728,30 +728,30 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		{
 			//left
 			v5.x += thickness;
-            v6.x += thickness;
-            v7.x += thickness;
-            v8.x += thickness;
+			v6.x += thickness;
+			v7.x += thickness;
+			v8.x += thickness;
 		}
 		if (wall_orientation == 1)
 		{
 			//center
 			float half = thickness / 2;
 			v1.x -= half;
-            v2.x -= half;
-            v3.x -= half;
-            v4.x -= half;
-            v5.x += half;
-            v6.x += half;
-            v7.x += half;
-            v8.x += half;
+			v2.x -= half;
+			v3.x -= half;
+			v4.x -= half;
+			v5.x += half;
+			v6.x += half;
+			v7.x += half;
+			v8.x += half;
 		}
 		if (wall_orientation == 2)
 		{
 			//right
 			v1.x -= thickness;
-            v2.x -= thickness;
-            v3.x -= thickness;
-            v4.x -= thickness;
+			v2.x -= thickness;
+			v3.x -= thickness;
+			v4.x -= thickness;
 		}
 	}
 
@@ -4217,6 +4217,6 @@ void SBS::UnregisterControl(Control *control)
 		{
 			control_index.erase(control_index.begin() + i);
 			i--;
-		};
+		}
 	}
 }

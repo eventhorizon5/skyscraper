@@ -814,15 +814,13 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	else
 		AddWall("FillerWallLeft", texture, 0, x1, z1, x1, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
+
 	sbs->DrawWalls(true, false, false, false, false, false);
 	if (direction == false)
-	{
 		AddWall("FillerWallRight", texture, 0, x1, z2, x2, z2, height, height, voffset, voffset, tw, th, false);
-	}
 	else
-	{
 		AddWall("FillerWallRight", texture, 0, x2, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
-	}
+
 	AddFloor("FillerWallTop", texture, 0, x1, z1, x2, z2, height + voffset, height + voffset, false, false, tw, th, false);
 	sbs->ResetWalls();
 }

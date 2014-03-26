@@ -42,14 +42,13 @@ const char* itoa(int value, char* str, int radix)
 }
 
 //strrev the standard way
-
 const char* strrev(char* szT)
 {
-	if ( !szT )	// handle null passed strings.
+	if (!szT)	// handle null passed strings.
 		return "";
 	int i = strlen(szT);
-	int t = !(i%2)? 1 : 0;	// check the length of the string .
-	for(int j = i-1 , k = 0 ; j > (i/2 -t) ; j-- )
+	int t = !(i % 2) ? 1 : 0;	// check the length of the string .
+	for(int j = i - 1, k = 0; j > (i / 2 - t); j--)
 	{
 		char ch = szT[j];
 		szT[j] = szT[k];
@@ -64,7 +63,7 @@ const char* StrRev(char* szT)
 	string s(szT);
 	reverse(s.begin(), s.end());
 	strncpy(szT, s.c_str(), s.size());
-	szT[s.size()+1] = '\0';
+	szT[s.size() + 1] = '\0';
 	return szT;
 }
 
