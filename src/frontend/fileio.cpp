@@ -732,7 +732,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 {
 	//loads a building data file into the runtime buffer
 	int location = insert_line;
-	std::string Filename = filename;
+	std::string Filename = Simcore->VerifyFile(filename);
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
@@ -755,7 +755,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	Ogre::DataStreamPtr filedata;
 	try
 	{
-		filedata = filesystem.open(filename, true);
+		filedata = filesystem.open(Filename.c_str(), true);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -766,7 +766,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	if(filedata.isNull())
 		return false;
 
-	Ogre::DataStreamPtr file(new Ogre::MemoryDataStream(filename, filedata, true, true));
+	Ogre::DataStreamPtr file(new Ogre::MemoryDataStream(Filename.c_str(), filedata, true, true));
 
 	while (file->eof() == false)
 	{
@@ -820,7 +820,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 
 		//store include info in array
 		IncludeInfo info;
-		info.filename = filename;
+		info.filename = Filename.c_str();
 		info.start_line = line;
 		info.end_line = end;
 		info.parent = parent;
