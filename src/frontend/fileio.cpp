@@ -4743,7 +4743,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->ElevatorSpeed))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->ElevatorSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4751,7 +4752,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->Acceleration))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->Acceleration))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4759,7 +4761,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->Deceleration))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->Deceleration))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4771,11 +4774,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->OpenSpeed))
+		std::string str2 = Calc(temp2.c_str());
+		if (!IsNumeric(str2.c_str(), elev->GetDoor(temp3)->OpenSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4783,7 +4788,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->NumDoors))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->NumDoors))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4791,7 +4797,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->AccelJerk))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->AccelJerk))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4799,7 +4806,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->DecelJerk))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->DecelJerk))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4891,7 +4899,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->AssignedShaft))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->AssignedShaft))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4903,11 +4912,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->DoorTimer))
+		std::string str2 = Calc(temp2.c_str());
+		if (!IsNumeric(str2.c_str(), elev->GetDoor(temp3)->DoorTimer))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4919,11 +4930,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->QuickClose))
+		std::string str2 = Calc(temp2.c_str());
+		if (!IsNumeric(str2.c_str(), elev->GetDoor(temp3)->QuickClose))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4935,11 +4948,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->NudgeTimer))
+		std::string str2 = Calc(temp2.c_str());
+		if (!IsNumeric(str2.c_str(), elev->GetDoor(temp3)->NudgeTimer))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4951,11 +4966,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->SlowSpeed))
+		std::string str2 = Calc(temp2.c_str());
+		if (!IsNumeric(str2.c_str(), elev->GetDoor(temp3)->SlowSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4967,11 +4984,13 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
 			return ScriptError("Invalid door number");
-		if (!IsNumeric(temp2.c_str(), elev->GetDoor(temp3)->ManualSpeed))
+		std::string str2 = Calc(temp2.c_str());
+		if (!IsNumeric(str2.c_str(), elev->GetDoor(temp3)->ManualSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
@@ -4983,6 +5002,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
@@ -5002,6 +5022,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
@@ -5021,6 +5042,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
@@ -5354,6 +5376,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
@@ -5374,6 +5397,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
@@ -5393,6 +5417,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
 		TrimString(str);
+		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
 		if (temp3 == 0 || temp3 > elev->NumDoors)
@@ -5530,7 +5555,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		int floortemp;
-		if (!IsNumeric(temp2.c_str(), floortemp))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetRecallFloor(floortemp);
 		return sNextLine;
@@ -5540,7 +5566,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		int floortemp;
-		if (!IsNumeric(temp2.c_str(), floortemp))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetAlternateRecallFloor(floortemp);
 		return sNextLine;
@@ -5550,7 +5577,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		int floortemp;
-		if (!IsNumeric(temp2.c_str(), floortemp))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), floortemp))
 			return ScriptError("Invalid value");
 		elev->SetACPFloor(floortemp);
 		return sNextLine;
@@ -5656,7 +5684,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float leveling;
-		if (!IsNumeric(temp2.c_str(), leveling))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingSpeed = leveling;
 		return sNextLine;
@@ -5666,7 +5695,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float leveling;
-		if (!IsNumeric(temp2.c_str(), leveling))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOffset = leveling;
 		return sNextLine;
@@ -5676,7 +5706,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float leveling;
-		if (!IsNumeric(temp2.c_str(), leveling))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), leveling))
 			return ScriptError("Invalid value");
 		elev->LevelingOpen = leveling;
 		return sNextLine;
@@ -5686,7 +5717,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float notify;
-		if (!IsNumeric(temp2.c_str(), notify))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), notify))
 			return ScriptError("Invalid value");
 		elev->NotifyEarly = notify;
 		return sNextLine;
@@ -5696,7 +5728,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float delay;
-		if (!IsNumeric(temp2.c_str(), delay))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), delay))
 			return ScriptError("Invalid value");
 		elev->DepartureDelay = delay;
 		return sNextLine;
@@ -5706,7 +5739,8 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		float delay;
-		if (!IsNumeric(temp2.c_str(), delay))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), delay))
 			return ScriptError("Invalid value");
 		elev->ArrivalDelay = delay;
 		return sNextLine;
@@ -5731,7 +5765,8 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		if (!IsNumeric(temp2.c_str(), elev->InspectionSpeed))
+		std::string str = Calc(temp2.c_str());
+		if (!IsNumeric(str.c_str(), elev->InspectionSpeed))
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
