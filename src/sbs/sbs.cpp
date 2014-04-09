@@ -3885,9 +3885,10 @@ Action* SBS::AddAction(const std::string name, std::vector<Object*> &action_pare
 	return action;
 }
 
-std::vector<Action*> SBS::GetAction(const std::string name)
+std::vector<Action*> SBS::GetAction(std::string name)
 {
 	//get action by name
+	ReplaceAll(name, " ", "");
 	std::vector<Action*> actionlist;
 	for (int i = 0; i < (int)ActionArray.size(); i++)
 	{

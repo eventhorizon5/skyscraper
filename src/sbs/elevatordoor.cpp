@@ -67,6 +67,9 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	NudgeTimer = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.NudgeTimer", 30);
 	nudgesound_loaded = false;
 	chimesound_loaded = 0;
+	sensor = 0;
+	EnableSensor = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true);
+	SensorSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.SensorSound", "");
 
 	//create main door object
 	Doors = new DoorWrapper(this, false);
@@ -109,6 +112,13 @@ ElevatorDoor::~ElevatorDoor()
 	if (nudgetimer)
 		delete nudgetimer;
 	nudgetimer = 0;
+
+	if (sensor)
+	{
+		sensor->object->parent_deleting = true;
+		delete sensor;
+	}
+	sensor = 0;
 
 	if (doorsound)
 	{
@@ -998,6 +1008,14 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	}
 	else
 		chime->SetPosition(Ogre::Vector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
+
+	//create door sensor
+	if (EnableSensor == true && ShaftDoor == false && elev->AutoDoors == true)
+	{
+		Ogre::Vector3 min (x1, wrapper->altitude, z1);
+		Ogre::Vector3 max (x2, wrapper->altitude + wrapper->Height, z2);
+		CreateSensor(min, max);
+	}
 
 	return wrapper->object;
 }
@@ -1973,9 +1991,10 @@ int ElevatorDoor::GetManualIndex(int floor)
 	return -1;
 }
 
-void ElevatorDoor::Hold()
+void ElevatorDoor::Hold(bool disable_nudge)
 {
 	//hold door (basically turn off timer)
+	//disable nudge mode timer if specified
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
@@ -1990,7 +2009,8 @@ void ElevatorDoor::Hold()
 
 	sbs->Report("Elevator " + ToString2(elev->Number) + ": holding doors" + doornumber);
 
-	nudgetimer->Stop();
+	if (disable_nudge == true)
+		nudgetimer->Stop();
 	timer->Stop();
 }
 
@@ -2031,4 +2051,33 @@ bool ElevatorDoor::GetNudgeStatus()
 	//get status of nudge mode
 
 	return nudge_enabled;
+}
+
+void ElevatorDoor::CheckSensor()
+{
+	if (sensor && (AreDoorsOpen() == true || OpenDoor != 0))
+		sensor->Check();
+}
+
+void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
+{
+	//create action for elevator door
+	std::string elev_name = elev->object->GetName();
+	std::string action_name1 = "sensor " + ToString2(Number);
+	std::string action_name2 = "reset " + ToString2(Number);
+	std::string full_name1 = elev_name + ":" + action_name1;
+	std::string full_name2 = elev_name + ":" + action_name2;
+
+	std::vector<Object*> parents;
+	parents.push_back(elev->object);
+	Action *action = sbs->AddAction(full_name1, parents, action_name1);
+	action = sbs->AddAction(full_name2, parents, action_name2);
+
+	std::vector<std::string> actions;
+	actions.push_back(full_name2);
+	actions.push_back(full_name1);
+
+	//create new trigger
+	sensor = new Trigger(object, "Sensor", SensorSound.c_str(), area_min, area_max, actions);
+	sensor->Move(elev->Origin);
 }

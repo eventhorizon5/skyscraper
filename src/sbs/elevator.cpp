@@ -1399,6 +1399,13 @@ void Elevator::MonitorLoop()
 		}
 	}
 
+	//process door sensors
+	for (int i = 0; i < (int)DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+			DoorArray[i]->CheckSensor();
+	}
+
 	//elevator movement
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
@@ -4543,9 +4550,10 @@ bool Elevator::IsQueued(int floor)
 	return false;
 }
 
-void Elevator::HoldDoors(int number)
+void Elevator::HoldDoors(int number, bool disable_nudge)
 {
 	//hold specified door, or all if "0" is given
+	//disable nudge mode timer if specified
 
 	int start, end;
 	if (number == 0)
@@ -4561,7 +4569,7 @@ void Elevator::HoldDoors(int number)
 	for (int i = start; i <= end; i++)
 	{
 		if (GetDoor(i))
-			GetDoor(i)->Hold();
+			GetDoor(i)->Hold(disable_nudge);
 		else
 			Report("Invalid door " + ToString2(i));
 	}

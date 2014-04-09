@@ -28,6 +28,7 @@
 
 #include "timer.h"
 #include "sound.h"
+#include "trigger.h"
 
 class Elevator;
 
@@ -115,6 +116,8 @@ public:
 	Ogre::Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)
 	float ManualSpeed; //manual speed multiplier
 	float SlowSpeed; //slow speed multiplier, mainly for nudge mode
+	bool EnableSensor; //enable door sensor
+	std::string SensorSound; //door sensor sound
 
 	ElevatorDoor(int number, Elevator* elevator);
 	~ElevatorDoor();
@@ -123,7 +126,7 @@ public:
 	void OpenDoors(int whichdoors = 1, int floor = 0, bool manual = false);
 	void CloseDoors(int whichdoors = 1, int floor = 0, bool manual = false);
 	void StopDoors();
-	void Hold();
+	void Hold(bool disable_nudge = true);
 	void ShaftDoorsEnabled(int floor, bool value);
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool AreDoorsOpen();
@@ -160,6 +163,8 @@ public:
 	bool GetNudgeStatus();
 	int GetManualIndex(int floor);
 	float GetShaftDoorAltitude(int floor);
+	void CheckSensor();
+	void CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
 
 private:
 
@@ -211,6 +216,9 @@ private:
 	bool nudge_enabled;
 	bool nudgesound_loaded;
 	int chimesound_loaded;
+
+	//door sensor
+	Trigger *sensor;
 };
 
 #endif

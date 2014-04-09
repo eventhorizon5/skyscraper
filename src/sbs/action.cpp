@@ -349,6 +349,21 @@ bool Action::DoAction()
 					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
 				elevator->HoldDoors(number);
 			}
+			if (StartsWith(command_name, "sensor", false) == true && elevator->Direction == 0)
+			{
+				int number = 0;
+				if (command_name.length() > 6)
+					number = atoi(command_name.substr(6, command_name.length() - 6).c_str());
+				elevator->OpenDoors(number);
+				elevator->HoldDoors(number, false);
+			}
+			if (StartsWith(command_name, "reset", false) == true && elevator->Direction == 0)
+			{
+				int number = 0;
+				if (command_name.length() > 5)
+					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				elevator->ResetDoorTimer(number);
+			}
 			if (command_name == "openshaftdoor")
 			{
 				if (command_parameters.size() == 2)

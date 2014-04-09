@@ -4773,7 +4773,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -4784,7 +4783,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid value");
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 5) == "doors")
+	if (linecheck.substr(0, 6) == "doors ")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -4911,7 +4910,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -4929,7 +4927,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -4947,7 +4944,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -4965,7 +4961,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -4983,7 +4978,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(11, LineData.find("=", 0) - 11);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -5001,7 +4995,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(9, LineData.find("=", 0) - 9);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -5021,7 +5014,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -5041,7 +5033,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -5375,7 +5366,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -5396,7 +5386,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(12, LineData.find("=", 0) - 12);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -5416,7 +5405,6 @@ int ScriptProcessor::ProcElevators()
 		if (elev->Created == false)
 			return ScriptError("Elevator not created yet");
 		std::string str = LineData.substr(14, LineData.find("=", 0) - 14);
-		TrimString(str);
 		str = Calc(str.c_str());
 		if (!IsNumeric(str.c_str(), temp3))
 			return ScriptError("No door specified");
@@ -5808,6 +5796,35 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		elev->FloorHold = Ogre::StringConverter::parseBool(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 10) == "doorsensor")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		if (elev->Created == false)
+			return ScriptError("Elevator not created yet");
+
+		std::string str = LineData.substr(10, LineData.find("=", 0) - 10);
+		str = Calc(str.c_str());
+		if (!IsNumeric(str.c_str(), temp3))
+			return ScriptError("No door specified");
+		if (temp3 == 0 || temp3 > elev->NumDoors)
+			return ScriptError("Invalid door number");
+
+		int params = SplitAfterEquals(LineData.c_str());
+		if (params < 1 || params > 2)
+			return ScriptError("Incorrect number of parameters");
+
+		elev->GetDoor(temp3)->EnableSensor = Ogre::StringConverter::parseBool(tempdata[0]);
+		if (params == 2)
+		{
+			//check to see if file exists
+			CheckFile(std::string("data/" + tempdata[1]).c_str());
+			//set door sound
+			elev->GetDoor(temp3)->SensorSound = tempdata[1];
+		}
 		return sNextLine;
 	}
 

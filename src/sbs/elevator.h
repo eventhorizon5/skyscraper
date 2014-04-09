@@ -221,7 +221,7 @@ public:
 	void OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
 	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
 	void StopDoors(int number = 0);
-	void HoldDoors(int number = 0);
+	void HoldDoors(int number = 0, bool disable_nudge = true);
 	void ShaftDoorsEnabled(int number, int floor, bool value);
 	void ShaftDoorsEnabledRange(int number, int floor, int range);
 	bool AreDoorsOpen(int number = 0);

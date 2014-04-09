@@ -1875,6 +1875,16 @@ elevator will immediately stop. This is used to mimic a modern manual elevator
 Syntax: <font face="Courier New, Courier, mono" size="2">FloorHold =
 true</font></p>
 
+<p align="left"><strong>69. DoorSensor</strong> - enable or disable the door sensor
+(electric eye), which is a trigger object placed in the elevator door area.  Default
+is enabled for automatic doors.  A second parameter specifies the sound file to play
+- only specify the first parameter for no sound.  This must be specified after
+the CreateElevator command.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">DoorSensor
+<em>doornumber</em> = <em>enable[, filename]</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">DoorSensor 1 =
+true, click.wav</font></p>
+
 <p></p>
 
 <p align="left"><strong>Commands:</strong></p>
@@ -2048,7 +2058,7 @@ played.</p>
 <em>Stop</em> (put elevator in stop state)<br>
 <em>EStop</em> (emergency stop)<br>
 <em>Alarm</em><br>
-<em>Fire1Off</em> (fire service phase 1 off for all elevators in same bank, aka
+<em>Fire1Off</em> (fire service phase 1 off for all elevators in same bank, which means
 all served by first call button on recall floor)<br>
 <em>Fire1On</em> (fire service phase 1 on for all elevators in same bank)<br>
 <em>Fire1Bypass</em> (fire service phase 1 bypass for all elevators in same
@@ -2081,10 +2091,12 @@ bank)<br>
 <em>Up</em> (move up for manual elevator)<br>
 <em>Down</em> (move down for manual elevator)<br>
 <em>InterlocksOn</em> (enable interlocks)<br>
-<em>InterlocksOff</em> (disable interlocks)</p>
+<em>InterlocksOff</em> (disable interlocks)<br>
+<em>Sensor</em> (open and hold doors, used by door sensor)<br>
+<em>Reset</em> (reset door timer which turns off hold, also used by door sensor)</p>
 
 <p align="left">In the above list, <em>Open</em>, <em>Close</em>, related
-commands such as <em>OpenInt</em> and <em>OpenManual</em>, and <em>Hold</em>
+commands such as <em>OpenInt</em> and <em>OpenManual</em>, <em>Hold</em>, <em>Sensor</em>, and <em>Reset</em>
 can have the door number after the name - for example, <em>Open2</em> will open
 door 2, while <em>Open</em> will open all doors.<br>
 <br>

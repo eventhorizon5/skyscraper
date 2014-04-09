@@ -355,7 +355,7 @@ public:
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Action* AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
 	Action* AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command);
-	std::vector<Action*> GetAction(const std::string name);
+	std::vector<Action*> GetAction(std::string name);
 	Action* GetAction(int index);
 	int GetActionCount();
 	bool AddActionParent(const std::string name, std::vector<Object*> &parents);
