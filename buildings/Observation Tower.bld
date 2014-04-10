@@ -77,6 +77,16 @@
     Load data/metal080.jpg, MainPanelBack, 0.5, 0.5
     Load data/cutston.jpg, ShaftWall, 0.269, 0.25
     Load data/cutston.jpg, ColumnTexture, 0.269, 0.25
+    Load data/fire2keyoff.png, Fire2Off, 1, 1
+    Load data/fire2keyon.png, Fire2On, 1, 1
+    Load data/fire2keyhold.png, Fire2Hold, 1, 1
+    Load data/fire1keyoff.png, Fire1Off, 1, 1
+    Load data/fire1keyon.png, Fire1On, 1, 1
+    Load data/fire1keybypass.png, Fire1Bypass, 1, 1
+    Load data/runkey.png, RunKey, 1, 1
+    Load data/stopkey.png, StopKey, 1, 1
+    Load data/indservkeyon.png, IndOn, 1, 1
+    Load data/indservkeyoff.png, IndOff, 1, 1
 
     #floor indicator/button pictures
     Load data/black.jpg, Black, 1, 1
@@ -173,7 +183,7 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
     if[%floor% > 9 & %floor% < 46] AddFloor ExtFloor, Brick, 0.5, -%6%, -%6%, %6%, -%5%, 0, 0, 0, 0, True
     if[%floor% > 9 & %floor% < 46] AddFloor ExtFloor, Brick, 0.5, -%6%, %5%, %6%, %6%, 0, 0, 0, 0, True
 
-    if[%floor% = 46] AddFloor Floor, Brick, 0.5, -%5%, -%5%, %5%, %5%, 0, 0, 0, 0, True
+    if[%floor% = 46] AddFloor Floor, Brick, 0.5, -%5%, -%5%, %5%, %5%, %interfloorheight%, %interfloorheight%, 0, 0, True
     if[%floor% > 100] AddFloor Floor, FloorTex, 0.5, -%5%, -%5%, %5%, %5%, 0, 0, 0, 0, False
 
     FloorOrientation = bottom
@@ -422,16 +432,17 @@ ShowFullShaft 3 = true
 	AddWall Shaft1LeftE, Wall1, 0.33, -5, -4.125 + 10 - 0.33, -5, -2 + 10 + 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
 	AddWall Shaft1FrontE, Wall1, 0.33, -5 - 0.33, -4.125 + 10, 5 + 0.33, -4.125 + 10, %fullheight%, %fullheight%, 0, 0, 0, 0, False
 	WallOrientation = left
-	DrawWalls = false, true, false, false, false, false
+	DrawWalls = false, true, false, true, false, false
 	AddWall Shaft1RightE, Wall1, 0.33, 5, -4.125 + 10 - 0.33, 5, -2 + 10 + 0.33, %fullheight%, %fullheight%, 0, 0, 0, 0, False
 <EndFloors>
 <Floors 103 to 104>
 	WallOrientation = right
-	DrawWalls = true, false, false, false, false, false
+	DrawWalls = true, false, false, true, false, false
 	AddWall Shaft1LeftE, Wall1, 0.33, -5, -4.125 + 10 - 0.33, -5, -2 + 10 + 0.33, %height%, %height%, 0, 0, 0, 0, False
+	DrawWalls = true, false, false, false, false, false
 	AddWall Shaft1FrontE, Wall1, 0.33, -5 - 0.33, -4.125 + 10, 5 + 0.33, -4.125 + 10, %height%, %height%, 0, 0, 0, 0, False
 	WallOrientation = left
-	DrawWalls = false, true, false, false, false, false
+	DrawWalls = false, true, false, true, false, false
 	AddWall Shaft1RightE, Wall1, 0.33, 5, -4.125 + 10 - 0.33, 5, -2 + 10 + 0.33, %height%, %height%, 0, 0, 0, 0, False
 <EndFloors>
 
@@ -522,7 +533,7 @@ ShowFullShaft 3 = true
     ServicedFloors = 0, 9, 46, 101 - 103
     AssignedShaft = 1
     LevelingOpen = 0.2
-    CreateElevator false, 0, 10 - 0.294, 0
+    CreateElevator true, 0, -0.294, 0
 
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -553,18 +564,23 @@ ShowFullShaft 3 = true
 
     AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -3.301 - 0.2 - 0.66 - 0.001, 6, front, 0.5, 1, true, 0, 0
 
-    CreatePanel ElevPanel, 10, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddButton 1, switch.wav, Button104, ButtonLit104, 2, 3, 103, 1, 1
-    AddButton 1, switch.wav, Button103, ButtonLit103, 3, 3, 102, 1, 1
-    AddButton 1, switch.wav, Button102, ButtonLit102, 4, 3, 101, 1, 1
-    AddButton 1, switch.wav, Button47, ButtonLit47, 5, 3, 46, 1, 1
-    AddButton 1, switch.wav, Button10, ButtonLit10, 6, 3, 9, 1, 1
-    AddButton 1, switch.wav, ButtonC, ButtonLitC, 7, 3, 0, 1, 1
-    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
-    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, , ButtonCancel, ButtonCancel, 9, 2, cancel, 1, 1
-    AddButton 1, , ButtonStop, ButtonStop, 9, 3, stop, 1, 1
-    AddButton 1, , ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+
+    CreatePanel ElevPanel, 11, 5, back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
+    AddButton 1, switch.wav, Button104, ButtonLit104, 3, 3, 103, 1, 1
+    AddButton 1, switch.wav, Button103, ButtonLit103, 4, 3, 102, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 5, 3, 101, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 6, 3, 46, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 7, 3, 9, 1, 1
+    AddButton 1, switch.wav, ButtonC, ButtonLitC, 8, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 9, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 9, 4, close, 1, 1
+    AddButton 1, , ButtonCancel, ButtonCancel, 10, 2, cancel, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 10, 3, stop, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 10, 4, alarm, 1, 1
 
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
    
@@ -579,7 +595,7 @@ ShowFullShaft 3 = true
     ServicedFloors = 0, 9, 46, 101 - 103
     AssignedShaft = 2
     LevelingOpen = 0.2
-    CreateElevator false, -10 + 0.294, 0, 0
+    CreateElevator true, 0.294, 0, 0
 
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -596,12 +612,13 @@ ShowFullShaft 3 = true
     AddWall Front, ElevWall, 0.2, -3, -3.5, 3, -3.5, 8, 8, 0, 0, 0, 0 #left wall
     AddWall Left, ElevWall, 0.2, -3, -3.5, -3, 3.5, 8, 8, 0, 0, 0, 0 #right wall
 
+    WallOrientation = right
     DrawWalls = true, true, false, true, false, false
     AddWall Left Panel, ElevPanelMain, 0.2, 3, -3.5, 3, -1.75, 8, 8, 0, 0, 0, 0 #left panel
     DrawWalls = true, true, true, false, false, false
     AddWall Right Panel, ElevPanelMain, 0.2, 3, 1.75, 3, 3.5, 8, 8, 0, 0, 0, 0 #right panel
     
-    WallOrientation = right
+    WallOrientation = left
     elevdoor_center(1, ElevDoors, Black, 0.2, 3.01, 0, 3.5, 8, right, 0.3, false)
     elevdoor_center(1, ElevDoors, Black, 0.2, 3.301, 0, 3.5, 8, right, 0.3, true)
 
@@ -610,18 +627,23 @@ ShowFullShaft 3 = true
 
     AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, 3.301 + 0.2 + 0.66 + 0.001, -3, 6, right, 0.5, 1, true, 0, 0
 
-    CreatePanel ElevPanel, 10, 5, left, 3 - 0.2 - 0.001, -1.75 - 0.875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddButton 1, switch.wav, Button104, ButtonLit104, 2, 3, 103, 1, 1
-    AddButton 1, switch.wav, Button103, ButtonLit103, 3, 3, 102, 1, 1
-    AddButton 1, switch.wav, Button102, ButtonLit102, 4, 3, 101, 1, 1
-    AddButton 1, switch.wav, Button47, ButtonLit47, 5, 3, 46, 1, 1
-    AddButton 1, switch.wav, Button10, ButtonLit10, 6, 3, 9, 1, 1
-    AddButton 1, switch.wav, ButtonC, ButtonLitC, 7, 3, 0, 1, 1
-    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
-    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, , ButtonCancel, ButtonCancel, 9, 2, cancel, 1, 1
-    AddButton 1, , ButtonStop, ButtonStop, 9, 3, stop, 1, 1
-    AddButton 1, , ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddFloorSigns 0, true, Button, front, 3.301 + 0.2 + 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, 3.301 + 0.2 + 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+
+    CreatePanel ElevPanel, 11, 5, left, 3 - 0.2 - 0.001, -1.75 - 0.875 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
+    AddButton 1, switch.wav, Button104, ButtonLit104, 3, 3, 103, 1, 1
+    AddButton 1, switch.wav, Button103, ButtonLit103, 4, 3, 102, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 5, 3, 101, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 6, 3, 46, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 7, 3, 9, 1, 1
+    AddButton 1, switch.wav, ButtonC, ButtonLitC, 8, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 9, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 9, 4, close, 1, 1
+    AddButton 1, , ButtonCancel, ButtonCancel, 10, 2, cancel, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 10, 3, stop, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 10, 4, alarm, 1, 1
 
     AddFloorIndicator left, 3 - 0.2 - 0.001, -1.75 - 0.875 + 0.1, 0.7, 0.5, 6.5   
 <EndElevator>
@@ -635,7 +657,7 @@ ShowFullShaft 3 = true
     ServicedFloors = 0, 9, 46, 101 - 103
     AssignedShaft = 3
     LevelingOpen = 0.2
-    CreateElevator false, 10 - 0.294, 0, 0
+    CreateElevator true, -0.294, 0, 0
 
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -666,18 +688,23 @@ ShowFullShaft 3 = true
 
     AddDirectionalIndicators true, false, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3.301 - 0.2 - 0.66 - 0.001, 3, 6, left, 0.5, 1, true, 0, 0
 
-    CreatePanel ElevPanel, 10, 5, right, -3 + 0.2 + 0.001, 1.75 + 0.875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddButton 1, switch.wav, Button104, ButtonLit104, 2, 3, 103, 1, 1
-    AddButton 1, switch.wav, Button103, ButtonLit103, 3, 3, 102, 1, 1
-    AddButton 1, switch.wav, Button102, ButtonLit102, 4, 3, 101, 1, 1
-    AddButton 1, switch.wav, Button47, ButtonLit47, 5, 3, 46, 1, 1
-    AddButton 1, switch.wav, Button10, ButtonLit10, 6, 3, 9, 1, 1
-    AddButton 1, switch.wav, ButtonC, ButtonLitC, 7, 3, 0, 1, 1
-    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
-    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, , ButtonCancel, ButtonCancel, 9, 2, cancel, 1, 1
-    AddButton 1, , ButtonStop, ButtonStop, 9, 3, stop, 1, 1
-    AddButton 1, , ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddFloorSigns 0, true, Button, front, -3.301 - 0.2 - 0.33, 3.5 / 2 - 0.01, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, back, -3.301 - 0.2 - 0.33, -3.5 / 2 + 0.01, 0.5, 0.42, 5.5
+
+    CreatePanel ElevPanel, 11, 5, right, -3 + 0.2 + 0.001, 1.75 + 0.875 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
+    AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
+    AddButton 1, switch.wav, Button104, ButtonLit104, 3, 3, 103, 1, 1
+    AddButton 1, switch.wav, Button103, ButtonLit103, 4, 3, 102, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 5, 3, 101, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 6, 3, 46, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 7, 3, 9, 1, 1
+    AddButton 1, switch.wav, ButtonC, ButtonLitC, 8, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 9, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 9, 4, close, 1, 1
+    AddButton 1, , ButtonCancel, ButtonCancel, 10, 2, cancel, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 10, 3, stop, 1, 1
+    AddButton 1, , ButtonAlarm, ButtonAlarm, 10, 4, alarm, 1, 1
 
     AddFloorIndicator right, -3 + 0.2 + 0.001, 1.75 + 0.875 - 0.1, 0.7, 0.5, 6.5   
 <EndElevator>
@@ -701,3 +728,4 @@ ShowFullShaft 3 = true
     CallButtonElevators = 1, 2, 3
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, 3, 10 - 4.125 - 0.33 - 0.1, 4, front, 0.5, 1, true, 0, 0
 <EndFloors>
+
