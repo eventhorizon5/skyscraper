@@ -1330,13 +1330,17 @@ void ElevatorDoor::Loop()
 
 void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
-	//moves doors
+	//move doors
 
 	SBS_PROFILE("ElevatorDoor::Move");
 	for (int i = 0; i < (int)Doors->doors.size(); i++)
 	{
 		Doors->doors[i]->mesh->Move(position, relative_x, relative_y, relative_z);
 	}
+
+	//move door sensor
+	if (sensor)
+		sensor->Move(position, relative_x, relative_y, relative_z);
 }
 
 Ogre::Vector3 ElevatorDoor::GetPosition()
