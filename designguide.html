@@ -49,18 +49,18 @@ also allow the user to view the building in 3D as it's being created.</p>
 building</font></strong></p>
 
 <p align="left">Buildings are stored in text files in Skyscraper's
-<em>buildings</em> folder, usually at c:\program files\skyscraper\buildings on
-Windows, or in the "buildings" directory on Unix. The filenames end in BLD, and
-so you need to make sure your text file ends with ".bld" and not ".txt". To
+<em>buildings</em> folder, usually at "c:\program files\skyscraper\buildings"
+on Windows, or in the "buildings" directory on Unix. The filenames end in BLD,
+and so you need to make sure your text file ends with ".bld" and not ".txt". To
 create a new building, first open up a text editor, and read the instructions
 below. When you're finished, save it into the <em>buildings</em> folder shown
-above, as something like "mybuilding.bld". The building will appear in
-Skyscraper's buildings list the next time you run it. A simplistic building is
-included for you to get a good idea of the overall format of a typical building
-data file. You might also want to open one of the other buildings that come
-with Skyscraper ("Triton Center.bld", "Glass Tower.bld", etc) for examples on
-the more advanced functions. Please note that the script syntax will change in
-the future.</p>
+above, as something like "mybuilding.bld". The building will appear when you
+choose "Other buildings..." in Skyscraper's main menu the next time you run it.
+A simplistic building is included for you to get a good idea of the overall
+format of a typical building data file. You might also want to open one of the
+other buildings that come with Skyscraper ("Triton Center.bld", "Glass
+Tower.bld", etc) for examples on the more advanced functions. Please note that
+the script syntax will change in the future.</p>
 
 <p align="left"> </p>
 
@@ -76,7 +76,7 @@ before your comment. For example:<br>
 <p align="left">It's a good idea to use comment markers to add a title header
 at the top of your building file. The Triton Center file has this header:<br>
 <font face="Courier New, Courier, mono" size="2">#The Triton Center<br>
-#Copyright ©2003-2010 Ryan Thoryk</font></p>
+#Copyright ©2002-2013 Ryan Thoryk</font></p>
 
 <p align="left"><br>
 <strong>2. Variables</strong></p>
@@ -148,12 +148,13 @@ the script, by referencing the floor in this manner:</p>
 <p align="left"><font face="Courier New, Courier, mono"
 size="2">Floor(<em>number</em>).<em>parameter</em></font></p>
 
-<p align="left">Available parameters are Base, Altitude, Height, FullHeight and
-InterfloorHeight. Note that this function must only be called after the
-specified floor has been created.<br>
-If the InterfloorOnTop parameter in the globals section is set to 'false' (the
-default), then Base refers to the floor's altitude plus interfloor height;
-otherwise it refers to the altitude.</p>
+<p align="left">Available parameters are <em>Base</em>, <em>Altitude</em>,
+<em>Height</em>, <em>FullHeight</em> and <em>InterfloorHeight</em>. Note that
+this function must only be called after the specified floor has been
+created.<br>
+If the <em>InterfloorOnTop</em> parameter in the globals section is set to
+'false' (the default), then <em>Base</em> refers to the floor's altitude plus
+interfloor height; otherwise it refers to the altitude.</p>
 
 <p align="left">Example:<font face="Courier New, Courier, mono" size="2"><br>
 Set 1 = Floor(5).Altitude</font></p>
@@ -162,7 +163,8 @@ Set 1 = Floor(5).Altitude</font></p>
 </font>6. Includes</strong></p>
 
 <p align="left">Other script files can be included (inserted) anywhere in the
-current script by using the &lt;Include&gt; command.  Scripts can be included multiple times, and included scripts can include other scripts.</p>
+current script by using the &lt;Include&gt; command. Scripts can be included
+multiple times, and included scripts can include other scripts.</p>
 
 <p align="left">Syntax:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Include
@@ -179,8 +181,10 @@ you would enter:<br>
 
 <p align="left">Functions can be created to share code between sections of
 scripts, and also between entire scripts when used in conjunction with
-includes. An unlimited number of parameters can be specified for each
-function.  If a function is specified with the same name as a previously defined function, the function will be skipped and a warning will be printed. This can only be used outside of any section, such as &lt;Floor&gt;.</p>
+includes. An unlimited number of parameters can be specified for each function.
+If a function is specified with the same name as a previously defined function,
+the function will be skipped and a warning will be printed. This can only be
+used outside of any section, such as &lt;Floor&gt;.</p>
 
 <p align="left">Syntax:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Function
@@ -188,11 +192,12 @@ function.  If a function is specified with the same name as a previously defined
 <em>(code)</em><br>
 &lt;EndFunction&gt; </font></p>
 
-<p align="left">The above is a function definition, and must be used before the function call.
-Functions can be called from anywhere in the script, and can also call other functions, resulting in nested functions.
-To call the function later in your code, use the function name followed by a list
-of parameters contained within parenthesis, or just parenthesis if you're not
-passing any parameters:</p>
+<p align="left">The above is a function definition, and must be used before the
+function call. Functions can be called from anywhere in the script, and can
+also call other functions, resulting in nested functions. To call the function
+later in your code, use the function name followed by a list of parameters
+contained within parenthesis, or just parenthesis if you're not passing any
+parameters:</p>
 
 <p align="left">Syntax:<br>
 <em>name</em>(<em>parameter1</em>, <em>parameter2</em>, ...)<br>
@@ -471,9 +476,9 @@ mywindows, true, 1, 1<br>
 windows_spec.png as a specular mask (which needs to be a file that contains an
 alpha blended image that is used to determine how the blending texture applies
 to the original texture), and loads a texture to blend as sky.jpg (see
-Skyscraper's data folder for examples of this). The spherical parameter
-determines if the texture is spherically mapped (true) or planar mapped
-(false). The values <em>tile_x</em> and <em>tile_y</em> are per-texture
+Skyscraper's data folder for examples of this). The <em>spherical</em>
+parameter determines if the texture is spherically mapped (true) or planar
+mapped (false). The values <em>tile_x</em> and <em>tile_y</em> are per-texture
 multipliers. For example, if you set <em>tile_x</em> to 2, and you specify a
 texture width (tw) of 2 during an <em>AddFloor</em> command later, the tiling
 value will be 4 (2 times 2), and the texture will be repeated 4 times
@@ -493,10 +498,10 @@ Skyscraper's data/materials folder, and are all automatically loaded on
 startup. The material definitions (the example being testmat.material) contain
 a material name along with the texture processing parameters. The material name
 specified in this command needs to match the one in the material definition you
-want to use; the example file is named "testmat". Name is the standard texture
-name you want to map it to, to use with other commands. The other commands are
-the same as in previous commands. For more information on how to make material
-definition scripts, see the <a
+want to use; the example file is named "testmat". <em>Name</em> is the standard
+texture name you want to map it to, to use with other commands. The other
+commands are the same as in previous commands. For more information on how to
+make material definition scripts, see the <a
 href="http://www.ogre3d.org/docs/manual/manual_14.html#Material-Scripts">OGRE
 manual's "Material Scripts" section</a>.</p>
 
@@ -510,27 +515,29 @@ h_align, v_align, ColorR, ColorG, ColorB[, force</em></font><em>]<br>
 Button100, nimbus_sans.ttf, 47, 100, -1, -1, -1, -1, center, center, 255, 255,
 255</font></p>
 
-<p align="left">With this command, texture_name is the name of the previously
-loaded texture to draw text onto (loaded with either Load or LoadRange). Name
-is the name to call this new texture. Font_filename is the filename of the font
-to use - fonts are in Skyscraper's data/fonts directory. X1, y1, x2, and y2 are
-coordinate values mainly used to position the text in a boxed area, with the
-position of 0, 0 (x 0, y 0) being on the top left.. If any value is -1, the
-dimension of the texture will be used (so in this example, the loaded texture
-has a size of 128x128 pixels, and so the values are 0, 0, 128, 128). This will
-place the text in the center of the texture image, but to position it
-elsewhere, specify the pixel box to place it in. H_align and v_align determine
-the alignment of the text - for h_align, it can either be "left", "right" or
-"center", and for v_align either "top", "bottom" or "center". ColorR, ColorG
-and ColorB determine the color of the text, and the values range from 0 to 255.
-If all values are 255, the text is white, and if all values are 0, then it's
-black. The <em>force</em> value is optional, and if set to false, autosizing
-will always be disabled for this texture; if set to true, autosizing will
-always be enabled. Note that the source texture needs to be a power-of-two
-size, such as 128x128, 256x256, 512x512, etc - this is because the work is done
-directly on the graphics card, and the majority of cards only support those
-kinds of sizes. Normal textures loaded with the Load command are internally
-resized by Crystal Space before use, and don't have that limitation.</p>
+<p align="left">With this command, <em>texture_name</em> is the name of the
+previously loaded texture to draw text onto (loaded with either Load or
+LoadRange). <em>Name</em> is the name to call this new texture.
+<em>Font_filename</em> is the filename of the font to use - fonts are in
+Skyscraper's data/fonts directory. <em>X1</em>, <em>y1</em>, <em>x2</em>, and
+<em>y2</em> are coordinate values mainly used to position the text in a boxed
+area, with the position of 0, 0 (x 0, y 0) being on the top left.. If any value
+is -1, the dimension of the texture will be used (so in this example, the
+loaded texture has a size of 128x128 pixels, and so the values are 0, 0, 128,
+128). This will place the text in the center of the texture image, but to
+position it elsewhere, specify the pixel box to place it in. <em>H_align</em>
+and <em>v_align</em> determine the alignment of the text - for h_align, it can
+either be "left", "right" or "center", and for v_align either "top", "bottom"
+or "center". <em>ColorR</em>, <em>ColorG</em> and <em>ColorB</em> determine the
+color of the text, and the values range from 0 to 255. If all values are 255,
+the text is white, and if all values are 0, then it's black. The <em>force</em>
+value is optional, and if set to false, autosizing will always be disabled for
+this texture; if set to true, autosizing will always be enabled. Note that the
+source texture needs to be a power-of-two size, such as 128x128, 256x256,
+512x512, etc - this is because the work is done directly on the graphics card,
+and the majority of cards only support those kinds of sizes. Normal textures
+loaded with the Load command are internally resized before use, and don't have
+that limitation.</p>
 
 <p align="left"><strong>7. AddTextRange</strong> - similar to LoadRange, but
 draws text onto a texture<br>
@@ -570,14 +577,14 @@ single texture, by drawing one on top of the other. <em>Texture_name</em>
 specifies the original source texture name to use (all textures must be loaded
 beforehand), <em>overlay_texture_name</em> specifies the texture to draw on top
 of the source texture, and <em>name</em> specifies the name of the new texture.
-X and Y determine the position to place the top-left of the new image at (since
-position 0, 0 is the top left of the image), and width and height determine the
-size in pixels of the overlay texture. In the above example, the "Brick2"
-texture is drawn on top of the "Brick1" texture, starting at pixel position 25,
-25, with a width of 50 and a height of 50. The resulting texture is called
-"NewBrick". The <em>force</em> value is optional, and if set to false,
-autosizing will always be disabled for this texture; if set to true, autosizing
-will always be enabled.</p>
+<em>X</em> and <em>Y</em> determine the position to place the top-left of the
+new image at (since position 0, 0 is the top left of the image), and
+<em>width</em> and <em>height</em> determine the size in pixels of the overlay
+texture. In the above example, the "Brick2" texture is drawn on top of the
+"Brick1" texture, starting at pixel position 25, 25, with a width of 50 and a
+height of 50. The resulting texture is called "NewBrick". The <em>force</em>
+value is optional, and if set to false, autosizing will always be disabled for
+this texture; if set to true, autosizing will always be enabled.</p>
 
 <p align="left"><strong>10. Rotate</strong> - sets a texture's rotation to a
 set amount. This can be used with other texture modifiers.<br>
@@ -598,9 +605,9 @@ speed<br>
 </em></font>Example: <font face="Courier New, Courier, mono"
 size="2">RotateAnim Brick1, 0.2</font></p>
 
-<p align="left">This command sets the texture's animated rotation value. Speed
-is in rotations per second. In the example, the Brick1 texture's rotation
-animation is set to 0.2 rotations per second.</p>
+<p align="left">This command sets the texture's animated rotation value.
+<em>Speed</em> is in rotations per second. In the example, the Brick1 texture's
+rotation animation is set to 0.2 rotations per second.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>12.
 Scroll</strong> - set's a texture's fixed scrolling value. This can be used
@@ -622,9 +629,9 @@ x_speed, y_speed<br>
 </em></font>Example: <font face="Courier New, Courier, mono"
 size="2">ScrollAnim Brick1, 1, 1</font></p>
 
-<p align="left">The speed values are the number of full scrolls per second. In
-the example, the Brick1 texture will scroll to the right once per second, and
-up once per second.</p>
+<p align="left">The <em>speed</em> values are the number of full scrolls per
+second. In the example, the Brick1 texture will scroll to the right once per
+second, and up once per second.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>14.
 Scale</strong> - sets a texture's scaling factor. This can be used with other
@@ -675,9 +682,9 @@ size of the wave.</p>
 <p align="left"><strong><font size="+1"><a name="Floor"></a>5. The
 <em>Floor</em> Sections</font></strong></p>
 
-<p align="left">There are 2 <em>Floor</em> sections available - <em>Floor</em>
-and <em>Floors</em>. <em>Floor</em> specifies a single floor, while
-<em>Floors</em> specifies a range of floors.<br>
+<p align="left">The Floor section can either be defined as a single floor,
+using the <em>Floor</em> name, or as a range of floors, using the
+<em>Floors</em> name.<br>
 For a single floor, the section would start with this:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Floor
 <em>number</em>&gt;</font><br>
@@ -849,9 +856,9 @@ Example: <font face="Courier New, Courier, mono" size="2">AddShaftFloor 1, My
 Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, false, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, and the
-<em>number</em> value is the shaft number to use. The x1, z1, x2, and z2
-parameters are offsets of the shaft's origin (similar to creating elevator
-walls and floors)</p>
+<em>number</em> value is the shaft number to use. The <em>x1</em>, <em>z1</em>,
+<em>x2,</em> and <em>z2</em> parameters are offsets of the shaft's origin
+(similar to creating elevator walls and floors)</p>
 
 <p align="left"><strong>7. AddShaftWall</strong> - adds a textured wall to the
 specified shaft, on the current floor<br>
@@ -861,9 +868,9 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftWall
 <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em></font></p>
 
 <p align="left">The parameters are the same as the AddWall command, and the
-<em>number</em> value is the shaft number to use. Also, the x1, z1, x2, and z2
-parameters are offsets of the shaft's origin (similar to creating elevator
-walls and floors)</p>
+<em>number</em> value is the shaft number to use. Also, the <em>x1</em>,
+<em>z1</em>, <em>x2,</em> and <em>z2</em> parameters are offsets of the shaft's
+origin (similar to creating elevator walls and floors)</p>
 
 <p align="left"><strong>8. AddStairsFloor</strong> - adds a textured floor to
 the specified stairwell, on the current floor<br>
@@ -885,9 +892,9 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsWall
 <em>voffset1</em>, <em>voffset2</em>, <em>tw</em>, <em>th</em></font></p>
 
 <p align="left">The parameters are the same as the AddWall command, and the
-<em>number</em> value is the stairwell number to use. Also, the x1, z1, x2, and
-z2 parameters are offsets of the stairwell's origin (similar to creating
-elevator walls and floors) </p>
+<em>number</em> value is the stairwell number to use. Also, the <em>x1</em>,
+<em>z1</em>, <em>x2</em>, and <em>z2</em> parameters are offsets of the
+stairwell's origin (similar to creating elevator walls and floors) </p>
 
 <p align="left"><strong>10. ColumnWallBox</strong> - creates 4 walls (box) at
 the specified coordinate locations, as part of the current floor's columnframe
@@ -1028,7 +1035,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsDoor
 <p align="left"><em>Number</em> specifies the stairwell number.
 <em>Direction</em> specifies the direction the door faces and also the
 direction it opens. For values of this, look at the AddDoor command above.
-Leave the sound fields blank for no sounds to be played.</p>
+Leave the <em>sound</em> fields blank for no sounds to be played.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>17.
 AddShaftStdDoor</strong> - adds a standard textured door for the specified
@@ -1039,11 +1046,12 @@ elevator shaft doors.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftStdDoor
 <em>number, opensound, closesound, open, texturename, thickness</em>,
 <em>direction, speed, CenterX</em>, <em>CenterZ</em>, <em>width</em>,
-<em>height</em>, <em>voffset</em>, <em>tw</em>,
-<em>th</em></font><em>Number</em> specifies the stairwell number.
-<em>Direction</em> specifies the direction the door faces and also the
-direction it opens. For values of this, look at the AddDoor command above.
-Leave the sound fields blank for no sounds to be played.</p>
+<em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th</em></font><em><br>
+<br>
+Number</em> specifies the stairwell number. <em>Direction</em> specifies the
+direction the door faces and also the direction it opens. For values of this,
+look at the AddDoor command above. Leave the <em>sound</em> fields blank for no
+sounds to be played.</p>
 
 <p align="left"><strong>17. AddDirectionalIndicator</strong> - creates a single
 elevator directional indicator/lantern on the current floor (similar to the
@@ -1059,9 +1067,9 @@ UpLight, UpLightOn, DownLight, DownLightOn, -3, -4.162, 6, front, 0.5, 1, true,
 0, 0</em></font></p>
 
 <p align="left">This command will create a directional indicator on the current
-floor (if ActiveDirection is false, then it'll only create it if the elevator
-serves that floor). It'll also automatically create the up and down lights
-depending on the floor.</p>
+floor (if <em>ActiveDirection</em> is false, then it'll only create it if the
+elevator serves that floor). It'll also automatically create the up and down
+lights depending on the floor.</p>
 
 <p align="left"><em>Elevator</em> specifies the elevator to create the
 indicators for.</p>
@@ -1126,17 +1134,18 @@ on the floor, and also for only creating shaft doors on one side if an elevator
 serves a specific floor. The <em>SetShaftDoors</em> command in the elevator
 section must be used before using this command. Parameters such as width,
 height, and direction are taken from the <em>AddDoors</em> command (so the
-regular elevator doors need to be created first). The voffset parameter allows
-you to create shaft doors at a different vertical position than the base of the
-floor, and the elevator will automatically stop according to the shaft door's
-voffset for that floor. These doors should be moved slightly away from the
-elevator doors (to separate them both). Also, this command cuts any shaft walls
-that are within the door area (and so this must be called after the shaft walls
-are created). <em>Number</em> specifies the number of the door to create
-(related to the <em>Doors</em> command) - if the elevator only has one door, or
-if the <em>Doors</em> command was not used, specify 1 here. Note that for
-filler walls to be created automatically, the names of the surrounding walls
-(shaft and outer floor walls) must contain the word "Shaft".</p>
+regular elevator doors need to be created first). The <em>voffset</em>
+parameter allows you to create shaft doors at a different vertical position
+than the base of the floor, and the elevator will automatically stop according
+to the shaft door's voffset for that floor. These doors should be moved
+slightly away from the elevator doors (to separate them both). Also, this
+command cuts any shaft walls that are within the door area (and so this must be
+called after the shaft walls are created). <em>Number</em> specifies the number
+of the door to create (related to the <em>Doors</em> command) - if the elevator
+only has one door, or if the <em>Doors</em> command was not used, specify 1
+here. Note that for filler walls to be created automatically, the names of the
+surrounding walls (shaft and outer floor walls) must contain the word
+"Shaft".</p>
 
 <p align="left"><strong>19. AddFloorIndicator</strong> - creates a floor
 indicator associated with a specific elevator<br>
@@ -1151,34 +1160,34 @@ direction the indicator faces, and can be either "left", "right", "front" or
 "back". <em>Relative</em> determines if the <em>CenterX</em> and
 <em>CenterZ</em> values are relative of the elevator's center or not. This
 command can be given multiple times to create multiple indicators.
-Texture_prefix is the base name of the texture to load when displaying a floor
-ID; for example if the indicator is on floor 3, and you specify a prefix of
-"Button", it'll load the "Button3" texture.</p>
+<em>Texture_prefix</em> is the base name of the texture to load when displaying
+a floor ID; for example if the indicator is on floor 3, and you specify a
+prefix of "Button", it'll load the "Button3" texture.</p>
 
 <p align="left"><strong>20. Cut</strong> - performs a manual box cut on an area
 within the current floor<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">Cut <em>x1, y1, z1, x2,
-y2, z2, cutwalls, cutfloors</em><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Cut <em>x1, y1, z1,
+x2, y2, z2, cutwalls, cutfloors</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">Cut -5, -5,
 -5, 5, 5, 5, false, true</font></p>
 
-<p align="left">The x, y and z values specify the start and end coordinates of
-the box cut. The Y values are relative to the current floor's altitude. If
-cutwalls is true, the function will cut walls; if cutfloors is true, it'll cut
-floors.</p>
+<p align="left">The <em>x</em>, <em>y</em> and <em>z</em> values specify the
+start and end coordinates of the box cut. The Y values are relative to the
+current floor's altitude. If <em>cutwalls</em> is true, the function will cut
+walls; if <em>cutfloors</em> is true, it'll cut floors.</p>
 
 <p align="left"><strong>21. CutAll</strong> - performs a manual box cut on all
 objects associated with the current floor (the level itself, interfloor,
 shafts, stairs and external)<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">CutAll <em>x1, y1, z1, x2,
-y2, z2, cutwalls, cutfloors</em><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">CutAll <em>x1, y1, z1,
+x2, y2, z2, cutwalls, cutfloors</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">CutAll -5, -5,
 -5, 5, 5, 5, false, true</font></p>
 
-<p align="left">The x, y and z values specify the start and end coordinates of
-the box cut. The Y values are relative to the current floor's altitude. If
-cutwalls is true, the function will cut walls; if cutfloors is true, it'll cut
-floors.</p>
+<p align="left">The <em>x</em>, <em>y</em> and <em>z</em> values specify the
+start and end coordinates of the box cut. The Y values are relative to the
+current floor's altitude. If <em>cutwalls</em> is true, the function will cut
+walls; if <em>cutfloors</em> is true, it'll cut floors.</p>
 
 <p align="left"><strong>22. AddFillerWalls</strong> - helper function to add
 fillers around a door's cut location. When a door is created, the wall in it's
@@ -1186,15 +1195,15 @@ location is cut to provide space; after the cut, the sides are open (if the
 wall has thickness) - this creates a covering wall on each side and a floor
 above the door frame to fill the area.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddFillerWalls
-<em>texture, thickness, CenterX, CenterZ, width, height, voffset, direction, tw,
-th</em><br>
+<em>texture, thickness, CenterX, CenterZ, width, height, voffset, direction,
+tw, th</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">AddFillerWalls
 ConnectionWall, 0.5, -10, 0, 3.5, 8, 0, true, 0, 0</font></p>
 
 <p align="left">The parameters in this function are similar to the related
-door's parameters. Direction is either true if the door faces the front/back
-(width is along the X axis), or false if the door faces left/right (width is
-along the Z axis).</p>
+door's parameters. <em>Direction</em> is either true if the door faces the
+front/back (width is along the X axis), or false if the door faces left/right
+(width is along the Z axis).</p>
 
 <p align="left"><strong>23. AddSound</strong> - creates a user-defined sound at
 the specified position<br>
@@ -1256,17 +1265,19 @@ cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
 
 <p></p>
 
-<p align="left">The Center value is either true or false, and determines if the
-loaded model should be automatically centered, otherwise the exact mesh
-positioning in the model file will be used. The CenterY value is relative to
-the current floor's base. MaxRenderDistance determines the maximum distance in
-feet that the object will be shown (0 means unlimited). ScaleMultiplier allows
-you to change the size of the object during the load - for example, set to 2 to
-double the size. Models are in the OGRE native mesh format. In the example, the
-material/texture file is cube.material, and the optional collider mesh file is
-cube.collider. EnablePhysics enables Bullet physics on the object (physics will
-only work if you don't provide a collider mesh), and Restitution, Friction and
-Mass determine the physical properties of the object.</p>
+<p align="left">The <em>Center</em> value is either true or false, and
+determines if the loaded model should be automatically centered, otherwise the
+exact mesh positioning in the model file will be used. The <em>CenterY</em>
+value is relative to the current floor's base. <em>MaxRenderDistance</em>
+determines the maximum distance in feet that the object will be shown (0 means
+unlimited). <em>ScaleMultiplier</em> allows you to change the size of the
+object during the load - for example, set to 2 to double the size. Models are
+in the OGRE native mesh format. In the example, the material/texture file is
+cube.material, and the optional collider mesh file is cube.collider.
+<em>EnablePhysics</em> enables Bullet physics on the object (physics will only
+work if you don't provide a collider mesh), and <em>Restitution</em>,
+<em>Friction</em> and <em>Mass</em> determine the physical properties of the
+object.</p>
 
 <p align="left"><strong>27. AddStairsModel</strong> - adds a 3D model to the
 specified stairwell, on the current floor. See the AddModel command above for
@@ -1278,8 +1289,8 @@ EnablePhysics, Restitution, Friction, Mass</em><em><br>
 </em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
 1, MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
-<p align="left">The CenterY value is relative to the current floor's altitude.
-</p>
+<p align="left">The <em>CenterY</em> value is relative to the current floor's
+altitude. </p>
 
 <p align="left"><strong>28. AddShaftModel</strong> - adds a 3D model to the
 specified shaft, on the current floor. See the AddModel command above for
@@ -1291,8 +1302,8 @@ EnablePhysics, Restitution, Friction, Mass</em><em><br>
 </em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
 1, MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
-<p align="left">The CenterY value is relative to the current floor's altitude.
-</p>
+<p align="left">The <em>CenterY</em> value is relative to the current floor's
+altitude. </p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>29.
 AddActionControl</strong> - creates a custom control that uses a specific
@@ -1312,8 +1323,8 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the floor's base. Leave the
-sound field blank for no sound to be played.trong&gt;</p>
+(front, left, right, back). <em>Voffset</em> is relative of the floor's base.
+Leave the <em>sound</em> field blank for no sound to be played.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>30.
 AddShaftActionControl</strong> - creates a custom control in a specified shaft
@@ -1333,8 +1344,9 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the floor's base. Leave the
-sound field blank for no sound to be played.<strong></strong></p>
+(front, left, right, back). <em>Voffset</em> is relative of the floor's base.
+Leave the <em>sound</em> field blank for no sound to be
+played.<strong></strong></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>31.
 AddStairsActionControl</strong> - creates a custom control in a specified
@@ -1354,8 +1366,9 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the floor's base. Leave the
-sound field blank for no sound to be played.<strong></strong></p>
+(front, left, right, back). <em>Voffset</em> is relative of the floor's base.
+Leave the <em>sound</em> field blank for no sound to be
+played.<strong></strong></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>32.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
@@ -1367,12 +1380,13 @@ size="2"> AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20,
 UndoMyAction, MyAction</font><br>
 <br>
 AddTrigger creates a trigger similar to action controls (AddActionControl) and
-elevator controls. The action_names(s) parameter allows you to specify a list
-of actions that this trigger will call when the camera enters or exits the
-area. The trigger starts in the first action, and will switch to each
-consecutive action when the users enters/leaves. The X, Y and Z parameters
-specify the 3D box that defines the trigger area. Y is relative of the floor's
-base. Leave the sound field blank for no sound to be played.</p>
+elevator controls. The <em>action_names(s)</em> parameter allows you to specify
+a list of actions that this trigger will call when the camera enters or exits
+the area. The trigger starts in the first action, and will switch to each
+consecutive action when the users enters/leaves. The <em>X</em>, <em>Y</em> and
+<em>Z</em> parameters specify the 3D box that defines the trigger area. Y is
+relative of the floor's base. Leave the <em>sound</em> field blank for no sound
+to be played.</p>
 
 <p align="left"><strong></strong></p>
 
@@ -1467,8 +1481,8 @@ Example: <font face="Courier New, Courier, mono" size="2">DoorTimer 1 =
 
 <p align="left"><strong>11. QuickClose</strong> - the length of time (in
 milliseconds) that the elevator doors should stay open before automatically
-closing, in quick-close mode. Specify 0 to disable. The default is 3000, or
-3seconds. This must be specified after the CreateElevator command.<br>
+closing, in quick-close mode. Specify 0 to disable. The default is 3000, or 3
+seconds. This must be specified after the CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">QuickClose
 <em>doornumber</em> = <em>value</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">QuickClose 1 =
@@ -1704,8 +1718,8 @@ Example: <font face="Courier New, Courier, mono" size="2">Doors = 2</font></p>
 motor sound emitter; if this command is not specified, it'll be placed at the
 base (altitude + interfloor) of the highest floor in the corresponding shaft.
 The X and Z values are relative of the elevator center.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">MotorPosition = <em>x, y,
-z</em><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">MotorPosition = <em>x,
+y, z</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">MotorPosition
 = 0, 100, 0</font></p>
 
@@ -1787,8 +1801,8 @@ Syntax: <font face="Courier New, Courier, mono" size="2">NotifyEarly =
 <p align="left"><strong>55. MusicPosition</strong> - sets the position of the
 music sound emitter relative of the elevator's position. If this command is not
 specified, it'll be placed in the center of the elevator on the ceiling.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">MusicPosition = <em>x, y,
-z</em><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">MusicPosition = <em>x,
+y, z</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">MusicPosition
 = 0, 8, 0</font></p>
 
@@ -1875,15 +1889,24 @@ elevator will immediately stop. This is used to mimic a modern manual elevator
 Syntax: <font face="Courier New, Courier, mono" size="2">FloorHold =
 true</font></p>
 
-<p align="left"><strong>69. DoorSensor</strong> - enable or disable the door sensor
-(electric eye), which is a trigger object placed in the elevator door area.  Default
-is enabled for automatic doors.  A second parameter specifies the sound file to play
-- only specify the first parameter for no sound.  This must be specified after
-the CreateElevator command.<br>
+<p align="left"><strong>69. DoorSensor</strong> - enable or disable the door
+sensor (electric eye), which is a trigger object placed in the elevator door
+area. Default is enabled for automatic doors. A second parameter specifies the
+sound file to play when switching between on and off - this is normally used
+for a relay switch sound effect. Only specify the first parameter for no sound.
+This must be specified after the CreateElevator command.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">DoorSensor
 <em>doornumber</em> = <em>enable[, filename]</em></font><br>
-Example: <font face="Courier New, Courier, mono" size="2">DoorSensor 1 =
-true, click.wav</font></p>
+Example: <font face="Courier New, Courier, mono" size="2">DoorSensor 1 = true,
+click.wav</font><br>
+<br>
+To have the sensor play a continuous beep while it's on (obstructed), create a
+sound inside the elevator with the AddSound command using the filename of the
+beep sound you want, and then create an action with the elevator's "sensor"
+command name. So for elevator 1, you would create an action named "Elevator
+1:sensor", and the action would do a "playsound" command on the sound you
+created.<br>
+</p>
 
 <p></p>
 
@@ -1893,8 +1916,8 @@ true, click.wav</font></p>
 specified location<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CreateElevator
 <em>relative, x</em>, <em>z</em>, <em>floor<br>
-</em></font>Example:<font face="Courier New, Courier, mono"
-size="2"><em></em>CreateElevator false, 0, 10, 0</font></p>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"><em></em>
+CreateElevator false, 0, 10, 0</font></p>
 
 <p align="left"><em>Relative </em>determines if the coordinates are relative to
 the shaft center, or if they're absolute, <em>X</em> and <em>Z </em>are the
@@ -1947,17 +1970,18 @@ voffset, tw, th</em></font></p>
 at the central location specified by <em>CenterX</em> and <em>CenterZ</em>.
 Other parameters such as width, height, and direction are taken from the
 AddDoors command (so the regular elevator doors need to be created first). The
-voffset parameter allows you to create shaft doors at a different vertical
-position than the base of the floor, and the elevator will automatically stop
-according to the shaft door's voffset for that floor. These doors should be
-moved slightly away from the elevator doors (to separate them both). Also, this
-command creates doors at all the floors specified in the ServicedFloors value,
-and cuts any shaft walls that are within the door area (and so this must be
-called after the shaft walls are created). <em>Number</em> specifies the number
-of the door to create (related to the <em>Doors</em> command) - if the elevator
-only has one door, or if the Doors command was not used, specify 1 here. Note
-that for filler walls to be created automatically, the names of the surrounding
-walls (shaft and outer floor walls) must contain the word "Shaft".</p>
+<em>voffset</em> parameter allows you to create shaft doors at a different
+vertical position than the base of the floor, and the elevator will
+automatically stop according to the shaft door's voffset for that floor. These
+doors should be moved slightly away from the elevator doors (to separate them
+both). Also, this command creates doors at all the floors specified in the
+ServicedFloors value, and cuts any shaft walls that are within the door area
+(and so this must be called after the shaft walls are created). <em>Number</em>
+specifies the number of the door to create (related to the <em>Doors</em>
+command) - if the elevator only has one door, or if the Doors command was not
+used, specify 1 here. Note that for filler walls to be created automatically,
+the names of the surrounding walls (shaft and outer floor walls) must contain
+the word "Shaft".</p>
 
 <p align="left"><strong>6. CreatePanel</strong> - creates a button panel<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CreatePanel
@@ -1991,28 +2015,28 @@ Example 2: <font face="Courier New, Courier, mono" size="2">AddButton 1, ,
 Button5, ButtonLit5, 7, 3, 4, 1, 1, 0.1, -0.1</font></p>
 
 <p align="left">The AddButton command creates a button on the button panel
-created with CreatePanel. Panel_number specifies the number of the panel to add
-the button to. <em>Row</em> and <em>Column</em> specify the position on the
-grid where the button should be. <em>Floor/Type</em> specifies either the floor
-number that this button calls, or the action name such as "Open" (see the
-AddControl command for more info). <em>Width</em> and <em>Height</em> specify
-the width and height of the button, as a percentage of a single grid unit size
-(1 being 100%, 0.5 being 50%). If both values are 0, the default of 1 is used
-for both values. If only one of the values is 0, then the exact size other is
-used; for example, if <em>width</em> is 0 and <em>height</em> is 1 (or any
-other number), then the width will end up being the same size as the height.
-<em>Hoffset</em> and <em>Voffset</em> are optional parameters, and are used to
-position the button outside the normal grid, and are in grid units (buttonwidth
-and buttonheight parameters of the CreatePanel function). In the second
-example, the button is positioned 0.1 grid units to the right, and 0.1 grid
-units down. Notice that no sound is specified in the 2nd example - this means
-that a sound won't be played.</p>
+created with CreatePanel. <em>Panel_number</em> specifies the number of the
+panel to add the button to. <em>Row</em> and <em>Column</em> specify the
+position on the grid where the button should be. <em>Floor/Type</em> specifies
+either the floor number that this button calls, or the action name such as
+"Open" (see the AddControl command for more info). <em>Width</em> and
+<em>Height</em> specify the width and height of the button, as a percentage of
+a single grid unit size (1 being 100%, 0.5 being 50%). If both values are 0,
+the default of 1 is used for both values. If only one of the values is 0, then
+the exact size other is used; for example, if <em>width</em> is 0 and
+<em>height</em> is 1 (or any other number), then the width will end up being
+the same size as the height. <em>Hoffset</em> and <em>Voffset</em> are optional
+parameters, and are used to position the button outside the normal grid, and
+are in grid units (buttonwidth and buttonheight parameters of the CreatePanel
+function). In the second example, the button is positioned 0.1 grid units to
+the right, and 0.1 grid units down. Notice that no sound is specified in the
+2nd example - this means that a sound won't be played.</p>
 
 <p align="left"><strong>8. AddControl</strong> - advanced command for creating
 buttons, switches and knobs on the panel<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddControl
 <em>panel_number, sound, row, column, width, height, hoffset, voffset,
-action_name(s), texture_name(s)<br>
+command_name(s), texture_name(s)<br>
 </em></font>Example 1: <font face="Courier New, Courier, mono"
 size="2">AddControl 1, switch.wav, 7, 3, 1, 1, 0, 0, open, ButtonOpen</font><br>
 Example 2: <font face="Courier New, Courier, mono" size="2">AddControl 1,
@@ -2026,20 +2050,20 @@ FireKnob2, FireKnob3</font></p>
 
 <p align="left">The AddControl command creates an advanced control on the
 specified button panel (created with CreatePanel). Most of the parameters are
-the same as the AddButton command, but the action_name(s) and texture_name(s)
-parameters allow you to specify a list of actions, and a list of textures to go
-along with those actions. There needs to be a texture for every action; if you
-specify 3 actions and only 2 textures, you will get an error. The first example
-shows a door open button being created, with the action "open" and the texture
-"ButtonOpen". The 2nd example shows a fan switch being created, with the first
-action being "FanOff" with the "SwitchFanOff" texture being used for that, and
-"FanOn" for the second action with the "SwitchFanOn" texture being used for
-that. Example 3 shows a standard floor button being created (which is what the
-AddButton command does) and example 4 shows a fire service mode knob being
-created with 3 positions. Leave the sound field blank for no sound to be
-played.</p>
+the same as the AddButton command, but the <em>command_name(s)</em> and
+<em>texture_name(s)</em> parameters allow you to specify a list of commands,
+and a list of textures to go along with those commands. A texture needs to be
+specified for every command; if you specify 3 commands and only 2 textures, you
+will get an error. The first example shows a door open button being created,
+with the command "open" and the texture "ButtonOpen". The 2nd example shows a
+fan switch being created, with the first command being "FanOff" with the
+"SwitchFanOff" texture being used for that, and "FanOn" for the second command
+with the "SwitchFanOn" texture being used for that. Example 3 shows a standard
+floor button being created (which is what the AddButton command does) and
+example 4 shows a fire service mode knob being created with 3 positions. Leave
+the sound field blank for no sound to be played.</p>
 
-<p align="left">Available action names:</p>
+<p align="left">Available command names for elevators:</p>
 
 <p align="left"><em>Off</em> (no action)<br>
 [floor number]<br>
@@ -2058,8 +2082,8 @@ played.</p>
 <em>Stop</em> (put elevator in stop state)<br>
 <em>EStop</em> (emergency stop)<br>
 <em>Alarm</em><br>
-<em>Fire1Off</em> (fire service phase 1 off for all elevators in same bank, which means
-all served by first call button on recall floor)<br>
+<em>Fire1Off</em> (fire service phase 1 off for all elevators in same bank,
+which means all served by first call button on recall floor)<br>
 <em>Fire1On</em> (fire service phase 1 on for all elevators in same bank)<br>
 <em>Fire1Bypass</em> (fire service phase 1 bypass for all elevators in same
 bank)<br>
@@ -2093,12 +2117,21 @@ bank)<br>
 <em>InterlocksOn</em> (enable interlocks)<br>
 <em>InterlocksOff</em> (disable interlocks)<br>
 <em>Sensor</em> (open and hold doors, used by door sensor)<br>
-<em>Reset</em> (reset door timer which turns off hold, also used by door sensor)</p>
+<em>Reset</em> (reset door timer which turns off hold, also used by door
+sensor)</p>
 
 <p align="left">In the above list, <em>Open</em>, <em>Close</em>, related
-commands such as <em>OpenInt</em> and <em>OpenManual</em>, <em>Hold</em>, <em>Sensor</em>, and <em>Reset</em>
-can have the door number after the name - for example, <em>Open2</em> will open
-door 2, while <em>Open</em> will open all doors.<br>
+commands such as <em>OpenInt</em> and <em>OpenManual</em>, <em>Hold</em>,
+<em>Sensor</em>, and <em>Reset</em> can have the door number after the name -
+for example, <em>Open2</em> will open door 2, while <em>Open</em> will open all
+doors.<br>
+<br>
+When this command is used, actions are created using the specified commands.
+The resulting names of the actions are the elevator name, followed by a colon
+and the command name, in order to be unique to each elevator. So the "Open"
+command for Elevator 1 is created as an action named "Elevator 1:open", and you
+can specify more actions with that name to run multiple actions when the
+elevator opens it's doors.<br>
 <br>
 <strong>9. AddFloorIndicator</strong> - creates a floor indicator<br>
 Syntax: <font face="Courier New, Courier, mono"
@@ -2109,10 +2142,10 @@ width, height, voffset</em></font> </p>
 position (relative to the elevator) specified by <em>CenterX</em> and
 <em>CenterZ</em>. <em>Direction</em> is the direction the indicator faces, and
 can be either "left", "right", "front" or "back". This command can be given
-multiple times to create multiple indicators. Texture_prefix is the base name
-of the texture to load when displaying a floor ID; for example if the elevator
-is on floor 3, and you specify a prefix of "Button", it'll load the "Button3"
-texture.</p>
+multiple times to create multiple indicators. <em>Texture_prefix</em> is the
+base name of the texture to load when displaying a floor ID; for example if the
+elevator is on floor 3, and you specify a prefix of "Button", it'll load the
+"Button3" texture.</p>
 
 <p align="left"><strong>10. AddDirectionalIndicator</strong> - creates an
 internal directional indicator/lantern<br>
@@ -2250,14 +2283,15 @@ size="2">AddFloorSigns<em> door_number, relative, texture_prefix, direction,
 CenterX, CenterZ, width, height, voffset</em></font> </p>
 
 <p align="left">The AddFloorSigns command creates floor signs (similar to floor
-indicators) on all the floors serviced by the current elevator. Direction is
-the direction the signs face, and can be either "left", "right", "front" or
-"back". Texture_prefix is the base name of the texture to load when displaying
-a floor ID; for example if the sign is on floor 3, and you specify a prefix of
-"Button", it'll load the "Button3" texture. Door_number specifies the door
-number to check against, meaning if shaft doors don't exist on a certain floor
-for the specified door, the sign won't be created on that floor. This can be
-bypassed by setting door_number to 0.</p>
+indicators) on all the floors serviced by the current elevator.
+<em>Direction</em> is the direction the signs face, and can be either "left",
+"right", "front" or "back". <em>Texture_prefix</em> is the base name of the
+texture to load when displaying a floor ID; for example if the sign is on floor
+3, and you specify a prefix of "Button", it'll load the "Button3" texture.
+<em>Door_number</em> specifies the door number to check against, meaning if
+shaft doors don't exist on a certain floor for the specified door, the sign
+won't be created on that floor. This can be bypassed by setting
+<em>door_number</em> to 0.</p>
 
 <p align="left"><strong>14. AddSound</strong> - creates a user-defined sound at
 the specified position<br>
@@ -2273,7 +2307,7 @@ MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0,
 
 <p align="left">For information on the parameters, see the AddSound command in
 the Globals section. The only difference here is that the X, Y and Z position
-values are relative of the elevator's center/origin.<em>Loop</em> specifies if
+values are relative of the elevator's center/origin. <em>Loop</em> specifies if
 the sound should loop and play on startup.</p>
 
 <p align="left"><strong>15. AddDoorComponent</strong> - creates a single
@@ -2363,17 +2397,18 @@ Mass</em><em><br>
 </em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
 MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 
-<p align="left">The Center value is either true or false, and determines if the
-loaded model should be automatically centered, otherwise the exact mesh
-positioning in the model file will be used. The CenterY value is relative to
-the current floor's base. MaxRenderDistance determines the maximum distance in
-feet that the object will be shown (0 means unlimited). ScaleMultiplier allows
-you to change the size of the object during the load - for example, set to 2 to
-double the size. Models are in the OGRE native mesh format. In the example, the
-material/texture file is cube.material, and the optional collider mesh file is
-cube.collider. EnablePhysics enables Bullet physics on the object, and
-Restitution, Friction and Mass determine the physical properties of the
-object.</p>
+<p align="left">The <em>Center</em> value is either true or false, and
+determines if the loaded model should be automatically centered, otherwise the
+exact mesh positioning in the model file will be used. The <em>CenterY</em>
+value is relative to the current floor's base. <em>MaxRenderDistance</em>
+determines the maximum distance in feet that the object will be shown (0 means
+unlimited). <em>ScaleMultiplier</em> allows you to change the size of the
+object during the load - for example, set to 2 to double the size. Models are
+in the OGRE native mesh format. In the example, the material/texture file is
+cube.material, and the optional collider mesh file is cube.collider.
+<em>EnablePhysics</em> enables Bullet physics on the object, and
+<em>Restitution</em>, <em>Friction</em> and <em>Mass</em> determine the
+physical properties of the object.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>21.
 AddActionControl</strong> - creates a custom control that uses a specific
@@ -2393,8 +2428,9 @@ actions. There needs to be a texture for every action; if you specify 3 actions
 and only 2 textures, you will get an error. The control starts up in the first
 action, and switches to the next actions in sequence when it's clicked.
 <em>Direction</em> is the direction the control itself will face in 3D space
-(front, left, right, back). Voffset is relative of the elevator's base. Leave
-the sound field blank for no sound to be played.<strong></strong></p>
+(front, left, right, back). <em>Voffset</em> is relative of the elevator's
+base. Leave the sound field blank for no sound to be
+played.<strong></strong></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>22.
 AddTrigger</strong> - creates a trigger that is used to signal an action when
@@ -2406,12 +2442,13 @@ size="2"> AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20,
 UndoMyAction, MyAction</font><br>
 <br>
 AddTrigger creates a trigger similar to action controls (AddActionControl) and
-elevator controls. The action_names(s) parameter allows you to specify a list
-of actions that this trigger will call when the camera enters or exits the
-area. The trigger starts in the first action, and will switch to each
-consecutive action when the users enters/leaves. The X, Y and Z parameters
-specify the 3D box that defines the trigger area, and are relative of the
-elevator's location. Leave the sound field blank for no sound to be played.</p>
+elevator controls. The <em>action_names(s)</em> parameter allows you to specify
+a list of actions that this trigger will call when the camera enters or exits
+the area. The trigger starts in the first action, and will switch to each
+consecutive action when the users enters/leaves. The <em>X</em>, <em>Y</em> and
+<em>Z</em> parameters specify the 3D box that defines the trigger area, and are
+relative of the elevator's location. Leave the <em>sound</em> field blank for
+no sound to be played.</p>
 
 <p align="left"> </p>
 
@@ -2429,7 +2466,9 @@ will be used, and altitude/y values specified in these commands will be offsets
 of that altitude.</p>
 
 <p align="left"><br>
-<strong>a. AddTriangleWall</strong> - adds a textured triangular wall.  If specified in a floor section, the Y values are then relative to the floor base.<br>
+<strong>a. AddTriangleWall</strong> - adds a textured triangular wall. If
+specified in a floor section, the Y values are then relative to the floor
+base.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddTriangleWall
 <em>destobject, name, texturename</em>, <em>x1</em>, <em>y1</em>, <em>z1</em>,
 <em>x2</em>, <em>y2</em>, <em>z2</em>, <em>x3</em>, <em>y3</em>, <em>z3</em>,
@@ -2468,12 +2507,12 @@ AddGround Ground, Downtown, -158400, -158400, 158400, 158400, 0, 7920,
 
 <p align="left">This command is mainly for creating large ground sections,
 since using the AddFloor function with a large amount of texture tiling causes
-interference problems. The X and Z values specify the total size of the ground,
-and the tile_x and tile_y specify the size of each tile square to create. For
-example, if the ground is 10,000 feet wide, and tile_x and tile_y are both
-1000, then 100 total tiles will be created; 10 wide and 10 deep. In the example
-above 7920 is 1/40 of the total width (316800 which is 158400 * 2), so the tile
-grid will be 40x40 tiles.</p>
+interference problems. The <em>X</em> and <em>Z</em> values specify the total
+size of the ground, and the <em>tile_x</em> and <em>tile_y</em> specify the
+size of each tile square to create. For example, if the ground is 10,000 feet
+wide, and tile_x and tile_y are both 1000, then 100 total tiles will be
+created; 10 wide and 10 deep. In the example above 7920 is 1/40 of the total
+width (316800 which is 158400 * 2), so the tile grid will be 40x40 tiles.</p>
 
 <p align="left"><strong>e. CreateWallBox</strong> - creates 4 walls (box) at
 the specified coordinate locations<br>
@@ -2504,8 +2543,8 @@ Example: <font face="Courier New, Courier, mono" size="2">CreateWallBox2
 external, My Box, brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false,
 false</font></p>
 
-<p align="left">The parameters are the same as the above command, except
-that<em>centerx</em> and <em>centerz</em> define the center of the box, and
+<p align="left">The parameters are the same as the above command, except that
+<em>centerx</em> and <em>centerz</em> define the center of the box, and
 <em>widthx</em> and <em>lengthz</em> specify the width and length off of the
 center.<br>
 <br>
@@ -2519,7 +2558,9 @@ Example: <font face="Courier New, Courier, mono" size="2">AddCustomWall
 external, My Wall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
 0</font></p>
 
-<p align="left"><strong>h. AddCustomFloor</strong> - the same as AddCustomWall, but with only one vertical parameter.  If specified while in a floor section, the altitude is relative to the current floor's base.<br>
+<p align="left"><strong>h. AddCustomFloor</strong> - the same as AddCustomWall,
+but with only one vertical parameter. If specified while in a floor section,
+the altitude is relative to the current floor's base.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddCustomFloor
 <em>destobject, name, texturename, x1, z1, x2, z2, x3, z3, ..., altitude, tw,
 th</em></font><br>
@@ -2533,11 +2574,11 @@ centerx, centerz, startfloor, endfloor</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddShaft 1, 10, 10,
 0, 9</font></p>
 
-<p align="left">The number parameter specifies the shaft number to create. This
-command just tells the simulator the area that the shaft will take up, and does
-not create the actual shaft walls. Later on when you create the walls/floors
-for the shaft, make sure that you make a floor at the very bottom and very top
-of the shaft (they can extend beyond the walls).</p>
+<p align="left">The <em>number</em> parameter specifies the shaft number to
+create. This command just tells the simulator the area that the shaft will take
+up, and does not create the actual shaft walls. Later on when you create the
+walls/floors for the shaft, make sure that you make a floor at the very bottom
+and very top of the shaft (they can extend beyond the walls).</p>
 
 <p align="left"><strong>j. CreateStairwell</strong> - creates a stairwell at a
 specified location and floor range<br>
@@ -2546,9 +2587,9 @@ Syntax: <font face="Courier New, Courier, mono" size="2">CreateStairwell
 Example: <font face="Courier New, Courier, mono" size="2">CreateStairwell 1,
 10, 10, 0, 9</font></p>
 
-<p align="left">The number parameter specifies the stairwell number to create.
-This command just tells the simulator the area that the stairwell will take up,
-and does not create the actual walls.</p>
+<p align="left">The <em>number</em> parameter specifies the stairwell number to
+create. This command just tells the simulator the area that the stairwell will
+take up, and does not create the actual walls.</p>
 
 <p align="left"><strong>k. WallOrientation</strong> - changes the internal wall
 orientation parameter, which is used for determining the wall thickness
@@ -2558,14 +2599,14 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> WallOrientation =
 Example: <font face="Courier New, Courier, mono" size="2">WallOrientation =
 left</font></p>
 
-<p align="left">The direction parameter can either be left, center, or right.
-Center is default. For example, if center is used, than half of the wall's
-thickness is to the right (positive) of it's x1/x2 or z1/z2 coordinates, and
-half is to the left (negative) of the coordinates. If left is used, than the
-coordinates define the wall's left (negative) edge, and the full thickness is
-to the right (positive) of those. If right is used, then again the coordinates
-define the wall's right (positive) edge, and the full thickness is to the left
-(negative) of those. See this graphic for a good example:</p>
+<p align="left">The <em>direction</em> parameter can either be left, center, or
+right. Center is default. For example, if center is used, than half of the
+wall's thickness is to the right (positive) of it's x1/x2 or z1/z2 coordinates,
+and half is to the left (negative) of the coordinates. If left is used, than
+the coordinates define the wall's left (negative) edge, and the full thickness
+is to the right (positive) of those. If right is used, then again the
+coordinates define the wall's right (positive) edge, and the full thickness is
+to the left (negative) of those. See this graphic for a good example:</p>
 
 <p align="left"><img src="guide/wall_info.jpg"></p>
 
@@ -2582,10 +2623,10 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> FloorOrientation =
 Example: <font face="Courier New, Courier, mono" size="2">FloorOrientation =
 bottom</font></p>
 
-<p align="left">The direction parameter can either be bottom, center, or top.
-Top is default. For example, if center is used, than half of the floor's
-thickness is above (positive) it's x1/x2 or z1/z2 coordinates, and half is
-below (negative) the coordinates. If bottom is used, than the coordinates
+<p align="left">The <em>direction</em> parameter can either be bottom, center,
+or top. Top is default. For example, if center is used, than half of the
+floor's thickness is above (positive) it's x1/x2 or z1/z2 coordinates, and half
+is below (negative) the coordinates. If bottom is used, than the coordinates
 define the floor's bottom edge, and the full thickness is the top (positive).
 If top is used, then again the coordinates define the floor's top edge, and the
 full thickness is the bottom (negative).</p>
@@ -2600,40 +2641,41 @@ true, false, false, false, false</font></p>
 
 <p align="left">The example shown is the default setting. This can seem
 complex, but I'll provide a graphic soon to explain it more easily.
-MainNegative is the main (that makes up the length if a wall, or the main area
-if a floor) face on the negative side, MainPositive is the main face on the
-positive side, SideNegative is the side (the part that is along the thickness)
-face on the negative side, SidePositive is the side face on the positive side;
-Top refers to either the top side if a wall, or to the positive X face if a
-floor; Bottom refers to either the bottom side if a wall, or the negative X
-face if a floor. In the graphic above in the WallOrientation section, let's say
-that the large box's difference in x values are larger (meaning that it is
-horizontal from the left to the right), and that it has the same z values. With
-that, MainNegative would be the front wall, MainPositive the back, SideNegative
-the left, SidePositive the right, etc.</p>
+<em>MainNegative</em> is the main (that makes up the length if a wall, or the
+main area if a floor) face on the negative side, <em>MainPositive</em> is the
+main face on the positive side, <em>SideNegative</em> is the side (the part
+that is along the thickness) face on the negative side, <em>SidePositive</em>
+is the side face on the positive side; <em>Top</em> refers to either the top
+side if a wall, or to the positive X face if a floor; <em>Bottom</em> refers to
+either the bottom side if a wall, or the negative X face if a floor. In the
+graphic above in the WallOrientation section, let's say that the large box's
+difference in x values are larger (meaning that it is horizontal from the left
+to the right), and that it has the same z values. With that,
+<em>MainNegative</em> would be the front wall, <em>MainPositive</em> the back,
+<em>SideNegative</em> the left, <em>SidePositive</em> the right, etc.</p>
 
 <p align="left"><strong>n. SetPlanarMapping</strong> - sets the planar texture
 mapper's parameters.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping <em>Flat,
-FlipX, FlipY, FlipZ, Rotate</em></font><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping
+<em>Flat, FlipX, FlipY, FlipZ, Rotate</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetPlanarMapping
 false, false, false, true, false</font></p>
 
-<p align="left">FlipX, FlipY and FlipZ reverse the texture mapping per axis,
-and Flat has it ignore depth., Skyscraper by default uses a simple planar
-texture mapper, which in simple terms draws the texture in a box around the
-object. With a basic wall, the top-left of the texture image is mapped to the
-top left of the wall, the top-right is mapped to the top-right of the wall,
-etc. If you want the top-right of the texture mapped to the top-left of the
-wall for example (to flip or change alignment), you'd set FlipX to false. This
-command is mainly used to change alignment - since the top-left of the texture
-is mapped to the top-left of the object, that means that textures have a
-left/top alignment by default. If you change FlipX to true, it'll be
-right-aligned. If you change FlipY to true, it'll be bottom-aligned. Rotate has
-it rotate the texture mapping 90 degrees counterclockwise, so instead of the
-texture being mapped from the top left to bottom right, if Rotate is true,
-it'll be mapped from the bottom left to top right. See this picture for an
-example:</p>
+<p align="left"><em>FlipX</em>, <em>FlipY</em> and <em>FlipZ</em> reverse the
+texture mapping per axis, and <em>Flat</em> has it ignore depth., Skyscraper by
+default uses a simple planar texture mapper, which in simple terms draws the
+texture in a box around the object. With a basic wall, the top-left of the
+texture image is mapped to the top left of the wall, the top-right is mapped to
+the top-right of the wall, etc. If you want the top-right of the texture mapped
+to the top-left of the wall for example (to flip or change alignment), you'd
+set <em>FlipX</em> to false. This command is mainly used to change alignment -
+since the top-left of the texture is mapped to the top-left of the object, that
+means that textures have a left/top alignment by default. If you change
+<em>FlipX</em> to true, it'll be right-aligned. If you change <em>FlipY</em> to
+true, it'll be bottom-aligned. <em>Rotate</em> has it rotate the texture
+mapping 90 degrees counterclockwise, so instead of the texture being mapped
+from the top left to bottom right, if <em>Rotate</em> is true, it'll be mapped
+from the bottom left to top right. See this picture for an example:</p>
 
 <p align="left"><img src="guide/extents.jpg"></p>
 
@@ -2641,9 +2683,9 @@ example:</p>
 yellow around it) 2.5 times on width and height. The bottom floor shows the
 default texture mapping (ReverseExtents false, false, false, false, false);
 you'll notice that it's aligned to the top-left. In the middle one, I set the
-FlipX value to true (ReverseExtents false, true, false, false, false). In the
-top one, I set the FlipY value to true (ReverseExtents false, false, true,
-false, false).</p>
+<em>FlipX</em> value to true (ReverseExtents false, true, false, false, false).
+In the top one, I set the <em>FlipY</em> value to true (ReverseExtents false,
+false, true, false, false).</p>
 
 <p align="left"><strong>o. SetTextureMapping</strong> - manually sets UV
 texture mapping for all polygons generated after this command;
@@ -2695,7 +2737,8 @@ SetTextureMapping - manually sets UV texture mapping for all polygons generated
 after this command; ResetTextureMapping restores the values to the defaults or
 previous<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetTextureMapping2
-<em>v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y, v3z, u3, v3</em></font><br>
+<em>v1x, v1y, v1z, u1, v1, v2x, v2y, v2z, u2, v2, v3x, v3y, v3z, u3,
+v3</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetTextureMapping2
 x0, y0, z0, 0, 0, x1, y1, z1, 1, 0, x2, y2, z2, 1, 1</font></p>
 
@@ -2763,7 +2806,8 @@ stairwell object - performs a vertical box cut on all floor objects (floors,
 ceilings, interfloor, etc) in the specified range. For the parameters, see the
 ShaftCut command.<strong><br>
 </strong>Syntax: <font face="Courier New, Courier, mono" size="2">CutStairwell
-<em>number, startx, startz, endx, endz, start_voffset, end_voffset</em></font><br>
+<em>number, startx, startz, endx, endz, start_voffset,
+end_voffset</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">CutStairwell 1, -4,
 -3.5, 4, 3.5, 0, 5</font></p>
 
@@ -2899,14 +2943,14 @@ horizontally.</p>
 
 <p align="left"><strong>ad. Cut</strong> - performs a manual box cut on an
 object<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">Cut
-<em>destobject, x1, y1, z1, x2, y2, z2, cutwalls, cutfloors</em><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Cut <em>destobject,
+x1, y1, z1, x2, y2, z2, cutwalls, cutfloors</em><br>
 </font>Example: <font face="Courier New, Courier, mono" size="2">Cut external,
 -5, -5, -5, 5, 5, 5, false, true</font></p>
 
-<p align="left">The x, y and z values specify the start and end coordinates of
-the box cut. If cutwalls is true, the function will cut walls; if cutfloors is
-true, it'll cut floors.</p>
+<p align="left">The <em>x</em>, <em>y</em> and <em>z</em> values specify the
+start and end coordinates of the box cut. If <em>cutwalls</em> is true, the
+function will cut walls; if <em>cutfloors</em> is true, it'll cut floors.</p>
 
 <p align="left"><strong>ae. Mount</strong> - mounts a zip file in the data
 directory into a virtual path.<br>
@@ -3011,22 +3055,23 @@ such as "Floors 3 to 8".</p>
 parameters:</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;">(General)<br>
-ChangeTexture: oldtexture, newtexture<br>
-PlaySound: name, loop true/false<br>
-OpenShaftDoor: door number (0 for all), floor number (parent needs to be the
-elevator object)<br>
-CloseShaftDoor: door number (0 for all), floor number (parent needs to be the
-elevator object)<br>
-OpenShaftDoorManual: door number (0 for all), floor number (parent needs to be
-elevator object)<br>
-CloseShaftDoorManual: door number (0 for all), floor number (parent needs to be
-elevator object)<br>
-(for other elevator commands, see AddControl command in elevator section; these
-have no parameters)</p>
+<em>ChangeTexture</em>: oldtexture, newtexture<br>
+<em>PlaySound</em>: name, loop true/false<br>
+<em>OpenShaftDoor</em>: door number (0 for all), floor number (parent needs to
+be the elevator object)<br>
+<em>CloseShaftDoor</em>: door number (0 for all), floor number (parent needs to
+be the elevator object)<br>
+<em>OpenShaftDoorManual</em>: door number (0 for all), floor number (parent
+needs to be elevator object)<br>
+<em>CloseShaftDoorManual</em>: door number (0 for all), floor number (parent
+needs to be elevator object)<br>
+(for other elevator commands, see the AddControl command in the elevator
+section)</p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;">With the PlaySound
-command, if multiple sounds have the same name, all of those sounds will be
-played simultaneously when the related action is run.</p>
+<p style="text-align:left;margin-left:0;margin-right:auto;">The
+<em>PlaySound</em> command plays sounds created with the AddSound command. With
+this command, if multiple sounds have the same name, all of those sounds will
+be played simultaneously when the related action is run.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;">OpenShaftDoor
 example, to open elevator 1's shaft doors on floor 2:</p>
@@ -3034,6 +3079,13 @@ example, to open elevator 1's shaft doors on floor 2:</p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><font
 face="Courier New, Courier, mono" size="2">AddAction MyDoorOpen, Elevator 1,
 OpenShaftDoor, 0, 2</font></p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;">PlaySound example,
+to play sound FireAlarm created using the AddSound command on Floor 1:</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><font
+face="Courier New, Courier, mono" size="2">AddAction MySound, Floor 1,
+FireAlarm, true</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aj.
 AddActionControl</strong> - creates a custom control that uses a specific
@@ -3066,12 +3118,12 @@ size="2"> AddTrigger MyTrigger, switch.wav, -30, 0, -30, -20, 10, -20,
 UndoMyAction, MyAction</font><br>
 <br>
 AddTrigger creates a trigger similar to action controls (AddActionControl) and
-elevator controls. The action_names(s) parameter allows you to specify a list
-of actions that this trigger will call when the camera enters or exits the
-area. The trigger starts in the first action, and will switch to each
-consecutive action when the users enters/leaves. The X, Y and Z parameters
-specify the 3D box that defines the trigger area. Leave the sound field blank
-for no sound to be played.</p>
+elevator controls. The <em>action_names(s)</em> parameter allows you to specify
+a list of actions that this trigger will call when the camera enters or exits
+the area. The trigger starts in the first action, and will switch to each
+consecutive action when the users enters/leaves. The <em>X</em>, <em>Y</em> and
+<em>Z</em> parameters specify the 3D box that defines the trigger area. Leave
+the <em>sound</em> field blank for no sound to be played.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>al.
 SetKey</strong> - specifies that the next created model will be a key. The
@@ -3111,7 +3163,8 @@ defaults, use 0 for the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
 Print</strong> - prints the contents of a line to the console. This command
 will still convert variables and even math expressions, and output the
 results.<br>
-Syntax: <font face="Courier New, Courier, mono" size="2">Print <em>text</em></font><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Print
+<em>text</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
@@ -3136,7 +3189,8 @@ myaction</font></p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
-AddActionParent</strong> - adds a parent object to an existing action. See the AddAction command for details on parent objects<br>
+AddActionParent</strong> - adds a parent object to an existing action. See the
+AddAction command for details on parent objects<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionParent
 <em>name, object</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddActionParent
@@ -3147,7 +3201,8 @@ myaction, Floors 2 to 5</font></p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
-RemoveActionParent</strong> - removes a parent object from an existing action. See the AddAction command for details on parent objects.  This command is
+RemoveActionParent</strong> - removes a parent object from an existing action.
+See the AddAction command for details on parent objects. This command is
 normally used after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">RemoveActionParent
 <em>name, object</em></font><br>
@@ -3167,12 +3222,13 @@ Example: <font face="Courier New, Courier, mono" size="2">GotoFloor 3</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p align="left"><strong>at. EndPoint</strong> - the EndPoint function calculates
-endpoint coordinates given a starting point, direction (angle in degrees), and distance.<br>
+<p align="left"><strong>at. EndPoint</strong> - the EndPoint function
+calculates endpoint coordinates given a starting point, direction (angle in
+degrees), and distance.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> endpoint(<em>startx,
 starty, angle, distance</em>)</font><br>
-Example: <font face="Courier New, Courier, mono" size="2">endpoint(-150,
-150, 180, 20)</font><br>
+Example: <font face="Courier New, Courier, mono" size="2">endpoint(-150, 150,
+180, 20)</font><br>
 Result: <font face="Courier New, Courier, mono" size="2">-150, 130</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
@@ -3191,9 +3247,10 @@ Example: <font face="Courier New, Courier, mono" size="2">&lt;end&gt;</font></p>
 <strong>9. BREAK command</strong></p>
 
 <p align="left">The Break command triggers a break section in the script
-processor, and is used when running the simulator in debug mode. A debugger
-breakpoint can be set on the associated line in fileio.cpp, and when this
-command is called, the debugger will hit the breakpoint.<br>
+processor, and is used when running a debug build of the simulator, with a
+debugger attached. A breakpoint can be set on the associated line in
+fileio.cpp, and when this command is called, the debugger will hit the
+breakpoint.<br>
 Example: <font face="Courier New, Courier, mono"
 size="2">&lt;break&gt;</font></p>
 
@@ -3219,9 +3276,10 @@ size="2">elevdoor_single(<em>door_number, texture, side_texture, thickness,
 CenterX, CenterZ, width, height, door_direction, movement_direction, speed,
 is_shaft_door</em>)</font></p>
 
-<p align="left">Door_Direction is either "left", "right", "front" or "back" and
-is the direction the doors face (torwards the outside of the elevator).
-Movement_direction is the direction the door should move.</p>
+<p align="left"><em>Door_Direction</em> is either "left", "right", "front" or
+"back" and is the direction the doors face (torwards the outside of the
+elevator). <em>Movement_direction</em> is the direction the door should
+move.</p>
 
 <p align="left"><strong>2. elevdoor_center</strong> - creates a center-open
 elevator door.<br>
