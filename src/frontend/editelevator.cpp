@@ -109,8 +109,6 @@ const long editelevator::ID_bSetDoorTimer = wxNewId();
 const long editelevator::ID_STATICTEXT61 = wxNewId();
 const long editelevator::ID_txtQuickClose = wxNewId();
 const long editelevator::ID_bSetQuickClose = wxNewId();
-const long editelevator::ID_STATICTEXT32 = wxNewId();
-const long editelevator::ID_txtUseSkipFloor = wxNewId();
 const long editelevator::ID_STATICTEXT44 = wxNewId();
 const long editelevator::ID_txtSkipFloorText = wxNewId();
 const long editelevator::ID_bSetSkipFloorText = wxNewId();
@@ -121,6 +119,9 @@ const long editelevator::ID_txtWaitForDoors = wxNewId();
 const long editelevator::ID_STATICTEXT67 = wxNewId();
 const long editelevator::ID_txtNudgeMode = wxNewId();
 const long editelevator::ID_bSetNudge = wxNewId();
+const long editelevator::ID_STATICTEXT32 = wxNewId();
+const long editelevator::ID_txtDoorSensor = wxNewId();
+const long editelevator::ID_bDoorSensor = wxNewId();
 const long editelevator::ID_STATICTEXT86 = wxNewId();
 const long editelevator::ID_txtActiveCallFloor = wxNewId();
 const long editelevator::ID_STATICTEXT87 = wxNewId();
@@ -505,12 +506,6 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer1->Add(txtQuickClose, 1, wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	bSetQuickClose = new wxButton(this, ID_bSetQuickClose, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetQuickClose"));
 	FlexGridSizer1->Add(bSetQuickClose, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText32 = new wxStaticText(this, ID_STATICTEXT32, _("UseFlrSkip:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT32"));
-	FlexGridSizer1->Add(StaticText32, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
-	txtUseSkipFloor = new wxTextCtrl(this, ID_txtUseSkipFloor, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtUseSkipFloor"));
-	txtUseSkipFloor->SetToolTip(_("Use Floor Skip Text"));
-	FlexGridSizer1->Add(txtUseSkipFloor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer1->Add(-1,-1,1, wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticText44 = new wxStaticText(this, ID_STATICTEXT44, _("FlrSkipTxt:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT44"));
 	FlexGridSizer1->Add(StaticText44, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	txtSkipFloorText = new wxTextCtrl(this, ID_txtSkipFloorText, wxEmptyString, wxDefaultPosition, wxSize(75,-1), 0, wxDefaultValidator, _T("ID_txtSkipFloorText"));
@@ -536,6 +531,13 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	FlexGridSizer1->Add(txtNudgeMode, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetNudge = new wxButton(this, ID_bSetNudge, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetNudge"));
 	FlexGridSizer1->Add(bSetNudge, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText32 = new wxStaticText(this, ID_STATICTEXT32, _("Sensor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT32"));
+	FlexGridSizer1->Add(StaticText32, 1, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	txtDoorSensor = new wxTextCtrl(this, ID_txtDoorSensor, wxEmptyString, wxDefaultPosition, wxSize(75,-1), wxTE_READONLY, wxDefaultValidator, _T("ID_txtDoorSensor"));
+	txtDoorSensor->SetToolTip(_("Door Sensor Status"));
+	FlexGridSizer1->Add(txtDoorSensor, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bDoorSensor = new wxButton(this, ID_bDoorSensor, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bDoorSensor"));
+	FlexGridSizer1->Add(bDoorSensor, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(FlexGridSizer1, 0, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	FlexGridSizer9 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText86 = new wxStaticText(this, ID_STATICTEXT86, _("ActCallFloor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT86"));
@@ -1023,6 +1025,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetQuickClose,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetQuickClose_Click);
 	Connect(ID_bSetSkipFloorText,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetSkipFloorText_Click);
 	Connect(ID_bSetNudge,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetNudge_Click);
+	Connect(ID_bDoorSensor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDoorSensor_Click);
 	Connect(ID_bSetLevelingSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingSpeed_Click);
 	Connect(ID_bSetLevelingOffset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOffset_Click);
 	Connect(ID_bLevelingOpen,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetLevelingOpen_Click);
@@ -1241,6 +1244,7 @@ void editelevator::Loop()
 		txtDoorWidth->SetValue(TruncateNumber(door->GetDoorWrapper()->Width, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
 		txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
+		txtDoorSensor->SetValue(wxString::FromAscii(BoolToString(door->EnableSensor)));
 	}
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));
@@ -1262,7 +1266,6 @@ void editelevator::Loop()
 	txtTempDecel->SetValue(TruncateNumber(elevator->TempDeceleration, 2));
 	txtJerkRate->SetValue(TruncateNumber(elevator->GetJerkRate(), 4));
 	txtIsMoving->SetValue(wxString::FromAscii(BoolToString(elevator->IsMoving)));
-	txtUseSkipFloor->SetValue(wxString::FromAscii(BoolToString(elevator->UseFloorSkipText)));
 	txtOnFloor->SetValue(wxString::FromAscii(BoolToString(elevator->OnFloor)));
 	txtAlarm->SetValue(wxString::FromAscii(BoolToString(elevator->AlarmActive)));
 	txtQueueLastDirection->SetValue(wxVariant((long)elevator->LastQueueDirection).GetString());
@@ -1707,5 +1710,19 @@ void editelevator::On_bInterlocks_Click(wxCommandEvent& event)
 void editelevator::On_bSetNudge_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->EnableNudgeMode(!elevator->IsNudgeModeActive());
+	{
+		int door = sDoor->GetThumbPosition();
+		bool status = elevator->IsNudgeModeActive(door);
+		elevator->EnableNudgeMode(!status, door);
+	}
+}
+
+void editelevator::On_bDoorSensor_Click(wxCommandEvent& event)
+{
+	if (elevator && door)
+	{
+		int doornum = sDoor->GetThumbPosition();
+		bool status = door->EnableSensor;
+		door->EnableSensor = !status;
+	}
 }

@@ -2615,11 +2615,20 @@ void Elevator::SetFloorSkipText(const char *id)
 {
 	//sets the text shown in the floor indicator while skipping floors (an express zone)
 
+	std::string text = id;
+	TrimString(text);
+
+	if (text == "")
+	{
+		UseFloorSkipText = false;
+		FloorSkipText = text;
+		return;
+	}
+
 	if (sbs->Verbose)
-		Report("setting floor skip text to " + std::string(id));
+		Report("setting floor skip text to " + text);
 	UseFloorSkipText = true;
 	FloorSkipText = id;
-	TrimString(FloorSkipText);
 }
 
 const char* Elevator::GetFloorSkipText()

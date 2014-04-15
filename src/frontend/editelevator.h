@@ -115,8 +115,6 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT61;
 		static const long ID_txtQuickClose;
 		static const long ID_bSetQuickClose;
-		static const long ID_STATICTEXT32;
-		static const long ID_txtUseSkipFloor;
 		static const long ID_STATICTEXT44;
 		static const long ID_txtSkipFloorText;
 		static const long ID_bSetSkipFloorText;
@@ -127,6 +125,9 @@ class editelevator: public wxDialog
 		static const long ID_STATICTEXT67;
 		static const long ID_txtNudgeMode;
 		static const long ID_bSetNudge;
+		static const long ID_STATICTEXT32;
+		static const long ID_txtDoorSensor;
+		static const long ID_bDoorSensor;
 		static const long ID_STATICTEXT86;
 		static const long ID_txtActiveCallFloor;
 		static const long ID_STATICTEXT87;
@@ -378,6 +379,7 @@ class editelevator: public wxDialog
 		void On_bSetAutoDoors_Click(wxCommandEvent& event);
 		void On_bInterlocks_Click(wxCommandEvent& event);
 		void On_bSetNudge_Click(wxCommandEvent& event);
+		void On_bDoorSensor_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -410,7 +412,9 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtMusicOn;
 		wxTextCtrl* txtOriginFloor;
 		wxStaticText* StaticText83;
+		wxButton* bDoorSensor;
 		wxBoxSizer* BoxSizer2;
+		wxTextCtrl* txtDoorSensor;
 		wxButton* bStop;
 		wxStaticText* StaticText32;
 		wxCheckBox* chkRun;
@@ -481,7 +485,6 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText2;
 		wxTextCtrl* txtPosition;
 		wxTextCtrl* txtDoorDirection;
-		wxTextCtrl* txtUseSkipFloor;
 		wxButton* bSetLevelingSpeed;
 		wxStaticText* StaticText84;
 		wxStaticText* StaticText85;

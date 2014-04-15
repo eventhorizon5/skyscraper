@@ -2059,7 +2059,7 @@ bool ElevatorDoor::GetNudgeStatus()
 
 void ElevatorDoor::CheckSensor()
 {
-	if (sensor && (AreDoorsOpen() == true || OpenDoor != 0))
+	if (EnableSensor == true && sensor && (AreDoorsOpen() == true || OpenDoor != 0))
 		sensor->Check();
 }
 

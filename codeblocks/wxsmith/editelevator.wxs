@@ -704,29 +704,6 @@
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_STATICTEXT32" variable="StaticText32" member="yes">
-													<label>UseFlrSkip:</label>
-												</object>
-												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
-												<object class="wxTextCtrl" name="ID_txtUseSkipFloor" variable="txtUseSkipFloor" member="yes">
-													<size>75,-1</size>
-													<tooltip>Use Floor Skip Text</tooltip>
-													<style>wxTE_READONLY</style>
-												</object>
-												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="spacer">
-												<flag>wxALIGN_LEFT|wxALIGN_TOP</flag>
-												<border>5</border>
-												<option>1</option>
-											</object>
-											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT44" variable="StaticText44" member="yes">
 													<label>FlrSkipTxt:</label>
 												</object>
@@ -821,6 +798,34 @@
 													<label>Set</label>
 													<style>wxBU_EXACTFIT</style>
 													<handler function="On_bSetNudge_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT32" variable="StaticText32" member="yes">
+													<label>Sensor:</label>
+												</object>
+												<flag>wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtDoorSensor" variable="txtDoorSensor" member="yes">
+													<size>75,-1</size>
+													<tooltip>Door Sensor Status</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bDoorSensor" variable="bDoorSensor" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bDoorSensor_Click" entry="EVT_BUTTON" />
 												</object>
 												<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
