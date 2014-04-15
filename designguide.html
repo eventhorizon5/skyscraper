@@ -382,8 +382,10 @@ GroundFogNoise<br>
 SandStormTest</p>
 
 <p align="left"><strong>12. InterfloorOnTop</strong> - determines if the
-interfloor area should be located at the bottom or top of each floor. Default
-is false.<br>
+interfloor area should be located at the bottom or top of each floor.
+Interfloor areas represent the area used by floor trusses (supports), between a
+level's ceiling and the next level. Since each floor needs supports below it,
+the default is false.<br>
 <font face="Courier New, Courier, mono" size="2">InterfloorOnTop =
 true</font></p>
 
@@ -2634,16 +2636,16 @@ Bottom</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">DrawWalls = true,
 true, false, false, false, false</font></p>
 
-<p align="left">The example shown is the default setting.
-<em>MainNegative</em> is the main (that makes up the front of a wall lengthwise, or the
-top area of a floor) face on the negative side, <em>MainPositive</em> is the
-main face on the positive side (back of a wall, or the bottom area of a floor),
-<em>SideNegative</em> is the side (the part
-that is along the thickness) face on the negative side, <em>SidePositive</em>
-is the side face on the positive side; <em>Top</em> refers to either the top
-side if a wall, or to the front face if a floor; <em>Bottom</em> refers to
-either the bottom side if a wall, or the back face if a floor. The following
-graphic explains the sides in detail:
+<p align="left">The example shown is the default setting. <em>MainNegative</em>
+is the main (that makes up the front of a wall lengthwise, or the top area of a
+floor) face on the negative side, <em>MainPositive</em> is the main face on the
+positive side (back of a wall, or the bottom area of a floor),
+<em>SideNegative</em> is the side (the part that is along the thickness) face
+on the negative side, <em>SidePositive</em> is the side face on the positive
+side; <em>Top</em> refers to either the top side if a wall, or to the front
+face if a floor; <em>Bottom</em> refers to either the bottom side if a wall, or
+the back face if a floor. The following graphic explains the sides in detail:
+</p>
 
 <p align="left"><img src="guide/sides.jpg"></p>
 
