@@ -532,12 +532,7 @@ or "center". <em>ColorR</em>, <em>ColorG</em> and <em>ColorB</em> determine the
 color of the text, and the values range from 0 to 255. If all values are 255,
 the text is white, and if all values are 0, then it's black. The <em>force</em>
 value is optional, and if set to false, autosizing will always be disabled for
-this texture; if set to true, autosizing will always be enabled. Note that the
-source texture needs to be a power-of-two size, such as 128x128, 256x256,
-512x512, etc - this is because the work is done directly on the graphics card,
-and the majority of cards only support those kinds of sizes. Normal textures
-loaded with the Load command are internally resized before use, and don't have
-that limitation.</p>
+this texture; if set to true, autosizing will always be enabled.</p>
 
 <p align="left"><strong>7. AddTextRange</strong> - similar to LoadRange, but
 draws text onto a texture<br>
@@ -2639,20 +2634,18 @@ Bottom</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">DrawWalls = true,
 true, false, false, false, false</font></p>
 
-<p align="left">The example shown is the default setting. This can seem
-complex, but I'll provide a graphic soon to explain it more easily.
-<em>MainNegative</em> is the main (that makes up the length if a wall, or the
-main area if a floor) face on the negative side, <em>MainPositive</em> is the
-main face on the positive side, <em>SideNegative</em> is the side (the part
+<p align="left">The example shown is the default setting.
+<em>MainNegative</em> is the main (that makes up the front of a wall lengthwise, or the
+top area of a floor) face on the negative side, <em>MainPositive</em> is the
+main face on the positive side (back of a wall, or the bottom area of a floor),
+<em>SideNegative</em> is the side (the part
 that is along the thickness) face on the negative side, <em>SidePositive</em>
 is the side face on the positive side; <em>Top</em> refers to either the top
-side if a wall, or to the positive X face if a floor; <em>Bottom</em> refers to
-either the bottom side if a wall, or the negative X face if a floor. In the
-graphic above in the WallOrientation section, let's say that the large box's
-difference in x values are larger (meaning that it is horizontal from the left
-to the right), and that it has the same z values. With that,
-<em>MainNegative</em> would be the front wall, <em>MainPositive</em> the back,
-<em>SideNegative</em> the left, <em>SidePositive</em> the right, etc.</p>
+side if a wall, or to the front face if a floor; <em>Bottom</em> refers to
+either the bottom side if a wall, or the back face if a floor. The following
+graphic explains the sides in detail:
+
+<p align="left"><img src="guide/sides.jpg"></p>
 
 <p align="left"><strong>n. SetPlanarMapping</strong> - sets the planar texture
 mapper's parameters.<br>

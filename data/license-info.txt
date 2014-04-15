@@ -75,3 +75,9 @@ sounds:
 -mechchime8.wav, mechchime9.wav and mechchime10.wav by escalatorgeek881
 -motor_start_hydraulic.wav, motor_run_hydraulic.wav, motor_stop_hydraulic.wav by Elevator5519
 -ambient.ogg was made by me, and is background audio recorded in the Sears Tower lobby
+
+models:
+-key.mesh originally Key.skp by 50210, from the Sketchup 3D Warehouse
+-couch.mesh originally "modern sofa.skp" from the Sketchup 3D Warehouse
+-swimmingpool.mesh originally "swimming pool" by 1, at www.3dxtras.com
+
