@@ -2048,6 +2048,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #SetAutoSize = true, true
 
     #Interfloor External
+    SetAutoSize = true, false
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
     AddWall IFront, MainWindows, 0.5, -39, -70, 39, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0, True
@@ -8705,50 +8706,75 @@ WallOrientation = right
 AddWall Buildings, Back, SearsTower, 0, 1720 + -112.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
 AddWall Buildings, Right, SearsTower, 0, 1720 + 112.5, -1840 + -112.5, 1720 + 112.5, -1840 + 112.5, 668, 668, 0, 0, 0, 50
 
-#50 to to 65
+#lower setbacks
+SetAutoSize = true, true
+AddFloor Buildings, Right, Brick, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 112.5, -1840 + 112.5, 668, 668, false, false, 0, 0
+AddFloor Buildings, Left, Brick, 0, 1720 - 37.5, -1840 - 37.5, 1720 - 112.5, -1840 - 112.5, 668, 668, false, false, 0, 0
+
+#50 to 65
+SetAutoSize = true, false
 WallOrientation = left
 #front
-AddWall Buildings, Front1, SearsTower, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Front2, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Front3, SearsTower, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
-#left
-AddWall Buildings, Left1, SearsTower, 0, 1720 + -112.5, -1840 + -112.5, 1720 + -37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Left2, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Left3, SearsTower, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Front1, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -37.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Front2, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
 #back
-AddWall Buildings, Back1, SearsTower, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Back2, SearsTower, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Back3, SearsTower, 0, 1720 + 112.5, -1840 + 37.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Back1, SearsTower, 0, 1720 + 112.5, -1840 + -112.5, 1720 + 112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Back2, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 112.5, -1840 + 37.5, 202, 202, 668, 668, 0, 16
+#left
+AddWall Buildings, Left1, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + -37.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Left2, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 112.5, -1840 + -112.5, 202, 202, 668, 668, 0, 16
 #right
-AddWall Buildings, Right1, SearsTower, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Right2, SearsTower, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
-AddWall Buildings, Right3, SearsTower, 0, 1720 + 37.5, -1840 + 112.5, 1720 + 112.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Right1, SearsTower, 0, 1720 + -112.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+AddWall Buildings, Right2, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 112.5, 202, 202, 668, 668, 0, 16
+
+#middle setbacks
+SetAutoSize = true, true
+AddFloor Buildings, Right, Brick, 0, 1720 + 37.5, -1840 - 37.5, 1720 + 112.5, -1840 - 112.5, 870, 870, false, false, 0, 0
+AddFloor Buildings, Left, Brick, 0, 1720 - 37.5, -1840 + 37.5, 1720 - 112.5, -1840 + 112.5, 870, 870, false, false, 0, 0
 
 #66 to 89
+SetAutoSize = true, false
 WallOrientation = left
 #front
-AddWall Buildings, Front1, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Front1, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
 AddWall Buildings, Front2, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
 AddWall Buildings, Front3, SearsTower, 0, 1720 + -112.5, -1840 + 37.5, 1720 + -37.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+#left
+AddWall Buildings, Left1, SearsTower, 0, 1720 + -112.5, -1840 + -37.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Left2, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Left3, SearsTower, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
 #back
 AddWall Buildings, Back1, SearsTower, 0, 1720 + 37.5, -1840 + -37.5, 1720 + 112.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
 AddWall Buildings, Back2, SearsTower, 0, 1720 + 112.5, -1840 + -37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Back3, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
-#left
-AddWall Buildings, Left1, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Left2, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Left3, SearsTower, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -37.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Back3, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
 #right
 AddWall Buildings, Right1, SearsTower, 0, 1720 + -37.5, -1840 + 37.5, 1720 + -37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
 AddWall Buildings, Right2, SearsTower, 0, 1720 + -37.5, -1840 + 112.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
-AddWall Buildings, Right3, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 112.5, 304, 304, 870, 870, 0, 24
+AddWall Buildings, Right3, SearsTower, 0, 1720 + 37.5, -1840 + 37.5, 1720 + 112.5, -1840 + 37.5, 304, 304, 870, 870, 0, 24
+
+#upper setbacks
+SetAutoSize = true, true
+AddFloor Buildings, Right, Brick, 0, 1720 + 37.5, -1840 - 37.5, 1720 + 112.5, -1840 + 37.5, 1174, 1174, false, false, 0, 0
+AddFloor Buildings, Left, Brick, 0, 1720 - 37.5, -1840 - 37.5, 1720 - 112.5, -1840 + 37.5, 1174, 1174, false, false, 0, 0
+AddFloor Buildings, Back, Brick, 0, 1720 - 37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 112.5, 1174, 1174, false, false, 0, 0
 
 #90 to 108
+SetAutoSize = true, false
 WallOrientation = left
 AddWall Buildings, Front, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + -37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
 AddWall Buildings, Left, SearsTower, 0, 1720 + -37.5, -1840 + -112.5, 1720 + 37.5, -1840 + -112.5, 280, 280, 1174, 1174, 0, 19
 AddWall Buildings, Back, SearsTower, 0, 1720 + 37.5, -1840 + -112.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
 AddWall Buildings, Right, SearsTower, 0, 1720 + -37.5, -1840 + 37.5, 1720 + 37.5, -1840 + 37.5, 280, 280, 1174, 1174, 0, 19
+
+#roof
+SetAutoSize = true, true
+AddFloor Buildings, Roof, Brick, 0, 1720 - 37.5, -1840 - 112.5, 1720 + 37.5, -1840 + 37.5, 1454, 1454, false, false, 0, 0
+
+#Antennas
+SetAutoSize = true, false
+CreateWallBox2 Buildings, West Antenna, Concrete, 1720, -1840 - 75, 8, 8, 279, 1454, 0, 25, false, true, top, false
+CreateWallBox2 Buildings, East Antenna, Concrete, 1720, -1840, 8, 8, 257, 1454, 0, 25, false, true, top, false
+SetAutoSize = true, true
 
 
 #Daley Center
