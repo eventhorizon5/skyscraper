@@ -1012,8 +1012,9 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	//create door sensor
 	if (EnableSensor == true && ShaftDoor == false && elev->AutoDoors == true)
 	{
-		Ogre::Vector3 min (x1, wrapper->altitude, z1);
-		Ogre::Vector3 max (x2, wrapper->altitude + wrapper->Height, z2);
+		float sensor_width = sbs->camera->cfg_body_width / 4;
+		Ogre::Vector3 min (x1 - sensor_width, wrapper->altitude, z1 - sensor_width);
+		Ogre::Vector3 max (x2 + sensor_width, wrapper->altitude + wrapper->Height, z2 + sensor_width);
 		CreateSensor(min, max);
 	}
 
@@ -2083,5 +2084,5 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 
 	//create new trigger
 	sensor = new Trigger(object, "Sensor", SensorSound.c_str(), area_min, area_max, actions);
-	sensor->Move(elev->Origin);
+	sensor->SetPosition(elev->Origin);
 }

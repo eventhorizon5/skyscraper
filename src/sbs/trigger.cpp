@@ -48,6 +48,7 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre:
 	this->area_min = area_min;
 	this->area_max = area_max;
 	IsInside = false;
+	pos = Ogre::Vector3::ZERO;
 
 	//create sound object
 	sound = new Sound(object, name, true);
