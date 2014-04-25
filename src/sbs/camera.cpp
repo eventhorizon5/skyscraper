@@ -297,30 +297,40 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 	if (vector == Ogre::Vector3::ZERO)
 		RotationStopped = true;
 
-	//rotate collider body on Y axis (left/right)
-	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed;
+	//convert rotation values to degrees
+	float xdeg = Ogre::Math::RadiansToDegrees(vector.x) * speed; //X axis (up/down)
+	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed; //Y axis (left/right)
+	float zdeg = Ogre::Math::RadiansToDegrees(vector.z) * speed; //Z axis (clockwise/counterclockwise)
+	rotation.x += xdeg;
 	rotation.y += ydeg;
+	rotation.z += zdeg;
 
+	if (rotation.x > 359)
+		rotation.x -= 360;
 	if (rotation.y > 359)
 		rotation.y -= 360;
+	if (rotation.z > 359)
+		rotation.z -= 360;
+	if (rotation.x < 0)
+		rotation.x += 360;
 	if (rotation.y < 0)
 		rotation.y += 360;
+	if (rotation.z < 0)
+		rotation.z += 360;
 
 	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	if (EnableBullet == true)
 	{
+		//rotate character collider
 		mCharacter->setOrientation(rot);
 		mCharacter->updateTransform(false, true, true);
+
+		//rotate camera
+		MainCamera->pitch(Ogre::Degree(xdeg));
+		MainCamera->roll(Ogre::Degree(zdeg));
 	}
 	else
 		MainCamera->setOrientation(rot);
-
-	//rotate camera
-	if (EnableBullet == true)
-	{
-		MainCamera->pitch(Ogre::Radian(vector.x) * speed);
-		MainCamera->roll(Ogre::Radian(vector.z) * speed);
-	}
 }
 
 void Camera::SetStartDirection(const Ogre::Vector3 &vector)
