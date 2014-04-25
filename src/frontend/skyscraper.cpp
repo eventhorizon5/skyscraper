@@ -1028,6 +1028,13 @@ void Skyscraper::Loop()
 		Pause = false;
 		UnloadSim();
 		Load();
+
+		//force a resizing of a window to fix some rendering issues after a reload
+#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
+		mRenderWindow->resize(window->GetClientSize().GetWidth() - 10, window->GetClientSize().GetHeight() - 10);
+		mRenderWindow->resize(window->GetClientSize().GetWidth(), window->GetClientSize().GetHeight());
+		mRenderWindow->windowMovedOrResized();
+#endif
 	}
 
 	//SBSProfileManager::dumpAll();
