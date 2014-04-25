@@ -41,6 +41,7 @@ TimerObject::TimerObject(Object *parent, const char *name, bool permanent)
 	LastHit = 0;
 	Running = false;
 	CurrentTime = 0;
+	StartTime = 0;
 }
 
 TimerObject::~TimerObject()
