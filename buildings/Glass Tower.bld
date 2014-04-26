@@ -1746,7 +1746,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     AddWall PenthouseLeft, Concrete, 0, -6.63, 30.14, -6.63, 14.59, 11.5, 11.5, 10, 10, 0, 0, true
     AddWall PenthouseBack, Concrete, 0, -6.63, 30.14, 17.42, 30.14, 11.5, 10, 10, 10, 0, 0, true
     AddWall PenthouseRight, Concrete, 0, 17.42, 30.14, 17.42, 14.59, 10, 10, 10, 10, 0, 0, true
-    AddWall PenthouseShaftFront, Concrete, 0, -6.63, 14.59, 17.42, 14.59, 11.5, 10, 10, 10, 0, 0, true
+    AddWall PenthouseShaftFront, Concrete, 0, -6.63, 14.59, 17.42, 14.59, 11.5, 10, 10, 10, 0, 0, false
     AddWall MainCover, HeliWalls, 0, -32, -25.8, -10.61, 5, 15.5, 15.5, -0.5, -0.5, 0, 0, true
     AddWall MainCover2, HeliWalls, 0, -10.61, 14.59, -10.61, 5, 15.5, 15.5, -0.5, -0.5, 0, 0, true
     AddWall InteriorCover, HeliWalls, 0, -10.61, 36.64, -10.61, 14.59, 10.5, 10.5, -0.5, -0.5, 0, 0, true
