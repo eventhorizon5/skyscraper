@@ -121,10 +121,21 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 		sbs->ResetWalls();
 	}
 
-	//create buttons
-	int bottomfloor = sbs->GetElevator(Elevators[0])->GetBottomFloor();
-	int topfloor = sbs->GetElevator(Elevators[0])->GetTopFloor();
+	//determine floor range of associated elevators
+	int bottomfloor = 0;
+	int topfloor = 0;
 
+	for (int i = 0; i < (int)Elevators.size(); i++)
+	{
+		int tmpbottom = sbs->GetElevator(Elevators[i])->GetBottomFloor();
+		int tmptop = sbs->GetElevator(Elevators[i])->GetTopFloor();
+		if (tmpbottom < bottomfloor)
+			bottomfloor = tmpbottom;
+		if (tmptop > topfloor)
+			topfloor = tmptop;
+	}
+
+	//create buttons
 	if (sbs->Verbose)
 		Report("Creating buttons");
 

@@ -5276,58 +5276,70 @@ bool Elevator::AvailableForCall(int floor, int direction)
 {
 	//return true or false if the elevator is available for the specified hall call
 
-	//if elevator is running
-	if (IsRunning() == true)
+	//if floor is a serviced floor
+	if (IsServicedFloor(floor) == true)
 	{
-		//and if no queue changes are pending
-		if (QueuePending == false)
+		//if direction doesn't go beyond elevator's range
+		if ((direction == 1 && floor < GetTopFloor()) || (direction == -1 && floor > GetBottomFloor()))
 		{
-			//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
-			if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+			//if elevator is running
+			if (IsRunning() == true)
 			{
-				//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
-				if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+				//and if no queue changes are pending
+				if (QueuePending == false)
 				{
-					//and if it's above the current floor and should be called down, or below the
-					//current floor and called up, or on the same floor and not moving, or idle
-					if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
+					//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
+					if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 					{
-						//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
-						if (QueuePositionDirection == direction || IsIdle())
+						//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
+						if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 						{
-							//and if nudge mode is off on all doors
-							if (IsNudgeModeActive() == false)
+							//and if it's above the current floor and should be called down, or below the
+							//current floor and called up, or on the same floor and not moving, or idle
+							if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 							{
-								//and if it's not in any service mode
-								if (InServiceMode() == false)
+								//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
+								if (QueuePositionDirection == direction || IsIdle())
 								{
-									if (sbs->Verbose)
-										Report("Available for call");
-									return true;
+									//and if nudge mode is off on all doors
+									if (IsNudgeModeActive() == false)
+									{
+										//and if it's not in any service mode
+										if (InServiceMode() == false)
+										{
+											if (sbs->Verbose)
+												Report("Available for call");
+											return true;
+										}
+										else if (sbs->Verbose == true)
+											Report("Not available for call - in service mode");
+									}
+									else if (sbs->Verbose == true)
+										Report("Not available for call - in nudge mode");
 								}
 								else if (sbs->Verbose == true)
-									Report("Not available for call - in service mode");
+									Report("Not available for call - going a different direction and is not idle");
 							}
 							else if (sbs->Verbose == true)
-								Report("Not available for call - in nudge mode");
+								Report("Not available for call - position/direction wrong for call");
 						}
 						else if (sbs->Verbose == true)
-							Report("Not available for call - going a different direction and is not idle");
+							Report("Not available for call - queueresets is on and opposite queue direction is active");
 					}
 					else if (sbs->Verbose == true)
-						Report("Not available for call - position/direction wrong for call");
+						Report("Not available for call - limitqueue is on and queue is active");
 				}
 				else if (sbs->Verbose == true)
-					Report("Not available for call - queueresets is on and opposite queue direction is active");
+					Report("Not available for call - queue change is pending");
 			}
 			else if (sbs->Verbose == true)
-				Report("Not available for call - limitqueue is on and queue is active");
+				Report("Not available for call - elevator not running");
 		}
 		else if (sbs->Verbose == true)
-			Report("Not available for call - queue change is pending");
+			Report("Not available for call - direction beyond serviced range");
 	}
 	else if (sbs->Verbose == true)
-		Report("Not available for call - elevator not running");
+		Report("Not available for call - not a serviced floor");
 
 	return false;
 }
