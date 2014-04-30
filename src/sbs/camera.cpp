@@ -573,7 +573,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			if (std::string(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
 			else
-				sbs->Report("Cannot delete object " + number);
+				sbs->ReportError("Cannot delete object " + number);
 			return;
 		}
 

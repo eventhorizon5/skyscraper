@@ -205,14 +205,14 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot open doors" + doornumber + "; doors manually stopped");
+		elev->ReportError("cannot open doors" + doornumber + "; doors manually stopped");
 		return;
 	}
 
 	//exit if in nudge mode
 	if (GetNudgeStatus() == true)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot open doors" + doornumber + "; nudge mode enabled");
+		elev->ReportError("cannot open doors" + doornumber + "; nudge mode enabled");
 		return;
 	}
 
@@ -223,14 +223,14 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//don't open doors if emergency stop is enabled
 	if (elev->OnFloor == false && whichdoors != 3 && manual == false && elev->AutoDoors == true)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot open doors" + doornumber + "; emergency stop enabled");
+		elev->ReportError("cannot open doors" + doornumber + "; emergency stop enabled");
 		return;
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual open is requested
 	if (DoorIsRunning == true && (abs(OpenDoor) == 2 || (abs(OpenDoor) == 1 && manual == true)))
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
+		elev->ReportError("doors" + doornumber + " in use");
 		return;
 	}
 
@@ -240,11 +240,11 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//reset timer if not in a service mode
 		if (elev->InServiceMode() == false)
 		{
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already open; resetting timer");
+			elev->Report("doors" + doornumber + " already open; resetting timer");
 			ResetDoorTimer();
 		}
 		else
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already open");
+			elev->Report("doors" + doornumber + " already open");
 		return;
 	}
 
@@ -258,23 +258,23 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": invalid shaft doors");
+			elev->ReportError("Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == true)
 		{
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": shaft doors" + doornumber + " already open on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("shaft doors" + doornumber + " already open on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": manually opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("manually opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": opening doors" + doornumber);
+		elev->Report("opening doors" + doornumber);
 	else
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": manually opening doors" + doornumber);
+		elev->Report("manually opening doors" + doornumber);
 
 	if (manual == false)
 		OpenDoor = 1;
@@ -299,7 +299,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": can't open doors" + doornumber + " - no shaft doors on " + ToString2(floor));
+		elev->ReportError("can't open doors" + doornumber + " - no shaft doors on " + ToString2(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -328,35 +328,35 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + "; doors manually stopped");
+		elev->ReportError("cannot close doors" + doornumber + "; doors manually stopped");
 		return;
 	}
 
 	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the parking floor
 	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + " while Fire Service Phase 1 is in recall mode");
+		elev->ReportError("cannot close doors" + doornumber + " while Fire Service Phase 1 is in recall mode");
 		return;
 	}
 
 	//do not close doors while fire service mode 2 is set to hold
 	if (manual == false && elev->FireServicePhase2 == 2)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
+		elev->ReportError("cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
 		return;
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual close is requested
 	if (DoorIsRunning == true && (abs(OpenDoor) == 2 || (abs(OpenDoor) == 1 && manual == true)))
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " in use");
+		elev->ReportError("doors" + doornumber + " in use");
 		return;
 	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (OpenDoor != 0 && manual == false && elev->FireServicePhase2 == 0)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": will close doors" + doornumber + " in quick-close mode");
+		elev->Report("will close doors" + doornumber + " in quick-close mode");
 		quick_close = true;
 		return;
 	}
@@ -364,7 +364,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//check if elevator doors are already closed
 	if (Doors->Open == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": doors" + doornumber + " already closed");
+		elev->Report("doors" + doornumber + " already closed");
 		return;
 	}
 
@@ -378,23 +378,23 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": invalid shaft doors");
+			elev->ReportError("Doors" + doornumber + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": shaft doors" + doornumber + " already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->ReportError("shaft doors" + doornumber + " already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": manually closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("manually closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": closing doors" + doornumber);
+		elev->Report("closing doors" + doornumber);
 	else
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": manually closing doors" + doornumber);
+		elev->Report("manually closing doors" + doornumber);
 
 	if (manual == false)
 		OpenDoor = -1;
@@ -412,7 +412,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": can't close doors" + doornumber + " - no shaft doors on " + ToString2(floor));
+		elev->ReportError("can't close doors" + doornumber + " - no shaft doors on " + ToString2(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -442,9 +442,9 @@ void ElevatorDoor::StopDoors()
 	if (OpenDoor == -2 || OpenDoor == 2)
 	{
 		if (WhichDoors == 3)
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": stopping shaft doors" + doornumber + " on floor " + ToString2(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
+			elev->Report("stopping shaft doors" + doornumber + " on floor " + ToString2(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
 		else
-			sbs->Report("Elevator " + ToString2(elev->Number) + ": stopping doors" + doornumber);
+			elev->Report("stopping doors" + doornumber);
 
 		if (WhichDoors == 1 || WhichDoors == 2)
 			Doors->StopDoors();
@@ -461,9 +461,9 @@ void ElevatorDoor::StopDoors()
 		doors_stopped = true;
 	}
 	else if (OpenDoor != 0)
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": can only stop doors" + doornumber + " in manual/emergency mode");
+		elev->Report("can only stop doors" + doornumber + " in manual/emergency mode");
 	else
-		sbs->Report("Elevator " + ToString2(elev->Number) + ": cannot stop doors" + doornumber + "; no doors moving");
+		elev->Report("cannot stop doors" + doornumber + "; no doors moving");
 }
 
 void ElevatorDoor::MoveDoors(bool open, bool manual)
@@ -2012,7 +2012,7 @@ void ElevatorDoor::Hold(bool disable_nudge)
 	if (GetNudgeStatus() == true)
 		return;
 
-	sbs->Report("Elevator " + ToString2(elev->Number) + ": holding doors" + doornumber);
+	elev->Report("holding doors" + doornumber);
 
 	if (disable_nudge == true)
 		nudgetimer->Stop();
@@ -2034,7 +2034,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	{
 		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
 			return;
-		sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": nudge mode activated");
+		elev->Report("Doors" + doornumber + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)
 			nudgesound->Load(NudgeSound.c_str());
@@ -2045,7 +2045,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	}
 	else if (nudge_enabled == true)
 	{
-		sbs->Report("Elevator " + ToString2(elev->Number) + " Doors" + doornumber + ": nudge mode disabled");
+		elev->Report("Doors" + doornumber + ": nudge mode disabled");
 		nudge_enabled = false;
 		nudgesound->Stop();
 	}

@@ -501,7 +501,7 @@ void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Ve
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for stairwell " + ToString2(StairsNum) + "...");
+	Report("cutting...");
 
 	float voffset1, voffset2;
 	cutstart = start;

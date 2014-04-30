@@ -384,7 +384,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 {
 	//Cut through floor/ceiling polygons on all associated levels, within the voffsets
 
-	sbs->Report("Cutting for shaft " + ToString2(ShaftNumber) + "...");
+	Report("cutting...");
 
 	float voffset1, voffset2;
 	cutstart = start;

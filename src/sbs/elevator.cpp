@@ -610,47 +610,30 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 	//directions are either 1 for up, or -1 for down
 
 	if (Running == false)
-	{
-		Report("Elevator not running");
-		return false;
-	}
+		return ReportError("Elevator not running");
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
 	if (!floorobj)
-	{
-		Report("Invalid floor " + ToString2(floor));
-		return false;
-	}
+		return ReportError("Invalid floor " + ToString2(floor));
 
 	//if doors are open or moving in independent service mode, quit
 	if (IndependentService == true && (AreDoorsOpen() == false || AreDoorsMoving() != 0))
-	{
-		Report("floor button must be pressed before closing doors while in independent service");
-		return false;
-	}
+		return ReportError("floor button must be pressed before closing doors while in independent service");
 
 	//do not add routes if in inspection service or fire phase 1 modes
 	if (InspectionService == true)
-	{
-		Report("cannot add route while in inspection service mode");
-		return false;
-	}
+		return ReportError("cannot add route while in inspection service mode");
+
 	if (FireServicePhase2 == 2)
-	{
-		Report("cannot add route while hold is enabled");
-		return false;
-	}
+		return ReportError("cannot add route while hold is enabled");
 
 	//discard route if direction opposite queue search direction
 	if (LimitQueue == true && direction != QueuePositionDirection && QueuePositionDirection != 0)
 	{
 		//only allow if any queue entries exist
 		if ((QueuePositionDirection == 1 && UpQueue.size() > 0) || (QueuePositionDirection == -1 && DownQueue.size() > 0))
-		{
-			Report("cannot add route in opposite direction of queue search");
-			return false;
-		}
+			return ReportError("cannot add route in opposite direction of queue search");
 	}
 
 	//add route in related direction queue
@@ -666,8 +649,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (loc != -1)
 		{
 			//exit if entry already exits
-			Report("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
-			return false;
+			return ReportError("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
 		}
 
 		//add floor to up queue
@@ -691,8 +673,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		if (loc != -1)
 		{
 			//exit if entry already exits
-			Report("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
-			return false;
+			return ReportError("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
 		}
 		
 		//add floor to down queue
@@ -734,18 +715,12 @@ bool Elevator::DeleteRoute(int floor, int direction)
 	//directions are either 1 for up, or -1 for down
 
 	if (Running == false)
-	{
-		Report("Elevator not running");
-		return false;
-	}
+		return ReportError("Elevator not running");
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
 	if (!floorobj)
-	{
-		Report("Invalid floor " + ToString2(floor));
-		return false;
-	}
+		return ReportError("Invalid floor " + ToString2(floor));
 
 	if (direction == 1)
 	{
@@ -785,15 +760,12 @@ bool Elevator::CallCancel()
 	//LastQueueFloor holds the floor and direction of the last route; array element 0 is the floor and 1 is the direction
 
 	if (Running == false)
-	{
-		Report("Elevator not running");
-		return false;
-	}
+		return ReportError("Elevator not running");
 
 	if (LastQueueFloor[1] == 0)
 	{
 		if (sbs->Verbose)
-			Report("CallCancel: route not valid");
+			ReportError("CallCancel: route not valid");
 		return false;
 	}
 
@@ -843,21 +815,21 @@ void Elevator::Stop(bool emergency)
 	if (InspectionService == true && emergency == true)
 	{
 		if (sbs->Verbose)
-			Report("cannot stop while in inspection service");
+			ReportError("cannot stop while in inspection service");
 		return;
 	}
 
 	//exit if in fire service phase 1 recall
 	if (FireServicePhase1 == 1 && FireServicePhase2 == 0)
 	{
-		Report("cannot stop while in fire service 1 recall mode");
+		ReportError("cannot stop while in fire service 1 recall mode");
 		return;
 	}
 
 	if (IsMoving == false)
 	{
 		if (sbs->Verbose)
-			Report("Stop: not moving");
+			ReportError("Stop: not moving");
 		return;
 	}
 
@@ -1436,7 +1408,7 @@ void Elevator::MoveElevatorToFloor()
 	//exit if doors are not fully closed while interlocks enabled
 	if (Interlocks == true && AreDoorsOpen() == true)
 	{
-		Report("Doors must be closed before moving when interlocks are enabled");
+		ReportError("Doors must be closed before moving when interlocks are enabled");
 		MoveElevator = false;
 		Direction = 0;
 		return;
@@ -1446,7 +1418,7 @@ void Elevator::MoveElevatorToFloor()
 	{
 		if (Running == false)
 		{
-			Report("Elevator not running");
+			ReportError("Elevator not running");
 			return;
 		}
 
@@ -1470,7 +1442,7 @@ void Elevator::MoveElevatorToFloor()
 		//exit if floor doesn't exist
 		if (!sbs->GetFloor(GotoFloor))
 		{
-			sbs->Report("Destination floor does not exist");
+			ReportError("Destination floor does not exist");
 			Direction = 0;
 			MoveElevator = false;
 			ElevatorIsRunning = false;
@@ -1481,7 +1453,7 @@ void Elevator::MoveElevatorToFloor()
 		//if destination floor is not a serviced floor, reset and exit
 		if (IsServicedFloor(GotoFloor) == false && InspectionService == false && ManualMove == 0)
 		{
-			sbs->Report("Destination floor not in ServicedFloors list");
+			ReportError("Destination floor not in ServicedFloors list");
 			Direction = 0;
 			MoveElevator = false;
 			ElevatorIsRunning = false;
@@ -1492,7 +1464,7 @@ void Elevator::MoveElevatorToFloor()
 		//If elevator is already on specified floor, open doors and exit
 		if (ElevatorFloor == GotoFloor && InspectionService == false && IsLeveled() == true && ManualMove == 0)
 		{
-			sbs->Report("Elevator already on specified floor");
+			ReportError("Elevator already on specified floor");
 			Direction = 0;
 			MoveElevator = false;
 			ElevatorIsRunning = false;
@@ -1537,7 +1509,7 @@ void Elevator::MoveElevatorToFloor()
 				if (ElevatorStart >= Destination)
 				{
 					//don't go above top floor
-					Report("cannot go above top floor");
+					ReportError("cannot go above top floor");
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
@@ -1552,7 +1524,7 @@ void Elevator::MoveElevatorToFloor()
 				if (ElevatorStart <= Destination)
 				{
 					//don't go below bottom floor
-					Report("cannot go below bottom floor");
+					ReportError("cannot go below bottom floor");
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
@@ -2670,16 +2642,13 @@ bool Elevator::Go(int floor, bool hold)
 	//go to specified floor, bypassing the queuing system
 
 	if (Running == false)
-	{
-		Report("Elevator not running");
-		return false;
-	}
+		return ReportError("Elevator not running");
 
 	//exit if in inspection mode
 	if (InspectionService == true)
 	{
 		if (sbs->Verbose)
-			Report("Go: in inspection mode");
+			ReportError("Go: in inspection mode");
 		return false;
 	}
 
@@ -2719,7 +2688,7 @@ void Elevator::GoToRecallFloor()
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -2761,7 +2730,7 @@ void Elevator::EnableACP(bool value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -2794,7 +2763,7 @@ void Elevator::EnableUpPeak(bool value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -2880,7 +2849,7 @@ void Elevator::EnableIndependentService(bool value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -2998,7 +2967,7 @@ void Elevator::EnableFireService1(int value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -3013,13 +2982,13 @@ void Elevator::EnableFireService1(int value)
 	//exit if in inspection modeno change
 	if (InspectionService == true)
 	{
-		Report("EnableFireService1: cannot enable while in inspection mode");
+		ReportError("EnableFireService1: cannot enable while in inspection mode");
 		return;
 	}
 
 	if (value < 0 || value > 2)
 	{
-		Report("EnableFireService1: invalid value");
+		ReportError("EnableFireService1: invalid value");
 		return;
 	}
 
@@ -3072,28 +3041,28 @@ void Elevator::EnableFireService2(int value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
 	//exit if in inspection mode
 	if (InspectionService == true)
 	{
-		Report("EnableFireService2: cannot enable while in inspection mode");
+		ReportError("EnableFireService2: cannot enable while in inspection mode");
 		return;
 	}
 
 	//require fire service phase 1 to be enabled first
 	if (FireServicePhase1 != 1 && FireServicePhase2 == 0 && value > 0)
 	{
-		Report("EnableFireService2: not in fire service phase 1 mode");
+		ReportError("EnableFireService2: not in fire service phase 1 mode");
 		return;
 	}
 
 	//require doors to be open to change modes
 	if (AreDoorsOpen() == false)
 	{
-		Report("EnableFireService2: doors must be open to change phase 2 modes");
+		ReportError("EnableFireService2: doors must be open to change phase 2 modes");
 		return;
 	}
 
@@ -3109,7 +3078,7 @@ void Elevator::EnableFireService2(int value)
 		FireServicePhase2 = value;
 	else
 	{
-		Report("EnableFireService2: invalid value");
+		ReportError("EnableFireService2: invalid value");
 		return;
 	}
 
@@ -3212,30 +3181,24 @@ bool Elevator::MoveUp()
 	//manual up movement for inspection service mode
 
 	if (Running == false)
-	{
-		Report("Elevator not running");
-		return false;
-	}
+		return ReportError("Elevator not running");
 
 	//moves elevator upwards if in Inspection Service mode
 	if (InspectionService == false)
-	{
-		Report("Not in inspection service mode");
-		return false;
-	}
+		return ReportError("Not in inspection service mode");
 
 	//make sure Go button is on
 	if (ManualGo == false)
 	{
 		if (sbs->Verbose)
-			Report("MoveUp: go button is off");
+			ReportError("MoveUp: go button is off");
 		return false;
 	}
 
 	if (IsMoving == true)
 	{
 		if (sbs->Verbose)
-			Report("MoveUp: already moving");
+			ReportError("MoveUp: already moving");
 		return false;
 	}
 
@@ -3252,30 +3215,24 @@ bool Elevator::MoveDown()
 	//manual down movement for inspection service mode
 
 	if (Running == false)
-	{
-		Report("Elevator not running");
-		return false;
-	}
+		return ReportError("Elevator not running");
 
 	//moves elevator downwards if in Inspection Service mode
 	if (InspectionService == false)
-	{
-		Report("Not in inspection service mode");
-		return false;
-	}
+		return ReportError("Not in inspection service mode");
 
 	//make sure Go button is on
 	if (ManualGo == false)
 	{
 		if (sbs->Verbose)
-			Report("MoveDown: go button is off");
+			ReportError("MoveDown: go button is off");
 		return false;
 	}
 
 	if (IsMoving == true)
 	{
 		if (sbs->Verbose)
-			Report("MoveDown: already moving");
+			ReportError("MoveDown: already moving");
 		return false;
 	}
 
@@ -3293,7 +3250,7 @@ void Elevator::SetGoButton(bool value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -3328,7 +3285,7 @@ void Elevator::SetUpButton(bool value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -3358,7 +3315,7 @@ void Elevator::SetDownButton(bool value)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -3560,12 +3517,12 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	{
 		if (IsMoving == true && OnFloor == false)
 		{
-			Report("Cannot open doors while moving if interlocks are enabled");
+			ReportError("Cannot open doors while moving if interlocks are enabled");
 			return;
 		}
 		if (OnFloor == false || (whichdoors == 3 && floor != GetFloor()))
 		{
-			Report("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
+			ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 			return;
 		}
 	}
@@ -3588,7 +3545,7 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			if (GetDoor(i))
 				GetDoor(i)->OpenDoors(whichdoors, floor, manual);
 			else
-				Report("Invalid door " + ToString2(i));
+				ReportError("Invalid door " + ToString2(i));
 		}
 
 		if (hold == true)
@@ -3613,7 +3570,7 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 					closedstate = true;
 			}
 			else
-				Report("Invalid door " + ToString2(i));
+				ReportError("Invalid door " + ToString2(i));
 		}
 
 		for (int i = start; i <= end; i++)
@@ -3627,7 +3584,7 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 					GetDoor(i)->Hold();
 			}
 			else
-				Report("Invalid door " + ToString2(i));
+				ReportError("Invalid door " + ToString2(i));
 		}
 
 		//reset persistent values
@@ -3670,7 +3627,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 			if (GetDoor(i))
 				GetDoor(i)->CloseDoors(whichdoors, floor, manual);
 			else
-				Report("Invalid door " + ToString2(i));
+				ReportError("Invalid door " + ToString2(i));
 		}
 
 		if (hold == true)
@@ -3694,7 +3651,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 					openstate = true;
 			}
 			else
-				Report("Invalid door " + ToString2(i));
+				ReportError("Invalid door " + ToString2(i));
 		}
 
 		if (openstate == true)
@@ -3705,7 +3662,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 				if (GetDoor(i))
 					GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
 				else
-					Report("Invalid door " + ToString2(i));
+					ReportError("Invalid door " + ToString2(i));
 			}
 		}
 
@@ -3738,7 +3695,7 @@ void Elevator::StopDoors(int number)
 		if (GetDoor(i))
 			GetDoor(i)->StopDoors();
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3814,7 +3771,7 @@ void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 		if (door)
 			door->ShaftDoorsEnabled(floor, value);
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3842,7 +3799,7 @@ void Elevator::ShaftDoorsEnabledRange(int number, int floor, int range)
 		if (door)
 			door->ShaftDoorsEnabledRange(floor, range);
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3871,7 +3828,7 @@ bool Elevator::AreDoorsOpen(int number)
 				return true;
 		}
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 	return false;
 }
@@ -3885,7 +3842,7 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 	if (door)
 		return door->AreShaftDoorsOpen(floor);
 	else
-		Report("Invalid door " + ToString2(number));
+		ReportError("Invalid door " + ToString2(number));
 	return false;
 }
 
@@ -3911,7 +3868,7 @@ void Elevator::Chime(int number, int floor, bool direction)
 		if (door)
 			door->Chime(floor, direction);
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 	if (direction == true)
 		LastChimeDirection = 1;
@@ -3940,7 +3897,7 @@ void Elevator::ResetDoorTimer(int number)
 		if (door)
 			door->ResetDoorTimer();
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3963,7 +3920,7 @@ bool Elevator::DoorsStopped(int number)
 		if (door)
 			return door->DoorsStopped();
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 	return false;
 }
@@ -4306,7 +4263,7 @@ void Elevator::DeleteActiveRoute()
 {
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -4362,7 +4319,7 @@ Object* Elevator::AddDoorComponent(int number, const char *name, const char *tex
 	if (GetDoor(number))
 		return GetDoor(number)->AddDoorComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
-		Report("Invalid door " + ToString2(number));
+		ReportError("Invalid door " + ToString2(number));
 	return 0;
 }
 
@@ -4385,7 +4342,7 @@ void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *
 	if (GetDoor(number))
 		GetDoor(number)->AddShaftDoorsComponent(name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
-		Report("Invalid door " + ToString2(number));
+		ReportError("Invalid door " + ToString2(number));
 }
 
 Object* Elevator::FinishDoors(int number, bool CreateWalls)
@@ -4395,7 +4352,7 @@ Object* Elevator::FinishDoors(int number, bool CreateWalls)
 	if (GetDoor(number))
 		return GetDoor(number)->FinishDoors(CreateWalls);
 	else
-		Report("Invalid door " + ToString2(number));
+		ReportError("Invalid door " + ToString2(number));
 	return 0;
 }
 
@@ -4515,7 +4472,7 @@ void Elevator::PressFloorButton(int floor)
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -4580,7 +4537,7 @@ void Elevator::HoldDoors(int number, bool disable_nudge)
 		if (GetDoor(i))
 			GetDoor(i)->Hold(disable_nudge);
 		else
-			Report("Invalid door " + ToString2(i));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -5350,15 +5307,9 @@ bool Elevator::SelectFloor(int floor)
 
 	//exit if in inspection mode or in fire service mode or is not running
 	if (InspectionService == true)
-	{
-		Report("Cannot select floor while in inspection mode");
-		return false;
-	}
+		return ReportError("Cannot select floor while in inspection mode");
 	else if (FireServicePhase1 == 1 && FireServicePhase2 == 0)
-	{
-		Report("Cannot select floor while in fire service recall mode");
-		return false;
-	}
+		return ReportError("Cannot select floor while in fire service recall mode");
 	else if (Running == false)
 		return false;
 
@@ -5532,7 +5483,7 @@ void Elevator::Up()
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 
@@ -5562,7 +5513,7 @@ void Elevator::Down()
 
 	if (Running == false)
 	{
-		Report("Elevator not running");
+		ReportError("Elevator not running");
 		return;
 	}
 

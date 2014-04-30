@@ -392,10 +392,7 @@ bool Control::Press()
 
 	//check lock state
 	if (IsLocked() == true)
-	{
-		sbs->Report(std::string("Control " + Name + " is locked").c_str());
-		return false;
-	}
+		return sbs->ReportError(std::string("Control " + Name + " is locked").c_str());
 
 	//get action name of next position state
 	std::string name = GetPositionAction(GetNextSelectPosition());

@@ -1444,7 +1444,7 @@ void SBS::CreateSky(const char *filenamebase)
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0f;
-	sbs->ResetTextureMapping(true);
+	ResetTextureMapping(true);
 	WallObject *wall = new WallObject(SkyBox, SkyBox->object, true);
 
 	wall->AddQuad( //front
@@ -1490,7 +1490,7 @@ void SBS::CreateSky(const char *filenamebase)
 		Ogre::Vector3(skysize, skysize, skysize),
 		Ogre::Vector3(-skysize, skysize, skysize), -1, -1, false);
 
-	sbs->ResetTextureMapping();
+	ResetTextureMapping();
 	delete wall;
 }
 
@@ -1506,7 +1506,7 @@ int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 		return -Basements;
 
 	//if checklastfloor is specified, compare altitude with lastfloor
-	if (checklastfloor == true)
+	if (checklastfloor == true && GetFloor(lastfloor))
 	{
 		float lastfloor_altitude = GetFloor(lastfloor)->Altitude;
 		float upperfloor_altitude;
@@ -1937,10 +1937,7 @@ bool SBS::SetWallOrientation(const char *direction)
 	else if (temp == "right")
 		wall_orientation = 2;
 	else
-	{
-		ReportError("SetWallOrientation: Invalid wall orientation");
-		return false;
-	}
+		return ReportError("SetWallOrientation: Invalid wall orientation");
 	return true;
 }
 
@@ -1967,10 +1964,7 @@ bool SBS::SetFloorOrientation(const char *direction)
 	else if (temp == "top")
 		floor_orientation = 2;
 	else
-	{
-		ReportError("SetFloorOrientation: Invalid floor orientation");
-		return false;
-	}
+		return ReportError("SetFloorOrientation: Invalid floor orientation");
 	return true;
 }
 
@@ -2383,10 +2377,7 @@ bool SBS::UnregisterDoorCallback(Door *door)
 			return true;
 		}
 		else
-		{
-			Report("Door in use; cannot unregister callback");
-			return false;
-		}
+			return ReportError("Door in use; cannot unregister callback");
 	}
 	else
 		return false;
@@ -2926,26 +2917,17 @@ bool SBS::DeleteObject(Object *object)
 	//this should be called to delete a simulator object during runtime
 
 	if (!object)
-	{
-		sbs->Report("Invalid object");
-		return false;
-	}
+		return ReportError("Invalid object");
 
 	std::string number = ToString(object->GetNumber());
 	bool deleted = false;
 
 	if (!object->GetRawObject())
-	{
-		sbs->Report("Invalid raw object " + number);
-		return false;
-	}
+		return ReportError("Invalid raw object " + number);
 
 	//don't delete permanent objects
 	if (object->IsPermanent() == true)
-	{
-		sbs->Report("Cannot delete permanent object " + number);
-		return false;
-	}
+		return ReportError("Cannot delete permanent object " + number);
 
 	std::string type = object->GetType();
 
@@ -2954,17 +2936,34 @@ bool SBS::DeleteObject(Object *object)
 	{
 		Floor *floor = (Floor*)object->GetRawObject();
 
+		//make sure no shaft is dependent on this floor
+		for (int i = 0; i < (int)ShaftArray.size(); i++)
+		{
+			Shaft *shaft = ShaftArray[i].object;
+			if (shaft)
+			{
+				if (shaft->IsValidFloor(floor->Number) == true)
+					return ReportError("Cannot delete floor " + ToString2(floor->Number) + " - in use by shaft " + ToString2(shaft->ShaftNumber));
+			}
+		}
+
+		//make sure no stairwell is dependent on this floor
+		for (int i = 0; i < (int)StairsArray.size(); i++)
+		{
+			Stairs *stairs = StairsArray[i].object;
+			if (stairs)
+			{
+				if (stairs->IsValidFloor(floor->Number) == true)
+					return ReportError("Cannot delete floor " + ToString2(floor->Number) + " - in use by stairwell " + ToString2(stairs->StairsNum));
+			}
+		}
+
 		//restrict deletions to only lowest/highest floors
 		if (floor->Number >= 0 && GetFloor(floor->Number + 1))
-		{
-			sbs->Report("Only the highest floor can be deleted");
-			return false;
-		}
+			return ReportError("Only the highest floor can be deleted");
+
 		if (floor->Number < 0 && GetFloor(floor->Number - 1))
-		{
-			sbs->Report("Only the lowest basement can be deleted");
-			return false;
-		}
+			return ReportError("Only the lowest basement can be deleted");
 
 		delete floor;
 		deleted = true;
@@ -3059,18 +3058,12 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool
 	//if relative is false, the X, Y and Z values determine which position axes should be set
 
 	if (!object)
-	{
-		sbs->Report("Invalid object");
-		return false;
-	}
+		return ReportError("Invalid object");
 
 	std::string number = ToString(object->GetNumber());
 
 	if (!object->GetRawObject())
-	{
-		sbs->Report("Invalid raw object " + number);
-		return false;
-	}
+		return ReportError("Invalid raw object " + number);
 
 	std::string type = object->GetType();
 
@@ -3219,18 +3212,12 @@ bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool
 	//if relative is false, the X, Y and Z values determine which position axes should be set
 
 	if (!object)
-	{
-		sbs->Report("Invalid object");
-		return false;
-	}
+		return ReportError("Invalid object");
 
 	std::string number = ToString(object->GetNumber());
 
 	if (!object->GetRawObject())
-	{
-		sbs->Report("Invalid raw object " + number);
-		return false;
-	}
+		return ReportError("Invalid raw object " + number);
 
 	std::string type = object->GetType();
 
@@ -3276,7 +3263,7 @@ Ogre::Vector3 SBS::GetObjectPosition(Object *object)
 
 	if (!object)
 	{
-		sbs->Report("Invalid object");
+		ReportError("Invalid object");
 		return Ogre::Vector3::ZERO;
 	}
 
@@ -3284,7 +3271,7 @@ Ogre::Vector3 SBS::GetObjectPosition(Object *object)
 
 	if (!object->GetRawObject())
 	{
-		sbs->Report("Invalid raw object " + number);
+		ReportError("Invalid raw object " + number);
 		return Ogre::Vector3::ZERO;
 	}
 
@@ -3350,7 +3337,7 @@ Ogre::Vector3 SBS::GetObjectRotation(Object *object)
 
 	if (!object)
 	{
-		sbs->Report("Invalid object");
+		ReportError("Invalid object");
 		return Ogre::Vector3::ZERO;
 	}
 
@@ -3358,7 +3345,7 @@ Ogre::Vector3 SBS::GetObjectRotation(Object *object)
 
 	if (!object->GetRawObject())
 	{
-		sbs->Report("Invalid raw object " + number);
+		ReportError("Invalid raw object " + number);
 		return Ogre::Vector3::ZERO;
 	}
 

@@ -299,8 +299,7 @@ bool CallButton::Call(bool direction)
 	if ((direction == true && UpStatus == true) || (direction == false && DownStatus == true))
 	{
 		if (sbs->Verbose)
-			Report("Call has already been made");
-		return false;
+			return ReportError("Call has already been made");
 	}
 
 	//reject call if all elevators are in fire phase 1 mode
@@ -315,10 +314,7 @@ bool CallButton::Call(bool direction)
 		}
 	}
 	if (bypass == true)
-	{
-		Report("Elevators are in fire phase 1 recall mode");
-		return false;
-	}
+		return ReportError("Elevators are in fire phase 1 recall mode");
 
 	//set light and direction value
 
