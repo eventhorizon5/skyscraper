@@ -1365,7 +1365,7 @@ int SBS::AddCustomFloor(WallObject* wallobject, const char *name, const char *te
 
 	//set up 3D vertex array
 	varray3.reserve(varray.size());
-	for (int i = 0; i < varray.size(); i++)
+	for (int i = 0; i < (int)varray.size(); i++)
 	{
 		varray3.push_back(Ogre::Vector3(varray[i].x, altitude, varray[i].y));
 	}
@@ -2251,12 +2251,20 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	else
 		additionalfloors = 0;
 
+	Shaft *shaft = 0;
+	Stairs *stairs = 0;
+
+	if (shaftnumber > 0)
+		shaft = GetShaft(shaftnumber);
+	if (stairsnumber > 0)
+		stairs = GetStairs(stairsnumber);
+
 	//disable floors 1 floor outside of range, unless part of group
 	if (value == true)
 	{
 		int floorval = floor - additionalfloors - 1;
 		if (IsValidFloor(floorval) && GetFloor(floor)->IsInGroup(floorval) == false)
-				GetFloor(floorval)->Enabled(false);
+			GetFloor(floorval)->Enabled(false);
 
 		floorval = floor + additionalfloors + 1;
 		if (IsValidFloor(floorval) && GetFloor(floor)->IsInGroup(floorval) == false)
@@ -2268,15 +2276,15 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	{
 		if (IsValidFloor(i))
 		{
-			if (shaftnumber > 0)
+			if (shaft)
 			{
 				//if a shaft is specified, only show the floor if it is in the related shaft's ShowFloorsList array
-				if (GetShaft(shaftnumber)->ShowFloors == true)
+				if (shaft->ShowFloors == true)
 				{
 					int index = -1;
-					for (int j = 0; j < (int)GetShaft(shaftnumber)->ShowFloorsList.size(); j++)
+					for (int j = 0; j < (int)shaft->ShowFloorsList.size(); j++)
 					{
-						if (GetShaft(shaftnumber)->ShowFloorsList[j] == i)
+						if (shaft->ShowFloorsList[j] == i)
 							index = j;
 					}
 					if (index != -1 && value == true)
@@ -2293,15 +2301,15 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 					}
 				}
 			}
-			else if (stairsnumber > 0)
+			else if (stairs)
 			{
 				//if a stairwell is specified, only show the floor if it is in the related stairwell's ShowFloorsList array
-				if (GetStairs(stairsnumber)->ShowFloors == true)
+				if (stairs->ShowFloors == true)
 				{
 					int index = -1;
-					for (int j = 0; j < (int)GetStairs(stairsnumber)->ShowFloorsList.size(); j++)
+					for (int j = 0; j < (int)stairs->ShowFloorsList.size(); j++)
 					{
-						if (GetStairs(stairsnumber)->ShowFloorsList[j] == i)
+						if (stairs->ShowFloorsList[j] == i)
 							index = j;
 					}
 					if (index != -1 && value == true)
@@ -2803,9 +2811,9 @@ bool SBS::UnregisterObject(int number)
 /*WallObject* SBS::GetWallObject(std::vector<WallObject*> &wallarray, int polygon_index)
 {
 	//returns the wall object that contains the specified polygon index
-	for (int i = 0; i < wallarray.size(); i++)
+	for (int i = 0; i < (int)wallarray.size(); i++)
 	{
-		for (int j = 0; j < wallarray[i]->handles.size(); j++)
+		for (int j = 0; j < (int)wallarray[i]->handles.size(); j++)
 		{
 			if (wallarray[i]->handles[j] == polygon_index)
 				return wallarray[i];
