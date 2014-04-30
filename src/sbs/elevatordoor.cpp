@@ -68,6 +68,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	nudgesound_loaded = false;
 	chimesound_loaded = 0;
 	sensor = 0;
+	sensor_action = 0;
+	reset_action = 0;
 	EnableSensor = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true);
 	SensorSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.SensorSound", "");
 
@@ -147,9 +149,16 @@ ElevatorDoor::~ElevatorDoor()
 	}
 	Doors = 0;
 
-	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
-		elev->RemoveElevatorDoor(this);
+	if (sbs->FastDelete == false)
+	{
+		//delete sensor actions
+		sbs->RemoveAction(sensor_action);
+		sbs->RemoveAction(reset_action);
+
+		//unregister from parent
+		if (object->parent_deleting == false)
+			elev->RemoveElevatorDoor(this);
+	}
 
 	delete object;
 }
@@ -2075,8 +2084,8 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 
 	std::vector<Object*> parents;
 	parents.push_back(elev->object);
-	Action *action = sbs->AddAction(full_name1, parents, action_name1);
-	action = sbs->AddAction(full_name2, parents, action_name2);
+	sensor_action = sbs->AddAction(full_name1, parents, action_name1);
+	reset_action = sbs->AddAction(full_name2, parents, action_name2);
 
 	std::vector<std::string> actions;
 	actions.push_back(full_name2);

@@ -219,6 +219,8 @@ private:
 
 	//door sensor
 	Trigger *sensor;
+	Action *sensor_action;
+	Action *reset_action;
 };
 
 #endif
