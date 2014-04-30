@@ -8780,6 +8780,7 @@ SetAutoSize = true, true
 #Daley Center
 
 DrawWalls = true, false, false, false, false, false
+SetAutoSize = true, false
 AddWall Buildings, Front, Daley, 0, -290.5 + 58, -174.5 - 35 - 260, -290.5 + 58 + 145, -174.5 - 35 - 260, 648, 648, 0, 0, 0, 32
 AddWall Buildings, Left, Daley, 0, -290.5 + 58, -174.5 - 35 - 260, -290.5 + 58, -174.5 - 35, 648, 648, 0, 0, 0, 32
 DrawWalls = false, true, false, false, false, false
