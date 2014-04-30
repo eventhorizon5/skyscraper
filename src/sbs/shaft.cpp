@@ -875,6 +875,11 @@ void Shaft::RemoveDoor(Door *door)
 
 void Shaft::Check(Ogre::Vector3 position, int current_floor)
 {
+	Elevator *elevator = sbs->GetElevator(sbs->ElevatorNumber);
+
+	if (!elevator)
+		return;
+
 	if (IsInShaft(position) == true)
 	{
 		if (InsideShaft == false && sbs->InElevator == false)
@@ -898,10 +903,10 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		{
 			//if user is in an elevator, show a range of the shaft at a time (while it's moving)
 			EnableRange(current_floor, sbs->ShaftDisplayRange, true, false);
-			sbs->GetElevator(sbs->ElevatorNumber)->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
+			elevator->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
 		}
 
-		if (InsideShaft == false && sbs->InElevator == true && sbs->GetElevator(sbs->ElevatorNumber)->IsMoving == true)
+		if (InsideShaft == false && sbs->InElevator == true && elevator->IsMoving == true)
 		{
 			//if specified, show floors or outside if user is in a moving elevator
 			if (ShowFloors == true)

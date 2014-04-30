@@ -364,9 +364,10 @@ Object* Floor::AddCallButtons(std::vector<int> &elevators, const char *BackTextu
 	bool check = false;
 	for (int i = 0; i < (int)elevators.size(); i++)
 	{
-		if (sbs->GetElevator(elevators[i]))
+		Elevator *elev = sbs->GetElevator(elevators[i]);
+		if (elev)
 		{
-			if (sbs->GetElevator(elevators[i])->IsServicedFloor(Number) == true)
+			if (elev->IsServicedFloor(Number) == true)
 			{
 				check = true;
 				break;

@@ -127,12 +127,16 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 	for (int i = 0; i < (int)Elevators.size(); i++)
 	{
-		int tmpbottom = sbs->GetElevator(Elevators[i])->GetBottomFloor();
-		int tmptop = sbs->GetElevator(Elevators[i])->GetTopFloor();
-		if (tmpbottom < bottomfloor)
-			bottomfloor = tmpbottom;
-		if (tmptop > topfloor)
-			topfloor = tmptop;
+		Elevator *elev = sbs->GetElevator(Elevators[i]);
+		if (elev)
+		{
+			int tmpbottom = sbs->GetElevator(Elevators[i])->GetBottomFloor();
+			int tmptop = sbs->GetElevator(Elevators[i])->GetTopFloor();
+			if (tmpbottom < bottomfloor)
+				bottomfloor = tmpbottom;
+			if (tmptop > topfloor)
+				topfloor = tmptop;
+		}
 	}
 
 	//create buttons
@@ -304,8 +308,11 @@ bool CallButton::Call(bool direction)
 	for (int i = 0; i < (int)Elevators.size(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
-		if (elevator->FireServicePhase1 != 1)
-			bypass = false;
+		if (elevator)
+		{
+			if (elevator->FireServicePhase1 != 1)
+				bypass = false;
+		}
 	}
 	if (bypass == true)
 	{
@@ -465,23 +472,25 @@ void CallButton::Loop(int direction)
 		for (int i = 0; i < (int)Elevators.size(); i++)
 		{
 			Elevator *elevator = sbs->GetElevator(Elevators[i]);
-
-			if (sbs->Verbose)
-				Report(std::string("Checking elevator " + ToString2(elevator->Number)).c_str());
-
-			//if elevator is closer than the previously checked one or we're starting the checks
-			if (abs(elevator->GetFloor() - floor) < closest || check == false)
+			if (elevator)
 			{
-				//see if elevator is available for the call
-				bool result = elevator->AvailableForCall(floor, direction);
+				if (sbs->Verbose)
+					Report(std::string("Checking elevator " + ToString2(elevator->Number)).c_str());
 
-				if (result == true)
+				//if elevator is closer than the previously checked one or we're starting the checks
+				if (abs(elevator->GetFloor() - floor) < closest || check == false)
 				{
-					if (sbs->Verbose)
-						Report("Marking - closest so far");
-					closest = abs(elevator->GetFloor() - floor);
-					closest_elev = i;
-					check = true;
+					//see if elevator is available for the call
+					bool result = elevator->AvailableForCall(floor, direction);
+
+					if (result == true)
+					{
+						if (sbs->Verbose)
+							Report("Marking - closest so far");
+						closest = abs(elevator->GetFloor() - floor);
+						closest_elev = i;
+						check = true;
+					}
 				}
 			}
 		}
@@ -489,10 +498,14 @@ void CallButton::Loop(int direction)
 	else
 	{
 		//set elevator to first elevator if call button only serves one, only if elevator is available for the call
-		if (sbs->GetElevator(Elevators[0])->AvailableForCall(floor, direction) == true)
+		Elevator *elevator = sbs->GetElevator(Elevators[0]);
+		if (elevator)
 		{
-			closest_elev = 0;
-			check = true;
+			if (elevator->AvailableForCall(floor, direction) == true)
+			{
+				closest_elev = 0;
+				check = true;
+			}
 		}
 	}
 

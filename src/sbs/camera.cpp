@@ -707,12 +707,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		int index2 = (int)meshname.find(":", index);
 		int number = atoi(meshname.substr(index + 10, index2 - (index + 10)).c_str());
 		int floor = atoi(meshname.substr(index2 + 1, meshname.length() - index2 - 2).c_str());
-		if (sbs->GetElevator(elevator))
+
+		Elevator *elev = sbs->GetElevator(elevator);
+		if (elev)
 		{
-			if (sbs->GetElevator(elevator)->AreShaftDoorsOpen(number, floor) == false)
-				sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 3, floor);
+			if (elev->AreShaftDoorsOpen(number, floor) == false)
+				elev->OpenDoorsEmergency(number, 3, floor);
 			else
-				sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 3, floor);
+				elev->CloseDoorsEmergency(number, 3, floor);
 		}
 	}
 
@@ -722,12 +724,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 		//user clicked on an elevator door
 		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13).c_str());
 		int number = atoi(meshname.substr(meshname.find(":") + 1, meshname.length() - meshname.find(":") - 1).c_str());
-		if (sbs->GetElevator(elevator))
+
+		Elevator *elev = sbs->GetElevator(elevator);
+		if (elev)
 		{
-			if (sbs->GetElevator(elevator)->AreDoorsOpen(number) == false)
-				sbs->GetElevator(elevator)->OpenDoorsEmergency(number, 2);
+			if (elev->AreDoorsOpen(number) == false)
+				elev->OpenDoorsEmergency(number, 2);
 			else
-				sbs->GetElevator(elevator)->CloseDoorsEmergency(number, 2);
+				elev->CloseDoorsEmergency(number, 2);
 		}
 	}
 }
