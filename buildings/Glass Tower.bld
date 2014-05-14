@@ -2071,11 +2071,9 @@ DrawWalls = true, true, false, false, false, false
     DecelJerk = 0.3
     ServicedFloors = 0, 2, 64, 66 - 69, 80, 99, 131 - 134, 136 - 137
     AssignedShaft = 2
+    MotorPosition = 0, Floor(137).Altitude + 20, 0
     CreateElevator true, 0, -0.294, 0
 
-    #reposition motor
-    MotorPosition = 0, Floor(137).Altitude + 12, 0
-    
     #floor
     SetAutoSize = false, false
     FloorOrientation = top
