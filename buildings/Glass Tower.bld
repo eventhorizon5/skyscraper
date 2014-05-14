@@ -1729,7 +1729,7 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     DrawWalls = true, true, false, false, false, false
     AddWall SideCover, Concrete, 0, 17.42, 36.64, 17.42, 9.78, 10.5, 10.5, -0.5, -0.5, 0, 0, true
     AddWall MidCover, Concrete, 0, -10.61, 14.59, 8.43, 14.59, 10, 10, 0, 0, 0, 0, true
-    AddWall LeftCover, HeliWalls, 0, -35.5, -30.8, -32, -25.8, 10, 10, 0, 0, 0, 0, true
+    AddWall LeftCover, HeliWalls, 0, -35.5, -30.8, -32, -25.8, 10.5, 10.5, -0.5, -0.5, 0, 0, true
     AddWall FrontLeft, Concrete, 0, -14.18, -20.4 - 4, -14.18, -37.8, 9, 9, 0, 0, 0, 0, true
     AddWall FrontLeft2, Concrete, 0, -14.18, -20.4, -14.18, -37.8, 2, 2, 9, 9, 0, 0, true
     WallOrientation = right
@@ -2522,9 +2522,10 @@ CutStairwell 3, -10.76, -12.77, -4.24, 4.5, 0, 5
     SetAutoSize = false, false
     DrawWalls = false, true, false, false, false, false
     AddStairsWall 3, SignTop, FloorSign, 0, -10.75 + 0.33, -0.5, -10.75 + 0.33, 0.5, 0.25, 0.25, 5, 5, 1, 1
-    if[%floor% > 1] AddStairsWall 3, SignTop, Button(%floor% + 1), 0, -10.75 + 0.33, -0.5, -10.75 + 0.33, 0.5, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% > 1 & %floor% < 137] AddStairsWall 3, SignTop, Button(%floor% + 1), 0, -10.75 + 0.33, -0.5, -10.75 + 0.33, 0.5, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 1] AddStairsWall 3, SignTop, ButtonA, 0, -10.75 + 0.33, -0.5, -10.75 + 0.33, 0.5, 0.75, 0.75, 4.25, 4.25, 1, 1
     if[%floor% = 0] AddStairsWall 3, SignTop, ButtonL, 0, -10.75 + 0.33, -0.5, -10.75 + 0.33, 0.5, 0.75, 0.75, 4.25, 4.25, 1, 1
+    if[%floor% = 137] AddStairsWall 3, SignTop, ButtonR, 0, -10.75 + 0.33, -0.5, -10.75 + 0.33, 0.5, 0.75, 0.75, 4.25, 4.25, 1, 1
     
     SetAutoSize = true, true
     DrawWalls = true, true, false, false, false, false

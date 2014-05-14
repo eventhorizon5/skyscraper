@@ -120,6 +120,10 @@ bool Skyscraper::OnInit(void)
 	raised = false;
 	soundsys = 0;
 	progdialog = 0;
+	override_floor = 0;
+	override_collisions = false;
+	override_gravity = false;
+	override_freelook = false;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -1023,11 +1027,16 @@ void Skyscraper::Loop()
 		PositionOverride = true;
 		override_position = Simcore->camera->GetPosition();
 		override_rotation = Simcore->camera->GetRotation();
+		override_floor = Simcore->camera->CurrentFloor;
+		override_collisions = Simcore->camera->CollisionsEnabled();
+		override_gravity = Simcore->camera->GetGravityStatus();
+		override_freelook = Simcore->camera->Freelook;
 		IsRunning = false;
 		IsLoading = false;
 		Pause = false;
 		UnloadSim();
 		Load();
+		Simcore->camera->GotoFloor(override_floor, true);
 
 		//force a resizing of a window to fix some rendering issues after a reload
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -1651,6 +1660,10 @@ bool Skyscraper::Start()
 		PositionOverride = false;
 		Simcore->camera->SetPosition(override_position);
 		Simcore->camera->SetRotation(override_rotation);
+		Simcore->camera->GotoFloor(override_floor, true);
+		Simcore->camera->EnableCollisions(override_collisions);
+		Simcore->camera->EnableGravity(override_gravity);
+		Simcore->camera->Freelook = override_freelook;
 	}
 
 	//load control panel

@@ -76,6 +76,10 @@ public:
 	bool PositionOverride;
 	Ogre::Vector3 override_position;
 	Ogre::Vector3 override_rotation;
+	int override_floor;
+	bool override_collisions;
+	bool override_gravity;
+	bool override_freelook;
 	int SkyMult; //sky time multiplier
 
 	unsigned int elapsed_time, current_time;
