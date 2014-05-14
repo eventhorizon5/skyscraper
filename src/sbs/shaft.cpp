@@ -171,19 +171,9 @@ Shaft::~Shaft()
 	}
 	ShaftArray.clear();
 
+	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)
-	{
-		//delete associated elevators
-		for (int i = 0; i < (int)elevators.size(); i++)
-		{
-			Elevator *elev = sbs->GetElevator(elevators[i]);
-			if (elev)
-				delete elev;
-		}
-
-		//unregister from parent
 		sbs->RemoveShaft(this);
-	}
 
 	delete object;
 }

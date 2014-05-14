@@ -3005,7 +3005,20 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "Shaft")
 	{
-		delete (Shaft*)object->GetRawObject();
+		Shaft *shaft = (Shaft*)object->GetRawObject();
+
+		//make sure no elevator is dependent on this shaft
+		for (int i = 0; i < (int)ElevatorArray.size(); i++)
+		{
+			Elevator *elev = ElevatorArray[i].object;
+			if (elev)
+			{
+				if (elev->AssignedShaft == shaft->ShaftNumber)
+					return ReportError("Cannot delete shaft " + ToString2(shaft->ShaftNumber) + " - in use by elevator " + ToString2(elev->Number));
+			}
+		}
+
+		delete shaft;
 		deleted = true;
 	}
 	if (type == "Sound")
