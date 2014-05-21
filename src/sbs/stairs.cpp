@@ -353,14 +353,14 @@ void Stairs::EnableWholeStairwell(bool value, bool force)
 	//turn on/off entire stairwell
 
 	if (force == true)
-		IsEnabled = false;
+		IsEnabled = !value;
 
-	if ((value == false && IsEnabled == true) || (value == true && IsEnabled == false))
+	if (IsEnabled == !value)
 	{
 		for (int i = startfloor; i <= endfloor; i++)
 		{
 			if (force == true)
-				EnableArray[i - startfloor] = false;
+				EnableArray[i - startfloor] = !value;
 			Enabled(i, value);
 		}
 	}

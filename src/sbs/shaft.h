@@ -99,6 +99,7 @@ private:
 	Ogre::Vector3 lastposition;
 	bool lastcheckresult;
 	bool checkfirstrun;
+	bool InElevator;
 
 	//lights
 	std::vector<std::vector<Light*> > lights;

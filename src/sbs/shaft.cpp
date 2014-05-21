@@ -65,6 +65,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	lastcheckresult = false;
 	checkfirstrun = true;
 	lastposition = 0;
+	InElevator = false;
 
 	std::string buffer, buffer2, buffer3;
 
@@ -316,14 +317,14 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 	//turn on/off entire shaft
 	
 	if (force == true)
-		IsEnabled = false;
+		IsEnabled = !value;
 	
-	if (((value == false && IsEnabled == true) || (value == true && IsEnabled == false)) && EnableCheck == false)
+	if (IsEnabled == !value && EnableCheck == false)
 	{
 		for (int i = startfloor; i <= endfloor; i++)
 		{
 			if (force == true)
-				EnableArray[i - startfloor] = false;
+				EnableArray[i - startfloor] = !value;
 			Enabled(i, value, EnableShaftDoors);
 		}
 	}
@@ -887,6 +888,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			//user is in the shaft
 			InsideShaft = true;
 			sbs->InShaft = true;
+			InElevator = false;
 
 			//turn on entire shaft
 			EnableWholeShaft(true, true);
@@ -896,6 +898,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			//user has moved from the shaft to an elevator
 			InsideShaft = false;
 			sbs->InShaft = false;
+			InElevator = true;
 
 			EnableWholeShaft(ShowFullShaft, true);
 		}
@@ -938,14 +941,15 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			}
 		}
 	}
-	else if (InsideShaft == true)
+	else if (InsideShaft == true || InElevator == true)
 	{
 		//user has moved out of the shaft
 		InsideShaft = false;
 		sbs->InShaft = false;
+		InElevator = false;
 
 		//turn off shaft
-		EnableWholeShaft(false, true);
+		EnableWholeShaft(false, true, true);
 	}
 	else if (InsideShaft == false)
 	{
