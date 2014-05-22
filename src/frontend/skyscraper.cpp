@@ -462,6 +462,13 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error initializing render window\nDetails:" + e.getDescription());
 	}
 
+	//get renderer info
+	Renderer = mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName();
+
+	//shorten name
+	int loc = Renderer.find("Rendering Subsystem");
+	Renderer = Renderer.substr(0, loc - 1);
+
 	//load resource configuration
 	Ogre::ConfigFile cf;
 	try
@@ -1852,7 +1859,7 @@ bool Skyscraper::InitSky()
 	//initialize sky
 
 	//ensure graphics card and render system are capable of Caelum's shaders
-	if (mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName() == "Direct3D9 Rendering Subsystem")
+	if (Renderer == "Direct3D9")
 	{
 		//on DirectX, Caelum requires a card capable of 3.0 shader levels, which would be
 		//an ATI Radeon HD 2000, nVidia Geforce 6, Intel G965 or newer
@@ -1875,7 +1882,7 @@ bool Skyscraper::InitSky()
 				return ReportFatalError("Error initializing Caelum: 3.0 vertex shaders not supported");
 	}
 
-	if (mRoot->getRenderSystem()->getCapabilities()->getRenderSystemName() == "OpenGL Rendering Subsystem")
+	if (Renderer == "OpenGL")
 	{
 		//on OpenGL, Caelum requires hardware support for shaders (OpenGL 2.0 or newer)
 		Ogre::RenderSystemCapabilities::ShaderProfiles profiles = mRoot->getRenderSystem()->getCapabilities()->getSupportedShaderProfiles();

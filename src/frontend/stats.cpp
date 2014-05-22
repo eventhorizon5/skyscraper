@@ -84,6 +84,8 @@ const long Stats::ID_STATICTEXT23 = wxNewId();
 const long Stats::ID_tSBSVersion = wxNewId();
 const long Stats::ID_STATICTEXT26 = wxNewId();
 const long Stats::ID_tPlatform = wxNewId();
+const long Stats::ID_STATICTEXT2 = wxNewId();
+const long Stats::ID_tRenderer = wxNewId();
 const long Stats::ID_bOK = wxNewId();
 //*)
 
@@ -212,6 +214,10 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	FlexGridSizer2->Add(StaticText26, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tPlatform = new wxTextCtrl(this, ID_tPlatform, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPlatform"));
 	FlexGridSizer2->Add(tPlatform, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Renderer:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+	FlexGridSizer2->Add(StaticText2, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 5);
+	tRenderer = new wxTextCtrl(this, ID_tRenderer, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tRenderer"));
+	FlexGridSizer2->Add(tRenderer, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(StaticBoxSizer1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer4, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
@@ -243,6 +249,7 @@ void Stats::OnInit()
 	tFrontendVersion->SetValue(wxString::FromAscii(skyscraper->version_frontend.c_str()));
 	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version.c_str()));
 	tPlatform->SetValue(wxString::FromAscii(skyscraper->Platform.c_str()));
+	tRenderer->SetValue(wxString::FromAscii(skyscraper->Renderer.c_str()));
 
 	tName->SetValue(wxString::FromAscii(Simcore->BuildingName.c_str()));
 	tDesigner->SetValue(wxString::FromAscii(Simcore->BuildingDesigner.c_str()));

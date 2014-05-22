@@ -52,6 +52,7 @@ class Stats: public wxDialog
 		wxStaticText* StaticText15;
 		wxTextCtrl* tSBSVersion;
 		wxStaticText* StaticText17;
+		wxTextCtrl* tRenderer;
 		wxTextCtrl* tElevators;
 		wxTextCtrl* tVersion;
 		wxTextCtrl* tStairs;
@@ -80,6 +81,7 @@ class Stats: public wxDialog
 		wxStaticText* StaticText4;
 		wxStaticText* StaticText5;
 		wxTextCtrl* tLocation;
+		wxStaticText* StaticText2;
 		wxTextCtrl* tWalls;
 		wxTextCtrl* tMeshes;
 		wxTextCtrl* tPlatform;
@@ -144,6 +146,8 @@ class Stats: public wxDialog
 		static const long ID_tSBSVersion;
 		static const long ID_STATICTEXT26;
 		static const long ID_tPlatform;
+		static const long ID_STATICTEXT2;
+		static const long ID_tRenderer;
 		static const long ID_bOK;
 		//*)
 		void OnInit();

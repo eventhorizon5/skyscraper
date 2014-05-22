@@ -62,6 +62,7 @@ public:
 
 	std::string Platform;
 	std::string SkyName;
+	std::string Renderer;
 
 	bool IsRunning;
 	bool IsLoading;
