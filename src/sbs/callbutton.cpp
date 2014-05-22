@@ -296,11 +296,10 @@ bool CallButton::Call(bool direction)
 	}
 
 	//exit if call has already been made
-	if ((direction == true && UpStatus == true) || (direction == false && DownStatus == true))
-	{
-		if (sbs->Verbose)
-			return ReportError("Call has already been made");
-	}
+	if (direction == true && UpStatus == true)
+		return ReportError("Up call has already been made");
+	if (direction == false && DownStatus == true)
+		return ReportError("Down call has already been made");
 
 	//reject call if all elevators are in fire phase 1 mode
 	bool bypass = true;
