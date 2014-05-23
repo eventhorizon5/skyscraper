@@ -3728,9 +3728,7 @@ Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, c
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
-	int index = GetFloorIndex(floor);
-
-	if (index != -1 && GetDoor(number))
+	if (IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, tw, th);
 	else
 		return 0;
@@ -3741,9 +3739,7 @@ Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, c
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
 
-	int index = GetFloorIndex(floor);
-
-	if (index != -1 && GetDoor(number))
+	if (IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->AddShaftDoor(floor, lefttexture, righttexture, thickness, CenterX, CenterZ, voffset, tw, th);
 	else
 		return 0;
@@ -4330,9 +4326,7 @@ Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name,
 {
 	//adds a single elevator shaft door component on the specified floor
 
-	int index = GetFloorIndex(floor);
-
-	if (index != -1 && GetDoor(number))
+	if (IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	else
 		return 0;
@@ -4363,9 +4357,7 @@ Object* Elevator::FinishShaftDoor(int number, int floor, bool CreateWalls)
 {
 	//finishes a single shaft door
 
-	int index = GetFloorIndex(floor);
-
-	if (index != -1 && GetDoor(number))
+	if (IsServicedFloor(floor) == true && GetDoor(number))
 		return GetDoor(number)->FinishShaftDoor(floor, CreateWalls);
 	else
 		return 0;
@@ -5159,10 +5151,8 @@ float Elevator::GetDestinationAltitude(int floor)
 {
 	//returns the destination altitude of the specified floor, based on shaft door positioning
 
-	int index = GetFloorIndex(floor);
-
-	if (index == -1)
-		return 0;
+	if (IsServicedFloor(floor) == false)
+		return 0.0f;
 
 	float result = 0;
 	bool found = false;
@@ -5191,6 +5181,9 @@ float Elevator::GetDestinationAltitude(int floor)
 float Elevator::GetDestinationOffset(int floor)
 {
 	//returns the offset distance from the floor's base altitude the elevator destination is
+
+	if (IsServicedFloor(floor) == false)
+		return 0.0f;
 
 	if (sbs->GetFloor(floor))
 		return GetDestinationAltitude(floor) - sbs->GetFloor(floor)->GetBase();
