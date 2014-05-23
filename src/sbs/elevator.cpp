@@ -4071,12 +4071,15 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 	{
 		bool door_result = false;
-		if (door_number != 0)
-			door_result = GetDoor(door_number)->ShaftDoorsExist(ServicedFloors[i]);
+		int floor = ServicedFloors[i];
+		float base = GetDestinationOffset(floor);
 
-		if ((door_number == 0 || door_result == true) && sbs->GetFloor(ServicedFloors[i]))
+		if (door_number != 0)
+			door_result = GetDoor(door_number)->ShaftDoorsExist(floor);
+
+		if ((door_number == 0 || door_result == true) && sbs->GetFloor(floor))
 		{
-			std::string texture = texture_prefix + sbs->GetFloor(ServicedFloors[i])->ID;
+			std::string texture = texture_prefix + sbs->GetFloor(floor)->ID;
 			std::string tmpdirection = direction;
 			SetCase(tmpdirection, false);
 
@@ -4086,9 +4089,9 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
-				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture.c_str(), 0, x - (width / 2), z, x + (width / 2), z, height, height, voffset, voffset, 1, 1, false);
+				sbs->GetFloor(floor)->AddWall("Floor Sign", texture.c_str(), 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
-				sbs->GetFloor(ServicedFloors[i])->AddWall("Floor Sign", texture.c_str(), 0, x, z - (width / 2), x, z + (width / 2), height, height, voffset, voffset, 1, 1, false);
+				sbs->GetFloor(floor)->AddWall("Floor Sign", texture.c_str(), 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
 			sbs->ResetWalls();
 		}
 	}
@@ -5183,6 +5186,16 @@ float Elevator::GetDestinationAltitude(int floor)
 			return sbs->GetFloor(floor)->GetBase();
 	}
 	return result;
+}
+
+float Elevator::GetDestinationOffset(int floor)
+{
+	//returns the offset distance from the floor's base altitude the elevator destination is
+
+	if (sbs->GetFloor(floor))
+		return GetDestinationAltitude(floor) - sbs->GetFloor(floor)->GetBase();
+
+	return 0.0f;
 }
 
 void Elevator::Init()

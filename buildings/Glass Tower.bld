@@ -2367,12 +2367,6 @@ DrawWalls = true, true, false, false, false, false
     WallOrientation = left
 <EndFloors>
 
-<Elevator 4>
-    #floor signs
-    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
-    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
-<EndElevator>
-
 <Floor 137>
     WallOrientation = right
     DrawWalls = true, true, true, true, true, true
@@ -2380,6 +2374,12 @@ DrawWalls = true, true, false, false, false, false
     AddDirectionalIndicator 4, true, false, true, ElevExtPanels, ArrowUp, ArrowUp_Lit, ArrowDown, ArrowDown_Lit, -3, -4.162 + 0.33, 16, front, 0.5, 1, true, 0, 0
     WallOrientation = left
 <EndFloor>
+
+<Elevator 4>
+    #floor signs
+    AddFloorSigns 0, true, Button, left, 3.5 / 2 - 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+    AddFloorSigns 0, true, Button, right, -3.5 / 2 + 0.01, -3.301 - 0.2 - 0.33, 0.5, 0.42, 5.5
+<EndElevator>
 
 <Floors 0 to 1>
     CallButtonElevators = 1, 2, 3

@@ -294,6 +294,7 @@ public:
 	std::vector<Sound*> GetSound(const char *name);
 	int GetFloorIndex(int floor);
 	float GetDestinationAltitude(int floor);
+	float GetDestinationOffset(int floor);
 	void SetAltitude(float altitude);
 	void SetFloor(int floor);
 	void Init();
