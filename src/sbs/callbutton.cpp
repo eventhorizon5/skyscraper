@@ -124,18 +124,20 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	//determine floor range of associated elevators
 	int bottomfloor = 0;
 	int topfloor = 0;
+	bool firstrun = true;
 
 	for (int i = 0; i < (int)Elevators.size(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(Elevators[i]);
 		if (elev)
 		{
-			int tmpbottom = sbs->GetElevator(Elevators[i])->GetBottomFloor();
-			int tmptop = sbs->GetElevator(Elevators[i])->GetTopFloor();
-			if (tmpbottom < bottomfloor)
+			int tmpbottom = elev->GetBottomFloor();
+			int tmptop = elev->GetTopFloor();
+			if (tmpbottom < bottomfloor || firstrun == true)
 				bottomfloor = tmpbottom;
-			if (tmptop > topfloor)
+			if (tmptop > topfloor || firstrun == true)
 				topfloor = tmptop;
+			firstrun = false;
 		}
 	}
 
