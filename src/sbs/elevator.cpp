@@ -2644,6 +2644,9 @@ bool Elevator::Go(int floor, bool hold)
 	if (Running == false)
 		return ReportError("Elevator not running");
 
+	if (!sbs->GetFloor(floor))
+		return ReportError("Invalid floor " + ToString2(floor));
+
 	//exit if in inspection mode
 	if (InspectionService == true)
 	{
@@ -2659,7 +2662,7 @@ bool Elevator::Go(int floor, bool hold)
 			GoActive = true;
 			GoActiveFloor = floor;
 		}
-		Report("Go: proceeding to floor " + ToString2(floor));
+		Report("Go: proceeding to floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		ChangeLight(floor, true);
 		GotoFloor = floor;
 		GoPending = true;
