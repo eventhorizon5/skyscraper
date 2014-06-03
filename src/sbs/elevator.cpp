@@ -700,9 +700,8 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		//only add ACP route if original route will pass ACP floor
 		if ((GetFloor() < ACPFloor && floor > ACPFloor) || (GetFloor() > ACPFloor && floor < ACPFloor))
 		{
-			if (sbs->Verbose)
-				Report("Adding ACP route");
-			Go(ACPFloor, false);
+			Report("adding ACP route");
+			AddRoute(ACPFloor, direction, change_light);
 		}
 	}
 
@@ -2646,6 +2645,10 @@ bool Elevator::Go(int floor, bool hold)
 
 	if (!sbs->GetFloor(floor))
 		return ReportError("Invalid floor " + ToString2(floor));
+
+	//exit if elevator is moving
+	if (MoveElevator == true)
+		return false;
 
 	//exit if in inspection mode
 	if (InspectionService == true)
