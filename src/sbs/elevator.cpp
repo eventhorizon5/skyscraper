@@ -670,11 +670,9 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 				loc = i;
 		}
 
+		//exit if entry already exits
 		if (loc != -1)
-		{
-			//exit if entry already exits
 			return ReportError("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
-		}
 		
 		//add floor to down queue
 		DownQueue.push_back(floor);
@@ -1399,11 +1397,11 @@ void Elevator::MoveElevatorToFloor()
 		return;
 
 	//exit if doors are not fully closed while interlocks enabled
-	if (Interlocks == true && AreDoorsOpen() == true)
+	if (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false))
 	{
 		ReportError("Doors must be closed before moving when interlocks are enabled");
 		MoveElevator = false;
-		Direction = 0;
+		DeleteActiveRoute();
 		return;
 	}
 
@@ -1436,7 +1434,6 @@ void Elevator::MoveElevatorToFloor()
 		if (!sbs->GetFloor(GotoFloor))
 		{
 			ReportError("Destination floor does not exist");
-			Direction = 0;
 			MoveElevator = false;
 			ElevatorIsRunning = false;
 			DeleteActiveRoute();
@@ -1447,7 +1444,6 @@ void Elevator::MoveElevatorToFloor()
 		if (IsServicedFloor(GotoFloor) == false && InspectionService == false && ManualMove == 0)
 		{
 			ReportError("Destination floor not in ServicedFloors list");
-			Direction = 0;
 			MoveElevator = false;
 			ElevatorIsRunning = false;
 			DeleteActiveRoute();
@@ -1458,7 +1454,6 @@ void Elevator::MoveElevatorToFloor()
 		if (ElevatorFloor == GotoFloor && InspectionService == false && IsLeveled() == true && ManualMove == 0)
 		{
 			ReportError("Elevator already on specified floor");
-			Direction = 0;
 			MoveElevator = false;
 			ElevatorIsRunning = false;
 			DeleteActiveRoute();
@@ -2293,7 +2288,6 @@ void Elevator::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	//SBS_PROFILE("Elevator::Enabled");
 	if (sbs->Verbose)
 	{
 		if (value == true)
@@ -3117,16 +3111,11 @@ bool Elevator::EnableFireService2(int value, bool force)
 bool Elevator::SetRecallFloor(int floor)
 {
 	//set elevator's fire recall floor
+
 	if (ServicedFloors.size() == 0)
-	{
-		ReportError("No serviced floors assigned");
-		return false;
-	}
+		return ReportError("No serviced floors assigned");
 	if (IsServicedFloor(floor) == false)
-	{
-		ReportError("Invalid recall floor");
-		return false;
-	}
+		return ReportError("Invalid recall floor");
 
 	if (sbs->Verbose)
 		Report("setting recall floor to " + ToString2(floor));
@@ -3138,16 +3127,11 @@ bool Elevator::SetRecallFloor(int floor)
 bool Elevator::SetAlternateRecallFloor(int floor)
 {
 	//set elevator's alternate fire recall floor
+
 	if (ServicedFloors.size() == 0)
-	{
-		ReportError("No serviced floors assigned");
-		return false;
-	}
+		return ReportError("No serviced floors assigned");
 	if (IsServicedFloor(floor) == false)
-	{
-		ReportError("Invalid alternate recall floor");
-		return false;
-	}
+		return ReportError("Invalid alternate recall floor");
 
 	if (sbs->Verbose)
 		Report("setting alternate recall floor to " + ToString2(floor));
@@ -3159,16 +3143,11 @@ bool Elevator::SetAlternateRecallFloor(int floor)
 bool Elevator::SetACPFloor(int floor)
 {
 	//set elevator's ACP floor
+
 	if (ServicedFloors.size() == 0)
-	{
-		ReportError("No serviced floors assigned");
-		return false;
-	}
+		return ReportError("No serviced floors assigned");
 	if (IsServicedFloor(floor) == false)
-	{
-		ReportError("Invalid ACP floor");
-		return false;
-	}
+		return ReportError("Invalid ACP floor");
 
 	if (sbs->Verbose)
 		Report("setting ACP floor to " + ToString2(floor));
@@ -3836,6 +3815,21 @@ bool Elevator::AreShaftDoorsOpen(int number, int floor)
 	return false;
 }
 
+bool Elevator::AreShaftDoorsClosed()
+{
+	//return true if all shaft doors are closed and not moving
+
+	for (int i = 0; i < (int)DoorArray.size(); i++)
+	{
+		if (DoorArray[i])
+		{
+			if (DoorArray[i]->AreShaftDoorsClosed() == false)
+				return false;
+		}
+	}
+	return true;
+}
+
 void Elevator::Chime(int number, int floor, bool direction)
 {
 	//play chime sound on specified floor
@@ -3924,7 +3918,7 @@ int Elevator::AreDoorsMoving()
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 		{
-			if (door->OpenDoor != 0)
+			if (door->AreDoorsMoving() == true)
 				return door->OpenDoor;
 		}
 	}
@@ -4049,8 +4043,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 		if (DoorExists(door_number) == false)
 		{
 			std::string doornum = ToString(door_number);
-			ReportError("AddFloorSigns: door " + doornum + " does not exist");
-			return false;
+			return ReportError("AddFloorSigns: door " + doornum + " does not exist");
 		}
 	}
 
@@ -5315,10 +5308,7 @@ bool Elevator::SelectFloor(int floor)
 
 	//use Go routine instead if floorhold parameter is enabled
 	if (FloorHold == true)
-	{
-		Go(floor, true);
-		return true;
-	}
+		return Go(floor, true);
 
 	bool result = false;
 

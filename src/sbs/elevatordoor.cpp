@@ -1258,6 +1258,26 @@ bool ElevatorDoor::AreShaftDoorsOpen(int floor)
 	return false;
 }
 
+bool ElevatorDoor::AreShaftDoorsClosed()
+{
+	//returns true if all shaft doors are closed and not moving
+
+	if (AreDoorsMoving() == true)
+		return false;
+
+	for (int i = 0; i < (int)ShaftDoors.size(); i++)
+	{
+		DoorWrapper* door = ShaftDoors[i];
+
+		if (door)
+		{
+			if (door->Open == true)
+				return false;
+		}
+	}
+	return true;
+}
+
 void ElevatorDoor::Timer::Notify()
 {
 	if (type == 0)
@@ -2094,4 +2114,11 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	//create new trigger
 	sensor = new Trigger(object, "Sensor", SensorSound.c_str(), area_min, area_max, actions);
 	sensor->SetPosition(elev->Origin);
+}
+
+bool ElevatorDoor::AreDoorsMoving()
+{
+	//return true if doors are moving
+
+	return (OpenDoor != 0);
 }

@@ -226,6 +226,7 @@ public:
 	void ShaftDoorsEnabledRange(int number, int floor, int range);
 	bool AreDoorsOpen(int number = 0);
 	bool AreShaftDoorsOpen(int number, int floor);
+	bool AreShaftDoorsClosed();
 	void ResetDoorTimer(int number = 0);
 	bool DoorsStopped(int number = 0);
 	Object* AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);

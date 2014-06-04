@@ -131,6 +131,7 @@ public:
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool AreDoorsOpen();
 	bool AreShaftDoorsOpen(int floor);
+	bool AreShaftDoorsClosed();
 	void ResetDoorTimer();
 	bool DoorsStopped();
 	Object* AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
@@ -165,6 +166,7 @@ public:
 	float GetShaftDoorAltitude(int floor);
 	void CheckSensor();
 	void CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
+	bool AreDoorsMoving();
 
 private:
 
