@@ -2730,55 +2730,64 @@ void Elevator::GoToRecallFloor()
 	}
 }
 
-void Elevator::EnableACP(bool value)
+bool Elevator::EnableACP(bool value)
 {
 	//enable Anti-Crime Protection (ACP) mode
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	//exit if no change
 	if (ACP == value)
 	{
 		if (sbs->Verbose)
-			Report("EnableACP: mode is the same");
-		return;
+			ReportError("EnableACP: mode is the same");
+		return false;
+	}
+
+	if (value == true)
+	{
+		if (IndependentService == true)
+			return ReportError("EnableACP: cannot enable while in independent service mode");
+		if (InspectionService == true)
+			return ReportError("EnableACP: cannot enable while in inspection service mode");
+		if (FireServicePhase1 > 0 || FireServicePhase2 > 0)
+			return ReportError("EnableACP: cannot enable while in a fire service mode");
 	}
 
 	ACP = value;
 
 	if (value == true)
-	{
-		EnableIndependentService(false);
-		EnableInspectionService(false);
-		EnableFireService1(0);
-		EnableFireService2(0);
 		Report("ACP mode enabled");
-	}
 	else
 		Report("ACP mode disabled");
 
+	return true;
 }
 
-void Elevator::EnableUpPeak(bool value)
+bool Elevator::EnableUpPeak(bool value)
 {
 	//enable Up-Peak mode
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	//exit if no change
 	if (UpPeak == value)
 	{
 		if (sbs->Verbose)
-			Report("EnableUpPeak: mode is the same");
-		return;
+			ReportError("EnableUpPeak: mode is the same");
+		return false;
+	}
+
+	if (value == true)
+	{
+		if (IndependentService == true)
+			return ReportError("EnableUpPeak: cannot enable while in independent service mode");
+		if (InspectionService == true)
+			return ReportError("EnableUpPeak: cannot enable while in inspection service mode");
+		if (FireServicePhase1 > 0 || FireServicePhase2 > 0)
+			return ReportError("EnableUpPeak: cannot enable while in a fire service mode");
 	}
 
 	UpPeak = value;
@@ -2786,10 +2795,6 @@ void Elevator::EnableUpPeak(bool value)
 	if (value == true)
 	{
 		EnableDownPeak(false);
-		EnableIndependentService(false);
-		EnableInspectionService(false);
-		EnableFireService1(0);
-		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetBottomFloor() && sbs->GetFloor(GetFloor()))
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
@@ -2804,24 +2809,33 @@ void Elevator::EnableUpPeak(bool value)
 		ResetDoorTimer();
 		Report("Up Peak mode disabled");
 	}
+
+	return true;
 }
 
-void Elevator::EnableDownPeak(bool value)
+bool Elevator::EnableDownPeak(bool value)
 {
 	//enable Down-Peak mode
 
 	if (Running == false)
-	{
-		Report("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	//exit if no change
 	if (DownPeak == value)
 	{
 		if (sbs->Verbose)
-			Report("EnableDownPeak: mode is the same");
-		return;
+			ReportError("EnableDownPeak: mode is the same");
+		return false;
+	}
+
+	if (value == true)
+	{
+		if (IndependentService == true)
+			return ReportError("EnableDownPeak: cannot enable while in independent service mode");
+		if (InspectionService == true)
+			return ReportError("EnableDownPeak: cannot enable while in inspection service mode");
+		if (FireServicePhase1 > 0 || FireServicePhase2 > 0)
+			return ReportError("EnableDownPeak: cannot enable while in a fire service mode");
 	}
 
 	DownPeak = value;
@@ -2829,10 +2843,6 @@ void Elevator::EnableDownPeak(bool value)
 	if (value == true)
 	{
 		EnableUpPeak(false);
-		EnableIndependentService(false);
-		EnableInspectionService(false);
-		EnableFireService1(0);
-		EnableFireService2(0);
 		if (IsMoving == false && GetFloor() == GetTopFloor() && sbs->GetFloor(GetFloor()))
 		{
 			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
@@ -2847,24 +2857,31 @@ void Elevator::EnableDownPeak(bool value)
 		ResetDoorTimer();
 		Report("Down Peak mode disabled");
 	}
+
+	return true;
 }
 
-void Elevator::EnableIndependentService(bool value)
+bool Elevator::EnableIndependentService(bool value)
 {
 	//enable Independent Service (ISC) mode
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	//exit if no change
 	if (IndependentService == value)
 	{
 		if (sbs->Verbose)
-			Report("EnableIndependentService: mode is the same");
-		return;
+			ReportError("EnableIndependentService: mode is the same");
+		return false;
+	}
+
+	if (value == true)
+	{
+		if (InspectionService == true)
+			return ReportError("EnableIndependentService: cannot enable while in inspection service mode");
+		if (FireServicePhase1 > 0 || FireServicePhase2 > 0)
+			return ReportError("EnableIndependentService: cannot enable while in a fire service mode");
 	}
 
 	IndependentService = value;
@@ -2874,9 +2891,6 @@ void Elevator::EnableIndependentService(bool value)
 		EnableACP(false);
 		EnableUpPeak(false);
 		EnableDownPeak(false);
-		EnableInspectionService(false);
-		EnableFireService1(0);
-		EnableFireService2(0);
 		ResetQueue(true, true);
 		EnableNudgeMode(false);
 		HoldDoors(); //turn off door timers
@@ -2890,9 +2904,11 @@ void Elevator::EnableIndependentService(bool value)
 		ResetDoorTimer();
 		Report("Independent Service mode disabled");
 	}
+
+	return true;
 }
 
-void Elevator::EnableInspectionService(bool value)
+bool Elevator::EnableInspectionService(bool value)
 {
 	//enable Inspection Service (INS) mode
 
@@ -2900,8 +2916,8 @@ void Elevator::EnableInspectionService(bool value)
 	if (InspectionService == value)
 	{
 		if (sbs->Verbose)
-			Report("EnableInspectionService: mode is the same");
-		return;
+			ReportError("EnableInspectionService: mode is the same");
+		return false;
 	}
 
 	if (value == true)
@@ -2911,7 +2927,7 @@ void Elevator::EnableInspectionService(bool value)
 		EnableDownPeak(false);
 		EnableIndependentService(false);
 		EnableFireService1(0);
-		EnableFireService2(0);
+		EnableFireService2(0, true);
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		HoldDoors(); //turn off door timers
@@ -2964,39 +2980,32 @@ void Elevator::EnableInspectionService(bool value)
 		else
 			ReturnToNearestFloor();
 	}
+
+	return true;
 }
 
-void Elevator::EnableFireService1(int value)
+bool Elevator::EnableFireService1(int value)
 {
 	//enable Fire Service Phase 1 mode
 	//valid values are 0 (off), 1 (on) or 2 (bypass)
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	//exit if no change
 	if (FireServicePhase1 == value)
 	{
 		if (sbs->Verbose)
-			Report("EnableFireService1: mode is the same");
-		return;
+			ReportError("EnableFireService1: mode is the same");
+		return false;
 	}
 
-	//exit if in inspection modeno change
-	if (InspectionService == true)
-	{
-		ReportError("EnableFireService1: cannot enable while in inspection mode");
-		return;
-	}
+	//exit if in inspection mode
+	if (InspectionService == true && value > 0)
+		return ReportError("EnableFireService1: cannot enable while in inspection service mode");
 
 	if (value < 0 || value > 2)
-	{
-		ReportError("EnableFireService1: invalid value");
-		return;
-	}
+		return ReportError("EnableFireService1: invalid value");
 
 	if (value > 0)
 	{
@@ -3004,7 +3013,6 @@ void Elevator::EnableFireService1(int value)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
-		EnableInspectionService(false);
 		if (value == 1)
 		{
 			Report("Fire Service Phase 1 mode set to On");
@@ -3038,55 +3046,46 @@ void Elevator::EnableFireService1(int value)
 	}
 
 	FireServicePhase1 = value;
+
+	return true;
 }
 
-void Elevator::EnableFireService2(int value)
+bool Elevator::EnableFireService2(int value, bool force)
 {
 	//enable Fire Service Phase 2 mode
 	//valid values are 0 (off), 1 (on) or 2 (hold)
+	//if force is true, does not require doors to be opened to change value
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
-	//exit if in inspection mode
-	if (InspectionService == true)
+	if (value > 0)
 	{
-		ReportError("EnableFireService2: cannot enable while in inspection mode");
-		return;
-	}
+		//exit if in inspection mode
+		if (InspectionService == true)
+			return ReportError("EnableFireService2: cannot enable while in inspection service mode");
 
-	//require fire service phase 1 to be enabled first
-	if (FireServicePhase1 != 1 && FireServicePhase2 == 0 && value > 0)
-	{
-		ReportError("EnableFireService2: not in fire service phase 1 mode");
-		return;
+		//require fire service phase 1 to be enabled first
+		if (FireServicePhase1 != 1 && FireServicePhase2 == 0)
+			return ReportError("EnableFireService2: not in fire service phase 1 mode");
 	}
 
 	//require doors to be open to change modes
-	if (AreDoorsOpen() == false)
-	{
-		ReportError("EnableFireService2: doors must be open to change phase 2 modes");
-		return;
-	}
+	if (AreDoorsOpen() == false && force == false)
+		return ReportError("EnableFireService2: doors must be open to change phase 2 modes");
 
 	//exit if no change
 	if (FireServicePhase2 == value)
 	{
 		if (sbs->Verbose)
-			Report("EnableFireService2: mode is the same");
-		return;
+			ReportError("EnableFireService2: mode is the same");
+		return false;
 	}
 
 	if (value >= 0 && value <= 2)
 		FireServicePhase2 = value;
 	else
-	{
-		ReportError("EnableFireService2: invalid value");
-		return;
-	}
+		return ReportError("EnableFireService2: invalid value");
 
 	if (value > 0)
 	{
@@ -3094,7 +3093,6 @@ void Elevator::EnableFireService2(int value)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
-		EnableInspectionService(false);
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		HoldDoors(); //disable all door timers
@@ -3106,6 +3104,7 @@ void Elevator::EnableFireService2(int value)
 	else
 	{
 		Report("Fire Service Phase 2 mode set to Off");
+
 		if (FireServicePhase1 == 0)
 			ResetDoorTimer(); //enable door timers
 		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
@@ -3117,6 +3116,8 @@ void Elevator::EnableFireService2(int value)
 			GoToRecallFloor();
 		}
 	}
+
+	return true;
 }
 
 bool Elevator::SetRecallFloor(int floor)
