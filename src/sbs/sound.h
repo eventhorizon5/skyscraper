@@ -50,17 +50,18 @@ public:
 	void Pause();
 	bool IsPaused();
 	void Stop();
-	void Play(bool reset = true);
+	bool Play(bool reset = true);
 	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
-	void Load(const char *filename, bool force = false);
+	bool Load(const char *filename, bool force = false);
 	bool IsPlaying();
 	float GetPlayPosition();
 	void SetPlayPosition(float percent);
 	void SetConeSettings(float inside_angle = 360.0, float outside_angle = 360.0, float outside_volume = 1.0);
 	const char *GetName();
 	void SetDopplerLevel(float level);
+	bool IsLoaded();
 
 private:
 
@@ -83,6 +84,7 @@ private:
 	std::string Name;
 	float default_speed;
 	float doppler_level;
+	bool loaded;
 
 };
 

@@ -52,6 +52,7 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	channel = 0;
 	default_speed = 0;
 	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
+	loaded = false;
 }
 
 Sound::~Sound()
@@ -266,8 +267,15 @@ bool Sound::IsValid()
 	return true;
 }
 
-void Sound::Play(bool reset)
+bool Sound::Play(bool reset)
 {
+	if (!loaded)
+	{
+		if (sbs->Verbose)
+			sbs->ReportError("Sound '" + Name + "': no sound loaded");
+		return false;
+	}
+
 	if (sbs->Verbose == true)
 	{
 		std::string objectnum = ToString(object->GetNumber());
@@ -280,7 +288,7 @@ void Sound::Play(bool reset)
 		FMOD_RESULT result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 
 		if (result != FMOD_OK || !channel)
-			return;
+			return false;
 
 		//get default speed value
 		channel->getFrequency(&default_speed);
@@ -299,6 +307,8 @@ void Sound::Play(bool reset)
 		Reset();
 	if (channel)
 		channel->setPaused(false);
+
+	return true;
 }
 
 void Sound::Reset()
@@ -306,16 +316,18 @@ void Sound::Reset()
 	SetPlayPosition(0);
 }
 
-void Sound::Load(const char *filename, bool force)
+bool Sound::Load(const char *filename, bool force)
 {
 	//exit if filename is the same
 	std::string filename_new = filename;
 	if (filename_new == Filename && force == false)
-		return;
+		return false;
 
 	//exit if none specified
 	if (filename_new == "")
-		return;
+		return false;
+
+	loaded = false;
 
 	//clear old object references
 	if (channel)
@@ -327,7 +339,7 @@ void Sound::Load(const char *filename, bool force)
 
 	//exit if sound is disabled
 	if (sbs->DisableSound == true)
-		return;
+		return false;
 
 	//load new sound
 	Filename = filename;
@@ -338,10 +350,10 @@ void Sound::Load(const char *filename, bool force)
 	FMOD_RESULT result = sbs->soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
 	//FMOD_RESULT result = sbs->soundsys->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
 	if (result != FMOD_OK)
-	{
-		sbs->ReportError("Can't load file '" + Filename + "'");
-		return;
-	}
+		return sbs->ReportError("Can't load file '" + Filename + "'");
+
+	loaded = true;
+	return true;
 }
 
 float Sound::GetPlayPosition()
@@ -393,4 +405,9 @@ void Sound::SetDopplerLevel(float level)
 
 	if (channel)
 		channel->set3DDopplerLevel(level);
+}
+
+bool Sound::IsLoaded()
+{
+	return loaded;
 }

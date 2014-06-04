@@ -57,7 +57,7 @@ public:
 	int GetPositions();
 	void PlaySound();
 	int FindActionPosition(const char *name);
-	bool DoAction();
+	void DoAction(bool &result, int &action_count);
 	bool Check();
 
 private:

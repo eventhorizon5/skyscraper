@@ -161,7 +161,7 @@ public:
 	bool DeleteRoute(int floor, int direction);
 	bool CallCancel();
 	void Alarm();
-	void Stop(bool emergency = false);
+	bool Stop(bool emergency = false);
 	void OpenHatch();
 	void ProcessCallQueue();
 	int GetFloor();
@@ -205,9 +205,9 @@ public:
 	void GoToRecallFloor();
 	bool MoveUp();
 	bool MoveDown();
-	void SetGoButton(bool value);
-	void SetUpButton(bool value);
-	void SetDownButton(bool value);
+	bool SetGoButton(bool value);
+	bool SetUpButton(bool value);
+	bool SetDownButton(bool value);
 	int GetTopFloor();
 	int GetBottomFloor();
 	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
@@ -216,9 +216,9 @@ public:
 	void UpdateDirectionalIndicators();
 	void EnableDirectionalIndicators(bool value);
 	ElevatorDoor* GetDoor(int number);
-	void OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0, bool hold = false);
+	bool OpenDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0, bool hold = false);
 	void CloseDoorsEmergency(int number = 0, int whichdoors = 1, int floor = 0, bool hold = false);
-	void OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
+	bool OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
 	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
 	void StopDoors(int number = 0);
 	void HoldDoors(int number = 0, bool disable_nudge = true);
@@ -290,7 +290,7 @@ public:
 	void AddDisplayFloor(int floor);
 	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
-	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
+	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	std::vector<Sound*> GetSound(const char *name);
 	int GetFloorIndex(int floor);
 	float GetDestinationAltitude(int floor);

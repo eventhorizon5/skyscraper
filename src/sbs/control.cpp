@@ -358,9 +358,10 @@ int Control::FindNumericActionPosition()
 	return 0;
 }
 
-bool Control::DoAction()
+void Control::DoAction(bool &result, int &action_count)
 {
 	//perform object's action
+	//result is true if at least one action in the list succeeded
 
 	std::vector<Action*> actionlist;
 
@@ -369,26 +370,23 @@ bool Control::DoAction()
 	else
 		actionlist.push_back(Actions[current_position - 1]);
 
-	bool result = true;
-	for (int i = 0; i < (int)actionlist.size(); i++)
+	result = false;
+	action_count = (int)actionlist.size();
+	for (int i = 0; i < action_count; i++)
 	{
 		bool result2 = false;
 
 		if (actionlist[i])
 			result2 = actionlist[i]->DoAction();
 
-		if (result2 == false)
-			result = false;
+		if (result2 == true)
+			result = true;
 	}
-	return result;
 }
 
 bool Control::Press()
 {
 	//press button/control
-
-	//play sound
-	PlaySound();
 
 	//check lock state
 	if (IsLocked() == true)
@@ -406,12 +404,20 @@ bool Control::Press()
 
 	//run action
 	bool result = false;
-	result = DoAction();
+	int count = 0;
+	DoAction(result, count);
 
 	//change back to original selection if a numeric action returns false
 	//(elevator is on the same floor, and doors are reopened)
-	if (IsNumeric(name.c_str()) && result == false)
-		NextSelectPosition();
+	//or if only one action was listed, and the result is false
+	if ((IsNumeric(name.c_str()) || count == 1) && result == false)
+	{
+		PreviousSelectPosition();
+		return false;
+	}
+
+	//play sound
+	PlaySound();
 
 	return result;
 }

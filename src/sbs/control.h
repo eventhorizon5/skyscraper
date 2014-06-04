@@ -60,7 +60,7 @@ public:
 	void SetTexture(int position, const char *texture);
 	int FindActionPosition(const char *name);
 	int FindNumericActionPosition();
-	bool DoAction();
+	void DoAction(bool &result, int &action_count);
 	bool Press();
 	void ChangeFloorLight(int floor, bool value);
 	void ChangeLight(bool value);

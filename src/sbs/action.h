@@ -47,6 +47,8 @@ public:
 
 private:
 
+	bool Run(Object *parent);
+
 	std::string command_name;
 	std::vector<std::string> command_parameters;
 	int state;

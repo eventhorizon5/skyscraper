@@ -806,30 +806,23 @@ void Elevator::Alarm()
 	}
 }
 
-void Elevator::Stop(bool emergency)
+bool Elevator::Stop(bool emergency)
 {
 	//Tells elevator to stop moving, no matter where it is
 
 	//exit if in inspection mode
 	if (InspectionService == true && emergency == true)
-	{
-		if (sbs->Verbose)
-			ReportError("cannot stop while in inspection service");
-		return;
-	}
+		return ReportError("cannot stop while in inspection service mode");
 
 	//exit if in fire service phase 1 recall
 	if (FireServicePhase1 == 1 && FireServicePhase2 == 0)
-	{
-		ReportError("cannot stop while in fire service 1 recall mode");
-		return;
-	}
+		return ReportError("cannot stop while in fire service 1 recall mode");
 
 	if (IsMoving == false)
 	{
 		if (sbs->Verbose)
 			ReportError("Stop: not moving");
-		return;
+		return false;
 	}
 
 	if (emergency == true)
@@ -845,6 +838,7 @@ void Elevator::Stop(bool emergency)
 		EmergencyStop = 1;
 		Report("stopping elevator");
 	}
+	return true;
 }
 
 void Elevator::OpenHatch()
@@ -1241,7 +1235,7 @@ void Elevator::MonitorLoop()
 	}
 
 	//play idle sound if in elevator, or if doors open
-	if (CarIdleSound != "")
+	if (CarIdleSound != "" && idlesound->IsLoaded() == true)
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
@@ -1271,7 +1265,7 @@ void Elevator::MonitorLoop()
 	}
 
 	//play music sound if in elevator, or if doors open
-	if (Music != "")
+	if (Music != "" && musicsound->IsLoaded() == true)
 	{
 		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && IsMoving == true) || MusicOnMove == false))
 		{
@@ -3251,18 +3245,15 @@ bool Elevator::MoveDown()
 	return true;
 }
 
-void Elevator::SetGoButton(bool value)
+bool Elevator::SetGoButton(bool value)
 {
 	//sets the value of the Go button (for Inspection Service mode)
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	if (InspectionService == false)
-		return;
+		return false;
 
 	if (ManualGo == true && value == false)
 		Stop();
@@ -3284,20 +3275,19 @@ void Elevator::SetGoButton(bool value)
 		if (ManualDown == true)
 			MoveDown();
 	}
+
+	return true;
 }
 
-void Elevator::SetUpButton(bool value)
+bool Elevator::SetUpButton(bool value)
 {
 	//sets the value of the Up button (for Inspection Service mode)
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	if (InspectionService == false)
-		return;
+		return false;
 
 	if (ManualUp == true && value == false)
 		Stop();
@@ -3314,20 +3304,19 @@ void Elevator::SetUpButton(bool value)
 
 	if (ManualGo == true && value == true)
 		MoveUp();
+
+	return true;
 }
 
-void Elevator::SetDownButton(bool value)
+bool Elevator::SetDownButton(bool value)
 {
 	//sets the value of the Go button (for Inspection Service mode)
 
 	if (Running == false)
-	{
-		ReportError("Elevator not running");
-		return;
-	}
+		return ReportError("Elevator not running");
 
 	if (InspectionService == false)
-		return;
+		return false;
 
 	if (ManualDown == true && value == false)
 		Stop();
@@ -3344,6 +3333,8 @@ void Elevator::SetDownButton(bool value)
 
 	if (ManualGo == true && value == true)
 		MoveDown();
+
+	return true;
 }
 
 int Elevator::GetTopFloor()
@@ -3474,7 +3465,7 @@ ElevatorDoor* Elevator::GetDoor(int number)
 	return 0;
 }
 
-void Elevator::OpenDoorsEmergency(int number, int whichdoors, int floor, bool hold)
+bool Elevator::OpenDoorsEmergency(int number, int whichdoors, int floor, bool hold)
 {
 	//Simulates manually prying doors open.
 	//Slowly opens the elevator doors no matter where elevator is.
@@ -3485,7 +3476,7 @@ void Elevator::OpenDoorsEmergency(int number, int whichdoors, int floor, bool ho
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	OpenDoors(number, whichdoors, floor, true, hold);
+	return OpenDoors(number, whichdoors, floor, true, hold);
 }
 
 void Elevator::CloseDoorsEmergency(int number, int whichdoors, int floor, bool hold)
@@ -3502,7 +3493,7 @@ void Elevator::CloseDoorsEmergency(int number, int whichdoors, int floor, bool h
 	CloseDoors(number, whichdoors, floor, true, hold);
 }
 
-void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, bool hold)
+bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, bool hold)
 {
 	//Opens elevator doors
 
@@ -3523,15 +3514,10 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	if (Interlocks == true)
 	{
 		if (IsMoving == true && OnFloor == false)
-		{
-			ReportError("Cannot open doors while moving if interlocks are enabled");
-			return;
-		}
+			return ReportError("Cannot open doors while moving if interlocks are enabled");
+
 		if (OnFloor == false || (whichdoors == 3 && floor != GetFloor()))
-		{
-			ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
-			return;
-		}
+			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 	}
 
 	int start, end;
@@ -3600,6 +3586,7 @@ void Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 		doorhold_floor = 0;
 		doorhold_manual = false;
 	}
+	return true;
 }
 
 void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bool hold)
@@ -5116,9 +5103,9 @@ Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vec
 	return trigger->object;
 }
 
-void Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
+bool Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
+	return ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
 }
 
 std::vector<Sound*> Elevator::GetSound(const char *name)
