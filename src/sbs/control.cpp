@@ -358,7 +358,7 @@ int Control::FindNumericActionPosition()
 	return 0;
 }
 
-void Control::DoAction(bool &result, int &action_count)
+bool Control::DoAction()
 {
 	//perform object's action
 	//result is true if at least one action in the list succeeded
@@ -370,9 +370,8 @@ void Control::DoAction(bool &result, int &action_count)
 	else
 		actionlist.push_back(Actions[current_position - 1]);
 
-	result = false;
-	action_count = (int)actionlist.size();
-	for (int i = 0; i < action_count; i++)
+	bool result = false;
+	for (int i = 0; i < (int)actionlist.size(); i++)
 	{
 		bool result2 = false;
 
@@ -382,6 +381,7 @@ void Control::DoAction(bool &result, int &action_count)
 		if (result2 == true)
 			result = true;
 	}
+	return result;
 }
 
 bool Control::Press()
@@ -403,21 +403,16 @@ bool Control::Press()
 	NextSelectPosition();
 
 	//run action
-	bool result = false;
-	int count = 0;
-	DoAction(result, count);
+	bool result = DoAction();
 
-	//change back to original selection if a numeric action returns false
-	//(elevator is on the same floor, and doors are reopened)
-	//or if only one action was listed, and the result is false
-	if ((IsNumeric(name.c_str()) || count == 1) && result == false)
-	{
+	//play sound if action succeeded
+	//or always if the name is numeric (elevator is on the same floor, and doors are reopened)
+	if (result == true || IsNumeric(name.c_str()))
+		PlaySound();
+
+	//change back to original selection if result is false
+	if (result == false)
 		PreviousSelectPosition();
-		return false;
-	}
-
-	//play sound
-	PlaySound();
 
 	return result;
 }

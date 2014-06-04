@@ -246,17 +246,16 @@ int Trigger::FindActionPosition(const char *name)
 	return 0;
 }
 
-void Trigger::DoAction(bool &result, int &action_count)
+bool Trigger::DoAction()
 {
 	//perform trigger's action
 	//result is true if at least one action in the list succeeded
 
 	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
 
-	result = false;
-	action_count = (int)actionlist.size();
+	bool result = false;
 
-	for (int i = 0; i < action_count; i++)
+	for (int i = 0; i < (int)actionlist.size(); i++)
 	{
 		bool result2 = false;
 
@@ -266,6 +265,7 @@ void Trigger::DoAction(bool &result, int &action_count)
 		if (result2 == true)
 			result = true;
 	}
+	return result;
 }
 
 bool Trigger::Check()
@@ -309,21 +309,16 @@ bool Trigger::Check()
 		NextSelectPosition();
 
 		//perform selected action
-		bool result = false;
-		int count = 0;
-		DoAction(result, count);
+		bool result = DoAction();
 
-		//change back to original selection if a numeric action returns false
-		//(elevator is on the same floor, and doors are reopened)
-		//or if only one action was listed, and the result is false
-		if ((IsNumeric(name.c_str()) || count == 1) && result == false)
-		{
+		//play sound if action succeeded
+		//or always if the name is numeric (elevator is on the same floor, and doors are reopened)
+		if (result == true || IsNumeric(name.c_str()))
+			PlaySound();
+
+		//change back to original selection if result is false
+		if (result == false)
 			PreviousSelectPosition();
-			return false;
-		}
-
-		//play sound
-		PlaySound();
 
 		return result;
 	}
