@@ -1,5 +1,91 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-right-clicking controls now reverses direction of selection
+-all shaft doors must now be fully closed for an elevator to move, when interlocks are enabled
+-actions now return the status of the commands run
+-controls and triggers will now only change position if the action succeeds
+-controls/triggers with multiple parents or actions succeed if at least one action succeeds
+-control/trigger sounds now only play if the position changes
+-fixed a message loop in verbose mode if certain elevator sounds can't be loaded
+-added more return codes and "loaded" status to sound code
+-cleaned up elevator mode switching, so that certain modes must be explicitly disabled before enabling another mode
+-ACP mode now uses standard queuing instead of Go function, which fixes a malfunction if used while another call is being handled
+-the elevator Go function will now exit if elevator is already moving
+-added floor ID reporting to Go function
+-floor signs now take the shaft door offset into account when created
+-added Renderer entry to Stats dialog
+-fixed an issue where shaft doors would stay disabled if pressing F6 (resetting position) while in an elevator
+-fixed logic behind 'force' parameter for shaft and stairs enable checks
+-changed Glass Tower 138 floor sign to say "R", and also minor wall fix
+-reload function now restores camera floor, gravity, collisions, and freelook options
+-added elevator floor signs to the Glass Tower
+-when deleting shafts, they must have associated elevators deleted manually first
+-sensor actions created by elevator doors are now removed along with the doors
+-floor deletions now fail if a shaft or stairwell depends on that floor
+-fixes to GetFloorNumber function to allow deleting the current floor
+-lots of reporting fixes and cleanups
+-added shaft and stairs existence checks to EnableFloorRange
+-elevators can now be deleted during runtime
+-call buttons are now created with directions based on the combined range of all elevators, instead of just the first one specified.
+-added a forced resize during a building reload for Linux - fixes rendering issues
+-camera rotation values are now updated properly.  This fixes the rotation display in the control panel, and also fixes rotations during a building reload
+-call shutdown() on Ogre root instead of delete, to fix a crash on certain systems during shutdown
+-fixed malfunction in trigger code due to an uninitialized position value
+-fixed setback positionings in Sears Tower model in Triton Center
+-added antennas to Sears Tower model in Triton Center
+-tiling fix for Triton Center top (143) interfloor
+-added missing keys to control reference
+-added explanation of interfloor areas to script guide
+-floor skip text can now be disabled by setting it with an empty value
+-nudge setting in elevator editor now works properly on a per-door basis
+-added door sensor item to elevator editor
+-added "sides" graphic for script guide
+-some needed fixes to the Observation Tower
+-added floor signs to Simple building
+-trim whitespace on GetAction() input string
+-added option to change nudge option for door hold command, used by Sensor action
+-added Sensor and Reset actions, used by sensors
+-added support for elevator door sensors
+-elevator parameters now properly calculate numbers
+-repositioned Glass Tower's rooftop elevator motor
+-moved Glass Tower roof structures to external mesh
+-added use of VerifyFile to building file loader, to fix filename case sensitivity on Linux and Mac
+-removed "starting time" entry from stats dialog
+-fixed parameter count checks in script interpreter
+-script includes now use VerifyFile which fixes case sensitivity issues on Linux and Mac
+-file not found errors for script includes now handle exceptions properly
+-moved Triton Center mech penthouse roof to separate floor
+-fixed issue with cutstairwell and cutshaft commands introduced in rev 2047 (in Alpha 7), that caused external meshes to cut a floor too high
+-removed unnecessary pauses
+-added support for function nesting (calling functions within other functions)
+-reworked the script error reporting code, to fix reported line number breakage when using nested includes
+-updated guide to explain include and function behavior
+-a warning is now shown in the console when a function is defined again, and the redefinition is skipped
+-return empty strings instead of nulls for c-string functions.  Fixes some crashes
+-added atrium floor spacing in Glass Tower
+-added progress dialog for script load
+-added EndPoint function
+-moved Print command to end, which allows certain command results to be printed properly
+-added AddCustomFloor command
+-(Glass Tower) added basic Peerless building and ground based on spotting blueprint from movie
+-(major) fixed an issue where the submesh processor would skip, leaving unused triangle data.  This was causing Prepare() to malfunction and sometimes visible corruption
+-Action Viewer now displays multiple parents
+-added ability to delete actions from the Action Viewer window, and fixed some cleanup issues involved in the deletions
+-added AddActionParent and RemoveActionParent commands
+-action viewer now refreshes list
+-actions created by button panels are now deleted along with the panels
+-walls of root object (SBS) meshes are now children of those meshes instead of root
+-fixed a vector overrun in RemoveFloor function (element was removed before accessed)
+-do not process geometry buffers if no data exists - fixes a crash on Windows
+-manually deleting floors now deletes any walls created in the "external" mesh
+-reset collisions when deleting objects, and clear last_collision value - this allows objects the user is touching (or standing on) to be deleted
+-added check to prevent floors from being deleted out of order
+-elevator doors can now be deleted properly during runtime
+-added round math function
+-added new math functions log2, ceil, flr, and rnd
+-fix for texture distortion issues on main menu
+-added option to turn off automatic filler/connection walls for elevator doors
+-math function fix - removed the need for a space before the function names
 -fixed default locale setting - this solves script error issues when running on machines with different locale settings
 -texture functions now report in verbose mode only
 -fixed StartsWith() function
