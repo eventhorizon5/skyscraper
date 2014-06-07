@@ -689,15 +689,17 @@ void Skyscraper::GetInput()
 	}
 
 	//check if the user clicked on an object, and process it
-	if (wxGetMouseState().LeftIsDown() == true && MouseDown == false)
+	bool left = wxGetMouseState().LeftIsDown();
+	bool right = wxGetMouseState().RightIsDown();
+	if ((left == true || right == true) && MouseDown == false)
 	{
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
-		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT));
+		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), right);
 	}
 
 	//reset mouse state
-	if (wxGetMouseState().LeftIsDown() == false)
+	if (left == false && right == false)
 	{
 		MouseDown = false;
 		Simcore->camera->MouseDown = MouseDown;

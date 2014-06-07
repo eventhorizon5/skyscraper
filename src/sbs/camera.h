@@ -94,7 +94,7 @@ public:
 	void CheckElevator();
 	void CheckShaft();
 	void CheckStairwell();
-	void ClickedObject(bool shift, bool ctrl, bool alt);
+	void ClickedObject(bool shift, bool ctrl, bool alt, bool right);
 	const char* GetClickedMeshName();
 	const char* GetClickedPolyName();
 	int GetClickedObjectNumber();

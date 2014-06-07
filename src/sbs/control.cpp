@@ -384,23 +384,31 @@ bool Control::DoAction()
 	return result;
 }
 
-bool Control::Press()
+bool Control::Press(bool reverse)
 {
 	//press button/control
+	//if reverse is true, select in opposite direction
 
 	//check lock state
 	if (IsLocked() == true)
 		return sbs->ReportError(std::string("Control " + Name + " is locked").c_str());
 
 	//get action name of next position state
-	std::string name = GetPositionAction(GetNextSelectPosition());
+	std::string name;
+	if (reverse == false)
+		name = GetPositionAction(GetNextSelectPosition());
+	else
+		name = GetPositionAction(GetPreviousSelectPosition());
 
 	//exit without changing position if floor button is currently selected
 	if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
 		return false;
 
 	//change to next control position
-	NextSelectPosition();
+	if (reverse == false)
+		NextSelectPosition();
+	else
+		PreviousSelectPosition();
 
 	//run action
 	bool result = DoAction();
@@ -412,7 +420,12 @@ bool Control::Press()
 
 	//change back to original selection if result is false
 	if (result == false)
-		PreviousSelectPosition();
+	{
+		if (reverse == false)
+			PreviousSelectPosition();
+		else
+			NextSelectPosition();
+	}
 
 	return result;
 }

@@ -438,7 +438,7 @@ void Camera::CheckStairwell()
 	FloorTemp = CurrentFloor;
 }
 
-void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
+void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 {
 	//get mesh object that the user clicked on, and perform related work
 
@@ -568,7 +568,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	if (obj)
 	{
 		//delete wall if ctrl is pressed
-		if (wall && ctrl == true && object_number > 0)
+		if (wall && ctrl == true && object_number > 0 && right == false)
 		{
 			if (std::string(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
@@ -590,14 +590,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 				if (control)
 				{
 					if (shift == false)
-						control->Press();
+						control->Press(right);
 					else
 						control->ToggleLock();
 				}
 			}
 
 			//check doors
-			if (type == "Door")
+			if (type == "Door" && right == false)
 			{
 				Door *door = (Door*)obj->GetParent()->GetRawObject();
 
@@ -633,7 +633,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 			}
 
 			//check models
-			if (type == "Model")
+			if (type == "Model" && right == false)
 			{
 				Model *model = (Model*)obj->GetParent()->GetRawObject();
 
@@ -659,7 +659,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check call buttons
-	if ((int)meshname.find("Call Button") != -1)
+	if ((int)meshname.find("Call Button") != -1 && right == false)
 	{
 		//user clicked on a call button
 		int index = (int)meshname.find(":");
@@ -699,7 +699,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check shaft doors
-	if ((int)meshname.find("Shaft Door") != -1 && shift == true)
+	if ((int)meshname.find("Shaft Door") != -1 && shift == true && right == false)
 	{
 		//user clicked on a shaft door
 		int elevator = atoi(meshname.substr(9, meshname.find(":") - 9).c_str());
@@ -719,7 +719,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt)
 	}
 
 	//check elevator doors
-	if ((int)meshname.find("ElevatorDoor") != -1 && shift == true)
+	if ((int)meshname.find("ElevatorDoor") != -1 && shift == true && right == false)
 	{
 		//user clicked on an elevator door
 		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13).c_str());

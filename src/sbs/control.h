@@ -61,7 +61,7 @@ public:
 	int FindActionPosition(const char *name);
 	int FindNumericActionPosition();
 	bool DoAction();
-	bool Press();
+	bool Press(bool reverse = false);
 	void ChangeFloorLight(int floor, bool value);
 	void ChangeLight(bool value);
 	void SetLocked(bool value, int keyid);
