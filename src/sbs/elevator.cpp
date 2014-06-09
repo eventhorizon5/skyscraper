@@ -1396,15 +1396,6 @@ void Elevator::MoveElevatorToFloor()
 	if (WaitForTimer == true)
 		return;
 
-	//exit if doors are not fully closed while interlocks enabled
-	if (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false))
-	{
-		ReportError("Doors must be closed before moving when interlocks are enabled");
-		MoveElevator = false;
-		DeleteActiveRoute();
-		return;
-	}
-
 	if (ElevatorIsRunning == false)
 	{
 		if (Running == false)
@@ -1458,6 +1449,16 @@ void Elevator::MoveElevatorToFloor()
 			ElevatorIsRunning = false;
 			DeleteActiveRoute();
 			goto finish; //skip main processing and run cleanup section
+		}
+
+		//exit if doors are not fully closed while interlocks enabled
+		if (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false))
+		{
+			ReportError("Doors must be closed before moving when interlocks are enabled");
+			MoveElevator = false;
+			ElevatorIsRunning = false;
+			DeleteActiveRoute();
+			return;
 		}
 
 		//Determine direction
