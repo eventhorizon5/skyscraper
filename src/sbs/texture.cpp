@@ -867,7 +867,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	float green = (float)ColorG / 255;
 	float blue = (float)ColorB / 255;
 
-	bool result = WriteToTexture(Text, texture, Ogre::Box(x1, y1, x2, y2), font, Ogre::ColourValue(red, green, blue, 1.0), align, valign);
+	bool result = WriteToTexture(Text, texture, x1, y1, x2, y2, font, Ogre::ColourValue(red, green, blue, 1.0), align, valign);
 	if (result == false)
 		return false;
 
@@ -1790,17 +1790,17 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	IncrementTextureCount();
 }
 
-bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, Ogre::Box destRectangle, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
+bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
 {
 	//justify is left 'l' by default - set to 'r' or 'c' for right or center
-	//vert_justify is top 't' by defautl - set to 'c' or 'b' for center or bottom
+	//vert_justify is top 't' by default - set to 'c' or 'b' for center or bottom
 
 	using namespace Ogre;
 
-	if (destTexture->getHeight() < destRectangle.bottom - 1)
-		destRectangle.bottom = destTexture->getHeight() - 1;
-	if (destTexture->getWidth() < destRectangle.right - 1)
-		destRectangle.right = destTexture->getWidth() - 1;
+	if (destTexture->getHeight() < destBottom - 1)
+		destBottom = destTexture->getHeight() - 1;
+	if (destTexture->getWidth() < destRight - 1)
+		destRight = destTexture->getWidth() - 1;
 
 	try
 	{
@@ -1821,7 +1821,6 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 	HardwarePixelBufferSharedPtr fontBuffer = fontTexture->getBuffer();
 	HardwarePixelBufferSharedPtr destBuffer = destTexture->getBuffer();
 
-	//PixelBox destPb = destBuffer->lock(destRectangle, HardwareBuffer::HBL_NORMAL);
 	PixelBox destPb = destBuffer->lock(Box(0, 0, destTexture->getWidth() - 1, destTexture->getHeight() - 1), HardwareBuffer::HBL_NORMAL);
 
 	// The font texture buffer was created write only...so we cannot read it back :o). One solution is to copy the buffer  instead of locking it. (Maybe there is a way to create a font texture which is not write_only ?)
@@ -1897,7 +1896,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 
 	int cursorX = 0;
 	int cursorY = 0;
-	//int lineend = destRectangle.getWidth();
+	//int lineend = destRight - destLeft;
 	bool carriagereturn = true;
 	for (unsigned int strindex = 0; strindex < str.size(); strindex++)
 	{
@@ -1962,22 +1961,22 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 					}
 
 					if (textwidth == 0)
-						textwidth = (int)destRectangle.getWidth();
+						textwidth = destRight - destLeft;
 
 					switch (justify)
 					{
 						case 'c':
-							cursorX = (int)destRectangle.left + ((int)destRectangle.getWidth() / 2) - (textwidth / 2);
-							//lineend = destRectangle.getWidth() - cursorX;
+							cursorX = destLeft + ((destRight - destLeft) / 2) - (textwidth / 2);
+							//lineend = (destRight - destLeft) - cursorX;
 							break;
 
 						case 'r':
-							cursorX = (int)destRectangle.right - textwidth;
-							//lineend = destRectangle.getWidth();
+							cursorX = destRight - textwidth;
+							//lineend = destRight - destLeft;
 							break;
 
 						default:
-							cursorX = (int)destRectangle.right;
+							cursorX = destRight;
 							//lineend = textwidth;
 							break;
 					}
@@ -1985,14 +1984,14 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, O
 					switch (vert_justify)
 					{
 						case 'c':
-							cursorY = (int)destRectangle.top + ((int)destRectangle.getHeight() / 2) - (charheight / 2);
+							cursorY = destTop + ((destBottom - destTop) / 2) - (charheight / 2);
 							break;
 
 						case 'b':
-							cursorY = (int)destRectangle.bottom - charheight + cursorY;
+							cursorY = destBottom - charheight + cursorY;
 							break;
 						default:
-							cursorY = (int)destRectangle.top;
+							cursorY = destTop;
 					}
 					carriagereturn = false;
 				}
