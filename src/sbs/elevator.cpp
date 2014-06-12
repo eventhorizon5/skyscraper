@@ -5409,7 +5409,7 @@ int Elevator::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				nearest_difference = fabsf(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+				nearest_difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
 				nearest = i;
 				firstrun = false;
 			}
@@ -5418,11 +5418,11 @@ int Elevator::GetNearestServicedFloor()
 		{
 			if (sbs->GetFloor(ServicedFloors[i]))
 			{
-				float difference = fabsf(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+				float difference = fabsf(GetPosition().y - GetDestinationOffset(ServicedFloors[i]));
 				if (difference < nearest_difference)
 				{
 					//mark closest
-					nearest_difference = fabsf(GetPosition().y - sbs->GetFloor(ServicedFloors[i])->Altitude);
+					nearest_difference = difference;
 					nearest = i;
 				}
 			}
@@ -5458,11 +5458,8 @@ bool Elevator::IsLeveled()
 	int floor = GetFloor();
 	if (IsServicedFloor(floor) == true)
 	{
-		if (sbs->GetFloor(floor))
-		{
-			if (GetPosition().y == sbs->GetFloor(floor)->Altitude)
-				return true;
-		}
+		if (GetPosition().y == GetDestinationAltitude(floor))
+			return true;
 	}
 	return false;
 }
