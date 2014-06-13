@@ -954,15 +954,15 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		sbs->ResetDoorwayWalls();
 		if (DoorDirection == false)
 		{
-			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, 1, "Shaft"))
+			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, 1))
 				return 0;
-			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, true, 2, "Shaft");
+			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, true, 2);
 		}
 		else
 		{
-			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, 1, "Shaft"))
+			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, 1))
 				return 0;
-			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2, "Shaft");
+			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2);
 		}
 
 		//create doorway walls

@@ -59,7 +59,7 @@ public:
 	void EnableWholeShaft(bool value, bool EnableShaftDoors, bool force = false);
 	bool IsInShaft(const Ogre::Vector3 &position);
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset);
-	bool Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, const char *checkstring = "");
+	bool Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);
 	void EnableRange(int floor, int range, bool value, bool EnableShaftDoors);
 	bool IsEnabledFloor(int floor);
 	void AddShowFloor(int floor);

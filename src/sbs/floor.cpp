@@ -386,7 +386,7 @@ Object* Floor::AddCallButtons(std::vector<int> &elevators, const char *BackTextu
 	return button->object;
 }
 
-void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, const char *checkstring, bool prepare)
+void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, bool prepare)
 {
 	//caller to SBS cut function
 	//Y values are relative to the floor's altitude
@@ -398,13 +398,13 @@ void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwa
 		if (i > 0)
 			reset = false;
 
-		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, checkstring, reset);
+		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, reset);
 	}
 	if (fast == false)
 	{
 		for (int i = 0; i < (int)Interfloor->Walls.size(); i++)
 		{
-			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, checkstring, false);
+			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, false);
 		}
 	}
 }
