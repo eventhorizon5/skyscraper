@@ -82,6 +82,9 @@ const long CameraControl::ID_bFreelook = wxNewId();
 const long CameraControl::ID_STATICTEXT20 = wxNewId();
 const long CameraControl::ID_txtFreelookSpeed = wxNewId();
 const long CameraControl::ID_bFreelookSpeed = wxNewId();
+const long CameraControl::ID_STATICTEXT33 = wxNewId();
+const long CameraControl::ID_txtBinocularsFOV = wxNewId();
+const long CameraControl::ID_bBinocularsFOV = wxNewId();
 const long CameraControl::ID_STATICTEXT18 = wxNewId();
 const long CameraControl::ID_txtGotoFloor = wxNewId();
 const long CameraControl::ID_bGotoFloor = wxNewId();
@@ -262,6 +265,12 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer3->Add(txtFreelookSpeed, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFreelookSpeed = new wxButton(this, ID_bFreelookSpeed, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bFreelookSpeed"));
 	FlexGridSizer3->Add(bFreelookSpeed, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText33 = new wxStaticText(this, ID_STATICTEXT33, _("Binoculars FOV:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT33"));
+	FlexGridSizer3->Add(StaticText33, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	txtBinocularsFOV = new wxTextCtrl(this, ID_txtBinocularsFOV, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtBinocularsFOV"));
+	FlexGridSizer3->Add(txtBinocularsFOV, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bBinocularsFOV = new wxButton(this, ID_bBinocularsFOV, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bBinocularsFOV"));
+	FlexGridSizer3->Add(bBinocularsFOV, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText18 = new wxStaticText(this, ID_STATICTEXT18, _("Goto Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT18"));
 	FlexGridSizer3->Add(StaticText18, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtGotoFloor = new wxTextCtrl(this, ID_txtGotoFloor, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtGotoFloor"));
@@ -408,6 +417,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bReportCollisions,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bReportCollisions_Click);
 	Connect(ID_bFreelook,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelook_Click);
 	Connect(ID_bFreelookSpeed,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bFreelookSpeed_Click);
+	Connect(ID_bBinocularsFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bBinocularsFOV_Click);
 	Connect(ID_bGotoFloor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bGotoFloor_Click);
 	Connect(ID_rPosition,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&CameraControl::On_rPosition_Select);
 	Connect(ID_rRotation,wxEVT_COMMAND_RADIOBUTTON_SELECTED,(wxObjectEventFunction)&CameraControl::On_rRotation_Select);
@@ -446,6 +456,7 @@ void CameraControl::OnInit()
 	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());
 	hold_vector = Ogre::Vector3(0, 0, 0);
 	txtSetSkyMult->SetValue(wxVariant(skyscraper->SkyMult).GetString());
+	txtBinocularsFOV->SetValue(TruncateNumber(Simcore->camera->BinocularsFOV, 4));
 }
 
 void CameraControl::Loop()
@@ -675,4 +686,9 @@ void CameraControl::On_bGotoFloor_Click(wxCommandEvent& event)
 void CameraControl::On_bReportCollisions_Click(wxCommandEvent& event)
 {
 	Simcore->camera->ReportCollisions = !Simcore->camera->ReportCollisions;
+}
+
+void CameraControl::On_bBinocularsFOV_Click(wxCommandEvent& event)
+{
+	Simcore->camera->BinocularsFOV = (atof(txtBinocularsFOV->GetValue().ToAscii()));
 }

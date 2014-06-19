@@ -58,7 +58,6 @@ public:
 	float cfg_speedfast; //camera fast speed multiplier
 	float cfg_speedslow; //camera slow speed multiplier
 	float cfg_zoomspeed; //camera zoom speed
-	float cfg_binoculars_fov; //binoculars mode FOV
 	Ogre::Vector3 desired_velocity;
 	Ogre::Vector3 velocity;
 	Ogre::Vector3 desired_angle_velocity;
@@ -71,6 +70,7 @@ public:
 	float Freelook_speed; //freelook speed
 	Ogre::Vector3 HitPosition; //last hit position
 	bool EnableBullet;
+	float BinocularsFOV; //binoculars mode FOV
 
 	//functions
 	Camera(Ogre::Camera *camera);
