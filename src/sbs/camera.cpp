@@ -80,6 +80,7 @@ Camera::Camera(Ogre::Camera *camera)
 	cfg_speedfast = sbs->GetConfigFloat("Skyscraper.SBS.Camera.FastSpeed", 2.0f);
 	cfg_speedslow = sbs->GetConfigFloat("Skyscraper.SBS.Camera.SlowSpeed", 0.5f);
 	cfg_zoomspeed = sbs->GetConfigFloat("Skyscraper.SBS.Camera.ZoomSpeed", 0.2f);
+	cfg_binoculars_fov = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BinocularsFOV", 10.0f);
 	speed = 1;
 	Collisions = 0;
 	lastfloor = 0;
@@ -1105,4 +1106,14 @@ void Camera::GotoFloor(int floor, bool disable_current)
 			floorobj->EnableGroup(true);
 		}
 	}
+}
+
+void Camera::Binoculars(bool value)
+{
+	//enable or disable binoculars mode
+
+	if (value == true)
+		SetFOVAngle(cfg_binoculars_fov);
+	else
+		SetToDefaultFOV();
 }

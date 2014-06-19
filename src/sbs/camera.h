@@ -58,6 +58,7 @@ public:
 	float cfg_speedfast; //camera fast speed multiplier
 	float cfg_speedslow; //camera slow speed multiplier
 	float cfg_zoomspeed; //camera zoom speed
+	float cfg_binoculars_fov; //binoculars mode FOV
 	Ogre::Vector3 desired_velocity;
 	Ogre::Vector3 velocity;
 	Ogre::Vector3 desired_angle_velocity;
@@ -129,6 +130,7 @@ public:
 	void MoveCharacter();
 	void ResetCollisions();
 	void GotoFloor(int floor, bool disable_current = true);
+	void Binoculars(bool value);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

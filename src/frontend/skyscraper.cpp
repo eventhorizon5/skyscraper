@@ -635,7 +635,7 @@ void Skyscraper::GetInput()
 		return;
 
 	static int wireframe;
-	static bool wait, waitcheck, colliders;
+	static bool wait, waitcheck, colliders, b_down;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
@@ -896,6 +896,18 @@ void Skyscraper::GetInput()
 			//decrease FOV angle
 			float angle = Simcore->camera->GetFOVAngle() - Simcore->camera->cfg_zoomspeed;
 			Simcore->camera->SetFOVAngle(angle);
+		}
+
+		//binoculars
+		if (wxGetKeyState((wxKeyCode)'B') && b_down == false)
+		{
+			Simcore->camera->Binoculars(true);
+			b_down = true;
+		}
+		if (!wxGetKeyState((wxKeyCode)'B') && b_down == true)
+		{
+			Simcore->camera->Binoculars(false);
+			b_down = false;
 		}
 
 		//values from old version
