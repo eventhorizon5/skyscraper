@@ -2012,6 +2012,4 @@ void Skyscraper::SetFullScreen(bool enabled)
 
 	FullScreen = enabled;
 	window->ShowFullScreen(FullScreen);
-	window->ToggleWindowStyle(wxSTAY_ON_TOP);
-	window->Refresh();
 }
