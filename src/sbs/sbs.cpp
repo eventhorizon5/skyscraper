@@ -492,10 +492,22 @@ bool SBS::Start()
 			ElevatorArray[i].object->Init();
 	}
 
+	//play looping global sounds
+	for (int i = 0; i < (int)sounds.size(); i++)
+	{
+		if (sounds[i])
+		{
+			if (sounds[i]->GetLoopState() == true)
+				sounds[i]->Play();
+		}
+	}
+
 	//move camera to start location
 	camera->SetToStartPosition(false); //also turns on start floor
 	camera->SetToStartDirection();
 	camera->SetToStartRotation();
+
+	IsRunning = true;
 
 	return true;
 }
@@ -2646,7 +2658,7 @@ Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 posi
 	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
 	sound->Loop(loop);
-	if (loop)
+	if (loop && IsRunning == true)
 		sound->Play();
 
 	return sound->object;

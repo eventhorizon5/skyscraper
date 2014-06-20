@@ -1237,7 +1237,7 @@ void Elevator::MonitorLoop()
 	{
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
-			if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
 			{
 				if (sbs->Verbose)
 					Report("playing idle sound");
@@ -1253,7 +1253,7 @@ void Elevator::MonitorLoop()
 					Report("stopping idle sound");
 				idlesound->Stop();
 			}
-			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+			else if (InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping idle sound");
@@ -1269,7 +1269,7 @@ void Elevator::MonitorLoop()
 		{
 			if (InServiceMode() == false)
 			{
-				if ((sbs->InElevator == true && sbs->ElevatorNumber == Number) || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+				if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
 				{
 					if (sbs->Verbose)
 						Report("playing music");
@@ -1291,7 +1291,7 @@ void Elevator::MonitorLoop()
 					Report("stopping music");
 				musicsound->Pause();
 			}
-			else if ((sbs->InElevator == false || sbs->ElevatorNumber != Number) && AreDoorsOpen() == false && AreDoorsMoving() == 0)
+			else if (InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
 					Report("stopping music");
@@ -4240,7 +4240,7 @@ Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3
 	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
 	sound->Loop(loop);
-	if (loop)
+	if (loop && sbs->IsRunning == true && InElevator() == true)
 		sound->Play();
 
 	return sound->object;
@@ -5367,7 +5367,7 @@ bool Elevator::Check(Ogre::Vector3 position)
 
 	if (IsInElevator(position) == true)
 	{
-		if (sbs->InElevator == false || sbs->ElevatorNumber != Number)
+		if (InElevator() == false)
 		{
 			EnableObjects(true);
 			UpdateFloorIndicators();
@@ -5377,7 +5377,7 @@ bool Elevator::Check(Ogre::Vector3 position)
 		sbs->ElevatorSync = true;
 		return true;
 	}
-	else if (sbs->InElevator == true && sbs->ElevatorNumber == Number)
+	else if (InElevator() == true)
 		EnableObjects(false); //turn off objects if user is not in the checked elevator
 	else if (CameraOffset > Height && CameraOffset < Height * 2)
 	{
@@ -5547,4 +5547,11 @@ int Elevator::GetActiveCallFloor()
 int Elevator::GetActiveCallDirection()
 {
 	return ActiveCallDirection;
+}
+
+bool Elevator::InElevator()
+{
+	//return true if user is currently in elevator
+
+	return (sbs->InElevator == true && sbs->ElevatorNumber == Number);
 }

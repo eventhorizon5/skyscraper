@@ -1695,7 +1695,6 @@ bool Skyscraper::Start()
 	//run simulation
 	Report("Running simulation...");
 	StopSound();
-	Simcore->IsRunning = true;
 	IsRunning = true;
 	IsLoading = false;
 	StartupRunning = false;

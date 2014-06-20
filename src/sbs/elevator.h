@@ -317,6 +317,7 @@ public:
 	int AreDoorsMoving();
 	bool AreDoorsOpening();
 	bool AreDoorsClosing();
+	bool InElevator();
 
 private:
 

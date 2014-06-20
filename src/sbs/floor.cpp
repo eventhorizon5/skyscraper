@@ -844,7 +844,7 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
 	sound->Loop(loop);
-	if (loop)
+	if (loop && sbs->IsRunning == true && sbs->camera->CurrentFloor == Number)
 		sound->Play();
 
 	return sound->object;
