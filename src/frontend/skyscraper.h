@@ -121,6 +121,7 @@ public:
 	void CreateProgressDialog();
 	void CloseProgressDialog();
 	void UpdateProgress(int percent);
+	void SetFullScreen(bool enabled);
 
 private:
 	//mouse status

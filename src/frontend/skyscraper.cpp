@@ -834,7 +834,7 @@ void Skyscraper::GetInput()
 
 		if (wxGetKeyState(WXK_F4) && wait == false)
 		{
-			//enable/disable wireframe mode
+			//toggle wireframe mode
 			if (wireframe == 0)
 			{
 				Simcore->EnableSkybox(false);
@@ -868,7 +868,7 @@ void Skyscraper::GetInput()
 		}
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
-			//enable/disable freelook mode
+			//toggle freelook mode
 			Simcore->camera->Freelook = !Simcore->camera->Freelook;
 			if (Simcore->camera->Freelook == true)
 				window->SetCursor(wxCURSOR_CROSS);
@@ -878,11 +878,8 @@ void Skyscraper::GetInput()
 		}
 		if (wxGetKeyState(WXK_F10) && wait == false)
 		{
-			//enable/disable fullscreen mode
-			FullScreen = !FullScreen;
-			window->ShowFullScreen(FullScreen);
-			window->ToggleWindowStyle(wxSTAY_ON_TOP);
-			window->Refresh();
+			//toggle fullscreen mode
+			SetFullScreen(!FullScreen);
 			wait = true;
 		}
 		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT) || wxGetKeyState((wxKeyCode)'['))
@@ -1659,16 +1656,16 @@ bool Skyscraper::Start()
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
 
-	//resize main window
-	window->SetBackgroundColour(*wxBLACK);
-	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
-	window->Center();
-
 	//switch to fullscreen mode if specified
 	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
+		SetFullScreen(true);
+
+	//resize main window
+	if (FullScreen == false)
 	{
-		FullScreen = true;
-		window->ShowFullScreen(FullScreen);
+		window->SetBackgroundColour(*wxBLACK);
+		window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
+		window->Center();
 	}
 
 	//start simulation
@@ -1735,8 +1732,7 @@ void Skyscraper::Unload()
 	CloseProgressDialog();
 
 	//return to main menu
-	FullScreen = false;
-	window->ShowFullScreen(FullScreen);
+	SetFullScreen(false);
 	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
 	window->Center();
 
@@ -2008,4 +2004,14 @@ void Skyscraper::CloseProgressDialog()
 void Skyscraper::UpdateProgress(int percent)
 {
 	progdialog->Update(percent);
+}
+
+void Skyscraper::SetFullScreen(bool enabled)
+{
+	//enable/disable fullscreen
+
+	FullScreen = enabled;
+	window->ShowFullScreen(FullScreen);
+	window->ToggleWindowStyle(wxSTAY_ON_TOP);
+	window->Refresh();
 }
