@@ -239,12 +239,12 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 				temppoly.push_back(origpolys[j][k]);
 
 			//make sure the polygon is not outside the cut area
-			if (sbs->Classify(0, temppoly, start.x) != 1 &&
-					sbs->Classify(0, temppoly, end.x) != 2 &&
-					sbs->Classify(1, temppoly, start.y) != 1 &&
-					sbs->Classify(1, temppoly, end.y) != 2 &&
-					sbs->Classify(2, temppoly, start.z) != 1 &&
-					sbs->Classify(2, temppoly, end.z) != 2)
+			if (Classify(0, temppoly, start.x) != 1 &&
+					Classify(0, temppoly, end.x) != 2 &&
+					Classify(1, temppoly, start.y) != 1 &&
+					Classify(1, temppoly, end.y) != 2 &&
+					Classify(2, temppoly, start.z) != 1 &&
+					Classify(2, temppoly, end.z) != 2)
 			{
 				if (Verbose)
 					Report("Cutting polygon " + name);
@@ -265,7 +265,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 
 							//get left side
 							worker = temppoly;
-							sbs->SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+							SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
 							worker.clear();
 
 							//get right side
@@ -273,7 +273,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else
 								worker = temppoly;
-							sbs->SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+							SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
 							worker.clear();
 
 							//get lower
@@ -283,7 +283,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							sbs->SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
 							worker.clear();
 
 							//get upper
@@ -295,7 +295,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							sbs->SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
 							worker.clear();
 						}
 						else
@@ -304,7 +304,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 
 							//get left side
 							worker = temppoly;
-							sbs->SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
+							SplitWithPlane(2, worker, temppoly, temppoly2, start.z);
 							worker.clear();
 
 							//get right side
@@ -312,7 +312,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else
 								worker = temppoly;
-							sbs->SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
+							SplitWithPlane(2, worker, temppoly3, temppoly2, end.z);
 							worker.clear();
 
 							//get lower
@@ -322,7 +322,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							sbs->SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
+							SplitWithPlane(1, worker, temppoly3, temppoly4, start.y);
 							worker.clear();
 
 							//get upper
@@ -334,7 +334,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 								worker = temppoly2;
 							else if (temppoly.size() > 0)
 								worker = temppoly;
-							sbs->SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
+							SplitWithPlane(1, worker, temppoly5, temppoly4, end.y);
 							worker.clear();
 						}
 						polycheck = true;
@@ -379,7 +379,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 
 					//get left side
 					worker = temppoly;
-					sbs->SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
+					SplitWithPlane(0, worker, temppoly, temppoly2, start.x);
 					worker.clear();
 
 					//get right side
@@ -387,7 +387,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 						worker = temppoly2;
 					else
 						worker = temppoly;
-					sbs->SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
+					SplitWithPlane(0, worker, temppoly3, temppoly2, end.x);
 					worker.clear();
 
 					//get lower
@@ -397,7 +397,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 						worker = temppoly2;
 					else if (temppoly.size() > 0)
 						worker = temppoly;
-					sbs->SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
+					SplitWithPlane(2, worker, temppoly3, temppoly4, start.z);
 					worker.clear();
 
 					//get upper
@@ -409,7 +409,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 						worker = temppoly2;
 					else if (temppoly.size() > 0)
 						worker = temppoly;
-					sbs->SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
+					SplitWithPlane(2, worker, temppoly5, temppoly4, end.z);
 					worker.clear();
 					temppoly5.clear();
 
@@ -550,10 +550,10 @@ Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const cha
 				return Ogre::Vector3(0, 0, 0);
 
 			//get upper
-			sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001f);
+			SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001f);
 
 			//get lower part of upper
-			sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001f);
+			SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001f);
 
 			Ogre::Vector3 result;
 			if (get_max == false)
@@ -588,7 +588,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 		newpoly.push_back(Ogre::Vector3(ToRemote(polygon[i].x), ToRemote(polygon[i].y), ToRemote(polygon[i].z)));
 
 	float D = 0;
-	Ogre::Vector3 normal = sbs->ComputeNormal(newpoly, D);
+	Ogre::Vector3 normal = ComputeNormal(newpoly, D);
 
 	int largest_normal = 0; //x
 
