@@ -2295,19 +2295,28 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 					for (int j = 0; j < (int)shaft->ShowFloorsList.size(); j++)
 					{
 						if (shaft->ShowFloorsList[j] == i)
+						{
 							index = j;
+							break;
+						}
 					}
 					if (index != -1 && value == true)
 					{
-						GetFloor(i)->Enabled(true);
-						if (enablegroups == true)
-							GetFloor(i)->EnableGroup(true);
+						if (GetFloor(i)->IsEnabled == false)
+						{
+							GetFloor(i)->Enabled(true);
+							if (enablegroups == true)
+								GetFloor(i)->EnableGroup(true);
+						}
 					}
 					else
 					{
-						GetFloor(i)->Enabled(false);
-						if (enablegroups == true)
-							GetFloor(i)->EnableGroup(false);
+						if (GetFloor(i)->IsEnabled == true)
+						{
+							GetFloor(i)->Enabled(false);
+							if (enablegroups == true)
+								GetFloor(i)->EnableGroup(false);
+						}
 					}
 				}
 			}
