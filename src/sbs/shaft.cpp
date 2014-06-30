@@ -909,7 +909,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			elevator->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
 		}
 
-		if (InsideShaft == false && sbs->InElevator == true && elevator->IsMoving == true)
+		if (InsideShaft == false && sbs->InElevator == true && elevator->IsMoving == true && elevator->Leveling == false)
 		{
 			//if specified, show floors or outside if user is in a moving elevator
 			if (ShowFloors == true)
