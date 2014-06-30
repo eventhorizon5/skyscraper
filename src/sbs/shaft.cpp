@@ -66,6 +66,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	checkfirstrun = true;
 	lastposition = 0;
 	InElevator = false;
+	ShowFloors_Enabled = false;
 
 	std::string buffer, buffer2, buffer3;
 
@@ -909,35 +910,43 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			elevator->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
 		}
 
-		if (InsideShaft == false && sbs->InElevator == true && elevator->IsMoving == true && elevator->Leveling == false)
+		//if specified, show floors or outside if user is in a moving elevator
+		if (ShowFloors == true && ShowFloors_Enabled == false)
 		{
-			//if specified, show floors or outside if user is in a moving elevator
-			if (ShowFloors == true)
-				sbs->EnableFloorRange(current_floor, sbs->FloorDisplayRange, true, true, ShaftNumber);
-
-			if (ShowOutside == true)
+			ShowFloors_Enabled = true;
+			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 			{
-				int loc = -1;
-				for (int i = 0; i < (int)ShowOutsideList.size(); i++)
+				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
+				if (floor->IsEnabled == false)
 				{
-					if (ShowOutsideList[i] == current_floor)
-						loc = i;
+					floor->Enabled(true);
+					//floor->EnableGroup(true);
 				}
+			}
+		}
 
-				if (loc != -1)
-				{
-					sbs->EnableSkybox(true);
-					sbs->EnableBuildings(true);
-					sbs->EnableLandscape(true);
-					sbs->EnableExternal(true);
-				}
-				else
-				{
-					sbs->EnableSkybox(false);
-					sbs->EnableBuildings(false);
-					sbs->EnableLandscape(false);
-					sbs->EnableExternal(false);
-				}
+		if (ShowOutside == true)
+		{
+			int loc = -1;
+			for (int i = 0; i < (int)ShowOutsideList.size(); i++)
+			{
+				if (ShowOutsideList[i] == current_floor)
+					loc = i;
+			}
+
+			if (loc != -1)
+			{
+				sbs->EnableSkybox(true);
+				sbs->EnableBuildings(true);
+				sbs->EnableLandscape(true);
+				sbs->EnableExternal(true);
+			}
+			else
+			{
+				sbs->EnableSkybox(false);
+				sbs->EnableBuildings(false);
+				sbs->EnableLandscape(false);
+				sbs->EnableExternal(false);
 			}
 		}
 	}
@@ -950,6 +959,26 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 
 		//turn off shaft
 		EnableWholeShaft(false, true, true);
+
+		//if specified, show floors or outside if user is in a moving elevator
+		if (ShowFloors == true && ShowFloors_Enabled == true)
+		{
+			ShowFloors_Enabled = false;
+			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+			{
+				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
+				if (floor->IsEnabled == true && sbs->camera->CurrentFloor != floor->Number)
+				{
+					floor->Enabled(false);
+					//floor->EnableGroup(false);
+				}
+			}
+
+			//enable camera floor group if any related floors were disabled
+			Floor *floor = sbs->GetFloor(sbs->camera->CurrentFloor);
+			if (floor)
+				floor->EnableGroup(true);
+		}
 	}
 	else if (InsideShaft == false)
 	{

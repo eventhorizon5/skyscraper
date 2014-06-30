@@ -100,6 +100,7 @@ private:
 	bool lastcheckresult;
 	bool checkfirstrun;
 	bool InElevator;
+	bool ShowFloors_Enabled;
 
 	//lights
 	std::vector<std::vector<Light*> > lights;

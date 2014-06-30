@@ -280,6 +280,14 @@ void Floor::Enabled(bool value)
 	Interfloor->Enable(value);
 	IsEnabled = value;
 
+	if (sbs->Verbose)
+	{
+		if (value == true)
+			Report("Enabled");
+		else
+			Report("Disabled");
+	}
+
 	EnableColumnFrame(value);
 
 	//controls

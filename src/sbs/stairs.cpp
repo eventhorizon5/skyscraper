@@ -910,8 +910,12 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 			{
 				for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 				{
-					sbs->GetFloor(ShowFloorsList[i])->Enabled(true);
-					sbs->GetFloor(ShowFloorsList[i])->EnableGroup(true);
+					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
+					if (floor->IsEnabled == false)
+					{
+						floor->Enabled(true);
+						floor->EnableGroup(true);
+					}
 				}
 			}
 		}
@@ -931,8 +935,12 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 			{
 				if (ShowFloorsList[i] != current_floor)
 				{
-					sbs->GetFloor(ShowFloorsList[i])->Enabled(false);
-					sbs->GetFloor(ShowFloorsList[i])->EnableGroup(false);
+					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
+					if (floor->IsEnabled == true)
+					{
+						floor->Enabled(false);
+						floor->EnableGroup(false);
+					}
 				}
 			}
 		}

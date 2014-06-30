@@ -153,7 +153,6 @@ public:
 	int StairsDisplayRange; //number of stairwell floors to display while in stairwell; has no effect if stairwell's ShowFullStairs is true
 	int ShaftOutsideDisplayRange; //number of shaft floors to display while outside of shaft
 	int StairsOutsideDisplayRange; //number of stairwell floors to display while outside of stairwell
-	int FloorDisplayRange; //number of floors to display while in elevator, if shaft's ShowFloors is true
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
 	std::string SkyName; //base filename of sky texture pack
