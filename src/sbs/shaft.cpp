@@ -910,7 +910,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 			elevator->ShaftDoorsEnabledRange(0, current_floor, sbs->ShaftDisplayRange);
 		}
 
-		//if specified, show floors or outside if user is in a moving elevator
+		//turn on related floors if ShowFloors is true
 		if (ShowFloors == true && ShowFloors_Enabled == false)
 		{
 			ShowFloors_Enabled = true;
@@ -960,7 +960,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		//turn off shaft
 		EnableWholeShaft(false, true, true);
 
-		//if specified, show floors or outside if user is in a moving elevator
+		//disable floors listed in ShowFloors list
 		if (ShowFloors == true && ShowFloors_Enabled == true)
 		{
 			ShowFloors_Enabled = false;

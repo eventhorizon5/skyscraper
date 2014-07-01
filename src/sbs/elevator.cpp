@@ -492,13 +492,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		ReportError("Not assigned to a shaft");
 		return 0;
 	}
-	if (!sbs->GetShaft(AssignedShaft))
+	if (!GetShaft())
 	{
 		std::string num = ToString(AssignedShaft);
 		ReportError(std::string("Shaft " + num + " doesn't exist").c_str());
 		return 0;
 	}
-	if (floor < sbs->GetShaft(AssignedShaft)->startfloor || floor > sbs->GetShaft(AssignedShaft)->endfloor)
+	if (floor < GetShaft()->startfloor || floor > GetShaft()->endfloor)
 	{
 		std::string num = ToString(floor);
 		ReportError(std::string("Invalid starting floor " + num).c_str());
@@ -508,6 +508,18 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
 	if (IsServicedFloor(floor) == false)
 		AddServicedFloor(floor);
+
+	//ensure that serviced floors are valid for the shaft
+	for (int i = 0; i < (int)ServicedFloors.size(); i++)
+	{
+		if (GetShaft()->IsValidFloor(ServicedFloors[i]) == false)
+		{
+			std::string snum = ToString(AssignedShaft);
+			std::string num = ToString(ServicedFloors[i]);
+			ReportError("Floor " + num + " not valid for shaft " + snum);
+			return 0;
+		}
+	}
 
 	//set data
 	if (!sbs->GetFloor(floor))
@@ -525,13 +537,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	else
 	{
-		Origin.x = sbs->GetShaft(AssignedShaft)->origin.x + x;
-		Origin.z = sbs->GetShaft(AssignedShaft)->origin.z + z;
+		Origin.x = GetShaft()->origin.x + x;
+		Origin.z = GetShaft()->origin.z + z;
 	}
 	OriginFloor = floor;
 
 	//add elevator to associated shaft's list
-	sbs->GetShaft(AssignedShaft)->AddElevator(Number);
+	GetShaft()->AddElevator(Number);
 
 	//set recall/ACP floors if not already set
 	if (RecallSet == false)
@@ -571,7 +583,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
 	else
 	{
-		Shaft* shaft = sbs->GetShaft(AssignedShaft);
+		Shaft* shaft = GetShaft();
 		if (shaft)
 		{
 			Floor *floor = sbs->GetFloor(shaft->endfloor);
@@ -1533,7 +1545,7 @@ void Elevator::MoveElevatorToFloor()
 				Report("user in elevator - turning off objects");
 
 			//turn off floor
-			if (sbs->GetShaft(AssignedShaft)->ShowFloors == false)
+			if (GetShaft()->ShowFloors == false)
 			{
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
@@ -1541,9 +1553,9 @@ void Elevator::MoveElevatorToFloor()
 			else
 			{
 				int loc = -1;
-				for (int i = 0; i < (int)sbs->GetShaft(AssignedShaft)->ShowFloorsList.size(); i++)
+				for (int i = 0; i < (int)GetShaft()->ShowFloorsList.size(); i++)
 				{
-					if (sbs->GetShaft(AssignedShaft)->ShowFloorsList[i] == sbs->camera->CurrentFloor)
+					if (GetShaft()->ShowFloorsList[i] == sbs->camera->CurrentFloor)
 						loc = i;
 				}
 
@@ -1555,7 +1567,7 @@ void Elevator::MoveElevatorToFloor()
 			}
 
 			//Turn off sky, buildings, and landscape
-			if (sbs->GetShaft(AssignedShaft)->ShowOutside == false)
+			if (GetShaft()->ShowOutside == false)
 			{
 				sbs->EnableSkybox(false);
 				sbs->EnableBuildings(false);
@@ -1565,9 +1577,9 @@ void Elevator::MoveElevatorToFloor()
 			else
 			{
 				int loc = -1;
-				for (int i = 0; i < (int)sbs->GetShaft(AssignedShaft)->ShowOutsideList.size(); i++)
+				for (int i = 0; i < (int)GetShaft()->ShowOutsideList.size(); i++)
 				{
-					if (sbs->GetShaft(AssignedShaft)->ShowOutsideList[i] == sbs->camera->CurrentFloor)
+					if (GetShaft()->ShowOutsideList[i] == sbs->camera->CurrentFloor)
 						loc = i;
 				}
 				if (loc == -1)
@@ -5187,8 +5199,8 @@ void Elevator::Init()
 
 	//turn on shaft doors
 	ShaftDoorsEnabled(0, sbs->camera->StartFloor, true);
-	ShaftDoorsEnabled(0, sbs->GetShaft(AssignedShaft)->startfloor, true);
-	ShaftDoorsEnabled(0, sbs->GetShaft(AssignedShaft)->endfloor, true);
+	ShaftDoorsEnabled(0, GetShaft()->startfloor, true);
+	ShaftDoorsEnabled(0, GetShaft()->endfloor, true);
 
 	//disable objects
 	EnableObjects(false);

@@ -914,7 +914,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 					if (floor->IsEnabled == false)
 					{
 						floor->Enabled(true);
-						floor->EnableGroup(true);
+						//floor->EnableGroup(true);
 					}
 				}
 			}
@@ -939,7 +939,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 					if (floor->IsEnabled == true)
 					{
 						floor->Enabled(false);
-						floor->EnableGroup(false);
+						//floor->EnableGroup(false);
 					}
 				}
 			}
