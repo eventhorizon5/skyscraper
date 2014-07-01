@@ -969,15 +969,13 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
 				if (floor->IsEnabled == true && sbs->camera->CurrentFloor != floor->Number)
 				{
-					floor->Enabled(false);
-					//floor->EnableGroup(false);
+					if ((floor->EnabledGroup == true && floor->EnabledGroup_Floor == sbs->camera->CurrentFloor) == false)
+					{
+						floor->Enabled(false);
+						//floor->EnableGroup(false);
+					}
 				}
 			}
-
-			//enable camera floor group if any related floors were disabled
-			Floor *floor = sbs->GetFloor(sbs->camera->CurrentFloor);
-			if (floor)
-				floor->EnableGroup(true);
 		}
 	}
 	else if (InsideShaft == false)

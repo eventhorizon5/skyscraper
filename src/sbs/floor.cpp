@@ -73,6 +73,8 @@ Floor::Floor(int number)
 	Altitude = 0;
 	Height = 0;
 	InterfloorHeight = 0;
+	EnabledGroup = false;
+	EnabledGroup_Floor = 0;
 }
 
 Floor::~Floor()
@@ -492,11 +494,24 @@ void Floor::EnableGroup(bool value)
 	{
 		for (size_t i = 0; i < Group.size(); i++)
 		{
+			Floor *floor = sbs->GetFloor(Group[i]);
+
 			//check if floor exists
-			if (sbs->GetFloor(Group[i]))
+			if (floor)
 			{
 				//enable other floor
-				sbs->GetFloor(Group[i])->Enabled(value);
+				floor->Enabled(value);
+
+				if (value == true)
+				{
+					floor->EnabledGroup = true;
+					floor->EnabledGroup_Floor = Number;
+				}
+				else
+				{
+					floor->EnabledGroup = false;
+					floor->EnabledGroup_Floor = 0;
+				}
 
 				//enable shafts and stairs for other floor
 				for (int j = 1; j <= sbs->Shafts(); j++)

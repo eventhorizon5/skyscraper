@@ -56,6 +56,8 @@ public:
 	std::vector<CallButton*> CallButtonArray; //pointer array to call button objects
 	std::vector<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	std::vector<int> Group; //floor group
+	bool EnabledGroup;
+	int EnabledGroup_Floor;
 
 	//functions
 	Floor(int number);
