@@ -1935,6 +1935,11 @@ bool Skyscraper::InitSky()
 			if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
 				mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
 			mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
+
+			//fix sky rotation
+			Ogre::Quaternion rot(Ogre::Degree(180.0f), Ogre::Vector3::UNIT_Y);
+			mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
+			mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 		}
 		catch (Ogre::Exception &e)
 		{
