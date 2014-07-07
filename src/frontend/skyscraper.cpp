@@ -111,7 +111,7 @@ bool Skyscraper::OnInit(void)
 	mCamera = 0;
 	sound = 0;
 	channel = 0;
-	SkyMult = 1;
+	SkyMult = 0;
 	mCaelumSystem = 0;
 	buttons = 0;
 	buttoncount = 0;
@@ -1948,7 +1948,9 @@ bool Skyscraper::InitSky()
 	else
 		return false;
 
-	SkyMult = GetConfigInt("Skyscraper.Frontend.SkyMult", 50);
+	//set sky time multiplier if not already set
+	if (SkyMult == 0)
+		SkyMult = mCaelumSystem->getTimeScale();
 
 	return true;
 }

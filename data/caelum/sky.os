@@ -15,8 +15,8 @@ caelum_sky_system EmptySky
 abstract caelum_sky_system DefaultBase
 {
     // J2000
-    julian_day 2451545.0
-    time_scale 1
+    julian_day 2451544.916667
+    time_scale 25
 
     point_starfield {
         magnitude_scale 2.51189
