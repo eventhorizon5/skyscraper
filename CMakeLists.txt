@@ -97,12 +97,12 @@ add_library(OgreBulletDyn SHARED ${OGREBULLET_DYN_FILES})
 add_library(SBS SHARED ${SBS_FILES})
 
 #frontend executable
-add_executable(Skyscraper ${FRONTEND_FILES})
+add_executable(skyscraper ${FRONTEND_FILES})
  
 target_link_libraries(OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 target_link_libraries(OgreBulletDyn OgreBulletCol ${OGRE_LIBRARIES} ${BULLET_LIBRARIES})
 
 target_link_libraries(SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${FMOD_LIBRARY})
 
-target_link_libraries(Skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
+target_link_libraries(skyscraper SBS OgreBulletCol OgreBulletDyn ${OGRE_LIBRARIES} ${OIS_LIBRARIES} ${wxWidgets_LIBRARIES} ${FMOD_LIBRARY} ${GTK2_LIBRARIES} ${Caelum_LIBRARIES} ${FRONTENDGLINC})
  
