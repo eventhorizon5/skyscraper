@@ -93,6 +93,15 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
+										<object class="wxCheckBox" name="ID_chkInterfloor" variable="chkInterfloor" member="yes">
+											<label>Interfloor</label>
+											<handler function="On_chkInterfloor_Click" entry="EVT_CHECKBOX" />
+										</object>
+										<flag>wxBOTTOM|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
 										<object class="wxCheckBox" name="ID_chkColumnFrame" variable="chkColumnFrame" member="yes">
 											<label>Column Frame</label>
 											<handler function="On_chkColumnFrame_Click" entry="EVT_CHECKBOX" />
@@ -132,6 +141,15 @@
 										<object class="wxCheckBox" name="ID_chkAllStairs" variable="chkAllStairs" member="yes">
 											<label>All Stairs</label>
 											<handler function="On_chkAllStairs_Click" entry="EVT_CHECKBOX" />
+										</object>
+										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+										<border>5</border>
+										<option>1</option>
+									</object>
+									<object class="sizeritem">
+										<object class="wxCheckBox" name="ID_chkAllInterfloors" variable="chkAllInterfloors" member="yes">
+											<label>All Interfloors</label>
+											<handler function="On_chkAllInterfloors_Click" entry="EVT_CHECKBOX" />
 										</object>
 										<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>

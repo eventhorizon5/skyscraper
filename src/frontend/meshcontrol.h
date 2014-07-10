@@ -55,10 +55,12 @@ class MeshControl: public wxDialog
 		static const long ID_chkFloor;
 		static const long ID_chkShafts;
 		static const long ID_chkStairs;
+		static const long ID_chkInterfloor;
 		static const long ID_chkColumnFrame;
 		static const long ID_chkAllFloors;
 		static const long ID_chkAllShafts;
 		static const long ID_chkAllStairs;
+		static const long ID_chkAllInterfloors;
 		static const long ID_chkAllColumnFrames;
 		static const long ID_bOk;
 		//*)
@@ -80,6 +82,8 @@ class MeshControl: public wxDialog
 		void On_chkAllStairs_Click(wxCommandEvent& event);
 		void On_chkColumnFrame_Click(wxCommandEvent& event);
 		void On_chkAllColumnFrames_Click(wxCommandEvent& event);
+		void On_chkInterfloor_Click(wxCommandEvent& event);
+		void On_chkAllInterfloors_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -89,8 +93,10 @@ class MeshControl: public wxDialog
 		wxCheckBox* chkSky;
 		wxCheckBox* chkExternal;
 		wxBoxSizer* BoxSizer2;
+		wxCheckBox* chkInterfloor;
 		wxCheckBox* chkElevators;
 		wxCheckBox* chkBuildings;
+		wxCheckBox* chkAllInterfloors;
 		wxButton* bOk;
 		wxCheckBox* chkLandscape;
 		wxCheckBox* chkColumnFrame;

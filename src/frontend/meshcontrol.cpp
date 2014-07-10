@@ -46,10 +46,12 @@ const long MeshControl::ID_chkElevators = wxNewId();
 const long MeshControl::ID_chkFloor = wxNewId();
 const long MeshControl::ID_chkShafts = wxNewId();
 const long MeshControl::ID_chkStairs = wxNewId();
+const long MeshControl::ID_chkInterfloor = wxNewId();
 const long MeshControl::ID_chkColumnFrame = wxNewId();
 const long MeshControl::ID_chkAllFloors = wxNewId();
 const long MeshControl::ID_chkAllShafts = wxNewId();
 const long MeshControl::ID_chkAllStairs = wxNewId();
+const long MeshControl::ID_chkAllInterfloors = wxNewId();
 const long MeshControl::ID_chkAllColumnFrames = wxNewId();
 const long MeshControl::ID_bOk = wxNewId();
 //*)
@@ -66,7 +68,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	wxBoxSizer* BoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer3;
 	wxStaticBoxSizer* StaticBoxSizer1;
-	
+
 	Create(parent, wxID_ANY, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
@@ -98,6 +100,9 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	chkStairs = new wxCheckBox(this, ID_chkStairs, _("Stairs"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkStairs"));
 	chkStairs->SetValue(false);
 	StaticBoxSizer2->Add(chkStairs, 1, wxBOTTOM|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	chkInterfloor = new wxCheckBox(this, ID_chkInterfloor, _("Interfloor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkInterfloor"));
+	chkInterfloor->SetValue(false);
+	StaticBoxSizer2->Add(chkInterfloor, 1, wxBOTTOM|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkColumnFrame = new wxCheckBox(this, ID_chkColumnFrame, _("Column Frame"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkColumnFrame"));
 	chkColumnFrame->SetValue(false);
 	StaticBoxSizer2->Add(chkColumnFrame, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -112,6 +117,9 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	chkAllStairs = new wxCheckBox(this, ID_chkAllStairs, _("All Stairs"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllStairs"));
 	chkAllStairs->SetValue(false);
 	StaticBoxSizer3->Add(chkAllStairs, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	chkAllInterfloors = new wxCheckBox(this, ID_chkAllInterfloors, _("All Interfloors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllInterfloors"));
+	chkAllInterfloors->SetValue(false);
+	StaticBoxSizer3->Add(chkAllInterfloors, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	chkAllColumnFrames = new wxCheckBox(this, ID_chkAllColumnFrames, _("All Column Frames"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkAllColumnFrames"));
 	chkAllColumnFrames->SetValue(false);
 	StaticBoxSizer3->Add(chkAllColumnFrames, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -124,7 +132,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_chkExternal,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkExternal_Click);
 	Connect(ID_chkBuildings,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkBuildings_Click);
 	Connect(ID_chkLandscape,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkLandscape_Click);
@@ -133,10 +141,12 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkFloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkFloor_Click);
 	Connect(ID_chkShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkShafts_Click);
 	Connect(ID_chkStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkStairs_Click);
+	Connect(ID_chkInterfloor,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkInterfloor_Click);
 	Connect(ID_chkColumnFrame,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkColumnFrame_Click);
 	Connect(ID_chkAllFloors,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllFloors_Click);
 	Connect(ID_chkAllShafts,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllShafts_Click);
 	Connect(ID_chkAllStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllStairs_Click);
+	Connect(ID_chkAllInterfloors,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllInterfloors_Click);
 	Connect(ID_chkAllColumnFrames,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllColumnFrames_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
@@ -268,5 +278,20 @@ void MeshControl::On_chkAllColumnFrames_Click(wxCommandEvent& event)
 	{
 		if (Simcore->GetFloor(i))
 			Simcore->GetFloor(i)->EnableColumnFrame(chkAllColumnFrames->GetValue());
+	}
+}
+
+void MeshControl::On_chkInterfloor_Click(wxCommandEvent& event)
+{
+	if (Simcore->camera->CurrentFloor)
+		Simcore->GetFloor(Simcore->camera->CurrentFloor)->EnableInterfloor(chkInterfloor->GetValue());
+}
+
+void MeshControl::On_chkAllInterfloors_Click(wxCommandEvent& event)
+{
+	for (int i = -Simcore->Basements; i < Simcore->Floors; i++)
+	{
+		if (Simcore->GetFloor(i))
+			Simcore->GetFloor(i)->EnableInterfloor(chkAllInterfloors->GetValue());
 	}
 }
