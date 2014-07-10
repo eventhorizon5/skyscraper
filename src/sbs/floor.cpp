@@ -61,8 +61,10 @@ Floor::Floor(int number)
 	TrimString(buffer);
 	ColumnFrame = new MeshObject(object, buffer.c_str());
 
-	//set enabled flag
+	//set enabled flags
 	IsEnabled = true;
+	IsColumnFrameEnabled = true;
+	IsInterfloorEnabled = true;
 
 	//init other variables
 	Name = "";
@@ -279,7 +281,6 @@ void Floor::Enabled(bool value)
 
 	SBS_PROFILE("Floor::Enabled");
 	Level->Enable(value);
-	Interfloor->Enable(value);
 	IsEnabled = value;
 
 	if (sbs->Verbose)
@@ -290,6 +291,7 @@ void Floor::Enabled(bool value)
 			Report("Disabled");
 	}
 
+	EnableInterfloor(value);
 	EnableColumnFrame(value);
 
 	//controls
@@ -621,6 +623,13 @@ void Floor::EnableColumnFrame(bool value)
 	//enable/disable columnframe mesh
 	ColumnFrame->Enable(value);
 	IsColumnFrameEnabled = value;
+}
+
+void Floor::EnableInterfloor(bool value)
+{
+	//enable/disable interfloor mesh
+	Interfloor->Enable(value);
+	IsInterfloorEnabled = value;
 }
 
 WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)

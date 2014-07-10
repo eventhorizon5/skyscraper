@@ -53,6 +53,7 @@ public:
 	float InterfloorHeight; //height of interfloor area
 	bool IsEnabled; //is floor enabled?
 	bool IsColumnFrameEnabled; //is columnframe enabled?
+	bool IsInterfloorEnabled; //is interfloor enabled?
 	std::vector<CallButton*> CallButtonArray; //pointer array to call button objects
 	std::vector<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	std::vector<int> Group; //floor group
@@ -79,6 +80,7 @@ public:
 	Object* AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	bool CalculateAltitude();
 	void EnableColumnFrame(bool value);
+	void EnableInterfloor(bool value);
 	WallObject* ColumnWallBox(const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	WallObject* ColumnWallBox2(const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom);
 	Object* AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
