@@ -268,7 +268,7 @@ void MeshControl::On_chkAllStairs_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkColumnFrame_Click(wxCommandEvent& event)
 {
-	if (Simcore->camera->CurrentFloor)
+	if (Simcore->GetFloor(Simcore->camera->CurrentFloor))
 		Simcore->GetFloor(Simcore->camera->CurrentFloor)->EnableColumnFrame(chkColumnFrame->GetValue());
 }
 
@@ -283,7 +283,7 @@ void MeshControl::On_chkAllColumnFrames_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkInterfloor_Click(wxCommandEvent& event)
 {
-	if (Simcore->camera->CurrentFloor)
+	if (Simcore->GetFloor(Simcore->camera->CurrentFloor))
 		Simcore->GetFloor(Simcore->camera->CurrentFloor)->EnableInterfloor(chkInterfloor->GetValue());
 }
 
