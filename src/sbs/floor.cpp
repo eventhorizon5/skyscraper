@@ -291,7 +291,67 @@ void Floor::Enabled(bool value)
 			Report("Disabled");
 	}
 
-	EnableInterfloor(value);
+	//handle interfloors
+	if (value == false)
+	{
+		if (sbs->InterfloorOnTop == false)
+		{
+			//only turn off interfloor if floor below is disabled
+			Floor *floor = sbs->GetFloor(Number - 1);
+			if (floor)
+			{
+				if (floor->IsEnabled == false)
+					EnableInterfloor(false);
+			}
+			else
+				EnableInterfloor(false);
+
+			//turn off adjacent interfloor
+			floor = sbs->GetFloor(Number + 1);
+			if (floor)
+			{
+				if (floor->IsEnabled == false)
+					floor->EnableInterfloor(false);
+			}
+		}
+		else
+		{
+			//only turn off interfloor if floor above is disabled
+			Floor *floor = sbs->GetFloor(Number + 1);
+			if (floor)
+			{
+				if (floor->IsEnabled == false)
+					EnableInterfloor(false);
+			}
+			else
+				EnableInterfloor(false);
+
+			//turn off adjacent interfloor
+			floor = sbs->GetFloor(Number - 1);
+			if (floor)
+			{
+				if (floor->IsEnabled == false)
+					floor->EnableInterfloor(false);
+			}
+		}
+	}
+	else
+	{
+		if (sbs->InterfloorOnTop == false)
+		{
+			//turn on interfloor for next floor
+			if (sbs->GetFloor(Number + 1))
+				sbs->GetFloor(Number + 1)->EnableInterfloor(true);
+		}
+		else
+		{
+			//turn on interfloor for previous floor
+			if (sbs->GetFloor(Number - 1))
+				sbs->GetFloor(Number - 1)->EnableInterfloor(true);
+		}
+		EnableInterfloor(true);
+	}
+
 	EnableColumnFrame(value);
 
 	//controls
