@@ -883,6 +883,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 		if (InsideStairwell == false)
 		{
 			InsideStairwell = true;
+			sbs->InStairwell = true;
 
 			//turn on entire stairwell if ShowFullStairs is true
 			if (ShowFullStairs == true)
@@ -923,6 +924,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 	else if (InsideStairwell == true)
 	{
 		InsideStairwell = false;
+		sbs->InStairwell = false;
 
 		//turn off stairwell if ShowFullStairs is true
 		if (ShowFullStairs == true)
