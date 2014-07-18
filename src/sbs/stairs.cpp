@@ -407,26 +407,22 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 
 	if (position.y > bottom && position.y < top)
 	{
-		//determine if camera has X and Z values within the current floor's bounding box
-		if (StairArray[floor - startfloor]->InBoundingBox(position, false) == true)
+		//check for hit with current floor
+		float distance = floorptr->FullHeight();
+		hit = GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+
+		//if no hit, check hit against lower floor
+		if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
 		{
-			//if within bounding box, check for hit with current floor
-			float distance = floorptr->FullHeight();
-			hit = GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
+			hit = GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+		}
 
-			//if no hit, check hit against lower floor
-			if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
-			{
-				distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
-				hit = GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
-			}
-
-			//if no hit, check hit against starting floor
-			if (hit == false && sbs->GetFloor(startfloor))
-			{
-				distance = position.y - sbs->GetFloor(startfloor)->Altitude;
-				hit = GetMeshObject(startfloor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
-			}
+		//if no hit, check hit against starting floor
+		if (hit == false && sbs->GetFloor(startfloor))
+		{
+			distance = position.y - sbs->GetFloor(startfloor)->Altitude;
+			hit = GetMeshObject(startfloor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 	}
 	floorptr = 0;
