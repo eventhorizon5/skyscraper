@@ -942,9 +942,6 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	//if shaft door, cut walls for door
 	if (ShaftDoor == true)
 	{
-		sbs->DrawWalls(true, true, true, true, true, true);
-		sbs->ResetTextureMapping(true);
-
 		//create doors
 		Floor *floorobj = sbs->GetFloor(floor);
 		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
@@ -968,12 +965,11 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		//create doorway walls
 		if (CreateWalls == true)
 		{
+			sbs->ResetTextureMapping(true);
 			WallObject *wall = floorobj->Level->CreateWallObject(floorobj->object, "Connection Walls");
 			sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
+			sbs->ResetTextureMapping();
 		}
-
-		sbs->ResetWalls();
-		sbs->ResetTextureMapping();
 	}
 
 	//create connection walls
