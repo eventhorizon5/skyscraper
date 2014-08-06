@@ -403,7 +403,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer8->Add(bOpenManual, 0, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	bOpenShaftDoor = new wxButton(this, ID_bOpenShaftDoor, _("Open Shaft Doors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOpenShaftDoor"));
 	BoxSizer8->Add(bOpenShaftDoor, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bStop = new wxButton(this, ID_bStop, _("Emerg. Stop"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStop"));
+	bStop = new wxButton(this, ID_bStop, _("Emergency Stop"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStop"));
 	BoxSizer8->Add(bStop, 0, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	bChime = new wxButton(this, ID_bChime, _("Chime"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bChime"));
 	BoxSizer8->Add(bChime, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);

@@ -341,7 +341,7 @@
 									</object>
 									<object class="sizeritem">
 										<object class="wxButton" name="ID_bStop" variable="bStop" member="yes">
-											<label>Emerg. Stop</label>
+											<label>Emergency Stop</label>
 											<handler function="On_bStop_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
