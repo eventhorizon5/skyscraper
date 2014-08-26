@@ -492,9 +492,9 @@ bool Skyscraper::Initialize()
 			Ogre::ConfigFile::SettingsMultiMap::iterator i;
 			for(i = settings->begin(); i != settings->end(); ++i)
 			{
-					typeName = i->first;
-					archName = i->second;
-					Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+				typeName = i->first;
+				archName = i->second;
+				Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
 			}
 		}
 
