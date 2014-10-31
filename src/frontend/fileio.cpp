@@ -1872,11 +1872,19 @@ int ScriptProcessor::ProcCommands()
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
 			return ScriptError("Invalid shaft number");
 
-		Simcore->GetShaft(shaftnum)->ShowFloors = true;
-
 		int params = SplitAfterEquals(LineData.c_str(), false);
 		if (params < 1)
 			return ScriptError("Syntax Error");
+
+		Simcore->GetShaft(shaftnum)->ShowFloors = 1;
+
+		//determine if last parameter is a boolean, used for full floor selection on/off
+		if (IsBoolean(tempdata[params - 1]) == true)
+		{
+			if (Ogre::StringConverter::parseBool(tempdata[params - 1]) == true)
+				Simcore->GetShaft(shaftnum)->ShowFloors = 2;
+			params--;
+		}
 
 		for (int line = 0; line < params; line++)
 		{

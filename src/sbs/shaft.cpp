@@ -58,7 +58,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	bottom = sbs->GetFloor(startfloor)->Altitude;
 	cutstart = 0;
 	cutend = 0;
-	ShowFloors = false;
+	ShowFloors = 0;
 	ShowOutside = false;
 	ShowFullShaft = false;
 	EnableCheck = false;
@@ -66,7 +66,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	checkfirstrun = true;
 	lastposition = 0;
 	InElevator = false;
-	ShowFloors_Enabled = false;
+	ShowFloorsFull_Enabled = false;
 
 	std::string buffer, buffer2, buffer3;
 
@@ -911,9 +911,14 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		}
 
 		//turn on related floors if ShowFloors is true
-		if (ShowFloors == true && ShowFloors_Enabled == false)
+		//display a selected range of floors in the floor list if the user is in a moving elevator
+		if (ShowFloors == 1 && InsideShaft == false && sbs->InElevator == true && elevator->IsMoving == true && elevator->Leveling == false)
+			sbs->EnableFloorRange(current_floor, sbs->FloorDisplayRange, true, true, ShaftNumber);
+
+		//display the full range of floors in the floor list
+		if (ShowFloors == 2 && ShowFloorsFull_Enabled == false)
 		{
-			ShowFloors_Enabled = true;
+			ShowFloorsFull_Enabled = true;
 			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
@@ -960,10 +965,10 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		//turn off shaft
 		EnableWholeShaft(false, true, true);
 
-		//disable floors listed in ShowFloors list
-		if (ShowFloors == true && ShowFloors_Enabled == true)
+		//disable floors listed in ShowFloors list, when "full" mode is enabled
+		if (ShowFloors == 2 && ShowFloorsFull_Enabled == true)
 		{
-			ShowFloors_Enabled = false;
+			ShowFloorsFull_Enabled = false;
 			for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 			{
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);

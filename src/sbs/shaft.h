@@ -44,7 +44,7 @@ public:
 	Ogre::Vector2 cutstart; //cut starting vector
 	Ogre::Vector2 cutend; //cut ending vector
 	bool IsEnabled; //true if the entire shaft has been enabled
-	bool ShowFloors; //true if floors should be shown while inside the shaft/elevator; floor list in ShowFloorsList
+	int ShowFloors; //determines if floors should be shown while inside the shaft/elevator; 0 is off, 1 shows a portion at a time, 2 shows all in list - floor list in ShowFloorsList
 	bool ShowOutside; //true if outside should be shown while inside the shaft/elevator; floor list in ShowOutsideList
 	std::vector<int> ShowFloorsList; //list of floors to enable while inside the shaft/elevator
 	std::vector<int> ShowOutsideList; //list of floors that the outside should be enabled on
@@ -100,7 +100,7 @@ private:
 	bool lastcheckresult;
 	bool checkfirstrun;
 	bool InElevator;
-	bool ShowFloors_Enabled;
+	bool ShowFloorsFull_Enabled;
 
 	//lights
 	std::vector<std::vector<Light*> > lights;

@@ -264,3 +264,9 @@ float Round(float number)
 {
 	return floorf(number + 0.5f);
 }
+
+bool IsBoolean(std::string string)
+{
+	SetCase(string, false);
+	return (string == "true" || string == "false");
+}

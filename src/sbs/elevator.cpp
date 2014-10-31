@@ -1545,7 +1545,7 @@ void Elevator::MoveElevatorToFloor()
 				Report("user in elevator - turning off objects");
 
 			//turn off floor
-			if (GetShaft()->ShowFloors == false)
+			if (GetShaft()->ShowFloors == 0)
 			{
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);

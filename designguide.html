@@ -2854,12 +2854,14 @@ have the texture "ElevFloor", but all other sides will use "Metal1".</p>
 to be shown either while inside the specified shaft or while inside an elevator
 in the shaft - primarily for glass elevators.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftShowFloors
-<em>ShaftNumber</em> = <em>range/list</em></font><br>
+<em>ShaftNumber</em> = <em>range/list[, full]</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShaftShowFloors 1 = 1
-- 10</font></p>
+- 10, true</font></p>
 
-<p align="left">In the above example, let's say the user is in an elevator in
-shaft 1, and is moving upwards from the 2nd floor. In this situation, the 2nd
+<p align="left">The "full" parameter is optional, and if it is false (the default),
+only a range of floors are shown at a time.  If "full" is true, all the floors in
+the list or range are shown at a time.  In the above example, let's say the user
+is in an elevator in shaft 1, and is moving upwards from the 2nd floor. In this situation, the 2nd
 floor will be visible/enabled while they're in the elevator (since it was in
 the range specified with this command), but when they reach the 11th floor,
 that floor will be invisible/disabled.</p>

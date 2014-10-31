@@ -215,6 +215,7 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	StairsDisplayRange = GetConfigInt("Skyscraper.SBS.StairsDisplayRange", 5);
 	ShaftOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.ShaftOutsideDisplayRange", 3);
 	StairsOutsideDisplayRange = GetConfigInt("Skyscraper.SBS.StairsOutsideDisplayRange", 3);
+	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 
@@ -2288,7 +2289,7 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 			if (shaft)
 			{
 				//if a shaft is specified, only show the floor if it is in the related shaft's ShowFloorsList array
-				if (shaft->ShowFloors == true)
+				if (shaft->ShowFloors > 0)
 				{
 					int index = -1;
 					for (int j = 0; j < (int)shaft->ShowFloorsList.size(); j++)
