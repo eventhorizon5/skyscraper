@@ -2055,7 +2055,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 		doornumber = doornumber + ToString(Number);
 	}
 
-	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->RecallFloor)))
+	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->RecallFloor && elev->GetFloor() != elev->RecallFloorAlternate)))
 	{
 		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
 			return;
