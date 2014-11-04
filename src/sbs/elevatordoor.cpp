@@ -860,10 +860,11 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	}
 }
 
-Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool CreateWalls)
+Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool DoorWalls, bool TrackWalls)
 {
 	//finishes a door creation
-	//CreateWalls determines if the connection walls (on the sides, and above the doors) should be made
+	//DoorWalls determines if the connection walls (on the sides, and above the doors) should be made
+	//TrackWalls determines if door track connection walls (below and above doors) should be made
 
 	//add floor to manual shaft door list if wrapper doesn't exist and exit
 	if (!wrapper && ShaftDoor == true)
@@ -963,7 +964,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		}
 
 		//create doorway walls
-		if (CreateWalls == true)
+		if (DoorWalls == true)
 		{
 			sbs->ResetTextureMapping(true);
 			WallObject *wall = floorobj->Level->CreateWallObject(floorobj->object, "Connection Walls");
@@ -972,12 +973,12 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		}
 	}
 
-	//create connection walls
-	sbs->ResetTextureMapping(true);
-
-	std::string name1, name2;
-	if (CreateWalls == true)
+	//create connection track walls
+	if (TrackWalls == true)
 	{
+		sbs->ResetTextureMapping(true);
+		std::string name1, name2;
+
 		if (ShaftDoor == false)
 		{
 			WallObject *wall;
@@ -1001,9 +1002,9 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 			sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
 			sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
 		}
-	}
 
-	sbs->ResetTextureMapping();
+		sbs->ResetTextureMapping();
+	}
 
 	//relocate sound object
 	if (ShaftDoor == false)
@@ -1026,14 +1027,14 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	return wrapper->object;
 }
 
-Object* ElevatorDoor::FinishDoors(bool CreateWalls)
+Object* ElevatorDoor::FinishDoors(bool DoorWalls, bool TrackWalls)
 {
 	//finish elevator doors
 
-	return FinishDoors(Doors, 0, false, CreateWalls);
+	return FinishDoors(Doors, 0, false, DoorWalls, TrackWalls);
 }
 
-Object* ElevatorDoor::FinishShaftDoor(int floor, bool CreateWalls)
+Object* ElevatorDoor::FinishShaftDoor(int floor, bool DoorWalls, bool TrackWalls)
 {
 	//finish shaft door on a specified floor
 
@@ -1058,15 +1059,15 @@ Object* ElevatorDoor::FinishShaftDoor(int floor, bool CreateWalls)
 	if (index > -1)
 		wrapper = ShaftDoors[index];
 
-	return FinishDoors(wrapper, floor, true, CreateWalls);
+	return FinishDoors(wrapper, floor, true, DoorWalls, TrackWalls);
 }
 
-bool ElevatorDoor::FinishShaftDoors(bool CreateWalls)
+bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 {
 	//finish all shaft doors
 
 	for (size_t i = 0; i < (int)elev->ServicedFloors.size(); i++)
-		FinishShaftDoor(elev->ServicedFloors[i], CreateWalls);
+		FinishShaftDoor(elev->ServicedFloors[i], DoorWalls, TrackWalls);
 
 	return true;
 }

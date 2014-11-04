@@ -4152,15 +4152,20 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
 
+		bool legacy = false;
+
 		if (params < 2)
 			return ScriptError("Incorrect number of parameters");
 
-		if (params > 3 && warn_deprecated == true)
-			ScriptWarning("Syntax deprecated");
-
-		bool option = false;
-		if (params == 3)
-			option = true;
+		if (params > 3)
+		{
+			if (IsNumeric(tempdata[2].c_str()) == true)
+			{
+				if (warn_deprecated == true)
+					ScriptWarning("Syntax deprecated");
+				legacy = true;
+			}
+		}
 
 		//check numeric values
 		for (int i = 0; i <= 1; i++)
@@ -4173,10 +4178,12 @@ int ScriptProcessor::ProcFloors()
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
-		if (option == false)
+		if (params == 1 || legacy == true)
 			StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current));
-		else
+		else if (params == 2)
 			StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current, Ogre::StringConverter::parseBool(tempdata[2].c_str())));
+		else
+			StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current, Ogre::StringConverter::parseBool(tempdata[2].c_str()), Ogre::StringConverter::parseBool(tempdata[3].c_str())));
 		return sNextLine;
 	}
 
@@ -6696,24 +6703,32 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 12);
 
+		bool legacy = false;
+
 		if (params < 1)
 			return ScriptError("Incorrect number of parameters");
 
-		if (params > 2 && warn_deprecated == true)
-			ScriptWarning("Syntax deprecated");
-
-		bool option = false;
-		if (params == 2)
-			option = true;
+		if (params > 2)
+		{
+			if (IsNumeric(tempdata[1].c_str()) == true)
+			{
+				if (warn_deprecated == true)
+					ScriptWarning("Syntax deprecated");
+				legacy = true;
+			}
+		}
 
 		//check numeric values
 		if (!IsNumeric(tempdata[0].c_str()))
 			return ScriptError("Invalid value: " + tempdata[0]);
 
-		if (option == false)
+		if (params == 1 || legacy == true)
 			StoreCommand(elev->FinishDoors(atoi(tempdata[0].c_str())));
-		else
+		else if (params == 2)
 			StoreCommand(elev->FinishDoors(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1].c_str())));
+		else
+			StoreCommand(elev->FinishDoors(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1].c_str()), Ogre::StringConverter::parseBool(tempdata[2].c_str())));
+
 		return sNextLine;
 	}
 
@@ -6723,25 +6738,32 @@ int ScriptProcessor::ProcElevators()
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
 
+		bool legacy = false;
+
 		if (params < 1)
 			return ScriptError("Incorrect number of parameters");
 
-		if (params > 2 && warn_deprecated == true)
-			ScriptWarning("Syntax deprecated");
-
-		bool option = false;
-		if (params == 2)
-			option = true;
+		if (params > 2)
+		{
+			if (IsNumeric(tempdata[1].c_str()) == true)
+			{
+				if (warn_deprecated == true)
+					ScriptWarning("Syntax deprecated");
+				legacy = true;
+			}
+		}
 
 		//check numeric values
 		if (!IsNumeric(tempdata[0].c_str()))
 			return ScriptError("Invalid value: " + tempdata[0]);
 
 		bool result;
-		if (option == false)
+		if (params == 1 || legacy == true)
 			result = elev->FinishShaftDoors(atoi(tempdata[0].c_str()));
-		else
+		else if (params == 2)
 			result = elev->FinishShaftDoors(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1].c_str()));
+		else
+			result = elev->FinishShaftDoors(atoi(tempdata[0].c_str()), Ogre::StringConverter::parseBool(tempdata[1].c_str()), Ogre::StringConverter::parseBool(tempdata[2].c_str()));
 
 		if (result == false)
 			return ScriptError();

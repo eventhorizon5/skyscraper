@@ -4342,33 +4342,33 @@ void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *
 		ReportError("Invalid door " + ToString2(number));
 }
 
-Object* Elevator::FinishDoors(int number, bool CreateWalls)
+Object* Elevator::FinishDoors(int number, bool DoorWalls, bool TrackWalls)
 {
 	//finishes elevator door
 
 	if (GetDoor(number))
-		return GetDoor(number)->FinishDoors(CreateWalls);
+		return GetDoor(number)->FinishDoors(DoorWalls, TrackWalls);
 	else
 		ReportError("Invalid door " + ToString2(number));
 	return 0;
 }
 
-Object* Elevator::FinishShaftDoor(int number, int floor, bool CreateWalls)
+Object* Elevator::FinishShaftDoor(int number, int floor, bool DoorWalls, bool TrackWalls)
 {
 	//finishes a single shaft door
 
 	if (IsServicedFloor(floor) == true && GetDoor(number))
-		return GetDoor(number)->FinishShaftDoor(floor, CreateWalls);
+		return GetDoor(number)->FinishShaftDoor(floor, DoorWalls, TrackWalls);
 	else
 		return 0;
 }
 
-bool Elevator::FinishShaftDoors(int number, bool CreateWalls)
+bool Elevator::FinishShaftDoors(int number, bool DoorWalls, bool TrackWalls)
 {
 	//finishes all shaft doors
 
 	if (GetDoor(number))
-		return GetDoor(number)->FinishShaftDoors(CreateWalls);
+		return GetDoor(number)->FinishShaftDoors(DoorWalls, TrackWalls);
 	else
 		ReportError("Invalid door " + ToString2(number));
 	return false;

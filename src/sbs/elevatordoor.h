@@ -153,10 +153,10 @@ public:
 	Object* AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	Object* AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	void AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	Object* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool CreateWalls = true);
-	Object* FinishDoors(bool CreateWalls = true);
-	Object* FinishShaftDoor(int floor, bool CreateWalls = true);
-	bool FinishShaftDoors(bool CreateWalls = true);
+	Object* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool DoorWalls = true, bool TrackWalls = true);
+	Object* FinishDoors(bool DoorWalls = true, bool TrackWalls = true);
+	Object* FinishShaftDoor(int floor, bool DoorWalls = true, bool TrackWalls = true);
+	bool FinishShaftDoors(bool DoorWalls = true, bool TrackWalls = true);
 	DoorWrapper* GetDoorWrapper();
 	DoorWrapper* GetShaftDoorWrapper(int floor);
 	bool TimerIsRunning();
