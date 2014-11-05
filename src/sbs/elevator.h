@@ -92,6 +92,7 @@ public:
 	std::string OpenMessageSound; //sound to play with message of elevator's doors are opening
 	std::string CloseMessageSound; //sound to play with message of elevator's doors are closing
 	std::string Music; //elevator music sound to play
+	std::string EmergencyStopSound; //emergency stop sound
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -150,6 +151,7 @@ public:
 	bool GoActive; //true if go function is in use (mouse hold is active)
 	bool FloorHold; //true if floor buttons need to be held for the elevator to proceed to the floor (modern manual mode)
 	bool GoPending; //true if Go() function is active
+	float EmergencyStopSpeed; //emergency stop deceleration multiplier
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 
@@ -372,9 +374,12 @@ private:
 	//functions
 	void MoveElevatorToFloor();
 	void FinishMove();
+	void PlayStartingSounds(bool car = true, bool motor = true);
+	void PlayStoppingSounds(bool car = true, bool motor = true);
+	void PlayMovingSounds(bool car = true, bool motor = true);
 
 	//sound objects
-	Sound *mainsound;
+	Sound *carsound;
 	Sound *idlesound;
 	Sound *motorsound;
 	Sound *alarm;
