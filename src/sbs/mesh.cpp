@@ -751,6 +751,9 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	no_collider = false;
 	tricollider = true;
 	MeshGeometry.reserve(128); //reserve vertex space
+	rotX = 0;
+	rotY = 0;
+	rotZ = 0;
 
 	Ogre::MeshPtr collidermesh;
 
