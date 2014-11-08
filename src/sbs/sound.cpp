@@ -54,6 +54,7 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	default_speed = 0;
 	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	loaded = false;
+	position_queued = false;
 }
 
 Sound::~Sound()
@@ -302,7 +303,9 @@ bool Sound::Play(bool reset)
 		Loop(SoundLoop);
 		SetSpeed(Speed);
 		SetDopplerLevel(doppler_level);
-		SetPlayPosition(Percent);
+		if (position_queued == true)
+			SetPlayPosition(Percent);
+		position_queued = false;
 	}
 
 	if (reset == true)
@@ -394,6 +397,8 @@ void Sound::SetPlayPosition(float percent)
 
 		unsigned int position = percent * length;
 		channel->setPosition(position, FMOD_TIMEUNIT_MS);
+
+		position_queued = true;
 	}
 }
 

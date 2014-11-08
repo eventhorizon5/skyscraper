@@ -86,6 +86,7 @@ private:
 	float default_speed;
 	float doppler_level;
 	bool loaded;
+	bool position_queued;
 
 };
 

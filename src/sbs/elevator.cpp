@@ -5495,7 +5495,7 @@ void Elevator::PlayStartingSounds()
 		motorsound->Loop(false);
 		motorsound->Play();
 	}
-	if (Direction == 1 && MotorDownStartSound.empty() == false && MotorDownStartSound != "")
+	if (Direction == -1 && MotorDownStartSound.empty() == false && MotorDownStartSound != "")
 	{
 		if (sbs->Verbose)
 			Report("playing motor down start sound");
