@@ -199,6 +199,7 @@ Elevator::Elevator(int number)
 	EmergencyStopSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.EmergencyStopSpeed", 3.0f);
 	CarEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarEmergencyStopSound", "");
 	MotorEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorEmergencyStopSound", "");
+	AutoAdjustSound = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -5579,8 +5580,6 @@ void Elevator::PlayStoppingSounds(bool emergency)
 		}
 	}
 
-	bool adjust = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
-
 	carsound->Stop();
 	motorsound->Stop();
 
@@ -5590,7 +5589,7 @@ void Elevator::PlayStoppingSounds(bool emergency)
 		carsound->Loop(false);
 
 		//set play position to current percent of the total speed
-		if (adjust == true)
+		if (AutoAdjustSound == true)
 			carsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
 		else
 			carsound->Reset();
@@ -5604,7 +5603,7 @@ void Elevator::PlayStoppingSounds(bool emergency)
 		motorsound->Loop(false);
 
 		//set play position to current percent of the total speed
-		if (adjust == true)
+		if (AutoAdjustSound == true)
 			motorsound->SetPlayPosition(1 - (ElevatorRate / ElevatorSpeed));
 		else
 			motorsound->Reset();

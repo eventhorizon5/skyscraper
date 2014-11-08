@@ -46,6 +46,7 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	Direction = 0;
 	SoundLoop = sbs->GetConfigBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->GetConfigInt("Skyscraper.SBS.Sound.Speed", 100);
+	Percent = 0;
 	Name = name;
 	sbs->IncrementSoundCount();
 	sound = 0;
@@ -301,6 +302,7 @@ bool Sound::Play(bool reset)
 		Loop(SoundLoop);
 		SetSpeed(Speed);
 		SetDopplerLevel(doppler_level);
+		SetPlayPosition(Percent);
 	}
 
 	if (reset == true)
@@ -361,7 +363,8 @@ float Sound::GetPlayPosition()
 	//returns the current sound playback position, in percent (1 = 100%)
 
 	if (!IsValid())
-		return 0.0;
+		return Percent;
+
 	if (!channel)
 		return -1;
 
@@ -373,22 +376,25 @@ float Sound::GetPlayPosition()
 	unsigned int position;
 	channel->getPosition(&position, FMOD_TIMEUNIT_MS);
 
-	return float(position / length);
+	Percent = float(position / length);
+	return Percent;
 }
 
 void Sound::SetPlayPosition(float percent)
 {
 	//sets the current sound playback position, in percent (1 = 100%)
 
-	if (!channel)
-		return;
+	Percent = percent;
 
-	//get length of sound in milliseconds
-	unsigned int length;
-	sound->getLength(&length, FMOD_TIMEUNIT_MS);
+	if (channel)
+	{
+		//get length of sound in milliseconds
+		unsigned int length;
+		sound->getLength(&length, FMOD_TIMEUNIT_MS);
 
-	unsigned int position = percent * length;
-	channel->setPosition(position, FMOD_TIMEUNIT_MS);
+		unsigned int position = percent * length;
+		channel->setPosition(position, FMOD_TIMEUNIT_MS);
+	}
 }
 
 const char *Sound::GetName()

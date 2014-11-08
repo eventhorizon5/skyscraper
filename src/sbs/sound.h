@@ -80,6 +80,7 @@ private:
 	Ogre::Vector3 Direction;
 	bool SoundLoop;
 	int Speed;
+	float Percent;
 	std::string Filename;
 	std::string Name;
 	float default_speed;
