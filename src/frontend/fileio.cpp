@@ -5842,7 +5842,7 @@ int ScriptProcessor::ProcElevators()
 		}
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 18) == "emergencystopsound")
+	if (linecheck.substr(0, 21) == "caremergencystopsound")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
@@ -5850,7 +5850,18 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + temp2).c_str());
 
-		elev->EmergencyStopSound = temp2;
+		elev->CarEmergencyStopSound = temp2;
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 23) == "motoremergencystopsound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->MotorEmergencyStopSound = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 18) == "emergencystopspeed")

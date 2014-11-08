@@ -197,7 +197,8 @@ Elevator::Elevator(int number)
 	FloorHold = sbs->GetConfigBool("Skyscraper.SBS.Elevator.FloorHold", false);
 	GoPending = false;
 	EmergencyStopSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.EmergencyStopSpeed", 3.0f);
-	EmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.EmergencyStopSound", "");
+	CarEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarEmergencyStopSound", "");
+	MotorEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorEmergencyStopSound", "");
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -1659,20 +1660,10 @@ void Elevator::MoveElevatorToFloor()
 		Brakes = true;
 
 		//play stopping sounds
-		if (EmergencyStop == 1 || EmergencyStopSound.empty() == true || EmergencyStopSound == "")
+		if (EmergencyStop == 1)
 			PlayStoppingSounds();
 		else
-		{
-			PlayStoppingSounds(false, true);
-
-			if (sbs->Verbose)
-				Report("playing emergency stop car sound");
-
-			carsound->Stop();
-			carsound->Load(EmergencyStopSound.c_str());
-			carsound->Loop(false);
-			carsound->Play();
-		}
+			PlayStoppingSounds(true);
 	}
 
 	if (Brakes == false)
@@ -5467,76 +5458,94 @@ bool Elevator::InElevator()
 	return (sbs->InElevator == true && sbs->ElevatorNumber == Number);
 }
 
-void Elevator::PlayStartingSounds(bool car, bool motor)
+void Elevator::PlayStartingSounds()
 {
 	//play elevator starting sounds
 
 	//car sound
-	if (car == true)
+	carsound->Stop();
+	if (Direction == 1 && CarUpStartSound.empty() == false && CarUpStartSound != "")
 	{
-		carsound->Stop();
-		if (Direction == 1 && CarUpStartSound.empty() == false && CarUpStartSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing car up start sound");
+		if (sbs->Verbose)
+			Report("playing car up start sound");
 
-			carsound->Load(CarUpStartSound.c_str());
-			carsound->Loop(false);
-			carsound->Play();
-		}
-		if (Direction == -1 && CarDownStartSound.empty() == false && CarDownStartSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing car down start sound");
+		carsound->Load(CarUpStartSound.c_str());
+		carsound->Loop(false);
+		carsound->Play();
+	}
+	if (Direction == -1 && CarDownStartSound.empty() == false && CarDownStartSound != "")
+	{
+		if (sbs->Verbose)
+			Report("playing car down start sound");
 
-			carsound->Load(CarDownStartSound.c_str());
-			carsound->Loop(false);
-			carsound->Play();
-		}
+		carsound->Load(CarDownStartSound.c_str());
+		carsound->Loop(false);
+		carsound->Play();
 	}
 
 	//motor sound
-	if (motor == true)
+	motorsound->Stop();
+	if (Direction == 1 && MotorUpStartSound.empty() == false && MotorUpStartSound != "")
 	{
-		motorsound->Stop();
-		if (Direction == 1 && MotorUpStartSound.empty() == false && MotorUpStartSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing motor up start sound");
+		if (sbs->Verbose)
+			Report("playing motor up start sound");
 
-			motorsound->Load(MotorUpStartSound.c_str());
-			motorsound->Loop(false);
-			motorsound->Play();
-		}
-		if (Direction == 1 && MotorDownStartSound.empty() == false && MotorDownStartSound != "")
-		{
-			if (sbs->Verbose)
-				Report("playing motor down start sound");
+		motorsound->Load(MotorUpStartSound.c_str());
+		motorsound->Loop(false);
+		motorsound->Play();
+	}
+	if (Direction == 1 && MotorDownStartSound.empty() == false && MotorDownStartSound != "")
+	{
+		if (sbs->Verbose)
+			Report("playing motor down start sound");
 
-			motorsound->Load(MotorDownStartSound.c_str());
-			motorsound->Loop(false);
-			motorsound->Play();
-		}
+		motorsound->Load(MotorDownStartSound.c_str());
+		motorsound->Loop(false);
+		motorsound->Play();
 	}
 }
 
-void Elevator::PlayStoppingSounds(bool car, bool motor)
+void Elevator::PlayStoppingSounds(bool emergency)
 {
 	//play elevator stopping sounds
+	//if emergency is true, plays emergency stop sounds with a fallback to standard sounds
 
 	bool carsound_play = false;
 	bool motorsound_play = false;
+	std::string CarSoundFile, MotorSoundFile;
+
+	if (emergency == true)
+	{
+		//car sound
+		if (CarEmergencyStopSound.empty() == false && CarEmergencyStopSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing car emergency stop sound");
+
+			CarSoundFile = CarEmergencyStopSound;
+			carsound_play = true;
+		}
+
+		//motor sound
+		if (MotorEmergencyStopSound.empty() == false && MotorEmergencyStopSound != "")
+		{
+			if (sbs->Verbose)
+				Report("playing motor emergency stop sound");
+
+			MotorSoundFile = MotorEmergencyStopSound;
+			motorsound_play = true;
+		}
+	}
 
 	//car sound
-	if (car == true)
+	if (carsound_play == false)
 	{
-		carsound->Stop();
 		if (Direction == -1 && CarUpStopSound.empty() == false && CarUpStopSound != "")
 		{
 			if (sbs->Verbose)
 				Report("playing car up stop sound");
 
-			carsound->Load(CarUpStopSound.c_str());
+			CarSoundFile = CarUpStopSound;
 			carsound_play = true;
 		}
 		if (Direction == 1 && CarDownStopSound.empty() == false && CarDownStopSound != "")
@@ -5544,21 +5553,20 @@ void Elevator::PlayStoppingSounds(bool car, bool motor)
 			if (sbs->Verbose)
 				Report("playing car down stop sound");
 
-			carsound->Load(CarDownStopSound.c_str());
+			CarSoundFile = CarDownStopSound;
 			carsound_play = true;
 		}
 	}
 
 	//motor sound
-	if (motor == true)
+	if (motorsound_play == false)
 	{
-		motorsound->Stop();
 		if (Direction == -1 && MotorUpStopSound.empty() == false && MotorUpStopSound != "")
 		{
 			if (sbs->Verbose)
 				Report("playing motor up stop sound");
 
-			motorsound->Load(MotorUpStopSound.c_str());
+			MotorSoundFile = MotorUpStopSound;
 			motorsound_play = true;
 		}
 		if (Direction == 1 && MotorDownStopSound.empty() == false && MotorDownStopSound != "")
@@ -5566,15 +5574,19 @@ void Elevator::PlayStoppingSounds(bool car, bool motor)
 			if (sbs->Verbose)
 				Report("playing motor down stop sound");
 
-			motorsound->Load(MotorDownStopSound.c_str());
+			MotorSoundFile = MotorDownStopSound;
 			motorsound_play = true;
 		}
 	}
 
 	bool adjust = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 
+	carsound->Stop();
+	motorsound->Stop();
+
 	if (carsound_play == true)
 	{
+		carsound->Load(CarSoundFile.c_str());
 		carsound->Loop(false);
 
 		//set play position to current percent of the total speed
@@ -5588,6 +5600,7 @@ void Elevator::PlayStoppingSounds(bool car, bool motor)
 	}
 	if (motorsound_play == true)
 	{
+		motorsound->Load(MotorSoundFile.c_str());
 		motorsound->Loop(false);
 
 		//set play position to current percent of the total speed
@@ -5600,12 +5613,12 @@ void Elevator::PlayStoppingSounds(bool car, bool motor)
 	}
 }
 
-void Elevator::PlayMovingSounds(bool car, bool motor)
+void Elevator::PlayMovingSounds()
 {
 	//play elevator movement sounds
 
 	//car sound
-	if (car == true && carsound->IsPlaying() == false)
+	if (carsound->IsPlaying() == false)
 	{
 		if (Direction == 1 && CarUpMoveSound.empty() == false && CarUpMoveSound != "")
 		{
@@ -5628,7 +5641,7 @@ void Elevator::PlayMovingSounds(bool car, bool motor)
 	}
 
 	//motor sound
-	if (motor == true && motorsound->IsPlaying() == false)
+	if (motorsound->IsPlaying() == false)
 	{
 		if (Direction == 1 && MotorUpRunSound.empty() == false && MotorUpRunSound != "")
 		{

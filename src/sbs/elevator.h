@@ -92,7 +92,8 @@ public:
 	std::string OpenMessageSound; //sound to play with message of elevator's doors are opening
 	std::string CloseMessageSound; //sound to play with message of elevator's doors are closing
 	std::string Music; //elevator music sound to play
-	std::string EmergencyStopSound; //emergency stop sound
+	std::string CarEmergencyStopSound; //car emergency stop sound
+	std::string MotorEmergencyStopSound; //motor emergency stop sound
 	bool UseFloorSkipText; //true if text set in SetFloorSkipText should be used
 	bool ACP; //Anti-Crime Protection mode enable/disable
 	int ACPFloor; //floor to stop at in ACP mode
@@ -374,9 +375,9 @@ private:
 	//functions
 	void MoveElevatorToFloor();
 	void FinishMove();
-	void PlayStartingSounds(bool car = true, bool motor = true);
-	void PlayStoppingSounds(bool car = true, bool motor = true);
-	void PlayMovingSounds(bool car = true, bool motor = true);
+	void PlayStartingSounds();
+	void PlayStoppingSounds(bool emergency = false);
+	void PlayMovingSounds();
 
 	//sound objects
 	Sound *carsound;
