@@ -6841,7 +6841,7 @@ DrawWalls = true, true, false, false, false, false
 
     #doors
     WallOrientation = right
-    AddDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
+    AddDoors 1, ServiceElevDoors, ServiceElevDoors2, 0.2, -3.626, 0, 3.5, 8, false, 0, 0 #doors
     AddShaftDoors 1, ServiceElevDoors2, ServiceElevDoors, 0.2, -3.926, 0, 0, 0 #shaft doors
     WallOrientation = left
     SetAutoSize = true, true
