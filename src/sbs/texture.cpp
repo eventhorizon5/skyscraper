@@ -83,7 +83,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 
 	//unload material if already loaded
 	if (UnloadMaterial(name, "General") == true)
-		UnregisterTexture(name);
+		UnregisterTextureInfo(name);
 
 	//create a new material
 	std::string matname = name;
@@ -110,7 +110,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	}
 
 	//add texture multipliers
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded texture " + filename2);
@@ -181,7 +181,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 
 	//unload material if already loaded
 	if (UnloadMaterial(name, "General") == true)
-		UnregisterTexture(name);
+		UnregisterTextureInfo(name);
 
 	//create a new material
 	std::string matname = name;
@@ -221,7 +221,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 		return false;
 
 	//add texture multipliers
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded animated texture " + matname);
@@ -309,7 +309,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 
 	//unload material if already loaded
 	if (UnloadMaterial(name, "General") == true)
-		UnregisterTexture(name);
+		UnregisterTextureInfo(name);
 
 	//create a new material
 	std::string matname = name;
@@ -350,7 +350,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	}
 
 	//add texture multipliers
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded alpha blended texture " + filename2);
@@ -381,7 +381,7 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//add texture multipliers
-	RegisterTexture(name, materialname, widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, materialname, widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded material " + matname);
@@ -389,7 +389,7 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	return true;
 }
 
-void SBS::RegisterTexture(const char *name, const char *material_name, float widthmult, float heightmult, bool enable_force, bool force_mode)
+void SBS::RegisterTextureInfo(const char *name, const char *material_name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//register texture for multipliers information
 	//see TextureInfo structure for more information
@@ -407,7 +407,7 @@ void SBS::RegisterTexture(const char *name, const char *material_name, float wid
 	textureinfo.push_back(info);
 }
 
-bool SBS::UnregisterTexture(const char *name, const char *material_name)
+bool SBS::UnregisterTextureInfo(const char *name, const char *material_name)
 {
 	std::string Name = name;
 	std::string Material = material_name;
@@ -532,7 +532,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 
 	//unload material if already loaded
 	if (UnloadMaterial(name, "General") == true)
-		UnregisterTexture(name);
+		UnregisterTextureInfo(name);
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
@@ -557,7 +557,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	}
 
 	//add texture multipliers
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	return true;
 }
@@ -900,7 +900,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 
 	//unload material if already loaded
 	if (UnloadMaterial(name, "General") == true)
-		UnregisterTexture(name);
+		UnregisterTextureInfo(name);
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
@@ -925,7 +925,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	}
 
 	//add texture multipliers
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("AddTextToTexture: created texture " + Name);
@@ -1003,7 +1003,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 
 	//unload material if already loaded
 	if (UnloadMaterial(name, "General") == true)
-		UnregisterTexture(name);
+		UnregisterTextureInfo(name);
 
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
@@ -1028,7 +1028,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	}
 
 	//add texture multipliers
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	return true;
 }
