@@ -81,6 +81,10 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
 	}
 
+	//unload material if already loaded
+	if (UnloadMaterial(name, "General") == true)
+		UnregisterTexture(name);
+
 	//create a new material
 	std::string matname = name;
 	TrimString(matname);
@@ -105,10 +109,12 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
+	//add texture multipliers
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+
 	if (sbs->Verbose)
 		Report("Loaded texture " + filename2);
 
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 	return true;
 }
 
@@ -173,6 +179,10 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 			Report("Loaded texture " + filenames2[i]);
 	}
 
+	//unload material if already loaded
+	if (UnloadMaterial(name, "General") == true)
+		UnregisterTexture(name);
+
 	//create a new material
 	std::string matname = name;
 	TrimString(matname);
@@ -210,10 +220,12 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	else
 		return false;
 
+	//add texture multipliers
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+
 	if (sbs->Verbose)
 		Report("Loaded animated texture " + matname);
 
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 	return true;
 }
 
@@ -295,6 +307,10 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 		return ReportError("Error loading texture " + blend_filename2 + "\n" + e.getDescription());
 	}
 
+	//unload material if already loaded
+	if (UnloadMaterial(name, "General") == true)
+		UnregisterTexture(name);
+
 	//create a new material
 	std::string matname = name;
 	TrimString(matname);
@@ -333,10 +349,12 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
+	//add texture multipliers
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+
 	if (sbs->Verbose)
 		Report("Loaded alpha blended texture " + filename2);
 
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 	return true;
 }
 
@@ -362,10 +380,12 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
+	//add texture multipliers
+	RegisterTexture(name, materialname, widthmult, heightmult, enable_force, force_mode);
+
 	if (sbs->Verbose)
 		Report("Loaded material " + matname);
 
-	RegisterTexture(name, materialname, widthmult, heightmult, enable_force, force_mode);
 	return true;
 }
 
@@ -410,7 +430,7 @@ bool SBS::UnloadTexture(const char *name, const char *group)
 	//unloads a texture
 
 	Ogre::ResourcePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name, group);
-	if (!wrapper.isNull())
+	if (wrapper.isNull())
 		return false;
 	Ogre::TextureManager::getSingleton().remove(wrapper);
 	DecrementTextureCount();
@@ -423,7 +443,7 @@ bool SBS::UnloadMaterial(const char *name, const char *group)
 	//unloads a material
 
 	Ogre::ResourcePtr wrapper = Ogre::MaterialManager::getSingleton().getByName(name, group);
-	if (!wrapper.isNull())
+	if (wrapper.isNull())
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
 	DecrementMaterialCount();
@@ -510,6 +530,10 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 	Ogre::Box dest (0, 0, width, height);
 	new_texture->getBuffer()->blit(mTex->getBuffer(), source, dest);
 
+	//unload material if already loaded
+	if (UnloadMaterial(name, "General") == true)
+		UnregisterTexture(name);
+
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
 	IncrementMaterialCount();
@@ -532,14 +556,8 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	//add texture multipliers for new texture
-	TextureInfo info;
-	info.name = name;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
+	//add texture multipliers
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	return true;
 }
@@ -845,9 +863,6 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	width = (int)texture->getWidth();
 	height = (int)texture->getHeight();
 
-	//add texture multipliers for new texture
-	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
-
 	//set default values if specified
 	if (x1 == -1)
 		x1 = 0;
@@ -883,6 +898,10 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	if (result == false)
 		return false;
 
+	//unload material if already loaded
+	if (UnloadMaterial(name, "General") == true)
+		UnregisterTexture(name);
+
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
 	IncrementMaterialCount();
@@ -905,8 +924,12 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
+	//add texture multipliers
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
+
 	if (sbs->Verbose)
 		Report("AddTextToTexture: created texture " + Name);
+
 	CacheFilename(Name, Name);
 	return true;
 }
@@ -978,6 +1001,10 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	new_texture->getBuffer()->blit(image1->getBuffer(), source_full, source_full);
 	new_texture->getBuffer()->blit(image2->getBuffer(), overlay, source);
 
+	//unload material if already loaded
+	if (UnloadMaterial(name, "General") == true)
+		UnregisterTexture(name);
+
 	//create a new material
 	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
 	IncrementMaterialCount();
@@ -1000,7 +1027,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	//add texture multipliers for new texture
+	//add texture multipliers
 	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	return true;

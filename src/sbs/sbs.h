@@ -383,7 +383,7 @@ public:
 	void UnregisterControl(Control *control);
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);
 	void RegisterTexture(const char *name, const char *material_name, float widthmult, float heightmult, bool enable_force, bool force_mode);
-	bool UnregisterTexture(const char *name, const char *material_name);
+	bool UnregisterTexture(const char *name, const char *material_name = "");
 
 	//Meshes
 	MeshObject* Buildings;
