@@ -186,7 +186,8 @@ public:
 	bool LoadAnimatedTexture(std::vector<std::string> filenames, const char *name, float duration, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	bool LoadAlphaBlendTexture(const char *filename, const char *specular_filename, const char *blend_filename, const char *name, bool spherical, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false, int mipmaps = -1, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	bool LoadMaterial(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
-	bool UnloadTexture(const char *name);
+	bool UnloadTexture(const char *name, const char *group);
+	bool UnloadMaterial(const char *name, const char *group);
 	bool LoadTextureCropped(const char *filename, const char *name, int x, int y, int width, int height, float widthmult, float heightmult, bool enable_force = false, bool force_mode = false);
 	bool RotateTexture(const char *name, float angle);
 	bool RotateAnimTexture(const char *name, float speed);
@@ -381,6 +382,8 @@ public:
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);
+	void RegisterTexture(const char *name, const char *material_name, float widthmult, float heightmult, bool enable_force, bool force_mode);
+	bool UnregisterTexture(const char *name, const char *material_name);
 
 	//Meshes
 	MeshObject* Buildings;

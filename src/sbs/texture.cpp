@@ -108,13 +108,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	if (sbs->Verbose)
 		Report("Loaded texture " + filename2);
 
-	TextureInfo info;
-	info.name = matname;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 	return true;
 }
 
@@ -219,13 +213,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 	if (sbs->Verbose)
 		Report("Loaded animated texture " + matname);
 
-	TextureInfo info;
-	info.name = matname;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 	return true;
 }
 
@@ -348,13 +336,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	if (sbs->Verbose)
 		Report("Loaded alpha blended texture " + filename2);
 
-	TextureInfo info;
-	info.name = matname;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 	return true;
 }
 
@@ -383,31 +365,67 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	if (sbs->Verbose)
 		Report("Loaded material " + matname);
 
+	RegisterTexture(name, materialname, widthmult, heightmult, enable_force, force_mode);
+	return true;
+}
+
+void SBS::RegisterTexture(const char *name, const char *material_name, float widthmult, float heightmult, bool enable_force, bool force_mode)
+{
+	//register texture for multipliers information
+	//see TextureInfo structure for more information
+
 	TextureInfo info;
 	info.name = name;
-	info.material_name = matname;
+	info.material_name = material_name;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
+
+	TrimString(info.name);
+	TrimString(info.material_name);
 	textureinfo.push_back(info);
-	return true;
 }
 
-bool SBS::UnloadTexture(const char *name)
+bool SBS::UnregisterTexture(const char *name, const char *material_name)
+{
+	std::string Name = name;
+	std::string Material = material_name;
+	TrimString(Name);
+	TrimString(Material);
+
+	for (int i = 0; i < textureinfo.size(); i++)
+	{
+		if (textureinfo[i].name == Name || (textureinfo[i].material_name == Material && textureinfo[i].material_name != ""))
+		{
+			textureinfo.erase(textureinfo.begin() + i);
+			return true;
+		}
+	}
+	return false;
+}
+
+bool SBS::UnloadTexture(const char *name, const char *group)
 {
 	//unloads a texture
 
-	Ogre::TexturePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name);
+	Ogre::ResourcePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name, group);
 	if (!wrapper.isNull())
 		return false;
-	Ogre::TextureManager::getSingleton().remove(name);
+	Ogre::TextureManager::getSingleton().remove(wrapper);
 	DecrementTextureCount();
 
-	Ogre::MaterialPtr mat = Ogre::MaterialManager::getSingleton().getByName(name);
+	return true;
+}
+
+bool SBS::UnloadMaterial(const char *name, const char *group)
+{
+	//unloads a material
+
+	Ogre::ResourcePtr wrapper = Ogre::MaterialManager::getSingleton().getByName(name, group);
 	if (!wrapper.isNull())
 		return false;
-	Ogre::MaterialManager::getSingleton().remove(name);
+	Ogre::MaterialManager::getSingleton().remove(wrapper);
 	DecrementMaterialCount();
 
 	return true;
@@ -828,13 +846,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	height = (int)texture->getHeight();
 
 	//add texture multipliers for new texture
-	TextureInfo info;
-	info.name = name;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	//set default values if specified
 	if (x1 == -1)
@@ -989,13 +1001,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	}
 
 	//add texture multipliers for new texture
-	TextureInfo info;
-	info.name = name;
-	info.widthmult = widthmult;
-	info.heightmult = heightmult;
-	info.enable_force = enable_force;
-	info.force_mode = force_mode;
-	textureinfo.push_back(info);
+	RegisterTexture(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	return true;
 }
