@@ -113,7 +113,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		Report("Loaded texture " + filename2);
+		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
 }
@@ -353,7 +353,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		Report("Loaded alpha blended texture " + filename2);
+		Report("Loaded alpha blended texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
 }
@@ -555,6 +555,9 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
+
+	if (sbs->Verbose)
+		Report("Loaded cropped texture '" + filename2 + "' as '" + Name + "'");
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
@@ -1026,6 +1029,9 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		//enable hard alpha for alpha mask values 128 and above
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
+
+	if (sbs->Verbose)
+		Report("AddTextureOverlay: created texture " + Name);
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
