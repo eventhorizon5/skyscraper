@@ -4178,9 +4178,9 @@ int ScriptProcessor::ProcFloors()
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
-		if (params == 1 || legacy == true)
+		if (params == 2 || legacy == true)
 			StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current));
-		else if (params == 2)
+		else if (params == 3)
 			StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current, Ogre::StringConverter::parseBool(tempdata[2].c_str())));
 		else
 			StoreCommand(elev->FinishShaftDoor(atoi(tempdata[1].c_str()), Current, Ogre::StringConverter::parseBool(tempdata[2].c_str()), Ogre::StringConverter::parseBool(tempdata[3].c_str())));
