@@ -370,6 +370,15 @@
 									<border>5</border>
 									<option>1</option>
 								</object>
+								<object class="sizeritem">
+									<object class="wxButton" name="ID_bTextures" variable="bTextures" member="yes">
+										<label>List Textures</label>
+										<handler function="On_bTextures_Click" entry="EVT_BUTTON" />
+									</object>
+									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									<border>5</border>
+									<option>1</option>
+								</object>
 							</object>
 							<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 							<border>10</border>
