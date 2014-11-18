@@ -2857,6 +2857,20 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//ListAltitudes command
+	if (linecheck.substr(0, 13) == "listaltitudes")
+	{
+		Simcore->ListAltitudes();
+		return sNextLine;
+	}
+
+	//ListTextures command
+	if (linecheck.substr(0, 12) == "listtextures")
+	{
+		Simcore->Report(Simcore->ListTextures(true));
+		return sNextLine;
+	}
+
 	//Print command
 	if (linecheck.substr(0, 5) == "print")
 	{

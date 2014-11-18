@@ -351,7 +351,7 @@ public:
 	void SetLighting(float red = 1.0, float green = 1.0, float blue = 1.0);
 	void ResetLighting();
 	void SaveTexture(Ogre::TexturePtr texture, std::string filename);
-	std::string ListTextures();
+	std::string ListTextures(bool show_filename = false);
 	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Action* AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
@@ -382,7 +382,7 @@ public:
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);
-	void RegisterTextureInfo(const char *name, const char *material_name, float widthmult, float heightmult, bool enable_force, bool force_mode);
+	void RegisterTextureInfo(const char *name, const char *material_name, const char *filename, float widthmult, float heightmult, bool enable_force, bool force_mode);
 	bool UnregisterTextureInfo(const char *name, const char *material_name = "");
 
 	//Meshes
@@ -469,6 +469,7 @@ private:
 	{
 		std::string name;
 		std::string material_name; //used if material is loaded instead of texture, as an alias
+		std::string filename;
 		float widthmult;
 		float heightmult;
 		bool enable_force; //enable forcing of tile or stretch mode?

@@ -110,7 +110,7 @@ bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, f
 	}
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
@@ -221,7 +221,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const char *na
 		return false;
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded animated texture " + matname);
@@ -350,7 +350,7 @@ bool SBS::LoadAlphaBlendTexture(const char *filename, const char *specular_filen
 	}
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded alpha blended texture '" + filename2 + "' as '" + matname + "'");
@@ -381,7 +381,7 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
 
 	//add texture multipliers
-	RegisterTextureInfo(name, materialname, widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, materialname, "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("Loaded material " + matname);
@@ -389,7 +389,7 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	return true;
 }
 
-void SBS::RegisterTextureInfo(const char *name, const char *material_name, float widthmult, float heightmult, bool enable_force, bool force_mode)
+void SBS::RegisterTextureInfo(const char *name, const char *material_name, const char *filename, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//register texture for multipliers information
 	//see TextureInfo structure for more information
@@ -397,6 +397,7 @@ void SBS::RegisterTextureInfo(const char *name, const char *material_name, float
 	TextureInfo info;
 	info.name = name;
 	info.material_name = material_name;
+	info.filename = filename;
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
@@ -404,6 +405,7 @@ void SBS::RegisterTextureInfo(const char *name, const char *material_name, float
 
 	TrimString(info.name);
 	TrimString(info.material_name);
+	TrimString(info.filename);
 	textureinfo.push_back(info);
 }
 
@@ -560,7 +562,7 @@ bool SBS::LoadTextureCropped(const char *filename, const char *name, int x, int 
 		Report("Loaded cropped texture '" + filename2 + "' as '" + Name + "'");
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
 	return true;
 }
@@ -928,7 +930,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	}
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
 		Report("AddTextToTexture: created texture " + Name);
@@ -1034,7 +1036,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 		Report("AddTextureOverlay: created texture " + Name);
 
 	//add texture multipliers
-	RegisterTextureInfo(name, "", widthmult, heightmult, enable_force, force_mode);
+	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
 	return true;
 }
@@ -1725,14 +1727,22 @@ void SBS::SetTextureOverride(const char *mainneg, const char *mainpos, const cha
 	TextureOverride = true;
 }
 
-std::string SBS::ListTextures()
+std::string SBS::ListTextures(bool show_filename)
 {
 	//list loaded textures
 
 	std::string list;
+	if (show_filename == true)
+		list.append("Name --- Filename\n\n");
+
 	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
 		list.append(textureinfo[i].name);
+		if (show_filename == true)
+		{
+			list.append(", ");
+			list.append(textureinfo[i].filename);
+		}
 		list.append("\n");
 	}
 	return list;
