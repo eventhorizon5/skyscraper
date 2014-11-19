@@ -2873,20 +2873,25 @@ after this one. In the above example, the Main Positive side of the object will
 have the texture "ElevFloor", but all other sides will use "Metal1".</p>
 
 <p align="left"><strong>x. ShaftShowFloors</strong> - allows a range of floors
-to be shown either while inside the specified shaft or while inside an elevator
-in the shaft - primarily for glass elevators.<br>
+to be shown in an elevator or shaft, primarily for glass elevators.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> ShaftShowFloors
 <em>ShaftNumber</em> = <em>range/list[, full]</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ShaftShowFloors 1 = 1
+- 10</font><br>
+Example 2: <font face="Courier New, Courier, mono" size="2">ShaftShowFloors 1 = 1
 - 10, true</font></p>
 
-<p align="left">The "full" parameter is optional, and if it is false (the default),
-only a range of floors are shown at a time.  If "full" is true, all the floors in
-the list or range are shown at a time.  In the above example, let's say the user
-is in an elevator in shaft 1, and is moving upwards from the 2nd floor. In this situation, the 2nd
-floor will be visible/enabled while they're in the elevator (since it was in
-the range specified with this command), but when they reach the 11th floor,
-that floor will be invisible/disabled.</p>
+<p align="left">The <em>full</em> parameter is optional, and if it is false or not specified (the default),
+only a range of floors are shown at a time (by default 3 at a time, and only the ones specified), while the elevator is moving, and is normally used in
+conjunction with the <em>Group</em> command for atriums.  If <em>full</em> is true, all the floors in
+the list or range are shown at a time, while the user is in the shaft, regardless of if the elevator
+is moving or not, and are disabled when the user exits the shaft.  In the first example above, let's say the user
+is in an elevator in shaft 1, and is moving upwards from the 2nd floor. In this situation, floors 1 to 10
+will be displayed, either a few at a time or the whole set (depending on the Group command), but after they go beyond the range,
+those floors will be disabled.  In the second example, when the user enters the shaft or elevator, floors
+1 to 10 will all be enabled, and when they exit the elevator/shaft, those floors will be disabled.
+For a basic glass elevator, the second example would be used, along with the <em>Group</em> command to group
+floors 1 to 10 together.</p>
 
 <p align="left"><strong>y. ShaftShowOutside</strong> - allows objects outside
 the building (sky, landscape, etc) to be enabled while the user is both inside

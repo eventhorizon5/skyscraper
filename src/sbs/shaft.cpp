@@ -911,8 +911,8 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		}
 
 		//turn on related floors if ShowFloors is true
-		//display a selected range of floors in the floor list
-		if (ShowFloors == 1)
+		//display a selected range of floors in the floor list if the user is in a moving elevator
+		if (ShowFloors == 1 && InsideShaft == false && sbs->InElevator == true && elevator->IsMoving == true && elevator->Leveling == false)
 			sbs->EnableFloorRange(current_floor, sbs->FloorDisplayRange, true, true, ShaftNumber);
 
 		//display the full range of floors in the floor list
