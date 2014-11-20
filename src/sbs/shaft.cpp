@@ -60,6 +60,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	cutend = 0;
 	ShowFloors = 0;
 	ShowOutside = false;
+	ShowInterfloors = false;
 	ShowFullShaft = false;
 	EnableCheck = false;
 	lastcheckresult = false;
@@ -515,7 +516,7 @@ bool Shaft::IsEnabledFloor(int floor)
 
 void Shaft::AddShowFloor(int floor)
 {
-	//adds a floor number to the ShowFloors array
+	//adds a floor number to the ShowFloors list
 
 	int index = -1;
 	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
@@ -532,7 +533,7 @@ void Shaft::AddShowFloor(int floor)
 
 void Shaft::RemoveShowFloor(int floor)
 {
-	//removes a floor number from the ShowFloors array
+	//removes a floor number from the ShowFloors list
 
 	int index = -1;
 	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
@@ -552,7 +553,7 @@ void Shaft::RemoveShowFloor(int floor)
 
 void Shaft::AddShowOutside(int floor)
 {
-	//adds a floor number to the ShowFloors array
+	//adds a floor number to the ShowOuside list
 
 	int index = -1;
 	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
@@ -569,7 +570,7 @@ void Shaft::AddShowOutside(int floor)
 
 void Shaft::RemoveShowOutside(int floor)
 {
-	//removes a floor number from the ShowFloors array
+	//removes a floor number from the ShowOutside list
 
 	int index = -1;
 	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
@@ -583,6 +584,43 @@ void Shaft::RemoveShowOutside(int floor)
 		{
 			if (ShowOutsideList[i] == floor)
 				ShowOutsideList.erase(ShowOutsideList.begin() + i);
+		}
+	}
+}
+
+void Shaft::AddShowInterfloor(int floor)
+{
+	//adds a floor number to the ShowInterfloors list
+
+	int index = -1;
+	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+	{
+		if (ShowInterfloorsList[i] == floor)
+			index = i;
+	}
+	if (index == -1)
+	{
+		ShowInterfloorsList.push_back(floor);
+		std::sort(ShowInterfloorsList.begin(), ShowInterfloorsList.end());
+	}
+}
+
+void Shaft::RemoveShowInterfloor(int floor)
+{
+	//removes a floor number from the ShowInterfloors list
+
+	int index = -1;
+	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+	{
+		if (ShowInterfloorsList[i] == floor)
+			index = i;
+	}
+	if (index != -1)
+	{
+		for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+		{
+			if (ShowInterfloorsList[i] == floor)
+				ShowInterfloorsList.erase(ShowInterfloorsList.begin() + i);
 		}
 	}
 }
@@ -954,6 +992,18 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 				sbs->EnableExternal(false);
 			}
 		}
+
+		//display interfloors
+		if (ShowInterfloors == true)
+		{
+			for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+			{
+				Floor *floor = sbs->GetFloor(ShowInterfloorsList[i]);
+				if (floor->IsInterfloorEnabled == false)
+					floor->EnableInterfloor(true);
+			}
+		}
+
 	}
 	else if (InsideShaft == true || InElevator == true)
 	{
@@ -980,6 +1030,17 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 						//floor->EnableGroup(false);
 					}
 				}
+			}
+		}
+
+		//disable interfloors
+		if (ShowInterfloors == true)
+		{
+			for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+			{
+				Floor *floor = sbs->GetFloor(ShowInterfloorsList[i]);
+				if (floor->IsInterfloorEnabled == true && floor->IsEnabled == false)
+					floor->EnableInterfloor(false);
 			}
 		}
 	}

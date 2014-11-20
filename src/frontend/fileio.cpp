@@ -1946,6 +1946,59 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//ShaftShowInterfloors command
+	if (linecheck.substr(0, 20) == "shaftshowinterfloors")
+	{
+		//get shaft number
+		int loc = LineData.find("=");
+		if (loc < 0)
+			return ScriptError("Syntax error");
+		int shaftnum;
+		std::string str = LineData.substr(20, loc - 21);
+		TrimString(str);
+		if (!IsNumeric(str.c_str(), shaftnum))
+			return ScriptError("Invalid shaft number");
+		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+			return ScriptError("Invalid shaft number");
+		Simcore->GetShaft(shaftnum)->ShowInterfloors = true;
+
+		int params = SplitAfterEquals(LineData.c_str(), false);
+		if (params < 1)
+			return ScriptError("Syntax Error");
+
+		for (int line = 0; line < params; line++)
+		{
+			if (tempdata[line].find("-", 1) > 0)
+			{
+				int start, end;
+				//found a range marker
+				std::string str1 = tempdata[line].substr(0, tempdata[line].find("-", 1));
+				std::string str2 = tempdata[line].substr(tempdata[line].find("-", 1) + 1);
+				TrimString(str1);
+				TrimString(str2);
+				if (!IsNumeric(str1.c_str(), start) || !IsNumeric(str2.c_str(), end))
+					return ScriptError("Invalid value");
+				if (end < start)
+				{
+					int temp = start;
+					start = end;
+					end = temp;
+				}
+
+				for (int k = start; k <= end; k++)
+					Simcore->GetShaft(shaftnum)->AddShowInterfloor(k);
+			}
+			else
+			{
+				int showfloor;
+				if (!IsNumeric(tempdata[line].c_str(), showfloor))
+					return ScriptError("Invalid value");
+				Simcore->GetShaft(shaftnum)->AddShowInterfloor(showfloor);
+			}
+		}
+		return sNextLine;
+	}
+
 	//ShaftShowOutside command
 	if (linecheck.substr(0, 16) == "shaftshowoutside")
 	{

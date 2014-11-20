@@ -218,12 +218,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -75, -70, 75, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -75, -70, 75, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 
@@ -312,12 +312,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -105, -100, 105, 100, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -105, -100, 105, 100, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -105, -100, 105, 100, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -105, -100, 105, 100, %interfloorheight%, %interfloorheight%, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 
@@ -701,12 +701,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -75, -70, 75, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -75, -70, 75, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -801,12 +801,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -75, -70, 75, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -75, -70, 75, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -942,12 +942,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -63, -70, 63, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1024,12 +1024,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -63, -70, 63, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1165,12 +1165,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -51, -70, 51, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1477,12 +1477,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -51, -70, 51, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -51, -70, 51, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -51, -70, 51, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1583,12 +1583,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1704,12 +1704,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1750,12 +1750,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, 0, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, 0, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, 0, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, 0, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1829,12 +1829,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1903,12 +1903,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1981,12 +1981,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -2019,12 +2019,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, 5, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, 5, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -39, 5, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -39, 5, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -2122,12 +2122,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -39, -70, 39, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloor, Brick, 0.1, -39, -70, 39, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITop, Brick, 0.1, -39, -70, 39, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -2282,7 +2282,9 @@ ShaftCut 16, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
 
 #Core utility shaft
 AddShaft 17, 1, 0, 42.71, -8, 142
-ShaftCut 17, -4.33, -4.75, 4.33 - 0.33, 4.75, 0, 5
+ShaftCut 17, -4.33, -4.75 + 0.33, 4.33 - 0.33, 4.75, 0, 5
+ShaftShowInterfloors 17 = -8 - 142
+ShaftShowFloors 17 = -8, true
 
 #Office zone 2 local shafts
 AddShaft 18, 2, -23.85, 9.25, 39, 62
@@ -2800,12 +2802,12 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     #shaft 17
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -8] AddShaftFloor 17, Shaft17Base, Brick, 0.5, -4.33, -4.75, 4.33, 4.75, 0, 0, 0, 0
+    if[%floor% = -8] AddShaftFloor 17, Shaft17Base, Brick, 0.1, -4.33, -4.75, 4.33, 4.75, 0, 0, 0, 0
     DrawWalls = true, false, false, false, false, false
-    if[%floor% = 142] AddShaftFloor 17, Shaft17Top, Brick, 0.5, -4.33, -4.75, 4.33, 4.75, %fullheight%, %fullheight%, 0, 0
+    if[%floor% = 142] AddShaftFloor 17, Shaft17Top, Brick, 0.1, -4.33, -4.75, 4.33, 4.75, %fullheight%, %fullheight%, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
-    AddShaftWall 17, Shaft17Front, Brick, 0.33, -4.33, -4.75, 4.33, -4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 17, Shaft17Front, Brick, 0.33, -4.33, -4.75, 4.33, -4.75, %height% + 0.2, %height% + 0.2, %interfloorheight% - 0.1, %interfloorheight% - 0.1, 0, 0
     AddShaftWall 17, Shaft17Left, Brick, 0.33, -4.33, -4.75, -4.33, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     WallOrientation = right
     AddShaftWall 17, Shaft17Back, Brick, 0.33, -4.33, 4.75, 4.33, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
