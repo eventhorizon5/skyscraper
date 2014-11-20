@@ -1,7 +1,7 @@
 # $Id$
 
 #The Triton Center
-#Copyright (C)2002-2013 Ryan Thoryk
+#Copyright (C)2002-2014 Ryan Thoryk
 
 #This program is free software; you can redistribute it and/or
 #modify it under the terms of the GNU General Public License
@@ -114,6 +114,7 @@
     Load data/stopkey.png, StopKey, 1, 1
     Load data/indservkeyon.png, IndOn, 1, 1
     Load data/indservkeyoff.png, IndOff, 1, 1
+    Load data/dcircle_lit.gif, ShaftLight, 1, 1, false
 
     #signs
     Load data/triton_signs/2-14.png, Sign2-14, 1, 1
@@ -472,6 +473,26 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddFloor RRCeiling, Ceiling1, 0.5, 33.5, -50, 48.5 + 0.33, -42.33, %height%, %height%, 0, 0, False
     AddFloor RRCeiling, Ceiling1, 0.5, 33.5, -42.33, 42.37, -24 + 0.33, %height%, %height%, 0, 0, False
 
+    #Interfloor bottom
+    FloorOrientation = bottom
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorFloor IFloor, Brick, 0.1, -75, -70, 75, 70, 0, 0, 0, 0
+
+    #Interfloor top
+    FloorOrientation = top
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorFloor ITop, Brick, 0.1, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
+
+    #Interfloor walls
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddInterfloorWall IFront, Brick, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -75, -70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddInterfloorWall IRight, Brick, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, -75, 70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+
     DrawWalls = true, true, false, false, false, false
 <EndFloor>
 
@@ -520,20 +541,22 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Interfloor bottom
     FloorOrientation = bottom
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloorLeft, Brick, 0.5, -75, -70, -48.5, 70, 0, 0, 0, 0
-    AddInterfloorFloor IFloorRight, Brick, 0.5, 48.5, -70, 75, 70, 0, 0, 0, 0
-    AddInterfloorFloor IFloorCross, Brick, 0.5, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0
-    AddInterfloorFloor IFloorCenter, Brick, 0.5, -5.5, -13.833, 5.5, 13.5, 0, 0, 0, 0
-    AddInterfloorFloor IFloorService, Brick, 0.5, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0
+    AddInterfloorFloor IFloorLeft, Brick, 0.1, -75, -70, -48.5, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloorRight, Brick, 0.1, 48.5, -70, 75, 70, 0, 0, 0, 0
+    AddInterfloorFloor IFloorCross, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0
+    AddInterfloorFloor IFloorCenter, Brick, 0.1, -5.5, -13.833, 5.5, 13.5, 0, 0, 0, 0
+    AddInterfloorFloor IFloorWalkway, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0
+    AddInterfloorFloor IFloorService, Brick, 0.1, -4.5 - 0.33, 13.5, 4.5 + 0.33, 37.5 + 0.5 + 0.33, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = top
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITopLeft, Brick, 0.5, -75, -70, -48.5, 70, %interfloorheight%, %interfloorheight%, 0, 0
-    AddInterfloorFloor ITopRight, Brick, 0.5, 48.5, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
-    AddInterfloorFloor ITopCross, Brick, 0.5, -48.5, -23.833, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
-    AddInterfloorFloor ITopCenter, Brick, 0.5, -5.5, -13.833, 5.5, 13.5, %interfloorheight%, %interfloorheight%, 0, 0
-    AddInterfloorFloor ITopService, Brick, 0.5, -48.5, -23.833, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopLeft, Brick, 0.1, -75, -70, -48.5, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopRight, Brick, 0.1, 48.5, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopCross, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopCenter, Brick, 0.1, -5.5, -13.833, 5.5, 13.5, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopWalkway, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopService, Brick, 0.1, -4.5 - 0.33, 13.5, 4.5 + 0.33, 37.5 + 0.5 + 0.33, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -2809,6 +2832,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     WallOrientation = left
     AddShaftWall 17, Shaft17Front, Brick, 0.33, -4.33, -4.75, 4.33, -4.75, %height% + 0.2, %height% + 0.2, %interfloorheight% - 0.1, %interfloorheight% - 0.1, 0, 0
     AddShaftWall 17, Shaft17Left, Brick, 0.33, -4.33, -4.75, -4.33, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall 17, Shaft17Light, ShaftLight, 0.1, -0.25, -4.75 + 0.33 + 0.2, 0.25, -4.75 + 0.33 + 0.2, 0.5, 0.5, %interfloorheight% + 0.5, %interfloorheight% + 0.5, 0, 0
     WallOrientation = right
     AddShaftWall 17, Shaft17Back, Brick, 0.33, -4.33, 4.75, 4.33, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0
     AddShaftWall 17, Shaft17Right, Brick, 0.33, 4.33, -4.75, 4.33, 4.75, %fullheight%, %fullheight%, 0, 0, 0, 0

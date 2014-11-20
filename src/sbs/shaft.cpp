@@ -553,7 +553,7 @@ void Shaft::RemoveShowFloor(int floor)
 
 void Shaft::AddShowOutside(int floor)
 {
-	//adds a floor number to the ShowOuside list
+	//adds a floor number to the ShowOutside list
 
 	int index = -1;
 	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
