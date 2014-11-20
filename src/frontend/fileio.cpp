@@ -1068,7 +1068,57 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//report a script error, with line and context information.
 	//reports a warning message (without window popup) if 'warning' is true
 
-	//first see if the current line is from an included file
+	std::string error;
+	int LineNumber, FunctionLine;
+	bool IsInclude, IsIncludeFunction;
+	std::string IncludeFile, IncludeFunctionFile;
+
+	GetLineInformation(true, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
+
+	if (warning == false)
+		error = "Script error ";
+	else
+		error = "Script warning ";
+
+	if (IsInclude == true)
+		error += "in included file " + IncludeFile + " ";
+
+	error += "on line " + ToString2(LineNumber) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context;
+
+	if (InFunction == 0)
+		error += "\nLine Text: " + LineData;
+	else
+	{
+		error += "\nFunction: " + FunctionStack[InFunction - 1].Name;
+
+		if (IsIncludeFunction == true)
+			error += "\nFunction included in file: " + IncludeFunctionFile;
+
+		error += "\nFunction call line: " + ToString2(FunctionLine) + "\nLine Text: " + LineData;
+	}
+
+	skyscraper->ReportError(error.c_str());
+
+	//show error dialog
+	if (warning == false)
+	{
+		wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+		dialog->ShowModal();
+
+		delete dialog;
+		dialog = 0;
+	}
+	return sError;
+}
+
+void ScriptProcessor::GetLineInformation(bool CheckFunctionCall, int &LineNumber, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile)
+{
+	//calculate line information for current script line
+
+	//if IsInclude is true, LineNumber is the line of the included file IncludeFile
+	//if in a function, the function call line is returned as FunctionLine
+	//if function call line is in an included file, IsIncludeFunction is true, with IncludeFunctionFile as the file
+	//to skip the function call line check, set CheckFunctionCall to false
 
 	int linenum = line;
 	int newlinenum = line;
@@ -1080,10 +1130,11 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	int included_lines_f = 0;
 	int parent = -1;
 	int parent_f = -1;
-	bool isinclude = false;
-	bool isinclude_f = false;
-	std::string includefile;
-	std::string isinclude_f_file;
+	FunctionLine = 0;
+	IsInclude = false;
+	IsIncludeFunction = false;
+	IncludeFile = "";
+	IncludeFunctionFile = "";
 
 	if (InFunction > 0)
 	{
@@ -1091,6 +1142,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		newfunction_line = function_line;
 	}
 
+	//first see if the current line is from an included file
 	for (int i = 0; i < (int)includes.size(); i++)
 	{
 		if (linenum < includes[i].start_line)
@@ -1099,21 +1151,24 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		//line is part of an included file
 		if (linenum >= includes[i].start_line && linenum <= includes[i].end_line)
 		{
-			isinclude = true;
-			includefile = includes[i].filename;
+			IsInclude = true;
+			IncludeFile = includes[i].filename;
 			newlinenum = linenum - includes[i].start_line;
 			parent = i;
 			linenum_start = includes[i].start_line;
 		}
 
 		//function call line is part of an included file
-		if (function_line >= includes[i].start_line && function_line <= includes[i].end_line)
+		if (CheckFunctionCall == true)
 		{
-			isinclude_f = true;
-			isinclude_f_file = includes[i].filename;
-			newfunction_line = function_line - includes[i].start_line;
-			parent_f = i;
-			function_line_start = includes[i].start_line;
+			if (function_line >= includes[i].start_line && function_line <= includes[i].end_line)
+			{
+				IsIncludeFunction = true;
+				IncludeFunctionFile = includes[i].filename;
+				newfunction_line = function_line - includes[i].start_line;
+				parent_f = i;
+				function_line_start = includes[i].start_line;
+			}
 		}
 	}
 
@@ -1129,10 +1184,13 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 				included_lines += includes[i].end_line - includes[i].start_line;
 		}
 
-		if (includes[i].parent == parent_f)
+		if (CheckFunctionCall == true)
 		{
-			if (function_line + function_line_start > includes[i].end_line)
-				included_lines_f += includes[i].end_line - includes[i].start_line;
+			if (includes[i].parent == parent_f)
+			{
+				if (function_line + function_line_start > includes[i].end_line)
+					included_lines_f += includes[i].end_line - includes[i].start_line;
+			}
 		}
 	}
 
@@ -1140,43 +1198,11 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	linenum += 1;
 	function_line += 1;
 
-	//Script error reporting function
-	std::string error;
+	//return values
+	LineNumber = linenum - included_lines;
 
-	if (warning == false)
-		error = "Script error ";
-	else
-		error = "Script warning ";
-
-	if (isinclude == true)
-		error += "in included file " + includefile + " ";
-
-	error += "on line " + ToString2(linenum - included_lines) + ": " + message + "\nSection: " + ToString2(Section) + "\nContext: " + Context;
-
-	if (InFunction == 0)
-		error += "\nLine Text: " + LineData;
-	else
-	{
-		error += "\nFunction: " + FunctionStack[InFunction - 1].Name;
-
-		if (isinclude_f == true)
-			error += "\nFunction included in file: " + isinclude_f_file;
-
-		error += "\nFunction call line: " + ToString2(function_line - included_lines_f) + "\nLine Text: " + LineData;
-	}
-
-	skyscraper->ReportError(error.c_str());
-
-	//show error dialog
-	if (warning == false)
-	{
-		wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
-		dialog->ShowModal();
-
-		delete dialog;
-		dialog = 0;
-	}
-	return sError;
+	if (InFunction > 0)
+		FunctionLine = function_line - included_lines_f;
 }
 
 int ScriptProcessor::ScriptError()
@@ -7741,10 +7767,17 @@ void ScriptProcessor::StoreCommand(Object *object)
 	//store command and line info in object
 	if (object)
 	{
+		int LineNumber, FunctionLine;
+		bool IsInclude, IsIncludeFunction;
+		std::string IncludeFile, IncludeFunctionFile;
+
+		GetLineInformation(false, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
+		object->linenum = LineNumber;
+		object->includefile = IncludeFile;
+
 		TrimString(BuildingData[line]);
 		object->command = BuildingData[line];
 		object->command_processed = LineData;
-		object->linenum = line + 1;
 		object->context = Context;
 		std::string current;
 		current = ToString(Current);

@@ -56,6 +56,7 @@ class ObjectInfo: public wxDialog
 		wxTextCtrl* tLineNum;
 		wxStaticLine* StaticLine1;
 		wxStaticText* StaticText8;
+		wxStaticText* StaticText12;
 		wxTextCtrl* tParentType;
 		wxStaticText* StaticText7;
 		wxButton* bSave;
@@ -71,6 +72,7 @@ class ObjectInfo: public wxDialog
 		wxButton* bOK;
 		wxTextCtrl* tParentName;
 		wxStaticText* StaticText9;
+		wxTextCtrl* tIncludeFile;
 		wxStaticText* StaticText11;
 		wxButton* bMove;
 		//*)
@@ -107,6 +109,8 @@ class ObjectInfo: public wxDialog
 		static const long ID_STATICLINE1;
 		static const long ID_STATICTEXT7;
 		static const long ID_tLineNum;
+		static const long ID_STATICTEXT12;
+		static const long ID_tIncludeFile;
 		static const long ID_STATICTEXT10;
 		static const long ID_tContext;
 		static const long ID_STATICTEXT8;

@@ -108,6 +108,7 @@ class ScriptProcessor
 	int ProcTextures();
 	bool FunctionProc();
 	void CheckFile(const char *filename);
+	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);
 
 	struct FunctionInfo
 	{
