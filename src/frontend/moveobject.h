@@ -161,7 +161,8 @@ class MoveObject: public wxDialog
 		wxRadioButton* rRotation;
 		//*)
 		Ogre::Vector3 hold_vector;
-		Object *object; //object number
+		Object *object;
+		int object_num; //object number
 
 	private:
 

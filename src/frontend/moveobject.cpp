@@ -224,7 +224,8 @@ MoveObject::MoveObject(wxWindow* parent,wxWindowID id, int object_number)
 	Connect(ID_bRotationY,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bRotationY_Click);
 	Connect(ID_bRotationZ,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MoveObject::On_bRotationZ_Click);
 	//*)
-	object = Simcore->GetObject(object_number);
+	object_num = object_number;
+	object = 0;
 	OnInit();
 }
 
@@ -240,6 +241,8 @@ void MoveObject::OnInit()
 
 void MoveObject::Loop()
 {
+	object = Simcore->GetObject(object_num);
+
 	if (object)
 	{
 		Ogre::Vector3 pos = Simcore->GetObjectPosition(object);
@@ -256,6 +259,8 @@ void MoveObject::Loop()
 				Simcore->RotateObject(object, hold_vector, 1, true, true, true, true);
 		}
 	}
+	else
+		Close();
 }
 
 void MoveObject::On_rPosition_Select(wxCommandEvent& event)
