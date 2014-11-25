@@ -154,6 +154,7 @@ public:
 	bool GoPending; //true if Go() function is active
 	float EmergencyStopSpeed; //emergency stop deceleration multiplier
 	bool AutoAdjustSound; //auto-adjust stopping sounds
+	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 

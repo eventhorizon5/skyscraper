@@ -200,6 +200,7 @@ Elevator::Elevator(int number)
 	CarEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.CarEmergencyStopSound", "");
 	MotorEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorEmergencyStopSound", "");
 	AutoAdjustSound = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
+	SkipFloorSound = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -1463,6 +1464,7 @@ void Elevator::MoveElevatorToFloor()
 			ReportError("Elevator already on specified floor");
 			MoveElevator = false;
 			ElevatorIsRunning = false;
+			SkipFloorSound = true; //don't play floor announcement if on same floor
 			DeleteActiveRoute();
 			goto finish; //skip main processing and run cleanup section
 		}
@@ -2134,6 +2136,7 @@ void Elevator::FinishMove()
 	ElevatorFloor = GotoFloor;
 
 	EmergencyStop = 0;
+	SkipFloorSound = false;
 	Parking = false;
 	FinishedMove = true;
 }
@@ -4778,7 +4781,7 @@ bool Elevator::PlayFloorSound()
 {
 	//play floor sound
 
-	if (InServiceMode() == true || FloorSound == "" || UseFloorSounds == false)
+	if (InServiceMode() == true || FloorSound == "" || UseFloorSounds == false || SkipFloorSound == true)
 		return false;
 
 	if (sbs->Verbose)
