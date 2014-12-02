@@ -152,7 +152,6 @@ Elevator::Elevator(int number)
 	motorsound = 0;
 	alarm = 0;
 	floorbeep = 0;
-	floorsound = 0;
 	OriginFloor = 0;
 	Fan = true;
 	NotifyEarly = sbs->GetConfigInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
@@ -168,7 +167,7 @@ Elevator::Elevator(int number)
 	WaitForTimer = false;
 	SoundsQueued = false;
 	HeightSet = false;
-	messagesnd = 0;
+	announcesnd = 0;
 	musicsound = 0;
 	elevposition = 0;
 	lastposition = 0;
@@ -380,12 +379,6 @@ Elevator::~Elevator()
 		delete floorbeep;
 	}
 	floorbeep = 0;
-	if (floorsound)
-	{
-		floorsound->object->parent_deleting = true;
-		delete floorsound;
-	}
-	floorsound = 0;
 	if (motorsound)
 	{
 		motorsound->object->parent_deleting = true;
@@ -398,12 +391,12 @@ Elevator::~Elevator()
 		delete idlesound;
 	}
 	idlesound = 0;
-	if (messagesnd)
+	if (announcesnd)
 	{
-		messagesnd->object->parent_deleting = true;
-		delete messagesnd;
+		announcesnd->object->parent_deleting = true;
+		delete announcesnd;
 	}
-	messagesnd = 0;
+	announcesnd = 0;
 	if (musicsound)
 	{
 		musicsound->object->parent_deleting = true;
@@ -601,10 +594,8 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	alarm->SetPosition(Origin);
 	floorbeep = new Sound(object, "Floor Beep", true);
 	floorbeep->SetPosition(Origin);
-	floorsound = new Sound(object, "Floor Sound", true);
-	floorsound->SetPosition(Origin);
-	messagesnd = new Sound(object, "Message Sound", true);
-	messagesnd->SetPosition(Origin);
+	announcesnd = new Sound(object, "Announcement Sound", true);
+	announcesnd->SetPosition(Origin);
 	musicsound = new Sound(object, "Music Sound", true);
 	musicsound->SetPosition(Origin + MusicPosition);
 	musicsound->Load(Music.c_str());
@@ -1386,6 +1377,9 @@ void Elevator::MonitorLoop()
 			DoorArray[i]->CheckSensor();
 	}
 
+	//process queued sounds
+	announcesnd->ProcessQueue();
+
 	//elevator movement
 	if (MoveElevator == true)
 		MoveElevatorToFloor();
@@ -1976,8 +1970,7 @@ void Elevator::SetAltitude(float altitude)
 	MoveDoorSound(0, elevposition, false, false, false);
 	alarm->SetPosition(elevposition);
 	floorbeep->SetPosition(elevposition);
-	floorsound->SetPosition(elevposition);
-	messagesnd->SetPosition(elevposition);
+	announcesnd->SetPosition(elevposition);
 	musicsound->SetPosition(elevposition + MusicPosition);
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
@@ -4791,10 +4784,7 @@ bool Elevator::PlayFloorSound()
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GotoFloor));
 	TrimString(newsound);
-	floorsound->Stop();
-	floorsound->Load(newsound.c_str());
-	floorsound->Loop(false);
-	floorsound->Play();
+	announcesnd->PlayQueued(newsound.c_str(), false, false);
 	return true;
 }
 
@@ -4875,10 +4865,7 @@ bool Elevator::PlayMessageSound(bool type)
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
-	messagesnd->Stop();
-	messagesnd->Load(newsound.c_str());
-	messagesnd->Loop(false);
-	messagesnd->Play();
+	announcesnd->PlayQueued(newsound.c_str(), false, false);
 	return true;
 }
 

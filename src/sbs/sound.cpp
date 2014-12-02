@@ -249,10 +249,7 @@ int Sound::GetSpeed()
 void Sound::Stop()
 {
 	if (sbs->Verbose == true)
-	{
-		std::string objectnum = ToString(object->GetNumber());
-		sbs->Report("Stopping sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
-	}
+		Report("Stopping");
 
 	if (channel)
 		channel->stop();
@@ -274,15 +271,12 @@ bool Sound::Play(bool reset)
 	if (!loaded)
 	{
 		if (sbs->Verbose)
-			sbs->ReportError("Sound '" + Name + "': no sound loaded");
+			ReportError("No sound loaded");
 		return false;
 	}
 
-	if (sbs->Verbose == true)
-	{
-		std::string objectnum = ToString(object->GetNumber());
-		sbs->Report("Playing sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
-	}
+	if (sbs->Verbose)
+		Report("Playing");
 
 	if (!IsValid())
 	{
@@ -310,6 +304,7 @@ bool Sound::Play(bool reset)
 
 	if (reset == true)
 		Reset();
+
 	if (channel)
 		channel->setPaused(false);
 
@@ -355,7 +350,7 @@ bool Sound::Load(const char *filename, bool force)
 	FMOD_RESULT result = sbs->soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
 	//FMOD_RESULT result = sbs->soundsys->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
 	if (result != FMOD_OK)
-		return sbs->ReportError("Can't load file '" + Filename + "'");
+		return ReportError("Can't load file '" + Filename + "'");
 
 	loaded = true;
 	return true;
@@ -421,4 +416,60 @@ void Sound::SetDopplerLevel(float level)
 bool Sound::IsLoaded()
 {
 	return loaded;
+}
+
+void Sound::Report(std::string message)
+{
+	std::string objectnum = ToString(object->GetNumber());
+	sbs->Report("Sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "': " + message);
+}
+
+bool Sound::ReportError(std::string message)
+{
+	std::string objectnum = ToString(object->GetNumber());
+	return sbs->ReportError("Sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "': " + message);
+}
+
+void Sound::PlayQueued(const char *filename, bool stop, bool loop)
+{
+	//loads and plays a sound, with queuing support
+	//if "stop" is true, stops currently playing sound
+	//use the ProcessQueue function to process queued sounds
+
+	//queue sound object
+	SoundEntry snd;
+	snd.filename = filename;
+	snd.loop = loop;
+	snd.played = false;
+	queue.push_back(snd);
+
+	if (stop == true)
+		Stop();
+
+	ProcessQueue();
+}
+
+void Sound::ProcessQueue()
+{
+	//if using the PlayQueued function, use this function to processed queued sounds
+
+	if (queue.empty())
+		return;
+
+	SoundEntry *snd = &queue.front();
+
+	if (IsPlaying() == true)
+		return;
+	else if (snd->played == true)
+	{
+		//dequeue sound that already played
+		queue.erase(queue.begin());
+		return;
+	}
+
+	//play new sound
+	Load(snd->filename.c_str());
+	Loop(snd->loop);
+	Play();
+	snd->played = true;
 }

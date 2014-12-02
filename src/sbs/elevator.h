@@ -387,9 +387,8 @@ private:
 	Sound *motorsound;
 	Sound *alarm;
 	Sound *floorbeep;
-	Sound *floorsound;
 	std::vector<Sound*> sounds; //generic sounds
-	Sound *messagesnd;
+	Sound *announcesnd;
 	Sound *musicsound;
 
 	//interior directional indicators

@@ -62,6 +62,10 @@ public:
 	const char *GetName();
 	void SetDopplerLevel(float level);
 	bool IsLoaded();
+	void PlayQueued(const char *filename, bool stop = true, bool loop = false);
+	void ProcessQueue();
+	void Report(std::string message);
+	bool ReportError(std::string message);
 
 private:
 
@@ -87,6 +91,15 @@ private:
 	float doppler_level;
 	bool loaded;
 	bool position_queued;
+
+	struct SBSIMPEXP SoundEntry
+	{
+		std::string filename;
+		bool loop;
+		bool played;
+	};
+
+	std::vector<SoundEntry> queue;
 
 };
 
