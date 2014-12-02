@@ -291,11 +291,10 @@ bool Trigger::Check()
 	{
 		if (sbs->Verbose == true)
 		{
-			std::string objectnum = ToString(object->GetNumber());
 			if (IsInside == true)
-				sbs->Report("Inside trigger area '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
+				sbs->Report("Inside trigger area '" + Name + "', parent '" + object->GetParent()->GetName() + "'");
 			else
-				sbs->Report("Outside trigger area '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "'");
+				sbs->Report("Outside trigger area '" + Name + "', parent '" + object->GetParent()->GetName() + "'");
 		}
 
 		//get action name of next position state

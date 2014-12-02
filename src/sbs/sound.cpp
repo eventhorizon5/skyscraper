@@ -420,14 +420,12 @@ bool Sound::IsLoaded()
 
 void Sound::Report(std::string message)
 {
-	std::string objectnum = ToString(object->GetNumber());
-	sbs->Report("Sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "': " + message);
+	sbs->Report("Sound '" + Name + "', parent '" + object->GetParent()->GetName() + "': " + message);
 }
 
 bool Sound::ReportError(std::string message)
 {
-	std::string objectnum = ToString(object->GetNumber());
-	return sbs->ReportError("Sound '" + Name + "', object " + objectnum + ", parent '" + object->GetParent()->GetName() + "': " + message);
+	return sbs->ReportError("Sound '" + Name + "', parent '" + object->GetParent()->GetName() + "': " + message);
 }
 
 void Sound::PlayQueued(const char *filename, bool stop, bool loop)
