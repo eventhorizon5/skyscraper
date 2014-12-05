@@ -2547,7 +2547,7 @@ int ScriptProcessor::ProcCommands()
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9, true, 1);
+		int params = SplitData(LineData.c_str(), 9, true);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -2617,7 +2617,7 @@ int ScriptProcessor::ProcCommands()
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9, true, 1);
+		int params = SplitData(LineData.c_str(), 9, true);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -4134,7 +4134,7 @@ int ScriptProcessor::ProcFloors()
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9, true, 1);
+		int params = SplitData(LineData.c_str(), 9, true);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -4284,7 +4284,7 @@ int ScriptProcessor::ProcFloors()
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9, true, 1);
+		int params = SplitData(LineData.c_str(), 9, true);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -4340,7 +4340,7 @@ int ScriptProcessor::ProcFloors()
 	if (linecheck.substr(0, 14) == "addstairsmodel")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 15, true, 2);
+		int params = SplitData(LineData.c_str(), 15, true);
 
 		if (params != 15 && params != 16)
 			return ScriptError("Incorrect number of parameters");
@@ -4402,7 +4402,7 @@ int ScriptProcessor::ProcFloors()
 	if (linecheck.substr(0, 13) == "addshaftmodel")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 14, true, 2);
+		int params = SplitData(LineData.c_str(), 14, true);
 
 		if (params != 15 && params != 16)
 			return ScriptError("Incorrect number of parameters");
@@ -6685,7 +6685,7 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9, true, 1);
+		int params = SplitData(LineData.c_str(), 9, true);
 
 		if (params != 5 && params != 6 && params != 13 && params != 17)
 			return ScriptError("Incorrect number of parameters");
@@ -6984,7 +6984,7 @@ int ScriptProcessor::ProcElevators()
 	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 9, true, 1);
+		int params = SplitData(LineData.c_str(), 9, true);
 
 		if (params != 14 && params != 15)
 			return ScriptError("Incorrect number of parameters");
@@ -7645,15 +7645,31 @@ std::string ScriptProcessor::Calc(const char *expression)
 		{
 			if (tmpcalc.at(i) == '+' || tmpcalc.at(i) == '/' || tmpcalc.at(i) == '*' || tmpcalc.at(i) == '^')
 			{
-				operators++;
-				if (operators == 2)
-					end = i;
+				//ensure that numbers are around operator
+				if (i < (int)tmpcalc.length() - 1)
+				{
+					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-'))
+					{
+						//valid operator found
+						operators++;
+						if (operators == 2)
+							end = i;
+					}
+				}
 			}
 			if (tmpcalc.at(i) == '-' && tmpcalc.at(i - 1) != '-' && tmpcalc.at(i - 1) != '+' && tmpcalc.at(i - 1) != '/' && tmpcalc.at(i - 1) != '*' && tmpcalc.at(i - 1) != '^')
 			{
-				operators++;
-				if (operators == 2)
-					end = i;
+				//ensure that numbers are around operator
+				if (i < (int)tmpcalc.length() - 1)
+				{
+					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-'))
+					{
+						//valid operator found
+						operators++;
+						if (operators == 2)
+							end = i;
+					}
+				}
 			}
 		}
 		if (end >= (int)tmpcalc.length() - 1 && operators > 0)
@@ -7932,7 +7948,7 @@ void ScriptProcessor::CheckFile(const char *filename)
 	}
 }
 
-int ScriptProcessor::SplitData(const char *string, int start, bool calc, int calc_skip)
+int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 {
 	//split data into separate strings starting at the "start" character
 	//delimeter is a comma ","
@@ -7946,11 +7962,8 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc, int cal
 	{
 		for (int i = 0; i < (int)tempdata.size(); i++)
 		{
-			if (i != calc_skip)
-			{
-				stringbuffer = Calc(tempdata[i].c_str());
-				tempdata[i] = stringbuffer;
-			}
+			stringbuffer = Calc(tempdata[i].c_str());
+			tempdata[i] = stringbuffer;
 		}
 	}
 	return (int)tempdata.size();

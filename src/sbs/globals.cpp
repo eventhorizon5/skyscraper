@@ -48,6 +48,15 @@ bool IsEven(int Number)
 		return false;
 }
 
+bool IsNumeric(char character)
+{
+	//test to see if a character is numeric
+
+	if (character > 47 && character < 58)
+		return true;
+	return false;
+}
+
 bool IsNumeric(const char *string)
 {
 	//test to see if a string is numeric

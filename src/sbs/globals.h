@@ -54,6 +54,7 @@
 #endif
 
 SBSIMPEXP bool IsEven(int Number);
+SBSIMPEXP bool IsNumeric(char character);
 SBSIMPEXP bool IsNumeric(const char *string);
 SBSIMPEXP bool IsNumeric(const char *string, int &number);
 SBSIMPEXP bool IsNumeric(const char *string, float &number);
