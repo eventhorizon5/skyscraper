@@ -3659,9 +3659,9 @@ int ScriptProcessor::ProcFloors()
 		if (params == 14)
 			compat = 2;
 
+		//check numeric values
 		if (compat == 1)
 		{
-			//check numeric values
 			for (int i = 3; i <= 11; i++)
 			{
 				if (i == 6 || i == 9) //skip non-numeric parameters
@@ -3674,7 +3674,6 @@ int ScriptProcessor::ProcFloors()
 		}
 		else if (compat == 2)
 		{
-			//check numeric values
 			for (int i = 5; i <= 13; i++)
 			{
 				if (i == 8 || i == 11) //skip non-numeric parameters
@@ -3690,7 +3689,6 @@ int ScriptProcessor::ProcFloors()
 			if (params != 15)
 				return ScriptError("Incorrect number of parameters");
 
-			//check numeric values
 			for (int i = 6; i <= 14; i++)
 			{
 				if (i == 9 || i == 12) //skip non-numeric parameters
@@ -3849,7 +3847,6 @@ int ScriptProcessor::ProcFloors()
 			}
 			compat = 1;
 		}
-		//check numeric values
 		if (params == 13)
 		{
 			for (int i = 0; i <= 12; i++)
@@ -3861,7 +3858,6 @@ int ScriptProcessor::ProcFloors()
 			}
 			compat = 2;
 		}
-		//check numeric values
 		if (params == 14)
 		{
 			for (int i = 0; i <= 13; i++)
@@ -3873,7 +3869,6 @@ int ScriptProcessor::ProcFloors()
 			}
 			compat = 3;
 		}
-		//check numeric values
 		if (params == 15)
 		{
 			for (int i = 0; i <= 14; i++)
@@ -6241,10 +6236,10 @@ int ScriptProcessor::ProcElevators()
 		float hoffset = 0, voffset = 0;
 		int compat = 0;
 
+		//check numeric values
 		if (params == 7)
 		{
 			//1.4 compatibility mode
-			//check numeric values
 			for (int i = 0; i <= 6; i++)
 			{
 				if (i == 1)
@@ -6259,7 +6254,6 @@ int ScriptProcessor::ProcElevators()
 			if (IsNumeric(tempdata[2].c_str()) == true)
 			{
 				//1.5 compatibility mode
-				//check numeric values
 				for (int i = 0; i <= 8; i++)
 				{
 					if (i == 1 || i == 4)
@@ -6276,7 +6270,6 @@ int ScriptProcessor::ProcElevators()
 		if (params == 8 || params == 10)
 		{
 			//pre-Alpha 6 compatibility
-			//check numeric values
 			for (int i = 0; i <= 7; i++)
 			{
 				if (i == 1)
@@ -6295,7 +6288,6 @@ int ScriptProcessor::ProcElevators()
 		}
 		if (params == 9 || params == 11)
 		{
-			//check numeric values
 			for (int i = 0; i <= 8; i++)
 			{
 				if (i == 1)
@@ -6354,10 +6346,10 @@ int ScriptProcessor::ProcElevators()
 		float hoffset = 0, voffset = 0;
 		int compat = 0;
 
+		//check numeric values
 		if (params == 7)
 		{
 			//1.4 compatibility mode
-			//check numeric values
 			for (int i = 1; i <= 6; i++)
 			{
 				if (i == 1 || i == 4)
@@ -6372,7 +6364,6 @@ int ScriptProcessor::ProcElevators()
 			if (IsNumeric(tempdata[2].c_str()) == true)
 			{
 				//1.5 compatibility mode
-				//check numeric values
 				for (int i = 1; i <= 8; i++)
 				{
 					if (i == 1 || i == 4)
@@ -6388,7 +6379,6 @@ int ScriptProcessor::ProcElevators()
 		if (params == 8 || params == 10)
 		{
 			//pre-Alpha 6 compatibility
-			//check numeric values
 			for (int i = 1; i <= 7; i++)
 			{
 				if (i == 1)
@@ -6407,7 +6397,6 @@ int ScriptProcessor::ProcElevators()
 		}
 		if (params == 9 || params == 11)
 		{
-			//check numeric values
 			for (int i = 1; i <= 8; i++)
 			{
 				if (i == 1)
@@ -6604,10 +6593,10 @@ int ScriptProcessor::ProcElevators()
 		if (params != 17 && params != 18)
 			return ScriptError("Incorrect number of parameters");
 
+		//check numeric values
 		bool compat = false;
 		if (params == 17)
 		{
-			//check numeric values
 			for (int i = 8; i <= 16; i++)
 			{
 				if (i == 11 || i == 14)
@@ -6621,7 +6610,6 @@ int ScriptProcessor::ProcElevators()
 		}
 		else
 		{
-			//check numeric values
 			for (int i = 9; i <= 17; i++)
 			{
 				if (i == 12 || i == 15)
