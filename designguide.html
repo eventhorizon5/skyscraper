@@ -929,13 +929,15 @@ Example: <font face="Courier New, Courier, mono" size="2">CallButtonElevators =
 <p align="left"><strong>13. CreateCallButtons</strong> - creates a call button
 set<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">CreateCallButtons
-<em>BackTexture</em>, <em>UpButtonTexture</em>, <em>UpButtonTexture_Lit,
+<em>Sound</em>, <em>BackTexture</em>, <em>UpButtonTexture</em>, <em>UpButtonTexture_Lit,
 DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction,
 BackWidth, BackHeight, ShowBack, tw, th<br>
-</em></font>Example:<font face="Courier New, Courier, mono"
-size="2"><em></em>Create Marble, CallButtonsUp, CallButtonsUpLit,
+</em></font>Example: <font face="Courier New, Courier, mono"
+size="2">CreateCallButtons switch.wav, Marble, CallButtonsUp, CallButtonsUpLit,
 CallButtonsDown, CallButtonsDownLit, -10, 0, 4, right, 0.5, 1, true, 1,
 1</font></p>
+
+<p align="left"><em>Sound</em> is the filename of the sound to play when the call buttons are pressed</p>
 
 <p align="left"><em>BackTexture</em> is the texture of the wall plate behind
 the buttons</p>

@@ -3653,11 +3653,13 @@ int ScriptProcessor::ProcFloors()
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
 
-		bool compat = false;
+		int compat = 0;
 		if (params == 12)
-			compat = true;
+			compat = 1;
+		if (params == 14)
+			compat = 2;
 
-		if (compat == true)
+		if (compat == 1)
 		{
 			//check numeric values
 			for (int i = 3; i <= 11; i++)
@@ -3670,11 +3672,8 @@ int ScriptProcessor::ProcFloors()
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
 		}
-		else
+		else if (compat == 2)
 		{
-			if (params != 14)
-				return ScriptError("Incorrect number of parameters");
-
 			//check numeric values
 			for (int i = 5; i <= 13; i++)
 			{
@@ -3683,14 +3682,32 @@ int ScriptProcessor::ProcFloors()
 				if (!IsNumeric(tempdata[i].c_str()))
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
+			if (warn_deprecated == true)
+				ScriptWarning("Syntax deprecated");
+		}
+		else
+		{
+			if (params != 15)
+				return ScriptError("Incorrect number of parameters");
+
+			//check numeric values
+			for (int i = 6; i <= 14; i++)
+			{
+				if (i == 9 || i == 12) //skip non-numeric parameters
+					i++;
+				if (!IsNumeric(tempdata[i].c_str()))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
 		}
 
 		//create call button
 		Object *obj = 0;
-		if (compat == true)
-			obj = floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
+		if (compat == 1)
+			obj = floor->AddCallButtons(callbutton_elevators, "", tempdata[0].c_str(), tempdata[1].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
+		else if (compat == 2)
+			obj = floor->AddCallButtons(callbutton_elevators, "", tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
-			obj = floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+			obj = floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), tempdata[9].c_str(), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
 		if (obj)
 		{

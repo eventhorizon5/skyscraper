@@ -33,7 +33,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, const char *sound_file, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a set of call buttons
 
@@ -81,8 +81,10 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	Locked = false;
 	KeyID = 0;
 
-	if (sbs->Verbose)
-		Report("Created");
+	//create sound object
+	sound = new Sound(object, "CallButton", true);
+	sound->Load(sound_file);
+	sound->SetPosition(Ogre::Vector3(CenterX, sbs->GetFloor(floor)->GetBase() + voffset, CenterZ));
 
 	sbs->ResetTextureMapping(true);
 
@@ -239,6 +241,9 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	}
 	sbs->ResetTextureMapping();
 	sbs->TexelOverride = false;
+
+	if (sbs->Verbose)
+		Report("Created");
 }
 
 CallButton::~CallButton()
@@ -252,6 +257,13 @@ CallButton::~CallButton()
 	if (CallButtonBackMesh)
 		delete CallButtonBackMesh;
 	CallButtonBackMesh = 0;
+
+	if (sound)
+	{
+		sound->object->parent_deleting = true;
+		delete sound;
+	}
+	sound = 0;
 
 	//unregister with parent floor object
 	if (sbs->FastDelete == false)
@@ -316,6 +328,10 @@ bool CallButton::Call(bool direction)
 	}
 	if (bypass == true)
 		return ReportError("Elevators are in fire phase 1 recall mode");
+
+	//play sound
+	sound->Loop(false);
+	sound->Play();
 
 	//set light and direction value
 
