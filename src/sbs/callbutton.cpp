@@ -82,7 +82,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	KeyID = 0;
 
 	//create sound object
-	sound = new Sound(object, "CallButton", true);
+	sound = new Sound(object, "Call Button Sound", true);
 	sound->Load(sound_file);
 	sound->SetPosition(Ogre::Vector3(CenterX, sbs->GetFloor(floor)->GetBase() + voffset, CenterZ));
 
