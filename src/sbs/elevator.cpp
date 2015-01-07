@@ -200,6 +200,8 @@ Elevator::Elevator(int number)
 	MotorEmergencyStopSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.MotorEmergencyStopSound", "");
 	AutoAdjustSound = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoAdjustSound", false);
 	SkipFloorSound = false;
+	DirMessageSound = false;
+	DoorMessageSound = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -1379,6 +1381,10 @@ void Elevator::MonitorLoop()
 
 	//process queued sounds
 	announcesnd->ProcessQueue();
+
+	//reset message sound status
+	DirMessageSound = false;
+	DoorMessageSound = false;
 
 	//elevator movement
 	if (MoveElevator == true)
@@ -4791,7 +4797,7 @@ bool Elevator::PlayFloorSound()
 bool Elevator::PlayMessageSound(bool type)
 {
 	//play message sound
-	//if type is true, play up/down sounds, otherwise play door open/close sounds
+	//if type is true, play directional up/down sounds, otherwise play door open/close sounds
 	//if direction is true, play up sound; otherwise play down sound
 
 	if (InServiceMode() == true)
@@ -4804,7 +4810,8 @@ bool Elevator::PlayMessageSound(bool type)
 
 	if (type == true)
 	{
-		if (UseDirMessageSounds == false)
+		//exit if directional message sounds are off, or one has already been queued
+		if (UseDirMessageSounds == false || DirMessageSound == true)
 			return false;
 
 		int direction = LastChimeDirection;
@@ -4832,10 +4839,13 @@ bool Elevator::PlayMessageSound(bool type)
 
 			newsound = DownMessageSound;
 		}
+
+		DirMessageSound = true;
 	}
 	else
 	{
-		if (UseDoorMessageSounds == false)
+		//exit if door message sounds are off, or one has already been queued
+		if (UseDoorMessageSounds == false || DoorMessageSound == true)
 			return false;
 
 		if (AreDoorsOpening() == true)
@@ -4860,6 +4870,8 @@ bool Elevator::PlayMessageSound(bool type)
 		}
 		else
 			return false;
+
+		DoorMessageSound = true;
 	}
 
 	//change the asterisk into the current floor number

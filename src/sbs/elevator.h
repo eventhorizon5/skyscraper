@@ -435,6 +435,8 @@ private:
 	bool FinishedMove;
 	bool RandomLobbySet;
 	bool SoundsQueued;
+	bool DirMessageSound; //true if a directional message sound is queued, to prevent repeats
+	bool DoorMessageSound; //true if a door message sound is queued, to prevent repeats
 
 	//internal data for door open/close hold feature
 	int doorhold_direction;
