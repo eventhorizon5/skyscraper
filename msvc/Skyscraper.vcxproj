@@ -214,8 +214,8 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
-      <Command>rem erase ..\src\frontend\revmain.h
-rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+      <Command>erase ..\src\frontend\revmain.h
+..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
 </Command>
     </PreBuildEvent>
     <Midl>
@@ -278,8 +278,8 @@ rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
-      <Command>rem erase ..\src\frontend\revmain.h
-rem ..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
+      <Command>erase ..\src\frontend\revmain.h
+..\svnrev\svnrev.exe -o..\src\frontend\revmain.h -i ..\src\frontend\*.cpp ..\src\frontend\*.h
 </Command>
     </PreBuildEvent>
     <Midl>
