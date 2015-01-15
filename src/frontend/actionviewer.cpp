@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.9 Alpha - Action Viewer
-	Copyright (C)2003-2014 Ryan Thoryk
+	Copyright (C)2003-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
