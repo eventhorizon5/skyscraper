@@ -1621,7 +1621,6 @@ bool Skyscraper::Load()
 
 	if (!processor->LoadDataFile(BuildingFile.c_str()))
 	{
-		ReportFatalError("Error loading building file\n");
 		Unload();
 		return false;
 	}

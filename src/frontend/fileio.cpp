@@ -737,11 +737,18 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	//if insert location is greater than array size, return with error
 	if (insert == true)
 		if (location > (int)BuildingData.size() - 1 || location < 0)
+		{
+			skyscraper->ReportError("Error loading building file: cannot insert file beyond end of script");
 			return false;
+		}
 
 	//make sure file exists
 	if (Simcore->FileExists(Filename.c_str()) == false)
+	{
+		if (insert == false)
+			skyscraper->ReportFatalError("Error loading building file:\nFile does not exist");
 		return false;
+	}
 
 	//Simcore->Report(Filename);
 
@@ -759,6 +766,8 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	}
 	catch (Ogre::Exception &e)
 	{
+		if (insert == false)
+			skyscraper->ReportFatalError("Error loading building file\nDetails:" + e.getDescription());
 		return false;
 	}
 
