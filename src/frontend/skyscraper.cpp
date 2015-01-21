@@ -271,7 +271,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	InLoop = false;
 	Center();
 	wxString title;
-	title = wxT("Skyscraper 1.9 Alpha");
+	title = wxT("Skyscraper 2.0 Alpha 9");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);
