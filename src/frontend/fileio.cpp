@@ -438,10 +438,7 @@ breakpoint:
 			std::string filename = Simcore->VerifyFile(includefile.c_str());
 			bool result = LoadDataFile(filename.c_str(), true, line);
 			if (result == false)
-			{
-				ScriptError("File not found");
 				goto Error;
-			}
 			skyscraper->Report("Inserted file " + includefile);
 
 			line--;
@@ -736,21 +733,26 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 
 	//if insert location is greater than array size, return with error
 	if (insert == true)
+	{
 		if (location > (int)BuildingData.size() - 1 || location < 0)
 		{
-			skyscraper->ReportError("Error loading building file: cannot insert file beyond end of script");
+			ScriptError("Cannot insert file beyond end of script");
 			return false;
 		}
+	}
 
 	//make sure file exists
 	if (Simcore->FileExists(Filename.c_str()) == false)
 	{
 		if (insert == false)
-			skyscraper->ReportFatalError("Error loading building file:\nFile does not exist");
+			skyscraper->ReportFatalError("Error loading building file:\nFile '" + Filename + "' does not exist");
+		else
+			ScriptError("File not found");
 		return false;
 	}
 
-	//Simcore->Report(Filename);
+	if (Simcore->Verbose)
+		Simcore->Report("Filename: '" + Filename + "'");
 
 	//load file
 #if OGRE_VERSION >= 0x00010900
@@ -766,14 +768,24 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	}
 	catch (Ogre::Exception &e)
 	{
+		std::string msg = "Error loading building file\nDetails:" + e.getDescription();
 		if (insert == false)
-			skyscraper->ReportFatalError("Error loading building file\nDetails:" + e.getDescription());
+			skyscraper->ReportFatalError(msg);
+		else
+			ScriptError(msg);
 		return false;
 	}
 
 	//exit if an error occurred while loading
 	if(filedata.isNull())
+	{
+		std::string msg = "Error loading building file";
+		if (insert == false)
+			skyscraper->ReportFatalError(msg);
+		else
+			ScriptError(msg);
 		return false;
+	}
 
 	Ogre::DataStreamPtr file(new Ogre::MemoryDataStream(Filename.c_str(), filedata, true, true));
 
