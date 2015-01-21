@@ -768,7 +768,7 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	}
 	catch (Ogre::Exception &e)
 	{
-		std::string msg = "Error loading building file\nDetails:" + e.getDescription();
+		std::string msg = "Error loading building file\nDetails: " + e.getDescription();
 		if (insert == false)
 			skyscraper->ReportFatalError(msg);
 		else

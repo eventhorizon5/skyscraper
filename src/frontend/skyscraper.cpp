@@ -139,7 +139,7 @@ bool Skyscraper::OnInit(void)
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error loading skyscraper.ini file\nDetails:" + e.getDescription());
+		return ReportFatalError("Error loading skyscraper.ini file\nDetails: " + e.getDescription());
 	}
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
@@ -397,7 +397,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error during initial OGRE check\nDetails:" + e.getDescription());
+		return ReportFatalError("Error during initial OGRE check\nDetails: " + e.getDescription());
 	}
 
 	if(!mRoot)
@@ -417,7 +417,7 @@ bool Skyscraper::Initialize()
 		}
 		catch (Ogre::Exception &e)
 		{
-			return ReportFatalError("Error initializing OGRE\nDetails:" + e.getDescription());
+			return ReportFatalError("Error initializing OGRE\nDetails: " + e.getDescription());
 		}
 	}
 
@@ -429,7 +429,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error creating overlay system\nDetails:" + e.getDescription());
+		return ReportFatalError("Error creating overlay system\nDetails: " + e.getDescription());
 	}
 #endif
 
@@ -448,7 +448,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error configuring render system\nDetails:" + e.getDescription());
+		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription());
 	}
 
 	//initialize render window
@@ -459,7 +459,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error initializing render window\nDetails:" + e.getDescription());
+		return ReportFatalError("Error initializing render window\nDetails: " + e.getDescription());
 	}
 
 	//get renderer info
@@ -477,7 +477,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error loading resources.cfg\nDetails:" + e.getDescription());
+		return ReportFatalError("Error loading resources.cfg\nDetails: " + e.getDescription());
 	}
 	Ogre::ConfigFile::SectionIterator seci = cf.getSectionIterator();
 
@@ -507,7 +507,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error initializing resources\nDetails:" + e.getDescription());
+		return ReportFatalError("Error initializing resources\nDetails: " + e.getDescription());
 	}
 	
 	//create scene manager
@@ -517,7 +517,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error creating scene manager\nDetails:" + e.getDescription());
+		return ReportFatalError("Error creating scene manager\nDetails: " + e.getDescription());
 	}
 
 #if OGRE_VERSION >= 0x00010900
@@ -536,7 +536,7 @@ bool Skyscraper::Initialize()
 	}
 	catch (Ogre::Exception &e)
 	{
-		return ReportFatalError("Error creating camera and viewport\nDetails:" + e.getDescription());
+		return ReportFatalError("Error creating camera and viewport\nDetails: " + e.getDescription());
 	}
 
 	//setup texture filtering
@@ -599,7 +599,7 @@ bool Skyscraper::Initialize()
 		}
 		catch (Ogre::Exception &e)
 		{
-			return ReportFatalError("Error initializing Caelum plugin:\nDetails:" + e.getDescription());
+			return ReportFatalError("Error initializing Caelum plugin:\nDetails: " + e.getDescription());
 		}
 	}
 
@@ -1916,7 +1916,7 @@ bool Skyscraper::InitSky()
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportFatalError("Error initializing Caelum:\nDetails:" + e.getDescription());
+		ReportFatalError("Error initializing Caelum:\nDetails: " + e.getDescription());
 	}
 	catch (...)
 	{
@@ -1942,7 +1942,7 @@ bool Skyscraper::InitSky()
 		}
 		catch (Ogre::Exception &e)
 		{
-			ReportFatalError("Error setting Caelum parameters:\nDetails:" + e.getDescription());
+			ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription());
 		}
 		catch (...)
 		{
