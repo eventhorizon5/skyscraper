@@ -1845,7 +1845,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 	}
 
-	if (GetFloor() != oldfloor)
+	if (GetFloor() != oldfloor && Leveling == false)
 	{
 		if (sbs->Verbose)
 			Report("on floor " + ToString2(GetFloor()));
