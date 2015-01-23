@@ -1830,9 +1830,9 @@ void Elevator::MoveElevatorToFloor()
 		bool pass = false;
 
 		//determine if elevator will pass floor, only for down movement
-		if (Direction == -1 && elevposition.y >= alt && elevposition.y + movement.y < alt)
+		if (ActiveDirection == -1 && elevposition.y >= alt && elevposition.y + movement.y < alt)
 			pass = true;
-		if (Direction == 1)
+		if (ActiveDirection == 1)
 			pass = true;
 
 		//if elevator hasn't started leveling, and is about to arrive at the destination, cancel any update
