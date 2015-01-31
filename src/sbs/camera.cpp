@@ -569,7 +569,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (obj)
 	{
 		//delete wall if ctrl is pressed
-		if (wall && ctrl == true && object_number > 0 && right == false)
+		if (wall && ctrl == true && shift == false && right == false && object_number > 0)
 		{
 			if (std::string(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
@@ -590,10 +590,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 				if (control)
 				{
-					if (shift == false)
-						control->Press(right);
-					else
+					if (ctrl == true && shift == true)
 						control->ToggleLock();
+					else
+						control->Press(right);
 				}
 			}
 
@@ -605,13 +605,15 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				if (door)
 				{
 					//delete door if ctrl key is pressed
-					if (ctrl == true)
+					if (ctrl == true && shift == false)
 					{
 						sbs->DeleteObject(obj->GetParent());
 						return;
 					}
 
-					if (shift == false)
+					if (ctrl == true && shift == true)
+						door->ToggleLock(pos);
+					else
 					{
 						if (door->IsOpen() == false)
 						{
@@ -628,8 +630,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 								door->Open(pos);
 						}
 					}
-					else
-						door->ToggleLock(pos);
 				}
 			}
 
@@ -641,7 +641,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				if (model)
 				{
 					//delete model if ctrl key is pressed
-					if (ctrl == true)
+					if (ctrl == true && shift == false)
 					{
 						sbs->DeleteObject(obj->GetParent());
 						return;
@@ -677,24 +677,26 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			std::string direction = meshname.substr(index2 + 1);
 			TrimString(direction);
 
-			if (shift == false)
+			if (ctrl == true && shift == true)
+			{
+				//if ctrl and shift are held, toggle lock
+				buttonref->ToggleLock();
+			}
+			else if (shift == true)
+			{
+				//if shift is held, change button status instead
+				if (direction == "Up")
+					buttonref->UpLight(!buttonref->UpStatus);
+				else
+					buttonref->DownLight(!buttonref->DownStatus);
+			}
+			else
 			{
 				//press button
 				if (direction == "Up")
 					buttonref->Call(true);
 				else
 					buttonref->Call(false);
-			}
-			else
-			{
-				//if shift is held, change button status instead
-				/*if (direction == "Up")
-					buttonref->UpLight(!buttonref->UpStatus);
-				else
-					buttonref->DownLight(!buttonref->DownStatus);*/
-
-				//if shift is held, toggle lock
-				buttonref->ToggleLock();
 			}
 		}
 	}
