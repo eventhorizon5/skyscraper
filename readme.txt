@@ -120,7 +120,8 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 -the selection order of controls (buttons and switches) can be reversed by right-clicking them
 -elevator shaft doors can be manually opened and closed by holding down the Shift key and clicking on them - note that this only works when the interlocks are released, which can be done in the elevator editor by clicking "Set" next to "Interlocks" on the related elevator
 -polygons (wall/floor sides) can be deleted by holding down Ctrl and clicking on the object
--doors, controls/buttons, and call buttons can be locked/unlocked by holding down the Shift key and clicking on the side to lock, if you have the associated key
+-doors, controls/buttons, and call buttons can be locked/unlocked by holding down both the Ctrl and Shift keys while clicking on the side to lock, if you have the associated key
+-call button light status can be changed by shift-clicking the related button
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -202,7 +203,8 @@ Alt + PgDown/L - Spin left
 Plus or ] - Zoom in (decrease FOV angle)
 Minus or [ - Zoom out (increase FOV angle)
 V - Toggle noclip mode (gravity and collisions off)
-Shift-click - lock or unlock objects
+Ctrl-Shift-click - lock or unlock objects
+Shift-click - toggle call button status
 -------
 
 

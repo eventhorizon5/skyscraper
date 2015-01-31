@@ -1399,6 +1399,7 @@ void Elevator::MoveElevatorToFloor()
 	SBS_PROFILE("Elevator::MoveElevatorToFloor");
 
 	Ogre::Vector3 movement = Ogre::Vector3(0, 0, 0);
+	bool StartLeveling = false;
 
 	//wait until doors are fully closed if WaitForDoors is true
 	if (WaitForDoors == true)
@@ -1815,10 +1816,48 @@ void Elevator::MoveElevatorToFloor()
 			if (sbs->Verbose)
 				Report("leveling enabled");
 			Leveling = true;
+			StartLeveling = true;
 
 			if (NotifyEarly == 1 && Parking == false)
 				NotifyArrival(GotoFloor);
 		}
+	}
+
+	//play floor beep and update indicators, if passing by or arriving at a floor
+	if ((GetFloor() != oldfloor && Leveling == false) || StartLeveling == true)
+	{
+		float alt = sbs->GetFloor(GetFloor())->Altitude;
+		bool pass = false;
+
+		//determine if elevator will pass floor, only for down movement
+		if (ActiveDirection == -1 && elevposition.y >= alt && elevposition.y + movement.y < alt)
+			pass = true;
+		if (ActiveDirection == 1)
+			pass = true;
+
+		//if elevator hasn't started leveling, and is about to arrive at the destination, cancel any update
+		if (GetFloor() == GotoFloor && StartLeveling == false)
+			pass = false;
+
+		if (pass == true || StartLeveling == true)
+		{
+			if (sbs->Verbose)
+				Report("on floor " + ToString2(GetFloor()));
+
+			//play floor beep sound if floor is a serviced floor
+			if (IsServicedFloor(GetFloor()) == true)
+				PlayFloorBeep();
+
+			//update floor indicators
+			UpdateFloorIndicators();
+
+			//update floor indicators on current camera floor
+			if (sbs->GetFloor(sbs->camera->CurrentFloor))
+				sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
+
+			oldfloor = GetFloor();
+		}
+		StartLeveling = false;
 	}
 
 	if (Leveling == true)
@@ -1844,25 +1883,6 @@ void Elevator::MoveElevatorToFloor()
 				FinishMove();
 		}
 	}
-
-	if (GetFloor() != oldfloor)
-	{
-		if (sbs->Verbose)
-			Report("on floor " + ToString2(GetFloor()));
-
-		//play floor beep sound if floor is a serviced floor
-		if (IsServicedFloor(GetFloor()) == true)
-			PlayFloorBeep();
-
-		//update floor indicators
-		UpdateFloorIndicators();
-
-		//update floor indicators on current camera floor
-		if (sbs->GetFloor(sbs->camera->CurrentFloor))
-			sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateFloorIndicators(Number);
-	}
-
-	oldfloor = GetFloor();
 
 	//exit if elevator's running
 	if (fabsf(ElevatorRate) != 0)
