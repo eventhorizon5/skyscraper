@@ -315,17 +315,22 @@ bool CallButton::Call(bool direction)
 	if (direction == false && DownStatus == true)
 		return ReportError("Down call has already been made");
 
-	//reject call if all elevators are in fire phase 1 mode
+	//check to make sure elevator objects are valid
+	//also reject call if all elevators are in fire phase 1 mode
 	bool bypass = true;
+	bool isvalid = false;
 	for (int i = 0; i < (int)Elevators.size(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
 		{
+			isvalid = true;
 			if (elevator->FireServicePhase1 != 1)
 				bypass = false;
 		}
 	}
+	if (isvalid == false)
+		return ReportError("No valid elevators found");
 	if (bypass == true)
 		return ReportError("Elevators are in fire phase 1 recall mode");
 
