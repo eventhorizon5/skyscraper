@@ -1737,10 +1737,10 @@ void editelevator::On_bSetNudge_Click(wxCommandEvent& event)
 
 void editelevator::On_bDoorSensor_Click(wxCommandEvent& event)
 {
-	if (elevator && door)
+	if (elevator)
 	{
-		int doornum = sDoor->GetThumbPosition();
-		bool status = door->EnableSensor;
-		door->EnableSensor = !status;
+		int door = sDoor->GetThumbPosition();
+		bool status = elevator->GetSensorStatus(door);
+		elevator->EnableSensor(!status, door);
 	}
 }

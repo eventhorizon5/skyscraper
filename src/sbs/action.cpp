@@ -401,6 +401,22 @@ bool Action::Run(Object *parent)
 			elevator->HoldDoors(number);
 			return true;
 		}
+		if (StartsWith(command_name, "sensoron", false) == true)
+		{
+			int number = 0;
+			if (command_name.length() > 8)
+				number = atoi(command_name.substr(8, command_name.length() - 8).c_str());
+			elevator->EnableSensor(true, number);
+			return true;
+		}
+		if (StartsWith(command_name, "sensoroff", false) == true)
+		{
+			int number = 0;
+			if (command_name.length() > 9)
+				number = atoi(command_name.substr(9, command_name.length() - 9).c_str());
+			elevator->EnableSensor(false, number);
+			return true;
+		}
 		if (StartsWith(command_name, "sensor", false) == true && elevator->Direction == 0)
 		{
 			int number = 0;
