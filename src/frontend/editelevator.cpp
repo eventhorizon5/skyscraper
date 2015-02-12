@@ -1256,7 +1256,7 @@ void editelevator::Loop()
 		txtDoorWidth->SetValue(TruncateNumber(door->GetDoorWrapper()->Width, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
 		txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
-		txtDoorSensor->SetValue(wxString::FromAscii(BoolToString(door->EnableSensor)));
+		txtDoorSensor->SetValue(wxString::FromAscii(BoolToString(door->GetSensorStatus())));
 	}
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));

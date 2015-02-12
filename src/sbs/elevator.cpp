@@ -5692,13 +5692,13 @@ bool Elevator::GetSensorStatus(int number)
 	if (number > 0 && number < (int)DoorArray.size())
 	{
 		if (DoorArray[number])
-			return DoorArray[number]->EnableSensor;
+			return DoorArray[number]->GetSensorStatus();
 	}
 	else if (number == 0)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
 		{
-			if (DoorArray[number]->EnableSensor == true)
+			if (DoorArray[number]->GetSensorStatus() == true)
 				return true;
 		}
 	}
@@ -5712,11 +5712,11 @@ void Elevator::EnableSensor(bool value, int number)
 	if (number > 0 && number < (int)DoorArray.size())
 	{
 		if (DoorArray[number])
-			DoorArray[number]->EnableSensor = value;
+			DoorArray[number]->EnableSensor(value);
 	}
 	else if (number == 0)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
-			DoorArray[number]->EnableSensor = value;
+			DoorArray[number]->EnableSensor(value);
 	}
 }

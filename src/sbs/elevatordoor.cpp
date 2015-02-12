@@ -70,7 +70,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	sensor = 0;
 	sensor_action = 0;
 	reset_action = 0;
-	EnableSensor = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true);
+	sensor_enabled = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true);
 	SensorSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.SensorSound", "");
 
 	//create main door object
@@ -1016,7 +1016,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		chime->SetPosition(Ogre::Vector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
 
 	//create door sensor
-	if (EnableSensor == true && ShaftDoor == false && elev->AutoDoors == true)
+	if (GetSensorStatus() == true && ShaftDoor == false && elev->AutoDoors == true)
 	{
 		float sensor_width = sbs->camera->cfg_body_width / 4;
 		Ogre::Vector3 min (x1 - sensor_width, wrapper->altitude, z1 - sensor_width);
@@ -2086,7 +2086,7 @@ bool ElevatorDoor::GetNudgeStatus()
 
 void ElevatorDoor::CheckSensor()
 {
-	if (EnableSensor == true && sensor && (AreDoorsOpen() == true || OpenDoor != 0))
+	if (GetSensorStatus() == true && sensor && (AreDoorsOpen() == true || OpenDoor != 0))
 		sensor->Check();
 }
 
@@ -2118,4 +2118,30 @@ bool ElevatorDoor::AreDoorsMoving()
 	//return true if doors are moving
 
 	return (OpenDoor != 0);
+}
+
+void ElevatorDoor::EnableSensor(bool value)
+{
+	//enable or disable door sensor
+
+	std::string doornumber;
+	if (elev->NumDoors > 1)
+	{
+		doornumber = " ";
+		doornumber = doornumber + ToString(Number);
+	}
+
+	if (value == true)
+		elev->Report("Doors" + doornumber + ": enabling sensor");
+	else
+		elev->Report("Doors" + doornumber + ": disabling sensor");
+
+	sensor_enabled = value;
+}
+
+bool ElevatorDoor::GetSensorStatus()
+{
+	//get status of door sensor
+
+	return sensor_enabled;
 }
