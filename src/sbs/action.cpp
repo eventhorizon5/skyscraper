@@ -154,11 +154,11 @@ bool Action::Run(Object *parent)
 	std::string parent_type = parent->GetType();
 	if (parent_type == "Floor")
 		floor = (Floor*)parent->GetRawObject();
-	if (parent_type == "Elevator")
+	else if (parent_type == "Elevator")
 		elevator = (Elevator*)parent->GetRawObject();
-	if (parent_type == "Shaft")
+	else if (parent_type == "Shaft")
 		shaft = (Shaft*)parent->GetRawObject();
-	if (parent_type == "Stairs")
+	else if (parent_type == "Stairs")
 		stairs = (Stairs*)parent->GetRawObject();
 
 	//report the action used
@@ -196,6 +196,7 @@ bool Action::Run(Object *parent)
 				if (command_name.length() > 5)
 					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 				elevator->CloseDoors(number, 2, 0, true);
+				return true;
 			}
 			if (StartsWith(command_name, "openextmanual", false) == true && elevator->Direction == 0)
 			{
@@ -210,6 +211,7 @@ bool Action::Run(Object *parent)
 				if (command_name.length() > 5)
 					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 				elevator->CloseDoors(number, 3, 0, true);
+				return true;
 			}
 			if (StartsWith(command_name, "openmanual", false) == true && elevator->Direction == 0)
 			{
@@ -224,6 +226,7 @@ bool Action::Run(Object *parent)
 				if (command_name.length() > 5)
 					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 				elevator->CloseDoors(number, 1, 0, true);
+				return true;
 			}
 			if (StartsWith(command_name, "openint", false) == true && elevator->Direction == 0)
 			{
@@ -238,6 +241,7 @@ bool Action::Run(Object *parent)
 				if (command_name.length() > 5)
 					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 				elevator->CloseDoors(number, 2, 0, false);
+				return true;
 			}
 			if (StartsWith(command_name, "openext", false) == true && elevator->Direction == 0)
 			{
@@ -252,6 +256,7 @@ bool Action::Run(Object *parent)
 				if (command_name.length() > 5)
 					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 				elevator->CloseDoors(number, 3, elevator->GetFloor(), false);
+				return true;
 			}
 			if (StartsWith(command_name, "open", false) == true && elevator->Direction == 0)
 			{
@@ -266,18 +271,28 @@ bool Action::Run(Object *parent)
 				if (command_name.length() > 5)
 					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 				elevator->CloseDoors(number);
+				return true;
 			}
 		}
 		if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
 			return elevator->CallCancel();
 		if (command_name == "run")
+		{
 			elevator->SetRunState(true);
+			return true;
+		}
 		if (command_name == "stop")
+		{
 			elevator->SetRunState(false);
+			return true;
+		}
 		if (command_name == "estop")
 			return elevator->Stop(true);
 		if (command_name == "alarm")
+		{
 			elevator->Alarm();
+			return true;
+		}
 		if (command_name == "fire2off")
 			return elevator->EnableFireService2(0);
 		if (command_name == "fire2on")
@@ -305,13 +320,25 @@ bool Action::Run(Object *parent)
 		if (command_name == "acpoff")
 			return elevator->EnableACP(false);
 		if (command_name == "fanon")
+		{
 			elevator->Fan = true;
+			return true;
+		}
 		if (command_name == "fanoff")
+		{
 			elevator->Fan = false;
+			return true;
+		}
 		if (command_name == "musicon")
+		{
 			elevator->MusicOn = true;
+			return true;
+		}
 		if (command_name == "musicoff")
+		{
 			elevator->MusicOn = false;
+			return true;
+		}
 		if (command_name == "upon")
 			return elevator->SetUpButton(true);
 		if (command_name == "upoff")
@@ -327,22 +354,43 @@ bool Action::Run(Object *parent)
 		if (command_name == "return")
 			return elevator->ReturnToNearestFloor();
 		if (command_name == "up")
+		{
 			elevator->Up();
+			return true;
+		}
 		if (command_name == "down")
+		{
 			elevator->Down();
+			return true;
+		}
 		if (command_name == "interlockson")
+		{
 			elevator->Interlocks = true;
+			return true;
+		}
 		if (command_name == "interlocksoff")
+		{
 			elevator->Interlocks = false;
+			return true;
+		}
 
 		if (callbutton)
 		{
 			if (command_name == "fire1off")
+			{
 				callbutton->FireService(0);
+				return true;
+			}
 			if (command_name == "fire1on")
+			{
 				callbutton->FireService(1);
+				return true;
+			}
 			if (command_name == "fire1bypass")
+			{
 				callbutton->FireService(2);
+				return true;
+			}
 		}
 
 		if (StartsWith(command_name, "hold", false) == true && elevator->Direction == 0)
@@ -351,6 +399,7 @@ bool Action::Run(Object *parent)
 			if (command_name.length() > 4)
 				number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
 			elevator->HoldDoors(number);
+			return true;
 		}
 		if (StartsWith(command_name, "sensor", false) == true && elevator->Direction == 0)
 		{
@@ -359,6 +408,7 @@ bool Action::Run(Object *parent)
 				number = atoi(command_name.substr(6, command_name.length() - 6).c_str());
 			elevator->OpenDoors(number);
 			elevator->HoldDoors(number, false);
+			return true;
 		}
 		if (StartsWith(command_name, "reset", false) == true && elevator->Direction == 0)
 		{
@@ -366,6 +416,7 @@ bool Action::Run(Object *parent)
 			if (command_name.length() > 5)
 				number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
 			elevator->ResetDoorTimer(number);
+			return true;
 		}
 		if (command_name == "openshaftdoor")
 		{
@@ -374,9 +425,8 @@ bool Action::Run(Object *parent)
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
 					return elevator->OpenDoors(param1, 3, param2, false);
-				else
-					return false;
 			}
+			return false;
 		}
 		if (command_name == "closeshaftdoor")
 		{
@@ -384,10 +434,12 @@ bool Action::Run(Object *parent)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+				{
 					elevator->CloseDoors(param1, 3, param2, false);
-				else
-					return false;
+					return true;
+				}
 			}
+			return false;
 		}
 		if (command_name == "openshaftdoormanual")
 		{
@@ -396,9 +448,8 @@ bool Action::Run(Object *parent)
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
 					return elevator->OpenDoors(param1, 3, param2, true);
-				else
-					return false;
 			}
+			return false;
 		}
 		if (command_name == "closeshaftdoormanual")
 		{
@@ -406,10 +457,12 @@ bool Action::Run(Object *parent)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+				{
 					elevator->CloseDoors(param1, 3, param2, true);
-				else
-					return false;
+					return true;
+				}
 			}
+			return false;
 		}
 	}
 
@@ -425,40 +478,43 @@ bool Action::Run(Object *parent)
 					return sbs->Landscape->ReplaceTexture(command_parameters[0], command_parameters[1]);
 				if (parent_name == "Buildings")
 					return sbs->Buildings->ReplaceTexture(command_parameters[0], command_parameters[1]);
+				return false;
 			}
-
 			if (parent_type == "Floor")
 			{
 				if (floor)
+				{
 					floor->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
+					return true;
+				}
+				return false;
 			}
 			if (parent_type == "Elevator")
 			{
 				if (elevator)
 					return elevator->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
+				return false;
 			}
 			if (parent_type == "Shaft")
 			{
 				if (shaft)
+				{
 					shaft->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
+					return true;
+				}
+				return false;
 			}
 			if (parent_type == "Stairs")
 			{
 				if (stairs)
+				{
 					stairs->ReplaceTexture(command_parameters[0], command_parameters[1]);
-				else
-					return false;
+					return true;
+				}
+				return false;
 			}
-
 		}
-		else
-			return false;
+		return false;
 	}
 
 	if (command_name == "playsound")
@@ -469,15 +525,14 @@ bool Action::Run(Object *parent)
 
 			if (parent_type == "SBS")
 				soundlist = sbs->GetSound(command_parameters[0].c_str());
-
-			if (parent_type == "Floor")
+			else if (parent_type == "Floor")
 			{
 				if (floor)
 					soundlist = floor->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
-			if (parent_type == "Elevator")
+			else if (parent_type == "Elevator")
 			{
 				if (elevator)
 					soundlist = elevator->GetSound(command_parameters[0].c_str());
@@ -504,10 +559,10 @@ bool Action::Run(Object *parent)
 							return result;
 					}
 				}
+				return true;
 			}
 		}
-		else
-			return false;
+		return false;
 	}
 
 	if (command_name == "stopsound")
@@ -518,15 +573,14 @@ bool Action::Run(Object *parent)
 
 			if (parent_type == "SBS")
 				soundlist = sbs->GetSound(command_parameters[0].c_str());
-
-			if (parent_type == "Floor")
+			else if (parent_type == "Floor")
 			{
 				if (floor)
 					soundlist = floor->GetSound(command_parameters[0].c_str());
 				else
 					return false;
 			}
-			if (parent_type == "Elevator")
+			else if (parent_type == "Elevator")
 			{
 				if (elevator)
 					soundlist = elevator->GetSound(command_parameters[0].c_str());
@@ -539,12 +593,12 @@ bool Action::Run(Object *parent)
 				if (soundlist[i])
 					soundlist[i]->Stop();
 			}
+			return true;
 		}
-		else
-			return false;
+		return false;
 	}
 
-	return true;
+	return false;
 }
 
 int Action::GetParentCount()
