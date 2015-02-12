@@ -5684,3 +5684,39 @@ void Elevator::PlayMovingSounds()
 		}
 	}
 }
+
+bool Elevator::GetSensorStatus(int number)
+{
+	//checks doors and returns true if any (or the specified door) have their door sensor active
+
+	if (number > 0 && number < (int)DoorArray.size())
+	{
+		if (DoorArray[number])
+			return DoorArray[number]->GetSensorStatus();
+	}
+	else if (number == 0)
+	{
+		for (int i = 0; i < (int)DoorArray.size(); i++)
+		{
+			if (DoorArray[number]->GetSensorStatus() == true)
+				return true;
+		}
+	}
+	return false;
+}
+
+void Elevator::EnableSensor(bool value, int number)
+{
+	//enables door sensor on all doors or the specified door
+
+	if (number > 0 && number < (int)DoorArray.size())
+	{
+		if (DoorArray[number])
+			DoorArray[number]->EnableSensor(value);
+	}
+	else if (number == 0)
+	{
+		for (int i = 0; i < (int)DoorArray.size(); i++)
+			DoorArray[number]->EnableSensor(value);
+	}
+}

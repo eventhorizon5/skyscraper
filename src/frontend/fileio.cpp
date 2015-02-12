@@ -5958,7 +5958,7 @@ int ScriptProcessor::ProcElevators()
 		if (params < 1 || params > 2)
 			return ScriptError("Incorrect number of parameters");
 
-		elev->GetDoor(temp3)->EnableSensor = Ogre::StringConverter::parseBool(tempdata[0]);
+		elev->GetDoor(temp3)->EnableSensor(Ogre::StringConverter::parseBool(tempdata[0]));
 		if (params == 2)
 		{
 			//check to see if file exists

@@ -323,6 +323,8 @@ public:
 	bool AreDoorsOpening();
 	bool AreDoorsClosing();
 	bool InElevator();
+	void EnableSensor(bool value, int number = 0);
+	bool GetSensorStatus(int number = 0);
 
 private:
 

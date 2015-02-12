@@ -1256,7 +1256,7 @@ void editelevator::Loop()
 		txtDoorWidth->SetValue(TruncateNumber(door->GetDoorWrapper()->Width, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
 		txtDoorStopped->SetValue(wxString::FromAscii(BoolToString(door->DoorsStopped())));
-		txtDoorSensor->SetValue(wxString::FromAscii(BoolToString(door->EnableSensor)));
+		txtDoorSensor->SetValue(wxString::FromAscii(BoolToString(door->GetSensorStatus())));
 	}
 	txtElevStart->SetValue(TruncateNumber(elevator->GetElevatorStart(), 2));
 	txtEnabled->SetValue(wxString::FromAscii(BoolToString(elevator->IsEnabled)));
@@ -1737,10 +1737,10 @@ void editelevator::On_bSetNudge_Click(wxCommandEvent& event)
 
 void editelevator::On_bDoorSensor_Click(wxCommandEvent& event)
 {
-	if (elevator && door)
+	if (elevator)
 	{
-		int doornum = sDoor->GetThumbPosition();
-		bool status = door->EnableSensor;
-		door->EnableSensor = !status;
+		int door = sDoor->GetThumbPosition();
+		bool status = elevator->GetSensorStatus(door);
+		elevator->EnableSensor(!status, door);
 	}
 }

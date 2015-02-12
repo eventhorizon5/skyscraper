@@ -2081,22 +2081,22 @@ the sound field blank for no sound to be played.</p>
 <p align="left">Available command names for elevators:</p>
 
 <p align="left"><em>Off</em> (no action)<br>
-[floor number]<br>
-<em>Open</em> (open doors)<br>
-<em>Close</em> (close doors)<br>
-<em>OpenInt</em> (open interior/car doors)<br>
-<em>CloseInt</em> (close interior/car doors)<br>
-<em>OpenExt</em> (open exterior/shaft doors)<br>
-<em>CloseExt</em> (close exterior/shaft doors)<br>
-<em>OpenManual</em> (open doors manually)<br>
-<em>CloseManual</em> (close doors manually)<br>
-<em>OpenIntManual</em> (open interior/car doors manually)<br>
-<em>CloseIntManual</em> (close interior/car doors manually)<br>
+<em>[floor number]</em> (specify only the floor number to send elevator to that floor)<br>
+<em>Open [door]</em> (open doors)<br>
+<em>Close [door]</em> (close doors)<br>
+<em>OpenInt [door]</em> (open interior/car doors)<br>
+<em>CloseInt [door]</em> (close interior/car doors)<br>
+<em>OpenExt [door]</em> (open exterior/shaft doors)<br>
+<em>CloseExt [door]</em> (close exterior/shaft doors)<br>
+<em>OpenManual [door]</em> (open doors manually)<br>
+<em>CloseManual [door]</em> (close doors manually)<br>
+<em>OpenIntManual [door]</em> (open interior/car doors manually)<br>
+<em>CloseIntManual [door]</em> (close interior/car doors manually)<br>
 <em>Cancel</em> (call cancel)<br>
 <em>Run</em> (put elevator in run state)<br>
 <em>Stop</em> (put elevator in stop state)<br>
 <em>EStop</em> (emergency stop)<br>
-<em>Alarm</em><br>
+<em>Alarm</em> (alarm trigger)<br>
 <em>Fire1Off</em> (fire service phase 1 off for all elevators in same bank,
 which means all served by first call button on recall floor)<br>
 <em>Fire1On</em> (fire service phase 1 on for all elevators in same bank)<br>
@@ -2117,9 +2117,9 @@ bank)<br>
 <em>AcpOff</em> (disable ACP mode)<br>
 <em>FanOn</em> (enable fan/idle sound)<br>
 <em>FanOff</em> (disable fan/idle sound)<br>
-<em>Hold</em> (hold door)<br>
-<em>MusicOn</em><br>
-<em>MusicOff</em><br>
+<em>Hold [door]</em> (hold door)<br>
+<em>MusicOn</em> (enable music sound)<br>
+<em>MusicOff</em> (disable music sound)<br>
 <em>UpOn</em> (inspection mode up on)<br>
 <em>UpOff</em> (inspection mode up off)<br>
 <em>DownOn</em> (inspection mode down on)<br>
@@ -2131,14 +2131,14 @@ bank)<br>
 <em>Down</em> (move down for manual elevator)<br>
 <em>InterlocksOn</em> (enable interlocks)<br>
 <em>InterlocksOff</em> (disable interlocks)<br>
-<em>Sensor</em> (open and hold doors, used by door sensor)<br>
-<em>Reset</em> (reset door timer which turns off hold, also used by door
-sensor)</p>
+<em>Sensor [door]</em> (open and hold doors, used by door sensor)<br>
+<em>Reset [door]</em> (reset door timer which turns off hold, also used by door sensor)<br>
+<em>SensorOn [door]</em> (enable door sensor)<br>
+<em>SensorOff [door]</em> (disable door sensor)<br>
+</p>
 
-<p align="left">In the above list, <em>Open</em>, <em>Close</em>, related
-commands such as <em>OpenInt</em> and <em>OpenManual</em>, <em>Hold</em>,
-<em>Sensor</em>, and <em>Reset</em> can have the door number after the name -
-for example, <em>Open2</em> will open door 2, while <em>Open</em> will open all
+<p align="left">Some commands in the above list have an optional <em>Door</em> parameter.
+For example, <em>Open 2</em> will open door 2, while <em>Open</em> or <em>Open 0</em> will open all
 doors.<br>
 <br>
 When this command is used, actions are created using the specified commands.

@@ -1722,9 +1722,10 @@ CreateStairwell 2, -3.26, -18.39, 137, 137
     SetAutoSize = true, true
     ResetTextureMapping = true
     FloorOrientation = top
+    DrawWalls = true, true, true, true, true, false
+    AddFloor StairsLandingLower, Landing, 0.5, -10.6, 5, -6.62, 14.59, 5, 5, 0, 0, true
     DrawWalls = true, true, true, true, true, true
     AddFloor LeftLanding, Landing, 0.5, -10.61, -20.39, -6.62, -16.38, 5, 5, 0, 0, true
-    AddFloor StairsLandingLower, Landing, 0.5, -10.6, 5, -6.62, 14.59, 5, 5, 0, 0, true
     AddFloor StairsLandingUpper, Landing, 0.5, -10.6, 5, -6.62, 14.59, 15, 15, 0, 0, true
     DrawWalls = true, true, false, false, false, false
     AddWall SideCover, Concrete, 0, 17.42, 36.64, 17.42, 9.78, 10.5, 10.5, -0.5, -0.5, 0, 0, true
