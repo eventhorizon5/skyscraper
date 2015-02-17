@@ -568,16 +568,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	//object checks and actions
 	if (obj)
 	{
-		//delete wall if ctrl and alt are pressed
-		if (wall && ctrl == true && alt == true && shift == false && right == false && object_number > 0)
-		{
-			if (std::string(obj->GetType()) == "Wall")
-				sbs->DeleteObject(obj);
-			else
-				sbs->ReportError("Cannot delete object " + number);
-			return;
-		}
-
 		//get original object (parent object of clicked mesh)
 		if (obj->GetParent())
 		{
@@ -687,6 +677,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			std::string direction = meshname.substr(index2 + 1);
 			TrimString(direction);
 
+			//delete call button if ctrl and alt keys are pressed
+			if (ctrl == true && alt == true && shift == false)
+			{
+				sbs->DeleteObject(buttonref->object);
+				return;
+			}
+
 			if (ctrl == true && shift == true)
 			{
 				//if ctrl and shift are held, toggle lock
@@ -746,6 +743,16 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			else
 				elev->CloseDoorsEmergency(number, 2);
 		}
+	}
+
+	//delete wall if ctrl and alt are pressed
+	if (obj && wall && ctrl == true && alt == true && shift == false && right == false && object_number > 0)
+	{
+		if (std::string(obj->GetType()) == "Wall")
+			sbs->DeleteObject(obj);
+		else
+			sbs->ReportError("Cannot delete object " + number);
+		return;
 	}
 }
 
