@@ -656,55 +656,60 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 					}
 				}
 			}
+
+			//check call buttons
+			if (type == "CallButton" && right == false)
+			{
+				CallButton *callbutton = (CallButton*)obj->GetParent()->GetRawObject();
+
+				if (callbutton)
+				{
+					int index = (int)meshname.find(":");
+					int index2 = (int)meshname.find(":", index + 1);
+
+					std::string direction = meshname.substr(index2 + 1);
+					TrimString(direction);
+
+					//delete call button if ctrl and alt keys are pressed
+					if (ctrl == true && alt == true && shift == false)
+					{
+						sbs->DeleteObject(callbutton->object);
+						return;
+					}
+
+					if (ctrl == true && shift == true)
+					{
+						//if ctrl and shift are held, toggle lock
+						callbutton->ToggleLock();
+					}
+					else if (shift == true)
+					{
+						//if shift is held, change button status instead
+						if (direction == "Up")
+							callbutton->UpLight(!callbutton->UpStatus);
+						else
+							callbutton->DownLight(!callbutton->DownStatus);
+					}
+					else
+					{
+						//press button
+						if (direction == "Up")
+							callbutton->Call(true);
+						else
+							callbutton->Call(false);
+					}
+				}
+			}
 		}
-	}
 
-	//check call buttons
-	if ((int)meshname.find("Call Button") != -1 && right == false)
-	{
-		//user clicked on a call button
-		int index = (int)meshname.find(":");
-		int index2 = (int)meshname.find(":", index + 1);
-		int floor = atoi(meshname.substr(12, index - 12).c_str());
-		int number = atoi(meshname.substr(index + 1, index2 - index - 1).c_str());
-
-		CallButton *buttonref = 0;
-		if (sbs->GetFloor(floor))
-			buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
-
-		if (buttonref)
+		//delete wall if ctrl and alt are pressed
+		if (wall && ctrl == true && alt == true && shift == false && right == false && object_number > 0)
 		{
-			std::string direction = meshname.substr(index2 + 1);
-			TrimString(direction);
-
-			//delete call button if ctrl and alt keys are pressed
-			if (ctrl == true && alt == true && shift == false)
-			{
-				sbs->DeleteObject(buttonref->object);
-				return;
-			}
-
-			if (ctrl == true && shift == true)
-			{
-				//if ctrl and shift are held, toggle lock
-				buttonref->ToggleLock();
-			}
-			else if (shift == true)
-			{
-				//if shift is held, change button status instead
-				if (direction == "Up")
-					buttonref->UpLight(!buttonref->UpStatus);
-				else
-					buttonref->DownLight(!buttonref->DownStatus);
-			}
+			if (std::string(obj->GetType()) == "Wall")
+				sbs->DeleteObject(obj);
 			else
-			{
-				//press button
-				if (direction == "Up")
-					buttonref->Call(true);
-				else
-					buttonref->Call(false);
-			}
+				sbs->ReportError("Cannot delete object " + number);
+			return;
 		}
 	}
 
@@ -743,16 +748,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			else
 				elev->CloseDoorsEmergency(number, 2);
 		}
-	}
-
-	//delete wall if ctrl and alt are pressed
-	if (obj && wall && ctrl == true && alt == true && shift == false && right == false && object_number > 0)
-	{
-		if (std::string(obj->GetType()) == "Wall")
-			sbs->DeleteObject(obj);
-		else
-			sbs->ReportError("Cannot delete object " + number);
-		return;
 	}
 }
 
