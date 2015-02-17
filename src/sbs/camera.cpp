@@ -568,8 +568,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	//object checks and actions
 	if (obj)
 	{
-		//delete wall if ctrl is pressed
-		if (wall && ctrl == true && shift == false && right == false && object_number > 0)
+		//delete wall if ctrl and alt are pressed
+		if (wall && ctrl == true && alt == true && shift == false && right == false && object_number > 0)
 		{
 			if (std::string(obj->GetType()) == "Wall")
 				sbs->DeleteObject(obj);
@@ -590,6 +590,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 				if (control)
 				{
+					//delete control if ctrl and alt keys are pressed
+					if (ctrl == true && alt == true && shift == false)
+					{
+						sbs->DeleteObject(obj->GetParent());
+						return;
+					}
+
+					//toggle lock status if ctrl and shift are pressed
 					if (ctrl == true && shift == true)
 						control->ToggleLock();
 					else
@@ -604,17 +612,19 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 				if (door)
 				{
-					//delete door if ctrl key is pressed
-					if (ctrl == true && shift == false)
+					//delete door if ctrl and alt keys are pressed
+					if (ctrl == true && alt == true && shift == false)
 					{
 						sbs->DeleteObject(obj->GetParent());
 						return;
 					}
 
+					//toggle lock status if ctrl and shift are pressed
 					if (ctrl == true && shift == true)
 						door->ToggleLock(pos);
 					else
 					{
+						//open and close doors
 						if (door->IsOpen() == false)
 						{
 							if (door->IsMoving == false)
@@ -640,8 +650,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 				if (model)
 				{
-					//delete model if ctrl key is pressed
-					if (ctrl == true && shift == false)
+					//delete model if ctrl and alt keys are pressed
+					if (ctrl == true && alt == true && shift == false)
 					{
 						sbs->DeleteObject(obj->GetParent());
 						return;
