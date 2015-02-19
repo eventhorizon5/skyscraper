@@ -83,7 +83,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	//create shaft door objects
 	ShaftDoors.resize(elev->ServicedFloors.size());
 	for (int i = 0; i < (int)ShaftDoors.size(); i++)
-		ShaftDoors[i] = new DoorWrapper(this, true);
+		ShaftDoors[i] = new DoorWrapper(this, true, elev->ServicedFloors[i]);
 
 	//create sound object
 	doorsound = new Sound(object, "Door Sound", true);
@@ -1499,7 +1499,7 @@ ElevatorDoor::DoorObject::~DoorObject()
 	mesh = 0;
 }
 
-ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor)
+ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor, int shaftdoor_floor)
 {
 	parent = parentobject;
 	Open = false;
@@ -1511,6 +1511,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	IsShaftDoor = shaftdoor;
 	Shift = 0;
 	altitude = 0;
+	floor = shaftdoor_floor;
 
 	object = new Object();
 	object->SetValues(this, parent->object, "DoorWrapper", "Door Wrapper", false);
