@@ -5720,3 +5720,17 @@ void Elevator::EnableSensor(bool value, int number)
 			DoorArray[number]->EnableSensor(value);
 	}
 }
+
+int Elevator::GetServicedFloorCount()
+{
+	//return number of serviced floors
+	return (int)ServicedFloors.size();
+}
+
+int Elevator::GetServicedFloor(int index)
+{
+	//get a specific serviced floor
+	if (index >= 0 && index < (int)ServicedFloors.size())
+		return ServicedFloors[index];
+	return 0;
+}
