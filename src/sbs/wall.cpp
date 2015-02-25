@@ -78,7 +78,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	std::vector<TriangleType> triangles;
 	if (!meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents, triangles))
 	{
-		sbs->ReportError("Error creating wall " + name2);
+		sbs->ReportError("Error creating wall '" + name2 + "'");
 		return 0;
 	}
 
@@ -105,7 +105,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	std::vector<TriangleType> triangles;
 	if (!meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles))
 	{
-		sbs->ReportError("Error creating wall " + name2);
+		sbs->ReportError("Error creating wall '" + name2 + "'");
 		return 0;
 	}
 
@@ -130,7 +130,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std:
 	std::vector<TriangleType> triangles;
 	if (!meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles, 0, 0))
 	{
-		sbs->ReportError("Error creating wall " + name2);
+		sbs->ReportError("Error creating wall '" + name2 + "'");
 		return 0;
 	}
 

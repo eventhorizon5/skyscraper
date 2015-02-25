@@ -65,7 +65,7 @@ Action::Action(const std::string name, std::vector<Object*> &action_parents, con
 Action::~Action()
 {
 	if (sbs->FastDelete == false)
-		sbs->Report("Deleted action " + name);
+		sbs->Report("Deleted action '" + name + "'");
 }
 
 const char *Action::GetName()

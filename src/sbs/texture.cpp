@@ -933,7 +933,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		Report("AddTextToTexture: created texture " + Name);
+		Report("AddTextToTexture: created texture '" + Name + "'");
 
 	CacheFilename(Name, Name);
 	return true;
@@ -1033,7 +1033,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	}
 
 	if (sbs->Verbose)
-		Report("AddTextureOverlay: created texture " + Name);
+		Report("AddTextureOverlay: created texture '" + Name + "'");
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);

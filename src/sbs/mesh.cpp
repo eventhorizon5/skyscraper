@@ -247,7 +247,7 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 					Classify(2, temppoly, end.z) != 2)
 			{
 				if (Verbose)
-					Report("Cutting polygon " + name);
+					Report("Cutting polygon '" + name + "'");
 
 				extentsx = GetExtents(temppoly, 1);
 				extentsy = GetExtents(temppoly, 2);
@@ -1861,7 +1861,7 @@ void MeshObject::CreateCollider()
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating collider for " + name + "\n" + e.getDescription());
+		sbs->ReportError("Error creating collider for '" + name + "'\n" + e.getDescription());
 	}
 }
 
@@ -1912,7 +1912,7 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating model collider for " + name + "\n" + e.getDescription());
+		sbs->ReportError("Error creating model collider for '" + name + "'\n" + e.getDescription());
 	}
 }
 
@@ -1943,7 +1943,7 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating box collider for " + name + "\n" + e.getDescription());
+		sbs->ReportError("Error creating box collider for '" + name + "'\n" + e.getDescription());
 	}
 }
 
