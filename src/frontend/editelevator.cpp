@@ -1195,6 +1195,7 @@ void editelevator::Loop()
 	door_num = sDoor->GetThumbPosition();
 	elevator_count = Simcore->Elevators();
 	elevator = Simcore->GetElevator(elev_num);
+	door = 0;
 
 	if (!elevator)
 		return;
