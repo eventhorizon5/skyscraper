@@ -1483,23 +1483,32 @@ void editelevator::On_bSetRecallAlternate_Click(wxCommandEvent& event)
 
 void editelevator::On_Fire1Off_Select(wxCommandEvent& event)
 {
-	CallButton *callbutton = elevator->GetPrimaryCallButton();
-	if (callbutton)
-		callbutton->FireService(0);
+	if (elevator)
+	{
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		if (callbutton)
+			callbutton->FireService(0);
+	}
 }
 
 void editelevator::On_Fire1On_Select(wxCommandEvent& event)
 {
-	CallButton *callbutton = elevator->GetPrimaryCallButton();
-	if (callbutton)
-		callbutton->FireService(1);
+	if (elevator)
+	{
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		if (callbutton)
+			callbutton->FireService(1);
+	}
 }
 
 void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 {
-	CallButton *callbutton = elevator->GetPrimaryCallButton();
-	if (callbutton)
-		callbutton->FireService(2);
+	if (elevator)
+	{
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		if (callbutton)
+			callbutton->FireService(2);
+	}
 }
 
 void editelevator::On_Fire2Off_Select(wxCommandEvent& event)
