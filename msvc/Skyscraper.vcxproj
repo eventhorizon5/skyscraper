@@ -119,6 +119,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -188,6 +189,7 @@
       <FunctionLevelLinking>false</FunctionLevelLinking>
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_RELEASE;wxUSE_GUI=1;WXUSINGDLL=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -251,6 +253,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -314,6 +317,7 @@
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FloatingPointModel>Fast</FloatingPointModel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;CS_WIN32_CSCONFIG;__CRYSTAL_SPACE__;CS_DEBUG;wxUSE_GUI=1;WXUSINGDLL=1;WXDEBUG=1;NOPCH;CS_SUPPORTS_MMX;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
