@@ -85,6 +85,8 @@ available building (and one button for loading user buildings). Choose the build
 ------------------------------------
 Keys currently used in the simulator:
 
+On a Mac, the Control key is the Command key (to the right of the Option key), and Alt is the Option key
+
 W or Up Arrow - move forwards
 S or Down Arrow - move backwards
 A or Left Arrow - move left
