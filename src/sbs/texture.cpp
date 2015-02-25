@@ -416,7 +416,7 @@ bool SBS::UnregisterTextureInfo(const char *name, const char *material_name)
 	TrimString(Name);
 	TrimString(Material);
 
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == Name || (textureinfo[i].material_name == Material && textureinfo[i].material_name != ""))
 		{
@@ -1846,9 +1846,9 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, i
 
 	using namespace Ogre;
 
-	if (destTexture->getHeight() < destBottom - 1)
+	if ((int)destTexture->getHeight() < destBottom - 1)
 		destBottom = destTexture->getHeight() - 1;
-	if (destTexture->getWidth() < destRight - 1)
+	if ((int)destTexture->getWidth() < destRight - 1)
 		destRight = destTexture->getWidth() - 1;
 
 	try
