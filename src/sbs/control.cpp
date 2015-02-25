@@ -291,13 +291,15 @@ const char* Control::GetPositionAction(int position)
 
 	std::vector<Action*> actionlist;
 
-	if (ActionNames.size() > 0)
+	if ((int)ActionNames.size() > 0)
 		actionlist = sbs->GetAction(ActionNames[position - 1]);
-	else
+	else if ((int)Actions.size() > 0)
 		actionlist.push_back(Actions[position - 1]);
+	else
+		return "";
 
 	//return command of first action in list
-	if (actionlist.size() > 0)
+	if ((int)actionlist.size() > 0)
 	{
 		if (actionlist[0])
 			return actionlist[0]->GetCommandName();
@@ -324,7 +326,7 @@ void Control::SetTexture(int position, const char *texture)
 int Control::GetPositions()
 {
 	//return number of available positions, based on size of Actions array
-	if (ActionNames.size() > 0)
+	if ((int)ActionNames.size() > 0)
 		return (int)ActionNames.size();
 	else
 		return (int)Actions.size();
@@ -365,10 +367,15 @@ bool Control::DoAction()
 
 	std::vector<Action*> actionlist;
 
-	if (ActionNames.size() > 0)
+	if ((int)ActionNames.size() > 0)
 		actionlist = sbs->GetAction(ActionNames[current_position - 1]);
-	else
+	else if ((int)Actions.size() > 0)
 		actionlist.push_back(Actions[current_position - 1]);
+	else
+	{
+		sbs->Report(std::string("No available actions for control " + Name).c_str());
+		return false;
+	}
 
 	bool result = false;
 	for (int i = 0; i < (int)actionlist.size(); i++)
