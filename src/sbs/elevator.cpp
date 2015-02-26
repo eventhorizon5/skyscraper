@@ -1597,6 +1597,9 @@ void Elevator::MoveElevatorToFloor()
 					sbs->EnableExternal(false);
 				}
 			}
+
+			//reset shaft doors
+			ResetShaftDoors(GetFloor());
 		}
 
 		//set interior directional indicators
@@ -2071,14 +2074,7 @@ void Elevator::FinishMove()
 			sbs->EnableExternal(true);
 
 			//reset shaft doors
-			for (int i = 1; i <= sbs->Shafts(); i++)
-			{
-				if (sbs->GetShaft(i))
-				{
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
-				}
-			}
+			ResetShaftDoors(GotoFloor);
 		}
 		else if (sbs->Verbose)
 			Report("user not in elevator - not turning on objects");
@@ -2137,18 +2133,9 @@ void Elevator::FinishMove()
 		if (sbs->Verbose)
 			Report("stop complete");
 
+		//reset shaft doors
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		{
-			//reset shaft doors
-			for (int i = 1; i <= sbs->Shafts(); i++)
-			{
-				if (sbs->GetShaft(i))
-				{
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
-				}
-			}
-		}
+			ResetShaftDoors(GotoFloor);
 	}
 
 	//update elevator's floor number
@@ -2877,14 +2864,7 @@ bool Elevator::EnableInspectionService(bool value)
 			sbs->EnableExternal(true);
 
 			//reset shaft doors
-			for (int i = 1; i <= sbs->Shafts(); i++)
-			{
-				if (sbs->GetShaft(i))
-				{
-					sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, false, true);
-					sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
-				}
-			}
+			ResetShaftDoors(GetFloor());
 		}
 
 		InspectionService = false;
@@ -5733,4 +5713,21 @@ int Elevator::GetServicedFloor(int index)
 	if (index >= 0 && index < (int)ServicedFloors.size())
 		return ServicedFloors[index];
 	return 0;
+}
+
+void Elevator::ResetShaftDoors(int floor)
+{
+	//reset shaft doors
+
+	//this might not be needed, due to addition of full-shaft enable check to
+	//floor object's EnableGroup function, needs testing
+
+	for (int i = 1; i <= sbs->Shafts(); i++)
+	{
+		if (sbs->GetShaft(i))
+		{
+			sbs->GetShaft(i)->EnableRange(floor, sbs->ShaftDisplayRange, false, true);
+			sbs->GetShaft(i)->EnableRange(floor, sbs->ShaftDisplayRange, true, true);
+		}
+	}
 }

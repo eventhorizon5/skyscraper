@@ -327,6 +327,7 @@ public:
 	bool GetSensorStatus(int number = 0);
 	int GetServicedFloorCount();
 	int GetServicedFloor(int index);
+	void ResetShaftDoors(int floor);
 
 private:
 
