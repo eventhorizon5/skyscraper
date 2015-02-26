@@ -1580,19 +1580,6 @@ float SBS::GetDistance(float x1, float x2, float z1, float z2)
 	return 0;
 }
 
-void SBS::ListAltitudes()
-{
-	//dumps the floor altitude list
-
-	Report("\n--- Floor Altitudes ---\n");
-	for (int i = -Basements; i < Floors; i++)
-	{
-		Floor *floor = GetFloor(i);
-		Report(ToString2(i) + "(" + floor->ID + ")\t----\t" + ToString2(floor->FullHeight()) + "\t----\t" + ToString2(floor->Altitude));
-	}
-	Report("");
-}
-
 Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
@@ -4260,23 +4247,39 @@ void SBS::UnregisterControl(Control *control)
 	}
 }
 
-void SBS::ShowFloorInfo(int floor)
+void SBS::ShowFloorInfo(bool all_floors, int floor)
 {
-	//show info for specified floor
+	//show floor information for all floors, or specified floor
 
-	Floor *flr = GetFloor(floor);
+	if (all_floors == false)
+	{
+		Floor *flr = GetFloor(floor);
 
-	if (!flr)
-		return;
+		if (!flr)
+			return;
 
-	Report("\n--- Floor Information ---\n");
-	Report("Number: " + ToString2(floor));
-	Report("ID: " + flr->ID);
-	Report("Name: " + flr->Name);
-	Report("Type: " + flr->FloorType);
-	Report("Description: " + flr->Description);
-	Report("Height: " + ToString2(flr->Height));
-	Report("InterfloorHeight: " + ToString2(flr->InterfloorHeight));
-	Report("Altitude: " + ToString2(flr->Altitude));
-	Report("");
+		Report("\n--- Floor Information ---\n");
+		Report("Number: " + ToString2(floor));
+		Report("ID: " + flr->ID);
+		Report("Name: " + flr->Name);
+		Report("Type: " + flr->FloorType);
+		Report("Description: " + flr->Description);
+		Report("Height: " + ToString2(flr->Height));
+		Report("InterfloorHeight: " + ToString2(flr->InterfloorHeight));
+		Report("FullHeight: " + ToString2(flr->FullHeight()));
+		Report("Altitude: " + ToString2(flr->Altitude));
+		Report("Base: " + ToString2(flr->GetBase()));
+		Report("");
+	}
+	else
+	{
+		Report("\n--- Floor Information ---\n");
+		Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tDescription");
+		for (int i = -Basements; i < Floors; i++)
+		{
+			Floor *floor = GetFloor(i);
+			Report(ToString2(i) + "(" + floor->ID + ")\t----\t" + floor->Name + "\t----\t" + floor->FloorType + "\t----\t" + ToString2(floor->Height) + "\t----\t" + ToString2(floor->InterfloorHeight) + "\t----\t" + ToString2(floor->Altitude) + "\t----\t" + floor->Description);
+		}
+		Report("");
+	}
 }

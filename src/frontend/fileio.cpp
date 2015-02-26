@@ -2957,10 +2957,22 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
-	//ListAltitudes command
-	if (linecheck.substr(0, 13) == "listaltitudes")
+	//FloorInfo command
+	if (linecheck.substr(0, 9) == "floorinfo")
 	{
-		Simcore->ListAltitudes();
+		if (LineData.size() == 9)
+			Simcore->ShowFloorInfo(true);
+		else
+		{
+			//calculate inline math
+			buffer = Calc(LineData.substr(10).c_str());
+
+			int num;
+			if (!IsNumeric(buffer.c_str(), num))
+				return ScriptError("Invalid value: " + buffer);
+
+			Simcore->ShowFloorInfo(false, num);
+		}
 		return sNextLine;
 	}
 

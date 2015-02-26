@@ -88,7 +88,7 @@ const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
 const long DebugPanel::ID_chkRandom = wxNewId();
 const long DebugPanel::ID_CHECKBOX1 = wxNewId();
-const long DebugPanel::ID_bListAltitudes = wxNewId();
+const long DebugPanel::ID_bFloorList = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
 const long DebugPanel::ID_bCameraControl = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
@@ -198,8 +198,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer2->Add(BoxSizer5, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
 	BoxSizer11->Add(BoxSizer2, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
-	bListAltitudes = new wxButton(Panel1, ID_bListAltitudes, _("List Altitudes"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListAltitudes"));
-	BoxSizer3->Add(bListAltitudes, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bFloorList = new wxButton(Panel1, ID_bFloorList, _("Floor List"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorList"));
+	BoxSizer3->Add(bFloorList, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bMeshControl = new wxButton(Panel1, ID_bMeshControl, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMeshControl"));
 	BoxSizer3->Add(bMeshControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bCameraControl = new wxButton(Panel1, ID_bCameraControl, _("Camera Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraControl"));
@@ -241,7 +241,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
 	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
 	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
-	Connect(ID_bListAltitudes,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bListAltitudes_Click);
+	Connect(ID_bFloorList,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorList_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
 	Connect(ID_bCameraControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraControl_Click);
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
@@ -315,9 +315,9 @@ void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 	Simcore->AutoShafts = chkAutoShafts->GetValue();
 }
 
-void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
+void DebugPanel::On_bFloorList_Click(wxCommandEvent& event)
 {
-	Simcore->ListAltitudes();
+	Simcore->ShowFloorInfo(true);
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
@@ -556,5 +556,5 @@ void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
 {
-	Simcore->ShowFloorInfo(Simcore->camera->CurrentFloor);
+	Simcore->ShowFloorInfo(false, Simcore->camera->CurrentFloor);
 }

@@ -294,9 +294,9 @@
 							<object class="wxBoxSizer" variable="BoxSizer3" member="yes">
 								<orient>wxVERTICAL</orient>
 								<object class="sizeritem">
-									<object class="wxButton" name="ID_bListAltitudes" variable="bListAltitudes" member="yes">
-										<label>List Altitudes</label>
-										<handler function="On_bListAltitudes_Click" entry="EVT_BUTTON" />
+									<object class="wxButton" name="ID_bFloorList" variable="bFloorList" member="yes">
+										<label>Floor List</label>
+										<handler function="On_bFloorList_Click" entry="EVT_BUTTON" />
 									</object>
 									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
