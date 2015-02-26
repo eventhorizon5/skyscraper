@@ -1,5 +1,11 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-prevent shaft door reset if full shaft is enabled
+-EnableGroup function in floor object will no longer touch shaft or stair objects if they're currently fully enabled
+-disabled some warnings on Visual C++
+-fixes to action array checks of Control and Trigger objects, to prevent crashes if no actions are associated with the object
+-more elevator object checks for elevator editor
+-reset door reference in elevator editor, to prevent issues if elevator is deleted
 -added Mac key hints to control reference and readme
 -the elevator editor's floor selector now only shows the related serviced floors
 -(c++)reworked shaft door and elevator door ClickedObject code to newer design
