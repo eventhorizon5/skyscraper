@@ -2185,13 +2185,14 @@ void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
 
-	sbs->Report("--- Elevator " + ToString2(Number) + " Queues ---\n");
+	sbs->Report("\n--- Elevator " + ToString2(Number) + " Queues ---\n");
 	sbs->Report("Up:");
 	for (int i = 0; i < (int)UpQueue.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(UpQueue[i]));
 	sbs->Report("Down:");
 	for (int i = 0; i < (int)DownQueue.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(DownQueue[i]));
+	Report("");
 }
 
 void Elevator::Enabled(bool value)
@@ -2384,9 +2385,10 @@ void Elevator::DumpServicedFloors()
 {
 	//dump serviced floors list
 
-	sbs->Report("--- Elevator " + ToString2(Number) + "'s Serviced Floors ---\n");
+	sbs->Report("\n--- Elevator " + ToString2(Number) + "'s Serviced Floors ---\n");
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(ServicedFloors[i]));
+	Report("");
 }
 
 bool Elevator::AddServicedFloor(int number)

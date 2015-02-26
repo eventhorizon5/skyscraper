@@ -1584,9 +1584,13 @@ void SBS::ListAltitudes()
 {
 	//dumps the floor altitude list
 
-	Report("--- Floor Altitudes ---\n");
+	Report("\n--- Floor Altitudes ---\n");
 	for (int i = -Basements; i < Floors; i++)
-		Report(ToString2(i) + "(" + GetFloor(i)->ID + ")\t----\t" + ToString2(GetFloor(i)->FullHeight()) + "\t----\t" + ToString2(GetFloor(i)->Altitude));
+	{
+		Floor *floor = GetFloor(i);
+		Report(ToString2(i) + "(" + floor->ID + ")\t----\t" + ToString2(floor->FullHeight()) + "\t----\t" + ToString2(floor->Altitude));
+	}
+	Report("");
 }
 
 Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
@@ -4213,13 +4217,14 @@ void SBS::ListKeys()
 {
 	//list all keys
 
-	Report("--- Keys ---\n");
+	Report("\n--- Keys ---\n");
 
 	for (int i = 0; i < (int)keys.size(); i++)
 	{
 		std::string id = ToString(keys[i].id);
 		Report(id + " - " + keys[i].name);
 	}
+	Report("");
 }
 
 void SBS::CameraLoop()
@@ -4259,12 +4264,12 @@ void SBS::ShowFloorInfo(int floor)
 {
 	//show info for specified floor
 
-	if (!GetFloor(floor))
+	Floor *flr = GetFloor(floor);
+
+	if (!flr)
 		return;
 
-	Report("--- Floor Information ---\n");
-
-	Floor *flr = GetFloor(floor);
+	Report("\n--- Floor Information ---\n");
 	Report("Number: " + ToString2(floor));
 	Report("ID: " + flr->ID);
 	Report("Name: " + flr->Name);
@@ -4273,4 +4278,5 @@ void SBS::ShowFloorInfo(int floor)
 	Report("Height: " + ToString2(flr->Height));
 	Report("InterfloorHeight: " + ToString2(flr->InterfloorHeight));
 	Report("Altitude: " + ToString2(flr->Altitude));
+	Report("");
 }

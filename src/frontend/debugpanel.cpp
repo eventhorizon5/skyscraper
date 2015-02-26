@@ -551,7 +551,7 @@ void DebugPanel::On_bKeys_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 {
-	Simcore->Report(Simcore->ListTextures(true));
+	Simcore->Report("\n" + Simcore->ListTextures(true));
 }
 
 void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
