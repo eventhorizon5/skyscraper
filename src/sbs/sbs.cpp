@@ -4254,3 +4254,23 @@ void SBS::UnregisterControl(Control *control)
 		}
 	}
 }
+
+void SBS::ShowFloorInfo(int floor)
+{
+	//show info for specified floor
+
+	if (!GetFloor(floor))
+		return;
+
+	Report("--- Floor Information ---\n");
+
+	Floor *flr = GetFloor(floor);
+	Report("Number: " + ToString2(floor));
+	Report("ID: " + flr->ID);
+	Report("Name: " + flr->Name);
+	Report("Type: " + flr->FloorType);
+	Report("Description: " + flr->Description);
+	Report("Height: " + ToString2(flr->Height));
+	Report("InterfloorHeight: " + ToString2(flr->InterfloorHeight));
+	Report("Altitude: " + ToString2(flr->Altitude));
+}

@@ -93,6 +93,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bProfiler;
 		static const long ID_bKeys;
 		static const long ID_bTextures;
+		static const long ID_bFloorInfo;
 		static const long ID_PANEL1;
 		//*)
 		class Timer : public wxTimer
@@ -127,6 +128,7 @@ class DebugPanel: public wxFrame
 		void On_bActionViewer_Click(wxCommandEvent& event);
 		void On_bKeys_Click(wxCommandEvent& event);
 		void On_bTextures_Click(wxCommandEvent& event);
+		void On_bFloorInfo_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -143,6 +145,7 @@ class DebugPanel: public wxFrame
 		wxBoxSizer* BoxSizer7;
 		wxCheckBox* chkAutoStairs;
 		wxCheckBox* chkFrameLimiter;
+		wxButton* bFloorInfo;
 		wxCheckBox* chkAutoShafts;
 		wxButton* bControlReference;
 		wxButton* bCameraControl;

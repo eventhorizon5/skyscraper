@@ -26,6 +26,14 @@
 													<border>5</border>
 												</object>
 												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_STATICTEXT12" variable="StaticText10" member="yes">
+														<label>Floor Name:</label>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+													<border>5</border>
+													<option>1</option>
+												</object>
+												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
 														<label>Camera Position:</label>
 													</object>
@@ -100,6 +108,16 @@
 													</object>
 													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 													<border>5</border>
+												</object>
+												<object class="sizeritem">
+													<object class="wxStaticText" name="ID_t_floorname" variable="t_floorname" member="yes">
+														<label></label>
+														<size>150,-1</size>
+														<style>wxST_NO_AUTORESIZE</style>
+													</object>
+													<flag>wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+													<border>5</border>
+													<option>1</option>
 												</object>
 												<object class="sizeritem">
 													<object class="wxStaticText" name="ID_t_camerap" variable="t_camerap" member="yes">
@@ -374,6 +392,15 @@
 									<object class="wxButton" name="ID_bTextures" variable="bTextures" member="yes">
 										<label>List Textures</label>
 										<handler function="On_bTextures_Click" entry="EVT_BUTTON" />
+									</object>
+									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									<border>5</border>
+									<option>1</option>
+								</object>
+								<object class="sizeritem">
+									<object class="wxButton" name="ID_bFloorInfo" variable="bFloorInfo" member="yes">
+										<label>Floor Information</label>
+										<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
 									</object>
 									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>

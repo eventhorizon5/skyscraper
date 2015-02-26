@@ -100,6 +100,7 @@ const long DebugPanel::ID_bActionViewer = wxNewId();
 const long DebugPanel::ID_bProfiler = wxNewId();
 const long DebugPanel::ID_bKeys = wxNewId();
 const long DebugPanel::ID_bTextures = wxNewId();
+const long DebugPanel::ID_bFloorInfo = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -221,6 +222,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bKeys, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bTextures = new wxButton(Panel1, ID_bTextures, _("List Textures"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
 	BoxSizer3->Add(bTextures, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
+	BoxSizer3->Add(bFloorInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer3, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
@@ -250,6 +253,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bProfiler,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
 	Connect(ID_bKeys,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
 	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
+	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	//*)
 	dp = this;
 	OnInit();
@@ -548,4 +552,9 @@ void DebugPanel::On_bKeys_Click(wxCommandEvent& event)
 void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 {
 	Simcore->Report(Simcore->ListTextures(true));
+}
+
+void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
+{
+	Simcore->ShowFloorInfo(Simcore->camera->CurrentFloor);
 }
