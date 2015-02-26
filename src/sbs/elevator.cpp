@@ -5724,10 +5724,14 @@ void Elevator::ResetShaftDoors(int floor)
 
 	for (int i = 1; i <= sbs->Shafts(); i++)
 	{
-		if (sbs->GetShaft(i))
+		Shaft *shaft = sbs->GetShaft(i);
+		if (shaft)
 		{
-			sbs->GetShaft(i)->EnableRange(floor, sbs->ShaftDisplayRange, false, true);
-			sbs->GetShaft(i)->EnableRange(floor, sbs->ShaftDisplayRange, true, true);
+			if (shaft->IsEnabled == false)
+			{
+				shaft->EnableRange(floor, sbs->ShaftDisplayRange, false, true);
+				shaft->EnableRange(floor, sbs->ShaftDisplayRange, true, true);
+			}
 		}
 	}
 }
