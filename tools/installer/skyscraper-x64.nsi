@@ -20,7 +20,7 @@ SetCompressor lzma
 VIAddVersionKey ProductName "Skyscraper"
 VIAddVersionKey FileDescription "Skyscraper"
 VIAddVersionKey CompanyName "TLI Networks"
-VIAddVersionKey LegalCopyright "©2003-2013 Ryan Thoryk"
+VIAddVersionKey LegalCopyright "©2003-2015 Ryan Thoryk"
 VIAddVersionKey FileVersion "1.9.0.0"
 VIAddVersionKey ProductVersion "1.9.0.0"
 VIProductVersion 1.9.0.0
@@ -86,7 +86,6 @@ Section "Application" SEC01
   File "${LOCAL_FILES}\OgreBulletCollisions.dll"
   File "${LOCAL_FILES}\OgreBulletDynamics.dll"
   File "${LOCAL_FILES}\skyscraper.ini"
-  File "${LOCAL_FILES}\D3DX9_42.dll"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
   CreateShortCut "$DESKTOP\Skyscraper.lnk" "$INSTDIR\Skyscraper.exe"
@@ -119,6 +118,16 @@ Section "Application" SEC01
   File "${LOCAL_FILES}\data\materials\*.*"
   SetOutPath "$INSTDIR\data\otis67"
   File "${LOCAL_FILES}\data\otis67\*.*"
+  SetOutPath "$INSTDIR\data\Mitsubishi_ADA"
+  File "${LOCAL_FILES}\data\Mitsubishi_ADA\*.*"
+  SetOutPath "$INSTDIR\data\New_Otis_Elevator"
+  File "${LOCAL_FILES}\data\New_Otis_Elevator\*.*"
+  SetOutPath "$INSTDIR\data\Otis_ZEN"
+  File "${LOCAL_FILES}\data\Otis_ZEN\*.*"
+  SetOutPath "$INSTDIR\data\pool"
+  File "${LOCAL_FILES}\data\pool\*.*"
+  SetOutPath "$INSTDIR\data\Sigma_Palladium"
+  File "${LOCAL_FILES}\data\Sigma_Palladium\*.*"
 SectionEnd
 
 Section /o "Source Code" SEC02
@@ -137,22 +146,16 @@ Section /o "Source Code" SEC02
   SetOutPath "$INSTDIR\src"
   File /r "${LOCAL_FILES}\src\*.*"
   SetOutPath "$INSTDIR\codeblocks"
-  File /r "${LOCAL_FILES}\codeblocks\*.*"
+  File "${LOCAL_FILES}\codeblocks\*.*"
+  SetOutPath "$INSTDIR\codeblocks\wxsmith"
+  File "${LOCAL_FILES}\codeblocks\wxsmith\*.*"
   SetOutPath "$INSTDIR\msvc"
   File "${LOCAL_FILES}\msvc\*.*"
   SetOutPath "$INSTDIR\tools"
   File /r "${LOCAL_FILES}\tools\*.*"
 SectionEnd
 
-Section "Visual C++ runtime" SEC03
-  SetOutPath "$INSTDIR"
-  File "${LOCAL_FILES}\vcredist_x64.exe"
-  ;Call CheckVCRedist
-  ExecWait '"$INSTDIR\vcredist_x64.exe" /Q'
-  Delete "${LOCAL_FILES}\vcredist_x64.exe"
-SectionEnd
-
-Section "Required libraries" SEC04
+Section "Required libraries" SEC03
   SetOutPath "$INSTDIR"
   File "${LOCAL_FILES}\Caelum.dll"
   File "${LOCAL_FILES}\cg.dll"
@@ -161,14 +164,18 @@ Section "Required libraries" SEC04
   File "${LOCAL_FILES}\Plugin_CgProgramManager.dll"
   File "${LOCAL_FILES}\Plugin_OctreeSceneManager.dll"
   File "${LOCAL_FILES}\RenderSystem_Direct3D9.dll"
+  File "${LOCAL_FILES}\RenderSystem_Direct3D11.dll"
   File "${LOCAL_FILES}\RenderSystem_GL.dll"
   File "${LOCAL_FILES}\plugins.cfg"
   File "${LOCAL_FILES}\resources.cfg"
   File "${LOCAL_FILES}\ogre.cfg"
-  File "${LOCAL_FILES}\wxbase28_vc_custom.dll"
-  File "${LOCAL_FILES}\wxmsw28_core_vc_custom.dll"
-  File "${LOCAL_FILES}\wxmsw28_gl_vc_custom.dll"
+  File "${LOCAL_FILES}\wxbase294u_vc_custom.dll"
+  File "${LOCAL_FILES}\wxmsw294u_core_vc_custom.dll"
+  File "${LOCAL_FILES}\wxmsw294u_gl_vc_custom.dll"
   File "${LOCAL_FILES}\D3DX9_42.dll"
+  File "${LOCAL_FILES}\D3DCompiler_42.dll"
+  File "${LOCAL_FILES}\msvcp100.dll"
+  File "${LOCAL_FILES}\msvcr100.dll"
   SetOutPath "$INSTDIR\data\caelum"
   File /r "${LOCAL_FILES}\data\caelum\*.*"
 SectionEnd
@@ -195,8 +202,7 @@ SectionEnd
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Application"
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Source code"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Visual C++ runtime"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Required libraries"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Required libraries"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 Function un.onUninstSuccess
@@ -207,22 +213,6 @@ FunctionEnd
 Function un.onInit
   MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove $(^Name) and all of its components?" IDYES +2
   Abort
-FunctionEnd
-
-;-------------------------------
-; Test if Visual Studio Redistributables 2008 SP1 installed
-Function CheckVCRedist
-   Push $R0
-   ClearErrors
-   ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{6AFCA4E1-9B78-3640-8F72-A7BF33448200}" "Version"
-
-   ; if VS 2008 redist SP1 not installed, install it
-   IfErrors 0 VSRedistInstalled
-   ExecWait '"$INSTDIR\vcredist_x64.exe" /Q'
-   ;StrCpy $R0 "-1"
-
-VSRedistInstalled:
-   Exch $R0
 FunctionEnd
 
 Section Uninstall
