@@ -1,5 +1,12 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-the print command can now be specified by itself, to print a blank line
+-many script commands would crash if given no parameters; this fixes the issue
+-(Triton Center) 135th floor description fix
+-made new floor list report and FloorInfo command, and migrated the ListAltitudes feature into that
+-added Floor Information button to the control panel
+-added current floor name to the control panel
+-fixed an interior window positioning issue in the Simple building
 -prevent shaft door reset if full shaft is enabled
 -EnableGroup function in floor object will no longer touch shaft or stair objects if they're currently fully enabled
 -disabled some warnings on Visual C++

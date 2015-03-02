@@ -1,9 +1,9 @@
-Building from source on Linux:
+Building from source on Linux (Debian 7/Wheezy):
 -------------------------------------
 
 Install required stuff:
 ---
-sudo apt-get install subversion cmake gcc g++ wx2.8-headers libwxgtk2.8-dev libglut3-dev libglui-dev zlib1g-dev libfreeimage-dev libfreetype6-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev
+sudo apt-get install subversion cmake gcc g++ gcc-doc wx2.8-headers libwxgtk2.8-dev freeglut3-dev zlib1g-dev libfreeimage-dev libfreetype6-dev libois-dev libzzip-dev libxaw7-dev libxrandr-dev x11proto-randr-dev nvidia-cg-toolkit libgtk2.0-dev libboost-dev cmake-curses-gui
 ---
 
 
@@ -22,7 +22,7 @@ tar xfvj bullet-current.tar.bz2
 Build and install Bullet:
 ---
 cd bullet
-cmake -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION
+cmake -DCMAKE_C_FLAGS=-fPIC -DCMAKE_CXX_FLAGS=-fPIC -DINSTALL_EXTRA_LIBS=ON -DBUILD_DEMOS=OFF -DUSE_DOUBLE_PRECISION=ON -DCMAKE_BUILD_TYPE=Release
 make
 sudo make install
 cd
@@ -34,16 +34,16 @@ If you have a multi-core system, you can type "make -j2" for example to build us
 Step 2 - install the FMOD sound system
 ----------
 Get the related Linux package from:
-http://www.fmod.org/index.php/download#FMODExProgrammersAPI
+http://www.fmod.org/download-previous-products/
 
-(this download URL will change - http://www.fmod.org/fmod-downloads.html)
+(Get the FMOD Ex Programmer's API for Linux)
 ---
-wget http://www.fmod.org/index.php/release/version/fmodapi44203linux.tar.gz
-tar xfvz fmodapi44203linux.tar.gz
-cd fmodapi44203linux/api
+wget http://www.fmod.org/download/fmodex/api/Linux/fmodapi44449linux.tar.gz
+tar xfvz fmodapi44449linux.tar.gz
+cd fmodapi44449linux/api
 sudo mkdir /usr/local/include/fmodex
-sudo cp -p inc/* /usr/local/include/fmodex/
-sudo cp -p lib/* /usr/local/lib/
+sudo cp -a inc/* /usr/local/include/fmodex/
+sudo cp -a lib/* /usr/local/lib/
 cd
 ---
 
@@ -53,41 +53,49 @@ Step 3 - build and install OGRE
 
 First get the source:
 ---
-wget http://www.skyscrapersim.com/downloads/dev/other_apps/ogre_src_v1-7-4.tar.bz2
-tar xfvj ogre_src_v1-7-4.tar.bz2
-cd ogre_src_v1-7-4
-cmake -DOGRE_BUILD_SAMPLES=OFF
+wget http://www.skyscrapersim.com/downloads/dev/other_apps/ogre_src_v1-8-1-skyscraper.tar.bz2
+tar xfvj ogre_src_v1-8-1-skyscraper.tar.bz2
+cd ogre_src_v1-8-1
+cmake -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release
 make
 sudo make install
 ---
 
 (if you want to install the OGRE samples, for the cmake line above do "cmake -DINSTALL_SAMPLES=ON" instead)
 
+On an Ubuntu 14.04 test system, the "cmake" command was failing for Ogre due to an issue with Freetype.  This line fixes the issue:
+---
+cmake -DFREETYPE_INCLUDE_DIR=/usr/include/freetype2 -DOGRE_BUILD_SAMPLES=OFF -DCMAKE_BUILD_TYPE=Release
+---
+
 
 Step 4 - build and install Caelum (sky system)
 -----------
 wget http://www.skyscrapersim.com/downloads/dev/other_apps/caelum-0.6.1.tar.gz
 tar xfvz caelum-0.6.1.tar.gz
-cd caelum-0.6.1
-cmake .
+cd caelum
+cmake -DCMAKE_BUILD_TYPE=Release
 make
 sudo make install
----
 
 
 Step 5 - build Skyscraper (this also builds the built-in OgreBullet libraries)
 -----------
 First grab the source via SVN, and build.
+
 ---
 svn co http://svn.tliquest.net/skyscraper/skyscraper/trunk skyscraper
 cd skyscraper
 wget http://www.skyscrapersim.com/downloads/dev/other_apps/plugins.cfg
-cmake -DCMAKE_C_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION" -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION"
-make svnrev/svnrev
-./svnrev.sh
+cmake -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION"
 make
-ln -s Skyscraper skyscraper
 ---
+
+on a 64-bit system, you may need to use this cmake line instead:
+---
+cmake -DCMAKE_CXX_FLAGS="-fPIC -DBT_USE_DOUBLE_PRECISION" -DFMOD_LIBRARY="/usr/local/lib/libfmodex64.so"
+---
+
 
 Finally, run Skyscraper:
 ---
@@ -101,5 +109,4 @@ svn update
 make
 ./skyscraper
 ---
-
 
