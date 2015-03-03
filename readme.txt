@@ -54,12 +54,12 @@ files.
 
 3. Release Notes
 
-This release is the ninth development relase of the 2.0 series (which is a complete rewrite of
+This release is the ninth development release of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
-This software requires both the OGRE graphics engine library (version 1.7 or later) which
-can be found at http://www.ogre3d.org, the Bullet physics engine with some custom patches,
-available at http://www.skyscrapersim.com/downloads/dev/other_apps/, the FMOD sound system (www.fmod.org), and the wxWidgets library (version 2.6.3 or later) which can be found at http://www.wxwidgets.org.
+This software utilizes the OGRE rendering engine library (version 1.8 or later), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 2.8 or later), and the Caleum sky system addon for OGRE.
+
+Skyscraper on Windows supports both DirectX and OpenGL (previous versions only used OpenGL).  To switch between them, simply delete the ogre.cfg file in Skyscraper's folder, run the program again, and choose from the OGRE rendering menu.
 
 See the changelog for a detailed list of new features, fixes, and other changes in this release.
 
@@ -80,7 +80,7 @@ See the compiling.txt file for information on how to build from source.
 5. Usage
 
 To use Skyscraper, run the program, and a main menu screen will appear with a button for each
-available building (and one button for loading user buildings). Choose the building to load, and in a few moments you will be walking around in that building. The only buildings that are completely simulated in this release are "Simple" and "Triton Center". While in one of these buildings, you can click on objects such as elevator call buttons, etc to perform actions.  The recommended building to try out is the Triton Center, since it is the most complete official building.  The "Simple" building is a minimalistic demo to basically show how to make your own buildings in the application's scripting language. Other user-created buildings are included, and can be loaded by choosing the "Other Building" button on the main screen.
+available building (and one button for loading user buildings). Choose the building to load, and in a few moments you will be walking around in that building. You can press F5 to switch between standard and freelook modes. The only buildings that are completely simulated in this release are "Simple" and "Triton Center". While in one of these buildings, you can click on objects such as elevator call buttons, etc to perform actions.  The recommended building to try out is the Triton Center, since it is the most complete official building, and also the Glass Tower, which has some of the more complex designs.  The "Simple" building is a minimalistic demo to basically show how to make your own buildings in the application's scripting language. Other user-created buildings are included, and can be loaded by choosing the "Other Building" button on the main screen.
 
 ------------------------------------
 Keys currently used in the simulator:
@@ -127,135 +127,173 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-6. Detailed Release Notes (major changes since Alpha 7)
+6. Detailed Release Notes
 
-Skyscraper now generates it's own raw 3D geometry.  Alpha 7 relied on Crystal Space's "thingmesh" system, and during the Alpha 8 (Crystal Space version) development, I ported everything off and created Skyscraper's geometry processor which made the OGRE port possible.
 
-Skyscraper now uses the OGRE graphics engine for all graphics rendering and other operations, Bullet for collision detection and physics, and FMOD for sound.  This has resulted in many more features and greater expandibility.  Previous releases used the Crystal Space game engine.
+Information for this release:
+------------------------------------
 
-Skyscraper supports both DirectX and OpenGL (previous versions only used OpenGL).  To switch between them, simply delete the ogre.cfg file in Skyscraper's folder, run the program again, and choose from the OGRE rendering menu.
+This release has a very large amount of bug fixes and stability fixes, which results in Alpha 9 being the most stable release of Skyscraper yet.  Many fixes were intended to make Skyscraper stable for dynamic creation and deletion of objects during runtime, in anticipation for a building designer.
 
-This version has a new performance profiler built in (the same one Bullet uses), and is mainly to help pinpoint performance issues.  To get to it, click the Profiler button on the control panel window.  It'll show different components and functions of the simulator, and their per-frame timing in milliseconds.
+Most objects can be deleted by pressing Ctrl and Alt together, and clicking on the object.  On a Mac, the keys are Command and Option.  Previously only the Ctrl key was used, but this caused interference with the Ctrl walking modifier feature.  Controls and Call Buttons can now be deleted this way.
 
-This version supports starting elevators in a certain fire mode (FireService1 and FireService1 parameters), and supports only playing elevator music while the elevator is moving (MusicOnMove parameter) - you can also globally set those in the INI file.
+The lock/unlock feature is now done by pressing Ctrl and Shift together, and clicking on the object.  Previously just the Shift key was used, but this change fixes interference with the shift running modifier.
 
-Small objects (such as directional indicators, controls, call buttons) now have a maximum distance value (default 100) that they'll be shown, to improve performance.
-
-Skyscraper now supports loading standard OGRE mesh models.  A couple couches and keys are loaded in the Simple building as an example.  See this forum thread on how to create models using Google Sketchup:
-https://forum.skyscrapersim.com/index.php?topic=5556.0
+Skyscraper has supported loading standard OGRE mesh models since the Alpha 8 release.  A couple couches and keys are loaded in the Simple building as an example, and there is a couch on the roof of the Triton Center to demonstrate physics.  See this forum thread on how to create models using Google Sketchup:
+http://forum.skyscrapersim.com/index.php?topic=5556.0
 
 To optimize rendering speed, the main thing that will cause overall slowdowns is the type of texture filtering used.  The better the filtering, the better the visual quality but the slower the app.  Skyscraper defaults to anisotropic filtering at level 4.  Lower-quality filtering is available too in the forms of bilinear and trilinear filtering, so to improve rendering performance, either lower the anisotropic level in the INI file or switch to a different filtering method.  Also, the Vsync option normally locks the FPS at 60, but can cause abnormal slowdowns that can decrease the framerate below what it should (such as an FPS reading of 30 with vsync on, while one of 40 with it off).  These options can all be set in the INI file.
-
-This version supports selective floor displays on indicators (meaning you can specify which floors to display on indicators) using the DisplayFloors command in the elevator section.
 
 Caelum is used to create dynamic skies, including moving clouds, moving sun and moon, effects like fog and rain, stars at night, etc.  To use Caelum, choose (or create) a sky function from the data/caelum/sky.os script, and either add it to your building script using the DynamicSky command or in the INI file with the SkyName parameter.  See the script guide (designguide.html) for more information on the available options.  The Caelum sky-related time multiplier can be set in the Camera Control box, in order to quickly show day/night cycles.
 
 To revert back to the old sky system, turn off Caelum in the skyscraper.ini file using the Skyscraper.Frontent.Caelum option.
 
-A basic code constructor has been added.  It's basically in-sim menus that let you build things during runtime by generating the related script commands.  You can access it by clicking "Object Manager" on the control panel and clicking "Create".
 
-The Triton Center and Glass Tower now have new external windows using the new LoadAlphaBlendTexture command.
+Major changes since the Alpha 8 release:
+------------------------------------
 
-Skyscraper supports loading Ogre material definitions and textures directly by placing all of the files into the data/materials folder, and using the LoadMaterial command to map the material to a simulator texture name (more info in the script guide).
+Ogre 1.8.1 is now used instead of 1.7.4, which Alpha 8 used.  Model mesh files need to be upgraded to the newer format to prevent warning messages on startup - they'll still work fine though.
 
-Texture animation has been added, and is done by many of the new commands - a new building has been created to show off the animations, and is called "Simple - Animated" - this uses all of the commands, and you can quickly learn how to use them this way.  This feature was very easy to add due to the capabilities of OGRE and how easy those were implemented in that graphics engine.
+A pool has been added to the Triton Center, on the Pool level (132).  This floor can be accessed by the Pool Express elevator in the Hotel (80) and Residential (100) skylobbies.
 
-An Action system has been created (along with a viewer/player in the control panel), allowing you to create custom controls and triggers anywhere in the simulator and bind them to specific simulator actions.  Custom controls work just like elevator buttons/controls, and perform certain actions - see the animated simple building for an example.  Triggers are defined areas that perform actions just like controls, except that it does them whenever you enter/leave the trigger area.  See the animated simple building for an example/demo of this also.  Sounds can also be played/stopped from actions.
+The Triton Center now has railings, and also displays interfloors along with shaft lights in the core utility shaft, accessible by a door on the subbasement (S) level.
 
-A bunch of new textures have been added, which are mostly there for window shading effects (see the Glass Tower and Triton Center buildings for examples).
+For the Glass Tower, the atrium base is now the Atrium level (previously mezzanine) to match movie depictions of the Hyatt Regency and Bank of America buildings.  The neighboring fictional Peerless Building was also made, based on a spotting blueprint.
 
-A new AddFloor command syntax has been made which fixes a number of polygon generation problems with the old version
+The StairsShowFloors and ShowFullStairs commands have been added, which allow stairwells to display multiple or all levels if in that stairwell.  This is used in the Triton Center's West Stairwell (serves floors 80-119) allowing you to look down the center of the whole stairwell.
 
-A "GotoFloor" option has been made in the camera controller, allowing you to instantly jump to any floor.
+More detailed information is shown in script error messages, and also in the Object Manager for each object.
 
-Due to changes made to the planar texture mapper, there's a chance that some walls in existing buildings will have their textures flipped - I haven't noticed anything during testing, but if you notice anything, it would be best just to fix those walls, since previous builds (including CS versions) worked in a more broken way.
+Performance improvements were made for buildings with thousands of floors or very fast elevators.
 
-ReverseAxis command is now deprecated and only used for the old AddFloor syntax
+Names can be used for variables instead of just variable numbers.  It's recommended to change any scripts that use numbered variables to the newer named format, to make script code easier to read.
 
-SetPlanarMapping command has been updated, with a "rotate" option
+When inspection mode is disabled in an elevator, the elevators now automatically re-level to the nearest floor.
 
-The default walking camera speed has been changed to half of the old speed, for a more realistic walking speed.  If you want the old behavior, just set the StepSpeed and StrafeSpeed parameters in skyscraper.ini to 140.
+A window has been added in the Object Manager to move objects such as models and walls.  To move an object (in this example I'll move a couch in the Simple building), first start Skyscraper and choose the Simple building.  Move into the building and look at both couches.  In the control panel, click "Object Manager", click the arrow next to "Floor 0" to expand it, scroll down, and click on one of the "Couch" entries.  Now click the Move button below, and you're now able to move and rotate it.
 
-AddShaftDoor command has been updated with a voffset parameter - shaft doors can now be placed at any height, not just the floor's base.  The Glass Tower uses this for the executive elevator.
+Elevator button texture sizing parameters have been fixed - this may break button positioning in existing buildings that have values other than 1 or 0 for the button size, but so far it seems to be limited (and is easily fixed if you just put in the correct value).
 
-SetShaftDoors command is now deprecated, and the options have been moved into the AddShaftDoor command.
+The simulator now fully supports manual elevators and platform lifts.
 
-You can now fully configure the main menu from the INI file (and can even create as many buttons as you want).
+Elevators support constant-pressure (hold) open and close buttons.
 
-Since single-sided colliders are not possible (in order to support some "locking doors" people have made, which isn't a very good idea anyway, since you'd still be walking through a wall), I added support for actual door locks and keys.  Models are loaded and assigned as keys, and all controls (including elevator buttons) can be locked and unlocked by shift-clicking on the control (but only if you have the related key).  Keys are assigned numbers, and you can see which keys you have by clicking the "List Keys" button in the control panel.  When you click on a key, the number is added to your inventory and the key model is deleted.
+Elevator fire modes have been reworked for full realism.
 
-The elevator bumpers feature has been improved, and now works regardless if the user is moving or not.
+Elevators now use interlocks for all doors; to manually open and close doors, interlocks must be disabled first in the Elevator Editor, and then shift-click can be used to open/close them.  If interlocks are enabled, the elevator will not move unless all associated shaft doors are closed.
 
-Go toggle options have been added as actions, so you can manually operate the elevator while in inspection mode from any control (see the AddControl command in the script guide for more info).
+A new console window has been created, and all logging in this window is put in the skyscraper.log file.
 
-The Simple building now has a key model in it, which unlocks both the elevator's 10th floor button and the 10th floor stairwell door.  Other controls can be locked and unlocked, and by default they're assigned a key ID of 0 (which means no key required).
+The RenderOnStartup option has been added to the INI file, which if enabled, lets you view the building as it's being build.  This results in a very slow startup, but is interesting.
 
-A couch has been added to the Triton Center's roof, which can be pushed off due to Bullet physics support.
+While statements have been added, and functions can be called from both If and While statements.
+
+Nested functions are now supported, and use a basic stack system for switching between contexts.
+
+Elevator door sensors have been added, which is enabled by default for all automatic doors.  Door sensors are automatically created triggers, sized in the elevator's internal door area with 1/4 of the character collider's width surrounding it for room.  Two new elevator commands were made which are used by it's action, and are "sensor" and "reset".  When a user passes into the sensor's trigger area, the "sensor" command is run which opens and holds the doors.  The "reset" command simply calls a function that has existed before, that resets door timers to disable a door hold.  The door sensors can be switched on and off in the elevator editor.
+
+The selection for controls (button and switches) can be reversed by right-clicking on them.
+
+Floor signs now take the shaft door vertical offset into account when being created.
+
+Call buttons are now created with directions based on the combined range of all elevators, instead of just the first one specified.
+
+A binoculars feature has been added, which can be toggled with the B key.  Pressing the B key will also reset the camera's field of view (FOV).
+
+The interfloors adjacent to the current active floor are now shown, which follows the original design.
+
+Elevators now support a separate emergency stop speed multiplier, along with car and motor sounds that are played during an emergency stop.
+
+A "List Textures" button has been added to the control panel, which lists all loaded textures from the texture tiling information table, along with the related filename.
+
+The internal sound code now supports sound queuing, which now makes the floor sounds and message sounds all play in their initiated order, one after the other, instead of simultaneously.
+
+Call buttons now support sounds.
+
+The elevator floor indicators and beep sounds have been revamped to update the floor number while they're passing the floor or beginning to level instead of when the elevator's base is located within that floors range, making them more realistic.
+
+The elevator editor's floor selector now only shows the related serviced floors.
 
 
 Modified keys:
 -------
-PgUp or P - Look upwards
-PgDown or L - Look downwards
-Home or O - Float upwards (or jump if collision detection is on)
-End or K - Float downwards (or crouch if collision detection is on)
-F7 - Show colliders
-Alt + PgUp/P - Spin right
-Alt + PgDown/L - Spin left
-Plus or ] - Zoom in (decrease FOV angle)
-Minus or [ - Zoom out (increase FOV angle)
-V - Toggle noclip mode (gravity and collisions off)
+Ctrl-Alt-click - delete objects (previously Ctrl-click)
 Ctrl-Shift-click - lock or unlock objects
 Shift-click - toggle call button status
 -------
 
 
 New commands/parameters:
-DisplayFloors
-AddModel
-AddShaftModel
-AddStairsModel
-DisplayFloors
-FireService1
-FireService2
-MusicOn
-MusicOnMove
-AutoEnable
-LoadMaterial
-LoadAnimatedTexture
-LoadAlphaBlendTexture
-RotateTexture
-RotateAnimTexture
-ScrollTexture
-ScrollAnimTexture
-ScaleTexture
-TransformTexture
-AddActionControl
-AddShaftActionControl
-AddStairsActionControl
-AddTrigger
-AddAction
-AddSound (updated)
-AddFloor (updated)
-MotorUpStartSound
-MotorDownStartSound
-MotorUpRunSound
-MotorDownRunSound
-MotorUpStopSound
-MotorDownStopSound
-CarUpStartSound
-CarDownStartSound
-CarUpRunSound
-CarDownRunSound
-CarUpStopSound
-CarDownStopSound
-(inspection mode actions: UpOn, UpOff, DownOn, DownOff, GoOn and GoOff)
-SetKey
-SetLock
-InspectionSpeed
-LimitQueue
-AutoEnable
-ReOpen
+FloorInfo
+ListTextures
+StairsShowFloors
+ShowFullStairs
+ShaftShowFloors (new parameter)
+ShaftShowInterfloors
+DynamicSky (fixed for Caelum)
+AutoDoors
+OpenOnStart
+Delete
+RunAction
+GotoFloor
+OpenMessage
+CloseMessage
+While statements
+FinishDoors (new filler walls parameter)
+FinishShaftDoors (new filler walls parameter)
+AddActionParent
+RemoveActionParent
+AddCustomFloor
+EndPoint
+AddFloor (parameter fix)
+Interlocks
+FloorHold
+DoorSensor
+CarEmergencyStopSound
+MotorEmergencyStopSound
+EmergencyStopSpeed
+CreateCallButtons (new sound parameter)
+
+New elevator actions:
+OpenInt
+CloseInt
+OpenExt
+CloseExt
+OpenManual
+CloseManual
+OpenIntManual
+CloseIntManual
+Return
+Up
+Down
+InterlocksOn
+InterlocksOff
+Sensor
+Reset
+SensorOn
+SensorOff
+
+New advanced math functions:
+cos
+sine
+tan
+acos
+asin
+atan
+atan2
+sqrt
+abs
+exp
+log
+log2
+log10
+mod
+hypot
+ceil
+flr
+rnd
+round
+
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
