@@ -1006,14 +1006,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 
 		if (ShowOutside == true)
 		{
-			int loc = -1;
-			for (int i = 0; i < (int)ShowOutsideList.size(); i++)
-			{
-				if (ShowOutsideList[i] == current_floor)
-					loc = i;
-			}
-
-			if (loc != -1)
+			if (IsShowOutside(current_floor) == true)
 			{
 				sbs->EnableSkybox(true);
 				sbs->EnableBuildings(true);
