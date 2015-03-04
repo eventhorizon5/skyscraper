@@ -416,7 +416,7 @@ bool SBS::UnregisterTextureInfo(const char *name, const char *material_name)
 	TrimString(Name);
 	TrimString(Material);
 
-	for (int i = 0; i < textureinfo.size(); i++)
+	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
 		if (textureinfo[i].name == Name || (textureinfo[i].material_name == Material && textureinfo[i].material_name != ""))
 		{
@@ -933,7 +933,7 @@ bool SBS::AddTextToTexture(const char *origname, const char *name, const char *f
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
 	if (sbs->Verbose)
-		Report("AddTextToTexture: created texture " + Name);
+		Report("AddTextToTexture: created texture '" + Name + "'");
 
 	CacheFilename(Name, Name);
 	return true;
@@ -1033,7 +1033,7 @@ bool SBS::AddTextureOverlay(const char *orig_texture, const char *overlay_textur
 	}
 
 	if (sbs->Verbose)
-		Report("AddTextureOverlay: created texture " + Name);
+		Report("AddTextureOverlay: created texture '" + Name + "'");
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
@@ -1846,9 +1846,9 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, i
 
 	using namespace Ogre;
 
-	if (destTexture->getHeight() < destBottom - 1)
+	if ((int)destTexture->getHeight() < destBottom - 1)
 		destBottom = destTexture->getHeight() - 1;
-	if (destTexture->getWidth() < destRight - 1)
+	if ((int)destTexture->getWidth() < destRight - 1)
 		destRight = destTexture->getWidth() - 1;
 
 	try

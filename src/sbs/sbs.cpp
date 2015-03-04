@@ -1580,15 +1580,6 @@ float SBS::GetDistance(float x1, float x2, float z1, float z2)
 	return 0;
 }
 
-void SBS::ListAltitudes()
-{
-	//dumps the floor altitude list
-
-	Report("--- Floor Altitudes ---\n");
-	for (int i = -Basements; i < Floors; i++)
-		Report(ToString2(i) + "(" + GetFloor(i)->ID + ")\t----\t" + ToString2(GetFloor(i)->FullHeight()) + "\t----\t" + ToString2(GetFloor(i)->Altitude));
-}
-
 Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
@@ -2255,6 +2246,10 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	if (IsEven(range) == true)
 		range++;
 
+	//floor must be valid
+	if (!IsValidFloor(floor))
+		return;
+
 	int additionalfloors;
 	if (range > 1)
 		additionalfloors = (range - 1) / 2;
@@ -2284,38 +2279,41 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	//enable floors within range
 	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
 	{
-		if (IsValidFloor(i))
+		Floor *floorobj = GetFloor(i);
+
+		if (floorobj)
 		{
 			if (shaft)
 			{
 				//if a shaft is specified, only show the floor if it is in the related shaft's ShowFloorsList array
 				if (shaft->ShowFloors > 0)
 				{
-					int index = -1;
-					for (int j = 0; j < (int)shaft->ShowFloorsList.size(); j++)
+					bool showfloor = shaft->IsShowFloor(i);
+
+					if (showfloor == true && value == true)
 					{
-						if (shaft->ShowFloorsList[j] == i)
+						if (floorobj->IsEnabled == false)
 						{
-							index = j;
-							break;
-						}
-					}
-					if (index != -1 && value == true)
-					{
-						if (GetFloor(i)->IsEnabled == false)
-						{
-							GetFloor(i)->Enabled(true);
+							floorobj->Enabled(true);
 							if (enablegroups == true)
-								GetFloor(i)->EnableGroup(true);
+								floorobj->EnableGroup(true);
 						}
 					}
 					else
 					{
-						if (GetFloor(i)->IsEnabled == true)
+						//only disable floor if it hasn't been enabled separately by a related group
+						if (floorobj->EnabledGroup == true)
 						{
-							GetFloor(i)->Enabled(false);
+							//for now check to see if the group floor is a ShowFloor
+							if (shaft->IsShowFloor(floorobj->EnabledGroup_Floor) == true)
+								return;
+						}
+
+						if (floorobj->IsEnabled == true)
+						{
+							floorobj->Enabled(false);
 							if (enablegroups == true)
-								GetFloor(i)->EnableGroup(false);
+								floorobj->EnableGroup(false);
 						}
 					}
 				}
@@ -2325,31 +2323,41 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 				//if a stairwell is specified, only show the floor if it is in the related stairwell's ShowFloorsList array
 				if (stairs->ShowFloors == true)
 				{
-					int index = -1;
-					for (int j = 0; j < (int)stairs->ShowFloorsList.size(); j++)
+					bool showfloor = stairs->IsShowFloor(i);
+
+					if (showfloor == true && value == true)
 					{
-						if (stairs->ShowFloorsList[j] == i)
-							index = j;
-					}
-					if (index != -1 && value == true)
-					{
-						GetFloor(i)->Enabled(true);
-						if (enablegroups == true)
-							GetFloor(i)->EnableGroup(true);
+						if (floorobj->IsEnabled == false)
+						{
+							floorobj->Enabled(true);
+							if (enablegroups == true)
+								floorobj->EnableGroup(true);
+						}
 					}
 					else
 					{
-						GetFloor(i)->Enabled(false);
-						if (enablegroups == true)
-							GetFloor(i)->EnableGroup(false);
+						//only disable floor if it hasn't been enabled separately by a related group
+						if (floorobj->EnabledGroup == true)
+						{
+							//for now check to see if the group floor is a ShowFloor
+							if (stairs->IsShowFloor(floorobj->EnabledGroup_Floor) == true)
+								return;
+						}
+
+						if (floorobj->IsEnabled == true)
+						{
+							floorobj->Enabled(false);
+							if (enablegroups == true)
+								floorobj->EnableGroup(false);
+						}
 					}
 				}
 			}
 			else
 			{
-				GetFloor(i)->Enabled(value);
+				floorobj->Enabled(value);
 				if (enablegroups == true)
-					GetFloor(i)->EnableGroup(value);
+					floorobj->EnableGroup(value);
 			}
 		}
 	}
@@ -4213,13 +4221,14 @@ void SBS::ListKeys()
 {
 	//list all keys
 
-	Report("--- Keys ---\n");
+	Report("\n--- Keys ---\n");
 
 	for (int i = 0; i < (int)keys.size(); i++)
 	{
 		std::string id = ToString(keys[i].id);
 		Report(id + " - " + keys[i].name);
 	}
+	Report("");
 }
 
 void SBS::CameraLoop()
@@ -4252,5 +4261,42 @@ void SBS::UnregisterControl(Control *control)
 			control_index.erase(control_index.begin() + i);
 			i--;
 		}
+	}
+}
+
+void SBS::ShowFloorInfo(bool all_floors, int floor)
+{
+	//show floor information for all floors, or specified floor
+
+	if (all_floors == false)
+	{
+		Floor *flr = GetFloor(floor);
+
+		if (!flr)
+			return;
+
+		Report("\n--- Floor Information ---\n");
+		Report("Number: " + ToString2(floor));
+		Report("ID: " + flr->ID);
+		Report("Name: " + flr->Name);
+		Report("Type: " + flr->FloorType);
+		Report("Description: " + flr->Description);
+		Report("Height: " + ToString2(flr->Height));
+		Report("InterfloorHeight: " + ToString2(flr->InterfloorHeight));
+		Report("FullHeight: " + ToString2(flr->FullHeight()));
+		Report("Altitude: " + ToString2(flr->Altitude));
+		Report("Base: " + ToString2(flr->GetBase()));
+		Report("");
+	}
+	else
+	{
+		Report("\n--- Floor Information ---\n");
+		Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tDescription");
+		for (int i = -Basements; i < Floors; i++)
+		{
+			Floor *floor = GetFloor(i);
+			Report(ToString2(i) + "(" + floor->ID + ")\t----\t" + floor->Name + "\t----\t" + floor->FloorType + "\t----\t" + ToString2(floor->Height) + "\t----\t" + ToString2(floor->InterfloorHeight) + "\t----\t" + ToString2(floor->Altitude) + "\t----\t" + floor->Description);
+		}
+		Report("");
 	}
 }

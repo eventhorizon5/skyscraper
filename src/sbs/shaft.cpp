@@ -551,6 +551,18 @@ void Shaft::RemoveShowFloor(int floor)
 	}
 }
 
+bool Shaft::IsShowFloor(int floor)
+{
+	//return true if a floor is in the ShowFloors list
+
+	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			return true;
+	}
+	return false;
+}
+
 void Shaft::AddShowOutside(int floor)
 {
 	//adds a floor number to the ShowOutside list
@@ -588,6 +600,18 @@ void Shaft::RemoveShowOutside(int floor)
 	}
 }
 
+bool Shaft::IsShowOutside(int floor)
+{
+	//return true if a floor is in the ShowOutside list
+
+	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
+	{
+		if (ShowOutsideList[i] == floor)
+			return true;
+	}
+	return false;
+}
+
 void Shaft::AddShowInterfloor(int floor)
 {
 	//adds a floor number to the ShowInterfloors list
@@ -623,6 +647,18 @@ void Shaft::RemoveShowInterfloor(int floor)
 				ShowInterfloorsList.erase(ShowInterfloorsList.begin() + i);
 		}
 	}
+}
+
+bool Shaft::IsShowInterfloor(int floor)
+{
+	//return true if a floor is in the ShowInterfloors list
+
+	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+	{
+		if (ShowInterfloorsList[i] == floor)
+			return true;
+	}
+	return false;
 }
 
 bool Shaft::IsValidFloor(int floor)
@@ -970,14 +1006,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 
 		if (ShowOutside == true)
 		{
-			int loc = -1;
-			for (int i = 0; i < (int)ShowOutsideList.size(); i++)
-			{
-				if (ShowOutsideList[i] == current_floor)
-					loc = i;
-			}
-
-			if (loc != -1)
+			if (IsShowOutside(current_floor) == true)
 			{
 				sbs->EnableSkybox(true);
 				sbs->EnableBuildings(true);

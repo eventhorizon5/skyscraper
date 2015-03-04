@@ -325,6 +325,9 @@ public:
 	bool InElevator();
 	void EnableSensor(bool value, int number = 0);
 	bool GetSensorStatus(int number = 0);
+	int GetServicedFloorCount();
+	int GetServicedFloor(int index);
+	void ResetShaftDoors(int floor);
 
 private:
 

@@ -1677,7 +1677,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     ID = %floor%
     Name = Grand Ballroom
     Type = Ballroom
-    Description = 2-story Grand Ballroom with exterior decks on the setback
+    Description = 2-story Grand Ballroom
     Height = 9
     InterfloorHeight = 2.24
     Group = 136 #enable 136 also, since both are merged

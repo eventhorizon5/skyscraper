@@ -657,6 +657,7 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtCameraOffset;
 		//*)
 		int last_elevator;
+		int floor_number;
 
 	private:
 

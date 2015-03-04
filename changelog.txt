@@ -1,5 +1,110 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-added new Underground building
+-cleanups in relation to ShowFloors arrays
+-fixed a conflict between Group listings and ShowFloors lists, and cleaned up EnableFloorRange function
+-the print command can now be specified by itself, to print a blank line
+-many script commands would crash if given no parameters; this fixes the issue
+-(Triton Center) 135th floor description fix
+-made new floor list report and FloorInfo command, and migrated the ListAltitudes feature into that
+-added Floor Information button to the control panel
+-added current floor name to the control panel
+-fixed an interior window positioning issue in the Simple building
+-prevent shaft door reset if full shaft is enabled
+-EnableGroup function in floor object will no longer touch shaft or stair objects if they're currently fully enabled
+-disabled some warnings on Visual C++
+-fixes to action array checks of Control and Trigger objects, to prevent crashes if no actions are associated with the object
+-more elevator object checks for elevator editor
+-reset door reference in elevator editor, to prevent issues if elevator is deleted
+-added Mac key hints to control reference and readme
+-the elevator editor's floor selector now only shows the related serviced floors
+-(c++)reworked shaft door and elevator door ClickedObject code to newer design
+-(c++)elevator shaft door wrapper objects now store associated floor number
+-(c++)remade call button code in ClickedObject function, to remove legacy code
+-call buttons can now be deleted using ctrl-alt-click
+-controls can now be deleted by ctrl-alt-click
+-objects are now deleted by ctrl-alt-click instead of just ctrl-click, to prevent interference with ctrl walking modifier
+-added reporting to elevator door sensors
+-added new actions for enabling and disabling elevator door sensors
+-reworked action run code, to prevent duplicates
+-call buttons now check if elevator objects are valid, to report accordingly
+-brought back shift-click call button functionality, to change light status
+-objects are now locked/unlocked by holding ctrl-shift and clicking instead of just shift-click, which fixes conflicts with using shift for running
+-added transparent button background texture (transparent.png)
+-elevators now update floor indicators and floor beep sounds when either passing a floor altitude, or beginning to level at a floor
+-prevent elevators from updating floor number during leveling mode
+-added more verbose file load error messages
+-year update
+-fixed Visual C++ 64-bit build options
+-updated Visual C++ 2010 build parameters
+-added message sound status checks, to prevent repeats
+-removed Palace Hotel on author's request
+-added support for sounds in call button objects
+-added numeric checks to the Calc function, to fix issues with the Calc function hanging on filenames.  Also removed the related work-around code for skipping parameters.
+-fixes and cleanups to verbose output
+-replaced elevator's message sound and floor sound objects with a single announcement sound object, and sounds using this are now queued to prevent overlapping
+-added sound queuing support, using PlayQueued and ProcessQueue functions
+-added reporting functions to Sound class
+-elevators no longer play floor sounds (floor announcements) if on the same floor as hall call
+-fixed crash that happened if the object move window was visible while the object was deleted
+-(Triton Center) Shaft 17 (core utility shaft) now displays interfloors, bottom floor while inside it, and lights
+-added ShaftShowInterfloors command
+-Object Information window now displays correct line number information (adjusted for includes), and also related include filename
+-split line number calculation portion of script error code into a separate function
+-added List Textures button to control panel
+-added script commands ListAltitudes and ListTextures
+-texture listing now supports showing filename
+-added more verbose output for texture loading functions
+-fixed texture overrides; texture functions now unload previous material if a new one of the same name is specified
+-(C++) added UnloadMaterial function and fixed UnloadTexture function
+-(C++) split off texture multipler registration into separate functions
+-(Triton Center) Residential service elevator texture orientation fix
+-added emergency stop motor sound
+-queued sound position option in sound code, to prevent repeat applies of the setting
+-fixes for SetPlayPosition and GetPlayPosition in sound code for fmod, used by AutoAdjustSound
+-added the AutoAdjustSound to the INI file, originally added in rev 1824
+-added support for separate car and motor emergency stop sounds
+-uninitialized value fixes (meshobject rotation)
+-during an emergency stop, the car stop sound is played if an emergency stop sound isn't specified
+-verbose mode now reports details on exactly which car/motor sounds are played, for start, move, and stop
+-reworked elevator car/motor sound code and moved into separate functions
+-renamed the "mainsound" sound object to "carsound"
+-added support for a separate emergency stop car sound and speed multiplier
+-fixed an issue where the elevator editor would display too much call button output in verbose mode
+-split the create_walls option in the FinishDoors commands into separate doors_walls and track_walls options, and updated guide
+-fixed issue where elevator nudge mode would become active if elevator was in fire phase 2 mode on alternate recall floor
+-partial floor range in ShaftShowFloors command is now shown regardless of elevator moving
+-added IsBoolean function (C++)
+-enhancements to the ShaftShowFloors command
+-button title fix (elevator editor)
+-fixed issue where FinishDoors function was not properly reverting the DrawWalls state
+-removed bounding box check in stairs code, since it was failing on stairwell floors that contained no geometry, but were still valid
+-fixed "InStairwell" status
+-interfloors are now shown for adjacent floors, in order to match the original design concept
+-fixed columnframe and interfloor checkboxes in the mesh control dialog
+-added Mesh Control dialog option to enable/disable interfloors
+-added functions to enable/disable interfloors
+-fixed main filename case
+-fixed Caelum sky rotation
+-changed Caelum start time to 10am instead of noon
+-removed SkyMult INI file parameter, and the Caelum sky.os file now configures this
+-added a check to make sure elevator serviced floors are valid for the associated shaft
+-added basic group state check to floor object, to prevent repeated enables/disables during ShowFloors functionality
+-floors now report in verbose mode when they're enabled/disabled
+-fixed an issue where the ShaftShowFloors command would cause the destination floor to become disabled
+-check floor enabled state before enabling/disabling floor and group
+-mentioned reverse floor ranges in script guide
+-fixed an issue where sound objects were playing during startup, and cleaned up related code
+-removed full screen stay-on-top flag
+-fixed an issue restoring fullscreen mode on Windows after a reload (using ctrl-r)
+-added info on 'b' key FOV reset
+-added binoculars FOV setting to the camera control window
+-fixed a typo for the reload feature in the control reference
+-added binoculars mode
+-(Triton Center) fixed crossbracing texture tiling and some mechanical interfloors
+-removed the Cut function's "checkstring" functionality, which reverts a "fix" from 2783 which broke filler walls in many existing buildings' elevators.  The original functionality never really worked, and the removal of it appears to work fine
+-data type fix for negative dest values.  Also fixes an assertion in debug mode
+-fixes to automatic filler walls function, to prevent z-fighting issues
 -right-clicking controls now reverses direction of selection
 -all shaft doors must now be fully closed for an elevator to move, when interlocks are enabled
 -actions now return the status of the commands run

@@ -53,6 +53,7 @@ class DebugPanel: public wxFrame
 
 		//(*Identifiers(DebugPanel)
 		static const long ID_STATICTEXT1;
+		static const long ID_STATICTEXT12;
 		static const long ID_STATICTEXT2;
 		static const long ID_STATICTEXT8;
 		static const long ID_STATICTEXT3;
@@ -62,6 +63,7 @@ class DebugPanel: public wxFrame
 		static const long ID_STATICTEXT9;
 		static const long ID_STATICTEXT6;
 		static const long ID_t_camerafloor;
+		static const long ID_t_floorname;
 		static const long ID_t_camerap;
 		static const long ID_t_rotation;
 		static const long ID_t_elevnumber;
@@ -79,7 +81,7 @@ class DebugPanel: public wxFrame
 		static const long ID_chkAutoStairs;
 		static const long ID_chkRandom;
 		static const long ID_CHECKBOX1;
-		static const long ID_bListAltitudes;
+		static const long ID_bFloorList;
 		static const long ID_bMeshControl;
 		static const long ID_bCameraControl;
 		static const long ID_bEditElevator;
@@ -91,6 +93,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bProfiler;
 		static const long ID_bKeys;
 		static const long ID_bTextures;
+		static const long ID_bFloorInfo;
 		static const long ID_PANEL1;
 		//*)
 		class Timer : public wxTimer
@@ -109,7 +112,7 @@ class DebugPanel: public wxFrame
 		void On_chkProcessElevators_Click(wxCommandEvent& event);
 		void On_chkAutoShafts_Click(wxCommandEvent& event);
 		void On_chkFrameSync_Click(wxCommandEvent& event);
-		void On_bListAltitudes_Click(wxCommandEvent& event);
+		void On_bFloorList_Click(wxCommandEvent& event);
 		void On_bMeshControl_Click(wxCommandEvent& event);
 		void On_bEditElevator_Click(wxCommandEvent& event);
 		void On_chkGravity_Click(wxCommandEvent& event);
@@ -125,6 +128,7 @@ class DebugPanel: public wxFrame
 		void On_bActionViewer_Click(wxCommandEvent& event);
 		void On_bKeys_Click(wxCommandEvent& event);
 		void On_bTextures_Click(wxCommandEvent& event);
+		void On_bFloorInfo_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
@@ -141,17 +145,20 @@ class DebugPanel: public wxFrame
 		wxBoxSizer* BoxSizer7;
 		wxCheckBox* chkAutoStairs;
 		wxCheckBox* chkFrameLimiter;
+		wxButton* bFloorInfo;
 		wxCheckBox* chkAutoShafts;
 		wxButton* bControlReference;
 		wxButton* bCameraControl;
 		wxBoxSizer* BoxSizer2;
 		wxStaticText* StaticText1;
+		wxStaticText* StaticText10;
 		wxButton* bActionViewer;
 		wxStaticText* StaticText3;
 		wxButton* bStats;
 		wxButton* bProfiler;
 		wxButton* bObjectInfo;
-		wxButton* bListAltitudes;
+		wxStaticText* t_floorname;
+		wxButton* bFloorList;
 		wxStaticText* StaticText8;
 		wxBoxSizer* BoxSizer4;
 		wxCheckBox* chkGravity;

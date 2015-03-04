@@ -1080,19 +1080,19 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, 1, true);
+		elevator->AddRoute(floor_number, 1, true);
 }
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->Go(sFloor->GetThumbPosition() - Simcore->Basements);
+		elevator->Go(floor_number);
 }
 
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->AddRoute(sFloor->GetThumbPosition() - Simcore->Basements, -1, true);
+		elevator->AddRoute(floor_number, -1, true);
 }
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
@@ -1170,14 +1170,12 @@ void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
 void editelevator::OnInit()
 {
 	last_elevator = 0;
+	floor_number = 0;
 
 	if (Simcore->Elevators() > 0)
 	{
 		//set elevator range slider
 		sNumber->SetScrollbar(0, 1, Simcore->Elevators(), 1);
-
-		//set floor range slider
-		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors(), 1);
 
 		//set door range slider
 		sDoor->SetScrollbar(1, 1, Simcore->GetElevator(sNumber->GetThumbPosition() + 1)->NumDoors + 1, 1);
@@ -1190,16 +1188,14 @@ void editelevator::Loop()
 {
 	static int last_door;
 	static int last_elevator_count;
-	static int last_floor_count;
 	int elev_num;
 	int door_num;
 	int elevator_count;
-	int floor_count;
 	elev_num = sNumber->GetThumbPosition() + 1;
 	door_num = sDoor->GetThumbPosition();
 	elevator_count = Simcore->Elevators();
-	floor_count = Simcore->TotalFloors();
 	elevator = Simcore->GetElevator(elev_num);
+	door = 0;
 
 	if (!elevator)
 		return;
@@ -1210,6 +1206,10 @@ void editelevator::Loop()
 	{
 		//number changed; update values
 		last_elevator = elev_num;
+
+		//set floor range slider
+		sFloor->SetScrollbar(0, 1, elevator->GetServicedFloorCount(), 1);
+
 		SetMainValues();
 	}
 	if (door_num != last_door)
@@ -1226,21 +1226,13 @@ void editelevator::Loop()
 		//set elevator range slider
 		sNumber->SetScrollbar(0, 1, Simcore->Elevators(), 1);
 	}
-	if (floor_count != last_floor_count)
-	{
-		//floor count changed; update slider
-		last_floor_count = floor_count;
-
-		//set floor range slider
-		sFloor->SetScrollbar(Simcore->Basements, 1, Simcore->TotalFloors(), 1);
-	}
 
 	tElevator->SetLabel(wxT("Number " + wxVariant((long)sNumber->GetThumbPosition() + 1).GetString()));
-	int floor_temp = sFloor->GetThumbPosition() - Simcore->Basements;
+	floor_number = elevator->GetServicedFloor(sFloor->GetThumbPosition());
 	wxString floor_name;
-	if (Simcore->GetFloor(floor_temp))
-		floor_name = wxString::FromAscii(Simcore->GetFloor(floor_temp)->ID.c_str());
-	tFloor->SetLabel(wxT("Floor ") + wxVariant((long)floor_temp).GetString() + wxT(" (" + floor_name) + wxT(")"));
+	if (Simcore->GetFloor(floor_number))
+		floor_name = wxString::FromAscii(Simcore->GetFloor(floor_number)->ID.c_str());
+	tFloor->SetLabel(wxT("Floor ") + wxVariant((long)floor_number).GetString() + wxT(" (" + floor_name) + wxT(")"));
 	tDoor->SetLabel(wxT("Door " + wxVariant((long)sDoor->GetThumbPosition()).GetString() + wxT(" (0 = all)")));
 	txtBrakes->SetValue(wxString::FromAscii(BoolToString(elevator->GetBrakeStatus())));
 	txtDestFloor->SetValue(wxVariant((long)elevator->GotoFloor).GetString());
@@ -1386,13 +1378,13 @@ void editelevator::On_bSetDecelJerk_Click(wxCommandEvent& event)
 void editelevator::On_bOpenShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->OpenDoors(sDoor->GetThumbPosition(), 3, sFloor->GetThumbPosition() - Simcore->Basements);
+		elevator->OpenDoors(sDoor->GetThumbPosition(), 3, floor_number);
 }
 
 void editelevator::On_bCloseShaftDoor_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->CloseDoors(sDoor->GetThumbPosition(), 3, sFloor->GetThumbPosition() - Simcore->Basements);
+		elevator->CloseDoors(sDoor->GetThumbPosition(), 3, floor_number);
 }
 
 void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
@@ -1404,7 +1396,7 @@ void editelevator::On_bSetDoorTimer_Click(wxCommandEvent& event)
 void editelevator::On_bChime_Click(wxCommandEvent& event)
 {
 	if (door)
-		door->Chime(sFloor->GetThumbPosition() - Simcore->Basements, true);
+		door->Chime(floor_number, true);
 }
 
 void editelevator::On_bACPMode_Toggle(wxCommandEvent& event)
@@ -1491,23 +1483,32 @@ void editelevator::On_bSetRecallAlternate_Click(wxCommandEvent& event)
 
 void editelevator::On_Fire1Off_Select(wxCommandEvent& event)
 {
-	CallButton *callbutton = elevator->GetPrimaryCallButton();
-	if (callbutton)
-		callbutton->FireService(0);
+	if (elevator)
+	{
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		if (callbutton)
+			callbutton->FireService(0);
+	}
 }
 
 void editelevator::On_Fire1On_Select(wxCommandEvent& event)
 {
-	CallButton *callbutton = elevator->GetPrimaryCallButton();
-	if (callbutton)
-		callbutton->FireService(1);
+	if (elevator)
+	{
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		if (callbutton)
+			callbutton->FireService(1);
+	}
 }
 
 void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 {
-	CallButton *callbutton = elevator->GetPrimaryCallButton();
-	if (callbutton)
-		callbutton->FireService(2);
+	if (elevator)
+	{
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
+		if (callbutton)
+			callbutton->FireService(2);
+	}
 }
 
 void editelevator::On_Fire2Off_Select(wxCommandEvent& event)
@@ -1569,14 +1570,14 @@ void editelevator::On_bDown_Toggle(wxCommandEvent& event)
 
 void editelevator::On_bUpIndicator_Click(wxCommandEvent& event)
 {
-	Floor *floor = Simcore->GetFloor(sFloor->GetThumbPosition() - Simcore->Basements);
+	Floor *floor = Simcore->GetFloor(floor_number);
 	if (floor && elevator)
 		floor->SetDirectionalIndicators(elevator->Number, true, false);
 }
 
 void editelevator::On_bDownIndicator_Click(wxCommandEvent& event)
 {
-	Floor *floor = Simcore->GetFloor(sFloor->GetThumbPosition() - Simcore->Basements);
+	Floor *floor = Simcore->GetFloor(floor_number);
 	if (floor && elevator)
 		floor->SetDirectionalIndicators(elevator->Number, false, true);
 }

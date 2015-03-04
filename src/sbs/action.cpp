@@ -65,7 +65,7 @@ Action::Action(const std::string name, std::vector<Object*> &action_parents, con
 Action::~Action()
 {
 	if (sbs->FastDelete == false)
-		sbs->Report("Deleted action " + name);
+		sbs->Report("Deleted action '" + name + "'");
 }
 
 const char *Action::GetName()
@@ -436,7 +436,7 @@ bool Action::Run(Object *parent)
 		}
 		if (command_name == "openshaftdoor")
 		{
-			if (command_parameters.size() == 2)
+			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
@@ -446,7 +446,7 @@ bool Action::Run(Object *parent)
 		}
 		if (command_name == "closeshaftdoor")
 		{
-			if (command_parameters.size() == 2)
+			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
@@ -459,7 +459,7 @@ bool Action::Run(Object *parent)
 		}
 		if (command_name == "openshaftdoormanual")
 		{
-			if (command_parameters.size() == 2)
+			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
@@ -469,7 +469,7 @@ bool Action::Run(Object *parent)
 		}
 		if (command_name == "closeshaftdoormanual")
 		{
-			if (command_parameters.size() == 2)
+			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
 				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
@@ -484,7 +484,7 @@ bool Action::Run(Object *parent)
 
 	if (command_name == "changetexture")
 	{
-		if (command_parameters.size() == 2)
+		if ((int)command_parameters.size() == 2)
 		{
 			if (parent_type == "Mesh")
 			{
@@ -535,7 +535,7 @@ bool Action::Run(Object *parent)
 
 	if (command_name == "playsound")
 	{
-		if (command_parameters.size() == 2)
+		if ((int)command_parameters.size() == 2)
 		{
 			std::vector<Sound*> soundlist;
 
@@ -556,7 +556,7 @@ bool Action::Run(Object *parent)
 					return false;
 			}
 
-			if (soundlist.size() > 0)
+			if ((int)soundlist.size() > 0)
 			{
 				std::string loop = command_parameters[1];
 				SetCase(loop, false);
@@ -571,7 +571,7 @@ bool Action::Run(Object *parent)
 							soundlist[i]->Loop(false);
 						bool result = soundlist[i]->Play();
 
-						if (soundlist.size() == 1)
+						if ((int)soundlist.size() == 1)
 							return result;
 					}
 				}
@@ -583,7 +583,7 @@ bool Action::Run(Object *parent)
 
 	if (command_name == "stopsound")
 	{
-		if (command_parameters.size() == 1)
+		if ((int)command_parameters.size() == 1)
 		{
 			std::vector<Sound*> soundlist;
 
@@ -603,6 +603,8 @@ bool Action::Run(Object *parent)
 				else
 					return false;
 			}
+			else
+				return false;
 
 			for (int i = 0; i < (int)soundlist.size(); i++)
 			{

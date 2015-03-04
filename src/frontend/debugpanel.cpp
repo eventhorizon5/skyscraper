@@ -60,6 +60,7 @@ ActionViewer *actionviewer;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
+const long DebugPanel::ID_STATICTEXT12 = wxNewId();
 const long DebugPanel::ID_STATICTEXT2 = wxNewId();
 const long DebugPanel::ID_STATICTEXT8 = wxNewId();
 const long DebugPanel::ID_STATICTEXT3 = wxNewId();
@@ -69,6 +70,7 @@ const long DebugPanel::ID_STATICTEXT10 = wxNewId();
 const long DebugPanel::ID_STATICTEXT9 = wxNewId();
 const long DebugPanel::ID_STATICTEXT6 = wxNewId();
 const long DebugPanel::ID_t_camerafloor = wxNewId();
+const long DebugPanel::ID_t_floorname = wxNewId();
 const long DebugPanel::ID_t_camerap = wxNewId();
 const long DebugPanel::ID_t_rotation = wxNewId();
 const long DebugPanel::ID_t_elevnumber = wxNewId();
@@ -86,7 +88,7 @@ const long DebugPanel::ID_chkAutoShafts = wxNewId();
 const long DebugPanel::ID_chkAutoStairs = wxNewId();
 const long DebugPanel::ID_chkRandom = wxNewId();
 const long DebugPanel::ID_CHECKBOX1 = wxNewId();
-const long DebugPanel::ID_bListAltitudes = wxNewId();
+const long DebugPanel::ID_bFloorList = wxNewId();
 const long DebugPanel::ID_bMeshControl = wxNewId();
 const long DebugPanel::ID_bCameraControl = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
@@ -98,6 +100,7 @@ const long DebugPanel::ID_bActionViewer = wxNewId();
 const long DebugPanel::ID_bProfiler = wxNewId();
 const long DebugPanel::ID_bKeys = wxNewId();
 const long DebugPanel::ID_bTextures = wxNewId();
+const long DebugPanel::ID_bFloorInfo = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -121,6 +124,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer6 = new wxBoxSizer(wxVERTICAL);
 	StaticText1 = new wxStaticText(Panel1, ID_STATICTEXT1, _("Camera Floor:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	BoxSizer6->Add(StaticText1, 0, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText10 = new wxStaticText(Panel1, ID_STATICTEXT12, _("Floor Name:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT12"));
+	BoxSizer6->Add(StaticText10, 1, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText2 = new wxStaticText(Panel1, ID_STATICTEXT2, _("Camera Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	BoxSizer6->Add(StaticText2, 0, wxBOTTOM|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText7 = new wxStaticText(Panel1, ID_STATICTEXT8, _("Camera Rotation:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
@@ -141,6 +146,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer7 = new wxBoxSizer(wxVERTICAL);
 	t_camerafloor = new wxStaticText(Panel1, ID_t_camerafloor, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_camerafloor"));
 	BoxSizer7->Add(t_camerafloor, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	t_floorname = new wxStaticText(Panel1, ID_t_floorname, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_floorname"));
+	BoxSizer7->Add(t_floorname, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t_camerap = new wxStaticText(Panel1, ID_t_camerap, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_camerap"));
 	BoxSizer7->Add(t_camerap, 0, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	t_rotation = new wxStaticText(Panel1, ID_t_rotation, wxEmptyString, wxDefaultPosition, wxSize(150,-1), wxST_NO_AUTORESIZE, _T("ID_t_rotation"));
@@ -191,8 +198,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer2->Add(BoxSizer5, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
 	BoxSizer11->Add(BoxSizer2, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
-	bListAltitudes = new wxButton(Panel1, ID_bListAltitudes, _("List Altitudes"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bListAltitudes"));
-	BoxSizer3->Add(bListAltitudes, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bFloorList = new wxButton(Panel1, ID_bFloorList, _("Floor List"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorList"));
+	BoxSizer3->Add(bFloorList, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bMeshControl = new wxButton(Panel1, ID_bMeshControl, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMeshControl"));
 	BoxSizer3->Add(bMeshControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bCameraControl = new wxButton(Panel1, ID_bCameraControl, _("Camera Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraControl"));
@@ -215,6 +222,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer3->Add(bKeys, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bTextures = new wxButton(Panel1, ID_bTextures, _("List Textures"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
 	BoxSizer3->Add(bTextures, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
+	BoxSizer3->Add(bFloorInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer3, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
@@ -232,7 +241,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAutoStairs,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkAutoStairs_Click);
 	Connect(ID_chkRandom,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkRandom_Click);
 	Connect(ID_CHECKBOX1,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&DebugPanel::On_chkVerbose_Click);
-	Connect(ID_bListAltitudes,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bListAltitudes_Click);
+	Connect(ID_bFloorList,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorList_Click);
 	Connect(ID_bMeshControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bMeshControl_Click);
 	Connect(ID_bCameraControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bCameraControl_Click);
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
@@ -244,6 +253,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bProfiler,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
 	Connect(ID_bKeys,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
 	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
+	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	//*)
 	dp = this;
 	OnInit();
@@ -305,9 +315,9 @@ void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 	Simcore->AutoShafts = chkAutoShafts->GetValue();
 }
 
-void DebugPanel::On_bListAltitudes_Click(wxCommandEvent& event)
+void DebugPanel::On_bFloorList_Click(wxCommandEvent& event)
 {
-	Simcore->ListAltitudes();
+	Simcore->ShowFloorInfo(true);
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
@@ -365,6 +375,8 @@ void DebugPanel::Timer::Notify()
 		dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
 		dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
 		dp->t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
+		if (Simcore->GetFloor(Simcore->camera->CurrentFloor))
+			dp->t_floorname->SetLabel(wxString::FromAscii(Simcore->GetFloor(Simcore->camera->CurrentFloor)->Name.c_str()));
 
 		if (Simcore->Elevators() > 0)
 		{
@@ -539,5 +551,10 @@ void DebugPanel::On_bKeys_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 {
-	Simcore->Report(Simcore->ListTextures(true));
+	Simcore->Report("\n" + Simcore->ListTextures(true));
+}
+
+void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
+{
+	Simcore->ShowFloorInfo(false, Simcore->camera->CurrentFloor);
 }

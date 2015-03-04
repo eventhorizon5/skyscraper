@@ -73,7 +73,7 @@ public:
 	//wrapper that represents the entire set of doors
 	struct DoorWrapper
 	{
-		DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor);
+		DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor, int shaftdoor_floor = 0);
 		~DoorWrapper();
 
 		DoorObject* CreateDoor(const char *doorname, const char *Direction, float OpenSpeed, float CloseSpeed);
@@ -96,6 +96,7 @@ public:
 		bool IsShaftDoor;
 		float Shift;
 		float altitude;
+		int floor;
 	};
 
 	Object *object; //SBS object

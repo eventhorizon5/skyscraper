@@ -578,13 +578,21 @@ void Floor::EnableGroup(bool value)
 				//enable shafts and stairs for other floor
 				for (int j = 1; j <= sbs->Shafts(); j++)
 				{
-					if (sbs->GetShaft(j))
-						sbs->GetShaft(j)->Enabled(Group[i], value, true);
+					Shaft *shaft = sbs->GetShaft(j);
+					if (shaft)
+					{
+						if (shaft->IsEnabled == false)
+							shaft->Enabled(Group[i], value, true);
+					}
 				}
 				for (int j = 1; j <= sbs->StairsNum(); j++)
 				{
-					if (sbs->GetStairs(j))
-						sbs->GetStairs(j)->Enabled(Group[i], value);
+					Stairs *stairs = sbs->GetStairs(j);
+					if (stairs)
+					{
+						if (stairs->IsEnabled == false)
+							stairs->Enabled(Group[i], value);
+					}
 				}
 			}
 		}

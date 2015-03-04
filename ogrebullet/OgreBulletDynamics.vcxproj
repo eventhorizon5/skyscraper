@@ -91,6 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain_d.lib;OgreBulletCollisions.lib;bulletcollision_debug.lib;bulletdynamics_debug.lib;linearmath_debug.lib;ConvexDecomposition_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -123,6 +124,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BufferSecurityCheck>false</BufferSecurityCheck>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain_d.lib;OgreBulletCollisions.lib;bulletcollision_debug.lib;bulletdynamics_debug.lib;linearmath_debug.lib;ConvexDecomposition_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -156,6 +158,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain.lib;OgreBulletCollisions.lib;bulletcollision.lib;bulletdynamics.lib;linearmath.lib;convexdecomposition.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -191,6 +194,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <AdditionalDependencies>OgreMain.lib;OgreBulletCollisions.lib;bulletcollision.lib;bulletdynamics.lib;linearmath.lib;convexdecomposition.lib;%(AdditionalDependencies)</AdditionalDependencies>

@@ -83,7 +83,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	//create shaft door objects
 	ShaftDoors.resize(elev->ServicedFloors.size());
 	for (int i = 0; i < (int)ShaftDoors.size(); i++)
-		ShaftDoors[i] = new DoorWrapper(this, true);
+		ShaftDoors[i] = new DoorWrapper(this, true, elev->ServicedFloors[i]);
 
 	//create sound object
 	doorsound = new Sound(object, "Door Sound", true);
@@ -631,25 +631,15 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 		if (open == false && (sbs->InShaft == true || sbs->InElevator == true))
 		{
-			if (sbs->GetShaft(elev->AssignedShaft)->ShowFloors == 0)
+			if (elev->GetShaft()->ShowFloors == 0)
 			{
 				sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
 				sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
 			}
-			else
+			else if (elev->GetShaft()->IsShowFloor(ShaftDoorFloor) == true)
 			{
-				int loc = -1;
-				for (int i = 0; i < (int)sbs->GetShaft(elev->AssignedShaft)->ShowFloorsList.size(); i++)
-				{
-					if (sbs->GetShaft(elev->AssignedShaft)->ShowFloorsList[i] == ShaftDoorFloor)
-						loc = i;
-				}
-
-				if (loc == -1)
-				{
-					sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
-					sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
-				}
+				sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
+				sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
 			}
 		}
 	}
@@ -945,7 +935,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		//create doors
 		Floor *floorobj = sbs->GetFloor(floor);
-		Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
+		Shaft *shaft = elev->GetShaft();
 		float base = (wrapper->altitude - floorobj->GetBase()) + floorobj->GetBase(true); //relative to floor
 
 		//cut shaft and floor walls
@@ -991,7 +981,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		else
 		{
 			WallObject *wall;
-			Shaft *shaft = sbs->GetShaft(elev->AssignedShaft);
+			Shaft *shaft = elev->GetShaft();
 			wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, "Connection");
 			name1 = "ShaftDoorF1";
 			name2 = "ShaftDoorF2";
@@ -1178,11 +1168,11 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabled");
 
 	//exit if shaft's ShowFullShaft is set
-	if (sbs->GetShaft(elev->AssignedShaft)->ShowFullShaft == true && value == false)
+	if (elev->GetShaft()->ShowFullShaft == true && value == false)
 		return;
 
 	//leave top and bottom on
-	if ((floor == sbs->GetShaft(elev->AssignedShaft)->startfloor || floor == sbs->GetShaft(elev->AssignedShaft)->endfloor) && value == false)
+	if ((floor == elev->GetShaft()->startfloor || floor == elev->GetShaft()->endfloor) && value == false)
 		return;
 
 	//exit if elevator doesn't service the requested floor
@@ -1207,7 +1197,7 @@ void ElevatorDoor::ShaftDoorsEnabledRange(int floor, int range)
 	SBS_PROFILE("ElevatorDoor::ShaftDoorsEnabledRange");
 
 	//exit if shaft's ShowFullShaft is set
-	if (sbs->GetShaft(elev->AssignedShaft)->ShowFullShaft == true)
+	if (elev->GetShaft()->ShowFullShaft == true)
 		return;
 
 	//range must be greater than 0
@@ -1499,7 +1489,7 @@ ElevatorDoor::DoorObject::~DoorObject()
 	mesh = 0;
 }
 
-ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor)
+ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor, int shaftdoor_floor)
 {
 	parent = parentobject;
 	Open = false;
@@ -1511,6 +1501,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	IsShaftDoor = shaftdoor;
 	Shift = 0;
 	altitude = 0;
+	floor = shaftdoor_floor;
 
 	object = new Object();
 	object->SetValues(this, parent->object, "DoorWrapper", "Door Wrapper", false);

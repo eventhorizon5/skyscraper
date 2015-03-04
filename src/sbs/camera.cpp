@@ -566,176 +566,191 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		sbs->Report("Clicked on object " + number + ": " + meshname);
 
 	//object checks and actions
-	if (obj)
+
+	if (!obj)
+		return;
+
+	std::string type = obj->GetType();
+
+	//get original object (parent object of clicked mesh)
+	if (obj->GetParent())
 	{
-		//delete wall if ctrl is pressed
-		if (wall && ctrl == true && shift == false && right == false && object_number > 0)
+		std::string parent_type = obj->GetParent()->GetType();
+
+		//check controls
+		if (parent_type == "Control")
 		{
-			if (std::string(obj->GetType()) == "Wall")
-				sbs->DeleteObject(obj);
-			else
-				sbs->ReportError("Cannot delete object " + number);
-			return;
+			Control *control = (Control*)obj->GetParent()->GetRawObject();
+
+			if (control)
+			{
+				//delete control if ctrl and alt keys are pressed
+				if (ctrl == true && alt == true && shift == false)
+				{
+					sbs->DeleteObject(obj->GetParent());
+					return;
+				}
+
+				//toggle lock status if ctrl and shift are pressed
+				if (ctrl == true && shift == true)
+					control->ToggleLock();
+				else
+					control->Press(right);
+			}
 		}
 
-		//get original object (parent object of clicked mesh)
-		if (obj->GetParent())
+		//check doors
+		if (parent_type == "Door" && right == false)
 		{
-			std::string type = obj->GetParent()->GetType();
+			Door *door = (Door*)obj->GetParent()->GetRawObject();
 
-			//check controls
-			if (type == "Control")
+			if (door)
 			{
-				Control *control = (Control*)obj->GetParent()->GetRawObject();
-
-				if (control)
+				//delete door if ctrl and alt keys are pressed
+				if (ctrl == true && alt == true && shift == false)
 				{
-					if (ctrl == true && shift == true)
-						control->ToggleLock();
-					else
-						control->Press(right);
+					sbs->DeleteObject(obj->GetParent());
+					return;
 				}
-			}
 
-			//check doors
-			if (type == "Door" && right == false)
-			{
-				Door *door = (Door*)obj->GetParent()->GetRawObject();
-
-				if (door)
+				//toggle lock status if ctrl and shift are pressed
+				if (ctrl == true && shift == true)
+					door->ToggleLock(pos);
+				else
 				{
-					//delete door if ctrl key is pressed
-					if (ctrl == true && shift == false)
+					//open and close doors
+					if (door->IsOpen() == false)
 					{
-						sbs->DeleteObject(obj->GetParent());
-						return;
-					}
-
-					if (ctrl == true && shift == true)
-						door->ToggleLock(pos);
-					else
-					{
-						if (door->IsOpen() == false)
-						{
-							if (door->IsMoving == false)
-								door->Open(pos);
-							else
-								door->Close();
-						}
+						if (door->IsMoving == false)
+							door->Open(pos);
 						else
-						{
-							if (door->IsMoving == false)
-								door->Close();
-							else
-								door->Open(pos);
-						}
+							door->Close();
+					}
+					else
+					{
+						if (door->IsMoving == false)
+							door->Close();
+						else
+							door->Open(pos);
 					}
 				}
 			}
+		}
 
-			//check models
-			if (type == "Model" && right == false)
+		//check models
+		if (parent_type == "Model" && right == false)
+		{
+			Model *model = (Model*)obj->GetParent()->GetRawObject();
+
+			if (model)
 			{
-				Model *model = (Model*)obj->GetParent()->GetRawObject();
-
-				if (model)
+				//delete model if ctrl and alt keys are pressed
+				if (ctrl == true && alt == true && shift == false)
 				{
-					//delete model if ctrl key is pressed
-					if (ctrl == true && shift == false)
-					{
-						sbs->DeleteObject(obj->GetParent());
-						return;
-					}
+					sbs->DeleteObject(obj->GetParent());
+					return;
+				}
 
-					//if model is a key, add key to keyring and delete model
-					if (model->IsKey() == true)
-					{
-						sbs->AddKey(model->GetKeyID(), model->Name);
-						sbs->DeleteObject(obj->GetParent());
-						return;
-					}
+				//if model is a key, add key to keyring and delete model
+				if (model->IsKey() == true)
+				{
+					sbs->AddKey(model->GetKeyID(), model->Name);
+					sbs->DeleteObject(obj->GetParent());
+					return;
+				}
+			}
+		}
+
+		//check call buttons
+		if (parent_type == "CallButton" && right == false)
+		{
+			CallButton *callbutton = (CallButton*)obj->GetParent()->GetRawObject();
+
+			if (callbutton)
+			{
+				int index = (int)meshname.find(":");
+				int index2 = (int)meshname.find(":", index + 1);
+
+				std::string direction = meshname.substr(index2 + 1);
+				TrimString(direction);
+
+				//delete call button if ctrl and alt keys are pressed
+				if (ctrl == true && alt == true && shift == false)
+				{
+					sbs->DeleteObject(callbutton->object);
+					return;
+				}
+
+				if (ctrl == true && shift == true)
+				{
+					//if ctrl and shift are held, toggle lock
+					callbutton->ToggleLock();
+				}
+				else if (shift == true)
+				{
+					//if shift is held, change button status instead
+					if (direction == "Up")
+						callbutton->UpLight(!callbutton->UpStatus);
+					else
+						callbutton->DownLight(!callbutton->DownStatus);
+				}
+				else
+				{
+					//press button
+					if (direction == "Up")
+						callbutton->Call(true);
+					else
+						callbutton->Call(false);
+				}
+			}
+		}
+
+		//check elevator doors
+		if (parent_type == "DoorWrapper" && shift == true && right == false)
+		{
+			ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
+
+			if (wrapper)
+			{
+				ElevatorDoor *parent = wrapper->parent;
+				if (!parent)
+					return;
+
+				Elevator *elevator = parent->elev;
+				if (!elevator)
+					return;
+
+				int number = parent->Number;
+				int floor = wrapper->floor;
+
+				if (wrapper->IsShaftDoor == true)
+				{
+					//check shaft doors
+					if (elevator->AreShaftDoorsOpen(number, floor) == false)
+						elevator->OpenDoorsEmergency(number, 3, floor);
+					else
+						elevator->CloseDoorsEmergency(number, 3, floor);
+				}
+				else
+				{
+					//check elevator doors
+					if (elevator->AreDoorsOpen(number) == false)
+						elevator->OpenDoorsEmergency(number, 2);
+					else
+						elevator->CloseDoorsEmergency(number, 2);
 				}
 			}
 		}
 	}
 
-	//check call buttons
-	if ((int)meshname.find("Call Button") != -1 && right == false)
+	//delete wall if ctrl and alt are pressed
+	if (ctrl == true && alt == true && shift == false && right == false && object_number > 0)
 	{
-		//user clicked on a call button
-		int index = (int)meshname.find(":");
-		int index2 = (int)meshname.find(":", index + 1);
-		int floor = atoi(meshname.substr(12, index - 12).c_str());
-		int number = atoi(meshname.substr(index + 1, index2 - index - 1).c_str());
-
-		CallButton *buttonref = 0;
-		if (sbs->GetFloor(floor))
-			buttonref = sbs->GetFloor(floor)->CallButtonArray[number];
-
-		if (buttonref)
-		{
-			std::string direction = meshname.substr(index2 + 1);
-			TrimString(direction);
-
-			if (ctrl == true && shift == true)
-			{
-				//if ctrl and shift are held, toggle lock
-				buttonref->ToggleLock();
-			}
-			else if (shift == true)
-			{
-				//if shift is held, change button status instead
-				if (direction == "Up")
-					buttonref->UpLight(!buttonref->UpStatus);
-				else
-					buttonref->DownLight(!buttonref->DownStatus);
-			}
-			else
-			{
-				//press button
-				if (direction == "Up")
-					buttonref->Call(true);
-				else
-					buttonref->Call(false);
-			}
-		}
-	}
-
-	//check shaft doors
-	if ((int)meshname.find("Shaft Door") != -1 && shift == true && right == false)
-	{
-		//user clicked on a shaft door
-		int elevator = atoi(meshname.substr(9, meshname.find(":") - 9).c_str());
-		int index = (int)meshname.find("Shaft Door");
-		int index2 = (int)meshname.find(":", index);
-		int number = atoi(meshname.substr(index + 10, index2 - (index + 10)).c_str());
-		int floor = atoi(meshname.substr(index2 + 1, meshname.length() - index2 - 2).c_str());
-
-		Elevator *elev = sbs->GetElevator(elevator);
-		if (elev)
-		{
-			if (elev->AreShaftDoorsOpen(number, floor) == false)
-				elev->OpenDoorsEmergency(number, 3, floor);
-			else
-				elev->CloseDoorsEmergency(number, 3, floor);
-		}
-	}
-
-	//check elevator doors
-	if ((int)meshname.find("ElevatorDoor") != -1 && shift == true && right == false)
-	{
-		//user clicked on an elevator door
-		int elevator = atoi(meshname.substr(13, meshname.find(":") - 13).c_str());
-		int number = atoi(meshname.substr(meshname.find(":") + 1, meshname.length() - meshname.find(":") - 1).c_str());
-
-		Elevator *elev = sbs->GetElevator(elevator);
-		if (elev)
-		{
-			if (elev->AreDoorsOpen(number) == false)
-				elev->OpenDoorsEmergency(number, 2);
-			else
-				elev->CloseDoorsEmergency(number, 2);
-		}
+		if (wall && type == "Wall")
+			sbs->DeleteObject(obj);
+		else
+			sbs->ReportError("Cannot delete object " + number);
+		return;
 	}
 }
 

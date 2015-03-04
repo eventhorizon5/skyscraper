@@ -1557,20 +1557,10 @@ void Elevator::MoveElevatorToFloor()
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
 			}
-			else
+			else if (GetShaft()->IsShowFloor(sbs->camera->CurrentFloor) == true)
 			{
-				int loc = -1;
-				for (int i = 0; i < (int)GetShaft()->ShowFloorsList.size(); i++)
-				{
-					if (GetShaft()->ShowFloorsList[i] == sbs->camera->CurrentFloor)
-						loc = i;
-				}
-
-				if (loc == -1)
-				{
-					sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
-					sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
-				}
+				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
+				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
 			}
 
 			//Turn off sky, buildings, and landscape
@@ -1581,22 +1571,16 @@ void Elevator::MoveElevatorToFloor()
 				sbs->EnableLandscape(false);
 				sbs->EnableExternal(false);
 			}
-			else
+			else if (GetShaft()->IsShowOutside(sbs->camera->CurrentFloor) == true)
 			{
-				int loc = -1;
-				for (int i = 0; i < (int)GetShaft()->ShowOutsideList.size(); i++)
-				{
-					if (GetShaft()->ShowOutsideList[i] == sbs->camera->CurrentFloor)
-						loc = i;
-				}
-				if (loc == -1)
-				{
-					sbs->EnableSkybox(false);
-					sbs->EnableBuildings(false);
-					sbs->EnableLandscape(false);
-					sbs->EnableExternal(false);
-				}
+				sbs->EnableSkybox(false);
+				sbs->EnableBuildings(false);
+				sbs->EnableLandscape(false);
+				sbs->EnableExternal(false);
 			}
+
+			//reset shaft doors
+			ResetShaftDoors(GetFloor());
 		}
 
 		//set interior directional indicators
@@ -2071,14 +2055,7 @@ void Elevator::FinishMove()
 			sbs->EnableExternal(true);
 
 			//reset shaft doors
-			for (int i = 1; i <= sbs->Shafts(); i++)
-			{
-				if (sbs->GetShaft(i))
-				{
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
-				}
-			}
+			ResetShaftDoors(GotoFloor);
 		}
 		else if (sbs->Verbose)
 			Report("user not in elevator - not turning on objects");
@@ -2137,18 +2114,9 @@ void Elevator::FinishMove()
 		if (sbs->Verbose)
 			Report("stop complete");
 
+		//reset shaft doors
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		{
-			//reset shaft doors
-			for (int i = 1; i <= sbs->Shafts(); i++)
-			{
-				if (sbs->GetShaft(i))
-				{
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, false, true);
-					sbs->GetShaft(i)->EnableRange(GotoFloor, sbs->ShaftDisplayRange, true, true);
-				}
-			}
-		}
+			ResetShaftDoors(GotoFloor);
 	}
 
 	//update elevator's floor number
@@ -2198,13 +2166,14 @@ void Elevator::DumpQueues()
 {
 	//dump both (up and down) elevator queues
 
-	sbs->Report("--- Elevator " + ToString2(Number) + " Queues ---\n");
+	sbs->Report("\n--- Elevator " + ToString2(Number) + " Queues ---\n");
 	sbs->Report("Up:");
 	for (int i = 0; i < (int)UpQueue.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(UpQueue[i]));
 	sbs->Report("Down:");
 	for (int i = 0; i < (int)DownQueue.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(DownQueue[i]));
+	Report("");
 }
 
 void Elevator::Enabled(bool value)
@@ -2397,9 +2366,10 @@ void Elevator::DumpServicedFloors()
 {
 	//dump serviced floors list
 
-	sbs->Report("--- Elevator " + ToString2(Number) + "'s Serviced Floors ---\n");
+	sbs->Report("\n--- Elevator " + ToString2(Number) + "'s Serviced Floors ---\n");
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(ServicedFloors[i]));
+	Report("");
 }
 
 bool Elevator::AddServicedFloor(int number)
@@ -2877,14 +2847,7 @@ bool Elevator::EnableInspectionService(bool value)
 			sbs->EnableExternal(true);
 
 			//reset shaft doors
-			for (int i = 1; i <= sbs->Shafts(); i++)
-			{
-				if (sbs->GetShaft(i))
-				{
-					sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, false, true);
-					sbs->GetShaft(i)->EnableRange(GetFloor(), sbs->ShaftDisplayRange, true, true);
-				}
-			}
+			ResetShaftDoors(GetFloor());
 		}
 
 		InspectionService = false;
@@ -5718,5 +5681,40 @@ void Elevator::EnableSensor(bool value, int number)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
 			DoorArray[number]->EnableSensor(value);
+	}
+}
+
+int Elevator::GetServicedFloorCount()
+{
+	//return number of serviced floors
+	return (int)ServicedFloors.size();
+}
+
+int Elevator::GetServicedFloor(int index)
+{
+	//get a specific serviced floor
+	if (index >= 0 && index < (int)ServicedFloors.size())
+		return ServicedFloors[index];
+	return 0;
+}
+
+void Elevator::ResetShaftDoors(int floor)
+{
+	//reset shaft doors
+
+	//this might not be needed, due to addition of full-shaft enable check to
+	//floor object's EnableGroup function, needs testing
+
+	for (int i = 1; i <= sbs->Shafts(); i++)
+	{
+		Shaft *shaft = sbs->GetShaft(i);
+		if (shaft)
+		{
+			if (shaft->IsEnabled == false)
+			{
+				shaft->EnableRange(floor, sbs->ShaftDisplayRange, false, true);
+				shaft->EnableRange(floor, sbs->ShaftDisplayRange, true, true);
+			}
+		}
 	}
 }

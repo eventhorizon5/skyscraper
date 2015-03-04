@@ -216,7 +216,6 @@ public:
 	void EnableSkybox(bool value);
 	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
-	void ListAltitudes();
 	Object* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	std::string GetTextureMaterial(const char *name, bool &result, bool report = true, const char *polygon_name = 0);
@@ -384,6 +383,7 @@ public:
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);
 	void RegisterTextureInfo(const char *name, const char *material_name, const char *filename, float widthmult, float heightmult, bool enable_force, bool force_mode);
 	bool UnregisterTextureInfo(const char *name, const char *material_name = "");
+	void ShowFloorInfo(bool all_floors, int floor = 0);
 
 	//Meshes
 	MeshObject* Buildings;

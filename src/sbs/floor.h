@@ -57,8 +57,8 @@ public:
 	std::vector<CallButton*> CallButtonArray; //pointer array to call button objects
 	std::vector<FloorIndicator*> FloorIndicatorArray; //pointer array to floor indicator objects
 	std::vector<int> Group; //floor group
-	bool EnabledGroup;
-	int EnabledGroup_Floor;
+	bool EnabledGroup; //true if floor was enabled as part of a group, not directly
+	int EnabledGroup_Floor; //number of floor that enabled this floor as part of it's own group
 
 	//functions
 	Floor(int number);

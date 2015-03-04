@@ -291,13 +291,15 @@ const char* Control::GetPositionAction(int position)
 
 	std::vector<Action*> actionlist;
 
-	if (ActionNames.size() > 0)
+	if ((int)ActionNames.size() > 0)
 		actionlist = sbs->GetAction(ActionNames[position - 1]);
-	else
+	else if ((int)Actions.size() > 0)
 		actionlist.push_back(Actions[position - 1]);
+	else
+		return "";
 
 	//return command of first action in list
-	if (actionlist.size() > 0)
+	if ((int)actionlist.size() > 0)
 	{
 		if (actionlist[0])
 			return actionlist[0]->GetCommandName();
@@ -324,7 +326,7 @@ void Control::SetTexture(int position, const char *texture)
 int Control::GetPositions()
 {
 	//return number of available positions, based on size of Actions array
-	if (ActionNames.size() > 0)
+	if ((int)ActionNames.size() > 0)
 		return (int)ActionNames.size();
 	else
 		return (int)Actions.size();
@@ -365,10 +367,15 @@ bool Control::DoAction()
 
 	std::vector<Action*> actionlist;
 
-	if (ActionNames.size() > 0)
+	if ((int)ActionNames.size() > 0)
 		actionlist = sbs->GetAction(ActionNames[current_position - 1]);
-	else
+	else if ((int)Actions.size() > 0)
 		actionlist.push_back(Actions[current_position - 1]);
+	else
+	{
+		sbs->Report(std::string("No available actions for control '" + Name + "'").c_str());
+		return false;
+	}
 
 	bool result = false;
 	for (int i = 0; i < (int)actionlist.size(); i++)
@@ -391,7 +398,7 @@ bool Control::Press(bool reverse)
 
 	//check lock state
 	if (IsLocked() == true)
-		return sbs->ReportError(std::string("Control " + Name + " is locked").c_str());
+		return sbs->ReportError(std::string("Control '" + Name + "' is locked").c_str());
 
 	//get action name of next position state
 	std::string name;
@@ -499,7 +506,7 @@ void Control::ToggleLock(bool force)
 		if (sbs->CheckKey(KeyID) == false && force == false)
 		{
 			std::string id = ToString(KeyID);
-			sbs->Report(std::string("Need key " + id + " to lock/unlock control " + Name).c_str());
+			sbs->Report(std::string("Need key " + id + " to lock/unlock control '" + Name + "'").c_str());
 			return;
 		}
 	}
@@ -507,9 +514,9 @@ void Control::ToggleLock(bool force)
 	Locked = !Locked;
 
 	if (Locked == true)
-		sbs->Report(std::string("Locked control " + Name).c_str());
+		sbs->Report(std::string("Locked control '" + Name + "'").c_str());
 	else
-		sbs->Report(std::string("Unlocked control " + Name).c_str());
+		sbs->Report(std::string("Unlocked control '" + Name + "'").c_str());
 }
 
 bool Control::IsLocked()
