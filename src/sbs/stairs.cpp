@@ -870,6 +870,18 @@ void Stairs::RemoveShowFloor(int floor)
 	}
 }
 
+bool Stairs::IsShowFloor(int floor)
+{
+	//return true if a floor is in the ShowFloors list
+
+	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			return true;
+	}
+	return false;
+}
+
 void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor)
 {
 	//check to see if user (camera) is in the stairwell

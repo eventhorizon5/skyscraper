@@ -551,6 +551,18 @@ void Shaft::RemoveShowFloor(int floor)
 	}
 }
 
+bool Shaft::IsShowFloor(int floor)
+{
+	//return true if a floor is in the ShowFloors list
+
+	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
+	{
+		if (ShowFloorsList[i] == floor)
+			return true;
+	}
+	return false;
+}
+
 void Shaft::AddShowOutside(int floor)
 {
 	//adds a floor number to the ShowOutside list

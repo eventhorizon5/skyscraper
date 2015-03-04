@@ -2246,6 +2246,10 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	if (IsEven(range) == true)
 		range++;
 
+	//floor must be valid
+	if (!IsValidFloor(floor))
+		return;
+
 	int additionalfloors;
 	if (range > 1)
 		additionalfloors = (range - 1) / 2;
@@ -2275,38 +2279,41 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 	//enable floors within range
 	for (int i = floor - additionalfloors; i <= floor + additionalfloors; i++)
 	{
-		if (IsValidFloor(i))
+		Floor *floorobj = GetFloor(i);
+
+		if (floorobj)
 		{
 			if (shaft)
 			{
 				//if a shaft is specified, only show the floor if it is in the related shaft's ShowFloorsList array
 				if (shaft->ShowFloors > 0)
 				{
-					int index = -1;
-					for (int j = 0; j < (int)shaft->ShowFloorsList.size(); j++)
+					bool showfloor = shaft->IsShowFloor(i);
+
+					if (showfloor == true && value == true)
 					{
-						if (shaft->ShowFloorsList[j] == i)
+						if (floorobj->IsEnabled == false)
 						{
-							index = j;
-							break;
-						}
-					}
-					if (index != -1 && value == true)
-					{
-						if (GetFloor(i)->IsEnabled == false)
-						{
-							GetFloor(i)->Enabled(true);
+							floorobj->Enabled(true);
 							if (enablegroups == true)
-								GetFloor(i)->EnableGroup(true);
+								floorobj->EnableGroup(true);
 						}
 					}
 					else
 					{
-						if (GetFloor(i)->IsEnabled == true)
+						//only disable floor if it hasn't been enabled separately by a related group
+						if (floorobj->EnabledGroup == true)
 						{
-							GetFloor(i)->Enabled(false);
+							//for now check to see if the group floor is a ShowFloor
+							if (shaft->IsShowFloor(floorobj->EnabledGroup_Floor) == true)
+								return;
+						}
+
+						if (floorobj->IsEnabled == true)
+						{
+							floorobj->Enabled(false);
 							if (enablegroups == true)
-								GetFloor(i)->EnableGroup(false);
+								floorobj->EnableGroup(false);
 						}
 					}
 				}
@@ -2316,31 +2323,38 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 				//if a stairwell is specified, only show the floor if it is in the related stairwell's ShowFloorsList array
 				if (stairs->ShowFloors == true)
 				{
-					int index = -1;
-					for (int j = 0; j < (int)stairs->ShowFloorsList.size(); j++)
+					bool showfloor = stairs->IsShowFloor(i);
+
+					if (showfloor == true && value == true)
 					{
-						if (stairs->ShowFloorsList[j] == i)
-							index = j;
-					}
-					if (index != -1 && value == true)
-					{
-						GetFloor(i)->Enabled(true);
+						floorobj->Enabled(true);
 						if (enablegroups == true)
-							GetFloor(i)->EnableGroup(true);
+							floorobj->EnableGroup(true);
 					}
 					else
 					{
-						GetFloor(i)->Enabled(false);
-						if (enablegroups == true)
-							GetFloor(i)->EnableGroup(false);
+						//only disable floor if it hasn't been enabled separately by a related group
+						if (floorobj->EnabledGroup == true)
+						{
+							//for now check to see if the group floor is a ShowFloor
+							if (stairs->IsShowFloor(floorobj->EnabledGroup_Floor) == true)
+								return;
+						}
+
+						if (floorobj->IsEnabled == true)
+						{
+							floorobj->Enabled(false);
+							if (enablegroups == true)
+								floorobj->EnableGroup(false);
+						}
 					}
 				}
 			}
 			else
 			{
-				GetFloor(i)->Enabled(value);
+				floorobj->Enabled(value);
 				if (enablegroups == true)
-					GetFloor(i)->EnableGroup(value);
+					floorobj->EnableGroup(value);
 			}
 		}
 	}
