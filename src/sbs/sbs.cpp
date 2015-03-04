@@ -2327,9 +2327,12 @@ void SBS::EnableFloorRange(int floor, int range, bool value, bool enablegroups, 
 
 					if (showfloor == true && value == true)
 					{
-						floorobj->Enabled(true);
-						if (enablegroups == true)
-							floorobj->EnableGroup(true);
+						if (floorobj->IsEnabled == false)
+						{
+							floorobj->Enabled(true);
+							if (enablegroups == true)
+								floorobj->EnableGroup(true);
+						}
 					}
 					else
 					{
