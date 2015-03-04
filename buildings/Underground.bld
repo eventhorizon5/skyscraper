@@ -560,7 +560,7 @@ DrawWalls = true, true, false, false, false, false
     SetAutoSize = true, true
     AddControl 1, switch.wav, 2, 2, 1, 1, 0, 0, Fire2Off, Fire2Hold, Fire2On, Fire2Off, Fire2Hold, Fire2On
     AddButton 1, switch.wav, ButtonCancel, ButtonCancel, 2, 4, cancel, 1, 1
-    AddButton 1, switch.wav, ButtonC, ButtonLitC, 4, 3, -1, 1, 1
+    AddButton 1, switch.wav, ButtonC, ButtonLitC, 4, 3, -10, 1, 1
     AddButton 1, switch.wav, ButtonU1, ButtonLitU1, 5, 3, -100, 1, 1
     AddButton 1, switch.wav, ButtonU2, ButtonLitU2, 6, 3, -200, 1, 1
     AddButton 1, switch.wav, ButtonU3, ButtonLitU3, 7, 3, -300, 1, 1
