@@ -1,5 +1,8 @@
 Version 1.9 (2.0 Alpha 9)
 -------------------------
+-added new Underground building
+-cleanups in relation to ShowFloors arrays
+-fixed a conflict between Group listings and ShowFloors lists, and cleaned up EnableFloorRange function
 -the print command can now be specified by itself, to print a blank line
 -many script commands would crash if given no parameters; this fixes the issue
 -(Triton Center) 135th floor description fix

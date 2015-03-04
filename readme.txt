@@ -139,6 +139,8 @@ Most objects can be deleted by pressing Ctrl and Alt together, and clicking on t
 
 The lock/unlock feature is now done by pressing Ctrl and Shift together, and clicking on the object.  Previously just the Shift key was used, but this change fixes interference with the shift running modifier.
 
+A new building called Underground has been added, which has been used for scalability tests to enhance the simulation engine.  This building features an extremely large underground environment, with very fast elevators.
+
 Skyscraper has supported loading standard OGRE mesh models since the Alpha 8 release.  A couple couches and keys are loaded in the Simple building as an example, and there is a couch on the roof of the Triton Center to demonstrate physics.  See this forum thread on how to create models using Google Sketchup:
 http://forum.skyscrapersim.com/index.php?topic=5556.0
 
