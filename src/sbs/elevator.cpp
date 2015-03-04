@@ -1557,20 +1557,10 @@ void Elevator::MoveElevatorToFloor()
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
 			}
-			else
+			else if (GetShaft()->IsShowFloor(sbs->camera->CurrentFloor) == true)
 			{
-				int loc = -1;
-				for (int i = 0; i < (int)GetShaft()->ShowFloorsList.size(); i++)
-				{
-					if (GetShaft()->ShowFloorsList[i] == sbs->camera->CurrentFloor)
-						loc = i;
-				}
-
-				if (loc == -1)
-				{
-					sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
-					sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
-				}
+				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
+				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
 			}
 
 			//Turn off sky, buildings, and landscape
@@ -1581,21 +1571,12 @@ void Elevator::MoveElevatorToFloor()
 				sbs->EnableLandscape(false);
 				sbs->EnableExternal(false);
 			}
-			else
+			else if (GetShaft()->IsShowOutside(sbs->camera->CurrentFloor) == true)
 			{
-				int loc = -1;
-				for (int i = 0; i < (int)GetShaft()->ShowOutsideList.size(); i++)
-				{
-					if (GetShaft()->ShowOutsideList[i] == sbs->camera->CurrentFloor)
-						loc = i;
-				}
-				if (loc == -1)
-				{
-					sbs->EnableSkybox(false);
-					sbs->EnableBuildings(false);
-					sbs->EnableLandscape(false);
-					sbs->EnableExternal(false);
-				}
+				sbs->EnableSkybox(false);
+				sbs->EnableBuildings(false);
+				sbs->EnableLandscape(false);
+				sbs->EnableExternal(false);
 			}
 
 			//reset shaft doors

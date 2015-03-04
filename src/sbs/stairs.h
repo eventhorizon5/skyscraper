@@ -42,7 +42,6 @@ public:
 	bool InsideStairwell; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
 	bool ShowFloors; //true if floors should be shown while inside the stairwell; floor list in ShowFloorsList
-	std::vector<int> ShowFloorsList; //list of floors to enable while inside the stairwell
 	bool ShowFullStairs; //if true, always show full stairwell instead of only a selected range
 
 	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
@@ -79,12 +78,13 @@ public:
 	void Init();
 	void AddShowFloor(int floor);
 	void RemoveShowFloor(int floor);
-	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
 	bool IsShowFloor(int floor);
+	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array
 	std::vector<bool> EnableArray;
+	std::vector<int> ShowFloorsList; //list of floors to enable while inside the stairwell
 
 	std::vector<DoorMap> DoorArray; //door object array
 

@@ -600,6 +600,18 @@ void Shaft::RemoveShowOutside(int floor)
 	}
 }
 
+bool Shaft::IsShowOutside(int floor)
+{
+	//return true if a floor is in the ShowOutside list
+
+	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
+	{
+		if (ShowOutsideList[i] == floor)
+			return true;
+	}
+	return false;
+}
+
 void Shaft::AddShowInterfloor(int floor)
 {
 	//adds a floor number to the ShowInterfloors list
@@ -635,6 +647,18 @@ void Shaft::RemoveShowInterfloor(int floor)
 				ShowInterfloorsList.erase(ShowInterfloorsList.begin() + i);
 		}
 	}
+}
+
+bool Shaft::IsShowInterfloor(int floor)
+{
+	//return true if a floor is in the ShowInterfloors list
+
+	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
+	{
+		if (ShowInterfloorsList[i] == floor)
+			return true;
+	}
+	return false;
 }
 
 bool Shaft::IsValidFloor(int floor)
