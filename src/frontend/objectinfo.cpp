@@ -344,7 +344,12 @@ void ObjectInfo::On_ObjectTree_SelectionChanged(wxTreeEvent& event)
 
 void ObjectInfo::On_bDelete_Click(wxCommandEvent& event)
 {
-	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(ObjectTree->GetSelection());
+	wxTreeItemId sel = ObjectTree->GetSelection();
+
+	if (!sel.IsOk())
+		return;
+
+	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(sel);
 	wxString num;
 	num = data->GetDesc();
 	int number = atoi(num.ToAscii());
@@ -353,7 +358,7 @@ void ObjectInfo::On_bDelete_Click(wxCommandEvent& event)
 	if (Simcore->DeleteObject(number))
 	{
 		//delete object from tree
-		ObjectTree->Delete(ObjectTree->GetSelection());
+		ObjectTree->Delete(sel);
 		deleted = true;
 	}
 }
