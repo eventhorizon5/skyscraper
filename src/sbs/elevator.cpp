@@ -1557,7 +1557,7 @@ void Elevator::MoveElevatorToFloor()
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
 			}
-			else if (GetShaft()->IsShowFloor(sbs->camera->CurrentFloor) == true)
+			else if (GetShaft()->IsShowFloor(sbs->camera->CurrentFloor) == false)
 			{
 				sbs->GetFloor(sbs->camera->CurrentFloor)->Enabled(false);
 				sbs->GetFloor(sbs->camera->CurrentFloor)->EnableGroup(false);
@@ -1571,7 +1571,7 @@ void Elevator::MoveElevatorToFloor()
 				sbs->EnableLandscape(false);
 				sbs->EnableExternal(false);
 			}
-			else if (GetShaft()->IsShowOutside(sbs->camera->CurrentFloor) == true)
+			else if (GetShaft()->IsShowOutside(sbs->camera->CurrentFloor) == false)
 			{
 				sbs->EnableSkybox(false);
 				sbs->EnableBuildings(false);

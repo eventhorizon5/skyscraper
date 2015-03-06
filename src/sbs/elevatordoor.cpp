@@ -636,7 +636,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
 				sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
 			}
-			else if (elev->GetShaft()->IsShowFloor(ShaftDoorFloor) == true)
+			else if (elev->GetShaft()->IsShowFloor(ShaftDoorFloor) == false)
 			{
 				sbs->GetFloor(ShaftDoorFloor)->Enabled(false);
 				sbs->GetFloor(ShaftDoorFloor)->EnableGroup(false);
