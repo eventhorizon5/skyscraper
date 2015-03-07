@@ -2173,7 +2173,7 @@ void Elevator::DumpQueues()
 	sbs->Report("Down:");
 	for (int i = 0; i < (int)DownQueue.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(DownQueue[i]));
-	Report("");
+	sbs->Report("");
 }
 
 void Elevator::Enabled(bool value)
@@ -2369,7 +2369,7 @@ void Elevator::DumpServicedFloors()
 	sbs->Report("\n--- Elevator " + ToString2(Number) + "'s Serviced Floors ---\n");
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(ServicedFloors[i]));
-	Report("");
+	sbs->Report("");
 }
 
 bool Elevator::AddServicedFloor(int number)
