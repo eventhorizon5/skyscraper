@@ -1386,7 +1386,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddWall Wall9, HotelWalls, 0.5, -14.67 + 9 + 0.33, -9.25 + 4.25, -14.67 + 9 + 0.33, 9.25 - 4.25, %height%, %height%, 0, 0, 0, 0, False
     #Right of room 7
     WallOrientation = left
-    AddWall Wall10, HotelWalls, 0.5, -4.75 - 19 - 0.33, 56.5, -4.75 - 19 - 0.33, 70, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Wall10, HotelWalls, 0.5, -4.75 - 19 - 0.33, 56.5 - 0.01, -4.75 - 19 - 0.33, 70, %height%, %height%, 0, 0, 0, 0, False
 
     WallOrientation = center
     #Room 1
