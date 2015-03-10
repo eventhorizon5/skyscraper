@@ -236,7 +236,7 @@ const char* ToString(int number)
 {
 	static char buffer[50];
 #if defined(__VISUALC__)
-	_snprintf_s(buffer, sizeof(buffer), 12, "%d", number);
+	_snprintf_s(buffer, sizeof(buffer), 13, "%d", number);
 #else
 	snprintf(buffer, sizeof(buffer), "%d", number);
 #endif
@@ -252,7 +252,7 @@ const char* ToString(float number)
 {
 	static char buffer[50];
 #if defined(__VISUALC__)
-	_snprintf_s(buffer, sizeof(buffer), 12, "%g", number);
+	_snprintf_s(buffer, sizeof(buffer), 13, "%g", number);
 #else
 	snprintf(buffer, sizeof(buffer), "%g", (double)number);
 #endif
