@@ -714,7 +714,12 @@ void Skyscraper::GetInput()
 
 	if (wxGetKeyState(WXK_F2) && wait == false)
 	{
-		Report(ToString2(Simcore->FPS));
+		float fps = Simcore->FPS;
+		int batches = (int)mRoot->getRenderSystem()->_getBatchCount();
+		int faces = (int)mRoot->getRenderSystem()->_getFaceCount();
+		int vertices = (int)mRoot->getRenderSystem()->_getVertexCount();
+
+		Report("FPS: " + ToString2(Simcore->FPS) + " - Batches: " + ToString2(batches) + " - Faces: " + ToString2(faces) + " - Vertices: " + ToString2(vertices));
 		wait = true;
 	}
 

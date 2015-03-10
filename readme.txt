@@ -96,7 +96,7 @@ PgDown or L - Look downwards
 Space - Jump
 Home or O - Float upwards (or jump if collision detection is on)
 End or K - Float downwards (or crouch if collision detection is on)
-F2 - print FPS on console
+F2 - print render statistics on console
 F3 - Reset camera rotation and zoom to default
 F4 - Enable/disable wireframe mode
 F5 - Freelook (mouse look) mode
