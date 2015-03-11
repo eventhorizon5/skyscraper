@@ -853,15 +853,12 @@ void Camera::Loop(float delta)
 						{
 							ElevatorDoor* door = wrapper->parent;
 
-							if (door)
+							//make sure both internal and external doors are closing
+							if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
 							{
-								//make sure both internal and external doors are closing
-								if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
-								{
-									//either open doors if the hit door was an internal door or a shaft door on the elevator floor
-									if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetFloor()))
-										door->elev->OpenDoors(door->Number, 1);
-								}
+								//either open doors if the hit door was an internal door or a shaft door on the elevator floor
+								if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetFloor()))
+									door->elev->OpenDoors(door->Number, 1);
 							}
 						}
 					}
