@@ -837,7 +837,7 @@ void Camera::Loop(float delta)
 			//get SBS object
 			Object *obj = sbs->GetObject(number);
 
-			//get original object (parent object of clicked mesh)
+			//get original object (parent object of mesh)
 			if (obj)
 			{
 				if (obj->GetParent())
