@@ -1171,10 +1171,6 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 	if (elev->GetShaft()->ShowFullShaft == true && value == false)
 		return;
 
-	//leave top and bottom on
-	if ((floor == elev->GetShaft()->startfloor || floor == elev->GetShaft()->endfloor) && value == false)
-		return;
-
 	//exit if elevator doesn't service the requested floor
 	int index = elev->GetFloorIndex(floor);
 

@@ -255,35 +255,29 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 		}
 		else
 		{
-			//leave bottom and top on
-			if (floor != startfloor && floor != endfloor)
+			GetMeshObject(floor)->Enable(value);
+			EnableArray[floor - startfloor] = false;
+
+			//controls
+			for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
 			{
-				GetMeshObject(floor)->Enable(value);
-				EnableArray[floor - startfloor] = false;
-
-				//controls
-				for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
-				{
-					if (ControlArray[floor - startfloor][i])
-						ControlArray[floor - startfloor][i]->Enabled(false);
-				}
-
-				//triggers
-				/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
-				{
-					if (TriggerArray[floor - startfloor][i])
-						TriggerArray[floor - startfloor][i]->Enabled(false);
-				}*/
-
-				//models
-				for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
-				{
-					if (ModelArray[floor - startfloor][i])
-						ModelArray[floor - startfloor][i]->Enable(false);
-				}
+				if (ControlArray[floor - startfloor][i])
+					ControlArray[floor - startfloor][i]->Enabled(false);
 			}
-			else
-				return;
+
+			//triggers
+			/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
+			{
+				if (TriggerArray[floor - startfloor][i])
+					TriggerArray[floor - startfloor][i]->Enabled(false);
+			}*/
+
+			//models
+			for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
+			{
+				if (ModelArray[floor - startfloor][i])
+					ModelArray[floor - startfloor][i]->Enable(false);
+			}
 		}
 
 		if (EnableShaftDoors == true)
