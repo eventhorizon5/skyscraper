@@ -835,13 +835,7 @@ void Shaft::Init()
 	//startup initialization of shafts
 
 	if (ShowFullShaft == false)
-	{
 		EnableWholeShaft(false, true);
-
-		//enable extents
-		Enabled(startfloor, true, true);
-		Enabled(endfloor, true, true);
-	}
 	else
 		EnableWholeShaft(true, true, true);
 }
