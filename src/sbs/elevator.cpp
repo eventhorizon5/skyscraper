@@ -2194,6 +2194,16 @@ void Elevator::Enabled(bool value)
 	ElevatorMesh->Enable(value);
 	EnableDoors(value);
 	IsEnabled = value;
+
+	//floor indicators
+	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Enabled(value);
+	}
+
+	//interior directional indicators
+	EnableDirectionalIndicators(value);
 }
 
 void Elevator::EnableObjects(bool value)
