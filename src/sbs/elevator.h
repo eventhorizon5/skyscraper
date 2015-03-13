@@ -328,6 +328,7 @@ public:
 	int GetServicedFloorCount();
 	int GetServicedFloor(int index);
 	void ResetShaftDoors(int floor);
+	std::string GetFloorDisplay();
 
 private:
 

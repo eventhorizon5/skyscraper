@@ -115,16 +115,22 @@ void FloorIndicator::MovePosition(const Ogre::Vector3& position)
 	FloorIndicatorMesh->Move(position, true, true, true);
 }
 
-void FloorIndicator::Update(const char *value)
+void FloorIndicator::Update()
 {
-	//update display with a new texture value, such as a floor number
+	//update indicator display with elevator's current floor identifier
 
 	SBS_PROFILE("FloorIndicator::Update");
-	std::string texture;
-	texture = value;
 
-	//don't update if name is set to 'null'
-	if (texture == "null")
+	std::string texture;
+	Elevator *elevator = sbs->GetElevator(elev);
+
+	if (!elevator)
+		return;
+
+	texture = elevator->GetFloorDisplay();
+
+	//don't update texture if no value
+	if (texture == "")
 		return;
 
 	texture.insert(0, Prefix);

@@ -2432,37 +2432,12 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 
 void Elevator::UpdateFloorIndicators()
 {
-	//changes the number texture on the floor indicators to the elevator's current floor
-
-	SBS_PROFILE("Elevator::UpdateFloorIndicators");
-	std::string value;
-	if (UseFloorSkipText == true && IsServicedFloor(GetFloor()) == false)
-		value = FloorSkipText;
-	else
-	{
-		if (DisplayFloors.size() > 0)
-		{
-			for (int i = 0; i < (int)DisplayFloors.size(); i++)
-			{
-				if (GetFloor() == DisplayFloors[i] && sbs->GetFloor(GetFloor()))
-					value = sbs->GetFloor(GetFloor())->ID;
-			}
-		}
-		else
-		{
-			if (sbs->GetFloor(GetFloor()))
-				value = sbs->GetFloor(GetFloor())->ID;
-		}
-	}
-	TrimString(value);
-
-	if (value == "")
-		value = "null";
+	//updates all floor indicators
 
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Update(value.c_str());
+			FloorIndicatorArray[i]->Update();
 	}
 }
 
@@ -4974,6 +4949,35 @@ void Elevator::AddDisplayFloor(int floor)
 {
 	//add a floor to the display floors list
 	DisplayFloors.push_back(floor);
+}
+
+std::string Elevator::GetFloorDisplay()
+{
+	//returns the current floor's indicator display string
+
+	std::string value;
+	int floornum = GetFloor();
+	Floor *floor = sbs->GetFloor(floornum);
+
+	if (!floor)
+		return value;
+
+	if (UseFloorSkipText == true && IsServicedFloor(floornum) == false)
+		value = FloorSkipText;
+	else
+	{
+		if (DisplayFloors.size() > 0)
+		{
+			for (int i = 0; i < (int)DisplayFloors.size(); i++)
+			{
+				if (floornum == DisplayFloors[i])
+					value = floor->ID;
+			}
+		}
+		else
+			value = floor->ID;
+	}
+	return value;
 }
 
 Object* Elevator::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
