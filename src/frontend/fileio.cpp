@@ -7686,7 +7686,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 				//ensure that numbers are around operator
 				if (i < (int)tmpcalc.length() - 1)
 				{
-					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-'))
+					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-' || tmpcalc.at(i + 1) == '.'))
 					{
 						//valid operator found
 						operators++;
@@ -7700,7 +7700,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 				//ensure that numbers are around operator
 				if (i < (int)tmpcalc.length() - 1)
 				{
-					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-'))
+					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-' || tmpcalc.at(i + 1) == '.'))
 					{
 						//valid operator found
 						operators++;
