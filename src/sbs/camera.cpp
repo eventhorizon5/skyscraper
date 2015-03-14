@@ -743,7 +743,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		}
 
 		//check floor and directional indicators
-		if (parent_type == "FloorIndicator" || parent_type == "DirectionalIndicator" && right == false)
+		if ((parent_type == "FloorIndicator" || parent_type == "DirectionalIndicator") && right == false)
 		{
 			//delete indicator if ctrl and alt keys are pressed
 			if (ctrl == true && alt == true && shift == false)
