@@ -669,6 +669,10 @@ void Skyscraper::GetInput()
 	Simcore->mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
 	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
+	//get window dimensions
+	float width = window->GetClientSize().GetWidth();
+	float height = window->GetClientSize().GetHeight();
+
 	//adjust for different window client height
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 	if (Simcore->camera->Freelook == false)
@@ -678,10 +682,10 @@ void Skyscraper::GetInput()
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
-		window->WarpPointer(window->GetClientSize().GetWidth() / 2, window->GetClientSize().GetHeight() / 2);
+		window->WarpPointer(width / 2, height / 2);
 		Ogre::Vector3 rotational;
-		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (window->GetClientSize().GetHeight() / 2))) / (window->GetClientSize().GetHeight() * 2));
-		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((window->GetClientSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetClientSize().GetWidth() * 2));
+		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (height / 2))) / (height * 2));
+		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2));
 		rotational.z = 0;
 		rotational *= 60;
 		Simcore->camera->desired_angle_velocity = rotational;
@@ -693,6 +697,10 @@ void Skyscraper::GetInput()
 	bool right = wxGetMouseState().RightIsDown();
 	if ((left == true || right == true) && MouseDown == false)
 	{
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+		if (Simcore->camera->Freelook == true)
+			Simcore->mouse_y += GetOffset();
+#endif
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
 		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), right);
