@@ -226,13 +226,13 @@ public:
 	bool OpenDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
 	void CloseDoors(int number = 0, int whichdoors = 1, int floor = 0, bool manual = false, bool hold = false);
 	void StopDoors(int number = 0);
-	void HoldDoors(int number = 0, bool disable_nudge = true);
+	void HoldDoors(int number = 0, bool disable_nudge = true, bool sensor = false);
 	void ShaftDoorsEnabled(int number, int floor, bool value);
 	void ShaftDoorsEnabledRange(int number, int floor, int range);
 	bool AreDoorsOpen(int number = 0);
 	bool AreShaftDoorsOpen(int number, int floor);
 	bool AreShaftDoorsClosed();
-	void ResetDoorTimer(int number = 0);
+	void ResetDoors(int number = 0, bool sensor = false);
 	bool DoorsStopped(int number = 0);
 	Object* AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	bool AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);

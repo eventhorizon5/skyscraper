@@ -126,13 +126,13 @@ public:
 	void OpenDoors(int whichdoors = 1, int floor = 0, bool manual = false);
 	void CloseDoors(int whichdoors = 1, int floor = 0, bool manual = false);
 	void StopDoors();
-	void Hold(bool disable_nudge = true);
+	void Hold(bool disable_nudge = true, bool sensor = false);
 	void ShaftDoorsEnabled(int floor, bool value);
 	void ShaftDoorsEnabledRange(int floor, int range);
 	bool AreDoorsOpen();
 	bool AreShaftDoorsOpen(int floor);
 	bool AreShaftDoorsClosed();
-	void ResetDoorTimer();
+	void Reset(bool sensor = false);
 	bool DoorsStopped();
 	Object* AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
 	bool AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);

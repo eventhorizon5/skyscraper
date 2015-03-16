@@ -1348,7 +1348,7 @@ void Elevator::MonitorLoop()
 				if (door)
 				{
 					if (door->TimerIsRunning() == false)
-						door->ResetDoorTimer();
+						door->Reset();
 				}
 			}
 		}
@@ -2675,7 +2675,7 @@ bool Elevator::EnableUpPeak(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Up Peak mode disabled");
 	}
 
@@ -2723,7 +2723,7 @@ bool Elevator::EnableDownPeak(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Down Peak mode disabled");
 	}
 
@@ -2770,7 +2770,7 @@ bool Elevator::EnableIndependentService(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Independent Service mode disabled");
 	}
 
@@ -2807,7 +2807,7 @@ bool Elevator::EnableInspectionService(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Inspection Service mode disabled");
 
 		UpdateFloorIndicators();
@@ -2896,14 +2896,14 @@ bool Elevator::EnableFireService1(int value)
 		else
 		{
 			if (FireServicePhase2 == 0)
-				ResetDoorTimer(); //enable door timers
+				ResetDoors(); //enable door timers
 			Report("Fire Service Phase 1 mode set to Bypass");
 		}
 	}
 	else
 	{
 		if (FireServicePhase2 == 0)
-			ResetDoorTimer(); //enable door timers
+			ResetDoors(); //enable door timers
 		Report("Fire Service Phase 1 mode set to Off");
 	}
 
@@ -2968,7 +2968,7 @@ bool Elevator::EnableFireService2(int value, bool force)
 		Report("Fire Service Phase 2 mode set to Off");
 
 		if (FireServicePhase1 == 0)
-			ResetDoorTimer(); //enable door timers
+			ResetDoors(); //enable door timers
 		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
 		{
 			//enable nudge mode on all doors if any are open
@@ -3734,7 +3734,7 @@ void Elevator::Chime(int number, int floor, bool direction)
 		LastChimeDirection = -1;
 }
 
-void Elevator::ResetDoorTimer(int number)
+void Elevator::ResetDoors(int number, bool sensor)
 {
 	//reset elevator door timer
 
@@ -3753,7 +3753,7 @@ void Elevator::ResetDoorTimer(int number)
 	{
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			door->ResetDoorTimer();
+			door->Reset(sensor);
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
@@ -4372,7 +4372,7 @@ bool Elevator::IsQueued(int floor)
 	return false;
 }
 
-void Elevator::HoldDoors(int number, bool disable_nudge)
+void Elevator::HoldDoors(int number, bool disable_nudge, bool sensor)
 {
 	//hold specified door, or all if "0" is given
 	//disable nudge mode timer if specified
@@ -4391,7 +4391,7 @@ void Elevator::HoldDoors(int number, bool disable_nudge)
 	for (int i = start; i <= end; i++)
 	{
 		if (GetDoor(i))
-			GetDoor(i)->Hold(disable_nudge);
+			GetDoor(i)->Hold(disable_nudge, sensor);
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
