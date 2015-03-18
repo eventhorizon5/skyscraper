@@ -260,6 +260,12 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	ResetLighting();
 	Report("Done");
 
+	//create object meshes
+	Buildings = new MeshObject(object, "Buildings");
+	External = new MeshObject(object, "External");
+	Landscape = new MeshObject(object, "Landscape");
+	//Landscape->tricollider = false;
+
 	//create camera object
 	this->camera = new Camera(camera);
 }
@@ -1299,15 +1305,6 @@ int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *te
 	z2 = CenterZ + (LengthZ / 2);
 
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
-}
-
-void SBS::InitMeshes()
-{
-	//create object meshes
-	Buildings = new MeshObject(object, "Buildings");
-	External = new MeshObject(object, "External");
-	Landscape = new MeshObject(object, "Landscape");
-	//Landscape->tricollider = false;
 }
 
 int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th)

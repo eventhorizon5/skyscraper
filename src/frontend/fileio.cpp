@@ -244,7 +244,6 @@ bool ScriptProcessor::Run()
 				ScriptError("Not in global section");
 				goto Error;
 			}
-			Simcore->InitMeshes();
 			Section = 0;
 			Context = "None";
 			skyscraper->Report("Finished globals");
