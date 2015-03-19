@@ -653,7 +653,10 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		for (int i = 0; i < (int)UpQueue.size(); i++)
 		{
 			if (UpQueue[i] == floor)
+			{
 				loc = i;
+				break;
+			}
 		}
 
 		if (loc != -1)
@@ -677,7 +680,10 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		for (int i = 0; i < (int)DownQueue.size(); i++)
 		{
 			if (DownQueue[i] == floor)
+			{
 				loc = i;
+				break;
+			}
 		}
 
 		//exit if entry already exits
@@ -738,6 +744,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 			{
 				Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction up");
 				UpQueue.erase(UpQueue.begin() + i);
+				break;
 			}
 		}
 		if (UpQueue.size() == 0)
@@ -752,6 +759,7 @@ bool Elevator::DeleteRoute(int floor, int direction)
 			{
 				Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
 				DownQueue.erase(DownQueue.begin() + i);
+				break;
 			}
 		}
 		if (DownQueue.size() == 0)
