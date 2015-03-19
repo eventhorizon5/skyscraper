@@ -3569,9 +3569,9 @@ std::string SBS::VerifyFile(const char *filename)
 	}
 
 #if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+	Ogre::FileSystemArchive filesystem(".", "FileSystem", false);
 #else
-	Ogre::FileSystemArchive filesystem(".","FileSystem");
+	Ogre::FileSystemArchive filesystem(".", "FileSystem");
 #endif
 	if (filesystem.exists(file))
 	{
@@ -3608,13 +3608,14 @@ bool SBS::FileExists(const char *filename)
 	TrimString(file);
 
 #if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+	Ogre::FileSystemArchive filesystem(".", "FileSystem", false);
 #else
-	Ogre::FileSystemArchive filesystem(".","FileSystem");
+	Ogre::FileSystemArchive filesystem(".", "FileSystem");
 #endif
 	if (filesystem.exists(file))
 		return true;
 
+	//if a corrected filename is found, return true
 	std::string verify = VerifyFile(file.c_str());
 	if (verify != file)
 		return true;

@@ -94,7 +94,6 @@ bool Skyscraper::OnInit(void)
 	MouseDown = false;
 	IsRunning = false;
 	IsLoading = false;
-	LoadError = false;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
@@ -983,7 +982,6 @@ void Skyscraper::Loop()
 			if (result == false)
 			{
 				ReportError("Error processing building\n");
-				LoadError = true;
 				Unload();
 				return;
 			}

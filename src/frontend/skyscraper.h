@@ -67,7 +67,6 @@ public:
 	bool IsRunning;
 	bool IsLoading;
 	bool StartupRunning;
-	bool LoadError;
 	bool Pause; //pause simulator
 	bool DisableSound;
 	bool IntroMusic;
