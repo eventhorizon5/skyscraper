@@ -7721,7 +7721,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 			newdata = Calc(tmpcalc.substr(0, end).c_str());
 
 			if (CalcError == true)
-				return newdata;
+				return tmpcalc;
 
 			//construct new string
 			two = tmpcalc.substr(end);
@@ -7755,12 +7755,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("-", 1);
@@ -7779,12 +7775,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("/", 1);
@@ -7809,12 +7801,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("*", 1);
@@ -7833,12 +7821,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("^", 1);
@@ -7857,12 +7841,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	return tmpcalc;
