@@ -1003,11 +1003,13 @@ void Skyscraper::Loop()
 	else
 		return;
 
-	//force window raise on startup
+	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && IsLoading == false)
 	{
 		window->Raise();
 		raised = true;
+
+		processor->ReportMissingFiles();
 	}
 
 	//process internal clock
@@ -1657,9 +1659,6 @@ bool Skyscraper::Start()
 	if (progdialog)
 		progdialog->Destroy();
 	progdialog = 0;
-
-	//report on missing files, if any
-	processor->ReportMissingFiles();
 
 	//the sky needs to be created before Prepare() is called
 	bool sky_result = false;
