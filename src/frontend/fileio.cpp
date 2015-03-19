@@ -7651,7 +7651,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 				newdata = Calc(tmpcalc.substr(start + 1, end - start - 1).c_str());
 
 				if (CalcError == true)
-					return newdata;
+					return tmpcalc;
 
 				//construct new string
 				one = tmpcalc.substr(0, start);
@@ -7665,7 +7665,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 			{
 				ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 				CalcError = true;
-				return "false";
+				return tmpcalc;
 			}
 		}
 		else
@@ -7713,7 +7713,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 		{
 			ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 			CalcError = true;
-			return "false";
+			return tmpcalc;
 		}
 		if (operators > 1)
 		{
@@ -7792,7 +7792,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 			{
 				ScriptError("Division by zero in math operation: '" + tmpcalc + "' (might be nested)");
 				CalcError = true;
-				return "false";
+				return tmpcalc;
 			}
 			float tmpnum = first / second;
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
