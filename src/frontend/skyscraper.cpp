@@ -1064,8 +1064,15 @@ void Skyscraper::Loop()
 		IsLoading = false;
 		Pause = false;
 		UnloadSim();
-		Load();
-		Simcore->camera->GotoFloor(override_floor, true);
+
+		if (Load() == false)
+		{
+			PositionOverride = false;
+			Reload = false;
+			return;
+		}
+
+		Reload = false;
 
 		//force a resizing of a window to fix some rendering issues after a reload
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -1708,7 +1715,6 @@ bool Skyscraper::Start()
 	IsRunning = true;
 	IsLoading = false;
 	StartupRunning = false;
-	Reload = false;
 	if (console)
 		console->bSend->Enable(true);
 	return true;
