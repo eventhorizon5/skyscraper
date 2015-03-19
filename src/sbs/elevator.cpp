@@ -735,9 +735,11 @@ bool Elevator::DeleteRoute(int floor, int direction)
 		for (int i = 0; i < (int)UpQueue.size(); i++)
 		{
 			if (UpQueue[i] == floor)
+			{
+				Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction up");
 				UpQueue.erase(UpQueue.begin() + i);
+			}
 		}
-		Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction up");
 		if (UpQueue.size() == 0)
 			UpQueueEmpty = true;
 	}
@@ -747,9 +749,11 @@ bool Elevator::DeleteRoute(int floor, int direction)
 		for (int i = 0; i < (int)DownQueue.size(); i++)
 		{
 			if (DownQueue[i] == floor)
+			{
+				Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
 				DownQueue.erase(DownQueue.begin() + i);
+			}
 		}
-		Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
 		if (DownQueue.size() == 0)
 			DownQueueEmpty = true;
 	}
