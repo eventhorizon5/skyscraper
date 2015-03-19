@@ -671,36 +671,39 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				int index = (int)meshname.find(":");
 				int index2 = (int)meshname.find(":", index + 1);
 
-				std::string direction = meshname.substr(index2 + 1);
-				TrimString(direction);
+				if (index > -1 && index2 > -1)
+				{
+					std::string direction = meshname.substr(index2 + 1);
+					TrimString(direction);
 
-				//delete call button if ctrl and alt keys are pressed
-				if (ctrl == true && alt == true && shift == false)
-				{
-					sbs->DeleteObject(callbutton->object);
-					return;
-				}
+					//delete call button if ctrl and alt keys are pressed
+					if (ctrl == true && alt == true && shift == false)
+					{
+						sbs->DeleteObject(callbutton->object);
+						return;
+					}
 
-				if (ctrl == true && shift == true)
-				{
-					//if ctrl and shift are held, toggle lock
-					callbutton->ToggleLock();
-				}
-				else if (shift == true)
-				{
-					//if shift is held, change button status instead
-					if (direction == "Up")
-						callbutton->UpLight(!callbutton->UpStatus);
+					if (ctrl == true && shift == true)
+					{
+						//if ctrl and shift are held, toggle lock
+						callbutton->ToggleLock();
+					}
+					else if (shift == true)
+					{
+						//if shift is held, change button status instead
+						if (direction == "Up")
+							callbutton->UpLight(!callbutton->UpStatus);
+						else
+							callbutton->DownLight(!callbutton->DownStatus);
+					}
 					else
-						callbutton->DownLight(!callbutton->DownStatus);
-				}
-				else
-				{
-					//press button
-					if (direction == "Up")
-						callbutton->Call(true);
-					else
-						callbutton->Call(false);
+					{
+						//press button
+						if (direction == "Up")
+							callbutton->Call(true);
+						else
+							callbutton->Call(false);
+					}
 				}
 			}
 		}

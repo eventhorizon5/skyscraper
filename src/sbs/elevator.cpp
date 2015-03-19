@@ -5137,9 +5137,14 @@ bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
 	return false;
 }
 
-bool Elevator::AvailableForCall(int floor, int direction)
+int Elevator::AvailableForCall(int floor, int direction)
 {
-	//return true or false if the elevator is available for the specified hall call
+	//determines if the elevator is available for the specified hall call
+
+	//return codes:
+	//0 - busy and will eventually be available
+	//1 - available for call
+	//2 - unavailable due to a service mode or error
 
 	//if floor is a serviced floor
 	if (IsServicedFloor(floor) == true)
@@ -5174,39 +5179,75 @@ bool Elevator::AvailableForCall(int floor, int direction)
 										{
 											if (sbs->Verbose)
 												Report("Available for call");
-											return true;
+											return 1;
 										}
-										else if (sbs->Verbose == true)
-											Report("Not available for call - in service mode");
+										else
+										{
+											if (sbs->Verbose == true)
+												Report("Not available for call - in service mode");
+											return 2;
+										}
 									}
-									else if (sbs->Verbose == true)
-										Report("Not available for call - in nudge mode");
+									else
+									{
+										if (sbs->Verbose == true)
+											Report("Not available for call - in nudge mode");
+										return 0;
+									}
 								}
-								else if (sbs->Verbose == true)
-									Report("Not available for call - going a different direction and is not idle");
+								else
+								{
+									if (sbs->Verbose == true)
+										Report("Not available for call - going a different direction and is not idle");
+									return 0;
+								}
 							}
-							else if (sbs->Verbose == true)
-								Report("Not available for call - position/direction wrong for call");
+							else
+							{
+								if (sbs->Verbose == true)
+									Report("Not available for call - position/direction wrong for call");
+								return 0;
+							}
 						}
-						else if (sbs->Verbose == true)
-							Report("Not available for call - queueresets is on and opposite queue direction is active");
+						else
+						{
+							if (sbs->Verbose == true)
+								Report("Not available for call - queueresets is on and opposite queue direction is active");
+							return 0;
+						}
 					}
-					else if (sbs->Verbose == true)
-						Report("Not available for call - limitqueue is on and queue is active");
+					else
+					{
+						if (sbs->Verbose == true)
+							Report("Not available for call - limitqueue is on and queue is active");
+						return 0;
+					}
 				}
-				else if (sbs->Verbose == true)
-					Report("Not available for call - queue change is pending");
+				else
+				{
+					if (sbs->Verbose == true)
+						Report("Not available for call - queue change is pending");
+					return 0;
+				}
 			}
-			else if (sbs->Verbose == true)
-				Report("Not available for call - elevator not running");
+			else
+			{
+				if (sbs->Verbose == true)
+					Report("Not available for call - elevator not running");
+				return 2;
+			}
 		}
-		else if (sbs->Verbose == true)
-			Report("Not available for call - direction beyond serviced range");
+		else
+		{
+			if (sbs->Verbose == true)
+				Report("Not available for call - direction beyond serviced range");
+			return 2;
+		}
 	}
-	else if (sbs->Verbose == true)
-		Report("Not available for call - not a serviced floor");
 
-	return false;
+	if (sbs->Verbose == true)
+		Report("Not available for call - not a serviced floor");
+	return 2;
 }
 
 bool Elevator::SelectFloor(int floor)

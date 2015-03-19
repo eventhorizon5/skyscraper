@@ -479,7 +479,7 @@ void CallButton::Loop(int direction)
 	int closest = 0;
 	int closest_elev = 0;
 	bool check = false;
-	int in_service = 0;
+	int errors = 0;
 
 	int count = (int)Elevators.size();
 
@@ -498,17 +498,13 @@ void CallButton::Loop(int direction)
 				if (sbs->Verbose)
 					Report(std::string("Checking elevator " + ToString2(elevator->Number)).c_str());
 
-				//keep a count of elevators in a service mode
-				if (elevator->InServiceMode() == true)
-					in_service++;
-
 				//if elevator is closer than the previously checked one or we're starting the checks
 				if (abs(elevator->GetFloor() - floor) < closest || check == false)
 				{
 					//see if elevator is available for the call
-					bool result = elevator->AvailableForCall(floor, direction);
+					int result = elevator->AvailableForCall(floor, direction);
 
-					if (result == true)
+					if (result == 1) //available
 					{
 						if (sbs->Verbose)
 							Report("Marking - closest so far");
@@ -516,6 +512,8 @@ void CallButton::Loop(int direction)
 						closest_elev = i;
 						check = true;
 					}
+					else if (result == 2) //keep track of elevators that won't service the call
+						errors++;
 				}
 			}
 		}
@@ -526,22 +524,23 @@ void CallButton::Loop(int direction)
 		Elevator *elevator = sbs->GetElevator(Elevators[0]);
 		if (elevator)
 		{
-			if (elevator->InServiceMode() == true)
-				in_service = 1;
+			int result = elevator->AvailableForCall(floor, direction);
 
-			if (elevator->AvailableForCall(floor, direction) == true)
+			if (result == 1) //available
 			{
 				closest_elev = 0;
 				check = true;
 			}
+			else if (result == 2) //elevator won't service the call
+				errors = 1;
 		}
 	}
 
-	if (in_service == count)
+	if (errors == count)
 	{
-		//exit if all elevators are in a service mode
+		//exit if all elevators are in a service mode or return errors
 
-		Report("All elevators in service mode");
+		Report("All elevators unavailable due to service modes or errors");
 
 		//reset button status
 		if (direction == 1)
