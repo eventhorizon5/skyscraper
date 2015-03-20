@@ -1,4 +1,4 @@
-Version 1.9.1 (2.0 Alpha 9 Update 1)
+Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -------------------------
 -(C++) SplitData function now verifies length of string properly
 -reverted and remade the fix to prevent crashes if no parameters are specified for certain commands
