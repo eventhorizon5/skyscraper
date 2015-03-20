@@ -1,5 +1,6 @@
 Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -------------------------
+-make sure that floors grouped with the current camera floor are not switched off as part of the shaft and stairwell ShowFloors code
 -(C++) SplitData function now verifies length of string properly
 -reverted and remade the fix to prevent crashes if no parameters are specified for certain commands
 -moved the missing file report to after the raising of the main window, to prevent it from being hidden on startup
