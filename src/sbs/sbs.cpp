@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Core
-	The Skyscraper Project - Version 1.9 Alpha
+	The Skyscraper Project - Version 1.10 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -41,7 +41,7 @@ SBS *sbs; //self reference
 SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem)
 {
 	sbs = this;
-	version = "0.9.0." + std::string(SVN_REVSTR);
+	version = "0.10.0." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//set up SBS object

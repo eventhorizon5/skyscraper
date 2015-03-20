@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Subsystem Class
-	The Skyscraper Project - Version 1.9 Alpha
+	The Skyscraper Project - Version 1.10 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
