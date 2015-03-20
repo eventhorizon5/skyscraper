@@ -479,15 +479,18 @@ void CallButton::Loop(int direction)
 	int closest = 0;
 	int closest_elev = 0;
 	bool check = false;
+	int errors = 0;
 
-	if (Elevators.size() > 1)
+	int count = (int)Elevators.size();
+
+	if (count > 1)
 	{
 		//search through elevator list if call button serves more than 1 elevator
 		if (sbs->Verbose)
 			Report("Finding nearest available elevator...");
 
 		//check each elevator associated with this call button to find the closest available one
-		for (int i = 0; i < (int)Elevators.size(); i++)
+		for (int i = 0; i < count; i++)
 		{
 			Elevator *elevator = sbs->GetElevator(Elevators[i]);
 			if (elevator)
@@ -499,9 +502,9 @@ void CallButton::Loop(int direction)
 				if (abs(elevator->GetFloor() - floor) < closest || check == false)
 				{
 					//see if elevator is available for the call
-					bool result = elevator->AvailableForCall(floor, direction);
+					int result = elevator->AvailableForCall(floor, direction);
 
-					if (result == true)
+					if (result == 1) //available
 					{
 						if (sbs->Verbose)
 							Report("Marking - closest so far");
@@ -509,6 +512,8 @@ void CallButton::Loop(int direction)
 						closest_elev = i;
 						check = true;
 					}
+					else if (result == 2) //keep track of elevators that won't service the call
+						errors++;
 				}
 			}
 		}
@@ -519,12 +524,31 @@ void CallButton::Loop(int direction)
 		Elevator *elevator = sbs->GetElevator(Elevators[0]);
 		if (elevator)
 		{
-			if (elevator->AvailableForCall(floor, direction) == true)
+			int result = elevator->AvailableForCall(floor, direction);
+
+			if (result == 1) //available
 			{
 				closest_elev = 0;
 				check = true;
 			}
+			else if (result == 2) //elevator won't service the call
+				errors = 1;
 		}
+	}
+
+	if (errors == count)
+	{
+		//exit if all elevators are in a service mode or return errors
+
+		Report("All elevators unavailable due to service modes or errors");
+
+		//reset button status
+		if (direction == 1)
+			UpLight(false);
+		else
+			DownLight(false);
+
+		return;
 	}
 
 	if (check == false)

@@ -1,3 +1,36 @@
+Version 1.9.1 (2.0 Alpha 9 Update 1)
+-------------------------
+-(C++) SplitData function now verifies length of string properly
+-reverted and remade the fix to prevent crashes if no parameters are specified for certain commands
+-moved the missing file report to after the raising of the main window, to prevent it from being hidden on startup
+-in Calc function, handle a calculation error as a silent error instead of ignoring it, to prevent infinite loops
+-fixed an issue where clicks on call button panels would trigger a down call
+-reworked elevator call availability code, to return busy or an error, to prevent call buttons from looping if all elevators won't service the call
+-fixed an issue where DeleteRoute would report even if a route is not deleted
+-in the Reload code, since the Load function can unload the simulator if it encounters an error, exit to the main menu if this happens to prevent a crash
+-ensure that the Reload flag is turned off after a reload, which prevents future startup issues
+-system meshes should be created on engine startup, not separately in script interpreter.  This fixes startup crashes that happen if no valid data is in the script file
+-door resets now report in verbose mode
+-(C++) renamed ResetDoorTimer functions to Reset and ResetDoors
+-sensors will only enable if using automatic doors (AutoDoors is true)
+-added a new action "sensorreset" as part of previous fix
+-fixed issue where door sensors would reset door holds.  Door hold and reset functions now disable and re-enable sensors, and leave the sensor alone if the sensor is calling those functions.
+-in Calc function, allow decimal numbers without 0's at start
+-fixed a click position offset in Freelook mode on Mac, and also did minor cleanups to the related code
+-reworked the floor indicator code, consolidating and separating it properly
+-elevator indicators should be enabled/disabled along with the elevator
+-floor and directional indicators can now be deleted by ctrl-alt-click
+-fixed mesh name of floor indicators
+-minor code cleanups
+-fixed an issue where all related elevator shaft doors would respond to door bumper code, instead of just the elevator's floor.  Also cleaned up the code.
+-added missing dbghelp.dll file (Windows packaging)
+-F2 key now prints more detailed render statistics
+-fixed length of floating point output in ToString functions, for Visual C++
+-don't treat textures in ChangeTexture function as filenames, just material names - this fixes a lot of performance problems
+-(Triton Center) Hotel wall positioning fixes
+-for call buttons, if all associated elevators are in a service mode, don't continue to search for more elevators; reset the call button instead
+-fixed last report line from elevator's DumpQueues and DumpServicedFloors functions
+
 Version 1.9 (2.0 Alpha 9)
 -------------------------
 -added new Underground building

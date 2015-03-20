@@ -244,7 +244,6 @@ bool ScriptProcessor::Run()
 				ScriptError("Not in global section");
 				goto Error;
 			}
-			Simcore->InitMeshes();
 			Section = 0;
 			Context = "None";
 			skyscraper->Report("Finished globals");
@@ -423,11 +422,18 @@ breakpoint:
 			skyscraper->Report("Script breakpoint reached");
 			goto Nextline;
 		}
-		if (linecheck.substr(0, 9) == "<include ")
+		if (linecheck.substr(0, 8) == "<include")
 		{
 			//include another file at the current script location
 
 			int endloc = LineData.find(">");
+
+			if (endloc == -1)
+			{
+				ScriptError("Syntax error");
+				goto Error;
+			}
+
 			std::string includefile = LineData.substr(9, endloc - 9);
 			TrimString(includefile);
 
@@ -444,7 +450,7 @@ breakpoint:
 			line--;
 			goto Nextline;
 		}
-		if (linecheck.substr(0, 10) == "<function ")
+		if (linecheck.substr(0, 9) == "<function")
 		{
 			//define a function
 
@@ -455,6 +461,13 @@ breakpoint:
 			}
 
 			int endloc = LineData.find(">");
+
+			if (endloc == -1)
+			{
+				ScriptError("Syntax error");
+				goto Error;
+			}
+
 			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
 
@@ -1326,7 +1339,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddTriangleWall command
-	if (linecheck.substr(0, 16) == "addtrianglewall ")
+	if (linecheck.substr(0, 15) == "addtrianglewall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -1395,7 +1408,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddWall command
-	if (linecheck.substr(0, 8) == "addwall ")
+	if (linecheck.substr(0, 7) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -1460,7 +1473,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddGround command
-	if (linecheck.substr(0, 10) == "addground ")
+	if (linecheck.substr(0, 9) == "addground")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 10);
@@ -1568,7 +1581,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CreateWallBox2 command
-	if (linecheck.substr(0, 15) == "createwallbox2 ")
+	if (linecheck.substr(0, 14) == "createwallbox2")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -2096,7 +2109,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//CreateStairwell command
-	if (linecheck.substr(0, 16) == "createstairwell ")
+	if (linecheck.substr(0, 15) == "createstairwell")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -2283,7 +2296,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetTextureMapping2 command
-	if (linecheck.substr(0, 19) == "settexturemapping2 ")
+	if (linecheck.substr(0, 18) == "settexturemapping2")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 19);
@@ -2323,7 +2336,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetPlanarMapping command
-	if (linecheck.substr(0, 17) == "setplanarmapping ")
+	if (linecheck.substr(0, 16) == "setplanarmapping")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -2451,7 +2464,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//GetWallExtents command
-	if (linecheck.substr(0, 15) == "getwallextents ")
+	if (linecheck.substr(0, 14) == "getwallextents")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -2498,7 +2511,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//TextureOverride command
-	if (linecheck.substr(0, 16) == "textureoverride ")
+	if (linecheck.substr(0, 15) == "textureoverride")
 	{
 		int params = SplitData(LineData.c_str(), 16, false);
 
@@ -2510,7 +2523,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//TextureFlip command
-	if (linecheck.substr(0, 12) == "textureflip ")
+	if (linecheck.substr(0, 11) == "textureflip")
 	{
 		int params = SplitData(LineData.c_str(), 12, false);
 
@@ -2529,7 +2542,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Mount command
-	if (linecheck.substr(0, 6) == "mount ")
+	if (linecheck.substr(0, 5) == "mount")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 6, false);
@@ -2544,7 +2557,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddFloorAutoArea command
-	if (linecheck.substr(0, 17) == "addfloorautoarea ")
+	if (linecheck.substr(0, 16) == "addfloorautoarea")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -2565,7 +2578,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddSound command
-	if (linecheck.substr(0, 9) == "addsound ")
+	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true);
@@ -2635,7 +2648,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddModel command
-	if (linecheck.substr(0, 9) == "addmodel ")
+	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true);
@@ -2777,7 +2790,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddActionControl command
-	if (linecheck.substr(0, 17) == "addactioncontrol ")
+	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -2826,7 +2839,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//AddTrigger command
-	if (linecheck.substr(0, 11) == "addtrigger ")
+	if (linecheck.substr(0, 10) == "addtrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
@@ -2857,7 +2870,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetKey command
-	if (linecheck.substr(0, 7) == "setkey ")
+	if (linecheck.substr(0, 6) == "setkey")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 7);
@@ -2881,7 +2894,7 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//SetLock command
-	if (linecheck.substr(0, 8) == "setlock ")
+	if (linecheck.substr(0, 7) == "setlock")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -2915,8 +2928,11 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//Delete command
-	if (linecheck.substr(0, 7) == "delete ")
+	if (linecheck.substr(0, 6) == "delete")
 	{
+		if (LineData.size() == 6)
+			return ScriptError("Incorrect number of parameters");
+
 		//calculate inline math
 		buffer = Calc(LineData.substr(7).c_str());
 
@@ -2931,8 +2947,11 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//RunAction command
-	if (linecheck.substr(0, 10) == "runaction ")
+	if (linecheck.substr(0, 9) == "runaction")
 	{
+		if (LineData.size() == 9)
+			return ScriptError("Incorrect number of parameters");
+
 		//calculate inline math
 		buffer = Calc(LineData.substr(10).c_str());
 
@@ -2943,8 +2962,11 @@ int ScriptProcessor::ProcCommands()
 	}
 
 	//GotoFloor command
-	if (linecheck.substr(0, 10) == "gotofloor ")
+	if (linecheck.substr(0, 9) == "gotofloor")
 	{
+		if (LineData.size() == 9)
+			return ScriptError("Incorrect number of parameters");
+
 		//calculate inline math
 		buffer = Calc(LineData.substr(10).c_str());
 
@@ -3374,7 +3396,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftFloor command
-	if (linecheck.substr(0, 14) == "addshaftfloor ")
+	if (linecheck.substr(0, 13) == "addshaftfloor")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -3426,10 +3448,10 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsFloor command
-	if (linecheck.substr(0, 15) == "addstairsfloor ")
+	if (linecheck.substr(0, 14) == "addstairsfloor")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 15);
+		int params = SplitData(LineData.c_str(), 14);
 
 		if (params != 12 && params != 14)
 			return ScriptError("Incorrect number of parameters");
@@ -3478,7 +3500,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddInterFloorFloor command
-	if (linecheck.substr(0, 19) == "addinterfloorfloor ")
+	if (linecheck.substr(0, 18) == "addinterfloorfloor")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 19);
@@ -3521,7 +3543,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddWall command
-	if (linecheck.substr(0, 8) == "addwall ")
+	if (linecheck.substr(0, 7) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -3542,7 +3564,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftWall command
-	if (linecheck.substr(0, 13) == "addshaftwall ")
+	if (linecheck.substr(0, 12) == "addshaftwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 13);
@@ -3568,7 +3590,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsWall command
-	if (linecheck.substr(0, 14) == "addstairswall ")
+	if (linecheck.substr(0, 13) == "addstairswall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -3594,7 +3616,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddInterFloorWall command
-	if (linecheck.substr(0, 18) == "addinterfloorwall ")
+	if (linecheck.substr(0, 17) == "addinterfloorwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
@@ -3635,7 +3657,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//ColumnWallBox2 command
-	if (linecheck.substr(0, 15) == "columnwallbox2 ")
+	if (linecheck.substr(0, 14) == "columnwallbox2")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -3678,7 +3700,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//CreateCallButtons command
-	if (linecheck.substr(0, 18) == "createcallbuttons ")
+	if (linecheck.substr(0, 17) == "createcallbuttons")
 	{
 		if (callbutton_elevators.size() == 0)
 			return ScriptError("No elevators specified");
@@ -3990,7 +4012,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddDirectionalIndicator command
-	if (linecheck.substr(0, 24) == "adddirectionalindicator ")
+	if (linecheck.substr(0, 23) == "adddirectionalindicator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 24);
@@ -4110,7 +4132,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddFloorIndicator command
-	if (linecheck.substr(0, 18) == "addfloorindicator ")
+	if (linecheck.substr(0, 17) == "addfloorindicator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
@@ -4154,7 +4176,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddFillerWalls command
-	if (linecheck.substr(0, 15) == "addfillerwalls ")
+	if (linecheck.substr(0, 14) == "addfillerwalls")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -4176,7 +4198,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddSound command
-	if (linecheck.substr(0, 9) == "addsound ")
+	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true);
@@ -4246,7 +4268,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftDoorComponent command
-	if (linecheck.substr(0, 22) == "addshaftdoorcomponent ")
+	if (linecheck.substr(0, 21) == "addshaftdoorcomponent")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 22);
@@ -4326,7 +4348,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddModel command
-	if (linecheck.substr(0, 9) == "addmodel ")
+	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true);
@@ -4382,7 +4404,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsModel command
-	if (linecheck.substr(0, 15) == "addstairsmodel ")
+	if (linecheck.substr(0, 14) == "addstairsmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15, true);
@@ -4444,7 +4466,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftModel command
-	if (linecheck.substr(0, 14) == "addshaftmodel ")
+	if (linecheck.substr(0, 13) == "addshaftmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14, true);
@@ -4505,7 +4527,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddActionControl command
-	if (linecheck.substr(0, 17) == "addactioncontrol ")
+	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -4554,10 +4576,10 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftActionControl command
-	if (linecheck.substr(0, 22) == "addshaftactioncontrol ")
+	if (linecheck.substr(0, 21) == "addshaftactioncontrol")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 22);
+		int params = SplitData(LineData.c_str(), 21);
 
 		if (params < 11)
 			return ScriptError("Incorrect number of parameters");
@@ -4610,10 +4632,10 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsActionControl command
-	if (linecheck.substr(0, 22) == "addstairsactioncontrol ")
+	if (linecheck.substr(0, 21) == "addstairsactioncontrol")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 22);
+		int params = SplitData(LineData.c_str(), 21);
 
 		if (params < 11)
 			return ScriptError("Incorrect number of parameters");
@@ -4666,7 +4688,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddTrigger command
-	if (linecheck.substr(0, 11) == "addtrigger ")
+	if (linecheck.substr(0, 10) == "addtrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
@@ -4697,7 +4719,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddShaftTrigger command
-	/*if (linecheck.substr(0, 16) == "addshafttrigger ")
+	/*if (linecheck.substr(0, 15) == "addshafttrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -4733,7 +4755,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//AddStairsTrigger command
-	if (linecheck.substr(0, 16) == "addstairstrigger ")
+	if (linecheck.substr(0, 15) == "addstairstrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 16);
@@ -4790,7 +4812,7 @@ int ScriptProcessor::ProcFloors()
 	}
 
 	//CutAll command
-	if (linecheck.substr(0, 7) == "cutall ")
+	if (linecheck.substr(0, 6) == "cutall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 7);
@@ -6013,7 +6035,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//CreateElevator command
-	if (linecheck.substr(0, 15) == "createelevator ")
+	if (linecheck.substr(0, 14) == "createelevator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -6079,7 +6101,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddWall command
-	if (linecheck.substr(0, 8) == "addwall ")
+	if (linecheck.substr(0, 7) == "addwall")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 8);
@@ -6100,7 +6122,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDoors command
-	if (linecheck.substr(0, 9) == "adddoors ")
+	if (linecheck.substr(0, 8) == "adddoors")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9);
@@ -6148,7 +6170,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//SetShaftDoors command
-	if (linecheck.substr(0, 14) == "setshaftdoors ")
+	if (linecheck.substr(0, 13) == "setshaftdoors")
 	{
 		//backwards compatibility
 		if (warn_deprecated == true)
@@ -6236,7 +6258,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//CreatePanel command
-	if (linecheck.substr(0, 12) == "createpanel ")
+	if (linecheck.substr(0, 11) == "createpanel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12);
@@ -6258,7 +6280,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorButton command
-	if (linecheck.substr(0, 15) == "addfloorbutton ")
+	if (linecheck.substr(0, 14) == "addfloorbutton")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 15);
@@ -6368,7 +6390,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddControlButton command
-	if (linecheck.substr(0, 17) == "addcontrolbutton ")
+	if (linecheck.substr(0, 16) == "addcontrolbutton")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -6578,7 +6600,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorIndicator command
-	if (linecheck.substr(0, 18) == "addfloorindicator ")
+	if (linecheck.substr(0, 17) == "addfloorindicator")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 18);
@@ -6618,7 +6640,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDirectionalIndicators command
-	if (linecheck.substr(0, 25) == "adddirectionalindicators ")
+	if (linecheck.substr(0, 24) == "adddirectionalindicators")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 25);
@@ -6660,7 +6682,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddFloorSigns command
-	if (linecheck.substr(0, 14) == "addfloorsigns ")
+	if (linecheck.substr(0, 13) == "addfloorsigns")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 14);
@@ -6720,7 +6742,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddSound command
-	if (linecheck.substr(0, 9) == "addsound ")
+	if (linecheck.substr(0, 8) == "addsound")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true);
@@ -6790,7 +6812,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddDoorComponent command
-	if (linecheck.substr(0, 17) == "adddoorcomponent ")
+	if (linecheck.substr(0, 16) == "adddoorcomponent")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -6825,7 +6847,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddShaftDoorsComponent command
-	if (linecheck.substr(0, 23) == "addshaftdoorscomponent ")
+	if (linecheck.substr(0, 22) == "addshaftdoorscomponent")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 23);
@@ -6860,7 +6882,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//FinishDoors command
-	if (linecheck.substr(0, 12) == "finishdoors ")
+	if (linecheck.substr(0, 11) == "finishdoors")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12);
@@ -6895,7 +6917,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//FinishShaftDoors command
-	if (linecheck.substr(0, 17) == "finishshaftdoors ")
+	if (linecheck.substr(0, 16) == "finishshaftdoors")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -7019,7 +7041,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddModel command
-	if (linecheck.substr(0, 9) == "addmodel ")
+	if (linecheck.substr(0, 8) == "addmodel")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 9, true);
@@ -7075,7 +7097,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddActionControl command
-	if (linecheck.substr(0, 17) == "addactioncontrol ")
+	if (linecheck.substr(0, 16) == "addactioncontrol")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 17);
@@ -7124,7 +7146,7 @@ int ScriptProcessor::ProcElevators()
 	}
 
 	//AddTrigger command
-	if (linecheck.substr(0, 11) == "addtrigger ")
+	if (linecheck.substr(0, 10) == "addtrigger")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11);
@@ -7379,7 +7401,7 @@ int ScriptProcessor::ProcTextures()
 	}
 
 	//AddTextRange command
-	if (linecheck.substr(0, 13) == "addtextrange ")
+	if (linecheck.substr(0, 12) == "addtextrange")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 13, false);
@@ -7427,7 +7449,7 @@ int ScriptProcessor::ProcTextures()
 	}
 
 	//LoadCropped command
-	if (linecheck.substr(0, 12) == "loadcropped ")
+	if (linecheck.substr(0, 11) == "loadcropped")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
@@ -7450,7 +7472,7 @@ int ScriptProcessor::ProcTextures()
 	}
 
 	//AddOverlay command
-	if (linecheck.substr(0, 11) == "addoverlay ")
+	if (linecheck.substr(0, 10) == "addoverlay")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 11, false);
@@ -7472,7 +7494,7 @@ int ScriptProcessor::ProcTextures()
 	}
 
 	//SetLighting command
-	if (linecheck.substr(0, 12) == "setlighting ")
+	if (linecheck.substr(0, 11) == "setlighting")
 	{
 		//get data
 		int params = SplitData(LineData.c_str(), 12, false);
@@ -7565,10 +7587,10 @@ int ScriptProcessor::ProcTextures()
 	}
 
 	//Scale command
-	if (linecheck.substr(0, 6) == "scale ")
+	if (linecheck.substr(0, 5) == "scale")
 	{
 		//get data
-		int params = SplitData(LineData.c_str(), 6, false);
+		int params = SplitData(LineData.c_str(), 5, false);
 
 		if (params != 3)
 			return ScriptError("Incorrect number of parameters");
@@ -7652,7 +7674,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 				newdata = Calc(tmpcalc.substr(start + 1, end - start - 1).c_str());
 
 				if (CalcError == true)
-					return newdata;
+					return tmpcalc;
 
 				//construct new string
 				one = tmpcalc.substr(0, start);
@@ -7666,7 +7688,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 			{
 				ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 				CalcError = true;
-				return "false";
+				return tmpcalc;
 			}
 		}
 		else
@@ -7686,7 +7708,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 				//ensure that numbers are around operator
 				if (i < (int)tmpcalc.length() - 1)
 				{
-					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-'))
+					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-' || tmpcalc.at(i + 1) == '.'))
 					{
 						//valid operator found
 						operators++;
@@ -7700,7 +7722,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 				//ensure that numbers are around operator
 				if (i < (int)tmpcalc.length() - 1)
 				{
-					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-'))
+					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-' || tmpcalc.at(i + 1) == '.'))
 					{
 						//valid operator found
 						operators++;
@@ -7714,7 +7736,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 		{
 			ScriptError("Syntax error in math operation: '" + tmpcalc + "' (might be nested)");
 			CalcError = true;
-			return "false";
+			return tmpcalc;
 		}
 		if (operators > 1)
 		{
@@ -7722,7 +7744,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 			newdata = Calc(tmpcalc.substr(0, end).c_str());
 
 			if (CalcError == true)
-				return newdata;
+				return tmpcalc;
 
 			//construct new string
 			two = tmpcalc.substr(end);
@@ -7756,12 +7778,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("-", 1);
@@ -7780,12 +7798,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("/", 1);
@@ -7801,7 +7815,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 			{
 				ScriptError("Division by zero in math operation: '" + tmpcalc + "' (might be nested)");
 				CalcError = true;
-				return "false";
+				return tmpcalc;
 			}
 			float tmpnum = first / second;
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
@@ -7810,12 +7824,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("*", 1);
@@ -7834,12 +7844,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	temp1 = tmpcalc.find("^", 1);
@@ -7858,12 +7864,8 @@ std::string ScriptProcessor::Calc(const char *expression)
 		}
 		else
 		{
-			/*if (IsNumeric(one.c_str()) == false)
-				ScriptError("Syntax error in math operation: '" + one + "' is not numeric");
-			else
-				ScriptError("Syntax error in math operation: '" + two + "' is not numeric");
 			CalcError = true;
-			return "false";*/
+			return tmpcalc;
 		}
 	}
 	return tmpcalc;
@@ -7995,6 +7997,11 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 
 	std::string data = string;
 	std::string stringbuffer;
+
+	//verify length of input string
+	if ((int)data.size() < start)
+		return 0;
+
 	SplitString(tempdata, data.substr(start).c_str(), ',');
 	if (calc == true)
 	{

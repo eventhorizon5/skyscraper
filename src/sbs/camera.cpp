@@ -671,36 +671,39 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				int index = (int)meshname.find(":");
 				int index2 = (int)meshname.find(":", index + 1);
 
-				std::string direction = meshname.substr(index2 + 1);
-				TrimString(direction);
+				if (index > -1 && index2 > -1)
+				{
+					std::string direction = meshname.substr(index2 + 1);
+					TrimString(direction);
 
-				//delete call button if ctrl and alt keys are pressed
-				if (ctrl == true && alt == true && shift == false)
-				{
-					sbs->DeleteObject(callbutton->object);
-					return;
-				}
+					//delete call button if ctrl and alt keys are pressed
+					if (ctrl == true && alt == true && shift == false)
+					{
+						sbs->DeleteObject(callbutton->object);
+						return;
+					}
 
-				if (ctrl == true && shift == true)
-				{
-					//if ctrl and shift are held, toggle lock
-					callbutton->ToggleLock();
-				}
-				else if (shift == true)
-				{
-					//if shift is held, change button status instead
-					if (direction == "Up")
-						callbutton->UpLight(!callbutton->UpStatus);
+					if (ctrl == true && shift == true)
+					{
+						//if ctrl and shift are held, toggle lock
+						callbutton->ToggleLock();
+					}
+					else if (shift == true)
+					{
+						//if shift is held, change button status instead
+						if (direction == "Up")
+							callbutton->UpLight(!callbutton->UpStatus);
+						else
+							callbutton->DownLight(!callbutton->DownStatus);
+					}
 					else
-						callbutton->DownLight(!callbutton->DownStatus);
-				}
-				else
-				{
-					//press button
-					if (direction == "Up")
-						callbutton->Call(true);
-					else
-						callbutton->Call(false);
+					{
+						//press button
+						if (direction == "Up")
+							callbutton->Call(true);
+						else
+							callbutton->Call(false);
+					}
 				}
 			}
 		}
@@ -739,6 +742,17 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 					else
 						elevator->CloseDoorsEmergency(number, 2);
 				}
+			}
+		}
+
+		//check floor and directional indicators
+		if ((parent_type == "FloorIndicator" || parent_type == "DirectionalIndicator") && right == false)
+		{
+			//delete indicator if ctrl and alt keys are pressed
+			if (ctrl == true && alt == true && shift == false)
+			{
+				sbs->DeleteObject(obj->GetParent());
+				return;
 			}
 		}
 	}
@@ -837,7 +851,7 @@ void Camera::Loop(float delta)
 			//get SBS object
 			Object *obj = sbs->GetObject(number);
 
-			//get original object (parent object of clicked mesh)
+			//get original object (parent object of mesh)
 			if (obj)
 			{
 				if (obj->GetParent())
@@ -848,14 +862,18 @@ void Camera::Loop(float delta)
 					if (type == "DoorWrapper")
 					{
 						ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
-						ElevatorDoor* door = wrapper->parent;
 
-						if (door)
+						if (wrapper)
 						{
-							int whichdoors = door->elev->GetDoor(door->Number)->GetWhichDoors();
+							ElevatorDoor* door = wrapper->parent;
 
-							if (door->elev->GetDoor(door->Number)->OpenDoor == -1 && whichdoors == 1)
-								door->elev->OpenDoors(door->Number, 1);
+							//make sure both internal and external doors are closing
+							if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
+							{
+								//either open doors if the hit door was an internal door or a shaft door on the elevator floor
+								if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetFloor()))
+									door->elev->OpenDoors(door->Number, 1);
+							}
 						}
 					}
 				}

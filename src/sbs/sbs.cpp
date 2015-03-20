@@ -260,6 +260,12 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	ResetLighting();
 	Report("Done");
 
+	//create object meshes
+	Buildings = new MeshObject(object, "Buildings");
+	External = new MeshObject(object, "External");
+	Landscape = new MeshObject(object, "Landscape");
+	//Landscape->tricollider = false;
+
 	//create camera object
 	this->camera = new Camera(camera);
 }
@@ -1299,15 +1305,6 @@ int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *te
 	z2 = CenterZ + (LengthZ / 2);
 
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
-}
-
-void SBS::InitMeshes()
-{
-	//create object meshes
-	Buildings = new MeshObject(object, "Buildings");
-	External = new MeshObject(object, "External");
-	Landscape = new MeshObject(object, "Landscape");
-	//Landscape->tricollider = false;
 }
 
 int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
@@ -3572,9 +3569,9 @@ std::string SBS::VerifyFile(const char *filename)
 	}
 
 #if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+	Ogre::FileSystemArchive filesystem(".", "FileSystem", false);
 #else
-	Ogre::FileSystemArchive filesystem(".","FileSystem");
+	Ogre::FileSystemArchive filesystem(".", "FileSystem");
 #endif
 	if (filesystem.exists(file))
 	{
@@ -3611,13 +3608,14 @@ bool SBS::FileExists(const char *filename)
 	TrimString(file);
 
 #if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+	Ogre::FileSystemArchive filesystem(".", "FileSystem", false);
 #else
-	Ogre::FileSystemArchive filesystem(".","FileSystem");
+	Ogre::FileSystemArchive filesystem(".", "FileSystem");
 #endif
 	if (filesystem.exists(file))
 		return true;
 
+	//if a corrected filename is found, return true
 	std::string verify = VerifyFile(file.c_str());
 	if (verify != file)
 		return true;

@@ -995,9 +995,8 @@ bool MeshObject::ChangeTexture(const char *texture, bool matcheck, int submesh)
 	//if matcheck is true, exit if old and new textures are the same
 
 	SBS_PROFILE("MeshObject::ChangeTexture");
-	std::string tex = sbs->VerifyFile(texture);
-	std::string path = sbs->GetMountPath(texture, tex);
-	TrimString(tex);
+	std::string material = texture;
+	TrimString(material);
 
 	if (MeshWrapper->getNumSubMeshes() == 0)
 		return false;
@@ -1005,20 +1004,20 @@ bool MeshObject::ChangeTexture(const char *texture, bool matcheck, int submesh)
 	//exit if old and new materials are the same
 	if (matcheck == true)
 	{
-		if (MeshWrapper->getSubMesh(submesh)->getMaterialName() == tex)
+		if (MeshWrapper->getSubMesh(submesh)->getMaterialName() == material)
 			return false;
 	}
 
 	//get new material
-	Ogre::MaterialPtr newmat = Ogre::MaterialManager::getSingleton().getByName(tex, path);
+	Ogre::MaterialPtr newmat = Ogre::MaterialManager::getSingleton().getByName(material, "General");
 	if (!newmat.get())
 	{
-		sbs->ReportError("ChangeTexture: Invalid texture '" + tex + "'");
+		sbs->ReportError("ChangeTexture: Invalid texture '" + material + "'");
 		return false;
 	}
 
 	//set material if valid
-	MeshWrapper->getSubMesh(submesh)->setMaterialName(tex, path);
+	MeshWrapper->getSubMesh(submesh)->setMaterialName(material);
 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();

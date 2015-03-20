@@ -744,77 +744,26 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 
 void Floor::UpdateFloorIndicators(int elevator)
 {
-	//changes the number texture on the floor indicators to the specified elevator's current floor
+	//updates a floor indicator for a specified elevator
 
-	SBS_PROFILE("Floor::UpdateFloorIndicators1");
-	std::string value;
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 		{
 			if (FloorIndicatorArray[i]->elev == elevator)
-			{
-				Elevator *elev = sbs->GetElevator(elevator);
-
-				if (!elev)
-					return;
-
-				if (elev->UseFloorSkipText == true && elev->IsServicedFloor(elev->GetFloor()) == false)
-					value = elev->GetFloorSkipText();
-				else
-				{
-					if (elev->DisplayFloors.size() > 0)
-					{
-						for (int i = 0; i < (int)elev->DisplayFloors.size(); i++)
-						{
-							if (elev->GetFloor() == elev->DisplayFloors[i])
-								value = sbs->GetFloor(elev->GetFloor())->ID;
-						}
-					}
-					else
-						value = sbs->GetFloor(elev->GetFloor())->ID;
-				}
-				TrimString(value);
-				if (value != "")
-					FloorIndicatorArray[i]->Update(value.c_str());
-			}
+				FloorIndicatorArray[i]->Update();
 		}
 	}
 }
 
 void Floor::UpdateFloorIndicators()
 {
-	//changes the number texture on the floor indicators
+	//updates all floor indicators
 
-	SBS_PROFILE("Floor::UpdateFloorIndicators2");
-	std::string value;
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-		{
-			Elevator *elevator = sbs->GetElevator(FloorIndicatorArray[i]->elev);
-
-			if (!elevator)
-				continue;
-
-			if (elevator->UseFloorSkipText == true && elevator->IsServicedFloor(elevator->GetFloor()) == false)
-				value = elevator->GetFloorSkipText();
-			else
-			{
-				if (elevator->DisplayFloors.size() > 0)
-				{
-					for (int i = 0; i < (int)elevator->DisplayFloors.size(); i++)
-					{
-						if (elevator->GetFloor() == elevator->DisplayFloors[i])
-							value = sbs->GetFloor(elevator->GetFloor())->ID;
-					}
-				}
-				else
-					value = sbs->GetFloor(elevator->GetFloor())->ID;
-			}
-			TrimString(value);
-			FloorIndicatorArray[i]->Update(value.c_str());
-		}
+			FloorIndicatorArray[i]->Update();
 	}
 }
 

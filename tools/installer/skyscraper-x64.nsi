@@ -176,6 +176,7 @@ Section "Required libraries" SEC03
   File "${LOCAL_FILES}\D3DCompiler_42.dll"
   File "${LOCAL_FILES}\msvcp100.dll"
   File "${LOCAL_FILES}\msvcr100.dll"
+  File "${LOCAL_FILES}\dbghelp.dll"
   SetOutPath "$INSTDIR\data\caelum"
   File /r "${LOCAL_FILES}\data\caelum\*.*"
 SectionEnd

@@ -70,7 +70,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	sensor = 0;
 	sensor_action = 0;
 	reset_action = 0;
-	sensor_enabled = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true);
+	EnableSensor(sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true));
 	SensorSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.SensorSound", "");
 
 	//create main door object
@@ -250,7 +250,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		if (elev->InServiceMode() == false)
 		{
 			elev->Report("doors" + doornumber + " already open; resetting timer");
-			ResetDoorTimer();
+			Reset();
 		}
 		else
 			elev->Report("doors" + doornumber + " already open");
@@ -667,7 +667,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
 		(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
 	{
-		ResetDoorTimer();
+		Reset();
 	}
 
 	//play direction message sound
@@ -1300,12 +1300,27 @@ void ElevatorDoor::Chime(int floor, bool direction)
 	chime->Play();
 }
 
-void ElevatorDoor::ResetDoorTimer()
+void ElevatorDoor::Reset(bool sensor)
 {
-	//reset elevator door timer
+	//reset elevator doors (timer and optionally sensor)
 
 	if (elev->AutoDoors == false)
 		return;
+
+	if (sbs->Verbose == true)
+	{
+		std::string doornumber;
+		if (elev->NumDoors > 1)
+		{
+			doornumber = " ";
+			doornumber = doornumber + ToString(Number);
+		}
+
+		if (sensor == true)
+			elev->Report("sensor resetting doors" + doornumber);
+		else
+			elev->Report("resetting doors" + doornumber);
+	}
 
 	if (quick_close == false)
 	{
@@ -1318,6 +1333,9 @@ void ElevatorDoor::ResetDoorTimer()
 			timer->Start(QuickClose, true);
 	}
 	quick_close = false;
+
+	if (sensor == false)
+		EnableSensor(true);
 }
 
 bool ElevatorDoor::TimerIsRunning()
@@ -2013,7 +2031,7 @@ int ElevatorDoor::GetManualIndex(int floor)
 	return -1;
 }
 
-void ElevatorDoor::Hold(bool disable_nudge)
+void ElevatorDoor::Hold(bool disable_nudge, bool sensor)
 {
 	//hold door (basically turn off timer)
 	//disable nudge mode timer if specified
@@ -2029,11 +2047,17 @@ void ElevatorDoor::Hold(bool disable_nudge)
 	if (GetNudgeStatus() == true)
 		return;
 
-	elev->Report("holding doors" + doornumber);
+	if (sensor == true)
+		elev->Report("sensor holding doors" + doornumber);
+	else
+		elev->Report("holding doors" + doornumber);
 
 	if (disable_nudge == true)
 		nudgetimer->Stop();
 	timer->Stop();
+
+	if (sensor == false)
+		EnableSensor(false);
 }
 
 void ElevatorDoor::EnableNudgeMode(bool value)
@@ -2086,7 +2110,7 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	//create action for elevator door
 	std::string elev_name = elev->object->GetName();
 	std::string action_name1 = "sensor " + ToString2(Number);
-	std::string action_name2 = "reset " + ToString2(Number);
+	std::string action_name2 = "sensorreset " + ToString2(Number);
 	std::string full_name1 = elev_name + ":" + action_name1;
 	std::string full_name2 = elev_name + ":" + action_name2;
 
@@ -2114,6 +2138,13 @@ bool ElevatorDoor::AreDoorsMoving()
 void ElevatorDoor::EnableSensor(bool value)
 {
 	//enable or disable door sensor
+
+	if (value == sensor_enabled)
+		return;
+
+	//only enable sensor if using automatic doors
+	if (elev->AutoDoors == false)
+		return;
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)

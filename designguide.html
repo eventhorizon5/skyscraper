@@ -2117,7 +2117,7 @@ bank)<br>
 <em>AcpOff</em> (disable ACP mode)<br>
 <em>FanOn</em> (enable fan/idle sound)<br>
 <em>FanOff</em> (disable fan/idle sound)<br>
-<em>Hold [door]</em> (hold door)<br>
+<em>Hold [door]</em> (hold door and disable door sensor temporarily)<br>
 <em>MusicOn</em> (enable music sound)<br>
 <em>MusicOff</em> (disable music sound)<br>
 <em>UpOn</em> (inspection mode up on)<br>
@@ -2131,10 +2131,11 @@ bank)<br>
 <em>Down</em> (move down for manual elevator)<br>
 <em>InterlocksOn</em> (enable interlocks)<br>
 <em>InterlocksOff</em> (disable interlocks)<br>
-<em>Sensor [door]</em> (open and hold doors, used by door sensor)<br>
-<em>Reset [door]</em> (reset door timer which turns off hold, also used by door sensor)<br>
+<em>Sensor [door]</em> (open and hold doors without disabling sensor, used by door sensor)<br>
+<em>Reset [door]</em> (reset door timer and turn on door sensor, which turns off hold)<br>
 <em>SensorOn [door]</em> (enable door sensor)<br>
 <em>SensorOff [door]</em> (disable door sensor)<br>
+<em>SensorReset [door]</em> (same as Reset but doesn't touch sensor setting)<br>
 </p>
 
 <p align="left">Some commands in the above list have an optional <em>Door</em> parameter.

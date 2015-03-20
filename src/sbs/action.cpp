@@ -417,13 +417,21 @@ bool Action::Run(Object *parent)
 			elevator->EnableSensor(false, number);
 			return true;
 		}
+		if (StartsWith(command_name, "sensorreset", false) == true && elevator->Direction == 0)
+		{
+			int number = 0;
+			if (command_name.length() > 5)
+				number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+			elevator->ResetDoors(number, true);
+			return true;
+		}
 		if (StartsWith(command_name, "sensor", false) == true && elevator->Direction == 0)
 		{
 			int number = 0;
 			if (command_name.length() > 6)
 				number = atoi(command_name.substr(6, command_name.length() - 6).c_str());
 			elevator->OpenDoors(number);
-			elevator->HoldDoors(number, false);
+			elevator->HoldDoors(number, false, true);
 			return true;
 		}
 		if (StartsWith(command_name, "reset", false) == true && elevator->Direction == 0)
@@ -431,7 +439,7 @@ bool Action::Run(Object *parent)
 			int number = 0;
 			if (command_name.length() > 5)
 				number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
-			elevator->ResetDoorTimer(number);
+			elevator->ResetDoors(number);
 			return true;
 		}
 		if (command_name == "openshaftdoor")

@@ -94,7 +94,6 @@ bool Skyscraper::OnInit(void)
 	MouseDown = false;
 	IsRunning = false;
 	IsLoading = false;
-	LoadError = false;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
@@ -669,6 +668,10 @@ void Skyscraper::GetInput()
 	Simcore->mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
 	Simcore->mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
+	//get window dimensions
+	float width = window->GetClientSize().GetWidth();
+	float height = window->GetClientSize().GetHeight();
+
 	//adjust for different window client height
 #if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
 	if (Simcore->camera->Freelook == false)
@@ -678,10 +681,10 @@ void Skyscraper::GetInput()
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
-		window->WarpPointer(window->GetClientSize().GetWidth() / 2, window->GetClientSize().GetHeight() / 2);
+		window->WarpPointer(width / 2, height / 2);
 		Ogre::Vector3 rotational;
-		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (window->GetClientSize().GetHeight() / 2))) / (window->GetClientSize().GetHeight() * 2));
-		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((window->GetClientSize().GetWidth() / 2) - (float)Simcore->mouse_x) / (window->GetClientSize().GetWidth() * 2));
+		rotational.x = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (height / 2))) / (height * 2));
+		rotational.y = Ogre::Math::DegreesToRadians(Simcore->camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2));
 		rotational.z = 0;
 		rotational *= 60;
 		Simcore->camera->desired_angle_velocity = rotational;
@@ -693,6 +696,10 @@ void Skyscraper::GetInput()
 	bool right = wxGetMouseState().RightIsDown();
 	if ((left == true || right == true) && MouseDown == false)
 	{
+#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
+		if (Simcore->camera->Freelook == true)
+			Simcore->mouse_y += GetOffset();
+#endif
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
 		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), right);
@@ -714,7 +721,12 @@ void Skyscraper::GetInput()
 
 	if (wxGetKeyState(WXK_F2) && wait == false)
 	{
-		Report(ToString2(Simcore->FPS));
+		float fps = Simcore->FPS;
+		int batches = (int)mRoot->getRenderSystem()->_getBatchCount();
+		int faces = (int)mRoot->getRenderSystem()->_getFaceCount();
+		int vertices = (int)mRoot->getRenderSystem()->_getVertexCount();
+
+		Report("FPS: " + ToString2(Simcore->FPS) + " - Batches: " + ToString2(batches) + " - Faces: " + ToString2(faces) + " - Vertices: " + ToString2(vertices));
 		wait = true;
 	}
 
@@ -970,7 +982,6 @@ void Skyscraper::Loop()
 			if (result == false)
 			{
 				ReportError("Error processing building\n");
-				LoadError = true;
 				Unload();
 				return;
 			}
@@ -992,11 +1003,13 @@ void Skyscraper::Loop()
 	else
 		return;
 
-	//force window raise on startup
+	//force window raise on startup, and report on missing files, if any
 	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && IsLoading == false)
 	{
 		window->Raise();
 		raised = true;
+
+		processor->ReportMissingFiles();
 	}
 
 	//process internal clock
@@ -1053,8 +1066,15 @@ void Skyscraper::Loop()
 		IsLoading = false;
 		Pause = false;
 		UnloadSim();
-		Load();
-		Simcore->camera->GotoFloor(override_floor, true);
+
+		if (Load() == false)
+		{
+			PositionOverride = false;
+			Reload = false;
+			return;
+		}
+
+		Reload = false;
 
 		//force a resizing of a window to fix some rendering issues after a reload
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
@@ -1640,9 +1660,6 @@ bool Skyscraper::Start()
 		progdialog->Destroy();
 	progdialog = 0;
 
-	//report on missing files, if any
-	processor->ReportMissingFiles();
-
 	//the sky needs to be created before Prepare() is called
 	bool sky_result = false;
 	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
@@ -1697,7 +1714,6 @@ bool Skyscraper::Start()
 	IsRunning = true;
 	IsLoading = false;
 	StartupRunning = false;
-	Reload = false;
 	if (console)
 		console->bSend->Enable(true);
 	return true;

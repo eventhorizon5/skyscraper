@@ -44,9 +44,9 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	elev = elevator;
 	Prefix = texture_prefix;
 
-	std::string buffer = ToString(elevator);
-	object->SetName(std::string("Floor Indicator " + buffer).c_str());
+	std::string buffer = "Floor Indicator " + ToString2(elevator);
 	TrimString(buffer);
+	object->SetName(buffer.c_str());
 	FloorIndicatorMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
@@ -115,16 +115,22 @@ void FloorIndicator::MovePosition(const Ogre::Vector3& position)
 	FloorIndicatorMesh->Move(position, true, true, true);
 }
 
-void FloorIndicator::Update(const char *value)
+void FloorIndicator::Update()
 {
-	//update display with a new texture value, such as a floor number
+	//update indicator display with elevator's current floor identifier
 
 	SBS_PROFILE("FloorIndicator::Update");
-	std::string texture;
-	texture = value;
 
-	//don't update if name is set to 'null'
-	if (texture == "null")
+	std::string texture;
+	Elevator *elevator = sbs->GetElevator(elev);
+
+	if (!elevator)
+		return;
+
+	texture = elevator->GetFloorDisplay();
+
+	//don't update texture if no value
+	if (texture == "")
 		return;
 
 	texture.insert(0, Prefix);

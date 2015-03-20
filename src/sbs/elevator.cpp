@@ -653,7 +653,10 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		for (int i = 0; i < (int)UpQueue.size(); i++)
 		{
 			if (UpQueue[i] == floor)
+			{
 				loc = i;
+				break;
+			}
 		}
 
 		if (loc != -1)
@@ -677,7 +680,10 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		for (int i = 0; i < (int)DownQueue.size(); i++)
 		{
 			if (DownQueue[i] == floor)
+			{
 				loc = i;
+				break;
+			}
 		}
 
 		//exit if entry already exits
@@ -735,9 +741,12 @@ bool Elevator::DeleteRoute(int floor, int direction)
 		for (int i = 0; i < (int)UpQueue.size(); i++)
 		{
 			if (UpQueue[i] == floor)
+			{
+				Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction up");
 				UpQueue.erase(UpQueue.begin() + i);
+				break;
+			}
 		}
-		Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction up");
 		if (UpQueue.size() == 0)
 			UpQueueEmpty = true;
 	}
@@ -747,9 +756,12 @@ bool Elevator::DeleteRoute(int floor, int direction)
 		for (int i = 0; i < (int)DownQueue.size(); i++)
 		{
 			if (DownQueue[i] == floor)
+			{
+				Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
 				DownQueue.erase(DownQueue.begin() + i);
+				break;
+			}
 		}
-		Report("deleting route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
 		if (DownQueue.size() == 0)
 			DownQueueEmpty = true;
 	}
@@ -1348,7 +1360,7 @@ void Elevator::MonitorLoop()
 				if (door)
 				{
 					if (door->TimerIsRunning() == false)
-						door->ResetDoorTimer();
+						door->Reset();
 				}
 			}
 		}
@@ -2173,7 +2185,7 @@ void Elevator::DumpQueues()
 	sbs->Report("Down:");
 	for (int i = 0; i < (int)DownQueue.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(DownQueue[i]));
-	Report("");
+	sbs->Report("");
 }
 
 void Elevator::Enabled(bool value)
@@ -2194,6 +2206,16 @@ void Elevator::Enabled(bool value)
 	ElevatorMesh->Enable(value);
 	EnableDoors(value);
 	IsEnabled = value;
+
+	//floor indicators
+	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->Enabled(value);
+	}
+
+	//interior directional indicators
+	EnableDirectionalIndicators(value);
 }
 
 void Elevator::EnableObjects(bool value)
@@ -2369,7 +2391,7 @@ void Elevator::DumpServicedFloors()
 	sbs->Report("\n--- Elevator " + ToString2(Number) + "'s Serviced Floors ---\n");
 	for (int i = 0; i < (int)ServicedFloors.size(); i++)
 		sbs->Report(ToString2(i) + " - " + ToString2(ServicedFloors[i]));
-	Report("");
+	sbs->Report("");
 }
 
 bool Elevator::AddServicedFloor(int number)
@@ -2422,37 +2444,12 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 
 void Elevator::UpdateFloorIndicators()
 {
-	//changes the number texture on the floor indicators to the elevator's current floor
-
-	SBS_PROFILE("Elevator::UpdateFloorIndicators");
-	std::string value;
-	if (UseFloorSkipText == true && IsServicedFloor(GetFloor()) == false)
-		value = FloorSkipText;
-	else
-	{
-		if (DisplayFloors.size() > 0)
-		{
-			for (int i = 0; i < (int)DisplayFloors.size(); i++)
-			{
-				if (GetFloor() == DisplayFloors[i] && sbs->GetFloor(GetFloor()))
-					value = sbs->GetFloor(GetFloor())->ID;
-			}
-		}
-		else
-		{
-			if (sbs->GetFloor(GetFloor()))
-				value = sbs->GetFloor(GetFloor())->ID;
-		}
-	}
-	TrimString(value);
-
-	if (value == "")
-		value = "null";
+	//updates all floor indicators
 
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->Update(value.c_str());
+			FloorIndicatorArray[i]->Update();
 	}
 }
 
@@ -2690,7 +2687,7 @@ bool Elevator::EnableUpPeak(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Up Peak mode disabled");
 	}
 
@@ -2738,7 +2735,7 @@ bool Elevator::EnableDownPeak(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Down Peak mode disabled");
 	}
 
@@ -2785,7 +2782,7 @@ bool Elevator::EnableIndependentService(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Independent Service mode disabled");
 	}
 
@@ -2822,7 +2819,7 @@ bool Elevator::EnableInspectionService(bool value)
 	}
 	else
 	{
-		ResetDoorTimer();
+		ResetDoors();
 		Report("Inspection Service mode disabled");
 
 		UpdateFloorIndicators();
@@ -2911,14 +2908,14 @@ bool Elevator::EnableFireService1(int value)
 		else
 		{
 			if (FireServicePhase2 == 0)
-				ResetDoorTimer(); //enable door timers
+				ResetDoors(); //enable door timers
 			Report("Fire Service Phase 1 mode set to Bypass");
 		}
 	}
 	else
 	{
 		if (FireServicePhase2 == 0)
-			ResetDoorTimer(); //enable door timers
+			ResetDoors(); //enable door timers
 		Report("Fire Service Phase 1 mode set to Off");
 	}
 
@@ -2983,7 +2980,7 @@ bool Elevator::EnableFireService2(int value, bool force)
 		Report("Fire Service Phase 2 mode set to Off");
 
 		if (FireServicePhase1 == 0)
-			ResetDoorTimer(); //enable door timers
+			ResetDoors(); //enable door timers
 		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
 		{
 			//enable nudge mode on all doors if any are open
@@ -3749,7 +3746,7 @@ void Elevator::Chime(int number, int floor, bool direction)
 		LastChimeDirection = -1;
 }
 
-void Elevator::ResetDoorTimer(int number)
+void Elevator::ResetDoors(int number, bool sensor)
 {
 	//reset elevator door timer
 
@@ -3768,7 +3765,7 @@ void Elevator::ResetDoorTimer(int number)
 	{
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			door->ResetDoorTimer();
+			door->Reset(sensor);
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
@@ -4387,7 +4384,7 @@ bool Elevator::IsQueued(int floor)
 	return false;
 }
 
-void Elevator::HoldDoors(int number, bool disable_nudge)
+void Elevator::HoldDoors(int number, bool disable_nudge, bool sensor)
 {
 	//hold specified door, or all if "0" is given
 	//disable nudge mode timer if specified
@@ -4406,7 +4403,7 @@ void Elevator::HoldDoors(int number, bool disable_nudge)
 	for (int i = start; i <= end; i++)
 	{
 		if (GetDoor(i))
-			GetDoor(i)->Hold(disable_nudge);
+			GetDoor(i)->Hold(disable_nudge, sensor);
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
@@ -4966,6 +4963,35 @@ void Elevator::AddDisplayFloor(int floor)
 	DisplayFloors.push_back(floor);
 }
 
+std::string Elevator::GetFloorDisplay()
+{
+	//returns the current floor's indicator display string
+
+	std::string value;
+	int floornum = GetFloor();
+	Floor *floor = sbs->GetFloor(floornum);
+
+	if (!floor)
+		return value;
+
+	if (UseFloorSkipText == true && IsServicedFloor(floornum) == false)
+		value = FloorSkipText;
+	else
+	{
+		if (DisplayFloors.size() > 0)
+		{
+			for (int i = 0; i < (int)DisplayFloors.size(); i++)
+			{
+				if (floornum == DisplayFloors[i])
+					value = floor->ID;
+			}
+		}
+		else
+			value = floor->ID;
+	}
+	return value;
+}
+
 Object* Elevator::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
@@ -5111,9 +5137,14 @@ bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
 	return false;
 }
 
-bool Elevator::AvailableForCall(int floor, int direction)
+int Elevator::AvailableForCall(int floor, int direction)
 {
-	//return true or false if the elevator is available for the specified hall call
+	//determines if the elevator is available for the specified hall call
+
+	//return codes:
+	//0 - busy and will eventually be available
+	//1 - available for call
+	//2 - unavailable due to a service mode or error
 
 	//if floor is a serviced floor
 	if (IsServicedFloor(floor) == true)
@@ -5148,39 +5179,75 @@ bool Elevator::AvailableForCall(int floor, int direction)
 										{
 											if (sbs->Verbose)
 												Report("Available for call");
-											return true;
+											return 1;
 										}
-										else if (sbs->Verbose == true)
-											Report("Not available for call - in service mode");
+										else
+										{
+											if (sbs->Verbose == true)
+												Report("Not available for call - in service mode");
+											return 2;
+										}
 									}
-									else if (sbs->Verbose == true)
-										Report("Not available for call - in nudge mode");
+									else
+									{
+										if (sbs->Verbose == true)
+											Report("Not available for call - in nudge mode");
+										return 0;
+									}
 								}
-								else if (sbs->Verbose == true)
-									Report("Not available for call - going a different direction and is not idle");
+								else
+								{
+									if (sbs->Verbose == true)
+										Report("Not available for call - going a different direction and is not idle");
+									return 0;
+								}
 							}
-							else if (sbs->Verbose == true)
-								Report("Not available for call - position/direction wrong for call");
+							else
+							{
+								if (sbs->Verbose == true)
+									Report("Not available for call - position/direction wrong for call");
+								return 0;
+							}
 						}
-						else if (sbs->Verbose == true)
-							Report("Not available for call - queueresets is on and opposite queue direction is active");
+						else
+						{
+							if (sbs->Verbose == true)
+								Report("Not available for call - queueresets is on and opposite queue direction is active");
+							return 0;
+						}
 					}
-					else if (sbs->Verbose == true)
-						Report("Not available for call - limitqueue is on and queue is active");
+					else
+					{
+						if (sbs->Verbose == true)
+							Report("Not available for call - limitqueue is on and queue is active");
+						return 0;
+					}
 				}
-				else if (sbs->Verbose == true)
-					Report("Not available for call - queue change is pending");
+				else
+				{
+					if (sbs->Verbose == true)
+						Report("Not available for call - queue change is pending");
+					return 0;
+				}
 			}
-			else if (sbs->Verbose == true)
-				Report("Not available for call - elevator not running");
+			else
+			{
+				if (sbs->Verbose == true)
+					Report("Not available for call - elevator not running");
+				return 2;
+			}
 		}
-		else if (sbs->Verbose == true)
-			Report("Not available for call - direction beyond serviced range");
+		else
+		{
+			if (sbs->Verbose == true)
+				Report("Not available for call - direction beyond serviced range");
+			return 2;
+		}
 	}
-	else if (sbs->Verbose == true)
-		Report("Not available for call - not a serviced floor");
 
-	return false;
+	if (sbs->Verbose == true)
+		Report("Not available for call - not a serviced floor");
+	return 2;
 }
 
 bool Elevator::SelectFloor(int floor)

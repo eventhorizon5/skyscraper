@@ -42,7 +42,7 @@ public:
 	Ogre::Vector3 GetPosition();
 	void SetPosition(const Ogre::Vector3 &position);
 	void MovePosition(const Ogre::Vector3 &position);
-	void Update(const char *value);
+	void Update();
 
 private:
 	MeshObject* FloorIndicatorMesh; //indicator mesh object
