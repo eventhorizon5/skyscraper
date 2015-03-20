@@ -24,7 +24,7 @@ FIND_PATH(FMOD_INCLUDE_DIR
 )
 
 FIND_LIBRARY(FMOD_LIBRARY
-  NAMES fmodex64 libfmodex64 fmodex libfmodex
+  NAMES fmodex libfmodex fmodex64 libfmodex64
   PATHS
   $ENV{FMOD_DIR}/lib
   /usr/local/lib
