@@ -946,7 +946,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 				if (ShowFloorsList[i] != current_floor)
 				{
 					Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
-					if (floor->IsEnabled == true)
+					if (floor->IsEnabled == true && floor->IsInGroup(current_floor) == false)
 					{
 						floor->Enabled(false);
 						//floor->EnableGroup(false);

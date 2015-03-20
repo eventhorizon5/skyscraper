@@ -1041,10 +1041,15 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 				Floor *floor = sbs->GetFloor(ShowFloorsList[i]);
 				if (floor->IsEnabled == true && sbs->camera->CurrentFloor != floor->Number)
 				{
+					//don't disable floors that were originally enabled as part of the camera floor's group
 					if ((floor->EnabledGroup == true && floor->EnabledGroup_Floor == sbs->camera->CurrentFloor) == false)
 					{
-						floor->Enabled(false);
-						//floor->EnableGroup(false);
+						//only disable floor if not part of the camera floor's group
+						if (floor->IsInGroup(sbs->camera->CurrentFloor) == false)
+						{
+							floor->Enabled(false);
+							//floor->EnableGroup(false);
+						}
 					}
 				}
 			}
