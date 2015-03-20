@@ -427,6 +427,13 @@ breakpoint:
 			//include another file at the current script location
 
 			int endloc = LineData.find(">");
+
+			if (endloc == -1)
+			{
+				ScriptError("Syntax error");
+				goto Error;
+			}
+
 			std::string includefile = LineData.substr(9, endloc - 9);
 			TrimString(includefile);
 
@@ -454,6 +461,13 @@ breakpoint:
 			}
 
 			int endloc = LineData.find(">");
+
+			if (endloc == -1)
+			{
+				ScriptError("Syntax error");
+				goto Error;
+			}
+
 			std::string function = LineData.substr(10, endloc - 10);
 			TrimString(function);
 
@@ -2916,6 +2930,9 @@ int ScriptProcessor::ProcCommands()
 	//Delete command
 	if (linecheck.substr(0, 6) == "delete")
 	{
+		if (LineData.size() == 6)
+			return ScriptError("Incorrect number of parameters");
+
 		//calculate inline math
 		buffer = Calc(LineData.substr(7).c_str());
 
@@ -2932,6 +2949,9 @@ int ScriptProcessor::ProcCommands()
 	//RunAction command
 	if (linecheck.substr(0, 9) == "runaction")
 	{
+		if (LineData.size() == 9)
+			return ScriptError("Incorrect number of parameters");
+
 		//calculate inline math
 		buffer = Calc(LineData.substr(10).c_str());
 
@@ -2944,6 +2964,9 @@ int ScriptProcessor::ProcCommands()
 	//GotoFloor command
 	if (linecheck.substr(0, 9) == "gotofloor")
 	{
+		if (LineData.size() == 9)
+			return ScriptError("Incorrect number of parameters");
+
 		//calculate inline math
 		buffer = Calc(LineData.substr(10).c_str());
 
@@ -7974,6 +7997,11 @@ int ScriptProcessor::SplitData(const char *string, int start, bool calc)
 
 	std::string data = string;
 	std::string stringbuffer;
+
+	//verify length of input string
+	if ((int)data.size() < start)
+		return 0;
+
 	SplitString(tempdata, data.substr(start).c_str(), ',');
 	if (calc == true)
 	{
