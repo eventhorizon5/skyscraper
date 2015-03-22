@@ -1266,8 +1266,9 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
 		float det;
-		Ogre::Vector3 normal = ComputeNormal(varray1, det);
-		Ogre::Plane plane = Ogre::Plane(normal, -det);
+		Ogre::Vector3 normal = -ComputeNormal(varray1, det);
+		normal.normalise();
+		Ogre::Plane plane = Ogre::Plane(normal, det);
 
 		direction = 0; //x; faces left/right
 
