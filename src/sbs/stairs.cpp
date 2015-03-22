@@ -288,8 +288,12 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 	return wall;
 }
 
-int Stairs::AddWall(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+bool Stairs::AddWall(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+		return ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
+
 	return sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, tw, th, true);
 }
 
@@ -307,8 +311,12 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	return wall;
 }
 
-int Stairs::AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+bool Stairs::AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+		return ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
+
 	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, sbs->GetFloor(floor)->GetBase() + voffset1, sbs->GetFloor(floor)->GetBase() + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 

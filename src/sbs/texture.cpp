@@ -1245,7 +1245,7 @@ Ogre::Vector2 SBS::CalculateSizing(const char *texture, const Ogre::Vector3 &v1,
 	return Ogre::Vector2(tw2, th2);
 }
 
-void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction)
+bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 &v1, Ogre::Vector3 &v2, Ogre::Vector3 &v3, int &direction)
 {
 	//returns texture mapping coordinates for the specified polygon index, in the v1, v2, and v3 vectors
 	//this performs one of 3 methods - planar mapping, index mapping and manual vertex mapping
@@ -1266,8 +1266,9 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
 		float det;
-		Ogre::Vector3 normal = ComputeNormal(varray1, det);
-		Ogre::Plane plane = Ogre::Plane(normal, -det);
+		Ogre::Vector3 normal = -ComputeNormal(varray1, det);
+		normal.normalise();
+		Ogre::Plane plane = Ogre::Plane(normal, det);
 
 		direction = 0; //x; faces left/right
 
@@ -1275,6 +1276,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 			direction = 1; //y biggest; faces up/down
 		else if (fabsf (normal.z) > fabsf (normal.x))
 			direction = 2; //z biggest; faces front/back
+		else if (normal.x == 0)
+			return false; //fail if normal vector is 0
 
 		size_t selX = (1 << direction) & 0x3;
 		size_t selY = (1 << selX) & 0x3;
@@ -1482,6 +1485,8 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 			direction = 1; //y biggest; faces up/down
 		else if (fabsf (normal.z) > fabsf (normal.x))
 			direction = 2; //z biggest; faces front/back
+		else if (normal.x == 0)
+			return false; //fail if normal vector is 0
 	}
 	if (MapMethod == 2)
 	{
@@ -1576,7 +1581,11 @@ void SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 			direction = 1; //y biggest; faces up/down
 		else if (fabsf (normal.z) > fabsf (normal.x))
 			direction = 2; //z biggest; faces front/back
+		else if (normal.x == 0)
+			return false; //fail if normal vector is 0
 	}
+
+	return true;
 }
 
 void SBS::ResetTextureMapping(bool todefaults)

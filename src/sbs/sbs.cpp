@@ -655,17 +655,24 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-int SBS::AddWallMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, parent, true);
-	int result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
+	bool result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
 	delete object;
 	return result;
 }
 
-int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	//Adds a wall with the specified dimensions
+
+	//exit if coordinates are invalid
+	if (x1 == x2 && z1 == z2)
+	{
+		std::string name2 = name;
+		return ReportError("Invalid coordinates for wall '" + name2 + "'");
+	}
 
 	//determine axis of wall
 	int axis = 0;
@@ -811,7 +818,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
 
-	if (DrawSideN == true)
+	if (DrawSideN == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -829,7 +836,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //left wall
 	}
 
-	if (DrawSideP == true)
+	if (DrawSideP == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -847,7 +854,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //right wall
 	}
 
-	if (DrawTop == true)
+	if (DrawTop == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -862,7 +869,7 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //top wall
 	}
 
-	if (DrawBottom == true)
+	if (DrawBottom == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -877,24 +884,31 @@ int SBS::AddWallMain(WallObject* wallobject, const char *name, const char *textu
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
 	}
 
-	return 0;
+	return true;
 }
 
-int SBS::AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
 	WallObject *object = new WallObject(mesh, parent, true);
-	int result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, autosize, legacy_behavior);
+	bool result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, autosize, legacy_behavior);
 	delete object;
 	return result;
 }
 
-int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
 	//direction determines the direction of slope (for different altitude values):
 	//false - left/right from altitude1 to altitude2, or legacy (broken) "ReverseAxis = false" behavior if legacy_behavior is true
 	//true - back/forwards from altitude1 to altitude2, or legacy (broken) "ReverseAxis = true" behavior if legacy_behavior is true
+
+	//exit if coordinates are invalid
+	if (x1 == x2 && z1 == z2)
+	{
+		std::string name2 = name;
+		return ReportError("Invalid coordinates for floor '" + name2 + "'");
+	}
 
 	//convert to clockwise coordinates
 	float temp;
@@ -1077,7 +1091,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
 
-	if (DrawSideN == true)
+	if (DrawSideN == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1092,7 +1106,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v5, v1, v4, tw2, th2, autosize); //left wall
 	}
 
-	if (DrawSideP == true)
+	if (DrawSideP == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1107,7 +1121,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v7, v3, v2, tw2, th2, autosize); //right wall
 	}
 
-	if (DrawTop == true)
+	if (DrawTop == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1122,7 +1136,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //front wall
 	}
 
-	if (DrawBottom == true)
+	if (DrawBottom == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1139,7 +1153,7 @@ int SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *text
 
 	PlanarRotate = old_planarrotate;
 
-	return 0;
+	return true;
 }
 
 void SBS::Report(std::string message)
@@ -1155,12 +1169,18 @@ bool SBS::ReportError(std::string message)
 	return false;
 }
 
-int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls
 
+	//exit if coordinates are invalid
+	if (x1 == x2 && z1 == z2)
+	{
+		std::string name2 = name;
+		return ReportError("Invalid coordinates for wall '" + name2 + "'");
+	}
+
 	std::string NewName;
-	int firstidx = 0;
 
 	//swap values if the first is greater than the second
 	if (x1 > x2)
@@ -1287,10 +1307,10 @@ int SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *tex
 				Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
 		}
 	}
-	return firstidx;
+	return true;
 }
 
-int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+bool SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls from a central point
 
@@ -1307,7 +1327,7 @@ int SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *te
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+bool SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
@@ -1364,10 +1384,10 @@ int SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *tex
 		wallobject->AddPolygon(NewName.c_str(), texture, varray2, tw2, th2, true);
 	}
 
-	return 0;
+	return true;
 }
 
-int SBS::AddCustomFloor(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
+bool SBS::AddCustomFloor(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	std::vector<Ogre::Vector3> varray3;
@@ -1383,7 +1403,7 @@ int SBS::AddCustomFloor(WallObject* wallobject, const char *name, const char *te
 	return AddCustomWall(wallobject, name, texture, varray3, tw, th);
 }
 
-int SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
+bool SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
 	std::vector<Ogre::Vector3> varray;
@@ -2039,11 +2059,10 @@ float SBS::FeetToMeters(float feet)
 	return feet / 3.2808399f;
 }
 
-int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th)
+void SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th)
 {
 	//add joining doorway polygons if needed
 
-	int index = 0;
 	if (wall1a == true && wall2a == true)
 	{
 		//true if doorway is facing forward/backward
@@ -2052,9 +2071,9 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 
 		DrawWalls(false, true, false, false, false, false);
 		if (direction == true)
-			index = AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
 		else
-			index = AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
 		ResetWalls();
 
 		DrawWalls(true, false, false, false, false, false);
@@ -2068,7 +2087,6 @@ int SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, 
 
 		ResetDoorwayWalls();
 	}
-	return index;
 }
 
 void SBS::ResetDoorwayWalls()

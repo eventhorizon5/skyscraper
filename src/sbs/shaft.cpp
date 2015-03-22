@@ -191,8 +191,17 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 	}
 
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
-	sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, true);
+	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
+}
+
+bool Shaft::AddWall(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+{
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+		return ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
+
+	return sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, true);
 }
 
 WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
@@ -200,9 +209,20 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		sbs->ReportError("Shaft " + ToString2(ShaftNumber) + " - AddFloor: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
 		return 0;
 	}
+
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
+	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
+	return wall;
+}
+
+bool Shaft::AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+{
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+		return ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
 
 	//get shaft extents
 	float altitude = sbs->GetFloor(floor)->Altitude;
@@ -216,9 +236,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
-	return wall;
+	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)

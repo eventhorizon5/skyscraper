@@ -52,7 +52,9 @@ public:
 	Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	~Shaft();
 	WallObject* AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	bool AddWall(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	WallObject* AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
+	bool AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	void Enabled(int floor, bool value, bool EnableShaftDoors);
 	bool IsShaft(Ogre::MeshPtr test);
 	void EnableWholeShaft(bool value, bool EnableShaftDoors, bool force = false);
