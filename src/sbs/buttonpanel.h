@@ -57,7 +57,7 @@ public:
 	void Move(const Ogre::Vector3 &position);
 	void SetToElevatorAltitude();
 	void Enabled(bool value);
-	int AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
+	bool AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	Control* GetControl(int index);
 	void ChangeLight(int floor, bool value);
 	void ChangeAllLights(bool value);
