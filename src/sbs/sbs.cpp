@@ -818,7 +818,7 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
 
-	if (DrawSideN == true)
+	if (DrawSideN == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -836,7 +836,7 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //left wall
 	}
 
-	if (DrawSideP == true)
+	if (DrawSideP == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -854,7 +854,7 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //right wall
 	}
 
-	if (DrawTop == true)
+	if (DrawTop == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -869,7 +869,7 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //top wall
 	}
 
-	if (DrawBottom == true)
+	if (DrawBottom == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1091,7 +1091,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
 
-	if (DrawSideN == true)
+	if (DrawSideN == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1106,7 +1106,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v5, v1, v4, tw2, th2, autosize); //left wall
 	}
 
-	if (DrawSideP == true)
+	if (DrawSideP == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1121,7 +1121,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v7, v3, v2, tw2, th2, autosize); //right wall
 	}
 
-	if (DrawTop == true)
+	if (DrawTop == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
@@ -1136,7 +1136,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //front wall
 	}
 
-	if (DrawBottom == true)
+	if (DrawBottom == true && thickness != 0.0f)
 	{
 		if (FlipTexture == true)
 		{
