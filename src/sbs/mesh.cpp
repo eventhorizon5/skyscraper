@@ -1234,7 +1234,8 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	int direction;
 
 	//get texture mapping coordinates
-	sbs->GetTextureMapping(vertices2[0], v1, v2, v3, direction);
+	if (!sbs->GetTextureMapping(vertices2[0], v1, v2, v3, direction))
+		return false;
 
 	if (tw == 0)
 		tw = 1;
