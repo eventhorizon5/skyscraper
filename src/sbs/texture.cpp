@@ -1268,7 +1268,7 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		float det;
 		Ogre::Vector3 normal = -ComputeNormal(varray1, det);
 		normal.normalise();
-		Ogre::Plane plane = Ogre::Plane(normal, det);
+		Ogre::Plane plane = Ogre::Plane(normal.x, normal.y, normal.z, det);
 
 		direction = 0; //x; faces left/right
 
