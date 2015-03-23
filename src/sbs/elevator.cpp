@@ -1281,13 +1281,13 @@ void Elevator::MonitorLoop()
 			if (Fan == false && idlesound->IsPlaying() == true)
 			{
 				if (sbs->Verbose)
-					Report("stopping idle sound");
+					Report("stopping car idle sound");
 				idlesound->Stop();
 			}
 			else if (InElevator() == false && AreDoorsOpen() == false && AreDoorsMoving() == 0)
 			{
 				if (sbs->Verbose)
-					Report("stopping idle sound");
+					Report("stopping car idle sound");
 				idlesound->Stop();
 			}
 		}
