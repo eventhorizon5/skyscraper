@@ -5534,6 +5534,17 @@ int ScriptProcessor::ProcElevators()
 		elev->MotorDownStopSound = temp2;
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 14) == "motoridlesound")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		//check to see if file exists
+		CheckFile(std::string("data/" + temp2).c_str());
+
+		elev->MotorIdleSound = temp2;
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 10) == "chimesound")
 	{
 		if (temp2check < 0)
