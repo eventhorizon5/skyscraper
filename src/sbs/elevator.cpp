@@ -393,6 +393,12 @@ Elevator::~Elevator()
 		delete idlesound;
 	}
 	idlesound = 0;
+	if (motoridlesound)
+	{
+		motoridlesound->object->parent_deleting = true;
+		delete motoridlesound;
+	}
+	motoridlesound = 0;
 	if (announcesnd)
 	{
 		announcesnd->object->parent_deleting = true;
@@ -575,9 +581,9 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	carsound->SetPosition(Origin);
 	idlesound = new Sound(object, "Idle", true);
 	idlesound->SetPosition(Origin);
-	idlesound->Load(CarIdleSound.c_str());
 	motorsound = new Sound(object, "Motor", true);
 	motorsound->SetPosition(Origin);
+	motoridlesound = new Sound(object, "Motor Idle", true);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
 		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
@@ -592,6 +598,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		}
 	}
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
+	motoridlesound->SetPosition(motorsound->GetPosition());
 	alarm = new Sound(object, "Alarm", true);
 	alarm->SetPosition(Origin);
 	floorbeep = new Sound(object, "Floor Beep", true);
@@ -600,7 +607,6 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	announcesnd->SetPosition(Origin);
 	musicsound = new Sound(object, "Music Sound", true);
 	musicsound->SetPosition(Origin + MusicPosition);
-	musicsound->Load(Music.c_str());
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -1254,15 +1260,18 @@ void Elevator::MonitorLoop()
 		UpdateFloorIndicators();
 	}
 
-	//play idle sound if in elevator, or if doors open
-	if (CarIdleSound != "" && idlesound->IsLoaded() == true)
+	//play car idle sound if in elevator, or if doors open
+	if (CarIdleSound != "")
 	{
+		if (idlesound->IsLoaded() == false)
+			idlesound->Load(CarIdleSound.c_str());
+
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
 			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
 			{
 				if (sbs->Verbose)
-					Report("playing idle sound");
+					Report("playing car idle sound");
 				idlesound->Loop(true);
 				idlesound->Play();
 			}
@@ -1284,9 +1293,35 @@ void Elevator::MonitorLoop()
 		}
 	}
 
-	//play music sound if in elevator, or if doors open
-	if (Music != "" && musicsound->IsLoaded() == true)
+	if (MotorIdleSound != "")
 	{
+		if (motoridlesound->IsLoaded() == false)
+			motoridlesound->Load(MotorIdleSound.c_str());
+
+		//play motor idle sound
+		if (motoridlesound->IsPlaying() == false && Running == true)
+		{
+			if (sbs->Verbose)
+				Report("playing motor idle sound");
+			motoridlesound->Loop(true);
+			motoridlesound->Play();
+		}
+
+		//stop motor sound if elevator is stopped and not running
+		if (motoridlesound->IsPlaying() == true && Running == false)
+		{
+			if (sbs->Verbose)
+				Report("stopping motor idle sound");
+			motoridlesound->Stop();
+		}
+	}
+
+	//play music sound if in elevator, or if doors open
+	if (Music != "")
+	{
+		if (musicsound->IsLoaded() == false)
+			musicsound->Load(Music.c_str());
+
 		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && IsMoving == true) || MusicOnMove == false))
 		{
 			if (InServiceMode() == false)

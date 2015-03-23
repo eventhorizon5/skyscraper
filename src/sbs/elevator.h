@@ -391,6 +391,7 @@ private:
 	Sound *carsound;
 	Sound *idlesound;
 	Sound *motorsound;
+	Sound *motoridlesound;
 	Sound *alarm;
 	Sound *floorbeep;
 	std::vector<Sound*> sounds; //generic sounds
