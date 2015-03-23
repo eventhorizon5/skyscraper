@@ -2149,10 +2149,13 @@ void ElevatorDoor::EnableSensor(bool value)
 		doornumber = doornumber + ToString(Number);
 	}
 
-	if (value == true)
-		elev->Report("Doors" + doornumber + ": enabling sensor");
-	else
-		elev->Report("Doors" + doornumber + ": disabling sensor");
+	if (sbs->IsRunning == true || sbs->Verbose)
+	{
+		if (value == true)
+			elev->Report("Doors" + doornumber + ": enabling sensor");
+		else
+			elev->Report("Doors" + doornumber + ": disabling sensor");
+	}
 
 	sensor_enabled = value;
 }
