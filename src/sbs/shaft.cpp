@@ -829,6 +829,11 @@ Object* Shaft::AddModel(int floor, const char *name, const char *filename, bool 
 Object* Shaft::AddControl(int floor, const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
+
+	//exit if floor is invalid
+	if (!IsValidFloor(floor))
+		return 0;
+
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
@@ -841,7 +846,12 @@ Object* Shaft::AddTrigger(int floor, const char *name, const char *sound_file, O
 	//triggers disabled for now
 
 	//add a trigger
-	/*Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
+
+	//exit if floor is invalid
+	/*if (!IsValidFloor(floor))
+		return 0;
+
+	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
 	TriggerArray[floor - startfloor].push_back(trigger);
 	trigger->SetPosition(Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z));
 	return trigger->object;*/
