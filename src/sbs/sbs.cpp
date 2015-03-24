@@ -1678,26 +1678,26 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	return stairs.object->object;
 }
 
-bool SBS::NewElevator(int number)
+Object* SBS::NewElevator(int number)
 {
 	//create a new elevator object
 
 	if (GetElevator(number))
-		return false;
+		return 0;
 
 	ElevatorMap elev;
 	elev.number = number;
 	elev.object = new Elevator(number);
 	ElevatorArray.push_back(elev);
-	return true;
+	return elev.object->object;
 }
 
-bool SBS::NewFloor(int number)
+Object* SBS::NewFloor(int number)
 {
 	//create a new floor object
 
 	if (GetFloor(number))
-		return false;
+		return 0;
 
 	FloorMap floor;
 	floor.number = number;
@@ -1708,7 +1708,7 @@ bool SBS::NewFloor(int number)
 		Basements++;
 	else
 		Floors++;
-	return true;
+	return floor.object->object;
 }
 
 int SBS::Elevators()

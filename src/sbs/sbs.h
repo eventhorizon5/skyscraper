@@ -218,8 +218,8 @@ public:
 	Object* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	std::string GetTextureMaterial(const char *name, bool &result, bool report = true, const char *polygon_name = 0);
-	bool NewElevator(int number);
-	bool NewFloor(int number);
+	Object* NewElevator(int number);
+	Object* NewFloor(int number);
 	int Elevators();
 	int TotalFloors(); //all floors including basements
 	int Shafts();
