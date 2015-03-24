@@ -415,8 +415,6 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 
 	if (position.y > bottom && position.y < top)
 	{
-		bool hit = false;
-
 		//check for hit with current floor
 		float distance = floorptr->FullHeight();
 		if (IsValidFloor(floor))
