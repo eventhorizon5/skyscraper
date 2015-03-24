@@ -7793,26 +7793,6 @@ std::string ScriptProcessor::Calc(const char *expression)
 			return tmpcalc;
 		}
 	}
-	temp1 = tmpcalc.find("-", 1);
-	if (temp1 > 0)
-	{
-		one = tmpcalc.substr(0, temp1);
-		two = tmpcalc.substr(temp1 + 1);
-		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
-		{
-			float first = atof(one.c_str());
-			float second = atof(two.c_str());
-			float tmpnum = first - second;
-			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
-			TrimString(tmpcalc);
-			return tmpcalc;
-		}
-		else
-		{
-			CalcError = true;
-			return tmpcalc;
-		}
-	}
 	temp1 = tmpcalc.find("/", 1);
 	if (temp1 > 0)
 	{
@@ -7869,6 +7849,26 @@ std::string ScriptProcessor::Calc(const char *expression)
 			float first = atof(one.c_str());
 			float second = atof(two.c_str());
 			float tmpnum = powf(first, second);
+			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			TrimString(tmpcalc);
+			return tmpcalc;
+		}
+		else
+		{
+			CalcError = true;
+			return tmpcalc;
+		}
+	}
+	temp1 = tmpcalc.find("-", 1);
+	if (temp1 > 0)
+	{
+		one = tmpcalc.substr(0, temp1);
+		two = tmpcalc.substr(temp1 + 1);
+		if (IsNumeric(one.c_str()) == true && IsNumeric(two.c_str()) == true)
+		{
+			float first = atof(one.c_str());
+			float second = atof(two.c_str());
+			float tmpnum = first - second;
 			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
