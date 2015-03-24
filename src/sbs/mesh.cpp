@@ -182,6 +182,26 @@ void SBS::Cut(WallObject *wall, const Ogre::Vector3& start, const Ogre::Vector3&
 	if (cutwalls == false && cutfloors == false)
 		return;
 
+	//swap values if the first is greater than the second
+	if (start.x > end.x)
+	{
+		float tmp = start.x;
+		start.x = end.x;
+		end.x = tmp;
+	}
+	if (start.y > end.y)
+	{
+		float tmp = start.y;
+		start.y = end.y;
+		end.y = tmp;
+	}
+	if (start.z > end.z)
+	{
+		float tmp = start.z;
+		start.z = end.z;
+		end.z = tmp;
+	}
+
 	std::vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 
 	bool polycheck = false;
