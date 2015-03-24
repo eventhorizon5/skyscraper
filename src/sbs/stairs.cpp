@@ -415,15 +415,19 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 
 	if (position.y > bottom && position.y < top)
 	{
+		bool hit = false;
+
 		//check for hit with current floor
 		float distance = floorptr->FullHeight();
-		hit = GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+		if (IsValidFloor(floor))
+			hit = GetMeshObject(floor)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 
 		//if no hit, check hit against lower floor
 		if (hit == false && sbs->GetFloor(floor - 1) && floor > startfloor)
 		{
 			distance = position.y - sbs->GetFloor(floor - 1)->Altitude;
-			hit = GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
+			if (IsValidFloor(floor - 1))
+				hit = GetMeshObject(floor - 1)->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, distance) >= 0;
 		}
 
 		//if no hit, check hit against starting floor
@@ -810,6 +814,11 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, bool
 Object* Stairs::AddControl(int floor, const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
+
+	//exit if floor is invalid
+	if (!IsValidFloor(floor))
+		return 0;
+
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
@@ -822,7 +831,12 @@ Object* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, 
 	//triggers are disabled for now
 
 	//add a trigger
-	/*Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
+
+	//exit if floor is invalid
+	/*if (!IsValidFloor(floor))
+		return 0;
+
+	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
 	TriggerArray[floor - startfloor].push_back(trigger);
 	trigger->SetPosition(Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z));
 	return trigger->object;*/
