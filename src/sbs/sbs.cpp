@@ -1681,9 +1681,9 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 bool SBS::NewElevator(int number)
 {
 	//create a new elevator object
-	for (size_t i = 0; i < ElevatorArray.size(); i++)
-		if (ElevatorArray[i].number == number)
-			return false;
+
+	if (GetElevator(number))
+		return false;
 
 	ElevatorMap elev;
 	elev.number = number;
@@ -1695,9 +1695,9 @@ bool SBS::NewElevator(int number)
 bool SBS::NewFloor(int number)
 {
 	//create a new floor object
-	for (size_t i = 0; i < FloorArray.size(); i++)
-		if (FloorArray[i].number == number)
-			return false;
+
+	if (GetFloor(number))
+		return false;
 
 	FloorMap floor;
 	floor.number = number;
