@@ -4937,6 +4937,8 @@ bool Elevator::IsNudgeModeActive(int number)
 
 		if (door)
 			return door->GetNudgeStatus();
+		else
+			ReportError("Invalid door " + ToString2(number));
 	}
 
 	return false;
@@ -4961,6 +4963,8 @@ void Elevator::EnableNudgeMode(bool value, int number)
 
 		if (door)
 			return door->EnableNudgeMode(value);
+		else
+			ReportError("Invalid door " + ToString2(number));
 	}
 }
 
@@ -5785,6 +5789,8 @@ bool Elevator::GetSensorStatus(int number)
 
 		if (door)
 			return door->GetSensorStatus();
+		else
+			ReportError("Invalid door " + ToString2(number));
 	}
 
 	return false;
@@ -5809,6 +5815,8 @@ void Elevator::EnableSensor(bool value, int number)
 
 		if (door)
 			door->EnableSensor(value);
+		else
+			ReportError("Invalid door " + ToString2(number));
 	}
 }
 

@@ -1331,7 +1331,7 @@ void ElevatorDoor::Reset(bool sensor)
 	quick_close = false;
 
 	if (sensor == false)
-		EnableSensor(true);
+		EnableSensor(true, false);
 }
 
 bool ElevatorDoor::TimerIsRunning()
@@ -2053,7 +2053,7 @@ void ElevatorDoor::Hold(bool disable_nudge, bool sensor)
 	timer->Stop();
 
 	if (sensor == false)
-		EnableSensor(false);
+		EnableSensor(false, false);
 }
 
 void ElevatorDoor::EnableNudgeMode(bool value)
@@ -2097,7 +2097,7 @@ bool ElevatorDoor::GetNudgeStatus()
 
 void ElevatorDoor::CheckSensor()
 {
-	if (GetSensorStatus() == true && sensor && (AreDoorsOpen() == true || OpenDoor != 0))
+	if (GetSensorStatus(false) == true && sensor && (AreDoorsOpen() == true || OpenDoor != 0))
 		sensor->Check();
 }
 
@@ -2131,11 +2131,18 @@ bool ElevatorDoor::AreDoorsMoving()
 	return (OpenDoor != 0);
 }
 
-void ElevatorDoor::EnableSensor(bool value)
+void ElevatorDoor::EnableSensor(bool value, bool persistent)
 {
 	//enable or disable door sensor
 
+	//set persistent to false if sensor should be temporarily activated/deactivated only
+	//and persistent state left untouched
+
 	if (value == sensor_enabled)
+		return;
+
+	//if deactivate_only is true, perform operation only is persistent state (sensor_status) is true
+	if (persistent == false && sensor_status == false)
 		return;
 
 	//only enable sensor if using automatic doors
@@ -2149,20 +2156,40 @@ void ElevatorDoor::EnableSensor(bool value)
 		doornumber = doornumber + ToString(Number);
 	}
 
+	//if not temporary, change persistent status
+	if (persistent == true)
+	{
+		if (sbs->IsRunning == true || sbs->Verbose)
+		{
+			if (value == true)
+				elev->Report("Doors" + doornumber + ": enabling sensor");
+			else
+				elev->Report("Doors" + doornumber + ": disabling sensor");
+		}
+
+		sensor_status = value;
+	}
+
 	if (sbs->IsRunning == true || sbs->Verbose)
 	{
 		if (value == true)
-			elev->Report("Doors" + doornumber + ": enabling sensor");
+			elev->Report("Doors" + doornumber + ": activating sensor");
 		else
-			elev->Report("Doors" + doornumber + ": disabling sensor");
+			elev->Report("Doors" + doornumber + ": deactivating sensor");
 	}
 
 	sensor_enabled = value;
 }
 
-bool ElevatorDoor::GetSensorStatus()
+bool ElevatorDoor::GetSensorStatus(bool persistent)
 {
 	//get status of door sensor
 
-	return sensor_enabled;
+	//if persistent is true, return persistent state (enabled/disabled)
+	//if persistent is false, return temporary state (activated/deactivated)
+
+	if (persistent == false)
+		return sensor_enabled;
+
+	return sensor_status;
 }

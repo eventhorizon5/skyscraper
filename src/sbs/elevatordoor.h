@@ -167,8 +167,8 @@ public:
 	void CheckSensor();
 	void CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
 	bool AreDoorsMoving();
-	void EnableSensor(bool value);
-	bool GetSensorStatus();
+	void EnableSensor(bool value, bool persistent = true);
+	bool GetSensorStatus(bool persistent = true);
 
 private:
 
@@ -220,7 +220,8 @@ private:
 	bool nudge_enabled;
 	bool nudgesound_loaded;
 	int chimesound_loaded;
-	bool sensor_enabled; //enable door sensor
+	bool sensor_enabled; //enable door sensor (active state)
+	bool sensor_status; //persistent sensor on/off state
 
 	//door sensor
 	Trigger *sensor;
