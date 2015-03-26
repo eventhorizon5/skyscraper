@@ -4919,19 +4919,26 @@ bool Elevator::IsNudgeModeActive(int number)
 {
 	//checks doors and returns true if any (or the specified door) have nudge mode active
 
-	if (number > 0 && number < (int)DoorArray.size())
-	{
-		if (DoorArray[number])
-			return DoorArray[number]->GetNudgeStatus();
-	}
-	else if (number == 0)
+	if (number == 0)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
 		{
-			if (DoorArray[number]->GetNudgeStatus() == true)
-				return true;
+			ElevatorDoor *door = DoorArray[i];
+			if (door)
+			{
+				if (door->GetNudgeStatus() == true)
+					return true;
+			}
 		}
 	}
+	else
+	{
+		ElevatorDoor *door = GetDoor(number);
+
+		if (door)
+			return door->GetNudgeStatus();
+	}
+
 	return false;
 }
 
@@ -4939,15 +4946,21 @@ void Elevator::EnableNudgeMode(bool value, int number)
 {
 	//enables nudge mode on all doors or the specified door
 
-	if (number > 0 && number < (int)DoorArray.size())
-	{
-		if (DoorArray[number])
-			DoorArray[number]->EnableNudgeMode(value);
-	}
-	else if (number == 0)
+	if (number == 0)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
-			DoorArray[number]->EnableNudgeMode(value);
+		{
+			ElevatorDoor *door = DoorArray[i];
+			if (door)
+				door->EnableNudgeMode(value);
+		}
+	}
+	else
+	{
+		ElevatorDoor *door = GetDoor(number);
+
+		if (door)
+			return door->EnableNudgeMode(value);
 	}
 }
 
@@ -5754,19 +5767,26 @@ bool Elevator::GetSensorStatus(int number)
 {
 	//checks doors and returns true if any (or the specified door) have their door sensor active
 
-	if (number > 0 && number < (int)DoorArray.size())
-	{
-		if (DoorArray[number])
-			return DoorArray[number]->GetSensorStatus();
-	}
-	else if (number == 0)
+	if (number == 0)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
 		{
-			if (DoorArray[number]->GetSensorStatus() == true)
-				return true;
+			ElevatorDoor *door = DoorArray[i];
+			if (door)
+			{
+				if (door->GetSensorStatus() == true)
+					return true;
+			}
 		}
 	}
+	else
+	{
+		ElevatorDoor *door = GetDoor(number);
+
+		if (door)
+			return door->GetSensorStatus();
+	}
+
 	return false;
 }
 
@@ -5774,15 +5794,21 @@ void Elevator::EnableSensor(bool value, int number)
 {
 	//enables door sensor on all doors or the specified door
 
-	if (number > 0 && number < (int)DoorArray.size())
-	{
-		if (DoorArray[number])
-			DoorArray[number]->EnableSensor(value);
-	}
-	else if (number == 0)
+	if (number == 0)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
-			DoorArray[number]->EnableSensor(value);
+		{
+			ElevatorDoor *door = DoorArray[i];
+			if (door)
+				door->EnableSensor(value);
+		}
+	}
+	else
+	{
+		ElevatorDoor *door = GetDoor(number);
+
+		if (door)
+			door->EnableSensor(value);
 	}
 }
 
