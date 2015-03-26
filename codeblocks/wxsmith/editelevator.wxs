@@ -409,9 +409,9 @@
 										<option>1</option>
 									</object>
 									<object class="sizeritem">
-										<object class="wxButton" name="ID_bAlarm" variable="bAlarm" member="yes">
-											<label>Alarm</label>
-											<handler function="On_bAlarm_Click" entry="EVT_BUTTON" />
+										<object class="wxButton" name="ID_bHoldDoors" variable="bHoldDoors" member="yes">
+											<label>Hold Doors</label>
+											<handler function="On_bHoldDoors_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP</flag>
 									</object>
