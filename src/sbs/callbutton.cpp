@@ -58,18 +58,15 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	ProcessedDown = false;
 
 	//create object mesh
-	std::string buffer, buffer2, buffer3;
-	buffer2 = ToString(floornum);
-	buffer3 = ToString(number);
-	buffer = "Call Panel " + buffer2 + ":" + buffer3;
-	TrimString(buffer);
-	object->SetName(buffer.c_str());
-	CallButtonBackMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	std::string base, buffer;
+	base = "Call Panel " + ToString2(floornum) + ":" + ToString2(number);
+	object->SetName(base.c_str());
+	CallButtonBackMesh = new MeshObject(object, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Up";
+	buffer = base + ":Up";
 	CallButtonMeshUp = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	buffer = "Call Button " + buffer2 + ":" + buffer3 + ":Down";
+	buffer = base + ":Down";
 	CallButtonMeshDown = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
@@ -454,7 +451,7 @@ bool CallButton::ServicesElevator(int elevator)
 		if (Elevators[i] == elevator)
 		{
 			if (sbs->Verbose)
-				Report(std::string("Services elevator " + ToString2(elevator)).c_str());
+				Report("Services elevator " + ToString2(elevator));
 			return true;
 		}
 	}
@@ -496,7 +493,7 @@ void CallButton::Loop(int direction)
 			if (elevator)
 			{
 				if (sbs->Verbose)
-					Report(std::string("Checking elevator " + ToString2(elevator->Number)).c_str());
+					Report("Checking elevator " + ToString2(elevator->Number));
 
 				//if elevator is closer than the previously checked one or we're starting the checks
 				if (abs(elevator->GetFloor() - floor) < closest || check == false)
@@ -573,7 +570,7 @@ void CallButton::Loop(int direction)
 		return;
 
 	if (sbs->Verbose)
-		Report(std::string("Using elevator " + ToString2(elevator->Number)).c_str());
+		Report("Using elevator " + ToString2(elevator->Number));
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == direction && elevator->IsIdle() == false && elevator->IsMoving == false)
@@ -625,18 +622,18 @@ void CallButton::Loop(int direction)
 	}
 }
 
-void CallButton::Report(const char *message)
+void CallButton::Report(std::string message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString2(floor) + ":" + ToString2(Number) + " - " + message;
-	sbs->Report(msg.c_str());
+	sbs->Report(msg);
 }
 
-bool CallButton::ReportError(const char *message)
+bool CallButton::ReportError(std::string message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString2(floor) + ":" + ToString2(Number) + " - " + message;
-	return sbs->ReportError(msg.c_str());
+	return sbs->ReportError(msg);
 }
 
 void CallButton::SetLocked(bool value, int keyid)
@@ -646,23 +643,16 @@ void CallButton::SetLocked(bool value, int keyid)
 	KeyID = keyid;
 }
 
-void CallButton::ToggleLock(bool force)
+bool CallButton::ToggleLock(bool force)
 {
 	//toggle lock state
 	//if force is true, bypass key check
-
-	bool replocked = false;
 
 	//quit if user doesn't have key, if force is false
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-		{
-			std::string id = ToString(KeyID);
-			std::string msg = "Need key " + id + "to lock/unlock";
-			ReportError(msg.c_str());
-			return;
-		}
+			return ReportError("Need key " + ToString2(KeyID) + "to lock/unlock");
 	}
 
 	Locked = !Locked;
@@ -671,6 +661,8 @@ void CallButton::ToggleLock(bool force)
 		Report("Locked");
 	else
 		Report("Unlocked");
+
+	return true;
 }
 
 bool CallButton::IsLocked()

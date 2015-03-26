@@ -36,8 +36,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	object = new Object();
 	object->SetValues(this, elevator->object, "ElevatorDoor", "", false);
 
-	std::string buffer = ToString(number);
-	object->SetName(std::string("Elevator Door " + buffer).c_str());
+	std::string name = "Elevator Door " + ToString2(number);
+	object->SetName(name.c_str());
 
 	//create a new elevator door
 	Number = number + 1;
@@ -206,10 +206,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
-	{
-		doornumber = " ";
-		doornumber = doornumber + ToString(Number);
-	}
+		doornumber = " " + ToString2(Number);
 
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
@@ -329,10 +326,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
-	{
-		doornumber = " ";
-		doornumber = doornumber + ToString(Number);
-	}
+		doornumber = " " + ToString2(Number);
 
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
@@ -443,10 +437,7 @@ void ElevatorDoor::StopDoors()
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
-	{
-		doornumber = " ";
-		doornumber = doornumber + ToString(Number);
-	}
+		doornumber = " " + ToString2(Number);
 
 	if (OpenDoor == -2 || OpenDoor == 2)
 	{
@@ -1129,8 +1120,6 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 		z4 = CenterZ;
 	}
 
-	std::string buffer, buffer2, buffer3, buffer4, buffer5;
-
 	//create doors
 
 	//create left door
@@ -1307,10 +1296,7 @@ void ElevatorDoor::Reset(bool sensor)
 	{
 		std::string doornumber;
 		if (elev->NumDoors > 1)
-		{
-			doornumber = " ";
-			doornumber = doornumber + ToString(Number);
-		}
+			doornumber = " " + ToString2(Number);
 
 		if (sensor == true)
 			elev->Report("sensor resetting doors" + doornumber);
@@ -2034,10 +2020,7 @@ void ElevatorDoor::Hold(bool disable_nudge, bool sensor)
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
-    {
-		doornumber = " ";
-		doornumber = doornumber + ToString(Number);
-	}
+		doornumber = " " + ToString2(Number);
 
 	//exit if nudge mode is active
 	if (GetNudgeStatus() == true)
@@ -2062,10 +2045,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
-	{
-		doornumber = " ";
-		doornumber = doornumber + ToString(Number);
-	}
+		doornumber = " " + ToString2(Number);
 
 	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->RecallFloor && elev->GetFloor() != elev->RecallFloorAlternate)))
 	{
@@ -2151,10 +2131,7 @@ void ElevatorDoor::EnableSensor(bool value, bool persistent)
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
-	{
-		doornumber = " ";
-		doornumber = doornumber + ToString(Number);
-	}
+		doornumber = " " + ToString2(Number);
 
 	//if not temporary, change persistent status
 	if (persistent == true)

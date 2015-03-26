@@ -2382,11 +2382,17 @@ bool SBS::RegisterDoorCallback(Door *door)
 {
 	//register a door object for callbacks (used for door movement)
 
+	if (!door)
+		return false;
+
 	int index = -1;
 	for (int i = 0; i < (int)doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i] == door)
+		{
 			index = i;
+			break;
+		}
 	}
 
 	if (index == -1)
@@ -2405,118 +2411,102 @@ bool SBS::RegisterDoorCallback(Door *door)
 
 bool SBS::UnregisterDoorCallback(Door *door)
 {
+	if (!door)
+		return false;
+
 	int index = -1;
 	for (int i = 0; i < (int)doorcallbacks.size(); i++)
 	{
 		if (doorcallbacks[i] == door)
-			index = i;
+		{
+			//unregister existing door callback
+			if (door->IsMoving == false)
+			{
+				doorcallbacks.erase(doorcallbacks.begin() + i);
+				return true;
+			}
+			else
+				return ReportError("Door in use; cannot unregister callback");
+		}
 	}
 
-	if (index != -1 && doorcallbacks[index])
-	{
-		//unregister existing door callback
-		if (doorcallbacks[index]->IsMoving == false)
-		{
-			for (int i = 0; i < (int)doorcallbacks.size(); i++)
-			{
-				if (doorcallbacks[i] == door)
-					doorcallbacks.erase(doorcallbacks.begin() + i);
-			}
-			return true;
-		}
-		else
-			return ReportError("Door in use; cannot unregister callback");
-	}
-	else
-		return false;
+	return false;
 }
 
 bool SBS::RegisterCallButtonCallback(CallButton *button)
 {
 	//register a door object for callbacks (used for door movement)
 
-	int index = -1;
+	if (!button)
+		return false;
+
 	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
 		if (buttoncallbacks[i] == button)
-			index = i;
+			return false;
 	}
 
-	if (index == -1)
-	{
-		//if call button isn't already in the array, add it
-		buttoncallbacks.push_back(button);
-	}
-	else
-		return false;
+	//if call button isn't already in the array, add it
+	buttoncallbacks.push_back(button);
+
 	return true;
 }
 
 bool SBS::UnregisterCallButtonCallback(CallButton *button)
 {
+	if (!button)
+		return false;
+
 	int index = -1;
 	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
-		if (buttoncallbacks[i] == button)
-			index = i;
-	}
-
-	if (index != -1 && buttoncallbacks[index])
-	{
 		//unregister existing call button callback
-		for (int i = 0; i < (int)buttoncallbacks.size(); i++)
+		if (buttoncallbacks[i] == button)
 		{
-			if (buttoncallbacks[i] == button)
-				buttoncallbacks.erase(buttoncallbacks.begin() + i);
+			buttoncallbacks.erase(buttoncallbacks.begin() + i);
+			return true;
 		}
 	}
-	else
-		return false;
-	return true;
+
+	return false;
 }
 
 bool SBS::RegisterTimerCallback(TimerObject *timer)
 {
 	//register a timer object for callbacks
 
-	int index = -1;
+	if (!timer)
+		return false;
+
 	for (int i = 0; i < (int)timercallbacks.size(); i++)
 	{
 		if (timercallbacks[i] == timer)
-			index = i;
+			return false;
 	}
 
-	if (index == -1)
-	{
-		//if timer isn't already in the array, add it
-		timercallbacks.push_back(timer);
-	}
-	else
-		return false;
+	//if timer isn't already in the array, add it
+	timercallbacks.push_back(timer);
+
 	return true;
 }
 
 bool SBS::UnregisterTimerCallback(TimerObject *timer)
 {
+	if (!timer)
+		return false;
+
 	int index = -1;
 	for (int i = 0; i < (int)timercallbacks.size(); i++)
 	{
-		if (timercallbacks[i] == timer)
-			index = i;
-	}
-
-	if (index != -1 && timercallbacks[index])
-	{
 		//unregister existing call button callback
-		for (int i = 0; i < (int)timercallbacks.size(); i++)
+		if (timercallbacks[i] == timer)
 		{
-			if (timercallbacks[i] == timer)
-				timercallbacks.erase(timercallbacks.begin() + i);
+			timercallbacks.erase(timercallbacks.begin() + i);
+			return true;
 		}
 	}
-	else
-		return false;
-	return true;
+
+	return false;
 }
 
 void SBS::ProcessCallButtons()
@@ -4276,6 +4266,7 @@ void SBS::UnregisterControl(Control *control)
 		{
 			control_index.erase(control_index.begin() + i);
 			i--;
+			break;
 		}
 	}
 }

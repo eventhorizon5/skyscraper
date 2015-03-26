@@ -38,8 +38,6 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre:
 	object = new Object();
 	object->SetValues(this, parent, "Trigger", name, false);
 
-	std::string objnum = ToString(object->GetNumber());
-	//Name = "(" + objnum + ")" + name;
 	Name = name;
 
 	Actions = action_names;
@@ -255,10 +253,7 @@ bool Trigger::DoAction()
 	//result is true if at least one action in the list succeeded
 
 	if ((int)Actions.size() == 0)
-	{
-		sbs->Report(std::string("No available actions for trigger '" + Name + "'").c_str());
-		return false;
-	}
+		return sbs->ReportError("No available actions for trigger '" + Name + "'");
 
 	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
 

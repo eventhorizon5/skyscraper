@@ -51,11 +51,11 @@ public:
 	void SetLights(int up, int down);
 	bool ServicesElevator(int elevator);
 	void Loop(int direction);
-	void Report(const char *message);
-	bool ReportError(const char *message);
+	void Report(std::string message);
+	bool ReportError(std::string message);
 	void SetLocked(bool value, int keyid);
 	bool IsLocked();
-	void ToggleLock(bool force = false);
+	bool ToggleLock(bool force = false);
 	int GetKeyID();
 	void FireService(int value);
 

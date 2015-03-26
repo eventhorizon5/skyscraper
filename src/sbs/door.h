@@ -47,7 +47,7 @@ public:
 
 	Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th);
 	~Door();
-	void Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
+	bool Open(Ogre::Vector3 &position, bool playsound = true, bool force = false);
 	void Close(bool playsound = true);
 	bool IsOpen();
 	void Enabled(bool value);
@@ -57,7 +57,7 @@ public:
 	void SetLocked(int side, int keyid);
 	bool GetSide(const Ogre::Vector3 &position);
 	bool IsLocked(const Ogre::Vector3 &position);
-	void ToggleLock(const Ogre::Vector3 &position, bool force = false);
+	bool ToggleLock(const Ogre::Vector3 &position, bool force = false);
 	int GetKeyID();
 
 private:

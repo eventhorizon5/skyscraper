@@ -69,10 +69,9 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	InElevator = false;
 	ShowFloorsFull_Enabled = false;
 
-	std::string buffer, buffer2, buffer3;
+	std::string name = "Shaft " + ToString2(number);
 
-	buffer = ToString(number);
-	object->SetName(std::string("Shaft " + buffer).c_str());
+	object->SetName(name.c_str());
 
 	ShaftArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -84,10 +83,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create shaft meshes
-		buffer2 = ToString(number);
-		buffer3 = ToString(i);
-		buffer = "Shaft " + buffer2 + ":" + buffer3;
-		TrimString(buffer);
+		std::string buffer = name + ":" + ToString2(i);
 		ShaftArray[i - startfloor] = new MeshObject(object, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
@@ -530,35 +526,23 @@ void Shaft::AddShowFloor(int floor)
 {
 	//adds a floor number to the ShowFloors list
 
-	int index = -1;
-	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
-	{
-		if (ShowFloorsList[i] == floor)
-			index = i;
-	}
-	if (index == -1)
-	{
-		ShowFloorsList.push_back(floor);
-		std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
-	}
+	if (IsShowFloor(floor))
+		return;
+
+	ShowFloorsList.push_back(floor);
+	std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
 }
 
 void Shaft::RemoveShowFloor(int floor)
 {
 	//removes a floor number from the ShowFloors list
 
-	int index = -1;
 	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
-			index = i;
-	}
-	if (index != -1)
-	{
-		for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 		{
-			if (ShowFloorsList[i] == floor)
-				ShowFloorsList.erase(ShowFloorsList.begin() + i);
+			ShowFloorsList.erase(ShowFloorsList.begin() + i);
+			return;
 		}
 	}
 }
@@ -579,35 +563,23 @@ void Shaft::AddShowOutside(int floor)
 {
 	//adds a floor number to the ShowOutside list
 
-	int index = -1;
-	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
-	{
-		if (ShowOutsideList[i] == floor)
-			index = i;
-	}
-	if (index == -1)
-	{
-		ShowOutsideList.push_back(floor);
-		std::sort(ShowOutsideList.begin(), ShowOutsideList.end());
-	}
+	if (IsShowOutside(floor))
+		return;
+
+	ShowOutsideList.push_back(floor);
+	std::sort(ShowOutsideList.begin(), ShowOutsideList.end());
 }
 
 void Shaft::RemoveShowOutside(int floor)
 {
 	//removes a floor number from the ShowOutside list
 
-	int index = -1;
 	for (int i = 0; i < (int)ShowOutsideList.size(); i++)
 	{
 		if (ShowOutsideList[i] == floor)
-			index = i;
-	}
-	if (index != -1)
-	{
-		for (int i = 0; i < (int)ShowOutsideList.size(); i++)
 		{
-			if (ShowOutsideList[i] == floor)
-				ShowOutsideList.erase(ShowOutsideList.begin() + i);
+			ShowOutsideList.erase(ShowOutsideList.begin() + i);
+			return;
 		}
 	}
 }
@@ -628,35 +600,23 @@ void Shaft::AddShowInterfloor(int floor)
 {
 	//adds a floor number to the ShowInterfloors list
 
-	int index = -1;
-	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
-	{
-		if (ShowInterfloorsList[i] == floor)
-			index = i;
-	}
-	if (index == -1)
-	{
-		ShowInterfloorsList.push_back(floor);
-		std::sort(ShowInterfloorsList.begin(), ShowInterfloorsList.end());
-	}
+	if (IsShowInterfloor(floor))
+		return;
+
+	ShowInterfloorsList.push_back(floor);
+	std::sort(ShowInterfloorsList.begin(), ShowInterfloorsList.end());
 }
 
 void Shaft::RemoveShowInterfloor(int floor)
 {
 	//removes a floor number from the ShowInterfloors list
 
-	int index = -1;
 	for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
 	{
 		if (ShowInterfloorsList[i] == floor)
-			index = i;
-	}
-	if (index != -1)
-	{
-		for (int i = 0; i < (int)ShowInterfloorsList.size(); i++)
 		{
-			if (ShowInterfloorsList[i] == floor)
-				ShowInterfloorsList.erase(ShowInterfloorsList.begin() + i);
+			ShowInterfloorsList.erase(ShowInterfloorsList.begin() + i);
+			return;
 		}
 	}
 }
@@ -689,6 +649,13 @@ bool Shaft::IsValidFloor(int floor)
 void Shaft::AddElevator(int number)
 {
 	//add specified elevator to list
+
+	for (int i = 0; i < (int)elevators.size(); i++)
+	{
+		if (elevators[i] == number)
+			return;
+	}
+
 	elevators.push_back(number);
 	std::sort(elevators.begin(), elevators.end());
 }
@@ -699,7 +666,10 @@ void Shaft::RemoveElevator(int number)
 	for (int i = 0; i < (int)elevators.size(); i++)
 	{
 		if (elevators[i] == number)
+		{
 			elevators.erase(elevators.begin() + i);
+			return;
+		}
 	}
 }
 
@@ -932,11 +902,8 @@ void Shaft::EnableDoor(int floor, bool value)
 
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
-		if (DoorArray[i].object)
-		{
-			if (DoorArray[i].floornumber == floor && DoorArray[i].object)
-				DoorArray[i].object->Enabled(value);
-		}
+		if (DoorArray[i].floornumber == floor && DoorArray[i].object)
+			DoorArray[i].object->Enabled(value);
 	}
 }
 

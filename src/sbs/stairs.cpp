@@ -55,10 +55,9 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	ShowFloors = false;
 	ShowFullStairs = false;
 
-	std::string buffer, buffer2, buffer3;
-
-	buffer = ToString(number);
-	object->SetName(std::string("Stairwell " + buffer).c_str());
+	std::string name;
+	name = "Stairwell " + ToString2(number);
+	object->SetName(name.c_str());
 
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -69,10 +68,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create stairwell meshes
-		buffer2 = ToString(number);
-		buffer3 = ToString(i);
-		buffer = "Stairwell " + buffer2 + ":" + buffer3;
-		TrimString(buffer);
+		std::string buffer = name + ":" + ToString2(i);
 		StairArray[i - startfloor] = new MeshObject(object, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
@@ -179,11 +175,10 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	//create wall object
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
 
-	std::string buffer, buffer2, buffer3;
+	std::string Name = name;
+	TrimString(Name);
 	std::string Direction = direction;
 	SetCase(Direction, false);
-	buffer3 = name;
-	TrimString(buffer3);
 
 	sbs->ResetTextureMapping(true);
 	if (Direction == "right" || Direction == "back")
@@ -194,7 +189,9 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	for (int i = 1; i <= num_stairs; i++)
 	{
 		float pos = 0;
-		buffer2 = ToString(i);
+		std::string base = Name + " " + ToString2(i);
+		std::string buffer;
+
 		float thickness = 0;
 		if (i < num_stairs - 1)
 			thickness = treadsize * 2;
@@ -206,13 +203,13 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 		if (Direction == "right")
 		{
 			pos = CenterX + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
-			buffer = buffer3 + " " + buffer2 + "-riser";
+			buffer = base + "-riser";
 			if (i != num_stairs)
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, floor, buffer.c_str(), texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
-			buffer = buffer3 + " " + buffer2 + "-tread";
+			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
@@ -222,13 +219,13 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 		if (Direction == "left")
 		{
 			pos = CenterX - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
-			buffer = buffer3 + " " + buffer2 + "-riser";
+			buffer = base + "-riser";
 			if (i != num_stairs)
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, floor, buffer.c_str(), texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
-			buffer = buffer3 + " " + buffer2 + "-tread";
+			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
@@ -238,13 +235,13 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 		if (Direction == "back")
 		{
 			pos = CenterZ + ((treadsize * (num_stairs - 1)) / 2) - (treadsize * i);
-			buffer = buffer3 + " " + buffer2 + "-riser";
+			buffer = base + "-riser";
 			if (i != num_stairs)
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, floor, buffer.c_str(), texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
-			buffer = buffer3 + " " + buffer2 + "-tread";
+			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
@@ -254,13 +251,13 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 		if (Direction == "front")
 		{
 			pos = CenterZ - ((treadsize * (num_stairs - 1)) / 2) + (treadsize * i);
-			buffer = buffer3 + " " + buffer2 + "-riser";
+			buffer = base + "-riser";
 			if (i != num_stairs)
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
 			AddWall(wall, floor, buffer.c_str(), texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
-			buffer = buffer3 + " " + buffer2 + "-tread";
+			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
@@ -857,35 +854,23 @@ void Stairs::AddShowFloor(int floor)
 {
 	//adds a floor number to the ShowFloors array
 
-	int index = -1;
-	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
-	{
-		if (ShowFloorsList[i] == floor)
-			index = i;
-	}
-	if (index == -1)
-	{
-		ShowFloorsList.push_back(floor);
-		std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
-	}
+	if (IsShowFloor(floor))
+		return;
+
+	ShowFloorsList.push_back(floor);
+	std::sort(ShowFloorsList.begin(), ShowFloorsList.end());
 }
 
 void Stairs::RemoveShowFloor(int floor)
 {
 	//removes a floor number from the ShowFloors array
 
-	int index = -1;
 	for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 	{
 		if (ShowFloorsList[i] == floor)
-			index = i;
-	}
-	if (index != -1)
-	{
-		for (int i = 0; i < (int)ShowFloorsList.size(); i++)
 		{
-			if (ShowFloorsList[i] == floor)
-				ShowFloorsList.erase(ShowFloorsList.begin() + i);
+			ShowFloorsList.erase(ShowFloorsList.begin() + i);
+			return;
 		}
 	}
 }

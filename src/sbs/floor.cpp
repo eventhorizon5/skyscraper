@@ -37,29 +37,19 @@ Floor::Floor(int number)
 	object = new Object();
 	object->SetValues(this, sbs->object, "Floor", "", false);
 
-	std::string buffer;
-
 	//Set floor's object number
 	Number = number;
+	std::string num = ToString2(Number);
+	object->SetName(std::string("Floor " + num).c_str());
 
 	//Create primary level mesh
-	buffer = ToString(Number);
-	object->SetName(std::string("Floor " + buffer).c_str());
-	buffer.insert(0, "Level ");
-	TrimString(buffer);
-	Level = new MeshObject(object, buffer.c_str());
+	Level = new MeshObject(object, std::string("Level " + num).c_str());
 
 	//Create interfloor mesh
-	buffer = ToString(Number);
-	buffer.insert(0, "Interfloor ");
-	TrimString(buffer);
-	Interfloor = new MeshObject(object, buffer.c_str());
+	Interfloor = new MeshObject(object,std::string("Interfloor " + num).c_str());
 
 	//Create columnframe mesh
-	buffer = ToString(Number);
-	buffer.insert(0, "ColumnFrame ");
-	TrimString(buffer);
-	ColumnFrame = new MeshObject(object, buffer.c_str());
+	ColumnFrame = new MeshObject(object, std::string("ColumnFrame " + num).c_str());
 
 	//set enabled flags
 	IsEnabled = true;
@@ -514,35 +504,23 @@ void Floor::AddGroupFloor(int number)
 	//Groups are used to enable multiple floors at the same time when
 	//a user arrives at a floor
 
-	int index = -1;
-	for (int i = 0; i < (int)Group.size(); i++)
-	{
-		if (Group[i] == number)
-			index = i;
-	}
-	if (index == -1)
-	{
-		Group.push_back(number);
-		std::sort(Group.begin(), Group.end());
-	}
+	if (IsInGroup(number))
+		return;
+
+	Group.push_back(number);
+	std::sort(Group.begin(), Group.end());
 }
 
 void Floor::RemoveGroupFloor(int number)
 {
 	//removes a floor number from the group list
 
-	int index = -1;
 	for (int i = 0; i < (int)Group.size(); i++)
 	{
 		if (Group[i] == number)
-			index = i;
-	}
-	if (index != -1)
-	{
-		for (int i = 0; i < (int)Group.size(); i++)
 		{
-			if (Group[i] == number)
-				Group.erase(Group.begin() + i);
+			Group.erase(Group.begin() + i);
+			return;
 		}
 	}
 }
@@ -647,9 +625,9 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 	else
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
-	std::string floornum = ToString(Number);
-	std::string num = ToString((int)DoorArray.size());
-	Door* door = new Door(object, std::string("Floor " + floornum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	int number = (int)DoorArray.size();
+	std::string name = "Floor " + ToString2(Number) + ":Door " + ToString2(number);
+	Door* door = new Door(object, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
 	DoorArray.push_back(door);
 	return door->object;
 }

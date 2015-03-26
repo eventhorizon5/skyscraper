@@ -42,8 +42,6 @@ Elevator::Elevator(int number)
 	object = new Object();
 	object->SetValues(this, sbs->object, "Elevator", "", false);
 
-	std::string buffer;
-
 	//set elevator number
 	Number = number;
 
@@ -210,11 +208,9 @@ Elevator::Elevator(int number)
 	departure_delay = new Timer("Departure Delay Timer", this,3);
 
 	//create object meshes
-	buffer = ToString(Number);
-	buffer.insert(0, "Elevator ");
-	TrimString(buffer);
-	object->SetName(buffer.c_str());
-	ElevatorMesh = new MeshObject(object, buffer.c_str());
+	std::string name = "Elevator " + ToString2(Number);
+	object->SetName(name.c_str());
+	ElevatorMesh = new MeshObject(object, name.c_str());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -500,14 +496,12 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	if (!GetShaft())
 	{
-		std::string num = ToString(AssignedShaft);
-		ReportError(std::string("Shaft " + num + " doesn't exist").c_str());
+		ReportError("Shaft " + ToString2(AssignedShaft) + " doesn't exist");
 		return 0;
 	}
 	if (floor < GetShaft()->startfloor || floor > GetShaft()->endfloor)
 	{
-		std::string num = ToString(floor);
-		ReportError(std::string("Invalid starting floor " + num).c_str());
+		ReportError("Invalid starting floor " + ToString2(floor));
 		return 0;
 	}
 
@@ -530,8 +524,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//set data
 	if (!sbs->GetFloor(floor))
 	{
-		std::string num = ToString(floor);
-		ReportError(std::string("Floor " + num + " doesn't exist").c_str());
+		ReportError("Floor " + ToString2(floor) + " doesn't exist");
 		return 0;
 	}
 
@@ -2436,10 +2429,7 @@ bool Elevator::AddServicedFloor(int number)
 
 	//check if floor is outside valid floor range
 	if (sbs->IsValidFloor(number) == false)
-	{
-		std::string floor = ToString(number);
-		return ReportError("AddServicedFloor: Invalid floor " + floor);
-	}
+		return ReportError("AddServicedFloor: Invalid floor " + ToString2(number));
 
 	if (IsServicedFloor(number) == false)
 	{
@@ -2466,11 +2456,9 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 	//create a new button panel object and store the pointer
 
 	int index = (int)PanelArray.size();
-	std::string number = ToString(index + 1);
-	TrimString(number);
 
 	if (sbs->Verbose)
-		Report("creating button panel " + number);
+		Report("creating button panel " + ToString2(index + 1));
 
 	ButtonPanel* panel = new ButtonPanel(Number, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	PanelArray.push_back(panel);
@@ -3962,10 +3950,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	if (door_number != 0)
 	{
 		if (DoorExists(door_number) == false)
-		{
-			std::string doornum = ToString(door_number);
-			return ReportError("AddFloorSigns: door " + doornum + " does not exist");
-		}
+			return ReportError("AddFloorSigns: door " + ToString2(door_number) + " does not exist");
 	}
 
 	bool autosize_x, autosize_y;

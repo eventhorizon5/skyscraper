@@ -41,8 +41,6 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 	object = new Object();
 	object->SetValues(this, parent, "Control", name, false);
 
-	std::string objnum = ToString(object->GetNumber());
-	//Name = "(" + objnum + ")" + name;
 	Name = name;
 	std::string Name2 = Name;
 	if ((int)Name.find("Control", 0) == -1)
@@ -372,10 +370,7 @@ bool Control::DoAction()
 	else if ((int)Actions.size() > 0)
 		actionlist.push_back(Actions[current_position - 1]);
 	else
-	{
-		sbs->Report(std::string("No available actions for control '" + Name + "'").c_str());
-		return false;
-	}
+		return sbs->ReportError("No available actions for control '" + Name + "'");
 
 	bool result = false;
 	for (int i = 0; i < (int)actionlist.size(); i++)
@@ -398,7 +393,7 @@ bool Control::Press(bool reverse)
 
 	//check lock state
 	if (IsLocked() == true)
-		return sbs->ReportError(std::string("Control '" + Name + "' is locked").c_str());
+		return sbs->ReportError("Control '" + Name + "' is locked");
 
 	//get action name of next position state
 	std::string name;
@@ -493,30 +488,26 @@ void Control::SetLocked(bool value, int keyid)
 	KeyID = keyid;
 }
 
-void Control::ToggleLock(bool force)
+bool Control::ToggleLock(bool force)
 {
 	//toggle lock state
 	//if force is true, bypass key check
-
-	bool replocked = false;
 
 	//quit if user doesn't have key, if force is false
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-		{
-			std::string id = ToString(KeyID);
-			sbs->Report(std::string("Need key " + id + " to lock/unlock control '" + Name + "'").c_str());
-			return;
-		}
+			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock control '" + Name + "'");
 	}
 
 	Locked = !Locked;
 
 	if (Locked == true)
-		sbs->Report(std::string("Locked control '" + Name + "'").c_str());
+		sbs->Report("Locked control '" + Name + "'");
 	else
-		sbs->Report(std::string("Unlocked control '" + Name + "'").c_str());
+		sbs->Report("Unlocked control '" + Name + "'");
+
+	return true;
 }
 
 bool Control::IsLocked()
