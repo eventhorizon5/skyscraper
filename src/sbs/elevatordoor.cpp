@@ -2193,3 +2193,12 @@ bool ElevatorDoor::GetSensorStatus(bool persistent)
 
 	return sensor_status;
 }
+
+bool ElevatorDoor::GetHoldStatus()
+{
+	//returns true if door hold is activated (doors are open and timer has been disabled)
+	if (AreDoorsOpen() == true && TimerIsRunning() == false)
+		return true;
+
+	return false;
+}

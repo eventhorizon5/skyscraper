@@ -5216,48 +5216,58 @@ int Elevator::AvailableForCall(int floor, int direction)
 						//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
 						if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 						{
-							//and if it's above the current floor and should be called down, or below the
-							//current floor and called up, or on the same floor and not moving, or idle
-							if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
+							//and if doors are not being held
+							if (GetHoldStatus() == false)
 							{
-								//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
-								if (QueuePositionDirection == direction || IsIdle())
+								//and if it's above the current floor and should be called down, or below the
+								//current floor and called up, or on the same floor and not moving, or idle
+								if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 								{
-									//and if nudge mode is off on all doors
-									if (IsNudgeModeActive() == false)
+									//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
+									if (QueuePositionDirection == direction || IsIdle())
 									{
-										//and if it's not in any service mode
-										if (InServiceMode() == false)
+										//and if nudge mode is off on all doors
+										if (IsNudgeModeActive() == false)
 										{
-											if (sbs->Verbose)
-												Report("Available for call");
-											return 1;
+											//and if it's not in any service mode
+											if (InServiceMode() == false)
+											{
+												if (sbs->Verbose)
+													Report("Available for call");
+												return 1;
+											}
+											else
+											{
+												if (sbs->Verbose == true)
+													Report("Not available for call - in service mode");
+												return 2;
+											}
 										}
 										else
 										{
 											if (sbs->Verbose == true)
-												Report("Not available for call - in service mode");
-											return 2;
+												Report("Not available for call - in nudge mode");
+											return 0;
 										}
 									}
 									else
 									{
 										if (sbs->Verbose == true)
-											Report("Not available for call - in nudge mode");
+											Report("Not available for call - going a different direction and is not idle");
 										return 0;
 									}
 								}
 								else
 								{
 									if (sbs->Verbose == true)
-										Report("Not available for call - going a different direction and is not idle");
+										Report("Not available for call - position/direction wrong for call and is not idle");
 									return 0;
 								}
 							}
 							else
 							{
 								if (sbs->Verbose == true)
-									Report("Not available for call - position/direction wrong for call");
+									Report("Not available for call - door hold is enabled");
 								return 0;
 							}
 						}
@@ -5853,4 +5863,33 @@ void Elevator::ResetShaftDoors(int floor)
 			}
 		}
 	}
+}
+
+bool Elevator::GetHoldStatus(int number)
+{
+	//checks doors and returns true if any (or the specified door) have door hold enabled
+
+	if (number == 0)
+	{
+		for (int i = 0; i < (int)DoorArray.size(); i++)
+		{
+			ElevatorDoor *door = DoorArray[i];
+			if (door)
+			{
+				if (door->GetHoldStatus() == true)
+					return true;
+			}
+		}
+	}
+	else
+	{
+		ElevatorDoor *door = GetDoor(number);
+
+		if (door)
+			return door->GetHoldStatus();
+		else
+			ReportError("Invalid door " + ToString2(number));
+	}
+
+	return false;
 }

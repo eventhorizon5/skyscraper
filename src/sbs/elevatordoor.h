@@ -169,6 +169,7 @@ public:
 	bool AreDoorsMoving();
 	void EnableSensor(bool value, bool persistent = true);
 	bool GetSensorStatus(bool persistent = true);
+	bool GetHoldStatus();
 
 private:
 
