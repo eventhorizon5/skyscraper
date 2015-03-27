@@ -1,3 +1,24 @@
+diff -urN bullet.orig/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp bullet.new/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp
+--- bullet.orig/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp	2014-01-10 15:49:31.000000000 -0600
++++ bullet.new/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector.cpp	2015-03-26 20:16:59.766935213 -0500
+@@ -51,7 +51,7 @@
+ m_ignoreMargin(false),
+ m_lastUsedMethod(-1),
+ m_catchDegeneracies(1),
+-m_fixContactNormalDirection(1)
++m_fixContactNormalDirection(0)
+ {
+ }
+ btGjkPairDetector::btGjkPairDetector(const btConvexShape* objectA,const btConvexShape* objectB,int shapeTypeA,int shapeTypeB,btScalar marginA, btScalar marginB, btSimplexSolverInterface* simplexSolver,btConvexPenetrationDepthSolver*	penetrationDepthSolver)
+@@ -67,7 +67,7 @@
+ m_ignoreMargin(false),
+ m_lastUsedMethod(-1),
+ m_catchDegeneracies(1),
+-m_fixContactNormalDirection(1)
++m_fixContactNormalDirection(0)
+ {
+ }
+ 
 diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.cpp bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.cpp
 --- bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2015-03-26 13:15:36.992897379 -0500
 +++ bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2015-03-26 01:38:09.802905314 -0500
