@@ -62,25 +62,23 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 		in_elevator = true;
 
 	//create object mesh
-	std::string buffer, buffer2, buffer3;
-	buffer2 = ToString(elevator);
-	buffer3 = ToString(floor);
-	buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Back";
-	TrimString(buffer);
-	object->SetName(std::string("Directional Indicator " + buffer2 + ":" + buffer3).c_str());
+	std::string base, buffer;
+	base = "Directional Indicator " + ToString2(elevator) + ":" + ToString2(floor);
+	buffer = base + ":Back";
+	object->SetName(base.c_str());
 	DirectionalMeshBack = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Single == false)
 	{
-		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Up";
+		buffer = base + ":Up";
 		DirectionalMeshUp = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Down";
+		buffer = base + ":Down";
 		DirectionalMeshDown = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 	else
 	{
-		buffer = "Directional Indicator " + buffer2 + ":" + buffer3 + ":Arrow";
+		buffer = base + ":Arrow";
 		DirectionalMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 

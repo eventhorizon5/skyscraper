@@ -66,7 +66,7 @@ public:
 	void ChangeLight(bool value);
 	void SetLocked(bool value, int keyid);
 	bool IsLocked();
-	void ToggleLock(bool force = false);
+	bool ToggleLock(bool force = false);
 	int GetKeyID();
 	void RemoveAction(Action *action);
 

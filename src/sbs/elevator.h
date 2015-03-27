@@ -329,6 +329,7 @@ public:
 	int GetServicedFloor(int index);
 	void ResetShaftDoors(int floor);
 	std::string GetFloorDisplay();
+	bool GetHoldStatus(int number = 0);
 
 private:
 

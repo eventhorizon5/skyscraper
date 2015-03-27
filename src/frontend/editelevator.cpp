@@ -76,7 +76,7 @@ const long editelevator::ID_bEnqueueDown = wxNewId();
 const long editelevator::ID_bClose = wxNewId();
 const long editelevator::ID_bCloseManual = wxNewId();
 const long editelevator::ID_bCloseShaftDoor = wxNewId();
-const long editelevator::ID_bAlarm = wxNewId();
+const long editelevator::ID_bHoldDoors = wxNewId();
 const long editelevator::ID_bStopDoors = wxNewId();
 const long editelevator::ID_bDownIndicator = wxNewId();
 const long editelevator::ID_STATICTEXT3 = wxNewId();
@@ -420,8 +420,8 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	BoxSizer9->Add(bCloseManual, 0, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	bCloseShaftDoor = new wxButton(this, ID_bCloseShaftDoor, _("Close Shaft Doors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCloseShaftDoor"));
 	BoxSizer9->Add(bCloseShaftDoor, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bAlarm = new wxButton(this, ID_bAlarm, _("Alarm"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAlarm"));
-	BoxSizer9->Add(bAlarm, 0, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
+	bHoldDoors = new wxButton(this, ID_bHoldDoors, _("Hold Doors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bHoldDoors"));
+	BoxSizer9->Add(bHoldDoors, 0, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 0);
 	bStopDoors = new wxButton(this, ID_bStopDoors, _("Stop Doors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStopDoors"));
 	BoxSizer9->Add(bStopDoors, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bDownIndicator = new wxButton(this, ID_bDownIndicator, _("Set Down Indicator"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDownIndicator"));
@@ -1016,7 +1016,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bClose,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bClose_Click);
 	Connect(ID_bCloseManual,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCloseManual_Click);
 	Connect(ID_bCloseShaftDoor,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bCloseShaftDoor_Click);
-	Connect(ID_bAlarm,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bAlarm_Click);
+	Connect(ID_bHoldDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bHoldDoors_Click);
 	Connect(ID_bStopDoors,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bStopDoors_Click);
 	Connect(ID_bDownIndicator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bDownIndicator_Click);
 	Connect(ID_bSetName,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetName_Click);
@@ -1125,10 +1125,10 @@ void editelevator::On_bStop_Click(wxCommandEvent& event)
 		elevator->Stop(true);
 }
 
-void editelevator::On_bAlarm_Click(wxCommandEvent& event)
+void editelevator::On_bHoldDoors_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->Alarm();
+		elevator->HoldDoors(sDoor->GetThumbPosition());
 }
 
 void editelevator::On_bSetName_Click(wxCommandEvent& event)

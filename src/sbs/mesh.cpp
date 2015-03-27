@@ -769,11 +769,16 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	this->friction = friction;
 	this->mass = mass;
 	no_collider = false;
-	tricollider = true;
 	MeshGeometry.reserve(128); //reserve vertex space
 	rotX = 0;
 	rotY = 0;
 	rotZ = 0;
+
+	//use box collider if physics should be enabled
+	if (IsPhysical == true)
+		tricollider = false;
+	else
+		tricollider = true;
 
 	Ogre::MeshPtr collidermesh;
 
@@ -855,18 +860,21 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 			return;
 		}
 
-		std::string colname2;
+		//load collider model if physics is disabled
+		if (IsPhysical == false)
+		{
+			std::string colname2;
 
-		//load collider model
-		try
-		{
-			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
-			colname2 = sbs->VerifyFile(colname.c_str());
-			collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
-		}
-		catch (Ogre::Exception &e)
-		{
-			sbs->ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
+			try
+			{
+				std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
+				colname2 = sbs->VerifyFile(colname.c_str());
+				collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
+			}
+			catch (Ogre::Exception &e)
+			{
+				sbs->ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
+			}
 		}
 	}
 

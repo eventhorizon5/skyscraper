@@ -170,24 +170,21 @@ Door::~Door()
 	delete object;
 }
 
-void Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
+bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 {
 	//position is the camera position, used to check if the door is locked
 	//if force is true, locking/position check will be bypassed
 
-	sbs->Report(std::string("Opening door '" + Name + "'").c_str());
+	sbs->Report("Opening door '" + Name + "'");
 
 	if (!sbs->RegisterDoorCallback(this))
-		return;
+		return false;
 
 	if (force == false)
 	{
 		//check lock state
 		if (IsLocked(position) == true)
-		{
-			sbs->Report(std::string("Door '" + Name + "' is locked").c_str());
-			return;
-		}
+			return sbs->ReportError("Door '" + Name + "' is locked");
 	}
 
 	if (IsMoving == false)
@@ -199,11 +196,13 @@ void Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 		sound->Play();
 	}
 	IsMoving = true;
+
+	return true;
 }
 
 void Door::Close(bool playsound)
 {
-	sbs->Report(std::string("Closing door '" + Name + "'").c_str());
+	sbs->Report("Closing door '" + Name + "'");
 
 	if (!sbs->RegisterDoorCallback(this))
 		return;
@@ -304,7 +303,7 @@ void Door::SetLocked(int side, int keyid)
 	KeyID = keyid;
 }
 
-void Door::ToggleLock(const Ogre::Vector3 &position, bool force)
+bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 {
 	//toggle lock state of the related door side
 	//if force is true, bypass key check
@@ -315,11 +314,7 @@ void Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-		{
-			std::string id = ToString(KeyID);
-			sbs->Report(std::string("Need key " + id + " to lock/unlock door '" + Name + "'").c_str());
-			return;
-		}
+			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock door '" + Name + "'");
 	}
 
 	if (GetSide(position) == false)
@@ -360,9 +355,11 @@ void Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	}
 
 	if (replocked == true)
-		sbs->Report(std::string("Locked door '" + Name + "'").c_str());
+		sbs->Report("Locked door '" + Name + "'");
 	else
-		sbs->Report(std::string("Unlocked door '" + Name + "'").c_str());
+		sbs->Report("Unlocked door '" + Name + "'");
+
+	return true;
 }
 
 bool Door::GetSide(const Ogre::Vector3 &position)

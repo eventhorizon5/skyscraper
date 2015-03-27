@@ -51,7 +51,10 @@ WallObject::~WallObject()
 		for (int i = 0; i < (int)parent_array->size(); i++)
 		{
 			if (parent_array->at(i) == this)
+			{
 				parent_array->erase(parent_array->begin() + i);
+				break;
+			}
 		}
 	}
 
@@ -172,10 +175,7 @@ std::string WallObject::ProcessName(const char *name)
 		name_modified.erase(0, (int)name_modified.find(")") + 1);
 
 	//construct name
-	std::string newname = "(";
-	std::string num = ToString(Number);
-	newname.append(num + ")");
-	newname.append(name_modified);
+	std::string newname = "(" + ToString2(Number) + ")" + name_modified;
 	return newname;
 }
 
@@ -281,10 +281,7 @@ void WallObject::SetPolygonName(int index, const char *name)
                 name_modified.erase(0, (int)name_modified.find(")") + 1);
 
         //construct name
-        std::string newname = "(";
-        std::string num = ToString(Number);
-        newname.append(num + ")");
-        newname.append(name_modified);
+        std::string newname = "(" + ToString2(Number) + ")" + name_modified;
 
         //set polygon name
         handles[index].name = newname;
@@ -300,8 +297,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 	{
 		if (i == 0)
 			checkplane = true;
-		bool check = handles[i].PointInside(meshwrapper, point, checkplane, convert);
-		if (check == true)
+		if(handles[i].PointInside(meshwrapper, point, checkplane, convert))
 			return true;
 	}
 	return false;
