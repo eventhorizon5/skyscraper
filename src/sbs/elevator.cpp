@@ -2711,6 +2711,7 @@ bool Elevator::EnableUpPeak(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Up Peak mode disabled");
 	}
 
@@ -2759,6 +2760,7 @@ bool Elevator::EnableDownPeak(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Down Peak mode disabled");
 	}
 
@@ -2796,8 +2798,8 @@ bool Elevator::EnableIndependentService(bool value)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		ResetQueue(true, true);
-		EnableNudgeMode(false);
-		HoldDoors(0, true); //turn off door timers
+		HoldDoors(); //turn off door timers
+		ResetNudgeTimer(false); //switch off nudge timer
 		if (IsMoving == false)
 			if (AutoDoors == true)
 				OpenDoors();
@@ -2806,6 +2808,7 @@ bool Elevator::EnableIndependentService(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Independent Service mode disabled");
 	}
 
@@ -2832,9 +2835,9 @@ bool Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0, true);
-		EnableNudgeMode(false);
 		ResetQueue(true, true);
-		HoldDoors(0, true); //turn off door timers
+		HoldDoors(); //turn off door timers
+		ResetNudgeTimer(false); //switch off nudge timer
 		if (IsMoving == true)
 			Stop();
 		Report("Inspection Service mode enabled");
@@ -2843,6 +2846,7 @@ bool Elevator::EnableInspectionService(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Inspection Service mode disabled");
 
 		UpdateFloorIndicators();
@@ -2918,7 +2922,8 @@ bool Elevator::EnableFireService1(int value)
 			if (FireServicePhase2 != 2)
 			{
 				//turn off all door timers
-				HoldDoors(0, true);
+				HoldDoors();
+				ResetNudgeTimer(false); //switch off nudge timer
 
 				//enable nudge mode on all doors if any are open
 				if (GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
@@ -2931,14 +2936,20 @@ bool Elevator::EnableFireService1(int value)
 		else
 		{
 			if (FireServicePhase2 == 0)
+			{
 				ResetDoors(); //enable door timers
+				ResetNudgeTimer();
+			}
 			Report("Fire Service Phase 1 mode set to Bypass");
 		}
 	}
 	else
 	{
 		if (FireServicePhase2 == 0)
+		{
 			ResetDoors(); //enable door timers
+			ResetNudgeTimer();
+		}
 		Report("Fire Service Phase 1 mode set to Off");
 	}
 
@@ -2990,9 +3001,9 @@ bool Elevator::EnableFireService2(int value, bool force)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
-		EnableNudgeMode(false);
 		ResetQueue(true, true);
-		HoldDoors(0, true); //disable all door timers
+		HoldDoors(); //disable all door timers
+		ResetNudgeTimer(false); //switch off nudge timer
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
@@ -3003,7 +3014,10 @@ bool Elevator::EnableFireService2(int value, bool force)
 		Report("Fire Service Phase 2 mode set to Off");
 
 		if (FireServicePhase1 == 0)
+		{
 			ResetDoors(); //enable door timers
+			ResetNudgeTimer();
+		}
 		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
 		{
 			//enable nudge mode on all doors if any are open
@@ -3464,8 +3478,6 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			{
 				if (closedstate == true)
 					GetDoor(i)->CloseDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
-				else
-					GetDoor(i)->Hold();
 			}
 			else
 				ReportError("Invalid door " + ToString2(i));
@@ -4410,10 +4422,9 @@ bool Elevator::IsQueued(int floor)
 	return false;
 }
 
-void Elevator::HoldDoors(int number, bool disable_nudge, bool sensor)
+void Elevator::HoldDoors(int number, bool sensor)
 {
 	//hold specified door, or all if "0" is given
-	//disable nudge mode timer if specified
 
 	int start, end;
 	if (number == 0)
@@ -4429,7 +4440,7 @@ void Elevator::HoldDoors(int number, bool disable_nudge, bool sensor)
 	for (int i = start; i <= end; i++)
 	{
 		if (GetDoor(i))
-			GetDoor(i)->Hold(disable_nudge, sensor);
+			GetDoor(i)->Hold(sensor);
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
@@ -4959,6 +4970,30 @@ void Elevator::EnableNudgeMode(bool value, int number)
 	}
 }
 
+void Elevator::ResetNudgeTimer(bool start, int number)
+{
+	//resets and optionally starts nudge timer on the specified door
+
+	if (number == 0)
+	{
+		for (int i = 0; i < (int)DoorArray.size(); i++)
+		{
+			ElevatorDoor *door = DoorArray[i];
+			if (door)
+				door->ResetNudgeTimer(start);
+		}
+	}
+	else
+	{
+		ElevatorDoor *door = GetDoor(number);
+
+		if (door)
+			return door->ResetNudgeTimer(start);
+		else
+			ReportError("Invalid door " + ToString2(number));
+	}
+}
+
 Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
@@ -5198,30 +5233,30 @@ int Elevator::AvailableForCall(int floor, int direction)
 			//if elevator is running
 			if (IsRunning() == true)
 			{
-				//and if no queue changes are pending
-				if (QueuePending == false)
+				//and if it's not in any service mode
+				if (InServiceMode() == false)
 				{
-					//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
-					if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+					//and if no queue changes are pending
+					if (QueuePending == false)
 					{
-						//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
-						if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+						//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
+						if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 						{
-							//and if doors are not being held
-							if (GetHoldStatus() == false)
+							//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
+							if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 							{
-								//and if it's above the current floor and should be called down, or below the
-								//current floor and called up, or on the same floor and not moving, or idle
-								if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
+								//and if doors are not being held
+								if (GetHoldStatus() == false)
 								{
-									//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
-									if (QueuePositionDirection == direction || IsIdle())
+									//and if nudge mode is off on all doors
+									if (IsNudgeModeActive() == false)
 									{
-										//and if nudge mode is off on all doors
-										if (IsNudgeModeActive() == false)
+										//and if it's above the current floor and should be called down, or below the
+										//current floor and called up, or on the same floor and not moving, or idle
+										if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 										{
-											//and if it's not in any service mode
-											if (InServiceMode() == false)
+											//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
+											if (QueuePositionDirection == direction || IsIdle())
 											{
 												if (sbs->Verbose)
 													Report("Available for call");
@@ -5230,57 +5265,57 @@ int Elevator::AvailableForCall(int floor, int direction)
 											else
 											{
 												if (sbs->Verbose == true)
-													Report("Not available for call - in service mode");
-												return 2;
+													Report("Not available for call - going a different direction and is not idle");
+												return 0;
 											}
 										}
 										else
 										{
 											if (sbs->Verbose == true)
-												Report("Not available for call - in nudge mode");
+												Report("Not available for call - position/direction wrong for call and is not idle");
 											return 0;
 										}
 									}
 									else
 									{
 										if (sbs->Verbose == true)
-											Report("Not available for call - going a different direction and is not idle");
+											Report("Not available for call - in nudge mode");
 										return 0;
 									}
 								}
 								else
 								{
 									if (sbs->Verbose == true)
-										Report("Not available for call - position/direction wrong for call and is not idle");
+										Report("Not available for call - door hold is enabled");
 									return 0;
 								}
 							}
 							else
 							{
 								if (sbs->Verbose == true)
-									Report("Not available for call - door hold is enabled");
+									Report("Not available for call - queueresets is on and opposite queue direction is active");
 								return 0;
 							}
 						}
 						else
 						{
 							if (sbs->Verbose == true)
-								Report("Not available for call - queueresets is on and opposite queue direction is active");
+								Report("Not available for call - limitqueue is on and queue is active");
 							return 0;
 						}
 					}
 					else
 					{
 						if (sbs->Verbose == true)
-							Report("Not available for call - limitqueue is on and queue is active");
+							Report("Not available for call - queue change is pending");
 						return 0;
 					}
 				}
 				else
 				{
 					if (sbs->Verbose == true)
-						Report("Not available for call - queue change is pending");
-					return 0;
+						Report("Not available for call - in service mode");
+					return 2;
 				}
 			}
 			else
