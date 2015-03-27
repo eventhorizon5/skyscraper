@@ -2797,7 +2797,7 @@ bool Elevator::EnableIndependentService(bool value)
 		EnableDownPeak(false);
 		ResetQueue(true, true);
 		EnableNudgeMode(false);
-		HoldDoors(); //turn off door timers
+		HoldDoors(0, true); //turn off door timers
 		if (IsMoving == false)
 			if (AutoDoors == true)
 				OpenDoors();
@@ -2834,7 +2834,7 @@ bool Elevator::EnableInspectionService(bool value)
 		EnableFireService2(0, true);
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
-		HoldDoors(); //turn off door timers
+		HoldDoors(0, true); //turn off door timers
 		if (IsMoving == true)
 			Stop();
 		Report("Inspection Service mode enabled");
@@ -2918,7 +2918,7 @@ bool Elevator::EnableFireService1(int value)
 			if (FireServicePhase2 != 2)
 			{
 				//turn off all door timers
-				HoldDoors();
+				HoldDoors(0, true);
 
 				//enable nudge mode on all doors if any are open
 				if (GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
@@ -2992,7 +2992,7 @@ bool Elevator::EnableFireService2(int value, bool force)
 		EnableIndependentService(false);
 		EnableNudgeMode(false);
 		ResetQueue(true, true);
-		HoldDoors(); //disable all door timers
+		HoldDoors(0, true); //disable all door timers
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
@@ -3448,7 +3448,10 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			if (GetDoor(i))
 			{
 				if (GetDoor(i)->AreDoorsOpen() == false)
+				{
 					closedstate = true;
+					break;
+				}
 			}
 			else
 				ReportError("Invalid door " + ToString2(i));
@@ -3456,7 +3459,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 
 		for (int i = start; i <= end; i++)
 		{
-			//close doors using persistent values, if button is released before doors are fully closed
+			//close doors using persistent values, if button is released before doors are fully open
 			if (GetDoor(i))
 			{
 				if (closedstate == true)
@@ -3530,7 +3533,10 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 			if (GetDoor(i))
 			{
 				if (GetDoor(i)->AreDoorsOpen() == true)
+				{
 					openstate = true;
+					break;
+				}
 			}
 			else
 				ReportError("Invalid door " + ToString2(i));
@@ -3540,7 +3546,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 		{
 			for (int i = start; i <= end; i++)
 			{
-				//close doors using persistent values, if button is released before doors are fully open
+				//open doors using persistent values, if button is released before doors are fully closed
 				if (GetDoor(i))
 					GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
 				else
