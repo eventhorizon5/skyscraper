@@ -4910,7 +4910,7 @@ bool Elevator::DoorExists(int number)
 	{
 		for (int i = 0; i < (int)DoorArray.size(); i++)
 		{
-			if (GetDoor(i))
+			if (DoorArray[i])
 				return true;
 		}
 	}
