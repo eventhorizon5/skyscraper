@@ -2548,10 +2548,6 @@ bool Elevator::Go(int floor, bool hold)
 	if (!sbs->GetFloor(floor))
 		return ReportError("Invalid floor " + ToString2(floor));
 
-	//exit if elevator is moving
-	if (MoveElevator == true)
-		return false;
-
 	//exit if in inspection mode
 	if (InspectionService == true)
 	{
@@ -2562,6 +2558,10 @@ bool Elevator::Go(int floor, bool hold)
 
 	if (GoActive == false || hold == false)
 	{
+		//exit if elevator is moving
+		if (MoveElevator == true)
+			return false;
+
 		if (hold == true)
 		{
 			GoActive = true;
