@@ -142,7 +142,6 @@ Stairs::~Stairs()
 		}
 		DoorArray[i].object = 0;
 	}
-	DoorArray.clear();
 
 	//delete mesh array objects
 	for (int i = 0; i < (int)StairArray.size(); i++)
@@ -151,7 +150,6 @@ Stairs::~Stairs()
 			delete StairArray[i];
 		StairArray[i] = 0;
 	}
-	StairArray.clear();
 
 	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)

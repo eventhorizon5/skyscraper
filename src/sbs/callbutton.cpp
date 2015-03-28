@@ -318,7 +318,10 @@ bool CallButton::Call(bool direction)
 	{
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
+		{
 			isvalid = true;
+			break;
+		}
 	}
 	if (isvalid == false)
 		return ReportError("No valid elevators found");

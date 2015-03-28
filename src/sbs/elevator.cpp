@@ -293,8 +293,8 @@ Elevator::~Elevator()
 			DirIndicatorArray[i]->object->parent_deleting = true;
 			delete DirIndicatorArray[i];
 		}
+		DirIndicatorArray[i] = 0;
 	}
-	DirIndicatorArray.clear();
 
 	//delete doors
 	if (sbs->Verbose)
@@ -309,6 +309,7 @@ Elevator::~Elevator()
 				DoorArray[i]->object->parent_deleting = true;
 				delete DoorArray[i];
 			}
+			DoorArray[i] = 0;
 		}
 	}
 
@@ -323,8 +324,8 @@ Elevator::~Elevator()
 			FloorIndicatorArray[i]->object->parent_deleting = true;
 			delete FloorIndicatorArray[i];
 		}
+		FloorIndicatorArray[i] = 0;
 	}
-	FloorIndicatorArray.clear();
 
 	//delete panels
 	if (sbs->Verbose)
@@ -339,7 +340,6 @@ Elevator::~Elevator()
 		}
 		PanelArray[i] = 0;
 	}
-	PanelArray.clear();
 
 	//delete doors
 	if (sbs->Verbose)
@@ -354,7 +354,6 @@ Elevator::~Elevator()
 		}
 		StdDoorArray[i] = 0;
 	}
-	StdDoorArray.clear();
 
 	//Destructor
 	if (sbs->Verbose)
@@ -421,7 +420,6 @@ Elevator::~Elevator()
 		}
 		sounds[i] = 0;
 	}
-	sounds.clear();
 
 	//delete wall objects
 	for (int i = 0; i < (int)elevator_walls.size(); i++)
@@ -4420,23 +4418,18 @@ bool Elevator::IsQueued(int floor)
 {
 	//return true if the given floor is in either queue
 	
-	int index = -1;
 	for (int i = 0; i < (int)UpQueue.size(); i++)
 	{
 		if (UpQueue[i] == floor)
-			index = i;
+			return true;
 	}
-	if (index > -1)
-		return true;
 
-	index = -1;
 	for (int i = 0; i < (int)DownQueue.size(); i++)
 	{
 		if (DownQueue[i] == floor)
-			index = i;
+			return true;
 	}
-	if (index > -1)
-		return true;
+
 	return false;
 }
 
@@ -5064,7 +5057,10 @@ std::string Elevator::GetFloorDisplay()
 			for (int i = 0; i < (int)DisplayFloors.size(); i++)
 			{
 				if (floornum == DisplayFloors[i])
+				{
 					value = floor->ID;
+					break;
+				}
 			}
 		}
 		else
