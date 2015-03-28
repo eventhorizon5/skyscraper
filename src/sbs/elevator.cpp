@@ -1361,9 +1361,9 @@ void Elevator::MonitorLoop()
 		Down();
 
 	//process door open/close holds
-	if (doorhold_direction == 1)
+	if (doorhold_direction > 0)
 		OpenDoors();
-	if (doorhold_direction == -1)
+	if (doorhold_direction < 0)
 		CloseDoors();
 
 	//process Go function hold
@@ -3422,19 +3422,33 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 	}
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
 	}
-	else
-	{
-		start = number;
-		end = number;
-	}
 	if (doorhold_direction == 0)
 	{
+		if (AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
+		{
+			doorhold_direction = 2;
+
+			if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
+				return true; //exit to skip an extra open door call
+		}
+
+		if (hold == true)
+			doorhold_direction = 1;
+
+		if (doorhold_direction > 0)
+		{
+			//set persistent values
+			doorhold_whichdoors = whichdoors;
+			doorhold_floor = floor;
+			doorhold_manual = manual;
+		}
+
 		for (int i = start; i <= end; i++)
 		{
 			if (GetDoor(i))
@@ -3442,18 +3456,11 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			else
 				ReportError("Invalid door " + ToString2(i));
 		}
-
-		if (hold == true)
-		{
-			//set persistent values
-			doorhold_direction = 1;
-			doorhold_whichdoors = whichdoors;
-			doorhold_floor = floor;
-			doorhold_manual = manual;
-		}
 	}
 	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
 	{
+		//require button to be held down to open doors
+
 		bool closedstate = false;
 
 		for (int i = start; i <= end; i++)
@@ -3489,6 +3496,44 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 		doorhold_floor = 0;
 		doorhold_manual = false;
 	}
+	else if (doorhold_direction == 2)
+	{
+		//hold doors while button is held
+
+		bool mouse_state = sbs->camera->MouseDown;
+
+		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
+		{
+			if (mouse_state == true)
+			{
+				//hold doors while button is held down
+				HoldDoors(number);
+				return true;
+			}
+			else
+			{
+				//run door open again to reset doors (turn off hold) if button is released
+				for (int i = start; i <= end; i++)
+				{
+					//open doors using persistent values
+					if (GetDoor(i))
+						GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+					else
+						ReportError("Invalid door " + ToString2(i));
+				}
+			}
+		}
+
+		if (mouse_state == false)
+		{
+			//reset persistent values
+			doorhold_direction = 0;
+			doorhold_whichdoors = 0;
+			doorhold_floor = 0;
+			doorhold_manual = false;
+		}
+	}
+
 	return true;
 }
 
@@ -3506,16 +3551,11 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 	if (IndependentService == true || FireServicePhase2 == 1)
 		hold = true;
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	if (doorhold_direction == 0)
 	{
@@ -3579,16 +3619,11 @@ void Elevator::StopDoors(int number)
 	//stops doors that are currently moving; can only be used for manual/emergency movements
 	//this basically just resets the door internals
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3650,16 +3685,12 @@ void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 	//turns shaft elevator doors on/off
 
 	SBS_PROFILE("Elevator::ShaftDoorsEnabled");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3678,16 +3709,12 @@ void Elevator::ShaftDoorsEnabledRange(int number, int floor, int range)
 	//if range is 1, show door on only the current floor (floor)
 
 	SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3704,16 +3731,12 @@ bool Elevator::AreDoorsOpen(int number)
 	//returns the internal door state
 
 	SBS_PROFILE("Elevator::AreDoorsOpen");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3762,16 +3785,12 @@ void Elevator::Chime(int number, int floor, bool direction)
 	//play chime sound on specified floor
 
 	SBS_PROFILE("Elevator::Chime");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3791,16 +3810,11 @@ void Elevator::ResetDoors(int number, bool sensor)
 {
 	//reset elevator door timer
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3814,16 +3828,11 @@ void Elevator::ResetDoors(int number, bool sensor)
 
 bool Elevator::DoorsStopped(int number)
 {
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3836,11 +3845,17 @@ bool Elevator::DoorsStopped(int number)
 	return false;
 }
 
-int Elevator::AreDoorsMoving()
+int Elevator::AreDoorsMoving(int number)
 {
 	//returns 1 if doors are opening, -1 if doors are closing, or 0 if doors are not moving
 
-	for (int i = 1; i <= NumDoors; i++)
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
 	{
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
@@ -3848,24 +3863,26 @@ int Elevator::AreDoorsMoving()
 			if (door->AreDoorsMoving() == true)
 				return door->OpenDoor;
 		}
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 	return 0;
 }
 
-bool Elevator::AreDoorsOpening()
+bool Elevator::AreDoorsOpening(int number)
 {
 	//returns true if doors are opening
 
-	if (AreDoorsMoving() == 1)
+	if (AreDoorsMoving(number) == 1)
 		return true;
 	return false;
 }
 
-bool Elevator::AreDoorsClosing()
+bool Elevator::AreDoorsClosing(int number)
 {
 	//returns true if doors are closing
 
-	if (AreDoorsMoving() == -1)
+	if (AreDoorsMoving(number) == -1)
 		return true;
 	return false;
 }
@@ -3875,18 +3892,19 @@ void Elevator::MoveDoors(int number, const Ogre::Vector3 position, bool relative
 	//move all doors
 
 	SBS_PROFILE("Elevator::MoveDoors");
+
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 1; i <= NumDoors; i++)
-		{
-			if (GetDoor(i))
-				GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(number))
-			GetDoor(number)->Move(position, relative_x, relative_y, relative_z);
+		if (GetDoor(i))
+			GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3915,35 +3933,35 @@ void Elevator::MoveDoorSound(int number, const Ogre::Vector3 position, bool rela
 {
 	//move all doors
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 1; i <= NumDoors; i++)
-		{
-			if (GetDoor(i))
-				GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(number))
-			GetDoor(number)->MoveSound(position, relative_x, relative_y, relative_z);
+		if (GetDoor(i))
+			GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
 void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
 {
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 1; i <= NumDoors; i++)
-		{
-			if (GetDoor(i))
-				GetDoor(i)->SetShaftDoors(thickness, CenterX, CenterZ);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(number))
-			GetDoor(number)->SetShaftDoors(thickness, CenterX, CenterZ);
+		if (GetDoor(i))
+			GetDoor(i)->SetShaftDoors(thickness, CenterX, CenterZ);
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -4426,16 +4444,11 @@ void Elevator::HoldDoors(int number, bool sensor)
 {
 	//hold specified door, or all if "0" is given
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -4903,16 +4916,16 @@ bool Elevator::DoorExists(int number)
 	//check if the specified door exists
 	//if number is 0, return true if any door exists
 
-	if (number > 0)
-		return (GetDoor(number) > 0);
-
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			if (DoorArray[i])
-				return true;
-		}
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+			return true;
 	}
 	return false;
 }
@@ -4921,26 +4934,22 @@ bool Elevator::IsNudgeModeActive(int number)
 {
 	//checks doors and returns true if any (or the specified door) have nudge mode active
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-			{
-				if (door->GetNudgeStatus() == true)
-					return true;
-			}
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->GetNudgeStatus();
+		{
+			if (door->GetNudgeStatus() == true)
+				return true;
+		}
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 
 	return false;
@@ -4950,23 +4959,19 @@ void Elevator::EnableNudgeMode(bool value, int number)
 {
 	//enables nudge mode on all doors or the specified door
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-				door->EnableNudgeMode(value);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->EnableNudgeMode(value);
+			door->EnableNudgeMode(value);
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -4974,23 +4979,21 @@ void Elevator::ResetNudgeTimer(bool start, int number)
 {
 	//resets and optionally starts nudge timer on the specified door
 
+	int start2 = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-				door->ResetNudgeTimer(start);
-		}
+		start2 = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start2; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->ResetNudgeTimer(start);
+		{
+			door->ResetNudgeTimer(start);
+		}
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -5807,26 +5810,22 @@ bool Elevator::GetSensorStatus(int number)
 {
 	//checks doors and returns true if any (or the specified door) have their door sensor active
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-			{
-				if (door->GetSensorStatus() == true)
-					return true;
-			}
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->GetSensorStatus();
+		{
+			if (door->GetSensorStatus() == true)
+				return true;
+		}
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 
 	return false;
@@ -5836,23 +5835,19 @@ void Elevator::EnableSensor(bool value, int number)
 {
 	//enables door sensor on all doors or the specified door
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-				door->EnableSensor(value);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
 			door->EnableSensor(value);
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -5895,26 +5890,22 @@ bool Elevator::GetHoldStatus(int number)
 {
 	//checks doors and returns true if any (or the specified door) have door hold enabled
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-			{
-				if (door->GetHoldStatus() == true)
-					return true;
-			}
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->GetHoldStatus();
+		{
+			if (door->GetHoldStatus() == true)
+				return true;
+		}
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 
 	return false;

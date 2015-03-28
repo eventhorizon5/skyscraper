@@ -459,6 +459,9 @@ void ElevatorDoor::StopDoors()
 		WhichDoors = 0;
 		door_changed = false;
 		doors_stopped = true;
+
+		//disable nudge mode
+		ResetNudgeTimer(false);
 	}
 	else if (OpenDoor != 0)
 		elev->Report("can only stop doors" + doornumber + " in manual/emergency mode");
@@ -2009,6 +2012,10 @@ void ElevatorDoor::Hold(bool sensor)
 	//hold door (basically turn off timer)
 	//disable nudge mode timer if specified
 
+	//exit if timer is already stopped
+	if (timer->IsRunning() == false)
+		return;
+
 	std::string doornumber;
 	if (elev->NumDoors > 1)
 		doornumber = " " + ToString2(Number);
@@ -2169,13 +2176,16 @@ bool ElevatorDoor::GetHoldStatus()
 
 void ElevatorDoor::ResetNudgeTimer(bool start)
 {
-	//switch off nudge mode timer if on
-	if (AreDoorsOpen() == false && nudgetimer->IsRunning() == true)
-		nudgetimer->Stop();
+	if (AreDoorsOpen() == false || doors_stopped == true)
+	{
+		//switch off nudge mode timer if on
+		if (nudgetimer->IsRunning() == true)
+			nudgetimer->Stop();
 
-	//switch off nudge mode if on
-	if (AreDoorsOpen() == false && GetNudgeStatus() == true)
-		EnableNudgeMode(false);
+		//switch off nudge mode if on
+		if (GetNudgeStatus() == true)
+			EnableNudgeMode(false);
+	}
 
 	//turn on nudge mode timer if doors are open
 	if (start == true)

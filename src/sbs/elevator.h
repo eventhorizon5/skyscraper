@@ -319,9 +319,9 @@ public:
 	int GetActiveCallDirection();
 	void ResetLights();
 	void ChangeLight(int floor, bool value);
-	int AreDoorsMoving();
-	bool AreDoorsOpening();
-	bool AreDoorsClosing();
+	int AreDoorsMoving(int number = 0);
+	bool AreDoorsOpening(int number = 0);
+	bool AreDoorsClosing(int number = 0);
 	bool InElevator();
 	void EnableSensor(bool value, int number = 0);
 	bool GetSensorStatus(int number = 0);
