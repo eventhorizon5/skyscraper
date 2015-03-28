@@ -288,7 +288,7 @@ round(<em>number</em>) - round number to nearest integer<br>
 <em>Globals</em> Section</font></strong></p>
 
 <p align="left">The <em>Globals</em> section contains the general information
-about your building. The section starts with this header:<br>
+about your building. This section is required, since it determines if a building file is valid.  The section starts with this header:<br>
 <font face="Courier New, Courier, mono" size="2">&lt;Globals&gt;</font></p>
 
 <p align="left">and ends with this footer:<br>
@@ -1216,7 +1216,7 @@ MySound, sound.wav, 10, 100, 5, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0,
 0</font></p>
 
 <p align="left">For information on the parameters, see the AddSound command in
-the Globals section. The only difference here is that the Y value is relative
+the Global Commands section. The only difference here is that the Y value is relative
 of the floor's base (altitude plus interfloor height). <em>Loop</em> specifies
 if the sound should loop and play on startup.</p>
 
@@ -2322,7 +2322,7 @@ MySound, ambient.ogg, 10, 100, 5, true, 1, 100, 1, -1, 0, 360, 360, 1, 0, 0,
 0</font></p>
 
 <p align="left">For information on the parameters, see the AddSound command in
-the Globals section. The only difference here is that the X, Y and Z position
+the Global Commands section. The only difference here is that the X, Y and Z position
 values are relative of the elevator's center/origin. <em>Loop</em> specifies if
 the sound should loop and play on startup.</p>
 
