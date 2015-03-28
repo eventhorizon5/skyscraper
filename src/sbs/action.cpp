@@ -431,7 +431,7 @@ bool Action::Run(Object *parent)
 			if (command_name.length() > 6)
 				number = atoi(command_name.substr(6, command_name.length() - 6).c_str());
 			elevator->OpenDoors(number);
-			elevator->HoldDoors(number, false, true);
+			elevator->HoldDoors(number, true);
 			return true;
 		}
 		if (StartsWith(command_name, "reset", false) == true && elevator->Direction == 0)

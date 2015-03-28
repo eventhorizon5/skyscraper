@@ -159,7 +159,6 @@ Shaft::~Shaft()
 		}
 		DoorArray[i].object = 0;
 	}
-	DoorArray.clear();
 
 	//delete mesh array objects
 	for (int i = 0; i < (int)ShaftArray.size(); i++)
@@ -168,7 +167,6 @@ Shaft::~Shaft()
 			delete ShaftArray[i];
 		ShaftArray[i] = 0;
 	}
-	ShaftArray.clear();
 
 	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)

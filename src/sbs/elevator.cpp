@@ -293,8 +293,8 @@ Elevator::~Elevator()
 			DirIndicatorArray[i]->object->parent_deleting = true;
 			delete DirIndicatorArray[i];
 		}
+		DirIndicatorArray[i] = 0;
 	}
-	DirIndicatorArray.clear();
 
 	//delete doors
 	if (sbs->Verbose)
@@ -309,6 +309,7 @@ Elevator::~Elevator()
 				DoorArray[i]->object->parent_deleting = true;
 				delete DoorArray[i];
 			}
+			DoorArray[i] = 0;
 		}
 	}
 
@@ -323,8 +324,8 @@ Elevator::~Elevator()
 			FloorIndicatorArray[i]->object->parent_deleting = true;
 			delete FloorIndicatorArray[i];
 		}
+		FloorIndicatorArray[i] = 0;
 	}
-	FloorIndicatorArray.clear();
 
 	//delete panels
 	if (sbs->Verbose)
@@ -339,7 +340,6 @@ Elevator::~Elevator()
 		}
 		PanelArray[i] = 0;
 	}
-	PanelArray.clear();
 
 	//delete doors
 	if (sbs->Verbose)
@@ -354,7 +354,6 @@ Elevator::~Elevator()
 		}
 		StdDoorArray[i] = 0;
 	}
-	StdDoorArray.clear();
 
 	//Destructor
 	if (sbs->Verbose)
@@ -421,7 +420,6 @@ Elevator::~Elevator()
 		}
 		sounds[i] = 0;
 	}
-	sounds.clear();
 
 	//delete wall objects
 	for (int i = 0; i < (int)elevator_walls.size(); i++)
@@ -1361,9 +1359,9 @@ void Elevator::MonitorLoop()
 		Down();
 
 	//process door open/close holds
-	if (doorhold_direction == 1)
+	if (doorhold_direction > 0)
 		OpenDoors();
-	if (doorhold_direction == -1)
+	if (doorhold_direction < 0)
 		CloseDoors();
 
 	//process Go function hold
@@ -2711,6 +2709,7 @@ bool Elevator::EnableUpPeak(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Up Peak mode disabled");
 	}
 
@@ -2759,6 +2758,7 @@ bool Elevator::EnableDownPeak(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Down Peak mode disabled");
 	}
 
@@ -2796,8 +2796,8 @@ bool Elevator::EnableIndependentService(bool value)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		ResetQueue(true, true);
-		EnableNudgeMode(false);
 		HoldDoors(); //turn off door timers
+		ResetNudgeTimer(false); //switch off nudge timer
 		if (IsMoving == false)
 			if (AutoDoors == true)
 				OpenDoors();
@@ -2806,6 +2806,7 @@ bool Elevator::EnableIndependentService(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Independent Service mode disabled");
 	}
 
@@ -2832,9 +2833,9 @@ bool Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0, true);
-		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		HoldDoors(); //turn off door timers
+		ResetNudgeTimer(false); //switch off nudge timer
 		if (IsMoving == true)
 			Stop();
 		Report("Inspection Service mode enabled");
@@ -2843,6 +2844,7 @@ bool Elevator::EnableInspectionService(bool value)
 	else
 	{
 		ResetDoors();
+		ResetNudgeTimer();
 		Report("Inspection Service mode disabled");
 
 		UpdateFloorIndicators();
@@ -2919,6 +2921,7 @@ bool Elevator::EnableFireService1(int value)
 			{
 				//turn off all door timers
 				HoldDoors();
+				ResetNudgeTimer(false); //switch off nudge timer
 
 				//enable nudge mode on all doors if any are open
 				if (GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
@@ -2931,14 +2934,20 @@ bool Elevator::EnableFireService1(int value)
 		else
 		{
 			if (FireServicePhase2 == 0)
+			{
 				ResetDoors(); //enable door timers
+				ResetNudgeTimer();
+			}
 			Report("Fire Service Phase 1 mode set to Bypass");
 		}
 	}
 	else
 	{
 		if (FireServicePhase2 == 0)
+		{
 			ResetDoors(); //enable door timers
+			ResetNudgeTimer();
+		}
 		Report("Fire Service Phase 1 mode set to Off");
 	}
 
@@ -2990,9 +2999,9 @@ bool Elevator::EnableFireService2(int value, bool force)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
-		EnableNudgeMode(false);
 		ResetQueue(true, true);
 		HoldDoors(); //disable all door timers
+		ResetNudgeTimer(false); //switch off nudge timer
 		if (value == 1)
 			Report("Fire Service Phase 2 mode set to On");
 		else
@@ -3003,7 +3012,10 @@ bool Elevator::EnableFireService2(int value, bool force)
 		Report("Fire Service Phase 2 mode set to Off");
 
 		if (FireServicePhase1 == 0)
+		{
 			ResetDoors(); //enable door timers
+			ResetNudgeTimer();
+		}
 		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
 		{
 			//enable nudge mode on all doors if any are open
@@ -3408,19 +3420,33 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 	}
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
 	}
-	else
-	{
-		start = number;
-		end = number;
-	}
 	if (doorhold_direction == 0)
 	{
+		if (AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
+		{
+			doorhold_direction = 2;
+
+			if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
+				return true; //exit to skip an extra open door call
+		}
+
+		if (hold == true)
+			doorhold_direction = 1;
+
+		if (doorhold_direction > 0)
+		{
+			//set persistent values
+			doorhold_whichdoors = whichdoors;
+			doorhold_floor = floor;
+			doorhold_manual = manual;
+		}
+
 		for (int i = start; i <= end; i++)
 		{
 			if (GetDoor(i))
@@ -3428,18 +3454,11 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			else
 				ReportError("Invalid door " + ToString2(i));
 		}
-
-		if (hold == true)
-		{
-			//set persistent values
-			doorhold_direction = 1;
-			doorhold_whichdoors = whichdoors;
-			doorhold_floor = floor;
-			doorhold_manual = manual;
-		}
 	}
 	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
 	{
+		//require button to be held down to open doors
+
 		bool closedstate = false;
 
 		for (int i = start; i <= end; i++)
@@ -3448,7 +3467,10 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			if (GetDoor(i))
 			{
 				if (GetDoor(i)->AreDoorsOpen() == false)
+				{
 					closedstate = true;
+					break;
+				}
 			}
 			else
 				ReportError("Invalid door " + ToString2(i));
@@ -3456,13 +3478,11 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 
 		for (int i = start; i <= end; i++)
 		{
-			//close doors using persistent values, if button is released before doors are fully closed
+			//close doors using persistent values, if button is released before doors are fully open
 			if (GetDoor(i))
 			{
 				if (closedstate == true)
 					GetDoor(i)->CloseDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
-				else
-					GetDoor(i)->Hold();
 			}
 			else
 				ReportError("Invalid door " + ToString2(i));
@@ -3474,6 +3494,44 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 		doorhold_floor = 0;
 		doorhold_manual = false;
 	}
+	else if (doorhold_direction == 2)
+	{
+		//hold doors while button is held
+
+		bool mouse_state = sbs->camera->MouseDown;
+
+		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
+		{
+			if (mouse_state == true)
+			{
+				//hold doors while button is held down
+				HoldDoors(number);
+				return true;
+			}
+			else
+			{
+				//run door open again to reset doors (turn off hold) if button is released
+				for (int i = start; i <= end; i++)
+				{
+					//open doors using persistent values
+					if (GetDoor(i))
+						GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
+					else
+						ReportError("Invalid door " + ToString2(i));
+				}
+			}
+		}
+
+		if (mouse_state == false)
+		{
+			//reset persistent values
+			doorhold_direction = 0;
+			doorhold_whichdoors = 0;
+			doorhold_floor = 0;
+			doorhold_manual = false;
+		}
+	}
+
 	return true;
 }
 
@@ -3491,16 +3549,11 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 	if (IndependentService == true || FireServicePhase2 == 1)
 		hold = true;
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	if (doorhold_direction == 0)
 	{
@@ -3530,7 +3583,10 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 			if (GetDoor(i))
 			{
 				if (GetDoor(i)->AreDoorsOpen() == true)
+				{
 					openstate = true;
+					break;
+				}
 			}
 			else
 				ReportError("Invalid door " + ToString2(i));
@@ -3540,7 +3596,7 @@ void Elevator::CloseDoors(int number, int whichdoors, int floor, bool manual, bo
 		{
 			for (int i = start; i <= end; i++)
 			{
-				//close doors using persistent values, if button is released before doors are fully open
+				//open doors using persistent values, if button is released before doors are fully closed
 				if (GetDoor(i))
 					GetDoor(i)->OpenDoors(doorhold_whichdoors, doorhold_floor, doorhold_manual);
 				else
@@ -3561,16 +3617,11 @@ void Elevator::StopDoors(int number)
 	//stops doors that are currently moving; can only be used for manual/emergency movements
 	//this basically just resets the door internals
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3632,16 +3683,12 @@ void Elevator::ShaftDoorsEnabled(int number, int floor, bool value)
 	//turns shaft elevator doors on/off
 
 	SBS_PROFILE("Elevator::ShaftDoorsEnabled");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3660,16 +3707,12 @@ void Elevator::ShaftDoorsEnabledRange(int number, int floor, int range)
 	//if range is 1, show door on only the current floor (floor)
 
 	SBS_PROFILE("Elevator::ShaftDoorsEnabledRange");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3686,16 +3729,12 @@ bool Elevator::AreDoorsOpen(int number)
 	//returns the internal door state
 
 	SBS_PROFILE("Elevator::AreDoorsOpen");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3744,16 +3783,12 @@ void Elevator::Chime(int number, int floor, bool direction)
 	//play chime sound on specified floor
 
 	SBS_PROFILE("Elevator::Chime");
-	int start, end;
+
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3773,16 +3808,11 @@ void Elevator::ResetDoors(int number, bool sensor)
 {
 	//reset elevator door timer
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3796,16 +3826,11 @@ void Elevator::ResetDoors(int number, bool sensor)
 
 bool Elevator::DoorsStopped(int number)
 {
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
-	}
-	else
-	{
-		start = number;
-		end = number;
 	}
 	for (int i = start; i <= end; i++)
 	{
@@ -3818,11 +3843,17 @@ bool Elevator::DoorsStopped(int number)
 	return false;
 }
 
-int Elevator::AreDoorsMoving()
+int Elevator::AreDoorsMoving(int number)
 {
 	//returns 1 if doors are opening, -1 if doors are closing, or 0 if doors are not moving
 
-	for (int i = 1; i <= NumDoors; i++)
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
 	{
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
@@ -3830,24 +3861,26 @@ int Elevator::AreDoorsMoving()
 			if (door->AreDoorsMoving() == true)
 				return door->OpenDoor;
 		}
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 	return 0;
 }
 
-bool Elevator::AreDoorsOpening()
+bool Elevator::AreDoorsOpening(int number)
 {
 	//returns true if doors are opening
 
-	if (AreDoorsMoving() == 1)
+	if (AreDoorsMoving(number) == 1)
 		return true;
 	return false;
 }
 
-bool Elevator::AreDoorsClosing()
+bool Elevator::AreDoorsClosing(int number)
 {
 	//returns true if doors are closing
 
-	if (AreDoorsMoving() == -1)
+	if (AreDoorsMoving(number) == -1)
 		return true;
 	return false;
 }
@@ -3857,18 +3890,19 @@ void Elevator::MoveDoors(int number, const Ogre::Vector3 position, bool relative
 	//move all doors
 
 	SBS_PROFILE("Elevator::MoveDoors");
+
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 1; i <= NumDoors; i++)
-		{
-			if (GetDoor(i))
-				GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(number))
-			GetDoor(number)->Move(position, relative_x, relative_y, relative_z);
+		if (GetDoor(i))
+			GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -3897,35 +3931,35 @@ void Elevator::MoveDoorSound(int number, const Ogre::Vector3 position, bool rela
 {
 	//move all doors
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 1; i <= NumDoors; i++)
-		{
-			if (GetDoor(i))
-				GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(number))
-			GetDoor(number)->MoveSound(position, relative_x, relative_y, relative_z);
+		if (GetDoor(i))
+			GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
 void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float CenterZ)
 {
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 1; i <= NumDoors; i++)
-		{
-			if (GetDoor(i))
-				GetDoor(i)->SetShaftDoors(thickness, CenterX, CenterZ);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		if (GetDoor(number))
-			GetDoor(number)->SetShaftDoors(thickness, CenterX, CenterZ);
+		if (GetDoor(i))
+			GetDoor(i)->SetShaftDoors(thickness, CenterX, CenterZ);
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -4384,46 +4418,35 @@ bool Elevator::IsQueued(int floor)
 {
 	//return true if the given floor is in either queue
 	
-	int index = -1;
 	for (int i = 0; i < (int)UpQueue.size(); i++)
 	{
 		if (UpQueue[i] == floor)
-			index = i;
+			return true;
 	}
-	if (index > -1)
-		return true;
 
-	index = -1;
 	for (int i = 0; i < (int)DownQueue.size(); i++)
 	{
 		if (DownQueue[i] == floor)
-			index = i;
+			return true;
 	}
-	if (index > -1)
-		return true;
+
 	return false;
 }
 
-void Elevator::HoldDoors(int number, bool disable_nudge, bool sensor)
+void Elevator::HoldDoors(int number, bool sensor)
 {
 	//hold specified door, or all if "0" is given
-	//disable nudge mode timer if specified
 
-	int start, end;
+	int start = number, end = number;
 	if (number == 0)
 	{
 		start = 1;
 		end = NumDoors;
 	}
-	else
-	{
-		start = number;
-		end = number;
-	}
 	for (int i = start; i <= end; i++)
 	{
 		if (GetDoor(i))
-			GetDoor(i)->Hold(disable_nudge, sensor);
+			GetDoor(i)->Hold(sensor);
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
@@ -4886,16 +4909,16 @@ bool Elevator::DoorExists(int number)
 	//check if the specified door exists
 	//if number is 0, return true if any door exists
 
-	if (number > 0)
-		return (GetDoor(number) > 0);
-
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			if (GetDoor(i))
-				return true;
-		}
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		if (GetDoor(i))
+			return true;
 	}
 	return false;
 }
@@ -4904,26 +4927,22 @@ bool Elevator::IsNudgeModeActive(int number)
 {
 	//checks doors and returns true if any (or the specified door) have nudge mode active
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-			{
-				if (door->GetNudgeStatus() == true)
-					return true;
-			}
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->GetNudgeStatus();
+		{
+			if (door->GetNudgeStatus() == true)
+				return true;
+		}
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 
 	return false;
@@ -4933,23 +4952,41 @@ void Elevator::EnableNudgeMode(bool value, int number)
 {
 	//enables nudge mode on all doors or the specified door
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-				door->EnableNudgeMode(value);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->EnableNudgeMode(value);
+			door->EnableNudgeMode(value);
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
+	}
+}
+
+void Elevator::ResetNudgeTimer(bool start, int number)
+{
+	//resets and optionally starts nudge timer on the specified door
+
+	int start2 = number, end = number;
+	if (number == 0)
+	{
+		start2 = 1;
+		end = NumDoors;
+	}
+	for (int i = start2; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			door->ResetNudgeTimer(start);
+		}
+		else
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -5020,7 +5057,10 @@ std::string Elevator::GetFloorDisplay()
 			for (int i = 0; i < (int)DisplayFloors.size(); i++)
 			{
 				if (floornum == DisplayFloors[i])
+				{
 					value = floor->ID;
+					break;
+				}
 			}
 		}
 		else
@@ -5192,30 +5232,30 @@ int Elevator::AvailableForCall(int floor, int direction)
 			//if elevator is running
 			if (IsRunning() == true)
 			{
-				//and if no queue changes are pending
-				if (QueuePending == false)
+				//and if it's not in any service mode
+				if (InServiceMode() == false)
 				{
-					//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
-					if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+					//and if no queue changes are pending
+					if (QueuePending == false)
 					{
-						//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
-						if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
+						//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
+						if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 						{
-							//and if doors are not being held
-							if (GetHoldStatus() == false)
+							//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
+							if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 							{
-								//and if it's above the current floor and should be called down, or below the
-								//current floor and called up, or on the same floor and not moving, or idle
-								if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
+								//and if doors are not being held
+								if (GetHoldStatus() == false)
 								{
-									//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
-									if (QueuePositionDirection == direction || IsIdle())
+									//and if nudge mode is off on all doors
+									if (IsNudgeModeActive() == false)
 									{
-										//and if nudge mode is off on all doors
-										if (IsNudgeModeActive() == false)
+										//and if it's above the current floor and should be called down, or below the
+										//current floor and called up, or on the same floor and not moving, or idle
+										if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 										{
-											//and if it's not in any service mode
-											if (InServiceMode() == false)
+											//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
+											if (QueuePositionDirection == direction || IsIdle())
 											{
 												if (sbs->Verbose)
 													Report("Available for call");
@@ -5224,57 +5264,57 @@ int Elevator::AvailableForCall(int floor, int direction)
 											else
 											{
 												if (sbs->Verbose == true)
-													Report("Not available for call - in service mode");
-												return 2;
+													Report("Not available for call - going a different direction and is not idle");
+												return 0;
 											}
 										}
 										else
 										{
 											if (sbs->Verbose == true)
-												Report("Not available for call - in nudge mode");
+												Report("Not available for call - position/direction wrong for call and is not idle");
 											return 0;
 										}
 									}
 									else
 									{
 										if (sbs->Verbose == true)
-											Report("Not available for call - going a different direction and is not idle");
+											Report("Not available for call - in nudge mode");
 										return 0;
 									}
 								}
 								else
 								{
 									if (sbs->Verbose == true)
-										Report("Not available for call - position/direction wrong for call and is not idle");
+										Report("Not available for call - door hold is enabled");
 									return 0;
 								}
 							}
 							else
 							{
 								if (sbs->Verbose == true)
-									Report("Not available for call - door hold is enabled");
+									Report("Not available for call - queueresets is on and opposite queue direction is active");
 								return 0;
 							}
 						}
 						else
 						{
 							if (sbs->Verbose == true)
-								Report("Not available for call - queueresets is on and opposite queue direction is active");
+								Report("Not available for call - limitqueue is on and queue is active");
 							return 0;
 						}
 					}
 					else
 					{
 						if (sbs->Verbose == true)
-							Report("Not available for call - limitqueue is on and queue is active");
+							Report("Not available for call - queue change is pending");
 						return 0;
 					}
 				}
 				else
 				{
 					if (sbs->Verbose == true)
-						Report("Not available for call - queue change is pending");
-					return 0;
+						Report("Not available for call - in service mode");
+					return 2;
 				}
 			}
 			else
@@ -5766,26 +5806,22 @@ bool Elevator::GetSensorStatus(int number)
 {
 	//checks doors and returns true if any (or the specified door) have their door sensor active
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-			{
-				if (door->GetSensorStatus() == true)
-					return true;
-			}
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->GetSensorStatus();
+		{
+			if (door->GetSensorStatus() == true)
+				return true;
+		}
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 
 	return false;
@@ -5795,23 +5831,19 @@ void Elevator::EnableSensor(bool value, int number)
 {
 	//enables door sensor on all doors or the specified door
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-				door->EnableSensor(value);
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
 			door->EnableSensor(value);
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -5854,26 +5886,22 @@ bool Elevator::GetHoldStatus(int number)
 {
 	//checks doors and returns true if any (or the specified door) have door hold enabled
 
+	int start = number, end = number;
 	if (number == 0)
 	{
-		for (int i = 0; i < (int)DoorArray.size(); i++)
-		{
-			ElevatorDoor *door = DoorArray[i];
-			if (door)
-			{
-				if (door->GetHoldStatus() == true)
-					return true;
-			}
-		}
+		start = 1;
+		end = NumDoors;
 	}
-	else
+	for (int i = start; i <= end; i++)
 	{
-		ElevatorDoor *door = GetDoor(number);
-
+		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->GetHoldStatus();
+		{
+			if (door->GetHoldStatus() == true)
+				return true;
+		}
 		else
-			ReportError("Invalid door " + ToString2(number));
+			ReportError("Invalid door " + ToString2(i));
 	}
 
 	return false;

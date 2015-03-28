@@ -459,6 +459,9 @@ void ElevatorDoor::StopDoors()
 		WhichDoors = 0;
 		door_changed = false;
 		doors_stopped = true;
+
+		//disable nudge mode
+		ResetNudgeTimer(false);
 	}
 	else if (OpenDoor != 0)
 		elev->Report("can only stop doors" + doornumber + " in manual/emergency mode");
@@ -635,17 +638,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 	}
 
-	//switch off nudge mode timer if on
-	if (open == false && nudgetimer->IsRunning() == true)
-		nudgetimer->Stop();
-
-	//switch off nudge mode if on
-	if (open == false && GetNudgeStatus() == true)
-		EnableNudgeMode(false);
-
-	//turn on nudge mode timer if doors are open
-	if (open == true && NudgeTimer > 0 && nudgetimer->IsRunning() == false && elev->AutoDoors == true)
-		nudgetimer->Start(int(NudgeTimer * 1000), true);
+	//reset and enable nudge timer
+	ResetNudgeTimer();
 
 	//reset values
 	OpenDoor = 0;
@@ -2017,10 +2011,14 @@ int ElevatorDoor::GetManualIndex(int floor)
 	return -1;
 }
 
-void ElevatorDoor::Hold(bool disable_nudge, bool sensor)
+void ElevatorDoor::Hold(bool sensor)
 {
 	//hold door (basically turn off timer)
 	//disable nudge mode timer if specified
+
+	//exit if timer is already stopped
+	if (timer->IsRunning() == false)
+		return;
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
@@ -2035,8 +2033,6 @@ void ElevatorDoor::Hold(bool disable_nudge, bool sensor)
 	else
 		elev->Report("holding doors" + doornumber);
 
-	if (disable_nudge == true)
-		nudgetimer->Stop();
 	timer->Stop();
 
 	if (sensor == false)
@@ -2051,10 +2047,8 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	if (elev->NumDoors > 1)
 		doornumber = " " + ToString2(Number);
 
-	if (value == true && nudge_enabled == false && AreDoorsOpen() == true && (elev->InServiceMode() == false || (elev->FireServicePhase1 == 1 && elev->GetFloor() != elev->RecallFloor && elev->GetFloor() != elev->RecallFloorAlternate)))
+	if (value == true && AllowNudgeMode() == true)
 	{
-		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
-			return;
 		elev->Report("Doors" + doornumber + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)
@@ -2181,5 +2175,43 @@ bool ElevatorDoor::GetHoldStatus()
 	if (AreDoorsOpen() == true && AreDoorsMoving() == false && TimerIsRunning() == false)
 		return true;
 
+	return false;
+}
+
+void ElevatorDoor::ResetNudgeTimer(bool start)
+{
+	if (AreDoorsOpen() == false || doors_stopped == true)
+	{
+		//switch off nudge mode timer if on
+		if (nudgetimer->IsRunning() == true)
+			nudgetimer->Stop();
+
+		//switch off nudge mode if on
+		if (GetNudgeStatus() == true)
+			EnableNudgeMode(false);
+	}
+
+	//turn on nudge mode timer if doors are open
+	if (start == true)
+	{
+		if (AllowNudgeMode() == true && NudgeTimer > 0 && nudgetimer->IsRunning() == false)
+			nudgetimer->Start(int(NudgeTimer * 1000), true);
+	}
+}
+
+bool ElevatorDoor::AllowNudgeMode()
+{
+	//return true if current situation allows nudge mode to be enabled
+
+	//allow nudge mode if fire phase 1 is on (phase 2 is off) and elevator is not at recall floor
+	bool firelobby = elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->GetFloor() != elev->RecallFloor && elev->GetFloor() != elev->RecallFloorAlternate;
+
+	if (GetNudgeStatus() == false && AreDoorsOpen() == true && elev->AutoDoors == true && (elev->InServiceMode() == false || firelobby == true))
+	{
+		if ((elev->UpPeak == true && elev->GetFloor() == elev->GetBottomFloor()) || (elev->DownPeak == true && elev->GetFloor() == elev->GetTopFloor()))
+			return false;
+
+		return true;
+	}
 	return false;
 }

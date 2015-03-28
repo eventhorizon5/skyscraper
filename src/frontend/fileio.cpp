@@ -117,6 +117,7 @@ void ScriptProcessor::Reset()
 	cache_interfloorheight_s = "";
 	cache_base = 0;
 	cache_base_s = "";
+	globals_found = false;
 }
 
 bool ScriptProcessor::Run()
@@ -155,7 +156,10 @@ bool ScriptProcessor::Run()
 		if (LineData == "")
 			goto Nextline;
 
-		//function parameter variables
+
+		//////////////////////////////
+		//Function parameter variables
+		//////////////////////////////
 		if (InFunction > 0)
 		{
 			startpos = 0;
@@ -222,6 +226,60 @@ bool ScriptProcessor::Run()
 
 		linecheck = SetCaseCopy(LineData, false);
 
+
+		//////////////////
+		//User variables
+		//////////////////
+		startpos = 0;
+		do
+		{
+			//User variable conversion
+			temp1 = LineData.find("%", startpos);
+			if (temp1 >= startpos)
+			{
+				temp3 = LineData.find("%", temp1 + 1);
+				if (temp3 >= (int)LineData.length() || temp3 < 0)
+				{
+					temp1 = 0;
+					temp3 = 0;
+					break;
+				}
+			}
+			else
+			{
+				//none (or no more) variables found
+				temp1 = 0;
+				temp3 = 0;
+				break;
+			}
+
+			if (temp1 + temp3 > 0)
+			{
+				temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
+				TrimString(temp2);
+
+				bool found = false;
+				for (int i = 0; i < (int)variables.size(); i++)
+				{
+					if (variables[i].name == temp2)
+					{
+						found = true;
+
+						//replace all occurrences of the variable with it's value
+						ReplaceAll(LineData, std::string("%" + temp2 + "%").c_str(), variables[i].value.c_str());
+						startpos = temp1;
+						break;
+					}
+				}
+
+				if (found == false)
+					startpos = temp3 + 1;
+			}
+			else
+				startpos++;
+		} while (true);
+
+
 		//////////////////////
 		//Section information
 		//////////////////////
@@ -234,6 +292,7 @@ bool ScriptProcessor::Run()
 			}
 			Section = 1;
 			Context = "Globals";
+			globals_found = true;
 			skyscraper->Report("Processing globals...");
 			goto Nextline;
 		}
@@ -247,6 +306,143 @@ bool ScriptProcessor::Run()
 			Section = 0;
 			Context = "None";
 			skyscraper->Report("Finished globals");
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 5) == "<end>")
+		{
+			Section = 0;
+			Context = "None";
+			skyscraper->Report("Exiting building script");
+			IsFinished = true;
+			show_percent = false;
+			line = (int)BuildingData.size(); //jump to end of script
+			return true; //exit data file parser
+		}
+		if (linecheck.substr(0, 7) == "<break>")
+		{
+			//breakpoint function for debugging scripts
+breakpoint:
+			skyscraper->Report("Script breakpoint reached");
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 8) == "<include")
+		{
+			//include another file at the current script location
+
+			int endloc = LineData.find(">");
+
+			if (endloc == -1)
+			{
+				ScriptError("Syntax error");
+				goto Error;
+			}
+
+			std::string includefile = LineData.substr(9, endloc - 9);
+			TrimString(includefile);
+
+			//delete current line
+			BuildingData.erase(BuildingData.begin() + line);
+
+			//insert file at current line
+			std::string filename = Simcore->VerifyFile(includefile.c_str());
+			bool result = LoadDataFile(filename.c_str(), true, line);
+			if (result == false)
+				goto Error;
+			skyscraper->Report("Inserted file " + includefile);
+
+			line--;
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 9) == "<function")
+		{
+			//define a function
+
+			if (Section != 0)
+			{
+				ScriptError("Cannot define a function within a section");
+				goto Error;
+			}
+
+			int endloc = LineData.find(">");
+
+			if (endloc == -1)
+			{
+				ScriptError("Syntax error");
+				goto Error;
+			}
+
+			std::string function = LineData.substr(10, endloc - 10);
+			TrimString(function);
+
+			//skip the function definition and show a warning if it's already been defined
+			bool defined = IsFunctionDefined(function.c_str());
+
+			if (defined == true)
+				skyscraper->Report("Function '" + function + "' already defined");
+			else
+			{
+				//store function info in array
+				FunctionInfo info;
+				info.name = function;
+				info.line = line;
+				functions.push_back(info);
+			}
+
+			//skip to end of function
+			for (int i = line + 1; i < (int)BuildingData.size(); i++)
+			{
+				if (SetCaseCopy(BuildingData[i].substr(0, 13), false) == "<endfunction>")
+				{
+					line = i;
+					break;
+				}
+			}
+
+			if (defined == false)
+				skyscraper->Report("Defined function " + function);
+			goto Nextline;
+		}
+
+		//exit if globals have never been defined
+		if (globals_found == false)
+		{
+			ScriptError("Globals section not found");
+			goto Error;
+		}
+
+		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
+		{
+			//end function and return to original line
+			line = FunctionStack[InFunction - 1].CallLine - 1;
+			ReplaceLineData = FunctionStack[InFunction - 1].LineData;
+			FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
+			InFunction -= 1;
+			ReplaceLine = true;
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 10) == "<textures>")
+		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				goto Error;
+			}
+			Section = 5;
+			Context = "Textures";
+			skyscraper->Report("Processing textures...");
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 13) == "<endtextures>")
+		{
+			if (Section != 5)
+			{
+				ScriptError("Not in texture section");
+				goto Error;
+			}
+			Simcore->FreeTextureImages();
+			Section = 0;
+			Context = "None";
+			skyscraper->Report("Finished textures");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 7) == "<floors")
@@ -380,184 +576,7 @@ bool ScriptProcessor::Run()
 			skyscraper->Report("Finished elevator");
 			goto Nextline;
 		}
-		if (linecheck.substr(0, 10) == "<textures>")
-		{
-			if (Section > 0)
-			{
-				ScriptError("Already within a section");
-				goto Error;
-			}
-			Section = 5;
-			Context = "Textures";
-			skyscraper->Report("Processing textures...");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 13) == "<endtextures>")
-		{
-			if (Section != 5)
-			{
-				ScriptError("Not in texture section");
-				goto Error;
-			}
-			Simcore->FreeTextureImages();
-			Section = 0;
-			Context = "None";
-			skyscraper->Report("Finished textures");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 5) == "<end>")
-		{
-			Section = 0;
-			Context = "None";
-			skyscraper->Report("Exiting building script");
-			IsFinished = true;
-			show_percent = false;
-			line = (int)BuildingData.size(); //jump to end of script
-			return true; //exit data file parser
-		}
-		if (linecheck.substr(0, 7) == "<break>")
-		{
-			//breakpoint function for debugging scripts
-breakpoint:
-			skyscraper->Report("Script breakpoint reached");
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 8) == "<include")
-		{
-			//include another file at the current script location
 
-			int endloc = LineData.find(">");
-
-			if (endloc == -1)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-			}
-
-			std::string includefile = LineData.substr(9, endloc - 9);
-			TrimString(includefile);
-
-			//delete current line
-			BuildingData.erase(BuildingData.begin() + line);
-
-			//insert file at current line
-			std::string filename = Simcore->VerifyFile(includefile.c_str());
-			bool result = LoadDataFile(filename.c_str(), true, line);
-			if (result == false)
-				goto Error;
-			skyscraper->Report("Inserted file " + includefile);
-
-			line--;
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 9) == "<function")
-		{
-			//define a function
-
-			if (Section != 0)
-			{
-				ScriptError("Cannot define a function within a section");
-				goto Error;
-			}
-
-			int endloc = LineData.find(">");
-
-			if (endloc == -1)
-			{
-				ScriptError("Syntax error");
-				goto Error;
-			}
-
-			std::string function = LineData.substr(10, endloc - 10);
-			TrimString(function);
-
-			//skip the function definition and show a warning if it's already been defined
-			bool defined = IsFunctionDefined(function.c_str());
-
-			if (defined == true)
-				skyscraper->Report("Function '" + function + "' already defined");
-			else
-			{
-				//store function info in array
-				FunctionInfo info;
-				info.name = function;
-				info.line = line;
-				functions.push_back(info);
-			}
-
-			//skip to end of function
-			for (int i = line + 1; i < (int)BuildingData.size(); i++)
-			{
-				if (SetCaseCopy(BuildingData[i].substr(0, 13), false) == "<endfunction>")
-				{
-					line = i;
-					break;
-				}
-			}
-
-			if (defined == false)
-				skyscraper->Report("Defined function " + function);
-			goto Nextline;
-		}
-		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
-		{
-			//end function and return to original line
-			line = FunctionStack[InFunction - 1].CallLine - 1;
-			ReplaceLineData = FunctionStack[InFunction - 1].LineData;
-			FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
-			InFunction -= 1;
-			ReplaceLine = true;
-			goto Nextline;
-		}
-
-		startpos = 0;
-		do
-		{
-			//User variable conversion
-			temp1 = LineData.find("%", startpos);
-			if (temp1 >= startpos)
-			{
-				temp3 = LineData.find("%", temp1 + 1);
-				if (temp3 >= (int)LineData.length() || temp3 < 0)
-				{
-					temp1 = 0;
-					temp3 = 0;
-					break;
-				}
-			}
-			else
-			{
-				//none (or no more) variables found
-				temp1 = 0;
-				temp3 = 0;
-				break;
-			}
-
-			if (temp1 + temp3 > 0)
-			{
-				temp2 = LineData.substr(temp1 + 1, temp3 - temp1 - 1);
-				TrimString(temp2);
-
-				bool found = false;
-				for (int i = 0; i < (int)variables.size(); i++)
-				{
-					if (variables[i].name == temp2)
-					{
-						found = true;
-
-						//replace all occurrences of the variable with it's value
-						ReplaceAll(LineData, std::string("%" + temp2 + "%").c_str(), variables[i].value.c_str());
-						startpos = temp1;
-						break;
-					}
-				}
-
-				if (found == false)
-					startpos = temp3 + 1;
-			}
-			else
-				startpos++;
-		} while (true);
 
 		//////////////////////////
 		//Floor object conversion

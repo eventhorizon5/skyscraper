@@ -122,7 +122,6 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 
 Control::~Control()
 {
-	TextureArray.clear();
 	if (sound)
 	{
 		sound->object->parent_deleting = true;
@@ -525,6 +524,9 @@ void Control::RemoveAction(Action *action)
 	for (int i = 0; i < (int)Actions.size(); i++)
 	{
 		if (Actions[i] == action)
+		{
 			Actions.erase(Actions.begin() + i);
+			return;
+		}
 	}
 }

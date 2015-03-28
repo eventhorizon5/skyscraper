@@ -341,7 +341,6 @@ SBS::~SBS()
 		}
 		FloorArray[i].object = 0;
 	}
-	FloorArray.clear();
 
 	//delete elevators
 	for (int i = 0; i < (int)ElevatorArray.size(); i++)
@@ -353,7 +352,6 @@ SBS::~SBS()
 		}
 		ElevatorArray[i].object = 0;
 	}
-	ElevatorArray.clear();
 
 	//delete shafts
 	for (int i = 0; i < (int)ShaftArray.size(); i++)
@@ -365,7 +363,6 @@ SBS::~SBS()
 		}
 		ShaftArray[i].object = 0;
 	}
-	ShaftArray.clear();
 
 	//delete stairs
 	for (int i = 0; i < (int)StairsArray.size(); i++)
@@ -377,7 +374,6 @@ SBS::~SBS()
 		}
 		StairsArray[i].object = 0;
 	}
-	StairsArray.clear();
 
 	//delete sounds
 	for (int i = 0; i < (int)sounds.size(); i++)
@@ -389,7 +385,6 @@ SBS::~SBS()
 		}
 		sounds[i] = 0;
 	}
-	sounds.clear();
 
 	//delete actions
 	for (int i = 0; i < (int)ActionArray.size(); i++)
@@ -398,7 +393,6 @@ SBS::~SBS()
 			delete ActionArray[i];
 		ActionArray[i] = 0;
 	}
-	ActionArray.clear();
 
 	//delete wall objects
 	if (SkyBox)
@@ -4265,8 +4259,7 @@ void SBS::UnregisterControl(Control *control)
 		if (control_index[i] == control)
 		{
 			control_index.erase(control_index.begin() + i);
-			i--;
-			break;
+			return;
 		}
 	}
 }

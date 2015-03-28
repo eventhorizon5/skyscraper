@@ -127,7 +127,6 @@ Floor::~Floor()
 		}
 		CallButtonArray[i] = 0;
 	}
-	CallButtonArray.clear();
 
 	//delete doors
 	for (int i = 0; i < (int)DoorArray.size(); i++)
@@ -139,7 +138,6 @@ Floor::~Floor()
 		}
 		DoorArray[i] = 0;
 	}
-	DoorArray.clear();
 
 	//delete floor indicators
 	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
@@ -149,8 +147,8 @@ Floor::~Floor()
 			FloorIndicatorArray[i]->object->parent_deleting = true;
 			delete FloorIndicatorArray[i];
 		}
+		FloorIndicatorArray[i] = 0;
 	}
-	FloorIndicatorArray.clear();
 
 	//delete directional indicators
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
@@ -160,8 +158,8 @@ Floor::~Floor()
 			DirIndicatorArray[i]->object->parent_deleting = true;
 			delete DirIndicatorArray[i];
 		}
+		DirIndicatorArray[i] = 0;
 	}
-	DirIndicatorArray.clear();
 
 	//delete sounds
 	for (int i = 0; i < (int)sounds.size(); i++)
@@ -173,7 +171,6 @@ Floor::~Floor()
 		}
 		sounds[i] = 0;
 	}
-	sounds.clear();
 
 	//delete meshes
 	if (Level)
