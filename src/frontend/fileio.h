@@ -94,7 +94,6 @@ class ScriptProcessor
 	bool show_percent;
 	bool InWhile;
 	int progress_marker;
-	bool globals_found;
 
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
