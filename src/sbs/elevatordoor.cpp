@@ -486,7 +486,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	SBS_PROFILE("ElevatorDoor::MoveDoors");
 
 	//find which doors should be moved
-	bool elevdoors = false, shaftdoors = false;
+	bool elevdoors = false, shaftdoors = false, playsounds = false;
 	if (WhichDoors == 1)
 	{
 		elevdoors = true;
@@ -524,18 +524,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		
 		if (manual == false)
 		{
-			if (open == true)
-			{
-				//play elevator opening sound
-				doorsound->Load(OpenSound.c_str());
-				doorsound->Play();
-			}
-			else
-			{
-				//play elevator closing sound
-				doorsound->Load(CloseSound.c_str());
-				doorsound->Play();
-			}
+			playsounds = true;
 			elev->PlayMessageSound(false);
 		}
 
@@ -576,6 +565,24 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	{
 		//if a different direction was specified during movement
 		door_changed = true;
+		playsounds = true;
+	}
+
+	//play door sounds
+	if (playsounds == true)
+	{
+		if (open == true)
+		{
+			//play elevator opening sound
+			doorsound->Load(OpenSound.c_str());
+			doorsound->Play();
+		}
+		else
+		{
+			//play elevator closing sound
+			doorsound->Load(CloseSound.c_str());
+			doorsound->Play();
+		}
 	}
 
 	//perform door movement and get open state of each door

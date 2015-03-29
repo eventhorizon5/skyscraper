@@ -117,7 +117,6 @@ void ScriptProcessor::Reset()
 	cache_interfloorheight_s = "";
 	cache_base = 0;
 	cache_base_s = "";
-	globals_found = false;
 }
 
 bool ScriptProcessor::Run()
@@ -292,7 +291,6 @@ bool ScriptProcessor::Run()
 			}
 			Section = 1;
 			Context = "Globals";
-			globals_found = true;
 			skyscraper->Report("Processing globals...");
 			goto Nextline;
 		}
@@ -402,24 +400,6 @@ breakpoint:
 				skyscraper->Report("Defined function " + function);
 			goto Nextline;
 		}
-
-		//exit if globals have never been defined
-		if (globals_found == false)
-		{
-			ScriptError("Globals section not found");
-			goto Error;
-		}
-
-		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
-		{
-			//end function and return to original line
-			line = FunctionStack[InFunction - 1].CallLine - 1;
-			ReplaceLineData = FunctionStack[InFunction - 1].LineData;
-			FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
-			InFunction -= 1;
-			ReplaceLine = true;
-			goto Nextline;
-		}
 		if (linecheck.substr(0, 10) == "<textures>")
 		{
 			if (Section > 0)
@@ -443,6 +423,16 @@ breakpoint:
 			Section = 0;
 			Context = "None";
 			skyscraper->Report("Finished textures");
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
+		{
+			//end function and return to original line
+			line = FunctionStack[InFunction - 1].CallLine - 1;
+			ReplaceLineData = FunctionStack[InFunction - 1].LineData;
+			FunctionStack.erase(FunctionStack.begin() + InFunction - 1);
+			InFunction -= 1;
+			ReplaceLine = true;
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 7) == "<floors")
