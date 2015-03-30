@@ -523,10 +523,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 		
 		if (manual == false)
-		{
 			playsounds = true;
-			elev->PlayMessageSound(false);
-		}
 
 		if (WhichDoors == 3)
 		{
@@ -583,6 +580,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 			doorsound->Load(CloseSound.c_str());
 			doorsound->Play();
 		}
+		elev->PlayMessageSound(false);
 	}
 
 	//perform door movement and get open state of each door
