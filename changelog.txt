@@ -1,5 +1,42 @@
 Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -------------------------
+-play elevator door open/close and message sounds on reversal
+-change to Go function in rev 3171 broke FloorHold feature; relocated code to fix
+-added more breaks and other cleanups
+-cleanups to elevator functions involving door lookups
+-prevent nudge mode from enabling if elevator doors were manually moved and stopped
+-elevator door open buttons now can be held down to hold doors and released to reset door timer
+-in DoorExists function, can't mix GetDoor and array (this was causing the DoorExists function to potentially malfunction)
+-reordered section information area in script interpreter for the other changes to be made possible
+-user variables now work in section lines such as "<Floors>", due to code reordering
+-removed unneeded fire phase 1 check in call button code
+-reordered call availability code, to properly report service and nudge modes
+-overhauled nudge mode to enable timer when the situation allows it
+-if mesh physics is enabled, use a box collider by default
+-if model physics is enabled, mesh code should not try to load collider model
+-(Bullet) position update is no longer needed in penetration recovery function, and causes issues
+-(Bullet) turn off contact normal direction fix, which inverts some polygon normals incorrectly
+-(Bullet) fixed penetration recovery by running it in the forward movement function, right after the setting of the original position, to prevent interference with stairs
+-have call availability check properly report busy if doors are held, instead of for other reason
+-elevator doors can now report their hold status
+-added more "Invalid Door" errors to nudge and sensor functions
+-reworked door sensor code to split into separate persistent enabled/disabled state, and temporary activated/deactivated state
+-changed Alarm button in elevator editor to Hold Doors
+-elevator door sensor and nudge functions now properly select door object
+-NewElevator and NewFloor functions should use GetFloor function instead of their own check, for performance
+-some functions in Shaft and Stairwell code weren't checking validity of floors
+-in Calc function, lowered precedence of subtraction operator due to order conflicts with other operators
+-cut function should flip coordinates if out of order
+-F6 key would cause a crash if current camera floor was invalid (mainly in empty buildings)
+-elevator sensor status is now only shown after startup or in verbose mode
+-car idle, motor idle and music sounds now load sounds on first run if not loaded yet, instead of in CreateElevator function
+-added motor idle sound code, which was started in rev 1603 but never finished
+-don't try to create wall/floor sides and top if thickness is 0
+-cleaned up wall/floor function return codes and some legacy stuff
+-added checks to AddWallMain and AddFloorMain functions to print an error if coordinates are invalid
+-added a zero normal check to the texture mapper
+-planar mapper should be computing normal based on full polygon, not just first three vertices.  This fixes some texture mapping errors
+-reverted behavior change to ShaftShowOutside command from revision 3194
 -make sure that floors grouped with the current camera floor are not switched off as part of the shaft and stairwell ShowFloors code
 -(C++) SplitData function now verifies length of string properly
 -reverted and remade the fix to prevent crashes if no parameters are specified for certain commands
