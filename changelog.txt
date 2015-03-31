@@ -68,6 +68,8 @@ Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -(Triton Center) Hotel wall positioning fixes
 -for call buttons, if all associated elevators are in a service mode, don't continue to search for more elevators; reset the call button instead
 -fixed last report line from elevator's DumpQueues and DumpServicedFloors functions
+-fixed an issue where floors listed in the ShowFloors or ShowOutside lists would be switched off when stopping and continuing at a floor
+-fixed a crash that would occur if the Move button was pressed in the Object Manager if no selection was made
 
 Version 1.9 (2.0 Alpha 9)
 -------------------------
