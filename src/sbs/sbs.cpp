@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Core
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -41,7 +41,7 @@ SBS *sbs; //self reference
 SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem)
 {
 	sbs = this;
-	version = "0.10.0." + std::string(SVN_REVSTR);
+	version = "0.9.1." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
 	//set up SBS object
@@ -1672,26 +1672,26 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	return stairs.object->object;
 }
 
-Object* SBS::NewElevator(int number)
+bool SBS::NewElevator(int number)
 {
 	//create a new elevator object
 
 	if (GetElevator(number))
-		return 0;
+		return false;
 
 	ElevatorMap elev;
 	elev.number = number;
 	elev.object = new Elevator(number);
 	ElevatorArray.push_back(elev);
-	return elev.object->object;
+	return true;
 }
 
-Object* SBS::NewFloor(int number)
+bool SBS::NewFloor(int number)
 {
 	//create a new floor object
 
 	if (GetFloor(number))
-		return 0;
+		return false;
 
 	FloorMap floor;
 	floor.number = number;
@@ -1702,7 +1702,7 @@ Object* SBS::NewFloor(int number)
 		Basements++;
 	else
 		Floors++;
-	return floor.object->object;
+	return true;
 }
 
 int SBS::Elevators()

@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 10 
+Skyscraper 2.0 Alpha 9 - Update 1
 Copyright (C)2003-2015 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
@@ -54,7 +54,7 @@ files.
 
 3. Release Notes
 
-This release is the tenth development release of the 2.0 series (which is a complete rewrite of
+This release is an update to the ninth development release of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
 This software utilizes the OGRE rendering engine library (version 1.8 or later), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 2.8 or later), and the Caleum sky system addon for OGRE.

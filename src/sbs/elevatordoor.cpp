@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Door Class
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -1157,6 +1157,10 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 
 	//exit if shaft's ShowFullShaft is set
 	if (elev->GetShaft()->ShowFullShaft == true && value == false)
+		return;
+
+	//leave top and bottom on
+	if ((floor == elev->GetShaft()->startfloor || floor == elev->GetShaft()->endfloor) && value == false)
 		return;
 
 	//exit if elevator doesn't service the requested floor

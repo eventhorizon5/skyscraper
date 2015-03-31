@@ -1,8 +1,3 @@
-Version 1.10 (2.0 Alpha 10)
--------------------------
--elevator and floor creation should return created object
--don't leave top and bottom levels of shafts on - this doesn't appear to be needed anymore, and should increase rendering efficiency
-
 Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -------------------------
 -play elevator door open/close and message sounds on reversal

@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Core
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -218,8 +218,8 @@ public:
 	Object* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	std::string GetTextureMaterial(const char *name, bool &result, bool report = true, const char *polygon_name = 0);
-	Object* NewElevator(int number);
-	Object* NewFloor(int number);
+	bool NewElevator(int number);
+	bool NewFloor(int number);
 	int Elevators();
 	int TotalFloors(); //all floors including basements
 	int Shafts();
