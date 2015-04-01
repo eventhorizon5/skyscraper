@@ -3393,7 +3393,7 @@ void Elevator::CloseDoorsEmergency(int number, int whichdoors, int floor, bool h
 	CloseDoors(number, whichdoors, floor, true, hold);
 }
 
-bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, bool hold)
+bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, bool hold, bool buttonhold)
 {
 	//Opens elevator doors
 
@@ -3401,6 +3401,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	//Slowly opens the elevator doors no matter where elevator is,
 	//and if lined up with shaft doors, then opens the shaft doors also.
 	//if hold is true, sets 'hold' state requiring button to be held to keep doors opening
+	//if buttonhold is true, allows open button to be held down to hold doors
 
 	//WhichDoors is the doors to move:
 	//1 = both shaft and elevator doors
@@ -3420,6 +3421,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 	}
 
+	bool mouse_state = sbs->camera->MouseDown;
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -3428,7 +3430,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	}
 	if (doorhold_direction == 0)
 	{
-		if (AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
+		if (buttonhold == true && mouse_state == true && AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
 		{
 			doorhold_direction = 2;
 
@@ -3455,7 +3457,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 				ReportError("Invalid door " + ToString2(i));
 		}
 	}
-	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
+	else if (doorhold_direction == 1 && mouse_state == false)
 	{
 		//require button to be held down to open doors
 
@@ -3497,8 +3499,6 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	else if (doorhold_direction == 2)
 	{
 		//hold doors while button is held
-
-		bool mouse_state = sbs->camera->MouseDown;
 
 		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
 		{

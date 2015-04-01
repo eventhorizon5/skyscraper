@@ -430,7 +430,7 @@ bool Action::Run(Object *parent)
 			int number = 0;
 			if (command_name.length() > 6)
 				number = atoi(command_name.substr(6, command_name.length() - 6).c_str());
-			elevator->OpenDoors(number);
+			elevator->OpenDoors(number, 1, 0, false, false, false);
 			elevator->HoldDoors(number, true);
 			return true;
 		}
