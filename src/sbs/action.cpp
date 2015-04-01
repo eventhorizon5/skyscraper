@@ -111,6 +111,20 @@ bool Action::Run(Object *parent)
 	//(floor number)
 	//Open = Open Doors
 	//Close = Close Doors
+	//OpenInt
+	//CloseInt
+	//OpenExt
+	//CloseExt
+	//OpenManual
+	//CloseManual
+	//OpenIntManual
+	//CloseIntManual
+	//OpenExtManual
+	//CloseExtManual
+	//OpenShaftDoor
+	//CloseShaftDoor
+	//OpenShaftDoorManual
+	//CloseShaftDoorManual
 	//Cancel = Call Cancel
 	//Run
 	//Stop
@@ -144,6 +158,15 @@ bool Action::Run(Object *parent)
 	//GoOn
 	//GoOff
 	//Return
+	//Up
+	//Down
+	//InterlocksOn
+	//InterlocksOff
+	//Sensor
+	//Reset
+	//SensorOn
+	//SensorOff
+	//SensorReset
 
 	Elevator *elevator = 0;
 	Floor *floor = 0;
