@@ -303,6 +303,14 @@ bool Action::Run(Object *caller, Object *parent)
 				elevator->CloseDoors(number);
 				return true;
 			}
+			if (StartsWith(command_name, "stopdoors", false) == true && elevator->Direction == 0)
+			{
+				int number = 0;
+				if (command_name.length() > 9)
+					number = atoi(command_name.substr(9, command_name.length() - 9).c_str());
+				elevator->StopDoors(number);
+				return true;
+			}
 		}
 		if (command_name == "cancel" && elevator->FireServicePhase2 == 1)
 			return elevator->CallCancel();
