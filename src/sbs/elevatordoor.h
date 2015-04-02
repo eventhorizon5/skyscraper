@@ -172,6 +172,7 @@ public:
 	bool GetHoldStatus();
 	void ResetNudgeTimer(bool start = true);
 	bool AllowNudgeMode();
+	std::string GetNumberText();
 
 private:
 

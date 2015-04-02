@@ -204,21 +204,17 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	std::string doornumber;
-	if (elev->NumDoors > 1)
-		doornumber = " " + ToString2(Number);
-
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		elev->ReportError("cannot open doors" + doornumber + "; doors manually stopped");
+		elev->ReportError("cannot open doors" + GetNumberText() + "; doors manually stopped");
 		return;
 	}
 
 	//exit if in nudge mode
 	if (GetNudgeStatus() == true)
 	{
-		elev->ReportError("cannot open doors" + doornumber + "; nudge mode enabled");
+		elev->ReportError("cannot open doors" + GetNumberText() + "; nudge mode enabled");
 		return;
 	}
 
@@ -229,14 +225,14 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	//don't open doors if emergency stop is enabled
 	if (elev->OnFloor == false && whichdoors != 3 && manual == false && elev->AutoDoors == true)
 	{
-		elev->ReportError("cannot open doors" + doornumber + "; emergency stop enabled");
+		elev->ReportError("cannot open doors" + GetNumberText() + "; emergency stop enabled");
 		return;
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual open is requested
 	if (DoorIsRunning == true && (AreDoorsMoving(2) == true || (AreDoorsMoving(1) == true && manual == true)))
 	{
-		elev->ReportError("doors" + doornumber + " in use");
+		elev->ReportError("doors" + GetNumberText() + " in use");
 		return;
 	}
 
@@ -246,11 +242,11 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//reset timer if not in a service mode
 		if (elev->InServiceMode() == false)
 		{
-			elev->Report("doors" + doornumber + " already open; resetting timer");
+			elev->Report("doors" + GetNumberText() + " already open; resetting timer");
 			Reset();
 		}
 		else
-			elev->Report("doors" + doornumber + " already open");
+			elev->Report("doors" + GetNumberText() + " already open");
 		return;
 	}
 
@@ -264,23 +260,23 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			elev->ReportError("Doors" + doornumber + ": invalid shaft doors");
+			elev->ReportError("Doors" + GetNumberText() + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == true)
 		{
-			elev->Report("shaft doors" + doornumber + " already open on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("shaft doors" + GetNumberText() + " already open on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			elev->Report("opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("opening shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			elev->Report("manually opening shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("manually opening shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		elev->Report("opening doors" + doornumber);
+		elev->Report("opening doors" + GetNumberText());
 	else
-		elev->Report("manually opening doors" + doornumber);
+		elev->Report("manually opening doors" + GetNumberText());
 
 	if (manual == false)
 		OpenDoor = 1;
@@ -305,7 +301,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		elev->ReportError("can't open doors" + doornumber + " - no shaft doors on " + ToString2(floor));
+		elev->ReportError("can't open doors" + GetNumberText() + " - no shaft doors on " + ToString2(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -324,42 +320,38 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//2 = only elevator doors
 	//3 = only shaft doors
 
-	std::string doornumber;
-	if (elev->NumDoors > 1)
-		doornumber = " " + ToString2(Number);
-
 	//exit if trying to open doors while stopped
 	if (manual == false && doors_stopped == true)
 	{
-		elev->ReportError("cannot close doors" + doornumber + "; doors manually stopped");
+		elev->ReportError("cannot close doors" + GetNumberText() + "; doors manually stopped");
 		return;
 	}
 
 	//do not close doors while fire service mode 1 is in recall mode and the elevator is waiting at the parking floor
 	if (manual == false && elev->FireServicePhase1 == 1 && elev->FireServicePhase2 == 0 && elev->WaitForDoors == false && elev->GetFloor() == elev->ParkingFloor)
 	{
-		elev->ReportError("cannot close doors" + doornumber + " while Fire Service Phase 1 is in recall mode");
+		elev->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 1 is in recall mode");
 		return;
 	}
 
 	//do not close doors while fire service mode 2 is set to hold
 	if (manual == false && elev->FireServicePhase2 == 2)
 	{
-		elev->ReportError("cannot close doors" + doornumber + " while Fire Service Phase 2 is set to hold");
+		elev->ReportError("cannot close doors" + GetNumberText() + " while Fire Service Phase 2 is set to hold");
 		return;
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual close is requested
 	if (DoorIsRunning == true && (AreDoorsMoving(2) == true || (AreDoorsMoving(1) == true && manual == true)))
 	{
-		elev->ReportError("doors" + doornumber + " in use");
+		elev->ReportError("doors" + GetNumberText() + " in use");
 		return;
 	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
 	if (AreDoorsMoving() == true && manual == false && elev->FireServicePhase2 == 0)
 	{
-		elev->Report("will close doors" + doornumber + " in quick-close mode");
+		elev->Report("will close doors" + GetNumberText() + " in quick-close mode");
 		quick_close = true;
 		return;
 	}
@@ -367,7 +359,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	//check if elevator doors are already closed
 	if (AreDoorsOpen() == false && whichdoors != 3 && AreDoorsMoving() == false && doors_stopped == false)
 	{
-		elev->Report("doors" + doornumber + " already closed");
+		elev->Report("doors" + GetNumberText() + " already closed");
 		return;
 	}
 
@@ -381,23 +373,23 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		//first make sure the shaft doors are valid
 		if (ShaftDoorsExist(floor) == false)
 		{
-			elev->ReportError("Doors" + doornumber + ": invalid shaft doors");
+			elev->ReportError("Doors" + GetNumberText() + ": invalid shaft doors");
 			return;
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			elev->ReportError("shaft doors" + doornumber + " already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->ReportError("shaft doors" + GetNumberText() + " already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			elev->Report("closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("closing shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			elev->Report("manually closing shaft doors" + doornumber + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("manually closing shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
-		elev->Report("closing doors" + doornumber);
+		elev->Report("closing doors" + GetNumberText());
 	else
-		elev->Report("manually closing doors" + doornumber);
+		elev->Report("manually closing doors" + GetNumberText());
 
 	if (manual == false)
 		OpenDoor = -1;
@@ -415,7 +407,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		elev->ReportError("can't close doors" + doornumber + " - no shaft doors on " + ToString2(floor));
+		elev->ReportError("can't close doors" + GetNumberText() + " - no shaft doors on " + ToString2(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -435,16 +427,12 @@ void ElevatorDoor::StopDoors()
 	//stops doors that are currently moving; can only be used for manual/emergency movements
 	//this basically just resets the door internals
 
-	std::string doornumber;
-	if (elev->NumDoors > 1)
-		doornumber = " " + ToString2(Number);
-
 	if (AreDoorsMoving(2) == true)
 	{
 		if (WhichDoors == 3)
-			elev->Report("stopping shaft doors" + doornumber + " on floor " + ToString2(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
+			elev->Report("stopping shaft doors" + GetNumberText() + " on floor " + ToString2(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
 		else
-			elev->Report("stopping doors" + doornumber);
+			elev->Report("stopping doors" + GetNumberText());
 
 		if (WhichDoors == 1 || WhichDoors == 2)
 			Doors->StopDoors();
@@ -464,9 +452,9 @@ void ElevatorDoor::StopDoors()
 		ResetNudgeTimer(false);
 	}
 	else if (AreDoorsMoving() == true)
-		elev->Report("can only stop doors" + doornumber + " in manual/emergency mode");
+		elev->Report("can only stop doors" + GetNumberText() + " in manual/emergency mode");
 	else
-		elev->Report("cannot stop doors" + doornumber + "; no doors moving");
+		elev->Report("cannot stop doors" + GetNumberText() + "; no doors moving");
 }
 
 void ElevatorDoor::MoveDoors(bool open, bool manual)
@@ -661,13 +649,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (IsSensorBlocked() == false)
 			Reset();
 		else
-		{
-			std::string doornumber;
-			if (elev->NumDoors > 1)
-				doornumber = " " + ToString2(Number);
-
-			elev->Report("not resetting timer for door" + doornumber + " due to blocked sensor");
-		}
+			elev->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
 	}
 
 	//play direction message sound
@@ -1303,14 +1285,10 @@ void ElevatorDoor::Reset(bool sensor)
 
 	if (sbs->Verbose == true)
 	{
-		std::string doornumber;
-		if (elev->NumDoors > 1)
-			doornumber = " " + ToString2(Number);
-
 		if (sensor == true)
-			elev->Report("sensor resetting doors" + doornumber);
+			elev->Report("sensor resetting doors" + GetNumberText());
 		else
-			elev->Report("resetting doors" + doornumber);
+			elev->Report("resetting doors" + GetNumberText());
 	}
 
 	if (quick_close == false)
@@ -2026,18 +2004,14 @@ void ElevatorDoor::Hold(bool sensor)
 	if (timer->IsRunning() == false)
 		return;
 
-	std::string doornumber;
-	if (elev->NumDoors > 1)
-		doornumber = " " + ToString2(Number);
-
 	//exit if nudge mode is active
 	if (GetNudgeStatus() == true)
 		return;
 
 	if (sensor == true)
-		elev->Report("sensor holding doors" + doornumber);
+		elev->Report("sensor holding doors" + GetNumberText());
 	else
-		elev->Report("holding doors" + doornumber);
+		elev->Report("holding doors" + GetNumberText());
 
 	timer->Stop();
 
@@ -2049,13 +2023,9 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 {
 	//enable or disable nudge mode
 
-	std::string doornumber;
-	if (elev->NumDoors > 1)
-		doornumber = " " + ToString2(Number);
-
 	if (value == true && AllowNudgeMode() == true)
 	{
-		elev->Report("Doors" + doornumber + ": nudge mode activated");
+		elev->Report("Doors" + GetNumberText() + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)
 			nudgesound->Load(NudgeSound.c_str());
@@ -2066,7 +2036,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 	}
 	else if (nudge_enabled == true)
 	{
-		elev->Report("Doors" + doornumber + ": nudge mode disabled");
+		elev->Report("Doors" + GetNumberText() + ": nudge mode disabled");
 		nudge_enabled = false;
 		nudgesound->Stop();
 	}
@@ -2142,19 +2112,15 @@ void ElevatorDoor::EnableSensor(bool value, bool persistent)
 	if (elev->AutoDoors == false)
 		return;
 
-	std::string doornumber;
-	if (elev->NumDoors > 1)
-		doornumber = " " + ToString2(Number);
-
 	//if not temporary, change persistent status
 	if (persistent == true)
 	{
 		if (sbs->IsRunning == true || sbs->Verbose)
 		{
 			if (value == true)
-				elev->Report("Doors" + doornumber + ": enabling sensor");
+				elev->Report("Doors" + GetNumberText() + ": enabling sensor");
 			else
-				elev->Report("Doors" + doornumber + ": disabling sensor");
+				elev->Report("Doors" + GetNumberText() + ": disabling sensor");
 		}
 
 		sensor_status = value;
@@ -2163,9 +2129,9 @@ void ElevatorDoor::EnableSensor(bool value, bool persistent)
 	if (sbs->IsRunning == true || sbs->Verbose)
 	{
 		if (value == true)
-			elev->Report("Doors" + doornumber + ": activating sensor");
+			elev->Report("Doors" + GetNumberText() + ": activating sensor");
 		else
-			elev->Report("Doors" + doornumber + ": deactivating sensor");
+			elev->Report("Doors" + GetNumberText() + ": deactivating sensor");
 	}
 
 	sensor_enabled = value;
@@ -2239,4 +2205,15 @@ bool ElevatorDoor::AllowNudgeMode()
 		return true;
 	}
 	return false;
+}
+
+std::string ElevatorDoor::GetNumberText()
+{
+	//return a text string representing the door number, or blank if it's the only door
+
+	std::string doornumber;
+	if (elev->NumDoors > 1)
+		doornumber = " " + ToString2(Number);
+
+	return doornumber;
 }
