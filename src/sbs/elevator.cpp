@@ -1512,7 +1512,7 @@ void Elevator::MoveElevatorToFloor()
 		}
 
 		//exit if doors are not fully closed while interlocks enabled
-		if (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false))
+		if (Interlocks == true && (AreDoorsOpen() == true || AreShaftDoorsClosed() == false || DoorsStopped() == true))
 		{
 			ReportError("Doors must be closed before moving when interlocks are enabled");
 			MoveElevator = false;
@@ -3828,6 +3828,8 @@ void Elevator::ResetDoors(int number, bool sensor)
 
 bool Elevator::DoorsStopped(int number)
 {
+	//return true if doors are stopped
+
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -3838,7 +3840,10 @@ bool Elevator::DoorsStopped(int number)
 	{
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
-			return door->DoorsStopped();
+		{
+			if (door->DoorsStopped() == true)
+				return true;
+		}
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
