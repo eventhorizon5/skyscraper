@@ -653,12 +653,21 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	doors_stopped = false;
 
 	//turn on autoclose timer
-	if (manual == false && IsSensorBlocked() == false &&
+	if (manual == false &&
 		(elev->InServiceMode() == false || elev->WaitForDoors == true) &&
 		(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
 		(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
 	{
-		Reset();
+		if (IsSensorBlocked() == false)
+			Reset();
+		else
+		{
+			std::string doornumber;
+			if (elev->NumDoors > 1)
+				doornumber = " " + ToString2(Number);
+
+			elev->Report("not resetting timer for door" + doornumber + " due to blocked sensor");
+		}
 	}
 
 	//play direction message sound
