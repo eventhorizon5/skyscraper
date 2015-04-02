@@ -1174,7 +1174,13 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 		return ReportError("Invalid coordinates for wall '" + name2 + "'");
 	}
 
+	bool x_thickness = false, z_thickness = false;
 	std::string NewName;
+
+	if (x1 != x2)
+		x_thickness = true;
+	if (z1 != z2)
+		z_thickness = true;
 
 	//swap values if the first is greater than the second
 	if (x1 > x2)
@@ -1197,53 +1203,62 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 		NewName = name;
 		NewName.append(":inside");
 
-		wallobject->AddQuad( //front
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x1, voffset, z1),
-			Ogre::Vector3(x2, voffset, z1),
-			Ogre::Vector3(x2, voffset + height_in, z1),
-			Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
-		wallobject->AddQuad( //right
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x2, voffset, z1),
-			Ogre::Vector3(x2, voffset, z2),
-			Ogre::Vector3(x2, voffset + height_in, z2),
-			Ogre::Vector3(x2, voffset + height_in, z1), tw, th, autosize);
-		wallobject->AddQuad( //back
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x2, voffset, z2),
-			Ogre::Vector3(x1, voffset, z2),
-			Ogre::Vector3(x1, voffset + height_in, z2),
-			Ogre::Vector3(x2, voffset + height_in, z2), tw, th, autosize);
-		wallobject->AddQuad( //left
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x1, voffset, z2),
-			Ogre::Vector3(x1, voffset, z1),
-			Ogre::Vector3(x1, voffset + height_in, z1),
-			Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
-		if (bottom == true)
+		if (x_thickness == true)
 		{
-			wallobject->AddQuad( //bottom
-				NewName.c_str(),
-				texture,
-				Ogre::Vector3(x1, voffset, z2),
-				Ogre::Vector3(x2, voffset, z2),
-				Ogre::Vector3(x2, voffset, z1),
-				Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
+			wallobject->AddQuad( //front
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x1, voffset, z1),
+					Ogre::Vector3(x2, voffset, z1),
+					Ogre::Vector3(x2, voffset + height_in, z1),
+					Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
+			wallobject->AddQuad( //back
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x2, voffset, z2),
+					Ogre::Vector3(x1, voffset, z2),
+					Ogre::Vector3(x1, voffset + height_in, z2),
+					Ogre::Vector3(x2, voffset + height_in, z2), tw, th, autosize);
 		}
-		if (top == true)
+		if (z_thickness == true)
 		{
-			wallobject->AddQuad( //top
-				NewName.c_str(),
-				texture,
-				Ogre::Vector3(x1, voffset + height_in, z1),
-				Ogre::Vector3(x2, voffset + height_in, z1),
-				Ogre::Vector3(x2, voffset + height_in, z1),
-				Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
+			wallobject->AddQuad( //right
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x2, voffset, z1),
+					Ogre::Vector3(x2, voffset, z2),
+					Ogre::Vector3(x2, voffset + height_in, z2),
+					Ogre::Vector3(x2, voffset + height_in, z1), tw, th, autosize);
+			wallobject->AddQuad( //left
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x1, voffset, z2),
+					Ogre::Vector3(x1, voffset, z1),
+					Ogre::Vector3(x1, voffset + height_in, z1),
+					Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
+		}
+		if (x_thickness == true && z_thickness == true)
+		{
+			if (bottom == true)
+			{
+				wallobject->AddQuad( //bottom
+						NewName.c_str(),
+						texture,
+						Ogre::Vector3(x1, voffset, z2),
+						Ogre::Vector3(x2, voffset, z2),
+						Ogre::Vector3(x2, voffset, z1),
+						Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
+			}
+			if (top == true)
+			{
+				wallobject->AddQuad( //top
+						NewName.c_str(),
+						texture,
+						Ogre::Vector3(x1, voffset + height_in, z1),
+						Ogre::Vector3(x2, voffset + height_in, z1),
+						Ogre::Vector3(x2, voffset + height_in, z1),
+						Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
+			}
 		}
 	}
 
@@ -1252,53 +1267,62 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 		NewName = name;
 		NewName.append(":outside");
 
-		wallobject->AddQuad( //front
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x1, voffset + height_in, z1),
-			Ogre::Vector3(x2, voffset + height_in, z1),
-			Ogre::Vector3(x2, voffset, z1),
-			Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
-		wallobject->AddQuad( //right
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x2, voffset + height_in, z1),
-			Ogre::Vector3(x2, voffset + height_in, z2),
-			Ogre::Vector3(x2, voffset, z2),
-			Ogre::Vector3(x2, voffset, z1), tw, th, autosize);
-		wallobject->AddQuad( //back
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x2, voffset + height_in, z2),
-			Ogre::Vector3(x1, voffset + height_in, z2),
-			Ogre::Vector3(x1, voffset, z2),
-			Ogre::Vector3(x2, voffset, z2), tw, th, autosize);
-		wallobject->AddQuad( //left
-			NewName.c_str(),
-			texture,
-			Ogre::Vector3(x1, voffset + height_in, z2),
-			Ogre::Vector3(x1, voffset + height_in, z1),
-			Ogre::Vector3(x1, voffset, z1),
-			Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
-		if (bottom == true)
+		if (x_thickness == true)
 		{
-			wallobject->AddQuad( //bottom
-				NewName.c_str(),
-				texture,
-				Ogre::Vector3(x1, voffset, z1),
-				Ogre::Vector3(x2, voffset, z1),
-				Ogre::Vector3(x2, voffset, z2),
-				Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
+			wallobject->AddQuad( //front
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x1, voffset + height_in, z1),
+					Ogre::Vector3(x2, voffset + height_in, z1),
+					Ogre::Vector3(x2, voffset, z1),
+					Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
+			wallobject->AddQuad( //back
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x2, voffset + height_in, z2),
+					Ogre::Vector3(x1, voffset + height_in, z2),
+					Ogre::Vector3(x1, voffset, z2),
+					Ogre::Vector3(x2, voffset, z2), tw, th, autosize);
 		}
-		if (top == true)
+		if (z_thickness == true)
 		{
-			wallobject->AddQuad( //top
-				NewName.c_str(),
-				texture,
-				Ogre::Vector3(x1, voffset + height_in, z2),
-				Ogre::Vector3(x2, voffset + height_in, z2),
-				Ogre::Vector3(x2, voffset + height_in, z1),
-				Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
+			wallobject->AddQuad( //right
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x2, voffset + height_in, z1),
+					Ogre::Vector3(x2, voffset + height_in, z2),
+					Ogre::Vector3(x2, voffset, z2),
+					Ogre::Vector3(x2, voffset, z1), tw, th, autosize);
+			wallobject->AddQuad( //left
+					NewName.c_str(),
+					texture,
+					Ogre::Vector3(x1, voffset + height_in, z2),
+					Ogre::Vector3(x1, voffset + height_in, z1),
+					Ogre::Vector3(x1, voffset, z1),
+					Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
+		}
+		if (x_thickness == true && z_thickness == true)
+		{
+			if (bottom == true)
+			{
+				wallobject->AddQuad( //bottom
+						NewName.c_str(),
+						texture,
+						Ogre::Vector3(x1, voffset, z1),
+						Ogre::Vector3(x2, voffset, z1),
+						Ogre::Vector3(x2, voffset, z2),
+						Ogre::Vector3(x1, voffset, z2), tw, th, autosize);
+			}
+			if (top == true)
+			{
+				wallobject->AddQuad( //top
+						NewName.c_str(),
+						texture,
+						Ogre::Vector3(x1, voffset + height_in, z2),
+						Ogre::Vector3(x2, voffset + height_in, z2),
+						Ogre::Vector3(x2, voffset + height_in, z1),
+						Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
+			}
 		}
 	}
 	return true;
@@ -4175,7 +4199,7 @@ bool SBS::RunAction(std::string name)
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction();
+			result2 = actionlist[i]->DoAction(object);
 
 		if (result2 == false)
 			result = false;
@@ -4189,7 +4213,7 @@ bool SBS::RunAction(int index)
 
 	Action *action = GetAction(index);
 	if (action)
-		return action->DoAction();
+		return action->DoAction(object);
 	return false;
 }
 

@@ -155,6 +155,7 @@ public:
 	float EmergencyStopSpeed; //emergency stop deceleration multiplier
 	bool AutoAdjustSound; //auto-adjust stopping sounds
 	bool SkipFloorSound; //skip playing floor sound, for use in FinishMove()
+	bool ControlPressActive; //true if a control associated with this elevator has just been pressed
 
 	MeshObject* ElevatorMesh; //elevator mesh object
 

@@ -59,13 +59,14 @@ public:
 	int FindActionPosition(const char *name);
 	bool DoAction();
 	bool Check();
+	bool IsInside();
 
 private:
 	Ogre::Vector3 area_min;
 	Ogre::Vector3 area_max;
 	Ogre::Vector3 pos;
 	int current_position; //current trigger position
-	bool IsInside;
+	bool is_inside;
 	std::vector<std::string> Actions; //trigger actions
 
 	Sound *sound; //sound object

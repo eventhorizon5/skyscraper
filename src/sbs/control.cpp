@@ -231,7 +231,7 @@ bool Control::NextSelectPosition(bool check_state)
 
 	int position = GetNextSelectPosition();
 
-	if (check_state == true)
+	if (check_state == false)
 		return SetSelectPosition(position);
 	else
 		return ChangeSelectPosition(position);
@@ -253,7 +253,7 @@ bool Control::PreviousSelectPosition(bool check_state)
 
 	int position = GetPreviousSelectPosition();
 
-	if (check_state == true)
+	if (check_state == false)
 		return SetSelectPosition(position);
 	else
 		return ChangeSelectPosition(position);
@@ -377,7 +377,7 @@ bool Control::DoAction()
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction();
+			result2 = actionlist[i]->DoAction(object);
 
 		if (result2 == true)
 			result = true;

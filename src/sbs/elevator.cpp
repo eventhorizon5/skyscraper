@@ -200,6 +200,7 @@ Elevator::Elevator(int number)
 	SkipFloorSound = false;
 	DirMessageSound = false;
 	DoorMessageSound = false;
+	ControlPressActive = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -1178,6 +1179,8 @@ void Elevator::MonitorLoop()
 	//Monitors elevator and starts actions if needed
 
 	SBS_PROFILE("Elevator::MonitorLoop");
+
+	ControlPressActive = false;
 
 	//make sure height value is set
 	if (HeightSet == false)
@@ -3420,6 +3423,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 	}
 
+	bool mouse_state = sbs->camera->MouseDown;
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -3428,7 +3432,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	}
 	if (doorhold_direction == 0)
 	{
-		if (AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
+		if (ControlPressActive == true && mouse_state == true && AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
 		{
 			doorhold_direction = 2;
 
@@ -3455,7 +3459,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 				ReportError("Invalid door " + ToString2(i));
 		}
 	}
-	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
+	else if (doorhold_direction == 1 && mouse_state == false)
 	{
 		//require button to be held down to open doors
 
@@ -3497,8 +3501,6 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	else if (doorhold_direction == 2)
 	{
 		//hold doors while button is held
-
-		bool mouse_state = sbs->camera->MouseDown;
 
 		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
 		{

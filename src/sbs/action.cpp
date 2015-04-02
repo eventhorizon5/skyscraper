@@ -78,7 +78,7 @@ const char *Action::GetCommandName()
 	return command_name.c_str();
 }
 
-bool Action::DoAction()
+bool Action::DoAction(Object *caller)
 {
 	//run action on all registered parents
 	//returns true if at least one action succeeded
@@ -90,14 +90,14 @@ bool Action::DoAction()
 		if (!parent_objects[i])
 			continue;
 
-		bool result2 = Run(parent_objects[i]);
+		bool result2 = Run(caller, parent_objects[i]);
 		if (result2 == true)
 			result = true;
 	}
 	return result;
 }
 
-bool Action::Run(Object *parent)
+bool Action::Run(Object *caller, Object *parent)
 {
 	//Supported action names:
 
@@ -111,6 +111,20 @@ bool Action::Run(Object *parent)
 	//(floor number)
 	//Open = Open Doors
 	//Close = Close Doors
+	//OpenInt
+	//CloseInt
+	//OpenExt
+	//CloseExt
+	//OpenManual
+	//CloseManual
+	//OpenIntManual
+	//CloseIntManual
+	//OpenExtManual
+	//CloseExtManual
+	//OpenShaftDoor
+	//CloseShaftDoor
+	//OpenShaftDoorManual
+	//CloseShaftDoorManual
 	//Cancel = Call Cancel
 	//Run
 	//Stop
@@ -144,11 +158,23 @@ bool Action::Run(Object *parent)
 	//GoOn
 	//GoOff
 	//Return
+	//Up
+	//Down
+	//InterlocksOn
+	//InterlocksOff
+	//Sensor
+	//Reset
+	//SensorOn
+	//SensorOff
+	//SensorReset
 
 	Elevator *elevator = 0;
 	Floor *floor = 0;
 	Shaft *shaft = 0;
 	Stairs *stairs = 0;
+
+	std::string caller_name = caller->GetName();
+	std::string caller_type = caller->GetType();
 
 	std::string parent_name = parent->GetName();
 	std::string parent_type = parent->GetType();
@@ -177,6 +203,10 @@ bool Action::Run(Object *parent)
 
 		//get first callbutton on recall floor
 		CallButton *callbutton = elevator->GetPrimaryCallButton();
+
+		//if called from a control and mouse button is held down, notify elevator
+		if (caller_type == "Control" && sbs->camera->MouseDown == true)
+			elevator->ControlPressActive = true;
 
 		if (command_name == "off")
 			return true;

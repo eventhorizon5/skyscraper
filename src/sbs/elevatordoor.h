@@ -113,7 +113,7 @@ public:
 	std::string DownChimeSound; //elevator down chime sound
 	std::string NudgeSound; //nudge mode sound
 	std::string SensorSound; //door sensor sound
-	int OpenDoor; //1=open doors, -1=close doors
+	int OpenDoor; //1=open doors, -1=close doors, 2=open manual, -2=close manual
 	float ShaftDoorThickness; //thickness of shaft doors (used with AddShaftDoor command) - deprecated
 	Ogre::Vector3 ShaftDoorOrigin; //shaft door origin (deprecated)
 	float ManualSpeed; //manual speed multiplier
@@ -145,7 +145,6 @@ public:
 	Ogre::Vector3 GetPosition();
 	void Enabled(bool value);
 	bool IsEnabled();
-	bool GetDoorsOpen();
 	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
 	bool ShaftDoorsExist(int floor);
 	int GetWhichDoors();
@@ -166,12 +165,14 @@ public:
 	float GetShaftDoorAltitude(int floor);
 	void CheckSensor();
 	void CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
-	bool AreDoorsMoving();
+	bool AreDoorsMoving(int doors = 0);
 	void EnableSensor(bool value, bool persistent = true);
 	bool GetSensorStatus(bool persistent = true);
+	bool IsSensorBlocked();
 	bool GetHoldStatus();
 	void ResetNudgeTimer(bool start = true);
 	bool AllowNudgeMode();
+	std::string GetNumberText();
 
 private:
 
