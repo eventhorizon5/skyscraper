@@ -264,7 +264,7 @@ bool Trigger::DoAction()
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction();
+			result2 = actionlist[i]->DoAction(object);
 
 		if (result2 == true)
 			result = true;

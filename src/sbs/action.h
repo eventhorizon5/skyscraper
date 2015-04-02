@@ -33,7 +33,7 @@ public:
 	Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
 	Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command);
 	~Action();
-	bool DoAction();
+	bool DoAction(Object *caller);
 	const char *GetName();
 	const char *GetCommandName();
 	const Object *GetParent(int number);
@@ -47,7 +47,7 @@ public:
 
 private:
 
-	bool Run(Object *parent);
+	bool Run(Object *caller, Object *parent);
 
 	std::string command_name;
 	std::vector<std::string> command_parameters;

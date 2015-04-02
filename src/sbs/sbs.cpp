@@ -4199,7 +4199,7 @@ bool SBS::RunAction(std::string name)
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction();
+			result2 = actionlist[i]->DoAction(object);
 
 		if (result2 == false)
 			result = false;
@@ -4213,7 +4213,7 @@ bool SBS::RunAction(int index)
 
 	Action *action = GetAction(index);
 	if (action)
-		return action->DoAction();
+		return action->DoAction(object);
 	return false;
 }
 

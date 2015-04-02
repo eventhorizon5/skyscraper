@@ -200,6 +200,7 @@ Elevator::Elevator(int number)
 	SkipFloorSound = false;
 	DirMessageSound = false;
 	DoorMessageSound = false;
+	ControlPressActive = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -1178,6 +1179,8 @@ void Elevator::MonitorLoop()
 	//Monitors elevator and starts actions if needed
 
 	SBS_PROFILE("Elevator::MonitorLoop");
+
+	ControlPressActive = false;
 
 	//make sure height value is set
 	if (HeightSet == false)
@@ -3429,7 +3432,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	}
 	if (doorhold_direction == 0)
 	{
-		if (mouse_state == true && AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
+		if (ControlPressActive == true && mouse_state == true && AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
 		{
 			doorhold_direction = 2;
 
