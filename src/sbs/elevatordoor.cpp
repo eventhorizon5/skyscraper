@@ -241,7 +241,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//check if elevator doors are already open
-	if (Doors->Open == true && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
+	if (AreDoorsOpen() == true && whichdoors != 3 && AreDoorsMoving() == false && doors_stopped == false)
 	{
 		//reset timer if not in a service mode
 		if (elev->InServiceMode() == false)
@@ -357,7 +357,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//if called while doors are opening, set quick_close (causes door timer to trigger faster)
-	if (OpenDoor != 0 && manual == false && elev->FireServicePhase2 == 0)
+	if (AreDoorsMoving() == true && manual == false && elev->FireServicePhase2 == 0)
 	{
 		elev->Report("will close doors" + doornumber + " in quick-close mode");
 		quick_close = true;
@@ -365,7 +365,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//check if elevator doors are already closed
-	if (Doors->Open == false && whichdoors != 3 && OpenDoor == 0 && doors_stopped == false)
+	if (AreDoorsOpen() == false && whichdoors != 3 && AreDoorsMoving() == false && doors_stopped == false)
 	{
 		elev->Report("doors" + doornumber + " already closed");
 		return;
@@ -463,7 +463,7 @@ void ElevatorDoor::StopDoors()
 		//disable nudge mode
 		ResetNudgeTimer(false);
 	}
-	else if (OpenDoor != 0)
+	else if (AreDoorsMoving() == true)
 		elev->Report("can only stop doors" + doornumber + " in manual/emergency mode");
 	else
 		elev->Report("cannot stop doors" + doornumber + "; no doors moving");
@@ -1378,11 +1378,6 @@ bool ElevatorDoor::IsEnabled()
 	return Doors->Enabled;
 }
 
-bool ElevatorDoor::GetDoorsOpen()
-{
-	return Doors->Open;
-}
-
 int ElevatorDoor::GetWhichDoors()
 {
 	//return value of WhichDoors
@@ -2076,7 +2071,7 @@ bool ElevatorDoor::GetNudgeStatus()
 
 void ElevatorDoor::CheckSensor()
 {
-	if (GetSensorStatus(false) == true && sensor && (AreDoorsOpen() == true || OpenDoor != 0))
+	if (GetSensorStatus(false) == true && sensor && (AreDoorsOpen() == true || AreDoorsMoving() == true))
 		sensor->Check();
 }
 

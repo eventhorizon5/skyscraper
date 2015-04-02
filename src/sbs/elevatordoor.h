@@ -145,7 +145,6 @@ public:
 	Ogre::Vector3 GetPosition();
 	void Enabled(bool value);
 	bool IsEnabled();
-	bool GetDoorsOpen();
 	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
 	bool ShaftDoorsExist(int floor);
 	int GetWhichDoors();
