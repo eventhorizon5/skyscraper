@@ -234,7 +234,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual open is requested
-	if (DoorIsRunning == true && (abs(OpenDoor) == 2 || (abs(OpenDoor) == 1 && manual == true)))
+	if (DoorIsRunning == true && (AreDoorsMoving(2) == true || (AreDoorsMoving(1) == true && manual == true)))
 	{
 		elev->ReportError("doors" + doornumber + " in use");
 		return;
@@ -350,7 +350,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//exit if doors are manually moving, or automatically moving and a manual close is requested
-	if (DoorIsRunning == true && (abs(OpenDoor) == 2 || (abs(OpenDoor) == 1 && manual == true)))
+	if (DoorIsRunning == true && (AreDoorsMoving(2) == true || (AreDoorsMoving(1) == true && manual == true)))
 	{
 		elev->ReportError("doors" + doornumber + " in use");
 		return;
@@ -439,7 +439,7 @@ void ElevatorDoor::StopDoors()
 	if (elev->NumDoors > 1)
 		doornumber = " " + ToString2(Number);
 
-	if (OpenDoor == -2 || OpenDoor == 2)
+	if (AreDoorsMoving(2) == true)
 	{
 		if (WhichDoors == 3)
 			elev->Report("stopping shaft doors" + doornumber + " on floor " + ToString2(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
@@ -2098,9 +2098,18 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	sensor->SetPosition(elev->Origin);
 }
 
-bool ElevatorDoor::AreDoorsMoving()
+bool ElevatorDoor::AreDoorsMoving(int doors)
 {
 	//return true if doors are moving
+
+	//if doors is 0, check if doors are moving normally or manually
+	//if doors is 1, check if doors are moving normally
+	//if doors is 2, check if doors are moving manually
+
+	if (doors == 1)
+		return (abs(OpenDoor) == 1);
+	if (doors == 2)
+		return (abs(OpenDoor) == 2);
 
 	return (OpenDoor != 0);
 }
