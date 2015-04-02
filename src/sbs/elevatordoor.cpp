@@ -653,7 +653,8 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	doors_stopped = false;
 
 	//turn on autoclose timer
-	if (manual == false && (elev->InServiceMode() == false || elev->WaitForDoors == true) &&
+	if (manual == false && IsSensorBlocked() == false &&
+		(elev->InServiceMode() == false || elev->WaitForDoors == true) &&
 		(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
 		(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
 	{
@@ -2172,6 +2173,16 @@ bool ElevatorDoor::GetSensorStatus(bool persistent)
 		return sensor_enabled;
 
 	return sensor_status;
+}
+
+bool ElevatorDoor::IsSensorBlocked()
+{
+	//return true if sensor is currently blocked/triggered
+
+	if (sensor)
+		return sensor->IsInside();
+
+	return false;
 }
 
 bool ElevatorDoor::GetHoldStatus()

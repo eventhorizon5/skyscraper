@@ -168,6 +168,7 @@ public:
 	bool AreDoorsMoving(int doors = 0);
 	void EnableSensor(bool value, bool persistent = true);
 	bool GetSensorStatus(bool persistent = true);
+	bool IsSensorBlocked();
 	bool GetHoldStatus();
 	void ResetNudgeTimer(bool start = true);
 	bool AllowNudgeMode();

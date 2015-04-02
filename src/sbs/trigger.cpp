@@ -45,7 +45,7 @@ Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre:
 	current_position = 1;
 	this->area_min = area_min;
 	this->area_max = area_max;
-	IsInside = false;
+	is_inside = false;
 	pos = Ogre::Vector3::ZERO;
 
 	//create sound object
@@ -280,22 +280,22 @@ bool Trigger::Check()
 	bool changed = false;
 	if (cam > (pos + area_min) && cam < (pos + area_max))
 	{
-		if (IsInside == false)
+		if (is_inside == false)
 			changed = true;
-		IsInside = true;
+		is_inside = true;
 	}
 	else
 	{
-		if (IsInside == true)
+		if (is_inside == true)
 			changed = true;
-		IsInside = false;
+		is_inside = false;
 	}
 
 	if (changed == true)
 	{
 		if (sbs->Verbose == true)
 		{
-			if (IsInside == true)
+			if (is_inside == true)
 				sbs->Report("Inside trigger area '" + Name + "', parent '" + object->GetParent()->GetName() + "'");
 			else
 				sbs->Report("Outside trigger area '" + Name + "', parent '" + object->GetParent()->GetName() + "'");
@@ -346,4 +346,11 @@ void Trigger::Move(const Ogre::Vector3 position, bool relative_x, bool relative_
 
 	//move sound
 	sound->SetPosition(pos);
+}
+
+bool Trigger::IsInside()
+{
+	//return inside status
+
+	return is_inside;
 }
