@@ -436,7 +436,7 @@ bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre:
 	// First we do backface culling on the polygon with respect to
 	// the starting point of the beam.
 
-	//compute plane from first 3 vertices
+	//compute plane
 	float DD;
 	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
 	norm.normalise();
@@ -518,7 +518,7 @@ bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, co
 	// Set *pr to -1 to indicate error if we return false now.
 	if (pr) *pr = -1;
 
-	//compute plane from first 3 vertices
+	//compute plane
 	float DD;
 	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
 	norm.normalise();
