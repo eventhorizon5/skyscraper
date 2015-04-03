@@ -657,6 +657,16 @@ Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, flo
 
 }
 
+Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
+{
+	//compute plane from a set of given vertices
+
+	float det;
+	Ogre::Vector3 normal = -ComputeNormal(vertices, det);
+	normal.normalise();
+	return Ogre::Plane(normal, det);
+}
+
 void WallPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 {
 	//return texture mapping matrix and vector

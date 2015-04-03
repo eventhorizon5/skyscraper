@@ -91,8 +91,8 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	bool result;
 	std::string material = sbs->GetTextureMaterial(texture, result, true, name2.c_str());
 
-	//compute plane from first 3 vertices
-	Ogre::Plane plane(array[0][0], array[0][1], array[0][2]);
+	//compute plane
+	Ogre::Plane plane = sbs->ComputePlane(array[0]);
 
 	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
@@ -118,8 +118,8 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	bool result;
 	std::string material = sbs->GetTextureMaterial(texture, result, true, name2.c_str());
 
-	//compute plane from first 3 vertices
-	Ogre::Plane plane(vertices[0], vertices[1], vertices[2]);
+	//compute plane
+	Ogre::Plane plane = sbs->ComputePlane(vertices);
 
 	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
 	return &handles[index];
@@ -140,8 +140,8 @@ WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std:
 	if (triangles.size() == 0)
 		return 0;
 
-	//compute plane from first 3 vertices
-	Ogre::Plane plane(vertices[0][0], vertices[0][1], vertices[0][2]);
+	//compute plane
+	Ogre::Plane plane = sbs->ComputePlane(vertices[0]);
 
 	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
 	return &handles[index];
