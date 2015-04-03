@@ -3423,7 +3423,6 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			return ReportError("Cannot open doors if not stopped within a landing zone if interlocks are enabled");
 	}
 
-	bool mouse_state = sbs->camera->MouseDown;
 	int start = number, end = number;
 	if (number == 0)
 	{
@@ -3432,7 +3431,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	}
 	if (doorhold_direction == 0)
 	{
-		if (ControlPressActive == true && mouse_state == true && AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
+		if (ControlPressActive == true && AutoDoors == true && InServiceMode() == false && hold == false && manual == false && whichdoors != 3 && DoorsStopped(number) == false)
 		{
 			doorhold_direction = 2;
 
@@ -3459,7 +3458,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 				ReportError("Invalid door " + ToString2(i));
 		}
 	}
-	else if (doorhold_direction == 1 && mouse_state == false)
+	else if (doorhold_direction == 1 && sbs->camera->MouseDown == false)
 	{
 		//require button to be held down to open doors
 
@@ -3504,7 +3503,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 
 		if (AreDoorsOpen(number) == true && AreDoorsMoving(number) == false)
 		{
-			if (mouse_state == true)
+			if (sbs->camera->MouseDown == true)
 			{
 				//hold doors while button is held down
 				HoldDoors(number);
@@ -3524,7 +3523,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 			}
 		}
 
-		if (mouse_state == false)
+		if (sbs->camera->MouseDown == false)
 		{
 			//reset persistent values
 			doorhold_direction = 0;
