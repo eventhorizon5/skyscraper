@@ -1255,17 +1255,12 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		//planar method
 
 		Ogre::Vector2 x, y, z;
-		std::vector<Ogre::Vector3> varray1, varray2;
+		std::vector<Ogre::Vector3> varray;
 		bool rev_x = false, rev_y = false, rev_z = false;
-
-		//copy vertices into polygon object
-		varray1.reserve(vertices.size());
-		for (int i = 0; i < (int)vertices.size(); i++)
-			varray1.push_back(vertices[i]);
 
 		//determine the largest projection dimension (the dimension that the polygon is generally on;
 		//with a floor Y would be biggest)
-		Ogre::Plane plane = ComputePlane(varray1);
+		Ogre::Plane plane = ComputePlane(vertices);
 		Ogre::Vector3 normal = plane.normal;
 
 		direction = 0; //x; faces left/right
@@ -1280,11 +1275,11 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 		size_t selX = (1 << direction) & 0x3;
 		size_t selY = (1 << selX) & 0x3;
 
-		varray2.reserve(varray1.size());
-		for (int i = 0; i < (int)varray1.size(); i++)
+		varray.reserve(vertices.size());
+		for (int i = 0; i < (int)vertices.size(); i++)
 		{
-			Ogre::Vector3 tmpvertex = varray1[i];
-			varray2.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
+			Ogre::Vector3 tmpvertex = vertices[i];
+			varray.push_back(Ogre::Vector3(tmpvertex[selX], tmpvertex[selY], 0));
 		}
 
 		//automatically flip texture based on largest normal (corrects some situations where the texture is incorrectly reversed)
@@ -1332,8 +1327,8 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 
 		//get extents of both dimensions, since the polygon is projected in 2D as X and Y coordinates
 		Ogre::Vector2 a, b;
-		a = GetExtents(varray2, 1);
-		b = GetExtents(varray2, 2);
+		a = GetExtents(varray, 1);
+		b = GetExtents(varray, 2);
 
 		//set the result 2D coordinates
 		if (direction == 0)
