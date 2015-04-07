@@ -2066,7 +2066,7 @@ Ogre::Vector3 MeshObject::GetWallExtents(const char *name, float altitude, bool 
 			newname = name2 + ":right";
 
 		int index = 0;
-		WallObject *wall = FindPolygon(name, index);
+		WallObject *wall = FindPolygon(newname.c_str(), index);
 
 		if (wall)
 		{
@@ -2163,11 +2163,13 @@ WallObject* MeshObject::FindPolygon(const char *name, int &index)
 
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		if (Walls[i]->FindPolygon(name) > -1)
+		int wall = Walls[i]->FindPolygon(name);
+		if (wall > -1)
 		{
-			index = i;
+			index = wall;
 			return Walls[i];
 		}
 	}
+	index = -1;
 	return 0;
 }
