@@ -2416,21 +2416,22 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		std::vector<WallObject*> *wall_array;
-		if (buffer == "floor")
-			wall_array = &Simcore->GetFloor(Current)->Level->Walls;
-		else if (buffer == "elevator")
-			wall_array = &Simcore->GetElevator(Current)->ElevatorMesh->Walls;
+
+		MeshObject *mesh = 0;
+		if (buffer == "floor" && Simcore->GetFloor(Current))
+			mesh = Simcore->GetFloor(Current)->Level;
+		else if (buffer == "elevator" && Simcore->GetElevator(Current))
+			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			wall_array = &Simcore->External->Walls;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			wall_array = &Simcore->Landscape->Walls;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			wall_array = &Simcore->Buildings->Walls;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
-		Ogre::Vector3 isect = Simcore->GetPoint(*wall_array, tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())));
+		Ogre::Vector3 isect = mesh->GetPoint(tempdata[1].c_str(), Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())));
 
 		buffer = std::string(LineData).substr(0, temp5) + ToString2(isect.x) + std::string(", ") + ToString2(isect.y) + std::string(", ") + ToString2(isect.z) + std::string(LineData).substr(temp4 + 1);
 		LineData = buffer;
@@ -2487,22 +2488,23 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		std::vector<WallObject*> *wall_array;
-		if (buffer == "floor")
-			wall_array = &Simcore->GetFloor(Current)->Level->Walls;
-		else if (buffer == "elevator")
-			wall_array = &Simcore->GetElevator(Current)->ElevatorMesh->Walls;
+
+		MeshObject *mesh = 0;
+		if (buffer == "floor" && Simcore->GetFloor(Current))
+			mesh = Simcore->GetFloor(Current)->Level;
+		else if (buffer == "elevator" && Simcore->GetElevator(Current))
+			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			wall_array = &Simcore->External->Walls;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			wall_array = &Simcore->Landscape->Walls;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			wall_array = &Simcore->Buildings->Walls;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
-		MinExtent = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), false);
-		MaxExtent = Simcore->GetWallExtents(*wall_array, tempdata[1].c_str(), atof(tempdata[2].c_str()), true);
+		MinExtent = mesh->GetWallExtents(tempdata[1].c_str(), atof(tempdata[2].c_str()), false);
+		MaxExtent = mesh->GetWallExtents(tempdata[1].c_str(), atof(tempdata[2].c_str()), true);
 		return sNextLine;
 	}
 

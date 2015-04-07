@@ -852,7 +852,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			Ogre::Vector2 extents = sbs->GetExtents(wrapper->doors[i]->mesh, j, true);
+			Ogre::Vector2 extents = wrapper->doors[i]->mesh->GetExtents(j, true);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 

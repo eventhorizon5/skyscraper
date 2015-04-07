@@ -89,86 +89,6 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, boo
 	return Ogre::Vector2(esmall, ebig);
 }
 
-Ogre::Vector2 SBS::GetExtents(MeshObject* mesh, int coord, bool flip_z)
-{
-	//returns the smallest and largest values from a specified coordinate type
-	//(x, y, or z) from a vertex array (polygon).
-	//first parameter must be a mesh object
-	//second must be either 1 (for x), 2 (for y) or 3 (for z)
-
-	float esmall = 0;
-	float ebig = 0;
-	float tempnum = 0;
-	int i = 0;
-
-	//return 0,0 if coord value is out of range
-	if (coord < 1 || coord > 3)
-		return Ogre::Vector2(0, 0);
-
-	for (i = 0; i < (int)mesh->MeshGeometry.size(); i++)
-	{
-		if (coord == 1)
-			tempnum = mesh->MeshGeometry[i].vertex.x;
-		if (coord == 2)
-			tempnum = mesh->MeshGeometry[i].vertex.y;
-		if (coord == 3)
-		{
-			if (flip_z == false)
-				tempnum = mesh->MeshGeometry[i].vertex.z;
-			else
-				tempnum = -mesh->MeshGeometry[i].vertex.z;
-		}
-
-		if (i == 0)
-		{
-			esmall = tempnum;
-			ebig = tempnum;
-		}
-		else
-		{
-			if (tempnum < esmall)
-				esmall = tempnum;
-			if (tempnum > ebig)
-				ebig = tempnum;
-		}
-	}
-
-	return Ogre::Vector2(esmall, ebig);
-}
-
-Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
-{
-	//do a line intersection with a specified mesh, and return
-	//the intersection point
-
-	int index = -1;
-	int index2 = -1;
-	for (int i = 0; i < (int)wallarray.size(); i++)
-	{
-		index2 = wallarray[i]->FindPolygon(polyname);
-		if (index2 > -1)
-		{
-			index = i;
-			break;
-		}
-	}
-
-	if (index >= 0)
-	{
-		//do a plane intersection with a line
-		Ogre::Vector3 isect;
-		float dist = 0;
-		std::vector<std::vector<Ogre::Vector3> > origpolys;
-		wallarray[index]->GetGeometry(index2, origpolys, true);
-		Ogre::Plane plane = ComputePlane(origpolys[0]);
-
-		bool result = SegmentPlane(start, end, plane, isect, dist);
-		if (result == true)
-			return isect;
-	}
-	return Ogre::Vector3(0, 0, 0);
-}
-
 void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
@@ -512,83 +432,6 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 			polycheck = false;
 		}
 	}
-}
-
-Ogre::Vector3 SBS::GetWallExtents(std::vector<WallObject*> &wallarray, const char *name, float altitude, bool get_max)
-{
-	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
-
-	std::string newname;
-	std::string name2 = name;
-	for (int i = 0; i < 6; i++)
-	{
-		if (i == 0)
-			newname = name2;
-		if (i == 1)
-			newname = name2 + ":0";
-		if (i == 2)
-			newname = name2 + ":1";
-		if (i == 3)
-			newname = name2 + ":front";
-		if (i == 4)
-			newname = name2 + ":back";
-		if (i == 5)
-			newname = name2 + ":left";
-		if (i == 6)
-			newname = name2 + ":right";
-
-		int index = -1;
-		int index2 = -1;
-		for (int j = 0; j < (int)wallarray.size(); j++)
-		{
-			index2 = wallarray[j]->FindPolygon(newname.c_str());
-			if (index2 > -1)
-			{
-				index = j;
-				break;
-			}
-		}
-
-		if (index >= 0)
-		{
-			std::vector<std::vector<Ogre::Vector3> > origpolys;
-			wallarray[index]->GetGeometry(index2, origpolys, true);
-
-			std::vector<Ogre::Vector3> original, tmp1, tmp2;
-			original.reserve(origpolys[0].size());
-			for (int i = 0; i < (int)origpolys[0].size(); i++)
-				original.push_back(origpolys[0][i]);
-
-			//if given altitude is outside of polygon's range, return 0
-			Ogre::Vector2 yextents = GetExtents(original, 2);
-			float tmpaltitude = altitude;
-			if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
-				return Ogre::Vector3(0, 0, 0);
-
-			//get upper
-			SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001f);
-
-			//get lower part of upper
-			SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001f);
-
-			Ogre::Vector3 result;
-			if (get_max == false)
-			{
-				//get minimum extents
-				result.x = GetExtents(original, 1).x;
-				result.z = GetExtents(original, 3).x;
-			}
-			else
-			{
-				//get maximum extents
-				result.x = GetExtents(original, 1).y;
-				result.z = GetExtents(original, 3).y;
-			}
-			result.y = altitude;
-			return result;
-		}
-	}
-	return Ogre::Vector3(0, 0, 0);
 }
 
 Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
@@ -2173,4 +2016,160 @@ void MeshObject::DeleteWalls(Object *parent)
 			}
 		}
 	}
+}
+
+Ogre::Vector3 MeshObject::GetPoint(const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+{
+	//do a line intersection with a specified wall associated with this mesh object,
+	//and return the intersection point
+
+	int index = -1;
+	int index2 = -1;
+	for (int i = 0; i < (int)Walls.size(); i++)
+	{
+		index2 = Walls[i]->FindPolygon(polyname);
+		if (index2 > -1)
+		{
+			index = i;
+			break;
+		}
+	}
+
+	if (index >= 0)
+	{
+		//do a plane intersection with a line
+		Ogre::Vector3 isect;
+		float dist = 0;
+		std::vector<std::vector<Ogre::Vector3> > origpolys;
+		Walls[index]->GetGeometry(index2, origpolys, true);
+		Ogre::Plane plane = sbs->ComputePlane(origpolys[0]);
+
+		bool result = sbs->SegmentPlane(start, end, plane, isect, dist);
+		if (result == true)
+			return isect;
+	}
+	return Ogre::Vector3(0, 0, 0);
+}
+
+Ogre::Vector3 MeshObject::GetWallExtents(const char *name, float altitude, bool get_max)
+{
+	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
+
+	std::string newname;
+	std::string name2 = name;
+	for (int i = 0; i < 6; i++)
+	{
+		if (i == 0)
+			newname = name2;
+		if (i == 1)
+			newname = name2 + ":0";
+		if (i == 2)
+			newname = name2 + ":1";
+		if (i == 3)
+			newname = name2 + ":front";
+		if (i == 4)
+			newname = name2 + ":back";
+		if (i == 5)
+			newname = name2 + ":left";
+		if (i == 6)
+			newname = name2 + ":right";
+
+		int index = -1;
+		int index2 = -1;
+		for (int j = 0; j < (int)Walls.size(); j++)
+		{
+			index2 = Walls[j]->FindPolygon(newname.c_str());
+			if (index2 > -1)
+			{
+				index = j;
+				break;
+			}
+		}
+
+		if (index >= 0)
+		{
+			std::vector<std::vector<Ogre::Vector3> > origpolys;
+			Walls[index]->GetGeometry(index2, origpolys, true);
+
+			std::vector<Ogre::Vector3> original, tmp1, tmp2;
+			original.reserve(origpolys[0].size());
+			for (int i = 0; i < (int)origpolys[0].size(); i++)
+				original.push_back(origpolys[0][i]);
+
+			//if given altitude is outside of polygon's range, return 0
+			Ogre::Vector2 yextents = sbs->GetExtents(original, 2);
+			float tmpaltitude = altitude;
+			if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
+				return Ogre::Vector3(0, 0, 0);
+
+			//get upper
+			sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001f);
+
+			//get lower part of upper
+			sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001f);
+
+			Ogre::Vector3 result;
+			if (get_max == false)
+			{
+				//get minimum extents
+				result.x = sbs->GetExtents(original, 1).x;
+				result.z = sbs->GetExtents(original, 3).x;
+			}
+			else
+			{
+				//get maximum extents
+				result.x = sbs->GetExtents(original, 1).y;
+				result.z = sbs->GetExtents(original, 3).y;
+			}
+			result.y = altitude;
+			return result;
+		}
+	}
+	return Ogre::Vector3(0, 0, 0);
+}
+
+Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
+{
+	//returns the smallest and largest values from a specified coordinate type
+	//(x, y, or z) from the polygons of this mesh object.
+	//first parameter must be either 1 (for x), 2 (for y) or 3 (for z)
+
+	float esmall = 0;
+	float ebig = 0;
+	float tempnum = 0;
+	int i = 0;
+
+	//return 0,0 if coord value is out of range
+	if (coord < 1 || coord > 3)
+		return Ogre::Vector2(0, 0);
+
+	for (i = 0; i < (int)MeshGeometry.size(); i++)
+	{
+		if (coord == 1)
+			tempnum = MeshGeometry[i].vertex.x;
+		if (coord == 2)
+			tempnum = MeshGeometry[i].vertex.y;
+		if (coord == 3)
+		{
+			if (flip_z == false)
+				tempnum = MeshGeometry[i].vertex.z;
+			else
+				tempnum = -MeshGeometry[i].vertex.z;
+		}
+
+		if (i == 0)
+		{
+			esmall = tempnum;
+			ebig = tempnum;
+		}
+		else
+		{
+			if (tempnum < esmall)
+				esmall = tempnum;
+			if (tempnum > ebig)
+				ebig = tempnum;
+		}
+	}
+
+	return Ogre::Vector2(esmall, ebig);
 }
