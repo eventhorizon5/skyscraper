@@ -2023,25 +2023,16 @@ Ogre::Vector3 MeshObject::GetPoint(const char *polyname, const Ogre::Vector3 &st
 	//do a line intersection with a specified wall associated with this mesh object,
 	//and return the intersection point
 
-	int index = -1;
-	int index2 = -1;
-	for (int i = 0; i < (int)Walls.size(); i++)
-	{
-		index2 = Walls[i]->FindPolygon(polyname);
-		if (index2 > -1)
-		{
-			index = i;
-			break;
-		}
-	}
+	int index = 0;
+	WallObject *wall = FindPolygon(polyname, index);
 
-	if (index >= 0)
+	if (wall)
 	{
 		//do a plane intersection with a line
 		Ogre::Vector3 isect;
 		float dist = 0;
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
-		Walls[index]->GetGeometry(index2, origpolys, true);
+		wall->GetGeometry(index, origpolys, true);
 		Ogre::Plane plane = sbs->ComputePlane(origpolys[0]);
 
 		bool result = sbs->SegmentPlane(start, end, plane, isect, dist);
@@ -2074,22 +2065,13 @@ Ogre::Vector3 MeshObject::GetWallExtents(const char *name, float altitude, bool 
 		if (i == 6)
 			newname = name2 + ":right";
 
-		int index = -1;
-		int index2 = -1;
-		for (int j = 0; j < (int)Walls.size(); j++)
-		{
-			index2 = Walls[j]->FindPolygon(newname.c_str());
-			if (index2 > -1)
-			{
-				index = j;
-				break;
-			}
-		}
+		int index = 0;
+		WallObject *wall = FindPolygon(name, index);
 
-		if (index >= 0)
+		if (wall)
 		{
 			std::vector<std::vector<Ogre::Vector3> > origpolys;
-			Walls[index]->GetGeometry(index2, origpolys, true);
+			wall->GetGeometry(index, origpolys, true);
 
 			std::vector<Ogre::Vector3> original, tmp1, tmp2;
 			original.reserve(origpolys[0].size());
@@ -2172,4 +2154,20 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	}
 
 	return Ogre::Vector2(esmall, ebig);
+}
+
+WallObject* MeshObject::FindPolygon(const char *name, int &index)
+{
+	//finds a polygon by name in all associated wall objects
+	//returns associated wall object and wall index
+
+	for (int i = 0; i < (int)Walls.size(); i++)
+	{
+		if (Walls[i]->FindPolygon(name) > -1)
+		{
+			index = i;
+			return Walls[i];
+		}
+	}
+	return 0;
 }

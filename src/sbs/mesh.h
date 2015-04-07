@@ -120,6 +120,7 @@ public:
 	Ogre::Vector3 GetPoint(const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	Ogre::Vector3 GetWallExtents(const char *name, float altitude,  bool get_max);
 	Ogre::Vector2 GetExtents(int coord, bool flip_z = false);
+	WallObject* FindPolygon(const char *name, int &index);
 
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
