@@ -2,22 +2,23 @@
 
 /*
 	This code was originally part of Crystal Space
-    Copyright (C) 1998-2005 by Jorrit Tyberghein
+	Available at http://www.crystalspace3d.org
+	Copyright (C) 1998-2005 by Jorrit Tyberghein
 	Modifications Copyright (C)2010 Ryan Thoryk
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Library General Public
-    License as published by the Free Software Foundation; either
-    version 2 of the License, or (at your option) any later version.
+	This library is free software; you can redistribute it and/or
+	modify it under the terms of the GNU Library General Public
+	License as published by the Free Software Foundation; either
+	version 2 of the License, or (at your option) any later version.
 
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Library General Public License for more details.
+	This library is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+	Library General Public License for more details.
 
-    You should have received a copy of the GNU Library General Public
-    License along with this library; if not, write to the Free
-    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+	You should have received a copy of the GNU Library General Public
+	License along with this library; if not, write to the Free
+	Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
 #include <math.h>
@@ -34,10 +35,15 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3)
 {
-	//this is modified code from the Crystal Space thingmesh system, from the "plugins/mesh/thing/object/polygon.cpp" file.
+	//this is modified code from the Crystal Space thingmesh system (SetTextureSpace function),
+	//from the "plugins/mesh/thing/object/polygon.cpp" file.
+
 	//given an array of vertices, this returns the texture transformation matrix and vector
 
 	//original description:
+	// Set the texture space transformation given three vertices and
+	// their uv coordinates.
+	//
 	// Some explanation. We have three points for
 	// which we know the uv coordinates. This gives:
 	//     P1 -> UV1
@@ -120,6 +126,22 @@ bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const O
 {
 	//originally from Crystal Space's libs/csgeom/textrans.cpp file
 	
+	/**
+	 * Calculate the matrix using two vertices (which are preferably on the
+	 * plane of the polygon and are possibly (but not necessarily) two vertices
+	 * of the polygon). The first vertex is seen as the origin and the second
+	 * as the u-axis of the texture space coordinate system. The v-axis is
+	 * calculated on the plane of the polygon and orthogonal to the given
+	 * u-axis. The length of the u-axis and the v-axis is given as the 'len1'
+	 * parameter.<p>
+	 * For example, if 'len1' is equal to 2 this means that texture will
+	 * be tiled exactly two times between vertex 'v_orig' and 'v1'.
+	 * I hope this explanation is clear since I can't seem to make it
+	 * any clearer :-)
+	 *
+	 * Use 'v1' and 'len1' for the u-axis and 'v2' and 'len2' for the v-axis.
+	 */
+
 	float d = v_orig.squaredDistance(v1);
 	//get inverse square of d
 	float invl1 = 1 / sqrtf(d);
@@ -433,10 +455,18 @@ bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre:
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
+	/**
+	 * Intersect object-space ray with this polygon. This function
+	 * is similar to IntersectSegment except that it doesn't keep the length
+	 * of the ray in account. It just tests if the ray intersects with the
+	 * interior of the polygon. Note that this function also does back-face
+	 * culling.
+	 */
+
 	// First we do backface culling on the polygon with respect to
 	// the starting point of the beam.
 
-	//compute plane from first 3 vertices
+	//compute plane
 	float DD;
 	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
 	norm.normalise();
@@ -479,6 +509,11 @@ bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start,
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
+	/**
+	 * Intersect object-space segment with this polygon. Return
+	 * true if it intersects and the intersection point in world coordinates.
+	 */
+
 	std::vector<std::vector<Ogre::Vector3> > vertices;
 	GetGeometry(mesh, vertices, false, convert, rescale, false, true);
 
@@ -496,6 +531,11 @@ bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start,
 bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
+
+	/**
+	 * Intersect object-space segment with the plane of this polygon. Return
+	 * true if it intersects and the intersection point in world coordinates.
+	 */
 
 	float x1 = start.x;
 	float y1 = start.y;
@@ -518,7 +558,7 @@ bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, co
 	// Set *pr to -1 to indicate error if we return false now.
 	if (pr) *pr = -1;
 
-	//compute plane from first 3 vertices
+	//compute plane
 	float DD;
 	Ogre::Vector3 norm = sbs->ComputeNormal(vertices, DD);
 	norm.normalise();
@@ -553,5 +593,54 @@ bool WallPolygon::IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, co
 		return false;
 
 	normal = norm;
+	return true;
+}
+
+bool SBS::SegmentPlane(const Ogre::Vector3 &u, const Ogre::Vector3 &v, Ogre::Plane &plane, Ogre::Vector3 &isect, float &dist)
+{
+	//from Crystal Space libs/csgeom/math3d.cpp
+
+	/**
+	* Intersect a 3D segment with a plane.  Returns true if there is an
+	* intersection, with the intersection point returned in isect.
+	* The distance from u to the intersection point is returned in dist.
+	* The distance that is returned is a normalized distance with respect
+	* to the given input vector. i.e. a distance of 0.5 means that the
+	* intersection point is halfway u and v.
+	* There are two cases in which this method will return false:
+	* - If the plane and the segment are parallel, then 'dist' will be set
+	*   equal to 0, and 'isect' equal to 'v'.
+	* - If the segment does not cross the plane (i.e. if 'dist'>1+epsilon or
+	*   'dist'<-epsilon, where epsilon is a very small value near to zero)
+	*   then 'isect's value is (0, 0, 0).
+	*
+	* \remarks
+	* 'p' is the plane, expressed as: A x + B y + C z + D = 0 , where (A,B,C) is
+	* the normal vector of the plane.
+	* 'u' and 'v' are the start (U point) and the end (V point) of the segment.
+	* 'isect' is searched along the segment U + x (V - U); the unknown 'x' value
+	* is got by: x = [(A,B,C) * U + D ] / (A,B,C) * (U - V), where * is the dot
+	* product.
+	*/
+
+	float denom;
+	Ogre::Vector3 uv = u - v;
+
+	denom = plane.normal.dotProduct(uv);
+	if (denom == 0)
+	{
+		// they are parallel
+		dist = 0; //'dist' is an output arg, so it must be initialized.
+		isect = v;
+		return false;
+	}
+	dist = (plane.normal.dotProduct(u) + plane.d) / denom;
+	if (dist < -SMALL_EPSILON || dist > 1 + SMALL_EPSILON)
+	{
+		isect = 0;//'isect' is an output arg, so it must be initialized.
+		return false;
+	}
+
+	isect = u + dist * -uv;
 	return true;
 }

@@ -158,17 +158,13 @@ Ogre::Vector3 SBS::GetPoint(std::vector<WallObject*> &wallarray, const char *pol
 		//do a plane intersection with a line
 		Ogre::Vector3 isect;
 		float dist = 0;
-		std::vector<Ogre::Vector3> original;
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
 		wallarray[index]->GetGeometry(index2, origpolys, true);
+		Ogre::Plane plane = ComputePlane(origpolys[0]);
 
-		original.reserve(origpolys[0].size());
-		for (int i = 0; i < (int)origpolys[0].size(); i++)
-			original.push_back(origpolys[0][i]);
-
-		//TODO: Fix for OGRE
-		//csIntersect3::SegmentPlane(ToRemote(start), ToRemote(end), Ogre::Plane(original[0], original[1], original[2]), isect, dist);
-		//return ToLocal(isect);
+		bool result = SegmentPlane(start, end, plane, isect, dist);
+		if (result == true)
+			return isect;
 	}
 	return Ogre::Vector3(0, 0, 0);
 }
@@ -655,6 +651,16 @@ Ogre::Vector2 SBS::GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, flo
 	Ogre::Vector2 result (x, -y);
 	return result;
 
+}
+
+Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
+{
+	//compute plane from a set of given vertices
+
+	float det;
+	Ogre::Vector3 normal = -ComputeNormal(vertices, det);
+	normal.normalise();
+	return Ogre::Plane(normal, det);
 }
 
 void WallPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
