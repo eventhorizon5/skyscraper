@@ -151,6 +151,46 @@ Caelum is used to create dynamic skies, including moving clouds, moving sun and 
 To revert back to the old sky system, turn off Caelum in the skyscraper.ini file using the Skyscraper.Frontent.Caelum option.
 
 
+Major changes in Update 2:
+------------------------------------
+
+Missing elevator action names have been added to the script guide, and a StopDoors action has been added.
+
+More elevator door sensor and open door hold fixes have been made.
+
+Certain elevator actions that took parameters have been fixed so that the parameters now work.
+
+The Isect function is now working.
+
+
+Major changes in Update 1:
+------------------------------------
+
+Skyscraper now prints renderer statistics instead of just FPS if you press the F2 key.  You can easily detect performance problems this way, by looking at the number of "batches", which are rendered meshes.  When this count goes way up (into the thousands), the performance will slow down, since Ogre has to handle batches on the CPU, while other things such as triangles are handled by the GPU.
+
+Holding elevator door buttons now hold the doors for elevators with automatic doors enabled.
+
+An issue involving major lag when pressing call buttons has been fixed.
+
+Elevators can now report a call rejection, so that call buttons can reset and switch off if all elevators are in service modes and related situations.
+
+Improvements have been made to the math processor, to prevent hangs.
+
+Door sensors have been reworked so that they operate properly, and can be switched on and off properly.
+
+A longstanding issue in the planar texture mapper has been fixed; previously certain walls were not being created properly.
+
+The motor idle sound is now working properly.
+
+The Alarm button in the elevator editor is now "Hold Doors".
+
+User variables now work in sections, such as "<Floors>".
+
+The FloorHold feature has been fixed, which is used in modern manual elevators.
+
+Elevator door open/close and message sounds are now also played on door reversals.
+
+
 Major changes since the Alpha 8 release:
 ------------------------------------
 
