@@ -1,7 +1,32 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-added FindPolygon mesh function and simplified code
+-moved GetPoint, GetWallExtents, and GetExtents functions to the MeshObject class
 -elevator and floor creation should return created object
 -don't leave top and bottom levels of shafts on - this doesn't appear to be needed anymore, and should increase rendering efficiency
+
+Version 1.9.2 (2.0 Alpha 9 - Update 2)
+-------------------------
+-sensor status variables need to be initialized first
+-added more CS information to the texmap.cpp file
+-GetPoint/isect functions are now working
+-removed unnecessary vertex array copy from planar texture mapper
+-wall object's plane calculations need to use full vertex list - this is the same issue as r3356
+-added new ComputePlane function
+-added StopDoors action
+-fixed length values for a number of action names - fixes issues where door number parameters don't work
+-fixed elevator's DoorsStopped function
+-elevator will no longer move if doors are stopped and interlocks are enabled
+-hold code in elevator's OpenDoor function will now only enable if an associated control has just been pressed
+-caller objects are now passed to actions when running
+-cleaned up elevator number text code for reports
+-elevator doors now report if no timer reset will be performed due to blocked sensor
+-triggers can now report their "inside" status
+-elevator doors no longer reset door timers if sensors are blocked/triggered
+-elevator door code cleanups
+-control/trigger variable check_state was being handled in reverse
+-added references to missing elevator action names
+-in CreateWallBox function, don't try to create side walls if there's no thickness
 
 Version 1.9.1 (2.0 Alpha 9 - Update 1)
 -------------------------
