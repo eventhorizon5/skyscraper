@@ -221,7 +221,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 	for (int i = 0; i < polycount; i++)
 	{
 		//get name
-		std::string name = wall->GetHandle(i)->name;
+		WallPolygon *handle = wall->GetHandle(i);
 
 		//get original vertices
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
@@ -263,7 +263,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 					Classify(2, temppoly, end.z) != 2)
 			{
 				if (Verbose)
-					Report("Cutting polygon '" + name + "'");
+					Report("Cutting polygon '" + handle->name + "'");
 
 				extentsx = GetExtents(temppoly, 1);
 				extentsy = GetExtents(temppoly, 2);
@@ -488,23 +488,22 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 			std::string oldmat;
 			Ogre::Vector3 oldvector;
 			Ogre::Matrix3 mapping;
+			std::string name = handle->name;
 
 			if (newpolys.size() > 0)
 			{
 				//get texture data from original polygon
-				oldmat = wall->GetHandle(i)->material;
-				wall->GetHandle(i)->GetTextureMapping(mapping, oldvector);
+				oldmat = handle->material;
+				handle->GetTextureMapping(mapping, oldvector);
 			}
 
 			//delete original polygon
 			wall->DeletePolygon(i, false);
+			handle = 0;
 
+			//create new polygon
 			if (newpolys.size() > 0)
-			{
-				//create new polygon
-				WallPolygon* handle = 0;
-				handle = wall->AddPolygon(name.c_str(), oldmat, newpolys, mapping, oldvector);
-			}
+				wall->AddPolygon(name.c_str(), oldmat, newpolys, mapping, oldvector);
 
 			//reset search position
 			i--;

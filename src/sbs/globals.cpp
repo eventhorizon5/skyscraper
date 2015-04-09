@@ -173,10 +173,17 @@ void TrimString(std::string &string)
 
 void ReplaceAll(std::string &string, const char *original, const char *replacement)
 {
-	//replace all occurances of "original" with "replacement"
+	//replace all occurrences of "original" with "replacement"
 
-	std::string newstring = Ogre::StringUtil::replaceAll(string, original, replacement);
-	string = newstring;
+	size_t position = 0;
+
+	while(true)
+	{
+		position = string.find(original, position);
+		if (position == string.npos)
+			break;
+		string.replace(position, strlen(original), replacement);
+	}
 }
 
 bool StartsWith(std::string &string, const char *check_string, bool ignore_case)

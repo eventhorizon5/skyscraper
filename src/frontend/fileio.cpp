@@ -923,9 +923,10 @@ bool ScriptProcessor::IfProc(const char *expression)
 			int end = -1;
 			for (int i = start + 1; i < (int)tmpcalc.length(); i++)
 			{
-				if (tmpcalc.at(i) == '(')
+				char &tmpchar = tmpcalc.at(i);
+				if (tmpchar == '(')
 					match++;
-				if (tmpcalc.at(i) == ')')
+				if (tmpchar == ')')
 					match--;
 				if (match == 0)
 				{
@@ -970,11 +971,11 @@ bool ScriptProcessor::IfProc(const char *expression)
 		check = false;
 		for (int i = 1; i < (int)tmpcalc.length(); i++)
 		{
-			if (tmpcalc.at(i) == '=' || tmpcalc.at(i) == '!' || tmpcalc.at(i) == '<' || tmpcalc.at(i) == '>')
-			{
+			char &tmpchar = tmpcalc.at(i);
+			if (tmpchar == '=' || tmpchar == '!' || tmpchar == '<' || tmpchar == '>')
 				operators++;
-			}
-			if (tmpcalc.at(i) == '&' || tmpcalc.at(i) == '|')
+
+			if (tmpchar == '&' || tmpchar == '|')
 			{
 				check = true;
 				operators2++;
@@ -7677,9 +7678,10 @@ std::string ScriptProcessor::Calc(const char *expression)
 			int end = -1;
 			for (int i = start + 1; i < (int)tmpcalc.length(); i++)
 			{
-				if (tmpcalc.at(i) == '(')
+				char &tmpchar = tmpcalc.at(i);
+				if (tmpchar == '(')
 					match++;
-				if (tmpcalc.at(i) == ')')
+				if (tmpchar == ')')
 					match--;
 				if (match == 0)
 				{
@@ -7723,12 +7725,15 @@ std::string ScriptProcessor::Calc(const char *expression)
 		end = 0;
 		for (int i = 1; i < (int)tmpcalc.length(); i++)
 		{
-			if (tmpcalc.at(i) == '+' || tmpcalc.at(i) == '/' || tmpcalc.at(i) == '*' || tmpcalc.at(i) == '^')
+			char &tmpchar = tmpcalc.at(i);
+			char &tmpcharprev = tmpcalc.at(i - 1);
+			if (tmpchar == '+' || tmpchar == '/' || tmpchar == '*' || tmpchar == '^')
 			{
 				//ensure that numbers are around operator
 				if (i < (int)tmpcalc.length() - 1)
 				{
-					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-' || tmpcalc.at(i + 1) == '.'))
+					char &tmpcharnext = tmpcalc.at(i + 1);
+					if (IsNumeric(tmpcharprev) == true && (IsNumeric(tmpcharnext) == true || tmpcharnext == '-' || tmpcharnext == '.'))
 					{
 						//valid operator found
 						operators++;
@@ -7737,12 +7742,13 @@ std::string ScriptProcessor::Calc(const char *expression)
 					}
 				}
 			}
-			if (tmpcalc.at(i) == '-' && tmpcalc.at(i - 1) != '-' && tmpcalc.at(i - 1) != '+' && tmpcalc.at(i - 1) != '/' && tmpcalc.at(i - 1) != '*' && tmpcalc.at(i - 1) != '^')
+			if (tmpchar == '-' && tmpcharprev != '-' && tmpcharprev != '+' && tmpcharprev != '/' && tmpcharprev != '*' && tmpcharprev != '^')
 			{
 				//ensure that numbers are around operator
 				if (i < (int)tmpcalc.length() - 1)
 				{
-					if (IsNumeric(tmpcalc.at(i - 1)) == true && (IsNumeric(tmpcalc.at(i + 1)) == true || tmpcalc.at(i + 1) == '-' || tmpcalc.at(i + 1) == '.'))
+					char &tmpcharnext = tmpcalc.at(i + 1);
+					if (IsNumeric(tmpcharprev) == true && (IsNumeric(tmpcharnext) == true || tmpcharnext == '-' || tmpcharnext == '.'))
 					{
 						//valid operator found
 						operators++;
