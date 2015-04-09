@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 9 - Update 1
+Skyscraper 2.0 Alpha 9 - Update 2
 Copyright (C)2003-2015 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
