@@ -56,10 +56,16 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	DirectionalMeshUp = 0;
 	DirectionalMeshDown = 0;
 	DirectionalMesh = 0;
+	timer = 0;
+	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 10000);
 
 	bool in_elevator = false;
 	if (std::string(parent->GetType()) == "Elevator")
 		in_elevator = true;
+
+	//create timer
+	if (ActiveDirection == false)
+		timer = new Timer("Shut-off Timer", this);
 
 	//create object mesh
 	std::string base, buffer;
@@ -272,6 +278,10 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 
 DirectionalIndicator::~DirectionalIndicator()
 {
+	if (timer)
+		delete timer;
+	timer = 0;
+
 	if (DirectionalMeshBack)
 		delete DirectionalMeshBack;
 	DirectionalMeshBack = 0;
@@ -322,6 +332,20 @@ void DirectionalIndicator::UpLight(bool value)
 {
 	//turn on the 'up' directional light
 
+	Elevator *elev = sbs->GetElevator(elevator_num);
+
+	if (!elev)
+		value = false;
+
+	if (timer && elev)
+	{
+		//stop or start timer
+		if (value == false && DownStatus == false)
+			timer->Stop();
+		else if (value == true && (elev->AutoDoors == false || elev->ShaftDoorsExist(0, floor_num) == false))
+			timer->Start(timer_interval, true);
+	}
+
 	if (value == UpStatus)
 		return;
 
@@ -341,6 +365,20 @@ void DirectionalIndicator::UpLight(bool value)
 void DirectionalIndicator::DownLight(bool value)
 {
 	//turn on the 'down' directional light
+
+	Elevator *elev = sbs->GetElevator(elevator_num);
+
+	if (!elev)
+		value = false;
+
+	if (timer && elev)
+	{
+		//stop or start timer
+		if (value == false && UpStatus == false)
+			timer->Stop();
+		else if (value == true && (elev->AutoDoors == false || elev->ShaftDoorsExist(0, floor_num) == false))
+			timer->Start(timer_interval, true);
+	}
 
 	if (value == DownStatus)
 		return;
@@ -420,4 +458,16 @@ Ogre::Vector3 DirectionalIndicator::GetPosition()
 {
 	//return indicator position
 	return DirectionalMeshBack->GetPosition();
+}
+
+void DirectionalIndicator::Timer::Notify()
+{
+	//when shut-off timer triggers, switch off lights
+
+	if (indicator->UpStatus == false && indicator->DownStatus == false)
+		return;
+
+	//turn off all lights
+	indicator->UpLight(false);
+	indicator->DownLight(false);
 }

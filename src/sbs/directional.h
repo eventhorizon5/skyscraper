@@ -26,6 +26,8 @@
 #ifndef _SBS_DIRECTIONAL_H
 #define _SBS_DIRECTIONAL_H
 
+#include "timer.h"
+
 class SBSIMPEXP DirectionalIndicator
 {
 public:
@@ -61,6 +63,22 @@ private:
 	MeshObject* DirectionalMeshUp; //indicator mesh up object
 	MeshObject* DirectionalMeshDown; //indicator mesh down object
 	MeshObject* DirectionalMesh; //indicator mesh single object
+
+	//shut-off timer
+	class Timer : public TimerObject
+	{
+	public:
+		DirectionalIndicator *indicator;
+		Timer(const char *name, DirectionalIndicator *parent) : TimerObject(parent->object, name, false)
+		{
+			indicator = parent;
+		};
+		virtual void Notify();
+	};
+
+	//timer object
+	Timer *timer;
+	int timer_interval;
 };
 
 #endif

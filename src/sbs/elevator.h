@@ -332,6 +332,7 @@ public:
 	std::string GetFloorDisplay();
 	bool GetHoldStatus(int number = 0);
 	void ResetNudgeTimer(bool start = true, int number = 0);
+	bool ShaftDoorsExist(int number, int floor);
 
 private:
 
