@@ -4004,7 +4004,7 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 		float base = GetDestinationOffset(floor);
 
 		if (door_number != 0)
-			door_result = GetDoor(door_number)->ShaftDoorsExist(floor);
+			door_result = ShaftDoorsExist(door_number, floor);
 
 		if ((door_number == 0 || door_result == true) && sbs->GetFloor(floor))
 		{
@@ -5910,5 +5910,27 @@ bool Elevator::GetHoldStatus(int number)
 			ReportError("Invalid door " + ToString2(i));
 	}
 
+	return false;
+}
+
+bool Elevator::ShaftDoorsExist(int number, int floor)
+{
+	//return true if shaft doors exist on the specified floor
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+		{
+			if (door->ShaftDoorsExist(floor) == true)
+				return true;
+		}
+	}
 	return false;
 }

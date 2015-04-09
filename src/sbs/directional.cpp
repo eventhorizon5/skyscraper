@@ -332,12 +332,17 @@ void DirectionalIndicator::UpLight(bool value)
 {
 	//turn on the 'up' directional light
 
-	if (timer)
+	Elevator *elev = sbs->GetElevator(elevator_num);
+
+	if (!elev)
+		value = false;
+
+	if (timer && elev)
 	{
 		//stop or start timer
 		if (value == false && DownStatus == false)
 			timer->Stop();
-		else if (value == true)
+		else if (value == true && (elev->AutoDoors == false || elev->ShaftDoorsExist(0, floor_num) == false))
 			timer->Start(timer_interval, true);
 	}
 
@@ -361,12 +366,17 @@ void DirectionalIndicator::DownLight(bool value)
 {
 	//turn on the 'down' directional light
 
-	if (timer)
+	Elevator *elev = sbs->GetElevator(elevator_num);
+
+	if (!elev)
+		value = false;
+
+	if (timer && elev)
 	{
 		//stop or start timer
 		if (value == false && UpStatus == false)
 			timer->Stop();
-		else if (value == true)
+		else if (value == true && (elev->AutoDoors == false || elev->ShaftDoorsExist(0, floor_num) == false))
 			timer->Start(timer_interval, true);
 	}
 
@@ -452,6 +462,8 @@ Ogre::Vector3 DirectionalIndicator::GetPosition()
 
 void DirectionalIndicator::Timer::Notify()
 {
+	//when shut-off timer triggers, switch off lights
+
 	if (indicator->UpStatus == false && indicator->DownStatus == false)
 		return;
 

@@ -67,6 +67,9 @@ void TimerObject::Start(int milliseconds, bool oneshot)
 
 void TimerObject::Stop()
 {
+	if (Running == false)
+		return;
+
 	Running = false;
 	sbs->UnregisterTimerCallback(this);
 
