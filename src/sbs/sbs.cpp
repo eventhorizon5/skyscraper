@@ -812,70 +812,73 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
 
-	if (DrawSideN == true && thickness != 0.0f)
+	if (thickness != 0.0f)
 	{
-		if (FlipTexture == true)
+		if (DrawSideN == true)
 		{
-			tw2 = widthscale[2];
-			th2 = heightscale[2];
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[2];
+				th2 = heightscale[2];
+			}
+			if (TextureOverride == true)
+				texture2 = sidenegtex;
+
+			NewName = name;
+			NewName.append(":left");
+			if (axis == 1)
+				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //left wall
+			else
+				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //left wall
 		}
-		if (TextureOverride == true)
-			texture2 = sidenegtex;
 
-		NewName = name;
-		NewName.append(":left");
-		if (axis == 1)
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //left wall
-		else
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //left wall
-	}
-
-	if (DrawSideP == true && thickness != 0.0f)
-	{
-		if (FlipTexture == true)
+		if (DrawSideP == true)
 		{
-			tw2 = widthscale[3];
-			th2 = heightscale[3];
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[3];
+				th2 = heightscale[3];
+			}
+			if (TextureOverride == true)
+				texture2 = sidepostex;
+
+			NewName = name;
+			NewName.append(":right");
+			if (axis == 1)
+				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //right wall
+			else
+				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //right wall
 		}
-		if (TextureOverride == true)
-			texture2 = sidepostex;
 
-		NewName = name;
-		NewName.append(":right");
-		if (axis == 1)
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //right wall
-		else
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //right wall
-	}
-
-	if (DrawTop == true && thickness != 0.0f)
-	{
-		if (FlipTexture == true)
+		if (DrawTop == true)
 		{
-			tw2 = widthscale[4];
-			th2 = heightscale[4];
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[4];
+				th2 = heightscale[4];
+			}
+			if (TextureOverride == true)
+				texture2 = toptex;
+
+			NewName = name;
+			NewName.append(":top");
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //top wall
 		}
-		if (TextureOverride == true)
-			texture2 = toptex;
 
-		NewName = name;
-		NewName.append(":top");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //top wall
-	}
-
-	if (DrawBottom == true && thickness != 0.0f)
-	{
-		if (FlipTexture == true)
+		if (DrawBottom == true)
 		{
-			tw2 = widthscale[5];
-			th2 = heightscale[5];
-		}
-		if (TextureOverride == true)
-			texture2 = bottomtex;
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[5];
+				th2 = heightscale[5];
+			}
+			if (TextureOverride == true)
+				texture2 = bottomtex;
 
-		NewName = name;
-		NewName.append(":bottom");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
+			NewName = name;
+			NewName.append(":bottom");
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
+		}
 	}
 
 	return true;
@@ -1085,64 +1088,67 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
 
-	if (DrawSideN == true && thickness != 0.0f)
+	if (thickness != 0.0f)
 	{
-		if (FlipTexture == true)
+		if (DrawSideN == true)
 		{
-			tw2 = widthscale[2];
-			th2 = heightscale[2];
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[2];
+				th2 = heightscale[2];
+			}
+			if (TextureOverride == true)
+				texture2 = sidenegtex;
+
+			NewName = name;
+			NewName.append(":left");
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v5, v1, v4, tw2, th2, autosize); //left wall
 		}
-		if (TextureOverride == true)
-			texture2 = sidenegtex;
 
-		NewName = name;
-		NewName.append(":left");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v5, v1, v4, tw2, th2, autosize); //left wall
-	}
-
-	if (DrawSideP == true && thickness != 0.0f)
-	{
-		if (FlipTexture == true)
+		if (DrawSideP == true)
 		{
-			tw2 = widthscale[3];
-			th2 = heightscale[3];
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[3];
+				th2 = heightscale[3];
+			}
+			if (TextureOverride == true)
+				texture2 = sidepostex;
+
+			NewName = name;
+			NewName.append(":right");
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v7, v3, v2, tw2, th2, autosize); //right wall
 		}
-		if (TextureOverride == true)
-			texture2 = sidepostex;
 
-		NewName = name;
-		NewName.append(":right");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v7, v3, v2, tw2, th2, autosize); //right wall
-	}
-
-	if (DrawTop == true && thickness != 0.0f)
-	{
-		if (FlipTexture == true)
+		if (DrawTop == true)
 		{
-			tw2 = widthscale[4];
-			th2 = heightscale[4];
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[4];
+				th2 = heightscale[4];
+			}
+			if (TextureOverride == true)
+				texture2 = toptex;
+
+			NewName = name;
+			NewName.append(":top");
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //front wall
 		}
-		if (TextureOverride == true)
-			texture2 = toptex;
 
-		NewName = name;
-		NewName.append(":top");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //front wall
-	}
-
-	if (DrawBottom == true && thickness != 0.0f)
-	{
-		if (FlipTexture == true)
+		if (DrawBottom == true)
 		{
-			tw2 = widthscale[5];
-			th2 = heightscale[5];
-		}
-		if (TextureOverride == true)
-			texture2 = bottomtex;
+			if (FlipTexture == true)
+			{
+				tw2 = widthscale[5];
+				th2 = heightscale[5];
+			}
+			if (TextureOverride == true)
+				texture2 = bottomtex;
 
-		NewName = name;
-		NewName.append(":bottom");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v7, v8, v4, v3, tw2, th2, autosize); //back wall
+			NewName = name;
+			NewName.append(":bottom");
+			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v7, v8, v4, v3, tw2, th2, autosize); //back wall
+		}
 	}
 
 	PlanarRotate = old_planarrotate;
