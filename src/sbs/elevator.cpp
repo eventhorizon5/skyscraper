@@ -1480,6 +1480,11 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorFloor = GetFloor();
 		oldfloor = ElevatorFloor;
 
+		//switch off directional indicators on current floor if not already done so
+		if (sbs->GetFloor(ElevatorFloor))
+			sbs->GetFloor(ElevatorFloor)->SetDirectionalIndicators(Number, false, false);
+		SetDirectionalIndicators(false, false);
+
 		//exit if floor doesn't exist
 		if (!sbs->GetFloor(GotoFloor))
 		{
