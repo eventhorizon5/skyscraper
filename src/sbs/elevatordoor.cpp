@@ -70,6 +70,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	sensor = 0;
 	sensor_action = 0;
 	reset_action = 0;
+	sensor_enabled = false;
+	sensor_status = false;
 	EnableSensor(sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true));
 	SensorSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.SensorSound", "");
 
