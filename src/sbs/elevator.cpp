@@ -556,7 +556,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		Report("creating doors");
 	if (NumDoors > 0)
 	{
-		for (int i = 0; i < NumDoors; i++)
+		for (int i = 1; i <= NumDoors; i++)
 			DoorArray.push_back(new ElevatorDoor(i, this));
 	}
 

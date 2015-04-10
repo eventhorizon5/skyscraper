@@ -40,7 +40,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	object->SetName(name.c_str());
 
 	//create a new elevator door
-	Number = number + 1;
+	Number = number;
 	elev = elevator;
 	OpenDoor = 0;
 	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3f);
@@ -773,15 +773,10 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 {
 	//adds an elevator door component; remake of AddDoors command
 
-	std::string elevnumber, doornumber, Name, buffer;
-	elevnumber = ToString(elev->Number);
-	TrimString(elevnumber);
-	doornumber = ToString(Number);
-	TrimString(doornumber);
+	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "ElevatorDoor " + elevnumber + ":" + doornumber + ":" + Name;
-	TrimString(buffer);
+	buffer = "ElevatorDoor " + ToString2(elev->Number) + ":" + ToString2(Number) + ":" + Name;
 
 	AddDoorComponent(Doors, name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors->object;
@@ -803,16 +798,10 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	if (!ShaftDoors[index])
 		return 0;
 
-	std::string elevnumber, floornumber, doornumber, Name, buffer;
-	elevnumber = ToString(elev->Number);
-	TrimString(elevnumber);
-	floornumber = ToString(floor);
-	TrimString(floornumber);
-	doornumber = ToString(Number);
-	TrimString(doornumber);
+	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
+	buffer = "Elevator " + ToString2(elev->Number) + ": Shaft Door " + ToString2(Number) + ":" + ToString2(floor) + ":" + Name;
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
@@ -824,20 +813,10 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 {
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
-	std::string elevnumber, floornumber, doornumber, Name;
-	elevnumber = ToString(elev->Number);
-	TrimString(elevnumber);
-	doornumber = ToString(Number);
-	TrimString(doornumber);
-	Name = name;
-	TrimString(Name);
-
 	//create doors
 	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 	{
 		int floor = elev->ServicedFloors[i];
-		floornumber = ToString(floor);
-		TrimString(floornumber);
 		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
 }
@@ -1495,8 +1474,14 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	altitude = 0;
 	floor = shaftdoor_floor;
 
+	std::string name;
+	if (IsShaftDoor == true)
+		name = "Shaft Door Wrapper " + ToString2(parent->Number) + ":" + ToString2(shaftdoor_floor);
+	else
+		name = "Elevator Door Wrapper " + ToString2(parent->Number);
+
 	object = new Object();
-	object->SetValues(this, parent->object, "DoorWrapper", "Door Wrapper", false);
+	object->SetValues(this, parent->object, "DoorWrapper", name.c_str(), false);
 }
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()
