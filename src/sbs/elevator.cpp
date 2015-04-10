@@ -1481,9 +1481,7 @@ void Elevator::MoveElevatorToFloor()
 		oldfloor = ElevatorFloor;
 
 		//switch off directional indicators on current floor if not already done so
-		if (sbs->GetFloor(ElevatorFloor))
-			sbs->GetFloor(ElevatorFloor)->SetDirectionalIndicators(Number, false, false);
-		SetDirectionalIndicators(false, false);
+		SetDirectionalIndicators(ElevatorFloor, false, false);
 
 		//exit if floor doesn't exist
 		if (!sbs->GetFloor(GotoFloor))
@@ -2707,8 +2705,7 @@ bool Elevator::EnableUpPeak(bool value)
 		EnableDownPeak(false);
 		if (IsMoving == false && GetFloor() == GetBottomFloor() && sbs->GetFloor(GetFloor()))
 		{
-			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
-			SetDirectionalIndicators(true, false);
+			SetDirectionalIndicators(GetFloor(), true, false);
 			if (AutoDoors == true)
 				OpenDoors();
 		}
@@ -2756,8 +2753,7 @@ bool Elevator::EnableDownPeak(bool value)
 		EnableUpPeak(false);
 		if (IsMoving == false && GetFloor() == GetTopFloor() && sbs->GetFloor(GetFloor()))
 		{
-			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
-			SetDirectionalIndicators(false, true);
+			SetDirectionalIndicators(GetFloor(), false, true);
 			if (AutoDoors == true)
 				OpenDoors();
 		}
@@ -3287,18 +3283,27 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	return indicator->object;
 }
 
-void Elevator::SetDirectionalIndicators(bool UpLight, bool DownLight)
+void Elevator::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
 {
-	//set light status of interior directional indicators
+	//set light status of exterior and interior directional indicators
+	//for interior indicators, the value of floor is passed to the indicator for checks
 
+	//exterior indicators
+	if (sbs->GetFloor(floor))
+		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, UpLight, DownLight);
+
+	//interior indicators
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
 		{
-			if (DirIndicatorArray[i]->ActiveDirection == false)
+			if (indicator->ActiveDirection == false)
 			{
-				DirIndicatorArray[i]->DownLight(DownLight);
-				DirIndicatorArray[i]->UpLight(UpLight);
+				indicator->floor_num = floor;
+				indicator->DownLight(DownLight);
+				indicator->UpLight(UpLight);
 			}
 		}
 	}
@@ -3310,24 +3315,26 @@ void Elevator::UpdateDirectionalIndicators()
 
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
 		{
-			if (DirIndicatorArray[i]->ActiveDirection == true)
+			if (indicator->ActiveDirection == true)
 			{
 				if (ActiveDirection == 1)
 				{
-					DirIndicatorArray[i]->DownLight(false);
-					DirIndicatorArray[i]->UpLight(true);
+					indicator->DownLight(false);
+					indicator->UpLight(true);
 				}
 				if (ActiveDirection == 0)
 				{
-					DirIndicatorArray[i]->DownLight(false);
-					DirIndicatorArray[i]->UpLight(false);
+					indicator->DownLight(false);
+					indicator->UpLight(false);
 				}
 				if (ActiveDirection == -1)
 				{
-					DirIndicatorArray[i]->DownLight(true);
-					DirIndicatorArray[i]->UpLight(false);
+					indicator->DownLight(true);
+					indicator->UpLight(false);
 				}
 			}
 		}
@@ -4662,16 +4669,12 @@ void Elevator::NotifyArrival(int floor)
 	if (GetArrivalDirection(floor) == true)
 	{
 		Chime(0, floor, true);
-		if (sbs->GetFloor(floor))
-			sbs->GetFloor(floor)->SetDirectionalIndicators(Number, true, false);
-		SetDirectionalIndicators(true, false);
+		SetDirectionalIndicators(floor, true, false);
 	}
 	else
 	{
 		Chime(0, floor, false);
-		if (sbs->GetFloor(floor))
-			sbs->GetFloor(floor)->SetDirectionalIndicators(Number, false, true);
-		SetDirectionalIndicators(false, true);
+		SetDirectionalIndicators(floor, false, true);
 	}
 
 	if (FireServicePhase1 == 0 && FireServicePhase2 == 0)
