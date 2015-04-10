@@ -355,15 +355,6 @@
 										<border>5</border>
 										<option>1</option>
 									</object>
-									<object class="sizeritem">
-										<object class="wxButton" name="ID_bUpIndicator" variable="bUpIndicator" member="yes">
-											<label>Set Up Indicator</label>
-											<handler function="On_bUpIndicator_Click" entry="EVT_BUTTON" />
-										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<option>1</option>
@@ -419,15 +410,6 @@
 										<object class="wxButton" name="ID_bStopDoors" variable="bStopDoors" member="yes">
 											<label>Stop Doors</label>
 											<handler function="On_bStopDoors_Click" entry="EVT_BUTTON" />
-										</object>
-										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-										<border>5</border>
-										<option>1</option>
-									</object>
-									<object class="sizeritem">
-										<object class="wxButton" name="ID_bDownIndicator" variable="bDownIndicator" member="yes">
-											<label>Set Down Indicator</label>
-											<handler function="On_bDownIndicator_Click" entry="EVT_BUTTON" />
 										</object>
 										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
