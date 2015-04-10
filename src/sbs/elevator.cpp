@@ -1484,7 +1484,7 @@ void Elevator::MoveElevatorToFloor()
 		SetDirectionalIndicators(ElevatorFloor, false, false);
 
 		//exit if floor doesn't exist
-		if (!sbs->GetFloor(GotoFloor))
+		if (!sbs->GetFloor(GotoFloor) && ManualMove == 0)
 		{
 			ReportError("Destination floor does not exist");
 			MoveElevator = false;
@@ -1520,6 +1520,7 @@ void Elevator::MoveElevatorToFloor()
 			ReportError("Doors must be closed before moving when interlocks are enabled");
 			MoveElevator = false;
 			ElevatorIsRunning = false;
+			Direction = 0;
 			DeleteActiveRoute();
 			return;
 		}
