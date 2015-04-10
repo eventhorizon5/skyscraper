@@ -631,30 +631,40 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 	}
 
-	//reset and enable nudge timer
-	ResetNudgeTimer();
-
 	//reset values
 	OpenDoor = 0;
 	WhichDoors = 0;
 	door_changed = false;
 	doors_stopped = false;
 
-	//turn on autoclose timer
-	if (manual == false &&
-		(elev->InServiceMode() == false || elev->WaitForDoors == true) &&
-		(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
-		(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
+	if (manual == false && open == true)
 	{
-		if (IsSensorBlocked() == false)
-			Reset();
-		else
-			elev->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
+		//reset and enable nudge timer
+		ResetNudgeTimer();
+
+		//turn on autoclose timer
+		if ((elev->InServiceMode() == false || elev->WaitForDoors == true) &&
+				(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
+				(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
+		{
+			if (IsSensorBlocked() == false)
+				Reset();
+			else
+				elev->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
+		}
+
+		//play direction message sound
+		elev->PlayMessageSound(true);
+	}
+	else
+	{
+		//turn off nudge timer
+		ResetNudgeTimer(false);
 	}
 
-	//play direction message sound
-	if (manual == false && open == true)
-		elev->PlayMessageSound(true);
+	//deactivate sensor if doors are closed
+	if (open == false)
+		EnableSensor(false, false);
 
 	DoorIsRunning = false;
 }
