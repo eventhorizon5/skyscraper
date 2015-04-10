@@ -3878,7 +3878,7 @@ int Elevator::AreDoorsMoving(int number, bool car_doors, bool shaft_doors)
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 		{
-			if (door->AreDoorsMoving(car_doors, shaft_doors) == true)
+			if (door->AreDoorsMoving(0, car_doors, shaft_doors) == true)
 				return door->OpenDoor;
 		}
 		else
