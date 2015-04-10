@@ -1476,9 +1476,9 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 
 	std::string name;
 	if (IsShaftDoor == true)
-		name = "Shaft Door " + ToString2(parent->Number) + ":" + ToString2(shaftdoor_floor) + " Wrapper";
+		name = "Shaft Door " + ToString2(parent->Number) + ":" + ToString2(shaftdoor_floor);
 	else
-		name = "Elevator Door " + ToString2(parent->Number) + " Wrapper";
+		name = "Elevator Door " + ToString2(parent->Number);
 
 	object = new Object();
 	object->SetValues(this, parent->object, "DoorWrapper", name.c_str(), false);
