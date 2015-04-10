@@ -218,7 +218,7 @@ public:
 	int GetBottomFloor();
 	void AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	Object* AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
-	void SetDirectionalIndicators(bool UpLight, bool DownLight);
+	void SetDirectionalIndicators(int floor, bool UpLight, bool DownLight);
 	void UpdateDirectionalIndicators();
 	void EnableDirectionalIndicators(bool value);
 	ElevatorDoor* GetDoor(int number);
@@ -320,9 +320,9 @@ public:
 	int GetActiveCallDirection();
 	void ResetLights();
 	void ChangeLight(int floor, bool value);
-	int AreDoorsMoving(int number = 0);
-	bool AreDoorsOpening(int number = 0);
-	bool AreDoorsClosing(int number = 0);
+	int AreDoorsMoving(int number = 0, bool car_doors = true, bool shaft_doors = true);
+	bool AreDoorsOpening(int number = 0, bool car_doors = true, bool shaft_doors = true);
+	bool AreDoorsClosing(int number = 0, bool car_doors = true, bool shaft_doors = true);
 	bool InElevator();
 	void EnableSensor(bool value, int number = 0);
 	bool GetSensorStatus(int number = 0);

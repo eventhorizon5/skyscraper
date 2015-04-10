@@ -968,12 +968,14 @@ void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
 		{
-			if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == false)
+			if (indicator->elevator_num == elevator && indicator->ActiveDirection == false)
 			{
-				DirIndicatorArray[i]->DownLight(DownLight);
-				DirIndicatorArray[i]->UpLight(UpLight);
+				indicator->DownLight(DownLight);
+				indicator->UpLight(UpLight);
 			}
 		}
 	}
@@ -986,9 +988,11 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 	SBS_PROFILE("Floor::UpdateDirectionalIndicators1");
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
 		{
-			if (DirIndicatorArray[i]->elevator_num == elevator && DirIndicatorArray[i]->ActiveDirection == true)
+			if (indicator->elevator_num == elevator && indicator->ActiveDirection == true)
 			{
 				Elevator *elev = sbs->GetElevator(elevator);
 
@@ -997,18 +1001,18 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 
 				if (elev->ActiveDirection == 1)
 				{
-					DirIndicatorArray[i]->UpLight(true);
-					DirIndicatorArray[i]->DownLight(false);
+					indicator->UpLight(true);
+					indicator->DownLight(false);
 				}
 				if (elev->ActiveDirection == 0)
 				{
-					DirIndicatorArray[i]->UpLight(false);
-					DirIndicatorArray[i]->DownLight(false);
+					indicator->UpLight(false);
+					indicator->DownLight(false);
 				}
 				if (elev->ActiveDirection == -1)
 				{
-					DirIndicatorArray[i]->UpLight(false);
-					DirIndicatorArray[i]->DownLight(true);
+					indicator->UpLight(false);
+					indicator->DownLight(true);
 				}
 			}
 		}
@@ -1023,29 +1027,31 @@ void Floor::UpdateDirectionalIndicators()
 	std::string value;
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
 		{
-			if (DirIndicatorArray[i]->ActiveDirection == true)
+			if (indicator->ActiveDirection == true)
 			{
-				Elevator *elev = sbs->GetElevator(DirIndicatorArray[i]->elevator_num);
+				Elevator *elev = sbs->GetElevator(indicator->elevator_num);
 
 				if (!elev)
 					return;
 
 				if (elev->ActiveDirection == 1)
 				{
-					DirIndicatorArray[i]->UpLight(true);
-					DirIndicatorArray[i]->DownLight(false);
+					indicator->UpLight(true);
+					indicator->DownLight(false);
 				}
 				if (elev->ActiveDirection == 0)
 				{
-					DirIndicatorArray[i]->UpLight(false);
-					DirIndicatorArray[i]->DownLight(false);
+					indicator->UpLight(false);
+					indicator->DownLight(false);
 				}
 				if (elev->ActiveDirection == -1)
 				{
-					DirIndicatorArray[i]->UpLight(false);
-					DirIndicatorArray[i]->DownLight(true);
+					indicator->UpLight(false);
+					indicator->DownLight(true);
 				}
 			}
 		}
@@ -1220,7 +1226,7 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX, GetBase(), CenterZ));
 	ControlArray.push_back(control);
 	return control->object;
@@ -1229,7 +1235,7 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
 	trigger->SetPosition(Ogre::Vector3(0, GetBase(), 0));
 	return trigger->object;

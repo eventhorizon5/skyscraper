@@ -40,7 +40,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	object->SetName(name.c_str());
 
 	//create a new elevator door
-	Number = number + 1;
+	Number = number;
 	elev = elevator;
 	OpenDoor = 0;
 	OpenSpeed = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.Door.OpenSpeed", 0.3f);
@@ -415,9 +415,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	}
 
 	//turn off directional indicators
-	if (whichdoors == 1)
-		sbs->GetFloor(floor)->SetDirectionalIndicators(elev->Number, false, false);
-	elev->SetDirectionalIndicators(false, false);
+	elev->SetDirectionalIndicators(floor, false, false);
 
 	WhichDoors = whichdoors;
 	ShaftDoorFloor = floor;
@@ -633,30 +631,40 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		}
 	}
 
-	//reset and enable nudge timer
-	ResetNudgeTimer();
-
 	//reset values
 	OpenDoor = 0;
 	WhichDoors = 0;
 	door_changed = false;
 	doors_stopped = false;
 
-	//turn on autoclose timer
-	if (manual == false &&
-		(elev->InServiceMode() == false || elev->WaitForDoors == true) &&
-		(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
-		(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
+	if (manual == false && open == true)
 	{
-		if (IsSensorBlocked() == false)
-			Reset();
-		else
-			elev->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
+		//reset and enable nudge timer
+		ResetNudgeTimer();
+
+		//turn on autoclose timer
+		if ((elev->InServiceMode() == false || elev->WaitForDoors == true) &&
+				(elev->UpPeak == false || ShaftDoorFloor != elev->GetBottomFloor()) &&
+				(elev->DownPeak == false || ShaftDoorFloor != elev->GetTopFloor()))
+		{
+			if (IsSensorBlocked() == false)
+				Reset();
+			else
+				elev->Report("not resetting timer for door" + GetNumberText() + " due to blocked sensor");
+		}
+
+		//play direction message sound
+		elev->PlayMessageSound(true);
+	}
+	else
+	{
+		//turn off nudge timer
+		ResetNudgeTimer(false);
 	}
 
-	//play direction message sound
-	if (manual == false && open == true)
-		elev->PlayMessageSound(true);
+	//deactivate sensor if doors are closed
+	if (open == false)
+		EnableSensor(false, false);
 
 	DoorIsRunning = false;
 }
@@ -765,15 +773,10 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 {
 	//adds an elevator door component; remake of AddDoors command
 
-	std::string elevnumber, doornumber, Name, buffer;
-	elevnumber = ToString(elev->Number);
-	TrimString(elevnumber);
-	doornumber = ToString(Number);
-	TrimString(doornumber);
+	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "ElevatorDoor " + elevnumber + ":" + doornumber + ":" + Name;
-	TrimString(buffer);
+	buffer = "ElevatorDoor " + ToString2(elev->Number) + ":" + ToString2(Number) + ":" + Name;
 
 	AddDoorComponent(Doors, name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors->object;
@@ -795,16 +798,10 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	if (!ShaftDoors[index])
 		return 0;
 
-	std::string elevnumber, floornumber, doornumber, Name, buffer;
-	elevnumber = ToString(elev->Number);
-	TrimString(elevnumber);
-	floornumber = ToString(floor);
-	TrimString(floornumber);
-	doornumber = ToString(Number);
-	TrimString(doornumber);
+	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "Elevator " + elevnumber + ": Shaft Door " + doornumber + ":" + floornumber + ":" + Name;
+	buffer = "Elevator " + ToString2(elev->Number) + ": Shaft Door " + ToString2(Number) + ":" + ToString2(floor) + ":" + Name;
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
@@ -816,20 +813,10 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 {
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
-	std::string elevnumber, floornumber, doornumber, Name;
-	elevnumber = ToString(elev->Number);
-	TrimString(elevnumber);
-	doornumber = ToString(Number);
-	TrimString(doornumber);
-	Name = name;
-	TrimString(Name);
-
 	//create doors
 	for (size_t i = 0; i < elev->ServicedFloors.size(); i++)
 	{
 		int floor = elev->ServicedFloors[i];
-		floornumber = ToString(floor);
-		TrimString(floornumber);
 		AddShaftDoorComponent(floor, name, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	}
 }
@@ -1491,8 +1478,14 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	altitude = 0;
 	floor = shaftdoor_floor;
 
+	std::string name;
+	if (IsShaftDoor == true)
+		name = "Shaft Door " + ToString2(parent->Number) + ":" + ToString2(shaftdoor_floor);
+	else
+		name = "Elevator Door " + ToString2(parent->Number);
+
 	object = new Object();
-	object->SetValues(this, parent->object, "DoorWrapper", "Door Wrapper", false);
+	object->SetValues(this, parent->object, "DoorWrapper", name.c_str(), false);
 }
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()
@@ -2080,11 +2073,11 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	actions.push_back(full_name1);
 
 	//create new trigger
-	sensor = new Trigger(object, "Sensor", SensorSound.c_str(), area_min, area_max, actions);
+	sensor = new Trigger(object, "Sensor", true, SensorSound.c_str(), area_min, area_max, actions);
 	sensor->SetPosition(elev->Origin);
 }
 
-bool ElevatorDoor::AreDoorsMoving(int doors)
+bool ElevatorDoor::AreDoorsMoving(int doors, bool car_doors, bool shaft_doors)
 {
 	//return true if doors are moving
 
@@ -2092,12 +2085,22 @@ bool ElevatorDoor::AreDoorsMoving(int doors)
 	//if doors is 1, check if doors are moving normally
 	//if doors is 2, check if doors are moving manually
 
-	if (doors == 1)
-		return (abs(OpenDoor) == 1);
-	if (doors == 2)
-		return (abs(OpenDoor) == 2);
+	bool result = false;
 
-	return (OpenDoor != 0);
+	if (doors == 0)
+		result = (OpenDoor != 0);
+	if (doors == 1)
+		result = (abs(OpenDoor) == 1);
+	if (doors == 2)
+		result = (abs(OpenDoor) == 2);
+
+	if (car_doors == true && (WhichDoors == 1 || WhichDoors == 2))
+		return result;
+
+	if (shaft_doors == true && (WhichDoors == 1 || WhichDoors == 3))
+		return result;
+
+	return false;
 }
 
 void ElevatorDoor::EnableSensor(bool value, bool persistent)

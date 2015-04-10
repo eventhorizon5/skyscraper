@@ -31,7 +31,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 
 Object::Object(bool temporary)
 {
-	Permanent = 0;
+	Permanent = false;
 	Parent = 0;
 	raw_object = 0;
 	linenum = 0;
@@ -63,6 +63,11 @@ Object::~Object()
 void Object::SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent)
 {
 	//set object values
+
+	//exit if settings have already been set
+	if (raw_object)
+		return;
+
 	raw_object = object;
 	Parent = parent;
 	Permanent = is_permanent;

@@ -588,16 +588,14 @@ void CallButton::Loop(int direction)
 		if (direction == -1)
 		{
 			//turn on directional indicator
-			sbs->GetFloor(floor)->SetDirectionalIndicators(elevator->Number, false, true);
-			elevator->SetDirectionalIndicators(false, true);
+			elevator->SetDirectionalIndicators(floor, false, true);
 			//play chime sound
 			elevator->Chime(0, floor, false);
 		}
 		else
 		{
 			//turn on directional indicator
-			sbs->GetFloor(floor)->SetDirectionalIndicators(elevator->Number, true, false);
-			elevator->SetDirectionalIndicators(true, false);
+			elevator->SetDirectionalIndicators(floor, true, false);
 			//play chime sound
 			elevator->Chime(0, floor, true);
 		}

@@ -30,13 +30,13 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Trigger::Trigger(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
+Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
 {
 	//create a proximity trigger at the specified location
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, parent, "Trigger", name, false);
+	object->SetValues(this, parent, "Trigger", name, permanent);
 
 	Name = name;
 

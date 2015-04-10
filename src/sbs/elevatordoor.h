@@ -165,7 +165,7 @@ public:
 	float GetShaftDoorAltitude(int floor);
 	void CheckSensor();
 	void CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max);
-	bool AreDoorsMoving(int doors = 0);
+	bool AreDoorsMoving(int doors = 0, bool car_doors = true, bool shaft_doors = true);
 	void EnableSensor(bool value, bool persistent = true);
 	bool GetSensorStatus(bool persistent = true);
 	bool IsSensorBlocked();
@@ -180,8 +180,8 @@ private:
 	DoorWrapper *Doors;
 
 	//Internal door simulation data
-	int WhichDoors;
-	int ShaftDoorFloor;
+	int WhichDoors; //which doors are in use; 1 for both, 2 for elevator doors, 3 for shaft doors
+	int ShaftDoorFloor; //floor the active shaft doors are on; only used if WhichDoors is 3
 	std::vector<DoorWrapper*> ShaftDoors; //shaft doors
 	std::vector<int> ManualFloors; //list of floors that use manual shaft doors
 

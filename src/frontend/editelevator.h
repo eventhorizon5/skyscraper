@@ -77,7 +77,6 @@ class editelevator: public wxDialog
 		static const long ID_bOpenShaftDoor;
 		static const long ID_bStop;
 		static const long ID_bChime;
-		static const long ID_bUpIndicator;
 		static const long ID_bEnqueueUp;
 		static const long ID_bEnqueueDown;
 		static const long ID_bClose;
@@ -85,7 +84,6 @@ class editelevator: public wxDialog
 		static const long ID_bCloseShaftDoor;
 		static const long ID_bHoldDoors;
 		static const long ID_bStopDoors;
-		static const long ID_bDownIndicator;
 		static const long ID_STATICTEXT3;
 		static const long ID_txtNumber;
 		static const long ID_STATICTEXT5;
@@ -352,8 +350,6 @@ class editelevator: public wxDialog
 		void On_bUp_Toggle(wxCommandEvent& event);
 		void On_bGoToggle_Toggle(wxCommandEvent& event);
 		void On_bDown_Toggle(wxCommandEvent& event);
-		void On_bUpIndicator_Click(wxCommandEvent& event);
-		void On_bDownIndicator_Click(wxCommandEvent& event);
 		void On_bResetQueues_Click(wxCommandEvent& event);
 		void On_bSetParkingFloor_Click(wxCommandEvent& event);
 		void On_bSetParkingDelay_Click(wxCommandEvent& event);
@@ -386,7 +382,6 @@ class editelevator: public wxDialog
 		//(*Declarations(editelevator)
 		wxButton* bSetManualSpeed;
 		wxTextCtrl* txtNotified;
-		wxButton* bHoldDoors;
 		wxFlexGridSizer* FlexGridSizer7;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText75;
@@ -424,7 +419,6 @@ class editelevator: public wxDialog
 		wxToggleButton* bUpPeak;
 		wxStaticText* StaticText82;
 		wxStaticText* StaticText20;
-		wxButton* bUpIndicator;
 		wxTextCtrl* txtDecelJerk;
 		wxStaticText* StaticText42;
 		wxTextCtrl* txtNudgeTimer;
@@ -498,7 +492,6 @@ class editelevator: public wxDialog
 		wxTextCtrl* txtShaft;
 		wxTextCtrl* txtManualMove;
 		wxStaticText* StaticText51;
-		wxButton* bDownIndicator;
 		wxTextCtrl* txtRecallAlternate;
 		wxButton* bClose;
 		wxFlexGridSizer* FlexGridSizer2;
@@ -588,6 +581,7 @@ class editelevator: public wxDialog
 		wxStaticText* StaticText19;
 		wxStaticText* StaticText38;
 		wxTextCtrl* txtAccelJerk;
+		wxButton* bHoldDoors;
 		wxBoxSizer* BoxSizer3;
 		wxStaticText* StaticText37;
 		wxTextCtrl* txtWaitForTimer;

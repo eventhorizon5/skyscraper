@@ -556,7 +556,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		Report("creating doors");
 	if (NumDoors > 0)
 	{
-		for (int i = 0; i < NumDoors; i++)
+		for (int i = 1; i <= NumDoors; i++)
 			DoorArray.push_back(new ElevatorDoor(i, this));
 	}
 
@@ -1262,7 +1262,7 @@ void Elevator::MonitorLoop()
 
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
-			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
 				if (sbs->Verbose)
 					Report("playing car idle sound");
@@ -1480,8 +1480,11 @@ void Elevator::MoveElevatorToFloor()
 		ElevatorFloor = GetFloor();
 		oldfloor = ElevatorFloor;
 
+		//switch off directional indicators on current floor if not already done so
+		SetDirectionalIndicators(ElevatorFloor, false, false);
+
 		//exit if floor doesn't exist
-		if (!sbs->GetFloor(GotoFloor))
+		if (!sbs->GetFloor(GotoFloor) && ManualMove == 0)
 		{
 			ReportError("Destination floor does not exist");
 			MoveElevator = false;
@@ -1517,6 +1520,7 @@ void Elevator::MoveElevatorToFloor()
 			ReportError("Doors must be closed before moving when interlocks are enabled");
 			MoveElevator = false;
 			ElevatorIsRunning = false;
+			Direction = 0;
 			DeleteActiveRoute();
 			return;
 		}
@@ -2702,8 +2706,7 @@ bool Elevator::EnableUpPeak(bool value)
 		EnableDownPeak(false);
 		if (IsMoving == false && GetFloor() == GetBottomFloor() && sbs->GetFloor(GetFloor()))
 		{
-			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, true, false);
-			SetDirectionalIndicators(true, false);
+			SetDirectionalIndicators(GetFloor(), true, false);
 			if (AutoDoors == true)
 				OpenDoors();
 		}
@@ -2751,8 +2754,7 @@ bool Elevator::EnableDownPeak(bool value)
 		EnableUpPeak(false);
 		if (IsMoving == false && GetFloor() == GetTopFloor() && sbs->GetFloor(GetFloor()))
 		{
-			sbs->GetFloor(GetFloor())->SetDirectionalIndicators(Number, false, true);
-			SetDirectionalIndicators(false, true);
+			SetDirectionalIndicators(GetFloor(), false, true);
 			if (AutoDoors == true)
 				OpenDoors();
 		}
@@ -3282,18 +3284,27 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	return indicator->object;
 }
 
-void Elevator::SetDirectionalIndicators(bool UpLight, bool DownLight)
+void Elevator::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
 {
-	//set light status of interior directional indicators
+	//set light status of exterior and interior directional indicators
+	//for interior indicators, the value of floor is passed to the indicator for checks
 
+	//exterior indicators
+	if (sbs->GetFloor(floor))
+		sbs->GetFloor(floor)->SetDirectionalIndicators(Number, UpLight, DownLight);
+
+	//interior indicators
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
 		{
-			if (DirIndicatorArray[i]->ActiveDirection == false)
+			if (indicator->ActiveDirection == false)
 			{
-				DirIndicatorArray[i]->DownLight(DownLight);
-				DirIndicatorArray[i]->UpLight(UpLight);
+				indicator->floor_num = floor;
+				indicator->DownLight(DownLight);
+				indicator->UpLight(UpLight);
 			}
 		}
 	}
@@ -3305,24 +3316,26 @@ void Elevator::UpdateDirectionalIndicators()
 
 	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
 	{
-		if (DirIndicatorArray[i])
+		DirectionalIndicator *indicator = DirIndicatorArray[i];
+
+		if (indicator)
 		{
-			if (DirIndicatorArray[i]->ActiveDirection == true)
+			if (indicator->ActiveDirection == true)
 			{
 				if (ActiveDirection == 1)
 				{
-					DirIndicatorArray[i]->DownLight(false);
-					DirIndicatorArray[i]->UpLight(true);
+					indicator->DownLight(false);
+					indicator->UpLight(true);
 				}
 				if (ActiveDirection == 0)
 				{
-					DirIndicatorArray[i]->DownLight(false);
-					DirIndicatorArray[i]->UpLight(false);
+					indicator->DownLight(false);
+					indicator->UpLight(false);
 				}
 				if (ActiveDirection == -1)
 				{
-					DirIndicatorArray[i]->DownLight(true);
-					DirIndicatorArray[i]->UpLight(false);
+					indicator->DownLight(true);
+					indicator->UpLight(false);
 				}
 			}
 		}
@@ -3849,9 +3862,10 @@ bool Elevator::DoorsStopped(int number)
 	return false;
 }
 
-int Elevator::AreDoorsMoving(int number)
+int Elevator::AreDoorsMoving(int number, bool car_doors, bool shaft_doors)
 {
-	//returns 1 if doors are opening, -1 if doors are closing, or 0 if doors are not moving
+	//returns 1 if doors are opening (2 manual), -1 if doors are closing (-2 manual), or 0 if doors are not moving
+	//if the type of door is specified, returns true if that type of door is moving
 
 	int start = number, end = number;
 	if (number == 0)
@@ -3864,7 +3878,7 @@ int Elevator::AreDoorsMoving(int number)
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 		{
-			if (door->AreDoorsMoving() == true)
+			if (door->AreDoorsMoving(0, car_doors, shaft_doors) == true)
 				return door->OpenDoor;
 		}
 		else
@@ -3873,20 +3887,20 @@ int Elevator::AreDoorsMoving(int number)
 	return 0;
 }
 
-bool Elevator::AreDoorsOpening(int number)
+bool Elevator::AreDoorsOpening(int number, bool car_doors, bool shaft_doors)
 {
 	//returns true if doors are opening
 
-	if (AreDoorsMoving(number) == 1)
+	if (AreDoorsMoving(number, car_doors, shaft_doors) == 1)
 		return true;
 	return false;
 }
 
-bool Elevator::AreDoorsClosing(int number)
+bool Elevator::AreDoorsClosing(int number, bool car_doors, bool shaft_doors)
 {
 	//returns true if doors are closing
 
-	if (AreDoorsMoving(number) == -1)
+	if (AreDoorsMoving(number, car_doors, shaft_doors) == -1)
 		return true;
 	return false;
 }
@@ -4657,16 +4671,12 @@ void Elevator::NotifyArrival(int floor)
 	if (GetArrivalDirection(floor) == true)
 	{
 		Chime(0, floor, true);
-		if (sbs->GetFloor(floor))
-			sbs->GetFloor(floor)->SetDirectionalIndicators(Number, true, false);
-		SetDirectionalIndicators(true, false);
+		SetDirectionalIndicators(floor, true, false);
 	}
 	else
 	{
 		Chime(0, floor, false);
-		if (sbs->GetFloor(floor))
-			sbs->GetFloor(floor)->SetDirectionalIndicators(Number, false, true);
-		SetDirectionalIndicators(false, true);
+		SetDirectionalIndicators(floor, false, true);
 	}
 
 	if (FireServicePhase1 == 0 && FireServicePhase2 == 0)
@@ -5079,7 +5089,7 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX + Origin.x, Origin.y, CenterZ + Origin.z));
 	ControlArray.push_back(control);
 	return control->object;
@@ -5088,7 +5098,7 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
 	trigger->SetPosition(Origin);
 	return trigger->object;
