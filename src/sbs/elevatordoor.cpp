@@ -2069,7 +2069,7 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	actions.push_back(full_name1);
 
 	//create new trigger
-	sensor = new Trigger(object, "Sensor", SensorSound.c_str(), area_min, area_max, actions);
+	sensor = new Trigger(object, "Sensor", true, SensorSound.c_str(), area_min, area_max, actions);
 	sensor->SetPosition(elev->Origin);
 }
 

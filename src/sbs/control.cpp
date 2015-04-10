@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset, bool center)
+Control::Control(Object *parent, const char *name, bool permanent, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset, bool center)
 {
 	//create a control at the specified location
 
@@ -39,7 +39,7 @@ Control::Control(Object *parent, const char *name, const char *sound_file, const
 
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, parent, "Control", name, false);
+	object->SetValues(this, parent, "Control", name, permanent);
 
 	Name = name;
 	std::string Name2 = Name;

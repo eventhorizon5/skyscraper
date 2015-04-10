@@ -3924,7 +3924,7 @@ Object* SBS::AddControl(const char *name, const char *sound, const char *directi
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX, 0, CenterZ));
 	ControlArray.push_back(control);
 	return control->object;
@@ -3933,7 +3933,7 @@ Object* SBS::AddControl(const char *name, const char *sound, const char *directi
 Object* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
 	return trigger->object;
 }

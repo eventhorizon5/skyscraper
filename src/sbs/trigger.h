@@ -37,7 +37,7 @@ public:
 	bool IsEnabled;
 
 	//functions
-	Trigger(Object *parent, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names);
+	Trigger(Object *parent, const char *name, bool permanent, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names);
 	~Trigger();
 	void Enabled(bool value);
 	Ogre::Vector3 GetPosition();
