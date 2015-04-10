@@ -57,7 +57,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	DirectionalMeshDown = 0;
 	DirectionalMesh = 0;
 	timer = 0;
-	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 10000);
+	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 15000);
 
 	bool in_elevator = false;
 	if (std::string(parent->GetType()) == "Elevator")
