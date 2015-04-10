@@ -1262,7 +1262,7 @@ void Elevator::MonitorLoop()
 
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
-			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving() != 0)
+			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
 				if (sbs->Verbose)
 					Report("playing car idle sound");
@@ -3862,9 +3862,10 @@ bool Elevator::DoorsStopped(int number)
 	return false;
 }
 
-int Elevator::AreDoorsMoving(int number)
+int Elevator::AreDoorsMoving(int number, bool car_doors, bool shaft_doors)
 {
-	//returns 1 if doors are opening, -1 if doors are closing, or 0 if doors are not moving
+	//returns 1 if doors are opening (2 manual), -1 if doors are closing (-2 manual), or 0 if doors are not moving
+	//if the type of door is specified, returns true if that type of door is moving
 
 	int start = number, end = number;
 	if (number == 0)
@@ -3886,20 +3887,20 @@ int Elevator::AreDoorsMoving(int number)
 	return 0;
 }
 
-bool Elevator::AreDoorsOpening(int number)
+bool Elevator::AreDoorsOpening(int number, bool car_doors, bool shaft_doors)
 {
 	//returns true if doors are opening
 
-	if (AreDoorsMoving(number) == 1)
+	if (AreDoorsMoving(number, car_doors, shaft_doors) == 1)
 		return true;
 	return false;
 }
 
-bool Elevator::AreDoorsClosing(int number)
+bool Elevator::AreDoorsClosing(int number, bool car_doors, bool shaft_doors)
 {
 	//returns true if doors are closing
 
-	if (AreDoorsMoving(number) == -1)
+	if (AreDoorsMoving(number, car_doors, shaft_doors) == -1)
 		return true;
 	return false;
 }

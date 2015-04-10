@@ -320,9 +320,9 @@ public:
 	int GetActiveCallDirection();
 	void ResetLights();
 	void ChangeLight(int floor, bool value);
-	int AreDoorsMoving(int number = 0);
-	bool AreDoorsOpening(int number = 0);
-	bool AreDoorsClosing(int number = 0);
+	int AreDoorsMoving(int number = 0, bool car_doors = true, bool shaft_doors = true);
+	bool AreDoorsOpening(int number = 0, bool car_doors = true, bool shaft_doors = true);
+	bool AreDoorsClosing(int number = 0, bool car_doors = true, bool shaft_doors = true);
 	bool InElevator();
 	void EnableSensor(bool value, int number = 0);
 	bool GetSensorStatus(int number = 0);

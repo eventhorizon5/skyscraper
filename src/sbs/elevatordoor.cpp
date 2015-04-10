@@ -2073,7 +2073,7 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	sensor->SetPosition(elev->Origin);
 }
 
-bool ElevatorDoor::AreDoorsMoving(int doors)
+bool ElevatorDoor::AreDoorsMoving(int doors, bool car_doors, bool shaft_doors)
 {
 	//return true if doors are moving
 
@@ -2081,12 +2081,22 @@ bool ElevatorDoor::AreDoorsMoving(int doors)
 	//if doors is 1, check if doors are moving normally
 	//if doors is 2, check if doors are moving manually
 
-	if (doors == 1)
-		return (abs(OpenDoor) == 1);
-	if (doors == 2)
-		return (abs(OpenDoor) == 2);
+	bool result = false;
 
-	return (OpenDoor != 0);
+	if (doors == 0)
+		result = (OpenDoor != 0);
+	if (doors == 1)
+		result = (abs(OpenDoor) == 1);
+	if (doors == 2)
+		result = (abs(OpenDoor) == 2);
+
+	if (car_doors == true && (WhichDoors == 1 || WhichDoors == 2))
+		return result;
+
+	if (shaft_doors == true && (WhichDoors == 1 || WhichDoors == 3))
+		return result;
+
+	return false;
 }
 
 void ElevatorDoor::EnableSensor(bool value, bool persistent)
