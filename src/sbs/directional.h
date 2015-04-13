@@ -72,7 +72,7 @@ private:
 		Timer(const char *name, DirectionalIndicator *parent) : TimerObject(parent->object, name, false)
 		{
 			indicator = parent;
-		};
+		}
 		virtual void Notify();
 	};
 

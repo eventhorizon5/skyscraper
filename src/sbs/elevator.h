@@ -346,8 +346,25 @@ private:
 		{
 			elevator = elev;
 			type = Type;
-		};
+		}
 		virtual void Notify();
+	};
+
+	struct QueueEntry
+	{
+		int floor; //floor number
+		bool hall_call; //true if entry is a hall call
+
+		QueueEntry(int floor, bool hall_call)
+		{
+			this->floor = floor;
+			this->hall_call = hall_call;
+		}
+
+		bool operator < (const QueueEntry& element) const
+		{
+			return floor < element.floor;
+		}
 	};
 
 	//parking timer object
@@ -361,8 +378,8 @@ private:
 	Timer *departure_delay;
 
 	//Internal elevator simulation data
-	std::vector<int> UpQueue; //up call queue
-	std::vector<int> DownQueue; //down call queue
+	std::vector<QueueEntry> UpQueue; //up call queue
+	std::vector<QueueEntry> DownQueue; //down call queue
 	float ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	float Destination; //elevator destination Y value
