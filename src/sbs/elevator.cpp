@@ -125,6 +125,7 @@ Elevator::Elevator(int number)
 	MotorPosition = 0;
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
+	ActiveCallHall = false;
 	lastdoor_result = 0;
 	lastdoor_number = 0;
 	QueueResets = sbs->GetConfigBool("Skyscraper.SBS.Elevator.QueueResets", false);
@@ -612,7 +613,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	return object;
 }
 
-bool Elevator::AddRoute(int floor, int direction, bool change_light)
+bool Elevator::AddRoute(int floor, int direction, bool hall_call, bool change_light)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
@@ -664,7 +665,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		}
 
 		//add floor to up queue
-		UpQueue.push_back(QueueEntry(floor, true));
+		UpQueue.push_back(QueueEntry(floor, hall_call));
 		std::sort(UpQueue.begin(), UpQueue.end());
 		QueuePending = true;
 
@@ -689,7 +690,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 			return ReportError("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
 		
 		//add floor to down queue
-		DownQueue.push_back(QueueEntry(floor, true));
+		DownQueue.push_back(QueueEntry(floor, hall_call));
 		std::sort(DownQueue.begin(), DownQueue.end());
 		QueuePending = true;
 		
@@ -713,7 +714,7 @@ bool Elevator::AddRoute(int floor, int direction, bool change_light)
 		if ((GetFloor() < ACPFloor && floor > ACPFloor) || (GetFloor() > ACPFloor && floor < ACPFloor))
 		{
 			Report("adding ACP route");
-			AddRoute(ACPFloor, direction, change_light);
+			AddRoute(ACPFloor, direction, false, change_light);
 		}
 	}
 
@@ -907,7 +908,7 @@ void Elevator::ProcessCallQueue()
 			{
 				if (sbs->Verbose)
 					Report("ProcessCallQueue: sending elevator to top floor for DownPeak mode");
-				AddRoute(TopFloor, 1, false);
+				AddRoute(TopFloor, 1, false, false);
 				return;
 			}
 			//if UpPeak mode is active, send elevator to the bottom serviced floor if not already there
@@ -915,7 +916,7 @@ void Elevator::ProcessCallQueue()
 			{
 				if (sbs->Verbose)
 					Report("ProcessCallQueue: sending elevator to bottom floor for UpPeak mode");
-				AddRoute(BottomFloor, -1, false);
+				AddRoute(BottomFloor, -1, false, false);
 				return;
 			}
 		}
@@ -1009,6 +1010,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue up: standard dispatch, floor " + ToString2(UpQueue[i].floor));
 					ActiveCallFloor = UpQueue[i].floor;
+					ActiveCallHall = UpQueue[i].hall_call;
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -1029,6 +1031,7 @@ void Elevator::ProcessCallQueue()
 						if (BeyondDecelMarker(1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 						{
 							ActiveCallFloor = UpQueue[i].floor;
+							ActiveCallHall = UpQueue[i].hall_call;
 							GotoFloor = UpQueue[i].floor;
 							Destination = tmpdestination;
 							Report("changing destination floor to " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
@@ -1048,6 +1051,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + ToString2(UpQueue[i].floor));
 					ActiveCallFloor = UpQueue[i].floor;
+					ActiveCallHall = UpQueue[i].hall_call;
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -1088,6 +1092,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue down: standard dispatch, floor " + ToString2(DownQueue[i].floor));
 					ActiveCallFloor = DownQueue[i].floor;
+					ActiveCallHall = DownQueue[i].hall_call;
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -1108,6 +1113,7 @@ void Elevator::ProcessCallQueue()
 						if (BeyondDecelMarker(-1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 						{
 							ActiveCallFloor = DownQueue[i].floor;
+							ActiveCallHall = DownQueue[i].hall_call;
 							GotoFloor = DownQueue[i].floor;
 							Destination = tmpdestination;
 							Report("changing destination floor to " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
@@ -1127,6 +1133,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + ToString2(DownQueue[i].floor));
 					ActiveCallFloor = DownQueue[i].floor;
+					ActiveCallHall = DownQueue[i].hall_call;
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -2637,17 +2644,17 @@ void Elevator::GoToRecallFloor()
 	{
 		Report("Proceeding to recall floor");
 		if (RecallFloor > GetFloor())
-			AddRoute(RecallFloor, 1, false);
+			AddRoute(RecallFloor, 1, false, false);
 		else
-			AddRoute(RecallFloor, -1, false);
+			AddRoute(RecallFloor, -1, false, false);
 	}
 	else
 	{
 		Report("Proceeding to alternate recall floor");
 		if (RecallFloor > GetFloor())
-			AddRoute(RecallFloorAlternate, 1, false);
+			AddRoute(RecallFloorAlternate, 1, false, false);
 		else
-			AddRoute(RecallFloorAlternate, -1, false);
+			AddRoute(RecallFloorAlternate, -1, false, false);
 	}
 }
 
@@ -4353,9 +4360,9 @@ void Elevator::Timer::Notify()
 			}
 
 			if (elevator->ParkingFloor > floor)
-				elevator->AddRoute(elevator->ParkingFloor, 1, false);
+				elevator->AddRoute(elevator->ParkingFloor, 1, false, false);
 			else if (elevator->ParkingFloor < floor)
-				elevator->AddRoute(elevator->ParkingFloor, -1, false);
+				elevator->AddRoute(elevator->ParkingFloor, -1, false, false);
 
 			Stop();
 		}
@@ -4682,12 +4689,14 @@ void Elevator::NotifyArrival(int floor)
 	//play chime sound and change indicator
 	if (GetArrivalDirection(floor) == true)
 	{
-		Chime(0, floor, true);
+		if (ActiveCallHall == true)
+			Chime(0, floor, true);
 		SetDirectionalIndicators(floor, true, false);
 	}
 	else
 	{
-		Chime(0, floor, false);
+		if (ActiveCallHall == true)
+			Chime(0, floor, false);
 		SetDirectionalIndicators(floor, false, true);
 	}
 
@@ -5385,11 +5394,11 @@ bool Elevator::SelectFloor(int floor)
 
 	//elevator is above floor
 	if (GetFloor() > floor)
-		result = AddRoute(floor, -1, true);
+		result = AddRoute(floor, -1, false, true);
 
 	//elevator is below floor
 	if (GetFloor() < floor)
-		result = AddRoute(floor, 1, true);
+		result = AddRoute(floor, 1, false, true);
 
 	//elevator is on floor
 	if (GetFloor() == floor)
@@ -5424,7 +5433,7 @@ bool Elevator::SelectFloor(int floor)
 		else
 		{
 			//add a route to the current floor if elevator is moving
-			result = AddRoute(floor, -Direction, true);
+			result = AddRoute(floor, -Direction, false, true);
 		}
 	}
 
@@ -5513,9 +5522,9 @@ bool Elevator::ReturnToNearestFloor()
 		Parking = true; //enable parking mode to prevent arrival notification
 
 		if (floor >= GetFloor())
-			AddRoute(floor, 1, false);
+			AddRoute(floor, 1, false, false);
 		else
-			AddRoute(floor, -1, false);
+			AddRoute(floor, -1, false, false);
 		return true;
 	}
 	return false;
@@ -5617,6 +5626,11 @@ int Elevator::GetActiveCallFloor()
 int Elevator::GetActiveCallDirection()
 {
 	return ActiveCallDirection;
+}
+
+bool Elevator::GetActiveCallHall()
+{
+	return ActiveCallHall;
 }
 
 bool Elevator::InElevator()

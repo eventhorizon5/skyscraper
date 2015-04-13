@@ -604,7 +604,7 @@ void CallButton::Loop(int direction)
 	}
 	else
 		//otherwise add a route entry to this floor
-		elevator->AddRoute(floor, direction, false);
+		elevator->AddRoute(floor, direction, true, false);
 
 	//unregister callback if inactive
 	if (UpStatus == false && DownStatus == false)

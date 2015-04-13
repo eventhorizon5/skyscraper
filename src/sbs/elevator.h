@@ -163,7 +163,7 @@ public:
 	Elevator(int number);
 	~Elevator();
 	Object* CreateElevator(bool relative, float x, float z, int floor);
-	bool AddRoute(int floor, int direction, bool change_light);
+	bool AddRoute(int floor, int direction, bool hall_call, bool change_light);
 	bool DeleteRoute(int floor, int direction);
 	bool CallCancel();
 	void Alarm();
@@ -318,6 +318,7 @@ public:
 	CallButton* GetPrimaryCallButton();
 	int GetActiveCallFloor();
 	int GetActiveCallDirection();
+	bool GetActiveCallHall();
 	void ResetLights();
 	void ChangeLight(int floor, bool value);
 	int AreDoorsMoving(int number = 0, bool car_doors = true, bool shaft_doors = true);
@@ -391,6 +392,7 @@ private:
 	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
+	bool ActiveCallHall; //true if active call is a hall call
 	bool FirstRun; //used for setting first-run items in the run loop
 	int RandomLobby; //lobby level of elevator to use for random predictions
 	bool Running; //is elevator in run mode?

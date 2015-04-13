@@ -1063,16 +1063,16 @@ void editelevator::On_bCall_Click(wxCommandEvent& event)
 	if (elevator)
 	{
 		if (elevator->GetFloor() > Simcore->camera->CurrentFloor)
-			elevator->AddRoute(Simcore->camera->CurrentFloor, -1, false);
+			elevator->AddRoute(Simcore->camera->CurrentFloor, -1, true, false);
 		if (elevator->GetFloor() < Simcore->camera->CurrentFloor)
-			elevator->AddRoute(Simcore->camera->CurrentFloor, 1, false);
+			elevator->AddRoute(Simcore->camera->CurrentFloor, 1, true, false);
 	}
 }
 
 void editelevator::On_bEnqueueUp_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->AddRoute(floor_number, 1, true);
+		elevator->AddRoute(floor_number, 1, false, true);
 }
 
 void editelevator::On_bGo_Click(wxCommandEvent& event)
@@ -1084,7 +1084,7 @@ void editelevator::On_bGo_Click(wxCommandEvent& event)
 void editelevator::On_bEnqueueDown_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->AddRoute(floor_number, -1, true);
+		elevator->AddRoute(floor_number, -1, false, true);
 }
 
 void editelevator::On_bOpen_Click(wxCommandEvent& event)
