@@ -163,7 +163,7 @@ public:
 	Elevator(int number);
 	~Elevator();
 	Object* CreateElevator(bool relative, float x, float z, int floor);
-	bool AddRoute(int floor, int direction, bool change_light);
+	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
 	bool CallCancel();
 	void Alarm();
@@ -318,6 +318,7 @@ public:
 	CallButton* GetPrimaryCallButton();
 	int GetActiveCallFloor();
 	int GetActiveCallDirection();
+	bool GetActiveCallHall();
 	void ResetLights();
 	void ChangeLight(int floor, bool value);
 	int AreDoorsMoving(int number = 0, bool car_doors = true, bool shaft_doors = true);
@@ -346,8 +347,25 @@ private:
 		{
 			elevator = elev;
 			type = Type;
-		};
+		}
 		virtual void Notify();
+	};
+
+	struct QueueEntry
+	{
+		int floor; //floor number
+		int call_type; //0 = car call, 1 = hall call, 2 = system call
+
+		QueueEntry(int floor, int call_type)
+		{
+			this->floor = floor;
+			this->call_type = call_type;
+		}
+
+		bool operator < (const QueueEntry& element) const
+		{
+			return floor < element.floor;
+		}
 	};
 
 	//parking timer object
@@ -361,8 +379,8 @@ private:
 	Timer *departure_delay;
 
 	//Internal elevator simulation data
-	std::vector<int> UpQueue; //up call queue
-	std::vector<int> DownQueue; //down call queue
+	std::vector<QueueEntry> UpQueue; //up call queue
+	std::vector<QueueEntry> DownQueue; //down call queue
 	float ElevatorStart; //elevator vertical starting location
 	int ElevatorFloor; //current elevator floor
 	float Destination; //elevator destination Y value
@@ -374,6 +392,7 @@ private:
 	float JerkPos; //temporary storage for the elevator rate at the end of the jerkrate increments
 	int ActiveCallFloor; //floor number of active call (that the elevator's currently responding too)
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
+	bool ActiveCallHall; //true if active call is a hall call
 	bool FirstRun; //used for setting first-run items in the run loop
 	int RandomLobby; //lobby level of elevator to use for random predictions
 	bool Running; //is elevator in run mode?

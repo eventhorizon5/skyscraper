@@ -199,7 +199,7 @@ private:
 			door = parent;
 			elevator = elev;
 			type = Type;
-		};
+		}
 		virtual void Notify();
 	};
 
