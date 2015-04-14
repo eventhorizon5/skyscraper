@@ -617,7 +617,7 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 {
 	//Add call route to elevator routing table, in sorted order
 	//directions are either 1 for up, or -1 for down
-	//call type is 0 for an internal button press, 1 for a hall call, and 2 for a system call
+	//call type is 0 for a car call, 1 for a hall call, and 2 for a system call
 
 	if (Running == false)
 		return ReportError("Elevator not running");

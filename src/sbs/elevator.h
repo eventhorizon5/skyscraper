@@ -354,7 +354,7 @@ private:
 	struct QueueEntry
 	{
 		int floor; //floor number
-		int call_type; //0 = internal button press, 1 = hall call, 2 = system call
+		int call_type; //0 = car call, 1 = hall call, 2 = system call
 
 		QueueEntry(int floor, int call_type)
 		{
