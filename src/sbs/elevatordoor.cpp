@@ -956,25 +956,26 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 			wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, "Connection");
 			name1 = "ShaftDoorF1";
 			name2 = "ShaftDoorF2";
-			x1 += elev->Origin.x;
-			x2 += elev->Origin.x;
-			z1 += elev->Origin.z;
-			z2 += elev->Origin.z;
-			sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name1.c_str(), "Connection", elev->Origin.x + x1, elev->Origin.x + x2, elev->Origin.z + z1, elev->Origin.z + z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name2.c_str(), "Connection", elev->Origin.x + x1, elev->Origin.x + x2, elev->Origin.z + z1, elev->Origin.z + z2, 1, wrapper->Height + 0.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
 		}
 
 		sbs->ResetTextureMapping();
 	}
 
+	Ogre::Vector3 center;
+	center.x = wrapper->Origin.x + x1 + ((x2 - x1) / 2);
+	center.y = wrapper->Origin.y + (wrapper->Height / 2);
+	center.z = wrapper->Origin.z + z1 + ((z2 - z1) / 2);
+
 	//relocate sound object
 	if (ShaftDoor == false)
 	{
-		doorsound->SetPosition(Ogre::Vector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
-		nudgesound->SetPosition(doorsound->GetPosition());
+		doorsound->SetPosition(center);
+		nudgesound->SetPosition(center);
 	}
 	else
-		chime->SetPosition(Ogre::Vector3(wrapper->Origin.x, wrapper->Origin.y + (wrapper->Height / 2), wrapper->Origin.z));
+		chime->SetPosition(center);
 
 	//create door sensor
 	if (GetSensorStatus() == true && ShaftDoor == false && elev->AutoDoors == true)
@@ -1379,19 +1380,19 @@ float ElevatorDoor::GetShaftDoorAltitude(int floor)
 void ElevatorDoor::MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
 {
 	//move sound
-	Ogre::Vector3 pos;
+	Ogre::Vector3 pos = doorsound->GetPosition();
 	if (relative_x == false)
 		pos.x = position.x;
 	else
-		pos.x = Doors->Origin.x + position.x;
+		pos.x += position.x;
 	if (relative_y == false)
 		pos.y = position.y + (Doors->Height / 2);
 	else
-		pos.y = Doors->Origin.y + position.y;
+		pos.y += position.y;
 	if (relative_z == false)
 		pos.z = position.z;
 	else
-		pos.z = Doors->Origin.z + position.z;
+		pos.z += position.z;
 	doorsound->SetPosition(pos);
 	nudgesound->SetPosition(pos);
 }

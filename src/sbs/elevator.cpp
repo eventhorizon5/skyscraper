@@ -2026,7 +2026,7 @@ void Elevator::SetAltitude(float altitude)
 	//move sounds
 	carsound->SetPosition(elevposition);
 	idlesound->SetPosition(elevposition);
-	MoveDoorSound(0, elevposition, false, false, false);
+	MoveDoorSound(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
 	alarm->SetPosition(elevposition);
 	floorbeep->SetPosition(elevposition);
 	announcesnd->SetPosition(elevposition);
