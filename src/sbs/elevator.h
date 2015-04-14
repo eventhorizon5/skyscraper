@@ -163,7 +163,7 @@ public:
 	Elevator(int number);
 	~Elevator();
 	Object* CreateElevator(bool relative, float x, float z, int floor);
-	bool AddRoute(int floor, int direction, bool hall_call, bool change_light);
+	bool AddRoute(int floor, int direction, int call_type);
 	bool DeleteRoute(int floor, int direction);
 	bool CallCancel();
 	void Alarm();
@@ -354,12 +354,12 @@ private:
 	struct QueueEntry
 	{
 		int floor; //floor number
-		bool hall_call; //true if entry is a hall call
+		int call_type; //0 = internal button press, 1 = hall call, 2 = system call
 
-		QueueEntry(int floor, bool hall_call)
+		QueueEntry(int floor, int call_type)
 		{
 			this->floor = floor;
-			this->hall_call = hall_call;
+			this->call_type = call_type;
 		}
 
 		bool operator < (const QueueEntry& element) const
