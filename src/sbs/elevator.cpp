@@ -149,6 +149,7 @@ Elevator::Elevator(int number)
 	carsound = 0;
 	idlesound = 0;
 	motorsound = 0;
+	motoridlesound = 0;
 	alarm = 0;
 	floorbeep = 0;
 	OriginFloor = 0;
@@ -1184,6 +1185,9 @@ void Elevator::MonitorLoop()
 
 	SBS_PROFILE("Elevator::MonitorLoop");
 
+	if (Created == false)
+		return;
+
 	ControlPressActive = false;
 
 	//make sure height value is set
@@ -1198,6 +1202,9 @@ void Elevator::MonitorLoop()
 				Height = sbs->ToLocal(ElevatorMesh->MeshGeometry[i].vertex.y);
 		}
 		HeightSet = true;
+
+		//update sound positions
+		SetAltitude(elevposition.y);
 	}
 
 	//set random lobby level if not set
@@ -2024,12 +2031,13 @@ void Elevator::SetAltitude(float altitude)
 	}
 
 	//move sounds
+	Ogre::Vector3 top = Ogre::Vector3(elevposition.x, elevposition.y + Height, elevposition.z);
 	carsound->SetPosition(elevposition);
-	idlesound->SetPosition(elevposition);
+	idlesound->SetPosition(top);
 	MoveDoorSound(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
-	alarm->SetPosition(elevposition);
-	floorbeep->SetPosition(elevposition);
-	announcesnd->SetPosition(elevposition);
+	alarm->SetPosition(top);
+	floorbeep->SetPosition(top);
+	announcesnd->SetPosition(top);
 	musicsound->SetPosition(elevposition + MusicPosition);
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
@@ -5231,6 +5239,10 @@ float Elevator::GetDestinationOffset(int floor)
 void Elevator::Init()
 {
 	//startup elevator initialization
+
+	//exit if not created properly
+	if (Created == false)
+		return;
 
 	bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 
