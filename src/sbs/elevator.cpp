@@ -2835,6 +2835,7 @@ bool Elevator::EnableIndependentService(bool value)
 		ResetQueue(true, true);
 		HoldDoors(); //turn off door timers
 		ResetNudgeTimer(false); //switch off nudge timer
+		SetDirectionalIndicators(ElevatorFloor, false, false); //switch off directional indicators on current floor
 		if (IsMoving == false)
 			if (AutoDoors == true)
 				OpenDoors();
@@ -2873,6 +2874,7 @@ bool Elevator::EnableInspectionService(bool value)
 		ResetQueue(true, true);
 		HoldDoors(); //turn off door timers
 		ResetNudgeTimer(false); //switch off nudge timer
+		SetDirectionalIndicators(ElevatorFloor, false, false); //switch off directional indicators on current floor
 		if (IsMoving == true)
 			Stop();
 		Report("Inspection Service mode enabled");
@@ -2953,6 +2955,9 @@ bool Elevator::EnableFireService1(int value)
 		{
 			Report("Fire Service Phase 1 mode set to On");
 			
+			//switch off directional indicators on current floor
+			SetDirectionalIndicators(ElevatorFloor, false, false);
+
 			//recall elevator if not in phase 2 hold
 			if (FireServicePhase2 != 2)
 			{
@@ -4829,6 +4834,10 @@ void Elevator::SetRunState(bool value)
 		else
 			Stop(true);
 	}
+
+	//switch off directional indicators on current floor
+	if (value == false && IsMoving == false)
+		SetDirectionalIndicators(ElevatorFloor, false, false);
 
 	if (value == false)
 		Report("Elevator stopped");
