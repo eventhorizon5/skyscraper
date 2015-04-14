@@ -1243,9 +1243,9 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 		for (int j = 0; j < (int)trimesh[i].triangles.size(); j++)
 		{
 			TriangleType tri = trimesh[i].triangles[j];
-			tri.x += count + location;
-			tri.y += count + location;
-			tri.z += count + location;
+			tri.a += count + location;
+			tri.b += count + location;
+			tri.c += count + location;
 			triangles.push_back(tri);
 		}
 		location += (int)trimesh[i].vertices.size();
@@ -1383,7 +1383,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 			TriangleType *triangle = &Triangles[index].triangles[i];
 			for (int j = 0; j < index_count; j++)
 			{
-				if (triangle->x == indexarray[j].x && triangle->y == indexarray[j].y && triangle->z == indexarray[j].z)
+				if (triangle->a == indexarray[j].a && triangle->b == indexarray[j].b && triangle->c == indexarray[j].c)
 				{
 					//delete match
 					RemoveTriangle(index, i);
@@ -1485,9 +1485,9 @@ void MeshObject::Prepare()
 		loc = 0;
 		for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
 		{
-			mIndices[loc] = Triangles[index].triangles[i].x;
-			mIndices[loc + 1] = Triangles[index].triangles[i].y;
-			mIndices[loc + 2] = Triangles[index].triangles[i].z;
+			mIndices[loc] = Triangles[index].triangles[i].a;
+			mIndices[loc + 1] = Triangles[index].triangles[i].b;
+			mIndices[loc + 2] = Triangles[index].triangles[i].c;
 			loc += 3;
 		}
 
@@ -1545,12 +1545,12 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 	deleted_v.reserve(deleted_indices.size() * 3);
 	for (int i = 0; i < (int)deleted_indices.size(); i++)
 	{
-		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].x) == deleted_v.end())
-			deleted_v.push_back(deleted_indices[i].x);
-		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].y) == deleted_v.end())
-			deleted_v.push_back(deleted_indices[i].y);
-		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].z) == deleted_v.end())
-			deleted_v.push_back(deleted_indices[i].z);
+		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].a) == deleted_v.end())
+			deleted_v.push_back(deleted_indices[i].a);
+		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].b) == deleted_v.end())
+			deleted_v.push_back(deleted_indices[i].b);
+		if (find(deleted_v.begin(), deleted_v.end(), deleted_indices[i].c) == deleted_v.end())
+			deleted_v.push_back(deleted_indices[i].c);
 	}
 	sort(deleted_v.begin(), deleted_v.end());
 
@@ -1575,11 +1575,11 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 		int elements_pos = 0;
 		for (int i = 0; i < (int)indiceslist->triangles.size(); i++)
 		{
-			elements[elements_pos] = indiceslist->triangles[i].x;
+			elements[elements_pos] = indiceslist->triangles[i].a;
 			elements_pos++;
-			elements[elements_pos] = indiceslist->triangles[i].y;
+			elements[elements_pos] = indiceslist->triangles[i].b;
 			elements_pos++;
-			elements[elements_pos] = indiceslist->triangles[i].z;
+			elements[elements_pos] = indiceslist->triangles[i].c;
 			elements_pos++;
 
 			for (int j = deleted_size - 1; j >= 0; j--)
@@ -1627,11 +1627,11 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 			int elements_pos = 0;
 			for (int k = 0; k < (int)poly->triangles.size(); k++)
 			{
-				elements[elements_pos] = poly->triangles[k].x;
+				elements[elements_pos] = poly->triangles[k].a;
 				elements_pos++;
-				elements[elements_pos] = poly->triangles[k].y;
+				elements[elements_pos] = poly->triangles[k].b;
 				elements_pos++;
-				elements[elements_pos] = poly->triangles[k].z;
+				elements[elements_pos] = poly->triangles[k].c;
 				elements_pos++;
 
 				for (int j = deleted_size - 1; j >= 0; j--)
@@ -1713,10 +1713,10 @@ void MeshObject::CreateCollider()
 			for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 			{
 				TriangleType tri(0, 0, 0);
-				tri.x = Triangles[i].triangles[j].x;
-				tri.y = Triangles[i].triangles[j].y;
-				tri.z = Triangles[i].triangles[j].z;
-				shape->AddTriangle(MeshGeometry[tri.x].vertex, MeshGeometry[tri.y].vertex, MeshGeometry[tri.z].vertex);
+				tri.a = Triangles[i].triangles[j].a;
+				tri.b = Triangles[i].triangles[j].b;
+				tri.c = Triangles[i].triangles[j].c;
+				shape->AddTriangle(MeshGeometry[tri.a].vertex, MeshGeometry[tri.b].vertex, MeshGeometry[tri.c].vertex);
 			}
 		}
 
@@ -1836,9 +1836,9 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 		for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 		{
 			Ogre::Vector3 tri_a, tri_b, tri_c;
-			tri_a = MeshGeometry[Triangles[i].triangles[j].x].vertex;
-			tri_b = MeshGeometry[Triangles[i].triangles[j].y].vertex;
-			tri_c = MeshGeometry[Triangles[i].triangles[j].z].vertex;
+			tri_a = MeshGeometry[Triangles[i].triangles[j].a].vertex;
+			tri_b = MeshGeometry[Triangles[i].triangles[j].b].vertex;
+			tri_c = MeshGeometry[Triangles[i].triangles[j].c].vertex;
 
 			std::pair<bool, float> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
 			if (result.first == true)

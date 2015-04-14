@@ -30,18 +30,18 @@ class WallObject;
 
 struct TriangleType
 {
-	unsigned int x, y, z;
+	unsigned int a, b, c;
 	TriangleType(unsigned int a, unsigned int b, unsigned int c)
 	{
-		x = a;
-		y = b;
-		z = c;
+		this->a = a;
+		this->b = b;
+		this->c = c;
 	}
 	TriangleType()
 	{
-		x = 0;
-		y = 0;
-		z = 0;
+		this->a = 0;
+		this->b = 0;
+		this->c = 0;
 	}
 };
 
