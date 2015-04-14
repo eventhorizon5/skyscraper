@@ -4686,16 +4686,20 @@ void Elevator::NotifyArrival(int floor)
 	if (InServiceMode() == true)
 		return;
 
+	//get call button status
+	bool up = false, down = false;
+	GetCallButtonStatus(floor, up, down);
+
 	//play chime sound and change indicator
 	if (GetArrivalDirection(floor) == true)
 	{
-		if (ActiveCallHall == true)
+		if (up == true)
 			Chime(0, floor, true);
 		SetDirectionalIndicators(floor, true, false);
 	}
 	else
 	{
-		if (ActiveCallHall == true)
+		if (down == true)
 			Chime(0, floor, false);
 		SetDirectionalIndicators(floor, false, true);
 	}
