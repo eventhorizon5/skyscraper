@@ -162,6 +162,26 @@ Certain elevator actions that took parameters have been fixed so that the parame
 
 The Isect function is now working.
 
+Numerous optimizations have been made, resulting in faster startup times.
+
+If an elevator's AutoDoors is set to false, or no shaft door exists on the floor, directional indicators will use an automatic switchoff timer.
+
+The "Set Up Indicator" and "Set Down Indicator" buttons in the elevator editor have been removed, for space.
+
+Remaining windows have been added to the Glass Tower's lobby.
+
+Elevator queues now show the origination of the calls, which can be seen by the "Dump Queues" button in the elevator editor.
+
+Elevators only chime if a related hall call is active on the floor.
+
+Directional indicators are now switched off at the appropriate times, mainly when leaving a floor, switching into a service mode, or when the elevator is being switched off.
+
+Sensor and nudge modes are now switched off when manually opening doors.
+
+Fixes to the names of elevator door objects have been made, to make it easier to find them in the Object Manager.
+
+Door and elevator sounds are now positioned properly, instead of just at the elevator center.
+
 
 Major changes in Update 1:
 ------------------------------------
@@ -305,6 +325,13 @@ OpenManual
 CloseManual
 OpenIntManual
 CloseIntManual
+OpenExtManual
+CloseExtManual
+OpenShaftDoor
+CloseShaftDoor
+OpenShaftDoorManual
+CloseShaftDoorManual
+StopDoors
 Return
 Up
 Down
@@ -314,6 +341,7 @@ Sensor
 Reset
 SensorOn
 SensorOff
+SensorReset
 
 New advanced math functions:
 cos
