@@ -125,7 +125,7 @@ Elevator::Elevator(int number)
 	MotorPosition = 0;
 	ActiveCallFloor = 0;
 	ActiveCallDirection = 0;
-	ActiveCallHall = false;
+	ActiveCallType = 0;
 	lastdoor_result = 0;
 	lastdoor_number = 0;
 	QueueResets = sbs->GetConfigBool("Skyscraper.SBS.Elevator.QueueResets", false);
@@ -1008,7 +1008,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue up: standard dispatch, floor " + ToString2(UpQueue[i].floor));
 					ActiveCallFloor = UpQueue[i].floor;
-					ActiveCallHall = UpQueue[i].call_type;
+					ActiveCallType = UpQueue[i].call_type;
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -1029,7 +1029,7 @@ void Elevator::ProcessCallQueue()
 						if (BeyondDecelMarker(1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 						{
 							ActiveCallFloor = UpQueue[i].floor;
-							ActiveCallHall = UpQueue[i].call_type;
+							ActiveCallType = UpQueue[i].call_type;
 							GotoFloor = UpQueue[i].floor;
 							Destination = tmpdestination;
 							Report("changing destination floor to " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
@@ -1049,7 +1049,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue up: dispatching idle lower elevator, floor " + ToString2(UpQueue[i].floor));
 					ActiveCallFloor = UpQueue[i].floor;
-					ActiveCallHall = UpQueue[i].call_type;
+					ActiveCallType = UpQueue[i].call_type;
 					ActiveCallDirection = 1;
 					GotoFloor = UpQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -1090,7 +1090,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue down: standard dispatch, floor " + ToString2(DownQueue[i].floor));
 					ActiveCallFloor = DownQueue[i].floor;
-					ActiveCallHall = DownQueue[i].call_type;
+					ActiveCallType = DownQueue[i].call_type;
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -1111,7 +1111,7 @@ void Elevator::ProcessCallQueue()
 						if (BeyondDecelMarker(-1, tmpdestination) == false && sbs->GetFloor(GotoFloor))
 						{
 							ActiveCallFloor = DownQueue[i].floor;
-							ActiveCallHall = DownQueue[i].call_type;
+							ActiveCallType = DownQueue[i].call_type;
 							GotoFloor = DownQueue[i].floor;
 							Destination = tmpdestination;
 							Report("changing destination floor to " + ToString2(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
@@ -1131,7 +1131,7 @@ void Elevator::ProcessCallQueue()
 					if (sbs->Verbose)
 						Report("ProcessCallQueue down: dispatching idle higher elevator, floor " + ToString2(DownQueue[i].floor));
 					ActiveCallFloor = DownQueue[i].floor;
-					ActiveCallHall = DownQueue[i].call_type;
+					ActiveCallType = DownQueue[i].call_type;
 					ActiveCallDirection = -1;
 					GotoFloor = DownQueue[i].floor;
 					if (FireServicePhase2 == 0 || UpPeak == true || DownPeak == true)
@@ -5670,9 +5670,9 @@ int Elevator::GetActiveCallDirection()
 	return ActiveCallDirection;
 }
 
-bool Elevator::GetActiveCallHall()
+int Elevator::GetActiveCallType()
 {
-	return ActiveCallHall;
+	return ActiveCallType;
 }
 
 bool Elevator::InElevator()
