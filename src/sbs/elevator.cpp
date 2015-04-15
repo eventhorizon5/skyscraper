@@ -2273,7 +2273,7 @@ void Elevator::Enabled(bool value)
 	IsEnabled = value;
 
 	//floor indicators
-	for (int i = 0; i < FloorIndicatorArray.size(); i++)
+	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->Enabled(value);
