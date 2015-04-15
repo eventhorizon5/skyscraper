@@ -1,5 +1,32 @@
 Version 1.9.2 (2.0 Alpha 9 - Update 2)
 -------------------------
+-fix TriangleType element names
+-turn off directional indicators if elevator is switching into a service mode, or is being switched off
+-startup functions no longer crash if CreateElevator is never specified
+-positioned elevator sounds properly
+-need to initialize motor idle sound (fixes potential crashes)
+-elevator door and chime sounds are now positioned properly at the door
+-removed change_light parameter of AddRoute function, since the call type now handles this
+-elevators now set queue-related call status for each call (car, hall and system), and they no longer chime if a related hall call is not active on that floor
+-elevator queues can now store call-related information in addition to floor number
+-(Glass Tower) added remaining interior atrium windows
+-removed "SetUpIndicator" and "SetDownIndicator" buttons from elevator editor
+-elevator door sensors are now set permanent to prevent crashes
+-controls and triggers can now be made permanent
+-AreDoorsMoving function now supports checking separate door types
+-fixed an issue where the car idle (fan) sound would play when only shaft doors were opening
+-elevator door name fixes
+-door/sensor reset is now only done if doors are opened normally
+-sensor and nudge modes are now switched off when manually opening doors
+-for manual elevator doors, interlock error needs to reset direction value, otherwise a lockup may occur
+-interior directional indicators are given the floor number to check for the existence of shaft doors
+-elevator interior and exterior directional indicators are now controlled together from elevator's SetDirectionalIndicators function
+-elevator should switch off directional indicators if leaving that floor
+-added ShaftDoorsExist function to elevator
+-added a shut-off timer to the directional indicator object, which will only start if associated elevator's AutoDoors is false, or no shaft doors exist on that floor
+-rewrote ReplaceAll function, to work directly on the string reference to avoid copies
+-in IfProc function, keep character references for performance
+-optimization to the Cut function - only do name string copies when necessary
 -sensor status variables need to be initialized first
 -added more CS information to the texmap.cpp file
 -GetPoint/isect functions are now working
