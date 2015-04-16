@@ -1,4 +1,4 @@
-Skyscraper 2.0 Alpha 10 
+Skyscraper 2.0 Alpha 9 - Update 2
 Copyright (C)2003-2015 Ryan Thoryk
 http://www.skyscrapersim.com
 http://sourceforge.net/projects/skyscraper
@@ -54,7 +54,7 @@ files.
 
 3. Release Notes
 
-This release is the tenth development release of the 2.0 series (which is a complete rewrite of
+This release is an update to the ninth development release of the 2.0 series (which is a complete rewrite of
 the original 1.0 version), and is part of an ongoing effort towards a 2.0 stable release.
 
 This software utilizes the OGRE rendering engine library (version 1.8 or later), the Bullet physics engine with some custom patches, the FMOD sound system, the wxWidgets library (version 2.8 or later), and the Caleum sky system addon for OGRE.
@@ -149,6 +149,66 @@ To optimize rendering speed, the main thing that will cause overall slowdowns is
 Caelum is used to create dynamic skies, including moving clouds, moving sun and moon, effects like fog and rain, stars at night, etc.  To use Caelum, choose (or create) a sky function from the data/caelum/sky.os script, and either add it to your building script using the DynamicSky command or in the INI file with the SkyName parameter.  See the script guide (designguide.html) for more information on the available options.  The Caelum sky-related time multiplier can be set in the Camera Control box, in order to quickly show day/night cycles.
 
 To revert back to the old sky system, turn off Caelum in the skyscraper.ini file using the Skyscraper.Frontent.Caelum option.
+
+
+Major changes in Update 2:
+------------------------------------
+
+Missing elevator action names have been added to the script guide, and a StopDoors action has been added.
+
+More elevator door sensor and open door hold fixes have been made.
+
+Certain elevator actions that took parameters have been fixed so that the parameters now work.
+
+The Isect function is now working.
+
+Numerous optimizations have been made, resulting in faster startup times.
+
+If an elevator's AutoDoors is set to false, or no shaft door exists on the floor, directional indicators will use an automatic switchoff timer.
+
+The "Set Up Indicator" and "Set Down Indicator" buttons in the elevator editor have been removed, for space.
+
+Remaining windows have been added to the Glass Tower's lobby.
+
+Elevator queues now show the origination of the calls, which can be seen by the "Dump Queues" button in the elevator editor.
+
+Elevators only chime if a related hall call is active on the floor.
+
+Directional indicators are now switched off at the appropriate times, mainly when leaving a floor, switching into a service mode, or when the elevator is being switched off.
+
+Sensor and nudge modes are now switched off when manually opening doors.
+
+Fixes to the names of elevator door objects have been made, to make it easier to find them in the Object Manager.
+
+Door and elevator sounds are now positioned properly, instead of just at the elevator center.
+
+
+Major changes in Update 1:
+------------------------------------
+
+Skyscraper now prints renderer statistics instead of just FPS if you press the F2 key.  You can easily detect performance problems this way, by looking at the number of "batches", which are rendered meshes.  When this count goes way up (into the thousands), the performance will slow down, since Ogre has to handle batches on the CPU, while other things such as triangles are handled by the GPU.
+
+Holding elevator door buttons now hold the doors for elevators with automatic doors enabled.
+
+An issue involving major lag when pressing call buttons has been fixed.
+
+Elevators can now report a call rejection, so that call buttons can reset and switch off if all elevators are in service modes and related situations.
+
+Improvements have been made to the math processor, to prevent hangs.
+
+Door sensors have been reworked so that they operate properly, and can be switched on and off properly.
+
+A longstanding issue in the planar texture mapper has been fixed; previously certain walls were not being created properly.
+
+The motor idle sound is now working properly.
+
+The Alarm button in the elevator editor is now "Hold Doors".
+
+User variables now work in sections, such as "<Floors>".
+
+The FloorHold feature has been fixed, which is used in modern manual elevators.
+
+Elevator door open/close and message sounds are now also played on door reversals.
 
 
 Major changes since the Alpha 8 release:
@@ -265,6 +325,13 @@ OpenManual
 CloseManual
 OpenIntManual
 CloseIntManual
+OpenExtManual
+CloseExtManual
+OpenShaftDoor
+CloseShaftDoor
+OpenShaftDoorManual
+CloseShaftDoorManual
+StopDoors
 Return
 Up
 Down
@@ -274,6 +341,7 @@ Sensor
 Reset
 SensorOn
 SensorOff
+SensorReset
 
 New advanced math functions:
 cos

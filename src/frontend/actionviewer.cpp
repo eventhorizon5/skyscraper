@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.10 Alpha - Action Viewer
+	Skyscraper 1.9 Alpha - Action Viewer
 	Copyright (C)2003-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

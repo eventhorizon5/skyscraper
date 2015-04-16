@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Shaft Class
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -267,29 +267,35 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 		}
 		else
 		{
-			GetMeshObject(floor)->Enable(value);
-			EnableArray[floor - startfloor] = false;
-
-			//controls
-			for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
+			//leave bottom and top on
+			if (floor != startfloor && floor != endfloor)
 			{
-				if (ControlArray[floor - startfloor][i])
-					ControlArray[floor - startfloor][i]->Enabled(false);
+				GetMeshObject(floor)->Enable(value);
+				EnableArray[floor - startfloor] = false;
+
+				//controls
+				for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
+				{
+					if (ControlArray[floor - startfloor][i])
+						ControlArray[floor - startfloor][i]->Enabled(false);
+				}
+
+				//triggers
+				/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
+				{
+					if (TriggerArray[floor - startfloor][i])
+						TriggerArray[floor - startfloor][i]->Enabled(false);
+				}*/
+
+				//models
+				for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
+				{
+					if (ModelArray[floor - startfloor][i])
+						ModelArray[floor - startfloor][i]->Enable(false);
+				}
 			}
-
-			//triggers
-			/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
-			{
-				if (TriggerArray[floor - startfloor][i])
-					TriggerArray[floor - startfloor][i]->Enabled(false);
-			}*/
-
-			//models
-			for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
-			{
-				if (ModelArray[floor - startfloor][i])
-					ModelArray[floor - startfloor][i]->Enable(false);
-			}
+			else
+				return;
 		}
 
 		if (EnableShaftDoors == true)
@@ -831,7 +837,13 @@ void Shaft::Init()
 	//startup initialization of shafts
 
 	if (ShowFullShaft == false)
+	{
 		EnableWholeShaft(false, true);
+
+		//enable extents
+		Enabled(startfloor, true, true);
+		Enabled(endfloor, true, true);
+	}
 	else
 		EnableWholeShaft(true, true, true);
 }

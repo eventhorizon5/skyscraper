@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.10 Alpha - Text Dialog
+	Skyscraper 1.9 Alpha - Text Dialog
 	Copyright (C)2003-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper

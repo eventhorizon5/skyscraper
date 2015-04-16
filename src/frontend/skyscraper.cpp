@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.10 Alpha - Simulation Frontend
+	Skyscraper 1.9 Alpha - Simulation Frontend
 	Copyright (C)2003-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -86,10 +86,10 @@ int main (int argc, char* argv[])
 
 bool Skyscraper::OnInit(void)
 {
-	version = "1.10";
+	version = "1.9";
 	version_rev = SVN_REVSTR;
 	version_state = "Alpha";
-	version_frontend = version + ".0." + version_rev;
+	version_frontend = version + ".2." + version_rev;
 	skyscraper = this;
 	MouseDown = false;
 	IsRunning = false;
@@ -270,7 +270,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	InLoop = false;
 	Center();
 	wxString title;
-	title = wxT("Skyscraper 1.10 Alpha");
+	title = wxT("Skyscraper 2.0 Alpha 9");
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);

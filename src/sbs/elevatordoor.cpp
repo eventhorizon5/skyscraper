@@ -2,7 +2,7 @@
 
 /*
 	Scalable Building Simulator - Elevator Door Class
-	The Skyscraper Project - Version 1.10 Alpha
+	The Skyscraper Project - Version 1.9 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -841,7 +841,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	{
 		for (int j = 1; j <= 3; j++)
 		{
-			Ogre::Vector2 extents = wrapper->doors[i]->mesh->GetExtents(j, true);
+			Ogre::Vector2 extents = sbs->GetExtents(wrapper->doors[i]->mesh, j, true);
 			extents.x = sbs->ToLocal(extents.x);
 			extents.y = sbs->ToLocal(extents.y);
 
@@ -1139,6 +1139,10 @@ void ElevatorDoor::ShaftDoorsEnabled(int floor, bool value)
 
 	//exit if shaft's ShowFullShaft is set
 	if (elev->GetShaft()->ShowFullShaft == true && value == false)
+		return;
+
+	//leave top and bottom on
+	if ((floor == elev->GetShaft()->startfloor || floor == elev->GetShaft()->endfloor) && value == false)
 		return;
 
 	//exit if elevator doesn't service the requested floor
