@@ -125,6 +125,7 @@ bool Action::Run(Object *caller, Object *parent)
 	//CloseShaftDoor
 	//OpenShaftDoorManual
 	//CloseShaftDoorManual
+	//StopDoors
 	//Cancel = Call Cancel
 	//Run
 	//Stop
