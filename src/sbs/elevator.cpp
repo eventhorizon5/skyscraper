@@ -4726,12 +4726,14 @@ void Elevator::NotifyArrival(int floor)
 		if (up == true)
 			Chime(0, floor, true);
 		SetDirectionalIndicators(floor, true, false);
+		LastChimeDirection = 1;
 	}
 	else
 	{
 		if (down == true)
 			Chime(0, floor, false);
 		SetDirectionalIndicators(floor, false, true);
+		LastChimeDirection = -1;
 	}
 
 	if (FireServicePhase1 == 0 && FireServicePhase2 == 0)
