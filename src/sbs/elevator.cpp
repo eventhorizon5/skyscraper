@@ -2031,7 +2031,7 @@ void Elevator::SetAltitude(float altitude)
 	}
 
 	//move sounds
-	Ogre::Vector3 top = Ogre::Vector3(elevposition.x, elevposition.y + Height, elevposition.z);
+	Ogre::Vector3 top = Ogre::Vector3(elevposition.x, elevposition.y + Height - 5, elevposition.z);
 	carsound->SetPosition(elevposition);
 	idlesound->SetPosition(top);
 	MoveDoorSound(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);

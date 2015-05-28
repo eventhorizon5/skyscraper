@@ -232,7 +232,10 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	if (DisableSound == false)
+	{
 		soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
+		soundsys->setGeometrySettings(1000.0f);
+	}
 
 	//set up physics
 	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true);

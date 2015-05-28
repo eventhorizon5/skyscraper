@@ -127,6 +127,7 @@ public:
 	std::vector<TriangleIndices> Triangles; //per-submesh triangles
 	std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
 	std::vector<WallObject*> Walls; //associated wall (polygon container) objects
+	FMOD::Geometry* sound_walls;
 
 	Ogre::Entity *Movable;
 	Ogre::SceneNode *SceneNode;

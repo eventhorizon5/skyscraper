@@ -621,6 +621,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	rotX = 0;
 	rotY = 0;
 	rotZ = 0;
+	sound_walls = 0;
 
 	//use box collider if physics should be enabled
 	if (IsPhysical == true)
@@ -999,6 +1000,14 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 	SceneNode->setPosition(pos);
 	if (mBody)
 		mBody->updateTransform(true, false, false);
+
+	FMOD_VECTOR fpos;
+	fpos.x = pos.x;
+	fpos.y = pos.y;
+	fpos.z = pos.z;
+
+	if (sound_walls)
+		sound_walls->setPosition(&fpos);
 }
 
 Ogre::Vector3 MeshObject::GetPosition()
@@ -1707,6 +1716,27 @@ void MeshObject::CreateCollider()
 		//initialize collider shape
 		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape((int)MeshGeometry.size(), tricount * 3);
 
+		//test code for sound occlusion
+		FMOD_VECTOR vertices[3];
+		const float directOcclusion = 0.9f;
+		const float reverbOcclusion = 0.9f;
+		const bool doubleSided = false;
+		int poly;
+		int num_polys = 0;
+		int num_verts = 0;
+
+		//get geometry counts
+		for (int i = 0; i < (int)Submeshes.size(); i++)
+		{
+			for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
+			{
+				num_polys++;
+				num_verts += 3;
+			}
+		}
+
+		sbs->soundsys->createGeometry(num_polys, num_verts, &sound_walls);
+
 		//add vertices to shape
 		for (int i = 0; i < (int)Submeshes.size(); i++)
 		{
@@ -1717,6 +1747,21 @@ void MeshObject::CreateCollider()
 				tri.b = Triangles[i].triangles[j].b;
 				tri.c = Triangles[i].triangles[j].c;
 				shape->AddTriangle(MeshGeometry[tri.a].vertex, MeshGeometry[tri.b].vertex, MeshGeometry[tri.c].vertex);
+
+				Ogre::Vector3 v1 = sbs->ToLocal(MeshGeometry[tri.a].vertex);
+				Ogre::Vector3 v2 = sbs->ToLocal(MeshGeometry[tri.b].vertex);
+				Ogre::Vector3 v3 = sbs->ToLocal(MeshGeometry[tri.c].vertex);
+
+				vertices[0].x = v1.x;
+				vertices[0].y = v1.y;
+				vertices[0].z = v1.z;
+				vertices[1].x = v2.x;
+				vertices[1].y = v2.y;
+				vertices[1].z = v2.z;
+				vertices[2].x = v3.x;
+				vertices[2].y = v3.y;
+				vertices[2].z = v3.z;
+				sound_walls->addPolygon(directOcclusion, reverbOcclusion, doubleSided, 3, vertices, &poly);
 			}
 		}
 
