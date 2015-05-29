@@ -63,15 +63,9 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 
 		//create and set up camera
 		camera = sbs->mSceneManager->createCamera(Name);
-		//camera->setNearClipDistance(1.5f);
 		camera->setNearClipDistance(0.1f);
-		//camera->setFarClipDistance(3000.0f);
 		camera->setFarClipDistance(0.0f);
 		camera->setAspectRatio(1.0f);
-
-		//set up scene node
-		//node = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
-		//node->attachObject(camera);
 
 		//set camera position and rotation
 		camera->setPosition(sbs->ToRemote(Origin));
@@ -84,8 +78,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 		renderTexture->addViewport(camera);
 		renderTexture->getViewport(0)->setClearEveryFrame(true);
 		renderTexture->getViewport(0)->setBackgroundColour(Ogre::ColourValue::Black);
-		renderTexture->getViewport(0)->setOverlaysEnabled(false);
-		renderTexture->setActive(enabled);
+		Enabled(true);
 
 		//unload material if already loaded
 		if (sbs->UnloadMaterial(name, "General") == true)
@@ -95,7 +88,6 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 		material = Ogre::MaterialManager::getSingleton().create(Name, "General");
 		sbs->IncrementMaterialCount();
 		material->setLightingEnabled(false);
-		//material->setAmbient(AmbientR, AmbientG, AmbientB);
 
 		//bind texture to material
 		material->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
@@ -111,7 +103,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error creating CameraTexture:\n" + e.getDescription());
+		sbs->ReportError("Error creating camera texture:\n" + e.getDescription());
 	}
 }
 
