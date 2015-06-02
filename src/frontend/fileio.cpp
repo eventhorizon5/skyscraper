@@ -4802,6 +4802,29 @@ int ScriptProcessor::ProcFloors()
 		return sNextLine;
 	}*/
 
+	//AddCameraTexture command
+	if (linecheck.substr(0, 16) == "addcameratexture")
+	{
+		//get data
+		int params = SplitData(LineData.c_str(), 17);
+
+		if (params != 11)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 2; i <= 10; i++)
+		{
+			if (i == 7)
+				i++;
+
+			if (!IsNumeric(tempdata[i].c_str()))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		StoreCommand(floor->AddCameraTexture(tempdata[0].c_str(), Ogre::StringConverter::parseBool(tempdata[1]), atoi(tempdata[2].c_str()), atof(tempdata[3].c_str()), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::Vector3(atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()))));
+		return sNextLine;
+	}
+
 	//Cut command
 	if (linecheck.substr(0, 4) == "cut ")
 	{
@@ -4819,7 +4842,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//perform cut on floor
-		Simcore->GetFloor(Current)->Cut(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), false);
+		floor->Cut(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), false);
 		return sNextLine;
 	}
 
@@ -4840,7 +4863,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//perform cut on all objects related to the current floor
-		Simcore->GetFloor(Current)->CutAll(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]));
+		floor->CutAll(Ogre::Vector3(atof(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str())), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]));
 		return sNextLine;
 	}
 

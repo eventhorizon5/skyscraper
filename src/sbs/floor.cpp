@@ -73,6 +73,17 @@ Floor::~Floor()
 {
 	//Destructor
 
+	//delete camera textures
+	for (int i = 0; i < (int)CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i])
+		{
+			CameraTextureArray[i]->object->parent_deleting = true;
+			delete CameraTextureArray[i];
+		}
+		CameraTextureArray[i] = 0;
+	}
+
 	//delete controls
 	for (int i = 0; i < (int)ControlArray.size(); i++)
 	{
@@ -1192,6 +1203,19 @@ void Floor::RemoveTrigger(Trigger *trigger)
 	}
 }
 
+void Floor::RemoveCameraTexture(CameraTexture *cameratexture)
+{
+	//remove a camera texture reference (does not delete the object itself)
+	for (int i = 0; i < (int)CameraTextureArray.size(); i++)
+	{
+		if (CameraTextureArray[i] == cameratexture)
+		{
+			CameraTextureArray.erase(CameraTextureArray.begin() + i);
+			return;
+		}
+	}
+}
+
 Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a light
@@ -1239,4 +1263,12 @@ Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector
 	TriggerArray.push_back(trigger);
 	trigger->SetPosition(Ogre::Vector3(0, GetBase(), 0));
 	return trigger->object;
+}
+
+Object* Floor::AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
+{
+	//add a camera texture
+	CameraTexture* cameratexture = new CameraTexture(this->object, name, enabled, quality, fov, GetBase() + position, use_rotation, rotation);
+	CameraTextureArray.push_back(cameratexture);
+	return cameratexture->object;
 }

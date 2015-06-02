@@ -31,14 +31,13 @@ class SBSIMPEXP CameraTexture
 public:
 
 	Object *object; //SBS object
-	std::string Name;
 	Ogre::Vector3 Origin;
+	std::string Name;
 
 	//functions
 	CameraTexture(Object *parent, const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
 	~CameraTexture();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
-	void SetPosition(const Ogre::Vector3 position);
 	Ogre::Vector3 GetPosition();
 	void SetRotation(const Ogre::Vector3 rotation);
 	Ogre::Vector3 GetRotation();

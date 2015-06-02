@@ -33,6 +33,7 @@
 #include "sound.h"
 #include "control.h"
 #include "trigger.h"
+#include "cameratexture.h"
 
 class SBSIMPEXP Floor
 {
@@ -108,11 +109,13 @@ public:
 	void RemoveModel(Model *model);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
+	void RemoveCameraTexture(CameraTexture *cameratexture);
 	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	Object* AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
+	Object* AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
 	std::vector<Sound*> GetSound(const char *name);
 
 private:
@@ -136,6 +139,9 @@ private:
 
 	//Triggers
 	std::vector<Trigger*> TriggerArray;
+
+	//CameraTextures
+	std::vector<CameraTexture*> CameraTextureArray;
 };
 
 #endif

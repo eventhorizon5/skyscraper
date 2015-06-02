@@ -68,7 +68,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 		camera->setAspectRatio(1.0f);
 
 		//set camera position and rotation
-		SetPosition(Origin);
+		camera->setPosition(sbs->ToRemote(Origin));
 		if (use_rotation == true)
 			SetRotation(rotation);
 		else
@@ -110,7 +110,8 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 CameraTexture::~CameraTexture()
 {
 	renderTexture->removeAllViewports();
-	sbs->mSceneManager->destroyCamera(camera);
+	if (sbs->mSceneManager->getCamera(Name))
+		sbs->mSceneManager->destroyCamera(camera);
 
 	if (sbs->FastDelete == false)
 	{
@@ -143,11 +144,6 @@ void CameraTexture::Move(const Ogre::Vector3 position, bool relative_x, bool rel
 	else
 		pos.z = camera->getPosition().z + sbs->ToRemote(position.z);
 	camera->setPosition(pos);
-}
-
-void CameraTexture::SetPosition(const Ogre::Vector3 position)
-{
-	camera->setPosition(sbs->ToRemote(Origin));
 }
 
 Ogre::Vector3 CameraTexture::GetPosition()
