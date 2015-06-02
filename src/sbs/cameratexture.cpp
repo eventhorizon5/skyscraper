@@ -68,7 +68,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 		camera->setAspectRatio(1.0f);
 
 		//set camera position and rotation
-		camera->setPosition(sbs->ToRemote(Origin));
+		SetPosition(Origin);
 		if (use_rotation == true)
 			SetRotation(rotation);
 		else
@@ -145,6 +145,11 @@ void CameraTexture::Move(const Ogre::Vector3 position, bool relative_x, bool rel
 	camera->setPosition(pos);
 }
 
+void CameraTexture::SetPosition(const Ogre::Vector3 position)
+{
+	camera->setPosition(sbs->ToRemote(Origin));
+}
+
 Ogre::Vector3 CameraTexture::GetPosition()
 {
 	return sbs->ToLocal(camera->getPosition());
@@ -157,6 +162,35 @@ void CameraTexture::SetRotation(const Ogre::Vector3 rotation)
 	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
 	camera->setOrientation(rot);
+	rotX = rotation.x;
+	rotY = rotation.y;
+	rotZ = rotation.z;
+}
+
+Ogre::Vector3 CameraTexture::GetRotation()
+{
+	return Ogre::Vector3(rotX, rotY, rotZ);
+}
+
+void CameraTexture::Rotate(const Ogre::Vector3 rotation, float speed)
+{
+	//rotates mesh in a relative amount
+	rotX += rotation.x * speed;
+	rotY += rotation.y * speed;
+	rotZ += rotation.z * speed;
+	if (rotX > 359)
+		rotX = rotX - 360;
+	if (rotY > 359)
+		rotY = rotY - 360;
+	if (rotZ > 359)
+		rotZ = rotZ - 360;
+	if (rotX < 0)
+		rotX = rotX + 360;
+	if (rotY < 0)
+		rotY = rotY + 360;
+	if (rotZ < 0)
+		rotZ = rotZ + 360;
+	SetRotation(Ogre::Vector3(rotX, rotY, rotZ));
 }
 
 void CameraTexture::LookAt(const Ogre::Vector3 point)
