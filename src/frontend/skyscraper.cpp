@@ -40,7 +40,6 @@
    #include "gtk/gtk.h"
    #include "gdk/gdk.h"
    #include "gdk/gdkx.h"
-   #include "wx/gtk/win_gtk.h"
    #include "GL/glx.h"
 #endif
 
@@ -1838,7 +1837,7 @@ const std::string Skyscraper::getOgreHandle() const
 	gtk_widget_realize(privHandle);
 
 	// grab the window object
-	GdkWindow* gdkWin = GTK_PIZZA(privHandle)->bin_window;
+	GdkWindow* gdkWin = gtk_widget_get_window((GtkWidget*)window->GetHandle());
 	Display* display = GDK_WINDOW_XDISPLAY(gdkWin);
 	Window wid = GDK_WINDOW_XWINDOW(gdkWin);
 
