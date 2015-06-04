@@ -203,7 +203,7 @@ bool Control::SetSelectPosition(int position)
 
 	current_position = position;
 
-	if (ControlMesh->ChangeTexture(TextureArray[position - 1].c_str()).get())
+	if (ControlMesh->ChangeTexture(TextureArray[position - 1].c_str()) == true)
 		return true;
 	return false;
 }

@@ -71,6 +71,9 @@ bool Skyscraper::OnInit(void)
 	Shutdown = false;
 	PositionOverride = false;
 	Reload = false;
+#if OGRE_VERSION >= 0x00010900
+	mOverlaySystem = 0;
+#endif
 	mRoot = 0;
 	mRenderWindow = 0;
 	mViewport = 0;
@@ -164,6 +167,9 @@ int Skyscraper::OnExit()
 
 	skyscraper = 0;
 
+#if OGRE_VERSION >= 0x00010900
+	delete mOverlaySystem;
+#endif
 	delete mRoot;
 	delete logger;
 	return 0;
@@ -226,7 +232,19 @@ bool Skyscraper::Initialize()
 			return ReportFatalError("Error initializing OGRE\nDetails:" + e.getDescription());
 		}
 	}
-	
+
+	//set up overlay system
+#if OGRE_VERSION >= 0x00010900
+	try
+	{
+		mOverlaySystem = new Ogre::OverlaySystem();
+	}
+	catch (Ogre::Exception &e)
+	{
+		return ReportFatalError("Error creating overlay system\nDetails:" + e.getDescription());
+	}
+#endif
+
 	//configure render system
 	try
 	{

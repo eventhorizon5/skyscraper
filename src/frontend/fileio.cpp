@@ -737,7 +737,11 @@ bool ScriptProcessor::LoadDataFile(const char *filename, bool insert, int insert
 	//Simcore->Report(Filename);
 
 	//load file
+#if OGRE_VERSION >= 0x00010900
+	Ogre::FileSystemArchive filesystem(".","FileSystem",false);
+#else
 	Ogre::FileSystemArchive filesystem(".","FileSystem");
+#endif
 	Ogre::DataStreamPtr filedata = filesystem.open(filename, true);
 
 	//exit if an error occurred while loading

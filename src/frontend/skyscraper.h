@@ -33,6 +33,10 @@
 #include "Caelum.h"
 #include "fileio.h"
 
+#if OGRE_VERSION >= 0x00010900
+#include <OgreOverlaySystem.h>
+#endif
+
 int main (int argc, char* argv[]);
 
 class Skyscraper : public Ogre::WindowEventListener, public Ogre::FrameListener, public Ogre::LogListener
@@ -45,6 +49,9 @@ public:
 	Ogre::Viewport* mViewport;
 	Ogre::SceneManager* mSceneMgr;
 	Ogre::Camera* mCamera;
+#if OGRE_VERSION >= 0x00010900
+	Ogre::OverlaySystem* mOverlaySystem;
+#endif
 
 	std::string version;
 	std::string version_rev;

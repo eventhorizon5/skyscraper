@@ -73,7 +73,7 @@ public:
 	void Enable(bool value, bool remove = true);
 	bool IsEnabled();
 	WallObject* CreateWallObject(Object *parent, const char *name);
-	Ogre::MaterialPtr ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
+	bool ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	int FindWall(const Ogre::Vector3 &point, bool convert = true);
 	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
