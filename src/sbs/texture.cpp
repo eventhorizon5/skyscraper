@@ -394,6 +394,11 @@ void SBS::RegisterTextureInfo(const char *name, const char *material_name, const
 	//register texture for multipliers information
 	//see TextureInfo structure for more information
 
+	if (widthmult == 0.0f)
+		widthmult = 1.0f;
+	if (heightmult == 0.0f)
+		heightmult = 1.0f;
+
 	TextureInfo info;
 	info.name = name;
 	info.material_name = material_name;
