@@ -1995,6 +1995,9 @@ void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLeve
 	if (console)
 	{
 		console->Write(message.c_str());
+#if wxMAJOR_VERSION > 2
+		console->Refresh();
+#endif
 		console->Update();
 	}
 }
