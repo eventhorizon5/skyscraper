@@ -76,7 +76,7 @@
     <ClCompile>
       <AdditionalOptions>-Zm1000 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;$(BULLET_HOME)\Extras;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;$(BULLET_HOME)\Extras;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(OGRE_HOME)\Components\Overlay\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_PRECOMP;_OGREBULLET_EXPORTS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -93,7 +93,7 @@
       <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain_d.lib;bulletcollision_debug.lib;bulletdynamics_debug.lib;linearmath_debug.lib;ConvexDecomposition_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;OgreOverlay_d.lib;bulletcollision_debug.lib;bulletdynamics_debug.lib;linearmath_debug.lib;ConvexDecomposition_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\OgreBulletCollisions.dll</OutputFile>
       <AdditionalLibraryDirectories>$(BULLET_HOME)\lib\$(Configuration);$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -109,7 +109,7 @@
     <ClCompile>
       <AdditionalOptions>-Zm1000 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;$(BULLET_HOME_64)\Extras;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;$(BULLET_HOME_64)\Extras;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(OGRE_HOME_64)\Components\Overlay\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_PRECOMP;_OGREBULLET_EXPORTS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <SmallerTypeCheck>true</SmallerTypeCheck>
@@ -125,7 +125,7 @@
       <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain_d.lib;bulletcollision_debug.lib;bulletdynamics_debug.lib;linearmath_debug.lib;ConvexDecomposition_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain_d.lib;OgreOverlay_d.lib;bulletcollision_debug.lib;bulletdynamics_debug.lib;linearmath_debug.lib;ConvexDecomposition_debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\OgreBulletCollisions.dll</OutputFile>
       <AdditionalLibraryDirectories>$(BULLET_HOME_64)\lib\$(Configuration);$(OGRE_HOME_64)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,7 +143,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;$(BULLET_HOME)\Extras;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME)\src;$(BULLET_HOME)\Extras;$(OGRE_HOME)\OgreMain\include;$(OGRE_HOME)\include;$(OGRE_HOME)\Components\Overlay\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_PRECOMP;_OGREBULLET_EXPORTS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -159,7 +159,7 @@
       <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain.lib;bulletcollision.lib;bulletdynamics.lib;linearmath.lib;convexdecomposition.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;OgreOverlay.lib;bulletcollision.lib;bulletdynamics.lib;linearmath.lib;convexdecomposition.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\OgreBulletCollisions.dll</OutputFile>
       <AdditionalLibraryDirectories>$(BULLET_HOME)\lib\$(Configuration);$(OGRE_HOME)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -179,7 +179,7 @@
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;$(BULLET_HOME_64)\Extras;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BULLET_HOME_64)\src;$(BULLET_HOME_64)\Extras;$(OGRE_HOME_64)\OgreMain\include;$(OGRE_HOME_64)\include;$(OGRE_HOME_64)\Components\Overlay\include;Collisions\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_PRECOMP;_OGREBULLET_EXPORTS;_OGREBULLET_DYNAMIC;BT_USE_DOUBLE_PRECISION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
@@ -195,7 +195,7 @@
       <DisableSpecificWarnings>4251;4275;4193</DisableSpecificWarnings>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>OgreMain.lib;bulletcollision.lib;bulletdynamics.lib;linearmath.lib;convexdecomposition.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OgreMain.lib;OgreOverlay.lib;bulletcollision.lib;bulletdynamics.lib;linearmath.lib;convexdecomposition.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>..\OgreBulletCollisions.dll</OutputFile>
       <AdditionalLibraryDirectories>$(BULLET_HOME_64)\lib\$(Configuration);$(OGRE_HOME_64)\lib\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
