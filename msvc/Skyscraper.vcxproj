@@ -126,7 +126,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;wxbase29u.lib;wxmsw29u_core.lib;wxmsw29u_gl.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;wxbase30u.lib;wxmsw30u_core.lib;wxmsw30u_gl.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../Skyscraper.exe</OutputFile>
       <Version>
       </Version>
@@ -196,7 +196,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;wxbase29u.lib;wxmsw29u_core.lib;wxmsw29u_gl.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SBS.lib;OgreMain.lib;OgreOverlay.lib;wxbase30u.lib;wxmsw30u_core.lib;wxmsw30u_gl.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../Skyscraper.exe</OutputFile>
       <Version>
       </Version>
@@ -260,7 +260,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase29ud.lib;wxmsw29ud_core.lib;wxmsw29ud_gl.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmodex_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../Skyscraper.exe</OutputFile>
       <Version>
       </Version>
@@ -324,7 +324,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase29ud.lib;wxmsw29ud_core.lib;wxmsw29ud_gl.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SBS.lib;OgreMain_d.lib;OgreOverlay_d.lib;wxbase30ud.lib;wxmsw30ud_core.lib;wxmsw30ud_gl.lib;fmodex64_vc.lib;OgreBulletCollisions.lib;OgreBulletDynamics.lib;Caelum.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>../Skyscraper.exe</OutputFile>
       <Version>
       </Version>
