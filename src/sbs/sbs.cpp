@@ -38,7 +38,7 @@
 
 SBS *sbs; //self reference
 
-SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem)
+SBS::SBS()
 {
 	sbs = this;
 	version = "0.10.0." + std::string(SVN_REVSTR);
@@ -48,21 +48,8 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	object = new Object();
 	object->SetValues(this, 0, "SBS", "SBS", true);
 
-	//Print SBS banner
-	PrintBanner();
-
-	//Pause for 2 seconds
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Sleep(2000);
-#else
-	sleep(2);
-#endif
-
 	mRoot = Ogre::Root::getSingletonPtr();
 	this->mSceneManager = mSceneManager;
-
-	root_dir = rootdirectory;
-	dir_char = directory_char;
 
 	//load config file
 	configfile.load("skyscraper.ini");
@@ -219,16 +206,29 @@ SBS::SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, O
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 
+	camera = 0;
+	Buildings = 0;
+	External = 0;
+	Landscape = 0;
+	mWorld = 0;
+	soundsys = 0;
+
 	if (UnitScale <= 0)
 		UnitScale = 1;
 
-	//set default texture map values
-	ResetTextureMapping(true);
+	//Print SBS banner
+	PrintBanner();
+}
 
+void SBS::Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FMOD::System *fmodsystem)
+{
 	//disable sound if system is not available
 	if (!fmodsystem)
 		DisableSound = true;
 	soundsys = fmodsystem;
+
+	//set default texture map values
+	ResetTextureMapping(true);
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	if (DisableSound == false)

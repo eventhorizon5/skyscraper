@@ -126,10 +126,6 @@ private:
 	//mouse status
 	bool MouseDown;
 
-	//app directory
-	std::string root_dir;
-	std::string dir_char;
-
 	//sound data
 	FMOD::System *soundsys;
 	FMOD::Sound *sound;

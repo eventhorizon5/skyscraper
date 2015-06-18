@@ -157,8 +157,6 @@ public:
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
 	std::string SkyName; //base filename of sky texture pack
-	std::string root_dir; //app directory
-	std::string dir_char;
 	bool DisableSound; //disable sound system if true
 	bool DeleteColliders; //true if system should delete mesh colliders on each modification
 	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
@@ -178,7 +176,7 @@ public:
 	int mouse_x, mouse_y;
 
 	//public functions
-	SBS(Ogre::RenderWindow* mRenderWindow, Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, const char* rootdirectory, const char* directory_char, FMOD::System *fmodsystem);
+	SBS();
 	~SBS();
 	void Report(std::string message);
 	bool ReportError(std::string message);
@@ -196,6 +194,7 @@ public:
 	bool ScaleTexture(const char *name, float x_scale, float y_scale);
 	bool TransformTexture(const char *name, const char *type, const char *wave_type, float base, float frequency, float phase, float amplitude);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
+	void Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FMOD::System *fmodsystem);
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	bool AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);

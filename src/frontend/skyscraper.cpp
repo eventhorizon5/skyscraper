@@ -1634,8 +1634,18 @@ bool Skyscraper::Load()
 
 	IsLoading = true;
 
-	//Create and initialize simulator
-	Simcore = new SBS(mRenderWindow, mSceneMgr, mCamera, root_dir.c_str(), dir_char.c_str(), soundsys);
+	//Create simulator object
+	Simcore = new SBS();
+
+	//Pause for 2 seconds
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Sleep(2000);
+#else
+	sleep(2);
+#endif
+
+	//initialize simulator
+	Simcore->Initialize(mSceneMgr, mCamera, soundsys);
 
 	//load building data file
 	Report("\nLoading building data from " + BuildingFile + "...\n");
