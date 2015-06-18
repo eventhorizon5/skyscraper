@@ -49,7 +49,6 @@ SBS::SBS()
 	object->SetValues(this, 0, "SBS", "SBS", true);
 
 	mRoot = Ogre::Root::getSingletonPtr();
-	this->mSceneManager = mSceneManager;
 
 	//load config file
 	configfile.load("skyscraper.ini");
@@ -222,6 +221,8 @@ SBS::SBS()
 
 void SBS::Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FMOD::System *fmodsystem)
 {
+	this->mSceneManager = mSceneManager;
+
 	//disable sound if system is not available
 	if (!fmodsystem)
 		DisableSound = true;
