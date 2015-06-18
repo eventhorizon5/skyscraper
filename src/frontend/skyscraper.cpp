@@ -1637,6 +1637,13 @@ bool Skyscraper::Load()
 	//Create simulator object
 	Simcore = new SBS();
 
+	//refresh console to fix banner message on Linux
+	if (console)
+	{
+		console->Refresh();
+		console->Update();
+	}
+
 	//Pause for 2 seconds
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	Sleep(2000);
