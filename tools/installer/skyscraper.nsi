@@ -161,6 +161,7 @@ Section "Required libraries" SEC03
   File "${LOCAL_FILES}\cg.dll"
   File "${LOCAL_FILES}\fmodex.dll"
   File "${LOCAL_FILES}\OgreMain.dll"
+  File "${LOCAL_FILES}\OgreOverlay.dll"
   File "${LOCAL_FILES}\Plugin_CgProgramManager.dll"
   File "${LOCAL_FILES}\Plugin_OctreeSceneManager.dll"
   File "${LOCAL_FILES}\RenderSystem_Direct3D9.dll"
