@@ -807,6 +807,13 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 
 	float x1 = 0, x2 = 0, z1 = 0, z2 = 0, depth1 = 0, depth2 = 0;
 
+	//exit if no height given
+	if (height == 0.0f)
+	{
+		ReportError("AddFillerWalls: no wall height specified");
+		return;
+	}
+
 	if (sbs->GetWallOrientation() == 0)
 	{
 		depth1 = 0;

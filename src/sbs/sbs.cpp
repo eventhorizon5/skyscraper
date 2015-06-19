@@ -669,6 +669,12 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 		return ReportError("Invalid coordinates for wall '" + name2 + "'");
 	}
 
+	if (height_in1 == 0.0f && height_in2 == 0.0f)
+	{
+		std::string name2 = name;
+		return ReportError("No wall height specified for wall '" + name2 + "'");
+	}
+
 	//determine axis of wall
 	int axis = 0;
 	if (fabsf(x1 - x2) > (fabsf(z1 - z2) + 0.00001))
@@ -902,7 +908,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 	//true - back/forwards from altitude1 to altitude2, or legacy (broken) "ReverseAxis = true" behavior if legacy_behavior is true
 
 	//exit if coordinates are invalid
-	if (x1 == x2 && z1 == z2)
+	if (x1 == x2 || z1 == z2)
 	{
 		std::string name2 = name;
 		return ReportError("Invalid coordinates for floor '" + name2 + "'");
