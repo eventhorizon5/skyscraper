@@ -982,6 +982,8 @@ bool MeshObject::IsEnabled()
 
 void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin)
 {
+	//move a mesh object
+
 	SBS_PROFILE("MeshObject::Move");
 	Ogre::Vector3 pos;
 	if (relative_x == false)
@@ -1874,6 +1876,8 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 
 void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents)
 {
+	//read hardware buffers from a loaded model mesh, and return geometry arrays
+
 	bool added_shared = false;
 	size_t current_offset = 0;
 	size_t shared_offset = 0;
