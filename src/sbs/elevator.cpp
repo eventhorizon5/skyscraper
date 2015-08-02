@@ -213,7 +213,7 @@ Elevator::Elevator(int number)
 	//create object meshes
 	std::string name = "Elevator " + ToString2(Number);
 	object->SetName(name.c_str());
-	ElevatorMesh = new MeshObject(object, name.c_str());
+	ElevatorMesh = new MeshObject(object, 0, name.c_str());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -2009,11 +2009,6 @@ void Elevator::SetAltitude(float altitude)
 	elevposition.y = altitude;
 	MoveDoors(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
 	MoveObjects(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
-	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->SetPosition(Ogre::Vector3(FloorIndicatorArray[i]->GetPosition().x, elevposition.y, FloorIndicatorArray[i]->GetPosition().z));
-	}
 	for (int i = 0; i < (int)PanelArray.size(); i++)
 	{
 		if (PanelArray[i])
@@ -2207,8 +2202,7 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 {
 	//Creates a floor indicator at the specified location
 
-	FloorIndicator* indicator = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
-	indicator->SetPosition(Origin);
+	FloorIndicator* indicator = new FloorIndicator(object, ElevatorMesh, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	FloorIndicatorArray.push_back(indicator);
 	return indicator->object;
 }

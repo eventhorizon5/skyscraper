@@ -61,13 +61,13 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	std::string base, buffer;
 	base = "Call Panel " + ToString2(floornum) + ":" + ToString2(number);
 	object->SetName(base.c_str());
-	CallButtonBackMesh = new MeshObject(object, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonBackMesh = new MeshObject(object, 0, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = base + ":Up";
-	CallButtonMeshUp = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshUp = new MeshObject(object, 0, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = base + ":Down";
-	CallButtonMeshDown = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshDown = new MeshObject(object, 0, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
 	floor = floornum;

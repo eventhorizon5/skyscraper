@@ -600,7 +600,7 @@ bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool
 	return false;
 }
 
-MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+MeshObject::MeshObject(Object* parent, MeshObject *parent_mesh, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
 	object = new Object();
@@ -611,6 +611,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	mShape = 0;
 	SceneNode = 0;
 	Movable = 0;
+	ParentMesh = parent_mesh;
 	prepared = false;
 	IsPhysical = enable_physics;
 	this->restitution = restitution;
@@ -743,7 +744,12 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
 	//Movable->setCastShadows(true);
-	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
+
+	//attach scene node to parent mesh's node or root
+	if (ParentMesh)
+		SceneNode = ParentMesh->SceneNode->createChildSceneNode(Name);
+	else
+		SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
 	SceneNode->attachObject(Movable);
 
 	//rescale if a loaded model

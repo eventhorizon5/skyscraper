@@ -262,9 +262,9 @@ void SBS::Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FM
 	Report("Done");
 
 	//create object meshes
-	Buildings = new MeshObject(object, "Buildings");
-	External = new MeshObject(object, "External");
-	Landscape = new MeshObject(object, "Landscape");
+	Buildings = new MeshObject(object, 0, "Buildings");
+	External = new MeshObject(object, 0, "External");
+	Landscape = new MeshObject(object, 0, "Landscape");
 	//Landscape->tricollider = false;
 
 	//create camera object
@@ -1499,7 +1499,7 @@ void SBS::CreateSky(const char *filenamebase)
 	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
 	ResetLighting();
 
-	SkyBox = new MeshObject(object, "SkyBox");
+	SkyBox = new MeshObject(object, 0, "SkyBox");
 	SkyBox->no_collider = true;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
