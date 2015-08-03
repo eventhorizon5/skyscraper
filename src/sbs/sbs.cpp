@@ -3217,7 +3217,7 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool
 	{
 		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
 		if (relative == true)
-			ind->MovePosition(position);
+			ind->Move(position);
 	}
 	if (type == "Sound")
 	{

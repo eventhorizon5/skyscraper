@@ -2014,11 +2014,6 @@ void Elevator::SetAltitude(float altitude)
 		if (PanelArray[i])
 			PanelArray[i]->SetToElevatorAltitude();
 	}
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i])
-			DirIndicatorArray[i]->SetPosition(Ogre::Vector3(DirIndicatorArray[i]->GetPosition().x, elevposition.y, DirIndicatorArray[i]->GetPosition().z));
-	}
 	for (int i = 0; i < (int)StdDoorArray.size(); i++)
 	{
 		if (StdDoorArray[i])
@@ -3306,11 +3301,7 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	if (sbs->Verbose)
 		Report("adding interior directional indicator");
 
-	float x = Origin.x + CenterX;
-	float z = Origin.z + CenterZ;
-
-	DirectionalIndicator *indicator = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	indicator->SetPosition(Ogre::Vector3(indicator->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), indicator->GetPosition().z));
+	DirectionalIndicator *indicator = new DirectionalIndicator(object, ElevatorMesh, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator->object;
 }

@@ -975,7 +975,7 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 			return 0;
 	}
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(object, Level, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase() + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator->object;
 }

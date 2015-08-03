@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator::DirectionalIndicator(Object *parent, MeshObject *parent_mesh, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
 	//if InElevator is true, the floor parameter is ignored
@@ -72,20 +72,20 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	base = "Directional Indicator " + ToString2(elevator) + ":" + ToString2(floor);
 	buffer = base + ":Back";
 	object->SetName(base.c_str());
-	DirectionalMeshBack = new MeshObject(object, 0, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	DirectionalMeshBack = new MeshObject(object, parent_mesh, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Single == false)
 	{
 		buffer = base + ":Up";
-		DirectionalMeshUp = new MeshObject(object, 0, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMeshUp = new MeshObject(object, DirectionalMeshBack, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 		buffer = base + ":Down";
-		DirectionalMeshDown = new MeshObject(object, 0, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMeshDown = new MeshObject(object, DirectionalMeshBack, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 	else
 	{
 		buffer = base + ":Arrow";
-		DirectionalMesh = new MeshObject(object, 0, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		DirectionalMesh = new MeshObject(object, DirectionalMeshBack, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	}
 
 	sbs->ResetTextureMapping(true);
@@ -99,7 +99,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(object, DirectionalMeshBack, "Panel", BackTexture, 0, CenterX - (BackWidth / 2), CenterZ, CenterX + (BackWidth / 2), CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
+			sbs->AddWallMain(object, DirectionalMeshBack, "Panel", BackTexture, 0, -BackWidth / 2, 0, BackWidth / 2, 0, BackHeight, BackHeight, 0, 0, tw, th, false);
 			sbs->ResetWalls();
 
 		}
@@ -109,7 +109,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(object, DirectionalMeshBack, "Panel", BackTexture, 0, CenterX, CenterZ + (BackWidth / 2), CenterX, CenterZ - (BackWidth / 2), BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
+			sbs->AddWallMain(object, DirectionalMeshBack, "Panel", BackTexture, 0, 0, BackWidth / 2, 0, -BackWidth / 2, BackHeight, BackHeight, 0, 0, tw, th, false);
 			sbs->ResetWalls();
 		}
 	}
@@ -120,8 +120,8 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 
 	if (Direction == "front" || Direction == "back")
 	{
-		float x1 = CenterX - (BackWidth / 4);
-		float x2 = CenterX + (BackWidth / 4);
+		float x1 = -BackWidth / 4;
+		float x2 = BackWidth / 4;
 		float offset;
 		if (Direction == "front")
 		{
@@ -140,28 +140,20 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true || in_elevator == true)
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude, altitude2;
-					if (in_elevator == false)
-					{
-						altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
-						altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
-					}
-					else
-					{
-						altitude = voffset + ((BackHeight / 7) * 4);
-						altitude2 = voffset + (BackHeight / 7);
-					}
-					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
-					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude2, altitude2, 1, 1, false);
+					float altitude = (BackHeight / 7) * 4;
+					float altitude2 = BackHeight / 7;
+
+					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude2, altitude2, 1, 1, false);
 				}
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
+					float altitude = (BackHeight / 7) * 2.5f;
 					if (floor < topfloor)
-						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
-						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 				}
 			}
 			else
@@ -169,43 +161,39 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				//horizontal lights
 				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true || in_elevator == true)
 				{
-					x1 = (CenterX - (BackWidth / 2)) + ((BackWidth / 7) * 4);
-					x2 = (CenterX - (BackWidth / 2)) + ((BackWidth / 7) * 6);
-					float x3 = (CenterX - (BackWidth / 2)) + (BackWidth / 7);
-					float x4 = (CenterX - (BackWidth / 2)) + ((BackWidth / 7) * 3);
+					x1 = (-BackWidth / 2) + ((BackWidth / 7) * 4);
+					x2 = (-BackWidth / 2) + ((BackWidth / 7) * 6);
+					float x3 = (-BackWidth / 2) + (BackWidth / 7);
+					float x4 = (-BackWidth / 2) + ((BackWidth / 7) * 3);
 					float height = (BackHeight / 6) * 4;
-					float altitude;
-					if (in_elevator == false)
-						altitude = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 6);
-					else
-						altitude = voffset + (BackHeight / 6);
+					float altitude =  BackHeight / 6;
 
-					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
-					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x3, CenterZ + offset, x4, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x3, offset, x4, offset, height, height, altitude, altitude, 1, 1, false);
 				}
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
+					float altitude = (BackHeight / 7) * 2.5f;
 					if (floor < topfloor)
-						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
-						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 				}
 			}
 		}
 		else
 		{
 			float height = (BackHeight / 6) * 4;
-			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 6);
-			sbs->AddWallMain(object, DirectionalMesh, "Directional", UpTextureUnlit.c_str(), 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+			float altitude = BackHeight / 6;
+			sbs->AddWallMain(object, DirectionalMesh, "Directional", UpTextureUnlit.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 		}
 		sbs->ResetWalls();
 	}
 	else
 	{
-		float z1 = CenterZ - (BackWidth / 4);
-		float z2 = CenterZ + (BackWidth / 4);
+		float z1 = -BackWidth / 4;
+		float z2 = BackWidth / 4;
 		float offset;
 		if (Direction == "left")
 		{
@@ -225,19 +213,19 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true || in_elevator == true)
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
-					float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
-					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
-					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude2, altitude2, 1, 1, false);
+					float altitude = (BackHeight / 7) * 4;
+					float altitude2 = BackHeight / 7;
+					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 				}
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
+					float altitude = (BackHeight / 7) * 2.5f;
 					if (floor < topfloor)
-						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
-						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 				}
 			}
 			else
@@ -245,35 +233,38 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				//horizontal lights
 				if ((floor > bottomfloor && floor < topfloor) || ActiveDirection == true || in_elevator == true)
 				{
-					z1 = (CenterZ - (BackWidth / 2)) + ((BackWidth / 7) * 4);
-					z2 = (CenterZ - (BackWidth / 2)) + ((BackWidth / 7) * 6);
-					float z3 = (CenterZ - (BackWidth / 2)) + (BackWidth / 7);
-					float z4 = (CenterZ - (BackWidth / 2)) + ((BackWidth / 7) * 3);
+					z1 = (-BackWidth / 2) + ((BackWidth / 7) * 4);
+					z2 = (-BackWidth / 2) + ((BackWidth / 7) * 6);
+					float z3 = (-BackWidth / 2) + (BackWidth / 7);
+					float z4 = (-BackWidth / 2) + ((BackWidth / 7) * 3);
 					float height = (BackHeight / 6) * 4;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 6);
-					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
-					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, CenterX + offset, z3, CenterX + offset, z4, height, height, altitude, altitude, 1, 1, false);
+					float altitude = BackHeight / 6;
+					sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+					sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, offset, z3, offset, z4, height, height, altitude, altitude, 1, 1, false);
 				}
 				else
 				{
 					float height = (BackHeight / 7) * 2;
-					float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 2.5f);
+					float altitude = (BackHeight / 7) * 2.5f;
 					if (floor < topfloor)
-						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshUp, "DirectionalUp", UpTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 					if (floor > bottomfloor)
-						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+						sbs->AddWallMain(object, DirectionalMeshDown, "DirectionalDown", DownTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 				}
 			}
 		}
 		else
 		{
 			float height = (BackHeight / 6) * 4;
-			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 6);
-			sbs->AddWallMain(object, DirectionalMesh, "Directional", UpTextureUnlit.c_str(), 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+			float altitude = BackHeight / 6;
+			sbs->AddWallMain(object, DirectionalMesh, "Directional", UpTextureUnlit.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 		}
 		sbs->ResetWalls();
 	}
 	sbs->ResetTextureMapping();
+
+	//set position of object
+	SetPosition(Ogre::Vector3(CenterX, voffset, CenterZ));
 }
 
 DirectionalIndicator::~DirectionalIndicator()
@@ -432,12 +423,6 @@ void DirectionalIndicator::SetPosition(const Ogre::Vector3& position)
 
 	if (DirectionalMeshBack)
 		DirectionalMeshBack->Move(position, false, false, false);
-	if (DirectionalMeshUp)
-		DirectionalMeshUp->Move(position, false, false, false);
-	if (DirectionalMeshDown)
-		DirectionalMeshDown->Move(position, false, false, false);
-	if (DirectionalMesh)
-		DirectionalMesh->Move(position, false, false, false);
 }
 
 void DirectionalIndicator::Move(const Ogre::Vector3& position)
@@ -446,12 +431,6 @@ void DirectionalIndicator::Move(const Ogre::Vector3& position)
 
 	if (DirectionalMeshBack)
 		DirectionalMeshBack->Move(position, true, true, true);
-	if (DirectionalMeshUp)
-		DirectionalMeshUp->Move(position, true, true, true);
-	if (DirectionalMeshDown)
-		DirectionalMeshDown->Move(position, true, true, true);
-	if (DirectionalMesh)
-		DirectionalMesh->Move(position, true, true, true);
 }
 
 Ogre::Vector3 DirectionalIndicator::GetPosition()

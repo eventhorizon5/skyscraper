@@ -76,6 +76,7 @@ FloorIndicator::FloorIndicator(Object *parent, MeshObject *parent_mesh, int elev
 	}
 	sbs->ResetWalls();
 
+	//set position of object
 	SetPosition(Ogre::Vector3(CenterX, altitude, CenterZ));
 }
 
@@ -114,7 +115,7 @@ void FloorIndicator::SetPosition(const Ogre::Vector3& position)
 	FloorIndicatorMesh->Move(position, false, false, false);
 }
 
-void FloorIndicator::MovePosition(const Ogre::Vector3& position)
+void FloorIndicator::Move(const Ogre::Vector3& position)
 {
 	//move indicator by a relative amount
 	FloorIndicatorMesh->Move(position, true, true, true);
