@@ -273,10 +273,6 @@ DirectionalIndicator::~DirectionalIndicator()
 		delete timer;
 	timer = 0;
 
-	if (DirectionalMeshBack)
-		delete DirectionalMeshBack;
-	DirectionalMeshBack = 0;
-	
 	if (DirectionalMesh)
 		delete DirectionalMesh;
 	DirectionalMesh = 0;
@@ -288,6 +284,10 @@ DirectionalIndicator::~DirectionalIndicator()
 	if (DirectionalMeshDown)
 		delete DirectionalMeshDown;
 	DirectionalMeshDown = 0;
+
+	if (DirectionalMeshBack)
+		delete DirectionalMeshBack;
+	DirectionalMeshBack = 0;
 
 	//unregister from parent
 	if (sbs->FastDelete == false && object->parent_deleting == false)

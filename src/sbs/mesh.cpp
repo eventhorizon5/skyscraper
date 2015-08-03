@@ -521,6 +521,7 @@ Ogre::SubMesh* WallPolygon::GetSubMesh()
 
 WallPolygon::WallPolygon()
 {
+	mesh = 0;
 }
 
 WallPolygon::~WallPolygon()
@@ -941,16 +942,19 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	Ogre::Vector3 cur_isect;
 	Ogre::Vector3 tmpnormal;
 
+	Ogre::Vector3 start2 = SceneNode->convertWorldToLocalPosition(start);
+	Ogre::Vector3 end2 = SceneNode->convertWorldToLocalPosition(end);
+
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
 		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
 		{
-			if (Walls[i]->handles[j].IntersectSegment(this, start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
+			if (Walls[i]->handles[j].IntersectSegment(this, start2, end2, cur_isect, &pr, tmpnormal, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{
 					//currently test against previous camera intersection test to fix some weird issues
-					Ogre::Vector3 orig_start = sbs->ToRemote(sbs->camera->HitPosition);
+					Ogre::Vector3 orig_start = sbs->ToRemote(SceneNode->convertWorldToLocalPosition(sbs->camera->HitPosition));
 					dist = orig_start.distance(cur_isect);
 
 					if (dist < best_dist)
@@ -1724,7 +1728,10 @@ void MeshObject::CreateCollider()
 				tri.a = Triangles[i].triangles[j].a;
 				tri.b = Triangles[i].triangles[j].b;
 				tri.c = Triangles[i].triangles[j].c;
-				shape->AddTriangle(MeshGeometry[tri.a].vertex, MeshGeometry[tri.b].vertex, MeshGeometry[tri.c].vertex);
+				Ogre::Vector3 v1 = SceneNode->convertLocalToWorldPosition(MeshGeometry[tri.a].vertex);
+				Ogre::Vector3 v2 = SceneNode->convertLocalToWorldPosition(MeshGeometry[tri.b].vertex);
+				Ogre::Vector3 v3 = SceneNode->convertLocalToWorldPosition(MeshGeometry[tri.c].vertex);
+				shape->AddTriangle(v1, v2, v3);
 			}
 		}
 
@@ -1815,8 +1822,8 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 		std::string name = SceneNode->getName();
 
-		Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-		box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
+		//Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+		//box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)

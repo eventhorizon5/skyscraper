@@ -71,10 +71,12 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	if (Speed <= 0)
 		Speed = 75;
 
-	//set origin to location of the door's hinge/pivot point and set up door coordinates
+	Ogre::Vector3 position = Ogre::Vector3::ZERO;
+
+	//set position to location of the door's hinge/pivot point and set up door coordinates
 	if (Direction == 1 || Direction == 2)
 	{
-		origin = Ogre::Vector3(CenterX, altitude, CenterZ - (width / 2)); //front
+		position = Ogre::Vector3(CenterX, altitude, CenterZ - (width / 2)); //front
 		x1 = 0;
 		x2 = 0;
 		z1 = 0;
@@ -82,7 +84,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 3 || Direction == 4)
 	{
-		origin = Ogre::Vector3(CenterX, altitude, CenterZ + (width / 2)); //back
+		position = Ogre::Vector3(CenterX, altitude, CenterZ + (width / 2)); //back
 		x1 = 0;
 		x2 = 0;
 		z1 = -width;
@@ -90,7 +92,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 5 || Direction == 6)
 	{
-		origin = Ogre::Vector3(CenterX + (width / 2), altitude, CenterZ); //right
+		position = Ogre::Vector3(CenterX + (width / 2), altitude, CenterZ); //right
 		x1 = -width;
 		x2 = 0;
 		z1 = 0;
@@ -98,7 +100,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 7 || Direction == 8)
 	{
-		origin = Ogre::Vector3(CenterX - (width / 2), altitude, CenterZ); //left
+		position = Ogre::Vector3(CenterX - (width / 2), altitude, CenterZ); //left
 		x1 = 0;
 		x2 = width;
 		z1 = 0;
@@ -112,11 +114,11 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//Create mesh
 	DoorMesh = new MeshObject(object, 0, Name.c_str());
-	DoorMesh->Move(origin, false, false, false);
+	DoorMesh->Move(position, false, false, false);
 
 	//create sound object
 	sound = new Sound(object, "DoorSound", true);
-	sound->SetPosition(origin);
+	sound->SetPosition(position);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);
@@ -134,7 +136,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//open door on startup (without sound) if specified
 	if (open_state == true)
-		Open(origin, false, true);
+		Open(position, false, true);
 }
 
 Door::~Door()
@@ -277,7 +279,6 @@ void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, 
 	//moves door
 
 	DoorMesh->Move(position, relative_x, relative_y, relative_z);
-	origin = GetPosition();
 
 }
 
@@ -366,10 +367,10 @@ bool Door::GetSide(const Ogre::Vector3 &position)
 {
 	//return which side of the door the position is (false for negative/left/front, true for positive/right/back)
 
-	if ((Direction >= 1 && Direction <= 4) && position.x > origin.x)
+	if ((Direction >= 1 && Direction <= 4) && position.x > GetPosition().x)
 		return true;
 
-	if ((Direction >= 5 && Direction <= 8) && position.z > origin.z)
+	if ((Direction >= 5 && Direction <= 8) && position.z > GetPosition().z)
 		return true;
 
 	return false;

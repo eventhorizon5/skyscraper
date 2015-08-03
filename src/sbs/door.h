@@ -36,7 +36,6 @@ public:
 	std::string Name; //door name
 	int Direction;
 	bool OpenState;
-	Ogre::Vector3 origin; //door origin
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
 	bool Clockwise; //if door should rotate clockwise
