@@ -80,7 +80,7 @@ public:
 		Ogre::IndexData *databuffer; //used to find the related submesh
 	};
 
-	MeshObject(Object* parent, MeshObject *parent_mesh, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
+	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~MeshObject();
 	void Enable(bool value, bool remove = true);
 	bool IsEnabled();
@@ -132,7 +132,6 @@ public:
 	Ogre::SceneNode *SceneNode;
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
-	MeshObject *ParentMesh;
 
 private:
 	bool enabled;

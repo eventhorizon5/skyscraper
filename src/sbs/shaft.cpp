@@ -84,7 +84,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	{
 		//Create shaft meshes
 		std::string buffer = name + ":" + ToString2(i);
-		ShaftArray[i - startfloor] = new MeshObject(object, 0, buffer.c_str());
+		ShaftArray[i - startfloor] = new MeshObject(object, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
 }

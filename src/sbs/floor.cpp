@@ -43,13 +43,13 @@ Floor::Floor(int number)
 	object->SetName(std::string("Floor " + num).c_str());
 
 	//Create primary level mesh
-	Level = new MeshObject(object, 0, std::string("Level " + num).c_str());
+	Level = new MeshObject(object, std::string("Level " + num).c_str());
 
 	//Create interfloor mesh
-	Interfloor = new MeshObject(object, 0, std::string("Interfloor " + num).c_str());
+	Interfloor = new MeshObject(object,std::string("Interfloor " + num).c_str());
 
 	//Create columnframe mesh
-	ColumnFrame = new MeshObject(object, 0, std::string("ColumnFrame " + num).c_str());
+	ColumnFrame = new MeshObject(object, std::string("ColumnFrame " + num).c_str());
 
 	//set enabled flags
 	IsEnabled = true;
@@ -710,7 +710,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 
 	if (relative == false)
 	{
-		FloorIndicator *ind = new FloorIndicator(object, Level, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
+		FloorIndicator *ind = new FloorIndicator(object, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
 		FloorIndicatorArray.push_back(ind);
 		return ind->object;
 	}
@@ -719,7 +719,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(object, Level, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
+			FloorIndicator *ind = new FloorIndicator(object, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
 			FloorIndicatorArray.push_back(ind);
 			return ind->object;
 		}
@@ -975,7 +975,7 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 			return 0;
 	}
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(object, Level, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase() + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator->object;
 }

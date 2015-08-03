@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-FloorIndicator::FloorIndicator(Object *parent, MeshObject *parent_mesh, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
 {
 	//creates a new floor indicator at the specified position
 
@@ -44,15 +44,11 @@ FloorIndicator::FloorIndicator(Object *parent, MeshObject *parent_mesh, int elev
 	elev = elevator;
 	Prefix = texture_prefix;
 
-	Elevator *elevatorobj = sbs->GetElevator(elevator);
-	if (!elevatorobj)
-		return;
-
 	std::string name = "Floor Indicator " + ToString2(elevator);
 	object->SetName(name.c_str());
-	FloorIndicatorMesh = new MeshObject(object, parent_mesh, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	FloorIndicatorMesh = new MeshObject(object, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
-	std::string texture = "Button" + sbs->GetFloor(elevatorobj->OriginFloor)->ID;
+	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 
@@ -63,7 +59,7 @@ FloorIndicator::FloorIndicator(Object *parent, MeshObject *parent_mesh, int elev
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, altitude, altitude, 1, 1, false);
 	}
 	if (tmpdirection == "left" || tmpdirection == "right")
 	{
@@ -72,12 +68,9 @@ FloorIndicator::FloorIndicator(Object *parent, MeshObject *parent_mesh, int elev
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, height, altitude, altitude, 1, 1, false);
 	}
 	sbs->ResetWalls();
-
-	//set position of object
-	SetPosition(Ogre::Vector3(CenterX, altitude, CenterZ));
 }
 
 FloorIndicator::~FloorIndicator()
@@ -115,7 +108,7 @@ void FloorIndicator::SetPosition(const Ogre::Vector3& position)
 	FloorIndicatorMesh->Move(position, false, false, false);
 }
 
-void FloorIndicator::Move(const Ogre::Vector3& position)
+void FloorIndicator::MovePosition(const Ogre::Vector3& position)
 {
 	//move indicator by a relative amount
 	FloorIndicatorMesh->Move(position, true, true, true);

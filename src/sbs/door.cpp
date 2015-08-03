@@ -111,7 +111,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(object, 0, Name.c_str());
+	DoorMesh = new MeshObject(object, Name.c_str());
 	DoorMesh->Move(origin, false, false, false);
 
 	//create sound object

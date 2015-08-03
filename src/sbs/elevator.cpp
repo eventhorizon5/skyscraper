@@ -213,7 +213,7 @@ Elevator::Elevator(int number)
 	//create object meshes
 	std::string name = "Elevator " + ToString2(Number);
 	object->SetName(name.c_str());
-	ElevatorMesh = new MeshObject(object, 0, name.c_str());
+	ElevatorMesh = new MeshObject(object, name.c_str());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -2009,10 +2009,20 @@ void Elevator::SetAltitude(float altitude)
 	elevposition.y = altitude;
 	MoveDoors(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
 	MoveObjects(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
+	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
+	{
+		if (FloorIndicatorArray[i])
+			FloorIndicatorArray[i]->SetPosition(Ogre::Vector3(FloorIndicatorArray[i]->GetPosition().x, elevposition.y, FloorIndicatorArray[i]->GetPosition().z));
+	}
 	for (int i = 0; i < (int)PanelArray.size(); i++)
 	{
 		if (PanelArray[i])
 			PanelArray[i]->SetToElevatorAltitude();
+	}
+	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
+	{
+		if (DirIndicatorArray[i])
+			DirIndicatorArray[i]->SetPosition(Ogre::Vector3(DirIndicatorArray[i]->GetPosition().x, elevposition.y, DirIndicatorArray[i]->GetPosition().z));
 	}
 	for (int i = 0; i < (int)StdDoorArray.size(); i++)
 	{
@@ -2197,7 +2207,8 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 {
 	//Creates a floor indicator at the specified location
 
-	FloorIndicator* indicator = new FloorIndicator(object, ElevatorMesh, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicator* indicator = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
+	indicator->SetPosition(Origin);
 	FloorIndicatorArray.push_back(indicator);
 	return indicator->object;
 }
@@ -3301,7 +3312,11 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	if (sbs->Verbose)
 		Report("adding interior directional indicator");
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(object, ElevatorMesh, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	float x = Origin.x + CenterX;
+	float z = Origin.z + CenterZ;
+
+	DirectionalIndicator *indicator = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	indicator->SetPosition(Ogre::Vector3(indicator->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), indicator->GetPosition().z));
 	DirIndicatorArray.push_back(indicator);
 	return indicator->object;
 }

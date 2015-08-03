@@ -69,7 +69,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	{
 		//Create stairwell meshes
 		std::string buffer = name + ":" + ToString2(i);
-		StairArray[i - startfloor] = new MeshObject(object, 0, buffer.c_str());
+		StairArray[i - startfloor] = new MeshObject(object, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
 }
