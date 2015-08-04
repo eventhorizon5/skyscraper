@@ -889,7 +889,7 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string shaftnum = ToString(ShaftNumber);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(object, mesh, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(object, mesh, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->GetBase() + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }
