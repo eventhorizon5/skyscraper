@@ -798,7 +798,7 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, bool
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(GetPosition().x, sbs->GetFloor(floor)->GetBase(), GetPosition().z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, GetMeshObject(floor), name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -817,7 +817,7 @@ Object* Stairs::AddControl(int floor, const char *name, const char *sound, const
 		return 0;
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, CenterX, CenterZ, width, height, sbs->GetFloor(floor)->GetBase(true) + voffset, true);
+	Control* control = new Control(object, GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, CenterX, CenterZ, width, height, voffset, true);
 	ControlArray[floor - startfloor].push_back(control);
 	return control->object;
 }

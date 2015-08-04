@@ -5054,7 +5054,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 Object* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(object, name, filename, center, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, ElevatorMesh, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

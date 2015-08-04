@@ -3754,7 +3754,7 @@ MeshObject* SBS::FindMeshObject(std::string name)
 Object* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(object, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, 0, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

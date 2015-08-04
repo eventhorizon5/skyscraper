@@ -1239,7 +1239,7 @@ Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre
 Object* Floor::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, Level, name, filename, center, position + Ogre::Vector3(0, GetBase(true), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;

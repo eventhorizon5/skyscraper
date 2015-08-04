@@ -783,7 +783,7 @@ Object* Shaft::AddModel(int floor, const char *name, const char *filename, bool 
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(GetPosition().x, sbs->GetFloor(floor)->Altitude, GetPosition().z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, GetMeshObject(floor), name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
