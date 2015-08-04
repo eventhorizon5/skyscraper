@@ -2009,16 +2009,6 @@ void Elevator::SetAltitude(float altitude)
 	elevposition.y = altitude;
 	MoveDoors(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
 	MoveObjects(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
-	for (int i = 0; i < (int)PanelArray.size(); i++)
-	{
-		if (PanelArray[i])
-			PanelArray[i]->SetToElevatorAltitude();
-	}
-	for (int i = 0; i < (int)StdDoorArray.size(); i++)
-	{
-		if (StdDoorArray[i])
-			StdDoorArray[i]->Move(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
-	}
 
 	//move sounds
 	Ogre::Vector3 top = Ogre::Vector3(elevposition.x, elevposition.y + Height, elevposition.z);
@@ -4542,7 +4532,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 
 	std::string elevnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
-	Door* door = new Door(object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	Door* door = new Door(object, ElevatorMesh, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door->object;
 }
@@ -5076,10 +5066,6 @@ Object* Elevator::AddModel(const char *name, const char *filename, bool center, 
 
 void Elevator::MoveObjects(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
 {
-	//move controls
-	for (int i = 0; i < (int)ControlArray.size(); i++)
-		ControlArray[i]->Move(position, relative_x, relative_y, relative_z);
-
 	//move triggers
 	for (int i = 0; i < (int)TriggerArray.size(); i++)
 		TriggerArray[i]->Move(position, relative_x, relative_y, relative_z);
@@ -5135,8 +5121,7 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX + Origin.x, Origin.y, CenterZ + Origin.z));
+	Control* control = new Control(object, ElevatorMesh, name, false, sound, action_names, actionnull, textures, direction, CenterX, CenterZ, width, height, voffset, true);
 	ControlArray.push_back(control);
 	return control->object;
 }

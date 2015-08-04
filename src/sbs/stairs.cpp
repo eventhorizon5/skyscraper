@@ -486,14 +486,15 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	}
 
 	//create doorway walls
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, "Connection Walls");
+	MeshObject *mesh = GetMeshObject(floor);
+	WallObject *wall = mesh->CreateWallObject(object, "Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string stairsnum = ToString(StairsNum);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(object, mesh, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }
@@ -813,8 +814,7 @@ Object* Stairs::AddControl(int floor, const char *name, const char *sound, const
 		return 0;
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
+	Control* control = new Control(object, GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, CenterX, CenterZ, width, height, sbs->GetFloor(floor)->Altitude + voffset, true);
 	ControlArray[floor - startfloor].push_back(control);
 	return control->object;
 }

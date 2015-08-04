@@ -635,7 +635,7 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString2(Number) + ":Door " + ToString2(number);
-	Door* door = new Door(object, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	Door* door = new Door(object, Level, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(true), tw, th);
 	DoorArray.push_back(door);
 	return door->object;
 }
@@ -1261,8 +1261,7 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX, GetBase(), CenterZ));
+	Control* control = new Control(object, Level, name, false, sound, action_names, actionnull, textures, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset, true);
 	ControlArray.push_back(control);
 	return control->object;
 }

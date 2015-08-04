@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, bool permanent, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset, bool center)
+Control::Control(Object *parent, MeshObject *parent_mesh, const char *name, bool permanent, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, bool center)
 {
 	//create a control at the specified location
 
@@ -57,7 +57,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	light_status = false;
 
 	//create object mesh
-	ControlMesh = new MeshObject(object, 0, Name2.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(object, parent_mesh, Name2.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	sbs->TexelOverride = true;
 	WallObject *wall;
@@ -71,7 +71,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
@@ -83,7 +83,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
@@ -95,7 +95,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
@@ -107,7 +107,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
 		wall = ControlMesh->CreateWallObject(object, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	sbs->TexelOverride = false;
@@ -115,6 +115,9 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	//create sound object
 	sound = new Sound(object, name, true);
 	sound->Load(sound_file);
+
+	//move object to position
+	ControlMesh->Move(Ogre::Vector3(CenterX, voffset, CenterZ), false, false, false);
 
 	//register control
 	sbs->RegisterControl(this);

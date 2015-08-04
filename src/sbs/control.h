@@ -38,7 +38,7 @@ public:
 	bool IsEnabled;
 
 	//functions
-	Control(Object *parent, const char *name, bool permanent, const char *sound, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset, bool center);
+	Control(Object *parent, MeshObject *parent_mesh, const char *name, bool permanent, const char *sound, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, bool center);
 	~Control();
 	void Enabled(bool value);
 	Ogre::Vector3 GetPosition();

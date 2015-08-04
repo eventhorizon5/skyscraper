@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -113,7 +113,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(object, 0, Name.c_str());
+	DoorMesh = new MeshObject(object, parent_mesh, Name.c_str());
 	DoorMesh->Move(position, false, false, false);
 
 	//create sound object
@@ -279,7 +279,6 @@ void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, 
 	//moves door
 
 	DoorMesh->Move(position, relative_x, relative_y, relative_z);
-
 }
 
 Ogre::Vector3 Door::GetPosition()
