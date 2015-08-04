@@ -537,8 +537,8 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	else
 	{
-		Origin.x = GetShaft()->origin.x + x;
-		Origin.z = GetShaft()->origin.z + z;
+		Origin.x = GetShaft()->GetPosition().x + x;
+		Origin.z = GetShaft()->GetPosition().z + z;
 	}
 	OriginFloor = floor;
 

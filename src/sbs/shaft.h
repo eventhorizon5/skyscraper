@@ -34,7 +34,6 @@ public:
 
 	Object *object; //SBS object
 	int ShaftNumber; //shaft number
-	Ogre::Vector3 origin; //origin vector
 	int startfloor; //starting floor
 	int endfloor; //ending floor
 	std::vector<int> elevators; //list of elevators that use this shaft
@@ -93,6 +92,8 @@ public:
 	Door* GetDoor(int number);
 	void RemoveDoor(Door *door);
 	void Check(Ogre::Vector3 position, int current_floor);
+	Ogre::Vector3 GetPosition(int floor);
+	Ogre::Vector3 GetPosition();
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array

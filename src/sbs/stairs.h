@@ -36,7 +36,6 @@ public:
 	int StairsNum; //number
 	int startfloor; //starting floor
 	int endfloor; //ending floor
-	Ogre::Vector3 origin; //origin vector
 	Ogre::Vector2 cutstart; //cut starting vector
 	Ogre::Vector2 cutend; //cut ending vector
 	bool InsideStairwell; //true if user/camera is in the stairwell
@@ -80,6 +79,8 @@ public:
 	void RemoveShowFloor(int floor);
 	bool IsShowFloor(int floor);
 	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
+	Ogre::Vector3 GetPosition(int floor);
+	Ogre::Vector3 GetPosition();
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array
