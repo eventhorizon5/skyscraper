@@ -202,7 +202,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 	{
 		//right
 		xpos = 0.01f;
-		zpos = (Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
+		zpos = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
 		zpos += hoffset * ButtonWidth;
 	}
 
