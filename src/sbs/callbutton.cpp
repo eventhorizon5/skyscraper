@@ -240,7 +240,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	sbs->TexelOverride = false;
 
 	//set position of object
-	CallButtonBackMesh->Move(Ogre::Vector3(CenterX, sbs->GetFloor(floor)->GetBase() + voffset, CenterZ), false, false, false);
+	CallButtonBackMesh->Move(Ogre::Vector3(CenterX, sbs->GetFloor(floor)->GetBase(true) + voffset, CenterZ), false, false, false);
 
 	if (sbs->Verbose)
 		Report("Created");
