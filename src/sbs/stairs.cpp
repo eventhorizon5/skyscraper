@@ -790,6 +790,13 @@ MeshObject* Stairs::GetMeshObject(int floor)
 	return StairArray[floor - startfloor];
 }
 
+MeshObject* Stairs::GetBaseMeshObject()
+{
+	//return mesh object of the starting floor
+
+	return GetMeshObject(startfloor);
+}
+
 Object* Stairs::AddModel(int floor, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model

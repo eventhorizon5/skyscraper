@@ -57,7 +57,6 @@ public:
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
 	float DecelJerk;
 	int OriginFloor; //elevator starting floor
-	Ogre::Vector3 Origin; //3D elevator origin vector
 	float TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
@@ -334,6 +333,8 @@ public:
 	bool GetHoldStatus(int number = 0);
 	void ResetNudgeTimer(bool start = true, int number = 0);
 	bool ShaftDoorsExist(int number, int floor);
+	float GetFloorBase(int floor);
+	float GetFloorAltitude(int floor);
 
 private:
 

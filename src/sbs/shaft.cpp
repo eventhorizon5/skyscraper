@@ -750,6 +750,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 	return ShaftArray[floor - startfloor];
 }
 
+MeshObject* Shaft::GetBaseMeshObject()
+{
+	//return mesh object of the starting floor
+
+	return GetMeshObject(startfloor);
+}
+
 void Shaft::Report(std::string message)
 {
 	//general reporting function
@@ -1095,4 +1102,32 @@ Ogre::Vector3 Shaft::GetPosition(bool absolute)
 	//returns position of shaft's starting floor mesh
 
 	return GetPosition(startfloor, absolute);
+}
+
+float Shaft::GetFloorBase(int floor)
+{
+	//get base of floor, relative of shaft
+
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		ReportError("GetFloorBase: Floor " + ToString2(floor) + " out of range");
+		return 0;
+	}
+
+	return GetMeshObject(floor)->GetPosition().y + sbs->GetFloor(floor)->GetBase(true);
+}
+
+float Shaft::GetFloorAltitude(int floor)
+{
+	//get altitude of floor, relative of shaft
+
+	//exit with an error if floor is invalid
+	if (IsValidFloor(floor) == false)
+	{
+		ReportError("GetFloorAltitude: Floor " + ToString2(floor) + " out of range");
+		return 0;
+	}
+
+	return GetMeshObject(floor)->GetPosition().y;
 }

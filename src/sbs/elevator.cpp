@@ -203,17 +203,13 @@ Elevator::Elevator(int number)
 	DirMessageSound = false;
 	DoorMessageSound = false;
 	ControlPressActive = false;
+	ElevatorMesh = 0;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
 	random_timer = new Timer("Random Timer", this, 1);
 	arrival_delay = new Timer("Arrival Delay Timer", this, 2);
 	departure_delay = new Timer("Departure Delay Timer", this,3);
-
-	//create object meshes
-	std::string name = "Elevator " + ToString2(Number);
-	object->SetName(name.c_str());
-	ElevatorMesh = new MeshObject(object, 0, name.c_str());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -529,16 +525,24 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		return 0;
 	}
 
-	Origin.y = sbs->GetFloor(floor)->GetBase();
+	Shaft *shaft = GetShaft();
+
+	//create object mesh
+	std::string name = "Elevator " + ToString2(Number);
+	object->SetName(name.c_str());
+	ElevatorMesh = new MeshObject(object, shaft->GetBaseMeshObject(), name.c_str());
+
+	Ogre::Vector3 origin;
+	origin.y = GetFloorBase(floor);
 	if (relative == false)
 	{
-		Origin.x = x;
-		Origin.z = z;
+		origin.x = x - shaft->GetPosition(true).x;
+		origin.z = z - shaft->GetPosition(true).z;
 	}
 	else
 	{
-		Origin.x = GetShaft()->GetPosition().x + x;
-		Origin.z = GetShaft()->GetPosition().z + z;
+		origin.x = x;
+		origin.z = z;
 	}
 	OriginFloor = floor;
 
@@ -565,22 +569,22 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//move objects to positions
 	if (sbs->Verbose)
 		Report("moving elevator to origin position");
-	ElevatorMesh->Move(Origin, false, false, false);
+	ElevatorMesh->Move(origin, false, false, false);
 	elevposition = GetPosition();
 
 	//create sound objects
 	if (sbs->Verbose)
 		Report("creating sound objects");
 	carsound = new Sound(object, "Car", true);
-	carsound->SetPosition(Origin);
+	carsound->SetPosition(GetPosition(true));
 	idlesound = new Sound(object, "Idle", true);
-	idlesound->SetPosition(Origin);
+	idlesound->SetPosition(GetPosition(true));
 	motorsound = new Sound(object, "Motor", true);
-	motorsound->SetPosition(Origin);
+	motorsound->SetPosition(GetPosition(true));
 	motoridlesound = new Sound(object, "Motor Idle", true);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
-		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
+		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + GetPosition(true).x, MotorPosition.y, MotorPosition.z + GetPosition(true).z));
 	else
 	{
 		Shaft* shaft = GetShaft();
@@ -591,16 +595,16 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 				motorsound->SetPositionY(floor->GetBase());
 		}
 	}
-	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
+	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - GetPosition(true).x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition(true).z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
 	alarm = new Sound(object, "Alarm", true);
-	alarm->SetPosition(Origin);
+	alarm->SetPosition(GetPosition(true));
 	floorbeep = new Sound(object, "Floor Beep", true);
-	floorbeep->SetPosition(Origin);
+	floorbeep->SetPosition(GetPosition(true));
 	announcesnd = new Sound(object, "Announcement Sound", true);
-	announcesnd->SetPosition(Origin);
+	announcesnd->SetPosition(GetPosition(true));
 	musicsound = new Sound(object, "Music Sound", true);
-	musicsound->SetPosition(Origin + MusicPosition);
+	musicsound->SetPosition(GetPosition(true) + MusicPosition);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -1170,9 +1174,9 @@ int Elevator::GetFloor()
 	int newlastfloor;
 
 	if (lastfloorset == true)
-		newlastfloor = sbs->GetFloorNumber(GetPosition().y, lastfloor, true);
+		newlastfloor = sbs->GetFloorNumber(GetPosition(true).y, lastfloor, true);
 	else
-		newlastfloor = sbs->GetFloorNumber(GetPosition().y);
+		newlastfloor = sbs->GetFloorNumber(GetPosition(true).y);
 
 	lastfloor = newlastfloor;
 	lastfloorset = true;
@@ -1339,7 +1343,7 @@ void Elevator::MonitorLoop()
 					if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
 						MusicPosition = Ogre::Vector3(0, Height, 0); //set default music position to elevator height
 
-					musicsound->SetPosition(GetPosition() + MusicPosition);
+					musicsound->SetPosition(GetPosition(true) + MusicPosition);
 					musicsound->Loop(true);
 					musicsound->Play(false);
 				}
@@ -1718,7 +1722,7 @@ void Elevator::MoveElevatorToFloor()
 
 	SetAltitude(GetPosition().y + movement.y);
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
+		sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, GetPosition(true).y + CameraOffset, sbs->camera->GetPosition().z));
 
 	//motion calculation
 	if (Brakes == false)
@@ -1866,7 +1870,7 @@ void Elevator::MoveElevatorToFloor()
 	//play floor beep and update indicators, if passing by or arriving at a floor
 	if ((GetFloor() != oldfloor && Leveling == false) || StartLeveling == true)
 	{
-		float alt = sbs->GetFloor(GetFloor())->Altitude;
+		float alt = GetFloorAltitude(GetFloor());
 		bool pass = false;
 
 		//determine if elevator will pass floor, only for down movement
@@ -1969,7 +1973,7 @@ void Elevator::MoveElevatorToFloor()
 		SetAltitude(Destination);
 
 		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
+			sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, GetPosition(true).y + CameraOffset, sbs->camera->GetPosition().z));
 	}
 
 	//reset values if at destination floor
@@ -2007,22 +2011,21 @@ void Elevator::SetAltitude(float altitude)
 
 	ElevatorMesh->Move(Ogre::Vector3(elevposition.x, altitude, elevposition.z), false, false, false);
 	elevposition.y = altitude;
-	MoveDoors(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
 	MoveObjects(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
 
 	//move sounds
-	Ogre::Vector3 top = Ogre::Vector3(elevposition.x, elevposition.y + Height, elevposition.z);
-	carsound->SetPosition(elevposition);
+	Ogre::Vector3 top = GetPosition(true) + Ogre::Vector3(0, Height, 0);
+	carsound->SetPosition(GetPosition(true));
 	idlesound->SetPosition(top);
-	MoveDoorSound(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
+	MoveDoorSound(0, Ogre::Vector3(0, GetPosition(true).y, 0), true, false, true);
 	alarm->SetPosition(top);
 	floorbeep->SetPosition(top);
 	announcesnd->SetPosition(top);
-	musicsound->SetPosition(elevposition + MusicPosition);
+	musicsound->SetPosition(GetPosition(true) + MusicPosition);
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
-			sounds[i]->SetPositionY(elevposition.y + sounds[i]->PositionOffset.y);
+			sounds[i]->SetPositionY(GetPosition(true).y + sounds[i]->PositionOffset.y);
 	}
 }
 
@@ -2339,7 +2342,7 @@ bool Elevator::IsElevator(Ogre::MeshPtr test)
 
 bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 {
-	//determine if the given 3D position is inside the elevator
+	//determine if the given absolute 3D position is inside the elevator
 
 	//SBS_PROFILE("Elevator::IsInElevator");
 	bool inelevator = false;
@@ -2356,7 +2359,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 
 	checkfirstrun = false;
 
-	if (position.y > GetPosition().y && position.y < GetPosition().y + (Height * 2))
+	if (position.y > GetPosition(true).y && position.y < GetPosition(true).y + (Height * 2))
 	{
 		if (ElevatorMesh->InBoundingBox(position, false) == true)
 		{
@@ -2365,12 +2368,12 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 				if (IsMoving == false)
 				{
 					//store camera offset if elevator is not moving
-					CameraOffset = position.y - GetPosition().y;
+					CameraOffset = position.y - GetPosition(true).y;
 				}
 				else if (CameraOffset == 0)
 				{
 					//reposition camera with a moving elevator if the offset is 0
-					if (position.y < GetPosition().y + Height)
+					if (position.y < GetPosition(true).y + Height)
 						CameraOffset = sbs->camera->GetHeight(); //if below ceiling, set to camera height
 					else
 						CameraOffset = Height + sbs->camera->GetHeight(); //if above ceiling, set to elev height + camera height
@@ -2381,7 +2384,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 		else
 			CameraOffset = 0;
 
-		if (position.y < GetPosition().y + Height)
+		if (position.y < GetPosition(true).y + Height)
 		{
 			//cache values
 			lastcheckresult = inelevator;
@@ -4003,13 +4006,13 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	float x, z;
 	if (relative == true)
 	{
-		x = Origin.x + CenterX;
-		z = Origin.z + CenterZ;
+		x = CenterX;
+		z = CenterZ;
 	}
 	else
 	{
-		x = CenterX;
-		z = CenterZ;
+		x = CenterX - GetPosition(true).x;
+		z = CenterZ - GetPosition(true).z;
 	}
 
 	//make sure specified door exists before continuing
@@ -4213,7 +4216,7 @@ Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3
 	sounds.push_back(sound);
 
 	//set parameters and play sound
-	sound->SetPosition(position);
+	sound->SetPosition(GetPosition(true) + position);
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
@@ -5046,7 +5049,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 {
 	//add a global light
 
-	Light* light = new Light(object, name, type, position + Origin, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(object, name, type, GetPosition(true) + position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light->object;
 }
@@ -5069,10 +5072,6 @@ void Elevator::MoveObjects(Ogre::Vector3 position, bool relative_x, bool relativ
 	//move triggers
 	for (int i = 0; i < (int)TriggerArray.size(); i++)
 		TriggerArray[i]->Move(position, relative_x, relative_y, relative_z);
-
-	//move models
-	for (int i = 0; i < (int)ModelArray.size(); i++)
-		ModelArray[i]->Move(position, relative_x, relative_y, relative_z);
 
 	//move lights
 	for (int i = 0; i < (int)lights.size(); i++)
@@ -5131,7 +5130,7 @@ Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vec
 	//add a trigger
 	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
-	trigger->SetPosition(Origin);
+	trigger->SetPosition(GetPosition(true));
 	return trigger->object;
 }
 
@@ -5199,7 +5198,7 @@ float Elevator::GetDestinationAltitude(int floor)
 	if (found == false)
 	{
 		if (sbs->GetFloor(floor))
-			return sbs->GetFloor(floor)->GetBase();
+			return GetFloorBase(floor);
 	}
 	return result;
 }
@@ -5212,7 +5211,7 @@ float Elevator::GetDestinationOffset(int floor)
 		return 0.0f;
 
 	if (sbs->GetFloor(floor))
-		return GetDestinationAltitude(floor) - sbs->GetFloor(floor)->GetBase();
+		return GetDestinationAltitude(floor) - GetFloorBase(floor);
 
 	return 0.0f;
 }
@@ -5229,8 +5228,6 @@ void Elevator::Init()
 
 	//turn on shaft doors
 	ShaftDoorsEnabled(0, sbs->camera->StartFloor, true);
-	ShaftDoorsEnabled(0, GetShaft()->startfloor, true);
-	ShaftDoorsEnabled(0, GetShaft()->endfloor, true);
 
 	//disable objects
 	EnableObjects(false);
@@ -5983,4 +5980,14 @@ bool Elevator::ShaftDoorsExist(int number, int floor)
 		}
 	}
 	return false;
+}
+
+float Elevator::GetFloorBase(int floor)
+{
+	return GetShaft()->GetFloorBase(floor);
+}
+
+float Elevator::GetFloorAltitude(int floor)
+{
+	return GetShaft()->GetFloorAltitude(floor);
 }

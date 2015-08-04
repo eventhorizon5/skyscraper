@@ -723,7 +723,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(object, Level, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase(true) + voffset);
+			FloorIndicator *ind = new FloorIndicator(object, Level, elevator, texture_prefix, direction, elev->GetPosition(true).x + CenterX, elev->GetPosition(true).z + CenterZ, width, height, GetBase(true) + voffset);
 			FloorIndicatorArray.push_back(ind);
 			return ind->object;
 		}
@@ -963,8 +963,8 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 	float x, z;
 	if (relative == true)
 	{
-		x = elev->Origin.x + CenterX;
-		z = elev->Origin.z + CenterZ;
+		x = elev->GetPosition(true).x + CenterX;
+		z = elev->GetPosition(true).z + CenterZ;
 	}
 	else
 	{

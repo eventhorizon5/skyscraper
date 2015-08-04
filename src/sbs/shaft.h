@@ -79,6 +79,7 @@ public:
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	MeshObject* GetMeshObject(int floor);
+	MeshObject* GetBaseMeshObject();
 	void Report(std::string message);
 	bool ReportError(std::string message);
 	Object* AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
@@ -94,6 +95,8 @@ public:
 	void Check(Ogre::Vector3 position, int current_floor);
 	Ogre::Vector3 GetPosition(int floor, bool absolute = false);
 	Ogre::Vector3 GetPosition(bool absolute = false);
+	float GetFloorBase(int floor);
+	float GetFloorAltitude(int floor);
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array
