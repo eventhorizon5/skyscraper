@@ -39,7 +39,7 @@ public:
 	Model(Object *parent, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~Model();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(bool absolute = false);
 	void Rotate(const Ogre::Vector3 rotation, float speed);
 	void SetRotation(const Ogre::Vector3 rotation);
 	Ogre::Vector3 GetRotation();

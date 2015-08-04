@@ -266,9 +266,10 @@ void ButtonPanel::Move(const Ogre::Vector3 &position)
 	ButtonPanelMesh->Move(position, true, true, true);
 }
 
-Ogre::Vector3 ButtonPanel::GetPosition()
+Ogre::Vector3 ButtonPanel::GetPosition(bool absolute)
 {
-	return ButtonPanelMesh->GetPosition();
+	//return current position
+	return ButtonPanelMesh->GetPosition(absolute);
 }
 
 void ButtonPanel::Enabled(bool value)

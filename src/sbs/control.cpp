@@ -174,10 +174,10 @@ void Control::Enabled(bool value)
 	IsEnabled = value;
 }
 
-Ogre::Vector3 Control::GetPosition()
+Ogre::Vector3 Control::GetPosition(bool absolute)
 {
 	//return current position
-	return ControlMesh->GetPosition();
+	return ControlMesh->GetPosition(absolute);
 }
 
 void Control::SetPosition(const Ogre::Vector3 &position)

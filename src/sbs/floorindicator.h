@@ -39,7 +39,7 @@ public:
 	FloorIndicator(Object *parent, MeshObject *parent_mesh, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude);
 	~FloorIndicator();
 	void Enabled(bool value);
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(bool absolute = false);
 	void SetPosition(const Ogre::Vector3 &position);
 	void Move(const Ogre::Vector3 &position);
 	void Update();

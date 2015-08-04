@@ -58,6 +58,7 @@ public:
 	bool ToggleLock(bool force = false);
 	int GetKeyID();
 	void FireService(int value);
+	Ogre::Vector3 GetPosition(bool absolute = false);
 
 private:
 	MeshObject* CallButtonBackMesh; //call button mesh object

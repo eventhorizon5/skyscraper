@@ -281,11 +281,11 @@ void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, 
 	DoorMesh->Move(position, relative_x, relative_y, relative_z);
 }
 
-Ogre::Vector3 Door::GetPosition()
+Ogre::Vector3 Door::GetPosition(bool absolute)
 {
 	//return the door's position
 
-	return DoorMesh->GetPosition();
+	return DoorMesh->GetPosition(absolute);
 }
 
 void Door::SetLocked(int side, int keyid)

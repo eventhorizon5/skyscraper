@@ -172,7 +172,7 @@ public:
 	void ProcessCallQueue();
 	int GetFloor();
 	void MonitorLoop();
-	const Ogre::Vector3 GetPosition();
+	const Ogre::Vector3 GetPosition(bool absolute = false);
 	WallObject* AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	WallObject* AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	Object* AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);

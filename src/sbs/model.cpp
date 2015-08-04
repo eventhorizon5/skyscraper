@@ -90,9 +90,9 @@ void Model::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y,
 	mesh->Move(position, relative_x, relative_y, relative_z, Offset);
 }
 
-Ogre::Vector3 Model::GetPosition()
+Ogre::Vector3 Model::GetPosition(bool absolute)
 {
-	return mesh->GetPosition() - Offset;
+	return mesh->GetPosition(absolute) - Offset;
 }
 
 void Model::SetRotation(const Ogre::Vector3 rotation)

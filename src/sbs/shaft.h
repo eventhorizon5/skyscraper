@@ -92,8 +92,8 @@ public:
 	Door* GetDoor(int number);
 	void RemoveDoor(Door *door);
 	void Check(Ogre::Vector3 position, int current_floor);
-	Ogre::Vector3 GetPosition(int floor);
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(int floor, bool absolute = false);
+	Ogre::Vector3 GetPosition(bool absolute = false);
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array

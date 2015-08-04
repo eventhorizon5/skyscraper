@@ -91,7 +91,7 @@ public:
 	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
 	void RescaleVertices(float multiplier);
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin = Ogre::Vector3(0, 0, 0));
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(bool absolute = false);
 	void Rotate(const Ogre::Vector3 rotation, float speed);
 	void SetRotation(const Ogre::Vector3 rotation);
 	Ogre::Vector3 GetRotation();

@@ -56,7 +56,7 @@ public:
 	void SetLights(int up, int down);
 	void SetPosition(const Ogre::Vector3& position);
 	void Move(const Ogre::Vector3& position);
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(bool absolute = false);
 
 private:
 	MeshObject* DirectionalMeshBack; //indicator mesh back object

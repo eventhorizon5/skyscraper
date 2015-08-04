@@ -52,7 +52,7 @@ public:
 	void Enabled(bool value);
 	void MoveDoor();
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(bool absolute = false);
 	void SetLocked(int side, int keyid);
 	bool GetSide(const Ogre::Vector3 &position);
 	bool IsLocked(const Ogre::Vector3 &position);

@@ -1076,7 +1076,7 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 	}
 }
 
-Ogre::Vector3 Shaft::GetPosition(int floor)
+Ogre::Vector3 Shaft::GetPosition(int floor, bool absolute)
 {
 	//return position of shaft mesh for specified floor
 
@@ -1087,12 +1087,12 @@ Ogre::Vector3 Shaft::GetPosition(int floor)
 		return Ogre::Vector3::ZERO;
 	}
 
-	return GetMeshObject(floor)->GetPosition();
+	return GetMeshObject(floor)->GetPosition(absolute);
 }
 
-Ogre::Vector3 Shaft::GetPosition()
+Ogre::Vector3 Shaft::GetPosition(bool absolute)
 {
 	//returns position of shaft's starting floor mesh
 
-	return GetPosition(startfloor);
+	return GetPosition(startfloor, absolute);
 }

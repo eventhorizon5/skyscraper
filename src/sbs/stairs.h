@@ -79,8 +79,8 @@ public:
 	void RemoveShowFloor(int floor);
 	bool IsShowFloor(int floor);
 	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
-	Ogre::Vector3 GetPosition(int floor);
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(int floor, bool absolute = false);
+	Ogre::Vector3 GetPosition(bool absolute = false);
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array

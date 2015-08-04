@@ -433,10 +433,10 @@ void DirectionalIndicator::Move(const Ogre::Vector3& position)
 		DirectionalMeshBack->Move(position, true, true, true);
 }
 
-Ogre::Vector3 DirectionalIndicator::GetPosition()
+Ogre::Vector3 DirectionalIndicator::GetPosition(bool absolute)
 {
 	//return indicator position
-	return DirectionalMeshBack->GetPosition();
+	return DirectionalMeshBack->GetPosition(absolute);
 }
 
 void DirectionalIndicator::Timer::Notify()

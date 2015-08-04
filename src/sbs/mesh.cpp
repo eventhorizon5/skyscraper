@@ -1013,9 +1013,14 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 		mBody->updateTransform(true, false, false);
 }
 
-Ogre::Vector3 MeshObject::GetPosition()
+Ogre::Vector3 MeshObject::GetPosition(bool absolute)
 {
-	return sbs->ToLocal(SceneNode->getPosition());
+	Ogre::Vector3 pos = sbs->ToLocal(SceneNode->getPosition());
+
+	if (absolute == true && ParentMesh)
+		return ParentMesh->GetPosition(true) + pos;
+
+	return pos;
 }
 
 void MeshObject::SetRotation(const Ogre::Vector3 rotation)

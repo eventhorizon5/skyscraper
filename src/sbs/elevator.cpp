@@ -2192,10 +2192,10 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 	return indicator->object;
 }
 
-const Ogre::Vector3 Elevator::GetPosition()
+const Ogre::Vector3 Elevator::GetPosition(bool absolute)
 {
 	//returns the elevator's position
-	return ElevatorMesh->GetPosition();
+	return ElevatorMesh->GetPosition(absolute);
 }
 
 void Elevator::DumpQueues()

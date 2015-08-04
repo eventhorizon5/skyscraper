@@ -1337,11 +1337,11 @@ void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool rel
 		sensor->Move(position, relative_x, relative_y, relative_z);
 }
 
-Ogre::Vector3 ElevatorDoor::GetPosition()
+Ogre::Vector3 ElevatorDoor::GetPosition(bool absolute)
 {
 	//get position of first door mesh
 	if ((int)Doors->doors.size() > 0)
-		return Doors->doors[0]->mesh->GetPosition();
+		return Doors->doors[0]->mesh->GetPosition(absolute);
 	return Ogre::Vector3::ZERO;
 }
 

@@ -968,7 +968,7 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 	}
 }
 
-Ogre::Vector3 Stairs::GetPosition(int floor)
+Ogre::Vector3 Stairs::GetPosition(int floor, bool absolute)
 {
 	//return position of stairwell mesh for specified floor
 
@@ -979,12 +979,12 @@ Ogre::Vector3 Stairs::GetPosition(int floor)
 		return Ogre::Vector3::ZERO;
 	}
 
-	return GetMeshObject(floor)->GetPosition();
+	return GetMeshObject(floor)->GetPosition(absolute);
 }
 
-Ogre::Vector3 Stairs::GetPosition()
+Ogre::Vector3 Stairs::GetPosition(bool absolute)
 {
 	//returns position of stairwell's starting floor mesh
 
-	return GetPosition(startfloor);
+	return GetPosition(startfloor, absolute);
 }

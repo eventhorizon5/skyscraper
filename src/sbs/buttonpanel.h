@@ -61,7 +61,7 @@ public:
 	void ChangeAllLights(bool value);
 	int GetFloorButtonIndex(int floor);
 	void RemoveControl(Control *control);
-	Ogre::Vector3 GetPosition();
+	Ogre::Vector3 GetPosition(bool absolute = false);
 
 private:
 

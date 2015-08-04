@@ -144,8 +144,8 @@ void FloorIndicator::Update()
 	FloorIndicatorMesh->ChangeTexture(texture.c_str());
 }
 
-Ogre::Vector3 FloorIndicator::GetPosition()
+Ogre::Vector3 FloorIndicator::GetPosition(bool absolute)
 {
 	//return current position of the indicator
-	return FloorIndicatorMesh->GetPosition();
+	return FloorIndicatorMesh->GetPosition(absolute);
 }

@@ -682,3 +682,9 @@ void CallButton::FireService(int value)
 			elevator->EnableFireService1(value);
 	}
 }
+
+Ogre::Vector3 CallButton::GetPosition(bool absolute)
+{
+	//return current position
+	return CallButtonBackMesh->GetPosition(absolute);
+}
