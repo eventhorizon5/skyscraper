@@ -48,7 +48,7 @@ public:
 	bool ActiveDirection; //true if this indicator displays the active elevator direction, instead of only for an available call
 
 	//functions
-	DirectionalIndicator(Object *parent, MeshObject *parent_mesh, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~DirectionalIndicator();
 	void Enabled(bool value);
 	void UpLight(bool value);
@@ -56,7 +56,7 @@ public:
 	void SetLights(int up, int down);
 	void SetPosition(const Ogre::Vector3& position);
 	void Move(const Ogre::Vector3& position);
-	Ogre::Vector3 GetPosition(bool absolute = false);
+	Ogre::Vector3 GetPosition();
 
 private:
 	MeshObject* DirectionalMeshBack; //indicator mesh back object

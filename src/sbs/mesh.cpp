@@ -521,7 +521,6 @@ Ogre::SubMesh* WallPolygon::GetSubMesh()
 
 WallPolygon::WallPolygon()
 {
-	mesh = 0;
 }
 
 WallPolygon::~WallPolygon()
@@ -601,7 +600,7 @@ bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool
 	return false;
 }
 
-MeshObject::MeshObject(Object* parent, MeshObject *parent_mesh, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
 	object = new Object();
@@ -612,7 +611,6 @@ MeshObject::MeshObject(Object* parent, MeshObject *parent_mesh, const char *name
 	mShape = 0;
 	SceneNode = 0;
 	Movable = 0;
-	ParentMesh = parent_mesh;
 	prepared = false;
 	IsPhysical = enable_physics;
 	this->restitution = restitution;
@@ -745,12 +743,7 @@ MeshObject::MeshObject(Object* parent, MeshObject *parent_mesh, const char *name
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
 	//Movable->setCastShadows(true);
-
-	//attach scene node to parent mesh's node or root
-	if (ParentMesh)
-		SceneNode = ParentMesh->SceneNode->createChildSceneNode(Name);
-	else
-		SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
+	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
 	SceneNode->attachObject(Movable);
 
 	//rescale if a loaded model
@@ -942,19 +935,16 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	Ogre::Vector3 cur_isect;
 	Ogre::Vector3 tmpnormal;
 
-	Ogre::Vector3 start2 = SceneNode->convertWorldToLocalPosition(start);
-	Ogre::Vector3 end2 = SceneNode->convertWorldToLocalPosition(end);
-
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
 		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
 		{
-			if (Walls[i]->handles[j].IntersectSegment(this, start2, end2, cur_isect, &pr, tmpnormal, convert, rescale) == true)
+			if (Walls[i]->handles[j].IntersectSegment(this, start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{
 					//currently test against previous camera intersection test to fix some weird issues
-					Ogre::Vector3 orig_start = sbs->ToRemote(SceneNode->convertWorldToLocalPosition(sbs->camera->HitPosition));
+					Ogre::Vector3 orig_start = sbs->ToRemote(sbs->camera->HitPosition);
 					dist = orig_start.distance(cur_isect);
 
 					if (dist < best_dist)
@@ -1013,14 +1003,9 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 		mBody->updateTransform(true, false, false);
 }
 
-Ogre::Vector3 MeshObject::GetPosition(bool absolute)
+Ogre::Vector3 MeshObject::GetPosition()
 {
-	Ogre::Vector3 pos = sbs->ToLocal(SceneNode->getPosition());
-
-	if (absolute == true && ParentMesh)
-		return ParentMesh->GetPosition(true) + pos;
-
-	return pos;
+	return sbs->ToLocal(SceneNode->getPosition());
 }
 
 void MeshObject::SetRotation(const Ogre::Vector3 rotation)
@@ -1733,10 +1718,7 @@ void MeshObject::CreateCollider()
 				tri.a = Triangles[i].triangles[j].a;
 				tri.b = Triangles[i].triangles[j].b;
 				tri.c = Triangles[i].triangles[j].c;
-				Ogre::Vector3 v1 = SceneNode->convertLocalToWorldPosition(MeshGeometry[tri.a].vertex);
-				Ogre::Vector3 v2 = SceneNode->convertLocalToWorldPosition(MeshGeometry[tri.b].vertex);
-				Ogre::Vector3 v3 = SceneNode->convertLocalToWorldPosition(MeshGeometry[tri.c].vertex);
-				shape->AddTriangle(v1, v2, v3);
+				shape->AddTriangle(MeshGeometry[tri.a].vertex, MeshGeometry[tri.b].vertex, MeshGeometry[tri.c].vertex);
 			}
 		}
 
@@ -1827,8 +1809,8 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 		std::string name = SceneNode->getName();
 
-		//Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-		//box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
+		Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+		box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)

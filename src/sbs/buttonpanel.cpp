@@ -38,18 +38,16 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
 
-	Elevator *elev = sbs->GetElevator(_elevator);
-	if (!elev)
-		return;
-
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, elev->object, "ButtonPanel", "", false);
+	object->SetValues(this, sbs->GetElevator(_elevator)->object, "ButtonPanel", "", false);
 
 	IsEnabled = true;
 	elevator = _elevator;
 	Index = index;
 	Direction = direction;
+	Origin.x = sbs->GetElevator(elevator)->Origin.x + CenterX;
+	Origin.z = sbs->GetElevator(elevator)->Origin.z + CenterZ;
 	ButtonWidth = buttonwidth;
 	ButtonHeight = buttonheight;
 	Rows = rows;
@@ -62,12 +60,18 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	Width = ((Columns + 1) * SpacingX) + (Columns * ButtonWidth);
 	Height = ((Rows + 1) * SpacingY) + (Rows * ButtonHeight);
 
+	//get vertical
+	Origin.y = voffset - (Height / 2);
+
 	//create mesh
 	std::string buffer;
 	buffer = "Button Panel " + ToString2(elevator) + ":" + ToString2(index);
 	TrimString(buffer);
 	object->SetName(buffer.c_str());
-	ButtonPanelMesh = new MeshObject(object, elev->ElevatorMesh, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ButtonPanelMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+
+	//move
+	SetToElevatorAltitude();
 
 	//create panel back
 	sbs->ResetTextureMapping(true);
@@ -93,9 +97,6 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	}
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
-
-	//set position of object
-	ButtonPanelMesh->Move(Ogre::Vector3(CenterX, voffset - (Height / 2), CenterZ), false, false, false);
 }
 
 ButtonPanel::~ButtonPanel()
@@ -173,7 +174,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 
 	//vertical position is the top of the panel, minus the total spacing above it,
 	//minus the total button spaces above (and including) it, minus half of the extra height multiplier
-	ypos = Height - (SpacingY * row) - (ButtonHeight * row) - ((ButtonHeight * (bheight - 1)) / 2);
+	ypos = (Origin.y + Height) - (SpacingY * row) - (ButtonHeight * row) - ((ButtonHeight * (bheight - 1)) / 2);
 	ypos += voffset * ButtonHeight;
 
 	if (Direction == "front")
@@ -181,28 +182,28 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 		//horizontal position is the left-most edge of the panel (origin aka center minus
 		//half the width), plus total spacing to the left of it, plus total button spaces
 		//to the left of it, plus half of the extra width multiplier
-		xpos = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
-		zpos = -0.01f;
+		xpos = (Origin.x - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
+		zpos = Origin.z - 0.01f;
 		xpos += hoffset * ButtonWidth;
 	}
 	if (Direction == "back")
 	{
 		//back
-		xpos = (Width / 2) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
-		zpos = 0.01f;
+		xpos = (Origin.x + (Width / 2)) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
+		zpos = Origin.z + 0.01f;
 		xpos -= hoffset * ButtonWidth;
 	}
 	if (Direction == "left")
 	{
-		xpos = -0.01f;
-		zpos = (Width / 2)  - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
+		xpos = Origin.x - 0.01f;
+		zpos = (Origin.z + (Width / 2))  - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
 		zpos -= hoffset * ButtonWidth;
 	}
 	if (Direction == "right")
 	{
 		//right
-		xpos = 0.01f;
-		zpos = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
+		xpos = Origin.x + 0.01f;
+		zpos = (Origin.z - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
 		zpos += hoffset * ButtonWidth;
 	}
 
@@ -235,7 +236,10 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(object, ButtonPanelMesh, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), xpos, zpos, ButtonWidth * bwidth, ButtonHeight * bheight, ypos, false);
+	Control *control = controls[control_index] = new Control(object, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos, false);
+
+	//move control
+	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 
 	return control->object;
 }
@@ -264,12 +268,30 @@ void ButtonPanel::Move(const Ogre::Vector3 &position)
 {
 	//relative movement
 	ButtonPanelMesh->Move(position, true, true, true);
+
+	//move controls
+	for (int i = 0; i < (int)controls.size(); i++)
+	{
+		controls[i]->Move(position);
+	}
 }
 
-Ogre::Vector3 ButtonPanel::GetPosition(bool absolute)
+Ogre::Vector3 ButtonPanel::GetPosition()
 {
-	//return current position
-	return ButtonPanelMesh->GetPosition(absolute);
+	return ButtonPanelMesh->GetPosition();
+}
+
+void ButtonPanel::SetToElevatorAltitude()
+{
+	Ogre::Vector3 pos = ButtonPanelMesh->GetPosition();
+	Ogre::Vector3 pos_new = Ogre::Vector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
+	ButtonPanelMesh->Move(pos_new, false, false, false);
+
+	//move controls
+	for (int i = 0; i < (int)controls.size(); i++)
+	{
+		controls[i]->SetPositionY(pos_new.y);
+	}
 }
 
 void ButtonPanel::Enabled(bool value)
@@ -292,7 +314,7 @@ bool ButtonPanel::AddWall(const char *name, const char *texture, float thickness
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(object, ButtonPanelMesh, name, texture, thickness, x1, z1, x2, + z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->AddWallMain(object, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
 }
 
 Control* ButtonPanel::GetControl(int index)

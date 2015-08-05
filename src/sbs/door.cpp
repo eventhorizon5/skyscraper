@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -71,12 +71,10 @@ Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char
 	if (Speed <= 0)
 		Speed = 75;
 
-	Ogre::Vector3 position = Ogre::Vector3::ZERO;
-
-	//set position to location of the door's hinge/pivot point and set up door coordinates
+	//set origin to location of the door's hinge/pivot point and set up door coordinates
 	if (Direction == 1 || Direction == 2)
 	{
-		position = Ogre::Vector3(CenterX, altitude, CenterZ - (width / 2)); //front
+		origin = Ogre::Vector3(CenterX, altitude, CenterZ - (width / 2)); //front
 		x1 = 0;
 		x2 = 0;
 		z1 = 0;
@@ -84,7 +82,7 @@ Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char
 	}
 	if (Direction == 3 || Direction == 4)
 	{
-		position = Ogre::Vector3(CenterX, altitude, CenterZ + (width / 2)); //back
+		origin = Ogre::Vector3(CenterX, altitude, CenterZ + (width / 2)); //back
 		x1 = 0;
 		x2 = 0;
 		z1 = -width;
@@ -92,7 +90,7 @@ Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char
 	}
 	if (Direction == 5 || Direction == 6)
 	{
-		position = Ogre::Vector3(CenterX + (width / 2), altitude, CenterZ); //right
+		origin = Ogre::Vector3(CenterX + (width / 2), altitude, CenterZ); //right
 		x1 = -width;
 		x2 = 0;
 		z1 = 0;
@@ -100,7 +98,7 @@ Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char
 	}
 	if (Direction == 7 || Direction == 8)
 	{
-		position = Ogre::Vector3(CenterX - (width / 2), altitude, CenterZ); //left
+		origin = Ogre::Vector3(CenterX - (width / 2), altitude, CenterZ); //left
 		x1 = 0;
 		x2 = width;
 		z1 = 0;
@@ -113,12 +111,12 @@ Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(object, parent_mesh, Name.c_str());
-	DoorMesh->Move(position, false, false, false);
+	DoorMesh = new MeshObject(object, Name.c_str());
+	DoorMesh->Move(origin, false, false, false);
 
 	//create sound object
 	sound = new Sound(object, "DoorSound", true);
-	sound->SetPosition(position);
+	sound->SetPosition(origin);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);
@@ -136,7 +134,7 @@ Door::Door(Object *parent, MeshObject *parent_mesh, const char *name, const char
 
 	//open door on startup (without sound) if specified
 	if (open_state == true)
-		Open(position, false, true);
+		Open(origin, false, true);
 }
 
 Door::~Door()
@@ -279,13 +277,15 @@ void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, 
 	//moves door
 
 	DoorMesh->Move(position, relative_x, relative_y, relative_z);
+	origin = GetPosition();
+
 }
 
-Ogre::Vector3 Door::GetPosition(bool absolute)
+Ogre::Vector3 Door::GetPosition()
 {
 	//return the door's position
 
-	return DoorMesh->GetPosition(absolute);
+	return DoorMesh->GetPosition();
 }
 
 void Door::SetLocked(int side, int keyid)
@@ -366,10 +366,10 @@ bool Door::GetSide(const Ogre::Vector3 &position)
 {
 	//return which side of the door the position is (false for negative/left/front, true for positive/right/back)
 
-	if ((Direction >= 1 && Direction <= 4) && position.x > GetPosition().x)
+	if ((Direction >= 1 && Direction <= 4) && position.x > origin.x)
 		return true;
 
-	if ((Direction >= 5 && Direction <= 8) && position.z > GetPosition().z)
+	if ((Direction >= 5 && Direction <= 8) && position.z > origin.z)
 		return true;
 
 	return false;

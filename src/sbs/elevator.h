@@ -57,6 +57,7 @@ public:
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
 	float DecelJerk;
 	int OriginFloor; //elevator starting floor
+	Ogre::Vector3 Origin; //3D elevator origin vector
 	float TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
@@ -171,7 +172,7 @@ public:
 	void ProcessCallQueue();
 	int GetFloor();
 	void MonitorLoop();
-	const Ogre::Vector3 GetPosition(bool absolute = false);
+	const Ogre::Vector3 GetPosition();
 	WallObject* AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	WallObject* AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	Object* AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset);
@@ -333,8 +334,6 @@ public:
 	bool GetHoldStatus(int number = 0);
 	void ResetNudgeTimer(bool start = true, int number = 0);
 	bool ShaftDoorsExist(int number, int floor);
-	float GetFloorBase(int floor);
-	float GetFloorAltitude(int floor);
 
 private:
 

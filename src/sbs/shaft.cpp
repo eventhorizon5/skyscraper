@@ -51,6 +51,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	if (endfloor > sbs->Floors - 1)
 		return;
 
+	origin = Ogre::Vector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
 	IsEnabled = true;
 	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
@@ -83,9 +84,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	{
 		//Create shaft meshes
 		std::string buffer = name + ":" + ToString2(i);
-		MeshObject *mesh = new MeshObject(object, 0, buffer.c_str());
-		ShaftArray[i - startfloor] = mesh;
-		mesh->Move(Ogre::Vector3(CenterX, sbs->GetFloor(i)->Altitude, CenterZ), false, false, false);
+		ShaftArray[i - startfloor] = new MeshObject(object, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
 }
@@ -196,7 +195,7 @@ bool Shaft::AddWall(WallObject *wall, int floor, const char *name, const char *t
 	if (IsValidFloor(floor) == false)
 		return ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
 
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, true);
 }
 
 WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
@@ -222,7 +221,6 @@ bool Shaft::AddFloor(WallObject *wall, int floor, const char *name, const char *
 	//get shaft extents
 	float altitude = sbs->GetFloor(floor)->Altitude;
 
-	//recalculate shaft extents if needed
 	if (altitude + voffset1 < bottom)
 		bottom = altitude + voffset1;
 	if (altitude + voffset2 < bottom)
@@ -232,7 +230,7 @@ bool Shaft::AddFloor(WallObject *wall, int floor, const char *name, const char *
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
@@ -394,8 +392,6 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	if (!sbs->GetFloor(startfloor) || !sbs->GetFloor(endfloor))
 		return;
 
-	Ogre::Vector3 origin = GetPosition();
-
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		Floor *floorptr = sbs->GetFloor(i);
@@ -449,7 +445,6 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 		return false;
 
 	float base = sbs->GetFloor(floor)->Altitude;
-	Ogre::Vector3 origin = GetPosition();
 
 	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
 	{
@@ -750,13 +745,6 @@ MeshObject* Shaft::GetMeshObject(int floor)
 	return ShaftArray[floor - startfloor];
 }
 
-MeshObject* Shaft::GetBaseMeshObject()
-{
-	//return mesh object of the starting floor
-
-	return GetMeshObject(startfloor);
-}
-
 void Shaft::Report(std::string message)
 {
 	//general reporting function
@@ -777,7 +765,7 @@ Object* Shaft::AddLight(int floor, const char *name, int type, Ogre::Vector3 pos
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(object, name, type, position + Ogre::Vector3(GetPosition().x, sbs->GetFloor(floor)->Altitude, GetPosition().z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(object, name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights[floor - startfloor].push_back(light);
 	return light->object;
 }
@@ -790,7 +778,7 @@ Object* Shaft::AddModel(int floor, const char *name, const char *filename, bool 
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(object, GetMeshObject(floor), name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -809,7 +797,8 @@ Object* Shaft::AddControl(int floor, const char *name, const char *sound, const 
 		return 0;
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, CenterX, CenterZ, width, height, voffset, true);
+	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
 	ControlArray[floor - startfloor].push_back(control);
 	return control->object;
 }
@@ -862,8 +851,6 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	if (!floorptr)
 		return 0;
 
-	Ogre::Vector3 origin = GetPosition();
-
 	float x1, z1, x2, z2;
 	//set up coordinates
 	if (direction < 5)
@@ -895,15 +882,14 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	}
 
 	//create doorway walls
-	MeshObject *mesh = GetMeshObject(floor);
-	WallObject *wall = mesh->CreateWallObject(object, "Connection Walls");
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, "Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string shaftnum = ToString(ShaftNumber);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(object, mesh, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(object, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->Altitude + floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object->object;
 }
@@ -1081,53 +1067,4 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		//show specified shaft range if outside the shaft
 		EnableRange(current_floor, sbs->ShaftOutsideDisplayRange, true, true);
 	}
-}
-
-Ogre::Vector3 Shaft::GetPosition(int floor, bool absolute)
-{
-	//return position of shaft mesh for specified floor
-
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-	{
-		ReportError("GetPosition: Floor " + ToString2(floor) + " out of range");
-		return Ogre::Vector3::ZERO;
-	}
-
-	return GetMeshObject(floor)->GetPosition(absolute);
-}
-
-Ogre::Vector3 Shaft::GetPosition(bool absolute)
-{
-	//returns position of shaft's starting floor mesh
-
-	return GetPosition(startfloor, absolute);
-}
-
-float Shaft::GetFloorBase(int floor)
-{
-	//get base of floor, relative of shaft
-
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-	{
-		ReportError("GetFloorBase: Floor " + ToString2(floor) + " out of range");
-		return 0;
-	}
-
-	return GetMeshObject(floor)->GetPosition().y + sbs->GetFloor(floor)->GetBase(true);
-}
-
-float Shaft::GetFloorAltitude(int floor)
-{
-	//get altitude of floor, relative of shaft
-
-	//exit with an error if floor is invalid
-	if (IsValidFloor(floor) == false)
-	{
-		ReportError("GetFloorAltitude: Floor " + ToString2(floor) + " out of range");
-		return 0;
-	}
-
-	return GetMeshObject(floor)->GetPosition().y;
 }

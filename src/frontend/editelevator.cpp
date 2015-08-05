@@ -1249,7 +1249,7 @@ void editelevator::Loop()
 	txtHeight->SetValue(TruncateNumber(elevator->Height, 2));
 	txtMoveElevator->SetValue(wxString::FromAscii(BoolToString(elevator->MoveElevator)));
 	txtNumber->SetValue(wxVariant((long)elevator->Number).GetString());
-	txtOrigin->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
+	txtOrigin->SetValue(TruncateNumber(elevator->Origin.x, 2) + wxT(", ") + TruncateNumber(elevator->Origin.y, 2) + wxT(", ") + TruncateNumber(elevator->Origin.z, 2));
 	txtOriginFloor->SetValue(wxVariant((long)elevator->OriginFloor).GetString());
 	txtPosition->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
 	txtQueueDirection->SetValue(wxVariant((long)elevator->QueuePositionDirection).GetString());

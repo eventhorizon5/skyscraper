@@ -262,9 +262,9 @@ void SBS::Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FM
 	Report("Done");
 
 	//create object meshes
-	Buildings = new MeshObject(object, 0, "Buildings");
-	External = new MeshObject(object, 0, "External");
-	Landscape = new MeshObject(object, 0, "Landscape");
+	Buildings = new MeshObject(object, "Buildings");
+	External = new MeshObject(object, "External");
+	Landscape = new MeshObject(object, "Landscape");
 	//Landscape->tricollider = false;
 
 	//create camera object
@@ -1499,7 +1499,7 @@ void SBS::CreateSky(const char *filenamebase)
 	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
 	ResetLighting();
 
-	SkyBox = new MeshObject(object, 0, "SkyBox");
+	SkyBox = new MeshObject(object, "SkyBox");
 	SkyBox->no_collider = true;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
@@ -3217,7 +3217,7 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool
 	{
 		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
 		if (relative == true)
-			ind->Move(position);
+			ind->MovePosition(position);
 	}
 	if (type == "Sound")
 	{
@@ -3754,7 +3754,7 @@ MeshObject* SBS::FindMeshObject(std::string name)
 Object* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(object, 0, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(object, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -3931,7 +3931,8 @@ Object* SBS::AddControl(const char *name, const char *sound, const char *directi
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, 0, name, false, sound, action_names, actionnull, textures, direction, 0, 0, width, height, voffset, true);
+	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	control->SetPosition(Ogre::Vector3(CenterX, 0, CenterZ));
 	ControlArray.push_back(control);
 	return control->object;
 }

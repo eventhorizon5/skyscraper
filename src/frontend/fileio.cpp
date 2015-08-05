@@ -3263,10 +3263,8 @@ int ScriptProcessor::ProcFloors()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		std::string str = Calc(temp2.c_str());
-		float alt;
-		if (!IsNumeric(str.c_str(), alt))
+		if (!IsNumeric(str.c_str(), floor->Altitude))
 			return ScriptError("Invalid value");
-		floor->SetAltitude(alt);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 2) == "id")

@@ -80,7 +80,7 @@ public:
 		Ogre::IndexData *databuffer; //used to find the related submesh
 	};
 
-	MeshObject(Object* parent, MeshObject *parent_mesh, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
+	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~MeshObject();
 	void Enable(bool value, bool remove = true);
 	bool IsEnabled();
@@ -91,7 +91,7 @@ public:
 	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
 	void RescaleVertices(float multiplier);
 	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin = Ogre::Vector3(0, 0, 0));
-	Ogre::Vector3 GetPosition(bool absolute = false);
+	Ogre::Vector3 GetPosition();
 	void Rotate(const Ogre::Vector3 rotation, float speed);
 	void SetRotation(const Ogre::Vector3 rotation);
 	Ogre::Vector3 GetRotation();
@@ -132,7 +132,6 @@ public:
 	Ogre::SceneNode *SceneNode;
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
-	MeshObject *ParentMesh;
 
 private:
 	bool enabled;

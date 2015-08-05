@@ -36,6 +36,7 @@ public:
 	int elevator;
 	int Index; //index number of panel
 	std::string Direction;
+	Ogre::Vector3 Origin;
 	float Width;
 	float Height;
 	float ButtonWidth;
@@ -54,6 +55,7 @@ public:
 	void DeleteButton(int row, int column);
 	void Press(int index);
 	void Move(const Ogre::Vector3 &position);
+	void SetToElevatorAltitude();
 	void Enabled(bool value);
 	bool AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	Control* GetControl(int index);
@@ -61,7 +63,7 @@ public:
 	void ChangeAllLights(bool value);
 	int GetFloorButtonIndex(int floor);
 	void RemoveControl(Control *control);
-	Ogre::Vector3 GetPosition(bool absolute = false);
+	Ogre::Vector3 GetPosition();
 
 private:
 

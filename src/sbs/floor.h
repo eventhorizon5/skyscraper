@@ -117,7 +117,6 @@ public:
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Object* AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
 	std::vector<Sound*> GetSound(const char *name);
-	void SetAltitude(float altitude);
 
 private:
 	//sound objects

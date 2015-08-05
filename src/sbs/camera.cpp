@@ -496,13 +496,12 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//HitPosition = sbs->ToLocal(callback.getCollisionPoint(i));
 		HitPosition = sbs->ToLocal(callback.getCollisionPoint());
 
-		//get associated mesh object
+		//get wall name
 		meshobject = sbs->FindMeshObject(meshname);
 		if (!meshobject)
 			//continue;
 			return;
 
-		//get index of hit wall, if any
 		Ogre::Vector3 isect;
 		float distance = best_distance;
 		Ogre::Vector3 normal = Ogre::Vector3::ZERO;
