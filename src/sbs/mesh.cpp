@@ -521,6 +521,7 @@ Ogre::SubMesh* WallPolygon::GetSubMesh()
 
 WallPolygon::WallPolygon()
 {
+	mesh = 0;
 }
 
 WallPolygon::~WallPolygon()
@@ -1808,9 +1809,6 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 		std::string name = SceneNode->getName();
-
-		Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-		box.scale(Ogre::Vector3(scale_multiplier, scale_multiplier, scale_multiplier));
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)

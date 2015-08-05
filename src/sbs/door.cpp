@@ -278,7 +278,6 @@ void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, 
 
 	DoorMesh->Move(position, relative_x, relative_y, relative_z);
 	origin = GetPosition();
-
 }
 
 Ogre::Vector3 Door::GetPosition()
