@@ -38,16 +38,20 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
 
+	Elevator *elev = sbs->GetElevator(_elevator);
+	if (!elev)
+		return;
+
 	//set up SBS object
 	object = new Object();
-	object->SetValues(this, sbs->GetElevator(_elevator)->object, "ButtonPanel", "", false);
+	object->SetValues(this, elev->object, "ButtonPanel", "", false);
 
 	IsEnabled = true;
 	elevator = _elevator;
 	Index = index;
 	Direction = direction;
-	Origin.x = sbs->GetElevator(elevator)->Origin.x + CenterX;
-	Origin.z = sbs->GetElevator(elevator)->Origin.z + CenterZ;
+	Origin.x = elev->Origin.x + CenterX;
+	Origin.z = elev->Origin.z + CenterZ;
 	ButtonWidth = buttonwidth;
 	ButtonHeight = buttonheight;
 	Rows = rows;

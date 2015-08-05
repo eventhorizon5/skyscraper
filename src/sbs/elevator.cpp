@@ -4238,7 +4238,7 @@ Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3
 	sounds.push_back(sound);
 
 	//set parameters and play sound
-	sound->SetPosition(position);
+	sound->SetPosition(Origin + position);
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
@@ -5259,8 +5259,6 @@ void Elevator::Init()
 
 	//turn on shaft doors
 	ShaftDoorsEnabled(0, sbs->camera->StartFloor, true);
-	ShaftDoorsEnabled(0, GetShaft()->startfloor, true);
-	ShaftDoorsEnabled(0, GetShaft()->endfloor, true);
 
 	//disable objects
 	EnableObjects(false);

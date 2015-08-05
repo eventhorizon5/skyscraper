@@ -41,7 +41,7 @@ public:
 	void Enabled(bool value);
 	Ogre::Vector3 GetPosition();
 	void SetPosition(const Ogre::Vector3 &position);
-	void MovePosition(const Ogre::Vector3 &position);
+	void Move(const Ogre::Vector3 &position);
 	void Update();
 
 private:

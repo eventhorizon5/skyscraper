@@ -805,7 +805,7 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
-	AddDoorComponent(ShaftDoors[index], name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, floorobj->Altitude + floorobj->GetBase(true) + voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(ShaftDoors[index], name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, floorobj->GetBase() + voffset, tw, th, side_tw, side_th);
 	return ShaftDoors[index]->object;
 }
 
@@ -1452,6 +1452,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	old_difference = 0;
 	recheck_difference = false;
 	reversed = false;
+	offset = 0;
 }
 
 ElevatorDoor::DoorObject::~DoorObject()
