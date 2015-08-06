@@ -629,8 +629,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	Ogre::MeshPtr collidermesh;
 
-	std::string Name = name;
-	this->name = "(" + ToString2(GetNumber()) + ")" + Name;
+	std::string Name = "(" + ToString2(GetNumber()) + ")" + std::string(name);
+	this->name = Name;
 	std::string filename2;
 
 	if (!filename)
