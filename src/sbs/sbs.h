@@ -379,6 +379,7 @@ public:
 	void ShowFloorInfo(bool all_floors, int floor = 0);
 	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices);
 	bool SegmentPlane(const Ogre::Vector3 &u, const Ogre::Vector3 &v, Ogre::Plane &plane, Ogre::Vector3 &isect, float &dist);
+	void ShowSceneNodes(bool value);
 
 	//Meshes
 	MeshObject* Buildings;

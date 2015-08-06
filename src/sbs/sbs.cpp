@@ -4338,3 +4338,10 @@ void SBS::ShowFloorInfo(bool all_floors, int floor)
 		Report("");
 	}
 }
+
+void SBS::ShowSceneNodes(bool value)
+{
+	//show all scene nodes for debugging
+
+	mSceneManager->setDisplaySceneNodes(value);
+}

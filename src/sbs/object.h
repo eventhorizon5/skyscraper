@@ -55,6 +55,7 @@ public:
 	Ogre::SceneNode* GetSceneNode();
 	void SetNumber(int number);
 	bool IsTemporary();
+	void ShowBoundingBox(bool value);
 
 private:
 	bool Permanent; //is object permanent?

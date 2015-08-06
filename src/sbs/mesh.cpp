@@ -836,9 +836,6 @@ void MeshObject::Enable(bool value, bool remove)
 		sbs->camera->ResetCollisions();
 	}
 
-	//show scenenode bounding box
-	//GetSceneNode()->showBoundingBox(value);
-
 	enabled = value;
 }
 

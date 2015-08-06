@@ -211,3 +211,10 @@ bool Object::IsTemporary()
 {
 	return Temporary;
 }
+
+void Object::ShowBoundingBox(bool value)
+{
+	//show object's 3D bounding box
+
+	SceneNode->showBoundingBox(value);
+}
