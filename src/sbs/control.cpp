@@ -168,36 +168,6 @@ void Control::Enabled(bool value)
 	IsEnabled = value;
 }
 
-Ogre::Vector3 Control::GetPosition()
-{
-	//return current position
-	return ControlMesh->GetPosition();
-}
-
-void Control::SetPosition(const Ogre::Vector3 &position)
-{
-	//set control position
-	sound->SetPosition(position);
-	ControlMesh->Move(position, false, false, false);
-}
-
-void Control::SetPositionY(float position)
-{
-	//set control position
-	Ogre::Vector3 pos = GetPosition();
-	pos.y = position;
-	SetPosition(pos);
-}
-
-void Control::Move(const Ogre::Vector3 &position)
-{
-	//relative movement
-	ControlMesh->Move(position, true, true, true);
-
-	//move sound
-	sound->SetPosition(GetPosition());
-}
-
 bool Control::SetSelectPosition(int position)
 {
 	//set selection position without checking state
@@ -466,15 +436,6 @@ void Control::ChangeLight(bool value)
 			ChangeSelectPosition(index);
 	}
 	light_status = value;
-}
-
-void Control::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//relative movement
-	ControlMesh->Move(position, relative_x, relative_y, relative_z);
-
-	//move sound
-	sound->SetPosition(GetPosition());
 }
 
 void Control::SetLocked(bool value, int keyid)

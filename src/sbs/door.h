@@ -35,7 +35,6 @@ public:
 	std::string Name; //door name
 	int Direction;
 	bool OpenState;
-	Ogre::Vector3 origin; //door origin
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
 	bool Clockwise; //if door should rotate clockwise
@@ -51,8 +50,6 @@ public:
 	bool IsOpen();
 	void Enabled(bool value);
 	void MoveDoor();
-	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
-	Ogre::Vector3 GetPosition();
 	void SetLocked(int side, int keyid);
 	bool GetSide(const Ogre::Vector3 &position);
 	bool IsLocked(const Ogre::Vector3 &position);

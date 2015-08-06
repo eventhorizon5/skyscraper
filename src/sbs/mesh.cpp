@@ -617,7 +617,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	this->mass = mass;
 	no_collider = false;
 	MeshGeometry.reserve(128); //reserve vertex space
-	Rotation = Ogre::Vector3::ZERO;
 
 	//use box collider if physics should be enabled
 	if (IsPhysical == true)

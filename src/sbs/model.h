@@ -30,18 +30,11 @@ class SBSIMPEXP Model : public Object
 {
 public:
 	std::string Name;
-	Ogre::Vector3 Origin;
-	Ogre::Vector3 Offset;
 	bool load_error;
 
 	//functions
 	Model(Object *parent, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~Model();
-	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
-	Ogre::Vector3 GetPosition();
-	void Rotate(const Ogre::Vector3 rotation, float speed);
-	void SetRotation(const Ogre::Vector3 rotation);
-	Ogre::Vector3 GetRotation();
 	bool IsEnabled();
 	void Enable(bool value);
 	bool IsKey();
@@ -51,6 +44,7 @@ public:
 private:
 
 	MeshObject* mesh;
+	Ogre::Vector3 Offset;
 	bool is_key;
 	int KeyID;
 };

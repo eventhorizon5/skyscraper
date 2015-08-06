@@ -562,7 +562,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//move objects to positions
 	if (sbs->Verbose)
 		Report("moving elevator to origin position");
-	ElevatorMesh->Move(Origin, false, false, false);
+	SetPosition(Origin);
 	elevposition = GetPosition();
 
 	//create sound objects
@@ -2002,11 +2002,9 @@ void Elevator::SetAltitude(float altitude)
 {
 	//set vertical position of elevator and objects
 
-	ElevatorMesh->Move(Ogre::Vector3(elevposition.x, altitude, elevposition.z), false, false, false);
+	SetPosition(Ogre::Vector3(elevposition.x, altitude, elevposition.z));
 	elevposition.y = altitude;
-	MoveDoors(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
-	MoveObjects(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
-	for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
+	/*for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
 	{
 		if (FloorIndicatorArray[i])
 			FloorIndicatorArray[i]->SetPosition(Ogre::Vector3(FloorIndicatorArray[i]->GetPosition().x, elevposition.y, FloorIndicatorArray[i]->GetPosition().z));
@@ -2020,18 +2018,12 @@ void Elevator::SetAltitude(float altitude)
 	{
 		if (DirIndicatorArray[i])
 			DirIndicatorArray[i]->SetPosition(Ogre::Vector3(DirIndicatorArray[i]->GetPosition().x, elevposition.y, DirIndicatorArray[i]->GetPosition().z));
-	}
-	for (int i = 0; i < (int)StdDoorArray.size(); i++)
-	{
-		if (StdDoorArray[i])
-			StdDoorArray[i]->Move(Ogre::Vector3(0, elevposition.y, 0), true, false, true);
-	}
+	}*/
 
 	//move sounds
 	Ogre::Vector3 top = Ogre::Vector3(elevposition.x, elevposition.y + Height, elevposition.z);
 	carsound->SetPosition(elevposition);
 	idlesound->SetPosition(top);
-	MoveDoorSound(0, Ogre::Vector3(0, elevposition.y, 0), true, false, true);
 	alarm->SetPosition(top);
 	floorbeep->SetPosition(top);
 	announcesnd->SetPosition(top);
@@ -2208,12 +2200,6 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 	indicator->SetPosition(Origin);
 	FloorIndicatorArray.push_back(indicator);
 	return indicator;
-}
-
-const Ogre::Vector3 Elevator::GetPosition()
-{
-	//returns the elevator's position
-	return ElevatorMesh->GetPosition();
 }
 
 void Elevator::DumpQueues()
@@ -3939,27 +3925,6 @@ bool Elevator::AreDoorsClosing(int number, bool car_doors, bool shaft_doors)
 	return false;
 }
 
-void Elevator::MoveDoors(int number, const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//move all doors
-
-	SBS_PROFILE("Elevator::MoveDoors");
-
-	int start = number, end = number;
-	if (number == 0)
-	{
-		start = 1;
-		end = NumDoors;
-	}
-	for (int i = start; i <= end; i++)
-	{
-		if (GetDoor(i))
-			GetDoor(i)->Move(position, relative_x, relative_y, relative_z);
-		else
-			ReportError("Invalid door " + ToString2(i));
-	}
-}
-
 void Elevator::EnableDoors(bool value)
 {
 	//enable/disable all doors
@@ -3978,25 +3943,6 @@ void Elevator::EnableDoors(bool value)
 		ElevatorDoor *door = GetDoor(i);
 		if (door)
 			door->Enabled(value);
-	}
-}
-
-void Elevator::MoveDoorSound(int number, const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//move all doors
-
-	int start = number, end = number;
-	if (number == 0)
-	{
-		start = 1;
-		end = NumDoors;
-	}
-	for (int i = start; i <= end; i++)
-	{
-		if (GetDoor(i))
-			GetDoor(i)->MoveSound(position, relative_x, relative_y, relative_z);
-		else
-			ReportError("Invalid door " + ToString2(i));
 	}
 }
 
@@ -5084,25 +5030,6 @@ Object* Elevator::AddModel(const char *name, const char *filename, bool center, 
 	}
 	ModelArray.push_back(model);
 	return model;
-}
-
-void Elevator::MoveObjects(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//move controls
-	for (int i = 0; i < (int)ControlArray.size(); i++)
-		ControlArray[i]->Move(position, relative_x, relative_y, relative_z);
-
-	//move triggers
-	for (int i = 0; i < (int)TriggerArray.size(); i++)
-		TriggerArray[i]->Move(position, relative_x, relative_y, relative_z);
-
-	//move models
-	for (int i = 0; i < (int)ModelArray.size(); i++)
-		ModelArray[i]->Move(position, relative_x, relative_y, relative_z);
-
-	//move lights
-	for (int i = 0; i < (int)lights.size(); i++)
-		lights[i]->Move(position, relative_x, relative_y, relative_z);
 }
 
 void Elevator::AddDisplayFloor(int floor)

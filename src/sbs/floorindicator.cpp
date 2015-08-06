@@ -99,18 +99,6 @@ void FloorIndicator::Enabled(bool value)
 	IsEnabled = value;
 }
 
-void FloorIndicator::SetPosition(const Ogre::Vector3& position)
-{
-	//set position of indicator
-	FloorIndicatorMesh->Move(position, false, false, false);
-}
-
-void FloorIndicator::Move(const Ogre::Vector3& position)
-{
-	//move indicator by a relative amount
-	FloorIndicatorMesh->Move(position, true, true, true);
-}
-
 void FloorIndicator::Update()
 {
 	//update indicator display with elevator's current floor identifier
@@ -132,10 +120,4 @@ void FloorIndicator::Update()
 	texture.insert(0, Prefix);
 
 	FloorIndicatorMesh->ChangeTexture(texture.c_str());
-}
-
-Ogre::Vector3 FloorIndicator::GetPosition()
-{
-	//return current position of the indicator
-	return FloorIndicatorMesh->GetPosition();
 }

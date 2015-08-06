@@ -60,7 +60,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	std::string base, buffer;
 	base = "Call Panel " + ToString2(floornum) + ":" + ToString2(number);
 	SetName(base.c_str());
-	CallButtonBackMesh = new MeshObject(this, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshBack = new MeshObject(this, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = base + ":Up";
 	CallButtonMeshUp = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -100,7 +100,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			WallObject *wall;
-			wall = CallButtonBackMesh->CreateWallObject(this, "Call Button Panel");
+			wall = CallButtonMeshBack->CreateWallObject(this, "Call Button Panel");
 			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, x1, CenterZ, x2, CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
 		if (Direction == "left" || Direction == "right")
@@ -113,7 +113,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			WallObject *wall;
-			wall = CallButtonBackMesh->CreateWallObject(this, "Call Button Panel");
+			wall = CallButtonMeshBack->CreateWallObject(this, "Call Button Panel");
 			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, CenterX, z1, CenterX, z2, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
 		sbs->ResetWalls();
@@ -250,9 +250,9 @@ CallButton::~CallButton()
 	if (CallButtonMeshUp)
 		delete CallButtonMeshUp;
 	CallButtonMeshUp = 0;
-	if (CallButtonBackMesh)
-		delete CallButtonBackMesh;
-	CallButtonBackMesh = 0;
+	if (CallButtonMeshBack)
+		delete CallButtonMeshBack;
+	CallButtonMeshBack = 0;
 
 	if (sound)
 	{
@@ -277,7 +277,7 @@ void CallButton::Enabled(bool value)
 	if (IsEnabled == value)
 		return;
 
-	CallButtonBackMesh->Enable(value);
+	CallButtonMeshBack->Enable(value);
 	CallButtonMeshUp->Enable(value);
 	CallButtonMeshDown->Enable(value);
 	IsEnabled = value;

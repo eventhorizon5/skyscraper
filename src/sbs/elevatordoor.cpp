@@ -1319,29 +1319,6 @@ void ElevatorDoor::Loop()
 		MoveDoors(false, true);
 }
 
-void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//move doors
-
-	SBS_PROFILE("ElevatorDoor::Move");
-	for (int i = 0; i < (int)Doors->doors.size(); i++)
-	{
-		Doors->doors[i]->mesh->Move(position, relative_x, relative_y, relative_z);
-	}
-
-	//move door sensor
-	if (sensor)
-		sensor->Move(position, relative_x, relative_y, relative_z);
-}
-
-Ogre::Vector3 ElevatorDoor::GetPosition()
-{
-	//get position of first door mesh
-	if ((int)Doors->doors.size() > 0)
-		return Doors->doors[0]->mesh->GetPosition();
-	return Ogre::Vector3::ZERO;
-}
-
 void ElevatorDoor::Enabled(bool value)
 {
 	Doors->Enable(value);
@@ -1502,9 +1479,9 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 
 	//move object to positions
 	if (IsShaftDoor == false)
-		doors[index]->mesh->Move(parent->elev->Origin, false, false, false);
+		doors[index]->mesh->SetPosition(parent->elev->Origin);
 	else
-		doors[index]->mesh->Move(Ogre::Vector3(parent->elev->Origin.x, 0, parent->elev->Origin.z), false, false, false);
+		doors[index]->mesh->SetPosition(Ogre::Vector3(parent->elev->Origin.x, 0, parent->elev->Origin.z));
 
 	return doors[index];
 }
@@ -1831,17 +1808,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float width = fabsf(extents_max.z - extents_min.z);
 				if (direction == 2)
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset)), false, false, false);
+					mesh->SetPosition(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset)));
 				else
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset)), false, false, false);
+					mesh->SetPosition(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset)));
 			}
 			else
 			{
 				float width = fabsf(extents_max.x - extents_min.x);
 				if (direction == 2)
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z), false, false, false);
+					mesh->SetPosition(Ogre::Vector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z));
 				else
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z), false, false, false);
+					mesh->SetPosition(Ogre::Vector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z));
 			}
 		}
 		else
@@ -1849,13 +1826,13 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			float mainheight = wrapper->Height / 2;
 			float height = fabsf(extents_max.y - extents_min.y);
 			if (direction == 0)
-				mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z), false, false, false);
+				mesh->SetPosition(Ogre::Vector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z));
 			else
-				mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z), false, false, false);
+				mesh->SetPosition(Ogre::Vector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z));
 		}
 	}
 	else
-		mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z), false, false, false);
+		mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z));
 
 	//the door is open or closed now
 	is_open = open;
@@ -1874,33 +1851,35 @@ void ElevatorDoor::DoorObject::Move()
 {
 	//move elevator doors
 
+	float speed = active_speed * sbs->delta;
+
 	//up movement
 	if (direction == 0)
-		mesh->Move(Ogre::Vector3(0, active_speed * sbs->delta, 0), true, true, true);
+		mesh->Move(Ogre::Vector3(0, 1, 0), speed);
 
 	//down movement
 	if (direction == 1)
-		mesh->Move(Ogre::Vector3(0, -active_speed * sbs->delta, 0), true, true, true);
+		mesh->Move(Ogre::Vector3(0, -1, 0), speed);
 
 	if (parent->DoorDirection == false)
 	{
 		//left movement
 		if (direction == 2)
-			mesh->Move(Ogre::Vector3(0, 0, -active_speed * sbs->delta), true, true, true);
+			mesh->Move(Ogre::Vector3(0, 0, -1), speed);
 
 		//right movement
 		if (direction == 3)
-			mesh->Move(Ogre::Vector3(0, 0, active_speed * sbs->delta), true, true, true);
+			mesh->Move(Ogre::Vector3(0, 0, 1), speed);
 	}
 	else
 	{
 		//left movement
 		if (direction == 2)
-			mesh->Move(Ogre::Vector3(-active_speed * sbs->delta, 0, 0), true, true, true);
+			mesh->Move(Ogre::Vector3(-1, 0, 0), speed);
 
 		//right movement
 		if (direction == 3)
-			mesh->Move(Ogre::Vector3(active_speed * sbs->delta, 0, 0), true, true, true);
+			mesh->Move(Ogre::Vector3(1, 0, 0), speed);
 	}
 }
 

@@ -423,40 +423,6 @@ void DirectionalIndicator::SetLights(int up, int down)
 	}
 }
 
-void DirectionalIndicator::SetPosition(const Ogre::Vector3& position)
-{
-	//set position of indicator objects
-
-	if (DirectionalMeshBack)
-		DirectionalMeshBack->Move(position, false, false, false);
-	if (DirectionalMeshUp)
-		DirectionalMeshUp->Move(position, false, false, false);
-	if (DirectionalMeshDown)
-		DirectionalMeshDown->Move(position, false, false, false);
-	if (DirectionalMesh)
-		DirectionalMesh->Move(position, false, false, false);
-}
-
-void DirectionalIndicator::Move(const Ogre::Vector3& position)
-{
-	//move indicator objects
-
-	if (DirectionalMeshBack)
-		DirectionalMeshBack->Move(position, true, true, true);
-	if (DirectionalMeshUp)
-		DirectionalMeshUp->Move(position, true, true, true);
-	if (DirectionalMeshDown)
-		DirectionalMeshDown->Move(position, true, true, true);
-	if (DirectionalMesh)
-		DirectionalMesh->Move(position, true, true, true);
-}
-
-Ogre::Vector3 DirectionalIndicator::GetPosition()
-{
-	//return indicator position
-	return DirectionalMeshBack->GetPosition();
-}
-
 void DirectionalIndicator::Timer::Notify()
 {
 	//when shut-off timer triggers, switch off lights

@@ -136,6 +136,9 @@ Camera::~Camera()
 	if (mCharacter)
 		delete mCharacter;
 
+	if (MainCamera)
+		GetSceneNode()->detachObject(MainCamera);
+
 	std::string nodename = GetSceneNode()->getChild(0)->getName();
 	sbs->mSceneManager->destroySceneNode(nodename);
 }

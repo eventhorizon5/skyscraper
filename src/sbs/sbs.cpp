@@ -3143,148 +3143,19 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool
 	if (!object)
 		return ReportError("Invalid object");
 
-	std::string number = ToString(object->GetNumber());
+	if (relative == false)
+	{
+		if (X == false)
+			position.x = object->GetPosition().x;
+		if (Y == false)
+			position.y = object->GetPosition().y;
+		if (Z == false)
+			position.z = object->GetPosition().z;
 
-	if (!object->GetRawObject())
-		return ReportError("Invalid raw object " + number);
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
-	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = mesh->GetPosition().x;
-			if (Y == false)
-				position.y = mesh->GetPosition().y;
-			if (Z == false)
-				position.z = mesh->GetPosition().z;
-		}
-		mesh->Move(position, relative, relative, relative);
+		object->SetPosition(position);
 	}
-	if (type == "ButtonPanel")
-	{
-		ButtonPanel* panel = (ButtonPanel*)object->GetRawObject();
-		if (relative == true)
-			panel->Move(position);
-	}
-	if (type == "DirectionalIndicator")
-	{
-		DirectionalIndicator* ind = (DirectionalIndicator*)object->GetRawObject();
-		if (relative == true)
-			ind->Move(position);
-		else
-		{
-			if (X == false)
-				position.x = ind->GetPosition().x;
-			if (Y == false)
-				position.y = ind->GetPosition().y;
-			if (Z == false)
-				position.z = ind->GetPosition().z;
-			ind->SetPosition(position);
-		}
-	}
-	if (type == "Door")
-	{
-		Door* door = (Door*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = door->GetPosition().x;
-			if (Y == false)
-				position.y = door->GetPosition().y;
-			if (Z == false)
-				position.z = door->GetPosition().z;
-		}
-		door->Move(position, relative, relative, relative);
-	}
-	if (type == "ElevatorDoor")
-	{
-		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = door->GetPosition().x;
-			if (Y == false)
-				position.y = door->GetPosition().y;
-			if (Z == false)
-				position.z = door->GetPosition().z;
-		}
-		door->Move(position, relative, relative, relative);
-	}
-	if (type == "FloorIndicator")
-	{
-		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
-		if (relative == true)
-			ind->Move(position);
-	}
-	if (type == "Sound")
-	{
-		Sound* sound = (Sound*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = sound->GetPosition().x;
-			if (Y == false)
-				position.y = sound->GetPosition().y;
-			if (Z == false)
-				position.z = sound->GetPosition().z;
-			sound->SetPosition(position);
-		}
-		else
-		{
-			Ogre::Vector3 newpos = sound->GetPosition() + position;
-			sound->SetPosition(newpos);
-		}
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = model->GetPosition().x;
-			if (Y == false)
-				position.y = model->GetPosition().y;
-			if (Z == false)
-				position.z = model->GetPosition().z;
-		}
-		model->Move(position, relative, relative, relative);
-	}
-	if (type == "Control")
-	{
-		Control* control = (Control*)object->GetRawObject();
-		if (relative == true)
-			control->Move(position);
-		else
-		{
-			if (X == false)
-				position.x = control->GetPosition().x;
-			if (Y == false)
-				position.y = control->GetPosition().y;
-			if (Z == false)
-				position.z = control->GetPosition().z;
-			control->SetPosition(position);
-		}
-	}
-	if (type == "Trigger")
-	{
-		Trigger* trigger = (Trigger*)object->GetRawObject();
-		if (relative == true)
-			trigger->Move(position);
-		else
-		{
-			if (X == false)
-				position.x = trigger->GetPosition().x;
-			if (Y == false)
-				position.y = trigger->GetPosition().y;
-			if (Z == false)
-				position.z = trigger->GetPosition().z;
-			trigger->SetPosition(position);
-		}
-	}
+	else
+		object->Move(position);
 
 	return true;
 }
@@ -3297,155 +3168,20 @@ bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool
 	if (!object)
 		return ReportError("Invalid object");
 
-	std::string number = ToString(object->GetNumber());
-
-	if (!object->GetRawObject())
-		return ReportError("Invalid raw object " + number);
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
+	if (relative == true)
+		object->Rotate(rotation, speed);
+	else
 	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		if (relative == true)
-			mesh->Rotate(rotation, speed);
-		else
-		{
-			if (X == false)
-				rotation.x = mesh->GetRotation().x;
-			if (Y == false)
-				rotation.y = mesh->GetRotation().y;
-			if (Z == false)
-				rotation.z = mesh->GetRotation().z;
-			mesh->SetRotation(rotation);
-		}
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		if (relative == true)
-			model->Rotate(rotation, speed);
-		else
-		{
-			if (X == false)
-				rotation.x = model->GetRotation().x;
-			if (Y == false)
-				rotation.y = model->GetRotation().y;
-			if (Z == false)
-				rotation.z = model->GetRotation().z;
-			model->SetRotation(rotation);
-		}
+		if (X == false)
+			rotation.x = object->GetRotation().x;
+		if (Y == false)
+			rotation.y = object->GetRotation().y;
+		if (Z == false)
+			rotation.z = object->GetRotation().z;
+		object->SetRotation(rotation);
 	}
 
 	return true;
-}
-
-Ogre::Vector3 SBS::GetObjectPosition(Object *object)
-{
-	//get object's position
-
-	if (!object)
-	{
-		ReportError("Invalid object");
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string number = ToString(object->GetNumber());
-
-	if (!object->GetRawObject())
-	{
-		ReportError("Invalid raw object " + number);
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
-	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		return mesh->GetPosition();
-	}
-	if (type == "ButtonPanel")
-	{
-		ButtonPanel* panel = (ButtonPanel*)object->GetRawObject();
-		return panel->GetPosition();
-	}
-	if (type == "DirectionalIndicator")
-	{
-		DirectionalIndicator* ind = (DirectionalIndicator*)object->GetRawObject();
-		return ind->GetPosition();
-	}
-	if (type == "Door")
-	{
-		Door* door = (Door*)object->GetRawObject();
-		return door->GetPosition();
-	}
-	if (type == "ElevatorDoor")
-	{
-		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
-		return door->GetPosition();
-	}
-	if (type == "FloorIndicator")
-	{
-		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
-		return ind->GetPosition();
-	}
-	if (type == "Sound")
-	{
-		Sound* sound = (Sound*)object->GetRawObject();
-		return sound->GetPosition();
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		return model->GetPosition();
-	}
-	if (type == "Control")
-	{
-		Control* control = (Control*)object->GetRawObject();
-		return control->GetPosition();
-	}
-	if (type == "Trigger")
-	{
-		Trigger* trigger = (Trigger*)object->GetRawObject();
-		return trigger->GetPosition();
-	}
-
-	return Ogre::Vector3::ZERO;
-}
-
-Ogre::Vector3 SBS::GetObjectRotation(Object *object)
-{
-	//rotate an object by reference
-
-	if (!object)
-	{
-		ReportError("Invalid object");
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string number = ToString(object->GetNumber());
-
-	if (!object->GetRawObject())
-	{
-		ReportError("Invalid raw object " + number);
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
-	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		return mesh->GetRotation();
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		return model->GetRotation();
-	}
-
-	return Ogre::Vector3::ZERO;
 }
 
 void SBS::RemoveFloor(Floor *floor)

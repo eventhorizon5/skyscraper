@@ -59,7 +59,7 @@ public:
 	void FireService(int value);
 
 private:
-	MeshObject* CallButtonBackMesh; //call button mesh object
+	MeshObject* CallButtonMeshBack; //call button mesh object
 	MeshObject* CallButtonMeshUp; //call button mesh object
 	MeshObject* CallButtonMeshDown; //call button mesh object
 

@@ -39,6 +39,7 @@ Object::Object(bool temporary)
 	Temporary = temporary;
 	parent_deleting = false;
 	SceneNode = 0;
+	Rotation = Ogre::Vector3::ZERO;
 
 	//register object with engine
 	if (temporary == false && sbs)
@@ -219,12 +220,12 @@ void Object::ShowBoundingBox(bool value)
 	SceneNode->showBoundingBox(value);
 }
 
-void Object::Move(const Ogre::Vector3 &position, bool relative)
+void Object::Move(const Ogre::Vector3 &position, float speed, bool relative)
 {
 	//move an object
 	//if relative is true, position is relative of parent object
 
-	SetPosition(GetPosition() + position, relative);
+	SetPosition(GetPosition(relative) + (position * speed), relative);
 }
 
 void Object::SetPosition(const Ogre::Vector3 &position, bool relative)
@@ -235,12 +236,21 @@ void Object::SetPosition(const Ogre::Vector3 &position, bool relative)
 	Ogre::Vector3 pos = sbs->ToRemote(position);
 
 	if (relative == false)
-		GetSceneNode()->_setDerivedPosition(pos);
+		SceneNode->_setDerivedPosition(pos);
 	else
-		GetSceneNode()->setPosition(pos);
+		SceneNode->setPosition(pos);
 
 	//notify about movement
 	OnMove();
+}
+
+void Object::SetPositionY(float value, bool relative)
+{
+	//set position of only Y vector
+	//if relative is true, position is relative of parent object
+
+	Ogre::Vector3 pos (GetPosition(relative).x, value, GetPosition(relative).z);
+	SetPosition(pos, relative);
 }
 
 Ogre::Vector3 Object::GetPosition(bool relative)
@@ -249,9 +259,9 @@ Ogre::Vector3 Object::GetPosition(bool relative)
 	//if relative is true, position is relative of parent object
 
 	if (relative == false)
-		return sbs->ToLocal(GetSceneNode()->_getDerivedPosition());
+		return sbs->ToLocal(SceneNode->_getDerivedPosition());
 
-	return sbs->ToLocal(GetSceneNode()->getPosition());
+	return sbs->ToLocal(SceneNode->getPosition());
 }
 
 void Object::SetRotation(Ogre::Vector3 rotation)
@@ -275,7 +285,7 @@ void Object::SetRotation(Ogre::Vector3 rotation)
 	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
-	GetSceneNode()->setOrientation(rot);
+	SceneNode->setOrientation(rot);
 	Rotation = rotation;
 
 	//notify about rotation

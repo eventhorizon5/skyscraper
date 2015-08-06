@@ -265,23 +265,11 @@ void ButtonPanel::Press(int index)
 	controls[index]->Press();
 }
 
-void ButtonPanel::Move(const Ogre::Vector3 &position)
-{
-	//relative movement
-	ButtonPanelMesh->Move(position, true, true, true);
-
-	//move controls
-	for (int i = 0; i < (int)controls.size(); i++)
-	{
-		controls[i]->Move(position);
-	}
-}
-
 void ButtonPanel::SetToElevatorAltitude()
 {
-	Ogre::Vector3 pos = ButtonPanelMesh->GetPosition();
+	Ogre::Vector3 pos = GetPosition();
 	Ogre::Vector3 pos_new = Ogre::Vector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
-	ButtonPanelMesh->Move(pos_new, false, false, false);
+	SetPosition(pos_new);
 
 	//move controls
 	for (int i = 0; i < (int)controls.size(); i++)

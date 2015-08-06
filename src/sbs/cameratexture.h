@@ -30,17 +30,11 @@ class SBSIMPEXP CameraTexture : public Object
 {
 public:
 
-	Ogre::Vector3 Origin;
 	std::string Name;
 
 	//functions
 	CameraTexture(Object *parent, const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
 	~CameraTexture();
-	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z);
-	Ogre::Vector3 GetPosition();
-	void SetRotation(const Ogre::Vector3 rotation);
-	Ogre::Vector3 GetRotation();
-	void Rotate(const Ogre::Vector3 rotation, float speed);
 	void LookAt(const Ogre::Vector3 point);
 	void Enabled(bool value);
 
@@ -50,7 +44,6 @@ private:
 	Ogre::TexturePtr texture;
 	Ogre::MaterialPtr material;
 	Ogre::RenderTexture *renderTexture;
-	float rotX, rotY, rotZ;
 };
 
 #endif

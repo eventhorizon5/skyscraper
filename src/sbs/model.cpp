@@ -36,7 +36,6 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 
 	//set up SBS object
 	SetValues(this, parent, "Model", name, false);
-	Origin = position;
 	Offset = 0;
 	is_key = false;
 	KeyID = 0;
@@ -55,8 +54,13 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 		Ogre::AxisAlignedBox box = mesh->MeshWrapper.get()->getBounds();
 		Ogre::Vector3 vec = box.getCenter();
 		Offset = Ogre::Vector3(vec.x, -box.getMinimum().y, -vec.z);
+		Offset = sbs->ToLocal(Offset);
 	}
-	Move(position, false, false, false);
+
+	//set mesh object at specified offset
+	mesh->Move(Offset, 0, true);
+
+	Move(position);
 	SetRotation(rotation);
 }
 
@@ -80,31 +84,6 @@ Model::~Model()
 		if (std::string(GetParent()->GetType()) == "SBS")
 			sbs->RemoveModel(this);
 	}
-}
-
-void Model::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	mesh->Move(position, relative_x, relative_y, relative_z, Offset);
-}
-
-Ogre::Vector3 Model::GetPosition()
-{
-	return mesh->GetPosition() - Offset;
-}
-
-void Model::SetRotation(const Ogre::Vector3 rotation)
-{
-	mesh->SetRotation(rotation);
-}
-
-void Model::Rotate(const Ogre::Vector3 rotation, float speed)
-{
-	mesh->Rotate(rotation, speed);
-}
-
-Ogre::Vector3 Model::GetRotation()
-{
-	return mesh->GetRotation();
 }
 
 void Model::Enable(bool value)
