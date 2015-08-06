@@ -94,12 +94,10 @@ struct SBSIMPEXP StairsMap
 };
 
 //SBS class
-class SBSIMPEXP SBS
+class SBSIMPEXP SBS : public Object
 {
 	friend class MeshObject;
 public:
-
-	Object *object; //SBS object
 
 	float delta;
 

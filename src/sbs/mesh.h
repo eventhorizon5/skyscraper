@@ -57,10 +57,9 @@ struct Extents
 	}
 };
 
-class SBSIMPEXP MeshObject
+class SBSIMPEXP MeshObject : public Object
 {
 public:
-	Object *object; //SBS object
 	std::string name; //mesh name
 	bool no_collider; //set to true if collider shouldn't be automatically generated
 	bool tricollider; //collider type; box if false, triangle if true

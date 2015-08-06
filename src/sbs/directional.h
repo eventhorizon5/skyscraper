@@ -28,11 +28,10 @@
 
 #include "timer.h"
 
-class SBSIMPEXP DirectionalIndicator
+class SBSIMPEXP DirectionalIndicator : public Object
 {
 public:
 
-	Object *object; //SBS object
 	int elevator_num; //elevator this indicator is assigned to
 	int floor_num; //floor the indicator is on
 	std::string Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
@@ -69,7 +68,7 @@ private:
 	{
 	public:
 		DirectionalIndicator *indicator;
-		Timer(const char *name, DirectionalIndicator *parent) : TimerObject(parent->object, name, false)
+		Timer(const char *name, DirectionalIndicator *parent) : TimerObject(parent, name, false)
 		{
 			indicator = parent;
 		}

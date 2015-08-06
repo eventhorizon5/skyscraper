@@ -26,10 +26,9 @@
 #ifndef _SBS_MODEL_H
 #define _SBS_MODEL_H
 
-class SBSIMPEXP Model
+class SBSIMPEXP Model : public Object
 {
 public:
-	Object *object; //SBS object
 	std::string Name;
 	Ogre::Vector3 Origin;
 	Ogre::Vector3 Offset;

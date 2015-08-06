@@ -40,7 +40,7 @@ Object::Object(bool temporary)
 	parent_deleting = false;
 
 	//register object with engine
-	if (temporary == false)
+	if (temporary == false && sbs)
 		Number = sbs->RegisterObject(this);
 }
 

@@ -26,11 +26,10 @@
 #ifndef _SBS_FLOORINDICATOR_H
 #define _SBS_FLOORINDICATOR_H
 
-class SBSIMPEXP FloorIndicator
+class SBSIMPEXP FloorIndicator : public Object
 {
 public:
 
-	Object *object; //SBS object
 	int elev; //elevator this indicator is assigned to
 	bool IsEnabled;
 	std::string Prefix; //texture name prefix

@@ -34,22 +34,21 @@ extern SBS *sbs; //external pointer to the SBS engine
 Floor::Floor(int number)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, sbs->object, "Floor", "", false);
+	SetValues(this, sbs, "Floor", "", false);
 
 	//Set floor's object number
 	Number = number;
 	std::string num = ToString2(Number);
-	object->SetName(std::string("Floor " + num).c_str());
+	SetName(std::string("Floor " + num).c_str());
 
 	//Create primary level mesh
-	Level = new MeshObject(object, std::string("Level " + num).c_str());
+	Level = new MeshObject(this, std::string("Level " + num).c_str());
 
 	//Create interfloor mesh
-	Interfloor = new MeshObject(object,std::string("Interfloor " + num).c_str());
+	Interfloor = new MeshObject(this,std::string("Interfloor " + num).c_str());
 
 	//Create columnframe mesh
-	ColumnFrame = new MeshObject(object, std::string("ColumnFrame " + num).c_str());
+	ColumnFrame = new MeshObject(this, std::string("ColumnFrame " + num).c_str());
 
 	//set enabled flags
 	IsEnabled = true;
@@ -78,7 +77,7 @@ Floor::~Floor()
 	{
 		if (CameraTextureArray[i])
 		{
-			CameraTextureArray[i]->object->parent_deleting = true;
+			CameraTextureArray[i]->parent_deleting = true;
 			delete CameraTextureArray[i];
 		}
 		CameraTextureArray[i] = 0;
@@ -89,7 +88,7 @@ Floor::~Floor()
 	{
 		if (ControlArray[i])
 		{
-			ControlArray[i]->object->parent_deleting = true;
+			ControlArray[i]->parent_deleting = true;
 			delete ControlArray[i];
 		}
 		ControlArray[i] = 0;
@@ -100,7 +99,7 @@ Floor::~Floor()
 	{
 		if (TriggerArray[i])
 		{
-			TriggerArray[i]->object->parent_deleting = true;
+			TriggerArray[i]->parent_deleting = true;
 			delete TriggerArray[i];
 		}
 		TriggerArray[i] = 0;
@@ -111,7 +110,7 @@ Floor::~Floor()
 	{
 		if (ModelArray[i])
 		{
-			ModelArray[i]->object->parent_deleting = true;
+			ModelArray[i]->parent_deleting = true;
 			delete ModelArray[i];
 		}
 		ModelArray[i] = 0;
@@ -122,7 +121,7 @@ Floor::~Floor()
 	{
 		if (lights[i])
 		{
-			lights[i]->object->parent_deleting = true;
+			lights[i]->parent_deleting = true;
 			delete lights[i];
 		}
 		lights[i] = 0;
@@ -133,7 +132,7 @@ Floor::~Floor()
 	{
 		if (CallButtonArray[i])
 		{
-			CallButtonArray[i]->object->parent_deleting = true;
+			CallButtonArray[i]->parent_deleting = true;
 			delete CallButtonArray[i];
 		}
 		CallButtonArray[i] = 0;
@@ -144,7 +143,7 @@ Floor::~Floor()
 	{
 		if (DoorArray[i])
 		{
-			DoorArray[i]->object->parent_deleting = true;
+			DoorArray[i]->parent_deleting = true;
 			delete DoorArray[i];
 		}
 		DoorArray[i] = 0;
@@ -155,7 +154,7 @@ Floor::~Floor()
 	{
 		if (FloorIndicatorArray[i])
 		{
-			FloorIndicatorArray[i]->object->parent_deleting = true;
+			FloorIndicatorArray[i]->parent_deleting = true;
 			delete FloorIndicatorArray[i];
 		}
 		FloorIndicatorArray[i] = 0;
@@ -166,7 +165,7 @@ Floor::~Floor()
 	{
 		if (DirIndicatorArray[i])
 		{
-			DirIndicatorArray[i]->object->parent_deleting = true;
+			DirIndicatorArray[i]->parent_deleting = true;
 			delete DirIndicatorArray[i];
 		}
 		DirIndicatorArray[i] = 0;
@@ -177,7 +176,7 @@ Floor::~Floor()
 	{
 		if (sounds[i])
 		{
-			sounds[i]->object->parent_deleting = true;
+			sounds[i]->parent_deleting = true;
 			delete sounds[i];
 		}
 		sounds[i] = 0;
@@ -198,13 +197,11 @@ Floor::~Floor()
 
 	//delete walls in external mesh
 	if (sbs->FastDelete == false)
-		sbs->External->DeleteWalls(object);
+		sbs->External->DeleteWalls(this);
 
 	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
+	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemoveFloor(this);
-
-	delete object;
 }
 
 void Floor::SetCameraFloor()
@@ -223,12 +220,12 @@ WallObject* Floor::AddFloor(const char *name, const char *texture, float thickne
 
 	if (isexternal == false)
 	{
-		wall = Level->CreateWallObject(object, name);
+		wall = Level->CreateWallObject(this, name);
 		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	else
 	{
-		wall = sbs->External->CreateWallObject(object, name);
+		wall = sbs->External->CreateWallObject(this, name);
 		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	return wall;
@@ -238,7 +235,7 @@ WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, flo
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
-	WallObject *wall = Interfloor->CreateWallObject(object, name);
+	WallObject *wall = Interfloor->CreateWallObject(this, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
@@ -250,12 +247,12 @@ WallObject* Floor::AddWall(const char *name, const char *texture, float thicknes
 	WallObject *wall;
 	if (isexternal == false)
 	{
-		wall = Level->CreateWallObject(object, name);
+		wall = Level->CreateWallObject(this, name);
 		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
 	}
 	else
 	{
-		wall = sbs->External->CreateWallObject(object, name);
+		wall = sbs->External->CreateWallObject(this, name);
 		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
 	return wall;
@@ -265,7 +262,7 @@ WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, floa
 {
 	//Adds an interfloor wall with the specified dimensions
 
-	WallObject *wall = Interfloor->CreateWallObject(object, name);
+	WallObject *wall = Interfloor->CreateWallObject(this, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	return wall;
 }
@@ -453,7 +450,7 @@ Object* Floor::AddCallButtons(std::vector<int> &elevators, const char *sound_fil
 	int Current = (int)CallButtonArray.size();
 	CallButton *button = new CallButton(elevators, Number, Current, sound_file, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	CallButtonArray.push_back(button);
-	return button->object;
+	return button;
 }
 
 void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, bool fast, int checkwallnumber, bool prepare)
@@ -635,9 +632,9 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString2(Number) + ":Door " + ToString2(number);
-	Door* door = new Door(object, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	Door* door = new Door(this, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
 	DoorArray.push_back(door);
-	return door->object;
+	return door;
 }
 
 bool Floor::CalculateAltitude()
@@ -690,7 +687,7 @@ WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1
 {
 	//create columnframe wall box
 
-	WallObject *wall = ColumnFrame->CreateWallObject(object, name);
+	WallObject *wall = ColumnFrame->CreateWallObject(this, name);
 	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
@@ -699,7 +696,7 @@ WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float C
 {
 	//create columnframe wall box from a central location
 
-	WallObject *wall = ColumnFrame->CreateWallObject(object, name);
+	WallObject *wall = ColumnFrame->CreateWallObject(this, name);
 	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
@@ -710,18 +707,18 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 
 	if (relative == false)
 	{
-		FloorIndicator *ind = new FloorIndicator(object, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
+		FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
 		FloorIndicatorArray.push_back(ind);
-		return ind->object;
+		return ind;
 	}
 	else
 	{
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(object, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
+			FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
 			FloorIndicatorArray.push_back(ind);
-			return ind->object;
+			return ind;
 		}
 		else
 			return 0;
@@ -872,7 +869,7 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 {
 	//create a looping sound object
 
-	Sound *sound = new Sound(object, name, false);
+	Sound *sound = new Sound(this, name, false);
 	sounds.push_back(sound);
 
 	//set parameters and play sound
@@ -889,7 +886,7 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	if (loop && sbs->IsRunning == true && sbs->camera->CurrentFloor == Number)
 		sound->Play();
 
-	return sound->object;
+	return sound;
 }
 
 std::vector<Sound*> Floor::GetSound(const char *name)
@@ -975,9 +972,9 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 			return 0;
 	}
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(object, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
-	return indicator->object;
+	return indicator;
 }
 
 void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
@@ -1227,22 +1224,22 @@ Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre
 {
 	//add a light
 
-	Light* light = new Light(object, name, type, position + Ogre::Vector3(0, GetBase(), 0), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(this, name, type, position + Ogre::Vector3(0, GetBase(), 0), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
-	return light->object;
+	return light;
 }
 
 Object* Floor::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
 	ModelArray.push_back(model);
-	return model->object;
+	return model;
 }
 
 void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
@@ -1257,25 +1254,25 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX, GetBase(), CenterZ));
 	ControlArray.push_back(control);
-	return control->object;
+	return control;
 }
 
 Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
 	trigger->SetPosition(Ogre::Vector3(0, GetBase(), 0));
-	return trigger->object;
+	return trigger;
 }
 
 Object* Floor::AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
 {
 	//add a camera texture
-	CameraTexture* cameratexture = new CameraTexture(this->object, name, enabled, quality, fov, GetBase() + position, use_rotation, rotation);
+	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase() + position, use_rotation, rotation);
 	CameraTextureArray.push_back(cameratexture);
-	return cameratexture->object;
+	return cameratexture;
 }

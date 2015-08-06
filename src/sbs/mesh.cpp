@@ -604,8 +604,7 @@ bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool
 MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Mesh", name, false);
+	SetValues(this, parent, "Mesh", name, false);
 
 	enabled = true;
 	mBody = 0;
@@ -633,7 +632,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	std::string buffer;
 	std::string Name = name;
-	buffer = ToString(object->GetNumber());
+	buffer = ToString(GetNumber());
 	Name.insert(0, "(" + buffer + ")");
 	this->name = Name;
 	std::string filename2;
@@ -806,8 +805,6 @@ MeshObject::~MeshObject()
 		Ogre::MeshManager::getSingleton().remove(name);
 		MeshWrapper.setNull();
 	}
-
-	delete object;
 }
 
 void MeshObject::Enable(bool value, bool remove)

@@ -42,8 +42,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 Camera::Camera(Ogre::Camera *camera)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, sbs->object, "Camera", "Camera", true);
+	SetValues(this, sbs, "Camera", "Camera", true);
 
 	//init variables
 	CurrentFloor = 0;
@@ -143,8 +142,6 @@ Camera::~Camera()
 	sbs->mSceneManager->destroySceneNode(nodename);
 	sbs->mSceneManager->destroySceneNode(CameraNode->getName());
 	CameraNode = 0;
-
-	delete object;
 }
 
 void Camera::SetPosition(const Ogre::Vector3 &vector)
@@ -680,7 +677,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 					//delete call button if ctrl and alt keys are pressed
 					if (ctrl == true && alt == true && shift == false)
 					{
-						sbs->DeleteObject(callbutton->object);
+						sbs->DeleteObject(callbutton);
 						return;
 					}
 

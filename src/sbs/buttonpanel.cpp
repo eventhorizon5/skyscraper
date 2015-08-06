@@ -43,8 +43,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 		return;
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, elev->object, "ButtonPanel", "", false);
+	SetValues(this, elev, "ButtonPanel", "", false);
 
 	IsEnabled = true;
 	elevator = _elevator;
@@ -71,8 +70,8 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	std::string buffer;
 	buffer = "Button Panel " + ToString2(elevator) + ":" + ToString2(index);
 	TrimString(buffer);
-	object->SetName(buffer.c_str());
-	ButtonPanelMesh = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	SetName(buffer.c_str());
+	ButtonPanelMesh = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//move
 	SetToElevatorAltitude();
@@ -110,7 +109,7 @@ ButtonPanel::~ButtonPanel()
 	{
 		if (controls[i])
 		{
-			controls[i]->object->parent_deleting = true;
+			controls[i]->parent_deleting = true;
 			delete controls[i];
 		}
 		controls[i] = 0;
@@ -123,15 +122,13 @@ ButtonPanel::~ButtonPanel()
 	if (sbs->FastDelete == false)
 	{
 		//unregister with parent floor object
-		if (object->parent_deleting == false)
+		if (parent_deleting == false)
 			sbs->GetElevator(elevator)->RemovePanel(this);
 
 		//remove associated actions
 		for (int i = 0; i < (int)action_list.size(); i++)
 			sbs->RemoveAction(action_list[i]);
 	}
-
-	delete object;
 }
 
 Object* ButtonPanel::AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
@@ -224,10 +221,10 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 
 	for (int i = 0; i < (int)action_names.size(); i++)
 	{
-		std::string newname = sbs->GetElevator(elevator)->object->GetName();
+		std::string newname = sbs->GetElevator(elevator)->GetName();
 		newname += ":" + action_names[i];
 		std::vector<Object*> parents;
-		parents.push_back(sbs->GetElevator(elevator)->object);
+		parents.push_back(sbs->GetElevator(elevator));
 		if ((off_action == 0 && action_names[i] == "off") || action_names[i] != "off")
 		{
 			Action* action = sbs->AddAction(newname, parents, action_names[i]);
@@ -240,12 +237,12 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(object, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos, false);
+	Control *control = controls[control_index] = new Control(this, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos, false);
 
 	//move control
 	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
 
-	return control->object;
+	return control;
 }
 
 void ButtonPanel::DeleteButton(int row, int column)
@@ -318,7 +315,7 @@ bool ButtonPanel::AddWall(const char *name, const char *texture, float thickness
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(object, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
+	return sbs->AddWallMain(this, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
 }
 
 Control* ButtonPanel::GetControl(int index)

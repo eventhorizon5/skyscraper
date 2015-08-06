@@ -29,10 +29,9 @@
 #include "globals.h"
 #include "action.h"
 
-class SBSIMPEXP Trigger
+class SBSIMPEXP Trigger : public Object
 {
 public:
-	Object *object; //SBS object
 	std::string Name;
 	bool IsEnabled;
 

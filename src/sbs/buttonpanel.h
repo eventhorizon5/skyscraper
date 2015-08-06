@@ -28,11 +28,10 @@
 
 #include "control.h"
 
-class SBSIMPEXP ButtonPanel
+class SBSIMPEXP ButtonPanel : public Object
 {
 public:
 
-	Object *object; //SBS object
 	int elevator;
 	int Index; //index number of panel
 	std::string Direction;

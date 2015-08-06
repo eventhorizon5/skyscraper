@@ -26,11 +26,10 @@
 #ifndef _SBS_LIGHT_H
 #define _SBS_LIGHT_H
 
-class SBSIMPEXP Light
+class SBSIMPEXP Light : public Object
 {
 public:
 
-	Object *object; //SBS object
 	std::string Name;
 	int Type;
 	Ogre::Vector3 Origin;

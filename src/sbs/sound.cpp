@@ -34,8 +34,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 Sound::Sound(Object *parent, const char *name, bool permanent)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Sound", name, permanent);
+	SetValues(this, parent, "Sound", name, permanent);
 
 	//first set default values
 	PositionOffset = 0;
@@ -71,19 +70,16 @@ Sound::~Sound()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		if (object->parent_deleting == false)
+		if (parent_deleting == false)
 		{
-			if (std::string(object->GetParent()->GetType()) == "Elevator")
-				((Elevator*)object->GetParent()->GetRawObject())->RemoveSound(this);
-			if (std::string(object->GetParent()->GetType()) == "Floor")
-				((Floor*)object->GetParent()->GetRawObject())->RemoveSound(this);
-			if (std::string(object->GetParent()->GetType()) == "SBS")
+			if (std::string(GetParent()->GetType()) == "Elevator")
+				((Elevator*)GetParent()->GetRawObject())->RemoveSound(this);
+			if (std::string(GetParent()->GetType()) == "Floor")
+				((Floor*)GetParent()->GetRawObject())->RemoveSound(this);
+			if (std::string(GetParent()->GetType()) == "SBS")
 				sbs->RemoveSound(this);
 		}
 	}
-
-	//destructor
-	delete object;
 }
 
 void Sound::SetPosition(const Ogre::Vector3& position, bool set_velocity)
@@ -420,12 +416,12 @@ bool Sound::IsLoaded()
 
 void Sound::Report(std::string message)
 {
-	sbs->Report("Sound '" + Name + "', parent '" + object->GetParent()->GetName() + "': " + message);
+	sbs->Report("Sound '" + Name + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 bool Sound::ReportError(std::string message)
 {
-	return sbs->ReportError("Sound '" + Name + "', parent '" + object->GetParent()->GetName() + "': " + message);
+	return sbs->ReportError("Sound '" + Name + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 void Sound::PlayQueued(const char *filename, bool stop, bool loop)

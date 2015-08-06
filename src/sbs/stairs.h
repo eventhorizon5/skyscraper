@@ -28,11 +28,10 @@
 
 #include "door.h"
 
-class SBSIMPEXP Stairs
+class SBSIMPEXP Stairs : public Object
 {
 public:
 
-	Object *object; //SBS object
 	int StairsNum; //number
 	int startfloor; //starting floor
 	int endfloor; //ending floor

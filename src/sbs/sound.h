@@ -26,11 +26,10 @@
 #ifndef _SBS_SOUND_H
 #define _SBS_SOUND_H
 
-class SBSIMPEXP Sound
+class SBSIMPEXP Sound : public Object
 {
 public:
 
-	Object *object; //SBS object
 	Ogre::Vector3 PositionOffset; //optional position offset, used only by other objects
 
 	Sound(Object *parent, const char *name, bool permanent);

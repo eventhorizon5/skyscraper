@@ -33,11 +33,10 @@ extern SBS *sbs; //external pointer to the SBS engine
 ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, elevator->object, "ElevatorDoor", "", false);
+	SetValues(this, elevator, "ElevatorDoor", "", false);
 
 	std::string name = "Elevator Door " + ToString2(number);
-	object->SetName(name.c_str());
+	SetName(name.c_str());
 
 	//create a new elevator door
 	Number = number;
@@ -88,10 +87,10 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 		ShaftDoors[i] = new DoorWrapper(this, true, elev->ServicedFloors[i]);
 
 	//create sound object
-	doorsound = new Sound(object, "Door Sound", true);
+	doorsound = new Sound(this, "Door Sound", true);
 	doorsound->SetPosition(elevator->Origin);
-	chime = new Sound(object, "Chime", true);
-	nudgesound = new Sound(object, "Nudge Sound", true);
+	chime = new Sound(this, "Chime", true);
+	nudgesound = new Sound(this, "Nudge Sound", true);
 	nudgesound->SetPosition(elevator->Origin);
 }
 
@@ -102,7 +101,7 @@ ElevatorDoor::~ElevatorDoor()
 	{
 		if (ShaftDoors[i])
 		{
-			ShaftDoors[i]->object->parent_deleting = true;
+			ShaftDoors[i]->parent_deleting = true;
 			delete ShaftDoors[i];
 		}
 		ShaftDoors[i] = 0;
@@ -119,26 +118,26 @@ ElevatorDoor::~ElevatorDoor()
 
 	if (sensor)
 	{
-		sensor->object->parent_deleting = true;
+		sensor->parent_deleting = true;
 		delete sensor;
 	}
 	sensor = 0;
 
 	if (doorsound)
 	{
-		doorsound->object->parent_deleting = true;
+		doorsound->parent_deleting = true;
 		delete doorsound;
 	}
 	doorsound = 0;
 	if (chime)
 	{
-		chime->object->parent_deleting = true;
+		chime->parent_deleting = true;
 		delete chime;
 	}
 	chime = 0;
 	if (nudgesound)
 	{
-		nudgesound->object->parent_deleting = true;
+		nudgesound->parent_deleting = true;
 		delete nudgesound;
 	}
 	nudgesound = 0;
@@ -146,7 +145,7 @@ ElevatorDoor::~ElevatorDoor()
 	//delete main doors
 	if (Doors)
 	{
-		Doors->object->parent_deleting = true;
+		Doors->parent_deleting = true;
 		delete Doors;
 	}
 	Doors = 0;
@@ -158,11 +157,9 @@ ElevatorDoor::~ElevatorDoor()
 		sbs->RemoveAction(reset_action);
 
 		//unregister from parent
-		if (object->parent_deleting == false)
+		if (parent_deleting == false)
 			elev->RemoveElevatorDoor(this);
 	}
-
-	delete object;
 }
 
 void ElevatorDoor::OpenDoorsEmergency(int whichdoors, int floor)
@@ -732,13 +729,13 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
 	WallObject *wall;
-	wall = door->mesh->CreateWallObject(wrapper->object, name);
+	wall = door->mesh->CreateWallObject(wrapper, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	wall = door->mesh->CreateWallObject(wrapper->object, name);
+	wall = door->mesh->CreateWallObject(wrapper, name);
 	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
@@ -779,7 +776,7 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 	buffer = "ElevatorDoor " + ToString2(elev->Number) + ":" + ToString2(Number) + ":" + Name;
 
 	AddDoorComponent(Doors, name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
-	return Doors->object;
+	return Doors;
 }
 
 Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
@@ -806,7 +803,7 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	Floor *floorobj = sbs->GetFloor(floor);
 
 	AddDoorComponent(ShaftDoors[index], name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, floorobj->GetBase() + voffset, tw, th, side_tw, side_th);
-	return ShaftDoors[index]->object;
+	return ShaftDoors[index];
 }
 
 void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
@@ -928,7 +925,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		if (DoorWalls == true)
 		{
 			sbs->ResetTextureMapping(true);
-			WallObject *wall = floorobj->Level->CreateWallObject(floorobj->object, "Connection Walls");
+			WallObject *wall = floorobj->Level->CreateWallObject(floorobj, "Connection Walls");
 			sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 			sbs->ResetTextureMapping();
 		}
@@ -943,7 +940,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		if (ShaftDoor == false)
 		{
 			WallObject *wall;
-			wall = elev->ElevatorMesh->CreateWallObject(elev->object, "Connection");
+			wall = elev->ElevatorMesh->CreateWallObject(elev, "Connection");
 			name1 = "DoorF1";
 			name2 = "DoorF2";
 			sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
@@ -953,7 +950,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		{
 			WallObject *wall;
 			Shaft *shaft = elev->GetShaft();
-			wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft->object, "Connection");
+			wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft, "Connection");
 			name1 = "ShaftDoorF1";
 			name2 = "ShaftDoorF2";
 			sbs->CreateWallBox(wall, name1.c_str(), "Connection", elev->Origin.x + x1, elev->Origin.x + x2, elev->Origin.z + z1, elev->Origin.z + z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
@@ -986,7 +983,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		CreateSensor(min, max);
 	}
 
-	return wrapper->object;
+	return wrapper;
 }
 
 Object* ElevatorDoor::FinishDoors(bool DoorWalls, bool TrackWalls)
@@ -1421,7 +1418,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 	parent = wrapper->parent;
 
 	//create object mesh
-	mesh = new MeshObject(wrapper->object, doorname);
+	mesh = new MeshObject(wrapper, doorname);
 	
 	std::string direction_check = Direction;
 	SetCase(direction_check, false);
@@ -1482,8 +1479,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	else
 		name = "Elevator Door " + ToString2(parent->Number);
 
-	object = new Object();
-	object->SetValues(this, parent->object, "DoorWrapper", name.c_str(), false);
+	SetValues(this, parent, "DoorWrapper", name.c_str(), false);
 }
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()
@@ -1494,9 +1490,6 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 			delete doors[i];
 		doors[i] = 0;
 	}
-	if (object)
-		delete object;
-	object = 0;
 }
 
 ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, const char *direction, float OpenSpeed, float CloseSpeed)
@@ -2055,14 +2048,14 @@ void ElevatorDoor::CheckSensor()
 void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
 {
 	//create action for elevator door
-	std::string elev_name = elev->object->GetName();
+	std::string elev_name = elev->GetName();
 	std::string action_name1 = "sensor " + ToString2(Number);
 	std::string action_name2 = "sensorreset " + ToString2(Number);
 	std::string full_name1 = elev_name + ":" + action_name1;
 	std::string full_name2 = elev_name + ":" + action_name2;
 
 	std::vector<Object*> parents;
-	parents.push_back(elev->object);
+	parents.push_back(elev);
 	sensor_action = sbs->AddAction(full_name1, parents, action_name1);
 	reset_action = sbs->AddAction(full_name2, parents, action_name2);
 
@@ -2071,7 +2064,7 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	actions.push_back(full_name1);
 
 	//create new trigger
-	sensor = new Trigger(object, "Sensor", true, SensorSound.c_str(), area_min, area_max, actions);
+	sensor = new Trigger(this, "Sensor", true, SensorSound.c_str(), area_min, area_max, actions);
 	sensor->SetPosition(elev->Origin);
 }
 

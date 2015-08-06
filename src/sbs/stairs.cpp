@@ -34,8 +34,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, sbs->object, "Stairs", "", false);
+	SetValues(this, sbs, "Stairs", "", false);
 
 	StairsNum = number;
 	startfloor = _startfloor;
@@ -57,7 +56,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 
 	std::string name;
 	name = "Stairwell " + ToString2(number);
-	object->SetName(name.c_str());
+	SetName(name.c_str());
 
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -69,7 +68,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _e
 	{
 		//Create stairwell meshes
 		std::string buffer = name + ":" + ToString2(i);
-		StairArray[i - startfloor] = new MeshObject(object, buffer.c_str());
+		StairArray[i - startfloor] = new MeshObject(this, buffer.c_str());
 		EnableArray[i - startfloor] = true;
 	}
 }
@@ -83,7 +82,7 @@ Stairs::~Stairs()
 		{
 			if (ControlArray[i][j])
 			{
-				ControlArray[i][j]->object->parent_deleting = true;
+				ControlArray[i][j]->parent_deleting = true;
 				delete ControlArray[i][j];
 			}
 			ControlArray[i][j] = 0;
@@ -97,7 +96,7 @@ Stairs::~Stairs()
 		{
 			if (TriggerArray[i][j])
 			{
-				TriggerArray[i][j]->object->parent_deleting = true;
+				TriggerArray[i][j]->parent_deleting = true;
 				delete TriggerArray[i][j];
 			}
 			TriggerArray[i][j] = 0;
@@ -111,7 +110,7 @@ Stairs::~Stairs()
 		{
 			if (ModelArray[i][j])
 			{
-				ModelArray[i][j]->object->parent_deleting = true;
+				ModelArray[i][j]->parent_deleting = true;
 				delete ModelArray[i][j];
 			}
 			ModelArray[i][j] = 0;
@@ -125,7 +124,7 @@ Stairs::~Stairs()
 		{
 			if (lights[i][j])
 			{
-				lights[i][j]->object->parent_deleting = true;
+				lights[i][j]->parent_deleting = true;
 				delete lights[i][j];
 			}
 			lights[i][j] = 0;
@@ -137,7 +136,7 @@ Stairs::~Stairs()
 	{
 		if (DoorArray[i].object)
 		{
-			DoorArray[i].object->object->parent_deleting = true;
+			DoorArray[i].object->parent_deleting = true;
 			delete DoorArray[i].object;
 		}
 		DoorArray[i].object = 0;
@@ -152,10 +151,8 @@ Stairs::~Stairs()
 	}
 
 	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
+	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemoveStairs(this);
-
-	delete object;
 }
 
 WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
@@ -171,7 +168,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	}
 
 	//create wall object
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
 
 	std::string Name = name;
 	TrimString(Name);
@@ -278,7 +275,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -301,7 +298,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
@@ -486,16 +483,16 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	}
 
 	//create doorway walls
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(object, "Connection Walls");
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, "Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string stairsnum = ToString(StairsNum);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(object, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->GetBase() + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(this, std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->GetBase() + voffset, tw, th);
 	floorptr = 0;
-	return DoorArray[DoorArray.size() - 1].object->object;
+	return DoorArray[DoorArray.size() - 1].object;
 }
 
 void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset)
@@ -771,9 +768,9 @@ Object* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 po
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(object, name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->GetBase(), origin.z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(this, name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->GetBase(), origin.z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights[floor - startfloor].push_back(light);
-	return light->object;
+	return light;
 }
 
 MeshObject* Stairs::GetMeshObject(int floor)
@@ -794,14 +791,14 @@ Object* Stairs::AddModel(int floor, const char *name, const char *filename, bool
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(object, name, filename, center, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->GetBase(), origin.z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->GetBase(), origin.z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
 	ModelArray[floor - startfloor].push_back(model);
-	return model->object;
+	return model;
 }
 
 Object* Stairs::AddControl(int floor, const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
@@ -813,10 +810,10 @@ Object* Stairs::AddControl(int floor, const char *name, const char *sound, const
 		return 0;
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->GetBase(), CenterZ + origin.z));
 	ControlArray[floor - startfloor].push_back(control);
-	return control->object;
+	return control;
 }
 
 Object* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
@@ -832,7 +829,7 @@ Object* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, 
 	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray[floor - startfloor].push_back(trigger);
 	trigger->SetPosition(Ogre::Vector3(origin.x, sbs->GetFloor(floor)->GetBase(), origin.z));
-	return trigger->object;*/
+	return trigger;*/
 	return 0;
 }
 

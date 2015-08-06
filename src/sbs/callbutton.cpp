@@ -38,8 +38,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	//create a set of call buttons
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, sbs->GetFloor(floornum)->object, "CallButton", "", false);
+	SetValues(this, sbs->GetFloor(floornum), "CallButton", "", false);
 
 	IsEnabled = true;
 	Elevators.resize(elevators.size());
@@ -60,14 +59,14 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	//create object mesh
 	std::string base, buffer;
 	base = "Call Panel " + ToString2(floornum) + ":" + ToString2(number);
-	object->SetName(base.c_str());
-	CallButtonBackMesh = new MeshObject(object, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	SetName(base.c_str());
+	CallButtonBackMesh = new MeshObject(this, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = base + ":Up";
-	CallButtonMeshUp = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshUp = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = base + ":Down";
-	CallButtonMeshDown = new MeshObject(object, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshDown = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
 	floor = floornum;
@@ -79,7 +78,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	KeyID = 0;
 
 	//create sound object
-	sound = new Sound(object, "Call Button Sound", true);
+	sound = new Sound(this, "Call Button Sound", true);
 	sound->Load(sound_file);
 	sound->SetPosition(Ogre::Vector3(CenterX, sbs->GetFloor(floor)->GetBase() + voffset, CenterZ));
 
@@ -101,7 +100,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			WallObject *wall;
-			wall = CallButtonBackMesh->CreateWallObject(object, "Call Button Panel");
+			wall = CallButtonBackMesh->CreateWallObject(this, "Call Button Panel");
 			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, x1, CenterZ, x2, CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
 		if (Direction == "left" || Direction == "right")
@@ -114,7 +113,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			WallObject *wall;
-			wall = CallButtonBackMesh->CreateWallObject(object, "Call Button Panel");
+			wall = CallButtonBackMesh->CreateWallObject(this, "Call Button Panel");
 			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, CenterX, z1, CenterX, z2, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
 		}
 		sbs->ResetWalls();
@@ -167,10 +166,10 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
 			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
 			WallObject *wall;
-			wall = CallButtonMeshUp->CreateWallObject(object, "Call Button Up");
+			wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
 			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
 
-			wall = CallButtonMeshDown->CreateWallObject(object, "Call Button Down");
+			wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
 			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
@@ -180,12 +179,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			WallObject *wall;
 			if (floornum < topfloor)
 			{
-				wall = CallButtonMeshUp->CreateWallObject(object, "Call Button Up");
+				wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
 				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
-				wall = CallButtonMeshDown->CreateWallObject(object, "Call Button Down");
+				wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
 				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
 			}
 		}
@@ -212,10 +211,10 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
 			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
 			WallObject *wall;
-			wall = CallButtonMeshUp->CreateWallObject(object, "Call Button Up");
+			wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
 			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
 
-			wall = CallButtonMeshDown->CreateWallObject(object, "Call Button Down");
+			wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
 			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
@@ -225,12 +224,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			WallObject *wall;
 			if (floornum < topfloor)
 			{
-				wall = CallButtonMeshUp->CreateWallObject(object, "Call Button Up");
+				wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
 				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
-				wall = CallButtonMeshDown->CreateWallObject(object, "Call Button Down");
+				wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
 				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 		}
@@ -257,7 +256,7 @@ CallButton::~CallButton()
 
 	if (sound)
 	{
-		sound->object->parent_deleting = true;
+		sound->parent_deleting = true;
 		delete sound;
 	}
 	sound = 0;
@@ -265,13 +264,11 @@ CallButton::~CallButton()
 	//unregister with parent floor object
 	if (sbs->FastDelete == false)
 	{
-		if (object->parent_deleting == false)
+		if (parent_deleting == false)
 			sbs->GetFloor(floor)->RemoveCallButton(this);
 
 		sbs->UnregisterCallButtonCallback(this);
 	}
-
-	delete object;
 }
 
 void CallButton::Enabled(bool value)
