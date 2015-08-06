@@ -277,11 +277,6 @@ void ButtonPanel::Move(const Ogre::Vector3 &position)
 	}
 }
 
-Ogre::Vector3 ButtonPanel::GetPosition()
-{
-	return ButtonPanelMesh->GetPosition();
-}
-
 void ButtonPanel::SetToElevatorAltitude()
 {
 	Ogre::Vector3 pos = ButtonPanelMesh->GetPosition();

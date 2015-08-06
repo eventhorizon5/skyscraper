@@ -89,11 +89,6 @@ public:
 	int FindWall(const Ogre::Vector3 &point, bool convert = true);
 	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
 	void RescaleVertices(float multiplier);
-	void Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin = Ogre::Vector3(0, 0, 0));
-	Ogre::Vector3 GetPosition();
-	void Rotate(const Ogre::Vector3 rotation, float speed);
-	void SetRotation(const Ogre::Vector3 rotation);
-	Ogre::Vector3 GetRotation();
 	void AddVertex(Geometry &vertex_geom);
 	void RemoveVertex(int index);
 	void AddTriangle(int submesh, TriangleType &triangle);
@@ -120,6 +115,8 @@ public:
 	Ogre::Vector3 GetWallExtents(const char *name, float altitude,  bool get_max);
 	Ogre::Vector2 GetExtents(int coord, bool flip_z = false);
 	WallObject* FindPolygon(const char *name, int &index);
+	void OnMove();
+	void OnRotate();
 
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
@@ -133,7 +130,6 @@ public:
 
 private:
 	bool enabled;
-	float rotX, rotY, rotZ;
 	bool IsPhysical;
 	float restitution, friction, mass;
 	bool prepared;

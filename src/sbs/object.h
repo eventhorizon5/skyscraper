@@ -39,7 +39,7 @@ public:
 
 	//functions
 	Object(bool temporary = false);
-	~Object();
+	virtual ~Object();
 	void SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent);
 	bool IsPermanent();
 	Object* GetParent();
@@ -56,6 +56,14 @@ public:
 	void SetNumber(int number);
 	bool IsTemporary();
 	void ShowBoundingBox(bool value);
+	void Move(const Ogre::Vector3 &position, bool relative = false);
+	void SetPosition(const Ogre::Vector3 &position, bool relative = false);
+	Ogre::Vector3 GetPosition(bool relative = false);
+	void Rotate(const Ogre::Vector3 &rotation, float speed);
+	void SetRotation(Ogre::Vector3 rotation);
+	Ogre::Vector3 GetRotation();
+	virtual void OnMove() {};
+	virtual void OnRotate() {};
 
 private:
 	bool Permanent; //is object permanent?
@@ -67,6 +75,7 @@ private:
 	std::string Name; //object name
 	std::vector<Object*> children; //object's children
 	Ogre::SceneNode *SceneNode; //node in scene graph
+	Ogre::Vector3 Rotation; //rotation vector
 };
 
 #endif

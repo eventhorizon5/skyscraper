@@ -218,3 +218,81 @@ void Object::ShowBoundingBox(bool value)
 
 	SceneNode->showBoundingBox(value);
 }
+
+void Object::Move(const Ogre::Vector3 &position, bool relative)
+{
+	//move an object
+	//if relative is true, position is relative of parent object
+
+	SetPosition(GetPosition() + position, relative);
+}
+
+void Object::SetPosition(const Ogre::Vector3 &position, bool relative)
+{
+	//set position of object
+	//if relative is true, position is relative of parent object
+
+	Ogre::Vector3 pos = sbs->ToRemote(position);
+
+	if (relative == false)
+		GetSceneNode()->_setDerivedPosition(pos);
+	else
+		GetSceneNode()->setPosition(pos);
+
+	//notify about movement
+	OnMove();
+}
+
+Ogre::Vector3 Object::GetPosition(bool relative)
+{
+	//get position of object
+	//if relative is true, position is relative of parent object
+
+	if (relative == false)
+		return sbs->ToLocal(GetSceneNode()->_getDerivedPosition());
+
+	return sbs->ToLocal(GetSceneNode()->getPosition());
+}
+
+void Object::SetRotation(Ogre::Vector3 rotation)
+{
+	//rotate object
+
+	if (rotation.x > 359)
+		rotation.x -= 360;
+	if (rotation.y > 359)
+		rotation.y -= 360;
+	if (rotation.z > 359)
+		rotation.z -= 360;
+	if (rotation.x < 0)
+		rotation.x += 360;
+	if (rotation.y < 0)
+		rotation += 360;
+	if (rotation.z < 0)
+		rotation.z += 360;
+
+	Ogre::Quaternion x(Ogre::Degree(rotation.x), Ogre::Vector3::UNIT_X);
+	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
+	Ogre::Quaternion rot = x * y * z;
+	GetSceneNode()->setOrientation(rot);
+	Rotation = rotation;
+
+	//notify about rotation
+	OnRotate();
+}
+
+void Object::Rotate(const Ogre::Vector3 &rotation, float speed)
+{
+	//rotates object in a relative amount
+
+	Ogre::Vector3 rot = Rotation + (rotation * speed);
+	SetRotation(rot);
+}
+
+Ogre::Vector3 Object::GetRotation()
+{
+	//get rotation of object
+
+	return Rotation;
+}

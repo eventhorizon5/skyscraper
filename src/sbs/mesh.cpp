@@ -617,9 +617,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	this->mass = mass;
 	no_collider = false;
 	MeshGeometry.reserve(128); //reserve vertex space
-	rotX = 0;
-	rotY = 0;
-	rotZ = 0;
+	Rotation = Ogre::Vector3::ZERO;
 
 	//use box collider if physics should be enabled
 	if (IsPhysical == true)
@@ -964,75 +962,6 @@ void MeshObject::RescaleVertices(float multiplier)
 bool MeshObject::IsEnabled()
 {
 	return enabled;
-}
-
-void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin)
-{
-	//move a mesh object
-
-	SBS_PROFILE("MeshObject::Move");
-	Ogre::Vector3 pos;
-	if (relative_x == false)
-		pos.x = sbs->ToRemote(origin.x + position.x);
-	else
-		pos.x = GetSceneNode()->_getDerivedPosition().x + sbs->ToRemote(position.x);
-	if (relative_y == false)
-		pos.y = sbs->ToRemote(origin.y + position.y);
-	else
-		pos.y = GetSceneNode()->_getDerivedPosition().y + sbs->ToRemote(position.y);
-	if (relative_z == false)
-		pos.z = sbs->ToRemote(-(origin.z + position.z));
-	else
-		pos.z = GetSceneNode()->_getDerivedPosition().z + sbs->ToRemote(-position.z);
-	GetSceneNode()->_setDerivedPosition(pos);
-	if (mBody)
-		mBody->updateTransform(true, false, false);
-}
-
-Ogre::Vector3 MeshObject::GetPosition()
-{
-	return sbs->ToLocal(GetSceneNode()->_getDerivedPosition());
-}
-
-void MeshObject::SetRotation(const Ogre::Vector3 rotation)
-{
-	//rotate mesh
-	Ogre::Quaternion x(Ogre::Degree(rotation.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion rot = x * y * z;
-	GetSceneNode()->setOrientation(rot);
-	rotX = rotation.x;
-	rotY = rotation.y;
-	rotZ = rotation.z;
-	if (mBody)
-		mBody->updateTransform(false, true, false);
-}
-
-void MeshObject::Rotate(const Ogre::Vector3 rotation, float speed)
-{
-	//rotates mesh in a relative amount
-	rotX += rotation.x * speed;
-	rotY += rotation.y * speed;
-	rotZ += rotation.z * speed;
-	if (rotX > 359)
-		rotX = rotX - 360;
-	if (rotY > 359)
-		rotY = rotY - 360;
-	if (rotZ > 359)
-		rotZ = rotZ - 360;
-	if (rotX < 0)
-		rotX = rotX + 360;
-	if (rotY < 0)
-		rotY = rotY + 360;
-	if (rotZ < 0)
-		rotZ = rotZ + 360;
-	SetRotation(Ogre::Vector3(rotX, rotY, rotZ));
-}
-
-Ogre::Vector3 MeshObject::GetRotation()
-{
-	return Ogre::Vector3(rotX, rotY, rotZ);
 }
 
 void MeshObject::AddVertex(Geometry &vertex_geom)
@@ -2158,4 +2087,16 @@ WallObject* MeshObject::FindPolygon(const char *name, int &index)
 	}
 	index = -1;
 	return 0;
+}
+
+void MeshObject::OnMove()
+{
+	if (mBody)
+		mBody->updateTransform(true, false, false);
+}
+
+void MeshObject::OnRotate()
+{
+	if (mBody)
+		mBody->updateTransform(false, true, false);
 }
