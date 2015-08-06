@@ -35,8 +35,7 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	//loads a 3D model into the simulation
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Model", name, false);
+	SetValues(this, parent, "Model", name, false);
 	Origin = position;
 	Offset = 0;
 	is_key = false;
@@ -44,7 +43,7 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	Name = name;
 
 	load_error = false;
-	mesh = new MeshObject(object, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (!mesh->MeshWrapper.get() || !mesh->SceneNode)
 	{
 		load_error = true;
@@ -68,21 +67,19 @@ Model::~Model()
 	mesh = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
+	if (sbs->FastDelete == false && parent_deleting == false)
 	{
-		if (std::string(object->GetParent()->GetType()) == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(object->GetParent()->GetType()) == "Floor")
-			((Floor*)object->GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(object->GetParent()->GetType()) == "Shaft")
-			((Shaft*)object->GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(object->GetParent()->GetType()) == "Stairs")
-			((Stairs*)object->GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(object->GetParent()->GetType()) == "SBS")
+		if (std::string(GetParent()->GetType()) == "Elevator")
+			((Elevator*)GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(GetParent()->GetType()) == "Floor")
+			((Floor*)GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(GetParent()->GetType()) == "Shaft")
+			((Shaft*)GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(GetParent()->GetType()) == "Stairs")
+			((Stairs*)GetParent()->GetRawObject())->RemoveModel(this);
+		if (std::string(GetParent()->GetType()) == "SBS")
 			sbs->RemoveModel(this);
 	}
-
-	delete object;
 }
 
 void Model::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)

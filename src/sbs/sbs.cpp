@@ -44,9 +44,12 @@ SBS::SBS()
 	version = "0.10.0." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
+	//root object needs to self-register
+	ObjectCount = 0;
+	RegisterObject(this);
+
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, 0, "SBS", "SBS", true);
+	SetValues(this, 0, "SBS", "SBS", true);
 
 	mRoot = Ogre::Root::getSingletonPtr();
 
@@ -152,7 +155,6 @@ SBS::SBS()
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
 	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);
-	ObjectCount = 0;
 	FastDelete = false;
 	WallCount = 0;
 	PolygonCount = 0;
@@ -262,9 +264,9 @@ void SBS::Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FM
 	Report("Done");
 
 	//create object meshes
-	Buildings = new MeshObject(object, "Buildings");
-	External = new MeshObject(object, "External");
-	Landscape = new MeshObject(object, "Landscape");
+	Buildings = new MeshObject(this, "Buildings");
+	External = new MeshObject(this, "External");
+	Landscape = new MeshObject(this, "Landscape");
 	//Landscape->tricollider = false;
 
 	//create camera object
@@ -284,7 +286,7 @@ SBS::~SBS()
 	{
 		if (ControlArray[i])
 		{
-			ControlArray[i]->object->parent_deleting = true;
+			ControlArray[i]->parent_deleting = true;
 			delete ControlArray[i];
 		}
 		ControlArray[i] = 0;
@@ -295,7 +297,7 @@ SBS::~SBS()
 	{
 		if (TriggerArray[i])
 		{
-			TriggerArray[i]->object->parent_deleting = true;
+			TriggerArray[i]->parent_deleting = true;
 			delete TriggerArray[i];
 		}
 		TriggerArray[i] = 0;
@@ -306,7 +308,7 @@ SBS::~SBS()
 	{
 		if (ModelArray[i])
 		{
-			ModelArray[i]->object->parent_deleting = true;
+			ModelArray[i]->parent_deleting = true;
 			delete ModelArray[i];
 		}
 		ModelArray[i] = 0;
@@ -317,7 +319,7 @@ SBS::~SBS()
 	{
 		if (lights[i])
 		{
-			lights[i]->object->parent_deleting = true;
+			lights[i]->parent_deleting = true;
 			delete lights[i];
 		}
 		lights[i] = 0;
@@ -337,7 +339,7 @@ SBS::~SBS()
 	{
 		if (FloorArray[i].object)
 		{
-			FloorArray[i].object->object->parent_deleting = true;
+			FloorArray[i].object->parent_deleting = true;
 			delete FloorArray[i].object;
 		}
 		FloorArray[i].object = 0;
@@ -348,7 +350,7 @@ SBS::~SBS()
 	{
 		if (ElevatorArray[i].object)
 		{
-			ElevatorArray[i].object->object->parent_deleting = true;
+			ElevatorArray[i].object->parent_deleting = true;
 			delete ElevatorArray[i].object;
 		}
 		ElevatorArray[i].object = 0;
@@ -359,7 +361,7 @@ SBS::~SBS()
 	{
 		if (ShaftArray[i].object)
 		{
-			ShaftArray[i].object->object->parent_deleting = true;
+			ShaftArray[i].object->parent_deleting = true;
 			delete ShaftArray[i].object;
 		}
 		ShaftArray[i].object = 0;
@@ -370,7 +372,7 @@ SBS::~SBS()
 	{
 		if (StairsArray[i].object)
 		{
-			StairsArray[i].object->object->parent_deleting = true;
+			StairsArray[i].object->parent_deleting = true;
 			delete StairsArray[i].object;
 		}
 		StairsArray[i].object = 0;
@@ -381,7 +383,7 @@ SBS::~SBS()
 	{
 		if (sounds[i])
 		{
-			sounds[i]->object->parent_deleting = true;
+			sounds[i]->parent_deleting = true;
 			delete sounds[i];
 		}
 		sounds[i] = 0;
@@ -442,10 +444,6 @@ SBS::~SBS()
 	//remove all textures
 	Ogre::TextureManager::getSingleton().removeAll();
 	texturecount = 0;
-
-	if (object)
-		delete object;
-	object = 0;
 
 	//clear self reference
 	sbs = 0;
@@ -1499,13 +1497,13 @@ void SBS::CreateSky(const char *filenamebase)
 	LoadTexture("sky/back.jpg", "SkyBack", 1, 1, false, false, false, 0);
 	ResetLighting();
 
-	SkyBox = new MeshObject(object, "SkyBox");
+	SkyBox = new MeshObject(this, "SkyBox");
 	SkyBox->no_collider = true;
 
 	//create a skybox that extends by default 30 miles (30 * 5280 ft) in each direction
 	float skysize = GetConfigInt("Skyscraper.SBS.HorizonDistance", 30) * 5280.0f;
 	ResetTextureMapping(true);
-	WallObject *wall = new WallObject(SkyBox, SkyBox->object, true);
+	WallObject *wall = new WallObject(SkyBox, SkyBox, true);
 
 	wall->AddQuad( //front
 		"SkyFront",
@@ -1666,7 +1664,7 @@ Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startflo
 	shaft.number = number;
 	shaft.object = new Shaft(number, CenterX, CenterZ, _startfloor, _endfloor);
 	ShaftArray.push_back(shaft);
-	return shaft.object->object;
+	return shaft.object;
 }
 
 Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
@@ -1706,7 +1704,7 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	stairs.number = number;
 	stairs.object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
 	StairsArray.push_back(stairs);
-	return stairs.object->object;
+	return stairs.object;
 }
 
 Object* SBS::NewElevator(int number)
@@ -1720,7 +1718,7 @@ Object* SBS::NewElevator(int number)
 	elev.number = number;
 	elev.object = new Elevator(number);
 	ElevatorArray.push_back(elev);
-	return elev.object->object;
+	return elev.object;
 }
 
 Object* SBS::NewFloor(int number)
@@ -1739,7 +1737,7 @@ Object* SBS::NewFloor(int number)
 		Basements++;
 	else
 		Floors++;
-	return floor.object->object;
+	return floor.object;
 }
 
 int SBS::Elevators()
@@ -2183,11 +2181,11 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 
 	WallObject *wall;
 	if (mesh == "external")
-		wall = External->CreateWallObject(External->object, name);
+		wall = External->CreateWallObject(External, name);
 	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(Buildings->object, name);
+		wall = Buildings->CreateWallObject(Buildings, name);
 	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(Landscape->object, name);
+		wall = Landscape->CreateWallObject(Landscape, name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
 	return wall;
@@ -2205,11 +2203,11 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 
 	WallObject *wall;
 	if (mesh == "external")
-		wall = External->CreateWallObject(External->object, name);
+		wall = External->CreateWallObject(External, name);
 	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(Buildings->object, name);
+		wall = Buildings->CreateWallObject(Buildings, name);
 	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(Landscape->object, name);
+		wall = Landscape->CreateWallObject(Landscape, name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
@@ -2246,7 +2244,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 		maxz = z1;
 	}
 
-	WallObject *wall = Landscape->CreateWallObject(Landscape->object, name);
+	WallObject *wall = Landscape->CreateWallObject(Landscape, name);
 
 	Report("Creating ground...");
 
@@ -2697,7 +2695,7 @@ int SBS::GetMeshCount()
 Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
-	Sound *sound = new Sound(object, name, false);
+	Sound *sound = new Sound(this, name, false);
 	sounds.push_back(sound);
 
 	//set parameters and play sound
@@ -2714,7 +2712,7 @@ Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 posi
 	if (loop && IsRunning == true)
 		sound->Play();
 
-	return sound->object;
+	return sound;
 }
 
 std::vector<Sound*> SBS::GetSound(const char *name)
@@ -3707,9 +3705,9 @@ Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::
 {
 	//add a global light
 
-	Light* light = new Light(object, name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(this, name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
-	return light->object;
+	return light;
 }
 
 void SBS::AddMeshHandle(MeshObject* handle)
@@ -3754,14 +3752,14 @@ MeshObject* SBS::FindMeshObject(std::string name)
 Object* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(object, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
 	ModelArray.push_back(model);
-	return model->object;
+	return model;
 }
 
 int SBS::GetConfigInt(std::string key, int default_value)
@@ -3931,18 +3929,18 @@ Object* SBS::AddControl(const char *name, const char *sound, const char *directi
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX, 0, CenterZ));
 	ControlArray.push_back(control);
-	return control->object;
+	return control;
 }
 
 Object* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
-	return trigger->object;
+	return trigger;
 }
 
 Action* SBS::AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
@@ -4212,7 +4210,7 @@ bool SBS::RunAction(std::string name)
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction(object);
+			result2 = actionlist[i]->DoAction(this);
 
 		if (result2 == false)
 			result = false;
@@ -4226,7 +4224,7 @@ bool SBS::RunAction(int index)
 
 	Action *action = GetAction(index);
 	if (action)
-		return action->DoAction(object);
+		return action->DoAction(this);
 	return false;
 }
 

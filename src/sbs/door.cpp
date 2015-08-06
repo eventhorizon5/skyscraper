@@ -47,8 +47,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	//8 = faces back, opens front
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Door", name, false);
+	SetValues(this, parent, "Door", name, false);
 
 	IsEnabled = true;
 	Name = name;
@@ -111,11 +110,11 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(object, Name.c_str());
+	DoorMesh = new MeshObject(this, Name.c_str());
 	DoorMesh->Move(origin, false, false, false);
 
 	//create sound object
-	sound = new Sound(object, "DoorSound", true);
+	sound = new Sound(this, "DoorSound", true);
 	sound->SetPosition(origin);
 
 	//create door
@@ -127,7 +126,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	WallObject *wall;
-	wall = DoorMesh->CreateWallObject(object, name);
+	wall = DoorMesh->CreateWallObject(this, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
@@ -143,7 +142,7 @@ Door::~Door()
 
 	if (sound)
 	{
-		sound->object->parent_deleting = true;
+		sound->parent_deleting = true;
 		delete sound;
 	}
 	sound = 0;
@@ -155,19 +154,17 @@ Door::~Door()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		if (object->parent_deleting == false)
+		if (parent_deleting == false)
 		{
-			if (std::string(object->GetParent()->GetType()) == "Elevator")
-				((Elevator*)object->GetParent()->GetRawObject())->RemoveDoor(this);
-			if (std::string(object->GetParent()->GetType()) == "Floor")
-				((Floor*)object->GetParent()->GetRawObject())->RemoveDoor(this);
-			if (std::string(object->GetParent()->GetType()) == "Stairs")
-				((Stairs*)object->GetParent()->GetRawObject())->RemoveDoor(this);
+			if (std::string(GetParent()->GetType()) == "Elevator")
+				((Elevator*)GetParent()->GetRawObject())->RemoveDoor(this);
+			if (std::string(GetParent()->GetType()) == "Floor")
+				((Floor*)GetParent()->GetRawObject())->RemoveDoor(this);
+			if (std::string(GetParent()->GetType()) == "Stairs")
+				((Stairs*)GetParent()->GetRawObject())->RemoveDoor(this);
 		}
 		sbs->UnregisterDoorCallback(this);
 	}
-
-	delete object;
 }
 
 bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)

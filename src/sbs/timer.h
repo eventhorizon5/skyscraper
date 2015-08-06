@@ -26,11 +26,9 @@
 #ifndef _SBS_TIMER_H
 #define _SBS_TIMER_H
 
-class SBSIMPEXP TimerObject
+class SBSIMPEXP TimerObject : public Object
 {
 public:
-
-	Object *object; //SBS object
 
 	TimerObject(Object *parent, const char *name, bool permanent);
 	virtual ~TimerObject();

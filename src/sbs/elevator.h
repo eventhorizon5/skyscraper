@@ -36,12 +36,11 @@
 #include "model.h"
 #include "timer.h"
 
-class SBSIMPEXP Elevator
+class SBSIMPEXP Elevator : public Object
 {
 	friend class ElevatorDoor;
 
 public:
-	Object *object; //SBS object
 	int Number; //elevator number
 	std::string Name; //elevator name
 	int NumDoors; //number of elevator doors
@@ -343,7 +342,7 @@ private:
 	public:
 		Elevator *elevator;
 		int type; //0 = parking timer, 1 = random timer, 2 = arrival, 3 = departure
-		Timer(std::string name, Elevator *elev, int Type) : TimerObject(elev->object, name.c_str(), false)
+		Timer(std::string name, Elevator *elev, int Type) : TimerObject(elev, name.c_str(), false)
 		{
 			elevator = elev;
 			type = Type;

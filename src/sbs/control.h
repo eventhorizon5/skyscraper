@@ -29,10 +29,9 @@
 #include "globals.h"
 #include "action.h"
 
-class SBSIMPEXP Control
+class SBSIMPEXP Control : public Object
 {
 public:
-	Object *object; //SBS object
 	std::string Name;
 	std::string Direction;
 	bool IsEnabled;

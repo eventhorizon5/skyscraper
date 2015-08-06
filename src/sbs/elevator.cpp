@@ -39,8 +39,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 Elevator::Elevator(int number)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, sbs->object, "Elevator", "", false);
+	SetValues(this, sbs, "Elevator", "", false);
 
 	//set elevator number
 	Number = number;
@@ -212,8 +211,8 @@ Elevator::Elevator(int number)
 
 	//create object meshes
 	std::string name = "Elevator " + ToString2(Number);
-	object->SetName(name.c_str());
-	ElevatorMesh = new MeshObject(object, name.c_str());
+	SetName(name.c_str());
+	ElevatorMesh = new MeshObject(this, name.c_str());
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -226,7 +225,7 @@ Elevator::~Elevator()
 	{
 		if (ControlArray[i])
 		{
-			ControlArray[i]->object->parent_deleting = true;
+			ControlArray[i]->parent_deleting = true;
 			delete ControlArray[i];
 		}
 		ControlArray[i] = 0;
@@ -237,7 +236,7 @@ Elevator::~Elevator()
 	{
 		if (TriggerArray[i])
 		{
-			TriggerArray[i]->object->parent_deleting = true;
+			TriggerArray[i]->parent_deleting = true;
 			delete TriggerArray[i];
 		}
 		TriggerArray[i] = 0;
@@ -248,7 +247,7 @@ Elevator::~Elevator()
 	{
 		if (ModelArray[i])
 		{
-			ModelArray[i]->object->parent_deleting = true;
+			ModelArray[i]->parent_deleting = true;
 			delete ModelArray[i];
 		}
 		ModelArray[i] = 0;
@@ -259,7 +258,7 @@ Elevator::~Elevator()
 	{
 		if (lights[i])
 		{
-			lights[i]->object->parent_deleting = true;
+			lights[i]->parent_deleting = true;
 			delete lights[i];
 		}
 		lights[i] = 0;
@@ -293,7 +292,7 @@ Elevator::~Elevator()
 	{
 		if (DirIndicatorArray[i])
 		{
-			DirIndicatorArray[i]->object->parent_deleting = true;
+			DirIndicatorArray[i]->parent_deleting = true;
 			delete DirIndicatorArray[i];
 		}
 		DirIndicatorArray[i] = 0;
@@ -309,7 +308,7 @@ Elevator::~Elevator()
 		{
 			if (DoorArray[i])
 			{
-				DoorArray[i]->object->parent_deleting = true;
+				DoorArray[i]->parent_deleting = true;
 				delete DoorArray[i];
 			}
 			DoorArray[i] = 0;
@@ -324,7 +323,7 @@ Elevator::~Elevator()
 	{
 		if (FloorIndicatorArray[i])
 		{
-			FloorIndicatorArray[i]->object->parent_deleting = true;
+			FloorIndicatorArray[i]->parent_deleting = true;
 			delete FloorIndicatorArray[i];
 		}
 		FloorIndicatorArray[i] = 0;
@@ -338,7 +337,7 @@ Elevator::~Elevator()
 	{
 		if (PanelArray[i])
 		{
-			PanelArray[i]->object->parent_deleting = true;
+			PanelArray[i]->parent_deleting = true;
 			delete PanelArray[i];
 		}
 		PanelArray[i] = 0;
@@ -352,7 +351,7 @@ Elevator::~Elevator()
 	{
 		if (StdDoorArray[i])
 		{
-			StdDoorArray[i]->object->parent_deleting = true;
+			StdDoorArray[i]->parent_deleting = true;
 			delete StdDoorArray[i];
 		}
 		StdDoorArray[i] = 0;
@@ -363,49 +362,49 @@ Elevator::~Elevator()
 		Report("deleting objects");
 	if (carsound)
 	{
-		carsound->object->parent_deleting = true;
+		carsound->parent_deleting = true;
 		delete carsound;
 	}
 	carsound = 0;
 	if (alarm)
 	{
-		alarm->object->parent_deleting = true;
+		alarm->parent_deleting = true;
 		delete alarm;
 	}
 	alarm = 0;
 	if (floorbeep)
 	{
-		floorbeep->object->parent_deleting = true;
+		floorbeep->parent_deleting = true;
 		delete floorbeep;
 	}
 	floorbeep = 0;
 	if (motorsound)
 	{
-		motorsound->object->parent_deleting = true;
+		motorsound->parent_deleting = true;
 		delete motorsound;
 	}
 	motorsound = 0;
 	if (idlesound)
 	{
-		idlesound->object->parent_deleting = true;
+		idlesound->parent_deleting = true;
 		delete idlesound;
 	}
 	idlesound = 0;
 	if (motoridlesound)
 	{
-		motoridlesound->object->parent_deleting = true;
+		motoridlesound->parent_deleting = true;
 		delete motoridlesound;
 	}
 	motoridlesound = 0;
 	if (announcesnd)
 	{
-		announcesnd->object->parent_deleting = true;
+		announcesnd->parent_deleting = true;
 		delete announcesnd;
 	}
 	announcesnd = 0;
 	if (musicsound)
 	{
-		musicsound->object->parent_deleting = true;
+		musicsound->parent_deleting = true;
 		delete musicsound;
 	}
 	musicsound = 0;
@@ -418,7 +417,7 @@ Elevator::~Elevator()
 	{
 		if (sounds[i])
 		{
-			sounds[i]->object->parent_deleting = true;
+			sounds[i]->parent_deleting = true;
 			delete sounds[i];
 		}
 		sounds[i] = 0;
@@ -440,10 +439,8 @@ Elevator::~Elevator()
 	ElevatorMesh = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
+	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemoveElevator(this);
-
-	delete object;
 }
 
 Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
@@ -571,13 +568,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//create sound objects
 	if (sbs->Verbose)
 		Report("creating sound objects");
-	carsound = new Sound(object, "Car", true);
+	carsound = new Sound(this, "Car", true);
 	carsound->SetPosition(Origin);
-	idlesound = new Sound(object, "Idle", true);
+	idlesound = new Sound(this, "Idle", true);
 	idlesound->SetPosition(Origin);
-	motorsound = new Sound(object, "Motor", true);
+	motorsound = new Sound(this, "Motor", true);
 	motorsound->SetPosition(Origin);
-	motoridlesound = new Sound(object, "Motor Idle", true);
+	motoridlesound = new Sound(this, "Motor Idle", true);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
 		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
@@ -593,13 +590,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
-	alarm = new Sound(object, "Alarm", true);
+	alarm = new Sound(this, "Alarm", true);
 	alarm->SetPosition(Origin);
-	floorbeep = new Sound(object, "Floor Beep", true);
+	floorbeep = new Sound(this, "Floor Beep", true);
 	floorbeep->SetPosition(Origin);
-	announcesnd = new Sound(object, "Announcement Sound", true);
+	announcesnd = new Sound(this, "Announcement Sound", true);
 	announcesnd->SetPosition(Origin);
-	musicsound = new Sound(object, "Music Sound", true);
+	musicsound = new Sound(this, "Music Sound", true);
 	musicsound->SetPosition(Origin + MusicPosition);
 
 	//set elevator's floor
@@ -611,7 +608,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	Created = true;
 
 	Report("created at " + sbs->TruncateNumber(x, 4) + ", " + sbs->TruncateNumber(x, 4) + ", " + ToString2(floor));
-	return object;
+	return this;
 }
 
 bool Elevator::AddRoute(int floor, int direction, int call_type)
@@ -2189,7 +2186,7 @@ WallObject* Elevator::AddWall(const char *name, const char *texture, float thick
 {
 	//Adds a wall with the specified dimensions
 
-	WallObject *wall = ElevatorMesh->CreateWallObject(object, name);
+	WallObject *wall = ElevatorMesh->CreateWallObject(this, name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
@@ -2198,7 +2195,7 @@ WallObject* Elevator::AddFloor(const char *name, const char *texture, float thic
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
-	WallObject *wall = ElevatorMesh->CreateWallObject(object, name);
+	WallObject *wall = ElevatorMesh->CreateWallObject(this, name);
 	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
@@ -2207,10 +2204,10 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 {
 	//Creates a floor indicator at the specified location
 
-	FloorIndicator* indicator = new FloorIndicator(object, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
+	FloorIndicator* indicator = new FloorIndicator(this, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
 	indicator->SetPosition(Origin);
 	FloorIndicatorArray.push_back(indicator);
-	return indicator->object;
+	return indicator;
 }
 
 const Ogre::Vector3 Elevator::GetPosition()
@@ -2499,7 +2496,7 @@ Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, 
 
 	ButtonPanel* panel = new ButtonPanel(Number, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	PanelArray.push_back(panel);
-	return panel->object;
+	return panel;
 }
 
 void Elevator::UpdateFloorIndicators()
@@ -3315,10 +3312,10 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	float x = Origin.x + CenterX;
 	float z = Origin.z + CenterZ;
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(object, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	indicator->SetPosition(Ogre::Vector3(indicator->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), indicator->GetPosition().z));
 	DirIndicatorArray.push_back(indicator);
-	return indicator->object;
+	return indicator;
 }
 
 void Elevator::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
@@ -4234,7 +4231,7 @@ void Elevator::SetMessageSound(bool type, bool direction, const char *filename)
 Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
-	Sound *sound = new Sound(object, name, false);
+	Sound *sound = new Sound(this, name, false);
 	sounds.push_back(sound);
 
 	//set parameters and play sound
@@ -4251,7 +4248,7 @@ Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3
 	if (loop && sbs->IsRunning == true && InElevator() == true)
 		sound->Play();
 
-	return sound->object;
+	return sound;
 }
 
 void Elevator::DeleteActiveRoute()
@@ -4557,9 +4554,9 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 
 	std::string elevnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
-	Door* door = new Door(object, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	Door* door = new Door(this, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
 	StdDoorArray.push_back(door);
-	return door->object;
+	return door;
 }
 
 Door* Elevator::GetStdDoor(int number)
@@ -5071,22 +5068,22 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 {
 	//add a global light
 
-	Light* light = new Light(object, name, type, position + Origin, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(this, name, type, position + Origin, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
-	return light->object;
+	return light;
 }
 
 Object* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(object, name, filename, center, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
 		return 0;
 	}
 	ModelArray.push_back(model);
-	return model->object;
+	return model;
 }
 
 void Elevator::MoveObjects(Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
@@ -5150,19 +5147,19 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(object, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
 	control->SetPosition(Ogre::Vector3(CenterX + Origin.x, Origin.y, CenterZ + Origin.z));
 	ControlArray.push_back(control);
-	return control->object;
+	return control;
 }
 
 Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
-	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
 	trigger->SetPosition(Origin);
-	return trigger->object;
+	return trigger;
 }
 
 bool Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)

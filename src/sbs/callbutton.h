@@ -28,11 +28,10 @@
 
 #include "sound.h"
 
-class SBSIMPEXP CallButton
+class SBSIMPEXP CallButton : public Object
 {
 public:
 
-	Object *object; //SBS object
 	std::vector<int> Elevators; //elevators this call button set is assigned to
 	int floor; //floor this call button set is on
 	int Number; //call button index number (on the specified floor)

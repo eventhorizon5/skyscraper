@@ -306,10 +306,10 @@ void ObjectInfo::PopulateTree()
 	ObjectTree->DeleteAllItems();
 
 	//populate object tree
-	wxTreeItemId id = ObjectTree->AddRoot(wxString::FromAscii(Simcore->object->GetName()), -1, -1, new TreeItemData(wxVariant(Simcore->object->GetNumber()).GetString()));
+	wxTreeItemId id = ObjectTree->AddRoot(wxString::FromAscii(Simcore->GetName()), -1, -1, new TreeItemData(wxVariant(Simcore->GetNumber()).GetString()));
 
 	//add child objects
-	AddChildren(Simcore->object, id);
+	AddChildren(Simcore, id);
 
 	ObjectTree->Expand(id);
 }

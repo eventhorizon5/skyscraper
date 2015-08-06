@@ -37,16 +37,15 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	//creates a new floor indicator at the specified position
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "FloorIndicator", "", false);
+	SetValues(this, parent, "FloorIndicator", "", false);
 
 	IsEnabled = true;
 	elev = elevator;
 	Prefix = texture_prefix;
 
 	std::string name = "Floor Indicator " + ToString2(elevator);
-	object->SetName(name.c_str());
-	FloorIndicatorMesh = new MeshObject(object, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	SetName(name.c_str());
+	FloorIndicatorMesh = new MeshObject(this, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
 	std::string tmpdirection = direction;
@@ -59,7 +58,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, altitude, altitude, 1, 1, false);
+		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, altitude, altitude, 1, 1, false);
 	}
 	if (tmpdirection == "left" || tmpdirection == "right")
 	{
@@ -68,7 +67,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(object, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, height, altitude, altitude, 1, 1, false);
+		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, height, altitude, altitude, 1, 1, false);
 	}
 	sbs->ResetWalls();
 }
@@ -80,15 +79,13 @@ FloorIndicator::~FloorIndicator()
 	FloorIndicatorMesh = 0;
 
 	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
+	if (sbs->FastDelete == false && parent_deleting == false)
 	{
-		if (std::string(object->GetParent()->GetType()) == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
-		if (std::string(object->GetParent()->GetType()) == "Floor")
-			((Floor*)object->GetParent()->GetRawObject())->RemoveFloorIndicator(this);
+		if (std::string(GetParent()->GetType()) == "Elevator")
+			((Elevator*)GetParent()->GetRawObject())->RemoveFloorIndicator(this);
+		if (std::string(GetParent()->GetType()) == "Floor")
+			((Floor*)GetParent()->GetRawObject())->RemoveFloorIndicator(this);
 	}
-
-	delete object;
 }
 
 void FloorIndicator::Enabled(bool value)

@@ -32,7 +32,7 @@
 
 class Elevator;
 
-class SBSIMPEXP ElevatorDoor
+class SBSIMPEXP ElevatorDoor : public Object
 {
 public:
 	//door component object
@@ -71,7 +71,7 @@ public:
 	};
 
 	//wrapper that represents the entire set of doors
-	struct DoorWrapper
+	struct DoorWrapper : public Object
 	{
 		DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor, int shaftdoor_floor = 0);
 		~DoorWrapper();
@@ -83,7 +83,6 @@ public:
 		void MoveDoors(bool open, bool manual);
 		void StopDoors();
 
-		Object *object;
 		std::vector<DoorObject*> doors;
 		std::string name;
 		bool Open;
@@ -99,7 +98,6 @@ public:
 		int floor;
 	};
 
-	Object *object; //SBS object
 	int Number; //door instance number
 	Elevator *elev; //pointer to associated elevator object
 	float OpenSpeed; //door opening/closing speed (for backwards-compatibility only)
@@ -194,7 +192,7 @@ private:
 		ElevatorDoor *door;
 		Elevator *elevator;
 		int type; //0 = autoclose, 1 = nudge
-		Timer(std::string name, ElevatorDoor *parent, Elevator *elev, int Type) : TimerObject(parent->object, name.c_str(), false)
+		Timer(std::string name, ElevatorDoor *parent, Elevator *elev, int Type) : TimerObject(parent, name.c_str(), false)
 		{
 			door = parent;
 			elevator = elev;

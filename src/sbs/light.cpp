@@ -41,8 +41,7 @@ Light::Light(Object *parent, const char *name, int type, Ogre::Vector3 position,
 	//2 - spotlight
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Light", name, false);
+	SetValues(this, parent, "Light", name, false);
 
 	Type = type;
 	Name = name;
@@ -77,21 +76,19 @@ Light::~Light()
 	sbs->mSceneManager->destroyLight(Name);
 
 	//unregister from parent
-	if (sbs->FastDelete == false && object->parent_deleting == false)
+	if (sbs->FastDelete == false && parent_deleting == false)
 	{
-		if (std::string(object->GetParent()->GetType()) == "Elevator")
-			((Elevator*)object->GetParent()->GetRawObject())->RemoveLight(this);
-		if (std::string(object->GetParent()->GetType()) == "Floor")
-			((Floor*)object->GetParent()->GetRawObject())->RemoveLight(this);
-		if (std::string(object->GetParent()->GetType()) == "Shaft")
-			((Shaft*)object->GetParent()->GetRawObject())->RemoveLight(this);
-		if (std::string(object->GetParent()->GetType()) == "Stairs")
-			((Stairs*)object->GetParent()->GetRawObject())->RemoveLight(this);
-		if (std::string(object->GetParent()->GetType()) == "SBS")
+		if (std::string(GetParent()->GetType()) == "Elevator")
+			((Elevator*)GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(GetParent()->GetType()) == "Floor")
+			((Floor*)GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(GetParent()->GetType()) == "Shaft")
+			((Shaft*)GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(GetParent()->GetType()) == "Stairs")
+			((Stairs*)GetParent()->GetRawObject())->RemoveLight(this);
+		if (std::string(GetParent()->GetType()) == "SBS")
 			sbs->RemoveLight(this);
 	}
-
-	delete object;
 }
 
 void Light::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)

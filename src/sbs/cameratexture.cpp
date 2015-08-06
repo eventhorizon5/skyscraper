@@ -42,8 +42,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 	//if use_rotation is true, the rotation vector is a standard rotation, otherwise that vector represents a point in space to look at
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "CameraTexture", name, false);
+	SetValues(this, parent, "CameraTexture", name, false);
 
 	Name = name;
 	Origin = position;
@@ -123,8 +122,6 @@ CameraTexture::~CameraTexture()
 		sbs->DecrementTextureCount();
 		sbs->DecrementMaterialCount();
 	}
-
-	delete object;
 }
 
 void CameraTexture::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)

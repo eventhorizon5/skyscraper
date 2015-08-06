@@ -28,11 +28,10 @@
 
 #include "door.h"
 
-class SBSIMPEXP Shaft
+class SBSIMPEXP Shaft : public Object
 {
 public:
 
-	Object *object; //SBS object
 	int ShaftNumber; //shaft number
 	Ogre::Vector3 origin; //origin vector
 	int startfloor; //starting floor

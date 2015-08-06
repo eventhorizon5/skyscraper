@@ -38,8 +38,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	//actions can either be given as a name list (dynamic action lists) or pointer list (static action lists) - don't use both
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Control", name, permanent);
+	SetValues(this, parent, "Control", name, permanent);
 
 	Name = name;
 	std::string Name2 = Name;
@@ -57,7 +56,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	light_status = false;
 
 	//create object mesh
-	ControlMesh = new MeshObject(object, Name2.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(this, Name2.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	sbs->TexelOverride = true;
 	WallObject *wall;
@@ -70,7 +69,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		wall = ControlMesh->CreateWallObject(this, Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "back")
@@ -82,7 +81,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		wall = ControlMesh->CreateWallObject(this, Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "left")
@@ -94,7 +93,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		wall = ControlMesh->CreateWallObject(this, Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
 	}
 	if (Direction == "right")
@@ -106,14 +105,14 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(object, Name.c_str());
+		wall = ControlMesh->CreateWallObject(this, Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	sbs->TexelOverride = false;
 
 	//create sound object
-	sound = new Sound(object, name, true);
+	sound = new Sound(this, name, true);
 	sound->Load(sound_file);
 
 	//register control
@@ -124,7 +123,7 @@ Control::~Control()
 {
 	if (sound)
 	{
-		sound->object->parent_deleting = true;
+		sound->parent_deleting = true;
 		delete sound;
 	}
 	sound = 0;
@@ -140,24 +139,22 @@ Control::~Control()
 		sbs->UnregisterControl(this);
 
 		//unregister from parent
-		if (object->parent_deleting == false)
+		if (parent_deleting == false)
 		{
-			if (std::string(object->GetParent()->GetType()) == "ButtonPanel")
-				((ButtonPanel*)object->GetParent()->GetRawObject())->RemoveControl(this);
-			if (std::string(object->GetParent()->GetType()) == "Elevator")
-				((Elevator*)object->GetParent()->GetRawObject())->RemoveControl(this);
-			if (std::string(object->GetParent()->GetType()) == "Floor")
-				((Floor*)object->GetParent()->GetRawObject())->RemoveControl(this);
-			if (std::string(object->GetParent()->GetType()) == "Shaft")
-				((Shaft*)object->GetParent()->GetRawObject())->RemoveControl(this);
-			if (std::string(object->GetParent()->GetType()) == "Stairs")
-				((Stairs*)object->GetParent()->GetRawObject())->RemoveControl(this);
-			if (std::string(object->GetParent()->GetType()) == "SBS")
+			if (std::string(GetParent()->GetType()) == "ButtonPanel")
+				((ButtonPanel*)GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(GetParent()->GetType()) == "Elevator")
+				((Elevator*)GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(GetParent()->GetType()) == "Floor")
+				((Floor*)GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(GetParent()->GetType()) == "Shaft")
+				((Shaft*)GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(GetParent()->GetType()) == "Stairs")
+				((Stairs*)GetParent()->GetRawObject())->RemoveControl(this);
+			if (std::string(GetParent()->GetType()) == "SBS")
 				sbs->RemoveControl(this);
 		}
 	}
-
-	delete object;
 }
 
 void Control::Enabled(bool value)
@@ -377,7 +374,7 @@ bool Control::DoAction()
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction(object);
+			result2 = actionlist[i]->DoAction(this);
 
 		if (result2 == true)
 			result = true;

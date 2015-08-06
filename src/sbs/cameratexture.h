@@ -26,11 +26,10 @@
 #ifndef _SBS_CameraTexture_H
 #define _SBS_CameraTexture_H
 
-class SBSIMPEXP CameraTexture
+class SBSIMPEXP CameraTexture : public Object
 {
 public:
 
-	Object *object; //SBS object
 	Ogre::Vector3 Origin;
 	std::string Name;
 

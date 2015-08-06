@@ -26,10 +26,9 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
-class SBSIMPEXP Camera
+class SBSIMPEXP Camera : public Object
 {
 public:
-	Object *object; //SBS object
 	int CurrentFloor; //floor camera's on
 	std::string CurrentFloorID; //indicator ID of camera's current floor
 	int StartFloor; //Starting floor

@@ -33,8 +33,7 @@ extern SBS *sbs; //external pointer to the SBS engine
 TimerObject::TimerObject(Object *parent, const char *name, bool permanent)
 {
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Timer", name, permanent);
+	SetValues(this, parent, "Timer", name, permanent);
 
 	Interval = 0;
 	OneShot = false;
@@ -48,8 +47,6 @@ TimerObject::~TimerObject()
 {
 	if (Running == true)
 		Stop();
-
-	delete object;
 }
 
 void TimerObject::Start(int milliseconds, bool oneshot)
@@ -114,6 +111,6 @@ unsigned long TimerObject::GetCurrentTime()
 
 void TimerObject::Report(std::string message)
 {
-	std::string name = object->GetName();
-	sbs->Report("Timer '" + name + "', parent '" + object->GetParent()->GetName() + "': " + message);
+	std::string name = GetName();
+	sbs->Report("Timer '" + name + "', parent '" + GetParent()->GetName() + "': " + message);
 }

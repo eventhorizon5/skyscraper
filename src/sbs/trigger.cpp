@@ -35,8 +35,7 @@ Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *s
 	//create a proximity trigger at the specified location
 
 	//set up SBS object
-	object = new Object();
-	object->SetValues(this, parent, "Trigger", name, permanent);
+	SetValues(this, parent, "Trigger", name, permanent);
 
 	Name = name;
 
@@ -49,7 +48,7 @@ Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *s
 	pos = Ogre::Vector3::ZERO;
 
 	//create sound object
-	sound = new Sound(object, name, true);
+	sound = new Sound(this, name, true);
 	sound->Load(sound_file);
 }
 
@@ -57,7 +56,7 @@ Trigger::~Trigger()
 {
 	if (sound)
 	{
-		sound->object->parent_deleting = true;
+		sound->parent_deleting = true;
 		delete sound;
 	}
 	sound = 0;
@@ -65,22 +64,20 @@ Trigger::~Trigger()
 	//unregister from parent
 	if (sbs->FastDelete == false)
 	{
-		if (object->parent_deleting == false)
+		if (parent_deleting == false)
 		{
-			if (std::string(object->GetParent()->GetType()) == "Elevator")
-				((Elevator*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
-			if (std::string(object->GetParent()->GetType()) == "Floor")
-				((Floor*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
-			if (std::string(object->GetParent()->GetType()) == "Shaft")
-				((Shaft*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
-			if (std::string(object->GetParent()->GetType()) == "Stairs")
-				((Stairs*)object->GetParent()->GetRawObject())->RemoveTrigger(this);
-			if (std::string(object->GetParent()->GetType()) == "SBS")
+			if (std::string(GetParent()->GetType()) == "Elevator")
+				((Elevator*)GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(GetParent()->GetType()) == "Floor")
+				((Floor*)GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(GetParent()->GetType()) == "Shaft")
+				((Shaft*)GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(GetParent()->GetType()) == "Stairs")
+				((Stairs*)GetParent()->GetRawObject())->RemoveTrigger(this);
+			if (std::string(GetParent()->GetType()) == "SBS")
 				sbs->RemoveTrigger(this);
 		}
 	}
-
-	delete object;
 }
 
 void Trigger::Enabled(bool value)
@@ -264,7 +261,7 @@ bool Trigger::DoAction()
 		bool result2 = false;
 
 		if (actionlist[i])
-			result2 = actionlist[i]->DoAction(object);
+			result2 = actionlist[i]->DoAction(this);
 
 		if (result2 == true)
 			result = true;
@@ -296,9 +293,9 @@ bool Trigger::Check()
 		if (sbs->Verbose == true)
 		{
 			if (is_inside == true)
-				sbs->Report("Inside trigger area '" + Name + "', parent '" + object->GetParent()->GetName() + "'");
+				sbs->Report("Inside trigger area '" + Name + "', parent '" + GetParent()->GetName() + "'");
 			else
-				sbs->Report("Outside trigger area '" + Name + "', parent '" + object->GetParent()->GetName() + "'");
+				sbs->Report("Outside trigger area '" + Name + "', parent '" + GetParent()->GetName() + "'");
 		}
 
 		//get action name of next position state

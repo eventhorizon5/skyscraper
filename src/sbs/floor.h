@@ -35,10 +35,9 @@
 #include "trigger.h"
 #include "cameratexture.h"
 
-class SBSIMPEXP Floor
+class SBSIMPEXP Floor : public Object
 {
 public:
-	Object *object; //SBS object
 	MeshObject *Level; //level mesh
 	MeshObject *Interfloor; //interfloor mesh
 	MeshObject *ColumnFrame; //columnframe mesh

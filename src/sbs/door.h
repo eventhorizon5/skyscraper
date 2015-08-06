@@ -28,11 +28,10 @@
 
 #include "sound.h"
 
-class SBSIMPEXP Door
+class SBSIMPEXP Door : public Object
 {
 public:
 
-	Object *object; //SBS object
 	std::string Name; //door name
 	int Direction;
 	bool OpenState;
