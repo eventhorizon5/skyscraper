@@ -128,7 +128,6 @@ public:
 	std::vector<WallObject*> Walls; //associated wall (polygon container) objects
 
 	Ogre::Entity *Movable;
-	Ogre::SceneNode *SceneNode;
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
 

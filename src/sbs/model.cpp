@@ -44,7 +44,7 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 
 	load_error = false;
 	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
-	if (!mesh->MeshWrapper.get() || !mesh->SceneNode)
+	if (!mesh->Movable)
 	{
 		load_error = true;
 		return;

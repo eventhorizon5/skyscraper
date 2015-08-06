@@ -38,6 +38,7 @@ Object::Object(bool temporary)
 	Number = -1;
 	Temporary = temporary;
 	parent_deleting = false;
+	SceneNode = 0;
 
 	//register object with engine
 	if (temporary == false && sbs)
@@ -47,6 +48,22 @@ Object::Object(bool temporary)
 Object::~Object()
 {
 	//remove object from engine
+
+	//exit if at end of engine deletion
+	if (!sbs)
+		return;
+
+	//clean up scene node
+	if (SceneNode)
+	{
+		SceneNode->detachAllObjects();
+
+		if (sbs->FastDelete == false)
+		{
+			SceneNode->getParent()->removeChild(SceneNode);
+			sbs->mSceneManager->destroySceneNode(SceneNode);
+		}
+	}
 
 	//if fastdelete is enabled, don't unregister (just delete)
 	if (sbs->FastDelete == true || Temporary == true)
@@ -73,6 +90,13 @@ void Object::SetValues(void *object, Object *parent, const char *type, const cha
 	Permanent = is_permanent;
 	Type = type;
 	Name = name;
+
+	//set up scene node
+	std::string node_name = "(" + ToString2(GetNumber()) + ")" + Name;
+
+	//create scene node
+	if (sbs->mSceneManager)
+		SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(node_name);
 
 	//register as child object if object has a valid parent
 	if (Parent)

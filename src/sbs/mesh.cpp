@@ -609,7 +609,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	enabled = true;
 	mBody = 0;
 	mShape = 0;
-	SceneNode = 0;
 	Movable = 0;
 	prepared = false;
 	IsPhysical = enable_physics;
@@ -630,11 +629,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	Ogre::MeshPtr collidermesh;
 
-	std::string buffer;
 	std::string Name = name;
-	buffer = ToString(GetNumber());
-	Name.insert(0, "(" + buffer + ")");
-	this->name = Name;
+	this->name = "(" + ToString2(GetNumber()) + ")" + Name;
 	std::string filename2;
 
 	if (!filename)
@@ -743,7 +739,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
 	//Movable->setCastShadows(true);
-	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
 	SceneNode->attachObject(Movable);
 
 	//rescale if a loaded model
@@ -788,22 +783,18 @@ MeshObject::~MeshObject()
 	//delete wall objects
 	DeleteWalls();
 
-	std::string nodename;
-	if (SceneNode)
-	{
-		SceneNode->detachAllObjects();
-		SceneNode->getParent()->removeChild(SceneNode);
-		sbs->mSceneManager->destroySceneNode(SceneNode->getName());
-		sbs->mSceneManager->destroyEntity(Movable->getName());
-	}
-	SceneNode = 0;
-	Movable = 0;
-
 	if (sbs->FastDelete == false)
 	{
 		sbs->DeleteMeshHandle(this);
 		Ogre::MeshManager::getSingleton().remove(name);
 		MeshWrapper.setNull();
+
+		if (Movable)
+		{
+			SceneNode->detachObject(Movable);
+			sbs->mSceneManager->destroyEntity(Movable);
+		}
+		Movable = 0;
 	}
 }
 

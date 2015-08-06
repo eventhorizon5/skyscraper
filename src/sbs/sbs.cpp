@@ -38,9 +38,11 @@
 
 SBS *sbs; //self reference
 
-SBS::SBS()
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 {
 	sbs = this;
+	this->mSceneManager = mSceneManager;
+
 	version = "0.10.0." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
@@ -217,19 +219,17 @@ SBS::SBS()
 	if (UnitScale <= 0)
 		UnitScale = 1;
 
-	//Print SBS banner
-	PrintBanner();
-}
-
-void SBS::Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FMOD::System *fmodsystem)
-{
-	this->mSceneManager = mSceneManager;
-
 	//disable sound if system is not available
 	if (!fmodsystem)
 		DisableSound = true;
 	soundsys = fmodsystem;
 
+	//Print SBS banner
+	PrintBanner();
+}
+
+void SBS::Initialize(Ogre::Camera *camera)
+{
 	//set default texture map values
 	ResetTextureMapping(true);
 
@@ -444,6 +444,9 @@ SBS::~SBS()
 	//remove all textures
 	Ogre::TextureManager::getSingleton().removeAll();
 	texturecount = 0;
+
+	//clear scene manager
+	mSceneManager->clearScene();
 
 	//clear self reference
 	sbs = 0;

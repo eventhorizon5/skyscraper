@@ -1635,7 +1635,7 @@ bool Skyscraper::Load()
 	IsLoading = true;
 
 	//Create simulator object
-	Simcore = new SBS();
+	Simcore = new SBS(mSceneMgr, soundsys);
 
 	//refresh console to fix banner message on Linux
 	if (console)
@@ -1652,7 +1652,7 @@ bool Skyscraper::Load()
 #endif
 
 	//initialize simulator
-	Simcore->Initialize(mSceneMgr, mCamera, soundsys);
+	Simcore->Initialize(mCamera);
 
 	//load building data file
 	Report("\nLoading building data from " + BuildingFile + "...\n");

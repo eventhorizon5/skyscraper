@@ -62,6 +62,7 @@ protected:
 	bool Temporary; //true if object can be deleted during runtime
 	std::string Name; //object name
 	std::vector<Object*> children; //object's children
+	Ogre::SceneNode *SceneNode;
 };
 
 #endif
