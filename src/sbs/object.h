@@ -52,8 +52,11 @@ public:
 	Object* GetChild(int index);
 	int GetChildrenCount();
 	void RemoveChild(Object *object);
+	Ogre::SceneNode* GetSceneNode();
+	void SetNumber(int number);
+	bool IsTemporary();
 
-protected:
+private:
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object
 	void *raw_object; //raw object
@@ -62,7 +65,7 @@ protected:
 	bool Temporary; //true if object can be deleted during runtime
 	std::string Name; //object name
 	std::vector<Object*> children; //object's children
-	Ogre::SceneNode *SceneNode;
+	Ogre::SceneNode *SceneNode; //node in scene graph
 };
 
 #endif

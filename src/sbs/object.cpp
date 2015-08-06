@@ -96,7 +96,13 @@ void Object::SetValues(void *object, Object *parent, const char *type, const cha
 
 	//create scene node
 	if (sbs->mSceneManager)
-		SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(node_name);
+	{
+		SceneNode = sbs->mSceneManager->createSceneNode(node_name);
+
+		//attach scene node to root, if no parent exists
+		if (!Parent)
+			sbs->mSceneManager->getRootSceneNode()->addChild(SceneNode);
+	}
 
 	//register as child object if object has a valid parent
 	if (Parent)
@@ -149,6 +155,9 @@ void Object::AddChild(Object *object)
 {
 	//add a child object to the internal array
 	children.push_back(object);
+
+	//add child's scene node
+	SceneNode->addChild(object->GetSceneNode());
 }
 
 void Object::RemoveChild(Object *object)
@@ -165,6 +174,9 @@ void Object::RemoveChild(Object *object)
 			}
 		}
 	}
+
+	//remove child's scene node
+	SceneNode->removeChild(object->GetSceneNode());
 }
 
 Object* Object::GetChild(int index)
@@ -180,4 +192,22 @@ int Object::GetChildrenCount()
 {
 	//return number of child objects
 	return (int)children.size();
+}
+
+Ogre::SceneNode* Object::GetSceneNode()
+{
+	return SceneNode;
+}
+
+void Object::SetNumber(int number)
+{
+	//set object's number - will only work if object is temporary
+
+	if (Temporary == true)
+		Number = number;
+}
+
+bool Object::IsTemporary()
+{
+	return Temporary;
 }

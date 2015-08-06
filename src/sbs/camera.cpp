@@ -104,7 +104,7 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
 	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0));
-	SceneNode->attachObject(MainCamera);
+	GetSceneNode()->attachObject(MainCamera);
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
 
@@ -116,7 +116,7 @@ Camera::Camera(Ogre::Camera *camera)
 	float height = (cfg_body_height + cfg_legs_height - 0.5f) - (width * 2);
 	float step_height = cfg_legs_height - 0.5f;
 
-	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, SceneNode, sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
+	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, GetSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
 	//create debug shape
@@ -136,7 +136,7 @@ Camera::~Camera()
 	if (mCharacter)
 		delete mCharacter;
 
-	std::string nodename = SceneNode->getChild(0)->getName();
+	std::string nodename = GetSceneNode()->getChild(0)->getName();
 	sbs->mSceneManager->destroySceneNode(nodename);
 }
 
@@ -194,7 +194,7 @@ Ogre::Vector3 Camera::GetPosition()
 {
 	//returns the camera's current position
 
-	return sbs->ToLocal(SceneNode->getPosition() + MainCamera->getPosition());
+	return sbs->ToLocal(GetSceneNode()->getPosition() + MainCamera->getPosition());
 }
 
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)

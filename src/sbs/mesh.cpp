@@ -629,8 +629,8 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	Ogre::MeshPtr collidermesh;
 
-	this->name = "(" + ToString2(GetNumber()) + ")" + std::string(name);
-	Name = this->name;
+	std::string Name = name;
+	this->name = "(" + ToString2(GetNumber()) + ")" + Name;
 	std::string filename2;
 
 	if (!filename)
@@ -739,11 +739,11 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
 	//Movable->setCastShadows(true);
-	SceneNode->attachObject(Movable);
+	GetSceneNode()->attachObject(Movable);
 
 	//rescale if a loaded model
 	if (filename)
-		SceneNode->setScale(sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier));
+		GetSceneNode()->setScale(sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier));
 
 	//set maximum render distance
 	if (max_render_distance > 0)
@@ -791,7 +791,7 @@ MeshObject::~MeshObject()
 
 		if (Movable)
 		{
-			SceneNode->detachObject(Movable);
+			GetSceneNode()->detachObject(Movable);
 			sbs->mSceneManager->destroyEntity(Movable);
 		}
 		Movable = 0;
@@ -809,9 +809,9 @@ void MeshObject::Enable(bool value, bool remove)
 
 	//attach or detach from scenegraph
 	if (value == false)
-		SceneNode->detachObject(Movable);
+		GetSceneNode()->detachObject(Movable);
 	else
-		SceneNode->attachObject(Movable);
+		GetSceneNode()->attachObject(Movable);
 
 	//enable or disable collision detection
 	if (mBody)
@@ -837,7 +837,7 @@ void MeshObject::Enable(bool value, bool remove)
 	}
 
 	//show scenenode bounding box
-	//SceneNode->showBoundingBox(value);
+	//GetSceneNode()->showBoundingBox(value);
 
 	enabled = value;
 }
@@ -978,23 +978,23 @@ void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relati
 	if (relative_x == false)
 		pos.x = sbs->ToRemote(origin.x + position.x);
 	else
-		pos.x = SceneNode->getPosition().x + sbs->ToRemote(position.x);
+		pos.x = GetSceneNode()->_getDerivedPosition().x + sbs->ToRemote(position.x);
 	if (relative_y == false)
 		pos.y = sbs->ToRemote(origin.y + position.y);
 	else
-		pos.y = SceneNode->getPosition().y + sbs->ToRemote(position.y);
+		pos.y = GetSceneNode()->_getDerivedPosition().y + sbs->ToRemote(position.y);
 	if (relative_z == false)
 		pos.z = sbs->ToRemote(-(origin.z + position.z));
 	else
-		pos.z = SceneNode->getPosition().z + sbs->ToRemote(-position.z);
-	SceneNode->setPosition(pos);
+		pos.z = GetSceneNode()->_getDerivedPosition().z + sbs->ToRemote(-position.z);
+	GetSceneNode()->_setDerivedPosition(pos);
 	if (mBody)
 		mBody->updateTransform(true, false, false);
 }
 
 Ogre::Vector3 MeshObject::GetPosition()
 {
-	return sbs->ToLocal(SceneNode->getPosition());
+	return sbs->ToLocal(GetSceneNode()->_getDerivedPosition());
 }
 
 void MeshObject::SetRotation(const Ogre::Vector3 rotation)
@@ -1004,7 +1004,7 @@ void MeshObject::SetRotation(const Ogre::Vector3 rotation)
 	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
-	SceneNode->setOrientation(rot);
+	GetSceneNode()->setOrientation(rot);
 	rotX = rotation.x;
 	rotY = rotation.y;
 	rotZ = rotation.z;
@@ -1258,8 +1258,8 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	//if a mesh was attached and was empty, it needs to be reattached to be visible
 	if (count == 0 && IsEnabled() == true)
 	{
-		SceneNode->detachObject(Movable);
-		SceneNode->attachObject(Movable);
+		GetSceneNode()->detachObject(Movable);
+		GetSceneNode()->attachObject(Movable);
 	}
 
 	if (sbs->RenderOnStartup == true)
@@ -1717,7 +1717,7 @@ void MeshObject::CreateCollider()
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(GetSceneNode(), shape, 0.1f, 0.5f, false);
 		mShape = shape;
 
 		if (sbs->DeleteColliders == true)
@@ -1770,11 +1770,11 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 
 		//finalize shape
 		shape->Finish();
-		std::string name = SceneNode->getName();
+		std::string name = GetSceneNode()->getName();
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(GetSceneNode(), shape, 0.1f, 0.5f, false);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1796,13 +1796,13 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 		//initialize collider shape
 		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
-		std::string name = SceneNode->getName();
+		std::string name = GetSceneNode()->getName();
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)
-			mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
+			mBody->setStaticShape(GetSceneNode(), shape, 0.1f, 0.5f, false);
 		else
-			mBody->setShape(SceneNode, shape, restitution, friction, mass);
+			mBody->setShape(GetSceneNode(), shape, restitution, friction, mass);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1818,7 +1818,7 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 
 	//cast a ray from the camera position downwards
 	SBS_PROFILE("MeshObject::HitBeam");
-	Ogre::Ray ray (sbs->ToRemote(origin) -  SceneNode->getPosition(), direction);
+	Ogre::Ray ray (sbs->ToRemote(origin) -  GetSceneNode()->getPosition(), direction);
 	for (int i = 0; i < (int)Triangles.size(); i++)
 	{
 		for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
@@ -1844,7 +1844,7 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 	//determine if position 'pos' is inside the mesh's bounding box
 
 	Ogre::Vector3 pos2 = sbs->ToRemote(pos);
-	pos2 -= SceneNode->getPosition();
+	pos2 -= GetSceneNode()->getPosition();
 	Ogre::Vector3 min = MeshWrapper->getBounds().getMinimum();
 	Ogre::Vector3 max = MeshWrapper->getBounds().getMaximum();
 	if (pos2.x >= min.x && pos2.x <= max.x && pos2.z >= min.z && pos2.z <= max.z)

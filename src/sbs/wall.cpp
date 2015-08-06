@@ -38,7 +38,7 @@ WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Obj
 
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)
-		Number = proxy->GetNumber();
+		SetNumber(proxy->GetNumber());
 	sbs->WallCount++;
 }
 
@@ -46,7 +46,7 @@ WallObject::~WallObject()
 {
 	//wall object destructor
 
-	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
+	if (sbs->FastDelete == false && parent_array && parent_deleting == false && IsTemporary() == false)
 	{
 		for (int i = 0; i < (int)parent_array->size(); i++)
 		{
@@ -175,7 +175,7 @@ std::string WallObject::ProcessName(const char *name)
 		name_modified.erase(0, (int)name_modified.find(")") + 1);
 
 	//construct name
-	std::string newname = "(" + ToString2(Number) + ")" + name_modified;
+	std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
 	return newname;
 }
 
@@ -281,7 +281,7 @@ void WallObject::SetPolygonName(int index, const char *name)
                 name_modified.erase(0, (int)name_modified.find(")") + 1);
 
         //construct name
-        std::string newname = "(" + ToString2(Number) + ")" + name_modified;
+        std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
 
         //set polygon name
         handles[index].name = newname;
