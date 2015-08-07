@@ -288,7 +288,7 @@ bool Stairs::AddWall(WallObject *wall, int floor, const char *name, const char *
 	if (IsValidFloor(floor) == false)
 		return ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
 
-	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, sbs->GetFloor(floor)->GetBase(true) + voffset1, sbs->GetFloor(floor)->GetBase(true) + voffset2, tw, th, true);
+	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
@@ -311,7 +311,7 @@ bool Stairs::AddFloor(WallObject *wall, int floor, const char *name, const char 
 	if (IsValidFloor(floor) == false)
 		return ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
 
-	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, sbs->GetFloor(floor)->GetBase(true) + voffset1, sbs->GetFloor(floor)->GetBase(true) + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
 void Stairs::Enabled(int floor, bool value)
@@ -492,7 +492,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string stairsnum = ToString(StairsNum);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object;
 }
@@ -561,8 +561,6 @@ bool Stairs::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogr
 	if (!sbs->GetFloor(floor))
 		return false;
 
-	float base = sbs->GetFloor(floor)->GetBase();
-
 	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
@@ -570,9 +568,9 @@ bool Stairs::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogr
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(GetPosition().x + start.x, base + start.y, GetPosition().z + start.z), Ogre::Vector3(GetPosition().x + end.x, base + end.y, GetPosition().z + end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(GetPosition().x + start.x, start.y, GetPosition().z + start.z), Ogre::Vector3(GetPosition().x + end.x, end.y, GetPosition().z + end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
 		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, base + start.y, start.z), Ogre::Vector3(end.x, base + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
 	}
 
 	return true;

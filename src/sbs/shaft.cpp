@@ -442,8 +442,6 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 	if (!sbs->GetFloor(floor))
 		return false;
 
-	float base = sbs->GetFloor(floor)->Altitude;
-
 	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
@@ -451,9 +449,9 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(GetPosition().x + start.x, base + start.y, GetPosition().z + start.z), Ogre::Vector3(GetPosition().x + end.x, base + end.y, GetPosition().z + end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(GetPosition().x + start.x, start.y, GetPosition().z + start.z), Ogre::Vector3(GetPosition().x + end.x, end.y, GetPosition().z + end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
 		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, base + start.y, start.z), Ogre::Vector3(end.x, base + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), GetPosition(), checkwallnumber, reset);
 	}
 	return true;
 }
