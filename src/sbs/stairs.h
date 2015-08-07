@@ -35,7 +35,6 @@ public:
 	int StairsNum; //number
 	int startfloor; //starting floor
 	int endfloor; //ending floor
-	Ogre::Vector3 origin; //origin vector
 	Ogre::Vector2 cutstart; //cut starting vector
 	Ogre::Vector2 cutend; //cut ending vector
 	bool InsideStairwell; //true if user/camera is in the stairwell
@@ -43,7 +42,7 @@ public:
 	bool ShowFloors; //true if floors should be shown while inside the stairwell; floor list in ShowFloorsList
 	bool ShowFullStairs; //if true, always show full stairwell instead of only a selected range
 
-	Stairs(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Stairs(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	~Stairs();
 	WallObject* AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th);
 	WallObject* AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);

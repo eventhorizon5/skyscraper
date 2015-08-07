@@ -534,8 +534,8 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	}
 	else
 	{
-		Origin.x = GetShaft()->origin.x + x;
-		Origin.z = GetShaft()->origin.z + z;
+		Origin.x = GetShaft()->GetPosition().x + x;
+		Origin.z = GetShaft()->GetPosition().z + z;
 	}
 	OriginFloor = floor;
 
@@ -5073,7 +5073,7 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 	//add a control
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
-	control->SetPosition(Ogre::Vector3(CenterX, voffset, CenterZ));
+	control->Move(Ogre::Vector3(CenterX, voffset, CenterZ));
 	ControlArray.push_back(control);
 	return control;
 }
