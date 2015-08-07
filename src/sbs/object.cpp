@@ -78,7 +78,7 @@ Object::~Object()
 	sbs->Report("Deleted object " + ToString2(Number) + ": " + Name);
 }
 
-void Object::SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent)
+void Object::SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable)
 {
 	//set object values
 
@@ -96,7 +96,7 @@ void Object::SetValues(void *object, Object *parent, const char *type, const cha
 	std::string node_name = "(" + ToString2(GetNumber()) + ")" + Name;
 
 	//create scene node
-	if (sbs->mSceneManager)
+	if (sbs->mSceneManager && is_movable)
 	{
 		SceneNode = sbs->mSceneManager->createSceneNode(node_name);
 
@@ -114,6 +114,11 @@ bool Object::IsPermanent()
 {
 	//return permanent state
 	return Permanent;
+}
+
+bool Object::IsMovable()
+{
+	return SceneNode != 0;
 }
 
 Object* Object::GetParent()
@@ -158,7 +163,8 @@ void Object::AddChild(Object *object)
 	children.push_back(object);
 
 	//add child's scene node
-	SceneNode->addChild(object->GetSceneNode());
+	if (SceneNode && object->GetSceneNode())
+		SceneNode->addChild(object->GetSceneNode());
 }
 
 void Object::RemoveChild(Object *object)
@@ -177,7 +183,8 @@ void Object::RemoveChild(Object *object)
 	}
 
 	//remove child's scene node
-	SceneNode->removeChild(object->GetSceneNode());
+	if (SceneNode && object->GetSceneNode())
+		SceneNode->removeChild(object->GetSceneNode());
 }
 
 Object* Object::GetChild(int index)
@@ -217,7 +224,8 @@ void Object::ShowBoundingBox(bool value)
 {
 	//show object's 3D bounding box
 
-	SceneNode->showBoundingBox(value);
+	if (SceneNode)
+		SceneNode->showBoundingBox(value);
 }
 
 void Object::Move(const Ogre::Vector3 &position, float speed, bool relative)
@@ -238,6 +246,9 @@ void Object::SetPosition(const Ogre::Vector3 &position, bool relative)
 {
 	//set position of object
 	//if relative is true, position is relative of parent object
+
+	if (!SceneNode)
+		return;
 
 	Ogre::Vector3 pos = sbs->ToRemote(position);
 
@@ -270,6 +281,9 @@ Ogre::Vector3 Object::GetPosition(bool relative)
 	//get position of object
 	//if relative is true, position is relative of parent object
 
+	if (!SceneNode)
+		return Ogre::Vector3::ZERO;
+
 	if (relative == false)
 		return sbs->ToLocal(SceneNode->_getDerivedPosition());
 
@@ -279,6 +293,9 @@ Ogre::Vector3 Object::GetPosition(bool relative)
 void Object::SetRotation(Ogre::Vector3 rotation)
 {
 	//rotate object
+
+	if (!SceneNode)
+		return;
 
 	if (rotation.x > 359)
 		rotation.x -= 360;
@@ -327,6 +344,9 @@ void Object::Rotate(float X, float Y, float Z, float speed)
 Ogre::Vector3 Object::GetRotation()
 {
 	//get rotation of object
+
+	if (!SceneNode)
+		return Ogre::Vector3::ZERO;
 
 	return Rotation;
 }

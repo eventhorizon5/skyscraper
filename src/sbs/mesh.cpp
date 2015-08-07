@@ -843,7 +843,7 @@ WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
 	WallObject *wall = new WallObject(this);
 	wall->name = name;
 	wall->parent_array = &Walls;
-	wall->SetValues(wall, parent, "Wall", name, false);
+	wall->SetValues(wall, parent, "Wall", name, false, false);
 	Walls.push_back(wall);
 	return wall;
 }

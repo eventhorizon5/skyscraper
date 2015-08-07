@@ -40,8 +40,9 @@ public:
 	//functions
 	Object(bool temporary = false);
 	virtual ~Object();
-	void SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent);
+	void SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();
+	bool IsMovable();
 	Object* GetParent();
 	void* GetRawObject();
 	const char* GetType();
