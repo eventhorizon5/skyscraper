@@ -163,8 +163,14 @@ void Object::AddChild(Object *object)
 	children.push_back(object);
 
 	//add child's scene node
-	if (SceneNode && object->GetSceneNode())
-		SceneNode->addChild(object->GetSceneNode());
+	if (object->GetSceneNode())
+	{
+		if (SceneNode)
+			SceneNode->addChild(object->GetSceneNode());
+		else
+			//if parent doesn't have a scenenode, but child does, add child to root node
+			sbs->mSceneManager->getRootSceneNode()->addChild(object->GetSceneNode());
+	}
 }
 
 void Object::RemoveChild(Object *object)
