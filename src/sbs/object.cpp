@@ -234,52 +234,68 @@ void Object::ShowBoundingBox(bool value)
 		SceneNode->showBoundingBox(value);
 }
 
-void Object::Move(const Ogre::Vector3 &position, float speed, bool relative)
+void Object::Move(const Ogre::Vector3 &position, float speed)
 {
 	//move an object
 	//if relative is true, position is relative of parent object
 
-	SetPosition(GetPosition(relative) + (position * speed), relative);
+	SetPosition(GetPosition() + (position * speed));
 }
 
-void Object::Move(float X, float Y, float Z, float speed, bool relative)
+void Object::Move(float X, float Y, float Z, float speed)
 {
 	Ogre::Vector3 pos (X, Y, Z);
-	Move(pos, speed, relative);
+	Move(pos, speed);
 }
 
-void Object::SetPosition(const Ogre::Vector3 &position, bool relative)
+void Object::SetPosition(const Ogre::Vector3 &position)
 {
 	//set position of object
-	//if relative is true, position is relative of parent object
 
 	if (!SceneNode)
 		return;
 
 	Ogre::Vector3 pos = sbs->ToRemote(position);
-
-	if (relative == false)
-		SceneNode->_setDerivedPosition(pos);
-	else
-		SceneNode->setPosition(pos);
+	SceneNode->_setDerivedPosition(pos);
 
 	//notify about movement
 	OnMove();
 }
 
-void Object::SetPosition(float X, float Y, float Z, bool relative)
+void Object::SetPositionRelative(const Ogre::Vector3 &position)
 {
-	Ogre::Vector3 pos (X, Y, Z);
-	SetPosition(pos, relative);
+	//set position of object
+	//position is relative of parent object
+
+	if (!SceneNode)
+		return;
+
+	Ogre::Vector3 pos = sbs->ToRemote(position);
+	SceneNode->setPosition(pos);
+
+	//notify about movement
+	OnMove();
 }
 
-void Object::SetPositionY(float value, bool relative)
+void Object::SetPosition(float X, float Y, float Z)
+{
+	Ogre::Vector3 pos (X, Y, Z);
+	SetPosition(pos);
+}
+
+void Object::SetPositionRelative(float X, float Y, float Z)
+{
+	Ogre::Vector3 pos (X, Y, Z);
+	SetPositionRelative(pos);
+}
+
+void Object::SetPositionY(float value)
 {
 	//set position of only Y vector
 	//if relative is true, position is relative of parent object
 
-	Ogre::Vector3 pos (GetPosition(relative).x, value, GetPosition(relative).z);
-	SetPosition(pos, relative);
+	Ogre::Vector3 pos (GetPosition().x, value, GetPosition().z);
+	SetPosition(pos);
 }
 
 Ogre::Vector3 Object::GetPosition(bool relative)

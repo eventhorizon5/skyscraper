@@ -57,11 +57,13 @@ public:
 	void SetNumber(int number);
 	bool IsTemporary();
 	void ShowBoundingBox(bool value);
-	void Move(const Ogre::Vector3 &position, float speed = 1.0f, bool relative = false);
-	void Move(float X, float Y, float Z, float speed = 1.0f, bool relative = false);
-	void SetPosition(const Ogre::Vector3 &position, bool relative = false);
-	void SetPosition(float X, float Y, float Z, bool relative = false);
-	void SetPositionY(float value, bool relative = false);
+	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
+	void Move(float X, float Y, float Z, float speed = 1.0f);
+	void SetPosition(const Ogre::Vector3 &position);
+	void SetPositionRelative(const Ogre::Vector3 &position);
+	void SetPosition(float X, float Y, float Z);
+	void SetPositionRelative(float X, float Y, float Z);
+	void SetPositionY(float value);
 	Ogre::Vector3 GetPosition(bool relative = false);
 	void Rotate(const Ogre::Vector3 &rotation, float speed = 1.0f);
 	void Rotate(float X, float Y, float Z, float speed = 1.0f);
