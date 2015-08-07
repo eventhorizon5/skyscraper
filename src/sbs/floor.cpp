@@ -236,7 +236,7 @@ WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, flo
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
 	WallObject *wall = Interfloor->CreateWallObject(this, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -263,7 +263,7 @@ WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, floa
 	//Adds an interfloor wall with the specified dimensions
 
 	WallObject *wall = Interfloor->CreateWallObject(this, name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
 
@@ -465,13 +465,13 @@ void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwa
 		if (i > 0)
 			reset = false;
 
-		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, reset);
+		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, reset);
 	}
 	if (fast == false)
 	{
 		for (int i = 0; i < (int)Interfloor->Walls.size(); i++)
 		{
-			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, false);
+			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, false);
 		}
 	}
 }
@@ -692,7 +692,7 @@ WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1
 	//create columnframe wall box
 
 	WallObject *wall = ColumnFrame->CreateWallObject(this, name);
-	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
+	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
 
@@ -701,7 +701,7 @@ WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float C
 	//create columnframe wall box from a central location
 
 	WallObject *wall = ColumnFrame->CreateWallObject(this, name);
-	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
+	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
 
@@ -960,8 +960,8 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 	float x, z;
 	if (relative == true)
 	{
-		x = elev->Origin.x + CenterX;
-		z = elev->Origin.z + CenterZ;
+		x = elev->GetPosition().x + CenterX;
+		z = elev->GetPosition().z + CenterZ;
 	}
 	else
 	{
