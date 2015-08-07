@@ -35,7 +35,6 @@ public:
 	int elevator;
 	int Index; //index number of panel
 	std::string Direction;
-	Ogre::Vector3 Origin;
 	float Width;
 	float Height;
 	float ButtonWidth;

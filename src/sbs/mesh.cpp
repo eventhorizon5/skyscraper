@@ -1743,7 +1743,10 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 
 	//cast a ray from the camera position downwards
 	SBS_PROFILE("MeshObject::HitBeam");
-	Ogre::Ray ray (sbs->ToRemote(origin) -  GetSceneNode()->getPosition(), direction);
+
+	Ogre::Vector3 position = sbs->ToRemote(origin - GetPosition());
+	Ogre::Ray ray (position, direction);
+
 	for (int i = 0; i < (int)Triangles.size(); i++)
 	{
 		for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
@@ -1768,17 +1771,18 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 {
 	//determine if position 'pos' is inside the mesh's bounding box
 
-	Ogre::Vector3 pos2 = sbs->ToRemote(pos);
-	pos2 -= GetSceneNode()->getPosition();
+	Ogre::Vector3 position = sbs->ToRemote(pos - GetPosition());
+
 	Ogre::Vector3 min = MeshWrapper->getBounds().getMinimum();
 	Ogre::Vector3 max = MeshWrapper->getBounds().getMaximum();
-	if (pos2.x >= min.x && pos2.x <= max.x && pos2.z >= min.z && pos2.z <= max.z)
+
+	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
 	{
 		if (check_y == false)
 			return true;
 		else
 		{
-			if (pos2.y >= min.y && pos2.y <= max.y)
+			if (position.y >= min.y && position.y <= max.y)
 				return true;
 		}
 	}

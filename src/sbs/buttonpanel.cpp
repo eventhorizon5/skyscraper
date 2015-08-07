@@ -49,8 +49,6 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	elevator = _elevator;
 	Index = index;
 	Direction = direction;
-	Origin.x = elev->Origin.x + CenterX;
-	Origin.z = elev->Origin.z + CenterZ;
 	ButtonWidth = buttonwidth;
 	ButtonHeight = buttonheight;
 	Rows = rows;
@@ -63,18 +61,16 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	Width = ((Columns + 1) * SpacingX) + (Columns * ButtonWidth);
 	Height = ((Rows + 1) * SpacingY) + (Rows * ButtonHeight);
 
-	//get vertical
-	Origin.y = voffset - (Height / 2);
-
 	//create mesh
 	std::string buffer;
 	buffer = "Button Panel " + ToString2(elevator) + ":" + ToString2(index);
 	TrimString(buffer);
 	SetName(buffer.c_str());
 	ButtonPanelMesh = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	Move(Ogre::Vector3(CenterX, voffset - (Height / 2), CenterZ));
 
 	//move
-	SetToElevatorAltitude();
+	//SetToElevatorAltitude();
 
 	//create panel back
 	sbs->ResetTextureMapping(true);
@@ -165,6 +161,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 	//create an elevator control (button, switch, knob)
 
 	float xpos = 0, ypos = 0, zpos = 0;
+	Ogre::Vector3 Origin = GetPosition();
 
 	//set to default if value is 0
 	if (bwidth == 0)
@@ -298,7 +295,7 @@ bool ButtonPanel::AddWall(const char *name, const char *texture, float thickness
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(this, ButtonPanelMesh, name, texture, thickness, Origin.x + x1, Origin.z + z1, Origin.x + x2, Origin.z + z2, height1, height2, Origin.y + voffset1, Origin.y + voffset2, tw, th, true);
+	return sbs->AddWallMain(this, ButtonPanelMesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 Control* ButtonPanel::GetControl(int index)
