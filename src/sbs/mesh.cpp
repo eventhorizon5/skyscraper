@@ -532,6 +532,12 @@ void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
+	//if firstonly is true, only return first result
+	//if convert is true, converts vertices from remote Ogre positions to local SBS positions
+	//if rescale is true (along with convert), rescales vertices with UnitScale multiplier
+	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
+	//if reverse is false, process extents table in ascending order, otherwise descending order
+
 	vertices.resize(index_extents.size());
 
 	for (int i = 0; i < (int)index_extents.size(); i++)
