@@ -3668,8 +3668,8 @@ Object* SBS::AddControl(const char *name, const char *sound, const char *directi
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX, 0, CenterZ));
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->SetPosition(Ogre::Vector3(CenterX, voffset, CenterZ));
 	ControlArray.push_back(control);
 	return control;
 }

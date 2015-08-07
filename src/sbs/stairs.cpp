@@ -810,8 +810,8 @@ Object* Stairs::AddControl(int floor, const char *name, const char *sound, const
 		return 0;
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->GetBase(), CenterZ + origin.z));
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->GetBase() + voffset, CenterZ + origin.z));
 	ControlArray[floor - startfloor].push_back(control);
 	return control;
 }

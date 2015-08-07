@@ -2197,7 +2197,6 @@ Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *dire
 	//Creates a floor indicator at the specified location
 
 	FloorIndicator* indicator = new FloorIndicator(this, Number, texture_prefix, direction, CenterX, CenterZ, width, height, voffset);
-	indicator->SetPosition(Origin);
 	FloorIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -3299,7 +3298,6 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	float z = Origin.z + CenterZ;
 
 	DirectionalIndicator *indicator = new DirectionalIndicator(this, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
-	indicator->SetPosition(Ogre::Vector3(indicator->GetPosition().x, sbs->GetFloor(OriginFloor)->GetBase(), indicator->GetPosition().z));
 	DirIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -3322,7 +3320,7 @@ void Elevator::SetDirectionalIndicators(int floor, bool UpLight, bool DownLight)
 		{
 			if (indicator->ActiveDirection == false)
 			{
-				indicator->floor_num = floor;
+				indicator->floor = floor;
 				indicator->DownLight(DownLight);
 				indicator->UpLight(UpLight);
 			}
@@ -4500,7 +4498,7 @@ Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool 
 
 	std::string elevnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
-	Door* door = new Door(this, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, GetPosition().x + CenterX, GetPosition().z + CenterZ, width, height, voffset + GetPosition().y, tw, th);
+	Door* door = new Door(this, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
 }
@@ -5074,8 +5072,8 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX + Origin.x, Origin.y, CenterZ + Origin.z));
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->SetPosition(Ogre::Vector3(CenterX, voffset, CenterZ));
 	ControlArray.push_back(control);
 	return control;
 }
@@ -5085,7 +5083,7 @@ Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vec
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
-	trigger->SetPosition(Origin);
+	trigger->SetPosition(GetPosition());
 	return trigger;
 }
 

@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -75,7 +75,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
 	if (Direction == 1 || Direction == 2)
 	{
-		position = Ogre::Vector3(CenterX, altitude, CenterZ - (width / 2)); //front
+		position = Ogre::Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
 		x1 = 0;
 		x2 = 0;
 		z1 = 0;
@@ -83,7 +83,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 3 || Direction == 4)
 	{
-		position = Ogre::Vector3(CenterX, altitude, CenterZ + (width / 2)); //back
+		position = Ogre::Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
 		x1 = 0;
 		x2 = 0;
 		z1 = -width;
@@ -91,7 +91,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 5 || Direction == 6)
 	{
-		position = Ogre::Vector3(CenterX + (width / 2), altitude, CenterZ); //right
+		position = Ogre::Vector3(CenterX + (width / 2), voffset, CenterZ); //right
 		x1 = -width;
 		x2 = 0;
 		z1 = 0;
@@ -99,7 +99,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 7 || Direction == 8)
 	{
-		position = Ogre::Vector3(CenterX - (width / 2), altitude, CenterZ); //left
+		position = Ogre::Vector3(CenterX - (width / 2), voffset, CenterZ); //left
 		x1 = 0;
 		x2 = width;
 		z1 = 0;
@@ -113,11 +113,10 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//Create mesh
 	DoorMesh = new MeshObject(this, Name.c_str());
-	SetPosition(position);
+	Move(position);
 
 	//create sound object
 	sound = new Sound(this, "DoorSound", true);
-	sound->SetPosition(position);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);

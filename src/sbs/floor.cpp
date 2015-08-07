@@ -632,7 +632,7 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString2(Number) + ":Door " + ToString2(number);
-	Door* door = new Door(this, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(true), tw, th);
+	Door* door = new Door(this, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }
@@ -991,7 +991,7 @@ void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 
 		if (indicator)
 		{
-			if (indicator->elevator_num == elevator && indicator->ActiveDirection == false)
+			if (indicator->elevator == elevator && indicator->ActiveDirection == false)
 			{
 				indicator->DownLight(DownLight);
 				indicator->UpLight(UpLight);
@@ -1011,7 +1011,7 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 
 		if (indicator)
 		{
-			if (indicator->elevator_num == elevator && indicator->ActiveDirection == true)
+			if (indicator->elevator == elevator && indicator->ActiveDirection == true)
 			{
 				Elevator *elev = sbs->GetElevator(elevator);
 
@@ -1052,7 +1052,7 @@ void Floor::UpdateDirectionalIndicators()
 		{
 			if (indicator->ActiveDirection == true)
 			{
-				Elevator *elev = sbs->GetElevator(indicator->elevator_num);
+				Elevator *elev = sbs->GetElevator(indicator->elevator);
 
 				if (!elev)
 					return;
@@ -1258,8 +1258,8 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->Move(CenterX, GetBase(true), CenterZ);
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->Move(CenterX, GetBase(true) + voffset, CenterZ);
 	ControlArray.push_back(control);
 	return control;
 }

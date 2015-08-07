@@ -232,7 +232,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(this, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, 0, false);
+	Control *control = controls[control_index] = new Control(this, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, false);
 
 	//move control
 	controls[control_index]->Move(position);

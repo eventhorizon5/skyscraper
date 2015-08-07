@@ -32,7 +32,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//creates a new floor indicator at the specified position
 
@@ -46,6 +46,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	std::string name = "Floor Indicator " + ToString2(elevator);
 	SetName(name.c_str());
 	FloorIndicatorMesh = new MeshObject(this, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	Move(CenterX, voffset, CenterZ);
 
 	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
 	std::string tmpdirection = direction;
@@ -58,7 +59,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX - (width / 2), CenterZ, CenterX + (width / 2), CenterZ, height, height, altitude, altitude, 1, 1, false);
+		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (tmpdirection == "left" || tmpdirection == "right")
 	{
@@ -67,7 +68,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, CenterX, CenterZ + (width / 2), CenterX, CenterZ - (width / 2), height, height, altitude, altitude, 1, 1, false);
+		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 }
