@@ -102,7 +102,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			WallObject *wall;
-			wall = CallButtonMeshBack->CreateWallObject(this, "Call Button Panel");
+			wall = CallButtonMeshBack->CreateWallObject("Call Button Panel");
 			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, x1, 0, x2, 0, BackHeight, BackHeight, 0, 0, tw, th, false);
 		}
 		if (Direction == "left" || Direction == "right")
@@ -115,7 +115,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			WallObject *wall;
-			wall = CallButtonMeshBack->CreateWallObject(this, "Call Button Panel");
+			wall = CallButtonMeshBack->CreateWallObject("Call Button Panel");
 			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, 0, z1, 0, z2, BackHeight, BackHeight, 0, 0, tw, th, false);
 		}
 		sbs->ResetWalls();
@@ -168,10 +168,10 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float altitude = (BackHeight / 7) * 4;
 			float altitude2 = BackHeight / 7;
 			WallObject *wall;
-			wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
+			wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 
-			wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
+			wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
@@ -181,12 +181,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			WallObject *wall;
 			if (floornum < topfloor)
 			{
-				wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
+				wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
-				wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
+				wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 			}
 		}
@@ -213,10 +213,10 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float altitude = (BackHeight / 7) * 4;
 			float altitude2 = BackHeight / 7;
 			WallObject *wall;
-			wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
+			wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 
-			wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
+			wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
@@ -226,12 +226,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			WallObject *wall;
 			if (floornum < topfloor)
 			{
-				wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
+				wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
-				wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
+				wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 		}

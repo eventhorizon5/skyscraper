@@ -729,13 +729,13 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
 	WallObject *wall;
-	wall = door->mesh->CreateWallObject(wrapper, name);
+	wall = door->mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	wall = door->mesh->CreateWallObject(wrapper, name);
+	wall = door->mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
@@ -925,7 +925,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		if (DoorWalls == true)
 		{
 			sbs->ResetTextureMapping(true);
-			WallObject *wall = floorobj->Level->CreateWallObject(floorobj, "Connection Walls");
+			WallObject *wall = floorobj->Level->CreateWallObject("Connection Walls");
 			sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 			sbs->ResetTextureMapping();
 		}
@@ -940,7 +940,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		if (ShaftDoor == false)
 		{
 			WallObject *wall;
-			wall = elev->ElevatorMesh->CreateWallObject(elev, "Connection");
+			wall = elev->ElevatorMesh->CreateWallObject("Connection");
 			name1 = "DoorF1";
 			name2 = "DoorF2";
 			sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
@@ -950,7 +950,7 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 		{
 			WallObject *wall;
 			Shaft *shaft = elev->GetShaft();
-			wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft, "Connection");
+			wall = shaft->GetMeshObject(floor)->CreateWallObject("Connection");
 			name1 = "ShaftDoorF1";
 			name2 = "ShaftDoorF2";
 			sbs->CreateWallBox(wall, name1.c_str(), "Connection", elev->Origin.x + x1, elev->Origin.x + x2, elev->Origin.z + z1, elev->Origin.z + z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);

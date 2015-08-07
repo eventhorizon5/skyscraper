@@ -127,7 +127,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	WallObject *wall;
-	wall = DoorMesh->CreateWallObject(this, name);
+	wall = DoorMesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();

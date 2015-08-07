@@ -170,7 +170,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	}
 
 	//create wall object
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
 
 	std::string Name = name;
 	TrimString(Name);
@@ -277,7 +277,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -300,7 +300,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
@@ -485,7 +485,7 @@ Object* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sou
 	}
 
 	//create doorway walls
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, "Connection Walls");
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject("Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.resize(DoorArray.size() + 1);

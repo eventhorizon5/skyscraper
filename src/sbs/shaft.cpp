@@ -181,7 +181,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -204,7 +204,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
@@ -879,7 +879,7 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	}
 
 	//create doorway walls
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, "Connection Walls");
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject("Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.resize(DoorArray.size() + 1);

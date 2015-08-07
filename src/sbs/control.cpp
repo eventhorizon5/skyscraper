@@ -69,7 +69,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
+		wall = ControlMesh->CreateWallObject(Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "back")
@@ -81,7 +81,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
+		wall = ControlMesh->CreateWallObject(Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "left")
@@ -93,7 +93,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
+		wall = ControlMesh->CreateWallObject(Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "right")
@@ -105,7 +105,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
+		wall = ControlMesh->CreateWallObject(Name.c_str());
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();

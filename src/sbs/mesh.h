@@ -83,7 +83,7 @@ public:
 	~MeshObject();
 	void Enable(bool value, bool remove = true);
 	bool IsEnabled();
-	WallObject* CreateWallObject(Object *parent, const char *name);
+	WallObject* CreateWallObject(const char *name);
 	bool ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	int FindWall(const Ogre::Vector3 &point, bool convert = true);
