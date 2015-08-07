@@ -528,7 +528,7 @@ WallPolygon::~WallPolygon()
 {
 }
 
-void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -585,12 +585,12 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 	}
 }
 
-bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check, bool convert)
+bool WallPolygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool convert)
 {
 	//check if a point is inside the polygon
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(mesh, vertices, false, convert);
+	GetGeometry(vertices, false, convert);
 
 	for (int i = 0; i < (int)vertices.size(); i++)
 	{
@@ -922,7 +922,7 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	{
 		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
 		{
-			if (Walls[i]->handles[j].IntersectSegment(this, start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
+			if (Walls[i]->handles[j].IntersectSegment(start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{

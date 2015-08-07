@@ -505,7 +505,7 @@ bool WallPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre:
 	return true;
 }
 
-bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal, bool convert, bool rescale)
+bool WallPolygon::IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal, bool convert, bool rescale)
 {
 	//from Crystal Space plugins/mesh/thing/object/polygon.cpp
 
@@ -515,7 +515,7 @@ bool WallPolygon::IntersectSegment(MeshObject *mesh, const Ogre::Vector3 &start,
 	 */
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(mesh, vertices, false, convert, rescale, false, true);
+	GetGeometry(vertices, false, convert, rescale, false, true);
 
 	for (int i = 0; i < (int)vertices.size(); i++)
 	{

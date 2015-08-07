@@ -265,7 +265,7 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 	if (index < 0 || index >= (int)handles.size())
 		return;
 
-	handles[index].GetGeometry(meshwrapper, vertices, firstonly);
+	handles[index].GetGeometry(vertices, firstonly);
 }
 
 void WallObject::SetPolygonName(int index, const char *name)
@@ -297,7 +297,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 	{
 		if (i == 0)
 			checkplane = true;
-		if(handles[i].PointInside(meshwrapper, point, checkplane, convert))
+		if(handles[i].PointInside(point, checkplane, convert))
 			return true;
 	}
 	return false;
@@ -314,7 +314,7 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
-		if (handles[i].IntersectSegment(meshwrapper, start, end, cur_isect, &pr, normal, convert))
+		if (handles[i].IntersectSegment(start, end, cur_isect, &pr, normal, convert))
 		{
 			if (pr < best_pr)
 			{
