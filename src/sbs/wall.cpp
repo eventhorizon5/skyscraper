@@ -270,21 +270,21 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 
 void WallObject::SetPolygonName(int index, const char *name)
 {
-		if (index < 0 || index >= (int)handles.size())
-			return;
+	if (index < 0 || index >= (int)handles.size())
+		return;
 
-		//set polygon name
-        std::string name_modified = name;
+	//set polygon name
+	std::string name_modified = name;
 
-        //strip off object ID from name if it exists
-        if ((int)name_modified.find("(") == 0)
-                name_modified.erase(0, (int)name_modified.find(")") + 1);
+	//strip off object ID from name if it exists
+	if ((int)name_modified.find("(") == 0)
+		name_modified.erase(0, (int)name_modified.find(")") + 1);
 
-        //construct name
-        std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
+	//construct name
+	std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
 
-        //set polygon name
-        handles[index].name = newname;
+	//set polygon name
+	handles[index].name = newname;
 }
 
 bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
