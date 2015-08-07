@@ -67,10 +67,6 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	TrimString(buffer);
 	SetName(buffer.c_str());
 	ButtonPanelMesh = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
-	Move(Ogre::Vector3(CenterX, voffset - (Height / 2), CenterZ));
-
-	//move
-	//SetToElevatorAltitude();
 
 	//create panel back
 	sbs->ResetTextureMapping(true);
@@ -96,6 +92,9 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	}
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
+
+	//set position of object
+	Move(CenterX, voffset - (Height / 2), CenterZ);
 }
 
 ButtonPanel::~ButtonPanel()
@@ -160,8 +159,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 {
 	//create an elevator control (button, switch, knob)
 
-	float xpos = 0, ypos = 0, zpos = 0;
-	Ogre::Vector3 Origin = GetPosition();
+	Ogre::Vector3 position = Ogre::Vector3::ZERO;
 
 	//set to default if value is 0
 	if (bwidth == 0)
@@ -172,37 +170,37 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 
 	//vertical position is the top of the panel, minus the total spacing above it,
 	//minus the total button spaces above (and including) it, minus half of the extra height multiplier
-	ypos = (Origin.y + Height) - (SpacingY * row) - (ButtonHeight * row) - ((ButtonHeight * (bheight - 1)) / 2);
-	ypos += voffset * ButtonHeight;
+	position.y = Height - (SpacingY * row) - (ButtonHeight * row) - ((ButtonHeight * (bheight - 1)) / 2);
+	position.y += voffset * ButtonHeight;
 
 	if (Direction == "front")
 	{
 		//horizontal position is the left-most edge of the panel (origin aka center minus
 		//half the width), plus total spacing to the left of it, plus total button spaces
 		//to the left of it, plus half of the extra width multiplier
-		xpos = (Origin.x - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
-		zpos = Origin.z - 0.01f;
-		xpos += hoffset * ButtonWidth;
+		position.x = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
+		position.z = -0.01f;
+		position.x += hoffset * ButtonWidth;
 	}
 	if (Direction == "back")
 	{
 		//back
-		xpos = (Origin.x + (Width / 2)) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
-		zpos = Origin.z + 0.01f;
-		xpos -= hoffset * ButtonWidth;
+		position.x = (Width / 2) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
+		position.z = 0.01f;
+		position.x -= hoffset * ButtonWidth;
 	}
 	if (Direction == "left")
 	{
-		xpos = Origin.x - 0.01f;
-		zpos = (Origin.z + (Width / 2))  - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
-		zpos -= hoffset * ButtonWidth;
+		position.x = -0.01f;
+		position.z = (Width / 2)  - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
+		position.z -= hoffset * ButtonWidth;
 	}
 	if (Direction == "right")
 	{
 		//right
-		xpos = Origin.x + 0.01f;
-		zpos = (Origin.z - (Width / 2)) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
-		zpos += hoffset * ButtonWidth;
+		position.x = 0.01f;
+		position.z = (-Width / 2) + (SpacingX * column) + (ButtonWidth * (column - 1)) - ((ButtonWidth * (bwidth - 1)) / 2);
+		position.z += hoffset * ButtonWidth;
 	}
 
 	//create control object
@@ -234,10 +232,10 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(this, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, ypos, false);
+	Control *control = controls[control_index] = new Control(this, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, 0, false);
 
 	//move control
-	controls[control_index]->SetPosition(Ogre::Vector3(xpos, sbs->GetElevator(elevator)->GetPosition().y, zpos));
+	controls[control_index]->Move(position);
 
 	return control;
 }
@@ -260,19 +258,6 @@ void ButtonPanel::Press(int index)
 
 	//press button
 	controls[index]->Press();
-}
-
-void ButtonPanel::SetToElevatorAltitude()
-{
-	Ogre::Vector3 pos = GetPosition();
-	Ogre::Vector3 pos_new = Ogre::Vector3(pos.x, sbs->GetElevator(elevator)->GetPosition().y, pos.z);
-	SetPosition(pos_new);
-
-	//move controls
-	for (int i = 0; i < (int)controls.size(); i++)
-	{
-		controls[i]->SetPositionY(pos_new.y);
-	}
 }
 
 void ButtonPanel::Enabled(bool value)

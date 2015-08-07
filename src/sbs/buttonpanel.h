@@ -52,7 +52,6 @@ public:
 	Object* AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	void DeleteButton(int row, int column);
 	void Press(int index);
-	void SetToElevatorAltitude();
 	void Enabled(bool value);
 	bool AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	Control* GetControl(int index);

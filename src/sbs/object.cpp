@@ -228,6 +228,12 @@ void Object::Move(const Ogre::Vector3 &position, float speed, bool relative)
 	SetPosition(GetPosition(relative) + (position * speed), relative);
 }
 
+void Object::Move(float X, float Y, float Z, float speed, bool relative)
+{
+	Ogre::Vector3 pos (X, Y, Z);
+	Move(pos, speed, relative);
+}
+
 void Object::SetPosition(const Ogre::Vector3 &position, bool relative)
 {
 	//set position of object
@@ -242,6 +248,12 @@ void Object::SetPosition(const Ogre::Vector3 &position, bool relative)
 
 	//notify about movement
 	OnMove();
+}
+
+void Object::SetPosition(float X, float Y, float Z, bool relative)
+{
+	Ogre::Vector3 pos (X, Y, Z);
+	SetPosition(pos, relative);
 }
 
 void Object::SetPositionY(float value, bool relative)
@@ -292,12 +304,24 @@ void Object::SetRotation(Ogre::Vector3 rotation)
 	OnRotate();
 }
 
+void Object::SetRotation(float X, float Y, float Z)
+{
+	Ogre::Vector3 rot (X, Y, Z);
+	SetRotation(rot);
+}
+
 void Object::Rotate(const Ogre::Vector3 &rotation, float speed)
 {
 	//rotates object in a relative amount
 
 	Ogre::Vector3 rot = Rotation + (rotation * speed);
 	SetRotation(rot);
+}
+
+void Object::Rotate(float X, float Y, float Z, float speed)
+{
+	Ogre::Vector3 rot (X, Y, Z);
+	Rotate(rot, speed);
 }
 
 Ogre::Vector3 Object::GetRotation()
