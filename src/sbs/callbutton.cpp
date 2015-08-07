@@ -37,8 +37,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 {
 	//create a set of call buttons
 
+	floor = sbs->GetFloor(floornum);
+	if (!floor)
+		return;
+
 	//set up SBS object
-	SetValues(this, sbs->GetFloor(floornum), "CallButton", "", false);
+	SetValues(this, floor, "CallButton", "", false);
 
 	IsEnabled = true;
 	Elevators.resize(elevators.size());
@@ -69,7 +73,6 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	CallButtonMeshDown = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
-	floor = floornum;
 	Number = number;
 	Direction = direction;
 	SetCase(Direction, false);
@@ -80,7 +83,6 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	//create sound object
 	sound = new Sound(this, "Call Button Sound", true);
 	sound->Load(sound_file);
-	sound->SetPosition(Ogre::Vector3(CenterX, sbs->GetFloor(floor)->GetBase() + voffset, CenterZ));
 
 	sbs->ResetTextureMapping(true);
 
@@ -92,8 +94,8 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 		if (Direction == "front" || Direction == "back")
 		{
-			float x1 = CenterX - (BackWidth / 2);
-			float x2 = CenterX + (BackWidth / 2);
+			float x1 = -BackWidth / 2;
+			float x2 = BackWidth / 2;
 			if (Direction == "front")
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
@@ -101,12 +103,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 			WallObject *wall;
 			wall = CallButtonMeshBack->CreateWallObject(this, "Call Button Panel");
-			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, x1, CenterZ, x2, CenterZ, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
+			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, x1, 0, x2, 0, BackHeight, BackHeight, 0, 0, tw, th, false);
 		}
 		if (Direction == "left" || Direction == "right")
 		{
-			float z1 = CenterZ - (BackWidth / 2);
-			float z2 = CenterZ + (BackWidth / 2);
+			float z1 = -BackWidth / 2;
+			float z2 = BackWidth / 2;
 			if (Direction == "left")
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
@@ -114,7 +116,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 			WallObject *wall;
 			wall = CallButtonMeshBack->CreateWallObject(this, "Call Button Panel");
-			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, CenterX, z1, CenterX, z2, BackHeight, BackHeight, sbs->GetFloor(floor)->GetBase() + voffset, sbs->GetFloor(floor)->GetBase() + voffset, tw, th, false);
+			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, 0, z1, 0, z2, BackHeight, BackHeight, 0, 0, tw, th, false);
 		}
 		sbs->ResetWalls();
 	}
@@ -146,8 +148,8 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	sbs->TexelOverride = true;
 	if (Direction == "front" || Direction == "back")
 	{
-		float x1 = CenterX - (BackWidth / 4);
-		float x2 = CenterX + (BackWidth / 4);
+		float x1 = -BackWidth / 4;
+		float x2 = BackWidth / 4;
 		float offset;
 		if (Direction == "front")
 		{
@@ -163,37 +165,37 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
 			float height = (BackHeight / 7) * 2;
-			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
-			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
+			float altitude = (BackHeight / 7) * 4;
+			float altitude2 = BackHeight / 7;
 			WallObject *wall;
 			wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
-			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 
 			wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
-			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude2, altitude2, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
 			float height = (BackHeight / 7) * 2;
-			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14));
+			float altitude = ((BackHeight / 7) * 3) - (BackHeight / 14);
 			WallObject *wall;
 			if (floornum < topfloor)
 			{
 				wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
-				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
 				wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
-				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, CenterZ + offset, x2, CenterZ + offset, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 			}
 		}
 		sbs->ResetWalls();
 	}
 	else
 	{
-		float z1 = CenterZ - (BackWidth / 4);
-		float z2 = CenterZ + (BackWidth / 4);
+		float z1 = -BackWidth / 4;
+		float z2 = BackWidth / 4;
 		float offset;
 		if (Direction == "left")
 		{
@@ -208,35 +210,38 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 		if (floornum > bottomfloor && floornum < topfloor)
 		{
 			float height = (BackHeight / 7) * 2;
-			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + ((BackHeight / 7) * 4);
-			float altitude2 = sbs->GetFloor(floor)->GetBase() + voffset + (BackHeight / 7);
+			float altitude = (BackHeight / 7) * 4;
+			float altitude2 = BackHeight / 7;
 			WallObject *wall;
 			wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
-			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 
 			wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
-			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude2, altitude2, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
 			float height = (BackHeight / 7) * 2;
-			float altitude = sbs->GetFloor(floor)->GetBase() + voffset + (((BackHeight / 7) * 3) - (BackHeight / 14));
+			float altitude = ((BackHeight / 7) * 3) - (BackHeight / 14);
 			WallObject *wall;
 			if (floornum < topfloor)
 			{
 				wall = CallButtonMeshUp->CreateWallObject(this, "Call Button Up");
-				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
 				wall = CallButtonMeshDown->CreateWallObject(this, "Call Button Down");
-				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, CenterX + offset, z1, CenterX + offset, z2, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 		}
 		sbs->ResetWalls();
 	}
 	sbs->ResetTextureMapping();
 	sbs->TexelOverride = false;
+
+	//set position of object
+	Move(CenterX, floor->GetBase(true) + voffset, CenterZ);
 
 	if (sbs->Verbose)
 		Report("Created");
@@ -265,7 +270,7 @@ CallButton::~CallButton()
 	if (sbs->FastDelete == false)
 	{
 		if (parent_deleting == false)
-			sbs->GetFloor(floor)->RemoveCallButton(this);
+			floor->RemoveCallButton(this);
 
 		sbs->UnregisterCallButtonCallback(this);
 	}
@@ -333,18 +338,18 @@ bool CallButton::Call(bool direction)
 		Report("Call: finding grouped call buttons");
 
 	//this call will return at least this call button
-	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
+	std::vector<int> buttons = floor->GetCallButtons(Elevators[0]);
 
 	for (int i = 0; i < (int)buttons.size(); i++)
 	{
 		if (direction == true)
 		{
-			sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->UpLight(true);
+			floor->CallButtonArray[buttons[i]]->UpLight(true);
 			ProcessedUp = false;
 		}
 		else
 		{
-			sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->DownLight(true);
+			floor->CallButtonArray[buttons[i]]->DownLight(true);
 			ProcessedDown = false;
 		}
 	}
@@ -488,16 +493,16 @@ void CallButton::Loop(int direction)
 					Report("Checking elevator " + ToString2(elevator->Number));
 
 				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(elevator->GetFloor() - floor) < closest || check == false)
+				if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
 				{
 					//see if elevator is available for the call
-					int result = elevator->AvailableForCall(floor, direction);
+					int result = elevator->AvailableForCall(GetFloor(), direction);
 
 					if (result == 1) //available
 					{
 						if (sbs->Verbose)
 							Report("Marking - closest so far");
-						closest = abs(elevator->GetFloor() - floor);
+						closest = abs(elevator->GetFloor() - GetFloor());
 						closest_elev = i;
 						check = true;
 					}
@@ -513,7 +518,7 @@ void CallButton::Loop(int direction)
 		Elevator *elevator = sbs->GetElevator(Elevators[0]);
 		if (elevator)
 		{
-			int result = elevator->AvailableForCall(floor, direction);
+			int result = elevator->AvailableForCall(GetFloor(), direction);
 
 			if (result == 1) //available
 			{
@@ -565,43 +570,43 @@ void CallButton::Loop(int direction)
 		Report("Using elevator " + ToString2(elevator->Number));
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
-	if (elevator->GetFloor() == floor && elevator->QueuePositionDirection == direction && elevator->IsIdle() == false && elevator->IsMoving == false)
+	if (elevator->GetFloor() == GetFloor() && elevator->QueuePositionDirection == direction && elevator->IsIdle() == false && elevator->IsMoving == false)
 	{
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
 		//this call will return at least this call button
-		std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Elevators[0]);
+		std::vector<int> buttons = floor->GetCallButtons(Elevators[0]);
 
 		//turn off all button lights in the group
 		for (int i = 0; i < (int)buttons.size(); i++)
 		{
 			if (direction == 1)
-				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->UpLight(false);
+				floor->CallButtonArray[buttons[i]]->UpLight(false);
 			else
-				sbs->GetFloor(floor)->CallButtonArray[buttons[i]]->DownLight(false);
+				floor->CallButtonArray[buttons[i]]->DownLight(false);
 		}
 
 		if (direction == -1)
 		{
 			//turn on directional indicator
-			elevator->SetDirectionalIndicators(floor, false, true);
+			elevator->SetDirectionalIndicators(GetFloor(), false, true);
 			//play chime sound
-			elevator->Chime(0, floor, false);
+			elevator->Chime(0, GetFloor(), false);
 		}
 		else
 		{
 			//turn on directional indicator
-			elevator->SetDirectionalIndicators(floor, true, false);
+			elevator->SetDirectionalIndicators(GetFloor(), true, false);
 			//play chime sound
-			elevator->Chime(0, floor, true);
+			elevator->Chime(0, GetFloor(), true);
 		}
 		//open elevator if it's on the same floor
 		elevator->OpenDoors();
 	}
 	else
 		//otherwise add a route entry to this floor
-		elevator->AddRoute(floor, direction, 1);
+		elevator->AddRoute(GetFloor(), direction, 1);
 
 	//unregister callback if inactive
 	if (UpStatus == false && DownStatus == false)
@@ -615,14 +620,14 @@ void CallButton::Loop(int direction)
 void CallButton::Report(std::string message)
 {
 	//general reporting function
-	std::string msg = "Call button " + ToString2(floor) + ":" + ToString2(Number) + " - " + message;
+	std::string msg = "Call button " + ToString2(GetFloor()) + ":" + ToString2(Number) + " - " + message;
 	sbs->Report(msg);
 }
 
 bool CallButton::ReportError(std::string message)
 {
 	//general reporting function
-	std::string msg = "Call button " + ToString2(floor) + ":" + ToString2(Number) + " - " + message;
+	std::string msg = "Call button " + ToString2(GetFloor()) + ":" + ToString2(Number) + " - " + message;
 	return sbs->ReportError(msg);
 }
 
@@ -675,4 +680,11 @@ void CallButton::FireService(int value)
 		if (elevator)
 			elevator->EnableFireService1(value);
 	}
+}
+
+int CallButton::GetFloor()
+{
+	//return floor number this call button is on
+
+	return floor->Number;
 }

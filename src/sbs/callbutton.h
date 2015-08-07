@@ -28,12 +28,13 @@
 
 #include "sound.h"
 
+class Floor;
+
 class SBSIMPEXP CallButton : public Object
 {
 public:
 
 	std::vector<int> Elevators; //elevators this call button set is assigned to
-	int floor; //floor this call button set is on
 	int Number; //call button index number (on the specified floor)
 	std::string Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled;
@@ -57,6 +58,7 @@ public:
 	bool ToggleLock(bool force = false);
 	int GetKeyID();
 	void FireService(int value);
+	int GetFloor();
 
 private:
 	MeshObject* CallButtonMeshBack; //call button mesh object
@@ -66,6 +68,7 @@ private:
 	std::string UpTexture, UpTextureLit;
 	std::string DownTexture, DownTextureLit;
 
+	Floor *floor; //floor this call button set is on
 	Sound *sound; //sound object
 
 	bool ProcessedUp;
