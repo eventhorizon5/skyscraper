@@ -1450,13 +1450,17 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	altitude = 0;
 	floor = shaftdoor_floor;
 
+	Object *objparent = parent;
+	if (IsShaftDoor == true)
+		objparent = parent->elev->GetShaft()->GetMeshObject(floor);
+
 	std::string name;
 	if (IsShaftDoor == true)
 		name = "Shaft Door " + ToString2(parent->Number) + ":" + ToString2(shaftdoor_floor);
 	else
 		name = "Elevator Door " + ToString2(parent->Number);
 
-	SetValues(this, parent, "DoorWrapper", name.c_str(), false);
+	SetValues(this, objparent, "DoorWrapper", name.c_str(), false);
 }
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()
@@ -1478,9 +1482,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 	doors[index] = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
 
 	//move object to positions
-	if (IsShaftDoor == false)
-		doors[index]->mesh->SetPosition(parent->elev->GetPosition());
-	else
+	if (IsShaftDoor == true)
 		doors[index]->mesh->SetPosition(Ogre::Vector3(parent->elev->GetPosition().x, 0, parent->elev->GetPosition().z));
 
 	return doors[index];
