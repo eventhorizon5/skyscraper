@@ -1235,7 +1235,7 @@ void editelevator::Loop()
 	{
 		txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(door->DoorDirection)));
 		txtDoorHeight->SetValue(TruncateNumber(door->GetDoorWrapper()->Height, 2));
-		txtDoorOrigin->SetValue(TruncateNumber(door->GetDoorWrapper()->Origin.x, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->Origin.y, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->Origin.z, 2));
+		txtDoorOrigin->SetValue(TruncateNumber(door->GetDoorWrapper()->GetPosition().x, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->GetPosition().y, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->GetPosition().z, 2));
 		txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(door->AreDoorsOpen())));
 		txtDoorWidth->SetValue(TruncateNumber(door->GetDoorWrapper()->Width, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));

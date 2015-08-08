@@ -87,14 +87,13 @@ public:
 		std::string name;
 		bool Open;
 		bool Enabled;
-		Ogre::Vector3 Origin;
 		float Width;
 		float Height;
 		float Thickness;
 		ElevatorDoor *parent;
 		bool IsShaftDoor;
 		float Shift;
-		float altitude;
+		float voffset;
 		int floor;
 	};
 
