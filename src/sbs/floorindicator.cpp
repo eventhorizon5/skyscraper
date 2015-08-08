@@ -48,7 +48,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	FloorIndicatorMesh = new MeshObject(this, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 	Move(CenterX, voffset, CenterZ);
 
-	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->OriginFloor)->ID;
+	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->StartingFloor)->ID;
 	std::string tmpdirection = direction;
 	SetCase(tmpdirection, false);
 

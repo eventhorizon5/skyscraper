@@ -761,7 +761,7 @@ Object* Shaft::AddLight(int floor, const char *name, int type, Ogre::Vector3 pos
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(GetMeshObject(floor), name, type, GetPosition() + position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(GetMeshObject(floor), name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights[floor - startfloor].push_back(light);
 	return light;
 }

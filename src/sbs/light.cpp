@@ -59,7 +59,7 @@ Light::Light(Object *parent, const char *name, int type, Ogre::Vector3 position,
 			light->setType(Ogre::Light::LT_SPOTLIGHT);
 
 		SetColor(color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b);
-		SetPosition(position);
+		Move(position);
 		light->setDirection(direction * Ogre::Vector3(1, 1, -1));
 		if (Type == 2)
 			light->setSpotlightRange(Ogre::Degree(spot_inner_angle), Ogre::Degree(spot_outer_angle), spot_falloff);

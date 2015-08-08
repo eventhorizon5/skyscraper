@@ -151,7 +151,7 @@ Elevator::Elevator(int number)
 	motoridlesound = 0;
 	alarm = 0;
 	floorbeep = 0;
-	OriginFloor = 0;
+	StartingFloor = 0;
 	Fan = true;
 	NotifyEarly = sbs->GetConfigInt("Skyscraper.SBS.Elevator.NotifyEarly", 0);
 	Running = sbs->GetConfigBool("Skyscraper.SBS.Elevator.Run", true);
@@ -526,18 +526,21 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		return 0;
 	}
 
-	Origin.y = sbs->GetFloor(floor)->GetBase();
+	//set starting position
+	Ogre::Vector3 position = Ogre::Vector3::ZERO;
+
+	position.y = sbs->GetFloor(floor)->GetBase();
 	if (relative == false)
 	{
-		Origin.x = x;
-		Origin.z = z;
+		position.x = x;
+		position.z = z;
 	}
 	else
 	{
-		Origin.x = GetShaft()->GetPosition().x + x;
-		Origin.z = GetShaft()->GetPosition().z + z;
+		position.x = GetShaft()->GetPosition().x + x;
+		position.z = GetShaft()->GetPosition().z + z;
 	}
-	OriginFloor = floor;
+	StartingFloor = floor;
 
 	//add elevator to associated shaft's list
 	GetShaft()->AddElevator(Number);
@@ -562,22 +565,19 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//move objects to positions
 	if (sbs->Verbose)
 		Report("moving elevator to origin position");
-	SetPosition(Origin);
+	SetPosition(position);
 	elevposition = GetPosition();
 
 	//create sound objects
 	if (sbs->Verbose)
 		Report("creating sound objects");
 	carsound = new Sound(this, "Car", true);
-	carsound->SetPosition(Origin);
 	idlesound = new Sound(this, "Idle", true);
-	idlesound->SetPosition(Origin);
 	motorsound = new Sound(this, "Motor", true);
-	motorsound->SetPosition(Origin);
 	motoridlesound = new Sound(this, "Motor Idle", true);
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
-		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + Origin.x, MotorPosition.y, MotorPosition.z + Origin.z));
+		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + GetPosition().x, MotorPosition.y, MotorPosition.z + GetPosition().z));
 	else
 	{
 		Shaft* shaft = GetShaft();
@@ -588,16 +588,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 				motorsound->SetPositionY(floor->GetBase());
 		}
 	}
-	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - Origin.x, motorsound->GetPosition().y, motorsound->GetPosition().z - Origin.z);
+	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
 	alarm = new Sound(this, "Alarm", true);
-	alarm->SetPosition(Origin);
 	floorbeep = new Sound(this, "Floor Beep", true);
-	floorbeep->SetPosition(Origin);
 	announcesnd = new Sound(this, "Announcement Sound", true);
-	announcesnd->SetPosition(Origin);
 	musicsound = new Sound(this, "Music Sound", true);
-	musicsound->SetPosition(Origin + MusicPosition);
+	musicsound->Move(MusicPosition);
 
 	//set elevator's floor
 	ElevatorFloor = floor;
@@ -607,7 +604,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	Created = true;
 
-	Report("created at " + sbs->TruncateNumber(x, 4) + ", " + sbs->TruncateNumber(x, 4) + ", " + ToString2(floor));
+	Report("created at " + sbs->TruncateNumber(position.x, 4) + ", " + sbs->TruncateNumber(position.z, 4) + ", " + ToString2(floor));
 	return this;
 }
 
@@ -1336,7 +1333,7 @@ void Elevator::MonitorLoop()
 					if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
 						MusicPosition = Ogre::Vector3(0, Height, 0); //set default music position to elevator height
 
-					musicsound->SetPosition(GetPosition() + MusicPosition);
+					musicsound->SetPositionRelative(MusicPosition);
 					musicsound->Loop(true);
 					musicsound->Play(false);
 				}
@@ -2004,30 +2001,14 @@ void Elevator::SetAltitude(float altitude)
 
 	SetPosition(Ogre::Vector3(elevposition.x, altitude, elevposition.z));
 	elevposition.y = altitude;
-	/*for (int i = 0; i < (int)FloorIndicatorArray.size(); i++)
-	{
-		if (FloorIndicatorArray[i])
-			FloorIndicatorArray[i]->SetPosition(Ogre::Vector3(FloorIndicatorArray[i]->GetPosition().x, elevposition.y, FloorIndicatorArray[i]->GetPosition().z));
-	}
-	for (int i = 0; i < (int)PanelArray.size(); i++)
-	{
-		if (PanelArray[i])
-			PanelArray[i]->SetToElevatorAltitude();
-	}
-	for (int i = 0; i < (int)DirIndicatorArray.size(); i++)
-	{
-		if (DirIndicatorArray[i])
-			DirIndicatorArray[i]->SetPosition(Ogre::Vector3(DirIndicatorArray[i]->GetPosition().x, elevposition.y, DirIndicatorArray[i]->GetPosition().z));
-	}*/
 
 	//move sounds
-	Ogre::Vector3 top = Ogre::Vector3(elevposition.x, elevposition.y + Height, elevposition.z);
-	carsound->SetPosition(elevposition);
-	idlesound->SetPosition(top);
-	alarm->SetPosition(top);
-	floorbeep->SetPosition(top);
-	announcesnd->SetPosition(top);
-	musicsound->SetPosition(elevposition + MusicPosition);
+	Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
+	idlesound->SetPositionRelative(top);
+	alarm->SetPositionRelative(top);
+	floorbeep->SetPositionRelative(top);
+	announcesnd->SetPositionRelative(top);
+	musicsound->SetPositionRelative(MusicPosition);
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
 		if (sounds[i])
@@ -3294,10 +3275,7 @@ Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bo
 	if (sbs->Verbose)
 		Report("adding interior directional indicator");
 
-	float x = Origin.x + CenterX;
-	float z = Origin.z + CenterZ;
-
-	DirectionalIndicator *indicator = new DirectionalIndicator(this, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, Number, 0, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -3969,8 +3947,8 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 	float x, z;
 	if (relative == true)
 	{
-		x = Origin.x + CenterX;
-		z = Origin.z + CenterZ;
+		x = GetPosition().x + CenterX;
+		z = GetPosition().z + CenterZ;
 	}
 	else
 	{
@@ -4179,7 +4157,7 @@ Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3
 	sounds.push_back(sound);
 
 	//set parameters and play sound
-	sound->SetPosition(Origin + position);
+	sound->Move(position);
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
@@ -5012,7 +4990,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 {
 	//add a global light
 
-	Light* light = new Light(this, name, type, position + Origin, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(this, name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light;
 }
@@ -5020,7 +4998,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 Object* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(this, name, filename, center, position + Origin, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -5083,7 +5061,6 @@ Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vec
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
-	trigger->SetPosition(GetPosition());
 	return trigger;
 }
 
@@ -5188,7 +5165,7 @@ void Elevator::Init()
 		Enabled(false);
 
 	//move elevator to starting position
-	SetFloor(OriginFloor);
+	SetFloor(StartingFloor);
 }
 
 bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)

@@ -261,9 +261,6 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 		sbs->ResetWalls();
 	}
 	sbs->ResetTextureMapping();
-
-	//set position of object
-	Move(CenterX, sbs->GetFloor(floor)->GetBase(true) + voffset, CenterZ);
 }
 
 DirectionalIndicator::~DirectionalIndicator()

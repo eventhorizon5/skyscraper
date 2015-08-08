@@ -55,8 +55,7 @@ public:
 	float Deceleration; //deceleration value; may be removed
 	float AccelJerk; //acceleration jerk rate (rate of change in acceleration; by percentage)
 	float DecelJerk;
-	int OriginFloor; //elevator starting floor
-	Ogre::Vector3 Origin; //3D elevator origin vector
+	int StartingFloor; //elevator starting floor
 	float TempDeceleration; //temporary deceleration value, used in overrun correction
 	float ErrorOffset;
 	float DistanceToTravel; //distance in Y to travel
