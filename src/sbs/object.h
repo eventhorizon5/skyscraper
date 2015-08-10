@@ -72,8 +72,12 @@ public:
 	Ogre::Vector3 GetRotation();
 	virtual void OnMove() {};
 	virtual void OnRotate() {};
+	void NotifyMove();
+	void NotifyRotate();
 
 private:
+	void NotifyChildren(bool move, bool rotate);
+
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object
 	void *raw_object; //raw object

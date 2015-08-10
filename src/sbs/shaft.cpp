@@ -360,6 +360,7 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 		//first determine if camera has X and Z values within the first shaft floor's bounding box
 		if (ShaftArray[0]->InBoundingBox(position, false) == true)
 		{
+			//do a hit beam test from the position to the bottom of the shaft, to see if it hits a shaft floor
 			bool result = (ShaftArray[0]->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
 
 			//cache values

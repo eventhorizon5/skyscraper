@@ -259,7 +259,7 @@ void Object::SetPosition(const Ogre::Vector3 &position)
 	SceneNode->_setDerivedPosition(pos);
 
 	//notify about movement
-	OnMove();
+	NotifyMove();
 }
 
 void Object::SetPositionRelative(const Ogre::Vector3 &position)
@@ -274,7 +274,7 @@ void Object::SetPositionRelative(const Ogre::Vector3 &position)
 	SceneNode->setPosition(pos);
 
 	//notify about movement
-	OnMove();
+	NotifyMove();
 }
 
 void Object::SetPosition(float X, float Y, float Z)
@@ -340,7 +340,7 @@ void Object::SetRotation(Ogre::Vector3 rotation)
 	Rotation = rotation;
 
 	//notify about rotation
-	OnRotate();
+	NotifyRotate();
 }
 
 void Object::SetRotation(float X, float Y, float Z)
@@ -371,4 +371,38 @@ Ogre::Vector3 Object::GetRotation()
 		return Ogre::Vector3::ZERO;
 
 	return Rotation;
+}
+
+void Object::NotifyMove()
+{
+	//notify about a move
+
+	OnMove();
+	NotifyChildren(true, false);
+}
+
+void Object::NotifyRotate()
+{
+	//notify about a rotate
+
+	OnRotate();
+	NotifyChildren(false, true);
+}
+
+void Object::NotifyChildren(bool move, bool rotate)
+{
+	//notify child objects about a parent move or rotate
+
+	int count = GetChildrenCount();
+
+	if (count == 0)
+		return;
+
+	for (int i = 0; i < count; i++)
+	{
+		if (move == true)
+			children[i]->NotifyMove();
+		if (rotate == true)
+			children[i]->NotifyRotate();
+	}
 }
