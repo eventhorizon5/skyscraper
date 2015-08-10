@@ -1711,8 +1711,6 @@ void Elevator::MoveElevatorToFloor()
 	movement.y = ElevatorRate * sbs->delta;
 
 	SetAltitude(GetPosition().y + movement.y);
-	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
 
 	//motion calculation
 	if (Brakes == false)
@@ -1961,9 +1959,6 @@ void Elevator::MoveElevatorToFloor()
 			Report("setting elevator to floor altitude");
 
 		SetAltitude(Destination);
-
-		if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-			sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, GetPosition().y + CameraOffset, sbs->camera->GetPosition().z));
 	}
 
 	//reset values if at destination floor
@@ -2001,6 +1996,10 @@ void Elevator::SetAltitude(float altitude)
 
 	SetPosition(Ogre::Vector3(elevposition.x, altitude, elevposition.z));
 	elevposition.y = altitude;
+
+	//move camera
+	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
+		sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
 
 	//move sounds
 	Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
