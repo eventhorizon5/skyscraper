@@ -89,11 +89,9 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, boo
 	return Ogre::Vector2(esmall, ebig);
 }
 
-void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber, bool reset_check)
+void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
-	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
-	//object_origin is for the object's (such as a shaft) central position, used for calculating wall offsets
 
 	if (cutwalls == false && cutfloors == false)
 		return;
@@ -275,36 +273,42 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 						}
 						polycheck = true;
 						polycheck2 = true;
+
 						//store extents of temppoly5 for door sides if needed
 						if (checkwallnumber > 0 && checkwallnumber < 3)
 						{
+							Ogre::Vector3 mesh_position = wall->meshwrapper->GetPosition();
 							float extent;
-							if (checkwallnumber == 2 && (wall2a == false || wall2b == false))
+
+							if (wall2a == false || wall2b == false)
 							{
-								//level walls
-								if (wall2a == true)
-									wall2b = true;
-								wall2a = true;
-								extent = GetExtents(temppoly5, 1).x + mesh_origin.x;
-								if (wall2b == false || (wall2b == true && fabsf(extent - object_origin.x) > fabsf(wall_extents_x.x - object_origin.x)))
-									wall_extents_x.x = extent;
-								extent = GetExtents(temppoly5, 3).x + mesh_origin.z;
-								if (wall2b == false || (wall2b == true && fabsf(extent - object_origin.z) > fabsf(wall_extents_z.x - object_origin.z)))
-									wall_extents_z.x = extent;
-								wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
-							}
-							else if (wall1a == false || wall1b == false)
-							{
-								//shaft walls
-								if (wall1a == true)
-									wall1b = true;
-								wall1a = true;
-								extent = GetExtents(temppoly5, 1).y + mesh_origin.x;
-								if (wall1b == false || (wall1b == true && fabsf(extent - object_origin.x) < fabsf(wall_extents_x.y - object_origin.x)))
-									wall_extents_x.y = extent;
-								extent = GetExtents(temppoly5, 3).y + mesh_origin.z;
-								if (wall1b == false || (wall1b == true && fabsf(extent - object_origin.z) < fabsf(wall_extents_z.y - object_origin.z)))
-									wall_extents_z.y = extent;
+								if (checkwallnumber == 2)
+								{
+									//level walls
+									if (wall2a == true)
+										wall2b = true;
+									wall2a = true;
+									extent = GetExtents(temppoly5, 1).x + mesh_position.x;
+									if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.x) > fabsf(wall_extents_x.x - mesh_position.x)))
+										wall_extents_x.x = extent;
+									extent = GetExtents(temppoly5, 3).x + mesh_position.z;
+									if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.z) > fabsf(wall_extents_z.x - mesh_position.z)))
+										wall_extents_z.x = extent;
+									wall_extents_y = GetExtents(temppoly5, 2) + mesh_position.y;
+								}
+								else
+								{
+									//shaft walls
+									if (wall1a == true)
+										wall1b = true;
+									wall1a = true;
+									extent = GetExtents(temppoly5, 1).y + mesh_position.x;
+									if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.x) < fabsf(wall_extents_x.y - mesh_position.x)))
+										wall_extents_x.y = extent;
+									extent = GetExtents(temppoly5, 3).y + mesh_position.z;
+									if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.z) < fabsf(wall_extents_z.y - mesh_position.z)))
+										wall_extents_z.y = extent;
+								}
 							}
 						}
 					}

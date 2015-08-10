@@ -2097,24 +2097,29 @@ void SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw,
 
 	if (wall1a == true && wall2a == true)
 	{
+		//convert extents to relative positioning
+		Ogre::Vector2 extents_x = wall_extents_x - wallobject->meshwrapper->GetPosition().x;
+		Ogre::Vector2 extents_y = wall_extents_y - wallobject->meshwrapper->GetPosition().y;
+		Ogre::Vector2 extents_z = wall_extents_z - wallobject->meshwrapper->GetPosition().z;
+
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right
-		bool direction = fabsf(wall_extents_x.x - wall_extents_x.y) > fabsf(wall_extents_z.x - wall_extents_z.y);
+		bool direction = fabsf(extents_x.x - extents_x.y) > fabsf(extents_z.x - extents_z.y);
 
 		DrawWalls(false, true, false, false, false, false);
 		if (direction == true)
-			AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		else
-			AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		ResetWalls();
 
 		DrawWalls(true, false, false, false, false, false);
 		if (direction == true)
-			AddWallMain(wallobject, "DoorwayRight", texture, 0, wall_extents_x.y, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		else
-			AddWallMain(wallobject, "DoorwayRight", texture, 0, wall_extents_x.x, wall_extents_z.y, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 
-		AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, false, false, tw, th, true);
+		AddFloorMain(wallobject, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
 		ResetWalls();
 
 		ResetDoorwayWalls();
