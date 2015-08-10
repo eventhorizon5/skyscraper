@@ -66,6 +66,9 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	if (ActiveDirection == false)
 		timer = new Timer("Shut-off Timer", this);
 
+	//move object
+	Move(CenterX, voffset, CenterZ);
+
 	//create object mesh
 	std::string base, buffer;
 	base = "Directional Indicator " + ToString2(elevator) + ":" + ToString2(floor);
