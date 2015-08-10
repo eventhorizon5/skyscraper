@@ -275,42 +275,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 						polycheck2 = true;
 
 						//store extents of temppoly5 for door sides if needed
-						if (checkwallnumber > 0 && checkwallnumber < 3)
-						{
-							Ogre::Vector3 mesh_position = wall->meshwrapper->GetPosition();
-							float extent;
-
-							if (wall2a == false || wall2b == false)
-							{
-								if (checkwallnumber == 2)
-								{
-									//level walls
-									if (wall2a == true)
-										wall2b = true;
-									wall2a = true;
-									extent = GetExtents(temppoly5, 1).x + mesh_position.x;
-									if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.x) > fabsf(wall_extents_x.x - mesh_position.x)))
-										wall_extents_x.x = extent;
-									extent = GetExtents(temppoly5, 3).x + mesh_position.z;
-									if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.z) > fabsf(wall_extents_z.x - mesh_position.z)))
-										wall_extents_z.x = extent;
-									wall_extents_y = GetExtents(temppoly5, 2) + mesh_position.y;
-								}
-								else
-								{
-									//shaft walls
-									if (wall1a == true)
-										wall1b = true;
-									wall1a = true;
-									extent = GetExtents(temppoly5, 1).y + mesh_position.x;
-									if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.x) < fabsf(wall_extents_x.y - mesh_position.x)))
-										wall_extents_x.y = extent;
-									extent = GetExtents(temppoly5, 3).y + mesh_position.z;
-									if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.z) < fabsf(wall_extents_z.y - mesh_position.z)))
-										wall_extents_z.y = extent;
-								}
-							}
-						}
+						GetDoorwayExtents(wall->meshwrapper, checkwallnumber, temppoly5);
 					}
 				}
 				else if (cutfloors == true)
@@ -433,6 +398,49 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 			i--;
 			polycount--;
 			polycheck = false;
+		}
+	}
+}
+
+void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon)
+{
+	//calculate doorway extents, for use with AddDoorwayWalls function
+	//checknumber is 1 when checking shaft walls, and 2 when checking floor walls
+
+	if (checknumber > 0 && checknumber < 3)
+	{
+		Ogre::Vector3 mesh_position = mesh->GetPosition();
+		float extent;
+
+		if (wall2a == false || wall2b == false)
+		{
+			if (checknumber == 2)
+			{
+				//level walls
+				if (wall2a == true)
+					wall2b = true;
+				wall2a = true;
+				extent = GetExtents(polygon, 1).x + mesh_position.x;
+				if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.x) > fabsf(wall_extents_x.x - mesh_position.x)))
+					wall_extents_x.x = extent;
+				extent = GetExtents(polygon, 3).x + mesh_position.z;
+				if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.z) > fabsf(wall_extents_z.x - mesh_position.z)))
+					wall_extents_z.x = extent;
+				wall_extents_y = GetExtents(polygon, 2) + mesh_position.y;
+			}
+			else
+			{
+				//shaft walls
+				if (wall1a == true)
+					wall1b = true;
+				wall1a = true;
+				extent = GetExtents(polygon, 1).y + mesh_position.x;
+				if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.x) < fabsf(wall_extents_x.y - mesh_position.x)))
+					wall_extents_x.y = extent;
+				extent = GetExtents(polygon, 3).y + mesh_position.z;
+				if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.z) < fabsf(wall_extents_z.y - mesh_position.z)))
+					wall_extents_z.y = extent;
+			}
 		}
 	}
 }
