@@ -35,7 +35,7 @@ Object::Object(bool temporary)
 	Parent = 0;
 	raw_object = 0;
 	linenum = 0;
-	Number = -1;
+	Number = 0;
 	Temporary = temporary;
 	parent_deleting = false;
 	SceneNode = 0;

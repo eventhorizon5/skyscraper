@@ -4086,3 +4086,10 @@ void SBS::ShowSceneNodes(bool value)
 
 	mSceneManager->setDisplaySceneNodes(value);
 }
+
+void SBS::ShowBoundingBoxes(bool value)
+{
+	//show all mesh bounding boxes for debugging
+
+	mSceneManager->showBoundingBoxes(value);
+}
