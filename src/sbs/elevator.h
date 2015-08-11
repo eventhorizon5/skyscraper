@@ -114,7 +114,6 @@ public:
 	bool UseDoorMessageSounds; //true if door message sounds should be used
 	Ogre::Vector3 MotorPosition; //position of motor sound emitter
 	bool QueueResets; //true if system should use automatic queue resets for normal operation
-	std::vector<WallObject*> elevator_walls;
 	float CameraOffset; //camera vertical offset for movement
 	int ParkingFloor; //floor to automatically park the elevator on when idle
 	float ParkingDelay; //time to wait in idle mode before parking

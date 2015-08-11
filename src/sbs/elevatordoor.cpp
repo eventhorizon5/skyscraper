@@ -1454,8 +1454,8 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 
 	SetValues(this, objparent, "DoorWrapper", name.c_str(), false);
 
-	if (IsShaftDoor)
-		Move(0, sbs->GetFloor(floor)->GetBase(true), 0);
+	if (IsShaftDoor == true)
+		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
 }
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()

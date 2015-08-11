@@ -423,17 +423,6 @@ Elevator::~Elevator()
 		sounds[i] = 0;
 	}
 
-	//delete wall objects
-	for (int i = 0; i < (int)elevator_walls.size(); i++)
-	{
-		if (elevator_walls[i])
-		{
-			elevator_walls[i]->parent_deleting = true;
-			delete elevator_walls[i];
-		}
-		elevator_walls[i] = 0;
-	}
-
 	if (ElevatorMesh)
 		delete ElevatorMesh;
 	ElevatorMesh = 0;
@@ -553,6 +542,12 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	if (ACPFloorSet == false)
 		SetACPFloor(GetBottomFloor());
 
+	//move objects to positions
+	if (sbs->Verbose)
+		Report("moving elevator to origin position");
+	SetPosition(position);
+	elevposition = GetPosition();
+
 	//create door objects
 	if (sbs->Verbose)
 		Report("creating doors");
@@ -561,12 +556,6 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		for (int i = 1; i <= NumDoors; i++)
 			DoorArray.push_back(new ElevatorDoor(i, this));
 	}
-
-	//move objects to positions
-	if (sbs->Verbose)
-		Report("moving elevator to origin position");
-	SetPosition(position);
-	elevposition = GetPosition();
 
 	//create sound objects
 	if (sbs->Verbose)
