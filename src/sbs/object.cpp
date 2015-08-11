@@ -35,15 +35,20 @@ Object::Object(bool temporary)
 	Parent = 0;
 	raw_object = 0;
 	linenum = 0;
-	Number = 0;
+	Number = -1;
 	Temporary = temporary;
 	parent_deleting = false;
 	SceneNode = 0;
 	Rotation = Ogre::Vector3::ZERO;
 
 	//register object with engine
-	if (temporary == false && sbs)
-		Number = sbs->RegisterObject(this);
+	if (temporary == false)
+	{
+		if (sbs)
+			Number = sbs->RegisterObject(this);
+		else
+			Number = 0; //root object
+	}
 }
 
 Object::~Object()
