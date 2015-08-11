@@ -1628,6 +1628,11 @@ void MeshObject::CreateCollider()
 	if (mBody)
 		return;
 
+	Ogre::SceneNode *node = GetSceneNode();
+
+	if (!node)
+		return;
+
 	//exit if mesh is empty
 	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
 		return;
@@ -1660,7 +1665,7 @@ void MeshObject::CreateCollider()
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(GetSceneNode(), shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 
 		if (sbs->DeleteColliders == true)
@@ -1700,6 +1705,11 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 	if (mBody)
 		return;
 
+	Ogre::SceneNode *node = GetSceneNode();
+
+	if (!node)
+		return;
+
 	try
 	{
 		//initialize collider shape
@@ -1713,11 +1723,11 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 
 		//finalize shape
 		shape->Finish();
-		std::string name = GetSceneNode()->getName();
+		std::string name = node->getName();
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(GetSceneNode(), shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1734,18 +1744,23 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	if (mBody)
 		return;
 
+	Ogre::SceneNode *node = GetSceneNode();
+
+	if (!node)
+		return;
+
 	try
 	{
 		//initialize collider shape
 		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
-		std::string name = GetSceneNode()->getName();
+		std::string name = node->getName();
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)
-			mBody->setStaticShape(GetSceneNode(), shape, 0.1f, 0.5f, false);
+			mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		else
-			mBody->setShape(GetSceneNode(), shape, restitution, friction, mass);
+			mBody->setShape(node, shape, restitution, friction, mass);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)

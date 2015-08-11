@@ -56,10 +56,11 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 		Offset = Ogre::Vector3(vec.x, -box.getMinimum().y, -vec.z);
 	}
 
-	//set mesh object at specified offset
-	mesh->Move(Offset);
-
 	Move(position);
+
+	//set mesh object at specified offset
+	mesh->SetPosition(GetPosition() + Offset);
+
 	SetRotation(rotation);
 }
 
