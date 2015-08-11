@@ -54,7 +54,6 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 		Ogre::AxisAlignedBox box = mesh->MeshWrapper.get()->getBounds();
 		Ogre::Vector3 vec = box.getCenter();
 		Offset = Ogre::Vector3(vec.x, -box.getMinimum().y, -vec.z);
-		Offset = sbs->ToLocal(Offset);
 	}
 
 	//set mesh object at specified offset
