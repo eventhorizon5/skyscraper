@@ -1476,10 +1476,6 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 	int index = (int)doors.size() - 1;
 	doors[index] = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
 
-	//move object to positions
-	if (IsShaftDoor == true)
-		doors[index]->mesh->SetPosition(Ogre::Vector3(parent->elev->GetPosition().x, GetPosition().y, parent->elev->GetPosition().z));
-
 	return doors[index];
 }
 
