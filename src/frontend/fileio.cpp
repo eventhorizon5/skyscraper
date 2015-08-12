@@ -1732,11 +1732,13 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
+		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
 			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
+			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
@@ -1767,7 +1769,7 @@ int ScriptProcessor::ProcCommands()
 
 		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.push_back(Ogre::Vector3(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()), atof(tempdata[temp3 + 2].c_str())));
+			varray.push_back(Ogre::Vector3(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()) - altitude_shift, atof(tempdata[temp3 + 2].c_str())));
 
 		StoreCommand(wall);
 
