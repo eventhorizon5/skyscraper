@@ -1624,11 +1624,13 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
+		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
 			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
+			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
@@ -1662,7 +1664,14 @@ int ScriptProcessor::ProcCommands()
 
 		float voffset = atof(tempdata[8].c_str());
 		if (Section == 2)
-			voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		{
+			if (buffer == "floor")
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+			else
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		}
+		else
+			voffset -= altitude_shift;
 
 		Simcore->CreateWallBox2(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), voffset, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 		return sNextLine;
