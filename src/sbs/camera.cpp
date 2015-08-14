@@ -458,7 +458,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (callback.doesCollide() == false)
 		return;
 
-	polyname = "";
+	wallname = "";
 	WallObject* wall = 0;
 	MeshObject* meshobject;
 	float best_distance = 2000000000.;
@@ -517,13 +517,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			wall = meshobject->Walls[num];
 		if (wall)
 		{
-			polyname = wall->GetName();
+			wallname = wall->GetName();
 			//meshname = bestmesh->name;
 			meshname = meshobject->name;
 			//meshobject = bestmesh;
 		}
 		else
-			polyname = "";
+			wallname = "";
 	//}
 
 	//get and strip object number
@@ -532,9 +532,9 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (wall)
 	{
 		object_number = wall->GetNumber();
-		int index = (int)polyname.find(")");
+		int index = (int)wallname.find(")");
 		if (index > -1)
-			polyname.erase(polyname.begin(), polyname.begin() + index + 1);
+			wallname.erase(wallname.begin(), wallname.begin() + index + 1);
 	}
 	if ((int)meshname.find("(") == 0)
 	{
@@ -556,7 +556,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//show result
 	if (wall)
-		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
+		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
 	else
 		sbs->Report("Clicked on object " + number + ": " + meshname);
 
@@ -573,6 +573,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	{
 		std::string parent_type = obj->GetParent()->GetType();
 
+		//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
 		if (parent_type == "Mesh")
 			mesh_parent = obj->GetParent()->GetParent();
 		else
@@ -782,11 +783,11 @@ const char* Camera::GetClickedMeshName()
 	return meshname.c_str();
 }
 
-const char* Camera::GetClickedPolyName()
+const char* Camera::GetClickedWallName()
 {
 	//return name of last clicked polygon
 
-	return polyname.c_str();
+	return wallname.c_str();
 }
 
 int Camera::GetClickedObjectNumber()

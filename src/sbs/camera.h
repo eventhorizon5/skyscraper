@@ -96,7 +96,7 @@ public:
 	void CheckStairwell();
 	void ClickedObject(bool shift, bool ctrl, bool alt, bool right);
 	const char* GetClickedMeshName();
-	const char* GetClickedPolyName();
+	const char* GetClickedWallName();
 	int GetClickedObjectNumber();
 	int GetClickedObjectLine();
 	const char* GetClickedObjectCommand();
@@ -136,7 +136,7 @@ private:
 	Ogre::Vector3 StartDirection; //direction camera faces on start
 	Ogre::Vector3 StartRotation; //camera's startup rotation
 	std::string meshname; //last clicked mesh name
-	std::string polyname; //last clicked polygon name
+	std::string wallname; //last clicked wall name
 	int object_number; //last clicked object number
 	int object_line; //script line number of last clicked object
 	std::string object_cmd; //original script command of last clicked object
