@@ -552,6 +552,12 @@ void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices
 
 	vertices.resize(index_extents.size());
 
+	Ogre::Vector3 mesh_position;
+	if (convert == true)
+		mesh_position = mesh->GetPosition();
+	else
+		mesh_position = sbs->ToRemote(mesh->GetPosition());
+
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
 		int min = index_extents[i].x;
@@ -572,9 +578,9 @@ void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition(), rescale));
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
@@ -592,9 +598,9 @@ void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition(), rescale));
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
