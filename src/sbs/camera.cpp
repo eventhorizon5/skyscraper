@@ -567,22 +567,34 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	std::string type = obj->GetType();
 
-	//get original object (parent object of clicked mesh)
+	Object *mesh_parent = 0;
+
 	if (obj->GetParent())
 	{
 		std::string parent_type = obj->GetParent()->GetType();
 
+		if (parent_type == "Mesh")
+			mesh_parent = obj->GetParent()->GetParent();
+		else
+			mesh_parent = obj->GetParent();
+	}
+
+	//get original object (parent object of clicked mesh)
+	if (mesh_parent)
+	{
+		std::string parent_type = mesh_parent->GetType();
+
 		//check controls
 		if (parent_type == "Control")
 		{
-			Control *control = (Control*)obj->GetParent()->GetRawObject();
+			Control *control = (Control*)mesh_parent->GetRawObject();
 
 			if (control)
 			{
 				//delete control if ctrl and alt keys are pressed
 				if (ctrl == true && alt == true && shift == false)
 				{
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 
@@ -597,14 +609,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check doors
 		if (parent_type == "Door" && right == false)
 		{
-			Door *door = (Door*)obj->GetParent()->GetRawObject();
+			Door *door = (Door*)mesh_parent->GetRawObject();
 
 			if (door)
 			{
 				//delete door if ctrl and alt keys are pressed
 				if (ctrl == true && alt == true && shift == false)
 				{
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 
@@ -635,14 +647,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check models
 		if (parent_type == "Model" && right == false)
 		{
-			Model *model = (Model*)obj->GetParent()->GetRawObject();
+			Model *model = (Model*)mesh_parent->GetRawObject();
 
 			if (model)
 			{
 				//delete model if ctrl and alt keys are pressed
 				if (ctrl == true && alt == true && shift == false)
 				{
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 
@@ -650,7 +662,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				if (model->IsKey() == true)
 				{
 					sbs->AddKey(model->GetKeyID(), model->Name);
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 			}
@@ -659,7 +671,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check call buttons
 		if (parent_type == "CallButton" && right == false)
 		{
-			CallButton *callbutton = (CallButton*)obj->GetParent()->GetRawObject();
+			CallButton *callbutton = (CallButton*)mesh_parent->GetRawObject();
 
 			if (callbutton)
 			{
@@ -706,7 +718,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check elevator doors
 		if (parent_type == "DoorWrapper" && shift == true && right == false)
 		{
-			ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
+			ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)mesh_parent->GetRawObject();
 
 			if (wrapper)
 			{
@@ -746,7 +758,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			//delete indicator if ctrl and alt keys are pressed
 			if (ctrl == true && alt == true && shift == false)
 			{
-				sbs->DeleteObject(obj->GetParent());
+				sbs->DeleteObject(mesh_parent);
 				return;
 			}
 		}
