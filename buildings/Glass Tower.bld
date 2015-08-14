@@ -507,7 +507,7 @@ SetAutoSize = false, false
     if[%floor% = 137] AddWall Front, TopWalls, 0, -79.2, -15.2, -18.88, -36.8, %fullheight% * 2, %fullheight%, 0, 0, 0, 0, True
     if[%floor% = 137] SetTextureMapping 0, -0.333, 0, 1, 6.333, -1, 2, 6.333, 1
     DrawWalls = false, true, false, false, false, false
-    if[%floor% < 137] AddWall Front, MainWindowsInside, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, false
+    if[%floor% < 136] AddWall Front, MainWindowsInside, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, false
     if[%floor% = 136] AddWall Front, TopWalls, 0, -79.2, -15.2, -18.88, -36.8, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     if[%floor% = 137] AddWall Front, TopWalls, 0, -79.2, -15.2, -18.88, -36.8, %fullheight% * 2, %fullheight%, 0, 0, 0, 0, True
 <EndFloors>
