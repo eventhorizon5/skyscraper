@@ -57,11 +57,11 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	}
 
 	Move(position);
+	//SetRotation(rotation);
 
 	//set mesh object at specified offset
 	mesh->SetPosition(GetPosition() + Offset);
-
-	SetRotation(rotation);
+	mesh->SetRotation(rotation);
 }
 
 Model::~Model()

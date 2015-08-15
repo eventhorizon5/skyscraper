@@ -192,7 +192,7 @@ Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bw
 	if (Direction == "left")
 	{
 		position.x = -0.01f;
-		position.z = (Width / 2)  - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
+		position.z = (Width / 2) - (SpacingX * column) - (ButtonWidth * (column - 1)) + ((ButtonWidth * (bwidth - 1)) / 2);
 		position.z -= hoffset * ButtonWidth;
 	}
 	if (Direction == "right")
