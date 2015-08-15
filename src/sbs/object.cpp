@@ -382,6 +382,12 @@ void Object::NotifyMove()
 {
 	//notify about a move
 
+	if (!SceneNode)
+		return;
+
+	//sync positioning, for child scene nodes
+	SceneNode->needUpdate();
+
 	OnMove();
 	NotifyChildren(true, false);
 }
@@ -389,6 +395,12 @@ void Object::NotifyMove()
 void Object::NotifyRotate()
 {
 	//notify about a rotate
+
+	if (!SceneNode)
+		return;
+
+	//sync positioning, for child scene nodes
+	SceneNode->needUpdate();
 
 	OnRotate();
 	NotifyChildren(false, true);
