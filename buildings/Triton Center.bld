@@ -399,7 +399,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     DrawWalls = true, false, false, false, false, false
     AddFloor Ceiling, Ceiling1, 0.5, -75, -70, -48.5, 70, %height%, %height%, 0, 0, False
     AddFloor Ceiling, Ceiling1, 0.5, 48.5, -70, 75, 70, %height%, %height%, 0, 0, False
-    AddFloor Ceiling, Ceiling1, 0.5, -48.5, -23.833, 48.5, -13.833, %height%, %height%, 0, 0, False #crosswalk
+    AddFloor Ceiling, Ceiling1, 0.5, -48.5, -23.67, 48.5, -13.833, %height%, %height%, 0, 0, False #crosswalk
     AddFloor Ceiling, Ceiling1, 0.5, -5.5, -13.833, 5.5, 13.5, %height%, %height%, 0, 0, False #center
     AddFloor Ceiling, Ceiling1, 0.5, -4.5, 13.5, 4.5, 37.5, %height%, %height%, 0, 0, False #service area
 
@@ -531,7 +531,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     DrawWalls = false, true, false, false, false, false
     AddFloor Floor, Carpet1, 0.5, -75, -70, -48.5, 70, 0, 0, 0, 0, False
     AddFloor Floor, Carpet1, 0.5, 48.5, -70, 75, 70, 0, 0, 0, 0, False
-    AddFloor Floor, Carpet1, 0.5, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0, False #crosswalk
+    AddFloor Floor, Carpet1, 0.5, -48.5, -23.67, 48.5, -13.833, 0, 0, 0, 0, False #crosswalk
     AddFloor Floor, Carpet1, 0.5, -5.5, -13.833, 5.5, 13.5, 0, 0, 0, 0, False #center
     AddFloor Floor, Carpet1, 0.5, -4.5 - 0.33, 13.5, 4.5 + 0.33, 37.5, 0, 0, 0, 0, False #service area
     FloorOrientation = bottom
@@ -543,9 +543,9 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     DrawWalls = false, true, false, false, false, false
     AddInterfloorFloor IFloorLeft, Brick, 0.1, -75, -70, -48.5, 70, 0, 0, 0, 0
     AddInterfloorFloor IFloorRight, Brick, 0.1, 48.5, -70, 75, 70, 0, 0, 0, 0
-    AddInterfloorFloor IFloorCross, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0
+    AddInterfloorFloor IFloorCross, Brick, 0.1, -48.5, -23.67, 48.5, -13.833, 0, 0, 0, 0
     AddInterfloorFloor IFloorCenter, Brick, 0.1, -5.5, -13.833, 5.5, 13.5, 0, 0, 0, 0
-    AddInterfloorFloor IFloorWalkway, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, 0, 0, 0, 0
+    AddInterfloorFloor IFloorWalkway, Brick, 0.1, -48.5, -23.67, 48.5, -13.833, 0, 0, 0, 0
     AddInterfloorFloor IFloorService, Brick, 0.1, -4.5 - 0.33, 13.5, 4.5 + 0.33, 37.5 + 0.5 + 0.33, 0, 0, 0, 0
 
     #Interfloor top
@@ -553,9 +553,9 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     DrawWalls = true, false, false, false, false, false
     AddInterfloorFloor ITopLeft, Brick, 0.1, -75, -70, -48.5, 70, %interfloorheight%, %interfloorheight%, 0, 0
     AddInterfloorFloor ITopRight, Brick, 0.1, 48.5, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
-    AddInterfloorFloor ITopCross, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopCross, Brick, 0.1, -48.5, -23.67, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
     AddInterfloorFloor ITopCenter, Brick, 0.1, -5.5, -13.833, 5.5, 13.5, %interfloorheight%, %interfloorheight%, 0, 0
-    AddInterfloorFloor ITopWalkway, Brick, 0.1, -48.5, -23.833, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
+    AddInterfloorFloor ITopWalkway, Brick, 0.1, -48.5, -23.67, 48.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0
     AddInterfloorFloor ITopService, Brick, 0.1, -4.5 - 0.33, 13.5, 4.5 + 0.33, 37.5 + 0.5 + 0.33, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
@@ -582,9 +582,9 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddInterfloorWall ICover5, ICover, 0.5, -33.5, -13.833, -22.25, -13.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     AddInterfloorWall ICover5, ICover, 0.5, 22.25, -13.833, 33.5, -13.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = left
-    AddInterfloorWall ICover5, ICover, 0.5, -33.5, -23.833, -22.25, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ICover5, ICover, 0.5, 22.25, -23.833, 33.5, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ICover5, ICover, 0.5, -7.5, -23.833, 7.5, -23.833, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, -33.5, -23.67, -22.25, -23.67, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, 22.25, -23.67, 33.5, -23.67, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ICover5, ICover, 0.5, -7.5, -23.67, 7.5, -23.67, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     #Wall Facades
     #DrawWalls = true, true, false, false, false, false
@@ -596,12 +596,12 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     #Left Restroom
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor RRFloor, Carpet1, 0.5, -48.5 - 0.33, -50, -33.5, -42.33, 0, 0, 0, 0, False
+    AddFloor RRFloor, Carpet1, 0.5, -48.5, -50, -33.5, -42.33, 0, 0, 0, 0, False
     AddFloor RRFloor, Carpet1, 0.5, -42.37, -42.33, -33.5, -24 + 0.33, 0, 0, 0, 0, False
 
     #Right Restroom
     FloorOrientation = top
-    AddFloor RRFloor, Carpet1, 0.5, 33.5, -50, 48.5 + 0.33, -42.33, 0, 0, 0, 0, False
+    AddFloor RRFloor, Carpet1, 0.5, 33.5, -50, 48.5, -42.33, 0, 0, 0, 0, False
     AddFloor RRFloor, Carpet1, 0.5, 33.5, -42.33, 42.37, -24 + 0.33, 0, 0, 0, 0, False
 
     DrawWalls = true, true, false, false, false, false
@@ -612,13 +612,13 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddWall Railing2, Railing, 0, 48.5, -66.5, 48.5, -50, 3.5, 3.5, 0, 0, 1, 1, false
     AddWall Railing3, Railing, 0, -48.5, -50, -33.5, -50, 3.5, 3.5, 0, 0, 1, 1, false
     AddWall Railing4, Railing, 0, 48.5, -50, 33.5, -50, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing5, Railing, 0, -33.5, -50, -33.5, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing6, Railing, 0, 33.5, -50, 33.5, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing7, Railing, 0, -33.5, -23.833, -22.25, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing5, Railing, 0, -33.5, -50, -33.5, -23.67, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing6, Railing, 0, 33.5, -50, 33.5, -23.67, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing7, Railing, 0, -33.5, -23.67, -22.25, -23.67, 3.5, 3.5, 0, 0, 1, 1, false
     AddWall Railing8, Railing, 0, -32.7, -13.833, -22.6, -13.833, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing9, Railing, 0, 33.5, -23.833, 22.25, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing9, Railing, 0, 33.5, -23.67, 22.25, -23.67, 3.5, 3.5, 0, 0, 1, 1, false
     AddWall Railing10, Railing, 0, 32.7, -13.833, 22.6, -13.833, 3.5, 3.5, 0, 0, 1, 1, false
-    AddWall Railing11, Railing, 0, -7.5, -23.833, 7.5, -23.833, 3.5, 3.5, 0, 0, 1, 1, false
+    AddWall Railing11, Railing, 0, -7.5, -23.67, 7.5, -23.67, 3.5, 3.5, 0, 0, 1, 1, false
     AddWall Railing12, Railing, 0, -48.5, 14, -48.5, 66.8, 3.5, 3.5, 0, 0, 1, 1, false
     AddWall Railing13, Railing, 0, 48.5, 14, 48.5, 66.8, 3.5, 3.5, 0, 0, 1, 1, false
     SetAutoSize = true, true
