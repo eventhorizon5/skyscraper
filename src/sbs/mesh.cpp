@@ -1981,7 +1981,34 @@ Ogre::Vector3 MeshObject::GetPoint(const char *polyname, const Ogre::Vector3 &st
 	//and return the intersection point
 
 	int index = 0;
-	WallObject *wall = FindPolygon(polyname, index);
+	WallObject *wall = 0;
+
+	std::string name = polyname;
+
+	for (int i = 0; i <= 6; i++)
+	{
+		std::string newname;
+
+		if (i == 0)
+			newname = name;
+		if (i == 1)
+			newname = name + ":0";
+		if (i == 2)
+			newname = name + ":1";
+		if (i == 3)
+			newname = name + ":front";
+		if (i == 4)
+			newname = name + ":back";
+		if (i == 5)
+			newname = name + ":left";
+		if (i == 6)
+			newname = name + ":right";
+
+		wall = FindPolygon(newname.c_str(), index);
+
+		if (wall)
+			break;
+	}
 
 	if (wall)
 	{
@@ -2005,7 +2032,7 @@ Ogre::Vector3 MeshObject::GetWallExtents(const char *name, float altitude, bool 
 
 	std::string newname;
 	std::string name2 = name;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i <= 6; i++)
 	{
 		if (i == 0)
 			newname = name2;
