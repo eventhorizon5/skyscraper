@@ -2535,9 +2535,14 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 
+		float offset = 0;
+
 		MeshObject *mesh = 0;
 		if (buffer == "floor" && Simcore->GetFloor(Current))
+		{
 			mesh = Simcore->GetFloor(Current)->Level;
+			offset = mesh->GetPosition().y;
+		}
 		else if (buffer == "elevator" && Simcore->GetElevator(Current))
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
@@ -2549,8 +2554,13 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		MinExtent = mesh->GetWallExtents(tempdata[1].c_str(), atof(tempdata[2].c_str()), false);
-		MaxExtent = mesh->GetWallExtents(tempdata[1].c_str(), atof(tempdata[2].c_str()), true);
+		float alt = atof(tempdata[2].c_str());
+
+		//GetWallExtents command requires relative position, so subtract altitude from value
+		alt -= offset;
+
+		MinExtent = mesh->GetWallExtents(tempdata[1].c_str(), alt, false);
+		MaxExtent = mesh->GetWallExtents(tempdata[1].c_str(), alt, true);
 		return sNextLine;
 	}
 
