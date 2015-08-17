@@ -38,7 +38,7 @@ WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Obj
 
 	//if proxy object is set, set object's number as proxy object's number
 	if (proxy)
-		Number = proxy->GetNumber();
+		SetNumber(proxy->GetNumber());
 	sbs->WallCount++;
 }
 
@@ -46,7 +46,7 @@ WallObject::~WallObject()
 {
 	//wall object destructor
 
-	if (sbs->FastDelete == false && parent_array && parent_deleting == false && Temporary == false)
+	if (sbs->FastDelete == false && parent_array && parent_deleting == false && IsTemporary() == false)
 	{
 		for (int i = 0; i < (int)parent_array->size(); i++)
 		{
@@ -67,35 +67,14 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 {
 	//add a quad
 
-	std::vector<std::vector<Ogre::Vector3> > array;
-	array.resize(1);
-	array[0].reserve(4);
-	array[0].push_back(v1);
-	array[0].push_back(v2);
-	array[0].push_back(v3);
-	array[0].push_back(v4);
-	std::string name2 = ProcessName(name);
-	Ogre::Matrix3 tm;
-	Ogre::Vector3 tv;
-	std::vector<Extents> index_extents;
-	std::vector<TriangleType> triangles;
-	if (!meshwrapper->PolyMesh(name2.c_str(), texture, array[0], tw, th, autosize, tm, tv, index_extents, triangles))
-	{
-		sbs->ReportError("Error creating wall '" + name2 + "'");
-		return 0;
-	}
+	std::vector<Ogre::Vector3> vertices;
+	vertices.reserve(4);
+	vertices.push_back(v1);
+	vertices.push_back(v2);
+	vertices.push_back(v3);
+	vertices.push_back(v4);
 
-	if (triangles.size() == 0)
-		return 0;
-
-	bool result;
-	std::string material = sbs->GetTextureMaterial(texture, result, true, name2.c_str());
-
-	//compute plane
-	Ogre::Plane plane = sbs->ComputePlane(array[0]);
-
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
-	return &handles[index];
+	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
 WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
@@ -175,7 +154,7 @@ std::string WallObject::ProcessName(const char *name)
 		name_modified.erase(0, (int)name_modified.find(")") + 1);
 
 	//construct name
-	std::string newname = "(" + ToString2(Number) + ")" + name_modified;
+	std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
 	return newname;
 }
 
@@ -258,33 +237,39 @@ int WallObject::FindPolygon(const char *name)
 	return -1;
 }
 
-void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly)
+void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
+
+	//if firstonly is true, only return first result
+	//if convert is true, converts vertices from remote Ogre positions to local SBS positions
+	//if rescale is true (along with convert), rescales vertices with UnitScale multiplier
+	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
+	//if reverse is false, process extents table in ascending order, otherwise descending order
 
 	if (index < 0 || index >= (int)handles.size())
 		return;
 
-	handles[index].GetGeometry(meshwrapper, vertices, firstonly);
+	handles[index].GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
 }
 
 void WallObject::SetPolygonName(int index, const char *name)
 {
-		if (index < 0 || index >= (int)handles.size())
-			return;
+	if (index < 0 || index >= (int)handles.size())
+		return;
 
-		//set polygon name
-        std::string name_modified = name;
+	//set polygon name
+	std::string name_modified = name;
 
-        //strip off object ID from name if it exists
-        if ((int)name_modified.find("(") == 0)
-                name_modified.erase(0, (int)name_modified.find(")") + 1);
+	//strip off object ID from name if it exists
+	if ((int)name_modified.find("(") == 0)
+		name_modified.erase(0, (int)name_modified.find(")") + 1);
 
-        //construct name
-        std::string newname = "(" + ToString2(Number) + ")" + name_modified;
+	//construct name
+	std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
 
-        //set polygon name
-        handles[index].name = newname;
+	//set polygon name
+	handles[index].name = newname;
 }
 
 bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
@@ -297,7 +282,7 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 	{
 		if (i == 0)
 			checkplane = true;
-		if(handles[i].PointInside(meshwrapper, point, checkplane, convert))
+		if(handles[i].PointInside(point, checkplane, convert))
 			return true;
 	}
 	return false;
@@ -314,7 +299,7 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 
 	for (int i = 0; i < (int)handles.size(); i++)
 	{
-		if (handles[i].IntersectSegment(meshwrapper, start, end, cur_isect, &pr, normal, convert))
+		if (handles[i].IntersectSegment(start, end, cur_isect, &pr, normal, convert))
 		{
 			if (pr < best_pr)
 			{

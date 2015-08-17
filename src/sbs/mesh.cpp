@@ -89,11 +89,9 @@ Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, boo
 	return Ogre::Vector2(esmall, ebig);
 }
 
-void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber, bool reset_check)
+void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
 {
 	//cuts a rectangular hole in the polygons within the specified range
-	//mesh_origin is a modifier for meshes with relative polygon coordinates (used only for calculating door positions) - in this you specify the mesh's global position
-	//object_origin is for the object's (such as a shaft) central position, used for calculating wall offsets
 
 	if (cutwalls == false && cutfloors == false)
 		return;
@@ -275,38 +273,9 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 						}
 						polycheck = true;
 						polycheck2 = true;
+
 						//store extents of temppoly5 for door sides if needed
-						if (checkwallnumber > 0 && checkwallnumber < 3)
-						{
-							float extent;
-							if (checkwallnumber == 2 && (wall2a == false || wall2b == false))
-							{
-								//level walls
-								if (wall2a == true)
-									wall2b = true;
-								wall2a = true;
-								extent = GetExtents(temppoly5, 1).x + mesh_origin.x;
-								if (wall2b == false || (wall2b == true && fabsf(extent - object_origin.x) > fabsf(wall_extents_x.x - object_origin.x)))
-									wall_extents_x.x = extent;
-								extent = GetExtents(temppoly5, 3).x + mesh_origin.z;
-								if (wall2b == false || (wall2b == true && fabsf(extent - object_origin.z) > fabsf(wall_extents_z.x - object_origin.z)))
-									wall_extents_z.x = extent;
-								wall_extents_y = GetExtents(temppoly5, 2) + mesh_origin.y;
-							}
-							else if (wall1a == false || wall1b == false)
-							{
-								//shaft walls
-								if (wall1a == true)
-									wall1b = true;
-								wall1a = true;
-								extent = GetExtents(temppoly5, 1).y + mesh_origin.x;
-								if (wall1b == false || (wall1b == true && fabsf(extent - object_origin.x) < fabsf(wall_extents_x.y - object_origin.x)))
-									wall_extents_x.y = extent;
-								extent = GetExtents(temppoly5, 3).y + mesh_origin.z;
-								if (wall1b == false || (wall1b == true && fabsf(extent - object_origin.z) < fabsf(wall_extents_z.y - object_origin.z)))
-									wall_extents_z.y = extent;
-							}
-						}
+						GetDoorwayExtents(wall->meshwrapper, checkwallnumber, temppoly5);
 					}
 				}
 				else if (cutfloors == true)
@@ -433,6 +402,49 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 	}
 }
 
+void SBS::GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon)
+{
+	//calculate doorway extents, for use with AddDoorwayWalls function
+	//checknumber is 1 when checking shaft walls, and 2 when checking floor walls
+
+	if (checknumber > 0 && checknumber < 3)
+	{
+		Ogre::Vector3 mesh_position = mesh->GetPosition();
+		float extent;
+
+		if (wall2a == false || wall2b == false)
+		{
+			if (checknumber == 2)
+			{
+				//level walls
+				if (wall2a == true)
+					wall2b = true;
+				wall2a = true;
+				extent = GetExtents(polygon, 1).x + mesh_position.x;
+				if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.x) > fabsf(wall_extents_x.x - mesh_position.x)))
+					wall_extents_x.x = extent;
+				extent = GetExtents(polygon, 3).x + mesh_position.z;
+				if (wall2b == false || (wall2b == true && fabsf(extent - mesh_position.z) > fabsf(wall_extents_z.x - mesh_position.z)))
+					wall_extents_z.x = extent;
+				wall_extents_y = GetExtents(polygon, 2) + mesh_position.y;
+			}
+			else
+			{
+				//shaft walls
+				if (wall1a == true)
+					wall1b = true;
+				wall1a = true;
+				extent = GetExtents(polygon, 1).y + mesh_position.x;
+				if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.x) < fabsf(wall_extents_x.y - mesh_position.x)))
+					wall_extents_x.y = extent;
+				extent = GetExtents(polygon, 3).y + mesh_position.z;
+				if (wall1b == false || (wall1b == true && fabsf(extent - mesh_position.z) < fabsf(wall_extents_z.y - mesh_position.z)))
+					wall_extents_z.y = extent;
+			}
+		}
+	}
+}
+
 Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 {
 	//returns the direction the polygon faces, in a 3D vector
@@ -528,11 +540,23 @@ WallPolygon::~WallPolygon()
 {
 }
 
-void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
+	//if firstonly is true, only return first result
+	//if convert is true, converts vertices from remote Ogre positions to local SBS positions
+	//if rescale is true (along with convert), rescales vertices with UnitScale multiplier
+	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
+	//if reverse is false, process extents table in ascending order, otherwise descending order
+
 	vertices.resize(index_extents.size());
+
+	Ogre::Vector3 mesh_position;
+	if (convert == true)
+		mesh_position = mesh->GetPosition();
+	else
+		mesh_position = sbs->ToRemote(mesh->GetPosition());
 
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
@@ -554,9 +578,9 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition(), rescale));
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
@@ -574,9 +598,9 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 				else
 				{
 					if (convert == true)
-						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh->GetPosition(), rescale));
+						vertices[i].push_back(sbs->ToLocal(mesh->MeshGeometry[j].vertex + mesh_position, rescale));
 					else
-						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh->GetPosition());
+						vertices[i].push_back(mesh->MeshGeometry[j].vertex + mesh_position);
 				}
 			}
 		}
@@ -585,12 +609,12 @@ void WallPolygon::GetGeometry(MeshObject *mesh, std::vector<std::vector<Ogre::Ve
 	}
 }
 
-bool WallPolygon::PointInside(MeshObject *mesh, const Ogre::Vector3 &point, bool plane_check, bool convert)
+bool WallPolygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool convert)
 {
 	//check if a point is inside the polygon
 
 	std::vector<std::vector<Ogre::Vector3> > vertices;
-	GetGeometry(mesh, vertices, false, convert);
+	GetGeometry(vertices, false, convert);
 
 	for (int i = 0; i < (int)vertices.size(); i++)
 	{
@@ -609,7 +633,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	enabled = true;
 	mBody = 0;
 	mShape = 0;
-	SceneNode = 0;
 	Movable = 0;
 	prepared = false;
 	IsPhysical = enable_physics;
@@ -618,9 +641,6 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	this->mass = mass;
 	no_collider = false;
 	MeshGeometry.reserve(128); //reserve vertex space
-	rotX = 0;
-	rotY = 0;
-	rotZ = 0;
 
 	//use box collider if physics should be enabled
 	if (IsPhysical == true)
@@ -630,10 +650,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	Ogre::MeshPtr collidermesh;
 
-	std::string buffer;
-	std::string Name = name;
-	buffer = ToString(GetNumber());
-	Name.insert(0, "(" + buffer + ")");
+	std::string Name = "(" + ToString2(GetNumber()) + ")" + std::string(name);
 	this->name = Name;
 	std::string filename2;
 
@@ -743,12 +760,11 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
 	//Movable->setCastShadows(true);
-	SceneNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode(Name);
-	SceneNode->attachObject(Movable);
+	GetSceneNode()->attachObject(Movable);
 
 	//rescale if a loaded model
 	if (filename)
-		SceneNode->setScale(sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier));
+		GetSceneNode()->setScale(sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier));
 
 	//set maximum render distance
 	if (max_render_distance > 0)
@@ -788,22 +804,18 @@ MeshObject::~MeshObject()
 	//delete wall objects
 	DeleteWalls();
 
-	std::string nodename;
-	if (SceneNode)
-	{
-		SceneNode->detachAllObjects();
-		SceneNode->getParent()->removeChild(SceneNode);
-		sbs->mSceneManager->destroySceneNode(SceneNode->getName());
-		sbs->mSceneManager->destroyEntity(Movable->getName());
-	}
-	SceneNode = 0;
-	Movable = 0;
-
 	if (sbs->FastDelete == false)
 	{
 		sbs->DeleteMeshHandle(this);
 		Ogre::MeshManager::getSingleton().remove(name);
 		MeshWrapper.setNull();
+
+		if (Movable)
+		{
+			GetSceneNode()->detachObject(Movable);
+			sbs->mSceneManager->destroyEntity(Movable);
+		}
+		Movable = 0;
 	}
 }
 
@@ -818,9 +830,9 @@ void MeshObject::Enable(bool value, bool remove)
 
 	//attach or detach from scenegraph
 	if (value == false)
-		SceneNode->detachObject(Movable);
+		GetSceneNode()->detachObject(Movable);
 	else
-		SceneNode->attachObject(Movable);
+		GetSceneNode()->attachObject(Movable);
 
 	//enable or disable collision detection
 	if (mBody)
@@ -845,20 +857,17 @@ void MeshObject::Enable(bool value, bool remove)
 		sbs->camera->ResetCollisions();
 	}
 
-	//show scenenode bounding box
-	//SceneNode->showBoundingBox(value);
-
 	enabled = value;
 }
 
-WallObject* MeshObject::CreateWallObject(Object *parent, const char *name)
+WallObject* MeshObject::CreateWallObject(const char *name)
 {
 	//create a new wall object in the given array
 
 	WallObject *wall = new WallObject(this);
 	wall->name = name;
 	wall->parent_array = &Walls;
-	wall->SetValues(wall, parent, "Wall", name, false);
+	wall->SetValues(wall, this, "Wall", name, false, false);
 	Walls.push_back(wall);
 	return wall;
 }
@@ -937,7 +946,7 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 	{
 		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
 		{
-			if (Walls[i]->handles[j].IntersectSegment(this, start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
+			if (Walls[i]->handles[j].IntersectSegment(start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{
@@ -976,75 +985,6 @@ void MeshObject::RescaleVertices(float multiplier)
 bool MeshObject::IsEnabled()
 {
 	return enabled;
-}
-
-void MeshObject::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z, Ogre::Vector3 origin)
-{
-	//move a mesh object
-
-	SBS_PROFILE("MeshObject::Move");
-	Ogre::Vector3 pos;
-	if (relative_x == false)
-		pos.x = sbs->ToRemote(origin.x + position.x);
-	else
-		pos.x = SceneNode->getPosition().x + sbs->ToRemote(position.x);
-	if (relative_y == false)
-		pos.y = sbs->ToRemote(origin.y + position.y);
-	else
-		pos.y = SceneNode->getPosition().y + sbs->ToRemote(position.y);
-	if (relative_z == false)
-		pos.z = sbs->ToRemote(-(origin.z + position.z));
-	else
-		pos.z = SceneNode->getPosition().z + sbs->ToRemote(-position.z);
-	SceneNode->setPosition(pos);
-	if (mBody)
-		mBody->updateTransform(true, false, false);
-}
-
-Ogre::Vector3 MeshObject::GetPosition()
-{
-	return sbs->ToLocal(SceneNode->getPosition());
-}
-
-void MeshObject::SetRotation(const Ogre::Vector3 rotation)
-{
-	//rotate mesh
-	Ogre::Quaternion x(Ogre::Degree(rotation.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion rot = x * y * z;
-	SceneNode->setOrientation(rot);
-	rotX = rotation.x;
-	rotY = rotation.y;
-	rotZ = rotation.z;
-	if (mBody)
-		mBody->updateTransform(false, true, false);
-}
-
-void MeshObject::Rotate(const Ogre::Vector3 rotation, float speed)
-{
-	//rotates mesh in a relative amount
-	rotX += rotation.x * speed;
-	rotY += rotation.y * speed;
-	rotZ += rotation.z * speed;
-	if (rotX > 359)
-		rotX = rotX - 360;
-	if (rotY > 359)
-		rotY = rotY - 360;
-	if (rotZ > 359)
-		rotZ = rotZ - 360;
-	if (rotX < 0)
-		rotX = rotX + 360;
-	if (rotY < 0)
-		rotY = rotY + 360;
-	if (rotZ < 0)
-		rotZ = rotZ + 360;
-	SetRotation(Ogre::Vector3(rotX, rotY, rotZ));
-}
-
-Ogre::Vector3 MeshObject::GetRotation()
-{
-	return Ogre::Vector3(rotX, rotY, rotZ);
 }
 
 void MeshObject::AddVertex(Geometry &vertex_geom)
@@ -1267,8 +1207,8 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 	//if a mesh was attached and was empty, it needs to be reattached to be visible
 	if (count == 0 && IsEnabled() == true)
 	{
-		SceneNode->detachObject(Movable);
-		SceneNode->attachObject(Movable);
+		GetSceneNode()->detachObject(Movable);
+		GetSceneNode()->attachObject(Movable);
 	}
 
 	if (sbs->RenderOnStartup == true)
@@ -1694,6 +1634,11 @@ void MeshObject::CreateCollider()
 	if (mBody)
 		return;
 
+	Ogre::SceneNode *node = GetSceneNode();
+
+	if (!node)
+		return;
+
 	//exit if mesh is empty
 	if (MeshGeometry.size() == 0 || Triangles.size() == 0)
 		return;
@@ -1726,7 +1671,7 @@ void MeshObject::CreateCollider()
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 
 		if (sbs->DeleteColliders == true)
@@ -1766,6 +1711,11 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 	if (mBody)
 		return;
 
+	Ogre::SceneNode *node = GetSceneNode();
+
+	if (!node)
+		return;
+
 	try
 	{
 		//initialize collider shape
@@ -1779,11 +1729,11 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 
 		//finalize shape
 		shape->Finish();
-		std::string name = SceneNode->getName();
+		std::string name = node->getName();
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1800,18 +1750,23 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	if (mBody)
 		return;
 
+	Ogre::SceneNode *node = GetSceneNode();
+
+	if (!node)
+		return;
+
 	try
 	{
 		//initialize collider shape
 		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
-		std::string name = SceneNode->getName();
+		std::string name = node->getName();
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical == false)
-			mBody->setStaticShape(SceneNode, shape, 0.1f, 0.5f, false);
+			mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		else
-			mBody->setShape(SceneNode, shape, restitution, friction, mass);
+			mBody->setShape(node, shape, restitution, friction, mass);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1827,7 +1782,10 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 
 	//cast a ray from the camera position downwards
 	SBS_PROFILE("MeshObject::HitBeam");
-	Ogre::Ray ray (sbs->ToRemote(origin) -  SceneNode->getPosition(), direction);
+
+	Ogre::Vector3 position = sbs->ToRemote(origin - GetPosition());
+	Ogre::Ray ray (position, direction);
+
 	for (int i = 0; i < (int)Triangles.size(); i++)
 	{
 		for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
@@ -1852,17 +1810,18 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 {
 	//determine if position 'pos' is inside the mesh's bounding box
 
-	Ogre::Vector3 pos2 = sbs->ToRemote(pos);
-	pos2 -= SceneNode->getPosition();
+	Ogre::Vector3 position = sbs->ToRemote(pos - GetPosition());
+
 	Ogre::Vector3 min = MeshWrapper->getBounds().getMinimum();
 	Ogre::Vector3 max = MeshWrapper->getBounds().getMaximum();
-	if (pos2.x >= min.x && pos2.x <= max.x && pos2.z >= min.z && pos2.z <= max.z)
+
+	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
 	{
 		if (check_y == false)
 			return true;
 		else
 		{
-			if (pos2.y >= min.y && pos2.y <= max.y)
+			if (position.y >= min.y && position.y <= max.y)
 				return true;
 		}
 	}
@@ -2022,7 +1981,34 @@ Ogre::Vector3 MeshObject::GetPoint(const char *polyname, const Ogre::Vector3 &st
 	//and return the intersection point
 
 	int index = 0;
-	WallObject *wall = FindPolygon(polyname, index);
+	WallObject *wall = 0;
+
+	std::string name = polyname;
+
+	for (int i = 0; i <= 6; i++)
+	{
+		std::string newname;
+
+		if (i == 0)
+			newname = name;
+		if (i == 1)
+			newname = name + ":0";
+		if (i == 2)
+			newname = name + ":1";
+		if (i == 3)
+			newname = name + ":front";
+		if (i == 4)
+			newname = name + ":back";
+		if (i == 5)
+			newname = name + ":left";
+		if (i == 6)
+			newname = name + ":right";
+
+		wall = FindPolygon(newname.c_str(), index);
+
+		if (wall)
+			break;
+	}
 
 	if (wall)
 	{
@@ -2046,7 +2032,7 @@ Ogre::Vector3 MeshObject::GetWallExtents(const char *name, float altitude, bool 
 
 	std::string newname;
 	std::string name2 = name;
-	for (int i = 0; i < 6; i++)
+	for (int i = 0; i <= 6; i++)
 	{
 		if (i == 0)
 			newname = name2;
@@ -2170,4 +2156,16 @@ WallObject* MeshObject::FindPolygon(const char *name, int &index)
 	}
 	index = -1;
 	return 0;
+}
+
+void MeshObject::OnMove()
+{
+	if (mBody)
+		mBody->updateTransform(true, false, false);
+}
+
+void MeshObject::OnRotate()
+{
+	if (mBody)
+		mBody->updateTransform(false, true, false);
 }

@@ -32,8 +32,8 @@ class SBSIMPEXP DirectionalIndicator : public Object
 {
 public:
 
-	int elevator_num; //elevator this indicator is assigned to
-	int floor_num; //floor the indicator is on
+	int elevator; //elevator this indicator is assigned to
+	int floor; //floor the indicator is on
 	std::string Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
 	bool IsEnabled; //true if indicator is currently enabled
 	std::string UpTextureUnlit; //unlit up texture
@@ -53,9 +53,6 @@ public:
 	void UpLight(bool value);
 	void DownLight(bool value);
 	void SetLights(int up, int down);
-	void SetPosition(const Ogre::Vector3& position);
-	void Move(const Ogre::Vector3& position);
-	Ogre::Vector3 GetPosition();
 
 private:
 	MeshObject* DirectionalMeshBack; //indicator mesh back object

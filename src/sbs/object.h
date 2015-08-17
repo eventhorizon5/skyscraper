@@ -39,9 +39,10 @@ public:
 
 	//functions
 	Object(bool temporary = false);
-	~Object();
-	void SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent);
+	virtual ~Object();
+	void SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();
+	bool IsMovable();
 	Object* GetParent();
 	void* GetRawObject();
 	const char* GetType();
@@ -52,8 +53,31 @@ public:
 	Object* GetChild(int index);
 	int GetChildrenCount();
 	void RemoveChild(Object *object);
+	Ogre::SceneNode* GetSceneNode();
+	void SetNumber(int number);
+	bool IsTemporary();
+	void ShowBoundingBox(bool value);
+	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
+	void Move(float X, float Y, float Z, float speed = 1.0f);
+	void SetPosition(const Ogre::Vector3 &position);
+	void SetPositionRelative(const Ogre::Vector3 &position);
+	void SetPosition(float X, float Y, float Z);
+	void SetPositionRelative(float X, float Y, float Z);
+	void SetPositionY(float value);
+	Ogre::Vector3 GetPosition(bool relative = false);
+	void Rotate(const Ogre::Vector3 &rotation, float speed = 1.0f);
+	void Rotate(float X, float Y, float Z, float speed = 1.0f);
+	void SetRotation(Ogre::Vector3 rotation);
+	void SetRotation(float X, float Y, float Z);
+	Ogre::Vector3 GetRotation();
+	virtual void OnMove() {};
+	virtual void OnRotate() {};
+	void NotifyMove();
+	void NotifyRotate();
 
-protected:
+private:
+	void NotifyChildren(bool move, bool rotate);
+
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object
 	void *raw_object; //raw object
@@ -62,6 +86,8 @@ protected:
 	bool Temporary; //true if object can be deleted during runtime
 	std::string Name; //object name
 	std::vector<Object*> children; //object's children
+	Ogre::SceneNode *SceneNode; //node in scene graph
+	Ogre::Vector3 Rotation; //rotation vector
 };
 
 #endif

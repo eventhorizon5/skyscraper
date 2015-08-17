@@ -88,10 +88,8 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 
 	//create sound object
 	doorsound = new Sound(this, "Door Sound", true);
-	doorsound->SetPosition(elevator->Origin);
 	chime = new Sound(this, "Chime", true);
 	nudgesound = new Sound(this, "Nudge Sound", true);
-	nudgesound->SetPosition(elevator->Origin);
 }
 
 ElevatorDoor::~ElevatorDoor()
@@ -668,7 +666,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 
 Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
-	//adds elevator doors specified at a relative central position (off of elevator origin)
+	//adds elevator doors specified at a relative central position (off of elevator position)
 	//if direction is false, doors are on the left/right side; otherwise front/back
 	float x1, x2, x3, x4;
 	float z1, z2, z3, z4;
@@ -729,13 +727,13 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	//add main walls
 	sbs->DrawWalls(true, true, false, false, false, false);
 	WallObject *wall;
-	wall = door->mesh->CreateWallObject(wrapper, name);
+	wall = door->mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, tw, th, false);
 	sbs->ResetWalls();
 
 	//add side walls
 	sbs->DrawWalls(false, false, true, true, true, true);
-	wall = door->mesh->CreateWallObject(wrapper, name);
+	wall = door->mesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, sidetexture, thickness, x1, z1, x2, z2, height, height, voffset, voffset, side_tw, side_th, false);
 	sbs->ResetWalls();
 
@@ -802,7 +800,7 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
-	AddDoorComponent(ShaftDoors[index], name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, floorobj->GetBase() + voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(ShaftDoors[index], name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return ShaftDoors[index];
 }
 
@@ -885,47 +883,41 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	}
 	wrapper->Height = y2 - y1;
 	if (y2 < y1)
-		wrapper->altitude = y2;
+		wrapper->voffset = y2;
 	else
-		wrapper->altitude = y1;
+		wrapper->voffset = y1;
 
-	//set door parameters
-	wrapper->Origin = Ogre::Vector3(elev->Origin.x, 0, elev->Origin.z);
+	float base = wrapper->voffset;
 
-	//set door voffset
-	if (ShaftDoor == false)
-		wrapper->Origin.y += elev->Origin.y;
-	else
-		wrapper->Origin.y = wrapper->altitude;
-
-	//if shaft door, cut walls for door
 	if (ShaftDoor == true)
 	{
+		//if shaft door, cut walls for door
+
 		//create doors
-		Floor *floorobj = sbs->GetFloor(floor);
 		Shaft *shaft = elev->GetShaft();
-		float base = (wrapper->altitude - floorobj->GetBase()) + floorobj->GetBase(true); //relative to floor
+		Floor *floorobj = sbs->GetFloor(floor);
+		base += floorobj->GetBase(true);
 
 		//cut shaft and floor walls
 		sbs->ResetDoorwayWalls();
 		if (DoorDirection == false)
 		{
-			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, 1))
+			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->GetPosition().x + x1 - 2, base, elev->GetPosition().z + z1), Ogre::Vector3(elev->GetPosition().x + x1 + 2, base + Doors->Height, elev->GetPosition().z + z2), true, false, 1))
 				return 0;
-			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1 - 2, base, elev->Origin.z + z1), Ogre::Vector3(elev->Origin.x + x1 + 2, base + Doors->Height, elev->Origin.z + z2), true, false, true, 2);
+			floorobj->Cut(Ogre::Vector3(elev->GetPosition().x + x1 - 2, base, elev->GetPosition().z + z1), Ogre::Vector3(elev->GetPosition().x + x1 + 2, base + Doors->Height, elev->GetPosition().z + z2), true, false, true, 2);
 		}
 		else
 		{
-			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, 1))
+			if (!shaft->Cut(false, floor, Ogre::Vector3(elev->GetPosition().x + x1, base, elev->GetPosition().z + z1 - 2), Ogre::Vector3(elev->GetPosition().x + x2, base + Doors->Height, elev->GetPosition().z + z1 + 2), true, false, 1))
 				return 0;
-			floorobj->Cut(Ogre::Vector3(elev->Origin.x + x1, base, elev->Origin.z + z1 - 2), Ogre::Vector3(elev->Origin.x + x2, base + Doors->Height, elev->Origin.z + z1 + 2), true, false, true, 2);
+			floorobj->Cut(Ogre::Vector3(elev->GetPosition().x + x1, base, elev->GetPosition().z + z1 - 2), Ogre::Vector3(elev->GetPosition().x + x2, base + Doors->Height, elev->GetPosition().z + z1 + 2), true, false, true, 2);
 		}
 
 		//create doorway walls
 		if (DoorWalls == true)
 		{
 			sbs->ResetTextureMapping(true);
-			WallObject *wall = floorobj->Level->CreateWallObject(floorobj, "Connection Walls");
+			WallObject *wall = floorobj->Level->CreateWallObject("Connection Walls");
 			sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 			sbs->ResetTextureMapping();
 		}
@@ -939,31 +931,30 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 
 		if (ShaftDoor == false)
 		{
-			WallObject *wall;
-			wall = elev->ElevatorMesh->CreateWallObject(elev, "Connection");
+			WallObject *wall = elev->ElevatorMesh->CreateWallObject("Connection");
 			name1 = "DoorF1";
 			name2 = "DoorF2";
-			sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
-			WallObject *wall;
 			Shaft *shaft = elev->GetShaft();
-			wall = shaft->GetMeshObject(floor)->CreateWallObject(shaft, "Connection");
+			WallObject *wall = shaft->GetMeshObject(floor)->CreateWallObject("Connection");
+			Ogre::Vector3 position (elev->GetPosition() - shaft->GetPosition());
 			name1 = "ShaftDoorF1";
 			name2 = "ShaftDoorF2";
-			sbs->CreateWallBox(wall, name1.c_str(), "Connection", elev->Origin.x + x1, elev->Origin.x + x2, elev->Origin.z + z1, elev->Origin.z + z2, 1, -1.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2.c_str(), "Connection", elev->Origin.x + x1, elev->Origin.x + x2, elev->Origin.z + z1, elev->Origin.z + z2, 1, wrapper->Height + 0.001f + wrapper->altitude, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name1.c_str(), "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name2.c_str(), "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 
 		sbs->ResetTextureMapping();
 	}
 
 	Ogre::Vector3 center;
-	center.x = wrapper->Origin.x + x1 + ((x2 - x1) / 2);
-	center.y = wrapper->Origin.y + (wrapper->Height / 2);
-	center.z = wrapper->Origin.z + z1 + ((z2 - z1) / 2);
+	center.x = wrapper->GetPosition().x + x1 + ((x2 - x1) / 2);
+	center.y = wrapper->GetPosition().y + (wrapper->Height / 2);
+	center.z = wrapper->GetPosition().z + z1 + ((z2 - z1) / 2);
 
 	//relocate sound object
 	if (ShaftDoor == false)
@@ -978,8 +969,8 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	if (GetSensorStatus() == true && ShaftDoor == false && elev->AutoDoors == true)
 	{
 		float sensor_width = sbs->camera->cfg_body_width / 4;
-		Ogre::Vector3 min (x1 - sensor_width, wrapper->altitude, z1 - sensor_width);
-		Ogre::Vector3 max (x2 + sensor_width, wrapper->altitude + wrapper->Height, z2 + sensor_width);
+		Ogre::Vector3 min (x1 - sensor_width, wrapper->voffset, z1 - sensor_width);
+		Ogre::Vector3 max (x2 + sensor_width, wrapper->voffset + wrapper->Height, z2 + sensor_width);
 		CreateSensor(min, max);
 	}
 
@@ -1319,29 +1310,6 @@ void ElevatorDoor::Loop()
 		MoveDoors(false, true);
 }
 
-void ElevatorDoor::Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//move doors
-
-	SBS_PROFILE("ElevatorDoor::Move");
-	for (int i = 0; i < (int)Doors->doors.size(); i++)
-	{
-		Doors->doors[i]->mesh->Move(position, relative_x, relative_y, relative_z);
-	}
-
-	//move door sensor
-	if (sensor)
-		sensor->Move(position, relative_x, relative_y, relative_z);
-}
-
-Ogre::Vector3 ElevatorDoor::GetPosition()
-{
-	//get position of first door mesh
-	if ((int)Doors->doors.size() > 0)
-		return Doors->doors[0]->mesh->GetPosition();
-	return Ogre::Vector3::ZERO;
-}
-
 void ElevatorDoor::Enabled(bool value)
 {
 	Doors->Enable(value);
@@ -1368,10 +1336,12 @@ float ElevatorDoor::GetShaftDoorAltitude(int floor)
 	if (index == -1)
 		return 0;
 
-	if (!ShaftDoors[index])
+	DoorWrapper *wrapper = ShaftDoors[index];
+
+	if (!wrapper)
 		return 0;
 
-	return ShaftDoors[index]->altitude;
+	return wrapper->GetPosition().y + wrapper->voffset;
 }
 
 void ElevatorDoor::MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z)
@@ -1466,12 +1436,15 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	Enabled = true;
 	Width = 0;
 	Height = 0;
-	Origin = 0;
 	Thickness = 0;
 	IsShaftDoor = shaftdoor;
 	Shift = 0;
-	altitude = 0;
+	voffset = 0;
 	floor = shaftdoor_floor;
+
+	Object *objparent = parent;
+	if (IsShaftDoor == true)
+		objparent = parent->elev->GetShaft()->GetMeshObject(floor);
 
 	std::string name;
 	if (IsShaftDoor == true)
@@ -1479,7 +1452,10 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	else
 		name = "Elevator Door " + ToString2(parent->Number);
 
-	SetValues(this, parent, "DoorWrapper", name.c_str(), false);
+	SetValues(this, objparent, "DoorWrapper", name.c_str(), false);
+
+	if (IsShaftDoor == true)
+		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
 }
 
 ElevatorDoor::DoorWrapper::~DoorWrapper()
@@ -1499,12 +1475,6 @@ ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *door
 	doors.resize(doors.size() + 1);
 	int index = (int)doors.size() - 1;
 	doors[index] = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
-
-	//move object to positions
-	if (IsShaftDoor == false)
-		doors[index]->mesh->Move(parent->elev->Origin, false, false, false);
-	else
-		doors[index]->mesh->Move(Ogre::Vector3(parent->elev->Origin.x, 0, parent->elev->Origin.z), false, false, false);
 
 	return doors[index];
 }
@@ -1548,12 +1518,12 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		if (parent->DoorDirection == false)
 		{
 			tempposition = mesh->GetPosition().z + wrapper->Shift;
-			temporigin = wrapper->Origin.z + wrapper->Shift;
+			temporigin = wrapper->GetPosition().z + wrapper->Shift;
 		}
 		else
 		{
 			tempposition = mesh->GetPosition().x + wrapper->Shift;
-			temporigin = wrapper->Origin.x + wrapper->Shift;
+			temporigin = wrapper->GetPosition().x + wrapper->Shift;
 		}
 	}
 	else
@@ -1643,14 +1613,14 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 					if (wrapper->IsShaftDoor == false)
 						offset = wrapper->Height - extents_max.y;
 					else
-						offset = wrapper->Height - (extents_max.y - wrapper->Origin.y);
+						offset = wrapper->Height - (extents_max.y - wrapper->GetPosition().y);
 				}
 				else
 				{
 					if (wrapper->IsShaftDoor == false)
 						offset = extents_min.y;
 					else
-						offset = extents_min.y - wrapper->Origin.y;
+						offset = extents_min.y - wrapper->GetPosition().y;
 				}
 				float newheight = height + offset;
 				marker1 = newheight / 4;
@@ -1694,14 +1664,14 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 					if (wrapper->IsShaftDoor == false)
 						offset = wrapper->Height - extents_max.y;
 					else
-						offset = wrapper->Height - (extents_max.y - wrapper->Origin.y);
+						offset = wrapper->Height - (extents_max.y - wrapper->GetPosition().y);
 				}
 				else
 				{
 					if (wrapper->IsShaftDoor == false)
 						offset = extents_min.y;
 					else
-						offset = extents_min.y - wrapper->Origin.y;
+						offset = extents_min.y - wrapper->GetPosition().y;
 				}
 				marker1 = 0;
 				marker2 = mainheight + (height - mainheight) + offset;
@@ -1815,11 +1785,8 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//sbs->Report("Door section: " + ToString2(door_section));
 
 	//place doors in positions (fixes any overrun errors)
-	float ypos;
-	if (wrapper->IsShaftDoor == false)
-		ypos = parent->elev->GetPosition().y;
-	else
-		ypos = 0;
+
+	mesh->SetPosition(Ogre::Vector3(parent->elev->GetPosition().x, mesh->GetParent()->GetPosition().y, parent->elev->GetPosition().z));
 
 	if (open == true)
 	{
@@ -1831,17 +1798,17 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float width = fabsf(extents_max.z - extents_min.z);
 				if (direction == 2)
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z - (mainwidth + (width - mainwidth) + offset)), false, false, false);
+					mesh->Move(Ogre::Vector3(0, 0, -(mainwidth + (width - mainwidth) + offset)));
 				else
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z + (mainwidth + (width - mainwidth) + offset)), false, false, false);
+					mesh->Move(Ogre::Vector3(0, 0, mainwidth + (width - mainwidth) + offset));
 			}
 			else
 			{
 				float width = fabsf(extents_max.x - extents_min.x);
 				if (direction == 2)
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x - (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z), false, false, false);
+					mesh->Move(Ogre::Vector3(-(mainwidth + (width - mainwidth) + offset), 0, 0));
 				else
-					mesh->Move(Ogre::Vector3(parent->elev->Origin.x + (mainwidth + (width - mainwidth) + offset), ypos, parent->elev->Origin.z), false, false, false);
+					mesh->Move(Ogre::Vector3(mainwidth + (width - mainwidth) + offset, 0, 0));
 			}
 		}
 		else
@@ -1849,13 +1816,11 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			float mainheight = wrapper->Height / 2;
 			float height = fabsf(extents_max.y - extents_min.y);
 			if (direction == 0)
-				mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos + (mainheight + (height - mainheight) + offset), parent->elev->Origin.z), false, false, false);
+				mesh->Move(Ogre::Vector3(0, mainheight + (height - mainheight) + offset, 0));
 			else
-				mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos - (mainheight + (height - mainheight) + offset), parent->elev->Origin.z), false, false, false);
+				mesh->Move(Ogre::Vector3(0, -(mainheight + (height - mainheight) + offset), 0));
 		}
 	}
-	else
-		mesh->Move(Ogre::Vector3(parent->elev->Origin.x, ypos, parent->elev->Origin.z), false, false, false);
 
 	//the door is open or closed now
 	is_open = open;
@@ -1874,33 +1839,35 @@ void ElevatorDoor::DoorObject::Move()
 {
 	//move elevator doors
 
+	float speed = active_speed * sbs->delta;
+
 	//up movement
 	if (direction == 0)
-		mesh->Move(Ogre::Vector3(0, active_speed * sbs->delta, 0), true, true, true);
+		mesh->Move(Ogre::Vector3(0, 1, 0), speed);
 
 	//down movement
 	if (direction == 1)
-		mesh->Move(Ogre::Vector3(0, -active_speed * sbs->delta, 0), true, true, true);
+		mesh->Move(Ogre::Vector3(0, -1, 0), speed);
 
 	if (parent->DoorDirection == false)
 	{
 		//left movement
 		if (direction == 2)
-			mesh->Move(Ogre::Vector3(0, 0, -active_speed * sbs->delta), true, true, true);
+			mesh->Move(Ogre::Vector3(0, 0, -1), speed);
 
 		//right movement
 		if (direction == 3)
-			mesh->Move(Ogre::Vector3(0, 0, active_speed * sbs->delta), true, true, true);
+			mesh->Move(Ogre::Vector3(0, 0, 1), speed);
 	}
 	else
 	{
 		//left movement
 		if (direction == 2)
-			mesh->Move(Ogre::Vector3(-active_speed * sbs->delta, 0, 0), true, true, true);
+			mesh->Move(Ogre::Vector3(-1, 0, 0), speed);
 
 		//right movement
 		if (direction == 3)
-			mesh->Move(Ogre::Vector3(active_speed * sbs->delta, 0, 0), true, true, true);
+			mesh->Move(Ogre::Vector3(1, 0, 0), speed);
 	}
 }
 
@@ -2065,7 +2032,6 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 
 	//create new trigger
 	sensor = new Trigger(this, "Sensor", true, SensorSound.c_str(), area_min, area_max, actions);
-	sensor->SetPosition(elev->Origin);
 }
 
 bool ElevatorDoor::AreDoorsMoving(int doors, bool car_doors, bool shaft_doors)

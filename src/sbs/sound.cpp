@@ -54,6 +54,7 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
 	loaded = false;
 	position_queued = false;
+	SetVelocity = false;
 }
 
 Sound::~Sound()
@@ -82,43 +83,28 @@ Sound::~Sound()
 	}
 }
 
-void Sound::SetPosition(const Ogre::Vector3& position, bool set_velocity)
+void Sound::OnMove()
 {
-	//set position of sound object
-
-	FMOD_VECTOR pos = {position.x, position.y, position.z};
+	FMOD_VECTOR pos = {GetPosition().x, GetPosition().y, GetPosition().z};
 	FMOD_VECTOR vel;
 	vel.x = 0;
 	vel.y = 0;
 	vel.z = 0;
 
 	//calculate sound velocity
-	if (sbs->GetElapsedTime() > 0 && set_velocity == true)
+	if (sbs->GetElapsedTime() > 0 && SetVelocity == true)
 	{
-		vel.x = (position.x - Position.x) * (1000 / sbs->GetElapsedTime());
-		vel.y = (position.y - Position.y) * (1000 / sbs->GetElapsedTime());
-		vel.z = (position.z - Position.z) * (1000 / sbs->GetElapsedTime());
+		vel.x = (GetPosition().x - Position.x) * (1000 / sbs->GetElapsedTime());
+		vel.y = (GetPosition().y - Position.y) * (1000 / sbs->GetElapsedTime());
+		vel.z = (GetPosition().z - Position.z) * (1000 / sbs->GetElapsedTime());
 	}
 
-	Position = position;
+	Position = GetPosition();
 	Velocity.x = vel.x;
 	Velocity.y = vel.y;
 	Velocity.z = vel.z;
 	if (channel)
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
-}
-
-void Sound::SetPositionY(float position, bool set_velocity)
-{
-	//set vertical position of sound object
-	Ogre::Vector3 newposition = Position;
-	newposition.y = position;
-	SetPosition(newposition, set_velocity);
-}
-
-Ogre::Vector3 Sound::GetPosition()
-{
-	return Position;
 }
 
 void Sound::SetVolume(float value)
@@ -391,11 +377,6 @@ void Sound::SetPlayPosition(float percent)
 
 		position_queued = true;
 	}
-}
-
-const char *Sound::GetName()
-{
-	return Name.c_str();
 }
 
 void Sound::SetDopplerLevel(float level)

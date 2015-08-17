@@ -174,7 +174,7 @@ public:
 	int mouse_x, mouse_y;
 
 	//public functions
-	SBS();
+	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem);
 	~SBS();
 	void Report(std::string message);
 	bool ReportError(std::string message);
@@ -192,7 +192,7 @@ public:
 	bool ScaleTexture(const char *name, float x_scale, float y_scale);
 	bool TransformTexture(const char *name, const char *type, const char *wave_type, float base, float frequency, float phase, float amplitude);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
-	void Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FMOD::System *fmodsystem);
+	void Initialize(Ogre::Camera *camera);
 	bool Start();
 	void CreateSky(const char *filenamebase);
 	bool AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
@@ -318,7 +318,7 @@ public:
 	MeshObject* FindMeshObject(std::string name);
 	Object* AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	Ogre::Vector2 GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z = false);
-	void Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, const Ogre::Vector3& mesh_origin, const Ogre::Vector3& object_origin, int checkwallnumber = 0, bool reset_check = true);
+	void Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);
 	int GetConfigInt(std::string key, int default_value);
 	std::string GetConfigString(std::string key, std::string default_value);
@@ -368,8 +368,6 @@ public:
 	void ListKeys();
 	bool MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool X, bool Y, bool Z);
 	bool RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool relative, bool X, bool Y, bool Z);
-	Ogre::Vector3 GetObjectPosition(Object *object);
-	Ogre::Vector3 GetObjectRotation(Object *object);
 	void CameraLoop();
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
@@ -379,6 +377,9 @@ public:
 	void ShowFloorInfo(bool all_floors, int floor = 0);
 	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices);
 	bool SegmentPlane(const Ogre::Vector3 &u, const Ogre::Vector3 &v, Ogre::Plane &plane, Ogre::Vector3 &isect, float &dist);
+	void ShowSceneNodes(bool value);
+	void GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon);
+	void ShowBoundingBoxes(bool value);
 
 	//Meshes
 	MeshObject* Buildings;

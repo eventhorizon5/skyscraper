@@ -633,7 +633,7 @@ void Skyscraper::GetInput()
 		return;
 
 	static int wireframe;
-	static bool wait, waitcheck, colliders, b_down;
+	static bool wait, waitcheck, colliders, b_down, boxes;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
@@ -903,6 +903,14 @@ void Skyscraper::GetInput()
 			SetFullScreen(!FullScreen);
 			wait = true;
 		}
+		if (wxGetKeyState(WXK_F8) && wait == false)
+		{
+			//show mesh bounding boxes
+			Simcore->ShowBoundingBoxes(!boxes);
+			boxes = !boxes;
+			wait = true;
+		}
+
 		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT) || wxGetKeyState((wxKeyCode)'['))
 		{
 			//increase FOV angle
@@ -1635,7 +1643,7 @@ bool Skyscraper::Load()
 	IsLoading = true;
 
 	//Create simulator object
-	Simcore = new SBS();
+	Simcore = new SBS(mSceneMgr, soundsys);
 
 	//refresh console to fix banner message on Linux
 	if (console)
@@ -1652,7 +1660,7 @@ bool Skyscraper::Load()
 #endif
 
 	//initialize simulator
-	Simcore->Initialize(mSceneMgr, mCamera, soundsys);
+	Simcore->Initialize(mCamera);
 
 	//load building data file
 	Report("\nLoading building data from " + BuildingFile + "...\n");

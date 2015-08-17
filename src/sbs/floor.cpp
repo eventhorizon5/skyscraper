@@ -220,12 +220,12 @@ WallObject* Floor::AddFloor(const char *name, const char *texture, float thickne
 
 	if (isexternal == false)
 	{
-		wall = Level->CreateWallObject(this, name);
-		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase() + voffset1, GetBase() + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+		wall = Level->CreateWallObject(name);
+		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, GetBase(true) + voffset1, GetBase(true) + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	else
 	{
-		wall = sbs->External->CreateWallObject(this, name);
+		wall = sbs->External->CreateWallObject(name);
 		sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	}
 	return wall;
@@ -235,8 +235,8 @@ WallObject* Floor::AddInterfloorFloor(const char *name, const char *texture, flo
 {
 	//Adds an interfloor floor with the specified dimensions and vertical offset
 
-	WallObject *wall = Interfloor->CreateWallObject(this, name);
-	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, Altitude + voffset1, Altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	WallObject *wall = Interfloor->CreateWallObject(name);
+	sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
 }
 
@@ -247,12 +247,12 @@ WallObject* Floor::AddWall(const char *name, const char *texture, float thicknes
 	WallObject *wall;
 	if (isexternal == false)
 	{
-		wall = Level->CreateWallObject(this, name);
-		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase() + voffset1, GetBase() + voffset2, tw, th, true);
+		wall = Level->CreateWallObject(name);
+		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, GetBase(true) + voffset1, GetBase(true) + voffset2, tw, th, true);
 	}
 	else
 	{
-		wall = sbs->External->CreateWallObject(this, name);
+		wall = sbs->External->CreateWallObject(name);
 		sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
 	}
 	return wall;
@@ -262,8 +262,8 @@ WallObject* Floor::AddInterfloorWall(const char *name, const char *texture, floa
 {
 	//Adds an interfloor wall with the specified dimensions
 
-	WallObject *wall = Interfloor->CreateWallObject(this, name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, Altitude + voffset1, Altitude + voffset2, tw, th, true);
+	WallObject *wall = Interfloor->CreateWallObject(name);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, voffset1, voffset2, tw, th, true);
 	return wall;
 }
 
@@ -465,13 +465,13 @@ void Floor::Cut(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwa
 		if (i > 0)
 			reset = false;
 
-		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, reset);
+		sbs->Cut(Level->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 	if (fast == false)
 	{
 		for (int i = 0; i < (int)Interfloor->Walls.size(); i++)
 		{
-			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0), checkwallnumber, false);
+			sbs->Cut(Interfloor->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, false);
 		}
 	}
 }
@@ -500,7 +500,7 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 
 	//cut external
 	for (int i = 0; i < (int)sbs->External->Walls.size(); i++)
-		sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
+		sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, Altitude + start.y, start.z), Ogre::Vector3(end.x, Altitude + end.y, end.z), cutwalls, cutfloors);
 }
 
 void Floor::AddGroupFloor(int number)
@@ -632,7 +632,7 @@ Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool ope
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString2(Number) + ":Door " + ToString2(number);
-	Door* door = new Door(this, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset + GetBase(), tw, th);
+	Door* door = new Door(this, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }
@@ -666,6 +666,10 @@ bool Floor::CalculateAltitude()
 				return ReportError("Invalid floor number specified - no adjacent floor");
 		}
 	}
+
+	//set altitude
+	SetAltitude(Altitude);
+
 	return true;
 }
 
@@ -687,8 +691,8 @@ WallObject* Floor::ColumnWallBox(const char *name, const char *texture, float x1
 {
 	//create columnframe wall box
 
-	WallObject *wall = ColumnFrame->CreateWallObject(this, name);
-	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
+	WallObject *wall = ColumnFrame->CreateWallObject(name);
+	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
 
@@ -696,8 +700,8 @@ WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float C
 {
 	//create columnframe wall box from a central location
 
-	WallObject *wall = ColumnFrame->CreateWallObject(this, name);
-	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, Altitude + voffset, tw, th, inside, outside, top, bottom, true);
+	WallObject *wall = ColumnFrame->CreateWallObject(name);
+	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 	return wall;
 }
 
@@ -707,7 +711,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 
 	if (relative == false)
 	{
-		FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase() + voffset);
+		FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, CenterX, CenterZ, width, height, GetBase(true) + voffset);
 		FloorIndicatorArray.push_back(ind);
 		return ind;
 	}
@@ -716,7 +720,7 @@ Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *textur
 		Elevator* elev = sbs->GetElevator(elevator);
 		if (elev)
 		{
-			FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, elev->Origin.x + CenterX, elev->Origin.z + CenterZ, width, height, GetBase() + voffset);
+			FloorIndicator *ind = new FloorIndicator(this, elevator, texture_prefix, direction, elev->GetPosition().x + CenterX, elev->GetPosition().z + CenterZ, width, height, GetBase(true) + voffset);
 			FloorIndicatorArray.push_back(ind);
 			return ind;
 		}
@@ -873,7 +877,7 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	sounds.push_back(sound);
 
 	//set parameters and play sound
-	sound->SetPosition(position);
+	sound->Move(position.x, GetBase(true) + position.y, position.z);
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
@@ -956,8 +960,8 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 	float x, z;
 	if (relative == true)
 	{
-		x = elev->Origin.x + CenterX;
-		z = elev->Origin.z + CenterZ;
+		x = elev->GetPosition().x + CenterX;
+		z = elev->GetPosition().z + CenterZ;
 	}
 	else
 	{
@@ -972,7 +976,7 @@ Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_
 			return 0;
 	}
 
-	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	DirectionalIndicator *indicator = new DirectionalIndicator(this, elevator, Number, active_direction, single, vertical, BackTexture, uptexture, uptexture_lit, downtexture, downtexture_lit, x, z, GetBase(true) + voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	DirIndicatorArray.push_back(indicator);
 	return indicator;
 }
@@ -987,7 +991,7 @@ void Floor::SetDirectionalIndicators(int elevator, bool UpLight, bool DownLight)
 
 		if (indicator)
 		{
-			if (indicator->elevator_num == elevator && indicator->ActiveDirection == false)
+			if (indicator->elevator == elevator && indicator->ActiveDirection == false)
 			{
 				indicator->DownLight(DownLight);
 				indicator->UpLight(UpLight);
@@ -1007,7 +1011,7 @@ void Floor::UpdateDirectionalIndicators(int elevator)
 
 		if (indicator)
 		{
-			if (indicator->elevator_num == elevator && indicator->ActiveDirection == true)
+			if (indicator->elevator == elevator && indicator->ActiveDirection == true)
 			{
 				Elevator *elev = sbs->GetElevator(elevator);
 
@@ -1048,7 +1052,7 @@ void Floor::UpdateDirectionalIndicators()
 		{
 			if (indicator->ActiveDirection == true)
 			{
-				Elevator *elev = sbs->GetElevator(indicator->elevator_num);
+				Elevator *elev = sbs->GetElevator(indicator->elevator);
 
 				if (!elev)
 					return;
@@ -1224,7 +1228,7 @@ Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre
 {
 	//add a light
 
-	Light* light = new Light(this, name, type, position + Ogre::Vector3(0, GetBase(), 0), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(this, name, type, position + Ogre::Vector3(0, GetBase(true), 0), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights.push_back(light);
 	return light;
 }
@@ -1232,7 +1236,7 @@ Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre
 Object* Floor::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
-	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(0, GetBase(), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(0, GetBase(true), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -1254,8 +1258,8 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX, GetBase(), CenterZ));
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->Move(CenterX, GetBase(true) + voffset, CenterZ);
 	ControlArray.push_back(control);
 	return control;
 }
@@ -1265,14 +1269,21 @@ Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray.push_back(trigger);
-	trigger->SetPosition(Ogre::Vector3(0, GetBase(), 0));
+	trigger->Move(0, GetBase(true), 0);
 	return trigger;
 }
 
 Object* Floor::AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
 {
 	//add a camera texture
-	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase() + position, use_rotation, rotation);
+	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase(true) + position, use_rotation, rotation);
 	CameraTextureArray.push_back(cameratexture);
 	return cameratexture;
+}
+
+void Floor::SetAltitude(float altitude)
+{
+	//position object at altitude
+	SetPositionY(altitude);
+	Altitude = altitude;
 }

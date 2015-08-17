@@ -1367,36 +1367,38 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
+		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
+			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
 
 			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 			else
-				wall = tmpMesh->CreateWallObject(Simcore->External, tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->Landscape, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->Buildings, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1408,8 +1410,21 @@ int ScriptProcessor::ProcCommands()
 		float voffset2 = atof(tempdata[7].c_str());
 		if (Section == 2)
 		{
-			voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
-			voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+			if (buffer == "floor")
+			{
+				voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+				voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+			}
+			else
+			{
+				voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+				voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+			}
+		}
+		else
+		{
+			voffset1 -= altitude_shift;
+			voffset2 -= altitude_shift;
 		}
 
 		//create triangle wall
@@ -1534,7 +1549,7 @@ int ScriptProcessor::ProcCommands()
 
 		//perform cut
 		for (int i = 0; i < (int)wallarray->size(); i++)
-			Simcore->Cut(wallarray->at(i), Ogre::Vector3(atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str())), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
+			Simcore->Cut(wallarray->at(i), Ogre::Vector3(atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str())), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]));
 		return sNextLine;
 	}
 
@@ -1609,36 +1624,38 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
+		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
+			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
 
 			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 			else
-				wall = tmpMesh->CreateWallObject(Simcore->External, tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->Landscape, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->Buildings, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1647,7 +1664,14 @@ int ScriptProcessor::ProcCommands()
 
 		float voffset = atof(tempdata[8].c_str());
 		if (Section == 2)
-			voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		{
+			if (buffer == "floor")
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+			else
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		}
+		else
+			voffset -= altitude_shift;
 
 		Simcore->CreateWallBox2(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), voffset, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 		return sNextLine;
@@ -1672,36 +1696,38 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
+		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
+			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
 
 			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 			else
-				wall = tmpMesh->CreateWallObject(Simcore->External, tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->Landscape, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->Buildings, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
@@ -1709,8 +1735,16 @@ int ScriptProcessor::ProcCommands()
 		StoreCommand(wall);
 
 		float voffset = atof(tempdata[8].c_str());
+
 		if (Section == 2)
-			voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		{
+			if (buffer == "floor")
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+			else
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		}
+		else
+			voffset -= altitude_shift;
 
 		Simcore->CreateWallBox(wall, tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), voffset, atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
 		return sNextLine;
@@ -1732,42 +1766,44 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
+		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
+			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
 
 			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 			else
-				wall = tmpMesh->CreateWallObject(Simcore->External, tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->Landscape, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->Buildings, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
 
 		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.push_back(Ogre::Vector3(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()), atof(tempdata[temp3 + 2].c_str())));
+			varray.push_back(Ogre::Vector3(atof(tempdata[temp3].c_str()), atof(tempdata[temp3 + 1].c_str()) - altitude_shift, atof(tempdata[temp3 + 2].c_str())));
 
 		StoreCommand(wall);
 
@@ -1791,42 +1827,51 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 		MeshObject* tmpMesh;
+		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
+			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(Simcore->GetElevator(Current), tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "external")
 		{
 			tmpMesh = Simcore->External;
 
 			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(Simcore->GetFloor(Current), tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 			else
-				wall = tmpMesh->CreateWallObject(Simcore->External, tempdata[1].c_str());
+				wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "landscape")
 		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(Simcore->Landscape, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else if (buffer == "buildings")
 		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(Simcore->Buildings, tempdata[1].c_str());
+			wall = tmpMesh->CreateWallObject(tempdata[1].c_str());
 		}
 		else
 			return ScriptError("Invalid object");
 
 		float altitude = atof(tempdata[params - 3].c_str());
 		if (Section == 2)
-			altitude += Simcore->GetFloor(Current)->GetBase();
+		{
+			if (buffer == "floor")
+				altitude += Simcore->GetFloor(Current)->GetBase(true);
+			else
+				altitude += Simcore->GetFloor(Current)->GetBase();
+		}
+		else
+			altitude -= altitude_shift;
 
 		std::vector<Ogre::Vector2> varray;
 		for (temp3 = 3; temp3 < params - 3; temp3 += 2)
@@ -2490,9 +2535,14 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 
+		float offset = 0;
+
 		MeshObject *mesh = 0;
 		if (buffer == "floor" && Simcore->GetFloor(Current))
+		{
 			mesh = Simcore->GetFloor(Current)->Level;
+			offset = mesh->GetPosition().y;
+		}
 		else if (buffer == "elevator" && Simcore->GetElevator(Current))
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
@@ -2504,8 +2554,13 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		MinExtent = mesh->GetWallExtents(tempdata[1].c_str(), atof(tempdata[2].c_str()), false);
-		MaxExtent = mesh->GetWallExtents(tempdata[1].c_str(), atof(tempdata[2].c_str()), true);
+		float alt = atof(tempdata[2].c_str());
+
+		//GetWallExtents command requires relative position, so subtract altitude from value
+		alt -= offset;
+
+		MinExtent = mesh->GetWallExtents(tempdata[1].c_str(), alt, false);
+		MaxExtent = mesh->GetWallExtents(tempdata[1].c_str(), alt, true);
 		return sNextLine;
 	}
 
@@ -3263,8 +3318,10 @@ int ScriptProcessor::ProcFloors()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 		std::string str = Calc(temp2.c_str());
-		if (!IsNumeric(str.c_str(), floor->Altitude))
+		float alt;
+		if (!IsNumeric(str.c_str(), alt))
 			return ScriptError("Invalid value");
+		floor->SetAltitude(alt);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 2) == "id")

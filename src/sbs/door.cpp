@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float altitude, float tw, float th)
+Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -70,10 +70,12 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	if (Speed <= 0)
 		Speed = 75;
 
+	Ogre::Vector3 position;
+
 	//set origin to location of the door's hinge/pivot point and set up door coordinates
 	if (Direction == 1 || Direction == 2)
 	{
-		origin = Ogre::Vector3(CenterX, altitude, CenterZ - (width / 2)); //front
+		position = Ogre::Vector3(CenterX, voffset, CenterZ - (width / 2)); //front
 		x1 = 0;
 		x2 = 0;
 		z1 = 0;
@@ -81,7 +83,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 3 || Direction == 4)
 	{
-		origin = Ogre::Vector3(CenterX, altitude, CenterZ + (width / 2)); //back
+		position = Ogre::Vector3(CenterX, voffset, CenterZ + (width / 2)); //back
 		x1 = 0;
 		x2 = 0;
 		z1 = -width;
@@ -89,7 +91,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 5 || Direction == 6)
 	{
-		origin = Ogre::Vector3(CenterX + (width / 2), altitude, CenterZ); //right
+		position = Ogre::Vector3(CenterX + (width / 2), voffset, CenterZ); //right
 		x1 = -width;
 		x2 = 0;
 		z1 = 0;
@@ -97,7 +99,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	}
 	if (Direction == 7 || Direction == 8)
 	{
-		origin = Ogre::Vector3(CenterX - (width / 2), altitude, CenterZ); //left
+		position = Ogre::Vector3(CenterX - (width / 2), voffset, CenterZ); //left
 		x1 = 0;
 		x2 = width;
 		z1 = 0;
@@ -111,11 +113,10 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 
 	//Create mesh
 	DoorMesh = new MeshObject(this, Name.c_str());
-	DoorMesh->Move(origin, false, false, false);
+	Move(position);
 
 	//create sound object
 	sound = new Sound(this, "DoorSound", true);
-	sound->SetPosition(origin);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);
@@ -126,14 +127,14 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	WallObject *wall;
-	wall = DoorMesh->CreateWallObject(this, name);
+	wall = DoorMesh->CreateWallObject(name);
 	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
 
 	//open door on startup (without sound) if specified
 	if (open_state == true)
-		Open(origin, false, true);
+		Open(position, false, true);
 }
 
 Door::~Door()
@@ -266,22 +267,7 @@ void Door::MoveDoor()
 		rotation = 0;
 	}
 
-	DoorMesh->SetRotation(Ogre::Vector3(0, rotation, 0));
-}
-
-void Door::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//moves door
-
-	DoorMesh->Move(position, relative_x, relative_y, relative_z);
-	origin = GetPosition();
-}
-
-Ogre::Vector3 Door::GetPosition()
-{
-	//return the door's position
-
-	return DoorMesh->GetPosition();
+	SetRotation(Ogre::Vector3(0, rotation, 0));
 }
 
 void Door::SetLocked(int side, int keyid)
@@ -362,10 +348,10 @@ bool Door::GetSide(const Ogre::Vector3 &position)
 {
 	//return which side of the door the position is (false for negative/left/front, true for positive/right/back)
 
-	if ((Direction >= 1 && Direction <= 4) && position.x > origin.x)
+	if ((Direction >= 1 && Direction <= 4) && position.x > GetPosition().x)
 		return true;
 
-	if ((Direction >= 5 && Direction <= 8) && position.z > origin.z)
+	if ((Direction >= 5 && Direction <= 8) && position.z > GetPosition().z)
 		return true;
 
 	return false;

@@ -31,18 +31,17 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
 {
-	//constructor
-	//creates a shaft in the location specified by x1, x2, z1, and z2
-	//and that spans the altitude range specified by startalt and endalt
+	//creates a shaft in the location specified by CenterX and CenterZ
+	//and that spans the floor range specified by startfloor and endfloor
 
 	//set up SBS object
 	SetValues(this, sbs, "Shaft", "", false);
 
 	ShaftNumber = number;
-	startfloor = _startfloor;
-	endfloor = _endfloor;
+	this->startfloor = startfloor;
+	this->endfloor = endfloor;
 
 	//make sure start and ending floors are within a valid range
 	if (startfloor < -sbs->Basements)
@@ -50,7 +49,6 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	if (endfloor > sbs->Floors - 1)
 		return;
 
-	origin = Ogre::Vector3(CenterX, sbs->GetFloor(_startfloor)->Altitude, CenterZ);
 	InsideShaft = false;
 	IsEnabled = true;
 	top = sbs->GetFloor(endfloor)->Altitude + sbs->GetFloor(endfloor)->FullHeight();
@@ -71,6 +69,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 	std::string name = "Shaft " + ToString2(number);
 
 	SetName(name.c_str());
+	SetPosition(CenterX, sbs->GetFloor(startfloor)->Altitude, CenterZ);
 
 	ShaftArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
@@ -84,6 +83,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _end
 		//Create shaft meshes
 		std::string buffer = name + ":" + ToString2(i);
 		ShaftArray[i - startfloor] = new MeshObject(this, buffer.c_str());
+		ShaftArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->Altitude);
 		EnableArray[i - startfloor] = true;
 	}
 }
@@ -181,7 +181,7 @@ WallObject* Shaft::AddWall(int floor, const char *name, const char *texture, flo
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddWall(wall, floor, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th);
 	return wall;
 }
@@ -192,7 +192,7 @@ bool Shaft::AddWall(WallObject *wall, int floor, const char *name, const char *t
 	if (IsValidFloor(floor) == false)
 		return ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
 
-	return sbs->AddWallMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, height1, height2, sbs->GetFloor(floor)->Altitude + voffset1, sbs->GetFloor(floor)->Altitude + voffset2, tw, th, true);
+	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
@@ -204,7 +204,7 @@ WallObject* Shaft::AddFloor(int floor, const char *name, const char *texture, fl
 		return 0;
 	}
 
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, name);
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject(name);
 	AddFloor(wall, floor, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, legacy_behavior);
 	return wall;
 }
@@ -228,7 +228,7 @@ bool Shaft::AddFloor(WallObject *wall, int floor, const char *name, const char *
 	if (altitude + voffset2 > top)
 		top = altitude + voffset2;
 
-	return sbs->AddFloorMain(wall, name, texture, thickness, origin.x + x1, origin.z + z1, origin.x + x2, origin.z + z2, altitude + voffset1, altitude + voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
+	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
 
 void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
@@ -360,6 +360,7 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 		//first determine if camera has X and Z values within the first shaft floor's bounding box
 		if (ShaftArray[0]->InBoundingBox(position, false) == true)
 		{
+			//do a hit beam test from the position to the bottom of the shaft, to see if it hits a shaft floor
 			bool result = (ShaftArray[0]->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, position.y - (bottom - 1)) >= 0);
 
 			//cache values
@@ -405,7 +406,7 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 			voffset2 = endvoffset;
 
 		if (relative == true)
-			floorptr->Cut(Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, false);
+			floorptr->Cut(Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true, false);
 		else
 			floorptr->Cut(Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, false);
 		floorptr = 0;
@@ -418,9 +419,9 @@ void Shaft::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vec
 	for (int i = 0; i < (int)sbs->External->Walls.size(); i++)
 	{
 		if (relative == true)
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(origin.x + start.x, voffset1, origin.z + start.y), Ogre::Vector3(origin.x + end.x, voffset2, origin.z + end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(GetPosition().x + start.x, voffset1, GetPosition().z + start.y), Ogre::Vector3(GetPosition().x + end.x, voffset2, GetPosition().z + end.y), false, true);
 		else
-			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true, Ogre::Vector3(0, 0, 0), Ogre::Vector3(0, 0, 0));
+			sbs->Cut(sbs->External->Walls[i], Ogre::Vector3(start.x, voffset1, start.y), Ogre::Vector3(end.x, voffset2, end.y), false, true);
 	}
 }
 
@@ -442,8 +443,6 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 	if (!sbs->GetFloor(floor))
 		return false;
 
-	float base = sbs->GetFloor(floor)->Altitude;
-
 	for (int i = 0; i < (int)GetMeshObject(floor)->Walls.size(); i++)
 	{
 		bool reset = true;
@@ -451,9 +450,9 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 			reset = false;
 
 		if (relative == true)
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(origin.x + start.x, base + start.y, origin.z + start.z), Ogre::Vector3(origin.x + end.x, base + end.y, origin.z + end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, start.y, start.z), Ogre::Vector3(end.x, end.y, end.z), cutwalls, cutfloors, checkwallnumber, reset);
 		else
-			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x, base + start.y, start.z), Ogre::Vector3(end.x, base + end.y, end.z), cutwalls, cutfloors, Ogre::Vector3(0, 0, 0), origin, checkwallnumber, reset);
+			sbs->Cut(GetMeshObject(floor)->Walls[i], Ogre::Vector3(start.x - GetPosition().x, start.y, start.z - GetPosition().z), Ogre::Vector3(end.x - GetPosition().x, end.y, end.z - GetPosition().z), cutwalls, cutfloors, checkwallnumber, reset);
 	}
 	return true;
 }
@@ -763,7 +762,7 @@ Object* Shaft::AddLight(int floor, const char *name, int type, Ogre::Vector3 pos
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Light* light = new Light(this, name, type, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
+	Light* light = new Light(GetMeshObject(floor), name, type, position, direction, color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b, spot_inner_angle, spot_outer_angle, spot_falloff, att_range, att_constant, att_linear, att_quadratic);
 	lights[floor - startfloor].push_back(light);
 	return light;
 }
@@ -776,7 +775,7 @@ Object* Shaft::AddModel(int floor, const char *name, const char *filename, bool 
 	if (!IsValidFloor(floor))
 		return 0;
 
-	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	Model* model = new Model(GetMeshObject(floor), name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (model->load_error == true)
 	{
 		delete model;
@@ -795,8 +794,8 @@ Object* Shaft::AddControl(int floor, const char *name, const char *sound, const 
 		return 0;
 
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX + origin.x, sbs->GetFloor(floor)->Altitude, CenterZ + origin.z));
+	Control* control = new Control(GetMeshObject(floor), name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->Move(CenterX, voffset, CenterZ);
 	ControlArray[floor - startfloor].push_back(control);
 	return control;
 }
@@ -811,9 +810,8 @@ Object* Shaft::AddTrigger(int floor, const char *name, const char *sound_file, O
 	/*if (!IsValidFloor(floor))
 		return 0;
 
-	Trigger* trigger = new Trigger(object, name, false, sound_file, area_min, area_max, action_names);
+	Trigger* trigger = new Trigger(GetMeshObject(floor), name, false, sound_file, area_min, area_max, action_names);
 	TriggerArray[floor - startfloor].push_back(trigger);
-	trigger->SetPosition(Ogre::Vector3(origin.x, sbs->GetFloor(floor)->Altitude, origin.z));
 	return trigger;*/
 	return 0;
 }
@@ -871,23 +869,23 @@ Object* Shaft::AddDoor(int floor, const char *open_sound, const char *close_soun
 	if (direction < 5)
 	{
 		Cut(1, floor, Ogre::Vector3(x1 - 0.5f, voffset, z1), Ogre::Vector3(x2 + 0.5f, voffset + height, z2), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(origin.x + x1 - 0.5f, floorptr->GetBase(true) + voffset, origin.z + z1), Ogre::Vector3(origin.x + x2 + 0.5f, floorptr->GetBase(true) + voffset + height, origin.z + z2), true, false, true, 2);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1 - 0.5f, floorptr->GetBase(true) + voffset, GetPosition().z + z1), Ogre::Vector3(GetPosition().x + x2 + 0.5f, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2), true, false, true, 2);
 	}
 	else
 	{
 		Cut(1, floor, Ogre::Vector3(x1, voffset, z1 - 0.5f), Ogre::Vector3(x2, voffset + height, z2 + 0.5f), true, false, 1);
-		floorptr->Cut(Ogre::Vector3(origin.x + x1, floorptr->GetBase(true) + voffset, origin.z + z1 - 0.5f), Ogre::Vector3(origin.x + x2, floorptr->GetBase(true) + voffset + height, origin.z + z2 + 0.5f), true, false, true, 2);
+		floorptr->Cut(Ogre::Vector3(GetPosition().x + x1, floorptr->GetBase(true) + voffset, GetPosition().z + z1 - 0.5f), Ogre::Vector3(GetPosition().x + x2, floorptr->GetBase(true) + voffset + height, GetPosition().z + z2 + 0.5f), true, false, true, 2);
 	}
 
 	//create doorway walls
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject(this, "Connection Walls");
+	WallObject *wall = GetMeshObject(floor)->CreateWallObject("Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
 	DoorArray.resize(DoorArray.size() + 1);
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string shaftnum = ToString(ShaftNumber);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(this, std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, origin.x + CenterX, origin.z + CenterZ, width, height, floorptr->GetBase() + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object;
 }

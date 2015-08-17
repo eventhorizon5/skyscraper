@@ -245,8 +245,8 @@ void MoveObject::Loop()
 
 	if (object)
 	{
-		Ogre::Vector3 pos = Simcore->GetObjectPosition(object);
-		Ogre::Vector3 rot = Simcore->GetObjectRotation(object);
+		Ogre::Vector3 pos = object->GetPosition();
+		Ogre::Vector3 rot = object->GetRotation();
 		lblPosition->SetLabel(TruncateNumber(pos.x, 2) + wxT(", ") + TruncateNumber(pos.y, 2) + wxT(", ") + TruncateNumber(pos.z, 2));
 		lblRotation->SetLabel(TruncateNumber(rot.x, 2) + wxT(", ") + TruncateNumber(rot.y, 2) + wxT(", ") + TruncateNumber(rot.z, 2));
 

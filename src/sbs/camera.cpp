@@ -104,8 +104,7 @@ Camera::Camera(Ogre::Camera *camera)
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
 	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0));
-	CameraNode = sbs->mSceneManager->getRootSceneNode()->createChildSceneNode("Camera");
-	CameraNode->attachObject(MainCamera);
+	GetSceneNode()->attachObject(MainCamera);
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
 
@@ -117,7 +116,7 @@ Camera::Camera(Ogre::Camera *camera)
 	float height = (cfg_body_height + cfg_legs_height - 0.5f) - (width * 2);
 	float step_height = cfg_legs_height - 0.5f;
 
-	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, CameraNode, sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
+	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, GetSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
 	//create debug shape
@@ -136,12 +135,12 @@ Camera::~Camera()
 	//Destructor
 	if (mCharacter)
 		delete mCharacter;
-	std::string nodename = CameraNode->getChild(0)->getName();
-	CameraNode->detachAllObjects();
-	CameraNode->getParent()->removeChild(CameraNode);
+
+	if (MainCamera)
+		GetSceneNode()->detachObject(MainCamera);
+
+	std::string nodename = GetSceneNode()->getChild(0)->getName();
 	sbs->mSceneManager->destroySceneNode(nodename);
-	sbs->mSceneManager->destroySceneNode(CameraNode->getName());
-	CameraNode = 0;
 }
 
 void Camera::SetPosition(const Ogre::Vector3 &vector)
@@ -197,10 +196,8 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 Ogre::Vector3 Camera::GetPosition()
 {
 	//returns the camera's current position
-	if (CameraNode)
-		return sbs->ToLocal(CameraNode->getPosition() + MainCamera->getPosition());
-	else
-		return Ogre::Vector3(0, 0, 0);
+
+	return sbs->ToLocal(GetSceneNode()->getPosition() + MainCamera->getPosition());
 }
 
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
@@ -461,7 +458,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (callback.doesCollide() == false)
 		return;
 
-	polyname = "";
+	wallname = "";
 	WallObject* wall = 0;
 	MeshObject* meshobject;
 	float best_distance = 2000000000.;
@@ -520,13 +517,13 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			wall = meshobject->Walls[num];
 		if (wall)
 		{
-			polyname = wall->GetName();
+			wallname = wall->GetName();
 			//meshname = bestmesh->name;
 			meshname = meshobject->name;
 			//meshobject = bestmesh;
 		}
 		else
-			polyname = "";
+			wallname = "";
 	//}
 
 	//get and strip object number
@@ -535,9 +532,9 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	if (wall)
 	{
 		object_number = wall->GetNumber();
-		int index = (int)polyname.find(")");
+		int index = (int)wallname.find(")");
 		if (index > -1)
-			polyname.erase(polyname.begin(), polyname.begin() + index + 1);
+			wallname.erase(wallname.begin(), wallname.begin() + index + 1);
 	}
 	if ((int)meshname.find("(") == 0)
 	{
@@ -559,7 +556,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//show result
 	if (wall)
-		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Polygon: " + polyname);
+		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
 	else
 		sbs->Report("Clicked on object " + number + ": " + meshname);
 
@@ -570,22 +567,35 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	std::string type = obj->GetType();
 
-	//get original object (parent object of clicked mesh)
+	Object *mesh_parent = 0;
+
 	if (obj->GetParent())
 	{
 		std::string parent_type = obj->GetParent()->GetType();
 
+		//if object is a wall, and parent is a mesh, get mesh's (parent's) parent
+		if (parent_type == "Mesh")
+			mesh_parent = obj->GetParent()->GetParent();
+		else
+			mesh_parent = obj->GetParent();
+	}
+
+	//get original object (parent object of clicked mesh)
+	if (mesh_parent)
+	{
+		std::string parent_type = mesh_parent->GetType();
+
 		//check controls
 		if (parent_type == "Control")
 		{
-			Control *control = (Control*)obj->GetParent()->GetRawObject();
+			Control *control = (Control*)mesh_parent->GetRawObject();
 
 			if (control)
 			{
 				//delete control if ctrl and alt keys are pressed
 				if (ctrl == true && alt == true && shift == false)
 				{
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 
@@ -600,14 +610,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check doors
 		if (parent_type == "Door" && right == false)
 		{
-			Door *door = (Door*)obj->GetParent()->GetRawObject();
+			Door *door = (Door*)mesh_parent->GetRawObject();
 
 			if (door)
 			{
 				//delete door if ctrl and alt keys are pressed
 				if (ctrl == true && alt == true && shift == false)
 				{
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 
@@ -638,14 +648,14 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check models
 		if (parent_type == "Model" && right == false)
 		{
-			Model *model = (Model*)obj->GetParent()->GetRawObject();
+			Model *model = (Model*)mesh_parent->GetRawObject();
 
 			if (model)
 			{
 				//delete model if ctrl and alt keys are pressed
 				if (ctrl == true && alt == true && shift == false)
 				{
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 
@@ -653,7 +663,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				if (model->IsKey() == true)
 				{
 					sbs->AddKey(model->GetKeyID(), model->Name);
-					sbs->DeleteObject(obj->GetParent());
+					sbs->DeleteObject(mesh_parent);
 					return;
 				}
 			}
@@ -662,7 +672,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check call buttons
 		if (parent_type == "CallButton" && right == false)
 		{
-			CallButton *callbutton = (CallButton*)obj->GetParent()->GetRawObject();
+			CallButton *callbutton = (CallButton*)mesh_parent->GetRawObject();
 
 			if (callbutton)
 			{
@@ -709,7 +719,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check elevator doors
 		if (parent_type == "DoorWrapper" && shift == true && right == false)
 		{
-			ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
+			ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)mesh_parent->GetRawObject();
 
 			if (wrapper)
 			{
@@ -749,7 +759,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 			//delete indicator if ctrl and alt keys are pressed
 			if (ctrl == true && alt == true && shift == false)
 			{
-				sbs->DeleteObject(obj->GetParent());
+				sbs->DeleteObject(mesh_parent);
 				return;
 			}
 		}
@@ -773,11 +783,11 @@ const char* Camera::GetClickedMeshName()
 	return meshname.c_str();
 }
 
-const char* Camera::GetClickedPolyName()
+const char* Camera::GetClickedWallName()
 {
 	//return name of last clicked polygon
 
-	return polyname.c_str();
+	return wallname.c_str();
 }
 
 int Camera::GetClickedObjectNumber()

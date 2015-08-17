@@ -33,7 +33,6 @@ class SBSIMPEXP Shaft : public Object
 public:
 
 	int ShaftNumber; //shaft number
-	Ogre::Vector3 origin; //origin vector
 	int startfloor; //starting floor
 	int endfloor; //ending floor
 	std::vector<int> elevators; //list of elevators that use this shaft
@@ -48,7 +47,7 @@ public:
 	bool ShowInterfloors; //true if interfloors should be shown while inside the shaft/elevator
 	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
 
-	Shaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	~Shaft();
 	WallObject* AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	bool AddWall(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);

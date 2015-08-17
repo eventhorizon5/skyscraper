@@ -45,7 +45,6 @@ Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *s
 	this->area_min = area_min;
 	this->area_max = area_max;
 	is_inside = false;
-	pos = Ogre::Vector3::ZERO;
 
 	//create sound object
 	sound = new Sound(this, name, true);
@@ -88,36 +87,6 @@ void Trigger::Enabled(bool value)
 		return;
 
 	IsEnabled = value;
-}
-
-Ogre::Vector3 Trigger::GetPosition()
-{
-	//return current position
-	return pos;
-}
-
-void Trigger::SetPosition(const Ogre::Vector3 &position)
-{
-	//set position
-	sound->SetPosition(position);
-	pos = position;
-}
-
-void Trigger::SetPositionY(float position)
-{
-	//set Y position
-	Ogre::Vector3 tmppos = GetPosition();
-	tmppos.y = position;
-	SetPosition(tmppos);
-}
-
-void Trigger::Move(const Ogre::Vector3 &position)
-{
-	//relative movement
-	pos += position;
-
-	//move sound
-	sound->SetPosition(pos);
 }
 
 bool Trigger::SetSelectPosition(int position)
@@ -275,7 +244,7 @@ bool Trigger::Check()
 
 	Ogre::Vector3 cam = sbs->camera->GetPosition();
 	bool changed = false;
-	if (cam > (pos + area_min) && cam < (pos + area_max))
+	if (cam > (GetPosition() + area_min) && cam < (GetPosition() + area_max))
 	{
 		if (is_inside == false)
 			changed = true;
@@ -323,26 +292,6 @@ bool Trigger::Check()
 		return result;
 	}
 	return false;
-}
-
-void Trigger::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//relative movement
-	if (relative_x)
-		pos.x += position.x;
-	else
-		pos.x = position.x;
-	if (relative_y)
-		pos.y += position.y;
-	else
-		pos.y = position.y;
-	if (relative_z)
-		pos.z += position.z;
-	else
-		pos.z = position.z;
-
-	//move sound
-	sound->SetPosition(pos);
 }
 
 bool Trigger::IsInside()

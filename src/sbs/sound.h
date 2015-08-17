@@ -31,12 +31,10 @@ class SBSIMPEXP Sound : public Object
 public:
 
 	Ogre::Vector3 PositionOffset; //optional position offset, used only by other objects
+	bool SetVelocity; //set sound velocity on move
 
 	Sound(Object *parent, const char *name, bool permanent);
 	~Sound();
-	void SetPosition(const Ogre::Vector3& position, bool set_velocity = false);
-	void SetPositionY(float position, bool set_velocity = false);
-	Ogre::Vector3 GetPosition();
 	void SetVolume(float value);
 	float GetVolume();
 	void SetDistances(float min, float max);
@@ -58,13 +56,13 @@ public:
 	float GetPlayPosition();
 	void SetPlayPosition(float percent);
 	void SetConeSettings(float inside_angle = 360.0, float outside_angle = 360.0, float outside_volume = 1.0);
-	const char *GetName();
 	void SetDopplerLevel(float level);
 	bool IsLoaded();
 	void PlayQueued(const char *filename, bool stop = true, bool loop = false);
 	void ProcessQueue();
 	void Report(std::string message);
 	bool ReportError(std::string message);
+	void OnMove();
 
 private:
 

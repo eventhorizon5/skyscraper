@@ -1235,7 +1235,7 @@ void editelevator::Loop()
 	{
 		txtDoorDirection->SetValue(wxString::FromAscii(BoolToString(door->DoorDirection)));
 		txtDoorHeight->SetValue(TruncateNumber(door->GetDoorWrapper()->Height, 2));
-		txtDoorOrigin->SetValue(TruncateNumber(door->GetDoorWrapper()->Origin.x, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->Origin.y, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->Origin.z, 2));
+		txtDoorOrigin->SetValue(TruncateNumber(door->GetDoorWrapper()->GetPosition().x, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->GetPosition().y, 2) + wxT(", ") + TruncateNumber(door->GetDoorWrapper()->GetPosition().z, 2));
 		txtDoorsOpen->SetValue(wxString::FromAscii(BoolToString(door->AreDoorsOpen())));
 		txtDoorWidth->SetValue(TruncateNumber(door->GetDoorWrapper()->Width, 2));
 		txtShaftDoorOrigin->SetValue(TruncateNumber(door->ShaftDoorOrigin.x, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.y, 2) + wxT(", ") + TruncateNumber(door->ShaftDoorOrigin.z, 2));
@@ -1249,8 +1249,8 @@ void editelevator::Loop()
 	txtHeight->SetValue(TruncateNumber(elevator->Height, 2));
 	txtMoveElevator->SetValue(wxString::FromAscii(BoolToString(elevator->MoveElevator)));
 	txtNumber->SetValue(wxVariant((long)elevator->Number).GetString());
-	txtOrigin->SetValue(TruncateNumber(elevator->Origin.x, 2) + wxT(", ") + TruncateNumber(elevator->Origin.y, 2) + wxT(", ") + TruncateNumber(elevator->Origin.z, 2));
-	txtOriginFloor->SetValue(wxVariant((long)elevator->OriginFloor).GetString());
+	txtOrigin->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
+	txtOriginFloor->SetValue(wxVariant((long)elevator->StartingFloor).GetString());
 	txtPosition->SetValue(TruncateNumber(elevator->GetPosition().x, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().y, 2) + wxT(", ") + TruncateNumber(elevator->GetPosition().z, 2));
 	txtQueueDirection->SetValue(wxVariant((long)elevator->QueuePositionDirection).GetString());
 	txtQueueLastDown->SetValue(wxVariant((long)elevator->LastQueueFloor[0]).GetString());

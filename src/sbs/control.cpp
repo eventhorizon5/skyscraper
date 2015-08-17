@@ -31,7 +31,7 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Control::Control(Object *parent, const char *name, bool permanent, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, float voffset, bool center)
+Control::Control(Object *parent, const char *name, bool permanent, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, bool center)
 {
 	//create a control at the specified location
 
@@ -69,8 +69,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(Name.c_str());
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
@@ -81,8 +81,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(Name.c_str());
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
@@ -93,8 +93,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(Name.c_str());
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
@@ -105,8 +105,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(this, Name.c_str());
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, voffset, voffset, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(Name.c_str());
+		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	sbs->TexelOverride = false;
@@ -166,36 +166,6 @@ void Control::Enabled(bool value)
 
 	ControlMesh->Enable(value);
 	IsEnabled = value;
-}
-
-Ogre::Vector3 Control::GetPosition()
-{
-	//return current position
-	return ControlMesh->GetPosition();
-}
-
-void Control::SetPosition(const Ogre::Vector3 &position)
-{
-	//set control position
-	sound->SetPosition(position);
-	ControlMesh->Move(position, false, false, false);
-}
-
-void Control::SetPositionY(float position)
-{
-	//set control position
-	Ogre::Vector3 pos = GetPosition();
-	pos.y = position;
-	SetPosition(pos);
-}
-
-void Control::Move(const Ogre::Vector3 &position)
-{
-	//relative movement
-	ControlMesh->Move(position, true, true, true);
-
-	//move sound
-	sound->SetPosition(GetPosition());
 }
 
 bool Control::SetSelectPosition(int position)
@@ -466,15 +436,6 @@ void Control::ChangeLight(bool value)
 			ChangeSelectPosition(index);
 	}
 	light_status = value;
-}
-
-void Control::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//relative movement
-	ControlMesh->Move(position, relative_x, relative_y, relative_z);
-
-	//move sound
-	sound->SetPosition(GetPosition());
 }
 
 void Control::SetLocked(bool value, int keyid)

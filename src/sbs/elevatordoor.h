@@ -87,14 +87,13 @@ public:
 		std::string name;
 		bool Open;
 		bool Enabled;
-		Ogre::Vector3 Origin;
 		float Width;
 		float Height;
 		float Thickness;
 		ElevatorDoor *parent;
 		bool IsShaftDoor;
 		float Shift;
-		float altitude;
+		float voffset;
 		int floor;
 	};
 
@@ -138,9 +137,7 @@ public:
 	Object* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
 	void Chime(int floor, bool direction);
 	void Loop();
-	void Move(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
 	void MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
-	Ogre::Vector3 GetPosition();
 	void Enabled(bool value);
 	bool IsEnabled();
 	void SetShaftDoors(float thickness, float CenterX, float CenterZ);

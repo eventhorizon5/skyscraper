@@ -38,9 +38,11 @@
 
 SBS *sbs; //self reference
 
-SBS::SBS()
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 {
 	sbs = this;
+	this->mSceneManager = mSceneManager;
+
 	version = "0.10.0." + std::string(SVN_REVSTR);
 	version_state = "Alpha";
 
@@ -217,19 +219,17 @@ SBS::SBS()
 	if (UnitScale <= 0)
 		UnitScale = 1;
 
-	//Print SBS banner
-	PrintBanner();
-}
-
-void SBS::Initialize(Ogre::SceneManager* mSceneManager, Ogre::Camera *camera, FMOD::System *fmodsystem)
-{
-	this->mSceneManager = mSceneManager;
-
 	//disable sound if system is not available
 	if (!fmodsystem)
 		DisableSound = true;
 	soundsys = fmodsystem;
 
+	//Print SBS banner
+	PrintBanner();
+}
+
+void SBS::Initialize(Ogre::Camera *camera)
+{
 	//set default texture map values
 	ResetTextureMapping(true);
 
@@ -444,6 +444,9 @@ SBS::~SBS()
 	//remove all textures
 	Ogre::TextureManager::getSingleton().removeAll();
 	texturecount = 0;
+
+	//clear scene manager
+	mSceneManager->clearScene();
 
 	//clear self reference
 	sbs = 0;
@@ -2094,24 +2097,29 @@ void SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw,
 
 	if (wall1a == true && wall2a == true)
 	{
+		//convert extents to relative positioning
+		Ogre::Vector2 extents_x = wall_extents_x - wallobject->meshwrapper->GetPosition().x;
+		Ogre::Vector2 extents_y = wall_extents_y - wallobject->meshwrapper->GetPosition().y;
+		Ogre::Vector2 extents_z = wall_extents_z - wallobject->meshwrapper->GetPosition().z;
+
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right
-		bool direction = fabsf(wall_extents_x.x - wall_extents_x.y) > fabsf(wall_extents_z.x - wall_extents_z.y);
+		bool direction = fabsf(extents_x.x - extents_x.y) > fabsf(extents_z.x - extents_z.y);
 
 		DrawWalls(false, true, false, false, false, false);
 		if (direction == true)
-			AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.x, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		else
-			AddWallMain(wallobject, "DoorwayLeft", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		ResetWalls();
 
 		DrawWalls(true, false, false, false, false, false);
 		if (direction == true)
-			AddWallMain(wallobject, "DoorwayRight", texture, 0, wall_extents_x.y, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		else
-			AddWallMain(wallobject, "DoorwayRight", texture, 0, wall_extents_x.x, wall_extents_z.y, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y - wall_extents_y.x, wall_extents_y.y - wall_extents_y.x, wall_extents_y.x, wall_extents_y.x, tw, th, true);
+			AddWallMain(wallobject, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 
-		AddFloorMain(wallobject, "DoorwayTop", texture, 0, wall_extents_x.x, wall_extents_z.x, wall_extents_x.y, wall_extents_z.y, wall_extents_y.y, wall_extents_y.y, false, false, tw, th, true);
+		AddFloorMain(wallobject, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
 		ResetWalls();
 
 		ResetDoorwayWalls();
@@ -2181,11 +2189,11 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 
 	WallObject *wall;
 	if (mesh == "external")
-		wall = External->CreateWallObject(External, name);
+		wall = External->CreateWallObject(name);
 	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(Buildings, name);
+		wall = Buildings->CreateWallObject(name);
 	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(Landscape, name);
+		wall = Landscape->CreateWallObject(name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
 	return wall;
@@ -2203,11 +2211,11 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 
 	WallObject *wall;
 	if (mesh == "external")
-		wall = External->CreateWallObject(External, name);
+		wall = External->CreateWallObject(name);
 	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(Buildings, name);
+		wall = Buildings->CreateWallObject(name);
 	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(Landscape, name);
+		wall = Landscape->CreateWallObject(name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
@@ -2244,7 +2252,7 @@ WallObject* SBS::AddGround(const char *name, const char *texture, float x1, floa
 		maxz = z1;
 	}
 
-	WallObject *wall = Landscape->CreateWallObject(Landscape, name);
+	WallObject *wall = Landscape->CreateWallObject(name);
 
 	Report("Creating ground...");
 
@@ -3140,148 +3148,19 @@ bool SBS::MoveObject(Object *object, Ogre::Vector3 position, bool relative, bool
 	if (!object)
 		return ReportError("Invalid object");
 
-	std::string number = ToString(object->GetNumber());
+	if (relative == false)
+	{
+		if (X == false)
+			position.x = object->GetPosition().x;
+		if (Y == false)
+			position.y = object->GetPosition().y;
+		if (Z == false)
+			position.z = object->GetPosition().z;
 
-	if (!object->GetRawObject())
-		return ReportError("Invalid raw object " + number);
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
-	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = mesh->GetPosition().x;
-			if (Y == false)
-				position.y = mesh->GetPosition().y;
-			if (Z == false)
-				position.z = mesh->GetPosition().z;
-		}
-		mesh->Move(position, relative, relative, relative);
+		object->SetPosition(position);
 	}
-	if (type == "ButtonPanel")
-	{
-		ButtonPanel* panel = (ButtonPanel*)object->GetRawObject();
-		if (relative == true)
-			panel->Move(position);
-	}
-	if (type == "DirectionalIndicator")
-	{
-		DirectionalIndicator* ind = (DirectionalIndicator*)object->GetRawObject();
-		if (relative == true)
-			ind->Move(position);
-		else
-		{
-			if (X == false)
-				position.x = ind->GetPosition().x;
-			if (Y == false)
-				position.y = ind->GetPosition().y;
-			if (Z == false)
-				position.z = ind->GetPosition().z;
-			ind->SetPosition(position);
-		}
-	}
-	if (type == "Door")
-	{
-		Door* door = (Door*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = door->GetPosition().x;
-			if (Y == false)
-				position.y = door->GetPosition().y;
-			if (Z == false)
-				position.z = door->GetPosition().z;
-		}
-		door->Move(position, relative, relative, relative);
-	}
-	if (type == "ElevatorDoor")
-	{
-		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = door->GetPosition().x;
-			if (Y == false)
-				position.y = door->GetPosition().y;
-			if (Z == false)
-				position.z = door->GetPosition().z;
-		}
-		door->Move(position, relative, relative, relative);
-	}
-	if (type == "FloorIndicator")
-	{
-		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
-		if (relative == true)
-			ind->Move(position);
-	}
-	if (type == "Sound")
-	{
-		Sound* sound = (Sound*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = sound->GetPosition().x;
-			if (Y == false)
-				position.y = sound->GetPosition().y;
-			if (Z == false)
-				position.z = sound->GetPosition().z;
-			sound->SetPosition(position);
-		}
-		else
-		{
-			Ogre::Vector3 newpos = sound->GetPosition() + position;
-			sound->SetPosition(newpos);
-		}
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		if (relative == false)
-		{
-			if (X == false)
-				position.x = model->GetPosition().x;
-			if (Y == false)
-				position.y = model->GetPosition().y;
-			if (Z == false)
-				position.z = model->GetPosition().z;
-		}
-		model->Move(position, relative, relative, relative);
-	}
-	if (type == "Control")
-	{
-		Control* control = (Control*)object->GetRawObject();
-		if (relative == true)
-			control->Move(position);
-		else
-		{
-			if (X == false)
-				position.x = control->GetPosition().x;
-			if (Y == false)
-				position.y = control->GetPosition().y;
-			if (Z == false)
-				position.z = control->GetPosition().z;
-			control->SetPosition(position);
-		}
-	}
-	if (type == "Trigger")
-	{
-		Trigger* trigger = (Trigger*)object->GetRawObject();
-		if (relative == true)
-			trigger->Move(position);
-		else
-		{
-			if (X == false)
-				position.x = trigger->GetPosition().x;
-			if (Y == false)
-				position.y = trigger->GetPosition().y;
-			if (Z == false)
-				position.z = trigger->GetPosition().z;
-			trigger->SetPosition(position);
-		}
-	}
+	else
+		object->Move(position);
 
 	return true;
 }
@@ -3294,155 +3173,20 @@ bool SBS::RotateObject(Object *object, Ogre::Vector3 rotation, float speed, bool
 	if (!object)
 		return ReportError("Invalid object");
 
-	std::string number = ToString(object->GetNumber());
-
-	if (!object->GetRawObject())
-		return ReportError("Invalid raw object " + number);
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
+	if (relative == true)
+		object->Rotate(rotation, speed);
+	else
 	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		if (relative == true)
-			mesh->Rotate(rotation, speed);
-		else
-		{
-			if (X == false)
-				rotation.x = mesh->GetRotation().x;
-			if (Y == false)
-				rotation.y = mesh->GetRotation().y;
-			if (Z == false)
-				rotation.z = mesh->GetRotation().z;
-			mesh->SetRotation(rotation);
-		}
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		if (relative == true)
-			model->Rotate(rotation, speed);
-		else
-		{
-			if (X == false)
-				rotation.x = model->GetRotation().x;
-			if (Y == false)
-				rotation.y = model->GetRotation().y;
-			if (Z == false)
-				rotation.z = model->GetRotation().z;
-			model->SetRotation(rotation);
-		}
+		if (X == false)
+			rotation.x = object->GetRotation().x;
+		if (Y == false)
+			rotation.y = object->GetRotation().y;
+		if (Z == false)
+			rotation.z = object->GetRotation().z;
+		object->SetRotation(rotation);
 	}
 
 	return true;
-}
-
-Ogre::Vector3 SBS::GetObjectPosition(Object *object)
-{
-	//get object's position
-
-	if (!object)
-	{
-		ReportError("Invalid object");
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string number = ToString(object->GetNumber());
-
-	if (!object->GetRawObject())
-	{
-		ReportError("Invalid raw object " + number);
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
-	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		return mesh->GetPosition();
-	}
-	if (type == "ButtonPanel")
-	{
-		ButtonPanel* panel = (ButtonPanel*)object->GetRawObject();
-		return panel->GetPosition();
-	}
-	if (type == "DirectionalIndicator")
-	{
-		DirectionalIndicator* ind = (DirectionalIndicator*)object->GetRawObject();
-		return ind->GetPosition();
-	}
-	if (type == "Door")
-	{
-		Door* door = (Door*)object->GetRawObject();
-		return door->GetPosition();
-	}
-	if (type == "ElevatorDoor")
-	{
-		ElevatorDoor* door = (ElevatorDoor*)object->GetRawObject();
-		return door->GetPosition();
-	}
-	if (type == "FloorIndicator")
-	{
-		FloorIndicator* ind = (FloorIndicator*)object->GetRawObject();
-		return ind->GetPosition();
-	}
-	if (type == "Sound")
-	{
-		Sound* sound = (Sound*)object->GetRawObject();
-		return sound->GetPosition();
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		return model->GetPosition();
-	}
-	if (type == "Control")
-	{
-		Control* control = (Control*)object->GetRawObject();
-		return control->GetPosition();
-	}
-	if (type == "Trigger")
-	{
-		Trigger* trigger = (Trigger*)object->GetRawObject();
-		return trigger->GetPosition();
-	}
-
-	return Ogre::Vector3::ZERO;
-}
-
-Ogre::Vector3 SBS::GetObjectRotation(Object *object)
-{
-	//rotate an object by reference
-
-	if (!object)
-	{
-		ReportError("Invalid object");
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string number = ToString(object->GetNumber());
-
-	if (!object->GetRawObject())
-	{
-		ReportError("Invalid raw object " + number);
-		return Ogre::Vector3::ZERO;
-	}
-
-	std::string type = object->GetType();
-
-	if (type == "Mesh")
-	{
-		MeshObject* mesh = (MeshObject*)object->GetRawObject();
-		return mesh->GetRotation();
-	}
-	if (type == "Model")
-	{
-		Model* model = (Model*)object->GetRawObject();
-		return model->GetRotation();
-	}
-
-	return Ogre::Vector3::ZERO;
 }
 
 void SBS::RemoveFloor(Floor *floor)
@@ -3929,8 +3673,8 @@ Object* SBS::AddControl(const char *name, const char *sound, const char *directi
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
-	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, voffset, true);
-	control->SetPosition(Ogre::Vector3(CenterX, 0, CenterZ));
+	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
+	control->SetPosition(Ogre::Vector3(CenterX, voffset, CenterZ));
 	ControlArray.push_back(control);
 	return control;
 }
@@ -4334,4 +4078,18 @@ void SBS::ShowFloorInfo(bool all_floors, int floor)
 		}
 		Report("");
 	}
+}
+
+void SBS::ShowSceneNodes(bool value)
+{
+	//show all scene nodes for debugging
+
+	mSceneManager->setDisplaySceneNodes(value);
+}
+
+void SBS::ShowBoundingBoxes(bool value)
+{
+	//show all mesh bounding boxes for debugging
+
+	mSceneManager->showBoundingBoxes(value);
 }

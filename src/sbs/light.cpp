@@ -45,11 +45,11 @@ Light::Light(Object *parent, const char *name, int type, Ogre::Vector3 position,
 
 	Type = type;
 	Name = name;
-	Origin = position;
 
 	try
 	{
 		light = sbs->mSceneManager->createLight(name);
+		GetSceneNode()->attachObject(light);
 
 		if (type == 0)
 			light->setType(Ogre::Light::LT_POINT);
@@ -59,7 +59,7 @@ Light::Light(Object *parent, const char *name, int type, Ogre::Vector3 position,
 			light->setType(Ogre::Light::LT_SPOTLIGHT);
 
 		SetColor(color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b);
-		light->setPosition(sbs->ToRemote(position));
+		Move(position);
 		light->setDirection(direction * Ogre::Vector3(1, 1, -1));
 		if (Type == 2)
 			light->setSpotlightRange(Ogre::Degree(spot_inner_angle), Ogre::Degree(spot_outer_angle), spot_falloff);
@@ -73,6 +73,8 @@ Light::Light(Object *parent, const char *name, int type, Ogre::Vector3 position,
 
 Light::~Light()
 {
+	if (light)
+		GetSceneNode()->detachObject(light);
 	sbs->mSceneManager->destroyLight(Name);
 
 	//unregister from parent
@@ -89,30 +91,6 @@ Light::~Light()
 		if (std::string(GetParent()->GetType()) == "SBS")
 			sbs->RemoveLight(this);
 	}
-}
-
-void Light::Move(const Ogre::Vector3 position, bool relative_x, bool relative_y, bool relative_z)
-{
-	//move light - this can only be done on movable lights
-	Ogre::Vector3 pos;
-	if (relative_x == false)
-		pos.x = sbs->ToRemote(Origin.x + position.x);
-	else
-		pos.x = light->getPosition().x + sbs->ToRemote(position.x);
-	if (relative_y == false)
-		pos.y = sbs->ToRemote(Origin.y + position.y);
-	else
-		pos.y = light->getPosition().y + sbs->ToRemote(position.y);
-	if (relative_z == false)
-		pos.z = sbs->ToRemote(Origin.z + position.z);
-	else
-		pos.z = light->getPosition().z + sbs->ToRemote(position.z);
-	light->setPosition(pos);
-}
-
-Ogre::Vector3 Light::GetPosition()
-{
-	return sbs->ToLocal(light->getPosition());
 }
 
 void Light::SetColor(float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b)
