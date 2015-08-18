@@ -874,13 +874,39 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     AddInterfloorWall IRight, Brick, 0.5, 37.5, -37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
-# Zone 3 upper offices
-<Floors 89 to 101>
+# Zone 3 upper
+<Floor 89>
+    ID = %floor% + 1
+    Name = Communications
+    Type = Communications
+    Description = Communications & mechanical level (%floor% + 1)
+<EndFloor>
+
+<Floors 90 to 97>
     ID = %floor% + 1
     Name = Offices
     Type = Office
     Description = Office level (%floor% + 1)
+<EndFloors>
 
+<Floor 89>
+    #key for upper service elevator
+    SetKey 1
+    AddModel Key, key.mesh, true, -20, 0, -20, 0, 90, 0, 0, 3, false, 0, 0, 0
+<EndFloor>
+
+<Floor 98>
+    ID = %floor% + 1
+    Name = Alternate Skydeck
+    Type = Observatory
+    Description = 99th floor alternate skydeck
+<EndFloor>
+
+<Floors 99 to 101>
+    ID = %floor% + 1
+    Name = Communications
+    Type = Communications
+    Description = Communications level (%floor% + 1)
 <EndFloors>
 
 <Floor 102>
@@ -888,15 +914,14 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Skydeck
     Type = Observatory
     Description = Skydeck
-
 <EndFloor>
 
 #communications & mechanical floors
 <Floors 103 to 104>
     ID = %floor% + 1
-    Name = Communications
-    Type = Communications
-    Description = Communications & mechanical level (%floor% + 1)
+    Name = Mechanical
+    Type = Mechanical
+    Description = Mechanical and Communications level (%floor% + 1)
     Height = 10
     InterfloorHeight = 2.24
 
@@ -949,8 +974,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <Floors 105 to 106>
     ID = %floor% + 1
     Name = Mechanical
-    Type = Service
-    Description = Zone 3 upper mechanical
+    Type = Mechanical
+    Description = Cooling Towers level
     Height = 10
     InterfloorHeight = 2.24
 
@@ -1011,12 +1036,12 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     SetAutoSize = true, true
 <EndFloor>
 
-#top floor mechanical/communications
+#top floor mechanical
 <Floor 107>
     ID = %floor% + 1
-    Name = Communications
-    Type = Communications
-    Description = Mechanical and communications
+    Name = Mechanical
+    Type = Mechanical
+    Description = Mechanical
     Height = 12
     InterfloorHeight = 3
 
@@ -1186,8 +1211,8 @@ ShaftCut 27, -4.236, -9.12, 4.236 - 0.33, 9.12, 0, 5
 ShaftCut 28, -4.236 + 0.33, -9.12, 4.236, 9.12, 0, 5
 
 #zone 3 locals 4 (90-102)
-AddShaft 29, 2, -32.154, -4.71, 64, 103
-AddShaft 30, 2, -13.146, -0.492, 64, 103
+AddShaft 29, 2, -32.154, -4.71, 64, 105
+AddShaft 30, 2, -13.146, -0.492, 64, 105
 ShaftCut 29, -4.464, -13.23, 4.464 - 0.33, 13.23, 0, 5
 ShaftCut 30, -4.464 + 0.33, -9.093, 4.464, 9.093, 0, 5
 
@@ -2003,7 +2028,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndFloors>
 
 #zone 3 local 4 shaft
-<Floors 64 to 103>
+<Floors 64 to 105>
     Set 5 = Wall1
     Set 6 = 4.464 #width
     Set 7 = 13.23 #length
@@ -4537,18 +4562,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator false, -31.471, -5, 66
 <EndElevator>
 
-<Elevator 75>
-    Speed = 12
-    Acceleration = 0.2
-    Deceleration = 0.2
-    AccelJerk = 0.3
-    DecelJerk = 0.3
-    ServicedFloors = 66, 89 - 101
-    AssignedShaft = 29
-    CreateElevator false, -31.471, -13.3, 66
-<EndElevator>
-
-<Elevators 73 to 75>
+<Elevators 73 to 74>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4616,7 +4630,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
 <EndElevators>
 
-<Elevator 76>
+<Elevator 75>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4627,7 +4641,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator false, -13.829, 4, 66
 <EndElevator>
 
-<Elevator 77>
+<Elevator 76>
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4638,7 +4652,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     CreateElevator false, -13.829, -5, 66
 <EndElevator>
 
-<Elevators 76 to 77>
+<Elevators 75 to 76>
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4705,6 +4719,89 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
 
 <EndElevators>
+
+#Upper service elevator
+<Elevator 77>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = 89 - 103, 105
+    AssignedShaft = 29
+    CreateElevator false, -31.471, -13.3, 89
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -2.95, -3.45, 2.95, 3.45, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -2.95, -3.45, 2.95, 3.45, 8, 8, 0, 0
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -2.95, 3.45, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #front and left walls
+    WallOrientation = left
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -2.95, -3.45, 2.95, -3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -2.95, -3.45, -2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
+
+    #doors
+    WallOrientation = left
+    AddDoors 1, ElevDoors, 0.2, 2.95 + 0.001, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 2.95 + 0.001 + 0.3, 0, 0, 0 #shaft doors
+
+    #panel
+    CreatePanel ElevPanel, 13, 4, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    SetLock 1, 1
+    AddFloorButton 1, Button106, ButtonLit106, 2, 2, 105, 1, 1
+    AddFloorButton 1, Button104, ButtonLit104, 2, 3, 103, 1, 1
+    AddFloorButton 1, Button103, ButtonLit103, 3, 2, 102, 1, 1
+    AddFloorButton 1, Button102, ButtonLit102, 3, 3, 101, 1, 1
+    AddFloorButton 1, Button101, ButtonLit101, 4, 2, 100, 1, 1
+    AddFloorButton 1, Button100, ButtonLit100, 4, 3, 99, 1, 1
+	SetLock 0, 0
+    AddFloorButton 1, Button99, ButtonLit99, 5, 2, 98, 1, 1
+    AddFloorButton 1, Button98, ButtonLit98, 5, 3, 97, 1, 1
+    AddFloorButton 1, Button97, ButtonLit97, 6, 2, 96, 1, 1
+    AddFloorButton 1, Button96, ButtonLit96, 6, 3, 95, 1, 1
+    AddFloorButton 1, Button95, ButtonLit95, 7, 2, 94, 1, 1
+    AddFloorButton 1, Button94, ButtonLit94, 7, 3, 93, 1, 1
+    AddFloorButton 1, Button93, ButtonLit93, 8, 2, 92, 1, 1
+    AddFloorButton 1, Button92, ButtonLit92, 8, 3, 91, 1, 1
+    AddFloorButton 1, Button91, ButtonLit91, 9, 2, 90, 1, 1
+	SetLock 1, 1
+    AddFloorButton 1, Button90, ButtonLit90, 9, 3, 89, 1, 1
+	SetLock 0, 0
+    AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
+    AddControlButton 1, ButtonClose, 11, 3, close, 1, 1
+    AddControlButton 1, ButtonStop, 12, 2, stop, 1, 1
+    AddControlButton 1, ButtonAlarm, 12, 3, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+
+<EndElevator>
 
 #Skydeck express elevators
 <Elevator 78>
@@ -4941,9 +5038,15 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndFloors>
 
 <Floors 89 to 101>
-    CallButtonElevators = 73, 74, 75, 76, 77
+    CallButtonElevators = 73, 74, 75, 76
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -32.154 + 4.464 + 0.33 + 0.1, -4.71 + 4.548, 4, right, 0.5, 1, true, 0, 0
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.146 - 4.464 - 0.33 - 0.1, -4.71 - 4.548, 4, left, 0.5, 1, true, 0, 0
+<EndFloors>
+
+#Upper service
+<Floors 89 to 105>
+    CallButtonElevators = 77
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -32.154 + 4.464 + 0.33 + 0.1, -16, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
 #Skydeck express
