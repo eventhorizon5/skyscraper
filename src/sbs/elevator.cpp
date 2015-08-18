@@ -5899,3 +5899,23 @@ bool Elevator::ShaftDoorsExist(int number, int floor)
 	}
 	return false;
 }
+
+void Elevator::ResetDoorState(int number)
+{
+	//reset elevator internal door state, in case of door malfunctions
+
+	int start = number, end = number;
+	if (number == 0)
+	{
+		start = 1;
+		end = NumDoors;
+	}
+	for (int i = start; i <= end; i++)
+	{
+		ElevatorDoor *door = GetDoor(i);
+		if (door)
+			door->ResetState(false, true);
+		else
+			ReportError("Invalid door " + ToString2(i));
+	}
+}
