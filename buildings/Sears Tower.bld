@@ -4578,26 +4578,26 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     SetLock 1,1
-    AddButton 1, switch.wav, Button102, ButtonLit102, 2, 4, 101, 1, 1
-    AddButton 1, switch.wav, Button101, ButtonLit101, 2, 3, 100, 1, 1
-    AddButton 1, switch.wav, Button100, ButtonLit100, 2, 2, 99, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 2, 2, 101, 1, 1
+    AddButton 1, switch.wav, Button101, ButtonLit101, 3, 4, 100, 1, 1
     SetLock 0,0
-    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 4, 98, 1, 1
-    AddButton 1, switch.wav, Button98, ButtonLit98, 3, 3, 97, 1, 1
-    AddButton 1, switch.wav, Button97, ButtonLit97, 3, 2, 96, 1, 1
-    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 4, 95, 1, 1
-    AddButton 1, switch.wav, Button95, ButtonLit95, 4, 3, 94, 1, 1
-    AddButton 1, switch.wav, Button94, ButtonLit94, 4, 2, 93, 1, 1
-    AddButton 1, switch.wav, Button93, ButtonLit93, 5, 4, 92, 1, 1
-    AddButton 1, switch.wav, Button92, ButtonLit92, 5, 3, 91, 1, 1
-    AddButton 1, switch.wav, Button91, ButtonLit91, 5, 2, 90, 1, 1
+    AddButton 1, switch.wav, Button100, ButtonLit100, 3, 3, 99, 1, 1
+    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 2, 98, 1, 1
+    AddButton 1, switch.wav, Button98, ButtonLit98, 4, 4, 97, 1, 1
+    AddButton 1, switch.wav, Button97, ButtonLit97, 4, 3, 96, 1, 1
+    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 2, 95, 1, 1
+    AddButton 1, switch.wav, Button95, ButtonLit95, 5, 4, 94, 1, 1
+    AddButton 1, switch.wav, Button94, ButtonLit94, 5, 3, 93, 1, 1
+    AddButton 1, switch.wav, Button93, ButtonLit93, 5, 2, 92, 1, 1
+    AddButton 1, switch.wav, Button92, ButtonLit92, 6, 4, 91, 1, 1
+    AddButton 1, switch.wav, Button91, ButtonLit91, 6, 3, 90, 1, 1
     SetLock 1,1
-    AddButton 1, switch.wav, Button90, ButtonLit90, 6, 4, 89, 1, 1
+    AddButton 1, switch.wav, Button90, ButtonLit90, 6, 2, 89, 1, 1
     SetLock 0,0
-    AddButton 1, switch.wav, Button67, ButtonLit67, 6, 2, 66, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 7, 4, 66, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4671,26 +4671,26 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     SetLock 1,1
-    AddButton 1, switch.wav, Button102, ButtonLit102, 2, 4, 101, 1, 1
-    AddButton 1, switch.wav, Button101, ButtonLit101, 2, 3, 100, 1, 1
-    AddButton 1, switch.wav, Button100, ButtonLit100, 2, 2, 99, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 2, 2, 101, 1, 1
+    AddButton 1, switch.wav, Button101, ButtonLit101, 3, 4, 100, 1, 1
     SetLock 0,0
-    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 4, 98, 1, 1
-    AddButton 1, switch.wav, Button98, ButtonLit98, 3, 3, 97, 1, 1
-    AddButton 1, switch.wav, Button97, ButtonLit97, 3, 2, 96, 1, 1
-    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 4, 95, 1, 1
-    AddButton 1, switch.wav, Button95, ButtonLit95, 4, 3, 94, 1, 1
-    AddButton 1, switch.wav, Button94, ButtonLit94, 4, 2, 93, 1, 1
-    AddButton 1, switch.wav, Button93, ButtonLit93, 5, 4, 92, 1, 1
-    AddButton 1, switch.wav, Button92, ButtonLit92, 5, 3, 91, 1, 1
-    AddButton 1, switch.wav, Button91, ButtonLit91, 5, 2, 90, 1, 1
+    AddButton 1, switch.wav, Button100, ButtonLit100, 3, 3, 99, 1, 1
+    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 2, 98, 1, 1
+    AddButton 1, switch.wav, Button98, ButtonLit98, 4, 4, 97, 1, 1
+    AddButton 1, switch.wav, Button97, ButtonLit97, 4, 3, 96, 1, 1
+    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 2, 95, 1, 1
+    AddButton 1, switch.wav, Button95, ButtonLit95, 5, 4, 94, 1, 1
+    AddButton 1, switch.wav, Button94, ButtonLit94, 5, 3, 93, 1, 1
+    AddButton 1, switch.wav, Button93, ButtonLit93, 5, 2, 92, 1, 1
+    AddButton 1, switch.wav, Button92, ButtonLit92, 6, 4, 91, 1, 1
+    AddButton 1, switch.wav, Button91, ButtonLit91, 6, 3, 90, 1, 1
     SetLock 1,1
-    AddButton 1, switch.wav, Button90, ButtonLit90, 6, 4, 89, 1, 1
+    AddButton 1, switch.wav, Button90, ButtonLit90, 6, 2, 89, 1, 1
     SetLock 0,0
-    AddButton 1, switch.wav, Button67, ButtonLit67, 6, 2, 66, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 7, 4, 66, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
