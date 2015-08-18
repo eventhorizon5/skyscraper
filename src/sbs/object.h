@@ -70,10 +70,11 @@ public:
 	void SetRotation(Ogre::Vector3 rotation);
 	void SetRotation(float X, float Y, float Z);
 	Ogre::Vector3 GetRotation();
-	virtual void OnMove() {};
-	virtual void OnRotate() {};
+	virtual void OnMove() {}; //called when object is moved
+	virtual void OnRotate() {}; //called when object is rotated
 	void NotifyMove();
 	void NotifyRotate();
+	virtual void ResetState() {}; //resets the internal state of an object
 
 private:
 	void NotifyChildren(bool move, bool rotate);

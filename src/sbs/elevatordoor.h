@@ -43,7 +43,7 @@ public:
 		~DoorObject();
 		void MoveDoors(bool open, bool manual);
 		void Move();
-		void Reset(bool open, bool full_state = true);
+		void Reset(bool open);
 
 		MeshObject* mesh;
 		int direction; //direction is either 0 for up, 1 for down, 2 for left/forward and 3 for right/backward
@@ -83,7 +83,7 @@ public:
 		bool IsFinished();
 		void MoveDoors(bool open, bool manual);
 		void StopDoors();
-		void Reset(bool open, bool full_state = true);
+		void ResetState();
 
 		std::vector<DoorObject*> doors;
 		std::string name;
@@ -170,7 +170,7 @@ public:
 	void ResetNudgeTimer(bool start = true);
 	bool AllowNudgeMode();
 	std::string GetNumberText();
-	void ResetState(bool open, bool full_state = true);
+	void ResetState();
 
 private:
 

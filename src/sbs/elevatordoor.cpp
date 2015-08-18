@@ -1785,19 +1785,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	//sbs->Report("Door section: " + ToString2(door_section));
 
 	//place doors in positions (fixes any overrun errors)
-	Reset(open, false);
-
-	//the door is open or closed now
-	is_open = open;
-	finished = true;
-
-	//reset values
-	active_speed = 0;
-	door_section = 0;
-	sign_changed = false;
-	old_difference = 0;
-	stopping_distance = 0;
-	reversed = false;
+	Reset(open);
 }
 
 void ElevatorDoor::DoorObject::Move()
@@ -1836,7 +1824,7 @@ void ElevatorDoor::DoorObject::Move()
 	}
 }
 
-void ElevatorDoor::DoorObject::Reset(bool open, bool full_state)
+void ElevatorDoor::DoorObject::Reset(bool open)
 {
 	//reset door state in case of an internal malfunction
 
@@ -1874,17 +1862,31 @@ void ElevatorDoor::DoorObject::Reset(bool open, bool full_state)
 			else
 				mesh->Move(Ogre::Vector3(0, -(mainheight + (height - mainheight) + offset), 0));
 		}
-	}
 
-	//reset full door state if specified
-	if (full_state == true && open == false)
+		//the door is open now
+		is_open = true;
+		finished = true;
+
+		//reset values
+		active_speed = 0;
+		door_section = 0;
+		sign_changed = false;
+		old_difference = 0;
+		stopping_distance = 0;
+		reversed = false;
+	}
+	else
 	{
+		//the door is closed now
+		is_open = false;
+		finished = true;
+
+		//reset values
 		openchange = 0;
 		marker1 = 0;
 		marker2 = 0;
 		temp_change = 0;
 		accelerating = false;
-		is_open = false;
 		recheck_difference = false;
 		active_speed = 0;
 		door_section = 0;
@@ -1892,7 +1894,6 @@ void ElevatorDoor::DoorObject::Reset(bool open, bool full_state)
 		old_difference = 0;
 		stopping_distance = 0;
 		reversed = false;
-		finished = true;
 	}
 }
 
@@ -1943,14 +1944,14 @@ void ElevatorDoor::DoorWrapper::StopDoors()
 	}
 }
 
-void ElevatorDoor::DoorWrapper::Reset(bool open, bool full_state)
+void ElevatorDoor::DoorWrapper::ResetState()
 {
 	//reset door state in case of an internal malfunction
 
-	Open = open;
+	Open = false;
 
 	for (int i = 0; i < (int)doors.size(); i++)
-		doors[i]->Reset(open, full_state);
+		doors[i]->Reset(false);
 }
 
 ElevatorDoor::DoorWrapper* ElevatorDoor::GetDoorWrapper()
@@ -2219,11 +2220,9 @@ std::string ElevatorDoor::GetNumberText()
 	return doornumber;
 }
 
-void ElevatorDoor::ResetState(bool open, bool full_state)
+void ElevatorDoor::ResetState()
 {
 	//reset door state in case of an internal malfunction
-	//'open' places doors in either an open or closed position
-	//if 'full_state' is true and 'open' is false, do a full state reset on doors
 
 	OpenDoor = 0;
 	WhichDoors = 0;
@@ -2232,18 +2231,15 @@ void ElevatorDoor::ResetState(bool open, bool full_state)
 	DoorIsRunning = false;
 
 	//first reset timers
-	if (full_state == true)
-	{
-		timer->Stop();
-		nudgetimer->Stop();
-		EnableNudgeMode(false);
-	}
+	timer->Stop();
+	nudgetimer->Stop();
+	EnableNudgeMode(false);
 
-	Doors->Reset(open, full_state);
+	Doors->ResetState();
 
 	for (int i = 0; i < (int)ShaftDoors.size(); i++)
 	{
 		if (ShaftDoors[i])
-			ShaftDoors[i]->Reset(open, full_state);
+			ShaftDoors[i]->ResetState();
 	}
 }
