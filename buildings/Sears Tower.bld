@@ -84,8 +84,6 @@
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonAlarm, nimbus_sans.ttf, 28, Alarm, -1, -1, -1, -1, center, center, 255, 255, 255
-    AddText Black, ButtonCancelTemp, nimbus_sans.ttf, 28, Call, -1, 30, -1, 54, center, center, 255, 255, 255
-    AddText ButtonCancelTemp, ButtonCancel, nimbus_sans.ttf, 28, Cancel, -1, 71, -1, 95, center, center, 255, 255, 255
     AddTextRange 1, 110, Black, Button%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
     AddTextRange 1, 110, BlackLit, ButtonLit%number%, nimbus_sans.ttf, 47, %number%, -1, -1, -1, -1, center, center, 255, 255, 255
 <EndTextures>
@@ -2208,15 +2206,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button34, ButtonLit34, 2, 3, 33, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 3, 3, 32, 1, 1
-    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 2, 3, 33, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 3, 32, 1, 1
+    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
@@ -2314,15 +2311,14 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button34, ButtonLit34, 2, 3, 33, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 3, 3, 32, 1, 1
-    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 2, 3, 33, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 3, 32, 1, 1
+    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
@@ -2408,17 +2404,16 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button67, ButtonLit67, 2, 4, 66, 1, 1
-    AddFloorButton 1, Button66, ButtonLit66, 2, 2, 65, 1, 1
-    AddFloorButton 1, Button34, ButtonLit34, 3, 4, 33, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 3, 2, 32, 1, 1
-    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 2, 4, 66, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 2, 2, 65, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 3, 4, 33, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 2, 32, 1, 1
+    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 3.418 - 0.2 - 0.001, -1.75 - 1.083 + 0.1, 0.7, 0.5, 6.5
@@ -2504,17 +2499,16 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button67, ButtonLit67, 2, 4, 66, 1, 1
-    AddFloorButton 1, Button66, ButtonLit66, 2, 2, 65, 1, 1
-    AddFloorButton 1, Button34, ButtonLit34, 3, 4, 33, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 3, 2, 32, 1, 1
-    AddFloorButton 1, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 2, 4, 66, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 2, 2, 65, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 3, 4, 33, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 3, 2, 32, 1, 1
+    AddButton 1, switch.wav, ButtonR, ButtonLitR, 4, 3, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -3.418 + 0.2 + 0.001, 1.75 + 1.083 - 0.1, 0.7, 0.5, 6.5
@@ -2598,20 +2592,19 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button10, ButtonLit10, 2, 4, 9, 1, 1
-    AddFloorButton 1, Button9, ButtonLit9, 2, 2, 8, 1, 1
-    AddFloorButton 1, Button8, ButtonLit8, 3, 4, 7, 1, 1
-    AddFloorButton 1, Button7, ButtonLit7, 3, 2, 6, 1, 1
-    AddFloorButton 1, Button6, ButtonLit6, 4, 4, 5, 1, 1
-    AddFloorButton 1, Button5, ButtonLit5, 4, 2, 4, 1, 1
-    AddFloorButton 1, Button4, ButtonLit4, 5, 4, 3, 1, 1
-    AddFloorButton 1, Button3, ButtonLit3, 5, 2, 2, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 2, 4, 9, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 2, 2, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 3, 4, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 3, 2, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 4, 4, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 4, 2, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 5, 4, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 5, 2, 2, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -2694,20 +2687,19 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button10, ButtonLit10, 2, 4, 9, 1, 1
-    AddFloorButton 1, Button9, ButtonLit9, 2, 2, 8, 1, 1
-    AddFloorButton 1, Button8, ButtonLit8, 3, 4, 7, 1, 1
-    AddFloorButton 1, Button7, ButtonLit7, 3, 2, 6, 1, 1
-    AddFloorButton 1, Button6, ButtonLit6, 4, 4, 5, 1, 1
-    AddFloorButton 1, Button5, ButtonLit5, 4, 2, 4, 1, 1
-    AddFloorButton 1, Button4, ButtonLit4, 5, 4, 3, 1, 1
-    AddFloorButton 1, Button3, ButtonLit3, 5, 2, 2, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 2, 4, 9, 1, 1
+    AddButton 1, switch.wav, Button9, ButtonLit9, 2, 2, 8, 1, 1
+    AddButton 1, switch.wav, Button8, ButtonLit8, 3, 4, 7, 1, 1
+    AddButton 1, switch.wav, Button7, ButtonLit7, 3, 2, 6, 1, 1
+    AddButton 1, switch.wav, Button6, ButtonLit6, 4, 4, 5, 1, 1
+    AddButton 1, switch.wav, Button5, ButtonLit5, 4, 2, 4, 1, 1
+    AddButton 1, switch.wav, Button4, ButtonLit4, 5, 4, 3, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 5, 2, 2, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -2791,20 +2783,19 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button17, ButtonLit17, 2, 4, 16, 1, 1
-    AddFloorButton 1, Button16, ButtonLit16, 2, 2, 15, 1, 1
-    AddFloorButton 1, Button15, ButtonLit15, 3, 4, 14, 1, 1
-    AddFloorButton 1, Button14, ButtonLit14, 3, 2, 13, 1, 1
-    AddFloorButton 1, Button13, ButtonLit13, 4, 4, 12, 1, 1
-    AddFloorButton 1, Button12, ButtonLit12, 4, 2, 11, 1, 1
-    AddFloorButton 1, Button11, ButtonLit11, 5, 4, 10, 1, 1
-    AddFloorButton 1, Button10, ButtonLit10, 5, 2, 9, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button17, ButtonLit17, 2, 4, 16, 1, 1
+    AddButton 1, switch.wav, Button16, ButtonLit16, 2, 2, 15, 1, 1
+    AddButton 1, switch.wav, Button15, ButtonLit15, 3, 4, 14, 1, 1
+    AddButton 1, switch.wav, Button14, ButtonLit14, 3, 2, 13, 1, 1
+    AddButton 1, switch.wav, Button13, ButtonLit13, 4, 4, 12, 1, 1
+    AddButton 1, switch.wav, Button12, ButtonLit12, 4, 2, 11, 1, 1
+    AddButton 1, switch.wav, Button11, ButtonLit11, 5, 4, 10, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 5, 2, 9, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -2887,20 +2878,19 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button17, ButtonLit17, 2, 4, 16, 1, 1
-    AddFloorButton 1, Button16, ButtonLit16, 2, 2, 15, 1, 1
-    AddFloorButton 1, Button15, ButtonLit15, 3, 4, 14, 1, 1
-    AddFloorButton 1, Button14, ButtonLit14, 3, 2, 13, 1, 1
-    AddFloorButton 1, Button13, ButtonLit13, 4, 4, 12, 1, 1
-    AddFloorButton 1, Button12, ButtonLit12, 4, 2, 11, 1, 1
-    AddFloorButton 1, Button11, ButtonLit11, 5, 4, 10, 1, 1
-    AddFloorButton 1, Button10, ButtonLit10, 5, 2, 9, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button17, ButtonLit17, 2, 4, 16, 1, 1
+    AddButton 1, switch.wav, Button16, ButtonLit16, 2, 2, 15, 1, 1
+    AddButton 1, switch.wav, Button15, ButtonLit15, 3, 4, 14, 1, 1
+    AddButton 1, switch.wav, Button14, ButtonLit14, 3, 2, 13, 1, 1
+    AddButton 1, switch.wav, Button13, ButtonLit13, 4, 4, 12, 1, 1
+    AddButton 1, switch.wav, Button12, ButtonLit12, 4, 2, 11, 1, 1
+    AddButton 1, switch.wav, Button11, ButtonLit11, 5, 4, 10, 1, 1
+    AddButton 1, switch.wav, Button10, ButtonLit10, 5, 2, 9, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -2984,19 +2974,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button23, ButtonLit23, 2, 4, 22, 1, 1
-    AddFloorButton 1, Button22, ButtonLit22, 2, 2, 21, 1, 1
-    AddFloorButton 1, Button21, ButtonLit21, 3, 4, 20, 1, 1
-    AddFloorButton 1, Button20, ButtonLit20, 3, 2, 19, 1, 1
-    AddFloorButton 1, Button19, ButtonLit19, 4, 4, 18, 1, 1
-    AddFloorButton 1, Button18, ButtonLit18, 4, 2, 17, 1, 1
-    AddFloorButton 1, Button17, ButtonLit17, 5, 4, 16, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button23, ButtonLit23, 2, 4, 22, 1, 1
+    AddButton 1, switch.wav, Button22, ButtonLit22, 2, 2, 21, 1, 1
+    AddButton 1, switch.wav, Button21, ButtonLit21, 3, 4, 20, 1, 1
+    AddButton 1, switch.wav, Button20, ButtonLit20, 3, 2, 19, 1, 1
+    AddButton 1, switch.wav, Button19, ButtonLit19, 4, 4, 18, 1, 1
+    AddButton 1, switch.wav, Button18, ButtonLit18, 4, 2, 17, 1, 1
+    AddButton 1, switch.wav, Button17, ButtonLit17, 5, 4, 16, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -3079,19 +3068,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button23, ButtonLit23, 2, 4, 22, 1, 1
-    AddFloorButton 1, Button22, ButtonLit22, 2, 2, 21, 1, 1
-    AddFloorButton 1, Button21, ButtonLit21, 3, 4, 20, 1, 1
-    AddFloorButton 1, Button20, ButtonLit20, 3, 2, 19, 1, 1
-    AddFloorButton 1, Button19, ButtonLit19, 4, 4, 18, 1, 1
-    AddFloorButton 1, Button18, ButtonLit18, 4, 2, 17, 1, 1
-    AddFloorButton 1, Button17, ButtonLit17, 5, 4, 16, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button23, ButtonLit23, 2, 4, 22, 1, 1
+    AddButton 1, switch.wav, Button22, ButtonLit22, 2, 2, 21, 1, 1
+    AddButton 1, switch.wav, Button21, ButtonLit21, 3, 4, 20, 1, 1
+    AddButton 1, switch.wav, Button20, ButtonLit20, 3, 2, 19, 1, 1
+    AddButton 1, switch.wav, Button19, ButtonLit19, 4, 4, 18, 1, 1
+    AddButton 1, switch.wav, Button18, ButtonLit18, 4, 2, 17, 1, 1
+    AddButton 1, switch.wav, Button17, ButtonLit17, 5, 4, 16, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -3175,18 +3163,17 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button28, ButtonLit28, 2, 4, 27, 1, 1
-    AddFloorButton 1, Button27, ButtonLit27, 2, 2, 26, 1, 1
-    AddFloorButton 1, Button26, ButtonLit26, 3, 4, 25, 1, 1
-    AddFloorButton 1, Button25, ButtonLit25, 3, 2, 24, 1, 1
-    AddFloorButton 1, Button24, ButtonLit24, 4, 4, 23, 1, 1
-    AddFloorButton 1, Button23, ButtonLit23, 4, 2, 22, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button28, ButtonLit28, 2, 4, 27, 1, 1
+    AddButton 1, switch.wav, Button27, ButtonLit27, 2, 2, 26, 1, 1
+    AddButton 1, switch.wav, Button26, ButtonLit26, 3, 4, 25, 1, 1
+    AddButton 1, switch.wav, Button25, ButtonLit25, 3, 2, 24, 1, 1
+    AddButton 1, switch.wav, Button24, ButtonLit24, 4, 4, 23, 1, 1
+    AddButton 1, switch.wav, Button23, ButtonLit23, 4, 2, 22, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -3258,18 +3245,17 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button28, ButtonLit28, 2, 4, 27, 1, 1
-    AddFloorButton 1, Button27, ButtonLit27, 2, 2, 26, 1, 1
-    AddFloorButton 1, Button26, ButtonLit26, 3, 4, 25, 1, 1
-    AddFloorButton 1, Button25, ButtonLit25, 3, 2, 24, 1, 1
-    AddFloorButton 1, Button24, ButtonLit24, 4, 4, 23, 1, 1
-    AddFloorButton 1, Button23, ButtonLit23, 4, 2, 22, 1, 1
-    AddFloorButton 1, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button28, ButtonLit28, 2, 4, 27, 1, 1
+    AddButton 1, switch.wav, Button27, ButtonLit27, 2, 2, 26, 1, 1
+    AddButton 1, switch.wav, Button26, ButtonLit26, 3, 4, 25, 1, 1
+    AddButton 1, switch.wav, Button25, ButtonLit25, 3, 2, 24, 1, 1
+    AddButton 1, switch.wav, Button24, ButtonLit24, 4, 4, 23, 1, 1
+    AddButton 1, switch.wav, Button23, ButtonLit23, 4, 2, 22, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -3353,20 +3339,19 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button42, ButtonLit42, 2, 4, 41, 1, 1
-    AddFloorButton 1, Button41, ButtonLit41, 2, 2, 40, 1, 1
-    AddFloorButton 1, Button40, ButtonLit40, 3, 4, 39, 1, 1
-    AddFloorButton 1, Button39, ButtonLit39, 3, 2, 38, 1, 1
-    AddFloorButton 1, Button38, ButtonLit38, 4, 4, 37, 1, 1
-    AddFloorButton 1, Button37, ButtonLit37, 4, 2, 36, 1, 1
-    AddFloorButton 1, Button36, ButtonLit36, 5, 4, 35, 1, 1
-    AddFloorButton 1, Button35, ButtonLit35, 5, 2, 34, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button42, ButtonLit42, 2, 4, 41, 1, 1
+    AddButton 1, switch.wav, Button41, ButtonLit41, 2, 2, 40, 1, 1
+    AddButton 1, switch.wav, Button40, ButtonLit40, 3, 4, 39, 1, 1
+    AddButton 1, switch.wav, Button39, ButtonLit39, 3, 2, 38, 1, 1
+    AddButton 1, switch.wav, Button38, ButtonLit38, 4, 4, 37, 1, 1
+    AddButton 1, switch.wav, Button37, ButtonLit37, 4, 2, 36, 1, 1
+    AddButton 1, switch.wav, Button36, ButtonLit36, 5, 4, 35, 1, 1
+    AddButton 1, switch.wav, Button35, ButtonLit35, 5, 2, 34, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 6, 3, 32, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -3449,20 +3434,19 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button42, ButtonLit42, 2, 4, 41, 1, 1
-    AddFloorButton 1, Button41, ButtonLit41, 2, 2, 40, 1, 1
-    AddFloorButton 1, Button40, ButtonLit40, 3, 4, 39, 1, 1
-    AddFloorButton 1, Button39, ButtonLit39, 3, 2, 38, 1, 1
-    AddFloorButton 1, Button38, ButtonLit38, 4, 4, 37, 1, 1
-    AddFloorButton 1, Button37, ButtonLit37, 4, 2, 36, 1, 1
-    AddFloorButton 1, Button36, ButtonLit36, 5, 4, 35, 1, 1
-    AddFloorButton 1, Button35, ButtonLit35, 5, 2, 34, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button42, ButtonLit42, 2, 4, 41, 1, 1
+    AddButton 1, switch.wav, Button41, ButtonLit41, 2, 2, 40, 1, 1
+    AddButton 1, switch.wav, Button40, ButtonLit40, 3, 4, 39, 1, 1
+    AddButton 1, switch.wav, Button39, ButtonLit39, 3, 2, 38, 1, 1
+    AddButton 1, switch.wav, Button38, ButtonLit38, 4, 4, 37, 1, 1
+    AddButton 1, switch.wav, Button37, ButtonLit37, 4, 2, 36, 1, 1
+    AddButton 1, switch.wav, Button36, ButtonLit36, 5, 4, 35, 1, 1
+    AddButton 1, switch.wav, Button35, ButtonLit35, 5, 2, 34, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 6, 3, 32, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -3546,20 +3530,19 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button49, ButtonLit49, 2, 4, 48, 1, 1
-    AddFloorButton 1, Button48, ButtonLit48, 2, 2, 47, 1, 1
-    AddFloorButton 1, Button47, ButtonLit47, 3, 4, 46, 1, 1
-    AddFloorButton 1, Button46, ButtonLit46, 3, 2, 45, 1, 1
-    AddFloorButton 1, Button45, ButtonLit45, 4, 4, 44, 1, 1
-    AddFloorButton 1, Button44, ButtonLit44, 4, 2, 43, 1, 1
-    AddFloorButton 1, Button43, ButtonLit43, 5, 4, 42, 1, 1
-    AddFloorButton 1, Button42, ButtonLit42, 5, 2, 41, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 6, 3, 32, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button49, ButtonLit49, 2, 4, 48, 1, 1
+    AddButton 1, switch.wav, Button48, ButtonLit48, 2, 2, 47, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 3, 4, 46, 1, 1
+    AddButton 1, switch.wav, Button46, ButtonLit46, 3, 2, 45, 1, 1
+    AddButton 1, switch.wav, Button45, ButtonLit45, 4, 4, 44, 1, 1
+    AddButton 1, switch.wav, Button44, ButtonLit44, 4, 2, 43, 1, 1
+    AddButton 1, switch.wav, Button43, ButtonLit43, 5, 4, 42, 1, 1
+    AddButton 1, switch.wav, Button42, ButtonLit42, 5, 2, 41, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 6, 3, 32, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -3642,19 +3625,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button49, ButtonLit49, 2, 4, 47, 1, 1
-    AddFloorButton 1, Button48, ButtonLit48, 2, 2, 46, 1, 1
-    AddFloorButton 1, Button47, ButtonLit47, 3, 4, 45, 1, 1
-    AddFloorButton 1, Button46, ButtonLit46, 3, 2, 44, 1, 1
-    AddFloorButton 1, Button45, ButtonLit45, 4, 4, 43, 1, 1
-    AddFloorButton 1, Button44, ButtonLit44, 4, 2, 42, 1, 1
-    AddFloorButton 1, Button43, ButtonLit43, 5, 4, 41, 1, 1
-    AddFloorButton 1, Button33, ButtonLit33, 5, 2, 32, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button49, ButtonLit49, 2, 4, 47, 1, 1
+    AddButton 1, switch.wav, Button48, ButtonLit48, 2, 2, 46, 1, 1
+    AddButton 1, switch.wav, Button47, ButtonLit47, 3, 4, 45, 1, 1
+    AddButton 1, switch.wav, Button46, ButtonLit46, 3, 2, 44, 1, 1
+    AddButton 1, switch.wav, Button45, ButtonLit45, 4, 4, 43, 1, 1
+    AddButton 1, switch.wav, Button44, ButtonLit44, 4, 2, 42, 1, 1
+    AddButton 1, switch.wav, Button43, ButtonLit43, 5, 4, 41, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 5, 2, 32, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -3738,21 +3720,20 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button57, ButtonLit57, 2, 4, 56, 1, 1
-    AddFloorButton 1, Button56, ButtonLit56, 2, 2, 55, 1, 1
-    AddFloorButton 1, Button55, ButtonLit55, 3, 4, 54, 1, 1
-    AddFloorButton 1, Button54, ButtonLit54, 3, 2, 53, 1, 1
-    AddFloorButton 1, Button53, ButtonLit53, 4, 4, 52, 1, 1
-    AddFloorButton 1, Button52, ButtonLit52, 4, 2, 51, 1, 1
-    AddFloorButton 1, Button51, ButtonLit51, 5, 4, 50, 1, 1
-    AddFloorButton 1, Button50, ButtonLit50, 5, 2, 49, 1, 1
-    AddFloorButton 1, Button49, ButtonLit49, 6, 4, 48, 1, 1
-    AddFloorButton 1, Button34, ButtonLit34, 6, 2, 33, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button57, ButtonLit57, 2, 4, 56, 1, 1
+    AddButton 1, switch.wav, Button56, ButtonLit56, 2, 2, 55, 1, 1
+    AddButton 1, switch.wav, Button55, ButtonLit55, 3, 4, 54, 1, 1
+    AddButton 1, switch.wav, Button54, ButtonLit54, 3, 2, 53, 1, 1
+    AddButton 1, switch.wav, Button53, ButtonLit53, 4, 4, 52, 1, 1
+    AddButton 1, switch.wav, Button52, ButtonLit52, 4, 2, 51, 1, 1
+    AddButton 1, switch.wav, Button51, ButtonLit51, 5, 4, 50, 1, 1
+    AddButton 1, switch.wav, Button50, ButtonLit50, 5, 2, 49, 1, 1
+    AddButton 1, switch.wav, Button49, ButtonLit49, 6, 4, 48, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 6, 2, 33, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -3835,21 +3816,20 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button57, ButtonLit57, 2, 4, 56, 1, 1
-    AddFloorButton 1, Button56, ButtonLit56, 2, 2, 55, 1, 1
-    AddFloorButton 1, Button55, ButtonLit55, 3, 4, 54, 1, 1
-    AddFloorButton 1, Button54, ButtonLit54, 3, 2, 53, 1, 1
-    AddFloorButton 1, Button53, ButtonLit53, 4, 4, 52, 1, 1
-    AddFloorButton 1, Button52, ButtonLit52, 4, 2, 51, 1, 1
-    AddFloorButton 1, Button51, ButtonLit51, 5, 4, 50, 1, 1
-    AddFloorButton 1, Button50, ButtonLit50, 5, 2, 49, 1, 1
-    AddFloorButton 1, Button49, ButtonLit49, 6, 4, 48, 1, 1
-    AddFloorButton 1, Button34, ButtonLit34, 6, 2, 33, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button57, ButtonLit57, 2, 4, 56, 1, 1
+    AddButton 1, switch.wav, Button56, ButtonLit56, 2, 2, 55, 1, 1
+    AddButton 1, switch.wav, Button55, ButtonLit55, 3, 4, 54, 1, 1
+    AddButton 1, switch.wav, Button54, ButtonLit54, 3, 2, 53, 1, 1
+    AddButton 1, switch.wav, Button53, ButtonLit53, 4, 4, 52, 1, 1
+    AddButton 1, switch.wav, Button52, ButtonLit52, 4, 2, 51, 1, 1
+    AddButton 1, switch.wav, Button51, ButtonLit51, 5, 4, 50, 1, 1
+    AddButton 1, switch.wav, Button50, ButtonLit50, 5, 2, 49, 1, 1
+    AddButton 1, switch.wav, Button49, ButtonLit49, 6, 4, 48, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 6, 2, 33, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -3933,18 +3913,17 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button63, ButtonLit63, 2, 4, 62, 1, 1
-    AddFloorButton 1, Button62, ButtonLit62, 2, 2, 61, 1, 1
-    AddFloorButton 1, Button61, ButtonLit61, 3, 4, 60, 1, 1
-    AddFloorButton 1, Button60, ButtonLit60, 3, 2, 59, 1, 1
-    AddFloorButton 1, Button59, ButtonLit59, 4, 4, 58, 1, 1
-    AddFloorButton 1, Button58, ButtonLit58, 4, 2, 57, 1, 1
-    AddFloorButton 1, Button34, ButtonLit34, 5, 3, 33, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button63, ButtonLit63, 2, 4, 62, 1, 1
+    AddButton 1, switch.wav, Button62, ButtonLit62, 2, 2, 61, 1, 1
+    AddButton 1, switch.wav, Button61, ButtonLit61, 3, 4, 60, 1, 1
+    AddButton 1, switch.wav, Button60, ButtonLit60, 3, 2, 59, 1, 1
+    AddButton 1, switch.wav, Button59, ButtonLit59, 4, 4, 58, 1, 1
+    AddButton 1, switch.wav, Button58, ButtonLit58, 4, 2, 57, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 5, 3, 33, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -4016,18 +3995,17 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button63, ButtonLit63, 2, 4, 62, 1, 1
-    AddFloorButton 1, Button62, ButtonLit62, 2, 2, 61, 1, 1
-    AddFloorButton 1, Button61, ButtonLit61, 3, 4, 60, 1, 1
-    AddFloorButton 1, Button60, ButtonLit60, 3, 2, 59, 1, 1
-    AddFloorButton 1, Button59, ButtonLit59, 4, 4, 58, 1, 1
-    AddFloorButton 1, Button58, ButtonLit58, 4, 2, 57, 1, 1
-    AddFloorButton 1, Button34, ButtonLit34, 5, 3, 33, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button63, ButtonLit63, 2, 4, 62, 1, 1
+    AddButton 1, switch.wav, Button62, ButtonLit62, 2, 2, 61, 1, 1
+    AddButton 1, switch.wav, Button61, ButtonLit61, 3, 4, 60, 1, 1
+    AddButton 1, switch.wav, Button60, ButtonLit60, 3, 2, 59, 1, 1
+    AddButton 1, switch.wav, Button59, ButtonLit59, 4, 4, 58, 1, 1
+    AddButton 1, switch.wav, Button58, ButtonLit58, 4, 2, 57, 1, 1
+    AddButton 1, switch.wav, Button34, ButtonLit34, 5, 3, 33, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -4100,19 +4078,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button74, ButtonLit74, 2, 4, 73, 1, 1
-    AddFloorButton 1, Button73, ButtonLit73, 2, 2, 72, 1, 1
-    AddFloorButton 1, Button72, ButtonLit72, 3, 4, 71, 1, 1
-    AddFloorButton 1, Button71, ButtonLit71, 3, 2, 70, 1, 1
-    AddFloorButton 1, Button70, ButtonLit70, 4, 4, 69, 1, 1
-    AddFloorButton 1, Button69, ButtonLit69, 4, 2, 68, 1, 1
-    AddFloorButton 1, Button68, ButtonLit68, 5, 4, 67, 1, 1
-    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button74, ButtonLit74, 2, 4, 73, 1, 1
+    AddButton 1, switch.wav, Button73, ButtonLit73, 2, 2, 72, 1, 1
+    AddButton 1, switch.wav, Button72, ButtonLit72, 3, 4, 71, 1, 1
+    AddButton 1, switch.wav, Button71, ButtonLit71, 3, 2, 70, 1, 1
+    AddButton 1, switch.wav, Button70, ButtonLit70, 4, 4, 69, 1, 1
+    AddButton 1, switch.wav, Button69, ButtonLit69, 4, 2, 68, 1, 1
+    AddButton 1, switch.wav, Button68, ButtonLit68, 5, 4, 67, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -4184,19 +4161,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button74, ButtonLit74, 2, 4, 73, 1, 1
-    AddFloorButton 1, Button73, ButtonLit73, 2, 2, 72, 1, 1
-    AddFloorButton 1, Button72, ButtonLit72, 3, 4, 71, 1, 1
-    AddFloorButton 1, Button71, ButtonLit71, 3, 2, 70, 1, 1
-    AddFloorButton 1, Button70, ButtonLit70, 4, 4, 69, 1, 1
-    AddFloorButton 1, Button69, ButtonLit69, 4, 2, 68, 1, 1
-    AddFloorButton 1, Button68, ButtonLit68, 5, 4, 67, 1, 1
-    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button74, ButtonLit74, 2, 4, 73, 1, 1
+    AddButton 1, switch.wav, Button73, ButtonLit73, 2, 2, 72, 1, 1
+    AddButton 1, switch.wav, Button72, ButtonLit72, 3, 4, 71, 1, 1
+    AddButton 1, switch.wav, Button71, ButtonLit71, 3, 2, 70, 1, 1
+    AddButton 1, switch.wav, Button70, ButtonLit70, 4, 4, 69, 1, 1
+    AddButton 1, switch.wav, Button69, ButtonLit69, 4, 2, 68, 1, 1
+    AddButton 1, switch.wav, Button68, ButtonLit68, 5, 4, 67, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -4269,19 +4245,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button81, ButtonLit81, 2, 4, 80, 1, 1
-    AddFloorButton 1, Button80, ButtonLit80, 2, 2, 79, 1, 1
-    AddFloorButton 1, Button79, ButtonLit79, 3, 4, 78, 1, 1
-    AddFloorButton 1, Button78, ButtonLit78, 3, 2, 77, 1, 1
-    AddFloorButton 1, Button77, ButtonLit77, 4, 4, 76, 1, 1
-    AddFloorButton 1, Button76, ButtonLit76, 4, 2, 75, 1, 1
-    AddFloorButton 1, Button75, ButtonLit75, 5, 4, 74, 1, 1
-    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button81, ButtonLit81, 2, 4, 80, 1, 1
+    AddButton 1, switch.wav, Button80, ButtonLit80, 2, 2, 79, 1, 1
+    AddButton 1, switch.wav, Button79, ButtonLit79, 3, 4, 78, 1, 1
+    AddButton 1, switch.wav, Button78, ButtonLit78, 3, 2, 77, 1, 1
+    AddButton 1, switch.wav, Button77, ButtonLit77, 4, 4, 76, 1, 1
+    AddButton 1, switch.wav, Button76, ButtonLit76, 4, 2, 75, 1, 1
+    AddButton 1, switch.wav, Button75, ButtonLit75, 5, 4, 74, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -4353,19 +4328,18 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button81, ButtonLit81, 2, 4, 80, 1, 1
-    AddFloorButton 1, Button80, ButtonLit80, 2, 2, 79, 1, 1
-    AddFloorButton 1, Button79, ButtonLit79, 3, 4, 78, 1, 1
-    AddFloorButton 1, Button78, ButtonLit78, 3, 2, 77, 1, 1
-    AddFloorButton 1, Button77, ButtonLit77, 4, 4, 76, 1, 1
-    AddFloorButton 1, Button76, ButtonLit76, 4, 2, 75, 1, 1
-    AddFloorButton 1, Button75, ButtonLit75, 5, 4, 74, 1, 1
-    AddFloorButton 1, Button66, ButtonLit66, 5, 2, 65, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button81, ButtonLit81, 2, 4, 80, 1, 1
+    AddButton 1, switch.wav, Button80, ButtonLit80, 2, 2, 79, 1, 1
+    AddButton 1, switch.wav, Button79, ButtonLit79, 3, 4, 78, 1, 1
+    AddButton 1, switch.wav, Button78, ButtonLit78, 3, 2, 77, 1, 1
+    AddButton 1, switch.wav, Button77, ButtonLit77, 4, 4, 76, 1, 1
+    AddButton 1, switch.wav, Button76, ButtonLit76, 4, 2, 75, 1, 1
+    AddButton 1, switch.wav, Button75, ButtonLit75, 5, 4, 74, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -4438,18 +4412,17 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button87, ButtonLit87, 2, 4, 86, 1, 1
-    AddFloorButton 1, Button86, ButtonLit86, 2, 2, 85, 1, 1
-    AddFloorButton 1, Button85, ButtonLit85, 3, 4, 84, 1, 1
-    AddFloorButton 1, Button84, ButtonLit84, 3, 2, 83, 1, 1
-    AddFloorButton 1, Button83, ButtonLit83, 4, 4, 82, 1, 1
-    AddFloorButton 1, Button82, ButtonLit82, 4, 2, 81, 1, 1
-    AddFloorButton 1, Button67, ButtonLit67, 5, 3, 66, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button87, ButtonLit87, 2, 4, 86, 1, 1
+    AddButton 1, switch.wav, Button86, ButtonLit86, 2, 2, 85, 1, 1
+    AddButton 1, switch.wav, Button85, ButtonLit85, 3, 4, 84, 1, 1
+    AddButton 1, switch.wav, Button84, ButtonLit84, 3, 2, 83, 1, 1
+    AddButton 1, switch.wav, Button83, ButtonLit83, 4, 4, 82, 1, 1
+    AddButton 1, switch.wav, Button82, ButtonLit82, 4, 2, 81, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 5, 3, 66, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -4521,18 +4494,17 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 9, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button87, ButtonLit87, 2, 4, 86, 1, 1
-    AddFloorButton 1, Button86, ButtonLit86, 2, 2, 85, 1, 1
-    AddFloorButton 1, Button85, ButtonLit85, 3, 4, 84, 1, 1
-    AddFloorButton 1, Button84, ButtonLit84, 3, 2, 83, 1, 1
-    AddFloorButton 1, Button83, ButtonLit83, 4, 4, 82, 1, 1
-    AddFloorButton 1, Button82, ButtonLit82, 4, 2, 81, 1, 1
-    AddFloorButton 1, Button67, ButtonLit67, 5, 3, 66, 1, 1
-    AddControlButton 1, ButtonOpen, 7, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 7, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 8, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 8, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 8, 4, alarm, 1, 1
+    AddButton 1, switch.wav, Button87, ButtonLit87, 2, 4, 86, 1, 1
+    AddButton 1, switch.wav, Button86, ButtonLit86, 2, 2, 85, 1, 1
+    AddButton 1, switch.wav, Button85, ButtonLit85, 3, 4, 84, 1, 1
+    AddButton 1, switch.wav, Button84, ButtonLit84, 3, 2, 83, 1, 1
+    AddButton 1, switch.wav, Button83, ButtonLit83, 4, 4, 82, 1, 1
+    AddButton 1, switch.wav, Button82, ButtonLit82, 4, 2, 81, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 5, 3, 66, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -4605,25 +4577,28 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button102, ButtonLit102, 2, 4, 101, 1, 1
-    AddFloorButton 1, Button101, ButtonLit101, 2, 3, 100, 1, 1
-    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 99, 1, 1
-    AddFloorButton 1, Button99, ButtonLit99, 3, 4, 98, 1, 1
-    AddFloorButton 1, Button98, ButtonLit98, 3, 3, 97, 1, 1
-    AddFloorButton 1, Button97, ButtonLit97, 3, 2, 96, 1, 1
-    AddFloorButton 1, Button96, ButtonLit96, 4, 4, 95, 1, 1
-    AddFloorButton 1, Button95, ButtonLit95, 4, 3, 94, 1, 1
-    AddFloorButton 1, Button94, ButtonLit94, 4, 2, 93, 1, 1
-    AddFloorButton 1, Button93, ButtonLit93, 5, 4, 92, 1, 1
-    AddFloorButton 1, Button92, ButtonLit92, 5, 3, 91, 1, 1
-    AddFloorButton 1, Button91, ButtonLit91, 5, 2, 90, 1, 1
-    AddFloorButton 1, Button90, ButtonLit90, 6, 4, 89, 1, 1
-    AddFloorButton 1, Button67, ButtonLit67, 6, 2, 66, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    SetLock 1,1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 2, 4, 101, 1, 1
+    AddButton 1, switch.wav, Button101, ButtonLit101, 2, 3, 100, 1, 1
+    AddButton 1, switch.wav, Button100, ButtonLit100, 2, 2, 99, 1, 1
+    SetLock 0,0
+    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 4, 98, 1, 1
+    AddButton 1, switch.wav, Button98, ButtonLit98, 3, 3, 97, 1, 1
+    AddButton 1, switch.wav, Button97, ButtonLit97, 3, 2, 96, 1, 1
+    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 4, 95, 1, 1
+    AddButton 1, switch.wav, Button95, ButtonLit95, 4, 3, 94, 1, 1
+    AddButton 1, switch.wav, Button94, ButtonLit94, 4, 2, 93, 1, 1
+    AddButton 1, switch.wav, Button93, ButtonLit93, 5, 4, 92, 1, 1
+    AddButton 1, switch.wav, Button92, ButtonLit92, 5, 3, 91, 1, 1
+    AddButton 1, switch.wav, Button91, ButtonLit91, 5, 2, 90, 1, 1
+    SetLock 1,1
+    AddButton 1, switch.wav, Button90, ButtonLit90, 6, 4, 89, 1, 1
+    SetLock 0,0
+    AddButton 1, switch.wav, Button67, ButtonLit67, 6, 2, 66, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -4695,25 +4670,28 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 10, 5, right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button102, ButtonLit102, 2, 4, 101, 1, 1
-    AddFloorButton 1, Button101, ButtonLit101, 2, 3, 100, 1, 1
-    AddFloorButton 1, Button100, ButtonLit100, 2, 2, 99, 1, 1
-    AddFloorButton 1, Button99, ButtonLit99, 3, 4, 98, 1, 1
-    AddFloorButton 1, Button98, ButtonLit98, 3, 3, 97, 1, 1
-    AddFloorButton 1, Button97, ButtonLit97, 3, 2, 96, 1, 1
-    AddFloorButton 1, Button96, ButtonLit96, 4, 4, 95, 1, 1
-    AddFloorButton 1, Button95, ButtonLit95, 4, 3, 94, 1, 1
-    AddFloorButton 1, Button94, ButtonLit94, 4, 2, 93, 1, 1
-    AddFloorButton 1, Button93, ButtonLit93, 5, 4, 92, 1, 1
-    AddFloorButton 1, Button92, ButtonLit92, 5, 3, 91, 1, 1
-    AddFloorButton 1, Button91, ButtonLit91, 5, 2, 90, 1, 1
-    AddFloorButton 1, Button90, ButtonLit90, 6, 4, 89, 1, 1
-    AddFloorButton 1, Button67, ButtonLit67, 6, 2, 66, 1, 1
-    AddControlButton 1, ButtonOpen, 8, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 8, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 9, 2, cancel, 1, 1
-    AddControlButton 1, ButtonStop, 9, 3, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 9, 4, alarm, 1, 1
+    SetLock 1,1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 2, 4, 101, 1, 1
+    AddButton 1, switch.wav, Button101, ButtonLit101, 2, 3, 100, 1, 1
+    AddButton 1, switch.wav, Button100, ButtonLit100, 2, 2, 99, 1, 1
+    SetLock 0,0
+    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 4, 98, 1, 1
+    AddButton 1, switch.wav, Button98, ButtonLit98, 3, 3, 97, 1, 1
+    AddButton 1, switch.wav, Button97, ButtonLit97, 3, 2, 96, 1, 1
+    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 4, 95, 1, 1
+    AddButton 1, switch.wav, Button95, ButtonLit95, 4, 3, 94, 1, 1
+    AddButton 1, switch.wav, Button94, ButtonLit94, 4, 2, 93, 1, 1
+    AddButton 1, switch.wav, Button93, ButtonLit93, 5, 4, 92, 1, 1
+    AddButton 1, switch.wav, Button92, ButtonLit92, 5, 3, 91, 1, 1
+    AddButton 1, switch.wav, Button91, ButtonLit91, 5, 2, 90, 1, 1
+    SetLock 1,1
+    AddButton 1, switch.wav, Button90, ButtonLit90, 6, 4, 89, 1, 1
+    SetLock 0,0
+    AddButton 1, switch.wav, Button67, ButtonLit67, 6, 2, 66, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -2.95 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
@@ -4774,29 +4752,29 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     #panel
     CreatePanel ElevPanel, 13, 4, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
     SetLock 1, 1
-    AddFloorButton 1, Button106, ButtonLit106, 2, 2, 105, 1, 1
-    AddFloorButton 1, Button104, ButtonLit104, 2, 3, 103, 1, 1
-    AddFloorButton 1, Button103, ButtonLit103, 3, 2, 102, 1, 1
-    AddFloorButton 1, Button102, ButtonLit102, 3, 3, 101, 1, 1
-    AddFloorButton 1, Button101, ButtonLit101, 4, 2, 100, 1, 1
-    AddFloorButton 1, Button100, ButtonLit100, 4, 3, 99, 1, 1
+    AddButton 1, switch.wav, Button106, ButtonLit106, 2, 2, 105, 1, 1
+    AddButton 1, switch.wav, Button104, ButtonLit104, 2, 3, 103, 1, 1
+    AddButton 1, switch.wav, Button103, ButtonLit103, 3, 2, 102, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 3, 3, 101, 1, 1
+    AddButton 1, switch.wav, Button101, ButtonLit101, 4, 2, 100, 1, 1
+    AddButton 1, switch.wav, Button100, ButtonLit100, 4, 3, 99, 1, 1
 	SetLock 0, 0
-    AddFloorButton 1, Button99, ButtonLit99, 5, 2, 98, 1, 1
-    AddFloorButton 1, Button98, ButtonLit98, 5, 3, 97, 1, 1
-    AddFloorButton 1, Button97, ButtonLit97, 6, 2, 96, 1, 1
-    AddFloorButton 1, Button96, ButtonLit96, 6, 3, 95, 1, 1
-    AddFloorButton 1, Button95, ButtonLit95, 7, 2, 94, 1, 1
-    AddFloorButton 1, Button94, ButtonLit94, 7, 3, 93, 1, 1
-    AddFloorButton 1, Button93, ButtonLit93, 8, 2, 92, 1, 1
-    AddFloorButton 1, Button92, ButtonLit92, 8, 3, 91, 1, 1
-    AddFloorButton 1, Button91, ButtonLit91, 9, 2, 90, 1, 1
+    AddButton 1, switch.wav, Button99, ButtonLit99, 5, 2, 98, 1, 1
+    AddButton 1, switch.wav, Button98, ButtonLit98, 5, 3, 97, 1, 1
+    AddButton 1, switch.wav, Button97, ButtonLit97, 6, 2, 96, 1, 1
+    AddButton 1, switch.wav, Button96, ButtonLit96, 6, 3, 95, 1, 1
+    AddButton 1, switch.wav, Button95, ButtonLit95, 7, 2, 94, 1, 1
+    AddButton 1, switch.wav, Button94, ButtonLit94, 7, 3, 93, 1, 1
+    AddButton 1, switch.wav, Button93, ButtonLit93, 8, 2, 92, 1, 1
+    AddButton 1, switch.wav, Button92, ButtonLit92, 8, 3, 91, 1, 1
+    AddButton 1, switch.wav, Button91, ButtonLit91, 9, 2, 90, 1, 1
 	SetLock 1, 1
-    AddFloorButton 1, Button90, ButtonLit90, 9, 3, 89, 1, 1
+    AddButton 1, switch.wav, Button90, ButtonLit90, 9, 3, 89, 1, 1
 	SetLock 0, 0
-    AddControlButton 1, ButtonOpen, 11, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 11, 3, close, 1, 1
-    AddControlButton 1, ButtonStop, 12, 2, stop, 1, 1
-    AddControlButton 1, ButtonAlarm, 12, 3, alarm, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 11, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 11, 3, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 12, 2, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 12, 3, alarm, 1, 1
 
     #Floor Indicator
     AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
@@ -4871,14 +4849,13 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 
     #panel
     CreatePanel ElevPanel, 8, 5, right, -4.09 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
-    AddFloorButton 1, Button103, ButtonLit103, 2, 3, 102, 1, 1
-    AddFloorButton 1, Button99, ButtonLit99, 3, 3, 98, 1, 1
-    AddFloorButton 1, ButtonLL2, ButtonLitLL2, 4, 3, -2, 1, 1
-    AddControlButton 1, ButtonOpen, 5, 2, open, 1, 1
-    AddControlButton 1, ButtonClose, 5, 4, close, 1, 1
-    AddControlButton 1, ButtonCancel, 6, 4, cancel, 1, 1
-    AddControlButton 1, ButtonAlarm, 6, 2, alarm, 1, 1
-    AddControlButton 1, ButtonStop, 7, 3, stop, 1, 1
+    AddButton 1, switch.wav, Button103, ButtonLit103, 2, 3, 102, 1, 1
+    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 3, 98, 1, 1
+    AddButton 1, switch.wav, ButtonLL2, ButtonLitLL2, 4, 3, -2, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 5, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 5, 4, close, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 6, 2, alarm, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 7, 3, stop, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -4.09 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
