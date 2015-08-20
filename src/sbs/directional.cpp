@@ -34,7 +34,6 @@ extern SBS *sbs; //external pointer to the SBS engine
 DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
-	//if InElevator is true, the floor parameter is ignored
 
 	//set up SBS object
 	SetValues(this, parent, "DirectionalIndicator", "", false);
@@ -275,11 +274,11 @@ DirectionalIndicator::~DirectionalIndicator()
 	if (DirectionalMesh)
 		delete DirectionalMesh;
 	DirectionalMesh = 0;
-	
+
 	if (DirectionalMeshUp)
 		delete DirectionalMeshUp;
 	DirectionalMeshUp = 0;
-	
+
 	if (DirectionalMeshDown)
 		delete DirectionalMeshDown;
 	DirectionalMeshDown = 0;
