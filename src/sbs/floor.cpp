@@ -1345,6 +1345,9 @@ void Floor::GetElevatorList(std::vector<int> &listing)
 	{
 		Elevator *elev = sbs->GetElevator(i);
 		if (elev)
-			listing.push_back(elev->Number);
+		{
+			if (elev->IsServicedFloor(Number))
+				listing.push_back(elev->Number);
+		}
 	}
 }
