@@ -1805,11 +1805,19 @@ void Elevator::MoveElevatorToFloor()
 			if (Direction == 1)
 			{
 				CalculateStoppingDistance = false;
-				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-				if ((Destination - LevelingOffset) >= elevposition.y)
+
+				//recalculate deceleration value based on distance from marker, and store result in TempDeceleration
+				if ((Destination - LevelingOffset) > elevposition.y)
 					TempDeceleration = Deceleration * (StoppingDistance / ((Destination - LevelingOffset) - elevposition.y));
-				else //if elevator is beyond leveling offset, ignore the offset
+				//if elevator is beyond leveling offset, ignore the offset
+				else if (Destination > elevposition.y)
 					TempDeceleration = Deceleration * (StoppingDistance / (Destination - elevposition.y));
+				else
+				{
+					//if elevator is at destination
+					TempDeceleration = 0;
+					ElevatorRate = 0;
+				}
 
 				//start deceleration
 				Direction = -1;
@@ -1823,11 +1831,19 @@ void Elevator::MoveElevatorToFloor()
 			else if (Direction == -1)
 			{
 				CalculateStoppingDistance = false;
-				//recalculate deceleration value based on distance from marker, and store result in tempdeceleration
-				if ((Destination + LevelingOffset) <= elevposition.y)
+
+				//recalculate deceleration value based on distance from marker, and store result in TempDeceleration
+				if ((Destination + LevelingOffset) < elevposition.y)
 					TempDeceleration = Deceleration * (StoppingDistance / (elevposition.y - (Destination + LevelingOffset)));
-				else //if elevator is beyond leveling offset, ignore the offset
+				//if elevator is beyond leveling offset, ignore the offset
+				else if (Destination < elevposition.y)
 					TempDeceleration = Deceleration * (StoppingDistance / (elevposition.y - Destination));
+				else
+				{
+					//if elevator is at destination
+					TempDeceleration = 0;
+					ElevatorRate = 0;
+				}
 
 				//start deceleration
 				Direction = 1;
@@ -1838,10 +1854,13 @@ void Elevator::MoveElevatorToFloor()
 					ElevatorRate += (ElevatorSpeed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
 			}
 
-			PlayStoppingSounds();
+			if (ElevatorRate > 0.0f)
+			{
+				PlayStoppingSounds();
 
-			if (NotifyEarly == 2 && Parking == false)
-				NotifyArrival(GotoFloor);
+				if (NotifyEarly == 2 && Parking == false)
+					NotifyArrival(GotoFloor);
+			}
 		}
 	}
 	else if (Leveling == false && EmergencyStop == 0)
