@@ -119,6 +119,8 @@ public:
 	void SetAltitude(float altitude);
 	void ShowInfo(bool detailed = true, bool display_header = true);
 	void GetElevatorList(std::vector<int> &listing);
+	void GetStairsList(std::vector<int> &listing);
+	void GetShaftList(std::vector<int> &listing);
 
 private:
 	//sound objects

@@ -1313,8 +1313,10 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 		sbs->Report("Altitude: " + ToString2(Altitude));
 		sbs->Report("Base: " + ToString2(GetBase()));
 
-		std::vector<int> elevator_list;
+		std::vector<int> elevator_list, stairs_list, shaft_list;
 		GetElevatorList(elevator_list);
+		GetStairsList(stairs_list);
+		GetShaftList(shaft_list);
 
 		std::string elevs;
 		for (int i = 0; i < (int)elevator_list.size(); i++)
@@ -1324,6 +1326,24 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 				elevs += ", ";
 		}
 		sbs->Report("Elevators servicing: " + elevs);
+
+		std::string stairs;
+		for (int i = 0; i < (int)stairs_list.size(); i++)
+		{
+			stairs += ToString2(stairs_list[i]);
+			if (i < (int)stairs_list.size() - 1)
+				stairs += ", ";
+		}
+		sbs->Report("Stairwells spanning: " + stairs);
+
+		std::string shafts;
+		for (int i = 0; i < (int)shaft_list.size(); i++)
+		{
+			shafts += ToString2(shaft_list[i]);
+			if (i < (int)shaft_list.size() - 1)
+				shafts += ", ";
+		}
+		sbs->Report("Shafts spanning: " + shafts);
 
 		if (display_header == true)
 			sbs->Report("");
@@ -1346,8 +1366,38 @@ void Floor::GetElevatorList(std::vector<int> &listing)
 		Elevator *elev = sbs->GetElevator(i);
 		if (elev)
 		{
-			if (elev->IsServicedFloor(Number))
+			if (elev->IsServicedFloor(Number) == true)
 				listing.push_back(elev->Number);
+		}
+	}
+}
+
+void Floor::GetStairsList(std::vector<int> &listing)
+{
+	//return a list of stairwells that span this floor
+
+	for (int i = 1; i <= sbs->StairsNum(); i++)
+	{
+		Stairs *stairs = sbs->GetStairs(i);
+		if (stairs)
+		{
+			if (stairs->IsValidFloor(Number) == true)
+				listing.push_back(stairs->StairsNum);
+		}
+	}
+}
+
+void Floor::GetShaftList(std::vector<int> &listing)
+{
+	//return a list of shafts that span this floor
+
+	for (int i = 1; i <= sbs->Shafts(); i++)
+	{
+		Shaft *shaft = sbs->GetShaft(i);
+		if (shaft)
+		{
+			if (shaft->IsValidFloor(Number) == true)
+				listing.push_back(shaft->ShaftNumber);
 		}
 	}
 }
