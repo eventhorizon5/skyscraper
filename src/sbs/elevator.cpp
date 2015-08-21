@@ -4238,7 +4238,7 @@ Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3
 	sounds.push_back(sound);
 
 	//set parameters and play sound
-	sound->SetPosition(position);
+	sound->SetPosition(Origin + position);
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);

@@ -858,7 +858,7 @@ Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 po
 	sounds.push_back(sound);
 
 	//set parameters and play sound
-	sound->SetPosition(position);
+	sound->SetPosition(Ogre::Vector3(position.x, GetBase() + position.y, position.z));
 	sound->SetDirection(direction);
 	sound->SetVolume(volume);
 	sound->SetSpeed(speed);
