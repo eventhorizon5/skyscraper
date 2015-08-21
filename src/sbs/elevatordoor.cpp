@@ -81,10 +81,10 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	timer = new Timer("Door Close Timer", this, elev, 0);
 	nudgetimer = new Timer("Nudge Timer", this, elev, 1);
 
-	//create shaft door objects
+	//initialize shaft door array
 	ShaftDoors.resize(elev->ServicedFloors.size());
 	for (int i = 0; i < (int)ShaftDoors.size(); i++)
-		ShaftDoors[i] = new DoorWrapper(this, true, elev->ServicedFloors[i]);
+		ShaftDoors[i] = 0;
 
 	//create sound object
 	doorsound = new Sound(this, "Door Sound", true);
@@ -790,8 +790,9 @@ Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const c
 	if (index == -1)
 		return 0;
 
+	//create shaft door wrapper if not already created
 	if (!ShaftDoors[index])
-		return 0;
+		ShaftDoors[index] = new DoorWrapper(this, true, floor);
 
 	std::string Name, buffer;
 	Name = name;
@@ -1466,6 +1467,10 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 			delete doors[i];
 		doors[i] = 0;
 	}
+
+	//unregister from parent
+	if (parent_deleting == false)
+		parent->RemoveShaftDoor(this);
 }
 
 ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, const char *direction, float OpenSpeed, float CloseSpeed)
@@ -1969,9 +1974,6 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::GetShaftDoorWrapper(int floor)
 	if (index == -1)
 		return 0;
 
-	if (!ShaftDoors[index])
-		return 0;
-
 	return ShaftDoors[index];
 }
 
@@ -2241,5 +2243,20 @@ void ElevatorDoor::ResetState()
 	{
 		if (ShaftDoors[i])
 			ShaftDoors[i]->ResetState();
+	}
+}
+
+void ElevatorDoor::RemoveShaftDoor(DoorWrapper *door)
+{
+	if (door)
+	{
+		for (int i = 0; i < (int)ShaftDoors.size(); i++)
+		{
+			if (ShaftDoors[i] == door)
+			{
+				ShaftDoors[i] = 0;
+				return;
+			}
+		}
 	}
 }

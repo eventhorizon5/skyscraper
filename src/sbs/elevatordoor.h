@@ -171,6 +171,7 @@ public:
 	bool AllowNudgeMode();
 	std::string GetNumberText();
 	void ResetState();
+	void RemoveShaftDoor(DoorWrapper *door);
 
 private:
 

@@ -3128,6 +3128,15 @@ bool SBS::DeleteObject(Object *object)
 		delete (Trigger*)object->GetRawObject();
 		deleted = true;
 	}
+	if (type == "DoorWrapper")
+	{
+		ElevatorDoor::DoorWrapper* wrapper = (ElevatorDoor::DoorWrapper*)object->GetRawObject();
+		if (wrapper->IsShaftDoor == false)
+			return ReportError("Deleting the main elevator door wrapper is not supported yet");
+
+		delete wrapper;
+		deleted = true;
+	}
 
 	camera->ResetCollisions();
 
