@@ -40,13 +40,13 @@ namespace OgreBulletCollisions
     // -------------------------------------------------------------------------
     /*!
 	 * \brief
-	 * 
+	 *
 	 * Object is the Basic Bullet Collision representation of an Physical thing in
      * a scene. It does need a Shape Object to know its "Geometrics" Bounds.
-	 * 
+	 *
 	 * \remarks
 	 * Objects doesn't need to be represented by a Visible 3D mesh.
-	 * 
+	 *
 	 * \see
 	 * Ogre::MovableObject | Ogre::UserDefinedObject | OgreBulletDynamics::RigidBody
 	 */
@@ -61,7 +61,7 @@ namespace OgreBulletCollisions
 #if (OGRE_VERSION >=  ((1 << 16) | (5 << 8) | 0)) // must have at least shoggoth (1.5.0)
 		void visitRenderables(Ogre::Renderable::Visitor* visitor, bool debugRenderables);
 #endif
-        virtual const Ogre::String& getMovableType() const; 
+        virtual const Ogre::String& getMovableType() const;
         virtual void _notifyAttached(Ogre::Node* parent,bool isTagPoint = false);
         //virtual const Ogre::String& getName(void) const {return mName};
         virtual void _notifyCurrentCamera(Ogre::Camera* camera);
@@ -89,7 +89,7 @@ namespace OgreBulletCollisions
         inline btCollisionObject*  getBulletObject() const { return mObject;};
         inline btCollisionWorld*  getBulletCollisionWorld() const { return mWorld->getBulletCollisionWorld ();};
         inline CollisionsWorld*  getCollisionWorld() const { return mWorld;};
-        
+
         inline CollisionShape *getShape() const{ return mShape;};
         inline DebugCollisionShape* getDebugShape() const{ return mDebugShape;};
 

@@ -88,7 +88,7 @@ Model::~Model()
 
 void Model::Enable(bool value)
 {
-	mesh->Enable(value);	
+	mesh->Enable(value);
 }
 
 bool Model::IsEnabled()

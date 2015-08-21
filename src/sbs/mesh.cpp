@@ -1157,7 +1157,7 @@ bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<s
 			mesh_geometry[k].normal.normalise();
 			mesh_geometry[k].texel = table[k];
 
-			//add geometry to mesh	
+			//add geometry to mesh
 			AddVertex(mesh_geometry[k]);
 			k++;
 		}
@@ -1280,7 +1280,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	if (index == -1)
 	{
 		createnew = true;
-		
+
 		//create submesh
 		submesh = MeshWrapper->createSubMesh(name);
 		submesh->useSharedVertices = true;

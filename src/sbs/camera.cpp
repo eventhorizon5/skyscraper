@@ -446,7 +446,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
 	//generate left-hand coordinate ray
-	
+
 	//get a collision callback from Bullet
 	//OgreBulletCollisions::CollisionAllRayResultCallback callback (ray, sbs->mWorld, 1000);
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1000);

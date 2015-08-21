@@ -105,7 +105,7 @@ ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxStrin
 	wxBoxSizer* BoxSizer2;
 	wxFlexGridSizer* FlexGridSizer3;
 	wxBoxSizer* BoxSizer1;
-	
+
 	Create(parent, wxID_ANY, _("Parameter Viewer"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	tDesc = new wxStaticText(this, ID_tDesc, _("Desc"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_tDesc"));
@@ -225,7 +225,7 @@ ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxStrin
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_TEXTCTRL1,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&ParameterViewer::ChangeParam);
 	Connect(ID_TEXTCTRL2,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&ParameterViewer::ChangeParam);
 	Connect(ID_TEXTCTRL3,wxEVT_COMMAND_TEXT_UPDATED,(wxObjectEventFunction)&ParameterViewer::ChangeParam);

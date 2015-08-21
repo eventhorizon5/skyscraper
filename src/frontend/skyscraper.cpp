@@ -507,7 +507,7 @@ bool Skyscraper::Initialize()
 	{
 		return ReportFatalError("Error initializing resources\nDetails: " + e.getDescription());
 	}
-	
+
 	//create scene manager
 	try
 	{

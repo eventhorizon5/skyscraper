@@ -62,7 +62,7 @@ namespace OgreBulletCollisions
     const Ogre::String Object::mMovableType = "OgreBullet::Object";
     // -------------------------------------------------------------------------
     Object::Object(const String &name, CollisionsWorld *world, bool init)
-        :	
+        :
         MovableObject(name),
         mWorld(world),
         mShape(0),
@@ -140,7 +140,7 @@ namespace OgreBulletCollisions
     }
     // -------------------------------------------------------------------------
     void Object::setTransform(const btVector3 &pos, const btQuaternion &quat)
-    { 
+    {
 		setPosition(pos);
         mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
     }
@@ -152,12 +152,12 @@ namespace OgreBulletCollisions
     }
     // -------------------------------------------------------------------------
     void Object::setOrientation(const btQuaternion &quat)
-    {   
+    {
 		mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
     }
     // -------------------------------------------------------------------------
     void Object::setTransform(const btTransform& worldTrans)
-    { 
+    {
 		//this sets the node's transformation based on the Bullet collider's world transformation
     	Ogre::Vector3 position (worldTrans.getOrigin()[0], worldTrans.getOrigin()[1], worldTrans.getOrigin()[2]);
         mRootNode->_setDerivedPosition(position);
@@ -173,7 +173,7 @@ namespace OgreBulletCollisions
         //mShapeNode->attachObject(this);
 
         mObject->setCollisionShape(shape->getBulletShape());
-        showDebugShape(mWorld->getShowDebugShapes()); 
+        showDebugShape(mWorld->getShowDebugShapes());
 
 		_notifyMoved();
     }
@@ -192,11 +192,11 @@ namespace OgreBulletCollisions
             }
             //setPosition(parent->getPosition());
             //setOrientation(parent->getOrientation());
-        } 
+        }
     }
 #if (OGRE_VERSION >=  ((1 << 16) | (5 << 8) | 0)) // must have at least shoggoth (1.5.0)
     //-----------------------------------------------------------------------
-	void Object::visitRenderables(Renderable::Visitor* visitor, 
+	void Object::visitRenderables(Renderable::Visitor* visitor,
 		bool debugRenderables)
 	{
 		//visitor->visit(this, 0, false);

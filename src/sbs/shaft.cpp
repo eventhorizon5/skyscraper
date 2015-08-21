@@ -321,10 +321,10 @@ bool Shaft::IsShaft(Ogre::MeshPtr test)
 void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 {
 	//turn on/off entire shaft
-	
+
 	if (force == true)
 		IsEnabled = !value;
-	
+
 	if (IsEnabled == !value && EnableCheck == false)
 	{
 		for (int i = startfloor; i <= endfloor; i++)
@@ -366,11 +366,11 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 			//cache values
 			lastcheckresult = result;
 			lastposition = position;
-		
+
 			return result;
 		}
 	}
-	
+
 	//cache values
 	lastcheckresult = false;
 	lastposition = position;
@@ -818,7 +818,7 @@ Object* Shaft::AddTrigger(int floor, const char *name, const char *sound_file, O
 
 void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
-	for (int i = startfloor; i <= endfloor; i++)	
+	for (int i = startfloor; i <= endfloor; i++)
         	GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
 }
 

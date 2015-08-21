@@ -1758,26 +1758,26 @@ std::string SBS::ListTextures(bool show_filename)
 
 
 // from http://www.ogre3d.org/tikiwiki/tiki-index.php?page=Creating+transparency+based+on+a+key+colour+in+code
-/** Utility function that generates a texture with transparency based on a certain colour value 
- @remarks 
-     The generated texture will either have full opacity or full transparency values 
- @param filename 
-     The name of the image file this texture will be based on, residing in resGroup 
- @param keyCol 
-     The colour value which should cause transparency (alpha component is ignored) 
- @param resGroup 
-     The resource group the base image file belongs and the generated texture will belong to 
- @param prefix 
-     The generated texture will be accessible via the name prefix+filename 
- @param numMipmaps 
+/** Utility function that generates a texture with transparency based on a certain colour value
+ @remarks
+     The generated texture will either have full opacity or full transparency values
+ @param filename
+     The name of the image file this texture will be based on, residing in resGroup
+ @param keyCol
+     The colour value which should cause transparency (alpha component is ignored)
+ @param resGroup
+     The resource group the base image file belongs and the generated texture will belong to
+ @param prefix
+     The generated texture will be accessible via the name prefix+filename
+ @param numMipmaps
      Usually you leave that on default, but if you never intend to scale the texture, you can set it to 0
- @param threshold 
-     If the difference between the pixel colour of the image and keyCol is less than this, it gets 
-     transparent. It should be between 0 and 1. The default value is less than (1 / 256), which means 
-     that for an 8 Bit channels input file, only the EXACT keyCol gets transparent. 
- @return 
-     Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename) 
- */ 
+ @param threshold
+     If the difference between the pixel colour of the image and keyCol is less than this, it gets
+     transparent. It should be between 0 and 1. The default value is less than (1 / 256), which means
+     that for an 8 Bit channels input file, only the EXACT keyCol gets transparent.
+ @return
+     Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename)
+ */
 void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
 {
 	using namespace Ogre;
@@ -1838,7 +1838,7 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 			pxDataIndex += pxDataIndexStep;
 		}
 	}
- 
+
 	Image chromaKeyedImg;
 	chromaKeyedImg.loadDynamicImage(pixelData, width, height, 1, PF_A8R8G8B8, true);
 	// You could save the chroma keyed image at this point for caching:

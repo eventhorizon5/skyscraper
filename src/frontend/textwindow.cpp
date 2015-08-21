@@ -44,7 +44,7 @@ TextWindow::TextWindow(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	//(*Initialize(TextWindow)
 	wxFlexGridSizer* FlexGridSizer1;
 	wxBoxSizer* BoxSizer1;
-	
+
 	Create(parent, id, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);
@@ -60,7 +60,7 @@ TextWindow::TextWindow(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
 	Center();
-	
+
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&TextWindow::On_bOK_Click);
 	//*)
 }

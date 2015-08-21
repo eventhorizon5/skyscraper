@@ -48,7 +48,7 @@ namespace OgreBulletDynamics
     class _OgreBulletExport CharacterController : public OgreBulletCollisions::Object
     {
     public:
-	    CharacterController(const Ogre::String &name, 
+	    CharacterController(const Ogre::String &name,
 				  DynamicsWorld *world,
 				  Ogre::SceneNode *node,
 				  float width,
@@ -90,11 +90,11 @@ namespace OgreBulletDynamics
 		btKinematicCharacterController *m_character;
     };
     // -------------------------------------------------------------------------
-    inline DynamicsWorld*       CharacterController::getDynamicsWorld() 
-    { 
+    inline DynamicsWorld*       CharacterController::getDynamicsWorld()
+    {
         return static_cast <DynamicsWorld* > (mWorld);
     };
-    
+
 }
 #endif //_OGREBULLETDYNAMICS_Character_H
 

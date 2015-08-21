@@ -673,12 +673,12 @@ bool Elevator::AddRoute(int floor, int direction, int call_type)
 		//exit if entry already exits
 		if (loc != -1)
 			return ReportError("route to floor " + ToString2(floor) + " (" + floorobj->ID + ") already exists");
-		
+
 		//add floor to down queue
 		DownQueue.push_back(QueueEntry(floor, call_type));
 		std::sort(DownQueue.begin(), DownQueue.end());
 		QueuePending = true;
-		
+
 		LastQueueFloor[0] = floor;
 		LastQueueFloor[1] = -1;
 		Report("adding route to floor " + ToString2(floor) + " (" + floorobj->ID + ") direction down");
@@ -2905,7 +2905,7 @@ bool Elevator::EnableFireService1(int value)
 		if (value == 1)
 		{
 			Report("Fire Service Phase 1 mode set to On");
-			
+
 			//switch off directional indicators on current floor
 			SetDirectionalIndicators(ElevatorFloor, false, false);
 
@@ -4393,7 +4393,7 @@ void Elevator::PressFloorButton(int floor)
 bool Elevator::IsQueued(int floor)
 {
 	//return true if the given floor is in either queue
-	
+
 	for (int i = 0; i < (int)UpQueue.size(); i++)
 	{
 		if (UpQueue[i].floor == floor)

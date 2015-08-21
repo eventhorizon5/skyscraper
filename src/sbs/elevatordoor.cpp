@@ -504,7 +504,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 				return;
 			}
 		}
-		
+
 		if (manual == false)
 			playsounds = true;
 
@@ -712,7 +712,7 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 
 	//create door object
 	DoorObject *door = wrapper->CreateDoor(meshname, direction, OpenSpeed, CloseSpeed);
-	
+
 	if (tw == 0)
 		tw = 1;
 	if (th == 0)
@@ -1389,7 +1389,7 @@ ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper,
 
 	//create object mesh
 	mesh = new MeshObject(wrapper, doorname);
-	
+
 	std::string direction_check = Direction;
 	SetCase(direction_check, false);
 	TrimString(direction_check);
@@ -1471,7 +1471,7 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, const char *direction, float OpenSpeed, float CloseSpeed)
 {
 	//initialize a door component
-	
+
 	doors.resize(doors.size() + 1);
 	int index = (int)doors.size() - 1;
 	doors[index] = new DoorObject(doorname, this, direction, OpenSpeed, CloseSpeed);
@@ -1774,7 +1774,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				active_speed -= openchange;
 			else
 				active_speed += openchange;
-			
+
 			Move();
 			door_section = 4;
 			return;

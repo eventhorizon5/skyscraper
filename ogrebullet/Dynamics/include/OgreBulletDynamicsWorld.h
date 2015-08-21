@@ -46,11 +46,11 @@ public:
 	/// Resets the initial reference time.
 	void reset();
 
-	/// Returns the time in ms since the last call to reset or since 
+	/// Returns the time in ms since the last call to reset or since
 	/// the btClock was created.
 	unsigned long int getTimeMilliseconds();
 
-	/// Returns the time in us since the last call to reset or since 
+	/// Returns the time in us since the last call to reset or since
 	/// the Clock was created.
 	unsigned long int getTimeMicroseconds();
 
@@ -65,8 +65,8 @@ namespace OgreBulletDynamics
     class _OgreBulletExport DynamicsWorld : public OgreBulletCollisions::CollisionsWorld
     {
     public:
-        DynamicsWorld(Ogre::SceneManager *mgr, 
-            const Ogre::AxisAlignedBox &bounds,  
+        DynamicsWorld(Ogre::SceneManager *mgr,
+            const Ogre::AxisAlignedBox &bounds,
             const Ogre::Vector3 &gravity,
             bool init = true);
 

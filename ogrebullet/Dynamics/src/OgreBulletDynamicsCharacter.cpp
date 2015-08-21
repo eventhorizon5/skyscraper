@@ -47,7 +47,7 @@ namespace OgreBulletDynamics
 
     // -------------------------------------------------------------------------
     CharacterController::CharacterController(const String &name, DynamicsWorld *world, Ogre::SceneNode *node, float width, float height, float stepHeight)
-        :	
+        :
         Object(name, world, false)
     {
 		in_world = false;
@@ -72,7 +72,7 @@ namespace OgreBulletDynamics
 		collisions_enabled = true;
 
 		addToWorld();
-		
+
 		getDynamicsWorld()->getBulletDynamicsWorld()->getBroadphase()->getOverlappingPairCache()->cleanProxyFromPairs(ghost->getBroadphaseHandle(),getDynamicsWorld()->getBulletDynamicsWorld()->getDispatcher());
 		reset();
     }
@@ -80,7 +80,7 @@ namespace OgreBulletDynamics
     CharacterController::~CharacterController()
     {
 		mShapeNode->detachAllObjects();
-    }  
+    }
 	void CharacterController::addToWorld()
 	{
 		if (in_world == true)
@@ -109,7 +109,7 @@ namespace OgreBulletDynamics
 
     void CharacterController::setWalkDirection( const Ogre::Vector3 &dir, const Ogre::Real speed )
     {
-		m_character->setWalkDirection(btVector3(dir.x * speed, dir.y * speed, dir.z * speed));	
+		m_character->setWalkDirection(btVector3(dir.x * speed, dir.y * speed, dir.z * speed));
     }
     void CharacterController::setVelocityForTimeInterval( const Ogre::Vector3 &velocity, const Ogre::Real timeInterval )
     {

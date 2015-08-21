@@ -25,7 +25,7 @@ protected:
 	}
 };
 
-LPTOP_LEVEL_EXCEPTION_FILTER WINAPI 
+LPTOP_LEVEL_EXCEPTION_FILTER WINAPI
 	MyDummySetUnhandledExceptionFilter(
 	LPTOP_LEVEL_EXCEPTION_FILTER lpTopLevelExceptionFilter)
 {

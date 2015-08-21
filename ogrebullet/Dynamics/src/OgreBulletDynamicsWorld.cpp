@@ -74,8 +74,8 @@ unsigned long int oClock::getTimeMicroseconds()
 namespace OgreBulletDynamics
 {
 
-    DynamicsWorld::DynamicsWorld(Ogre::SceneManager *mgr, 
-                const Ogre::AxisAlignedBox &bounds,  
+    DynamicsWorld::DynamicsWorld(Ogre::SceneManager *mgr,
+                const Ogre::AxisAlignedBox &bounds,
                 const Ogre::Vector3 &gravity,
                 bool init) :
                 CollisionsWorld(mgr, bounds, false)
@@ -119,11 +119,11 @@ namespace OgreBulletDynamics
 		if (collisionGroup == 0 && collisionMask == 0)
 		{
 			// use default collision group/mask values (dynamic/kinematic/static)
-			static_cast <btDiscreteDynamicsWorld *> (mWorld)->addRigidBody(rb->getBulletRigidBody());      
+			static_cast <btDiscreteDynamicsWorld *> (mWorld)->addRigidBody(rb->getBulletRigidBody());
 		}
 		else
 		{
-			static_cast <btDiscreteDynamicsWorld *> (mWorld)->addRigidBody(rb->getBulletRigidBody(), collisionGroup, collisionMask);      
+			static_cast <btDiscreteDynamicsWorld *> (mWorld)->addRigidBody(rb->getBulletRigidBody(), collisionGroup, collisionMask);
 		}
     }
     // -------------------------------------------------------------------------
@@ -140,14 +140,14 @@ namespace OgreBulletDynamics
     int DynamicsWorld::stepSimulation(const Ogre::Real elapsedTime, int maxSubSteps, const Ogre::Real fixedTimestep)
     {
         // Reset Debug Lines
-        if (mDebugDrawer) 
+        if (mDebugDrawer)
 			mDebugDrawer->clear ();
-		if (mDebugContactPoints)  
+		if (mDebugContactPoints)
 			mDebugContactPoints->clear ();
 
         int result = static_cast <btDiscreteDynamicsWorld *> (mWorld)->stepSimulation(elapsedTime, maxSubSteps, fixedTimestep);
 
-		if (mDebugContactPoints) 
+		if (mDebugContactPoints)
 		{
 			///one way to draw all the contact points is iterating over contact manifolds / points:
 			const unsigned int  numManifolds = mWorld->getDispatcher()->getNumManifolds();
@@ -178,13 +178,13 @@ namespace OgreBulletDynamics
 					}
 				}
 				//you can un-comment out this line, and then all points are removed
-				//contactManifold->clearManifold();	
+				//contactManifold->clearManifold();
 			}
 			// draw lines that step Simulation sent.
 			mDebugContactPoints->draw();
 		}
 
-		if (mDebugDrawer) 
+		if (mDebugDrawer)
 		{
 			// draw lines that step Simulation sent.
 			mDebugDrawer->draw();

@@ -73,7 +73,7 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	m12 = uv3.x - uv1.x;
 	m21 = uv2.y - uv1.y;
 	m22 = uv3.y - uv1.y;
-	
+
 	//compute determinant of matrix
 	float det = m11 * m22 - m12 * m21;
 
@@ -125,7 +125,7 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 bool MeshObject::ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2)
 {
 	//originally from Crystal Space's libs/csgeom/textrans.cpp file
-	
+
 	/**
 	 * Calculate the matrix using two vertices (which are preferably on the
 	 * plane of the polygon and are possibly (but not necessarily) two vertices
@@ -300,7 +300,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 			sideB = ptB.y - value;
 		if (axis == 2)
 			sideB = ptB.z - value;
-		
+
 		if (fabsf(sideB) < SMALL_EPSILON)
 			sideB = 0;
 
@@ -337,7 +337,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 				// Compute the intersection point of the line
 				// from point A to point B with the partition
 				// plane. This is a simple ray-plane intersection.
-				
+
 				Ogre::Vector3 v = ptB;
 				v -= ptA;
 
