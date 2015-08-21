@@ -317,7 +317,7 @@ void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bFloorList_Click(wxCommandEvent& event)
 {
-	Simcore->ShowFloorInfo(true);
+	Simcore->ShowFloorList();
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
@@ -366,6 +366,8 @@ void DebugPanel::OnInit()
 
 void DebugPanel::Timer::Notify()
 {
+	Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+
 	if (dp)
 	{
 		dp->t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
@@ -375,8 +377,8 @@ void DebugPanel::Timer::Notify()
 		dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
 		dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
 		dp->t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
-		if (Simcore->GetFloor(Simcore->camera->CurrentFloor))
-			dp->t_floorname->SetLabel(wxString::FromAscii(Simcore->GetFloor(Simcore->camera->CurrentFloor)->Name.c_str()));
+		if (floor)
+			dp->t_floorname->SetLabel(wxString::FromAscii(floor->Name.c_str()));
 
 		if (Simcore->Elevators() > 0)
 		{
@@ -399,11 +401,11 @@ void DebugPanel::Timer::Notify()
 	{
 		if (mc->IsShown() == true)
 		{
-			if (Simcore->GetFloor(Simcore->camera->CurrentFloor))
+			if (floor)
 			{
-				mc->chkFloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsEnabled);
-				mc->chkColumnFrame->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsColumnFrameEnabled);
-				mc->chkInterfloor->SetValue(Simcore->GetFloor(Simcore->camera->CurrentFloor)->IsInterfloorEnabled);
+				mc->chkFloor->SetValue(floor->IsEnabled);
+				mc->chkColumnFrame->SetValue(floor->IsColumnFrameEnabled);
+				mc->chkInterfloor->SetValue(floor->IsInterfloorEnabled);
 			}
 			mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
 			mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
@@ -556,5 +558,8 @@ void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
 {
-	Simcore->ShowFloorInfo(false, Simcore->camera->CurrentFloor);
+	Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+
+	if (floor)
+		floor->ShowInfo();
 }

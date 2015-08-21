@@ -771,7 +771,7 @@ void Floor::Loop()
 std::vector<int> Floor::GetCallButtons(int elevator)
 {
 	//get numbers of call buttons that service the specified elevator
-	
+
 	std::vector<int> buttons;
 	buttons.reserve(CallButtonArray.size());
 	for (int i = 0; i < (int)CallButtonArray.size(); i++)
@@ -1286,4 +1286,65 @@ void Floor::SetAltitude(float altitude)
 	//position object at altitude
 	SetPositionY(altitude);
 	Altitude = altitude;
+}
+
+void Floor::ShowInfo(bool detailed, bool display_header)
+{
+	//show information about this floor on the console
+
+	//if detailed is true (default), show detailed information for this floor
+	//otherwise, show a single-line listing suitable for showing in a list with other floors
+
+	//if display_header is true, show header/key along with listing
+
+	if (display_header == true)
+		sbs->Report("\n--- Floor Information ---\n");
+
+	if (detailed == true)
+	{
+		sbs->Report("Number: " + ToString2(Number));
+		sbs->Report("ID: " + ID);
+		sbs->Report("Name: " + Name);
+		sbs->Report("Type: " + FloorType);
+		sbs->Report("Description: " + Description);
+		sbs->Report("Height: " + ToString2(Height));
+		sbs->Report("InterfloorHeight: " + ToString2(InterfloorHeight));
+		sbs->Report("FullHeight: " + ToString2(FullHeight()));
+		sbs->Report("Altitude: " + ToString2(Altitude));
+		sbs->Report("Base: " + ToString2(GetBase()));
+
+		std::vector<int> elevator_list;
+		GetElevatorList(elevator_list);
+
+		std::string elevs;
+		for (int i = 0; i < (int)elevator_list.size(); i++)
+		{
+			elevs += ToString2(elevator_list[i]);
+			if (i < (int)elevator_list.size() - 1)
+				elevs += ", ";
+		}
+		sbs->Report("Elevators servicing: " + elevs);
+
+		if (display_header == true)
+			sbs->Report("");
+	}
+	else
+	{
+		if (display_header == true)
+			sbs->Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tDescription");
+
+		sbs->Report(ToString2(Number) + "(" + ID + ")\t----\t" + Name + "\t----\t" + FloorType + "\t----\t" + ToString2(Height) + "\t----\t" + ToString2(InterfloorHeight) + "\t----\t" + ToString2(Altitude) + "\t----\t" + Description);
+	}
+}
+
+void Floor::GetElevatorList(std::vector<int> &listing)
+{
+	//return a list of elevators that service this floor
+
+	for (int i = 1; i <= sbs->Elevators(); i++)
+	{
+		Elevator *elev = sbs->GetElevator(i);
+		if (elev)
+			listing.push_back(elev->Number);
+	}
 }

@@ -2792,7 +2792,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			for (int i = 3; i < params; i++)
 			{
-				actparams.push_back(tempdata[i]);	
+				actparams.push_back(tempdata[i]);
 			}
 		}
 
@@ -3050,7 +3050,7 @@ int ScriptProcessor::ProcCommands()
 	if (linecheck.substr(0, 9) == "floorinfo")
 	{
 		if (LineData.size() == 9)
-			Simcore->ShowFloorInfo(true);
+			Simcore->ShowFloorList();
 		else
 		{
 			//calculate inline math
@@ -3060,7 +3060,9 @@ int ScriptProcessor::ProcCommands()
 			if (!IsNumeric(buffer.c_str(), num))
 				return ScriptError("Invalid value: " + buffer);
 
-			Simcore->ShowFloorInfo(false, num);
+			Floor *floor = Simcore->GetFloor(num);
+			if (floor)
+				floor->ShowInfo();
 		}
 		return sNextLine;
 	}
@@ -6343,7 +6345,7 @@ int ScriptProcessor::ProcElevators()
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
-		
+
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
@@ -7534,7 +7536,7 @@ int ScriptProcessor::ProcTextures()
 			TrimString(buffer);
 			LineData = temp6;
 			ReplaceAll(LineData, "%number%", buffer.c_str());
-		
+
 			//get data
 			int params = SplitData(LineData.c_str(), 13, false);
 

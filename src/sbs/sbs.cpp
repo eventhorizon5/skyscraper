@@ -468,7 +468,7 @@ bool SBS::Start()
 	EnableLandscape(true);
 	EnableExternal(true);
 	EnableSkybox(true);
-	
+
 	//turn off floors
 	for (int i = 0; i < TotalFloors(); i++)
 		FloorArray[i].object->Enabled(false);
@@ -2645,7 +2645,7 @@ void SBS::AddFloorAutoArea(Ogre::Vector3 start, Ogre::Vector3 end)
 void SBS::CheckAutoAreas()
 {
 	//check all automatic areas
-	
+
 	Ogre::Vector3 position = camera->GetPosition();
 	int floor = camera->CurrentFloor;
 
@@ -2817,7 +2817,7 @@ Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale)
 {
 	//convert local (SBS) vertex positions to remote (OGRE) positions
-	
+
 	Ogre::Vector3 newvalue;
 	newvalue.x = local_value.x;
 	newvalue.y = local_value.y;
@@ -2891,7 +2891,7 @@ bool SBS::UnregisterObject(int number)
 std::string SBS::TruncateNumber(float value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
-	
+
 	if ((int)value == value)
 		decimals = 0; //value is an integer
 
@@ -2906,7 +2906,7 @@ std::string SBS::TruncateNumber(const char *value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 	std::string number = value;
-	
+
 	if (decimals < 1)
 		return number;
 	number.erase((int)number.find(".") + decimals + 1);
@@ -3418,7 +3418,7 @@ int SBS::GetPolygonCount()
 void SBS::Prepare(bool report)
 {
 	//prepare objects for run
-	
+
 	if (report == true)
 	{
 		Report("Preparing objects...");
@@ -3590,7 +3590,7 @@ void SBS::CalculateAverageTime()
 		return;
 
 	//SmoothFrames is the maximum number of milliseconds to hold timing info
-	
+
 	//find oldest time to keep
 	std::deque<unsigned long>::iterator it = frame_times.begin(), end = frame_times.end() - 2;
 
@@ -3613,7 +3613,7 @@ std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
 {
 	//get mountpoint (resource group) path of given file
 	//if not found, return "General"
-	
+
 	std::string file = filename;
 	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
 	newfilename = file;
@@ -4043,41 +4043,26 @@ void SBS::UnregisterControl(Control *control)
 	}
 }
 
-void SBS::ShowFloorInfo(bool all_floors, int floor)
+void SBS::ShowFloorList()
 {
-	//show floor information for all floors, or specified floor
+	//show floor information for all floors
 
-	if (all_floors == false)
+	bool header_shown = false;
+	for (int i = -Basements; i < Floors; i++)
 	{
-		Floor *flr = GetFloor(floor);
-
-		if (!flr)
-			return;
-
-		Report("\n--- Floor Information ---\n");
-		Report("Number: " + ToString2(floor));
-		Report("ID: " + flr->ID);
-		Report("Name: " + flr->Name);
-		Report("Type: " + flr->FloorType);
-		Report("Description: " + flr->Description);
-		Report("Height: " + ToString2(flr->Height));
-		Report("InterfloorHeight: " + ToString2(flr->InterfloorHeight));
-		Report("FullHeight: " + ToString2(flr->FullHeight()));
-		Report("Altitude: " + ToString2(flr->Altitude));
-		Report("Base: " + ToString2(flr->GetBase()));
-		Report("");
-	}
-	else
-	{
-		Report("\n--- Floor Information ---\n");
-		Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tDescription");
-		for (int i = -Basements; i < Floors; i++)
+		Floor *floor = GetFloor(i);
+		if (floor)
 		{
-			Floor *floor = GetFloor(i);
-			Report(ToString2(i) + "(" + floor->ID + ")\t----\t" + floor->Name + "\t----\t" + floor->FloorType + "\t----\t" + ToString2(floor->Height) + "\t----\t" + ToString2(floor->InterfloorHeight) + "\t----\t" + ToString2(floor->Altitude) + "\t----\t" + floor->Description);
+			if (header_shown == false)
+			{
+				floor->ShowInfo(false, true);
+				header_shown = true;
+			}
+			else
+				floor->ShowInfo(false, false);
 		}
-		Report("");
 	}
+	Report("");
 }
 
 void SBS::ShowSceneNodes(bool value)

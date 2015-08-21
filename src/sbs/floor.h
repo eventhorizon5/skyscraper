@@ -117,6 +117,8 @@ public:
 	Object* AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
 	std::vector<Sound*> GetSound(const char *name);
 	void SetAltitude(float altitude);
+	void ShowInfo(bool detailed = true, bool display_header = true);
+	void GetElevatorList(std::vector<int> &listing);
 
 private:
 	//sound objects
