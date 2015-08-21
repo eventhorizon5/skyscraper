@@ -148,7 +148,10 @@ Stairs::~Stairs()
 	for (int i = 0; i < (int)StairArray.size(); i++)
 	{
 		if (StairArray[i])
+		{
+			StairArray[i]->parent_deleting = true;
 			delete StairArray[i];
+		}
 		StairArray[i] = 0;
 	}
 

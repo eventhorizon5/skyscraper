@@ -250,13 +250,22 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 CallButton::~CallButton()
 {
 	if (CallButtonMeshDown)
+	{
+		CallButtonMeshDown->parent_deleting = true;
 		delete CallButtonMeshDown;
+	}
 	CallButtonMeshDown = 0;
 	if (CallButtonMeshUp)
+	{
+		CallButtonMeshUp->parent_deleting = true;
 		delete CallButtonMeshUp;
+	}
 	CallButtonMeshUp = 0;
 	if (CallButtonMeshBack)
+	{
+		CallButtonMeshBack->parent_deleting = true;
 		delete CallButtonMeshBack;
+	}
 	CallButtonMeshBack = 0;
 
 	if (sound)

@@ -129,7 +129,10 @@ Control::~Control()
 	sound = 0;
 
 	if (ControlMesh)
+	{
+		ControlMesh->parent_deleting = true;
 		delete ControlMesh;
+	}
 	ControlMesh = 0;
 
 	//unregister from parent

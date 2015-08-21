@@ -111,7 +111,10 @@ ButtonPanel::~ButtonPanel()
 	}
 	//delete panel
 	if (ButtonPanelMesh)
+	{
+		ButtonPanelMesh->parent_deleting = true;
 		delete ButtonPanelMesh;
+	}
 	ButtonPanelMesh = 0;
 
 	if (sbs->FastDelete == false)

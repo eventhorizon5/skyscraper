@@ -327,7 +327,10 @@ SBS::~SBS()
 
 	//delete camera object
 	if (camera)
+	{
+		camera->parent_deleting = true;
 		delete camera;
+	}
 	camera = 0;
 
 	//delete callbacks
@@ -397,21 +400,33 @@ SBS::~SBS()
 		ActionArray[i] = 0;
 	}
 
-	//delete wall objects
+	//delete mesh objects
 	if (SkyBox)
+	{
+		SkyBox->parent_deleting = true;
 		delete SkyBox;
+	}
 	SkyBox = 0;
 
 	if (Landscape)
+	{
+		Landscape->parent_deleting = true;
 		delete Landscape;
+	}
 	Landscape = 0;
 
 	if (External)
+	{
+		External->parent_deleting = true;
 		delete External;
+	}
 	External = 0;
 
 	if (Buildings)
+	{
+		Buildings->parent_deleting = true;
 		delete Buildings;
+	}
 	Buildings = 0;
 
 	//delete physics objects

@@ -184,15 +184,24 @@ Floor::~Floor()
 
 	//delete meshes
 	if (Level)
+	{
+		Level->parent_deleting = true;
 		delete Level;
+	}
 	Level = 0;
 
 	if (Interfloor)
+	{
+		Interfloor->parent_deleting = true;
 		delete Interfloor;
+	}
 	Interfloor = 0;
 
 	if (ColumnFrame)
+	{
+		ColumnFrame->parent_deleting = true;
 		delete ColumnFrame;
+	}
 	ColumnFrame = 0;
 
 	//delete walls in external mesh

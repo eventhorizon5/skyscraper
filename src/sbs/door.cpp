@@ -149,7 +149,10 @@ Door::~Door()
 	sound = 0;
 
 	if (DoorMesh)
+	{
+		DoorMesh->parent_deleting = true;
 		delete DoorMesh;
+	}
 	DoorMesh = 0;
 
 	//unregister from parent

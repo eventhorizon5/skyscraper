@@ -78,7 +78,10 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 FloorIndicator::~FloorIndicator()
 {
 	if (FloorIndicatorMesh)
+	{
+		FloorIndicatorMesh->parent_deleting = true;
 		delete FloorIndicatorMesh;
+	}
 	FloorIndicatorMesh = 0;
 
 	//unregister from parent

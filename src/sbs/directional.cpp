@@ -268,23 +268,38 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 DirectionalIndicator::~DirectionalIndicator()
 {
 	if (timer)
+	{
+		timer->parent_deleting = true;
 		delete timer;
+	}
 	timer = 0;
 
 	if (DirectionalMesh)
+	{
+		DirectionalMesh->parent_deleting = true;
 		delete DirectionalMesh;
+	}
 	DirectionalMesh = 0;
 
 	if (DirectionalMeshUp)
+	{
+		DirectionalMeshUp->parent_deleting = true;
 		delete DirectionalMeshUp;
+	}
 	DirectionalMeshUp = 0;
 
 	if (DirectionalMeshDown)
+	{
+		DirectionalMeshDown->parent_deleting = true;
 		delete DirectionalMeshDown;
+	}
 	DirectionalMeshDown = 0;
 
 	if (DirectionalMeshBack)
+	{
+		DirectionalMeshBack->parent_deleting = true;
 		delete DirectionalMeshBack;
+	}
 	DirectionalMeshBack = 0;
 
 	//unregister from parent

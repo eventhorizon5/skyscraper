@@ -163,7 +163,10 @@ Shaft::~Shaft()
 	for (int i = 0; i < (int)ShaftArray.size(); i++)
 	{
 		if (ShaftArray[i])
+		{
+			ShaftArray[i]->parent_deleting = true;
 			delete ShaftArray[i];
+		}
 		ShaftArray[i] = 0;
 	}
 

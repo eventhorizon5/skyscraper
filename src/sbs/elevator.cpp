@@ -269,19 +269,31 @@ Elevator::~Elevator()
 		Report("deleting timers");
 
 	if (parking_timer)
+	{
+		parking_timer->parent_deleting = true;
 		delete parking_timer;
+	}
 	parking_timer = 0;
 
 	if (random_timer)
+	{
+		random_timer->parent_deleting = true;
 		delete random_timer;
+	}
 	random_timer = 0;
 
 	if (arrival_delay)
+	{
+		arrival_delay->parent_deleting = true;
 		delete arrival_delay;
+	}
 	arrival_delay = 0;
 
 	if (departure_delay)
+	{
+		departure_delay->parent_deleting = true;
 		delete departure_delay;
+	}
 	departure_delay = 0;
 
 	//delete directional indicators
@@ -424,7 +436,10 @@ Elevator::~Elevator()
 	}
 
 	if (ElevatorMesh)
+	{
+		ElevatorMesh->parent_deleting = true;
 		delete ElevatorMesh;
+	}
 	ElevatorMesh = 0;
 
 	//unregister from parent

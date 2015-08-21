@@ -67,7 +67,10 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 Model::~Model()
 {
 	if (mesh)
+	{
+		mesh->parent_deleting = true;
 		delete mesh;
+	}
 	mesh = 0;
 
 	//unregister from parent

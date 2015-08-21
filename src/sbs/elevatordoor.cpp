@@ -107,11 +107,17 @@ ElevatorDoor::~ElevatorDoor()
 
 	//Destructor
 	if (timer)
+	{
+		timer->parent_deleting = true;
 		delete timer;
+	}
 	timer = 0;
 
 	if (nudgetimer)
+	{
+		nudgetimer->parent_deleting = true;
 		delete nudgetimer;
+	}
 	nudgetimer = 0;
 
 	if (sensor)
