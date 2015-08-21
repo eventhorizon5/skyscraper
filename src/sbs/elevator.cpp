@@ -1854,7 +1854,7 @@ void Elevator::MoveElevatorToFloor()
 					ElevatorRate += (ElevatorSpeed * InspectionSpeed) * ((TempDeceleration * JerkRate) * sbs->delta);
 			}
 
-			if (ElevatorRate > 0.0f)
+			if (ElevatorRate != 0.0f)
 			{
 				PlayStoppingSounds();
 
