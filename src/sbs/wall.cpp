@@ -129,19 +129,14 @@ Polygon* WallObject::AddPolygon(const char *name, std::string material, std::vec
 int WallObject::CreatePolygon(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
-	int i = (int)polygons.size();
-	polygons.resize(polygons.size() + 1);
-	sbs->PolygonCount++;
-	polygons[i].mesh = meshwrapper;
-	polygons[i].index_extents = index_extents;
-	polygons[i].t_matrix = tex_matrix;
-	polygons[i].t_vector = tex_vector;
-	polygons[i].material = material;
-	polygons[i].plane = plane;
-	polygons[i].triangles = triangles;
-	SetPolygonName(i, name);
 
-	return i;
+	std::string newname = ProcessName(name);
+
+	Polygon polygon(newname.c_str(), meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
+	polygons.push_back(polygon);
+	sbs->PolygonCount++;
+
+	return (int)polygons.size() - 1;
 }
 
 std::string WallObject::ProcessName(const char *name)
@@ -246,25 +241,6 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 		return;
 
 	polygons[index].GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
-}
-
-void WallObject::SetPolygonName(int index, const char *name)
-{
-	if (index < 0 || index >= (int)polygons.size())
-		return;
-
-	//set polygon name
-	std::string name_modified = name;
-
-	//strip off object ID from name if it exists
-	if ((int)name_modified.find("(") == 0)
-		name_modified.erase(0, (int)name_modified.find(")") + 1);
-
-	//construct name
-	std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
-
-	//set polygon name
-	polygons[index].name = newname;
 }
 
 bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)

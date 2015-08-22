@@ -29,9 +29,15 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Polygon::Polygon()
+Polygon::Polygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane)
 {
-	mesh = 0;
+	mesh = meshwrapper;
+	this->index_extents = index_extents;
+	t_matrix = tex_matrix;
+	t_vector = tex_vector;
+	this->material = material;
+	this->plane = plane;
+	this->triangles = triangles;
 }
 
 Polygon::~Polygon()
