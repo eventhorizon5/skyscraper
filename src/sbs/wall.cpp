@@ -315,3 +315,18 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 
 	return false;
 }
+
+void WallObject::Move(const Ogre::Vector3 &position, float speed)
+{
+	//move a wall object
+
+	for (int i = 0; i < (int)handles.size(); i++)
+	{
+		handles[i].Move(position, speed);
+	}
+
+	//prepare mesh
+	meshwrapper->Prepare(true);
+	meshwrapper->DeleteCollider();
+	meshwrapper->CreateCollider();
+}

@@ -100,7 +100,7 @@ public:
 	int ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add);
 	int FindMatchingSubMesh(std::string material);
 	void DeleteVertices(std::vector<TriangleType> &deleted_indices);
-	void Prepare();
+	void Prepare(bool force = false);
 	void EnableDebugView(bool value);
 	void CreateCollider();
 	void DeleteCollider();
@@ -168,6 +168,7 @@ public:
 	bool IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
 	bool IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	bool IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal);
+	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 };
 
 #endif

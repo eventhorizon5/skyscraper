@@ -57,19 +57,19 @@ public:
 	void SetNumber(int number);
 	bool IsTemporary();
 	void ShowBoundingBox(bool value);
-	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
-	void Move(float X, float Y, float Z, float speed = 1.0f);
-	void SetPosition(const Ogre::Vector3 &position);
+	virtual void Move(const Ogre::Vector3 &position, float speed = 1.0f);
+	virtual void Move(float X, float Y, float Z, float speed = 1.0f);
+	virtual void SetPosition(const Ogre::Vector3 &position);
 	void SetPositionRelative(const Ogre::Vector3 &position);
-	void SetPosition(float X, float Y, float Z);
+	virtual void SetPosition(float X, float Y, float Z);
 	void SetPositionRelative(float X, float Y, float Z);
-	void SetPositionY(float value);
-	Ogre::Vector3 GetPosition(bool relative = false);
-	void Rotate(const Ogre::Vector3 &rotation, float speed = 1.0f);
-	void Rotate(float X, float Y, float Z, float speed = 1.0f);
-	void SetRotation(Ogre::Vector3 rotation);
-	void SetRotation(float X, float Y, float Z);
-	Ogre::Vector3 GetRotation();
+	virtual void SetPositionY(float value);
+	virtual Ogre::Vector3 GetPosition(bool relative = false);
+	virtual void Rotate(const Ogre::Vector3 &rotation, float speed = 1.0f);
+	virtual void Rotate(float X, float Y, float Z, float speed = 1.0f);
+	virtual void SetRotation(Ogre::Vector3 rotation);
+	virtual void SetRotation(float X, float Y, float Z);
+	virtual Ogre::Vector3 GetRotation();
 	virtual void OnMove() {}; //called when object is moved
 	virtual void OnRotate() {}; //called when object is rotated
 	void NotifyMove();

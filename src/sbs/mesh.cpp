@@ -625,6 +625,17 @@ bool WallPolygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool
 	return false;
 }
 
+void WallPolygon::Move(const Ogre::Vector3 &position, float speed)
+{
+	for (int i = 0; i < (int)index_extents.size(); i++)
+	{
+		int min = index_extents[i].x;
+		int max = index_extents[i].y;
+		for (int j = min; j <= max; j++)
+			mesh->MeshGeometry[j].vertex += sbs->ToRemote(position);
+	}
+}
+
 MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
@@ -1341,7 +1352,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &
 	return index;
 }
 
-void MeshObject::Prepare()
+void MeshObject::Prepare(bool force)
 {
 	//prepare mesh object
 	//collects and uploads geometry and triangle data to graphics card, and prepares mesh for rendering
@@ -1351,7 +1362,7 @@ void MeshObject::Prepare()
 	//each submesh represents a portion of the mesh that uses the same material
 
 	//exit if mesh has already been prepared
-	if (prepared == true)
+	if (prepared == true && force == false)
 		return;
 
 	//clear vertex data and exit if there's no associated submesh or geometry data
