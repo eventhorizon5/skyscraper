@@ -282,6 +282,7 @@
     <ClCompile Include="..\src\sbs\mesh.cpp" />
     <ClCompile Include="..\src\sbs\model.cpp" />
     <ClCompile Include="..\src\sbs\object.cpp" />
+    <ClCompile Include="..\src\sbs\polygon.cpp" />
     <ClCompile Include="..\src\sbs\profiler.cpp" />
     <ClCompile Include="..\src\sbs\random.cpp" />
     <ClCompile Include="..\src\sbs\sbs.cpp" />
@@ -313,6 +314,7 @@
     <ClInclude Include="..\src\sbs\mesh.h" />
     <ClInclude Include="..\src\sbs\model.h" />
     <ClInclude Include="..\src\sbs\object.h" />
+    <ClInclude Include="..\src\sbs\polygon.h" />
     <ClInclude Include="..\src\sbs\profiler.h" />
     <ClInclude Include="..\src\sbs\random.h" />
     <ClInclude Include="..\src\sbs\sbs.h" />
