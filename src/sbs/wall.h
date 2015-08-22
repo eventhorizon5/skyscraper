@@ -36,13 +36,13 @@ public:
 	Polygon* AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize);
 	Polygon* AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize);
 	Polygon* AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector);
-	int CreateHandle(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane);
+	int CreatePolygon(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane);
 	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
 	void DeleteVertices(std::vector<int> &deleted_indices);
 	std::string ProcessName(const char *name);
-	int GetHandleCount();
-	Polygon* GetHandle(int index);
+	int GetPolygonCount();
+	Polygon* GetPolygon(int index);
 	int FindPolygon(const char *name);
 	void GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly = false, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
 	void SetPolygonName(int index, const char *name);
@@ -59,7 +59,7 @@ public:
 	//parent array
 	std::vector<WallObject*> *parent_array;
 
-	std::vector<Polygon> handles;
+	std::vector<Polygon> polygons;
 };
 
 #endif

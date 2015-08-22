@@ -29,6 +29,15 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
+Polygon::Polygon()
+{
+	mesh = 0;
+}
+
+Polygon::~Polygon()
+{
+}
+
 void Polygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 {
 	//return texture mapping matrix and vector
@@ -41,15 +50,6 @@ Ogre::SubMesh* Polygon::GetSubMesh()
 	//return the submesh this polygon is in
 	int index = mesh->FindMatchingSubMesh(material);
 	return mesh->Submeshes[index];
-}
-
-Polygon::Polygon()
-{
-	mesh = 0;
-}
-
-Polygon::~Polygon()
-{
 }
 
 void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)

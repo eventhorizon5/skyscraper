@@ -135,11 +135,11 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 	}
 
 	//step through each polygon
-	int polycount = wall->GetHandleCount();
+	int polycount = wall->GetPolygonCount();
 	for (int i = 0; i < polycount; i++)
 	{
 		//get name
-		Polygon *handle = wall->GetHandle(i);
+		Polygon *polygon = wall->GetPolygon(i);
 
 		//get original vertices
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
@@ -181,7 +181,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 					Classify(2, temppoly, end.z) != 2)
 			{
 				if (Verbose)
-					Report("Cutting polygon '" + handle->name + "'");
+					Report("Cutting polygon '" + polygon->name + "'");
 
 				extentsx = GetExtents(temppoly, 1);
 				extentsy = GetExtents(temppoly, 2);
@@ -377,18 +377,18 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 			std::string oldmat;
 			Ogre::Vector3 oldvector;
 			Ogre::Matrix3 mapping;
-			std::string name = handle->name;
+			std::string name = polygon->name;
 
 			if (newpolys.size() > 0)
 			{
 				//get texture data from original polygon
-				oldmat = handle->material;
-				handle->GetTextureMapping(mapping, oldvector);
+				oldmat = polygon->material;
+				polygon->GetTextureMapping(mapping, oldvector);
 			}
 
 			//delete original polygon
 			wall->DeletePolygon(i, false);
-			handle = 0;
+			polygon = 0;
 
 			//create new polygon
 			if (newpolys.size() > 0)
@@ -836,9 +836,9 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
+		for (int j = 0; j < (int)Walls[i]->polygons.size(); j++)
 		{
-			if (Walls[i]->handles[j].IntersectSegment(start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
+			if (Walls[i]->polygons[j].IntersectSegment(start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{
@@ -1447,11 +1447,11 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 		if (!Walls[i])
 			continue;
 
-		for (int j = 0; j < (int)Walls[i]->handles.size(); j++)
+		for (int j = 0; j < (int)Walls[i]->polygons.size(); j++)
 		{
 			//reindex triangle indices
 
-			Polygon *poly = &Walls[i]->handles[j];
+			Polygon *poly = &Walls[i]->polygons[j];
 
 			int elements_size = (int)poly->triangles.size() * 3;
 			int *elements = new int[elements_size];

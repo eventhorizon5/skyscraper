@@ -59,8 +59,8 @@ WallObject::~WallObject()
 	}
 
 	sbs->WallCount--;
-	sbs->PolygonCount -= (int)handles.size();
-	handles.clear();
+	sbs->PolygonCount -= (int)polygons.size();
+	polygons.clear();
 }
 
 Polygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
@@ -100,8 +100,8 @@ Polygon* WallObject::AddPolygon(const char *name, const char *texture, std::vect
 	//compute plane
 	Ogre::Plane plane = sbs->ComputePlane(vertices);
 
-	int index = CreateHandle(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
-	return &handles[index];
+	int index = CreatePolygon(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
+	return &polygons[index];
 }
 
 Polygon* WallObject::AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
@@ -122,23 +122,23 @@ Polygon* WallObject::AddPolygon(const char *name, std::string material, std::vec
 	//compute plane
 	Ogre::Plane plane = sbs->ComputePlane(vertices[0]);
 
-	int index = CreateHandle(triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
-	return &handles[index];
+	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
+	return &polygons[index];
 }
 
-int WallObject::CreateHandle(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane)
+int WallObject::CreatePolygon(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane)
 {
 	//create a polygon handle
-	int i = (int)handles.size();
-	handles.resize(handles.size() + 1);
+	int i = (int)polygons.size();
+	polygons.resize(polygons.size() + 1);
 	sbs->PolygonCount++;
-	handles[i].mesh = meshwrapper;
-	handles[i].index_extents = index_extents;
-	handles[i].t_matrix = tex_matrix;
-	handles[i].t_vector = tex_vector;
-	handles[i].material = material;
-	handles[i].plane = plane;
-	handles[i].triangles = triangles;
+	polygons[i].mesh = meshwrapper;
+	polygons[i].index_extents = index_extents;
+	polygons[i].t_matrix = tex_matrix;
+	polygons[i].t_vector = tex_vector;
+	polygons[i].material = material;
+	polygons[i].plane = plane;
+	polygons[i].triangles = triangles;
 	SetPolygonName(i, name);
 
 	return i;
@@ -160,9 +160,9 @@ std::string WallObject::ProcessName(const char *name)
 
 void WallObject::DeletePolygons(bool recreate_collider)
 {
-	//delete polygons and handles
+	//delete polygons
 
-	for (int i = (int)handles.size() - 1; i >= 0; i--)
+	for (int i = (int)polygons.size() - 1; i >= 0; i--)
 		DeletePolygon(i, false);
 
 	//recreate colliders
@@ -180,16 +180,16 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 {
 	//delete a single polygon
 
-	if (index > -1 && index < (int)handles.size())
+	if (index > -1 && index < (int)polygons.size())
 	{
 		//delete triangles
-		meshwrapper->ProcessSubMesh(handles[index].triangles, handles[index].material, handles[index].name.c_str(), false);
+		meshwrapper->ProcessSubMesh(polygons[index].triangles, polygons[index].material, polygons[index].name.c_str(), false);
 
 		//delete related mesh vertices
-		meshwrapper->DeleteVertices(handles[index].triangles);
+		meshwrapper->DeleteVertices(polygons[index].triangles);
 
 		//delete polygon
-		handles.erase(handles.begin() + index);
+		polygons.erase(polygons.begin() + index);
 
 		sbs->PolygonCount--;
 
@@ -203,15 +203,15 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 	}
 }
 
-int WallObject::GetHandleCount()
+int WallObject::GetPolygonCount()
 {
-	return (int)handles.size();
+	return (int)polygons.size();
 }
 
-Polygon* WallObject::GetHandle(int index)
+Polygon* WallObject::GetPolygon(int index)
 {
-	if (index > -1 && index < (int)handles.size())
-		return &handles[index];
+	if (index > -1 && index < (int)polygons.size())
+		return &polygons[index];
 	return 0;
 }
 
@@ -222,9 +222,9 @@ int WallObject::FindPolygon(const char *name)
 	SBS_PROFILE("WallObject::FindPolygon");
 
 	std::string name2 = name;
-	for (int i = 0; i < (int)handles.size(); i++)
+	for (int i = 0; i < (int)polygons.size(); i++)
 	{
-		std::string tmpname = handles[i].name;
+		std::string tmpname = polygons[i].name;
 		if ((int)tmpname.find("(") == 0)
 		{
 			//strip object number
@@ -247,15 +247,15 @@ void WallObject::GetGeometry(int index, std::vector<std::vector<Ogre::Vector3> >
 	//if relative is true, vertices are relative of mesh center, otherwise they use absolute/global positioning
 	//if reverse is false, process extents table in ascending order, otherwise descending order
 
-	if (index < 0 || index >= (int)handles.size())
+	if (index < 0 || index >= (int)polygons.size())
 		return;
 
-	handles[index].GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
+	polygons[index].GetGeometry(vertices, firstonly, convert, rescale, relative, reverse);
 }
 
 void WallObject::SetPolygonName(int index, const char *name)
 {
-	if (index < 0 || index >= (int)handles.size())
+	if (index < 0 || index >= (int)polygons.size())
 		return;
 
 	//set polygon name
@@ -269,7 +269,7 @@ void WallObject::SetPolygonName(int index, const char *name)
 	std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
 
 	//set polygon name
-	handles[index].name = newname;
+	polygons[index].name = newname;
 }
 
 bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
@@ -278,11 +278,11 @@ bool WallObject::IsPointOnWall(const Ogre::Vector3 &point, bool convert)
 
 	SBS_PROFILE("WallObject::IsPointOnWall");
 	bool checkplane = false;
-	for (int i = 0; i < (int)handles.size(); i++)
+	for (int i = 0; i < (int)polygons.size(); i++)
 	{
 		if (i == 0)
 			checkplane = true;
-		if(handles[i].PointInside(point, checkplane, convert))
+		if(polygons[i].PointInside(point, checkplane, convert))
 			return true;
 	}
 	return false;
@@ -297,9 +297,9 @@ bool WallObject::IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 
 	int best_i = -1;
 	Ogre::Vector3 cur_isect, normal;
 
-	for (int i = 0; i < (int)handles.size(); i++)
+	for (int i = 0; i < (int)polygons.size(); i++)
 	{
-		if (handles[i].IntersectSegment(start, end, cur_isect, &pr, normal, convert))
+		if (polygons[i].IntersectSegment(start, end, cur_isect, &pr, normal, convert))
 		{
 			if (pr < best_pr)
 			{
@@ -320,9 +320,9 @@ void WallObject::Move(const Ogre::Vector3 &position, float speed)
 {
 	//move a wall object
 
-	for (int i = 0; i < (int)handles.size(); i++)
+	for (int i = 0; i < (int)polygons.size(); i++)
 	{
-		handles[i].Move(position, speed);
+		polygons[i].Move(position, speed);
 	}
 
 	//prepare mesh

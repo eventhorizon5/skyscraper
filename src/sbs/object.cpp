@@ -83,15 +83,15 @@ Object::~Object()
 	sbs->Report("Deleted object " + ToString2(Number) + ": " + Name);
 }
 
-void Object::SetValues(void *object, Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable)
+void Object::SetValues(void *raw_object, Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable)
 {
 	//set object values
 
 	//exit if settings have already been set
-	if (raw_object)
+	if (this->raw_object)
 		return;
 
-	raw_object = object;
+	this->raw_object = raw_object;
 	Parent = parent;
 	Permanent = is_permanent;
 	Type = type;
