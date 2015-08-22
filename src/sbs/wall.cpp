@@ -63,7 +63,7 @@ WallObject::~WallObject()
 	handles.clear();
 }
 
-WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
+Polygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -77,7 +77,7 @@ WallPolygon* WallObject::AddQuad(const char *name, const char *texture, const Og
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
-WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
+Polygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	std::string name2 = ProcessName(name);
@@ -104,7 +104,7 @@ WallPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::
 	return &handles[index];
 }
 
-WallPolygon* WallObject::AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+Polygon* WallObject::AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 	std::string name2 = ProcessName(name);
@@ -208,7 +208,7 @@ int WallObject::GetHandleCount()
 	return (int)handles.size();
 }
 
-WallPolygon* WallObject::GetHandle(int index)
+Polygon* WallObject::GetHandle(int index)
 {
 	if (index > -1 && index < (int)handles.size())
 		return &handles[index];

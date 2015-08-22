@@ -29,30 +29,30 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-void WallPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
+void Polygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 {
 	//return texture mapping matrix and vector
 	tm = t_matrix;
 	tv = t_vector;
 }
 
-Ogre::SubMesh* WallPolygon::GetSubMesh()
+Ogre::SubMesh* Polygon::GetSubMesh()
 {
 	//return the submesh this polygon is in
 	int index = mesh->FindMatchingSubMesh(material);
 	return mesh->Submeshes[index];
 }
 
-WallPolygon::WallPolygon()
+Polygon::Polygon()
 {
 	mesh = 0;
 }
 
-WallPolygon::~WallPolygon()
+Polygon::~Polygon()
 {
 }
 
-void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -121,7 +121,7 @@ void WallPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices
 	}
 }
 
-bool WallPolygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool convert)
+bool Polygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool convert)
 {
 	//check if a point is inside the polygon
 
@@ -137,7 +137,7 @@ bool WallPolygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool
 	return false;
 }
 
-void WallPolygon::Move(const Ogre::Vector3 &position, float speed)
+void Polygon::Move(const Ogre::Vector3 &position, float speed)
 {
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
