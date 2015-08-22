@@ -182,13 +182,8 @@ void WallObject::DeletePolygon(int index, bool recreate_colliders)
 
 	if (index > -1 && index < (int)polygons.size())
 	{
-		//delete triangles
-		meshwrapper->ProcessSubMesh(polygons[index].triangles, polygons[index].material, polygons[index].name.c_str(), false);
-
-		//delete related mesh vertices
-		meshwrapper->DeleteVertices(polygons[index].triangles);
-
 		//delete polygon
+		polygons[index].Delete();
 		polygons.erase(polygons.begin() + index);
 
 		sbs->PolygonCount--;

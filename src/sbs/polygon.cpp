@@ -147,3 +147,14 @@ void Polygon::Move(const Ogre::Vector3 &position, float speed)
 			mesh->MeshGeometry[j].vertex += sbs->ToRemote(position);
 	}
 }
+
+void Polygon::Delete()
+{
+	//delete polygon geometry
+
+	//delete triangles
+	mesh->ProcessSubMesh(triangles, material, name.c_str(), false);
+
+	//delete related mesh vertices
+	mesh->DeleteVertices(triangles);
+}

@@ -53,6 +53,7 @@ public:
 	bool IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
 	bool IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal);
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
+	void Delete();
 };
 
 #endif
