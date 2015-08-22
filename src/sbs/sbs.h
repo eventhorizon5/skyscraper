@@ -52,6 +52,7 @@ namespace OgreBulletCollisions {
 #include "object.h"
 #include "light.h"
 #include "mesh.h"
+#include "polygon.h"
 #include "model.h"
 #include "wall.h"
 #include "floor.h"

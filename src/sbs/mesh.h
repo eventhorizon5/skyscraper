@@ -142,33 +142,4 @@ private:
 	};
 };
 
-class SBSIMPEXP WallPolygon
-{
-public:
-	MeshObject* mesh;
-	std::vector<TriangleType> triangles;
-	Ogre::Plane plane;
-
-	//array holding index extents, to get original geometry
-	std::vector<Extents> index_extents;
-
-	//texture mapping matrix and vector
-	Ogre::Matrix3 t_matrix;
-	Ogre::Vector3 t_vector;
-
-	std::string material; //polygon material
-	std::string name; //polygon names
-
-	WallPolygon();
-	~WallPolygon();
-	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
-	Ogre::SubMesh* GetSubMesh();
-	void GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);
-	bool PointInside(const Ogre::Vector3 &point, bool plane_check = true, bool convert = true);
-	bool IntersectSegment(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
-	bool IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	bool IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal);
-	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
-};
-
 #endif
