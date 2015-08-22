@@ -275,7 +275,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 						polycheck2 = true;
 
 						//store extents of temppoly5 for door sides if needed
-						GetDoorwayExtents(wall->meshwrapper, checkwallnumber, temppoly5);
+						GetDoorwayExtents(wall->GetMesh(), checkwallnumber, temppoly5);
 					}
 				}
 				else if (cutfloors == true)
@@ -836,9 +836,9 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		for (int j = 0; j < (int)Walls[i]->polygons.size(); j++)
+		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
-			if (Walls[i]->polygons[j].IntersectSegment(start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
+			if (Walls[i]->GetPolygon(j)->IntersectSegment(start, end, cur_isect, &pr, tmpnormal, convert, rescale) == true)
 			{
 				if (pr < best_pr)
 				{
@@ -1447,11 +1447,11 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 		if (!Walls[i])
 			continue;
 
-		for (int j = 0; j < (int)Walls[i]->polygons.size(); j++)
+		for (int j = 0; j < Walls[i]->GetPolygonCount(); j++)
 		{
 			//reindex triangle indices
 
-			Polygon *poly = &Walls[i]->polygons[j];
+			Polygon *poly = Walls[i]->GetPolygon(j);
 
 			int elements_size = (int)poly->triangles.size() * 3;
 			int *elements = new int[elements_size];

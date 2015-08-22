@@ -330,3 +330,8 @@ void WallObject::Move(const Ogre::Vector3 &position, float speed)
 	meshwrapper->DeleteCollider();
 	meshwrapper->CreateCollider();
 }
+
+MeshObject* WallObject::GetMesh()
+{
+	return meshwrapper;
+}

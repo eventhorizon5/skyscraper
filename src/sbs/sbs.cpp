@@ -2113,9 +2113,9 @@ void SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw,
 	if (wall1a == true && wall2a == true)
 	{
 		//convert extents to relative positioning
-		Ogre::Vector2 extents_x = wall_extents_x - wallobject->meshwrapper->GetPosition().x;
-		Ogre::Vector2 extents_y = wall_extents_y - wallobject->meshwrapper->GetPosition().y;
-		Ogre::Vector2 extents_z = wall_extents_z - wallobject->meshwrapper->GetPosition().z;
+		Ogre::Vector2 extents_x = wall_extents_x - wallobject->GetMesh()->GetPosition().x;
+		Ogre::Vector2 extents_y = wall_extents_y - wallobject->GetMesh()->GetPosition().y;
+		Ogre::Vector2 extents_z = wall_extents_z - wallobject->GetMesh()->GetPosition().z;
 
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right
