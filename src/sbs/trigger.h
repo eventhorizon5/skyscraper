@@ -32,7 +32,6 @@
 class SBSIMPEXP Trigger : public Object
 {
 public:
-	std::string Name;
 	bool IsEnabled;
 
 	//functions

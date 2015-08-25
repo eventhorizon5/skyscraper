@@ -40,7 +40,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	//set up SBS object
 	SetValues(this, parent, "Control", name, permanent);
 
-	Name = name;
+	std::string Name = name;
 	std::string Name2 = Name;
 	if ((int)Name.find("Control", 0) == -1)
 		Name2 = "Control " + Name;
@@ -69,7 +69,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(Name.c_str());
+		wall = ControlMesh->CreateWallObject(name);
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "back")
@@ -81,7 +81,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(Name.c_str());
+		wall = ControlMesh->CreateWallObject(name);
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "left")
@@ -93,7 +93,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(Name.c_str());
+		wall = ControlMesh->CreateWallObject(name);
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "right")
@@ -105,7 +105,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(Name.c_str());
+		wall = ControlMesh->CreateWallObject(name);
 		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
@@ -339,7 +339,7 @@ bool Control::DoAction()
 	else if ((int)Actions.size() > 0)
 		actionlist.push_back(Actions[current_position - 1]);
 	else
-		return sbs->ReportError("No available actions for control '" + Name + "'");
+		return sbs->ReportError("No available actions for control '" + std::string(GetName()) + "'");
 
 	bool result = false;
 	for (int i = 0; i < (int)actionlist.size(); i++)
@@ -362,7 +362,7 @@ bool Control::Press(bool reverse)
 
 	//check lock state
 	if (IsLocked() == true)
-		return sbs->ReportError("Control '" + Name + "' is locked");
+		return sbs->ReportError("Control '" + std::string(GetName()) + "' is locked");
 
 	//get action name of next position state
 	std::string name;
@@ -457,15 +457,15 @@ bool Control::ToggleLock(bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock control '" + Name + "'");
+			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock control '" + std::string(GetName()) + "'");
 	}
 
 	Locked = !Locked;
 
 	if (Locked == true)
-		sbs->Report("Locked control '" + Name + "'");
+		sbs->Report("Locked control '" + std::string(GetName()) + "'");
 	else
-		sbs->Report("Unlocked control '" + Name + "'");
+		sbs->Report("Unlocked control '" + std::string(GetName()) + "'");
 
 	return true;
 }

@@ -37,8 +37,6 @@ Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *s
 	//set up SBS object
 	SetValues(this, parent, "Trigger", name, permanent);
 
-	Name = name;
-
 	Actions = action_names;
 	IsEnabled = true;
 	current_position = 1;
@@ -219,7 +217,7 @@ bool Trigger::DoAction()
 	//result is true if at least one action in the list succeeded
 
 	if ((int)Actions.size() == 0)
-		return sbs->ReportError("No available actions for trigger '" + Name + "'");
+		return sbs->ReportError("No available actions for trigger '" + std::string(GetName()) + "'");
 
 	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
 
@@ -262,9 +260,9 @@ bool Trigger::Check()
 		if (sbs->Verbose == true)
 		{
 			if (is_inside == true)
-				sbs->Report("Inside trigger area '" + Name + "', parent '" + GetParent()->GetName() + "'");
+				sbs->Report("Inside trigger area '" + std::string(GetName()) + "', parent '" + std::string(GetParent()->GetName()) + "'");
 			else
-				sbs->Report("Outside trigger area '" + Name + "', parent '" + GetParent()->GetName() + "'");
+				sbs->Report("Outside trigger area '" + std::string(GetName()) + "', parent '" + std::string(GetParent()->GetName()) + "'");
 		}
 
 		//get action name of next position state

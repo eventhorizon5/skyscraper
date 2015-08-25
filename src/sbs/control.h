@@ -32,7 +32,6 @@
 class SBSIMPEXP Control : public Object
 {
 public:
-	std::string Name;
 	std::string Direction;
 	bool IsEnabled;
 
