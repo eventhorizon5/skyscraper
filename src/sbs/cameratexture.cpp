@@ -44,8 +44,6 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 	//set up SBS object
 	SetValues(this, parent, "CameraTexture", name, false);
 
-	Name = name;
-
 	unsigned int texture_size = 256;
 	if (quality == 2)
 		texture_size = 512;
@@ -55,12 +53,12 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 	try
 	{
 		//create a new render texture
-		texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
+		texture = Ogre::TextureManager::getSingleton().createManual(name, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
 		sbs->IncrementTextureCount();
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
 		//create and set up camera
-		camera = sbs->mSceneManager->createCamera(Name);
+		camera = sbs->mSceneManager->createCamera(name);
 		camera->setNearClipDistance(0.1f);
 		camera->setFarClipDistance(0.0f);
 		camera->setAspectRatio(1.0f);
@@ -86,12 +84,12 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 			sbs->UnregisterTextureInfo(name);
 
 		//create a new material
-		material = Ogre::MaterialManager::getSingleton().create(Name, "General");
+		material = Ogre::MaterialManager::getSingleton().create(name, "General");
 		sbs->IncrementMaterialCount();
 		material->setLightingEnabled(false);
 
 		//bind texture to material
-		material->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
+		material->getTechnique(0)->getPass(0)->createTextureUnitState(name);
 
 		//show only clockwise side of material
 		material->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
@@ -100,7 +98,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 		sbs->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
 		if (sbs->Verbose)
-			sbs->Report("Created camera texture '" + Name + "'");
+			sbs->Report("Created camera texture '" + std::string(GetName()) + "'");
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -123,7 +121,7 @@ CameraTexture::~CameraTexture()
 		Ogre::MaterialManager::getSingleton().remove(matwrapper);
 		Ogre::ResourcePtr texwrapper = texture;
 		Ogre::TextureManager::getSingleton().remove(texwrapper);
-		sbs->UnregisterTextureInfo(Name.c_str());
+		sbs->UnregisterTextureInfo(GetName());
 		sbs->DecrementTextureCount();
 		sbs->DecrementMaterialCount();
 	}

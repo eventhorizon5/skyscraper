@@ -50,9 +50,6 @@ public:
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 	MeshObject* GetMesh();
 
-	//name
-	std::string name;
-
 	//parent array
 	std::vector<WallObject*> *parent_array;
 

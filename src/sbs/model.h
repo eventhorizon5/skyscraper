@@ -29,7 +29,6 @@
 class SBSIMPEXP Model : public Object
 {
 public:
-	std::string Name;
 	bool load_error;
 
 	//functions

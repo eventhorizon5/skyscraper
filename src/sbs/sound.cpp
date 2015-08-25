@@ -46,7 +46,6 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	SoundLoop = sbs->GetConfigBool("Skyscraper.SBS.Sound.Loop", false);
 	Speed = sbs->GetConfigInt("Skyscraper.SBS.Sound.Speed", 100);
 	Percent = 0;
-	Name = name;
 	sbs->IncrementSoundCount();
 	sound = 0;
 	channel = 0;
@@ -397,12 +396,12 @@ bool Sound::IsLoaded()
 
 void Sound::Report(std::string message)
 {
-	sbs->Report("Sound '" + Name + "', parent '" + GetParent()->GetName() + "': " + message);
+	sbs->Report("Sound '" + std::string(GetName()) + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 bool Sound::ReportError(std::string message)
 {
-	return sbs->ReportError("Sound '" + Name + "', parent '" + GetParent()->GetName() + "': " + message);
+	return sbs->ReportError("Sound '" + std::string(GetName()) + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 void Sound::PlayQueued(const char *filename, bool stop, bool loop)

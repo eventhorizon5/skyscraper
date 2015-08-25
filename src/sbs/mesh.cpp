@@ -757,7 +757,6 @@ WallObject* MeshObject::CreateWallObject(const char *name)
 	//create a new wall object in the given array
 
 	WallObject *wall = new WallObject(this);
-	wall->name = name;
 	wall->parent_array = &Walls;
 	wall->SetValues(wall, this, "Wall", name, false, false);
 	Walls.push_back(wall);

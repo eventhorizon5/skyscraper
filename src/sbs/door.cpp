@@ -50,7 +50,6 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	SetValues(this, parent, "Door", name, false);
 
 	IsEnabled = true;
-	Name = name;
 	Direction = direction;
 	OpenState = false;
 	IsMoving = false;
@@ -112,7 +111,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(this, Name.c_str());
+	DoorMesh = new MeshObject(this, name);
 	Move(position);
 
 	//create sound object
@@ -176,7 +175,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	//position is the camera position, used to check if the door is locked
 	//if force is true, locking/position check will be bypassed
 
-	sbs->Report("Opening door '" + Name + "'");
+	sbs->Report("Opening door '" + std::string(GetName()) + "'");
 
 	if (!sbs->RegisterDoorCallback(this))
 		return false;
@@ -185,7 +184,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	{
 		//check lock state
 		if (IsLocked(position) == true)
-			return sbs->ReportError("Door '" + Name + "' is locked");
+			return sbs->ReportError("Door '" + std::string(GetName()) + "' is locked");
 	}
 
 	if (IsMoving == false)
@@ -203,7 +202,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 void Door::Close(bool playsound)
 {
-	sbs->Report("Closing door '" + Name + "'");
+	sbs->Report("Closing door '" + std::string(GetName()) + "'");
 
 	if (!sbs->RegisterDoorCallback(this))
 		return;
@@ -299,7 +298,7 @@ bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock door '" + Name + "'");
+			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock door '" + std::string(GetName()) + "'");
 	}
 
 	if (GetSide(position) == false)
@@ -340,9 +339,9 @@ bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	}
 
 	if (replocked == true)
-		sbs->Report("Locked door '" + Name + "'");
+		sbs->Report("Locked door '" + std::string(GetName()) + "'");
 	else
-		sbs->Report("Unlocked door '" + Name + "'");
+		sbs->Report("Unlocked door '" + std::string(GetName()) + "'");
 
 	return true;
 }

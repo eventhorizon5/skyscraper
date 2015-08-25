@@ -32,7 +32,6 @@ class SBSIMPEXP Door : public Object
 {
 public:
 
-	std::string Name; //door name
 	int Direction;
 	bool OpenState;
 	bool IsMoving; //is door moving?

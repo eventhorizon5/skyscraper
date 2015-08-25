@@ -39,7 +39,6 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	Offset = 0;
 	is_key = false;
 	KeyID = 0;
-	Name = name;
 
 	load_error = false;
 	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);

@@ -662,7 +662,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				//if model is a key, add key to keyring and delete model
 				if (model->IsKey() == true)
 				{
-					sbs->AddKey(model->GetKeyID(), model->Name);
+					sbs->AddKey(model->GetKeyID(), model->GetName());
 					sbs->DeleteObject(mesh_parent);
 					return;
 				}
