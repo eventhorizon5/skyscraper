@@ -50,8 +50,9 @@ const long ObjectInfo::ID_bDelete = wxNewId();
 const long ObjectInfo::ID_bMove = wxNewId();
 const long ObjectInfo::ID_bCreate = wxNewId();
 const long ObjectInfo::ID_bViewScript = wxNewId();
-const long ObjectInfo::ID_bSave = wxNewId();
+const long ObjectInfo::ID_bReset = wxNewId();
 const long ObjectInfo::ID_bOK = wxNewId();
+const long ObjectInfo::ID_bSave = wxNewId();
 const long ObjectInfo::ID_STATICTEXT1 = wxNewId();
 const long ObjectInfo::ID_tNumber = wxNewId();
 const long ObjectInfo::ID_STATICTEXT5 = wxNewId();
@@ -104,20 +105,28 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	FlexGridSizer4->Add(ObjectTree, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2 = new wxBoxSizer(wxHORIZONTAL);
 	bDelete = new wxButton(this, ID_bDelete, _("Delete"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bDelete"));
+	bDelete->SetToolTip(_("Delete selected object"));
 	BoxSizer2->Add(bDelete, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bMove = new wxButton(this, ID_bMove, _("Move"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMove"));
+	bMove->SetToolTip(_("Move selected object"));
 	BoxSizer2->Add(bMove, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bCreate = new wxButton(this, ID_bCreate, _("Create"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCreate"));
+	bCreate->SetToolTip(_("Create a new object"));
 	BoxSizer2->Add(bCreate, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer4->Add(BoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer3 = new wxBoxSizer(wxHORIZONTAL);
 	bViewScript = new wxButton(this, ID_bViewScript, _("View Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bViewScript"));
+	bViewScript->SetToolTip(_("View current running script"));
 	BoxSizer3->Add(bViewScript, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
-	bSave = new wxButton(this, ID_bSave, _("Save Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
-	bSave->Disable();
-	BoxSizer3->Add(bSave, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
+	bReset = new wxButton(this, ID_bReset, _("Reset State"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bReset"));
+	bReset->SetToolTip(_("Reset the state of the current object"));
+	BoxSizer3->Add(bReset, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer3->Add(bOK, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSave = new wxButton(this, ID_bSave, _("Save Script"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSave"));
+	bSave->Disable();
+	bSave->Hide();
+	BoxSizer3->Add(bSave, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer4->Add(BoxSizer3, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1->Add(FlexGridSizer4, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
@@ -190,8 +199,9 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Connect(ID_bMove,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bMove_Click);
 	Connect(ID_bCreate,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bCreate_Click);
 	Connect(ID_bViewScript,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bViewScript_Click);
-	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
+	Connect(ID_bReset,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bReset_Click);
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
+	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
 	//*)
 	//OnInit();
 	oldobject = -1;
@@ -428,4 +438,22 @@ void ObjectInfo::On_bMove_Click(wxCommandEvent& event)
 
 	moveobject = new MoveObject(this, -1, number);
 	moveobject->Show();
+}
+
+void ObjectInfo::On_bReset_Click(wxCommandEvent& event)
+{
+	wxTreeItemId sel = ObjectTree->GetSelection();
+
+	if (!sel.IsOk())
+		return;
+
+	TreeItemData *data = (TreeItemData*) ObjectTree->GetItemData(sel);
+	wxString num;
+	num = data->GetDesc();
+	int number = atoi(num.ToAscii());
+
+	//call SBS to reset object state
+	Object *obj = Simcore->GetObject(number);
+	if (obj)
+		obj->ResetState();
 }

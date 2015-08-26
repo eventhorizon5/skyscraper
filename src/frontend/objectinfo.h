@@ -44,6 +44,7 @@ class ObjectInfo: public wxDialog
 
 		//(*Declarations(ObjectInfo)
 		wxTextCtrl* tType;
+		wxButton* bReset;
 		wxTextCtrl* tScriptCommand;
 		wxTextCtrl* tParent;
 		wxTextCtrl* tScriptCommand2;
@@ -90,8 +91,9 @@ class ObjectInfo: public wxDialog
 		static const long ID_bMove;
 		static const long ID_bCreate;
 		static const long ID_bViewScript;
-		static const long ID_bSave;
+		static const long ID_bReset;
 		static const long ID_bOK;
+		static const long ID_bSave;
 		static const long ID_STATICTEXT1;
 		static const long ID_tNumber;
 		static const long ID_STATICTEXT5;
@@ -131,6 +133,7 @@ class ObjectInfo: public wxDialog
 		void On_bSave_Click(wxCommandEvent& event);
 		void On_bViewScript_Click(wxCommandEvent& event);
 		void On_bMove_Click(wxCommandEvent& event);
+		void On_bReset_Click(wxCommandEvent& event);
 		//*)
 		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
 		bool changed;
