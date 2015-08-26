@@ -32,6 +32,7 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bDelete" variable="bDelete" member="yes">
 									<label>Delete</label>
+									<tooltip>Delete selected object</tooltip>
 									<handler function="On_bDelete_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -41,6 +42,7 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bMove" variable="bMove" member="yes">
 									<label>Move</label>
+									<tooltip>Move selected object</tooltip>
 									<handler function="On_bMove_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -50,6 +52,7 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bCreate" variable="bCreate" member="yes">
 									<label>Create</label>
+									<tooltip>Create a new object</tooltip>
 									<handler function="On_bCreate_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -66,6 +69,7 @@
 							<object class="sizeritem">
 								<object class="wxButton" name="ID_bViewScript" variable="bViewScript" member="yes">
 									<label>View Script</label>
+									<tooltip>View current running script</tooltip>
 									<handler function="On_bViewScript_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -73,10 +77,10 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxButton" name="ID_bSave" variable="bSave" member="yes">
-									<label>Save Script</label>
-									<enabled>0</enabled>
-									<handler function="On_bSave_Click" entry="EVT_BUTTON" />
+								<object class="wxButton" name="ID_bReset" variable="bReset" member="yes">
+									<label>Reset State</label>
+									<tooltip>Reset the state of the current object</tooltip>
+									<handler function="On_bReset_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
@@ -88,6 +92,17 @@
 									<handler function="On_bOK_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+								<border>5</border>
+								<option>1</option>
+							</object>
+							<object class="sizeritem">
+								<object class="wxButton" name="ID_bSave" variable="bSave" member="yes">
+									<label>Save Script</label>
+									<enabled>0</enabled>
+									<hidden>1</hidden>
+									<handler function="On_bSave_Click" entry="EVT_BUTTON" />
+								</object>
+								<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
 								<border>5</border>
 								<option>1</option>
 							</object>
