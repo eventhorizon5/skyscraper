@@ -3270,6 +3270,7 @@ int ScriptProcessor::ProcFloors()
 	ReplaceAll(LineData, "%id%", floor->ID.c_str());
 	ReplaceAll(LineData, "%name%", floor->Name.c_str());
 	ReplaceAll(LineData, "%type%", floor->FloorType.c_str());
+	ReplaceAll(LineData, "%description%", floor->Description.c_str());
 
 	if (getfloordata == true)
 		return sCheckFloors;
