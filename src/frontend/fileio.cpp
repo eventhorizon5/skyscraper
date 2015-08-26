@@ -3269,7 +3269,7 @@ int ScriptProcessor::ProcFloors()
 	ReplaceAll(LineData, "%base%", cache_base_s.c_str());
 	ReplaceAll(LineData, "%id%", floor->ID.c_str());
 	ReplaceAll(LineData, "%name%", floor->Name.c_str());
-	ReplaceAll(LineData, "%type%", floor->Type.c_str());
+	ReplaceAll(LineData, "%type%", floor->FloorType.c_str());
 
 	if (getfloordata == true)
 		return sCheckFloors;
