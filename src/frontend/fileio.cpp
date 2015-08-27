@@ -3074,6 +3074,13 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//ListVisibleMeshes command
+	if (linecheck.substr(0, 17) == "listvisiblemeshes")
+	{
+		Simcore->ListVisibleMeshes();
+		return sNextLine;
+	}
+
 	//Print command
 	if (linecheck.substr(0, 5) == "print")
 	{

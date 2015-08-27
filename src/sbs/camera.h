@@ -130,6 +130,7 @@ public:
 	void ResetCollisions();
 	void GotoFloor(int floor, bool disable_current = true);
 	void Binoculars(bool value);
+	bool IsMeshVisible(MeshObject *mesh);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

@@ -4102,3 +4102,22 @@ void SBS::ShowBoundingBoxes(bool value)
 
 	mSceneManager->showBoundingBoxes(value);
 }
+
+void SBS::ListVisibleMeshes()
+{
+	//list all meshes visible by the main camera
+
+	Report("\n--- Visible Meshes ---\n");
+	int count = 0;
+
+	for (int i = 0; i < (int)meshes.size(); i++)
+	{
+		if (camera->IsMeshVisible(meshes[i]) == true)
+		{
+			Report(meshes[i]->name);
+			count++;
+		}
+	}
+	Report("Total: " + ToString2(count));
+	Report("");
+}

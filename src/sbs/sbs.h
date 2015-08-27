@@ -381,6 +381,7 @@ public:
 	void ShowSceneNodes(bool value);
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon);
 	void ShowBoundingBoxes(bool value);
+	void ListVisibleMeshes();
 
 	//Meshes
 	MeshObject* Buildings;
