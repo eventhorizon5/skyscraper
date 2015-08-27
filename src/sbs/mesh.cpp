@@ -2060,3 +2060,8 @@ void MeshObject::OnRotate()
 	if (mBody)
 		mBody->updateTransform(false, true, false);
 }
+
+int MeshObject::GetSubmeshCount()
+{
+	return MeshWrapper->getNumSubMeshes();
+}

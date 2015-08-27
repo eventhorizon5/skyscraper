@@ -4107,14 +4107,17 @@ void SBS::ListVisibleMeshes()
 {
 	//list all meshes visible by the main camera
 
-	Report("\n--- Visible Meshes ---\n");
+	Report("\n--- Visible Meshes ---");
+	Report("Name\t-\tSubmeshes\n");
 	int count = 0;
+	int submeshes = 0;
 
 	for (int i = 0; i < (int)meshes.size(); i++)
 	{
 		if (camera->IsMeshVisible(meshes[i]) == true)
 		{
-			Report(meshes[i]->name);
+			submeshes = meshes[i]->GetSubmeshCount();
+			Report(meshes[i]->name + "\t-\t" + ToString2(submeshes));
 			count++;
 		}
 	}

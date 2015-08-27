@@ -117,6 +117,7 @@ public:
 	WallObject* FindPolygon(const char *name, int &index);
 	void OnMove();
 	void OnRotate();
+	int GetSubmeshCount();
 
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
