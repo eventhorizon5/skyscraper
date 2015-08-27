@@ -2065,3 +2065,24 @@ int MeshObject::GetSubmeshCount()
 {
 	return MeshWrapper->getNumSubMeshes();
 }
+
+bool MeshObject::IsVisible(Ogre::Camera *camera)
+{
+	//returns if this mesh object is visible in the provided camera's view frustom or not
+
+	if (IsEnabled() == false || !camera)
+		return false;
+
+	//if beyond the max render distance
+	if (Movable->isVisible() == false)
+		return false;
+
+	//generate a globally-positioned axis-aligned box
+	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+	Ogre::Vector3 min = box.getMinimum();
+	Ogre::Vector3 max = box.getMaximum();
+	Ogre::Vector3 pos = sbs->ToRemote(GetPosition());
+	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
+
+	return camera->isVisible(global_box);
+}

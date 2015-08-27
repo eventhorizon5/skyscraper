@@ -118,6 +118,7 @@ public:
 	void OnMove();
 	void OnRotate();
 	int GetSubmeshCount();
+	bool IsVisible(Ogre::Camera *camera);
 
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container

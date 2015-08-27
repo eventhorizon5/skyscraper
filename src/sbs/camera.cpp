@@ -1163,7 +1163,10 @@ void Camera::Binoculars(bool value)
 
 bool Camera::IsMeshVisible(MeshObject *mesh)
 {
-	//returns if a mesh object is visible in the current camera's view frustom or not
+	//returns if a mesh object is visible in the camera's view frustom or not
 
-	return MainCamera->isVisible(mesh->MeshWrapper->getBounds());
+	if (!mesh)
+		return false;
+
+	return mesh->IsVisible(MainCamera);
 }
