@@ -4111,6 +4111,7 @@ void SBS::ListVisibleMeshes()
 	Report("Name\t-\tSubmeshes\n");
 	int count = 0;
 	int submeshes = 0;
+	int total = 0;
 
 	for (int i = 0; i < (int)meshes.size(); i++)
 	{
@@ -4119,8 +4120,9 @@ void SBS::ListVisibleMeshes()
 			submeshes = meshes[i]->GetSubmeshCount();
 			Report(meshes[i]->name + "\t-\t" + ToString2(submeshes));
 			count++;
+			total += submeshes;
 		}
 	}
-	Report("Total: " + ToString2(count));
+	Report("Total: " + ToString2(count) + " meshes, " + ToString2(total) + " submeshes");
 	Report("");
 }
