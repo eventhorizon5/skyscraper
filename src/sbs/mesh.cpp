@@ -2077,6 +2077,9 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	if (Movable->isVisible() == false)
 		return false;
 
+	if (GetSubmeshCount() == 0)
+		return false;
+
 	//generate a globally-positioned axis-aligned box
 	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
 	Ogre::Vector3 min = box.getMinimum();
