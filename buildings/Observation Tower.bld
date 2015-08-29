@@ -578,8 +578,7 @@ ShowFullShaft 3 = true
     AddButton 1, switch.wav, ButtonC, ButtonLitC, 8, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 9, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 9, 4, close, 1, 1
-    AddButton 1, , ButtonCancel, ButtonCancel, 10, 2, cancel, 1, 1
-    AddButton 1, , ButtonStop, ButtonStop, 10, 3, stop, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 10, 2, stop, 1, 1
     AddButton 1, , ButtonAlarm, ButtonAlarm, 10, 4, alarm, 1, 1
 
     AddFloorIndicator back, -1.75 - 0.875 + 0.1, -3 + 0.2 + 0.001, 0.7, 0.5, 6.5
@@ -641,8 +640,7 @@ ShowFullShaft 3 = true
     AddButton 1, switch.wav, ButtonC, ButtonLitC, 8, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 9, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 9, 4, close, 1, 1
-    AddButton 1, , ButtonCancel, ButtonCancel, 10, 2, cancel, 1, 1
-    AddButton 1, , ButtonStop, ButtonStop, 10, 3, stop, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 10, 2, stop, 1, 1
     AddButton 1, , ButtonAlarm, ButtonAlarm, 10, 4, alarm, 1, 1
 
     AddFloorIndicator left, 3 - 0.2 - 0.001, -1.75 - 0.875 + 0.1, 0.7, 0.5, 6.5   
@@ -702,8 +700,7 @@ ShowFullShaft 3 = true
     AddButton 1, switch.wav, ButtonC, ButtonLitC, 8, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 9, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 9, 4, close, 1, 1
-    AddButton 1, , ButtonCancel, ButtonCancel, 10, 2, cancel, 1, 1
-    AddButton 1, , ButtonStop, ButtonStop, 10, 3, stop, 1, 1
+    AddButton 1, , ButtonStop, ButtonStop, 10, 2, stop, 1, 1
     AddButton 1, , ButtonAlarm, ButtonAlarm, 10, 4, alarm, 1, 1
 
     AddFloorIndicator right, -3 + 0.2 + 0.001, 1.75 + 0.875 - 0.1, 0.7, 0.5, 6.5   
