@@ -1564,7 +1564,7 @@ int ScriptProcessor::ProcCommands()
 		TrimString(str);
 
 		//reserved keywords
-		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param")
+		if (str == "base" || str == "floor" || str == "height" || str == "interfloorheight" || str == "fullheight" || str == "elevator" || str == "minx" || str == "maxx" || str == "minz" || str == "maxz" || str == "number" || str.substr(0, 4) == "param" || str == "floorname" || str == "floortype" || str == "floorid" || str == "description")
 			return ScriptError("Cannot use system variable name");
 
 		//get text after equal sign
@@ -3274,9 +3274,9 @@ int ScriptProcessor::ProcFloors()
 	ReplaceAll(LineData, "%fullheight%", cache_fullheight_s.c_str());
 	ReplaceAll(LineData, "%interfloorheight%", cache_interfloorheight_s.c_str());
 	ReplaceAll(LineData, "%base%", cache_base_s.c_str());
-	ReplaceAll(LineData, "%id%", floor->ID.c_str());
-	ReplaceAll(LineData, "%name%", floor->Name.c_str());
-	ReplaceAll(LineData, "%type%", floor->FloorType.c_str());
+	ReplaceAll(LineData, "%floorid%", floor->ID.c_str());
+	ReplaceAll(LineData, "%floorname%", floor->Name.c_str());
+	ReplaceAll(LineData, "%floortype%", floor->FloorType.c_str());
 	ReplaceAll(LineData, "%description%", floor->Description.c_str());
 
 	if (getfloordata == true)
