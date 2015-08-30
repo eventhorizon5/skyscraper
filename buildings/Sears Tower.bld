@@ -1,7 +1,7 @@
 # $Id$
 	
 #The Sears Tower
-#Model Copyright (C)2006-2010 Ryan Thoryk
+#Model Copyright (C)2006-2015 Ryan Thoryk
 #Original building by SOM; architect Bruce Graham and structural engineer Fazlur Khan
 
 #This program is free software; you can redistribute it and/or
@@ -98,7 +98,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lower Level 1
     Type = Basement
     Description = Lower Level 1
-    Height = 12.24
+    Height = 13
     InterfloorHeight = 0
 <EndFloor>
 
@@ -107,7 +107,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lower Level 2
     Type = Basement
     Description = Lower Level 2
-    Height = 12.24
+    Height = 13
     InterfloorHeight = 0
 <EndFloor>
 
@@ -116,7 +116,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lower Level 3
     Type = Basement
     Description = Lower Level 3
-    Height = 12.24
+    Height = 13
     InterfloorHeight = 0
 <EndFloor>
 
@@ -147,7 +147,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lobby Level
     Type = Lobby
     Description = Lobby Level
-    Height = 12.24
+    Height = 13
     InterfloorHeight = 0
     Group = 0, 1, 2
 
@@ -184,7 +184,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Restaurant Level
     Type = Lobby
     Description = Restaurant Level
-    Height = 12.24
+    Height = 13
     InterfloorHeight = 0
     Group = 0, 1, 2
     
@@ -258,7 +258,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <Floors 3 to 27>
     Height = 10
     if[%floor% = 26] Height = 15
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -321,40 +321,58 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Mechanical
     Type = Service
     Description = Zone 1 mechanical
-    Height = 15
-    InterfloorHeight = 2.24
+    Height = 10
+    if[%floor% = 28] Height = 8
+    if[%floor% = 30] Height = 8
+    if[%floor% < 30] Group = 28, 29
+    if[%floor% > 29] Group = 30, 31
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
+    if[%floor% = 28 | %floor% = 30] AddFloor Floor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    #AddFloor Ceiling, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+
+    #External walls
+    SetAutoSize = true, false
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% = 28] AddWall Front, MainWindows, 0, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    if[%floor% = 28] AddWall Left, MainWindows, 0, -112.5, -112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    if[%floor% = 28] AddWall Back, MainWindowsInside, 0, -112.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    if[%floor% = 28] AddWall Right, MainWindowsInside, 0, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = 28] AddWall Front, MainWindowsInside, 0, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    if[%floor% = 28] AddWall Left, MainWindowsInside, 0, -112.5, -112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    if[%floor% = 28] AddWall Back, MainWindows, 0, -112.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    if[%floor% = 28] AddWall Right, MainWindows, 0, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    SetAutoSize = true, true
 
     #Internal vents
     SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Vents Front, VentsInt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
-    AddWall Vents Left, VentsInt, 0, -112.5, -112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
+    if[%floor% > 28] AddWall Vents Front, VentsInt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
+    if[%floor% > 28] AddWall Vents Left, VentsInt, 0, -112.5, -112.5, -112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Vents Back, VentsInt, 0, -112.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
-    AddWall Vents Right, VentsInt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
+    if[%floor% > 28] AddWall Vents Back, VentsInt, 0, -112.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
+    if[%floor% > 28] AddWall Vents Right, VentsInt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 15, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
+    if[%floor% = 28 | %floor% = 30] AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    if[%floor% = 28 | %floor% = 30] AddInterfloorFloor ITop, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -368,24 +386,24 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <EndFloors>
 
 #Zone 1 mechanical vents
-<Floor 28>
+<Floor 29>
     #External vents
     SetAutoSize = false, false
     WallOrientation = left
     DrawWalls = true, false, false, false, false, false
-    AddWall ExtVents Front, VentsExt, 0, -112.5, -112.5, 112.5, -112.5, %fullheight% * 4, %fullheight% * 4, 0, 0, 15, 0, True
-    AddWall ExtVents Left, VentsExt, 0, -112.5, -112.5, -112.5, 112.5, %fullheight% * 4, %fullheight% * 4, 0, 0, 15, 0, True
+    AddWall ExtVents Front, VentsExt, 0, -112.5, -112.5, 112.5, -112.5, (%fullheight% * 3) - 2, (%fullheight% * 3) - 2, 0, 0, 15, 0, True
+    AddWall ExtVents Left, VentsExt, 0, -112.5, -112.5, -112.5, 112.5, (%fullheight% * 3) - 2, (%fullheight% * 3) - 2, 0, 0, 15, 0, True
     WallOrientation = right
     DrawWalls = false, true, false, false, false, false
-    AddWall ExtVents Back, VentsExt, 0, -112.5, 112.5, 112.5, 112.5, %fullheight% * 4, %fullheight% * 4, 0, 0, 15, 0, True
-    AddWall ExtVents Right, VentsExt, 0, 112.5, -112.5, 112.5, 112.5, %fullheight% * 4, %fullheight% * 4, 0, 0, 15, 0, True
+    AddWall ExtVents Back, VentsExt, 0, -112.5, 112.5, 112.5, 112.5, (%fullheight% * 3) - 2, (%fullheight% * 3) - 2, 0, 0, 15, 0, True
+    AddWall ExtVents Right, VentsExt, 0, 112.5, -112.5, 112.5, 112.5, (%fullheight% * 3) - 2, (%fullheight% * 3) - 2, 0, 0, 15, 0, True
     SetAutoSize = true, true
 <EndFloor>
 
 #zone 2 lower skeleton
 <Floors 32 to 48>
     Height = 10
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -463,7 +481,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 2 upper skeleton
 <Floors 49 to 62>
     Height = 10
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -548,7 +566,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Service
     Description = Zone 2 mechanical
     Height = 15
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -630,7 +648,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 3 lower skeleton
 <Floors 65 to 86>
     Height = 10
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -732,8 +750,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Mechanical
     Type = Service
     Description = Zone 3 lower mechanical
-    Height = 15
-    InterfloorHeight = 2.24
+    Height = 13
+    InterfloorHeight = 0
 
     #Floor
     FloorOrientation = top
@@ -824,8 +842,9 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 3 upper skeleton
 <Floors 89 to 102>
     Height = 10
-    if[%floor% = 102] Height = 12
-    InterfloorHeight = 2.24
+    if[%floor% = 90] Height = 13
+    if[%floor% = 102] Height = 13
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -921,7 +940,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Mechanical
     Description = Mechanical and Communications level %id%
     Height = 10
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -975,7 +994,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Mechanical
     Description = Cooling Towers level
     Height = 10
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -1095,7 +1114,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Service
     Description = Main roof, penthouse and communications antennas
     Height = 12
-    InterfloorHeight = 2.24
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
