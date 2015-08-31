@@ -336,6 +336,11 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     DrawWalls = false, true, false, false, false, false
     if[%floor% = 28 | %floor% = 30] AddFloor Floor, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
 
+    #Ceiling
+    FloorOrientation = Bottom
+    DrawWalls = true, false, false, false, false, false
+    if[%floor% = 29 | %floor% = 31] AddFloor Ceiling, Brick, 0.5, -112.5, -112.5, 112.5, 112.5, %height%, %height%, 0, 0, False
+
     #External walls
     SetAutoSize = true, false
     DrawWalls = true, false, false, false, false, false
@@ -569,6 +574,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Zone 2 mechanical
     Height = 10
     InterfloorHeight = 3
+    Group = 63, 64
 
     #Floor
     FloorOrientation = top
@@ -580,24 +586,10 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    #AddFloor Southwest Ceiling, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
-    #AddFloor Northeast Ceiling, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
-    #AddFloor East Ceiling, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 64] AddFloor Southwest Ceiling, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 64] AddFloor Northeast Ceiling, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 64] AddFloor East Ceiling, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
-    #Internal vents
-    SetAutoSize = false, false
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Vents Front1, VentsInt, 0, -112.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
-    AddWall Vents Left1, VentsInt, 0, -112.5, -112.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
-    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Vents Front2, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Left2, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
-    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 112.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -613,15 +605,32 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Interfloor walls
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorWall IFront, Brick, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ILeft, Brick, 0.5, -63, -70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IFront, Brick, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall ILeft, Brick, 0.5, -63, -70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorWall IRight, Brick, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IBack, Brick, 0.5, -63, 70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IRight, Brick, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorWall IBack, Brick, 0.5, -63, 70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 <Floor 63>
+    #Internal vents
+    SetAutoSize = false, false
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    Set newheight = %height% + Floor(64).FullHeight
+    AddWall Vents Front1, VentsInt, 0, -112.5, -112.5, 37.5, -112.5, %newheight%, %newheight%, 0, 0, 10, 1, False
+    AddWall Vents Left1, VentsInt, 0, -112.5, -112.5, -112.5, 37.5, %newheight%, %newheight%, 0, 0, 10, 1, False
+    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Vents Front2, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Left2, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 112.5, 112.5, %newheight%, %newheight%, 0, 0, 10, 1, False
+    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 112.5, %newheight%, %newheight%, 0, 0, 10, 1, False
+    SetAutoSize = true, true
+
     #External vents
     SetAutoSize = false, false
     WallOrientation = left
@@ -756,39 +765,22 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Zone 3 lower mechanical
     Height = 10
     InterfloorHeight = 3
+    Group = 87, 88
 
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor South Floor, Brick, 0.5, -37.5, -112.5, 37.5, -37.5, 0, 0, 0, 0, False
-    AddFloor Center Floor, Brick, 0.5, -112.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
-    AddFloor North Floor, Brick, 0.5, -37.5, 37.5, 37.5, 112.5, 0, 0, 0, 0, False
+    if[%floor% = 87] AddFloor South Floor, Brick, 0.5, -37.5, -112.5, 37.5, -37.5, 0, 0, 0, 0, False
+    if[%floor% = 87] AddFloor Center Floor, Brick, 0.5, -112.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
+    if[%floor% = 87] AddFloor North Floor, Brick, 0.5, -37.5, 37.5, 37.5, 112.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor South Ceiling, Brick, 0.5, -37.5, -112.5, 37.5, -37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
-    AddFloor Center Ceiling, Brick, 0.5, -112.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
-    AddFloor North Ceiling, Brick, 0.5, -37.5, 37.5, 37.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 88] AddFloor South Ceiling, Brick, 0.5, -37.5, -112.5, 37.5, -37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 88] AddFloor Center Ceiling, Brick, 0.5, -112.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 88] AddFloor North Ceiling, Brick, 0.5, -37.5, 37.5, 37.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
-    #Internal vents
-    SetAutoSize = false, false
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Vents Front1, VentsInt, 0, -37.5, -112.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Front2, VentsInt, 0, -37.5, -112.5, 37.5, -112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Left1, VentsInt, 0, -112.5, -37.5, -37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Left2, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Vents Front3, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Left3, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Back3, VentsInt, 0, 37.5, 37.5, 37.5, 112.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    AddWall Vents Right3, VentsInt, 0, 37.5, 37.5, 112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
@@ -813,6 +805,27 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <EndFloors>
 
 <Floor 87>
+    #Internal vents
+    SetAutoSize = false, false
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    Set newheight = %height% + Floor(88).FullHeight
+    AddWall Vents Front1, VentsInt, 0, -37.5, -112.5, -37.5, -37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Front2, VentsInt, 0, -37.5, -112.5, 37.5, -112.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Left1, VentsInt, 0, -112.5, -37.5, -37.5, -37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Left2, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Back1, VentsInt, 0, -37.5, 37.5, -37.5, 112.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Right1, VentsInt, 0, 37.5, -37.5, 112.5, -37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Vents Front3, VentsInt, 0, 37.5, -112.5, 37.5, -37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Left3, VentsInt, 0, -112.5, 37.5, -37.5, 37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Back2, VentsInt, 0, -37.5, 112.5, 37.5, 112.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Back3, VentsInt, 0, 37.5, 37.5, 37.5, 112.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Right2, VentsInt, 0, 112.5, -37.5, 112.5, 37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    AddWall Vents Right3, VentsInt, 0, 37.5, 37.5, 112.5, 37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    SetAutoSize = true, true
+
     #External vents
     SetAutoSize = false, false
     WallOrientation = left
@@ -947,27 +960,28 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Height = 10
     if[%floor% = 103] InterfloorHeight = 5
     if[%floor% = 104] InterfloorHeight = 1
+    Group = 103, 104
 
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
+    if[%floor% = 103] AddFloor Floor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Ceiling1, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 104] AddFloor Ceiling, Ceiling1, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #External walls
     SetAutoSize = true, false
     DrawWalls = true, false, false, false, false, false
     AddWall Front, MainWindows, 0, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Left, MainWindows, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Back, MainWindowsInside, 0, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Right, MainWindowsInside, 0, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Back, MainWindowsInside, 0, -112.5, 37.5, 37.5, 37.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Right, MainWindowsInside, 0, 37.5, -37.5, 37.5, 37.5, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
-    AddWall Front, MainWindowsInside, 0, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Left, MainWindowsInside, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Front, MainWindowsInside, 0, -112.5, -37.5, 37.5, -37.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, MainWindowsInside, 0, -112.5, -37.5, -112.5, 37.5, %height%, %height%, 0, 0, 0, 0, False
     AddWall Back, MainWindows, 0, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     AddWall Right, MainWindows, 0, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
     SetAutoSize = true, true
@@ -975,12 +989,12 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Interfloor bottom
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
+    if[%floor% = 103] AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    if[%floor% = 103] AddInterfloorFloor ITop, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
@@ -1002,51 +1016,55 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Height = 10
     if[%floor% = 105] InterfloorHeight = 3
     if[%floor% = 106] InterfloorHeight = 1
+    Group = 105, 106
 
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
+    if[%floor% = 105] AddFloor Floor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Ceiling, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    if[%floor% = 106] AddFloor Ceiling, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
-    #Internal vents
-    SetAutoSize = false, false
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddWall Vents Front, VentsInt, 0, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
-    AddWall Vents Left, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddWall Vents Back, VentsInt, 0, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 10, 1, False
-    AddWall Vents Right, VentsInt, 0, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 5, 1, False
     SetAutoSize = true, true
 
     #Interfloor bottom
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
+    if[%floor% = 105] AddInterfloorFloor IFloor, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorFloor ITop, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    if[%floor% = 105] AddInterfloorFloor ITop, Brick, 0.5, -112.5, -37.5, 37.5, 37.5, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddInterfloorWall IFront, Brick, 0.5, -112.5, -37.5, 37.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall ILeft, Brick, 0.5, -112.5, -37.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 105] AddInterfloorWall IFront, Brick, 0.5, -112.5, -37.5, 37.5, -37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 105] AddInterfloorWall ILeft, Brick, 0.5, -112.5, -37.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddInterfloorWall IBack, Brick, 0.5, -112.5, 37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IRight, Brick, 0.5, 37.5, -37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 105] AddInterfloorWall IBack, Brick, 0.5, -112.5, 37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    if[%floor% = 105] AddInterfloorWall IRight, Brick, 0.5, 37.5, -37.5, 37.5, 37.5, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 <Floor 105>
+    #Internal vents
+    SetAutoSize = false, false
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    Set newheight = %height% + Floor(106).FullHeight
+    AddWall Vents Front, VentsInt, 0, -112.5, -37.5, 37.5, -37.5, %newheight%, %newheight%, 0, 0, 10, 1, False
+    AddWall Vents Left, VentsInt, 0, -112.5, -37.5, -112.5, 37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Vents Back, VentsInt, 0, -112.5, 37.5, 37.5, 37.5, %newheight%, %newheight%, 0, 0, 10, 1, False
+    AddWall Vents Right, VentsInt, 0, 37.5, -37.5, 37.5, 37.5, %newheight%, %newheight%, 0, 0, 5, 1, False
+    SetAutoSize = true, true
+
     #External vents
     SetAutoSize = false, false
     WallOrientation = left
@@ -1082,15 +1100,15 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #External walls
     SetAutoSize = true, false
     DrawWalls = true, false, false, false, false, false
-    AddWall Front, MainWindows, 0, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Left, MainWindows, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Back, MainWindowsInside, 0, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Right, MainWindowsInside, 0, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
+    AddWall Front, MainWindows, 0, -112.5, -37.5, 37.5, -37.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 2, True
+    AddWall Left, MainWindows, 0, -112.5, -37.5, -112.5, 37.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 2, True
+    AddWall Back, MainWindowsInside, 0, -112.5, 37.5, 37.5, 37.5, %height%, %height%, 0, 0, 0, 2, False
+    AddWall Right, MainWindowsInside, 0, 37.5, -37.5, 37.5, 37.5, %height%, %height%, 0, 0, 0, 2, False
     DrawWalls = false, true, false, false, false, false
-    AddWall Front, MainWindowsInside, 0, -112.5, -37.5, 37.5, -37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Left, MainWindowsInside, 0, -112.5, -37.5, -112.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, False
-    AddWall Back, MainWindows, 0, -112.5, 37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
-    AddWall Right, MainWindows, 0, 37.5, -37.5, 37.5, 37.5, %fullheight%, %fullheight%, 0, 0, 0, 0, True
+    AddWall Front, MainWindowsInside, 0, -112.5, -37.5, 37.5, -37.5, %height%, %height%, 0, 0, 0, 2, False
+    AddWall Left, MainWindowsInside, 0, -112.5, -37.5, -112.5, 37.5, %height%, %height%, 0, 0, 0, 2, False
+    AddWall Back, MainWindows, 0, -112.5, 37.5, 37.5, 37.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 2, True
+    AddWall Right, MainWindows, 0, 37.5, -37.5, 37.5, 37.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 2, True
     SetAutoSize = true, true
 
     #Interfloor bottom
