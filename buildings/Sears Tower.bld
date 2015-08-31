@@ -2256,7 +2256,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -2361,7 +2361,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -2456,7 +2456,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -2551,7 +2551,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -2649,7 +2649,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -2746,7 +2746,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -2844,7 +2844,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -2941,7 +2941,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 6, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3038,7 +3038,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3134,7 +3134,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 2, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3230,7 +3230,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3314,7 +3314,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonL, ButtonLitL, 5, 3, 0, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3412,7 +3412,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button33, ButtonLit33, 6, 3, 32, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3509,7 +3509,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button33, ButtonLit33, 6, 3, 32, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3607,7 +3607,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button33, ButtonLit33, 6, 3, 32, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3703,7 +3703,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button33, ButtonLit33, 5, 2, 32, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3802,7 +3802,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button34, ButtonLit34, 6, 2, 33, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3900,7 +3900,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button34, ButtonLit34, 6, 2, 33, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 8, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 8, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 9, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 9, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -3996,7 +3996,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button34, ButtonLit34, 5, 3, 33, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4080,7 +4080,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button34, ButtonLit34, 5, 3, 33, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4166,7 +4166,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4251,7 +4251,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4337,7 +4337,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4422,7 +4422,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button66, ButtonLit66, 5, 2, 65, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4507,7 +4507,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button67, ButtonLit67, 5, 3, 66, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4591,7 +4591,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, Button67, ButtonLit67, 5, 3, 66, 1, 1
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 7, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 7, 4, close, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 8, 2, stop, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 8, 4, alarm, 1, 1
 
     #Floor Indicator
@@ -4947,7 +4947,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 5, 2, open, 1, 1
     AddButton 1, switch.wav, ButtonClose, ButtonClose, 5, 4, close, 1, 1
     AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 6, 2, alarm, 1, 1
-    AddButton 1, switch.wav, ButtonStop, ButtonStop, 7, 3, stop, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 7, 4, stop, 1, 1
 
     #Floor Indicator
     AddFloorIndicator right, -4.09 + 0.2 + 0.001, 1.75 + 1 - 0.1, 0.7, 0.5, 6.5
