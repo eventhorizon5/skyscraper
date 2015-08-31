@@ -222,7 +222,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Offices
     Type = Office
-    Description = Zone 1 office level %id%
+    Description = Zone 1 office level %floorid%
     Height = 24.48
     InterfloorHeight = 0
     Group = 0, 1, 2
@@ -311,7 +311,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Offices
     Type = Office
-    Description = Zone 1 office level %id%
+    Description = Zone 1 office level %floorid%
 
 <EndFloors>
 
@@ -463,7 +463,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Offices
     Type = Office
-    Description = Zone 2 office level %id%
+    Description = Zone 2 office level %floorid%
 
 <EndFloors>
 
@@ -552,7 +552,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Offices
     Type = Office
-    Description = Zone 2 office level %id%
+    Description = Zone 2 office level %floorid%
 
 <EndFloors>
 
@@ -737,7 +737,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Offices
     Type = Office
-    Description = Office level %id%
+    Description = Office level %floorid%
 
 <EndFloors>
 
@@ -893,14 +893,14 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Communications
     Type = Communications
-    Description = Communications & mechanical level %id%
+    Description = Communications & mechanical level %floorid%
 <EndFloor>
 
 <Floors 90 to 97>
     ID = %floor% + 1
     Name = Offices
     Type = Office
-    Description = Office level %id%
+    Description = Office level %floorid%
 <EndFloors>
 
 <Floor 89>
@@ -920,7 +920,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Communications
     Type = Communications
-    Description = Communications level %id%
+    Description = Communications level %floorid%
 <EndFloors>
 
 <Floor 102>
@@ -935,7 +935,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     ID = %floor% + 1
     Name = Mechanical
     Type = Mechanical
-    Description = Mechanical and Communications level %id%
+    Description = Mechanical and Communications level %floorid%
     Height = 10
     InterfloorHeight = 3
 

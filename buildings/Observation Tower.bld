@@ -163,7 +163,7 @@ Cut Landscape, -50, -1, -50, 50, 1, 50, false, true
     ID = %floor% + 1
     Name = %floor% + 1
     Type = Floor
-    Description = %id%
+    Description = %floorid%
     Height = 10
     InterfloorHeight = 2.24
 
@@ -318,7 +318,7 @@ CreateWallBox external, Column4, ColumnTexture, 10, 15, -15, -10, Floor(101).Alt
     ID = %floor% + 1
     Name = %floor% + 1
     Type = Floor
-    Description = %id%
+    Description = %floorid%
     Height = 10
     InterfloorHeight = 2.24
 
