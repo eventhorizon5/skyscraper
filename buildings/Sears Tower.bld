@@ -98,8 +98,9 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lower Level 1
     Type = Basement
     Description = Lower Level 1
-    Height = 13
-    InterfloorHeight = 0
+    Height = 12
+    InterfloorHeight = 3
+    Altitude = -28
 <EndFloor>
 
 <Floor -2>
@@ -107,8 +108,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lower Level 2
     Type = Basement
     Description = Lower Level 2
-    Height = 13
-    InterfloorHeight = 0
+    Height = 12
+    InterfloorHeight = 3
 <EndFloor>
 
 <Floor -3>
@@ -116,8 +117,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lower Level 3
     Type = Basement
     Description = Lower Level 3
-    Height = 13
-    InterfloorHeight = 0
+    Height = 12
+    InterfloorHeight = 3
 <EndFloor>
 
 <Floors -1 to -3>
@@ -147,8 +148,9 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Lobby Level
     Type = Lobby
     Description = Lobby Level
-    Height = 13
-    InterfloorHeight = 0
+    Height = 12
+    InterfloorHeight = 3
+    Altitude = -13
     Group = 0, 1, 2
 
     #Floor
@@ -184,8 +186,9 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Restaurant Level
     Type = Lobby
     Description = Restaurant Level
-    Height = 13
-    InterfloorHeight = 0
+    Height = 12
+    InterfloorHeight = 3
+    Altitude = 2
     Group = 0, 1, 2
     
     #Floor
@@ -223,8 +226,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Offices
     Type = Office
     Description = Zone 1 office level %floorid%
-    Height = 24.48
-    InterfloorHeight = 0
+    Height = 23
+    InterfloorHeight = 3
     Group = 0, 1, 2
 
     FloorOrientation = top
@@ -258,8 +261,9 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <Floors 3 to 27>
     Height = 10
     if[%floor% = 26] Height = 15
+    if[%floor% = 27] Height = 12
     InterfloorHeight = 3
-
+    
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
@@ -322,8 +326,6 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Service
     Description = Zone 1 mechanical
     Height = 10
-    if[%floor% = 28] Height = 8
-    if[%floor% = 30] Height = 8
     if[%floor% < 30] Group = 28, 29
     if[%floor% > 29] Group = 30, 31
     InterfloorHeight = 3
@@ -400,6 +402,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 2 lower skeleton
 <Floors 32 to 48>
     Height = 10
+    if[%floor% < 34] Height = 12
     InterfloorHeight = 3
 
     #Floor
@@ -478,6 +481,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 2 upper skeleton
 <Floors 49 to 62>
     Height = 10
+    if[%floor% = 62] Height = 12
     InterfloorHeight = 3
 
     #Floor
@@ -562,22 +566,22 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Mechanical
     Type = Service
     Description = Zone 2 mechanical
-    Height = 15
+    Height = 10
     InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Southwest Floor, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, 0, 0, 0, 0, False
-    AddFloor Northeast Floor, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, 0, 0, 0, 0, False
-    AddFloor East Floor, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
+    if[%floor% = 63] AddFloor Southwest Floor, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, 0, 0, 0, 0, False
+    if[%floor% = 63] AddFloor Northeast Floor, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, 0, 0, 0, 0, False
+    if[%floor% = 63] AddFloor East Floor, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    AddFloor Southwest Ceiling, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
-    AddFloor Northeast Ceiling, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
-    AddFloor East Ceiling, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    #AddFloor Southwest Ceiling, Brick, 0.5, -112.5, -112.5, 37.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    #AddFloor Northeast Ceiling, Brick, 0.5, -37.5, 37.5, 112.5, 112.5, %height% - 0.05, %height% - 0.05, 0, 0, False
+    #AddFloor East Ceiling, Brick, 0.5, 37.5, -37.5, 112.5, 37.5, %height% - 0.05, %height% - 0.05, 0, 0, False
 
     #Internal vents
     SetAutoSize = false, false
@@ -598,22 +602,22 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Interfloor bottom
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    #AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
+    if[%floor% = 63] AddInterfloorFloor IFloor, Brick, 0.5, -63, -70, 63, 70, 0, 0, 0, 0
 
     #Interfloor top
     FloorOrientation = bottom
     DrawWalls = true, false, false, false, false, false
-    #AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
+    if[%floor% = 63] AddInterfloorFloor ITop, Brick, 0.5, -63, -70, 63, 70, %interfloorheight% - 0.05, %interfloorheight% - 0.05, 0, 0
 
     #Interfloor walls
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    #AddInterfloorWall IFront, Brick, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    #AddInterfloorWall ILeft, Brick, 0.5, -63, -70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IFront, Brick, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall ILeft, Brick, 0.5, -63, -70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    #AddInterfloorWall IRight, Brick, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    #AddInterfloorWall IBack, Brick, 0.5, -63, 70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IRight, Brick, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    AddInterfloorWall IBack, Brick, 0.5, -63, 70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 <EndFloors>
 
 <Floor 63>
@@ -645,6 +649,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 3 lower skeleton
 <Floors 65 to 86>
     Height = 10
+    if[%floor% < 67] Height = 12
+    if[%floor% = 86] Height = 12
     InterfloorHeight = 3
 
     #Floor
@@ -747,8 +753,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Mechanical
     Type = Service
     Description = Zone 3 lower mechanical
-    Height = 13
-    InterfloorHeight = 0
+    Height = 10
+    InterfloorHeight = 3
 
     #Floor
     FloorOrientation = top
@@ -839,8 +845,9 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 3 upper skeleton
 <Floors 89 to 102>
     Height = 10
-    if[%floor% = 90] Height = 13
-    if[%floor% = 102] Height = 13
+    if[%floor% = 89] Height = 15
+    if[%floor% = 101] Height = 12
+    if[%floor% = 102] Height = 14
     InterfloorHeight = 3
 
     #Floor
@@ -937,7 +944,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Mechanical
     Description = Mechanical and Communications level %floorid%
     Height = 10
-    InterfloorHeight = 3
+    if[%floor% = 103] InterfloorHeight = 5
+    if[%floor% = 104] InterfloorHeight = 1
 
     #Floor
     FloorOrientation = top
@@ -991,7 +999,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Mechanical
     Description = Cooling Towers level
     Height = 10
-    InterfloorHeight = 3
+    if[%floor% = 105] InterfloorHeight = 3
+    if[%floor% = 106] InterfloorHeight = 1
 
     #Floor
     FloorOrientation = top
@@ -1110,7 +1119,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Penthouse
     Type = Service
     Description = Main roof, penthouse and communications antennas
-    Height = 12
+    Height = 19
     InterfloorHeight = 3
 
     #Floor
