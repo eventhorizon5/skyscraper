@@ -80,6 +80,7 @@
     AddText BlackLit, ButtonLitLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonEX, nimbus_sans.ttf, 47, EX, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonStop, nimbus_sans.ttf, 28, Stop, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -2575,6 +2576,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 15 to 17>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2670,6 +2673,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 18 to 20>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2766,6 +2771,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 21 to 23>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2861,6 +2868,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 24 to 26>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -2957,6 +2966,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 27 to 29>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3051,6 +3062,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 30 to 32>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3146,6 +3159,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 33 to 35>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3228,6 +3243,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 36 to 37>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3322,6 +3339,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 38 to 40>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3417,6 +3436,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 41 to 43>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3513,6 +3534,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 44 to 46>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3608,6 +3631,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 47 to 49>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3703,6 +3728,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 50 to 52>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3799,6 +3826,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 53 to 55>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3896,6 +3925,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 56 to 58>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -3978,6 +4009,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 59 to 60>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4061,6 +4094,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 61 to 62>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4144,6 +4179,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 63 to 64>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4228,6 +4265,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 65 to 66>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4311,6 +4350,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 67 to 68>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4395,6 +4436,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 69 to 70>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4477,6 +4520,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 71 to 72>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4560,6 +4605,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 73 to 74>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
@@ -4653,6 +4700,8 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndElevator>
 
 <Elevators 75 to 76>
+    FloorSkipText = EX
+
     #floor
     FloorOrientation = top
     DrawWalls = true, true, true, true, true, true
