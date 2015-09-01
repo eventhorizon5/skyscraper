@@ -1360,9 +1360,9 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 	else
 	{
 		if (display_header == true)
-			sbs->Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tDescription");
+			sbs->Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tBase\t----\tDescription");
 
-		sbs->Report(ToString2(Number) + "(" + ID + ")\t----\t" + Name + "\t----\t" + FloorType + "\t----\t" + ToString2(Height) + "\t----\t" + ToString2(InterfloorHeight) + "\t----\t" + ToString2(Altitude) + "\t----\t" + Description);
+		sbs->Report(ToString2(Number) + "(" + ID + ")\t----\t" + Name + "\t----\t" + FloorType + "\t----\t" + ToString2(Height) + "\t----\t" + ToString2(InterfloorHeight) + "\t----\t" + ToString2(Altitude) + "\t----\t" + ToString2(GetBase()) + "\t----\t" + Description);
 	}
 }
 
