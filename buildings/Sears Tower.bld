@@ -101,7 +101,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Lower Level 1
     Height = 11
     InterfloorHeight = 3.833
-    Altitude = -27.66
+    Altitude = -18.66
 <EndFloor>
 
 <Floor -2>
@@ -151,7 +151,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Lobby Level
     Height = 11
     InterfloorHeight = 3.833
-    Altitude = -12.833
+    Altitude = -3.833
     Group = 0, 1, 2
 
     #Floor
@@ -189,7 +189,6 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Restaurant Level
     Height = 11
     InterfloorHeight = 3.833
-    Altitude = 2
     Group = 0, 1, 2
     
     #Floor
@@ -227,7 +226,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Offices
     Type = Office
     Description = Zone 1 office level %floorid%
-    Height = 21
+    Height = 22
     InterfloorHeight = 3.833
     Group = 0, 1, 2
 
