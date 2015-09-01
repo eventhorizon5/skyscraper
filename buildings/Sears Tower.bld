@@ -226,7 +226,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Name = Offices
     Type = Office
     Description = Zone 1 office level %floorid%
-    Height = 22
+    Height = 21.833
     InterfloorHeight = 3.833
     Group = 0, 1, 2
 
@@ -261,8 +261,10 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <Floors 3 to 27>
     Height = 9
     if[%floor% = 26] Height = 14
-    if[%floor% = 27] Height = 11
+    if[%floor% = 27] Height = 10.5
     InterfloorHeight = 3.833
+    if[%floor% = 3] InterfloorHeight = 4.41
+    if[%floor% = 27] InterfloorHeight = 4.41
     
     #Floor
     FloorOrientation = top
@@ -329,6 +331,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     if[%floor% < 30] Group = 28, 29
     if[%floor% > 29] Group = 30, 31
     InterfloorHeight = 3.833
+    if[%floor% = 28] InterfloorHeight = 4.41
 
     #Floor
     FloorOrientation = top
@@ -409,6 +412,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Height = 9
     if[%floor% < 34] Height = 11
     InterfloorHeight = 3.833
+    if[%floor% = 32] InterfloorHeight = 4.41
 
     #Floor
     FloorOrientation = top
@@ -486,7 +490,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 #zone 2 upper skeleton
 <Floors 49 to 62>
     Height = 9
-    if[%floor% = 62] Height = 11
+    if[%floor% = 62] Height = 10.5
     InterfloorHeight = 3.833
 
     #Floor
@@ -573,6 +577,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Zone 2 mechanical
     Height = 9
     InterfloorHeight = 3.833
+    if[%floor% = 63] InterfloorHeight = 4.41
     Group = 63, 64
 
     #Floor
@@ -659,7 +664,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <Floors 65 to 86>
     Height = 9
     if[%floor% < 67] Height = 11
-    if[%floor% = 86] Height = 11
+    if[%floor% = 86] Height = 10.5
     InterfloorHeight = 3.833
 
     #Floor
@@ -764,6 +769,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Zone 3 lower mechanical
     Height = 9
     InterfloorHeight = 3.833
+    if[%floor% = 87] InterfloorHeight = 4.41
     Group = 87, 88
 
     #Floor
@@ -859,8 +865,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
 <Floors 89 to 102>
     Height = 9
     if[%floor% = 89] Height = 14
-    if[%floor% = 101] Height = 11
-    if[%floor% = 102] Height = 13
+    if[%floor% = 102] Height = 12
     InterfloorHeight = 3.833
 
     #Floor
@@ -957,8 +962,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Mechanical
     Description = Mechanical and Communications level %floorid%
     Height = 9
-    if[%floor% = 103] InterfloorHeight = 4.5
-    if[%floor% = 104] InterfloorHeight = 1
+    if[%floor% = 103] InterfloorHeight = 4.41
+    if[%floor% = 104] InterfloorHeight = 1.83
     Group = 103, 104
 
     #Floor
@@ -1013,8 +1018,8 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Type = Mechanical
     Description = Cooling Towers level
     Height = 9
-    if[%floor% = 105] InterfloorHeight = 3.833
-    if[%floor% = 106] InterfloorHeight = 1
+    InterfloorHeight = 3.833
+    if[%floor% = 106] InterfloorHeight = 2.833
     Group = 105, 106
 
     #Floor
