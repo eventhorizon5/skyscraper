@@ -153,7 +153,7 @@ size="2">Floor(<em>number</em>).<em>parameter</em></font></p>
 this function must only be called after the specified floor has been
 created.<br>
 If the <em>InterfloorOnTop</em> parameter in the globals section is set to
-'false' (the default), then <em>Base</em> refers to the floor's altitude plus
+'false' (the default), then <em>Base</em> (slab height) refers to the floor's altitude plus
 interfloor height; otherwise it refers to the altitude.</p>
 
 <p align="left">Example:<font face="Courier New, Courier, mono" size="2"><br>
@@ -720,7 +720,7 @@ size="2"><strong>%fullheight%</strong></font> - contains the current floor's
 total height, including the interfloor height<br>
 <font face="Courier New, Courier, mono" size="2"><strong>%base%</strong></font>
 - if the InterfloorOnTop parameter in the Globals section is set to 'false'
-(the default), then Base refers to the floor's altitude plus interfloor height;
+(the default), then Base refers to the floor's altitude plus interfloor height (slab height);
 otherwise it's the floor's altitude<br>
 <font face="Courier New, Courier, mono" size="2"><strong>%floorname%</strong></font>
 - the floor's name<br>
