@@ -31,8 +31,9 @@
 
 <Textures>
     Load data/brick1.jpg, Brick, 0.269, 0.25
-    Load data/searstower.jpg, MainWindows, 0.067, 1
-    Load data/windows11e_inside.gif, MainWindowsInside, 0.067, 1
+    LoadAlphaBlend data/searstower2.jpg, data/searstower2spec.png, data/sky3j.jpg, MainWindows, true, 0.0668, 1
+    LoadAlphaBlend data/searstower2.jpg, data/searstower2spec.png, data/sky3j.jpg, MainWindows2, true, 1, 1
+    Load data/windows11j_inside.gif, MainWindowsInside, 1, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     #Load data/stucco3.jpg, Ceiling1, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
@@ -41,7 +42,7 @@
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/vents1.jpg, VentsInt, 1, 1
     Load data/vents1c.jpg, VentsExt, 1, 1
-    Load data/intext.jpg, IntExt, 0.269, 1
+    Load data/searstower_trim.jpg, IntExt, 0.1, 1
     Load data/st_wall.jpg, Wall1, 0.269, 0.25
     Load data/callbutton.gif, ButtonUp, 1, 1
     Load data/callbutton.gif, ButtonDown, 1, -1
