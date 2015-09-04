@@ -20,7 +20,7 @@
 
 <Globals>
     Name = Sears Tower
-    Designer = SOM
+    Designer = Skidmore, Owings and Merrill
     Location = 233 S. Wacker Drive, Chicago, IL
     Description = The famous 108-story Sears Tower, tallest building in the US
     Version = 1
@@ -33,7 +33,7 @@
     Load data/brick1.jpg, Brick, 0.269, 0.25
     LoadAlphaBlend data/searstower2.jpg, data/searstower2spec.png, data/sky3j.jpg, MainWindows, true, 0.0668, 1
     LoadAlphaBlend data/searstower2.jpg, data/searstower2spec.png, data/sky3j.jpg, MainWindows2, true, 1, 1
-    Load data/windows11j_inside.gif, MainWindowsInside, 1, 1
+    Load data/windows11j_inside.gif, MainWindowsInside, 0.0668, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
     #Load data/stucco3.jpg, Ceiling1, 0.269, 0.25
     Load data/marb047.jpg, Marble4, 0.269, 0.25
@@ -5058,7 +5058,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
     AccelJerk = 0.2
     DecelJerk = 0.2
     ServicedFloors = -2, 98, 102
-    DisplayFloors = -2, 9, 19, 29, 39, 49, 59, 69, 79, 89, 98, 102
+    DisplayFloors = -2, 9, 19, 29, 39, 49, 59, 69, 79, 89, 98, 99, 102
     AssignedShaft = 31
     CreateElevator false, -42.471, -2, -2
 <EndElevator>
