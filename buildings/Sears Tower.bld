@@ -432,6 +432,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     AddWall ExtVents Front, VentsInt, 0, -112.5, -112.5, 112.5, -112.5, %top%, %top%, 0, 0, 15, 0, False
     AddWall ExtVents Left, VentsInt, 0, -112.5, -112.5, -112.5, 112.5, %top%, %top%, 0, 0, 15, 0, False
     WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
     AddWall ExtVents Back, VentsInt, 0, -112.5, 112.5, 112.5, 112.5, %top%, %top%, 0, 0, 15, 0, False
     AddWall ExtVents Right, VentsInt, 0, 112.5, -112.5, 112.5, 112.5, %top%, %top%, 0, 0, 15, 0, False
 
@@ -441,6 +442,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     AddWall ExtVents Front, VentsExt, 0, -112.5, -112.5, 112.5, -112.5, %top%, %top%, %bottom%, %bottom%, 15, 0, True
     AddWall ExtVents Left, VentsExt, 0, -112.5, -112.5, -112.5, 112.5, %top%, %top%, %bottom%, %bottom%, 15, 0, True
     WallOrientation = right
+    DrawWalls = false, true, false, false, false, false
     AddWall ExtVents Back, VentsExt, 0, -112.5, 112.5, 112.5, 112.5, %top%, %top%, %bottom%, %bottom%, 15, 0, True
     AddWall ExtVents Right, VentsExt, 0, 112.5, -112.5, 112.5, 112.5, %top%, %top%, %bottom%, %bottom%, 15, 0, True
     SetAutoSize = true, true
