@@ -281,6 +281,21 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     SetAutoSize = true, true
 <EndFloor>
 
+<Floors 1 to 2>
+    #Cover walls
+    SetAutoSize = true, true
+    DrawWalls = true, false, false, false, false, false
+    AddWall Top Left, Wall1, 0, -112.5, 37.5, -53, 37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    AddWall Center Left, Wall1, 0, -53, -37.5, -53, 37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    AddWall Side Right, Wall1, 0, 112.5, -37.5, 112.5, 37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    AddWall Top Right, Wall1, 0, 53, 37.5, 112.5, 37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    DrawWalls = false, true, false, false, false, false
+    AddWall Bottom Left, Wall1, 0, -112.5, -37.5, -53, -37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    AddWall Center Right, Wall1, 0, 53, -37.5, 53, 37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    AddWall Side Left, Wall1, 0, -112.5, -37.5, -112.5, 37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+    AddWall Bottom Right, Wall1, 0, 53, -37.5, 112.5, -37.5, %interfloorheight%, %interfloorheight%, -%interfloorheight%, -%interfloorheight%, 0, 0, False
+<EndFloors>
+
 #zone 1 skeleton
 <Floors 3 to 27>
     Height = 9
