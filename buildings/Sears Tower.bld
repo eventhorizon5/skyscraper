@@ -35,9 +35,8 @@
     LoadAlphaBlend data/searstower2.jpg, data/searstower2spec.png, data/sky3j.jpg, MainWindows2, true, 1, 1
     Load data/windows11j_inside.gif, MainWindowsInside, 0.0668, 1
     Load data/Carpet0013_S.jpg, Carpet1, 0.2, 0.2
-    #Load data/stucco3.jpg, Ceiling1, 0.269, 0.25
-    Load data/marb047.jpg, Marble4, 0.269, 0.25
-    Load data/cutston.jpg, Ceiling1, 0.269, 0.25
+    Load data/rose_marble.jpg, LobbyFloor, 0.25, 0.25
+    Load data/stucco1b.jpg, Ceiling1, 0.15, 0.15
     Load data/text12.jpg, Wall3, 0.269, 0.25
     Load data/cinderblocks.jpg, Concrete, 0.25, 0.25
     Load data/vents1.jpg, VentsInt, 1, 1
@@ -159,7 +158,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Marble4, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
+    AddFloor Floor, LobbyFloor, 0.5, -112.5, -112.5, 112.5, 112.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
@@ -171,16 +170,19 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Lobby Front
     SetAutoSize = true, false
     DrawWalls = true, false, false, false, false, false
-    AddWall Front, MainWindows, 0, -112.5, -112.5, 112.5, -112.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Left, MainWindows, 0, -112.5, -112.5, -112.5, 112.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
-    AddWall Back, MainWindowsInside, 0, -112.5, 112.5, 112.5, 112.5, %height%, %height%, 0, 0, 0, 0, False
     AddWall Right, MainWindowsInside, 0, 112.5, -112.5, 112.5, 112.5, %height%, %height%, 0, 0, 0, 0, False
     DrawWalls = false, true, false, false, false, false
-    AddWall Front, MainWindowsInside, 0, -112.5, -112.5, 112.5, -112.5, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Left, MainWindowsInside, 0, -112.5, -112.5, -112.5, 112.5, %height%, %height%, 0, 0, 0, 0, False
-    AddWall Back, MainWindows, 0, -112.5, 112.5, 112.5, 112.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     AddWall Right, MainWindows, 0, 112.5, -112.5, 112.5, 112.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
     SetAutoSize = true, true
+
+    DrawWalls = true, false, false, false, false, false
+    AddWall Front, IntExt, 0, -112.5, -112.5, 112.5, -112.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Left, IntExt, 0, -112.5, -112.5, -112.5, 112.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
+    AddWall Back, Wall1, 0, -112.5, 112.5, 112.5, 112.5, %height%, %height%, 0, 0, 0, 0, False
+    DrawWalls = false, true, false, false, false, false
+    AddWall Front, Wall1, 0, -112.5, -112.5, 112.5, -112.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Left, Wall1, 0, -112.5, -112.5, -112.5, 112.5, %height%, %height%, 0, 0, 0, 0, False
+    AddWall Back, IntExt, 0, -112.5, 112.5, 112.5, 112.5, %height%, %height%, %interfloorheight%, %interfloorheight%, 0, 0, True
 <EndFloor>
 
 #Resturant Level
@@ -196,9 +198,9 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     #Floor
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    AddFloor Floor, Marble4, 0.5, -112.5, 37.5, 112.5, 112.5, 0, 0, 0, 0, False
-    AddFloor Floor, Marble4, 0.5, -112.5, -112.5, 112.5, -37.5, 0, 0, 0, 0, False
-    AddFloor Floor, Marble4, 0.5, -53, -37.5, 53, 37.5, 0, 0, 0, 0, False
+    AddFloor Floor, LobbyFloor, 0.5, -112.5, 37.5, 112.5, 112.5, 0, 0, 0, 0, False
+    AddFloor Floor, LobbyFloor, 0.5, -112.5, -112.5, 112.5, -37.5, 0, 0, 0, 0, False
+    AddFloor Floor, LobbyFloor, 0.5, -53, -37.5, 53, 37.5, 0, 0, 0, 0, False
 
     #Ceiling
     FloorOrientation = bottom
