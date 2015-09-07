@@ -1092,7 +1092,7 @@ Cut Landscape, -112.5, -1, -112.5, 112.5, 1, 112.5, false, true
     Description = Office level %floorid%
 <EndFloors>
 
-<Floor 89>
+<Floor 90>
     #key for upper service elevator
     SetKey 1
     AddModel Key, key.mesh, true, -20, 0, -20, 0, 90, 0, 0, 3, false, 0, 0, 0
@@ -2266,7 +2266,7 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 <EndFloors>
 
 #zone 3 local 4 shaft
-<Floors 64 to 105>
+<Floors 64 to 108>
     Set 5 = Wall1
     Set 6 = 4.464 #width
     Set 7 = 13.23 #length
