@@ -38,6 +38,7 @@ Polygon::Polygon(const char *name, MeshObject *meshwrapper, std::vector<Triangle
 	this->material = material;
 	this->plane = plane;
 	this->triangles = triangles;
+	this->name = name;
 }
 
 Polygon::~Polygon()
