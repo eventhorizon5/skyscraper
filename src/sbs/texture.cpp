@@ -1797,11 +1797,31 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	if (strExt == "gif")
 	{
 		//get chroma transparency color from GIF file data
-		uchar enabled = 0, trans_color = 0;
-		encoded->seek(784); //transparency enabled if value is 0x1
-		encoded->read(&enabled, 1);
-		encoded->seek(787); //transparency color
-		encoded->read(&trans_color, 1);
+		uchar enabled = 0, trans_color = 0, check = 0;
+		int found = 0;
+
+		//first, find graphics control extension (starts with 21:F9:04 hex)
+		for (int i = 0; i < (int)encoded->size(); i++)
+		{
+			//extension found
+			if (found == 3 && i < (int)encoded->size() - 4)
+			{
+				encoded->seek(i); //transparency enabled if value is 0x1
+				encoded->read(&enabled, 1);
+				encoded->seek(i + 3); //transparency color
+				encoded->read(&trans_color, 1);
+				break;
+			}
+
+			encoded->seek(i);
+			encoded->read(&check, 1);
+			if (check == 33) //21h
+				found = 1;
+			if (check == 249 && found == 1) //F9h
+				found = 2;
+			if (check == 4 && found == 2) //04h
+				found = 3;
+		}
 
 		if (enabled == 1)
 		{
