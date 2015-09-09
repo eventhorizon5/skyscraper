@@ -946,25 +946,42 @@ void Skyscraper::GetInput()
 
 void Skyscraper::Report(std::string message)
 {
-	Ogre::LogManager::getSingleton().logMessage(message);
+	try
+	{
+		Ogre::LogManager::getSingleton().logMessage(message);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ShowError("Error writing message to log\n" + e.getDescription());
+	}
 }
 
 bool Skyscraper::ReportError(std::string message)
 {
-	Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
+	try
+	{
+		Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ShowError("Error writing message to log\n" + e.getDescription());
+	}
 	return false;
 }
 
 bool Skyscraper::ReportFatalError(std::string message)
 {
 	ReportError(message);
+	ShowError(message);
+	return false;
+}
 
+void Skyscraper::ShowError(std::string message)
+{
 	//show error dialog
 	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
 	dialog->ShowModal();
 	delete dialog;
-
-	return false;
 }
 
 void Skyscraper::Loop()
