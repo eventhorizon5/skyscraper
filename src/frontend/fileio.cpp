@@ -8750,14 +8750,33 @@ int ScriptProcessor::MathFunctions()
 		if (last < 0)
 			return ScriptError("Syntax error");
 
-		tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+		int option = LineData.find(",", first);
+		std::string decimals;
+		int decimal = 0;
+		if (option > 0 && option < last)
+		{
+			tempdata = Calc(LineData.substr(first + 1, option - first - 1).c_str());
+			decimals = Calc(LineData.substr(option + 1, last - option - 1).c_str());
+		}
+		else
+		{
+			tempdata = Calc(LineData.substr(first + 1, last - first - 1).c_str());
+			decimals = "0";
+		}
+
 		if (!IsNumeric(tempdata.c_str(), value))
+			return ScriptError("Invalid value: " + tempdata);
+
+		if (!IsNumeric(decimals.c_str(), decimal))
 			return ScriptError("Invalid value: " + tempdata);
 
 		if (value <= 0)
 			return ScriptError("Invalid value: " + tempdata);
 
-		result = Round(value);
+		if (decimal < 0)
+			return ScriptError("Invalid value: " + decimals);
+
+		result = Round(value, decimal);
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}
 

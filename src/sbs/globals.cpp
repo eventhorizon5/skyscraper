@@ -276,9 +276,16 @@ float Log2(float number)
 	return logf(number) / logf(2.0f);
 }
 
-float Round(float number)
+float Round(float number, int decimal_places)
 {
-	return floorf(number + 0.5f);
+	//round float to specified decimal places
+
+	if (decimal_places <= 0)
+		return floorf(number + 0.5f);
+
+	float multiplier = powf(10, decimal_places);
+	float rounded = floorf((number * multiplier) + 0.5f) / multiplier;
+	return rounded;
 }
 
 bool IsBoolean(std::string string)
