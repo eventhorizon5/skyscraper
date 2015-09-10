@@ -2055,7 +2055,7 @@ void Elevator::FinishMove()
 	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
 	//manualstop is true if elevator is stopped within 18 inches of the nearest landing
-	bool manualstop = EmergencyStop == 1 && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5;
+	bool manualstop = (InServiceMode() == false && EmergencyStop == 1 && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5);
 
 	if (EmergencyStop == 0 || manualstop == true)
 	{
