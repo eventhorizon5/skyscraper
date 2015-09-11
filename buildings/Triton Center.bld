@@ -869,7 +869,8 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddWall Back, Stucco4, 0.5, -46.67 - 4.5 - 10 - 0.5, 37.367 + 4.167, -19 + 4.75 - 0.33, 37.367 + 4.167, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = center
     AddDoor StairsDoor, 0.2, 5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, 1, 1
-    AddFillerWalls ConnectionWall, 0.5, -46.67 - 4.5 - 5, -3.708 - 9.708, 3.5, 8, 0, true, 0, 0
+    WallOrientation = right
+    AddFillerWalls ConnectionWall, 0.5, -46.67 - 4.5 - 5, -3.708 - 9.708 + 0.33, 3.5, 8, 0, true, 0, 0
 
     #South transfer
     WallOrientation = right
