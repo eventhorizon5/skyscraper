@@ -102,16 +102,19 @@ bool MeshObject::ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vec
 	Ogre::Vector2 v = Ogre::Vector2(0, 0) - uv1;
 	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	po = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+	po = Round(po, 7); //round result to prevent precision errors
 
 	// For (1,0) and Pu
 	v = Ogre::Vector2(1, 0) - uv1;
 	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	pu = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+	pu = Round(pu, 7); //round result to prevent precision errors
 
 	// For (0,1) and Pv
 	v = Ogre::Vector2(0, 1) - uv1;
 	pl = Ogre::Vector2(m11 * v.x + m12 * v.y, m21 * v.x + m22 * v.y);
 	pv = p1 + pl.x * (p2 - p1) + pl.y * (p3 - p1);
+	pv = Round(pv, 7); //round result to prevent precision errors
 
 	//compute norms of vectors
 	Ogre::Vector3 len1 = pu - po;

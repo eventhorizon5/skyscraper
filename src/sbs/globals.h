@@ -28,6 +28,8 @@
 
 #include <string>
 #include <vector>
+#include <OgreVector2.h>
+#include <OgreVector3.h>
 
 //DLL Exporting
 #ifdef _WIN32
@@ -77,6 +79,8 @@ SBSIMPEXP const char* ToString(float number);
 SBSIMPEXP std::string ToString2(float number);
 SBSIMPEXP float Log2(float number);
 SBSIMPEXP float Round(float number, int decimal_places = 0);
+SBSIMPEXP Ogre::Vector3 Round(const Ogre::Vector3 &value, int decimal_places = 0);
+SBSIMPEXP Ogre::Vector2 Round(const Ogre::Vector2 &value, int decimal_places = 0);
 SBSIMPEXP bool IsBoolean(std::string string);
 
 #endif
