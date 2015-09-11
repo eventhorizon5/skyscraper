@@ -732,14 +732,14 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddInterfloorFloor ITop, Brick, 0.1, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    if[%floor% > 2] AddInterfloorWall IFrontInt, InterInt, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if[%floor% > 2] AddInterfloorWall ILeftInt, InterInt, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    if[%floor% > 2] AddInterfloorWall IRightInt, InterInt, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if[%floor% > 2] AddInterfloorWall IBackInt, InterInt, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #WallOrientation = left
+    #DrawWalls = false, true, false, false, false, false
+    #if[%floor% > 2] AddInterfloorWall IFrontInt, InterInt, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #if[%floor% > 2] AddInterfloorWall ILeftInt, InterInt, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #WallOrientation = right
+    #DrawWalls = true, false, false, false, false, false
+    #if[%floor% > 2] AddInterfloorWall IRightInt, InterInt, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #if[%floor% > 2] AddInterfloorWall IBackInt, InterInt, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
@@ -832,14 +832,14 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddInterfloorFloor ITop, Brick, 0.1, -75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    if[%floor% = 38] AddInterfloorWall IFrontInt, InterInt, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if[%floor% = 38] AddInterfloorWall ILeftInt, InterInt, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    if[%floor% = 38] AddInterfloorWall IRightInt, InterInt, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    if[%floor% = 38] AddInterfloorWall IBackInt, InterInt, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #WallOrientation = left
+    #DrawWalls = false, true, false, false, false, false
+    #if[%floor% = 38] AddInterfloorWall IFrontInt, InterInt, 0.5, -75, -70, 75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #if[%floor% = 38] AddInterfloorWall ILeftInt, InterInt, 0.5, -75, 70, -75, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #WallOrientation = right
+    #DrawWalls = true, false, false, false, false, false
+    #if[%floor% = 38] AddInterfloorWall IRightInt, InterInt, 0.5, 75, -70, 75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #if[%floor% = 38] AddInterfloorWall IBackInt, InterInt, 0.5, 75, 70, -75, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     #zone 1 setbacks
     FloorOrientation = top
@@ -886,33 +886,39 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
 
 # Zone 1 Column Frame
 <Floors 0 to 39>
-    ColumnWallBox2 ColumnL1, ColumnTex, -75 + 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnL2, ColumnTex, -75 + 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnL3, ColumnTex, -75 + 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnL4, ColumnTex, -75 + 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnL5, ColumnTex, -75 + 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnL6, ColumnTex, -75 + 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnL7, ColumnTex, -75 + 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL1, ColumnTex, -75 + 1.6, 68.4, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL2, ColumnTex, -75 + 1.6, 45.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL3, ColumnTex, -75 + 1.6, 22.8, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL4, ColumnTex, -75 + 1.6, 0, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL5, ColumnTex, -75 + 1.6, -22.8, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL6, ColumnTex, -75 + 1.6, -45.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnL7, ColumnTex, -75 + 1.6, -68.4, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnLBase, ColumnTex, -75 + 1.6, 0, 3, 136.86 + 3, %interfloorheight%, 0, 0, 0, false, true, false, false
 
-    ColumnWallBox2 ColumnR1, ColumnTex, 75 - 1.6, 68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnR2, ColumnTex, 75 - 1.6, 45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnR3, ColumnTex, 75 - 1.6, 22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnR4, ColumnTex, 75 - 1.6, 0, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnR5, ColumnTex, 75 - 1.6, -22.8, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnR6, ColumnTex, 75 - 1.6, -45.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnR7, ColumnTex, 75 - 1.6, -68.4, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR1, ColumnTex, 75 - 1.6, 68.4, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR2, ColumnTex, 75 - 1.6, 45.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR3, ColumnTex, 75 - 1.6, 22.8, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR4, ColumnTex, 75 - 1.6, 0, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR5, ColumnTex, 75 - 1.6, -22.8, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR6, ColumnTex, 75 - 1.6, -45.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnR7, ColumnTex, 75 - 1.6, -68.4, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnRBase, ColumnTex, 75 - 1.6, 0, 3, 136.8 + 3, %interfloorheight%, 0, 0, 0, false, true, false, false
 
-    ColumnWallBox2 ColumnB1, ColumnTex, -48.93, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnB2, ColumnTex, -24.47, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnB3, ColumnTex, 0, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnB4, ColumnTex, 24.47, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnB5, ColumnTex, 48.93, 70 - 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB1, ColumnTex, -48.93, 70 - 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB2, ColumnTex, -24.47, 70 - 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB3, ColumnTex, 0, 70 - 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnB4, ColumnTex, 24.47, 70 - 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true,false, false
+    ColumnWallBox2 ColumnB5, ColumnTex, 48.93, 70 - 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    if[%floor% ! 1] ColumnWallBox2 ColumnBBase, ColumnTex, 0, 70 - 1.6, 146.8 - 3, 3, %interfloorheight%, 0, 0, 0, false, true, false, false
+    if[%floor% = 1] ColumnWallBox2 ColumnBBase, ColumnTex, 0, 70 - 1.6, 97.86 + 3 - 0.86, 3, %interfloorheight%, 0, 0, 0, false, true, true, true
 
-    ColumnWallBox2 ColumnF1, ColumnTex, -48.93, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnF2, ColumnTex, -24.47, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnF3, ColumnTex, 0, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnF4, ColumnTex, 24.47, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
-    ColumnWallBox2 ColumnF5, ColumnTex, 48.93, -70 + 1.6, 3, 3, %fullheight%, 0, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF1, ColumnTex, -48.93, -70 + 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF2, ColumnTex, -24.47, -70 + 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF3, ColumnTex, 0, -70 + 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF4, ColumnTex, 24.47, -70 + 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    ColumnWallBox2 ColumnF5, ColumnTex, 48.93, -70 + 1.6, 3, 3, %height%, %interfloorheight%, 0, 0, false, true, false, false
+    if[%floor% ! 1] ColumnWallBox2 ColumnFBase, ColumnTex, 0, -70 + 1.6, 146.8 - 3, 3, %interfloorheight%, 0, 0, 0, false, true, false, false
+    if[%floor% = 1] ColumnWallBox2 ColumnFBase, ColumnTex, 0, -70 + 1.6, 97.86 + 3 - 0.86, 3, %interfloorheight%, 0, 0, 0, false, true, true, true
 <EndFloors>
 
 #zone 2 skeleton
@@ -973,14 +979,14 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddInterfloorFloor ITop, Brick, 0.1, -63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0
 
     #Interfloor walls
-    WallOrientation = left
-    DrawWalls = false, true, false, false, false, false
-    AddInterfloorWall ILeft, Brick, 0.5, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IFront, Brick, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    WallOrientation = right
-    DrawWalls = true, false, false, false, false, false
-    AddInterfloorWall IBack, Brick, 0.5, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
-    AddInterfloorWall IRight, Brick, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #WallOrientation = left
+    #DrawWalls = false, true, false, false, false, false
+    #AddInterfloorWall ILeft, Brick, 0.5, -63, 70, -63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IFront, Brick, 0.5, -63, -70, 63, -70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #WallOrientation = right
+    #DrawWalls = true, false, false, false, false, false
+    #AddInterfloorWall IBack, Brick, 0.5, 63, 70, -63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
+    #AddInterfloorWall IRight, Brick, 0.5, 63, -70, 63, 70, %interfloorheight%, %interfloorheight%, 0, 0, 0, 0
 
     DrawWalls = true, true, false, false, false, false
 <EndFloors>
@@ -1081,7 +1087,8 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
     AddWall Back, Stucco4, 0.5, -29.083 + 5.333 - 10 - 0.5, 51.66 + 4.5 - 0.33, 4.7515 - 9.0815 - 0.33, 51.66 + 4.5 - 0.33, %height%, %height%, 0, 0, 0, 0, False
     WallOrientation = center
     AddDoor StairsDoor, 0.2, 8, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, 1, 1
-    AddFillerWalls ConnectionWall, 0.5, -29.083 + 5.333 - 5, 51.66 + 4.5, 3.5, 8, 0, true, 0, 0
+    WallOrientation = left
+    AddFillerWalls ConnectionWall, 0.5, -29.083 + 5.333 - 5, 51.66 + 4.5 - 0.33, 3.5, 8, 0, true, 0, 0
 
     #Southwest transfer
     WallOrientation = right
@@ -3524,12 +3531,12 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     if[%floor% = 79] Set 5 = Stucco4
     if[%floor% > 81 & %floor% < 100] Set 5 = HotelWalls
     Set 3 = 0
-    if[%floor% = 79] Set 3 = 8.5 + %interfloorheight%
+    if[%floor% = 79] Set 3 = 8.5 + %interfloorheight% + 0.5
 
     #shaft 35
     FloorOrientation = top
     DrawWalls = true, true, false, false, false, false
-    if[%floor% = 79] AddShaftFloor 35, Shaft35Base, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, %3%, %3%, 0, 0
+    if[%floor% = 79] AddShaftFloor 35, Shaft35Base, Brick, 0.5, -9.71 - 0.33, -4.5 - 0.33, 9.71, 4.5, %3%, %3%, 0, 0
     DrawWalls = true, false, false, false, false, false
     if[%floor% = 101] AddShaftFloor 35, Shaft35Top, Brick, 0.5, -9.71, -4.5, 9.71, 4.5, %fullheight%, %fullheight%, 0, 0
     WallOrientation = left
@@ -3556,7 +3563,7 @@ ShaftCut 36, -5.04 + 0.33, -5.08, 5.04, 5.08, 0, 5
     AddWall Shaft35FrontE, %5%, 0.33, -9.71 + -14.04 - 0.33, -4.5 + 51.66, -9.417 - 4.92, -4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    if[%floor% > 79] AddWall Shaft35BackE, %5%, 0.33, -9.71 + -14.04 - 0.33, 4.5 + 51.66, 9.71 + -14.04, 4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
+    if[%floor% > 79] AddWall Shaft35BackE, %5%, 0.33, -9.71 + -14.04 - 0.33, 4.5 + 51.66, 9.71 + -14.04 - 0.33, 4.5 + 51.66, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #Residential service (Service Shaft 3)
@@ -7404,8 +7411,8 @@ AddAction FireServiceBypass71, Elevator71, Fire1Bypass
 
 <Floors 80 to 99>
     #elevators 69 and 70
-    AddFloorIndicator 69, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8
-    AddFloorIndicator 70, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8
+    AddFloorIndicator 69, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8.05
+    AddFloorIndicator 70, true, back, 0, 4.051 + 0.2 + 0.66 + 0.02, 0.5, 0.4, 8.05
 <EndFloors>
 
 <Floors 100 to 130>
