@@ -1503,7 +1503,7 @@ void SBS::CreateSky(const char *filenamebase)
 	//create skybox
 
 	std::string file = filenamebase;
-	Mount(std::string("data/sky-" + file + ".zip").c_str(), "sky");
+	Mount(std::string("sky-" + file + ".zip").c_str(), "sky");
 
 	//load textures
 	SetLighting();
@@ -2630,7 +2630,8 @@ bool SBS::Mount(const char *filename, const char *path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	std::string file = VerifyFile(filename);
+	std::string newfile = "data" + std::string("/") + std::string(filename);
+	std::string file = VerifyFile(newfile.c_str());
 	std::string Path = path;
 
 	Report("Mounting " + file + " as path " + Path);
