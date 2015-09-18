@@ -1,5 +1,71 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-removed Mac screen adjustment code, due to fixes in Ogre 1.9
+-prevent GTK checks on OSX
+-fixed issues with Mount command
+-(Triton Center) transfer hallway fixes
+-(Triton Center) column frame work
+-ComputeTextureMap function now rounds vector results, to prevent precision malfunctions in ComputeTextureSpace function
+-added vector rounding functions
+-added support for rounding numbers to a specified decimal place
+-elevator's 'manualstop' setting should not enable if in a service mode
+-an error dialog is now shown if messages can't be written to log
+-fixed GIF transparency detection; should scan for extension marker instead of accessing directly
+-(Sears Tower) shaft range fixes, and fixed issues with Zone 2 42-49 locals
+-(Sears Tower) new exterior textures
+-(Sears Tower) separated exterior into window frames and interfloor segments
+-(Sears Tower) misc tweaks
+-added references to floor slab heights to designguide.html
+-add floor base to list report
+-(Sears Tower) adjusted standard slab heights to be 12' 10" according to steel frame diagram
+-(Sears Tower) repositioned stop buttons
+-floor description fixes for Sears Tower and Observation Tower buildings
+-(Sears Tower) zone 1 mechanical fixes
+-(Sears Tower) increased interfloor heights to 3ft
+-(Sears Tower) removed extra Call Cancel buttons
+-visible mesh listing now shows submesh count
+-added ListVisibleMeshes function and script command
+-added description variable for floors
+-added floorname, floorid and floortype variables to the floor section of the script interpreter
+-added option to reset object state to the Object Information window, and made inactive Save Script button hidden
+-removed separate Name variables, to use Object name instead
+-removed redundant SetPolygonName function
+-move polygon-specific code into polygon class
+-made certain elements private in wall object
+-rename "object" to "raw_object" in Object's SetValues function
+-rename reference of "handle" to "polygon"
+-WallPolygon class is now SPolygon
+-moved polygon code to separate file
+-added basic movement support to wall objects, which works by modifying vertices
+-fixed a divide-by-zero issue in the elevator braking code
+-make sure parent_deleting flag is set properly in destructors for all child objects
+-elevator shaft door wrappers can now be deleted separately
+-delay creation of elevator shaft door wrappers
+-floor info now reports which stairwells and shafts span the floor
+-moved floor info code into floor object
+-floor information now shows a list of elevators that service the floor
+-(Sears Tower) updated elevator button/control commands
+-(Sears Tower) floors 90 and 100-102 are now locked
+-(Sears Tower) split off separate upper service elevator, for floors 90-106
+-ResetState functionality is now abstracted from the core Object class, and the implementation has been simplified
+-added ability to reset elevator door states, mainly in case of door malfunction
+-(Triton Center) lower level wall fixes
+-(Triton Center) lobby positioning fixes
+-(Glass Tower) fix extra instance of interior windows on 137
+-found that the ObjectCount value wasn't being initialized before registering SBS root object
+-simplified object system; object type is now inherited by sim objects
+-don't turn on starting and ending floor shaft doors during elevator init
+-elevator sounds need to be positioned from elevator center
+-fixed positioning issue in stairs controls
+-stairwell objects (models, action controls, etc) need to be offset of the floor base, not altitude
+-MaxSmallRenderDistance now works due to new positioning system
+-new object positioning system
+-report error if no height specified in AddWallMain function
+-report error and exit if no height specified when calling AddFillerWalls
+-fixed invalid coordinate check in AddFloorMain function
+-default texture tiling to 1.0 if 0 is specified during texture load
+-wxWidgets 3.0 support
+-added CameraTexture object
 -added FindPolygon mesh function and simplified code
 -moved GetPoint, GetWallExtents, and GetExtents functions to the MeshObject class
 -elevator and floor creation should return created object
