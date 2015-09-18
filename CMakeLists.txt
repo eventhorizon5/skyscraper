@@ -30,7 +30,9 @@ find_package(wxWidgets COMPONENTS core base gl REQUIRED)
 find_package(FMOD REQUIRED)
 
 #find GTK
+if(NOT APPLE)
 find_package(GTK2 COMPONENTS gtk REQUIRED)
+endif ()
 
 #find BULLET
 find_package(Bullet REQUIRED)
