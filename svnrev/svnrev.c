@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
                 " */\n\n", max_build, max_year, max_month, max_day);
   } /* if */
 
-  fprintf(fp, "#ifndef SVNREH_H\n");
+  fprintf(fp, "#ifndef SVNREV_H\n");
   fprintf(fp, "#define SVNREV_H\n\n");
   fprintf(fp, "#define SVN_REV\t\t%d\n", max_build);
   fprintf(fp, "#define SVN_REVSTR\t\"%d\"\n", max_build);
