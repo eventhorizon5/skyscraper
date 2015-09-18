@@ -139,7 +139,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 	for (int i = 0; i < polycount; i++)
 	{
 		//get name
-		Polygon *polygon = wall->GetPolygon(i);
+		SPolygon *polygon = wall->GetPolygon(i);
 
 		//get original vertices
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
@@ -1450,7 +1450,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 		{
 			//reindex triangle indices
 
-			Polygon *poly = Walls[i]->GetPolygon(j);
+			SPolygon *poly = Walls[i]->GetPolygon(j);
 
 			int elements_size = (int)poly->triangles.size() * 3;
 			int *elements = new int[elements_size];

@@ -26,7 +26,7 @@
 #ifndef _SBS_POLYGON_H
 #define _SBS_POLYGON_H
 
-class SBSIMPEXP Polygon
+class SBSIMPEXP SPolygon
 {
 public:
 	MeshObject* mesh;
@@ -43,8 +43,8 @@ public:
 	std::string material; //polygon material
 	std::string name; //polygon names
 
-	Polygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane);
-	~Polygon();
+	SPolygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane);
+	~SPolygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();
 	void GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);

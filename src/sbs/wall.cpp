@@ -63,7 +63,7 @@ WallObject::~WallObject()
 	polygons.clear();
 }
 
-Polygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
+SPolygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -77,7 +77,7 @@ Polygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
-Polygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
+SPolygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	std::string name2 = ProcessName(name);
@@ -104,7 +104,7 @@ Polygon* WallObject::AddPolygon(const char *name, const char *texture, std::vect
 	return &polygons[index];
 }
 
-Polygon* WallObject::AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+SPolygon* WallObject::AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 	std::string name2 = ProcessName(name);
@@ -132,7 +132,7 @@ int WallObject::CreatePolygon(std::vector<TriangleType> &triangles, std::vector<
 
 	std::string newname = ProcessName(name);
 
-	Polygon polygon(newname.c_str(), meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
+	SPolygon polygon(newname.c_str(), meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
 	polygons.push_back(polygon);
 	sbs->PolygonCount++;
 
@@ -198,7 +198,7 @@ int WallObject::GetPolygonCount()
 	return (int)polygons.size();
 }
 
-Polygon* WallObject::GetPolygon(int index)
+SPolygon* WallObject::GetPolygon(int index)
 {
 	if (index > -1 && index < (int)polygons.size())
 		return &polygons[index];
