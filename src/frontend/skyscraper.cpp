@@ -671,12 +671,6 @@ void Skyscraper::GetInput()
 	float width = window->GetClientSize().GetWidth();
 	float height = window->GetClientSize().GetHeight();
 
-	//adjust for different window client height
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	if (Simcore->camera->Freelook == false)
-		Simcore->mouse_y += GetOffset();
-#endif
-
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
 	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
@@ -695,10 +689,6 @@ void Skyscraper::GetInput()
 	bool right = wxGetMouseState().RightIsDown();
 	if ((left == true || right == true) && MouseDown == false)
 	{
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-		if (Simcore->camera->Freelook == true)
-			Simcore->mouse_y += GetOffset();
-#endif
 		MouseDown = true;
 		Simcore->camera->MouseDown = MouseDown;
 		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), right);
@@ -1228,14 +1218,6 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 	if (background_image == Filename)
 		return;
 
-	//adjust for different window client height (Mac)
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	int offset, clientheight, height;
-	window->GetClientSize(&offset, &clientheight);
-	window->GetSize(&offset, &height);
-	y += (1 - ((float)clientheight / (float)height)) * 2;
-#endif
-
 	Ogre::TextureManager::getSingleton().setVerbose(false);
 	Ogre::TexturePtr tex = Ogre::TextureManager::getSingleton().getByName(Filename);
 	if (tex.isNull() == false)
@@ -1451,11 +1433,6 @@ void Skyscraper::GetMenuInput()
 	int mouse_x = window->ScreenToClient(wxGetMousePosition()).x;
 	int mouse_y = window->ScreenToClient(wxGetMousePosition()).y;
 
-	//adjust for different window client height
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-	mouse_y += GetOffset();
-#endif
-
 	for (int i = 0; i < buttoncount; i++)
 	{
 		buttondata *button = &buttons[i];
@@ -1465,13 +1442,8 @@ void Skyscraper::GetMenuInput()
         {
 			float mx = mouse_x;
 			float my = mouse_y;
-#if OGRE_PLATFORM == OGRE_PLATFORM_APPLE
-			float w = mx / window->GetSize().x;
-			float h = my / window->GetSize().y;
-#else
 			float w = mx / window->GetClientSize().x;
 			float h = my / window->GetClientSize().y;
-#endif
 			float mouse_x_rel = (w * 2) - 1;
 			float mouse_y_rel = (h * 2) - 1;
 
@@ -2049,15 +2021,6 @@ void Skyscraper::ShowConsole(bool send_button)
 	console->Raise();
 	console->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ConsoleX", 10), GetConfigInt("Skyscraper.Frontend.ConsoleY", 25)));
 	console->bSend->Enable(send_button);
-}
-
-int Skyscraper::GetOffset()
-{
-	int offset, clientheight, height;
-	window->GetClientSize(&offset, &clientheight);
-	window->GetSize(&offset, &height);
-	offset = height - clientheight;
-	return offset;
 }
 
 void Skyscraper::CreateProgressDialog()
