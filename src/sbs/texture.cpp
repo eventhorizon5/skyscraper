@@ -1806,8 +1806,20 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 			//extension found
 			if (found == 3 && i < (int)encoded->size() - 4)
 			{
+				//gif transparency info
+
+				//bit flag layout of packed field
+				struct ext {
+					unsigned char transparent : 1; //transparency flag is first bit
+					unsigned char userinput : 1;
+					unsigned char disposal : 3;
+					unsigned char reserved : 3;
+				};
+				ext flags;
+
 				encoded->seek(i); //transparency enabled if value is 0x1
-				encoded->read(&enabled, 1);
+				encoded->read(&flags, 1);
+				enabled = flags.transparent;
 				encoded->seek(i + 3); //transparency color
 				encoded->read(&trans_color, 1);
 				break;
