@@ -239,12 +239,12 @@ void Object::ShowBoundingBox(bool value)
 		SceneNode->showBoundingBox(value);
 }
 
-void Object::Move(const Ogre::Vector3 &position, float speed)
+void Object::Move(const Ogre::Vector3 &vector, float speed)
 {
 	//move an object
-	//if relative is true, position is relative of parent object
+	//if relative is true, vector is relative of parent object
 
-	SetPosition(GetPosition() + (position * speed));
+	SetPosition(GetPosition() + (vector * speed));
 }
 
 void Object::Move(float X, float Y, float Z, float speed)
@@ -354,11 +354,11 @@ void Object::SetRotation(float X, float Y, float Z)
 	SetRotation(rot);
 }
 
-void Object::Rotate(const Ogre::Vector3 &rotation, float speed)
+void Object::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates object in a relative amount
 
-	Ogre::Vector3 rot = Rotation + (rotation * speed);
+	Ogre::Vector3 rot = Rotation + (vector * speed);
 	SetRotation(rot);
 }
 

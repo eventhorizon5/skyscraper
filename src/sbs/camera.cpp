@@ -272,6 +272,17 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 	return true;
 }
 
+bool Camera::MovePosition(Ogre::Vector3 vector, float speed)
+{
+	//moves the camera in a relative amount, using SetPosition, instead of character movement
+
+	if (vector == Ogre::Vector3::ZERO)
+		return false;
+
+	SetPosition(GetPosition() + (vector * speed));
+	return true;
+}
+
 void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates the camera in a relative amount in world space

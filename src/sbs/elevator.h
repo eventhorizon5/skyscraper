@@ -295,7 +295,7 @@ public:
 	int GetFloorIndex(int floor);
 	float GetDestinationAltitude(int floor);
 	float GetDestinationOffset(int floor);
-	void SetAltitude(float altitude);
+	void MoveObjects(float offset);
 	void SetFloor(int floor);
 	void Init();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);

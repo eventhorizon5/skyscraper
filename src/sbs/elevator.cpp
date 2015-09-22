@@ -1202,7 +1202,7 @@ void Elevator::MonitorLoop()
 		HeightSet = true;
 
 		//update sound positions
-		SetAltitude(elevposition.y);
+		MoveObjects(0);
 	}
 
 	//set random lobby level if not set
@@ -1714,7 +1714,7 @@ void Elevator::MoveElevatorToFloor()
 	//move elevator objects and camera
 	movement.y = ElevatorRate * sbs->delta;
 
-	SetAltitude(GetPosition().y + movement.y);
+	MoveObjects(movement.y);
 
 	//motion calculation
 	if (Brakes == false)
@@ -1981,7 +1981,7 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->Verbose)
 			Report("setting elevator to floor altitude");
 
-		SetAltitude(Destination);
+		MoveObjects(Destination - GetPosition().y);
 	}
 
 	//reset values if at destination floor
@@ -2013,16 +2013,18 @@ finish:
 		FinishMove();
 }
 
-void Elevator::SetAltitude(float altitude)
+void Elevator::MoveObjects(float offset)
 {
-	//set vertical position of elevator and objects
+	//move elevator and objects vertically
 
-	SetPosition(Ogre::Vector3(elevposition.x, altitude, elevposition.z));
-	elevposition.y = altitude;
+	Ogre::Vector3 vector (0, offset, 0);
+
+	Move(vector);
+	elevposition.y = GetPosition().y;
 
 	//move camera
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
-		sbs->camera->SetPosition(Ogre::Vector3(sbs->camera->GetPosition().x, elevposition.y + CameraOffset, sbs->camera->GetPosition().z));
+		sbs->camera->MovePosition(vector);
 
 	//move sounds
 	Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
@@ -2047,7 +2049,7 @@ void Elevator::SetFloor(int floor)
 		return;
 
 	altitude = GetDestinationAltitude(floor);
-	SetAltitude(altitude);
+	MoveObjects(altitude - GetPosition().y);
 }
 
 void Elevator::FinishMove()
