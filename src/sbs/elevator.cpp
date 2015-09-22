@@ -2349,6 +2349,9 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 {
 	//determine if the given 3D position is inside the elevator
 
+	//first checks to see if camera is within an elevator's height range, and then
+	//checks for a collision with the elevator's floor below
+
 	//SBS_PROFILE("Elevator::IsInElevator");
 	bool inelevator = false;
 
@@ -2370,19 +2373,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 		{
 			if (ElevatorMesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
-				if (IsMoving == false)
-				{
-					//store camera offset if elevator is not moving
-					CameraOffset = position.y - GetPosition().y;
-				}
-				else if (CameraOffset == 0)
-				{
-					//reposition camera with a moving elevator if the offset is 0
-					if (position.y < GetPosition().y + Height)
-						CameraOffset = sbs->camera->GetHeight(); //if below ceiling, set to camera height
-					else
-						CameraOffset = Height + sbs->camera->GetHeight(); //if above ceiling, set to elev height + camera height
-				}
+				CameraOffset = position.y - GetPosition().y;
 				inelevator = true;
 			}
 		}
@@ -5421,11 +5412,14 @@ bool Elevator::Check(Ogre::Vector3 position)
 		sbs->ElevatorSync = true;
 		return true;
 	}
+
+	//turn off objects if user has moved outside the checked elevator
 	else if (InElevator() == true)
-		EnableObjects(false); //turn off objects if user is not in the checked elevator
+		EnableObjects(false);
+
+	//if camera is within vertical elevator range, turn on syncing to allow things like elevator surfing
 	else if (CameraOffset > Height && CameraOffset < Height * 2)
 	{
-		//if camera is within vertical elevator range, turn on syncing to allow things like elevator surfing
 		sbs->ElevatorNumber = Number;
 		sbs->ElevatorSync = true;
 		return true;

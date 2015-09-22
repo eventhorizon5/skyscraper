@@ -383,9 +383,6 @@ void Camera::CheckElevator()
 {
 	//check to see if user (camera) is in an elevator
 
-	//first checks to see if camera is within an elevator's height range, and then
-	//checks for a collision with the elevator's floor below
-
 	SBS_PROFILE("Camera::CheckElevator");
 
 	for (int i = 1; i <= sbs->Elevators(); i++)
