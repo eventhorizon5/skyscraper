@@ -494,9 +494,8 @@ bool SPolygon::IntersectRay(std::vector<Ogre::Vector3> &vertices, const Ogre::Ve
 	Ogre::Vector3 relend = end;
 	relend -= start;
 
-	int i, i1;
-	i1 = (int)vertices.size() - 1;
-	for (i = 0; i < (int)vertices.size() - 1; i++)
+	int i1 = (int)vertices.size() - 1;
+	for (int i = 0; i < (int)vertices.size(); i++)
 	{
 		Ogre::Vector3 start2 = start - vertices[i1];
 		normal = start2.crossProduct(start - vertices[i]);
