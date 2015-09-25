@@ -37,7 +37,6 @@ Sound::Sound(Object *parent, const char *name, bool permanent)
 	SetValues(this, parent, "Sound", name, permanent);
 
 	//first set default values
-	PositionOffset = 0;
 	Position = 0;
 	Volume = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
 	MaxDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", 10000.0);

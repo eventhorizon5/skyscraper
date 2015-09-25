@@ -39,8 +39,10 @@ extern Skyscraper *skyscraper;
 
 //(*IdInit(MoveObject)
 const long MoveObject::ID_STATICTEXT1 = wxNewId();
-const long MoveObject::ID_STATICTEXT2 = wxNewId();
 const long MoveObject::ID_lblPosition = wxNewId();
+const long MoveObject::ID_STATICTEXT3 = wxNewId();
+const long MoveObject::ID_STATICTEXT4 = wxNewId();
+const long MoveObject::ID_STATICTEXT2 = wxNewId();
 const long MoveObject::ID_lblRotation = wxNewId();
 const long MoveObject::ID_STATICLINE2 = wxNewId();
 const long MoveObject::ID_rPosition = wxNewId();
@@ -107,10 +109,14 @@ MoveObject::MoveObject(wxWindow* parent,wxWindowID id, int object_number)
 	GridSizer1 = new wxGridSizer(0, 2, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT1"));
 	GridSizer1->Add(StaticText1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Rotation:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT2"));
-	GridSizer1->Add(StaticText2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	lblPosition = new wxStaticText(this, ID_lblPosition, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblPosition"));
 	GridSizer1->Add(lblPosition, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Relative Position:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT3"));
+	GridSizer1->Add(StaticText3, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	lblRelPosition = new wxStaticText(this, ID_STATICTEXT4, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT4"));
+	GridSizer1->Add(lblRelPosition, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Rotation:"), wxDefaultPosition, wxDefaultSize, wxALIGN_CENTRE, _T("ID_STATICTEXT2"));
+	GridSizer1->Add(StaticText2, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	lblRotation = new wxStaticText(this, ID_lblRotation, _("0, 0, 0"), wxDefaultPosition, wxDefaultSize, wxST_NO_AUTORESIZE|wxALIGN_CENTRE, _T("ID_lblRotation"));
 	GridSizer1->Add(lblRotation, 1, wxALL|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer5->Add(GridSizer1, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -246,8 +252,10 @@ void MoveObject::Loop()
 	if (object)
 	{
 		Ogre::Vector3 pos = object->GetPosition();
+		Ogre::Vector3 relpos = object->GetPosition(true);
 		Ogre::Vector3 rot = object->GetRotation();
 		lblPosition->SetLabel(TruncateNumber(pos.x, 2) + wxT(", ") + TruncateNumber(pos.y, 2) + wxT(", ") + TruncateNumber(pos.z, 2));
+		lblRelPosition->SetLabel(TruncateNumber(relpos.x, 2) + wxT(", ") + TruncateNumber(relpos.y, 2) + wxT(", ") + TruncateNumber(relpos.z, 2));
 		lblRotation->SetLabel(TruncateNumber(rot.x, 2) + wxT(", ") + TruncateNumber(rot.y, 2) + wxT(", ") + TruncateNumber(rot.z, 2));
 
 		//move if hold vector is not zero

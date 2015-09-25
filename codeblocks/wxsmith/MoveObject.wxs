@@ -30,8 +30,17 @@
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
-													<label>Rotation:</label>
+												<object class="wxStaticText" name="ID_lblPosition" variable="lblPosition" member="yes">
+													<label>0, 0, 0</label>
+													<style>wxST_NO_AUTORESIZE|wxALIGN_CENTRE</style>
+												</object>
+												<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
+													<label>Relative Position:</label>
 													<style>wxALIGN_CENTRE</style>
 												</object>
 												<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -39,11 +48,20 @@
 												<option>1</option>
 											</object>
 											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_lblPosition" variable="lblPosition" member="yes">
+												<object class="wxStaticText" name="ID_STATICTEXT4" variable="lblRelPosition" member="yes">
 													<label>0, 0, 0</label>
-													<style>wxST_NO_AUTORESIZE|wxALIGN_CENTRE</style>
+													<style>wxALIGN_CENTRE</style>
 												</object>
 												<flag>wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT2" variable="StaticText2" member="yes">
+													<label>Rotation:</label>
+													<style>wxALIGN_CENTRE</style>
+												</object>
+												<flag>wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 												<border>5</border>
 												<option>1</option>
 											</object>

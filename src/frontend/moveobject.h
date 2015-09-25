@@ -45,8 +45,10 @@ class MoveObject: public wxDialog
 
 		//(*Identifiers(MoveObject)
 		static const long ID_STATICTEXT1;
-		static const long ID_STATICTEXT2;
 		static const long ID_lblPosition;
+		static const long ID_STATICTEXT3;
+		static const long ID_STATICTEXT4;
+		static const long ID_STATICTEXT2;
 		static const long ID_lblRotation;
 		static const long ID_STATICLINE2;
 		static const long ID_rPosition;
@@ -136,10 +138,12 @@ class MoveObject: public wxDialog
 		wxButton* bXPlus;
 		wxStaticText* lblPosition;
 		wxButton* bYNeg;
+		wxStaticText* lblRelPosition;
 		wxStaticText* StaticText20;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText16;
 		wxButton* bRotationZ;
+		wxStaticText* StaticText3;
 		wxTextCtrl* txtRotationX;
 		wxStaticText* StaticText23;
 		wxButton* bXNeg;

@@ -30,7 +30,6 @@ class SBSIMPEXP Sound : public Object
 {
 public:
 
-	Ogre::Vector3 PositionOffset; //optional position offset, used only by other objects
 	bool SetVelocity; //set sound velocity on move
 
 	Sound(Object *parent, const char *name, bool permanent);

@@ -577,20 +577,20 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		Report("creating sound objects");
 	carsound = new Sound(this, "Car", true);
 	idlesound = new Sound(this, "Idle", true);
-	motorsound = new Sound(this, "Motor", true);
-	motoridlesound = new Sound(this, "Motor Idle", true);
+
+	std::string motorname = "Motor " + ToString2(Number);
+	motorsound = new Sound(GetShaft(), motorname.c_str(), true);
+	motorname += " Idle";
+	motoridlesound = new Sound(GetShaft(), motorname.c_str(), true);
+
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
 		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + GetPosition().x, MotorPosition.y, MotorPosition.z + GetPosition().z));
 	else
 	{
-		Shaft* shaft = GetShaft();
-		if (shaft)
-		{
-			Floor *floor = sbs->GetFloor(shaft->endfloor);
-			if (floor)
-				motorsound->SetPositionY(floor->GetBase());
-		}
+		Floor *floor = sbs->GetFloor(GetShaft()->endfloor);
+		if (floor)
+			motorsound->SetPositionY(floor->GetBase());
 	}
 	MotorPosition = Ogre::Vector3(motorsound->GetPosition().x - GetPosition().x, motorsound->GetPosition().y, motorsound->GetPosition().z - GetPosition().z);
 	motoridlesound->SetPosition(motorsound->GetPosition());
@@ -1201,8 +1201,17 @@ void Elevator::MonitorLoop()
 		}
 		HeightSet = true;
 
-		//update sound positions
-		MoveObjects(0);
+		//position sounds at top of elevator car
+		Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
+		idlesound->SetPositionRelative(top);
+		alarm->SetPositionRelative(top);
+		floorbeep->SetPositionRelative(top);
+		announcesnd->SetPositionRelative(top);
+
+		//set default music position to elevator height
+		if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
+			MusicPosition = top;
+		musicsound->SetPositionRelative(MusicPosition);
 	}
 
 	//set random lobby level if not set
@@ -1334,10 +1343,6 @@ void Elevator::MonitorLoop()
 					if (sbs->Verbose)
 						Report("playing music");
 
-					if (MusicPosition == Ogre::Vector3(0, 0, 0) && Height > 0)
-						MusicPosition = Ogre::Vector3(0, Height, 0); //set default music position to elevator height
-
-					musicsound->SetPositionRelative(MusicPosition);
 					musicsound->Loop(true);
 					musicsound->Play(false);
 				}
@@ -2025,19 +2030,6 @@ void Elevator::MoveObjects(float offset)
 	//move camera
 	if (sbs->ElevatorSync == true && sbs->ElevatorNumber == Number)
 		sbs->camera->MovePosition(vector);
-
-	//move sounds
-	Ogre::Vector3 top = Ogre::Vector3(0, Height, 0);
-	idlesound->SetPositionRelative(top);
-	alarm->SetPositionRelative(top);
-	floorbeep->SetPositionRelative(top);
-	announcesnd->SetPositionRelative(top);
-	musicsound->SetPositionRelative(MusicPosition);
-	for (int i = 0; i < (int)sounds.size(); i++)
-	{
-		if (sounds[i])
-			sounds[i]->SetPositionY(elevposition.y + sounds[i]->PositionOffset.y);
-	}
 }
 
 void Elevator::SetFloor(int floor)
@@ -4167,7 +4159,7 @@ void Elevator::SetMessageSound(bool type, bool direction, const char *filename)
 
 Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
-	//create a looping sound object
+	//create a sound object
 	Sound *sound = new Sound(this, name, false);
 	sounds.push_back(sound);
 

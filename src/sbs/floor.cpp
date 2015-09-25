@@ -213,14 +213,6 @@ Floor::~Floor()
 		sbs->RemoveFloor(this);
 }
 
-void Floor::SetCameraFloor()
-{
-	//Moves camera to specified floor (sets altitude to the floor's base plus DefaultAltitude)
-
-	Ogre::Vector3 camlocation = sbs->camera->GetPosition();
-	sbs->camera->SetPosition(Ogre::Vector3(camlocation.x, GetBase() + sbs->camera->cfg_body_height + sbs->camera->cfg_legs_height, camlocation.z));
-}
-
 WallObject* Floor::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool isexternal, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset

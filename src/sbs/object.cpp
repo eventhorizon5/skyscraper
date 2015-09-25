@@ -242,7 +242,6 @@ void Object::ShowBoundingBox(bool value)
 void Object::Move(const Ogre::Vector3 &vector, float speed)
 {
 	//move an object
-	//if relative is true, vector is relative of parent object
 
 	SetPosition(GetPosition() + (vector * speed));
 }
@@ -297,7 +296,6 @@ void Object::SetPositionRelative(float X, float Y, float Z)
 void Object::SetPositionY(float value)
 {
 	//set position of only Y vector
-	//if relative is true, position is relative of parent object
 
 	Ogre::Vector3 pos (GetPosition().x, value, GetPosition().z);
 	SetPosition(pos);
