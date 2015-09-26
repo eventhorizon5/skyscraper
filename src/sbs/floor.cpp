@@ -72,6 +72,17 @@ Floor::~Floor()
 {
 	//Destructor
 
+	//delete escalators
+	for (int i = 0; i < (int)EscalatorArray.size(); i++)
+	{
+		if (EscalatorArray[i])
+		{
+			EscalatorArray[i]->parent_deleting = true;
+			delete EscalatorArray[i];
+		}
+		EscalatorArray[i] = 0;
+	}
+
 	//delete camera textures
 	for (int i = 0; i < (int)CameraTextureArray.size(); i++)
 	{
@@ -1280,6 +1291,14 @@ Object* Floor::AddCameraTexture(const char *name, bool enabled, int quality, flo
 	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase(true) + position, use_rotation, rotation);
 	CameraTextureArray.push_back(cameratexture);
 	return cameratexture;
+}
+
+Object* Floor::AddEscalator(const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+{
+	//add an escalator
+	Escalator* escalator = new Escalator(this, name, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
+	EscalatorArray.push_back(escalator);
+	return escalator;
 }
 
 void Floor::SetAltitude(float altitude)

@@ -34,6 +34,7 @@
 #include "control.h"
 #include "trigger.h"
 #include "cameratexture.h"
+#include "escalator.h"
 
 class SBSIMPEXP Floor : public Object
 {
@@ -114,6 +115,7 @@ public:
 	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Object* AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
+	Object* AddEscalator(const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	std::vector<Sound*> GetSound(const char *name);
 	void SetAltitude(float altitude);
 	void ShowInfo(bool detailed = true, bool display_header = true);
@@ -145,6 +147,9 @@ private:
 
 	//CameraTextures
 	std::vector<CameraTexture*> CameraTextureArray;
+
+	//Escalators
+	std::vector<Escalator*> EscalatorArray;
 };
 
 #endif
