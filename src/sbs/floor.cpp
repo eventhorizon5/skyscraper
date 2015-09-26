@@ -413,6 +413,13 @@ void Floor::Enabled(bool value)
 	//update floor indicator values
 	UpdateFloorIndicators();
 
+	//escalators
+	for (size_t i = 0; i < (int)EscalatorArray.size(); i++)
+	{
+		if (EscalatorArray[i])
+			EscalatorArray[i]->Enabled(value);
+	}
+
 	//sounds
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{

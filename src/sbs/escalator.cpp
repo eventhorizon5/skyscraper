@@ -95,6 +95,9 @@ void Escalator::Enabled(bool value)
 	for (int i = 0; i < (int)Steps.size(); i++)
 		Steps[i]->Enable(value);
 
+	if (value == false && sound->IsPlaying() == true)
+		sound->Stop();
+
 	IsEnabled = value;
 }
 
