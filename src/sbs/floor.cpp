@@ -777,6 +777,12 @@ void Floor::Loop()
 			if (TriggerArray[i])
 				TriggerArray[i]->Check();
 		}
+
+		for (int i = 0; i < (int)EscalatorArray.size(); i++)
+		{
+			if (EscalatorArray[i])
+				EscalatorArray[i]->Loop();
+		}
 	}
 }
 
@@ -1231,6 +1237,19 @@ void Floor::RemoveCameraTexture(CameraTexture *cameratexture)
 		if (CameraTextureArray[i] == cameratexture)
 		{
 			CameraTextureArray.erase(CameraTextureArray.begin() + i);
+			return;
+		}
+	}
+}
+
+void Floor::RemoveEscalator(Escalator *escalator)
+{
+	//remove an escalator reference (does not delete the object itself)
+	for (int i = 0; i < (int)EscalatorArray.size(); i++)
+	{
+		if (EscalatorArray[i] == escalator)
+		{
+			EscalatorArray.erase(EscalatorArray.begin() + i);
 			return;
 		}
 	}

@@ -36,6 +36,7 @@ public:
 	void Enabled(bool value);
 	void Report(std::string message);
 	bool ReportError(std::string message);
+	void Loop();
 
 private:
 	std::vector<MeshObject*> Steps;

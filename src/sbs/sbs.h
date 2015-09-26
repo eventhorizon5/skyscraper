@@ -382,6 +382,9 @@ public:
 	void GetDoorwayExtents(MeshObject *mesh, int checknumber, std::vector<Ogre::Vector3> &polygon);
 	void ShowBoundingBoxes(bool value);
 	void ListVisibleMeshes();
+	int GetEscalatorCount();
+	void IncrementEscalatorCount();
+	void DecrementEscalatorCount();
 
 	//Meshes
 	MeshObject* Buildings;
@@ -535,6 +538,8 @@ private:
 	std::vector<Trigger*> TriggerArray;
 
 	int ObjectCount; //number of simulator objects
+
+	int EscalatorCount; //number of escalators
 
 	//internal clock
 	unsigned long current_time;

@@ -36,11 +36,34 @@ Escalator::Escalator(Object *parent, const char *name, const char *texture, cons
 	SetValues(this, parent, "Escalator", name, false);
 
 	IsEnabled = true;
+	sbs->IncrementEscalatorCount();
 }
 
 Escalator::~Escalator()
 {
+	//remove step meshes
+	for (int i = 0; i < (int)Steps.size(); i++)
+	{
+		if (Steps[i])
+		{
+			Steps[i]->parent_deleting = true;
+			delete Steps[i];
+		}
+		Steps[i] = 0;
+	}
 
+	//unregister from parent
+	if (sbs->FastDelete == false)
+	{
+		sbs->DecrementEscalatorCount();
+
+		//unregister from parent
+		if (parent_deleting == false)
+		{
+			if (std::string(GetParent()->GetType()) == "Floor")
+				((Floor*)GetParent()->GetRawObject())->RemoveEscalator(this);
+		}
+	}
 }
 
 void Escalator::Enabled(bool value)
@@ -66,4 +89,12 @@ bool Escalator::ReportError(std::string message)
 {
 	//general reporting function
 	return sbs->ReportError("Escalator " + std::string(GetName()) + ": " + message);
+}
+
+void Escalator::Loop()
+{
+	//run loop
+
+	if (!IsEnabled)
+		return;
 }

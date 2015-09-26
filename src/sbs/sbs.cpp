@@ -208,6 +208,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 	FloorDisplayRange = GetConfigInt("Skyscraper.SBS.FloorDisplayRange", 3);
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
+	EscalatorCount = 0;
 
 	camera = 0;
 	Buildings = 0;
@@ -4126,4 +4127,20 @@ void SBS::ListVisibleMeshes()
 	}
 	Report("Total: " + ToString2(count) + " meshes, " + ToString2(total) + " submeshes");
 	Report("");
+}
+
+int SBS::GetEscalatorCount()
+{
+	//return total number of allocated sounds
+	return EscalatorCount;
+}
+
+void SBS::IncrementEscalatorCount()
+{
+	EscalatorCount++;
+}
+
+void SBS::DecrementEscalatorCount()
+{
+	EscalatorCount--;
 }
