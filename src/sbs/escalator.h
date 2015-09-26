@@ -43,6 +43,8 @@ public:
 private:
 	std::vector<MeshObject*> Steps;
 	Sound *sound; //sound object
+
+	void CreateSteps(const char *texture, const char *direction, float width, float risersize, float treadsize, float tw, float th);
 };
 
 #endif
