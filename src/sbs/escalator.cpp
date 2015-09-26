@@ -30,13 +30,14 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Escalator::Escalator(Object *parent, const char *name, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator::Escalator(Object *parent, const char *name, bool run, bool run_direction, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//set up SBS object
 	SetValues(this, parent, "Escalator", name, false);
 
 	IsEnabled = true;
-	Run = true;
+	Run = run;
+	RunDirection = run_direction;
 	sbs->IncrementEscalatorCount();
 
 	//create step meshes

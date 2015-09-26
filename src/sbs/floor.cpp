@@ -1319,10 +1319,10 @@ Object* Floor::AddCameraTexture(const char *name, bool enabled, int quality, flo
 	return cameratexture;
 }
 
-Object* Floor::AddEscalator(const char *name, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Object* Floor::AddEscalator(const char *name, bool run, bool run_direction, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//add an escalator
-	Escalator* escalator = new Escalator(this, name, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
+	Escalator* escalator = new Escalator(this, name, run, run_direction, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);
 	EscalatorArray.push_back(escalator);
 	return escalator;
 }
