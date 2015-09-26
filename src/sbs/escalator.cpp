@@ -42,7 +42,7 @@ Escalator::Escalator(Object *parent, const char *name, const char *sound_file, c
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		MeshObject *mesh = new MeshObject(this, name, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		MeshObject *mesh = new MeshObject(this, name);
 		Steps.push_back(mesh);
 	}
 
