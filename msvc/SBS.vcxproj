@@ -275,6 +275,7 @@
     <ClCompile Include="..\src\sbs\door.cpp" />
     <ClCompile Include="..\src\sbs\elevator.cpp" />
     <ClCompile Include="..\src\sbs\elevatordoor.cpp" />
+    <ClCompile Include="..\src\sbs\escalator.cpp" />
     <ClCompile Include="..\src\sbs\floor.cpp" />
     <ClCompile Include="..\src\sbs\floorindicator.cpp" />
     <ClCompile Include="..\src\sbs\globals.cpp" />
@@ -307,6 +308,7 @@
     <ClInclude Include="..\src\sbs\door.h" />
     <ClInclude Include="..\src\sbs\elevator.h" />
     <ClInclude Include="..\src\sbs\elevatordoor.h" />
+    <ClInclude Include="..\src\sbs\escalator.h" />
     <ClInclude Include="..\src\sbs\floor.h" />
     <ClInclude Include="..\src\sbs\floorindicator.h" />
     <ClInclude Include="..\src\sbs\globals.h" />
