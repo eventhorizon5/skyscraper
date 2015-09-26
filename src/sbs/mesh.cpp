@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Mesh Class
+	Scalable Building Simulator - Mesh Object
 	The Skyscraper Project - Version 1.10 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
