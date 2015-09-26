@@ -30,13 +30,40 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Escalator::Escalator(Object *parent, const char *name)
+Escalator::Escalator(Object *parent, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//set up SBS object
 	SetValues(this, parent, "Escalator", name, false);
+
+	IsEnabled = true;
 }
 
 Escalator::~Escalator()
 {
 
+}
+
+void Escalator::Enabled(bool value)
+{
+	//enable or disable escalator
+
+	if (IsEnabled == value)
+		return;
+
+	for (int i = 0; i < (int)Steps.size(); i++)
+		Steps[i]->Enable(value);
+
+	IsEnabled = value;
+}
+
+void Escalator::Report(std::string message)
+{
+	//general reporting function
+	sbs->Report("Escalator " + std::string(GetName()) + ": " + message);
+}
+
+bool Escalator::ReportError(std::string message)
+{
+	//general reporting function
+	return sbs->ReportError("Escalator " + std::string(GetName()) + ": " + message);
 }

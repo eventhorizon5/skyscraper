@@ -29,12 +29,16 @@
 class SBSIMPEXP Escalator : public Object
 {
 public:
+	bool IsEnabled;
 
-	Escalator(Object *parent, const char *name);
+	Escalator(Object *parent, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	~Escalator();
+	void Enabled(bool value);
+	void Report(std::string message);
+	bool ReportError(std::string message);
 
 private:
-
+	std::vector<MeshObject*> Steps;
 };
 
 #endif
