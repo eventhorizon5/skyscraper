@@ -1,5 +1,16 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-new Escalator object
+-added Relative Position item to Move Object window, and realigned text boxes
+-elevator motor sounds are now children of shafts, fixing movement issues, where they were moving along with the elevator (due to new positioning system)
+-misc positioning fixes and cleanups
+-elevator music sound is now positioned properly on startup, instead of at start of play
+-elevator object positioning cleanups
+-fixed typo (extra '-1') in IntersectRay function, fixes wall click issues
+-fixes to elevator CameraOffset value, to allow user to move on top of an elevator while it's moving
+-elevators now use move functions to set altitude; user can now jump and move vertically in elevator
+-added camera movement function that uses SetPosition instead of character movement
+-more GIF transparency fixes; added parsing of packed field to properly get transparency flag
 -removed Mac screen adjustment code, due to fixes in Ogre 1.9
 -prevent GTK checks on OSX
 -fixed issues with Mount command
