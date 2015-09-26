@@ -30,17 +30,36 @@
 
 extern SBS *sbs; //external pointer to the SBS engine
 
-Escalator::Escalator(Object *parent, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator::Escalator(Object *parent, const char *name, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//set up SBS object
 	SetValues(this, parent, "Escalator", name, false);
 
 	IsEnabled = true;
+	Run = true;
 	sbs->IncrementEscalatorCount();
+
+	//create step meshes
+	for (int i = 0; i < num_steps; i++)
+	{
+		MeshObject *mesh = new MeshObject(this, name, 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+		Steps.push_back(mesh);
+	}
+
+	//create sound object
+	sound = new Sound(this, name, true);
+	sound->Load(sound_file);
 }
 
 Escalator::~Escalator()
 {
+	if (sound)
+	{
+		sound->parent_deleting = true;
+		delete sound;
+	}
+	sound = 0;
+
 	//remove step meshes
 	for (int i = 0; i < (int)Steps.size(); i++)
 	{
@@ -95,6 +114,16 @@ void Escalator::Loop()
 {
 	//run loop
 
-	if (!IsEnabled)
+	if (!IsEnabled || !Run)
+	{
+		if (sound->IsPlaying() == true)
+			sound->Stop();
 		return;
+	}
+
+	if (sound->IsPlaying() == false)
+	{
+		sound->Loop(true);
+		sound->Play();
+	}
 }

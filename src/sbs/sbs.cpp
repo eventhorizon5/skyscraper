@@ -3154,6 +3154,11 @@ bool SBS::DeleteObject(Object *object)
 		delete wrapper;
 		deleted = true;
 	}
+	if (type == "Escalator")
+	{
+		delete (Escalator*)object->GetRawObject();
+		deleted = true;
+	}
 
 	camera->ResetCollisions();
 

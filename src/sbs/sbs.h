@@ -65,6 +65,7 @@ namespace OgreBulletCollisions {
 #include "profiler.h"
 #include "control.h"
 #include "trigger.h"
+#include "escalator.h"
 #include "action.h"
 #include "timer.h"
 
