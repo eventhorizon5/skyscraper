@@ -1,5 +1,6 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-elevators should accept hall calls if waiting in UpPeak or DownPeak mode
 -new Escalator object
 -added Relative Position item to Move Object window, and realigned text boxes
 -elevator motor sounds are now children of shafts, fixing movement issues, where they were moving along with the elevator (due to new positioning system)
