@@ -328,6 +328,7 @@ public:
 	void ResetNudgeTimer(bool start = true, int number = 0);
 	bool ShaftDoorsExist(int number, int floor);
 	void ResetDoorState(int number = 0);
+	bool PeakWaiting();
 
 private:
 

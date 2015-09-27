@@ -5229,8 +5229,8 @@ int Elevator::AvailableForCall(int floor, int direction)
 							//and if elevator either has queueresets off, or has queueresets on and queue direction is the same
 							if (QueueResets == false || (QueueResets == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
 							{
-								//and if doors are not being held
-								if (GetHoldStatus() == false)
+								//and if doors are not being held or elevator is waiting in a peak mode
+								if (GetHoldStatus() == false || PeakWaiting() == true)
 								{
 									//and if nudge mode is off on all doors
 									if (IsNudgeModeActive() == false)
@@ -5940,4 +5940,17 @@ void Elevator::ResetDoorState(int number)
 		else
 			ReportError("Invalid door " + ToString2(i));
 	}
+}
+
+bool Elevator::PeakWaiting()
+{
+	//returns true if elevator is waiting in UpPeak or DownPeak mode
+
+	if (GetHoldStatus() == false)
+		return false;
+
+	if ((GetFloor() == GetTopFloor() && DownPeak == true && IsMoving == false) ||
+		(GetFloor() == GetBottomFloor() && UpPeak == true && IsMoving == false))
+		return true;
+	return false;
 }
