@@ -61,6 +61,7 @@ textures:
 -square_offices.jpg, marble1-4, rose_marble, and stone.jpg from mayang.com/textures/
 -marble5 and marble6 from www.public-domain-image.com
 -fire1 and fire2 textures by inskeemr
+-textures in 'escalator' folder by escalatorgeek881
 
 sounds:
 -chime1.wav made by me
