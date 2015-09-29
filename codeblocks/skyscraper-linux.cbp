@@ -67,53 +67,103 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="../skyscraper.ico" />
-		<Unit filename="../src/buttonpanel.cpp" />
-		<Unit filename="../src/buttonpanel.h" />
-		<Unit filename="../src/callbutton.cpp" />
-		<Unit filename="../src/callbutton.h" />
-		<Unit filename="../src/camera.cpp" />
-		<Unit filename="../src/camera.h" />
-		<Unit filename="../src/cameracontrol.cpp" />
-		<Unit filename="../src/cameracontrol.h" />
-		<Unit filename="../src/console.cpp" />
-		<Unit filename="../src/console.h" />
-		<Unit filename="../src/debugpanel.cpp" />
-		<Unit filename="../src/debugpanel.h" />
-		<Unit filename="../src/editelevator.cpp" />
-		<Unit filename="../src/editelevator.h" />
-		<Unit filename="../src/elevator.cpp" />
-		<Unit filename="../src/elevator.h" />
-		<Unit filename="../src/fileio.cpp" />
-		<Unit filename="../src/floor.cpp" />
-		<Unit filename="../src/floor.h" />
 		<Unit filename="../src/frontend/actionviewer.cpp" />
 		<Unit filename="../src/frontend/actionviewer.h" />
+		<Unit filename="../src/frontend/cameracontrol.cpp" />
+		<Unit filename="../src/frontend/cameracontrol.h" />
+		<Unit filename="../src/frontend/console.cpp" />
+		<Unit filename="../src/frontend/console.h" />
 		<Unit filename="../src/frontend/createobject.cpp" />
 		<Unit filename="../src/frontend/createobject.h" />
+		<Unit filename="../src/frontend/debugpanel.cpp" />
+		<Unit filename="../src/frontend/debugpanel.h" />
+		<Unit filename="../src/frontend/editelevator.cpp" />
+		<Unit filename="../src/frontend/editelevator.h" />
+		<Unit filename="../src/frontend/fileio.cpp" />
+		<Unit filename="../src/frontend/fileio.h" />
+		<Unit filename="../src/frontend/keydialog.cpp" />
+		<Unit filename="../src/frontend/keydialog.h" />
+		<Unit filename="../src/frontend/meshcontrol.cpp" />
+		<Unit filename="../src/frontend/meshcontrol.h" />
+		<Unit filename="../src/frontend/moveobject.cpp" />
+		<Unit filename="../src/frontend/moveobject.h" />
+		<Unit filename="../src/frontend/objectinfo.cpp" />
+		<Unit filename="../src/frontend/objectinfo.h" />
 		<Unit filename="../src/frontend/parameterviewer.cpp" />
 		<Unit filename="../src/frontend/parameterviewer.h" />
 		<Unit filename="../src/frontend/profilergui.cpp" />
 		<Unit filename="../src/frontend/profilergui.h" />
-		<Unit filename="../src/globals.cpp" />
-		<Unit filename="../src/globals.h" />
-		<Unit filename="../src/keydialog.cpp" />
-		<Unit filename="../src/keydialog.h" />
-		<Unit filename="../src/meshcontrol.cpp" />
-		<Unit filename="../src/meshcontrol.h" />
-		<Unit filename="../src/objectinfo.cpp" />
-		<Unit filename="../src/objectinfo.h" />
-		<Unit filename="../src/sbs.cpp" />
-		<Unit filename="../src/sbs.h" />
-		<Unit filename="../src/shaft.cpp" />
-		<Unit filename="../src/shaft.h" />
-		<Unit filename="../src/skyscraper.cpp" />
-		<Unit filename="../src/skyscraper.h" />
-		<Unit filename="../src/stairs.cpp" />
-		<Unit filename="../src/stairs.h" />
-		<Unit filename="../src/stats.cpp" />
-		<Unit filename="../src/stats.h" />
-		<Unit filename="../src/unix.cpp" />
-		<Unit filename="../src/unix.h" />
+		<Unit filename="../src/frontend/revmain.h" />
+		<Unit filename="../src/frontend/skyscraper.cpp" />
+		<Unit filename="../src/frontend/skyscraper.h" />
+		<Unit filename="../src/frontend/stackwalker.cpp" />
+		<Unit filename="../src/frontend/stackwalker.h" />
+		<Unit filename="../src/frontend/stats.cpp" />
+		<Unit filename="../src/frontend/stats.h" />
+		<Unit filename="../src/frontend/textwindow.cpp" />
+		<Unit filename="../src/frontend/textwindow.h" />
+		<Unit filename="../src/frontend/uexception.h" />
+		<Unit filename="../src/sbs/action.cpp" />
+		<Unit filename="../src/sbs/action.h" />
+		<Unit filename="../src/sbs/buttonpanel.cpp" />
+		<Unit filename="../src/sbs/buttonpanel.h" />
+		<Unit filename="../src/sbs/callbutton.cpp" />
+		<Unit filename="../src/sbs/callbutton.h" />
+		<Unit filename="../src/sbs/camera.cpp" />
+		<Unit filename="../src/sbs/camera.h" />
+		<Unit filename="../src/sbs/cameratexture.cpp" />
+		<Unit filename="../src/sbs/cameratexture.h" />
+		<Unit filename="../src/sbs/control.cpp" />
+		<Unit filename="../src/sbs/control.h" />
+		<Unit filename="../src/sbs/directional.cpp" />
+		<Unit filename="../src/sbs/directional.h" />
+		<Unit filename="../src/sbs/door.cpp" />
+		<Unit filename="../src/sbs/door.h" />
+		<Unit filename="../src/sbs/elevator.cpp" />
+		<Unit filename="../src/sbs/elevator.h" />
+		<Unit filename="../src/sbs/elevatordoor.cpp" />
+		<Unit filename="../src/sbs/elevatordoor.h" />
+		<Unit filename="../src/sbs/escalator.cpp" />
+		<Unit filename="../src/sbs/escalator.h" />
+		<Unit filename="../src/sbs/floor.cpp" />
+		<Unit filename="../src/sbs/floor.h" />
+		<Unit filename="../src/sbs/floorindicator.cpp" />
+		<Unit filename="../src/sbs/floorindicator.h" />
+		<Unit filename="../src/sbs/globals.cpp" />
+		<Unit filename="../src/sbs/globals.h" />
+		<Unit filename="../src/sbs/light.cpp" />
+		<Unit filename="../src/sbs/light.h" />
+		<Unit filename="../src/sbs/mesh.cpp" />
+		<Unit filename="../src/sbs/mesh.h" />
+		<Unit filename="../src/sbs/model.cpp" />
+		<Unit filename="../src/sbs/model.h" />
+		<Unit filename="../src/sbs/object.cpp" />
+		<Unit filename="../src/sbs/object.h" />
+		<Unit filename="../src/sbs/polygon.cpp" />
+		<Unit filename="../src/sbs/polygon.h" />
+		<Unit filename="../src/sbs/profiler.cpp" />
+		<Unit filename="../src/sbs/profiler.h" />
+		<Unit filename="../src/sbs/random.cpp" />
+		<Unit filename="../src/sbs/random.h" />
+		<Unit filename="../src/sbs/revsbs.h" />
+		<Unit filename="../src/sbs/sbs.cpp" />
+		<Unit filename="../src/sbs/sbs.h" />
+		<Unit filename="../src/sbs/shaft.cpp" />
+		<Unit filename="../src/sbs/shaft.h" />
+		<Unit filename="../src/sbs/sound.cpp" />
+		<Unit filename="../src/sbs/sound.h" />
+		<Unit filename="../src/sbs/stairs.cpp" />
+		<Unit filename="../src/sbs/stairs.h" />
+		<Unit filename="../src/sbs/texmap.cpp" />
+		<Unit filename="../src/sbs/texture.cpp" />
+		<Unit filename="../src/sbs/timer.cpp" />
+		<Unit filename="../src/sbs/timer.h" />
+		<Unit filename="../src/sbs/trigger.cpp" />
+		<Unit filename="../src/sbs/trigger.h" />
+		<Unit filename="../src/sbs/unix.cpp" />
+		<Unit filename="../src/sbs/unix.h" />
+		<Unit filename="../src/sbs/wall.cpp" />
+		<Unit filename="../src/sbs/wall.h" />
 		<Extensions>
 			<code_completion />
 			<debugger>
@@ -122,20 +172,20 @@
 			<wxsmith version="1">
 				<gui name="wxWidgets" src="" main="" init_handlers="necessary" language="CPP" />
 				<resources>
-					<wxFrame wxs="wxsmith/DebugPanel.wxs" src="../src/frontend/debugpanel.cpp" hdr="../src/frontend/debugpanel.h" name="DebugPanel" language="CPP" />
-					<wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/frontend/cameracontrol.cpp" hdr="../src/frontend/cameracontrol.h" name="CameraControl" language="CPP" />
-					<wxDialog wxs="wxsmith/editelevator.wxs" src="../src/frontend/editelevator.cpp" hdr="../src/frontend/editelevator.h" name="editelevator" language="CPP" />
-					<wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/frontend/meshcontrol.cpp" hdr="../src/frontend/meshcontrol.h" name="MeshControl" language="CPP" />
-					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/frontend/keydialog.cpp" hdr="../src/frontend/keydialog.h" name="KeyDialog" language="CPP" />
-					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/frontend/stats.cpp" hdr="../src/frontend/stats.h" name="Stats" language="CPP" />
-					<wxFrame wxs="wxsmith/Console.wxs" src="../src/frontend/console.cpp" hdr="../src/frontend/console.h" name="Console" language="CPP" />
-					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/frontend/objectinfo.cpp" hdr="../src/frontend/objectinfo.h" name="ObjectInfo" language="CPP" />
-					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/frontend/textwindow.cpp" hdr="../src/frontend/textwindow.h" name="TextWindow" language="CPP" />
-					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/frontend/profilergui.cpp" hdr="../src/frontend/profilergui.h" name="Profiler" language="CPP" />
-					<wxDialog wxs="wxsmith/CreateObject.wxs" src="../src/frontend/createobject.cpp" hdr="../src/frontend/createobject.h" name="CreateObject" language="CPP" />
-					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/frontend/parameterviewer.cpp" hdr="../src/frontend/parameterviewer.h" name="ParameterViewer" language="CPP" />
-					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/frontend/actionviewer.cpp" hdr="../src/frontend/actionviewer.h" name="ActionViewer" language="CPP" />
-					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/frontend/moveobject.cpp" hdr="../src/frontend/moveobject.h" name="MoveObject" language="CPP" />
+					<wxFrame wxs="wxsmith/DebugPanel.wxs" src="../src/frontend/debugpanel.cpp" hdr="../src/frontend/debugpanel.h" fwddecl="0" i18n="1" name="DebugPanel" language="CPP" />
+					<wxDialog wxs="wxsmith/CameraControl.wxs" src="../src/frontend/cameracontrol.cpp" hdr="../src/frontend/cameracontrol.h" fwddecl="0" i18n="1" name="CameraControl" language="CPP" />
+					<wxDialog wxs="wxsmith/editelevator.wxs" src="../src/frontend/editelevator.cpp" hdr="../src/frontend/editelevator.h" fwddecl="0" i18n="1" name="editelevator" language="CPP" />
+					<wxDialog wxs="wxsmith/MeshControl.wxs" src="../src/frontend/meshcontrol.cpp" hdr="../src/frontend/meshcontrol.h" fwddecl="0" i18n="1" name="MeshControl" language="CPP" />
+					<wxDialog wxs="wxsmith/KeyDialog.wxs" src="../src/frontend/keydialog.cpp" hdr="../src/frontend/keydialog.h" fwddecl="0" i18n="1" name="KeyDialog" language="CPP" />
+					<wxDialog wxs="wxsmith/Stats.wxs" src="../src/frontend/stats.cpp" hdr="../src/frontend/stats.h" fwddecl="0" i18n="1" name="Stats" language="CPP" />
+					<wxFrame wxs="wxsmith/Console.wxs" src="../src/frontend/console.cpp" hdr="../src/frontend/console.h" fwddecl="0" i18n="1" name="Console" language="CPP" />
+					<wxDialog wxs="wxsmith/ObjectInfo.wxs" src="../src/frontend/objectinfo.cpp" hdr="../src/frontend/objectinfo.h" fwddecl="0" i18n="1" name="ObjectInfo" language="CPP" />
+					<wxDialog wxs="wxsmith/TextWindow.wxs" src="../src/frontend/textwindow.cpp" hdr="../src/frontend/textwindow.h" fwddecl="0" i18n="1" name="TextWindow" language="CPP" />
+					<wxDialog wxs="wxsmith/Profiler.wxs" src="../src/frontend/profilergui.cpp" hdr="../src/frontend/profilergui.h" fwddecl="0" i18n="1" name="Profiler" language="CPP" />
+					<wxDialog wxs="wxsmith/CreateObject.wxs" src="../src/frontend/createobject.cpp" hdr="../src/frontend/createobject.h" fwddecl="0" i18n="1" name="CreateObject" language="CPP" />
+					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/frontend/parameterviewer.cpp" hdr="../src/frontend/parameterviewer.h" fwddecl="0" i18n="1" name="ParameterViewer" language="CPP" />
+					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/frontend/actionviewer.cpp" hdr="../src/frontend/actionviewer.h" fwddecl="0" i18n="1" name="ActionViewer" language="CPP" />
+					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/frontend/moveobject.cpp" hdr="../src/frontend/moveobject.h" fwddecl="0" i18n="1" name="MoveObject" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />
