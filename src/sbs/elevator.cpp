@@ -2223,9 +2223,9 @@ void Elevator::DumpQueues()
 	for (int i = 0; i < (int)DownQueue.size(); i++)
 	{
 		std::string type = "Car";
-		if (UpQueue[i].call_type == 1)
+		if (DownQueue[i].call_type == 1)
 			type = "Hall";
-		if (UpQueue[i].call_type == 2)
+		if (DownQueue[i].call_type == 2)
 			type = "System";
 		sbs->Report("Entry: " + ToString2(i) + "\t-\tFloor: " + ToString2(DownQueue[i].floor) + "\t-\tCall type: " + type);
 	}
