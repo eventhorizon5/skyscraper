@@ -341,27 +341,17 @@ bool CallButton::Call(bool direction)
 	sound->Loop(false);
 	sound->Play();
 
-	//set light and direction value
+	//turn on button lights
+	if (direction == true)
+		UpLight(true);
+	else
+		DownLight(true);
 
-	if (sbs->Verbose)
-		Report("Call: finding grouped call buttons");
-
-	//this call will return at least this call button
-	std::vector<int> buttons = floor->GetCallButtons(Elevators[0]);
-
-	for (int i = 0; i < (int)buttons.size(); i++)
-	{
-		if (direction == true)
-		{
-			floor->CallButtonArray[buttons[i]]->UpLight(true);
-			ProcessedUp = false;
-		}
-		else
-		{
-			floor->CallButtonArray[buttons[i]]->DownLight(true);
-			ProcessedDown = false;
-		}
-	}
+	//reset processed state
+	if (direction == true)
+		ProcessedUp = false;
+	else
+		ProcessedDown = false;
 
 	//register callback for this button
 	if (sbs->Verbose)
@@ -383,11 +373,9 @@ void CallButton::UpLight(bool value)
 
 	//set light status
 	if (value == true)
-		SetLights(1, 0);
+		SetLightsGroup(1, 0);
 	else
-		SetLights(2, 0);
-
-	UpStatus = value;
+		SetLightsGroup(2, 0);
 }
 
 void CallButton::DownLight(bool value)
@@ -402,11 +390,9 @@ void CallButton::DownLight(bool value)
 
 	//set light status
 	if (value == true)
-		SetLights(0, 1);
+		SetLightsGroup(0, 1);
 	else
-		SetLights(0, 2);
-
-	DownStatus = value;
+		SetLightsGroup(0, 2);
 }
 
 void CallButton::SetLights(int up, int down)
@@ -420,6 +406,7 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning on up light");
 
 		CallButtonMeshUp->ChangeTexture(UpTextureLit.c_str());
+		UpStatus = true;
 	}
 	if (up == 2 && CallButtonMeshUp)
 	{
@@ -427,6 +414,7 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning off up light");
 
 		CallButtonMeshUp->ChangeTexture(UpTexture.c_str());
+		UpStatus = false;
 	}
 	if (down == 1 && CallButtonMeshDown)
 	{
@@ -434,6 +422,7 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning on down light");
 
 		CallButtonMeshDown->ChangeTexture(DownTextureLit.c_str());
+		DownStatus = true;
 	}
 	if (down == 2 && CallButtonMeshDown)
 	{
@@ -441,6 +430,7 @@ void CallButton::SetLights(int up, int down)
 			Report("SetLights: turning off down light");
 
 		CallButtonMeshDown->ChangeTexture(DownTexture.c_str());
+		DownStatus = false;
 	}
 
 	/*if (up > 0 && !CallButtonMeshUp && sbs->Verbose)
@@ -545,7 +535,7 @@ void CallButton::Loop(int direction)
 
 		Report("All elevators unavailable due to service modes or errors");
 
-		//reset button status
+		//turn off button lights
 		if (direction == 1)
 			UpLight(false);
 		else
@@ -584,17 +574,11 @@ void CallButton::Loop(int direction)
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
-		//this call will return at least this call button
-		std::vector<int> buttons = floor->GetCallButtons(Elevators[0]);
-
-		//turn off all button lights in the group
-		for (int i = 0; i < (int)buttons.size(); i++)
-		{
-			if (direction == 1)
-				floor->CallButtonArray[buttons[i]]->UpLight(false);
-			else
-				floor->CallButtonArray[buttons[i]]->DownLight(false);
-		}
+		//turn off button lights
+		if (direction == 1)
+			UpLight(false);
+		else
+			DownLight(false);
 
 		if (direction == -1)
 		{
@@ -696,4 +680,22 @@ int CallButton::GetFloor()
 	//return floor number this call button is on
 
 	return floor->Number;
+}
+
+void CallButton::SetLightsGroup(int up, int down)
+{
+	//set status of call button lights for whole group
+	//values are 0 for no change, 1 for on, and 2 for off
+
+	if (sbs->Verbose)
+		Report("Call: finding grouped call buttons");
+
+	//this call will return at least this call button
+	std::vector<int> buttons = floor->GetCallButtons(Elevators[0]);
+
+	//set status on each call button
+	for (int i = 0; i < (int)buttons.size(); i++)
+	{
+		floor->CallButtonArray[buttons[i]]->SetLights(up, down);
+	}
 }

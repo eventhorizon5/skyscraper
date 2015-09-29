@@ -360,8 +360,6 @@ void DirectionalIndicator::UpLight(bool value)
 		SetLights(1, 0);
 	else
 		SetLights(2, 0);
-
-	UpStatus = value;
 }
 
 void DirectionalIndicator::DownLight(bool value)
@@ -394,8 +392,6 @@ void DirectionalIndicator::DownLight(bool value)
 		SetLights(0, 1);
 	else
 		SetLights(0, 2);
-
-	DownStatus = value;
 }
 
 void DirectionalIndicator::SetLights(int up, int down)
@@ -426,6 +422,16 @@ void DirectionalIndicator::SetLights(int up, int down)
 				DirectionalMesh->ChangeTexture(UpTextureUnlit.c_str());
 		}
 	}
+
+	//change status
+	if (up == 1)
+		UpStatus = true;
+	if (up == 2)
+		UpStatus = false;
+	if (down == 1)
+		DownStatus = true;
+	if (down == 2)
+		DownStatus = false;
 }
 
 void DirectionalIndicator::Timer::Notify()

@@ -59,6 +59,7 @@ public:
 	int GetKeyID();
 	void FireService(int value);
 	int GetFloor();
+	void SetLightsGroup(int up, int down);
 
 private:
 	MeshObject* CallButtonMeshBack; //call button mesh object
