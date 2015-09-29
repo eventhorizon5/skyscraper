@@ -2145,7 +2145,7 @@ void Elevator::FinishMove()
 
 		//open doors
 		//do not automatically open doors if fire service phase 2 is on
-		if (FireServicePhase2 != 1 || GetFloor() == RecallFloor || GetFloor() == RecallFloorAlternate)
+		if (FireServicePhase2 != 1 || OnRecallFloor() == true)
 		{
 			if (Parking == false)
 				if (AutoDoors == true)
@@ -2616,8 +2616,12 @@ void Elevator::GoToRecallFloor()
 	//reset queues
 	ResetQueue(true, true);
 
-	if (RecallFloor == GetFloor())
+	if (OnRecallFloor() == true)
 	{
+		if (RecallUnavailable == false)
+			Report("On recall floor");
+		else
+			Report("On alternate recall floor");
 		if (AutoDoors == true)
 			OpenDoors();
 		return;
@@ -2634,7 +2638,7 @@ void Elevator::GoToRecallFloor()
 	else
 	{
 		Report("Proceeding to alternate recall floor");
-		if (RecallFloor > GetFloor())
+		if (RecallFloorAlternate > GetFloor())
 			AddRoute(RecallFloorAlternate, 1, 2);
 		else
 			AddRoute(RecallFloorAlternate, -1, 2);
@@ -2936,7 +2940,7 @@ bool Elevator::EnableFireService1(int value)
 				ResetNudgeTimer(false); //switch off nudge timer
 
 				//enable nudge mode on all doors if any are open
-				if (GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
+				if (OnRecallFloor() == false)
 					EnableNudgeMode(true);
 
 				//goto recall floor
@@ -3028,7 +3032,7 @@ bool Elevator::EnableFireService2(int value, bool force)
 			ResetDoors(); //enable door timers
 			ResetNudgeTimer();
 		}
-		else if (FireServicePhase1 == 1 && GetFloor() != RecallFloor && GetFloor() != RecallFloorAlternate)
+		else if (FireServicePhase1 == 1 && OnRecallFloor() == false)
 		{
 			//enable nudge mode on all doors if any are open
 			EnableNudgeMode(true);
@@ -3427,7 +3431,7 @@ bool Elevator::OpenDoors(int number, int whichdoors, int floor, bool manual, boo
 	//3 = only shaft doors
 
 	//require open button to be held for fire service phase 2 if not on recall floor
-	if (FireServicePhase2 == 1 && (GetFloor() != RecallFloor) && (GetFloor() != RecallFloorAlternate))
+	if (FireServicePhase2 == 1 && OnRecallFloor() == false)
 		hold = true;
 
 	if (Interlocks == true)
@@ -5953,4 +5957,24 @@ bool Elevator::PeakWaiting()
 		(GetFloor() == GetBottomFloor() && UpPeak == true && IsMoving == false))
 		return true;
 	return false;
+}
+
+int Elevator::OnRecallFloor()
+{
+	//returns 0 if not on a recall floor,
+	//1 if on the standard recall floor and normal recall is available
+	//2 if on the alternate recall floor and normal recall is unavailable
+
+	if (RecallUnavailable == false)
+	{
+		if (GetFloor() == RecallFloor)
+			return 1;
+	}
+	else
+	{
+		if (GetFloor() == RecallFloorAlternate)
+			return 2;
+	}
+
+	return 0;
 }
