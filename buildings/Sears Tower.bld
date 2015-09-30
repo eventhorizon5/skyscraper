@@ -1469,7 +1469,7 @@ AddShaft 32, 2, -32.154, -13.45, 64, 108
 ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
 
 #Freight Elevator 1 shaft
-AddShaft 33, 2, -13.183, -14.031, -3, 104
+AddShaft 33, 2, -13.183, -14.031, -3, 103
 ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #zone 1 express shafts
@@ -2410,7 +2410,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndFloors>
 
 #Freight Elevator 1 shaft
-<Floors -3 to 102>
+<Floors -3 to 103>
     Set 5 = Wall1
     Set 6 = 4.28 #width
     
