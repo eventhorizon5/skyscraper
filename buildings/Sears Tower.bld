@@ -2419,7 +2419,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     Set 7 = 4.658 #length
     FloorOrientation = top
     DrawWalls = false, true, false, false, false, false
-    if[%floor% = -1] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    if[%floor% = -3] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
     DrawWalls = true, true, false, false, false, false
     WallOrientation = left
     AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
@@ -5338,7 +5338,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
     AddButton 1, switch.wav, Button31, ButtonLit31, 12, 4, 30, 1, 1
     AddButton 1, switch.wav, Button27, ButtonLit27, 12, 3, 26, 1, 1
     AddButton 1, switch.wav, Button3, ButtonLit3, 12, 2, 2, 1, 1
-    AddButton 1, switch.wav, ButtonL, ButtonLitL, 13, 5, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 13, 5, 0, 1, 1
     AddButton 1, switch.wav, ButtonL1, ButtonLitL1, 13, 4, -1, 1, 1
     AddButton 1, switch.wav, ButtonL2, ButtonLitL2, 13, 3, -2, 1, 1
     AddButton 1, switch.wav, ButtonL3, ButtonLitL3, 13, 2, -3, 1, 1
@@ -5536,6 +5536,6 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 #Freight Elevator 1
 <Floors -3 to 101>
     CallButtonElevators = 80
-    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.183 + 4.658 + 0.33 + 0.1, -11.5, 4, right, 0.5, 1, true, 0, 0
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.183 + 4.28 + 0.33 + 0.1, -11.5, 4, right, 0.5, 1, true, 0, 0
 <EndFloors>
 
