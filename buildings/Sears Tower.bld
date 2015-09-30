@@ -76,11 +76,17 @@
     AddText Black, ButtonLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonL1, nimbus_sans.ttf, 47, L1, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonL2, nimbus_sans.ttf, 47, L2, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText Black, ButtonL3, nimbus_sans.ttf, 47, L3, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitR, nimbus_sans.ttf, 47, R, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitL, nimbus_sans.ttf, 47, L, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL1, nimbus_sans.ttf, 47, LL1, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL2, nimbus_sans.ttf, 47, LL2, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText BlackLit, ButtonLitLL3, nimbus_sans.ttf, 47, LL3, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitL1, nimbus_sans.ttf, 47, L1, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitL2, nimbus_sans.ttf, 47, L2, -1, -1, -1, -1, center, center, 255, 255, 255
+    AddText BlackLit, ButtonLitL3, nimbus_sans.ttf, 47, L3, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonEX, nimbus_sans.ttf, 47, EX, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonOpen, nimbus_sans.ttf, 28, Open, -1, -1, -1, -1, center, center, 255, 255, 255
     AddText Black, ButtonClose, nimbus_sans.ttf, 28, Close, -1, -1, -1, -1, center, center, 255, 255, 255
@@ -1382,7 +1388,7 @@ ShaftCut 4, -5 + 0.33, -14.335, 5, 14.335, 0, 5
 AddShaft 5, 2, -31.713, 14.083, -1, 11
 AddShaft 6, 2, -13.183, 14.083, -1, 11
 ShaftCut 5, -4.28, -13.836, 4.28 - 0.33, 13.836, 0, 5
-ShaftCut 6, -4.28 + 0.33, -13.836, 4.28, 13.836, 0, 5
+ShaftCut 6, -4.28 + 0.33, -13.836, 4.28, 13.836 - 0.096, 0, 5
 
 #zone 1 locals 2 (10-17)
 AddShaft 7, 2, 13.181, 14.083, -1, 17
@@ -1461,6 +1467,10 @@ ShaftCut 31, -5.312 + 0.33, -10.475, 5.312, 10.475, 0, 5
 #Upper Service shaft (90-106)
 AddShaft 32, 2, -32.154, -13.45, 64, 108
 ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
+
+#Freight Elevator 1 shaft
+AddShaft 33, 2, -13.183, -14.031, -3, 104
+ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #zone 1 express shafts
 <Floors -1 to 35>
@@ -1633,7 +1643,7 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8%, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.494, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 6
     Set 10 = 6 #shaft number
@@ -1641,10 +1651,11 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
     Set 9 = 14.083 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.096, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%BackE, %5%, 0.33, -%6% + %8% - 0.33, %7% + %9%, %6% + %8% + 0.33, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.096, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #zone 1 local 2 shaft
@@ -1822,7 +1833,7 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
     AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8%, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
-    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 12
     Set 10 = 12 #shaft number
@@ -1831,7 +1842,10 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
     Set 9 = -4.611 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9%, -%6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 
     #shaft 13
     Set 10 = 13 #shaft number
@@ -1840,8 +1854,11 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
     Set 9 = -23.262 #zpos
     WallOrientation = right
     DrawWalls = true, false, false, false, false, false
-    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8%, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
-    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9% + 0.33, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%FrontE, %5%, 0.33, -%6% + %8% - 0.33, -%7% + %9%, %6% + %8% + 0.33, -%7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9% - 0.33, -%6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 #zone 2 local 1 shaft
@@ -2390,6 +2407,40 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
     WallOrientation = left
     DrawWalls = false, true, false, false, false, false
     AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9% - 0.33, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+<EndFloors>
+
+#Freight Elevator 1 shaft
+<Floors -3 to 102>
+    Set 5 = Wall1
+    Set 6 = 4.28 #width
+    
+    #shaft 33
+    Set 10 = 33 #shaft number
+    Set 7 = 4.658 #length
+    FloorOrientation = top
+    DrawWalls = false, true, false, false, false, false
+    if[%floor% = -1] AddShaftFloor %10%, Shaft%10%Base, Brick, 0.5, -%6%, -%7%, %6%, %7%, 0, 0, 0, 0
+    DrawWalls = true, true, false, false, false, false
+    WallOrientation = left
+    AddShaftWall %10%, Shaft%10%Front, Brick, 0.33, -%6%, -%7%, %6%, -%7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Left, Brick, 0.33, -%6%, -%7%, -%6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    WallOrientation = right
+    AddShaftWall %10%, Shaft%10%Back, Brick, 0.33, -%6%, %7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+    AddShaftWall %10%, Shaft%10%Right, Brick, 0.33, %6%, -%7%, %6%, %7%, %fullheight%, %fullheight%, 0, 0, 0, 0
+
+    #external shaft walls
+    Set 3 = %height%
+    Set 4 = 0
+
+    #shaft 33
+    Set 8 = -13.183 #xpos
+    Set 9 = -14.031 #zpos
+    WallOrientation = right
+    DrawWalls = true, false, false, false, false, false
+    AddWall Shaft%10%LeftE, %5%, 0.33, -%6% + %8%, -%7% + %9%, -%6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
+    WallOrientation = left
+    DrawWalls = false, true, false, false, false, false
+    AddWall Shaft%10%RightE, %5%, 0.33, %6% + %8%, -%7% + %9%, %6% + %8%, %7% + %9%, %3%, %3%, %4%, %4%, 0, 0, False
 <EndFloors>
 
 
@@ -5189,6 +5240,119 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
 
 <EndElevators>
 
+<Elevator 80>
+    Speed = 12
+    Acceleration = 0.2
+    Deceleration = 0.2
+    AccelJerk = 0.3
+    DecelJerk = 0.3
+    ServicedFloors = -3 - 1, 2, 26, 30, 32, 62, 63, 65 - 87, 89 - 101
+    AssignedShaft = 33
+    CreateElevator false, -12.684, -14.031, 0
+
+    FloorSkipText = EX
+
+    #floor
+    FloorOrientation = top
+    DrawWalls = true, true, true, true, true, true
+    TextureOverride ElevExt, ElevFloor, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Floor, ElevFloor, 0.2, -2.95, -3.45, 2.95, 3.45, 0, 0, 0, 0
+
+    #ceiling
+    FloorOrientation = bottom
+    TextureOverride ElevCeiling, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddFloor Ceiling, ElevCeiling, 0.2, -2.95, -3.45, 2.95, 3.45, 8, 8, 0, 0
+
+    #back wall (in global perspective)
+    WallOrientation = right
+    DrawWalls = true, true, false, false, false, false
+    TextureOverride OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Back, OfficeElevWall, 0.2, -2.95, 3.45, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #front and left walls
+    WallOrientation = left
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Front, OfficeElevWall, 0.2, -2.95, -3.45, 2.95, -3.45, 8, 8, 0, 0, 0, 0
+    TextureOverride ElevExt, OfficeElevWall, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left, OfficeElevWall, 0.2, -2.95, -3.45, -2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    #panels
+    WallOrientation = right
+    DrawWalls = true, true, false, true, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Left Panel, ElevPanelMain, 0.2, 2.95, -3.45, 2.95, -1.75, 8, 8, 0, 0, 0, 0
+    DrawWalls = true, true, true, false, false, false
+    TextureOverride ElevPanelMain, ElevExt, ElevExt, ElevExt, ElevExt, ElevExt
+    AddWall Right Panel, ElevPanelMain, 0.2, 2.95, 1.75, 2.95, 3.45, 8, 8, 0, 0, 0, 0
+
+    SetAutoSize = true, true
+
+    #doors
+    WallOrientation = left
+    AddDoors 1, ElevDoors, 0.2, 2.95 + 0.001, 0, 3.5, 8, false, 0, 0 #doors
+    AddShaftDoors 1, ElevDoors, 0.2, 2.95 + 0.001 + 0.3, 0, 0, 0 #shaft doors
+
+    #panel
+    CreatePanel ElevPanel, 15, 6, left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.15, 0.15, 0.3, 0.45, 4, 0, 0
+    #AddButton 1, switch.wav, Black, Black, 2, 5, off, 1, 1
+    #AddButton 1, switch.wav, Black, Black, 2, 4, off, 1, 1
+    AddButton 1, switch.wav, Button102, ButtonLit102, 2, 3, 101, 1, 1
+    AddButton 1, switch.wav, Button101, ButtonLit101, 2, 2, 100, 1, 1
+    AddButton 1, switch.wav, Button100, ButtonLit100, 3, 5, 99, 1, 1
+    AddButton 1, switch.wav, Button99, ButtonLit99, 3, 4, 98, 1, 1
+    AddButton 1, switch.wav, Button98, ButtonLit98, 3, 3, 97, 1, 1
+    AddButton 1, switch.wav, Button97, ButtonLit97, 3, 2, 96, 1, 1
+    AddButton 1, switch.wav, Button96, ButtonLit96, 4, 5, 95, 1, 1
+    AddButton 1, switch.wav, Button95, ButtonLit95, 4, 4, 94, 1, 1
+    AddButton 1, switch.wav, Button94, ButtonLit94, 4, 3, 93, 1, 1
+    AddButton 1, switch.wav, Button93, ButtonLit93, 4, 2, 92, 1, 1
+    AddButton 1, switch.wav, Button92, ButtonLit92, 5, 5, 91, 1, 1
+    AddButton 1, switch.wav, Button91, ButtonLit91, 5, 4, 90, 1, 1
+    AddButton 1, switch.wav, Button90, ButtonLit90, 5, 3, 89, 1, 1
+    AddButton 1, switch.wav, Button88, ButtonLit88, 5, 2, 87, 1, 1
+    AddButton 1, switch.wav, Button87, ButtonLit87, 6, 5, 86, 1, 1
+    AddButton 1, switch.wav, Button86, ButtonLit86, 6, 4, 85, 1, 1
+    AddButton 1, switch.wav, Button85, ButtonLit85, 6, 3, 84, 1, 1
+    AddButton 1, switch.wav, Button84, ButtonLit84, 6, 2, 83, 1, 1
+    AddButton 1, switch.wav, Button83, ButtonLit83, 7, 5, 82, 1, 1
+    AddButton 1, switch.wav, Button82, ButtonLit82, 7, 4, 81, 1, 1
+    AddButton 1, switch.wav, Button81, ButtonLit81, 7, 3, 80, 1, 1
+    AddButton 1, switch.wav, Button80, ButtonLit80, 7, 2, 79, 1, 1
+    AddButton 1, switch.wav, Button79, ButtonLit79, 8, 5, 78, 1, 1
+    AddButton 1, switch.wav, Button78, ButtonLit78, 8, 4, 77, 1, 1
+    AddButton 1, switch.wav, Button77, ButtonLit77, 8, 3, 76, 1, 1
+    AddButton 1, switch.wav, Button76, ButtonLit76, 8, 2, 75, 1, 1
+    AddButton 1, switch.wav, Button75, ButtonLit75, 9, 5, 74, 1, 1
+    AddButton 1, switch.wav, Button74, ButtonLit74, 9, 4, 73, 1, 1
+    AddButton 1, switch.wav, Button73, ButtonLit73, 9, 3, 72, 1, 1
+    AddButton 1, switch.wav, Button72, ButtonLit72, 9, 2, 71, 1, 1
+    AddButton 1, switch.wav, Button71, ButtonLit71, 10, 5, 70, 1, 1
+    AddButton 1, switch.wav, Button70, ButtonLit70, 10, 4, 69, 1, 1
+    AddButton 1, switch.wav, Button69, ButtonLit69, 10, 3, 68, 1, 1
+    AddButton 1, switch.wav, Button68, ButtonLit68, 10, 2, 67, 1, 1
+    AddButton 1, switch.wav, Button67, ButtonLit67, 11, 5, 66, 1, 1
+    AddButton 1, switch.wav, Button66, ButtonLit66, 11, 4, 65, 1, 1
+    AddButton 1, switch.wav, Button64, ButtonLit64, 11, 3, 63, 1, 1
+    AddButton 1, switch.wav, Button63, ButtonLit63, 11, 2, 62, 1, 1
+    AddButton 1, switch.wav, Button33, ButtonLit33, 12, 5, 32, 1, 1
+    AddButton 1, switch.wav, Button31, ButtonLit31, 12, 4, 30, 1, 1
+    AddButton 1, switch.wav, Button27, ButtonLit27, 12, 3, 26, 1, 1
+    AddButton 1, switch.wav, Button3, ButtonLit3, 12, 2, 2, 1, 1
+    AddButton 1, switch.wav, ButtonL, ButtonLitL, 13, 5, 1, 1, 1
+    AddButton 1, switch.wav, ButtonL1, ButtonLitL1, 13, 4, -1, 1, 1
+    AddButton 1, switch.wav, ButtonL2, ButtonLitL2, 13, 3, -2, 1, 1
+    AddButton 1, switch.wav, ButtonL3, ButtonLitL3, 13, 2, -3, 1, 1
+    AddButton 1, switch.wav, ButtonOpen, ButtonOpen, 14, 2, open, 1, 1
+    AddButton 1, switch.wav, ButtonClose, ButtonClose, 14, 3, close, 1, 1
+    AddButton 1, switch.wav, ButtonStop, ButtonStop, 14, 4, stop, 1, 1
+    AddButton 1, switch.wav, ButtonAlarm, ButtonAlarm, 14, 5, alarm, 1, 1
+
+    #Floor Indicator
+    AddFloorIndicator left, 2.95 - 0.2 - 0.001, -1.75 - 1 + 0.1, 0.7, 0.5, 6.5
+
+<EndElevator>
+
+
 #Zone 1 Express
 <Floors 0 to 1>
     CallButtonElevators = 1, 2, 3, 4, 5, 6, 7, 8
@@ -5368,3 +5532,10 @@ ShaftCut 32, -4.464, -4.258, 4.464 - 0.33, 4.258, 0, 5
     CallButtonElevators = 78, 79
     CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -42.08 - 5.312 - 0.33 - 0.1, -7.39, 4, left, 0.5, 1, true, 0, 0
 <EndFloor>
+
+#Freight Elevator 1
+<Floors -3 to 101>
+    CallButtonElevators = 80
+    CreateCallButtons ElevExtPanels, ButtonUp, ButtonUpLit, ButtonDown, ButtonDownLit, -13.183 + 4.658 + 0.33 + 0.1, -11.5, 4, right, 0.5, 1, true, 0, 0
+<EndFloors>
+
