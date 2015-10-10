@@ -28,7 +28,7 @@
 
 namespace SBS {
 
-class SBSIMPEXP SPolygon
+class SBSIMPEXP Polygon
 {
 public:
 	MeshObject* mesh;
@@ -45,8 +45,8 @@ public:
 	std::string material; //polygon material
 	std::string name; //polygon names
 
-	SPolygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane);
-	~SPolygon();
+	Polygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane);
+	~Polygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();
 	void GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert = true, bool rescale = true, bool relative = true, bool reverse = false);

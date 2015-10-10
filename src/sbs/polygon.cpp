@@ -31,7 +31,7 @@ extern SBS::SBS *sbs; //external pointer to the SBS engine
 
 namespace SBS {
 
-SPolygon::SPolygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane)
+Polygon::Polygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane)
 {
 	mesh = meshwrapper;
 	this->index_extents = index_extents;
@@ -43,25 +43,25 @@ SPolygon::SPolygon(const char *name, MeshObject *meshwrapper, std::vector<Triang
 	this->name = name;
 }
 
-SPolygon::~SPolygon()
+Polygon::~Polygon()
 {
 }
 
-void SPolygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
+void Polygon::GetTextureMapping(Ogre::Matrix3 &tm, Ogre::Vector3 &tv)
 {
 	//return texture mapping matrix and vector
 	tm = t_matrix;
 	tv = t_vector;
 }
 
-Ogre::SubMesh* SPolygon::GetSubMesh()
+Ogre::SubMesh* Polygon::GetSubMesh()
 {
 	//return the submesh this polygon is in
 	int index = mesh->FindMatchingSubMesh(material);
 	return mesh->Submeshes[index];
 }
 
-void SPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
+void Polygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, bool firstonly, bool convert, bool rescale, bool relative, bool reverse)
 {
 	//gets vertex geometry using mesh's vertex extent arrays; returns vertices in 'vertices'
 
@@ -130,7 +130,7 @@ void SPolygon::GetGeometry(std::vector<std::vector<Ogre::Vector3> > &vertices, b
 	}
 }
 
-bool SPolygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool convert)
+bool Polygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool convert)
 {
 	//check if a point is inside the polygon
 
@@ -146,7 +146,7 @@ bool SPolygon::PointInside(const Ogre::Vector3 &point, bool plane_check, bool co
 	return false;
 }
 
-void SPolygon::Move(const Ogre::Vector3 &position, float speed)
+void Polygon::Move(const Ogre::Vector3 &position, float speed)
 {
 	for (int i = 0; i < (int)index_extents.size(); i++)
 	{
@@ -157,7 +157,7 @@ void SPolygon::Move(const Ogre::Vector3 &position, float speed)
 	}
 }
 
-void SPolygon::Delete()
+void Polygon::Delete()
 {
 	//delete polygon geometry
 
