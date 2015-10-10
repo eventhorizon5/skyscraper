@@ -27,7 +27,7 @@
 #include "profilergui.h"
 #include "profiler.h"
 
-extern SBS *Simcore; //external pointer to the SBS engine
+extern SBS::SBS *Simcore; //external pointer to the SBS engine
 
 //(*InternalHeaders(Profiler)
 #include <wx/intl.h>

@@ -31,7 +31,9 @@
 #include "elevator.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, const char *sound_file, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
@@ -698,4 +700,6 @@ void CallButton::SetLightsGroup(int up, int down)
 	{
 		floor->CallButtonArray[buttons[i]]->SetLights(up, down);
 	}
+}
+
 }

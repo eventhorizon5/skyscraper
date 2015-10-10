@@ -28,7 +28,9 @@
 #include "elevatordoor.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 {
@@ -2265,4 +2267,6 @@ void ElevatorDoor::RemoveShaftDoor(DoorWrapper *door)
 			}
 		}
 	}
+}
+
 }

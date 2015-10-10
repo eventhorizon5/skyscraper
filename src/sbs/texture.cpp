@@ -33,7 +33,9 @@
 #include "sbs.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 bool SBS::LoadTexture(const char *filename, const char *name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
@@ -2151,4 +2153,6 @@ void SBS::IncrementMaterialCount()
 void SBS::DecrementMaterialCount()
 {
 	materialcount--;
+}
+
 }

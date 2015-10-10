@@ -28,6 +28,8 @@
 
 #include "timer.h"
 
+namespace SBS {
+
 class SBSIMPEXP DirectionalIndicator : public Object
 {
 public:
@@ -76,5 +78,7 @@ private:
 	Timer *timer;
 	int timer_interval;
 };
+
+}
 
 #endif

@@ -26,7 +26,9 @@
 #include "sbs.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 #undef EPSILON
 #define EPSILON 0.001f
@@ -645,4 +647,6 @@ bool SBS::SegmentPlane(const Ogre::Vector3 &u, const Ogre::Vector3 &v, Ogre::Pla
 
 	isect = u + dist * -uv;
 	return true;
+}
+
 }

@@ -26,6 +26,8 @@
 #ifndef _SBS_MODEL_H
 #define _SBS_MODEL_H
 
+namespace SBS {
+
 class SBSIMPEXP Model : public Object
 {
 public:
@@ -47,5 +49,7 @@ private:
 	bool is_key;
 	int KeyID;
 };
+
+}
 
 #endif

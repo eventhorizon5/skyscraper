@@ -40,7 +40,9 @@
 
 //this file includes function implementations of the low-level SBS geometry and mesh code
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Ogre::Vector2 SBS::GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z)
 {
@@ -2088,4 +2090,6 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
 	return camera->isVisible(global_box);
+}
+
 }

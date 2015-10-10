@@ -69,6 +69,8 @@ namespace OgreBulletCollisions {
 #include "action.h"
 #include "timer.h"
 
+namespace SBS {
+
 //global functions
 
 struct SBSIMPEXP FloorMap
@@ -591,5 +593,7 @@ private:
 	int getstairs_number;
 	std::string prev_material;
 };
+
+}
 
 #endif

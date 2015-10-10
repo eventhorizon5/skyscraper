@@ -28,6 +28,8 @@
 
 #include "control.h"
 
+namespace SBS {
+
 class SBSIMPEXP ButtonPanel : public Object
 {
 public:
@@ -68,5 +70,7 @@ private:
 	std::vector<Action*> action_list; //list used for action cleanup on delete
 
 };
+
+}
 
 #endif

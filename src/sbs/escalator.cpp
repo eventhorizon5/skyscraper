@@ -28,7 +28,9 @@
 #include "escalator.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Escalator::Escalator(Object *parent, const char *name, bool run, bool run_direction, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
@@ -241,4 +243,6 @@ void Escalator::CreateSteps(const char *texture, const char *direction, float wi
 	}
 	sbs->ResetWalls(true);
 	sbs->ResetTextureMapping();
+}
+
 }

@@ -28,6 +28,8 @@
 
 #include "sound.h"
 
+namespace SBS {
+
 class Floor;
 
 class SBSIMPEXP CallButton : public Object
@@ -77,5 +79,7 @@ private:
 	bool Locked;
 	int KeyID;
 };
+
+}
 
 #endif

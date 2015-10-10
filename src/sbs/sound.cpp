@@ -29,7 +29,9 @@
 #include "camera.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Sound::Sound(Object *parent, const char *name, bool permanent)
 {
@@ -445,4 +447,6 @@ void Sound::ProcessQueue()
 	Loop(snd->loop);
 	Play();
 	snd->played = true;
+}
+
 }

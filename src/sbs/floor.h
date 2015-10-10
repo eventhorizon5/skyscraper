@@ -36,6 +36,8 @@
 #include "cameratexture.h"
 #include "escalator.h"
 
+namespace SBS {
+
 class SBSIMPEXP Floor : public Object
 {
 public:
@@ -152,5 +154,7 @@ private:
 	//Escalators
 	std::vector<Escalator*> EscalatorArray;
 };
+
+}
 
 #endif

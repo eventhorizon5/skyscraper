@@ -27,7 +27,9 @@
 #include "sbs.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 SPolygon::SPolygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane)
 {
@@ -164,4 +166,6 @@ void SPolygon::Delete()
 
 	//delete related mesh vertices
 	mesh->DeleteVertices(triangles);
+}
+
 }

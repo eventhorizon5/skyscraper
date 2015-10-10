@@ -26,6 +26,8 @@
 #ifndef _SBS_ESCALATOR_H
 #define _SBS_ESCALATOR_H
 
+namespace SBS {
+
 class SBSIMPEXP Escalator : public Object
 {
 public:
@@ -46,5 +48,7 @@ private:
 
 	void CreateSteps(const char *texture, const char *direction, float width, float risersize, float treadsize, float tw, float th);
 };
+
+}
 
 #endif

@@ -3,6 +3,8 @@
 #ifndef _SBS_RANDOM_H
 #define _SBS_RANDOM_H
 
+namespace SBS {
+
 class SBSIMPEXP RandomGen
 {
 public:
@@ -21,5 +23,7 @@ private:
 	void InitRANMAR(unsigned int ij, unsigned int kl); //initialize
 	float RANMAR(); //get next number in sequence
 };
+
+}
 
 #endif

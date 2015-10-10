@@ -29,7 +29,9 @@
 #include "control.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Control::Control(Object *parent, const char *name, bool permanent, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, bool center)
 {
@@ -490,4 +492,6 @@ void Control::RemoveAction(Action *action)
 			return;
 		}
 	}
+}
+
 }

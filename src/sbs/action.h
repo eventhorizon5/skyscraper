@@ -26,6 +26,8 @@
 #ifndef _SBS_ACTION_H
 #define _SBS_ACTION_H
 
+namespace SBS {
+
 class SBSIMPEXP Action
 {
 public:
@@ -55,5 +57,7 @@ private:
 	std::string name;
 	std::vector<Object*> parent_objects;
 };
+
+}
 
 #endif

@@ -26,6 +26,8 @@
 #ifndef _SBS_POLYGON_H
 #define _SBS_POLYGON_H
 
+namespace SBS {
+
 class SBSIMPEXP SPolygon
 {
 public:
@@ -55,5 +57,7 @@ public:
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 	void Delete();
 };
+
+}
 
 #endif

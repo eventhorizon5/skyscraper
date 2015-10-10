@@ -56,7 +56,9 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
 
-SBS *Simcore;
+using namespace SBS;
+
+SBS::SBS *Simcore;
 Skyscraper *skyscraper;
 DebugPanel *dpanel;
 MainScreen *window;
@@ -1632,7 +1634,7 @@ bool Skyscraper::Load()
 	IsLoading = true;
 
 	//Create simulator object
-	Simcore = new SBS(mSceneMgr, soundsys);
+	Simcore = new SBS::SBS(mSceneMgr, soundsys);
 
 	//refresh console to fix banner message on Linux
 	if (console)

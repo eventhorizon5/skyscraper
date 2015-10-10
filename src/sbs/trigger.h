@@ -29,6 +29,8 @@
 #include "globals.h"
 #include "action.h"
 
+namespace SBS {
+
 class SBSIMPEXP Trigger : public Object
 {
 public:
@@ -64,5 +66,7 @@ private:
 	Sound *sound; //sound object
 
 };
+
+}
 
 #endif

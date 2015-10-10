@@ -28,6 +28,8 @@
 
 #include "door.h"
 
+namespace SBS {
+
 class SBSIMPEXP Stairs : public Object
 {
 public:
@@ -106,5 +108,7 @@ private:
 	bool lastcheckresult;
 	bool checkfirstrun;
 };
+
+}
 
 #endif

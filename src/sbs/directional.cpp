@@ -29,7 +29,9 @@
 #include "directional.h"
 #include "elevator.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
@@ -444,4 +446,6 @@ void DirectionalIndicator::Timer::Notify()
 	//turn off all lights
 	indicator->UpLight(false);
 	indicator->DownLight(false);
+}
+
 }

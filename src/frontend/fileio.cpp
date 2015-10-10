@@ -40,7 +40,9 @@
 #include "unix.h"
 #include "textwindow.h"
 
-extern SBS *Simcore;
+using namespace SBS;
+
+extern SBS::SBS *Simcore;
 extern Skyscraper *skyscraper;
 
 #define sContinue 0

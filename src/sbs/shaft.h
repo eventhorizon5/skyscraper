@@ -28,6 +28,8 @@
 
 #include "door.h"
 
+namespace SBS {
+
 class SBSIMPEXP Shaft : public Object
 {
 public:
@@ -121,5 +123,7 @@ private:
 	//Triggers
 	//std::vector<std::vector<Trigger*> > TriggerArray;
 };
+
+}
 
 #endif

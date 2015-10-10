@@ -38,7 +38,7 @@
 #include "textwindow.h"
 #include "parameterviewer.h"
 
-extern SBS *Simcore; //external pointer to the SBS engine
+extern SBS::SBS *Simcore; //external pointer to the SBS engine
 extern Skyscraper *skyscraper;
 extern ObjectInfo *objectinfo;
 

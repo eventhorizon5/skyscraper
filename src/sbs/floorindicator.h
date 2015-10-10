@@ -26,6 +26,8 @@
 #ifndef _SBS_FLOORINDICATOR_H
 #define _SBS_FLOORINDICATOR_H
 
+namespace SBS {
+
 class SBSIMPEXP FloorIndicator : public Object
 {
 public:
@@ -43,5 +45,7 @@ public:
 private:
 	MeshObject* FloorIndicatorMesh; //indicator mesh object
 };
+
+}
 
 #endif

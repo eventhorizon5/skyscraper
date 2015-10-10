@@ -28,7 +28,9 @@
 #include "action.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Action::Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
 {
@@ -740,4 +742,6 @@ bool Action::RemoveParent(Object *parent)
 		}
 	}
 	return false;
+}
+
 }

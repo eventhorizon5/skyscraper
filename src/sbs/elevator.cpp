@@ -34,7 +34,9 @@
 
 #include <time.h>
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Elevator::Elevator(int number)
 {
@@ -5977,4 +5979,6 @@ int Elevator::OnRecallFloor()
 	}
 
 	return 0;
+}
+
 }

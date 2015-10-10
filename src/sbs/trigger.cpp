@@ -28,7 +28,9 @@
 #include "trigger.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
 {
@@ -297,4 +299,6 @@ bool Trigger::IsInside()
 	//return inside status
 
 	return is_inside;
+}
+
 }

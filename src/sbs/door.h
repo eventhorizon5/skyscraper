@@ -28,6 +28,8 @@
 
 #include "sound.h"
 
+namespace SBS {
+
 class SBSIMPEXP Door : public Object
 {
 public:
@@ -71,5 +73,7 @@ struct DoorMap
 	int floornumber; //associated floor number
 	Door *object; //door object reference
 };
+
+}
 
 #endif

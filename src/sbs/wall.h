@@ -26,6 +26,8 @@
 #ifndef _SBS_WALL_H
 #define _SBS_WALL_H
 
+namespace SBS {
+
 class SBSIMPEXP WallObject : public Object
 {
 public:
@@ -60,5 +62,7 @@ private:
 	//polygon array
 	std::vector<SPolygon> polygons;
 };
+
+}
 
 #endif

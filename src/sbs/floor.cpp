@@ -29,7 +29,9 @@
 #include "camera.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Floor::Floor(int number)
 {
@@ -1446,4 +1448,6 @@ void Floor::GetShaftList(std::vector<int> &listing)
 				listing.push_back(shaft->ShaftNumber);
 		}
 	}
+}
+
 }

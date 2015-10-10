@@ -135,7 +135,7 @@ class ObjectInfo: public wxDialog
 		void On_bMove_Click(wxCommandEvent& event);
 		void On_bReset_Click(wxCommandEvent& event);
 		//*)
-		void AddChildren(Object *parent, const wxTreeItemId& treeparent);
+		void AddChildren(SBS::Object *parent, const wxTreeItemId& treeparent);
 		bool changed;
 		int lastcount;
 

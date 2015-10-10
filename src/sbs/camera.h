@@ -26,6 +26,8 @@
 #ifndef _SBS_CAMERA_H
 #define _SBS_CAMERA_H
 
+namespace SBS {
+
 class SBSIMPEXP Camera : public Object
 {
 public:
@@ -162,5 +164,7 @@ private:
 	OgreBulletDynamics::CharacterController* mCharacter;
 	OgreBulletCollisions::CollisionShape* mShape;
 };
+
+}
 
 #endif

@@ -27,7 +27,9 @@
 #include "sbs.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Object::Object(bool temporary)
 {
@@ -420,4 +422,6 @@ void Object::NotifyChildren(bool move, bool rotate)
 		if (rotate == true)
 			children[i]->NotifyRotate();
 	}
+}
+
 }

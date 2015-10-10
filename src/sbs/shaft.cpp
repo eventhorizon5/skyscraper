@@ -29,7 +29,9 @@
 #include "camera.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
 {
@@ -1066,4 +1068,6 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 		//show specified shaft range if outside the shaft
 		EnableRange(current_floor, sbs->ShaftOutsideDisplayRange, true, true);
 	}
+}
+
 }

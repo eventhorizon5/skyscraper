@@ -26,6 +26,8 @@
 #ifndef _SBS_SOUND_H
 #define _SBS_SOUND_H
 
+namespace SBS {
+
 class SBSIMPEXP Sound : public Object
 {
 public:
@@ -97,5 +99,7 @@ private:
 	std::vector<SoundEntry> queue;
 
 };
+
+}
 
 #endif

@@ -34,7 +34,7 @@
 #include "floor.h"
 #include "elevator.h"
 
-extern SBS *Simcore; //external pointer to the SBS engine
+extern SBS::SBS *Simcore; //external pointer to the SBS engine
 MeshControl *p; //self pointer
 
 //(*IdInit(MeshControl)

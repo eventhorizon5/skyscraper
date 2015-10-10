@@ -30,7 +30,9 @@
 #include "elevator.h"
 #include "floor.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
@@ -126,4 +128,6 @@ void FloorIndicator::Update()
 	texture.insert(0, Prefix);
 
 	FloorIndicatorMesh->ChangeTexture(texture.c_str());
+}
+
 }

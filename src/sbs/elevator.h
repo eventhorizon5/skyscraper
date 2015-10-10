@@ -36,6 +36,8 @@
 #include "model.h"
 #include "timer.h"
 
+namespace SBS {
+
 class SBSIMPEXP Elevator : public Object
 {
 	friend class ElevatorDoor;
@@ -475,5 +477,7 @@ private:
 	bool lastcheckresult;
 	bool checkfirstrun;
 };
+
+}
 
 #endif

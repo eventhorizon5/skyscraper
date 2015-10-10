@@ -29,7 +29,7 @@
 #include "fileio.h"
 #include "skyscraper.h"
 
-extern SBS *Simcore;
+extern SBS::SBS *Simcore;
 extern Skyscraper *skyscraper;
 extern Console *console;
 

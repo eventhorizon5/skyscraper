@@ -34,7 +34,9 @@
 #include "unix.h"
 #include "cameracontrol.h"
 
-extern SBS *Simcore; //external pointer to the SBS engine
+using namespace SBS;
+
+extern SBS::SBS *Simcore; //external pointer to the SBS engine
 extern Skyscraper *skyscraper;
 
 //(*IdInit(CameraControl)

@@ -28,7 +28,9 @@
 #include "unix.h"
 #include "model.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Model::Model(Object *parent, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
@@ -112,4 +114,6 @@ void Model::SetKey(int keyid)
 {
 	is_key = true;
 	KeyID = keyid;
+}
+
 }

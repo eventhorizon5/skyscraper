@@ -26,6 +26,8 @@
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
 
+namespace SBS {
+
 class WallObject;
 
 struct TriangleType
@@ -143,5 +145,7 @@ private:
 		std::vector<Ogre::Vector3> vertices; //vertices have x, y and z components
 	};
 };
+
+}
 
 #endif

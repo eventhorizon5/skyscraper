@@ -30,6 +30,8 @@
 #include "sound.h"
 #include "trigger.h"
 
+namespace SBS {
+
 class Elevator;
 
 class SBSIMPEXP ElevatorDoor : public Object
@@ -231,5 +233,7 @@ private:
 	Action *sensor_action;
 	Action *reset_action;
 };
+
+}
 
 #endif

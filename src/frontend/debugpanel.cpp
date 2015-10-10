@@ -44,7 +44,9 @@
 #include "objectinfo.h"
 #include "skyscraper.h"
 
-extern SBS *Simcore; //external pointer to the SBS engine
+using namespace SBS;
+
+extern SBS::SBS *Simcore; //external pointer to the SBS engine
 extern Skyscraper *skyscraper;
 extern DebugPanel *dpanel;
 DebugPanel *dp; //self pointer

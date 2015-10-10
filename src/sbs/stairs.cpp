@@ -29,7 +29,9 @@
 #include "camera.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
 {
@@ -962,4 +964,6 @@ void Stairs::Check(Ogre::Vector3 position, int current_floor, int previous_floor
 		//show specified stairwell range if outside the stairwell
 		EnableRange(current_floor, sbs->StairsOutsideDisplayRange, true);
 	}
+}
+
 }

@@ -26,6 +26,8 @@
 #ifndef _SBS_CameraTexture_H
 #define _SBS_CameraTexture_H
 
+namespace SBS {
+
 class SBSIMPEXP CameraTexture : public Object
 {
 public:
@@ -43,5 +45,7 @@ private:
 	Ogre::MaterialPtr material;
 	Ogre::RenderTexture *renderTexture;
 };
+
+}
 
 #endif

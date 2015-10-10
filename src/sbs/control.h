@@ -29,6 +29,8 @@
 #include "globals.h"
 #include "action.h"
 
+namespace SBS {
+
 class SBSIMPEXP Control : public Object
 {
 public:
@@ -76,5 +78,7 @@ private:
 	bool light_status; //light on/off value, used for floor buttons
 
 };
+
+}
 
 #endif

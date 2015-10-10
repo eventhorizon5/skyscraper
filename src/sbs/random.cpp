@@ -34,6 +34,8 @@
 #include <stdio.h>
 #include <time.h>
 
+namespace SBS {
+
 RandomGen::RandomGen()
 {
 	Initialize();
@@ -169,4 +171,6 @@ bool RandomGen::SelfTest ()
 		return false;
 	}
 	return true;
+}
+
 }

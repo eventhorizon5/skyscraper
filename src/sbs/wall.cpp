@@ -28,7 +28,9 @@
 #include "wall.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Object(temporary)
 {
@@ -305,4 +307,6 @@ void WallObject::Move(const Ogre::Vector3 &position, float speed)
 MeshObject* WallObject::GetMesh()
 {
 	return meshwrapper;
+}
+
 }

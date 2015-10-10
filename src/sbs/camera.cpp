@@ -34,7 +34,9 @@
 #include "camera.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
@@ -1177,4 +1179,6 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 		return false;
 
 	return mesh->IsVisible(MainCamera);
+}
+
 }

@@ -26,6 +26,8 @@
 #ifndef _SBS_TIMER_H
 #define _SBS_TIMER_H
 
+namespace SBS {
+
 class SBSIMPEXP TimerObject : public Object
 {
 public:
@@ -48,5 +50,7 @@ private:
 	unsigned long StartTime;
 	bool Running;
 };
+
+}
 
 #endif

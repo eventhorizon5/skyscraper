@@ -26,6 +26,8 @@
 #ifndef _SBS_OBJECT_H
 #define _SBS_OBJECT_H
 
+namespace SBS {
+
 class SBSIMPEXP Object
 {
 public:
@@ -90,5 +92,7 @@ private:
 	Ogre::SceneNode *SceneNode; //node in scene graph
 	Ogre::Vector3 Rotation; //rotation vector
 };
+
+}
 
 #endif

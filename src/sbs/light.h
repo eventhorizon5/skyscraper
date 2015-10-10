@@ -26,6 +26,8 @@
 #ifndef _SBS_LIGHT_H
 #define _SBS_LIGHT_H
 
+namespace SBS {
+
 class SBSIMPEXP Light : public Object
 {
 public:
@@ -42,5 +44,7 @@ private:
 
 	Ogre::Light* light;
 };
+
+}
 
 #endif

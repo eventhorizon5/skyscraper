@@ -28,7 +28,9 @@
 #include "unix.h"
 #include "timer.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 TimerObject::TimerObject(Object *parent, const char *name, bool permanent)
 {
@@ -113,4 +115,6 @@ void TimerObject::Report(std::string message)
 {
 	std::string name = GetName();
 	sbs->Report("Timer '" + name + "', parent '" + GetParent()->GetName() + "': " + message);
+}
+
 }

@@ -31,7 +31,9 @@
 #include "action.h"
 #include "unix.h"
 
-extern SBS *sbs; //external pointer to the SBS engine
+extern SBS::SBS *sbs; //external pointer to the SBS engine
+
+namespace SBS {
 
 ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
@@ -340,4 +342,6 @@ void ButtonPanel::RemoveControl(Control *control)
 			return;
 		}
 	}
+}
+
 }

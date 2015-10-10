@@ -36,7 +36,9 @@
 #include "revsbs.h"
 #include "model.h"
 
-SBS *sbs; //self reference
+SBS::SBS *sbs; //self reference
+
+namespace SBS {
 
 SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 {
@@ -4148,4 +4150,6 @@ void SBS::IncrementEscalatorCount()
 void SBS::DecrementEscalatorCount()
 {
 	EscalatorCount--;
+}
+
 }

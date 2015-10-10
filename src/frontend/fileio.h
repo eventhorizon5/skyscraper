@@ -71,7 +71,7 @@ class ScriptProcessor
 	int RangeL;
 	int RangeH;
 	long RangeStart;
-	WallObject *wall;
+	SBS::WallObject *wall;
 	std::string buffer;
 	int startpos;
 	bool getfloordata;
@@ -100,7 +100,7 @@ class ScriptProcessor
 	int ScriptWarning(std::string message);
 	std::string Calc(const char *expression);
 	bool IfProc(const char *expression);
-	void StoreCommand(Object *object);
+	void StoreCommand(SBS::Object *object);
 	int ProcCommands();
 	int ProcGlobals();
 	int ProcFloors();
