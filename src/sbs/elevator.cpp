@@ -5961,21 +5961,21 @@ bool Elevator::PeakWaiting()
 	return false;
 }
 
-int Elevator::OnRecallFloor()
+bool Elevator::OnRecallFloor()
 {
-	//returns 0 if not on a recall floor,
-	//1 if on the standard recall floor and normal recall is available
-	//2 if on the alternate recall floor and normal recall is unavailable
+	//returns false if not on a recall floor,
+	//returns true if on the standard recall floor and normal recall is available
+	//returns true if on the alternate recall floor and normal recall is unavailable
 
 	if (RecallUnavailable == false)
 	{
 		if (GetFloor() == RecallFloor)
-			return 1;
+			return true;
 	}
 	else
 	{
 		if (GetFloor() == RecallFloorAlternate)
-			return 2;
+			return true;
 	}
 
 	return 0;

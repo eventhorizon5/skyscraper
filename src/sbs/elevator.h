@@ -331,7 +331,7 @@ public:
 	bool ShaftDoorsExist(int number, int floor);
 	void ResetDoorState(int number = 0);
 	bool PeakWaiting();
-	int OnRecallFloor();
+	bool OnRecallFloor();
 
 private:
 
