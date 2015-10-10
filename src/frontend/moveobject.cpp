@@ -35,7 +35,6 @@
 #include "moveobject.h"
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
-extern Skyscraper *skyscraper;
 
 //(*IdInit(MoveObject)
 const long MoveObject::ID_STATICTEXT1 = wxNewId();

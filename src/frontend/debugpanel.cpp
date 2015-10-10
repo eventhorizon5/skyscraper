@@ -55,7 +55,6 @@ editelevator *ee;
 CameraControl *cc;
 KeyDialog *kd;
 Stats *stats;
-extern Console *console;
 ObjectInfo *objectinfo;
 Profiler *profiler;
 ActionViewer *actionviewer;

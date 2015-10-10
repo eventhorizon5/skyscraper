@@ -75,6 +75,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	sensor_status = false;
 	EnableSensor(sbs->GetConfigBool("Skyscraper.SBS.Elevator.Door.Sensor", true));
 	SensorSound = sbs->GetConfigString("Skyscraper.SBS.Elevator.Door.SensorSound", "");
+	DoorDirection = false;
 
 	//create main door object
 	Doors = new DoorWrapper(this, false);

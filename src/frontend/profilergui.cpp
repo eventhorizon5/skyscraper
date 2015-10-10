@@ -67,6 +67,7 @@ Profiler::Profiler(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSiz
 	BoxSizer1->SetSizeHints(this);
 	Center();
 	//*)
+	advanced = false;
 }
 
 Profiler::~Profiler()

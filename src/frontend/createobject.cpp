@@ -33,7 +33,6 @@
 #include "parameterviewer.h"
 #include "createobject.h"
 
-extern SBS::SBS *Simcore; //external pointer to the SBS engine
 ParameterViewer *viewer;
 
 //(*IdInit(CreateObject)

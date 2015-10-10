@@ -31,7 +31,6 @@
 
 extern SBS::SBS *Simcore;
 extern Skyscraper *skyscraper;
-extern Console *console;
 
 //(*InternalHeaders(Console)
 #include <wx/string.h>

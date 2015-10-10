@@ -40,7 +40,6 @@
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
 extern Skyscraper *skyscraper;
-extern ObjectInfo *objectinfo;
 
 //(*IdInit(ParameterViewer)
 const long ParameterViewer::ID_tDesc = wxNewId();
