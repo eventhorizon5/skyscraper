@@ -11,6 +11,8 @@
 **
 ***************************************************************************************************/
 
+namespace SBS {
+
 ///A node in the Profile Hierarchy Tree
 class SBSIMPEXP SBSProfileNode {
 
@@ -131,6 +133,8 @@ private:
 #else
 #define	SBS_PROFILE(name)
 #endif
+
+}
 
 #endif
 

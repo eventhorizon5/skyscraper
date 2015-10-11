@@ -381,7 +381,7 @@ void MainScreen::OnLeaveWindow(wxMouseEvent& event)
 
 void Skyscraper::Render()
 {
-	SBS_PROFILE_MAIN("Render");
+	SBS::SBS_PROFILE_MAIN("Render");
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
@@ -632,7 +632,7 @@ bool Skyscraper::Initialize()
 
 void Skyscraper::GetInput()
 {
-	SBS_PROFILE_MAIN("GetInput");
+	SBS::SBS_PROFILE_MAIN("GetInput");
 
 	//quit if main window isn't selected
 	if (window->Active == false)
@@ -984,8 +984,8 @@ void Skyscraper::Loop()
 {
 	//Main simulator loop
 
-	SBSProfileManager::Reset();
-	SBSProfileManager::Increment_Frame_Counter();
+	SBS::SBSProfileManager::Reset();
+	SBS::SBSProfileManager::Increment_Frame_Counter();
 
 	static unsigned long finish_time;
 
@@ -1114,7 +1114,7 @@ void Skyscraper::Loop()
 #endif
 	}
 
-	//SBSProfileManager::dumpAll();
+	//SBS::SBSProfileManager::dumpAll();
 }
 
 void Skyscraper::DrawBackground()

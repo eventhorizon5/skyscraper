@@ -7,6 +7,8 @@
 extern SBS::SBS *sbs; //external pointer to the SBS engine
 static oClock gProfileClock;
 
+namespace SBS {
+
 /*
 
 ***************************************************************************************************
@@ -384,4 +386,6 @@ SBSProfileSample::~SBSProfileSample( void )
 	if (is_advanced == true && sbs->enable_advanced_profiling == false)
 		return;
 	SBSProfileManager::Stop_Profile();
+}
+
 }
