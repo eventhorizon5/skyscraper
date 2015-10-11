@@ -1,6 +1,8 @@
 #ifndef _SBS_PROFILER_H
 #define _SBS_PROFILER_H
 
+namespace SBS {
+
 #define ENABLE_PROFILING
 
 /***************************************************************************************************
@@ -10,8 +12,6 @@
 ** by Greg Hjelstrom & Byon Garrabrant
 **
 ***************************************************************************************************/
-
-namespace SBS {
 
 ///A node in the Profile Hierarchy Tree
 class SBSIMPEXP ProfileNode {
