@@ -36,9 +36,9 @@
 #include "revsbs.h"
 #include "model.h"
 
-SBS::SBS *sbs; //self reference
-
 namespace SBS {
+
+SBS *sbs; //singleton pointer
 
 SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 {

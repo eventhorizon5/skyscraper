@@ -28,8 +28,6 @@
 #include "unix.h"
 #include "timer.h"
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
-
 namespace SBS {
 
 TimerObject::TimerObject(Object *parent, const char *name, bool permanent)

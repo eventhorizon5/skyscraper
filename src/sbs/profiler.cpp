@@ -4,7 +4,6 @@
 #include "profiler.h"
 #include "unix.h"
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
 static oClock gProfileClock;
 
 namespace SBS {

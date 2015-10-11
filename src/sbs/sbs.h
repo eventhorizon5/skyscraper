@@ -594,6 +594,7 @@ private:
 	std::string prev_material;
 };
 
+	extern SBS *sbs; //singleton pointer
 }
 
 #endif

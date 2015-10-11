@@ -34,8 +34,6 @@
 
 #include <time.h>
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
-
 namespace SBS {
 
 Elevator::Elevator(int number)

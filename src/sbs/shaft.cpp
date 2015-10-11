@@ -29,8 +29,6 @@
 #include "camera.h"
 #include "unix.h"
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
-
 namespace SBS {
 
 Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor)

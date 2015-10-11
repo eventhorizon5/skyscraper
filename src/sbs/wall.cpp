@@ -28,8 +28,6 @@
 #include "wall.h"
 #include "unix.h"
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
-
 namespace SBS {
 
 WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Object(temporary)

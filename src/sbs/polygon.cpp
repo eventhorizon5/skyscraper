@@ -27,8 +27,6 @@
 #include "sbs.h"
 #include "unix.h"
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
-
 namespace SBS {
 
 Polygon::Polygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane)

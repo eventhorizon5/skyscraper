@@ -34,8 +34,6 @@
 #include "camera.h"
 #include "unix.h"
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
-
 namespace SBS {
 
 #undef SMALL_EPSILON

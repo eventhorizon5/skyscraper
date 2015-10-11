@@ -33,8 +33,6 @@
 #include "unix.h"
 #include "cameratexture.h"
 
-extern SBS::SBS *sbs; //external pointer to the SBS engine
-
 namespace SBS {
 
 CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
