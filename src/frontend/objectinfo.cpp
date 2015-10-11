@@ -38,9 +38,6 @@
 #include "textwindow.h"
 #include "moveobject.h"
 
-extern SBS::SBS *Simcore; //external pointer to the SBS engine
-extern Skyscraper::Skyscraper *skyscraper;
-
 namespace Skyscraper {
 
 CreateObject *createobject;

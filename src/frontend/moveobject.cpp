@@ -34,8 +34,6 @@
 #include "unix.h"
 #include "moveobject.h"
 
-extern SBS::SBS *Simcore; //external pointer to the SBS engine
-
 namespace Skyscraper {
 
 //(*IdInit(MoveObject)

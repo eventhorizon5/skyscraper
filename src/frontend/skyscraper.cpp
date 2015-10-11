@@ -30,7 +30,6 @@
 #include "globals.h"
 #include "sbs.h"
 #include "skyscraper.h"
-#include "debugpanel.h"
 #include "console.h"
 #include "unix.h"
 #include "revmain.h"
@@ -58,13 +57,13 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
 
-}
-
 SBS::SBS *Simcore;
-Skyscraper::Skyscraper *skyscraper;
-Skyscraper::DebugPanel *dpanel;
-Skyscraper::MainScreen *window;
-Skyscraper::Console *console;
+Skyscraper *skyscraper;
+DebugPanel *dpanel;
+MainScreen *window;
+Console *console;
+
+}
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "uexception.h"

@@ -34,6 +34,7 @@
 #include <fmod.hpp>
 #include "Caelum.h"
 #include "fileio.h"
+#include "debugpanel.h"
 
 #if OGRE_VERSION >= 0x00010900
 #include <OgreOverlaySystem.h>
@@ -193,6 +194,10 @@ public:
 
 	DECLARE_EVENT_TABLE()
 };
+
+extern SBS::SBS *Simcore; //external pointer to the SBS engine
+extern Skyscraper *skyscraper;
+extern DebugPanel *dpanel;
 
 DECLARE_APP(Skyscraper)
 

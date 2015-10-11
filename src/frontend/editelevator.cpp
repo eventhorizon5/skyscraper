@@ -32,8 +32,7 @@
 #include "sbs.h"
 #include "elevator.h"
 #include "unix.h"
-
-extern SBS::SBS *Simcore; //external pointer to the SBS engine
+#include "skyscraper.h"
 
 namespace Skyscraper {
 

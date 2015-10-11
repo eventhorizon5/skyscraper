@@ -29,9 +29,6 @@
 #include "fileio.h"
 #include "skyscraper.h"
 
-extern SBS::SBS *Simcore;
-extern Skyscraper::Skyscraper *skyscraper;
-
 //(*InternalHeaders(Console)
 #include <wx/string.h>
 #include <wx/intl.h>

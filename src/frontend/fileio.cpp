@@ -40,9 +40,6 @@
 #include "unix.h"
 #include "textwindow.h"
 
-extern SBS::SBS *Simcore;
-extern Skyscraper::Skyscraper *skyscraper;
-
 #define sContinue 0
 #define sNextLine 1
 #define sError 2
