@@ -25,6 +25,8 @@
 #ifndef FILEIO_H
 #define FILEIO_H
 
+namespace Skyscraper {
+
 class ScriptProcessor
 {
 	public:
@@ -148,5 +150,7 @@ class ScriptProcessor
 	float cache_base;
 	std::string cache_base_s;
 };
+
+}
 
 #endif

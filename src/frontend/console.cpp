@@ -30,12 +30,14 @@
 #include "skyscraper.h"
 
 extern SBS::SBS *Simcore;
-extern Skyscraper *skyscraper;
+extern Skyscraper::Skyscraper *skyscraper;
 
 //(*InternalHeaders(Console)
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
+
+namespace Skyscraper {
 
 //(*IdInit(Console)
 const long Console::ID_tConsole = wxNewId();
@@ -133,4 +135,6 @@ void Console::On_Close(wxCloseEvent& event)
 void Console::Write(const char *message)
 {
 	tConsole->AppendText(wxString::FromAscii(message) + wxT("\n"));
+}
+
 }

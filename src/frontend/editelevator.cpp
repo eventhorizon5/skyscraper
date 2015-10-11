@@ -35,6 +35,8 @@
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
 
+namespace Skyscraper {
+
 SBS::Elevator *elevator;
 SBS::ElevatorDoor *door;
 
@@ -1723,4 +1725,6 @@ void editelevator::On_bDoorSensor_Click(wxCommandEvent& event)
 		bool status = elevator->GetSensorStatus(door);
 		elevator->EnableSensor(!status, door);
 	}
+}
+
 }

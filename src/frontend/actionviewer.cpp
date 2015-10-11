@@ -36,6 +36,8 @@
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
 
+namespace Skyscraper {
+
 //(*IdInit(ActionViewer)
 const long ActionViewer::ID_ActionList = wxNewId();
 const long ActionViewer::ID_bDelete = wxNewId();
@@ -189,4 +191,6 @@ void ActionViewer::On_bDelete_Click(wxCommandEvent& event)
 	SBS::Action *action = Simcore->GetAction(selection);
 	if (action)
 		Simcore->RemoveAction(action);
+}
+
 }

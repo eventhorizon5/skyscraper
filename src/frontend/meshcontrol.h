@@ -38,6 +38,8 @@
 #include <wx/button.h>
 //*)
 
+namespace Skyscraper {
+
 class MeshControl: public wxDialog
 {
 	friend class DebugPanel::Timer;
@@ -112,5 +114,7 @@ class MeshControl: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

@@ -35,6 +35,8 @@
 #include <wx/treectrl.h>
 //*)
 
+namespace Skyscraper {
+
 class ObjectInfo: public wxDialog
 {
 	public:
@@ -151,5 +153,7 @@ public:
 private:
     wxString m_desc;
 };
+
+}
 
 #endif

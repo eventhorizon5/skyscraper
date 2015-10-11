@@ -33,6 +33,8 @@
 #include "parameterviewer.h"
 #include "createobject.h"
 
+namespace Skyscraper {
+
 ParameterViewer *viewer;
 
 //(*IdInit(CreateObject)
@@ -511,4 +513,6 @@ void CreateObject::On_bAddShaftModel_Click(wxCommandEvent& event)
 
 void CreateObject::On_bAddShaftStdDoor_Click(wxCommandEvent& event)
 {
+}
+
 }

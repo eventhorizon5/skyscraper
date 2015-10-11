@@ -41,6 +41,8 @@
 
 int main (int argc, char* argv[]);
 
+namespace Skyscraper {
+
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
 public:
@@ -193,5 +195,7 @@ public:
 };
 
 DECLARE_APP(Skyscraper)
+
+}
 
 #endif

@@ -43,6 +43,8 @@
    #include "GL/glx.h"
 #endif
 
+namespace Skyscraper {
+
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
 
 BEGIN_EVENT_TABLE(MainScreen, wxFrame)
@@ -56,11 +58,13 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
 
+}
+
 SBS::SBS *Simcore;
-Skyscraper *skyscraper;
-DebugPanel *dpanel;
-MainScreen *window;
-Console *console;
+Skyscraper::Skyscraper *skyscraper;
+Skyscraper::DebugPanel *dpanel;
+Skyscraper::MainScreen *window;
+Skyscraper::Console *console;
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "uexception.h"
@@ -82,6 +86,8 @@ int main (int argc, char* argv[])
 
 	return 0;
 }
+
+namespace Skyscraper {
 
 bool Skyscraper::OnInit(void)
 {
@@ -2047,4 +2053,6 @@ void Skyscraper::SetFullScreen(bool enabled)
 
 	FullScreen = enabled;
 	window->ShowFullScreen(FullScreen);
+}
+
 }

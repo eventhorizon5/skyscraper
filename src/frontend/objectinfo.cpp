@@ -39,7 +39,10 @@
 #include "moveobject.h"
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
-extern Skyscraper *skyscraper;
+extern Skyscraper::Skyscraper *skyscraper;
+
+namespace Skyscraper {
+
 CreateObject *createobject;
 ParameterViewer *modifyobject;
 MoveObject *moveobject;
@@ -456,4 +459,6 @@ void ObjectInfo::On_bReset_Click(wxCommandEvent& event)
 	SBS::Object *obj = Simcore->GetObject(number);
 	if (obj)
 		obj->ResetState();
+}
+
 }

@@ -36,6 +36,8 @@
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
 
+namespace Skyscraper {
+
 //(*IdInit(MoveObject)
 const long MoveObject::ID_STATICTEXT1 = wxNewId();
 const long MoveObject::ID_lblPosition = wxNewId();
@@ -398,4 +400,6 @@ void MoveObject::On_chkHold_Click(wxCommandEvent& event)
 {
 	if (chkHold->GetValue() == false)
 		hold_vector = Ogre::Vector3(0, 0, 0);
+}
+
 }

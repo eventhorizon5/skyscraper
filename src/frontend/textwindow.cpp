@@ -29,6 +29,8 @@
 #include <wx/intl.h>
 //*)
 
+namespace Skyscraper {
+
 //(*IdInit(TextWindow)
 const long TextWindow::ID_tMain = wxNewId();
 const long TextWindow::ID_bOK = wxNewId();
@@ -75,4 +77,6 @@ TextWindow::~TextWindow()
 void TextWindow::On_bOK_Click(wxCommandEvent& event)
 {
 	this->Close();
+}
+
 }

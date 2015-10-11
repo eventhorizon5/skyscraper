@@ -36,6 +36,8 @@
 #include <wx/textctrl.h>
 //*)
 
+namespace Skyscraper {
+
 class CameraControl: public wxDialog
 {
 	public:
@@ -287,5 +289,7 @@ class CameraControl: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

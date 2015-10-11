@@ -34,6 +34,8 @@ extern SBS::SBS *Simcore; //external pointer to the SBS engine
 #include <wx/string.h>
 //*)
 
+namespace Skyscraper {
+
 //(*IdInit(Profiler)
 const long Profiler::ID_chkAdvanced = wxNewId();
 const long Profiler::ID_txtMain = wxNewId();
@@ -91,4 +93,6 @@ void Profiler::Loop()
 	txtMain->SetLabel(wxString::FromAscii(output.c_str()));
 
 	SBSProfileManager::Release_Iterator(profileIterator);
+}
+
 }

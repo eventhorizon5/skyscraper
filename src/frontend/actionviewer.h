@@ -34,6 +34,8 @@
 #include <wx/listbox.h>
 //*)
 
+namespace Skyscraper {
+
 class ActionViewer: public wxDialog
 {
 	public:
@@ -90,5 +92,7 @@ class ActionViewer: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

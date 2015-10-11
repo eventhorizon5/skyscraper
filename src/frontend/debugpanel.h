@@ -43,6 +43,8 @@
 #include <wx/timer.h>
 #include <wx/variant.h>
 
+namespace Skyscraper {
+
 class DebugPanel: public wxFrame
 {
 	friend class Timer;
@@ -191,5 +193,7 @@ class DebugPanel: public wxFrame
 };
 
 wxString TruncateNumber(float value, int decimals);
+
+}
 
 #endif

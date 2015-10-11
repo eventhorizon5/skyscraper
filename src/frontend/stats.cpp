@@ -33,7 +33,9 @@
 #include "skyscraper.h"
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
-extern Skyscraper *skyscraper;
+extern Skyscraper::Skyscraper *skyscraper;
+
+namespace Skyscraper {
 
 //(*IdInit(Stats)
 const long Stats::ID_STATICTEXT18 = wxNewId();
@@ -276,4 +278,6 @@ void Stats::Loop()
 	tElevators->SetValue(wxVariant(Simcore->Elevators()).GetString());
 	tShafts->SetValue(wxVariant(Simcore->Shafts()).GetString());
 	tStairs->SetValue(wxVariant(Simcore->StairsNum()).GetString());
+}
+
 }

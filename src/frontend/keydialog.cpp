@@ -29,6 +29,8 @@
 #include <wx/intl.h>
 //*)
 
+namespace Skyscraper {
+
 //(*IdInit(KeyDialog)
 const long KeyDialog::ID_TEXTCTRL1 = wxNewId();
 //*)
@@ -61,3 +63,4 @@ KeyDialog::~KeyDialog()
 	//*)
 }
 
+}

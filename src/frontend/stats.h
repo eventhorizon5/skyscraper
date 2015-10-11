@@ -33,6 +33,8 @@
 #include <wx/textctrl.h>
 //*)
 
+namespace Skyscraper {
+
 class Stats: public wxDialog
 {
 	public:
@@ -160,5 +162,7 @@ class Stats: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

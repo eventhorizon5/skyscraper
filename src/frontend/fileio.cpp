@@ -41,7 +41,7 @@
 #include "textwindow.h"
 
 extern SBS::SBS *Simcore;
-extern Skyscraper *skyscraper;
+extern Skyscraper::Skyscraper *skyscraper;
 
 #define sContinue 0
 #define sNextLine 1
@@ -50,6 +50,8 @@ extern Skyscraper *skyscraper;
 #define sBreak 4
 #define sRecalc 5
 #define sSkipReset 6
+
+namespace Skyscraper {
 
 ScriptProcessor::ScriptProcessor()
 {
@@ -8793,4 +8795,6 @@ bool ScriptProcessor::IsFunctionDefined(const char *name)
 			return true;
 	}
 	return false;
+}
+
 }

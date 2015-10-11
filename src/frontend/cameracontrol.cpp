@@ -35,7 +35,9 @@
 #include "cameracontrol.h"
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
-extern Skyscraper *skyscraper;
+extern Skyscraper::Skyscraper *skyscraper;
+
+namespace Skyscraper {
 
 //(*IdInit(CameraControl)
 const long CameraControl::ID_STATICTEXT3 = wxNewId();
@@ -691,4 +693,6 @@ void CameraControl::On_bReportCollisions_Click(wxCommandEvent& event)
 void CameraControl::On_bBinocularsFOV_Click(wxCommandEvent& event)
 {
 	Simcore->camera->BinocularsFOV = (atof(txtBinocularsFOV->GetValue().ToAscii()));
+}
+
 }

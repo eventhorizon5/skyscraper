@@ -31,6 +31,8 @@
 #include <wx/button.h>
 //*)
 
+namespace Skyscraper {
+
 class CreateObject: public wxDialog
 {
 	public:
@@ -147,5 +149,7 @@ class CreateObject: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

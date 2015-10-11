@@ -45,8 +45,10 @@
 #include "skyscraper.h"
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
-extern Skyscraper *skyscraper;
-extern DebugPanel *dpanel;
+extern Skyscraper::Skyscraper *skyscraper;
+extern Skyscraper::DebugPanel *dpanel;
+
+namespace Skyscraper {
 
 DebugPanel *dp; //self pointer
 MeshControl *mc;
@@ -562,4 +564,6 @@ void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
 
 	if (floor)
 		floor->ShowInfo();
+}
+
 }

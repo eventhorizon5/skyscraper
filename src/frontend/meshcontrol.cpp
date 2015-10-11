@@ -35,6 +35,9 @@
 #include "elevator.h"
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
+
+namespace Skyscraper {
+
 MeshControl *p; //self pointer
 
 //(*IdInit(MeshControl)
@@ -294,4 +297,6 @@ void MeshControl::On_chkAllInterfloors_Click(wxCommandEvent& event)
 		if (Simcore->GetFloor(i))
 			Simcore->GetFloor(i)->EnableInterfloor(chkAllInterfloors->GetValue());
 	}
+}
+
 }

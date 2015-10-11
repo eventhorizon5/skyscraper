@@ -32,6 +32,8 @@
 #include <wx/dialog.h>
 //*)
 
+namespace Skyscraper {
+
 class Profiler: public wxDialog
 {
 	public:
@@ -60,5 +62,7 @@ class Profiler: public wxDialog
 		bool advanced;
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

@@ -39,7 +39,9 @@
 #include "parameterviewer.h"
 
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
-extern Skyscraper *skyscraper;
+extern Skyscraper::Skyscraper *skyscraper;
+
+namespace Skyscraper {
 
 //(*IdInit(ParameterViewer)
 const long ParameterViewer::ID_tDesc = wxNewId();
@@ -2009,4 +2011,6 @@ void ParameterViewer::On_bTextures_Click(wxCommandEvent& event)
 	wxString message = wxString::FromAscii(Simcore->ListTextures().c_str());
 	twindow->tMain->WriteText(message);
 	twindow->tMain->SetInsertionPoint(0);
+}
+
 }

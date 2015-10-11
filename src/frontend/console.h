@@ -35,6 +35,8 @@
 #include <wx/textctrl.h>
 //*)
 
+namespace Skyscraper {
+
 class Console: public wxFrame
 {
 	public:
@@ -71,5 +73,7 @@ class Console: public wxFrame
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

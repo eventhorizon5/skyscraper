@@ -32,6 +32,8 @@
 #include <wx/textctrl.h>
 //*)
 
+namespace Skyscraper {
+
 class TextWindow: public wxDialog
 {
 	public:
@@ -59,5 +61,7 @@ class TextWindow: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

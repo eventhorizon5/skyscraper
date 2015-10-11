@@ -37,6 +37,8 @@
 #include <wx/textctrl.h>
 //*)
 
+namespace Skyscraper {
+
 class editelevator: public wxDialog
 {
 	friend class Timer;
@@ -657,5 +659,7 @@ class editelevator: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif

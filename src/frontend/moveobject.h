@@ -36,6 +36,8 @@
 #include <wx/textctrl.h>
 //*)
 
+namespace Skyscraper {
+
 class MoveObject: public wxDialog
 {
 	public:
@@ -172,5 +174,7 @@ class MoveObject: public wxDialog
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif
