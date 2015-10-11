@@ -14,17 +14,17 @@
 namespace SBS {
 
 ///A node in the Profile Hierarchy Tree
-class SBSIMPEXP SBSProfileNode {
+class SBSIMPEXP ProfileNode {
 
 public:
-	SBSProfileNode( const char * name, SBSProfileNode * parent );
-	~SBSProfileNode( void );
+	ProfileNode( const char * name, ProfileNode * parent );
+	~ProfileNode( void );
 
-	SBSProfileNode * Get_Sub_Node( const char * name );
+	ProfileNode * Get_Sub_Node( const char * name );
 
-	SBSProfileNode * Get_Parent( void )		{ return Parent; }
-	SBSProfileNode * Get_Sibling( void )		{ return Sibling; }
-	SBSProfileNode * Get_Child( void )			{ return Child; }
+	ProfileNode * Get_Parent( void )		{ return Parent; }
+	ProfileNode * Get_Sibling( void )		{ return Sibling; }
+	ProfileNode * Get_Child( void )			{ return Child; }
 
 	void				CleanupMemory();
 	void				Reset( void );
@@ -43,13 +43,13 @@ protected:
 	unsigned long int			StartTime;
 	int				RecursionCounter;
 
-	SBSProfileNode *	Parent;
-	SBSProfileNode *	Child;
-	SBSProfileNode *	Sibling;
+	ProfileNode *	Parent;
+	ProfileNode *	Child;
+	ProfileNode *	Sibling;
 };
 
 ///An iterator to navigate through the tree
-class SBSIMPEXP SBSProfileIterator
+class SBSIMPEXP ProfileIterator
 {
 public:
 	// Access all the children of the current parent
@@ -74,16 +74,16 @@ public:
 
 protected:
 
-	SBSProfileNode *	CurrentParent;
-	SBSProfileNode *	CurrentChild;
+	ProfileNode *	CurrentParent;
+	ProfileNode *	CurrentChild;
 
-	SBSProfileIterator( SBSProfileNode * start );
-	friend	class		SBSProfileManager;
+	ProfileIterator( ProfileNode * start );
+	friend	class		ProfileManager;
 };
 
 
 ///The Manager for the Profile system
-class SBSIMPEXP SBSProfileManager {
+class SBSIMPEXP ProfileManager {
 public:
 	static	void						Start_Profile( const char * name );
 	static	void						Stop_Profile( void );
@@ -98,20 +98,20 @@ public:
 	static	int						Get_Frame_Count_Since_Reset( void )		{ return FrameCounter; }
 	static	float						Get_Time_Since_Reset( void );
 
-	static	SBSProfileIterator *	Get_Iterator( void )
+	static	ProfileIterator *	Get_Iterator( void )
 	{
 
-		return new SBSProfileIterator( &Root );
+		return new ProfileIterator( &Root );
 	}
-	static	void						Release_Iterator( SBSProfileIterator * iterator ) { delete ( iterator); }
+	static	void						Release_Iterator( ProfileIterator * iterator ) { delete ( iterator); }
 
-	static void	dumpRecursive(std::string &output, SBSProfileIterator* profileIterator, int spacing);
+	static void	dumpRecursive(std::string &output, ProfileIterator* profileIterator, int spacing);
 
 	static void	dumpAll();
 
 private:
-	static	SBSProfileNode			Root;
-	static	SBSProfileNode *			CurrentNode;
+	static	ProfileNode			Root;
+	static	ProfileNode *			CurrentNode;
 	static	int						FrameCounter;
 	static	unsigned long int		ResetTime;
 };
@@ -119,17 +119,17 @@ private:
 
 ///ProfileSampleClass is a simple way to profile a function's scope
 ///Use the SBS_PROFILE macro at the start of scope to time
-class SBSIMPEXP SBSProfileSample {
+class SBSIMPEXP ProfileSample {
 public:
-	SBSProfileSample( const char * name, bool advanced = true );
-	~SBSProfileSample( void );
+	ProfileSample( const char * name, bool advanced = true );
+	~ProfileSample( void );
 private:
 	bool is_advanced;
 };
 
 #ifdef ENABLE_PROFILING
-#define	SBS_PROFILE(name)			SBSProfileSample __profile(name, true)
-#define	SBS_PROFILE_MAIN(name)			SBSProfileSample __profile(name, false)
+#define	SBS_PROFILE(name)			ProfileSample __profile(name, true)
+#define	SBS_PROFILE_MAIN(name)			ProfileSample __profile(name, false)
 #else
 #define	SBS_PROFILE(name)
 #endif

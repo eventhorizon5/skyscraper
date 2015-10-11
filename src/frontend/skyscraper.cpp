@@ -984,8 +984,8 @@ void Skyscraper::Loop()
 {
 	//Main simulator loop
 
-	SBS::SBSProfileManager::Reset();
-	SBS::SBSProfileManager::Increment_Frame_Counter();
+	SBS::ProfileManager::Reset();
+	SBS::ProfileManager::Increment_Frame_Counter();
 
 	static unsigned long finish_time;
 
@@ -1114,7 +1114,7 @@ void Skyscraper::Loop()
 #endif
 	}
 
-	//SBS::SBSProfileManager::dumpAll();
+	//SBS::ProfileManager::dumpAll();
 }
 
 void Skyscraper::DrawBackground()

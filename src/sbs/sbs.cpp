@@ -568,11 +568,11 @@ void SBS::MainLoop()
 	if (camera->EnableBullet == true)
 	{
 		if (enable_advanced_profiling == false)
-			SBSProfileManager::Start_Profile("Collisions/Physics");
+			ProfileManager::Start_Profile("Collisions/Physics");
 		else
-			SBSProfileManager::Start_Profile("Bullet");
+			ProfileManager::Start_Profile("Bullet");
 		steps = mWorld->stepSimulation(elapsed, 1);
-		SBSProfileManager::Stop_Profile();
+		ProfileManager::Stop_Profile();
 	}
 
 	//only move character if Bullet processed a step (within it's 60fps timestep)
@@ -589,11 +589,11 @@ void SBS::MainLoop()
 
 	//update sound
 	if (enable_advanced_profiling == false)
-		SBSProfileManager::Start_Profile("Sound");
+		ProfileManager::Start_Profile("Sound");
 	else
-		SBSProfileManager::Start_Profile("FMOD");
+		ProfileManager::Start_Profile("FMOD");
 	soundsys->update();
-	SBSProfileManager::Stop_Profile();
+	ProfileManager::Stop_Profile();
 
 	elapsed = remaining_delta + ((float)timing / 1000.0f);
 
@@ -601,7 +601,7 @@ void SBS::MainLoop()
 	if (elapsed > .5f)
 		elapsed = .5f;
 
-	SBSProfileManager::Start_Profile("Simulator Loop");
+	ProfileManager::Start_Profile("Simulator Loop");
 	while (elapsed >= delta)
 	{
 		//Determine floor that the camera is on
@@ -653,7 +653,7 @@ void SBS::MainLoop()
 	//process timers
 	ProcessTimers();
 
-	SBSProfileManager::Stop_Profile();
+	ProfileManager::Stop_Profile();
 }
 
 void SBS::CalculateFrameRate()

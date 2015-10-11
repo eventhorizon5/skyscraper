@@ -81,18 +81,18 @@ Profiler::~Profiler()
 void Profiler::Loop()
 {
 	if (advanced != chkAdvanced->GetValue())
-		SBS::SBSProfileManager::CleanupMemory();
+		SBS::ProfileManager::CleanupMemory();
 
 	advanced = chkAdvanced->GetValue();
 	Simcore->enable_advanced_profiling = advanced;
-	SBS::SBSProfileIterator* profileIterator = 0;
-	profileIterator = SBS::SBSProfileManager::Get_Iterator();
+	SBS::ProfileIterator* profileIterator = 0;
+	profileIterator = SBS::ProfileManager::Get_Iterator();
 
 	std::string output;
-	SBS::SBSProfileManager::dumpRecursive(output, profileIterator,0);
+	SBS::ProfileManager::dumpRecursive(output, profileIterator,0);
 	txtMain->SetLabel(wxString::FromAscii(output.c_str()));
 
-	SBS::SBSProfileManager::Release_Iterator(profileIterator);
+	SBS::ProfileManager::Release_Iterator(profileIterator);
 }
 
 }

@@ -35,7 +35,7 @@ inline float Profile_Get_Tick_Rate(void)
 
 /***************************************************************************************************
 **
-** SBSProfileNode
+** ProfileNode
 **
 ***************************************************************************************************/
 
@@ -48,7 +48,7 @@ inline float Profile_Get_Tick_Rate(void)
  * The name is assumed to be a static pointer, only the pointer is stored and compared for     *
  * efficiency reasons.                                                                         *
  *=============================================================================================*/
-SBSProfileNode::SBSProfileNode( const char * name, SBSProfileNode * parent ) :
+ProfileNode::ProfileNode( const char * name, ProfileNode * parent ) :
 	Name( name ),
 	TotalCalls( 0 ),
 	TotalTime( 0 ),
@@ -62,7 +62,7 @@ SBSProfileNode::SBSProfileNode( const char * name, SBSProfileNode * parent ) :
 }
 
 
-void	SBSProfileNode::CleanupMemory()
+void	ProfileNode::CleanupMemory()
 {
 	delete ( Child);
 	Child = NULL;
@@ -70,7 +70,7 @@ void	SBSProfileNode::CleanupMemory()
 	Sibling = NULL;
 }
 
-SBSProfileNode::~SBSProfileNode( void )
+ProfileNode::~ProfileNode( void )
 {
 	delete ( Child);
 	delete ( Sibling);
@@ -85,10 +85,10 @@ SBSProfileNode::~SBSProfileNode( void )
  * All profile names are assumed to be static strings so this function uses pointer compares   *
  * to find the named node.                                                                     *
  *=============================================================================================*/
-SBSProfileNode * SBSProfileNode::Get_Sub_Node( const char * name )
+ProfileNode * ProfileNode::Get_Sub_Node( const char * name )
 {
 	// Try to find this sub node
-	SBSProfileNode * child = Child;
+	ProfileNode * child = Child;
 	while ( child ) {
 		if ( child->Name == name ) {
 			return child;
@@ -98,14 +98,14 @@ SBSProfileNode * SBSProfileNode::Get_Sub_Node( const char * name )
 
 	// We didn't find it, so add it
 
-	SBSProfileNode * node = new SBSProfileNode( name, this );
+	ProfileNode * node = new ProfileNode( name, this );
 	node->Sibling = Child;
 	Child = node;
 	return node;
 }
 
 
-void	SBSProfileNode::Reset( void )
+void	ProfileNode::Reset( void )
 {
 	TotalCalls = 0;
 	TotalTime = 0.0f;
@@ -120,7 +120,7 @@ void	SBSProfileNode::Reset( void )
 }
 
 
-void	SBSProfileNode::Call( void )
+void	ProfileNode::Call( void )
 {
 	TotalCalls++;
 	if (RecursionCounter++ == 0) {
@@ -129,7 +129,7 @@ void	SBSProfileNode::Call( void )
 }
 
 
-bool	SBSProfileNode::Return( void )
+bool	ProfileNode::Return( void )
 {
 	if ( --RecursionCounter == 0 && TotalCalls != 0 ) {
 		unsigned long int time;
@@ -143,35 +143,35 @@ bool	SBSProfileNode::Return( void )
 
 /***************************************************************************************************
 **
-** SBSProfileIterator
+** ProfileIterator
 **
 ***************************************************************************************************/
-SBSProfileIterator::SBSProfileIterator( SBSProfileNode * start )
+ProfileIterator::ProfileIterator( ProfileNode * start )
 {
 	CurrentParent = start;
 	CurrentChild = CurrentParent->Get_Child();
 }
 
 
-void	SBSProfileIterator::First(void)
+void	ProfileIterator::First(void)
 {
 	CurrentChild = CurrentParent->Get_Child();
 }
 
 
-void	SBSProfileIterator::Next(void)
+void	ProfileIterator::Next(void)
 {
 	CurrentChild = CurrentChild->Get_Sibling();
 }
 
 
-bool	SBSProfileIterator::Is_Done(void)
+bool	ProfileIterator::Is_Done(void)
 {
 	return CurrentChild == NULL;
 }
 
 
-void	SBSProfileIterator::Enter_Child( int index )
+void	ProfileIterator::Enter_Child( int index )
 {
 	CurrentChild = CurrentParent->Get_Child();
 	while ( (CurrentChild != NULL) && (index != 0) ) {
@@ -186,7 +186,7 @@ void	SBSProfileIterator::Enter_Child( int index )
 }
 
 
-void	SBSProfileIterator::Enter_Parent( void )
+void	ProfileIterator::Enter_Parent( void )
 {
 	if ( CurrentParent->Get_Parent() != NULL ) {
 		CurrentParent = CurrentParent->Get_Parent();
@@ -197,18 +197,18 @@ void	SBSProfileIterator::Enter_Parent( void )
 
 /***************************************************************************************************
 **
-** SBSProfileManager
+** ProfileManager
 **
 ***************************************************************************************************/
 
-SBSProfileNode	SBSProfileManager::Root( "Root", NULL );
-SBSProfileNode *	SBSProfileManager::CurrentNode = &SBSProfileManager::Root;
-int				SBSProfileManager::FrameCounter = 0;
-unsigned long int			SBSProfileManager::ResetTime = 0;
+ProfileNode	ProfileManager::Root( "Root", NULL );
+ProfileNode *	ProfileManager::CurrentNode = &ProfileManager::Root;
+int				ProfileManager::FrameCounter = 0;
+unsigned long int			ProfileManager::ResetTime = 0;
 
 
 /***********************************************************************************************
- * SBSProfileManager::Start_Profile -- Begin a named profile                                    *
+ * ProfileManager::Start_Profile -- Begin a named profile                                    *
  *                                                                                             *
  * Steps one level deeper into the tree, if a child already exists with the specified name     *
  * then it accumulates the profiling; otherwise a new child node is added to the profile tree. *
@@ -220,7 +220,7 @@ unsigned long int			SBSProfileManager::ResetTime = 0;
  * The string used is assumed to be a static string; pointer compares are used throughout      *
  * the profiling code for efficiency.                                                          *
  *=============================================================================================*/
-void	SBSProfileManager::Start_Profile( const char * name )
+void	ProfileManager::Start_Profile( const char * name )
 {
 	if (!sbs)
 		return;
@@ -236,9 +236,9 @@ void	SBSProfileManager::Start_Profile( const char * name )
 
 
 /***********************************************************************************************
- * SBSProfileManager::Stop_Profile -- Stop timing and record the results.                       *
+ * ProfileManager::Stop_Profile -- Stop timing and record the results.                       *
  *=============================================================================================*/
-void	SBSProfileManager::Stop_Profile( void )
+void	ProfileManager::Stop_Profile( void )
 {
 	if (!sbs)
 		return;
@@ -254,11 +254,11 @@ void	SBSProfileManager::Stop_Profile( void )
 
 
 /***********************************************************************************************
- * SBSProfileManager::Reset -- Reset the contents of the profiling system                       *
+ * ProfileManager::Reset -- Reset the contents of the profiling system                       *
  *                                                                                             *
  *    This resets everything except for the tree structure.  All of the timing data is reset.  *
  *=============================================================================================*/
-void	SBSProfileManager::Reset( void )
+void	ProfileManager::Reset( void )
 {
 	if (!sbs)
 		return;
@@ -274,9 +274,9 @@ void	SBSProfileManager::Reset( void )
 
 
 /***********************************************************************************************
- * SBSProfileManager::Increment_Frame_Counter -- Increment the frame counter                    *
+ * ProfileManager::Increment_Frame_Counter -- Increment the frame counter                    *
  *=============================================================================================*/
-void SBSProfileManager::Increment_Frame_Counter( void )
+void ProfileManager::Increment_Frame_Counter( void )
 {
 	if (!sbs)
 		return;
@@ -288,9 +288,9 @@ void SBSProfileManager::Increment_Frame_Counter( void )
 
 
 /***********************************************************************************************
- * SBSProfileManager::Get_Time_Since_Reset -- returns the elapsed time since last reset         *
+ * ProfileManager::Get_Time_Since_Reset -- returns the elapsed time since last reset         *
  *=============================================================================================*/
-float SBSProfileManager::Get_Time_Since_Reset( void )
+float ProfileManager::Get_Time_Since_Reset( void )
 {
 	unsigned long int time;
 	Profile_Get_Ticks(&time);
@@ -300,7 +300,7 @@ float SBSProfileManager::Get_Time_Since_Reset( void )
 
 #include <stdio.h>
 
-void SBSProfileManager::dumpRecursive(std::string &output, SBSProfileIterator* profileIterator, int spacing)
+void ProfileManager::dumpRecursive(std::string &output, ProfileIterator* profileIterator, int spacing)
 {
 	if (!sbs)
 		return;
@@ -311,8 +311,8 @@ void SBSProfileManager::dumpRecursive(std::string &output, SBSProfileIterator* p
 	if (profileIterator->Is_Done())
 		return;
 
-	float accumulated_time=0, parent_time = profileIterator->Is_Root() ? SBSProfileManager::Get_Time_Since_Reset() : profileIterator->Get_Current_Parent_Total_Time();
-	int frames_since_reset = SBSProfileManager::Get_Frame_Count_Since_Reset();
+	float accumulated_time=0, parent_time = profileIterator->Is_Root() ? ProfileManager::Get_Time_Since_Reset() : profileIterator->Get_Current_Parent_Total_Time();
+	int frames_since_reset = ProfileManager::Get_Frame_Count_Since_Reset();
 	for (int i = 0; i < spacing; i++)
 		output.append(".");
 	output.append("----------------------------------\n");
@@ -357,35 +357,35 @@ void SBSProfileManager::dumpRecursive(std::string &output, SBSProfileIterator* p
 	}
 }
 
-void SBSProfileManager::dumpAll()
+void ProfileManager::dumpAll()
 {
-	SBSProfileIterator* profileIterator = 0;
-	profileIterator = SBSProfileManager::Get_Iterator();
+	ProfileIterator* profileIterator = 0;
+	profileIterator = ProfileManager::Get_Iterator();
 
 	std::string output;
 	dumpRecursive(output, profileIterator, 0);
 	printf("%s\n", output.c_str());
 
-	SBSProfileManager::Release_Iterator(profileIterator);
+	ProfileManager::Release_Iterator(profileIterator);
 }
 
-SBSProfileSample::SBSProfileSample( const char * name, bool advanced )
+ProfileSample::ProfileSample( const char * name, bool advanced )
 {
 	is_advanced = advanced;
 	if (!sbs)
 		return;
 	if (is_advanced == true && sbs->enable_advanced_profiling == false)
 		return;
-	SBSProfileManager::Start_Profile( name );
+	ProfileManager::Start_Profile( name );
 }
 
-SBSProfileSample::~SBSProfileSample( void )
+ProfileSample::~ProfileSample( void )
 {
 	if (!sbs)
 		return;
 	if (is_advanced == true && sbs->enable_advanced_profiling == false)
 		return;
-	SBSProfileManager::Stop_Profile();
+	ProfileManager::Stop_Profile();
 }
 
 }
