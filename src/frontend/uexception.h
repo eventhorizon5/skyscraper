@@ -13,6 +13,8 @@
 #include "stackwalker.h"
 #include "textwindow.h"
 
+namespace Skyscraper {
+
 TextWindow *twindow = 0;
 
 class StackWalkerToConsole : public StackWalker
@@ -160,4 +162,6 @@ static void InitUnhandledExceptionFilter()
 		PreventSetUnhandledExceptionFilter();
 		s_bUnhandledExeptionFilterSet = TRUE;
 	}
+}
+
 }

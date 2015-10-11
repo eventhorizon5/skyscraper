@@ -77,7 +77,7 @@ int main (int argc, char* argv[])
 {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	//initialize top-level exception handler
-	InitUnhandledExceptionFilter();
+	Skyscraper::InitUnhandledExceptionFilter();
 #endif
 
 	//main wxWidgets entry point
