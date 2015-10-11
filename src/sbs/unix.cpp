@@ -32,8 +32,6 @@
 #include <algorithm>
 #include <stdio.h>
 
-using namespace std;
-
 const char* itoa(int value, char* str, int radix)
 {
 	//send data to sprintf, discarding the radix value
@@ -60,8 +58,8 @@ const char* strrev(char* szT)
 // strrev STL way .
 const char* StrRev(char* szT)
 {
-	string s(szT);
-	reverse(s.begin(), s.end());
+	std::string s(szT);
+	std::reverse(s.begin(), s.end());
 	strncpy(szT, s.c_str(), s.size());
 	szT[s.size() + 1] = '\0';
 	return szT;
