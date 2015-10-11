@@ -34,8 +34,6 @@
 #include "sbs.h"
 #include "action.h"
 
-using namespace SBS;
-
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
 
 //(*IdInit(ActionViewer)
@@ -159,7 +157,7 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	Action *action = Simcore->GetAction(selection);
+	SBS::Action *action = Simcore->GetAction(selection);
 	if (action)
 	{
 		tName->SetValue(wxString::FromAscii(action->GetName()));
@@ -188,7 +186,7 @@ void ActionViewer::On_bDelete_Click(wxCommandEvent& event)
 	if (selection < 0)
 		return;
 
-	Action *action = Simcore->GetAction(selection);
+	SBS::Action *action = Simcore->GetAction(selection);
 	if (action)
 		Simcore->RemoveAction(action);
 }

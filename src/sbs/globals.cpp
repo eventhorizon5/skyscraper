@@ -35,8 +35,6 @@
 #include "unix.h"
 #include "globals.h"
 
-namespace SBS {
-
 const float pi = 3.14159265f;
 
 bool IsEven(int Number)
@@ -315,6 +313,4 @@ bool IsBoolean(std::string string)
 {
 	SetCase(string, false);
 	return (string == "true" || string == "false");
-}
-
 }

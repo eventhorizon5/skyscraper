@@ -40,8 +40,6 @@
 #include "unix.h"
 #include "textwindow.h"
 
-using namespace SBS;
-
 extern SBS::SBS *Simcore;
 extern Skyscraper *skyscraper;
 
@@ -1368,7 +1366,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		SBS::MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1538,7 +1536,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		std::vector<WallObject*> *wallarray;
+		std::vector<SBS::WallObject*> *wallarray;
 
 		if (buffer == "external")
 			wallarray = &Simcore->External->Walls;
@@ -1625,7 +1623,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		SBS::MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1697,7 +1695,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		SBS::MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1767,7 +1765,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		SBS::MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1828,7 +1826,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		SBS::MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1935,7 +1933,7 @@ int ScriptProcessor::ProcCommands()
 		if (endfloor > Simcore->Floors - 1)
 			return ScriptError("Invalid ending floor");
 
-		Object *object;
+		SBS::Object *object;
 		if (compat == true)
 			object = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
 		else
@@ -2181,7 +2179,7 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Object *object = Simcore->CreateStairwell(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
+		SBS::Object *object = Simcore->CreateStairwell(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
 		if (!object)
 			return ScriptError();
 
@@ -2465,7 +2463,7 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 
-		MeshObject *mesh = 0;
+		SBS::MeshObject *mesh = 0;
 		if (buffer == "floor" && Simcore->GetFloor(Current))
 			mesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "elevator" && Simcore->GetElevator(Current))
@@ -2539,7 +2537,7 @@ int ScriptProcessor::ProcCommands()
 
 		float offset = 0;
 
-		MeshObject *mesh = 0;
+		SBS::MeshObject *mesh = 0;
 		if (buffer == "floor" && Simcore->GetFloor(Current))
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
@@ -2757,7 +2755,7 @@ int ScriptProcessor::ProcCommands()
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		Object* obj;
+		SBS::Object* obj;
 		if (compat == true)
 			obj = Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
@@ -2765,7 +2763,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (setkey == true && obj)
 		{
-			Model *mod = (Model*)obj->GetRawObject();
+			SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
@@ -2781,7 +2779,7 @@ int ScriptProcessor::ProcCommands()
 		if (params < 3)
 			return ScriptError("Incorrect number of parameters");
 
-		std::vector<Object*> objects;
+		std::vector<SBS::Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
@@ -2819,7 +2817,7 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		std::vector<Object*> objects;
+		std::vector<SBS::Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
@@ -2843,7 +2841,7 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		std::vector<Object*> objects;
+		std::vector<SBS::Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
@@ -2893,11 +2891,11 @@ int ScriptProcessor::ProcCommands()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		Object *obj = Simcore->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Object *obj = Simcore->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
 		if (obj)
 		{
-			Control* control = (Control*)obj->GetRawObject();
+			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -3062,7 +3060,7 @@ int ScriptProcessor::ProcCommands()
 			if (!IsNumeric(buffer.c_str(), num))
 				return ScriptError("Invalid value: " + buffer);
 
-			Floor *floor = Simcore->GetFloor(num);
+			SBS::Floor *floor = Simcore->GetFloor(num);
 			if (floor)
 				floor->ShowInfo();
 		}
@@ -3231,7 +3229,7 @@ int ScriptProcessor::ProcFloors()
 {
 	//process floors
 
-	Floor *floor = Simcore->GetFloor(Current);
+	SBS::Floor *floor = Simcore->GetFloor(Current);
 
 	//exit with error if floor is invalid
 	if (!floor)
@@ -3838,7 +3836,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create call button
-		Object *obj = 0;
+		SBS::Object *obj = 0;
 		if (compat == 1)
 			obj = floor->AddCallButtons(callbutton_elevators, "", tempdata[0].c_str(), tempdata[1].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
 		else if (compat == 2)
@@ -3848,7 +3846,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (obj)
 		{
-			CallButton* callbutton = (CallButton*)obj->GetRawObject();
+			SBS::CallButton* callbutton = (SBS::CallButton*)obj->GetRawObject();
 			if (lockvalue == 0)
 				callbutton->SetLocked(false, keyvalue);
 			else
@@ -3943,7 +3941,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptWarning("Syntax deprecated");
 
 		//create door
-		Object *obj;
+		SBS::Object *obj;
 
 		if (compat == 1)
 			obj = floor->AddDoor("", "", false, tempdata[0].c_str(), atof(tempdata[1].c_str()), atoi(tempdata[2].c_str()), 0, atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()));
@@ -3956,7 +3954,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (obj)
 		{
-			Door* door = (Door*)obj->GetRawObject();
+			SBS::Door* door = (SBS::Door*)obj->GetRawObject();
 			door->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
@@ -4032,7 +4030,7 @@ int ScriptProcessor::ProcFloors()
 		//create door
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
-			Object *obj;
+			SBS::Object *obj;
 
 			if (compat == 1)
 				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, "", "", false, tempdata[1].c_str(), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), 0, atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()));
@@ -4045,7 +4043,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (obj)
 			{
-				Door* door = (Door*)obj->GetRawObject();
+				SBS::Door* door = (SBS::Door*)obj->GetRawObject();
 				door->SetLocked(lockvalue, keyvalue);
 			}
 			StoreCommand(obj);
@@ -4080,12 +4078,12 @@ int ScriptProcessor::ProcFloors()
 		//create door
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
-			Object *obj;
+			SBS::Object *obj;
 			obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
 			if (obj)
 			{
-				Door* door = (Door*)obj->GetRawObject();
+				SBS::Door* door = (SBS::Door*)obj->GetRawObject();
 				door->SetLocked(lockvalue, keyvalue);
 			}
 			StoreCommand(obj);
@@ -4379,7 +4377,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
+		SBS::Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
@@ -4418,7 +4416,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
+		SBS::Elevator *elev = Simcore->GetElevator(atoi(tempdata[0].c_str()));
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
@@ -4472,7 +4470,7 @@ int ScriptProcessor::ProcFloors()
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		Object *obj;
+		SBS::Object *obj;
 		if (compat == true)
 			obj = floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
@@ -4480,7 +4478,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (setkey == true && obj)
 		{
-			Model *mod = (Model*)obj->GetRawObject();
+			SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
@@ -4530,7 +4528,7 @@ int ScriptProcessor::ProcFloors()
 		//create model
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
-			Object *obj;
+			SBS::Object *obj;
 
 			if (compat == true)
 				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
@@ -4539,7 +4537,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (setkey == true && obj)
 			{
-				Model *mod = (Model*)obj->GetRawObject();
+				SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
 				mod->SetKey(keyvalue);
 			}
 			StoreCommand(obj);
@@ -4592,7 +4590,7 @@ int ScriptProcessor::ProcFloors()
 		//create model
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
-			Object *obj;
+			SBS::Object *obj;
 			if (compat == true)
 				obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 			else
@@ -4600,7 +4598,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (setkey == true && obj)
 			{
-				Model *mod = (Model*)obj->GetRawObject();
+				SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
 				mod->SetKey(keyvalue);
 			}
 			StoreCommand(obj);
@@ -4645,11 +4643,11 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		Object *obj = floor->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Object *obj = floor->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
 		if (obj)
 		{
-			Control* control = (Control*)obj->GetRawObject();
+			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -4698,11 +4696,11 @@ int ScriptProcessor::ProcFloors()
 
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
-			Object *obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
+			SBS::Object *obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
 
 			if (obj)
 			{
-				Control* control = (Control*)obj->GetRawObject();
+				SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 				if (lockvalue == 0)
 					control->SetLocked(false, keyvalue);
 				else
@@ -4754,11 +4752,11 @@ int ScriptProcessor::ProcFloors()
 
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
-			Object *obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
+			SBS::Object *obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
 
 			if (obj)
 			{
-				Control* control = (Control*)obj->GetRawObject();
+				SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 				if (lockvalue == 0)
 					control->SetLocked(false, keyvalue);
 				else
@@ -5008,7 +5006,7 @@ int ScriptProcessor::ProcElevators()
 	int temp2check = LineData.find("=", 0);
 	temp2 = GetAfterEquals(LineData.c_str());
 
-	Elevator *elev = Simcore->GetElevator(Current);
+	SBS::Elevator *elev = Simcore->GetElevator(Current);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -6168,7 +6166,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()));
+		SBS::Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()));
 		if (!object)
 			return ScriptError();
 		StoreCommand(object);
@@ -6483,7 +6481,7 @@ int ScriptProcessor::ProcElevators()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		Object *obj;
+		SBS::Object *obj;
 
 		if (compat == 0)
 		{
@@ -6497,7 +6495,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			Control* control = (Control*)obj->GetRawObject();
+			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -6592,7 +6590,7 @@ int ScriptProcessor::ProcElevators()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		Object *obj;
+		SBS::Object *obj;
 
 		if (compat == 0)
 		{
@@ -6606,7 +6604,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			Control* control = (Control*)obj->GetRawObject();
+			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -6649,11 +6647,11 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		Object *obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
+		SBS::Object *obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 
 		if (obj)
 		{
-			Control* control = (Control*)obj->GetRawObject();
+			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -6703,11 +6701,11 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		Object *obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Object *obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
 		if (obj)
 		{
-			Control* control = (Control*)obj->GetRawObject();
+			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -7140,7 +7138,7 @@ int ScriptProcessor::ProcElevators()
 			ScriptWarning("Syntax deprecated");
 
 		//create door
-		Object *obj;
+		SBS::Object *obj;
 
 		if (compat == 1)
 			obj = elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), 0, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
@@ -7151,7 +7149,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			Door* door = (Door*)obj->GetRawObject();
+			SBS::Door* door = (SBS::Door*)obj->GetRawObject();
 			door->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
@@ -7199,7 +7197,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		Object *obj;
+		SBS::Object *obj;
 		if (compat == true)
 			obj = elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
@@ -7207,7 +7205,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (setkey == true && obj)
 		{
-			Model *mod = (Model*)obj->GetRawObject();
+			SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
@@ -7249,11 +7247,11 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		Object *obj = elev->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Object *obj = elev->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
 		if (obj)
 		{
-			Control* control = (Control*)obj->GetRawObject();
+			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -7994,7 +7992,7 @@ std::string ScriptProcessor::Calc(const char *expression)
 	return tmpcalc;
 }
 
-void ScriptProcessor::StoreCommand(Object *object)
+void ScriptProcessor::StoreCommand(SBS::Object *object)
 {
 	//store command and line info in object
 	if (object)
@@ -8728,7 +8726,7 @@ int ScriptProcessor::MathFunctions()
 		if (value <= 0)
 			return ScriptError("Invalid value: " + tempdata);
 
-		RandomGen rnd(time(0));
+		SBS::RandomGen rnd(time(0));
 		result = rnd.Get(value);
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}

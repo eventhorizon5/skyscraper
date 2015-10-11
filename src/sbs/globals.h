@@ -55,8 +55,6 @@
 	#define SBSIMPEXP_DATA(type)
 #endif
 
-namespace SBS {
-
 SBSIMPEXP bool IsEven(int Number);
 SBSIMPEXP bool IsNumeric(char character);
 SBSIMPEXP bool IsNumeric(const char *string);
@@ -84,7 +82,5 @@ SBSIMPEXP float Round(float number, int decimal_places = 0);
 SBSIMPEXP Ogre::Vector3 Round(const Ogre::Vector3 &value, int decimal_places = 0);
 SBSIMPEXP Ogre::Vector2 Round(const Ogre::Vector2 &value, int decimal_places = 0);
 SBSIMPEXP bool IsBoolean(std::string string);
-
-}
 
 #endif

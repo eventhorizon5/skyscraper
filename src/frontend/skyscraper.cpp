@@ -56,8 +56,6 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
 
-using namespace SBS;
-
 SBS::SBS *Simcore;
 Skyscraper *skyscraper;
 DebugPanel *dpanel;
@@ -816,7 +814,7 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_F6))
 		{
 			//reset camera position and state
-			Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+			SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 			if (floor)
 			{
 				floor->Enabled(false);

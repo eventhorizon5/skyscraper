@@ -44,11 +44,10 @@
 #include "objectinfo.h"
 #include "skyscraper.h"
 
-using namespace SBS;
-
 extern SBS::SBS *Simcore; //external pointer to the SBS engine
 extern Skyscraper *skyscraper;
 extern DebugPanel *dpanel;
+
 DebugPanel *dp; //self pointer
 MeshControl *mc;
 editelevator *ee;
@@ -367,7 +366,7 @@ void DebugPanel::OnInit()
 
 void DebugPanel::Timer::Notify()
 {
-	Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 
 	if (dp)
 	{
@@ -559,7 +558,7 @@ void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
 {
-	Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 
 	if (floor)
 		floor->ShowInfo();
