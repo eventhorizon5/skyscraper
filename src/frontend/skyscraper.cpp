@@ -943,7 +943,8 @@ void Skyscraper::Report(std::string message)
 {
 	try
 	{
-		Ogre::LogManager::getSingleton().logMessage(message);
+		if (Ogre::LogManager::getSingletonPtr())
+			Ogre::LogManager::getSingleton().logMessage(message);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -955,7 +956,8 @@ bool Skyscraper::ReportError(std::string message)
 {
 	try
 	{
-		Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
+		if (Ogre::LogManager::getSingletonPtr())
+			Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
 	}
 	catch (Ogre::Exception &e)
 	{
