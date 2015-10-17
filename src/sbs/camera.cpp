@@ -829,6 +829,11 @@ void Camera::Loop(float delta)
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
+	float move_delta = delta;
+	//if using Bullet, use a fixed delta for movement
+	if (EnableBullet == true)
+		move_delta = 1.0f / 60.0f;
+
 	if (collision_reset == true && EnableBullet == true)
 		mCharacter->resetCollisions();
 	collision_reset = false;
@@ -845,12 +850,13 @@ void Camera::Loop(float delta)
 	}
 
 	//calculate acceleration
-	InterpolateMovement(delta);
+	InterpolateMovement(move_delta);
+	InterpolateRotation(delta);
 
 	//general movement
 
 	RotateLocal(angle_velocity, delta * speed);
-	Move(velocity, delta * speed, false);
+	Move(velocity, move_delta * speed, false);
 
 	if (CollisionsEnabled() == true)
 	{
@@ -958,7 +964,7 @@ void Camera::Spin(float speed)
 
 void Camera::InterpolateMovement(float delta)
 {
-	//calculate acceleration
+	//calculate movement acceleration
 
 	delta *= 1700.0f;
 
@@ -977,6 +983,13 @@ void Camera::InterpolateMovement(float delta)
 				velocity[i] = desired_velocity[i];
 		}
 	}
+}
+
+void Camera::InterpolateRotation(float delta)
+{
+	//calculate rotation acceleration
+
+	delta *= 1700.0f;
 
 	for (size_t i = 0; i < 3; i++)
 	{

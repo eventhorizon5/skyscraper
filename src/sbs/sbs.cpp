@@ -563,6 +563,9 @@ void SBS::MainLoop()
 		start_time = GetRunTime() / 1000.0f;
 	running_time = (GetRunTime() / 1000.0f) - start_time;
 
+	//move camera or update character movement
+	camera->MoveCharacter();
+	
 	//update physics
 	int steps = 0;
 	if (camera->EnableBullet == true)
@@ -571,18 +574,9 @@ void SBS::MainLoop()
 			ProfileManager::Start_Profile("Collisions/Physics");
 		else
 			ProfileManager::Start_Profile("Bullet");
-		steps = mWorld->stepSimulation(elapsed, 1);
+		steps = mWorld->stepSimulation(elapsed, 30);
 		ProfileManager::Stop_Profile();
 	}
-
-	//only move character if Bullet processed a step (within it's 60fps timestep)
-	if (camera->EnableBullet == true)
-	{
-		if (steps >= 1)
-			camera->MoveCharacter();
-	}
-	else
-		camera->MoveCharacter();
 
 	//sync camera to physics
 	camera->Sync();
