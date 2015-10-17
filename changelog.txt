@@ -1,5 +1,29 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-functions that create new sim objects should return full type, instead of just a generic object
+-removed unnecessary conversion in Freelook mode code
+-have camera only disable camera gravity value, instead of physics gravity also
+-camera delta values were being used twice causing erratic movement behavior when using Bullet.  Have Bullet use a single variable timestep, to prevent movement skipping issues
+-simplified camera movement code
+-camera movement vector needs to be flipped on X axis if Bullet is disabled
+-object OnMove and OnRotate functions now have a "parent" flag, to determine if a parent object called the update
+-rotations should update collider position also - this fixes an issue where parent objects would rotate, and child colliders would not be updated with the new derived position
+-make sure Ogre log manager has been created before trying to call it
+-simplified use of frontend and SBS singleton variables
+-moved frontend into "Skyscraper" namespace
+-return type fix for OnRecallFloor() function
+-WallPolygon class has been renamed Polygon
+-cleanups and initialization fixes
+-moved SBS system into it's own namespace
+-(Sears Tower) added Freight Elevator 1, along with minor wall fixes
+-(Sears Tower) split off upper service elevator into separate shaft, and fixed positioning of shafts 29, 30 and the new 32
+-(Sears Tower) adjustments to shaft starting/ending levels
+-updated Codeblocks project
+-moved elevator recall floor check into separate function, and added a check for the "recall unavailable" flag - this fixes an issue where an elevator on the alternate recall floor would not recall to the standard recall floor along with other elevators
+-fixed crash in elevator's DumpQueues function, due to wrong queue being used for Down Queue info
+-moved direction status variable to SetLights function in both callbutton and directional indicator objects
+-call buttons need to set all lights in group for each light change - this fixes an issue where a call button light would be switched off later due to elevators rejecting the call, but other lights in the group would remain on
+-added escalator textures from EG881's Escalator2011 package
 -elevators should accept hall calls if waiting in UpPeak or DownPeak mode
 -new Escalator object
 -added Relative Position item to Move Object window, and realigned text boxes
@@ -46,7 +70,6 @@ Version 1.10 (2.0 Alpha 10)
 -made certain elements private in wall object
 -rename "object" to "raw_object" in Object's SetValues function
 -rename reference of "handle" to "polygon"
--WallPolygon class is now SPolygon
 -moved polygon code to separate file
 -added basic movement support to wall objects, which works by modifying vertices
 -fixed a divide-by-zero issue in the elevator braking code
