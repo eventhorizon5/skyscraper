@@ -126,7 +126,7 @@ Camera::Camera(Ogre::Camera *camera)
 	//other movement options
 	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
 	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65f)));
-	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f)); // 9.806 m/s/s
+	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
 	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
 }
 
@@ -1008,13 +1008,14 @@ void Camera::InterpolateRotation(float delta)
 	}
 }
 
-void Camera::SetGravity(float gravity, bool save_value)
+void Camera::SetGravity(float gravity, bool save_value, bool camera_only)
 {
 	if (save_value == true)
 		Gravity = gravity;
 	if (EnableBullet == true)
 	{
-		sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
+		if (camera_only == false)
+			sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
 		mCharacter->setGravity(sbs->ToRemote(gravity));
 	}
 }
