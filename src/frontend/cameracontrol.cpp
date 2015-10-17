@@ -231,7 +231,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	FlexGridSizer3->Add(StaticText14, 1, wxRIGHT|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	txtGravity = new wxTextCtrl(this, ID_txtGravity, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_txtGravity"));
 	txtGravity->SetMinSize(wxSize(100,-1));
-	FlexGridSizer3->Add(txtGravity, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer3->Add(txtGravity, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bGravity = new wxButton(this, ID_bGravity, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bGravity"));
 	FlexGridSizer3->Add(bGravity, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	lblGravityEnabled = new wxStaticText(this, ID_lblGravityEnabled, _("Gravity On:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_lblGravityEnabled"));
@@ -693,3 +693,4 @@ void CameraControl::On_bBinocularsFOV_Click(wxCommandEvent& event)
 }
 
 }
+

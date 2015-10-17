@@ -254,7 +254,7 @@
 										<object class="wxTextCtrl" name="ID_txtGravity" variable="txtGravity" member="yes">
 											<minsize>100,-1</minsize>
 										</object>
-										<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+										<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 										<border>5</border>
 										<option>1</option>
 									</object>
