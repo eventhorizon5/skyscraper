@@ -671,7 +671,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	DoorIsRunning = false;
 }
 
-Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator position)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -713,7 +713,7 @@ Object* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture
 	return FinishDoors();
 }
 
-void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//creates a door component - finish with FinishDoor()
 
@@ -769,9 +769,11 @@ void ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, cons
 	door->extents_max.y = voffset + height;
 
 	sbs->ResetTextureMapping();
+
+	return door;
 }
 
-Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component; remake of AddDoors command
 
@@ -784,7 +786,7 @@ Object* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, co
 	return Doors;
 }
 
-Object* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a shaft door component; remake of AddShaftDoor command
 
@@ -824,7 +826,7 @@ void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture,
 	}
 }
 
-Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool DoorWalls, bool TrackWalls)
+ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool DoorWalls, bool TrackWalls)
 {
 	//finishes a door creation
 	//DoorWalls determines if the connection walls (on the sides, and above the doors) should be made
@@ -985,14 +987,14 @@ Object* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoo
 	return wrapper;
 }
 
-Object* ElevatorDoor::FinishDoors(bool DoorWalls, bool TrackWalls)
+ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(bool DoorWalls, bool TrackWalls)
 {
 	//finish elevator doors
 
 	return FinishDoors(Doors, 0, false, DoorWalls, TrackWalls);
 }
 
-Object* ElevatorDoor::FinishShaftDoor(int floor, bool DoorWalls, bool TrackWalls)
+ElevatorDoor::DoorWrapper* ElevatorDoor::FinishShaftDoor(int floor, bool DoorWalls, bool TrackWalls)
 {
 	//finish shaft door on a specified floor
 
@@ -1049,14 +1051,14 @@ bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttextu
 	return true;
 }
 
-Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th)
 {
 	//compatibility version of AddShaftDoor; please use newer implementation instead
 
 	return AddShaftDoor(floor, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
 }
 
-Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1106,13 +1108,13 @@ Object* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const cha
 	AddShaftDoorComponent(floor, "Right", righttexture, righttexture, thickness, "Right", OpenSpeed, OpenSpeed * 0.75f, x3, z3, x4, z4, Doors->Height, voffset, tw, th, tw, th);
 
 	//finish doors
-	Object *object = FinishShaftDoor(floor);
+	DoorWrapper *wrapper = FinishShaftDoor(floor);
 
 	//make doors invisible on start
 	if (ShaftDoors[index])
 		ShaftDoors[index]->Enable(false);
 
-	return object;
+	return wrapper;
 }
 
 void ElevatorDoor::SetShaftDoors(float thickness, float CenterX, float CenterZ)

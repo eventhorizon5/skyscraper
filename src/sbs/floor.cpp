@@ -442,7 +442,7 @@ float Floor::FullHeight()
 	return InterfloorHeight + Height;
 }
 
-Object* Floor::AddCallButtons(std::vector<int> &elevators, const char *sound_file, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const char *sound_file, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//adds call buttons
 
@@ -616,7 +616,7 @@ bool Floor::IsInGroup(int floor)
 	return false;
 }
 
-Object* Floor::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Floor::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -724,7 +724,7 @@ WallObject* Floor::ColumnWallBox2(const char *name, const char *texture, float C
 	return wall;
 }
 
-Object* Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator* Floor::AddFloorIndicator(int elevator, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -894,7 +894,7 @@ void Floor::AddFillerWalls(const char *texture, float thickness, float CenterX, 
 	sbs->ResetWalls();
 }
 
-Object* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Sound* Floor::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
 
@@ -971,7 +971,7 @@ float Floor::GetBase(bool relative)
 	}
 }
 
-Object* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator* Floor::AddDirectionalIndicator(int elevator, bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator on the specified floor, associated with a given elevator
 
@@ -1262,7 +1262,7 @@ void Floor::RemoveEscalator(Escalator *escalator)
 	}
 }
 
-Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a light
 
@@ -1271,7 +1271,7 @@ Object* Floor::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre
 	return light;
 }
 
-Object* Floor::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* Floor::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position + Ogre::Vector3(0, GetBase(true), 0), rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -1292,7 +1292,7 @@ void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &new
 	ColumnFrame->ReplaceTexture(oldtexture, newtexture);
 }
 
-Object* Floor::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Floor::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -1302,7 +1302,7 @@ Object* Floor::AddControl(const char *name, const char *sound, const char *direc
 	return control;
 }
 
-Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
@@ -1311,7 +1311,7 @@ Object* Floor::AddTrigger(const char *name, const char *sound_file, Ogre::Vector
 	return trigger;
 }
 
-Object* Floor::AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
+CameraTexture* Floor::AddCameraTexture(const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
 {
 	//add a camera texture
 	CameraTexture* cameratexture = new CameraTexture(this, name, enabled, quality, fov, GetBase(true) + position, use_rotation, rotation);
@@ -1319,7 +1319,7 @@ Object* Floor::AddCameraTexture(const char *name, bool enabled, int quality, flo
 	return cameratexture;
 }
 
-Object* Floor::AddEscalator(const char *name, bool run, bool run_direction, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator* Floor::AddEscalator(const char *name, bool run, bool run_direction, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//add an escalator
 	Escalator* escalator = new Escalator(this, name, run, run_direction, sound_file, texture, direction, CenterX, CenterZ, width, risersize, treadsize, num_steps, GetBase(true) + voffset, tw, th);

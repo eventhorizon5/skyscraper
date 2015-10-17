@@ -1640,7 +1640,7 @@ float SBS::GetDistance(float x1, float x2, float z1, float z2)
 	return 0;
 }
 
-Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Shaft* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a shaft object
 
@@ -1681,7 +1681,7 @@ Object* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startflo
 	return shaft.object;
 }
 
-Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
+Stairs* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor)
 {
 	//create a stairwell object
 
@@ -1721,7 +1721,7 @@ Object* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 	return stairs.object;
 }
 
-Object* SBS::NewElevator(int number)
+Elevator* SBS::NewElevator(int number)
 {
 	//create a new elevator object
 
@@ -1735,7 +1735,7 @@ Object* SBS::NewElevator(int number)
 	return elev.object;
 }
 
-Object* SBS::NewFloor(int number)
+Floor* SBS::NewFloor(int number)
 {
 	//create a new floor object
 
@@ -2712,7 +2712,7 @@ int SBS::GetMeshCount()
 	return (int)meshes.size();
 }
 
-Object* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Sound* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a looping sound object
 	Sound *sound = new Sound(this, name, false);
@@ -3471,7 +3471,7 @@ void SBS::Prepare(bool report)
 		Report("Finished prepare");
 }
 
-Object* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
@@ -3519,7 +3519,7 @@ MeshObject* SBS::FindMeshObject(std::string name)
 	return 0;
 }
 
-Object* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -3695,7 +3695,7 @@ void SBS::ResetLighting()
 	AmbientB = OldAmbientB;
 }
 
-Object* SBS::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* SBS::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -3705,7 +3705,7 @@ Object* SBS::AddControl(const char *name, const char *sound, const char *directi
 	return control;
 }
 
-Object* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);

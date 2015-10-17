@@ -6165,10 +6165,10 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		SBS::Object *object = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()));
-		if (!object)
+		bool result = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()));
+		if (result == false)
 			return ScriptError();
-		StoreCommand(object);
+		StoreCommand(elev);
 		return sNextLine;
 	}
 

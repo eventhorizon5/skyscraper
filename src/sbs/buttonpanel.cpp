@@ -129,7 +129,7 @@ ButtonPanel::~ButtonPanel()
 	}
 }
 
-Object* ButtonPanel::AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
+Control* ButtonPanel::AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
 {
 	//create a standard button at specified row/column position
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%.
@@ -158,7 +158,7 @@ Object* ButtonPanel::AddButton(const char *sound, const char *texture, const cha
 	return AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 }
 
-Object* ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
 

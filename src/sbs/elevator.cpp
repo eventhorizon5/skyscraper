@@ -447,7 +447,7 @@ Elevator::~Elevator()
 		sbs->RemoveElevator(this);
 }
 
-Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
+bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 {
 	//Creates elevator at specified location and floor
 	//x and z are the center coordinates
@@ -455,57 +455,35 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	//to the assigned shaft's center
 
 	if (Created == true)
-	{
-		ReportError("Has already been created");
-		return 0;
-	}
+		return ReportError("Has already been created");
 
 	//make sure required values are set
 	if (ElevatorSpeed <= 0)
-	{
-		ReportError("Speed not set or invalid");
-		return 0;
-	}
+		return ReportError("Speed not set or invalid");
+
 	if (Acceleration <= 0)
-	{
-		ReportError("Acceleration not set or invalid");
-		return 0;
-	}
+		return ReportError("Acceleration not set or invalid");
+
 	if (Deceleration <= 0)
-	{
-		ReportError("Deceleration not set or invalid");
-		return 0;
-	}
+		return ReportError("Deceleration not set or invalid");
+
 	if (NumDoors < 0)
-	{
-		ReportError("Number of doors invalid");
-		return 0;
-	}
+		return ReportError("Number of doors invalid");
+
 	if (AccelJerk <= 0)
-	{
-		ReportError("Invalid value for AccelJerk");
-		return 0;
-	}
+		return ReportError("Invalid value for AccelJerk");
+
 	if (DecelJerk <= 0)
-	{
-		ReportError("Invalid value for DecelJerk");
-		return 0;
-	}
+		return ReportError("Invalid value for DecelJerk");
+
 	if (AssignedShaft <= 0)
-	{
-		ReportError("Not assigned to a shaft");
-		return 0;
-	}
+		return ReportError("Not assigned to a shaft");
+
 	if (!GetShaft())
-	{
-		ReportError("Shaft " + ToString2(AssignedShaft) + " doesn't exist");
-		return 0;
-	}
+		return ReportError("Shaft " + ToString2(AssignedShaft) + " doesn't exist");
+
 	if (floor < GetShaft()->startfloor || floor > GetShaft()->endfloor)
-	{
-		ReportError("Invalid starting floor " + ToString2(floor));
-		return 0;
-	}
+		return ReportError("Invalid starting floor " + ToString2(floor));
 
 	//add elevator's starting floor to serviced floor list - this also ensures that the list is populated to prevent errors
 	if (IsServicedFloor(floor) == false)
@@ -518,17 +496,13 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 		{
 			std::string snum = ToString(AssignedShaft);
 			std::string num = ToString(ServicedFloors[i]);
-			ReportError("Floor " + num + " not valid for shaft " + snum);
-			return 0;
+			return ReportError("Floor " + num + " not valid for shaft " + snum);
 		}
 	}
 
 	//set data
 	if (!sbs->GetFloor(floor))
-	{
-		ReportError("Floor " + ToString2(floor) + " doesn't exist");
-		return 0;
-	}
+		return ReportError("Floor " + ToString2(floor) + " doesn't exist");
 
 	//set starting position
 	Ogre::Vector3 position = Ogre::Vector3::ZERO;
@@ -609,7 +583,7 @@ Object* Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	Created = true;
 
 	Report("created at " + sbs->TruncateNumber(position.x, 4) + ", " + sbs->TruncateNumber(position.z, 4) + ", " + ToString2(floor));
-	return this;
+	return true;
 }
 
 bool Elevator::AddRoute(int floor, int direction, int call_type)
@@ -2189,7 +2163,7 @@ WallObject* Elevator::AddFloor(const char *name, const char *texture, float thic
 	return wall;
 }
 
-Object* Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator* Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -2458,7 +2432,7 @@ void Elevator::RemoveServicedFloor(int number)
 	}
 }
 
-Object* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
+ButtonPanel* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
 	//create a new button panel object and store the pointer
 
@@ -3279,7 +3253,7 @@ void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bo
 	}
 }
 
-Object* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator inside the elevator
 
@@ -3653,7 +3627,7 @@ void Elevator::StopDoors(int number)
 	}
 }
 
-Object* Elevator::AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+ElevatorDoor::DoorWrapper* Elevator::AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -3677,7 +3651,7 @@ bool Elevator::AddShaftDoors(int number, const char *lefttexture, const char *ri
 	return false;
 }
 
-Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th)
+ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -3688,7 +3662,7 @@ Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, c
 		return 0;
 }
 
-Object* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -4161,7 +4135,7 @@ void Elevator::SetMessageSound(bool type, bool direction, const char *filename)
 	}
 }
 
-Object* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Sound* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a sound object
 	Sound *sound = new Sound(this, name, false);
@@ -4237,7 +4211,7 @@ bool Elevator::ReportError(std::string message)
 	return sbs->ReportError("Elevator " + ToString2(Number) + ": " + message);
 }
 
-Object* Elevator::AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* Elevator::AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component to the specified door at a relative central position (off of elevator origin)
 
@@ -4248,7 +4222,7 @@ Object* Elevator::AddDoorComponent(int number, const char *name, const char *tex
 	return 0;
 }
 
-Object* Elevator::AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* Elevator::AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a single elevator shaft door component on the specified floor
 
@@ -4268,7 +4242,7 @@ void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *
 		ReportError("Invalid door " + ToString2(number));
 }
 
-Object* Elevator::FinishDoors(int number, bool DoorWalls, bool TrackWalls)
+ElevatorDoor::DoorWrapper* Elevator::FinishDoors(int number, bool DoorWalls, bool TrackWalls)
 {
 	//finishes elevator door
 
@@ -4279,7 +4253,7 @@ Object* Elevator::FinishDoors(int number, bool DoorWalls, bool TrackWalls)
 	return 0;
 }
 
-Object* Elevator::FinishShaftDoor(int number, int floor, bool DoorWalls, bool TrackWalls)
+ElevatorDoor::DoorWrapper* Elevator::FinishShaftDoor(int number, int floor, bool DoorWalls, bool TrackWalls)
 {
 	//finishes a single shaft door
 
@@ -4451,7 +4425,7 @@ void Elevator::HoldDoors(int number, bool sensor)
 	}
 }
 
-Object* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -4997,7 +4971,7 @@ void Elevator::ResetNudgeTimer(bool start, int number)
 	}
 }
 
-Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
@@ -5006,7 +4980,7 @@ Object* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, O
 	return light;
 }
 
-Object* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -5057,7 +5031,7 @@ std::string Elevator::GetFloorDisplay()
 	return value;
 }
 
-Object* Elevator::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Elevator::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -5067,7 +5041,7 @@ Object* Elevator::AddControl(const char *name, const char *sound, const char *di
 	return control;
 }
 
-Object* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);

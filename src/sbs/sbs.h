@@ -216,11 +216,11 @@ public:
 	void EnableSkybox(bool value);
 	int GetFloorNumber(float altitude, int lastfloor = 0, bool checklastfloor = false);
 	float GetDistance(float x1, float x2, float z1, float z2);
-	Object* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
-	Object* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Shaft* CreateShaft(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
+	Stairs* CreateStairwell(int number, float CenterX, float CenterZ, int _startfloor, int _endfloor);
 	std::string GetTextureMaterial(const char *name, bool &result, bool report = true, const char *polygon_name = 0);
-	Object* NewElevator(int number);
-	Object* NewFloor(int number);
+	Elevator* NewElevator(int number);
+	Floor* NewFloor(int number);
 	int Elevators();
 	int TotalFloors(); //all floors including basements
 	int Shafts();
@@ -275,7 +275,7 @@ public:
 	int GetMeshCount();
 	int GetTextureCount();
 	int GetMaterialCount();
-	Object* AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop = true, float volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 0.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
+	Sound* AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop = true, float volume = 1.0, int speed = 100, float min_distance = 1.0, float max_distance = -1.0, float doppler_level = 0.0, float cone_inside_angle = 360, float cone_outside_angle = 360, float cone_outside_volume = 1.0, Ogre::Vector3 direction = Ogre::Vector3(0, 0, 0));
 	int GetSoundCount();
 	void IncrementSoundCount();
 	void DecrementSoundCount();
@@ -317,10 +317,10 @@ public:
 	void AddMeshHandle(MeshObject* handle);
 	void DeleteMeshHandle(MeshObject* handle);
 	void Prepare(bool report = true);
-	Object* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
+	Light* AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	MeshObject* FindMeshObject(Ogre::MeshPtr meshwrapper);
 	MeshObject* FindMeshObject(std::string name);
-	Object* AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
+	Model* AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	Ogre::Vector2 GetExtents(std::vector<Ogre::Vector3> &varray, int coord, bool flip_z = false);
 	void Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber = 0, bool reset_check = true);
 	Ogre::Vector3 GetPolygonDirection(std::vector<Ogre::Vector3> &polygon);
@@ -348,8 +348,8 @@ public:
 	void ResetLighting();
 	void SaveTexture(Ogre::TexturePtr texture, std::string filename);
 	std::string ListTextures(bool show_filename = false);
-	Object* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
-	Object* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
+	Control* AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
+	Trigger* AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	Action* AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
 	Action* AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command);
 	std::vector<Action*> GetAction(std::string name);
