@@ -255,7 +255,7 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 		MovementStopped = true;
 
 	if (flip == true)
-		vector = vector * Ogre::Vector3(-1, 1, 1);
+		vector *= Ogre::Vector3(-1, 1, 1);
 
 	//multiply vector with camera's orientation, and flip X axis
 	if (EnableBullet == true)
@@ -265,6 +265,7 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 	}
 	else
 	{
+		vector *= Ogre::Vector3(-1, 1, 1);
 		vector = MainCamera->getOrientation() * sbs->ToRemote(vector);
 		accum_movement += (vector * speed);
 	}
