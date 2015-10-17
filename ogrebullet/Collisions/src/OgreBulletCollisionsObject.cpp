@@ -142,8 +142,7 @@ namespace OgreBulletCollisions
     void Object::setTransform(const btVector3 &pos, const btQuaternion &quat)
     {
 		setPosition(pos);
-		Quaternion quat2(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
-        mRootNode->_setDerivedOrientation(quat2);
+        mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
     }
     // -------------------------------------------------------------------------
     void Object::setPosition(const btVector3 &pos)
@@ -154,8 +153,7 @@ namespace OgreBulletCollisions
     // -------------------------------------------------------------------------
     void Object::setOrientation(const btQuaternion &quat)
     {
-    	Quaternion quat2(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
-		mRootNode->_setDerivedOrientation(quat2);
+		mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
     }
     // -------------------------------------------------------------------------
     void Object::setTransform(const btTransform& worldTrans)
