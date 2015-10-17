@@ -257,18 +257,19 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 	if (flip == true)
 		vector *= Ogre::Vector3(-1, 1, 1);
 
-	//multiply vector with camera's orientation, and flip X axis
+	Ogre::Quaternion orientation;
+
 	if (EnableBullet == true)
-	{
-		vector = mCharacter->getRootNode()->getOrientation() * vector * Ogre::Vector3(-1, 1, 1);
-		accum_movement += (sbs->ToRemote(vector) * speed);
-	}
+		orientation = mCharacter->getRootNode()->getOrientation();
 	else
 	{
-		vector *= Ogre::Vector3(-1, 1, 1);
-		vector = MainCamera->getOrientation() * sbs->ToRemote(vector);
-		accum_movement += (vector * speed);
+		orientation = MainCamera->getOrientation();
+		vector *= Ogre::Vector3(-1, 1, 1); //flip X axis if not using Bullet
 	}
+
+	//multiply vector with camera's orientation
+	vector = orientation * sbs->ToRemote(vector);
+	accum_movement += (vector * speed);
 
 	return true;
 }
