@@ -113,7 +113,6 @@ public:
 	void Turn(float speed = 1.0f);
 	void Spin(float speed = 1.0f);
 	void InterpolateMovement(float delta);
-	void InterpolateRotation(float delta);
 	void SetGravity(float gravity, bool save_value = true, bool camera_only = true);
 	float GetGravity();
 	void EnableGravity(bool value);

@@ -565,16 +565,15 @@ void SBS::MainLoop()
 
 	//move camera or update character movement
 	camera->MoveCharacter();
-	
+
 	//update physics
-	int steps = 0;
 	if (camera->EnableBullet == true)
 	{
 		if (enable_advanced_profiling == false)
 			ProfileManager::Start_Profile("Collisions/Physics");
 		else
 			ProfileManager::Start_Profile("Bullet");
-		steps = mWorld->stepSimulation(elapsed, 0);
+		mWorld->stepSimulation(elapsed, 0);
 		ProfileManager::Stop_Profile();
 	}
 
