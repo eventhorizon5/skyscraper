@@ -574,7 +574,7 @@ void SBS::MainLoop()
 			ProfileManager::Start_Profile("Collisions/Physics");
 		else
 			ProfileManager::Start_Profile("Bullet");
-		steps = mWorld->stepSimulation(elapsed, 30);
+		steps = mWorld->stepSimulation(elapsed, 0);
 		ProfileManager::Stop_Profile();
 	}
 
@@ -589,7 +589,7 @@ void SBS::MainLoop()
 	soundsys->update();
 	ProfileManager::Stop_Profile();
 
-	elapsed = remaining_delta + ((float)timing / 1000.0f);
+	elapsed += remaining_delta;
 
 	//limit the elapsed value to prevent major slowdowns during debugging
 	if (elapsed > .5f)
