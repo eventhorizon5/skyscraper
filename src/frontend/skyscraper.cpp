@@ -684,7 +684,8 @@ void Skyscraper::GetInput()
 		rotational.x = Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (height / 2))) / (height * 2);
 		rotational.y = Simcore->camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2);
 		rotational.z = 0;
-		Simcore->camera->Rotate(rotational);
+		Simcore->camera->desired_angle_velocity = rotational;
+		Simcore->camera->angle_velocity = rotational;
 	}
 
 	//check if the user clicked on an object, and process it
