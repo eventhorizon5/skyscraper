@@ -81,7 +81,7 @@ Sound::~Sound()
 	}
 }
 
-void Sound::OnMove()
+void Sound::OnMove(bool parent)
 {
 	FMOD_VECTOR pos = {GetPosition().x, GetPosition().y, GetPosition().z};
 	FMOD_VECTOR vel;
@@ -105,9 +105,10 @@ void Sound::OnMove()
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 }
 
-void Sound::OnRotate()
+void Sound::OnRotate(bool parent)
 {
-	OnMove();
+	if (parent == true)
+		OnMove(parent); //update position if parent object has been rotated
 }
 
 void Sound::SetVolume(float value)

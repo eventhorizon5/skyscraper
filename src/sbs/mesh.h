@@ -117,8 +117,8 @@ public:
 	Ogre::Vector3 GetWallExtents(const char *name, float altitude, bool get_max);
 	Ogre::Vector2 GetExtents(int coord, bool flip_z = false);
 	WallObject* FindPolygon(const char *name, int &index);
-	void OnMove();
-	void OnRotate();
+	void OnMove(bool parent);
+	void OnRotate(bool parent);
 	int GetSubmeshCount();
 	bool IsVisible(Ogre::Camera *camera);
 

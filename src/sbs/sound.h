@@ -63,8 +63,8 @@ public:
 	void ProcessQueue();
 	void Report(std::string message);
 	bool ReportError(std::string message);
-	void OnMove();
-	void OnRotate();
+	void OnMove(bool parent);
+	void OnRotate(bool parent);
 
 private:
 

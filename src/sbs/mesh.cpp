@@ -2049,16 +2049,21 @@ WallObject* MeshObject::FindPolygon(const char *name, int &index)
 	return 0;
 }
 
-void MeshObject::OnMove()
+void MeshObject::OnMove(bool parent)
 {
 	if (mBody)
 		mBody->updateTransform(true, false, false);
 }
 
-void MeshObject::OnRotate()
+void MeshObject::OnRotate(bool parent)
 {
 	if (mBody)
-		mBody->updateTransform(true, true, false);
+	{
+		if (parent == true)
+			OnMove(parent); //update position if parent object has been rotated
+
+		mBody->updateTransform(false, true, false);
+	}
 }
 
 int MeshObject::GetSubmeshCount()

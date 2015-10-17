@@ -376,9 +376,10 @@ Ogre::Vector3 Object::GetRotation()
 	return Rotation;
 }
 
-void Object::NotifyMove()
+void Object::NotifyMove(bool parent)
 {
 	//notify about a move
+	//if parent is true, this function was called from a parent object
 
 	if (!SceneNode)
 		return;
@@ -386,13 +387,14 @@ void Object::NotifyMove()
 	//sync positioning, for child scene nodes
 	SceneNode->needUpdate();
 
-	OnMove();
+	OnMove(parent);
 	NotifyChildren(true, false);
 }
 
-void Object::NotifyRotate()
+void Object::NotifyRotate(bool parent)
 {
 	//notify about a rotate
+	//if parent is true, this function was called from a parent object
 
 	if (!SceneNode)
 		return;
@@ -400,7 +402,7 @@ void Object::NotifyRotate()
 	//sync positioning, for child scene nodes
 	SceneNode->needUpdate();
 
-	OnRotate();
+	OnRotate(parent);
 	NotifyChildren(false, true);
 }
 
@@ -416,9 +418,9 @@ void Object::NotifyChildren(bool move, bool rotate)
 	for (int i = 0; i < count; i++)
 	{
 		if (move == true)
-			children[i]->NotifyMove();
+			children[i]->NotifyMove(true);
 		if (rotate == true)
-			children[i]->NotifyRotate();
+			children[i]->NotifyRotate(true);
 	}
 }
 
