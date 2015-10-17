@@ -2058,7 +2058,7 @@ void MeshObject::OnMove()
 void MeshObject::OnRotate()
 {
 	if (mBody)
-		mBody->updateTransform(false, true, false);
+		mBody->updateTransform(true, true, false);
 }
 
 int MeshObject::GetSubmeshCount()

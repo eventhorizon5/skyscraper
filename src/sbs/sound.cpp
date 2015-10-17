@@ -105,6 +105,11 @@ void Sound::OnMove()
 		channel->set3DAttributes(&pos, &vel); //note - do not use ToRemote for positioning
 }
 
+void Sound::OnRotate()
+{
+	OnMove();
+}
+
 void Sound::SetVolume(float value)
 {
 	//set volume of sound

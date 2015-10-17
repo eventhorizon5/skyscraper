@@ -64,6 +64,7 @@ public:
 	void Report(std::string message);
 	bool ReportError(std::string message);
 	void OnMove();
+	void OnRotate();
 
 private:
 
