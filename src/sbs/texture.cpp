@@ -1827,12 +1827,26 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 
 			encoded->seek(i);
 			encoded->read(&check, 1);
-			if (check == 33) //21h
+
+			//check for first value, 21h
+			if (check == 33 && i < (int)encoded->size() - 4)
+			{
 				found = 1;
-			if (check == 249 && found == 1) //F9h
-				found = 2;
-			if (check == 4 && found == 2) //04h
-				found = 3;
+
+				//find second value, F9h
+				i++;
+				encoded->seek(i);
+				encoded->read(&check, 1);
+				if (check == 249)
+					found++;
+
+				//find third value, 04h
+				i++;
+				encoded->seek(i);
+				encoded->read(&check, 1);
+				if (check == 4)
+					found++;
+			}
 		}
 
 		if (enabled == 1)
