@@ -2198,7 +2198,7 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 	TrimString(mesh);
 	SetCase(mesh, false);
 
-	WallObject *wall;
+	WallObject *wall = 0;
 	if (mesh == "external")
 		wall = External->CreateWallObject(name);
 	if (mesh == "buildings")
@@ -2220,7 +2220,7 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 	TrimString(mesh);
 	SetCase(mesh, false);
 
-	WallObject *wall;
+	WallObject *wall = 0;
 	if (mesh == "external")
 		wall = External->CreateWallObject(name);
 	if (mesh == "buildings")

@@ -1754,6 +1754,10 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 		index_count += (int)submesh->indexData->indexCount;
 	}
 
+	//ensure minimum index count
+	if (index_count < 3)
+		return;
+
 	// Allocate space for the vertices and indices
 	vertices = new Ogre::Vector3[vertex_count];
 	indices = new unsigned long[index_count];

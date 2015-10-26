@@ -833,9 +833,10 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 	//TrackWalls determines if door track connection walls (below and above doors) should be made
 
 	//add floor to manual shaft door list if wrapper doesn't exist and exit
-	if (!wrapper && ShaftDoor == true)
+	if (!wrapper)
 	{
-		ManualFloors.push_back(floor);
+		if (ShaftDoor == true)
+			ManualFloors.push_back(floor);
 		return 0;
 	}
 

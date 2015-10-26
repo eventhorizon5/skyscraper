@@ -281,7 +281,7 @@ void SBS::SplitWithPlane(int axis, std::vector<Ogre::Vector3> &orig, std::vector
 	poly2.reserve(orig.size());
 
 	Ogre::Vector3 ptB;
-	float sideA, sideB;
+	float sideA = 0, sideB = 0;
 	Ogre::Vector3 ptA = orig[orig.size() - 1];
 
 	if (axis == 0)

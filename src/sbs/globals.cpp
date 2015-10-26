@@ -283,7 +283,7 @@ float Round(float number, int decimal_places)
 	if (decimal_places <= 0)
 		return floorf(number + 0.5f);
 
-	float multiplier = powf(10, decimal_places);
+	float multiplier = powf(10.0f, decimal_places);
 	float rounded = floorf((number * multiplier) + 0.5f) / multiplier;
 	return rounded;
 }
