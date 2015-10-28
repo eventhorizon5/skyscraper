@@ -44,6 +44,8 @@ public:
 	bool PhysicsEnabled();
 
 private:
+	void RemoveFromParent();
+	void AddToParent();
 
 	MeshObject* mesh;
 	Ogre::Vector3 Offset;

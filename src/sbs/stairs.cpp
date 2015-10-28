@@ -804,6 +804,26 @@ Model* Stairs::AddModel(int floor, const char *name, const char *filename, bool 
 	return model;
 }
 
+void Stairs::AddModel(int floor, Model *model)
+{
+	//add a model reference
+
+	if (!model)
+		return;
+
+	//exit if floor is invalid
+	if (!IsValidFloor(floor))
+		return;
+
+	for (int i = 0; i < (int)ModelArray[floor - startfloor].size(); i++)
+	{
+		if (ModelArray[floor - startfloor][i] == model)
+			return;
+	}
+
+	ModelArray[floor - startfloor].push_back(model);
+}
+
 Control* Stairs::AddControl(int floor, const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control

@@ -1284,6 +1284,22 @@ Model* Floor::AddModel(const char *name, const char *filename, bool center, Ogre
 	return model;
 }
 
+void Floor::AddModel(Model *model)
+{
+	//add a model reference
+
+	if (!model)
+		return;
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+			return;
+	}
+
+	ModelArray.push_back(model);
+}
+
 void Floor::ReplaceTexture(const std::string &oldtexture, const std::string &newtexture)
 {
 	//change all instances of oldtexture in all meshes to newtexture

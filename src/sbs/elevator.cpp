@@ -4996,6 +4996,22 @@ Model* Elevator::AddModel(const char *name, const char *filename, bool center, O
 	return model;
 }
 
+void Elevator::AddModel(Model *model)
+{
+	//add a model reference
+
+	if (!model)
+		return;
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+			return;
+	}
+
+	ModelArray.push_back(model);
+}
+
 void Elevator::AddDisplayFloor(int floor)
 {
 	//add a floor to the display floors list

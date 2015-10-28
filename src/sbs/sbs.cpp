@@ -3532,6 +3532,22 @@ Model* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::
 	return model;
 }
 
+void SBS::AddModel(Model *model)
+{
+	//add a model reference
+
+	if (!model)
+		return;
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+			return;
+	}
+
+	ModelArray.push_back(model);
+}
+
 int SBS::GetConfigInt(std::string key, int default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));

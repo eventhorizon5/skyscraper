@@ -74,18 +74,7 @@ Model::~Model()
 
 	//unregister from parent
 	if (sbs->FastDelete == false && parent_deleting == false)
-	{
-		if (std::string(GetParent()->GetType()) == "Elevator")
-			((Elevator*)GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(GetParent()->GetType()) == "Floor")
-			((Floor*)GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(GetParent()->GetType()) == "Shaft")
-			((Shaft*)GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(GetParent()->GetType()) == "Stairs")
-			((Stairs*)GetParent()->GetRawObject())->RemoveModel(this);
-		if (std::string(GetParent()->GetType()) == "SBS")
-			sbs->RemoveModel(this);
-	}
+		RemoveFromParent();
 }
 
 void Model::Enable(bool value)
@@ -117,6 +106,39 @@ void Model::SetKey(int keyid)
 bool Model::PhysicsEnabled()
 {
 	return mesh->Movable;
+}
+
+void Model::RemoveFromParent()
+{
+	if (std::string(GetParent()->GetType()) == "Elevator")
+		((Elevator*)GetParent()->GetRawObject())->RemoveModel(this);
+	else if (std::string(GetParent()->GetType()) == "Floor")
+		((Floor*)GetParent()->GetRawObject())->RemoveModel(this);
+	else if (std::string(GetParent()->GetType()) == "Shaft")
+		((Shaft*)GetParent()->GetRawObject())->RemoveModel(this);
+	else if (std::string(GetParent()->GetType()) == "Stairs")
+		((Stairs*)GetParent()->GetRawObject())->RemoveModel(this);
+	else if (std::string(GetParent()->GetType()) == "SBS")
+		sbs->RemoveModel(this);
+}
+
+void Model::AddToParent()
+{
+	int floor = 0;
+
+	if (SceneNode)
+		floor = sbs->GetFloorNumber(GetPosition().y);
+
+	if (std::string(GetParent()->GetType()) == "Elevator")
+		((Elevator*)GetParent()->GetRawObject())->AddModel(this);
+	else if (std::string(GetParent()->GetType()) == "Floor")
+		((Floor*)GetParent()->GetRawObject())->AddModel(this);
+	else if (std::string(GetParent()->GetType()) == "Shaft")
+		((Shaft*)GetParent()->GetRawObject())->AddModel(floor, this);
+	else if (std::string(GetParent()->GetType()) == "Stairs")
+		((Stairs*)GetParent()->GetRawObject())->AddModel(floor, this);
+	else if (std::string(GetParent()->GetType()) == "SBS")
+		sbs->AddModel(this);
 }
 
 }
