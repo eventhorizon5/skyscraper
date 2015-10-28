@@ -144,6 +144,45 @@ void Model::AddToParent()
 void Model::Loop()
 {
 	//runloop, called by parent to allow for switching parents
+
+	//exit if global object
+	if (IsGlobal() == true)
+		return;
+
+	//if model is a child of a floor, and is in an elevator, switch parent to elevator
+	if (std::string(GetParent()->GetType()) == "Floor")
+	{
+		for (int i = 1; i < sbs->Elevators(); i++)
+		{
+			Elevator *elev = sbs->GetElevator(i);
+
+			if (elev)
+			{
+				if (elev->IsInElevator(mesh->GetPosition()) == true)
+				{
+					RemoveFromParent();
+					ChangeParent(elev);
+					AddToParent();
+					break;
+				}
+			}
+		}
+	}
+
+	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor
+	else if (std::string(GetParent()->GetType()) == "Elevator")
+	{
+		Elevator *elev = ((Elevator*)GetParent()->GetRawObject());
+		int floornum = sbs->GetFloorNumber(GetPosition().y);
+		Floor *floor = sbs->GetFloor(floornum);
+
+		if (elev->IsInElevator(mesh->GetPosition()) == false && floor)
+		{
+			RemoveFromParent();
+			ChangeParent(floor);
+			AddToParent();
+		}
+	}
 }
 
 }

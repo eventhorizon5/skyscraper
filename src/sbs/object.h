@@ -78,6 +78,7 @@ public:
 	void NotifyRotate(bool parent = false);
 	virtual void ResetState() {}; //resets the internal state of an object
 	void ChangeParent(Object *new_parent);
+	bool IsGlobal();
 
 private:
 	void NotifyChildren(bool move, bool rotate);

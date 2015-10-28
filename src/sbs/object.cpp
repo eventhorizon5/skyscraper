@@ -441,7 +441,17 @@ void Object::ChangeParent(Object *new_parent)
 	Parent = new_parent;
 	Parent->AddChild(this);
 
-	sbs->Report("Changed parent of object " + ToString2(Number) + ": " + Name + " to " + ToString2(new_parent->GetNumber()) + ": " + std::string(new_parent->GetName()));
+	sbs->Report("Changed parent of object '" + ToString2(Number) + ": " + Name + "' to '" + ToString2(new_parent->GetNumber()) + ": " + std::string(new_parent->GetName()) + "'");
+}
+
+bool Object::IsGlobal()
+{
+	//returns true if object is a child of the SBS engine object (is a global object)
+
+	if (Number == 0 || !Parent)
+		return false;
+
+	return (Parent->GetNumber() == 0);
 }
 
 }

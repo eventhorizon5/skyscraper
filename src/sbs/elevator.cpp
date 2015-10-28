@@ -2342,7 +2342,7 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 
 	checkfirstrun = false;
 
-	if (position.y > GetPosition().y && position.y < GetPosition().y + (Height * 2))
+	if (position.y >= GetPosition().y && position.y < GetPosition().y + (Height * 2))
 	{
 		if (ElevatorMesh->InBoundingBox(position, false) == true)
 		{
@@ -5396,7 +5396,7 @@ bool Elevator::Check(Ogre::Vector3 position)
 {
 	//check to see if user (camera) is in the elevator
 
-	if (IsInElevator(position) == true)
+	if (IsInElevator(position, true) == true)
 	{
 		if (InElevator() == false)
 		{
