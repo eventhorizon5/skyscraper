@@ -105,7 +105,7 @@ void Object::SetValues(void *raw_object, Object *parent, const char *type, const
 	{
 		SceneNode = sbs->mSceneManager->createSceneNode(node_name);
 
-		//attach scene node to root, if no parent exists
+		//attach scene node to root, if no parent exists (for engine root object)
 		if (!Parent)
 			sbs->mSceneManager->getRootSceneNode()->addChild(SceneNode);
 	}
@@ -422,6 +422,26 @@ void Object::NotifyChildren(bool move, bool rotate)
 		if (rotate == true)
 			children[i]->NotifyRotate(true);
 	}
+}
+
+void Object::ChangeParent(Object *new_parent)
+{
+	//change parent of object
+
+	//require valid parents
+	if (!Parent || !new_parent)
+		return;
+
+	//remove this scenenode from parent
+	if (SceneNode)
+		SceneNode->getParent()->removeChild(SceneNode);
+
+	//switch parent
+	Parent->RemoveChild(this);
+	Parent = new_parent;
+	Parent->AddChild(this);
+
+	sbs->Report("Changed parent of object " + ToString2(Number) + ": " + Name + " to " + ToString2(new_parent->GetNumber()) + ": " + std::string(new_parent->GetName()));
 }
 
 }
