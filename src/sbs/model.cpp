@@ -126,7 +126,7 @@ void Model::AddToParent()
 {
 	int floor = 0;
 
-	if (SceneNode)
+	if (IsMovable() == true)
 		floor = sbs->GetFloorNumber(GetPosition().y);
 
 	if (std::string(GetParent()->GetType()) == "Elevator")
@@ -139,6 +139,11 @@ void Model::AddToParent()
 		((Stairs*)GetParent()->GetRawObject())->AddModel(floor, this);
 	else if (std::string(GetParent()->GetType()) == "SBS")
 		sbs->AddModel(this);
+}
+
+void Model::Loop()
+{
+	//runloop, called by parent to allow for switching parents
 }
 
 }

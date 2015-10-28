@@ -1391,13 +1391,20 @@ void Elevator::MonitorLoop()
 	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false && AutoDoors == true)
 		random_timer->Start(int(RandomFrequency * 1000), false);
 
-	//process triggers
 	if (IsEnabled == true)
 	{
+		//process triggers
 		for (int i = 0; i < (int)TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Check();
+		}
+
+		//process models
+		for (int i = 0; i < (int)ModelArray.size(); i++)
+		{
+			if (ModelArray[i])
+				ModelArray[i]->Loop();
 		}
 	}
 

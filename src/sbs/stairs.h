@@ -81,6 +81,7 @@ public:
 	void RemoveShowFloor(int floor);
 	bool IsShowFloor(int floor);
 	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
+	void Loop();
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array

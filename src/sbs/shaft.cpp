@@ -1088,4 +1088,21 @@ void Shaft::Check(Ogre::Vector3 position, int current_floor)
 	}
 }
 
+void Shaft::Loop()
+{
+	//shaft runloop
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (EnableArray[i] == true)
+		{
+			for (int j = 0; j < (int)ModelArray[i].size(); j++)
+			{
+				if (ModelArray[i][j])
+					ModelArray[i][j]->Loop();
+			}
+		}
+	}
+}
+
 }

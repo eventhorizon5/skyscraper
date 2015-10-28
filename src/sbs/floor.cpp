@@ -777,19 +777,25 @@ void Floor::Loop()
 {
 	//floor object main loop; runs if camera is currently on this floor
 
-	if (IsEnabled == true)
-	{
-		for (int i = 0; i < (int)TriggerArray.size(); i++)
-		{
-			if (TriggerArray[i])
-				TriggerArray[i]->Check();
-		}
+	if (IsEnabled == false)
+		return;
 
-		for (int i = 0; i < (int)EscalatorArray.size(); i++)
-		{
-			if (EscalatorArray[i])
-				EscalatorArray[i]->Loop();
-		}
+	for (int i = 0; i < (int)TriggerArray.size(); i++)
+	{
+		if (TriggerArray[i])
+			TriggerArray[i]->Check();
+	}
+
+	for (int i = 0; i < (int)EscalatorArray.size(); i++)
+	{
+		if (EscalatorArray[i])
+			EscalatorArray[i]->Loop();
+	}
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i])
+			ModelArray[i]->Loop();
 	}
 }
 

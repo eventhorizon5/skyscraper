@@ -613,6 +613,20 @@ void SBS::MainLoop()
 			camera->CheckElevator();
 		}
 
+		//run shaft loops
+		for (int i = 1; i <= Shafts(); i++)
+		{
+			if (GetShaft(i))
+				GetShaft(i)->Loop();
+		}
+
+		//run stairwell loops
+		for (int i = 1; i <= StairsNum(); i++)
+		{
+			if (GetStairs(i))
+				GetStairs(i)->Loop();
+		}
+
 		//check if the user is in a shaft
 		camera->CheckShaft();
 
@@ -637,6 +651,13 @@ void SBS::MainLoop()
 		{
 			if (TriggerArray[i])
 				TriggerArray[i]->Check();
+		}
+
+		//process models
+		for (int i = 0; i < (int)ModelArray.size(); i++)
+		{
+			if (ModelArray[i])
+				ModelArray[i]->Loop();
 		}
 
 		elapsed -= delta;

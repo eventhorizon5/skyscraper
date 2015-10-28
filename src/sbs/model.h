@@ -42,6 +42,7 @@ public:
 	int GetKeyID();
 	void SetKey(int keyid);
 	bool PhysicsEnabled();
+	void Loop();
 
 private:
 	void RemoveFromParent();
