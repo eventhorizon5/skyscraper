@@ -133,6 +133,18 @@ Camera::Camera(Ogre::Camera *camera)
 Camera::~Camera()
 {
 	//Destructor
+
+	//delete models
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i])
+		{
+			ModelArray[i]->parent_deleting = true;
+			delete ModelArray[i];
+		}
+		ModelArray[i] = 0;
+	}
+
 	if (mCharacter)
 		delete mCharacter;
 
@@ -1180,6 +1192,37 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 		return false;
 
 	return mesh->IsVisible(MainCamera);
+}
+
+void Camera::AddModel(Model *model)
+{
+	//add a model reference
+	//this is used for picking up a model, which changes the model's parent to the camera
+
+	if (!model)
+		return;
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+			return;
+	}
+
+	ModelArray.push_back(model);
+}
+
+void Camera::RemoveModel(Model *model)
+{
+	//remove a model reference (does not delete the object itself)
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (ModelArray[i] == model)
+		{
+			ModelArray.erase(ModelArray.begin() + i);
+			return;
+		}
+	}
 }
 
 }

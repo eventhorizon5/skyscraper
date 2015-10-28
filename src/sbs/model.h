@@ -43,6 +43,8 @@ public:
 	void SetKey(int keyid);
 	bool PhysicsEnabled();
 	void Loop();
+	void PickUp(bool drop = false);
+	bool IsPickedUp();
 
 private:
 	void RemoveFromParent();
@@ -52,6 +54,7 @@ private:
 	Ogre::Vector3 Offset;
 	bool is_key;
 	int KeyID;
+	bool global;
 };
 
 }

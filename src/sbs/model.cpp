@@ -39,6 +39,7 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	Offset = 0;
 	is_key = false;
 	KeyID = 0;
+	global = IsGlobal();
 
 	load_error = false;
 	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -118,6 +119,8 @@ void Model::RemoveFromParent()
 		((Shaft*)GetParent()->GetRawObject())->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "Stairs")
 		((Stairs*)GetParent()->GetRawObject())->RemoveModel(this);
+	else if (std::string(GetParent()->GetType()) == "Camera")
+		sbs->camera->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "SBS")
 		sbs->RemoveModel(this);
 }
@@ -137,6 +140,8 @@ void Model::AddToParent()
 		((Shaft*)GetParent()->GetRawObject())->AddModel(floor, this);
 	else if (std::string(GetParent()->GetType()) == "Stairs")
 		((Stairs*)GetParent()->GetRawObject())->AddModel(floor, this);
+	else if (std::string(GetParent()->GetType()) == "Camera")
+		sbs->camera->AddModel(this);
 	else if (std::string(GetParent()->GetType()) == "SBS")
 		sbs->AddModel(this);
 }
@@ -146,7 +151,7 @@ void Model::Loop()
 	//runloop, called by parent to allow for switching parents
 
 	//exit if global object
-	if (IsGlobal() == true)
+	if (global == true)
 		return;
 
 	//if model is a child of a floor, and is in an elevator, switch parent to elevator
@@ -183,6 +188,63 @@ void Model::Loop()
 			AddToParent();
 		}
 	}
+}
+
+void Model::PickUp(bool drop)
+{
+	//pick up or drop model
+
+	if (IsPickedUp() == false && drop == false)
+	{
+		//pick-up model (make model a child of the camera)
+		RemoveFromParent();
+		ChangeParent(sbs->camera);
+		AddToParent();
+		return;
+	}
+
+	//drop model (make model a child of the proper non-camera object)
+	if (IsPickedUp() == true && drop == true)
+	{
+		RemoveFromParent();
+
+		if (global == true)
+			ChangeParent(sbs);
+		else
+		{
+			bool found = false;
+			for (int i = 1; i < sbs->Elevators(); i++)
+			{
+				Elevator *elev = sbs->GetElevator(i);
+
+				if (elev)
+				{
+					if (elev->IsInElevator(mesh->GetPosition()) == true)
+					{
+						ChangeParent(elev);
+						found = true;
+						break;
+					}
+				}
+			}
+
+			if (found == false)
+			{
+				int floornum = sbs->GetFloorNumber(GetPosition().y);
+				Floor *floor = sbs->GetFloor(floornum);
+
+				if (floor)
+					ChangeParent(floor);
+			}
+		}
+
+		AddToParent();
+	}
+}
+
+bool Model::IsPickedUp()
+{
+	return (std::string(GetParent()->GetType()) == "Camera");
 }
 
 }

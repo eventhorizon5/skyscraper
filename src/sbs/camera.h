@@ -134,6 +134,8 @@ public:
 	void GotoFloor(int floor, bool disable_current = true);
 	void Binoculars(bool value);
 	bool IsMeshVisible(MeshObject *mesh);
+	void AddModel(Model *model);
+	void RemoveModel(Model *model);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -159,6 +161,9 @@ private:
 	Ogre::Vector3 accum_movement;
 	bool collision_reset;
 	bool use_startdirection;
+
+	//Models
+	std::vector<Model*> ModelArray;
 
 	//collision/physics
 	OgreBulletDynamics::CharacterController* mCharacter;

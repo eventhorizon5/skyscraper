@@ -432,6 +432,9 @@ void Object::ChangeParent(Object *new_parent)
 	if (!Parent || !new_parent)
 		return;
 
+	if (new_parent == Parent)
+		return;
+
 	//remove this scenenode from parent
 	if (SceneNode)
 		SceneNode->getParent()->removeChild(SceneNode);
