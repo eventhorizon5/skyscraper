@@ -41,6 +41,7 @@ public:
 	bool IsKey();
 	int GetKeyID();
 	void SetKey(int keyid);
+	bool PhysicsEnabled();
 
 private:
 

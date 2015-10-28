@@ -2311,12 +2311,14 @@ bool Elevator::IsElevator(Ogre::MeshPtr test)
 	return false;
 }
 
-bool Elevator::IsInElevator(const Ogre::Vector3 &position)
+bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 {
 	//determine if the given 3D position is inside the elevator
 
 	//first checks to see if camera is within an elevator's height range, and then
 	//checks for a collision with the elevator's floor below
+
+	//if camera is true, set associated camera offset
 
 	//SBS_PROFILE("Elevator::IsInElevator");
 	bool inelevator = false;
@@ -2339,11 +2341,12 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position)
 		{
 			if (ElevatorMesh->HitBeam(position, Ogre::Vector3::NEGATIVE_UNIT_Y, Height) >= 0)
 			{
-				CameraOffset = position.y - GetPosition().y;
+				if (camera == true)
+					CameraOffset = position.y - GetPosition().y;
 				inelevator = true;
 			}
 		}
-		else
+		else if (camera == true)
 			CameraOffset = 0;
 
 		if (position.y < GetPosition().y + Height)

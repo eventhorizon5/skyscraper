@@ -114,4 +114,9 @@ void Model::SetKey(int keyid)
 	KeyID = keyid;
 }
 
+bool Model::PhysicsEnabled()
+{
+	return mesh->Movable;
+}
+
 }
