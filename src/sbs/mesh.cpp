@@ -1675,7 +1675,7 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 	SBS_PROFILE("MeshObject::HitBeam");
 
 	Ogre::Vector3 position = sbs->ToRemote(origin - GetPosition());
-	Ogre::Ray ray (position, direction);
+	Ogre::Ray ray (position, sbs->ToRemote(direction, false));
 
 	for (int i = 0; i < (int)Triangles.size(); i++)
 	{
