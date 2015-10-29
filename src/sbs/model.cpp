@@ -119,8 +119,6 @@ void Model::RemoveFromParent()
 		((Shaft*)GetParent()->GetRawObject())->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "Stairs")
 		((Stairs*)GetParent()->GetRawObject())->RemoveModel(this);
-	else if (std::string(GetParent()->GetType()) == "Camera")
-		sbs->camera->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "SBS")
 		sbs->RemoveModel(this);
 }
@@ -140,8 +138,6 @@ void Model::AddToParent()
 		((Shaft*)GetParent()->GetRawObject())->AddModel(floor, this);
 	else if (std::string(GetParent()->GetType()) == "Stairs")
 		((Stairs*)GetParent()->GetRawObject())->AddModel(floor, this);
-	else if (std::string(GetParent()->GetType()) == "Camera")
-		sbs->camera->AddModel(this);
 	else if (std::string(GetParent()->GetType()) == "SBS")
 		sbs->AddModel(this);
 }
@@ -190,61 +186,61 @@ void Model::Loop()
 	}
 }
 
-void Model::PickUp(bool drop)
+void Model::PickUp()
 {
-	//pick up or drop model
+	//pick up model (make model a child of the camera object)
 
-	if (IsPickedUp() == false && drop == false)
-	{
-		//pick-up model (make model a child of the camera)
-		RemoveFromParent();
-		ChangeParent(sbs->camera);
-		AddToParent();
+	if (IsPickedUp() == true)
 		return;
-	}
 
+	//pick-up model (make model a child of the camera)
+	RemoveFromParent();
+	ChangeParent(sbs->camera);
+}
+
+void Model::Drop()
+{
 	//drop model (make model a child of the proper non-camera object)
-	if (IsPickedUp() == true && drop == true)
+
+	if (IsPickedUp() == false)
+		return;
+
+	if (global == true)
+		ChangeParent(sbs);
+	else
 	{
-		RemoveFromParent();
-
-		if (global == true)
-			ChangeParent(sbs);
-		else
+		bool found = false;
+		for (int i = 1; i < sbs->Elevators(); i++)
 		{
-			bool found = false;
-			for (int i = 1; i < sbs->Elevators(); i++)
-			{
-				Elevator *elev = sbs->GetElevator(i);
+			Elevator *elev = sbs->GetElevator(i);
 
-				if (elev)
+			if (elev)
+			{
+				if (elev->IsInElevator(mesh->GetPosition()) == true)
 				{
-					if (elev->IsInElevator(mesh->GetPosition()) == true)
-					{
-						ChangeParent(elev);
-						found = true;
-						break;
-					}
+					ChangeParent(elev);
+					found = true;
+					break;
 				}
-			}
-
-			if (found == false)
-			{
-				int floornum = sbs->GetFloorNumber(GetPosition().y);
-				Floor *floor = sbs->GetFloor(floornum);
-
-				if (floor)
-					ChangeParent(floor);
 			}
 		}
 
-		AddToParent();
+		if (found == false)
+		{
+			int floornum = sbs->GetFloorNumber(GetPosition().y);
+			Floor *floor = sbs->GetFloor(floornum);
+
+			if (floor)
+				ChangeParent(floor);
+		}
 	}
+
+	AddToParent();
 }
 
 bool Model::IsPickedUp()
 {
-	return (std::string(GetParent()->GetType()) == "Camera");
+	return (GetParent() == sbs->camera);
 }
 
 }

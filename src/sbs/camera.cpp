@@ -99,6 +99,7 @@ Camera::Camera(Ogre::Camera *camera)
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 	use_startdirection = false;
 	BinocularsFOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BinocularsFOV", 10.0f);
+	AttachedModel = 0;
 
 	//set up camera and scene nodes
 	MainCamera = camera;
@@ -134,15 +135,12 @@ Camera::~Camera()
 {
 	//Destructor
 
-	//delete models
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	//delete model
+	if (AttachedModel)
 	{
-		if (ModelArray[i])
-		{
-			ModelArray[i]->parent_deleting = true;
-			delete ModelArray[i];
-		}
-		ModelArray[i] = 0;
+		AttachedModel->parent_deleting = true;
+		delete AttachedModel;
+		AttachedModel = 0;
 	}
 
 	if (mCharacter)
@@ -1186,7 +1184,7 @@ void Camera::Binoculars(bool value)
 
 bool Camera::IsMeshVisible(MeshObject *mesh)
 {
-	//returns if a mesh object is visible in the camera's view frustom or not
+	//returns if a mesh object is visible in the camera's view frustum or not
 
 	if (!mesh)
 		return false;
@@ -1194,34 +1192,76 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 	return mesh->IsVisible(MainCamera);
 }
 
-void Camera::AddModel(Model *model)
+void Camera::AttachModel(Model *model)
 {
-	//add a model reference
+	//attach a model to the camera
 	//this is used for picking up a model, which changes the model's parent to the camera
 
-	if (!model)
+	if (!model || AttachedModel)
 		return;
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
-	{
-		if (ModelArray[i] == model)
-			return;
-	}
-
-	ModelArray.push_back(model);
+	AttachedModel = model;
 }
 
-void Camera::RemoveModel(Model *model)
+void Camera::DetachModel()
 {
-	//remove a model reference (does not delete the object itself)
+	//detach a model from the camera
 
-	for (int i = 0; i < (int)ModelArray.size(); i++)
+	AttachedModel = 0;
+}
+
+void Camera::PickUpModel()
+{
+	//pick up model
+	Ogre::Vector3 front, top;
+	GetDirection(front, top);
+
+	Ogre::Ray ray (sbs->ToRemote(GetPosition() - Ogre::Vector3(0, GetHeight() - 1, 0)), sbs->ToRemote(front, false));
+
+	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1.0f);
+
+	//check for collision
+	sbs->mWorld->launchRay(callback);
+
+	//exit if no collision
+	if (callback.doesCollide() == false)
+		return;
+
+	OgreBulletCollisions::Object* object = callback.getCollidedObject();
+
+	if (!object)
+		return;
+
+	//get name of collision object's parent scenenode (which is the same name as the mesh object)
+	std::string name = object->getRootNode()->getName();
+
+	//get associated mesh object
+	MeshObject *meshobject = sbs->FindMeshObject(name);
+	if (!meshobject)
+		return;
+
+	std::string type = meshobject->GetParent()->GetType();
+
+	if (type == "Model")
 	{
-		if (ModelArray[i] == model)
+		Model *model = (Model*)meshobject->GetParent()->GetRawObject();
+
+		if (model)
 		{
-			ModelArray.erase(ModelArray.begin() + i);
-			return;
+			model->PickUp();
+			AttachModel(model);
 		}
+	}
+}
+
+void Camera::DropModel()
+{
+	//drop model
+
+	if (AttachedModel)
+	{
+		AttachedModel->Drop();
+		DetachModel();
 	}
 }
 

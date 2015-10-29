@@ -43,7 +43,8 @@ public:
 	void SetKey(int keyid);
 	bool PhysicsEnabled();
 	void Loop();
-	void PickUp(bool drop = false);
+	void PickUp();
+	void Drop();
 	bool IsPickedUp();
 
 private:

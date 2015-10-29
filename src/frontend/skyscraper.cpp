@@ -638,7 +638,7 @@ void Skyscraper::GetInput()
 		return;
 
 	static int wireframe;
-	static bool wait, waitcheck, colliders, b_down, boxes;
+	static bool wait, waitcheck, colliders, b_down, c_down, boxes;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
@@ -924,10 +924,22 @@ void Skyscraper::GetInput()
 			Simcore->camera->Binoculars(true);
 			b_down = true;
 		}
-		if (!wxGetKeyState((wxKeyCode)'B') && b_down == true)
+		else if (!wxGetKeyState((wxKeyCode)'B') && b_down == true)
 		{
 			Simcore->camera->Binoculars(false);
 			b_down = false;
+		}
+
+		//model pick-up
+		if (wxGetKeyState((wxKeyCode)'C') && c_down == false)
+		{
+			Simcore->camera->PickUpModel();
+			c_down = true;
+		}
+		else if (!wxGetKeyState((wxKeyCode)'C') && c_down == true)
+		{
+			Simcore->camera->DropModel();
+			c_down = false;
 		}
 
 		//values from old version
