@@ -1932,16 +1932,16 @@ int ScriptProcessor::ProcCommands()
 		if (endfloor > Simcore->Floors - 1)
 			return ScriptError("Invalid ending floor");
 
-		SBS::Object *object;
+		SBS::Shaft *shaft;
 		if (compat == true)
-			object = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
+			shaft = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()));
 		else
-			object = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
+			shaft = Simcore->CreateShaft(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
 
-		if (!object)
+		if (!shaft)
 			return ScriptError();
 
-		StoreCommand(object);
+		StoreCommand(shaft);
 		return sNextLine;
 	}
 
@@ -2178,11 +2178,11 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		SBS::Object *object = Simcore->CreateStairwell(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
-		if (!object)
+		SBS::Stairs *stairs = Simcore->CreateStairwell(atoi(tempdata[0].c_str()), atof(tempdata[1].c_str()), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()));
+		if (!stairs)
 			return ScriptError();
 
-		StoreCommand(object);
+		StoreCommand(stairs);
 		return sNextLine;
 	}
 
@@ -2754,18 +2754,16 @@ int ScriptProcessor::ProcCommands()
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		SBS::Object* obj;
+		SBS::Model* model;
 		if (compat == true)
-			obj = Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+			model = Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
-			obj = Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+			model = Simcore->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
-		if (setkey == true && obj)
-		{
-			SBS::Model *mod = static_cast<SBS::Model*>(obj);
-			mod->SetKey(keyvalue);
-		}
-		StoreCommand(obj);
+		if (setkey == true && model)
+			model->SetKey(keyvalue);
+
+		StoreCommand(model);
 		return sNextLine;
 	}
 
@@ -2890,17 +2888,16 @@ int ScriptProcessor::ProcCommands()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		SBS::Object *obj = Simcore->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Control* control = Simcore->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
-		if (obj)
+		if (control)
 		{
-			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
 				control->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(control);
 		return sNextLine;
 	}
 
@@ -3835,23 +3832,22 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create call button
-		SBS::Object *obj = 0;
+		SBS::CallButton* callbutton = 0;
 		if (compat == 1)
-			obj = floor->AddCallButtons(callbutton_elevators, "", tempdata[0].c_str(), tempdata[1].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
+			callbutton = floor->AddCallButtons(callbutton_elevators, "", tempdata[0].c_str(), tempdata[1].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), Ogre::StringConverter::parseBool(tempdata[9]), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
 		else if (compat == 2)
-			obj = floor->AddCallButtons(callbutton_elevators, "", tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+			callbutton = floor->AddCallButtons(callbutton_elevators, "", tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), tempdata[8].c_str(), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
-			obj = floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), tempdata[9].c_str(), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+			callbutton = floor->AddCallButtons(callbutton_elevators, tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), tempdata[4].c_str(), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), tempdata[9].c_str(), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
-		if (obj)
+		if (callbutton)
 		{
-			SBS::CallButton* callbutton = static_cast<SBS::CallButton*>(obj);
 			if (lockvalue == 0)
 				callbutton->SetLocked(false, keyvalue);
 			else
 				callbutton->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(callbutton);
 		return sNextLine;
 	}
 
@@ -3940,23 +3936,21 @@ int ScriptProcessor::ProcFloors()
 			ScriptWarning("Syntax deprecated");
 
 		//create door
-		SBS::Object *obj;
+		SBS::Door* door;
 
 		if (compat == 1)
-			obj = floor->AddDoor("", "", false, tempdata[0].c_str(), atof(tempdata[1].c_str()), atoi(tempdata[2].c_str()), 0, atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()));
+			door = floor->AddDoor("", "", false, tempdata[0].c_str(), atof(tempdata[1].c_str()), atoi(tempdata[2].c_str()), 0, atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()));
 		if (compat == 2)
-			obj = floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), 0, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
+			door = floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), 0, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
 		if (compat == 3)
-			obj = floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()));
+			door = floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()));
 		if (compat == 0)
-			obj = floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+			door = floor->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 
-		if (obj)
-		{
-			SBS::Door* door = static_cast<SBS::Door*>(obj);
+		if (door)
 			door->SetLocked(lockvalue, keyvalue);
-		}
-		StoreCommand(obj);
+
+		StoreCommand(door);
 		return sNextLine;
 	}
 
@@ -4029,23 +4023,21 @@ int ScriptProcessor::ProcFloors()
 		//create door
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
-			SBS::Object *obj;
+			SBS::Door* door;
 
 			if (compat == 1)
-				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, "", "", false, tempdata[1].c_str(), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), 0, atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()));
+				door = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, "", "", false, tempdata[1].c_str(), atof(tempdata[2].c_str()), atoi(tempdata[3].c_str()), 0, atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()));
 			if (compat == 2)
-				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), 0, atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()));
+				door = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), 0, atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()));
 			if (compat == 3)
-				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+				door = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 			if (compat == 0)
-				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+				door = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
-			if (obj)
-			{
-				SBS::Door* door = static_cast<SBS::Door*>(obj);
+			if (door)
 				door->SetLocked(lockvalue, keyvalue);
-			}
-			StoreCommand(obj);
+
+			StoreCommand(door);
 		}
 		else
 			return ScriptError("Invalid stairwell");
@@ -4077,15 +4069,12 @@ int ScriptProcessor::ProcFloors()
 		//create door
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
-			SBS::Object *obj;
-			obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+			SBS::Door* door = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddDoor(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4].c_str(), atof(tempdata[5].c_str()), atoi(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
-			if (obj)
-			{
-				SBS::Door* door = static_cast<SBS::Door*>(obj);
+			if (door)
 				door->SetLocked(lockvalue, keyvalue);
-			}
-			StoreCommand(obj);
+
+			StoreCommand(door);
 		}
 		else
 			return ScriptError("Invalid shaft");
@@ -4469,18 +4458,16 @@ int ScriptProcessor::ProcFloors()
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		SBS::Object *obj;
+		SBS::Model *model;
 		if (compat == true)
-			obj = floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+			model = floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
-			obj = floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+			model = floor->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
-		if (setkey == true && obj)
-		{
-			SBS::Model *mod = static_cast<SBS::Model*>(obj);
-			mod->SetKey(keyvalue);
-		}
-		StoreCommand(obj);
+		if (setkey == true && model)
+			model->SetKey(keyvalue);
+
+		StoreCommand(model);
 		return sNextLine;
 	}
 
@@ -4527,19 +4514,17 @@ int ScriptProcessor::ProcFloors()
 		//create model
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
-			SBS::Object *obj;
+			SBS::Model *model;
 
 			if (compat == true)
-				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+				model = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 			else
-				obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::Vector3(atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()));
+				model = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::Vector3(atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()));
 
-			if (setkey == true && obj)
-			{
-				SBS::Model *mod = static_cast<SBS::Model*>(obj);
-				mod->SetKey(keyvalue);
-			}
-			StoreCommand(obj);
+			if (setkey == true && model)
+				model->SetKey(keyvalue);
+
+			StoreCommand(model);
 		}
 		else
 			return ScriptError("Invalid stairwell");
@@ -4589,18 +4574,16 @@ int ScriptProcessor::ProcFloors()
 		//create model
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
-			SBS::Object *obj;
+			SBS::Model *model;
 			if (compat == true)
-				obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+				model = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), false, Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 			else
-				obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::Vector3(atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()));
+				model = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddModel(Current, tempdata[1].c_str(), tempdata[2].c_str(), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str())), Ogre::Vector3(atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str())), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), Ogre::StringConverter::parseBool(tempdata[12]), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()), atof(tempdata[15].c_str()));
 
-			if (setkey == true && obj)
-			{
-				SBS::Model *mod = static_cast<SBS::Model*>(obj);
-				mod->SetKey(keyvalue);
-			}
-			StoreCommand(obj);
+			if (setkey == true && model)
+				model->SetKey(keyvalue);
+
+			StoreCommand(model);
 		}
 		else
 			return ScriptError("Invalid shaft");
@@ -4642,17 +4625,16 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		SBS::Object *obj = floor->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Control* control = floor->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
-		if (obj)
+		if (control)
 		{
-			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
 				control->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(control);
 		return sNextLine;
 	}
 
@@ -4695,17 +4677,16 @@ int ScriptProcessor::ProcFloors()
 
 		if (Simcore->GetShaft(atoi(tempdata[0].c_str())))
 		{
-			SBS::Object *obj = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
+			SBS::Control* control = Simcore->GetShaft(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
 
-			if (obj)
+			if (control)
 			{
-				SBS::Control* control = static_cast<SBS::Control*>(obj);
 				if (lockvalue == 0)
 					control->SetLocked(false, keyvalue);
 				else
 					control->SetLocked(true, keyvalue);
 			}
-			StoreCommand(obj);
+			StoreCommand(control);
 		}
 		else
 			return ScriptError("Invalid shaft");
@@ -4751,17 +4732,16 @@ int ScriptProcessor::ProcFloors()
 
 		if (Simcore->GetStairs(atoi(tempdata[0].c_str())))
 		{
-			SBS::Object *obj = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
+			SBS::Control* control = Simcore->GetStairs(atoi(tempdata[0].c_str()))->AddControl(Current, tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), action_array, tex_array);
 
-			if (obj)
+			if (control)
 			{
-				SBS::Control* control = static_cast<SBS::Control*>(obj);
 				if (lockvalue == 0)
 					control->SetLocked(false, keyvalue);
 				else
 					control->SetLocked(true, keyvalue);
 			}
-			StoreCommand(obj);
+			StoreCommand(control);
 		}
 		else
 			return ScriptError("Invalid stairwell");
@@ -6480,27 +6460,26 @@ int ScriptProcessor::ProcElevators()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		SBS::Object *obj;
+		SBS::Control* control;
 
 		if (compat == 0)
 		{
 			CheckFile(std::string("data/" + tempdata[1]).c_str());
-			obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
+			control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
-			obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), hoffset, voffset);
+			control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), hoffset, voffset);
 		if (compat == 2)
-			obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), hoffset, voffset);
+			control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), hoffset, voffset);
 
-		if (obj)
+		if (control)
 		{
-			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
 				control->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(control);
 		return sNextLine;
 	}
 
@@ -6589,27 +6568,26 @@ int ScriptProcessor::ProcElevators()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		SBS::Object *obj;
+		SBS::Control* control;
 
 		if (compat == 0)
 		{
 			CheckFile(std::string("data/" + tempdata[1]).c_str());
-			obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
+			control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 		}
 		if (compat == 1)
-			obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), hoffset, voffset);
+			control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), tempdata[4].c_str(), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), hoffset, voffset);
 		if (compat == 2)
-			obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), hoffset, voffset);
+			control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton("", tempdata[1].c_str(), tempdata[2].c_str(), atoi(tempdata[3].c_str()), atoi(tempdata[4].c_str()), tempdata[5].c_str(), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), hoffset, voffset);
 
-		if (obj)
+		if (control)
 		{
-			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
 				control->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(control);
 		return sNextLine;
 	}
 
@@ -6646,17 +6624,16 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		SBS::Object *obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
+		SBS::Control* control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddButton(tempdata[1].c_str(), tempdata[2].c_str(), tempdata[3].c_str(), atoi(tempdata[4].c_str()), atoi(tempdata[5].c_str()), tempdata[6].c_str(), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), hoffset, voffset);
 
-		if (obj)
+		if (control)
 		{
-			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
 				control->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(control);
 		return sNextLine;
 	}
 
@@ -6700,17 +6677,16 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		SBS::Object *obj = elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Control* control = elev->GetPanel(atoi(tempdata[0].c_str()))->AddControl(tempdata[1].c_str(), atoi(tempdata[2].c_str()), atoi(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
-		if (obj)
+		if (control)
 		{
-			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
 				control->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(control);
 		return sNextLine;
 	}
 
@@ -7137,21 +7113,19 @@ int ScriptProcessor::ProcElevators()
 			ScriptWarning("Syntax deprecated");
 
 		//create door
-		SBS::Object *obj;
+		SBS::Door* door;
 
 		if (compat == 1)
-			obj = elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), 0, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
+			door = elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), 0, atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()));
 		else if (compat == 2)
-			obj = elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()));
+			door = elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), false, tempdata[2].c_str(), atof(tempdata[3].c_str()), atoi(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()));
 		else
-			obj = elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+			door = elev->AddDoor(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3].c_str(), atof(tempdata[4].c_str()), atoi(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 
-		if (obj)
-		{
-			SBS::Door* door = static_cast<SBS::Door*>(obj);
+		if (door)
 			door->SetLocked(lockvalue, keyvalue);
-		}
-		StoreCommand(obj);
+
+		StoreCommand(door);
 		return sNextLine;
 	}
 
@@ -7196,18 +7170,16 @@ int ScriptProcessor::ProcElevators()
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
 		//create model
-		SBS::Object *obj;
+		SBS::Model *model;
 		if (compat == true)
-			obj = elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
+			model = elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), false, Ogre::Vector3(atof(tempdata[2].c_str()), atof(tempdata[3].c_str()), atof(tempdata[4].c_str())), Ogre::Vector3(atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str())), atof(tempdata[8].c_str()), atof(tempdata[9].c_str()), Ogre::StringConverter::parseBool(tempdata[10]), atof(tempdata[11].c_str()), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()));
 		else
-			obj = elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
+			model = elev->AddModel(tempdata[0].c_str(), tempdata[1].c_str(), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str())), Ogre::Vector3(atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), atof(tempdata[8].c_str())), atof(tempdata[9].c_str()), atof(tempdata[10].c_str()), Ogre::StringConverter::parseBool(tempdata[11]), atof(tempdata[12].c_str()), atof(tempdata[13].c_str()), atof(tempdata[14].c_str()));
 
-		if (setkey == true && obj)
-		{
-			SBS::Model *mod = static_cast<SBS::Model*>(obj);
-			mod->SetKey(keyvalue);
-		}
-		StoreCommand(obj);
+		if (setkey == true && model)
+			model->SetKey(keyvalue);
+
+		StoreCommand(model);
 		return sNextLine;
 	}
 
@@ -7246,17 +7218,16 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile(std::string("data/" + tempdata[1]).c_str());
 
-		SBS::Object *obj = elev->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
+		SBS::Control* control = elev->AddControl(tempdata[0].c_str(), tempdata[1].c_str(), tempdata[2].c_str(), atof(tempdata[3].c_str()), atof(tempdata[4].c_str()), atof(tempdata[5].c_str()), atof(tempdata[6].c_str()), atof(tempdata[7].c_str()), action_array, tex_array);
 
-		if (obj)
+		if (control)
 		{
-			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
 				control->SetLocked(true, keyvalue);
 		}
-		StoreCommand(obj);
+		StoreCommand(control);
 		return sNextLine;
 	}
 
@@ -7994,27 +7965,28 @@ std::string ScriptProcessor::Calc(const char *expression)
 void ScriptProcessor::StoreCommand(SBS::Object *object)
 {
 	//store command and line info in object
-	if (object)
-	{
-		int LineNumber, FunctionLine;
-		bool IsInclude, IsIncludeFunction;
-		std::string IncludeFile, IncludeFunctionFile;
 
-		GetLineInformation(false, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
-		object->linenum = LineNumber;
-		object->includefile = IncludeFile;
+	if (!object)
+		return;
 
-		TrimString(BuildingData[line]);
-		object->command = BuildingData[line];
-		object->command_processed = LineData;
-		object->context = Context;
-		std::string current;
-		current = ToString(Current);
-		if (Section == 2)
-			object->context = "Floor " + current;
-		if (Section == 4)
-			object->context = "Elevator " + current;
-	}
+	int LineNumber, FunctionLine;
+	bool IsInclude, IsIncludeFunction;
+	std::string IncludeFile, IncludeFunctionFile;
+
+	GetLineInformation(false, LineNumber, FunctionLine, IsInclude, IncludeFile, IsIncludeFunction, IncludeFunctionFile);
+	object->linenum = LineNumber;
+	object->includefile = IncludeFile;
+
+	TrimString(BuildingData[line]);
+	object->command = BuildingData[line];
+	object->command_processed = LineData;
+	object->context = Context;
+	std::string current;
+	current = ToString(Current);
+	if (Section == 2)
+		object->context = "Floor " + current;
+	if (Section == 4)
+		object->context = "Elevator " + current;
 }
 
 bool ScriptProcessor::FunctionProc()
