@@ -861,7 +861,10 @@ WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre
 		}
 	}
 
-	return Walls[best_i];
+	if (best_i >= 0)
+		return Walls[best_i];
+	else
+		return 0;
 }
 
 void MeshObject::RescaleVertices(float multiplier)
