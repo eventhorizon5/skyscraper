@@ -477,26 +477,20 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		return;
 
 	meshname = mesh->GetName();
+	wallname = "";
+	Object *obj = mesh;
 
 	if (wall)
 	{
 		wallname = wall->GetName();
-		object_number = wall->GetNumber();
-	}
-	else
-	{
-		wallname = "";
-		object_number = mesh->GetNumber();
+		obj = wall;
 	}
 
 	//store parameters of object
-	Object *obj = sbs->GetObject(object_number);
-	if (obj)
-	{
-		object_line = obj->linenum;
-		object_cmd = obj->command;
-		object_cmd_processed = obj->command_processed;
-	}
+	object_number = obj->GetNumber();
+	object_line = obj->linenum;
+	object_cmd = obj->command;
+	object_cmd_processed = obj->command_processed;
 
 	//show result
 	std::string number = ToString(object_number);
@@ -507,11 +501,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 
 	//object checks and actions
 
-	if (!obj)
-		return;
-
 	std::string type = obj->GetType();
-
 	Object *mesh_parent = 0;
 
 	if (obj->GetParent())
