@@ -675,7 +675,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		FloorIndicator *ind = dynamic_cast<FloorIndicator*>(mesh_parent);
 		DirectionalIndicator *ind2 = dynamic_cast<DirectionalIndicator*>(mesh_parent);
 
-		if (ind || ind2) && right == false)
+		if ((ind || ind2) && right == false)
 		{
 			//delete indicator if ctrl and alt keys are pressed
 			if (ctrl == true && alt == true && shift == false)
