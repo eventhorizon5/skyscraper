@@ -39,7 +39,7 @@ namespace SBS {
 Elevator::Elevator(int number)
 {
 	//set up SBS object
-	SetValues(this, sbs, "Elevator", "", false);
+	SetValues(sbs, "Elevator", "", false);
 
 	//set elevator number
 	Number = number;

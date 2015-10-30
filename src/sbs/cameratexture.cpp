@@ -42,7 +42,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 	//if use_rotation is true, the rotation vector is a standard rotation, otherwise that vector represents a point in space to look at
 
 	//set up SBS object
-	SetValues(this, parent, "CameraTexture", name, false);
+	SetValues(parent, "CameraTexture", name, false);
 
 	unsigned int texture_size = 256;
 	if (quality == 2)

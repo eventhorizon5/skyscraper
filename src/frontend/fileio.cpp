@@ -2762,7 +2762,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (setkey == true && obj)
 		{
-			SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
+			SBS::Model *mod = static_cast<SBS::Model*>(obj);
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
@@ -2894,7 +2894,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (obj)
 		{
-			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -3845,7 +3845,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (obj)
 		{
-			SBS::CallButton* callbutton = (SBS::CallButton*)obj->GetRawObject();
+			SBS::CallButton* callbutton = static_cast<SBS::CallButton*>(obj);
 			if (lockvalue == 0)
 				callbutton->SetLocked(false, keyvalue);
 			else
@@ -3953,7 +3953,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (obj)
 		{
-			SBS::Door* door = (SBS::Door*)obj->GetRawObject();
+			SBS::Door* door = static_cast<SBS::Door*>(obj);
 			door->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
@@ -4042,7 +4042,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (obj)
 			{
-				SBS::Door* door = (SBS::Door*)obj->GetRawObject();
+				SBS::Door* door = static_cast<SBS::Door*>(obj);
 				door->SetLocked(lockvalue, keyvalue);
 			}
 			StoreCommand(obj);
@@ -4082,7 +4082,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (obj)
 			{
-				SBS::Door* door = (SBS::Door*)obj->GetRawObject();
+				SBS::Door* door = static_cast<SBS::Door*>(obj);
 				door->SetLocked(lockvalue, keyvalue);
 			}
 			StoreCommand(obj);
@@ -4477,7 +4477,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (setkey == true && obj)
 		{
-			SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
+			SBS::Model *mod = static_cast<SBS::Model*>(obj);
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
@@ -4536,7 +4536,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (setkey == true && obj)
 			{
-				SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
+				SBS::Model *mod = static_cast<SBS::Model*>(obj);
 				mod->SetKey(keyvalue);
 			}
 			StoreCommand(obj);
@@ -4597,7 +4597,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (setkey == true && obj)
 			{
-				SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
+				SBS::Model *mod = static_cast<SBS::Model*>(obj);
 				mod->SetKey(keyvalue);
 			}
 			StoreCommand(obj);
@@ -4646,7 +4646,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (obj)
 		{
-			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -4699,7 +4699,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (obj)
 			{
-				SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+				SBS::Control* control = static_cast<SBS::Control*>(obj);
 				if (lockvalue == 0)
 					control->SetLocked(false, keyvalue);
 				else
@@ -4755,7 +4755,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (obj)
 			{
-				SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+				SBS::Control* control = static_cast<SBS::Control*>(obj);
 				if (lockvalue == 0)
 					control->SetLocked(false, keyvalue);
 				else
@@ -6494,7 +6494,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -6603,7 +6603,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -6650,7 +6650,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -6704,7 +6704,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else
@@ -7148,7 +7148,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			SBS::Door* door = (SBS::Door*)obj->GetRawObject();
+			SBS::Door* door = static_cast<SBS::Door*>(obj);
 			door->SetLocked(lockvalue, keyvalue);
 		}
 		StoreCommand(obj);
@@ -7204,7 +7204,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (setkey == true && obj)
 		{
-			SBS::Model *mod = (SBS::Model*)obj->GetRawObject();
+			SBS::Model *mod = static_cast<SBS::Model*>(obj);
 			mod->SetKey(keyvalue);
 		}
 		StoreCommand(obj);
@@ -7250,7 +7250,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (obj)
 		{
-			SBS::Control* control = (SBS::Control*)obj->GetRawObject();
+			SBS::Control* control = static_cast<SBS::Control*>(obj);
 			if (lockvalue == 0)
 				control->SetLocked(false, keyvalue);
 			else

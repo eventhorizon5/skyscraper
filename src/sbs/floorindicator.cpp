@@ -37,7 +37,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	//creates a new floor indicator at the specified position
 
 	//set up SBS object
-	SetValues(this, parent, "FloorIndicator", "", false);
+	SetValues(parent, "FloorIndicator", "", false);
 
 	IsEnabled = true;
 	elev = elevator;
@@ -88,9 +88,9 @@ FloorIndicator::~FloorIndicator()
 	if (sbs->FastDelete == false && parent_deleting == false)
 	{
 		if (std::string(GetParent()->GetType()) == "Elevator")
-			((Elevator*)GetParent()->GetRawObject())->RemoveFloorIndicator(this);
+			static_cast<Elevator*>(GetParent())->RemoveFloorIndicator(this);
 		if (std::string(GetParent()->GetType()) == "Floor")
-			((Floor*)GetParent()->GetRawObject())->RemoveFloorIndicator(this);
+			static_cast<Floor*>(GetParent())->RemoveFloorIndicator(this);
 	}
 }
 

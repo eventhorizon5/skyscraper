@@ -35,7 +35,7 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	//loads a 3D model into the simulation
 
 	//set up SBS object
-	SetValues(this, parent, "Model", name, false);
+	SetValues(parent, "Model", name, false);
 	Offset = 0;
 	is_key = false;
 	KeyID = 0;
@@ -112,13 +112,13 @@ bool Model::PhysicsEnabled()
 void Model::RemoveFromParent()
 {
 	if (std::string(GetParent()->GetType()) == "Elevator")
-		((Elevator*)GetParent()->GetRawObject())->RemoveModel(this);
+		static_cast<Elevator*>(GetParent())->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "Floor")
-		((Floor*)GetParent()->GetRawObject())->RemoveModel(this);
+		static_cast<Floor*>(GetParent())->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "Shaft")
-		((Shaft*)GetParent()->GetRawObject())->RemoveModel(this);
+		static_cast<Shaft*>(GetParent())->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "Stairs")
-		((Stairs*)GetParent()->GetRawObject())->RemoveModel(this);
+		static_cast<Stairs*>(GetParent())->RemoveModel(this);
 	else if (std::string(GetParent()->GetType()) == "SBS")
 		sbs->RemoveModel(this);
 }
@@ -131,13 +131,13 @@ void Model::AddToParent()
 		floor = sbs->GetFloorNumber(GetPosition().y);
 
 	if (std::string(GetParent()->GetType()) == "Elevator")
-		((Elevator*)GetParent()->GetRawObject())->AddModel(this);
+		static_cast<Elevator*>(GetParent())->AddModel(this);
 	else if (std::string(GetParent()->GetType()) == "Floor")
-		((Floor*)GetParent()->GetRawObject())->AddModel(this);
+		static_cast<Floor*>(GetParent())->AddModel(this);
 	else if (std::string(GetParent()->GetType()) == "Shaft")
-		((Shaft*)GetParent()->GetRawObject())->AddModel(floor, this);
+		static_cast<Shaft*>(GetParent())->AddModel(floor, this);
 	else if (std::string(GetParent()->GetType()) == "Stairs")
-		((Stairs*)GetParent()->GetRawObject())->AddModel(floor, this);
+		static_cast<Stairs*>(GetParent())->AddModel(floor, this);
 	else if (std::string(GetParent()->GetType()) == "SBS")
 		sbs->AddModel(this);
 }
@@ -173,7 +173,7 @@ void Model::Loop()
 	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor
 	else if (std::string(GetParent()->GetType()) == "Elevator")
 	{
-		Elevator *elev = ((Elevator*)GetParent()->GetRawObject());
+		Elevator *elev = static_cast<Elevator*>(GetParent());
 		int floornum = sbs->GetFloorNumber(GetPosition().y);
 		Floor *floor = sbs->GetFloor(floornum);
 

@@ -42,11 +42,10 @@ public:
 	//functions
 	Object(bool temporary = false);
 	virtual ~Object();
-	void SetValues(void *raw_object, Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable = true);
+	void SetValues(Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();
 	bool IsMovable();
 	Object* GetParent();
-	void* GetRawObject();
 	const char* GetType();
 	int GetNumber();
 	const char* GetName();
@@ -85,7 +84,6 @@ private:
 
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object
-	void *raw_object; //raw object
 	std::string Type; //object type
 	int Number; //object identifier
 	bool Temporary; //true if object can be deleted during runtime
@@ -93,6 +91,7 @@ private:
 	std::vector<Object*> children; //object's children
 	Ogre::SceneNode *SceneNode; //node in scene graph
 	Ogre::Vector3 Rotation; //rotation vector
+	bool values_set;
 };
 
 }

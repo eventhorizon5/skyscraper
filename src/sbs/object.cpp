@@ -33,13 +33,13 @@ Object::Object(bool temporary)
 {
 	Permanent = false;
 	Parent = 0;
-	raw_object = 0;
 	linenum = 0;
 	Number = -1;
 	Temporary = temporary;
 	parent_deleting = false;
 	SceneNode = 0;
 	Rotation = Ogre::Vector3::ZERO;
+	values_set = false;
 
 	//register object with engine
 	if (temporary == false)
@@ -83,15 +83,15 @@ Object::~Object()
 	sbs->Report("Deleted object " + ToString2(Number) + ": " + Name);
 }
 
-void Object::SetValues(void *raw_object, Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable)
+void Object::SetValues(Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable)
 {
 	//set object values
 
 	//exit if settings have already been set
-	if (this->raw_object)
+	if (values_set == true)
 		return;
 
-	this->raw_object = raw_object;
+	values_set = true;
 	Parent = parent;
 	Permanent = is_permanent;
 	Type = type;
@@ -130,12 +130,6 @@ Object* Object::GetParent()
 {
 	//return parent object
 	return Parent;
-}
-
-void* Object::GetRawObject()
-{
-	//return raw object
-	return raw_object;
 }
 
 const char* Object::GetType()

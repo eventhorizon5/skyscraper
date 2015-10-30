@@ -37,7 +37,7 @@ Escalator::Escalator(Object *parent, const char *name, bool run, bool run_direct
 	//direction is where the stair base is - front, back, left, or right.
 
 	//set up SBS object
-	SetValues(this, parent, "Escalator", name, false);
+	SetValues(parent, "Escalator", name, false);
 
 	IsEnabled = true;
 	Run = run;
@@ -91,7 +91,7 @@ Escalator::~Escalator()
 		if (parent_deleting == false)
 		{
 			if (std::string(GetParent()->GetType()) == "Floor")
-				((Floor*)GetParent()->GetRawObject())->RemoveEscalator(this);
+				static_cast<Floor*>(GetParent())->RemoveEscalator(this);
 		}
 	}
 }

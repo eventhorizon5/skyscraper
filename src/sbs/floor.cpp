@@ -34,7 +34,7 @@ namespace SBS {
 Floor::Floor(int number)
 {
 	//set up SBS object
-	SetValues(this, sbs, "Floor", "", false);
+	SetValues(sbs, "Floor", "", false);
 
 	//Set floor's object number
 	Number = number;

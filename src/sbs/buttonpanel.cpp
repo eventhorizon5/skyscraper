@@ -43,7 +43,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 		return;
 
 	//set up SBS object
-	SetValues(this, elev, "ButtonPanel", "", false);
+	SetValues(elev, "ButtonPanel", "", false);
 
 	IsEnabled = true;
 	elevator = _elevator;

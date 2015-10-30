@@ -42,7 +42,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 		return;
 
 	//set up SBS object
-	SetValues(this, floor, "CallButton", "", false);
+	SetValues(floor, "CallButton", "", false);
 
 	IsEnabled = true;
 	Elevators.resize(elevators.size());

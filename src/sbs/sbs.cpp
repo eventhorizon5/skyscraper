@@ -54,7 +54,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 	RegisterObject(this);
 
 	//set up SBS object
-	SetValues(this, 0, "SBS", "SBS", true);
+	SetValues(0, "SBS", "SBS", true);
 
 	mRoot = Ogre::Root::getSingletonPtr();
 
@@ -3031,9 +3031,6 @@ bool SBS::DeleteObject(Object *object)
 	std::string number = ToString(object->GetNumber());
 	bool deleted = false;
 
-	if (!object->GetRawObject())
-		return ReportError("Invalid raw object " + number);
-
 	//don't delete permanent objects
 	if (object->IsPermanent() == true)
 		return ReportError("Cannot delete permanent object " + number);
@@ -3043,7 +3040,7 @@ bool SBS::DeleteObject(Object *object)
 	//perform standard delete based on object type
 	if (type == "Floor")
 	{
-		Floor *floor = (Floor*)object->GetRawObject();
+		Floor *floor = static_cast<Floor*>(object);
 
 		//make sure no shaft is dependent on this floor
 		for (int i = 0; i < (int)ShaftArray.size(); i++)
@@ -3079,42 +3076,42 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "Elevator")
 	{
-		delete (Elevator*)object->GetRawObject();
+		delete static_cast<Elevator*>(object);
 		deleted = true;
 	}
 	if (type == "ButtonPanel")
 	{
-		delete (ButtonPanel*)object->GetRawObject();
+		delete static_cast<ButtonPanel*>(object);
 		deleted = true;
 	}
 	if (type == "CallButton")
 	{
-		delete (CallButton*)object->GetRawObject();
+		delete static_cast<CallButton*>(object);
 		deleted = true;
 	}
 	if (type == "DirectionalIndicator")
 	{
-		delete (DirectionalIndicator*)object->GetRawObject();
+		delete static_cast<DirectionalIndicator*>(object);
 		deleted = true;
 	}
 	if (type == "Door")
 	{
-		delete (Door*)object->GetRawObject();
+		delete static_cast<Door*>(object);
 		deleted = true;
 	}
 	if (type == "ElevatorDoor")
 	{
-		delete (ElevatorDoor*)object->GetRawObject();
+		delete static_cast<ElevatorDoor*>(object);
 		deleted = true;
 	}
 	if (type == "FloorIndicator")
 	{
-		delete (FloorIndicator*)object->GetRawObject();
+		delete static_cast<FloorIndicator*>(object);
 		deleted = true;
 	}
 	if (type == "Shaft")
 	{
-		Shaft *shaft = (Shaft*)object->GetRawObject();
+		Shaft *shaft = static_cast<Shaft*>(object);
 
 		//make sure no elevator is dependent on this shaft
 		for (int i = 0; i < (int)ElevatorArray.size(); i++)
@@ -3132,39 +3129,39 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "Sound")
 	{
-		delete (Sound*)object->GetRawObject();
+		delete static_cast<Sound*>(object);
 		deleted = true;
 	}
 	if (type == "Stairs")
 	{
-		delete (Stairs*)object->GetRawObject();
+		delete static_cast<Stairs*>(object);
 		deleted = true;
 	}
 	if (type == "Wall")
 	{
-		WallObject *obj = (WallObject*)object->GetRawObject();
+		WallObject *obj = static_cast<WallObject*>(object);
 		obj->DeletePolygons(true);
 		delete obj;
 		deleted = true;
 	}
 	if (type == "Model")
 	{
-		delete (Model*)object->GetRawObject();
+		delete static_cast<Model*>(object);
 		deleted = true;
 	}
 	if (type == "Control")
 	{
-		delete (Control*)object->GetRawObject();
+		delete static_cast<Control*>(object);
 		deleted = true;
 	}
 	if (type == "Trigger")
 	{
-		delete (Trigger*)object->GetRawObject();
+		delete static_cast<Trigger*>(object);
 		deleted = true;
 	}
 	if (type == "DoorWrapper")
 	{
-		ElevatorDoor::DoorWrapper* wrapper = (ElevatorDoor::DoorWrapper*)object->GetRawObject();
+		ElevatorDoor::DoorWrapper* wrapper = static_cast<ElevatorDoor::DoorWrapper*>(object);
 		if (wrapper->IsShaftDoor == false)
 			return ReportError("Deleting the main elevator door wrapper is not supported yet");
 
@@ -3173,7 +3170,7 @@ bool SBS::DeleteObject(Object *object)
 	}
 	if (type == "Escalator")
 	{
-		delete (Escalator*)object->GetRawObject();
+		delete static_cast<Escalator*>(object);
 		deleted = true;
 	}
 

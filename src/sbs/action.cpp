@@ -180,13 +180,13 @@ bool Action::Run(Object *caller, Object *parent)
 	std::string parent_name = parent->GetName();
 	std::string parent_type = parent->GetType();
 	if (parent_type == "Floor")
-		floor = (Floor*)parent->GetRawObject();
+		floor = static_cast<Floor*>(parent);
 	else if (parent_type == "Elevator")
-		elevator = (Elevator*)parent->GetRawObject();
+		elevator = static_cast<Elevator*>(parent);
 	else if (parent_type == "Shaft")
-		shaft = (Shaft*)parent->GetRawObject();
+		shaft = static_cast<Shaft*>(parent);
 	else if (parent_type == "Stairs")
-		stairs = (Stairs*)parent->GetRawObject();
+		stairs = static_cast<Stairs*>(parent);
 
 	//report the action used
 	sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");

@@ -33,7 +33,7 @@ namespace SBS {
 ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 {
 	//set up SBS object
-	SetValues(this, elevator, "ElevatorDoor", "", false);
+	SetValues(elevator, "ElevatorDoor", "", false);
 
 	std::string name = "Elevator Door " + ToString2(number);
 	SetName(name.c_str());
@@ -1463,7 +1463,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	else
 		name = "Elevator Door " + ToString2(parent->Number);
 
-	SetValues(this, objparent, "DoorWrapper", name.c_str(), false);
+	SetValues(objparent, "DoorWrapper", name.c_str(), false);
 
 	if (IsShaftDoor == true)
 		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);

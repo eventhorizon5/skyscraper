@@ -42,7 +42,7 @@ namespace SBS {
 Camera::Camera(Ogre::Camera *camera)
 {
 	//set up SBS object
-	SetValues(this, sbs, "Camera", "Camera", true);
+	SetValues(sbs, "Camera", "Camera", true);
 
 	//init variables
 	CurrentFloor = 0;
@@ -523,7 +523,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check controls
 		if (parent_type == "Control")
 		{
-			Control *control = (Control*)mesh_parent->GetRawObject();
+			Control *control = static_cast<Control*>(mesh_parent);
 
 			if (control)
 			{
@@ -545,7 +545,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check doors
 		if (parent_type == "Door" && right == false)
 		{
-			Door *door = (Door*)mesh_parent->GetRawObject();
+			Door *door = static_cast<Door*>(mesh_parent);
 
 			if (door)
 			{
@@ -583,7 +583,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check models
 		if (parent_type == "Model" && right == false)
 		{
-			Model *model = (Model*)mesh_parent->GetRawObject();
+			Model *model = static_cast<Model*>(mesh_parent);
 
 			if (model)
 			{
@@ -607,7 +607,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check call buttons
 		if (parent_type == "CallButton" && right == false)
 		{
-			CallButton *callbutton = (CallButton*)mesh_parent->GetRawObject();
+			CallButton *callbutton = static_cast<CallButton*>(mesh_parent);
 
 			if (callbutton)
 			{
@@ -654,7 +654,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 		//check elevator doors
 		if (parent_type == "DoorWrapper" && shift == true && right == false)
 		{
-			ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)mesh_parent->GetRawObject();
+			ElevatorDoor::DoorWrapper *wrapper = static_cast<ElevatorDoor::DoorWrapper*>(mesh_parent);
 
 			if (wrapper)
 			{
@@ -803,7 +803,7 @@ void Camera::Loop(float delta)
 					//check elevator doors (door bumpers feature)
 					if (type == "DoorWrapper")
 					{
-						ElevatorDoor::DoorWrapper *wrapper = (ElevatorDoor::DoorWrapper*)obj->GetParent()->GetRawObject();
+						ElevatorDoor::DoorWrapper *wrapper = static_cast<ElevatorDoor::DoorWrapper*>(obj->GetParent());
 
 						if (wrapper)
 						{
@@ -1145,7 +1145,7 @@ void Camera::PickUpModel()
 
 	if (type == "Model")
 	{
-		Model *model = (Model*)mesh->GetParent()->GetRawObject();
+		Model *model = static_cast<Model*>(mesh->GetParent());
 
 		if (model)
 		{

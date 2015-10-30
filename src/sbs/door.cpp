@@ -47,7 +47,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 	//8 = faces back, opens front
 
 	//set up SBS object
-	SetValues(this, parent, "Door", name, false);
+	SetValues(parent, "Door", name, false);
 
 	IsEnabled = true;
 	Direction = direction;
@@ -160,11 +160,11 @@ Door::~Door()
 		if (parent_deleting == false)
 		{
 			if (std::string(GetParent()->GetType()) == "Elevator")
-				((Elevator*)GetParent()->GetRawObject())->RemoveDoor(this);
+				static_cast<Elevator*>(GetParent())->RemoveDoor(this);
 			if (std::string(GetParent()->GetType()) == "Floor")
-				((Floor*)GetParent()->GetRawObject())->RemoveDoor(this);
+				static_cast<Floor*>(GetParent())->RemoveDoor(this);
 			if (std::string(GetParent()->GetType()) == "Stairs")
-				((Stairs*)GetParent()->GetRawObject())->RemoveDoor(this);
+				static_cast<Stairs*>(GetParent())->RemoveDoor(this);
 		}
 		sbs->UnregisterDoorCallback(this);
 	}

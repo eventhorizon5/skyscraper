@@ -41,7 +41,7 @@ Light::Light(Object *parent, const char *name, int type, Ogre::Vector3 position,
 	//2 - spotlight
 
 	//set up SBS object
-	SetValues(this, parent, "Light", name, false);
+	SetValues(parent, "Light", name, false);
 
 	Type = type;
 	Name = name;
@@ -81,13 +81,13 @@ Light::~Light()
 	if (sbs->FastDelete == false && parent_deleting == false)
 	{
 		if (std::string(GetParent()->GetType()) == "Elevator")
-			((Elevator*)GetParent()->GetRawObject())->RemoveLight(this);
+			static_cast<Elevator*>(GetParent())->RemoveLight(this);
 		if (std::string(GetParent()->GetType()) == "Floor")
-			((Floor*)GetParent()->GetRawObject())->RemoveLight(this);
+			static_cast<Floor*>(GetParent())->RemoveLight(this);
 		if (std::string(GetParent()->GetType()) == "Shaft")
-			((Shaft*)GetParent()->GetRawObject())->RemoveLight(this);
+			static_cast<Shaft*>(GetParent())->RemoveLight(this);
 		if (std::string(GetParent()->GetType()) == "Stairs")
-			((Stairs*)GetParent()->GetRawObject())->RemoveLight(this);
+			static_cast<Stairs*>(GetParent())->RemoveLight(this);
 		if (std::string(GetParent()->GetType()) == "SBS")
 			sbs->RemoveLight(this);
 	}

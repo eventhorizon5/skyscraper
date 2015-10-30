@@ -34,7 +34,7 @@ namespace SBS {
 Sound::Sound(Object *parent, const char *name, bool permanent)
 {
 	//set up SBS object
-	SetValues(this, parent, "Sound", name, permanent);
+	SetValues(parent, "Sound", name, permanent);
 
 	//first set default values
 	Position = 0;
@@ -72,9 +72,9 @@ Sound::~Sound()
 		if (parent_deleting == false)
 		{
 			if (std::string(GetParent()->GetType()) == "Elevator")
-				((Elevator*)GetParent()->GetRawObject())->RemoveSound(this);
+				static_cast<Elevator*>(GetParent())->RemoveSound(this);
 			if (std::string(GetParent()->GetType()) == "Floor")
-				((Floor*)GetParent()->GetRawObject())->RemoveSound(this);
+				static_cast<Floor*>(GetParent())->RemoveSound(this);
 			if (std::string(GetParent()->GetType()) == "SBS")
 				sbs->RemoveSound(this);
 		}

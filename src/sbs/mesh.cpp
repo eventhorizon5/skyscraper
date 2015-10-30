@@ -520,7 +520,7 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
-	SetValues(this, parent, "Mesh", name, false);
+	SetValues(parent, "Mesh", name, false);
 
 	enabled = true;
 	mBody = 0;
@@ -758,7 +758,7 @@ WallObject* MeshObject::CreateWallObject(const char *name)
 
 	WallObject *wall = new WallObject(this);
 	wall->parent_array = &Walls;
-	wall->SetValues(wall, this, "Wall", name, false, false);
+	wall->SetValues(this, "Wall", name, false, false);
 	Walls.push_back(wall);
 	return wall;
 }

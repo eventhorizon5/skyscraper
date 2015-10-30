@@ -37,7 +37,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfl
 	//and that spans the floor range specified by startfloor and endfloor
 
 	//set up SBS object
-	SetValues(this, sbs, "Shaft", "", false);
+	SetValues(sbs, "Shaft", "", false);
 
 	ShaftNumber = number;
 	this->startfloor = startfloor;

@@ -37,7 +37,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int end
 	//and that spans the floor range specified by startfloor and endfloor
 
 	//set up SBS object
-	SetValues(this, sbs, "Stairs", "", false);
+	SetValues(sbs, "Stairs", "", false);
 
 	StairsNum = number;
 	this->startfloor = startfloor;

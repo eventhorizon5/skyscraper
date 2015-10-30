@@ -36,7 +36,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	//create a directional indicator
 
 	//set up SBS object
-	SetValues(this, parent, "DirectionalIndicator", "", false);
+	SetValues(parent, "DirectionalIndicator", "", false);
 
 	IsEnabled = true;
 	this->elevator = elevator;
@@ -306,9 +306,9 @@ DirectionalIndicator::~DirectionalIndicator()
 	if (sbs->FastDelete == false && parent_deleting == false)
 	{
 		if (std::string(GetParent()->GetType()) == "Elevator")
-			((Elevator*)GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
+			static_cast<Elevator*>(GetParent())->RemoveDirectionalIndicator(this);
 		if (std::string(GetParent()->GetType()) == "Floor")
-			((Floor*)GetParent()->GetRawObject())->RemoveDirectionalIndicator(this);
+			static_cast<Floor*>(GetParent())->RemoveDirectionalIndicator(this);
 	}
 }
 

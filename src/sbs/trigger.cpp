@@ -35,7 +35,7 @@ Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *s
 	//create a proximity trigger at the specified location
 
 	//set up SBS object
-	SetValues(this, parent, "Trigger", name, permanent);
+	SetValues(parent, "Trigger", name, permanent);
 
 	Actions = action_names;
 	IsEnabled = true;
@@ -64,13 +64,13 @@ Trigger::~Trigger()
 		if (parent_deleting == false)
 		{
 			if (std::string(GetParent()->GetType()) == "Elevator")
-				((Elevator*)GetParent()->GetRawObject())->RemoveTrigger(this);
+				static_cast<Elevator*>(GetParent())->RemoveTrigger(this);
 			if (std::string(GetParent()->GetType()) == "Floor")
-				((Floor*)GetParent()->GetRawObject())->RemoveTrigger(this);
+				static_cast<Floor*>(GetParent())->RemoveTrigger(this);
 			if (std::string(GetParent()->GetType()) == "Shaft")
-				((Shaft*)GetParent()->GetRawObject())->RemoveTrigger(this);
+				static_cast<Shaft*>(GetParent())->RemoveTrigger(this);
 			if (std::string(GetParent()->GetType()) == "Stairs")
-				((Stairs*)GetParent()->GetRawObject())->RemoveTrigger(this);
+				static_cast<Stairs*>(GetParent())->RemoveTrigger(this);
 			if (std::string(GetParent()->GetType()) == "SBS")
 				sbs->RemoveTrigger(this);
 		}

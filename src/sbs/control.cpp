@@ -38,7 +38,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	//actions can either be given as a name list (dynamic action lists) or pointer list (static action lists) - don't use both
 
 	//set up SBS object
-	SetValues(this, parent, "Control", name, permanent);
+	SetValues(parent, "Control", name, permanent);
 
 	std::string Name = name;
 	std::string Name2 = Name;
@@ -145,15 +145,15 @@ Control::~Control()
 		if (parent_deleting == false)
 		{
 			if (std::string(GetParent()->GetType()) == "ButtonPanel")
-				((ButtonPanel*)GetParent()->GetRawObject())->RemoveControl(this);
+				static_cast<ButtonPanel*>(GetParent())->RemoveControl(this);
 			if (std::string(GetParent()->GetType()) == "Elevator")
-				((Elevator*)GetParent()->GetRawObject())->RemoveControl(this);
+				static_cast<Elevator*>(GetParent())->RemoveControl(this);
 			if (std::string(GetParent()->GetType()) == "Floor")
-				((Floor*)GetParent()->GetRawObject())->RemoveControl(this);
+				static_cast<Floor*>(GetParent())->RemoveControl(this);
 			if (std::string(GetParent()->GetType()) == "Shaft")
-				((Shaft*)GetParent()->GetRawObject())->RemoveControl(this);
+				static_cast<Shaft*>(GetParent())->RemoveControl(this);
 			if (std::string(GetParent()->GetType()) == "Stairs")
-				((Stairs*)GetParent()->GetRawObject())->RemoveControl(this);
+				static_cast<Stairs*>(GetParent())->RemoveControl(this);
 			if (std::string(GetParent()->GetType()) == "SBS")
 				sbs->RemoveControl(this);
 		}
