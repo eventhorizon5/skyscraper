@@ -90,7 +90,9 @@ Escalator::~Escalator()
 		//unregister from parent
 		if (parent_deleting == false)
 		{
-			if (std::string(GetParent()->GetType()) == "Floor")
+			std::string type = GetParent()->GetType();
+
+			if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveEscalator(this);
 		}
 	}

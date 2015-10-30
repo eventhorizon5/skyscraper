@@ -63,15 +63,17 @@ Trigger::~Trigger()
 	{
 		if (parent_deleting == false)
 		{
-			if (std::string(GetParent()->GetType()) == "Elevator")
+			std::string type = GetParent()->GetType();
+
+			if (type == "Elevator")
 				static_cast<Elevator*>(GetParent())->RemoveTrigger(this);
-			if (std::string(GetParent()->GetType()) == "Floor")
+			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveTrigger(this);
-			if (std::string(GetParent()->GetType()) == "Shaft")
+			else if (type == "Shaft")
 				static_cast<Shaft*>(GetParent())->RemoveTrigger(this);
-			if (std::string(GetParent()->GetType()) == "Stairs")
+			else if (type == "Stairs")
 				static_cast<Stairs*>(GetParent())->RemoveTrigger(this);
-			if (std::string(GetParent()->GetType()) == "SBS")
+			else if (type == "SBS")
 				sbs->RemoveTrigger(this);
 		}
 	}

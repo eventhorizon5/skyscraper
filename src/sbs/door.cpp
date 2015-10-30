@@ -159,11 +159,13 @@ Door::~Door()
 	{
 		if (parent_deleting == false)
 		{
-			if (std::string(GetParent()->GetType()) == "Elevator")
+			std::string type = GetParent()->GetType();
+
+			if (type == "Elevator")
 				static_cast<Elevator*>(GetParent())->RemoveDoor(this);
-			if (std::string(GetParent()->GetType()) == "Floor")
+			else if (type == "Floor")
 				static_cast<Floor*>(GetParent())->RemoveDoor(this);
-			if (std::string(GetParent()->GetType()) == "Stairs")
+			else if (type == "Stairs")
 				static_cast<Stairs*>(GetParent())->RemoveDoor(this);
 		}
 		sbs->UnregisterDoorCallback(this);

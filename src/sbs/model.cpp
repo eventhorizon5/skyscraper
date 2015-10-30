@@ -111,15 +111,17 @@ bool Model::PhysicsEnabled()
 
 void Model::RemoveFromParent()
 {
-	if (std::string(GetParent()->GetType()) == "Elevator")
+	std::string type = GetParent()->GetType();
+
+	if (type == "Elevator")
 		static_cast<Elevator*>(GetParent())->RemoveModel(this);
-	else if (std::string(GetParent()->GetType()) == "Floor")
+	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->RemoveModel(this);
-	else if (std::string(GetParent()->GetType()) == "Shaft")
+	else if (type == "Shaft")
 		static_cast<Shaft*>(GetParent())->RemoveModel(this);
-	else if (std::string(GetParent()->GetType()) == "Stairs")
+	else if (type == "Stairs")
 		static_cast<Stairs*>(GetParent())->RemoveModel(this);
-	else if (std::string(GetParent()->GetType()) == "SBS")
+	else if (type == "SBS")
 		sbs->RemoveModel(this);
 }
 
@@ -130,15 +132,17 @@ void Model::AddToParent()
 	if (IsMovable() == true)
 		floor = sbs->GetFloorNumber(GetPosition().y);
 
-	if (std::string(GetParent()->GetType()) == "Elevator")
+	std::string type = GetParent()->GetType();
+
+	if (type == "Elevator")
 		static_cast<Elevator*>(GetParent())->AddModel(this);
-	else if (std::string(GetParent()->GetType()) == "Floor")
+	else if (type == "Floor")
 		static_cast<Floor*>(GetParent())->AddModel(this);
-	else if (std::string(GetParent()->GetType()) == "Shaft")
+	else if (type == "Shaft")
 		static_cast<Shaft*>(GetParent())->AddModel(floor, this);
-	else if (std::string(GetParent()->GetType()) == "Stairs")
+	else if (type == "Stairs")
 		static_cast<Stairs*>(GetParent())->AddModel(floor, this);
-	else if (std::string(GetParent()->GetType()) == "SBS")
+	else if (type == "SBS")
 		sbs->AddModel(this);
 }
 
