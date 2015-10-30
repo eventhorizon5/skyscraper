@@ -518,178 +518,164 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	//get original object (parent object of clicked mesh)
 	if (mesh_parent)
 	{
-		std::string parent_type = mesh_parent->GetType();
-
 		//check controls
-		if (parent_type == "Control")
+		Control *control = dynamic_cast<Control*>(mesh_parent);
+
+		if (control)
 		{
-			Control *control = static_cast<Control*>(mesh_parent);
-
-			if (control)
+			//delete control if ctrl and alt keys are pressed
+			if (ctrl == true && alt == true && shift == false)
 			{
-				//delete control if ctrl and alt keys are pressed
-				if (ctrl == true && alt == true && shift == false)
-				{
-					sbs->DeleteObject(mesh_parent);
-					return;
-				}
-
-				//toggle lock status if ctrl and shift are pressed
-				if (ctrl == true && shift == true)
-					control->ToggleLock();
-				else
-					control->Press(right);
+				sbs->DeleteObject(mesh_parent);
+				return;
 			}
+
+			//toggle lock status if ctrl and shift are pressed
+			if (ctrl == true && shift == true)
+				control->ToggleLock();
+			else
+				control->Press(right);
 		}
 
 		//check doors
-		if (parent_type == "Door" && right == false)
+		Door *door = dynamic_cast<Door*>(mesh_parent);
+
+		if (door && right == false)
 		{
-			Door *door = static_cast<Door*>(mesh_parent);
-
-			if (door)
+			//delete door if ctrl and alt keys are pressed
+			if (ctrl == true && alt == true && shift == false)
 			{
-				//delete door if ctrl and alt keys are pressed
-				if (ctrl == true && alt == true && shift == false)
-				{
-					sbs->DeleteObject(mesh_parent);
-					return;
-				}
+				sbs->DeleteObject(mesh_parent);
+				return;
+			}
 
-				//toggle lock status if ctrl and shift are pressed
-				if (ctrl == true && shift == true)
-					door->ToggleLock(pos);
+			//toggle lock status if ctrl and shift are pressed
+			if (ctrl == true && shift == true)
+				door->ToggleLock(pos);
+			else
+			{
+				//open and close doors
+				if (door->IsOpen() == false)
+				{
+					if (door->IsMoving == false)
+						door->Open(pos);
+					else
+						door->Close();
+				}
 				else
 				{
-					//open and close doors
-					if (door->IsOpen() == false)
-					{
-						if (door->IsMoving == false)
-							door->Open(pos);
-						else
-							door->Close();
-					}
+					if (door->IsMoving == false)
+						door->Close();
 					else
-					{
-						if (door->IsMoving == false)
-							door->Close();
-						else
-							door->Open(pos);
-					}
+						door->Open(pos);
 				}
 			}
 		}
 
 		//check models
-		if (parent_type == "Model" && right == false)
+		Model *model = dynamic_cast<Model*>(mesh_parent);
+
+		if (model && right == false)
 		{
-			Model *model = static_cast<Model*>(mesh_parent);
-
-			if (model)
+			//delete model if ctrl and alt keys are pressed
+			if (ctrl == true && alt == true && shift == false)
 			{
-				//delete model if ctrl and alt keys are pressed
-				if (ctrl == true && alt == true && shift == false)
-				{
-					sbs->DeleteObject(mesh_parent);
-					return;
-				}
+				sbs->DeleteObject(mesh_parent);
+				return;
+			}
 
-				//if model is a key, add key to keyring and delete model
-				if (model->IsKey() == true)
-				{
-					sbs->AddKey(model->GetKeyID(), model->GetName());
-					sbs->DeleteObject(mesh_parent);
-					return;
-				}
+			//if model is a key, add key to keyring and delete model
+			if (model->IsKey() == true)
+			{
+				sbs->AddKey(model->GetKeyID(), model->GetName());
+				sbs->DeleteObject(mesh_parent);
+				return;
 			}
 		}
 
 		//check call buttons
-		if (parent_type == "CallButton" && right == false)
+		CallButton *callbutton = dynamic_cast<CallButton*>(mesh_parent);
+
+		if (callbutton && right == false)
 		{
-			CallButton *callbutton = static_cast<CallButton*>(mesh_parent);
+			int index = (int)meshname.find(":");
+			int index2 = (int)meshname.find(":", index + 1);
 
-			if (callbutton)
+			if (index > -1 && index2 > -1)
 			{
-				int index = (int)meshname.find(":");
-				int index2 = (int)meshname.find(":", index + 1);
+				std::string direction = meshname.substr(index2 + 1);
+				TrimString(direction);
 
-				if (index > -1 && index2 > -1)
+				//delete call button if ctrl and alt keys are pressed
+				if (ctrl == true && alt == true && shift == false)
 				{
-					std::string direction = meshname.substr(index2 + 1);
-					TrimString(direction);
+					sbs->DeleteObject(callbutton);
+					return;
+				}
 
-					//delete call button if ctrl and alt keys are pressed
-					if (ctrl == true && alt == true && shift == false)
-					{
-						sbs->DeleteObject(callbutton);
-						return;
-					}
-
-					if (ctrl == true && shift == true)
-					{
-						//if ctrl and shift are held, toggle lock
-						callbutton->ToggleLock();
-					}
-					else if (shift == true)
-					{
-						//if shift is held, change button status instead
-						if (direction == "Up")
-							callbutton->UpLight(!callbutton->UpStatus);
-						else
-							callbutton->DownLight(!callbutton->DownStatus);
-					}
+				if (ctrl == true && shift == true)
+				{
+					//if ctrl and shift are held, toggle lock
+					callbutton->ToggleLock();
+				}
+				else if (shift == true)
+				{
+					//if shift is held, change button status instead
+					if (direction == "Up")
+						callbutton->UpLight(!callbutton->UpStatus);
 					else
-					{
-						//press button
-						if (direction == "Up")
-							callbutton->Call(true);
-						else
-							callbutton->Call(false);
-					}
+						callbutton->DownLight(!callbutton->DownStatus);
+				}
+				else
+				{
+					//press button
+					if (direction == "Up")
+						callbutton->Call(true);
+					else
+						callbutton->Call(false);
 				}
 			}
 		}
 
 		//check elevator doors
-		if (parent_type == "DoorWrapper" && shift == true && right == false)
+		ElevatorDoor::DoorWrapper *wrapper = dynamic_cast<ElevatorDoor::DoorWrapper*>(mesh_parent);
+
+		if (wrapper && shift == true && right == false)
 		{
-			ElevatorDoor::DoorWrapper *wrapper = static_cast<ElevatorDoor::DoorWrapper*>(mesh_parent);
+			ElevatorDoor *parent = wrapper->parent;
+			if (!parent)
+				return;
 
-			if (wrapper)
+			Elevator *elevator = parent->elev;
+			if (!elevator)
+				return;
+
+			int number = parent->Number;
+			int floor = wrapper->floor;
+
+			if (wrapper->IsShaftDoor == true)
 			{
-				ElevatorDoor *parent = wrapper->parent;
-				if (!parent)
-					return;
-
-				Elevator *elevator = parent->elev;
-				if (!elevator)
-					return;
-
-				int number = parent->Number;
-				int floor = wrapper->floor;
-
-				if (wrapper->IsShaftDoor == true)
-				{
-					//check shaft doors
-					if (elevator->AreShaftDoorsOpen(number, floor) == false)
-						elevator->OpenDoorsEmergency(number, 3, floor);
-					else
-						elevator->CloseDoorsEmergency(number, 3, floor);
-				}
+				//check shaft doors
+				if (elevator->AreShaftDoorsOpen(number, floor) == false)
+					elevator->OpenDoorsEmergency(number, 3, floor);
 				else
-				{
-					//check elevator doors
-					if (elevator->AreDoorsOpen(number) == false)
-						elevator->OpenDoorsEmergency(number, 2);
-					else
-						elevator->CloseDoorsEmergency(number, 2);
-				}
+					elevator->CloseDoorsEmergency(number, 3, floor);
+			}
+			else
+			{
+				//check elevator doors
+				if (elevator->AreDoorsOpen(number) == false)
+					elevator->OpenDoorsEmergency(number, 2);
+				else
+					elevator->CloseDoorsEmergency(number, 2);
 			}
 		}
 
 		//check floor and directional indicators
-		if ((parent_type == "FloorIndicator" || parent_type == "DirectionalIndicator") && right == false)
+		FloorIndicator *ind = dynamic_cast<FloorIndicator*>(mesh_parent);
+		DirectionalIndicator *ind2 = dynamic_cast<DirectionalIndicator*>(mesh_parent);
+
+		if (ind || ind2) && right == false)
 		{
 			//delete indicator if ctrl and alt keys are pressed
 			if (ctrl == true && alt == true && shift == false)
@@ -798,24 +784,19 @@ void Camera::Loop(float delta)
 			{
 				if (obj->GetParent())
 				{
-					std::string type = obj->GetParent()->GetType();
-
 					//check elevator doors (door bumpers feature)
-					if (type == "DoorWrapper")
+					ElevatorDoor::DoorWrapper *wrapper = dynamic_cast<ElevatorDoor::DoorWrapper*>(obj->GetParent());
+
+					if (wrapper)
 					{
-						ElevatorDoor::DoorWrapper *wrapper = static_cast<ElevatorDoor::DoorWrapper*>(obj->GetParent());
+						ElevatorDoor* door = wrapper->parent;
 
-						if (wrapper)
+						//make sure both internal and external doors are closing
+						if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
 						{
-							ElevatorDoor* door = wrapper->parent;
-
-							//make sure both internal and external doors are closing
-							if (door->OpenDoor == -1 && door->GetWhichDoors() == 1)
-							{
-								//either open doors if the hit door was an internal door or a shaft door on the elevator floor
-								if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetFloor()))
-									door->elev->OpenDoors(door->Number, 1);
-							}
+							//either open doors if the hit door was an internal door or a shaft door on the elevator floor
+							if (wrapper->IsShaftDoor == false || (wrapper->IsShaftDoor == true && wrapper->floor == door->elev->GetFloor()))
+								door->elev->OpenDoors(door->Number, 1);
 						}
 					}
 				}
@@ -1141,17 +1122,12 @@ void Camera::PickUpModel()
 	if (hit == false)
 		return;
 
-	std::string type = mesh->GetParent()->GetType();
+	Model *model = dynamic_cast<Model*>(mesh->GetParent());
 
-	if (type == "Model")
+	if (model)
 	{
-		Model *model = static_cast<Model*>(mesh->GetParent());
-
-		if (model)
-		{
-			model->PickUp();
-			AttachModel(model);
-		}
+		model->PickUp();
+		AttachModel(model);
 	}
 }
 

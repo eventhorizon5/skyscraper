@@ -150,8 +150,11 @@ void Model::Loop()
 	if (global == true)
 		return;
 
+	Floor *floor = dynamic_cast<Floor*>(GetParent());
+	Elevator *elevator = dynamic_cast<Elevator*>(GetParent());
+
 	//if model is a child of a floor, and is in an elevator, switch parent to elevator
-	if (std::string(GetParent()->GetType()) == "Floor")
+	if (floor)
 	{
 		for (int i = 1; i < sbs->Elevators(); i++)
 		{
@@ -171,13 +174,12 @@ void Model::Loop()
 	}
 
 	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor
-	else if (std::string(GetParent()->GetType()) == "Elevator")
+	else if (elevator)
 	{
-		Elevator *elev = static_cast<Elevator*>(GetParent());
 		int floornum = sbs->GetFloorNumber(GetPosition().y);
 		Floor *floor = sbs->GetFloor(floornum);
 
-		if (elev->IsInElevator(mesh->GetPosition()) == false && floor)
+		if (elevator->IsInElevator(mesh->GetPosition()) == false && floor)
 		{
 			RemoveFromParent();
 			ChangeParent(floor);

@@ -169,24 +169,16 @@ bool Action::Run(Object *caller, Object *parent)
 	//SensorOff
 	//SensorReset
 
-	Elevator *elevator = 0;
-	Floor *floor = 0;
-	Shaft *shaft = 0;
-	Stairs *stairs = 0;
+	Elevator *elevator = dynamic_cast<Elevator*>(parent);
+	Floor *floor = dynamic_cast<Floor*>(parent);
+	Shaft *shaft = dynamic_cast<Shaft*>(parent);
+	Stairs *stairs = dynamic_cast<Stairs*>(parent);
 
 	std::string caller_name = caller->GetName();
 	std::string caller_type = caller->GetType();
 
 	std::string parent_name = parent->GetName();
 	std::string parent_type = parent->GetType();
-	if (parent_type == "Floor")
-		floor = static_cast<Floor*>(parent);
-	else if (parent_type == "Elevator")
-		elevator = static_cast<Elevator*>(parent);
-	else if (parent_type == "Shaft")
-		shaft = static_cast<Shaft*>(parent);
-	else if (parent_type == "Stairs")
-		stairs = static_cast<Stairs*>(parent);
 
 	//report the action used
 	sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");
