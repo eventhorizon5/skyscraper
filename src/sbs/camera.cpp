@@ -468,71 +468,26 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	float y = (float)sbs->mouse_y / (float)height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
-	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1000);
-
-	//check for collision
-	sbs->mWorld->launchRay(callback);
-
-	//exit if no collision
-	if (callback.doesCollide() == false)
-		return;
-
-	wallname = "";
+	MeshObject* mesh = 0;
 	WallObject* wall = 0;
-	MeshObject* meshobject;
 
-	//get collided collision object
-	OgreBulletCollisions::Object* object = callback.getCollidedObject();
+	bool hit = sbs->HitBeam(ray, 1000.0f, mesh, wall, HitPosition);
 
-	if (!object)
+	if (hit == false)
 		return;
 
-	//get name of collision object's parent scenenode (which is the same name as the mesh object)
-	meshname = object->getRootNode()->getName();
+	meshname = mesh->GetName();
 
-	//get hit/intersection position
-	HitPosition = sbs->ToLocal(callback.getCollisionPoint());
-
-	//get associated mesh object
-	meshobject = sbs->FindMeshObject(meshname);
-	if (!meshobject)
-		return;
-
-	//get index of hit wall, if any
-	Ogre::Vector3 isect;
-	float distance = 2000000000.;
-	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
-	int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, distance, normal, false, false);
-
-	if (num > -1)
-		wall = meshobject->Walls[num];
 	if (wall)
 	{
 		wallname = wall->GetName();
-		meshname = meshobject->name;
+		object_number = wall->GetNumber();
 	}
 	else
+	{
 		wallname = "";
-
-	//get and strip object number
-	std::string number;
-	object_number = 0;
-	if (wall)
-	{
-		object_number = wall->GetNumber();
-		int index = (int)wallname.find(")");
-		if (index > -1)
-			wallname.erase(wallname.begin(), wallname.begin() + index + 1);
+		object_number = mesh->GetNumber();
 	}
-	if ((int)meshname.find("(") == 0)
-	{
-		int index = (int)meshname.find(")");
-		if (object_number == 0)
-			object_number = atoi(meshname.substr(1, index - 1).c_str());
-		meshname.erase(meshname.begin(), meshname.begin() + index + 1);
-	}
-	number = ToString(object_number);
 
 	//store parameters of object
 	Object *obj = sbs->GetObject(object_number);
@@ -544,6 +499,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	}
 
 	//show result
+	std::string number = ToString(object_number);
 	if (wall)
 		sbs->Report("Clicked on object " + number + ": Mesh: " + meshname + ", Wall: " + wallname);
 	else
@@ -1186,33 +1142,20 @@ void Camera::PickUpModel()
 
 	Ogre::Ray ray (sbs->ToRemote(GetPosition() - Ogre::Vector3(0, GetHeight() - 1, 0)), sbs->ToRemote(front, false));
 
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1.0f);
+	Ogre::Vector3 hit_position;
+	MeshObject *mesh = 0;
+	WallObject *wall = 0;
 
-	//check for collision
-	sbs->mWorld->launchRay(callback);
+	bool hit = sbs->HitBeam(ray, 1.0f, mesh, wall, hit_position);
 
-	//exit if no collision
-	if (callback.doesCollide() == false)
+	if (hit == false)
 		return;
 
-	OgreBulletCollisions::Object* object = callback.getCollidedObject();
-
-	if (!object)
-		return;
-
-	//get name of collision object's parent scenenode (which is the same name as the mesh object)
-	std::string name = object->getRootNode()->getName();
-
-	//get associated mesh object
-	MeshObject *meshobject = sbs->FindMeshObject(name);
-	if (!meshobject)
-		return;
-
-	std::string type = meshobject->GetParent()->GetType();
+	std::string type = mesh->GetParent()->GetType();
 
 	if (type == "Model")
 	{
-		Model *model = (Model*)meshobject->GetParent()->GetRawObject();
+		Model *model = (Model*)mesh->GetParent()->GetRawObject();
 
 		if (model)
 		{

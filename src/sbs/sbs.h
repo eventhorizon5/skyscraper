@@ -389,6 +389,7 @@ public:
 	int GetEscalatorCount();
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
+	bool HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
 
 	//Meshes
 	MeshObject* Buildings;

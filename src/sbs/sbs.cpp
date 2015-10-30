@@ -30,6 +30,7 @@
 #include <OgreStringConverter.h>
 #include <fmod.hpp>
 #include <OgreBulletDynamicsRigidBody.h>
+#include <OgreBulletCollisionsRay.h>
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
@@ -4180,6 +4181,49 @@ void SBS::IncrementEscalatorCount()
 void SBS::DecrementEscalatorCount()
 {
 	EscalatorCount--;
+}
+
+bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position)
+{
+	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
+
+	//get a collision callback from Bullet
+	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, max_distance);
+
+	//check for collision
+	sbs->mWorld->launchRay(callback);
+
+	//exit if no collision
+	if (callback.doesCollide() == false)
+		return false;
+
+	//get collided collision object
+	OgreBulletCollisions::Object* object = callback.getCollidedObject();
+
+	if (!object)
+		return false;
+
+	//get name of collision object's parent scenenode (which is the same name as the mesh object)
+	std::string meshname = object->getRootNode()->getName();
+
+	//get hit/intersection position
+	hit_position = sbs->ToLocal(callback.getCollisionPoint());
+
+	//get associated mesh object
+	mesh = sbs->FindMeshObject(meshname);
+	if (!mesh)
+		return false;
+
+	//get index of hit wall, if any
+	Ogre::Vector3 isect;
+	float distance = 2000000000.;
+	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
+	int num = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal, false, false);
+
+	if (num > -1)
+		wall = mesh->Walls[num];
+
+	return true;
 }
 
 }
