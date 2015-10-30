@@ -458,6 +458,8 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 {
 	//get mesh object that the user clicked on, and perform related work
 
+	Ogre::Vector3 pos = GetPosition();
+
 	//cast a ray from the camera in the direction of the clicked position
 	SBS_PROFILE("Camera::ClickedObject");
 	int width = MainCamera->getViewport()->getActualWidth();
@@ -466,10 +468,7 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	float y = (float)sbs->mouse_y / (float)height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
 
-	//generate left-hand coordinate ray
-
 	//get a collision callback from Bullet
-	//OgreBulletCollisions::CollisionAllRayResultCallback callback (ray, sbs->mWorld, 1000);
 	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, 1000);
 
 	//check for collision
@@ -482,70 +481,39 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	wallname = "";
 	WallObject* wall = 0;
 	MeshObject* meshobject;
-	float best_distance = 2000000000.;
-	MeshObject* bestmesh = 0;
-	int best_i = -1;
-	std::string prevmesh = "";
-	Ogre::Vector3 pos = GetPosition();
 
 	//get collided collision object
-	//for (int i = 0; i < callback.getCollisionCount(); i++)
-	//{
-		//OgreBulletCollisions::Object* object = callback.getCollidedObject(i);
-		OgreBulletCollisions::Object* object = callback.getCollidedObject();
+	OgreBulletCollisions::Object* object = callback.getCollidedObject();
 
-		if (!object)
-			//continue;
-			return;
+	if (!object)
+		return;
 
-		//get name of collision object's parent scenenode (which is the same name as the mesh object)
-		meshname = object->getRootNode()->getName();
+	//get name of collision object's parent scenenode (which is the same name as the mesh object)
+	meshname = object->getRootNode()->getName();
 
-		if (meshname == prevmesh)
-			//continue;
-			return;
+	//get hit/intersection position
+	HitPosition = sbs->ToLocal(callback.getCollisionPoint());
 
-		prevmesh = meshname;
+	//get associated mesh object
+	meshobject = sbs->FindMeshObject(meshname);
+	if (!meshobject)
+		return;
 
-		//get hit/intersection position
-		//HitPosition = sbs->ToLocal(callback.getCollisionPoint(i));
-		HitPosition = sbs->ToLocal(callback.getCollisionPoint());
+	//get index of hit wall, if any
+	Ogre::Vector3 isect;
+	float distance = 2000000000.;
+	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
+	int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, distance, normal, false, false);
 
-		//get associated mesh object
-		meshobject = sbs->FindMeshObject(meshname);
-		if (!meshobject)
-			//continue;
-			return;
-
-		//get index of hit wall, if any
-		Ogre::Vector3 isect;
-		float distance = best_distance;
-		Ogre::Vector3 normal = Ogre::Vector3::ZERO;
-		int num = meshobject->FindWallIntersect(ray.getOrigin(), ray.getPoint(1000), isect, distance, normal, false, false);
-
-		/*if (distance < best_distance)
-		{
-			best_distance = distance;
-			bestmesh = meshobject;
-			best_i = num;
-		}
-	}*/
-
-	//if (best_i > -1 && bestmesh)
-	//{
-		//wall = bestmesh->Walls[best_i];
-		if (num > -1)
-			wall = meshobject->Walls[num];
-		if (wall)
-		{
-			wallname = wall->GetName();
-			//meshname = bestmesh->name;
-			meshname = meshobject->name;
-			//meshobject = bestmesh;
-		}
-		else
-			wallname = "";
-	//}
+	if (num > -1)
+		wall = meshobject->Walls[num];
+	if (wall)
+	{
+		wallname = wall->GetName();
+		meshname = meshobject->name;
+	}
+	else
+		wallname = "";
 
 	//get and strip object number
 	std::string number;
