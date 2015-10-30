@@ -4214,14 +4214,11 @@ bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObj
 	if (!mesh)
 		return false;
 
-	//get index of hit wall, if any
+	//get wall object, if any
 	Ogre::Vector3 isect;
 	float distance = 2000000000.;
 	Ogre::Vector3 normal = Ogre::Vector3::ZERO;
-	int num = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal, false, false);
-
-	if (num > -1)
-		wall = mesh->Walls[num];
+	wall = mesh->FindWallIntersect(ray.getOrigin(), ray.getPoint(max_distance), isect, distance, normal, false, false);
 
 	return true;
 }

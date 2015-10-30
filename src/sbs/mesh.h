@@ -88,8 +88,8 @@ public:
 	WallObject* CreateWallObject(const char *name);
 	bool ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	int FindWall(const Ogre::Vector3 &point, bool convert = true);
-	int FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
+	WallObject* FindWall(const Ogre::Vector3 &point, bool convert = true);
+	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
 	void RescaleVertices(float multiplier);
 	void AddVertex(Geometry &vertex_geom);
 	void RemoveVertex(int index);

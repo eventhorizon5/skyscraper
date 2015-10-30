@@ -809,7 +809,7 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	return result;
 }
 
-int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
+WallObject* MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
 {
 	//find a wall from a 3D point
 
@@ -817,12 +817,12 @@ int MeshObject::FindWall(const Ogre::Vector3 &point, bool convert)
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
 		if (Walls[i]->IsPointOnWall(point, convert) == true)
-			return i;
+			return Walls[i];
 	}
-	return -1;
+	return 0;
 }
 
-int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert, bool rescale)
+WallObject* MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert, bool rescale)
 {
 	//find a wall from a 3D point
 
@@ -861,7 +861,7 @@ int MeshObject::FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector
 		}
 	}
 
-	return best_i;
+	return Walls[best_i];
 }
 
 void MeshObject::RescaleVertices(float multiplier)
