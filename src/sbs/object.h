@@ -79,6 +79,11 @@ public:
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
 
+	template <typename T> bool IsType() //check if an object is of the given type
+	{
+		return (dynamic_cast<T>(this) > 0);
+	}
+
 private:
 	void NotifyChildren(bool move, bool rotate);
 
