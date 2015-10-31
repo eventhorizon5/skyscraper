@@ -154,10 +154,11 @@ void Model::Loop()
 	if (global == true)
 		return;
 
-	Elevator *elevator = dynamic_cast<Elevator*>(GetParent());
+	Floor *floor = GetParent()->ConvertTo<Floor*>();
+	Elevator *elevator = GetParent()->ConvertTo<Elevator*>();
 
 	//if model is a child of a floor, and is in an elevator, switch parent to elevator
-	if (GetParent()->IsType<Floor*>() == true)
+	if (floor)
 	{
 		for (int i = 1; i < sbs->Elevators(); i++)
 		{

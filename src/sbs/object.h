@@ -79,9 +79,16 @@ public:
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
 
-	template <typename T> bool IsType() //check if an object is of the given type
+	template <typename T> bool IsType()
 	{
+		//check if an object is of the given type
 		return (dynamic_cast<T>(this) > 0);
+	}
+
+	template <typename T> T ConvertTo()
+	{
+		//convert object to the given type, if possible.  Returns 0 on failure
+		return dynamic_cast<T>(this);
 	}
 
 private:
