@@ -154,8 +154,8 @@ void Model::Loop()
 	if (global == true)
 		return;
 
-	Floor *floor = GetParent()->ConvertTo<Floor*>();
-	Elevator *elevator = GetParent()->ConvertTo<Elevator*>();
+	Floor *floor = GetParent()->ConvertTo<Floor>();
+	Elevator *elevator = GetParent()->ConvertTo<Elevator>();
 
 	//if model is a child of a floor, and is in an elevator, switch parent to elevator
 	if (floor)

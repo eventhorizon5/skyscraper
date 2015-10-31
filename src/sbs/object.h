@@ -82,13 +82,13 @@ public:
 	template <typename T> bool IsType()
 	{
 		//check if an object is of the given type
-		return (dynamic_cast<T>(this) > 0);
+		return (dynamic_cast<T*>(this) > 0);
 	}
 
-	template <typename T> T ConvertTo()
+	template <typename T> T* ConvertTo()
 	{
 		//convert object to the given type, if possible.  Returns 0 on failure
-		return dynamic_cast<T>(this);
+		return dynamic_cast<T*>(this);
 	}
 
 private:
