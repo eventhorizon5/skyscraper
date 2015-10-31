@@ -3071,45 +3071,23 @@ bool SBS::DeleteObject(Object *object)
 		if (floor->Number < 0 && GetFloor(floor->Number - 1))
 			return ReportError("Only the lowest basement can be deleted");
 
-		delete floor;
 		deleted = true;
 	}
-	if (type == "Elevator")
-	{
-		delete static_cast<Elevator*>(object);
+	else if (type == "Elevator")
 		deleted = true;
-	}
-	if (type == "ButtonPanel")
-	{
-		delete static_cast<ButtonPanel*>(object);
+	else if (type == "ButtonPanel")
 		deleted = true;
-	}
-	if (type == "CallButton")
-	{
-		delete static_cast<CallButton*>(object);
+	else if (type == "CallButton")
 		deleted = true;
-	}
-	if (type == "DirectionalIndicator")
-	{
-		delete static_cast<DirectionalIndicator*>(object);
+	else if (type == "DirectionalIndicator")
 		deleted = true;
-	}
-	if (type == "Door")
-	{
-		delete static_cast<Door*>(object);
+	else if (type == "Door")
 		deleted = true;
-	}
-	if (type == "ElevatorDoor")
-	{
-		delete static_cast<ElevatorDoor*>(object);
+	else if (type == "ElevatorDoor")
 		deleted = true;
-	}
-	if (type == "FloorIndicator")
-	{
-		delete static_cast<FloorIndicator*>(object);
+	else if (type == "FloorIndicator")
 		deleted = true;
-	}
-	if (type == "Shaft")
+	else if (type == "Shaft")
 	{
 		Shaft *shaft = static_cast<Shaft*>(object);
 
@@ -3124,55 +3102,38 @@ bool SBS::DeleteObject(Object *object)
 			}
 		}
 
-		delete shaft;
 		deleted = true;
 	}
-	if (type == "Sound")
-	{
-		delete static_cast<Sound*>(object);
+	else if (type == "Sound")
 		deleted = true;
-	}
-	if (type == "Stairs")
-	{
-		delete static_cast<Stairs*>(object);
+	else if (type == "Stairs")
 		deleted = true;
-	}
-	if (type == "Wall")
+	else if (type == "Wall")
 	{
 		WallObject *obj = static_cast<WallObject*>(object);
 		obj->DeletePolygons(true);
-		delete obj;
 		deleted = true;
 	}
-	if (type == "Model")
-	{
-		delete static_cast<Model*>(object);
+	else if (type == "Model")
 		deleted = true;
-	}
-	if (type == "Control")
-	{
-		delete static_cast<Control*>(object);
+	else if (type == "Control")
 		deleted = true;
-	}
-	if (type == "Trigger")
-	{
-		delete static_cast<Trigger*>(object);
+	else if (type == "Trigger")
 		deleted = true;
-	}
-	if (type == "DoorWrapper")
+	else if (type == "DoorWrapper")
 	{
 		ElevatorDoor::DoorWrapper* wrapper = static_cast<ElevatorDoor::DoorWrapper*>(object);
 		if (wrapper->IsShaftDoor == false)
 			return ReportError("Deleting the main elevator door wrapper is not supported yet");
 
-		delete wrapper;
 		deleted = true;
 	}
-	if (type == "Escalator")
-	{
-		delete static_cast<Escalator*>(object);
+	else if (type == "Escalator")
 		deleted = true;
-	}
+
+	//delete object
+	if (deleted == true)
+		delete object;
 
 	camera->ResetCollisions();
 
