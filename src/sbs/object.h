@@ -46,9 +46,9 @@ public:
 	bool IsPermanent();
 	bool IsMovable();
 	Object* GetParent();
-	std::string GetType();
+	const std::string& GetType();
 	int GetNumber();
-	std::string GetName();
+	const std::string& GetName();
 	void SetName(const std::string &name);
 	void AddChild(Object *object);
 	Object* GetChild(int index);

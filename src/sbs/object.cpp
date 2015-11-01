@@ -132,7 +132,7 @@ Object* Object::GetParent()
 	return Parent;
 }
 
-std::string Object::GetType()
+const std::string& Object::GetType()
 {
 	//return object type string
 	return Type;
@@ -144,7 +144,7 @@ int Object::GetNumber()
 	return Number;
 }
 
-std::string Object::GetName()
+const std::string& Object::GetName()
 {
 	//return object name
 	return Name;
@@ -439,7 +439,7 @@ void Object::ChangeParent(Object *new_parent)
 	Parent = new_parent;
 	Parent->AddChild(this);
 
-	sbs->Report("Changed parent of object '" + ToString2(Number) + ": " + Name + "' to '" + ToString2(new_parent->GetNumber()) + ": " + std::string(new_parent->GetName()) + "'");
+	sbs->Report("Changed parent of object '" + ToString2(Number) + ": " + Name + "' to '" + ToString2(new_parent->GetNumber()) + ": " + new_parent->GetName() + "'");
 }
 
 bool Object::IsGlobal()
