@@ -342,7 +342,7 @@ private:
 	public:
 		Elevator *elevator;
 		int type; //0 = parking timer, 1 = random timer, 2 = arrival, 3 = departure
-		Timer(std::string name, Elevator *elev, int Type) : TimerObject(elev, name.c_str(), false)
+		Timer(const std::string &name, Elevator *elev, int Type) : TimerObject(elev, name, false)
 		{
 			elevator = elev;
 			type = Type;

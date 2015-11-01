@@ -33,12 +33,12 @@
 
 namespace SBS {
 
-ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
+ButtonPanel::ButtonPanel(int elevator, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
 
-	Elevator *elev = sbs->GetElevator(_elevator);
+	Elevator *elev = sbs->GetElevator(elevator);
 	if (!elev)
 		return;
 
@@ -46,7 +46,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	SetValues(elev, "ButtonPanel", "", false);
 
 	IsEnabled = true;
-	elevator = _elevator;
+	this->elevator = elevator;
 	Index = index;
 	Direction = direction;
 	ButtonWidth = buttonwidth;
@@ -65,7 +65,7 @@ ButtonPanel::ButtonPanel(int _elevator, int index, const char *texture, int rows
 	std::string buffer;
 	buffer = "Button Panel " + ToString2(elevator) + ":" + ToString2(index);
 	TrimString(buffer);
-	SetName(buffer.c_str());
+	SetName(buffer);
 	ButtonPanelMesh = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
@@ -129,7 +129,7 @@ ButtonPanel::~ButtonPanel()
 	}
 }
 
-Control* ButtonPanel::AddButton(const char *sound, const char *texture, const char *texture_lit, int row, int column, const char *type, float width, float height, float hoffset, float voffset)
+Control* ButtonPanel::AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, float width, float height, float hoffset, float voffset)
 {
 	//create a standard button at specified row/column position
 	//width and height are the button size percentage that the button should be (divided by 100); default is 1 for each, aka 100%.
@@ -158,7 +158,7 @@ Control* ButtonPanel::AddButton(const char *sound, const char *texture, const ch
 	return AddControl(sound, row, column, width, height, hoffset, voffset, names, textures);
 }
 
-Control* ButtonPanel::AddControl(const char *sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//create an elevator control (button, switch, knob)
 
@@ -235,7 +235,7 @@ Control* ButtonPanel::AddControl(const char *sound, int row, int column, float b
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(this, buffer.c_str(), false, sound, actionsnull, actions, textures, Direction.c_str(), ButtonWidth * bwidth, ButtonHeight * bheight, false);
+	Control *control = controls[control_index] = new Control(this, buffer, false, sound, actionsnull, actions, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, false);
 
 	//move control
 	controls[control_index]->Move(position);
@@ -279,11 +279,11 @@ void ButtonPanel::Enabled(bool value)
 	IsEnabled = value;
 }
 
-bool ButtonPanel::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(this, ButtonPanelMesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->AddWallMain(this, ButtonPanelMesh, name.c_str(), texture.c_str(), thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 Control* ButtonPanel::GetControl(int index)
@@ -322,7 +322,7 @@ int ButtonPanel::GetFloorButtonIndex(int floor)
 	{
 		for (int i = 0; i < (int)controls.size(); i++)
 		{
-			if (controls[i]->FindActionPosition(floornum.c_str()))
+			if (controls[i]->FindActionPosition(floornum))
 				return i;
 		}
 	}

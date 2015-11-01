@@ -37,7 +37,7 @@ public:
 	std::string Prefix; //texture name prefix
 
 	//functions
-	FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float altitude);
+	FloorIndicator(Object *parent, int elevator, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float altitude);
 	~FloorIndicator();
 	void Enabled(bool value);
 	void Update();

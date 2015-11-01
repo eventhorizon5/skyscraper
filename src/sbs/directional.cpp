@@ -31,7 +31,7 @@
 
 namespace SBS {
 
-DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator
 
@@ -58,7 +58,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	timer_interval = sbs->GetConfigInt("Skyscraper.SBS.DirectionalIndicator.Timer", 15000);
 
 	bool in_elevator = false;
-	if (std::string(parent->GetType()) == "Elevator")
+	if (parent->GetType() == "Elevator")
 		in_elevator = true;
 
 	//create timer
@@ -72,7 +72,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	std::string base, buffer;
 	base = "Directional Indicator " + ToString2(elevator) + ":" + ToString2(floor);
 	buffer = base + ":Back";
-	SetName(base.c_str());
+	SetName(base);
 	DirectionalMeshBack = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	if (Single == false)
@@ -100,7 +100,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(this, DirectionalMeshBack, "Panel", BackTexture, 0, -BackWidth / 2, 0, BackWidth / 2, 0, BackHeight, BackHeight, 0, 0, tw, th, false);
+			sbs->AddWallMain(this, DirectionalMeshBack, "Panel", BackTexture.c_str(), 0, -BackWidth / 2, 0, BackWidth / 2, 0, BackHeight, BackHeight, 0, 0, tw, th, false);
 			sbs->ResetWalls();
 
 		}
@@ -110,7 +110,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 				sbs->DrawWalls(true, false, false, false, false, false);
 			else
 				sbs->DrawWalls(false, true, false, false, false, false);
-			sbs->AddWallMain(this, DirectionalMeshBack, "Panel", BackTexture, 0, 0, BackWidth / 2, 0, -BackWidth / 2, BackHeight, BackHeight, 0, 0, tw, th, false);
+			sbs->AddWallMain(this, DirectionalMeshBack, "Panel", BackTexture.c_str(), 0, 0, BackWidth / 2, 0, -BackWidth / 2, BackHeight, BackHeight, 0, 0, tw, th, false);
 			sbs->ResetWalls();
 		}
 	}

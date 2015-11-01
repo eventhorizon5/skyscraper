@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-TimerObject::TimerObject(Object *parent, const char *name, bool permanent)
+TimerObject::TimerObject(Object *parent, const std::string &name, bool permanent)
 {
 	//set up SBS object
 	SetValues(parent, "Timer", name, permanent);
@@ -111,8 +111,7 @@ unsigned long TimerObject::GetCurrentTime()
 
 void TimerObject::Report(std::string message)
 {
-	std::string name = GetName();
-	sbs->Report("Timer '" + name + "', parent '" + GetParent()->GetName() + "': " + message);
+	sbs->Report("Timer '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 }

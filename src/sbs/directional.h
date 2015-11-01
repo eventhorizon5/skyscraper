@@ -49,7 +49,7 @@ public:
 	bool ActiveDirection; //true if this indicator displays the active elevator direction, instead of only for an available call
 
 	//functions
-	DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	DirectionalIndicator(Object *parent, int elevator, int floor, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~DirectionalIndicator();
 	void Enabled(bool value);
 	void UpLight(bool value);
@@ -67,7 +67,7 @@ private:
 	{
 	public:
 		DirectionalIndicator *indicator;
-		Timer(const char *name, DirectionalIndicator *parent) : TimerObject(parent, name, false)
+		Timer(const std::string &name, DirectionalIndicator *parent) : TimerObject(parent, name, false)
 		{
 			indicator = parent;
 		}

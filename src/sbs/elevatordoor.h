@@ -195,7 +195,7 @@ private:
 		ElevatorDoor *door;
 		Elevator *elevator;
 		int type; //0 = autoclose, 1 = nudge
-		Timer(std::string name, ElevatorDoor *parent, Elevator *elev, int Type) : TimerObject(parent, name.c_str(), false)
+		Timer(const std::string &name, ElevatorDoor *parent, Elevator *elev, int Type) : TimerObject(parent, name, false)
 		{
 			door = parent;
 			elevator = elev;

@@ -32,7 +32,7 @@
 
 namespace SBS {
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//creates a new floor indicator at the specified position
 
@@ -47,7 +47,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const char *texture
 	Move(CenterX, voffset, CenterZ);
 
 	std::string name = "Floor Indicator " + ToString2(elevator);
-	SetName(name.c_str());
+	SetName(name);
 	FloorIndicatorMesh = new MeshObject(this, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->StartingFloor)->ID;
