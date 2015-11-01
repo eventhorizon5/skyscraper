@@ -35,7 +35,7 @@ public:
 	bool Run;
 	bool RunDirection;
 
-	Escalator(Object *parent, const char *name, bool run, bool run_direction, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
+	Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	~Escalator();
 	void Enabled(bool value);
 	void Report(std::string message);
@@ -46,7 +46,7 @@ private:
 	std::vector<MeshObject*> Steps;
 	Sound *sound; //sound object
 
-	void CreateSteps(const char *texture, const char *direction, float width, float risersize, float treadsize, float tw, float th);
+	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
 };
 
 }

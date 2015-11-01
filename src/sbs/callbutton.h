@@ -44,7 +44,7 @@ public:
 	bool DownStatus; //status of down light
 
 	//functions
-	CallButton(std::vector<int> &elevators, int floornum, int number, const char *sound_file, const char *BackTexture, const char *UpButtonTexture, const char *UpButtonTexture_Lit, const char *DownButtonTexture, const char *DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
+	CallButton(std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~CallButton();
 	void Enabled(bool value);
 	bool Call(bool direction); //true is up, false is down

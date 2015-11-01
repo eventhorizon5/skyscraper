@@ -31,7 +31,7 @@
 
 namespace SBS {
 
-Door::Door(Object *parent, const char *name, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door::Door(Object *parent, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -111,7 +111,7 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(this, name);
+	DoorMesh = new MeshObject(this, name.c_str());
 	Move(position);
 
 	//create sound object
@@ -126,8 +126,8 @@ Door::Door(Object *parent, const char *name, const char *open_sound, const char 
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	WallObject *wall;
-	wall = DoorMesh->CreateWallObject(name);
-	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
+	wall = DoorMesh->CreateWallObject(name.c_str());
+	sbs->AddWallMain(wall, name.c_str(), texture.c_str(), thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
 
@@ -177,7 +177,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	//position is the camera position, used to check if the door is locked
 	//if force is true, locking/position check will be bypassed
 
-	sbs->Report("Opening door '" + std::string(GetName()) + "'");
+	sbs->Report("Opening door '" + GetName() + "'");
 
 	if (!sbs->RegisterDoorCallback(this))
 		return false;
@@ -186,7 +186,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	{
 		//check lock state
 		if (IsLocked(position) == true)
-			return sbs->ReportError("Door '" + std::string(GetName()) + "' is locked");
+			return sbs->ReportError("Door '" + GetName() + "' is locked");
 	}
 
 	if (IsMoving == false)
@@ -194,7 +194,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 	if (playsound == true)
 	{
-		sound->Load(OpenSound.c_str());
+		sound->Load(OpenSound);
 		sound->Play();
 	}
 	IsMoving = true;
@@ -204,7 +204,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 
 void Door::Close(bool playsound)
 {
-	sbs->Report("Closing door '" + std::string(GetName()) + "'");
+	sbs->Report("Closing door '" + GetName() + "'");
 
 	if (!sbs->RegisterDoorCallback(this))
 		return;
@@ -214,7 +214,7 @@ void Door::Close(bool playsound)
 
 	if (playsound == true)
 	{
-		sound->Load(CloseSound.c_str());
+		sound->Load(CloseSound);
 		sound->Play();
 	}
 	IsMoving = true;
@@ -300,7 +300,7 @@ bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock door '" + std::string(GetName()) + "'");
+			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock door '" + GetName() + "'");
 	}
 
 	if (GetSide(position) == false)
@@ -341,9 +341,9 @@ bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	}
 
 	if (replocked == true)
-		sbs->Report("Locked door '" + std::string(GetName()) + "'");
+		sbs->Report("Locked door '" + GetName() + "'");
 	else
-		sbs->Report("Unlocked door '" + std::string(GetName()) + "'");
+		sbs->Report("Unlocked door '" + GetName() + "'");
 
 	return true;
 }

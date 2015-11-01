@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Model::Model(Object *parent, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model::Model(Object *parent, const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//loads a 3D model into the simulation
 
@@ -42,7 +42,7 @@ Model::Model(Object *parent, const char *name, const char *filename, bool center
 	global = IsGlobal();
 
 	load_error = false;
-	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	mesh = new MeshObject(this, name.c_str(), filename.c_str(), max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (!mesh->Movable)
 	{
 		load_error = true;

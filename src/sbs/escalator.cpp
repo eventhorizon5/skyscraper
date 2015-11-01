@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Escalator::Escalator(Object *parent, const char *name, bool run, bool run_direction, const char *sound_file, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator::Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
 {
 	//create a new escalator object
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
@@ -50,7 +50,7 @@ Escalator::Escalator(Object *parent, const char *name, bool run, bool run_direct
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		MeshObject *mesh = new MeshObject(this, name);
+		MeshObject *mesh = new MeshObject(this, name.c_str());
 		Steps.push_back(mesh);
 	}
 
@@ -117,13 +117,13 @@ void Escalator::Enabled(bool value)
 void Escalator::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Escalator " + std::string(GetName()) + ": " + message);
+	sbs->Report("Escalator " + GetName() + ": " + message);
 }
 
 bool Escalator::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Escalator " + std::string(GetName()) + ": " + message);
+	return sbs->ReportError("Escalator " + GetName() + ": " + message);
 }
 
 void Escalator::Loop()
@@ -144,7 +144,7 @@ void Escalator::Loop()
 	}
 }
 
-void Escalator::CreateSteps(const char *texture, const char *direction, float width, float risersize, float treadsize, float tw, float th)
+void Escalator::CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th)
 {
 	//create steps
 	std::string Name = GetName();
@@ -184,12 +184,12 @@ void Escalator::CreateSteps(const char *texture, const char *direction, float wi
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture, thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture, 0, pos, -(width / 2), pos + treadsize, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, pos, -(width / 2), pos + treadsize, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 		if (Direction == "left")
@@ -200,12 +200,12 @@ void Escalator::CreateSteps(const char *texture, const char *direction, float wi
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture, thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture, 0, pos - treadsize, -(width / 2), pos, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, pos - treadsize, -(width / 2), pos, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 		if (Direction == "back")
@@ -216,12 +216,12 @@ void Escalator::CreateSteps(const char *texture, const char *direction, float wi
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture, thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture, 0, -(width / 2), pos, width / 2, pos + treadsize, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, -(width / 2), pos, width / 2, pos + treadsize, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 		if (Direction == "front")
@@ -232,12 +232,12 @@ void Escalator::CreateSteps(const char *texture, const char *direction, float wi
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture, thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture, 0, -(width / 2), pos - treadsize, width / 2, pos, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, -(width / 2), pos - treadsize, width / 2, pos, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 	}
