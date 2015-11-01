@@ -98,12 +98,12 @@ public:
 	void CheckShaft();
 	void CheckStairwell();
 	void ClickedObject(bool shift, bool ctrl, bool alt, bool right);
-	const char* GetClickedMeshName();
-	const char* GetClickedWallName();
+	std::string GetClickedMeshName();
+	std::string GetClickedWallName();
 	int GetClickedObjectNumber();
 	int GetClickedObjectLine();
-	const char* GetClickedObjectCommand();
-	const char* GetClickedObjectCommandP();
+	std::string GetClickedObjectCommand();
+	std::string GetClickedObjectCommandP();
 	void Loop(float delta);
 	void Strafe(float speed = 1.0f);
 	void Step(float speed = 1.0f);

@@ -211,8 +211,8 @@ Elevator::Elevator(int number)
 
 	//create object meshes
 	std::string name = "Elevator " + ToString2(Number);
-	SetName(name.c_str());
-	ElevatorMesh = new MeshObject(this, name.c_str());
+	SetName(name);
+	ElevatorMesh = new MeshObject(this, name);
 
 	if (sbs->Verbose)
 		Report("elevator object created");
@@ -553,9 +553,9 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 	idlesound = new Sound(this, "Idle", true);
 
 	std::string motorname = "Motor " + ToString2(Number);
-	motorsound = new Sound(GetShaft(), motorname.c_str(), true);
+	motorsound = new Sound(GetShaft(), motorname, true);
 	motorname += " Idle";
-	motoridlesound = new Sound(GetShaft(), motorname.c_str(), true);
+	motoridlesound = new Sound(GetShaft(), motorname, true);
 
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
@@ -775,7 +775,7 @@ void Elevator::Alarm()
 		Report("alarm on");
 		if (AlarmSound != "")
 		{
-			alarm->Load(AlarmSound.c_str());
+			alarm->Load(AlarmSound);
 			alarm->Loop(true);
 			alarm->Play();
 		}
@@ -787,7 +787,7 @@ void Elevator::Alarm()
 		if (AlarmSound != "")
 		{
 			alarm->Stop();
-			alarm->Load(AlarmSoundStop.c_str());
+			alarm->Load(AlarmSoundStop);
 			alarm->Loop(false);
 			alarm->Play();
 		}
@@ -1250,7 +1250,7 @@ void Elevator::MonitorLoop()
 	if (CarIdleSound != "")
 	{
 		if (idlesound->IsLoaded() == false)
-			idlesound->Load(CarIdleSound.c_str());
+			idlesound->Load(CarIdleSound);
 
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
@@ -1282,7 +1282,7 @@ void Elevator::MonitorLoop()
 	if (MotorIdleSound != "")
 	{
 		if (motoridlesound->IsLoaded() == false)
-			motoridlesound->Load(MotorIdleSound.c_str());
+			motoridlesound->Load(MotorIdleSound);
 
 		//play motor idle sound
 		if (motoridlesound->IsPlaying() == false && Running == true)
@@ -1306,7 +1306,7 @@ void Elevator::MonitorLoop()
 	if (Music != "")
 	{
 		if (musicsound->IsLoaded() == false)
-			musicsound->Load(Music.c_str());
+			musicsound->Load(Music);
 
 		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && IsMoving == true) || MusicOnMove == false))
 		{
@@ -4471,7 +4471,7 @@ Door* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool op
 
 	std::string elevnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
-	Door* door = new Door(this, std::string("Elevator " + elevnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	Door* door = new Door(this, std::string("Elevator " + elevnum + ":Door " + num), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
 }
@@ -4784,7 +4784,7 @@ bool Elevator::PlayFloorBeep()
 	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
 	floorbeep->Stop();
-	floorbeep->Load(newsound.c_str());
+	floorbeep->Load(newsound);
 	floorbeep->Loop(false);
 	floorbeep->Play();
 	return true;
@@ -4804,7 +4804,7 @@ bool Elevator::PlayFloorSound()
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GotoFloor));
 	TrimString(newsound);
-	announcesnd->PlayQueued(newsound.c_str(), false, false);
+	announcesnd->PlayQueued(newsound, false, false);
 	return true;
 }
 
@@ -4891,7 +4891,7 @@ bool Elevator::PlayMessageSound(bool type)
 	//change the asterisk into the current floor number
 	ReplaceAll(newsound, "*", ToString(GetFloor()));
 	TrimString(newsound);
-	announcesnd->PlayQueued(newsound.c_str(), false, false);
+	announcesnd->PlayQueued(newsound, false, false);
 	return true;
 }
 
@@ -5606,7 +5606,7 @@ void Elevator::PlayStartingSounds()
 		if (sbs->Verbose)
 			Report("playing car up start sound");
 
-		carsound->Load(CarUpStartSound.c_str());
+		carsound->Load(CarUpStartSound);
 		carsound->Loop(false);
 		carsound->Play();
 	}
@@ -5615,7 +5615,7 @@ void Elevator::PlayStartingSounds()
 		if (sbs->Verbose)
 			Report("playing car down start sound");
 
-		carsound->Load(CarDownStartSound.c_str());
+		carsound->Load(CarDownStartSound);
 		carsound->Loop(false);
 		carsound->Play();
 	}
@@ -5627,7 +5627,7 @@ void Elevator::PlayStartingSounds()
 		if (sbs->Verbose)
 			Report("playing motor up start sound");
 
-		motorsound->Load(MotorUpStartSound.c_str());
+		motorsound->Load(MotorUpStartSound);
 		motorsound->Loop(false);
 		motorsound->Play();
 	}
@@ -5636,7 +5636,7 @@ void Elevator::PlayStartingSounds()
 		if (sbs->Verbose)
 			Report("playing motor down start sound");
 
-		motorsound->Load(MotorDownStartSound.c_str());
+		motorsound->Load(MotorDownStartSound);
 		motorsound->Loop(false);
 		motorsound->Play();
 	}
@@ -5721,7 +5721,7 @@ void Elevator::PlayStoppingSounds(bool emergency)
 
 	if (carsound_play == true)
 	{
-		carsound->Load(CarSoundFile.c_str());
+		carsound->Load(CarSoundFile);
 		carsound->Loop(false);
 
 		//set play position to current percent of the total speed
@@ -5735,7 +5735,7 @@ void Elevator::PlayStoppingSounds(bool emergency)
 	}
 	if (motorsound_play == true)
 	{
-		motorsound->Load(MotorSoundFile.c_str());
+		motorsound->Load(MotorSoundFile);
 		motorsound->Loop(false);
 
 		//set play position to current percent of the total speed
@@ -5760,7 +5760,7 @@ void Elevator::PlayMovingSounds()
 			if (sbs->Verbose)
 				Report("playing car up movement sound");
 
-			carsound->Load(CarUpMoveSound.c_str());
+			carsound->Load(CarUpMoveSound);
 			carsound->Loop(true);
 			carsound->Play();
 		}
@@ -5769,7 +5769,7 @@ void Elevator::PlayMovingSounds()
 			if (sbs->Verbose)
 				Report("playing car down movement sound");
 
-			carsound->Load(CarDownMoveSound.c_str());
+			carsound->Load(CarDownMoveSound);
 			carsound->Loop(true);
 			carsound->Play();
 		}
@@ -5783,7 +5783,7 @@ void Elevator::PlayMovingSounds()
 			if (sbs->Verbose)
 				Report("playing motor up run sound");
 
-			motorsound->Load(MotorUpRunSound.c_str());
+			motorsound->Load(MotorUpRunSound);
 			motorsound->Loop(true);
 			motorsound->Play();
 		}
@@ -5792,7 +5792,7 @@ void Elevator::PlayMovingSounds()
 			if (sbs->Verbose)
 				Report("playing motor down run sound");
 
-			motorsound->Load(MotorDownRunSound.c_str());
+			motorsound->Load(MotorDownRunSound);
 			motorsound->Loop(true);
 			motorsound->Play();
 		}

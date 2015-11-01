@@ -684,7 +684,7 @@ void SBS::CalculateFrameRate()
 	}
 }
 
-bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	WallObject *object = new WallObject(mesh, parent, true);
 	bool result = AddWallMain(object, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, autosize);
@@ -692,22 +692,16 @@ bool SBS::AddWallMain(Object *parent, MeshObject* mesh, const char *name, const 
 	return result;
 }
 
-bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
+bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize)
 {
 	//Adds a wall with the specified dimensions
 
 	//exit if coordinates are invalid
 	if (x1 == x2 && z1 == z2)
-	{
-		std::string name2 = name;
-		return ReportError("Invalid coordinates for wall '" + name2 + "'");
-	}
+		return ReportError("Invalid coordinates for wall '" + name + "'");
 
 	if (height_in1 == 0.0f && height_in2 == 0.0f)
-	{
-		std::string name2 = name;
-		return ReportError("No wall height specified for wall '" + name2 + "'");
-	}
+		return ReportError("No wall height specified for wall '" + name + "'");
 
 	//determine axis of wall
 	int axis = 0;
@@ -835,7 +829,7 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.append(":front");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v1, v2, v3, v4, tw2, th2, autosize); //front wall
+		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //front wall
 	}
 
 	if (DrawMainP == true)
@@ -850,7 +844,7 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 
 		NewName = name;
 		NewName.append(":back");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v5, v8, v7, tw2, th2, autosize); //back wall
+		wallobject->AddQuad(NewName, texture2, v6, v5, v8, v7, tw2, th2, autosize); //back wall
 	}
 
 	if (thickness != 0.0f)
@@ -868,9 +862,9 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 			NewName = name;
 			NewName.append(":left");
 			if (axis == 1)
-				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //left wall
+				wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //left wall
 			else
-				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //left wall
+				wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //left wall
 		}
 
 		if (DrawSideP == true)
@@ -886,9 +880,9 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 			NewName = name;
 			NewName.append(":right");
 			if (axis == 1)
-				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v2, v6, v7, v3, tw2, th2, autosize); //right wall
+				wallobject->AddQuad(NewName, texture2, v2, v6, v7, v3, tw2, th2, autosize); //right wall
 			else
-				wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v1, v4, v8, tw2, th2, autosize); //right wall
+				wallobject->AddQuad(NewName, texture2, v5, v1, v4, v8, tw2, th2, autosize); //right wall
 		}
 
 		if (DrawTop == true)
@@ -903,7 +897,7 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 
 			NewName = name;
 			NewName.append(":top");
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //top wall
+			wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //top wall
 		}
 
 		if (DrawBottom == true)
@@ -918,14 +912,14 @@ bool SBS::AddWallMain(WallObject* wallobject, const char *name, const char *text
 
 			NewName = name;
 			NewName.append(":bottom");
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
+			wallobject->AddQuad(NewName, texture2, v4, v3, v7, v8, tw2, th2, autosize); //bottom wall
 		}
 	}
 
 	return true;
 }
 
-bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
 	WallObject *object = new WallObject(mesh, parent, true);
 	bool result = AddFloorMain(object, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, autosize, legacy_behavior);
@@ -933,7 +927,7 @@ bool SBS::AddFloorMain(Object *parent, MeshObject* mesh, const char *name, const
 	return result;
 }
 
-bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
+bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool autosize, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
@@ -943,10 +937,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 
 	//exit if coordinates are invalid
 	if (x1 == x2 || z1 == z2)
-	{
-		std::string name2 = name;
-		return ReportError("Invalid coordinates for floor '" + name2 + "'");
-	}
+		return ReportError("Invalid coordinates for floor '" + name + "'");
 
 	//convert to clockwise coordinates
 	float temp;
@@ -1111,7 +1102,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 		NewName = name;
 		if (GetDrawWallsCount() > 1)
 			NewName.append(":front");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v1, v2, v3, v4, tw2, th2, autosize); //bottom wall
+		wallobject->AddQuad(NewName, texture2, v1, v2, v3, v4, tw2, th2, autosize); //bottom wall
 	}
 
 	if (DrawMainP == true)
@@ -1126,7 +1117,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 
 		NewName = name;
 		NewName.append(":back");
-		wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v7, v6, v5, tw2, th2, autosize); //top wall
+		wallobject->AddQuad(NewName, texture2, v8, v7, v6, v5, tw2, th2, autosize); //top wall
 	}
 
 	if (thickness != 0.0f)
@@ -1143,7 +1134,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 
 			NewName = name;
 			NewName.append(":left");
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v8, v5, v1, v4, tw2, th2, autosize); //left wall
+			wallobject->AddQuad(NewName, texture2, v8, v5, v1, v4, tw2, th2, autosize); //left wall
 		}
 
 		if (DrawSideP == true)
@@ -1158,7 +1149,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 
 			NewName = name;
 			NewName.append(":right");
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v6, v7, v3, v2, tw2, th2, autosize); //right wall
+			wallobject->AddQuad(NewName, texture2, v6, v7, v3, v2, tw2, th2, autosize); //right wall
 		}
 
 		if (DrawTop == true)
@@ -1173,7 +1164,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 
 			NewName = name;
 			NewName.append(":top");
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v5, v6, v2, v1, tw2, th2, autosize); //front wall
+			wallobject->AddQuad(NewName, texture2, v5, v6, v2, v1, tw2, th2, autosize); //front wall
 		}
 
 		if (DrawBottom == true)
@@ -1188,7 +1179,7 @@ bool SBS::AddFloorMain(WallObject* wallobject, const char *name, const char *tex
 
 			NewName = name;
 			NewName.append(":bottom");
-			wallobject->AddQuad(NewName.c_str(), texture2.c_str(), v7, v8, v4, v3, tw2, th2, autosize); //back wall
+			wallobject->AddQuad(NewName, texture2, v7, v8, v4, v3, tw2, th2, autosize); //back wall
 		}
 	}
 
@@ -1210,16 +1201,13 @@ bool SBS::ReportError(std::string message)
 	return false;
 }
 
-bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls
 
 	//exit if coordinates are invalid
 	if (x1 == x2 && z1 == z2)
-	{
-		std::string name2 = name;
-		return ReportError("Invalid coordinates for wall '" + name2 + "'");
-	}
+		return ReportError("Invalid coordinates for wall '" + name + "'");
 
 	bool x_thickness = false, z_thickness = false;
 	std::string NewName;
@@ -1253,14 +1241,14 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 		if (x_thickness == true)
 		{
 			wallobject->AddQuad( //front
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x1, voffset, z1),
 					Ogre::Vector3(x2, voffset, z1),
 					Ogre::Vector3(x2, voffset + height_in, z1),
 					Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
 			wallobject->AddQuad( //back
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x2, voffset, z2),
 					Ogre::Vector3(x1, voffset, z2),
@@ -1270,14 +1258,14 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 		if (z_thickness == true)
 		{
 			wallobject->AddQuad( //right
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x2, voffset, z1),
 					Ogre::Vector3(x2, voffset, z2),
 					Ogre::Vector3(x2, voffset + height_in, z2),
 					Ogre::Vector3(x2, voffset + height_in, z1), tw, th, autosize);
 			wallobject->AddQuad( //left
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x1, voffset, z2),
 					Ogre::Vector3(x1, voffset, z1),
@@ -1289,7 +1277,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 			if (bottom == true)
 			{
 				wallobject->AddQuad( //bottom
-						NewName.c_str(),
+						NewName,
 						texture,
 						Ogre::Vector3(x1, voffset, z2),
 						Ogre::Vector3(x2, voffset, z2),
@@ -1299,7 +1287,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 			if (top == true)
 			{
 				wallobject->AddQuad( //top
-						NewName.c_str(),
+						NewName,
 						texture,
 						Ogre::Vector3(x1, voffset + height_in, z1),
 						Ogre::Vector3(x2, voffset + height_in, z1),
@@ -1317,14 +1305,14 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 		if (x_thickness == true)
 		{
 			wallobject->AddQuad( //front
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x1, voffset + height_in, z1),
 					Ogre::Vector3(x2, voffset + height_in, z1),
 					Ogre::Vector3(x2, voffset, z1),
 					Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
 			wallobject->AddQuad( //back
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x2, voffset + height_in, z2),
 					Ogre::Vector3(x1, voffset + height_in, z2),
@@ -1334,14 +1322,14 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 		if (z_thickness == true)
 		{
 			wallobject->AddQuad( //right
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x2, voffset + height_in, z1),
 					Ogre::Vector3(x2, voffset + height_in, z2),
 					Ogre::Vector3(x2, voffset, z2),
 					Ogre::Vector3(x2, voffset, z1), tw, th, autosize);
 			wallobject->AddQuad( //left
-					NewName.c_str(),
+					NewName,
 					texture,
 					Ogre::Vector3(x1, voffset + height_in, z2),
 					Ogre::Vector3(x1, voffset + height_in, z1),
@@ -1353,7 +1341,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 			if (bottom == true)
 			{
 				wallobject->AddQuad( //bottom
-						NewName.c_str(),
+						NewName,
 						texture,
 						Ogre::Vector3(x1, voffset, z1),
 						Ogre::Vector3(x2, voffset, z1),
@@ -1363,7 +1351,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 			if (top == true)
 			{
 				wallobject->AddQuad( //top
-						NewName.c_str(),
+						NewName,
 						texture,
 						Ogre::Vector3(x1, voffset + height_in, z2),
 						Ogre::Vector3(x2, voffset + height_in, z2),
@@ -1375,7 +1363,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const char *name, const char *te
 	return true;
 }
 
-bool SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+bool SBS::CreateWallBox2(WallObject* wallobject, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls from a central point
 
@@ -1392,7 +1380,7 @@ bool SBS::CreateWallBox2(WallObject* wallobject, const char *name, const char *t
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-bool SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+bool SBS::AddCustomWall(WallObject* wallobject, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
 {
 	//Adds a wall from a specified array of 3D vectors
 
@@ -1436,23 +1424,21 @@ bool SBS::AddCustomWall(WallObject* wallobject, const char *name, const char *te
 	//add the polygons
 	if (DrawMainN == true)
 	{
-		std::string NewName;
-		NewName = name;
+		std::string NewName = name;
 		NewName.append(":0");
-		wallobject->AddPolygon(NewName.c_str(), texture, varray1, tw2, th2, true);
+		wallobject->AddPolygon(NewName, texture, varray1, tw2, th2, true);
 	}
 	if (DrawMainP == true)
 	{
-		std::string NewName;
-		NewName = name;
+		std::string NewName = name;
 		NewName.append(":1");
-		wallobject->AddPolygon(NewName.c_str(), texture, varray2, tw2, th2, true);
+		wallobject->AddPolygon(NewName, texture, varray2, tw2, th2, true);
 	}
 
 	return true;
 }
 
-bool SBS::AddCustomFloor(WallObject* wallobject, const char *name, const char *texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
+bool SBS::AddCustomFloor(WallObject* wallobject, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	std::vector<Ogre::Vector3> varray3;
@@ -1468,7 +1454,7 @@ bool SBS::AddCustomFloor(WallObject* wallobject, const char *name, const char *t
 	return AddCustomWall(wallobject, name, texture, varray3, tw, th);
 }
 
-bool SBS::AddTriangleWall(WallObject* wallobject, const char *name, const char *texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
+bool SBS::AddTriangleWall(WallObject* wallobject, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
 	std::vector<Ogre::Vector3> varray;
@@ -1516,12 +1502,11 @@ void SBS::EnableSkybox(bool value)
 		IsSkyboxEnabled = true;
 }
 
-void SBS::CreateSky(const char *filenamebase)
+void SBS::CreateSky(const std::string &filenamebase)
 {
 	//create skybox
 
-	std::string file = filenamebase;
-	Mount(std::string("sky-" + file + ".zip").c_str(), "sky");
+	Mount(std::string("sky-" + filenamebase + ".zip"), "sky");
 
 	//load textures
 	SetLighting();
@@ -2004,7 +1989,7 @@ Stairs* SBS::GetStairs(int number)
 	return 0;
 }
 
-bool SBS::SetWallOrientation(const char *direction)
+bool SBS::SetWallOrientation(std::string direction)
 {
 	//changes internal wall orientation parameter.
 	//direction can either be "left" (negative), "center" (0), or "right" (positive).
@@ -2012,14 +1997,13 @@ bool SBS::SetWallOrientation(const char *direction)
 	//the parameter is used to determine the location of the wall's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
 
-	std::string temp = direction;
-	SetCase(temp, false);
+	SetCase(direction, false);
 
-	if (temp == "left")
+	if (direction == "left")
 		wall_orientation = 0;
-	else if (temp == "center")
+	else if (direction == "center")
 		wall_orientation = 1;
-	else if (temp == "right")
+	else if (direction == "right")
 		wall_orientation = 2;
 	else
 		return ReportError("SetWallOrientation: Invalid wall orientation");
@@ -2031,7 +2015,7 @@ int SBS::GetWallOrientation()
 	return wall_orientation;
 }
 
-bool SBS::SetFloorOrientation(const char *direction)
+bool SBS::SetFloorOrientation(std::string direction)
 {
 	//changes internal floor orientation parameter.
 	//direction can either be "bottom" (negative), "center" (0), or "top" (positive).
@@ -2039,14 +2023,13 @@ bool SBS::SetFloorOrientation(const char *direction)
 	//the parameter is used to determine the location of the floor's
 	//x1/x2 or z1/z2 coordinates in relation to the thickness extents
 
-	std::string temp = direction;
-	SetCase(temp, false);
+	SetCase(direction, false);
 
-	if (temp == "bottom")
+	if (direction == "bottom")
 		floor_orientation = 0;
-	else if (temp == "center")
+	else if (direction == "center")
 		floor_orientation = 1;
-	else if (temp == "top")
+	else if (direction == "top")
 		floor_orientation = 2;
 	else
 		return ReportError("SetFloorOrientation: Invalid floor orientation");
@@ -2124,7 +2107,7 @@ float SBS::FeetToMeters(float feet)
 	return feet / 3.2808399f;
 }
 
-void SBS::AddDoorwayWalls(WallObject *wallobject, const char *texture, float tw, float th)
+void SBS::AddDoorwayWalls(WallObject *wallobject, const std::string &texture, float tw, float th)
 {
 	//add joining doorway polygons if needed
 
@@ -2210,7 +2193,7 @@ void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &
 		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
-WallObject* SBS::AddWall(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+WallObject* SBS::AddWall(const std::string &meshname, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
 	//meshname can either be:
 	//external, landscape, or buildings
@@ -2232,7 +2215,7 @@ WallObject* SBS::AddWall(const char *meshname, const char *name, const char *tex
 	return wall;
 }
 
-WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+WallObject* SBS::AddFloor(const std::string &meshname, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//meshname can either be:
 	//external, landscape, or buildings
@@ -2254,7 +2237,7 @@ WallObject* SBS::AddFloor(const char *meshname, const char *name, const char *te
 	return wall;
 }
 
-WallObject* SBS::AddGround(const char *name, const char *texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
+WallObject* SBS::AddGround(const std::string &name, const std::string &texture, float x1, float z1, float x2, float z2, float altitude, int tile_x, int tile_z)
 {
 	//Adds ground based on a tiled-floor layout, with the specified dimensions and vertical offset
 	//this does not support thickness
@@ -2644,12 +2627,12 @@ int SBS::GetTimerCallbackCount()
 	return (int)timercallbacks.size();
 }
 
-bool SBS::Mount(const char *filename, const char *path)
+bool SBS::Mount(const std::string &filename, const std::string &path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	std::string newfile = "data" + std::string("/") + std::string(filename);
-	std::string file = VerifyFile(newfile.c_str());
+	std::string newfile = "data" + std::string("/") + filename;
+	std::string file = VerifyFile(newfile);
 	std::string Path = path;
 
 	Report("Mounting " + file + " as path " + Path);
@@ -2734,7 +2717,7 @@ int SBS::GetMeshCount()
 	return (int)meshes.size();
 }
 
-Sound* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Sound* SBS::AddSound(const std::string &name, const std::string &filename, const Ogre::Vector3 &position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, const Ogre::Vector3 &direction)
 {
 	//create a looping sound object
 	Sound *sound = new Sound(this, name, false);
@@ -2757,7 +2740,7 @@ Sound* SBS::AddSound(const char *name, const char *filename, Ogre::Vector3 posit
 	return sound;
 }
 
-std::vector<Sound*> SBS::GetSound(const char *name)
+std::vector<Sound*> SBS::GetSound(const std::string &name)
 {
 	//get sound by name
 
@@ -2936,7 +2919,7 @@ std::string SBS::TruncateNumber(float value, int decimals)
 	return buffer.str();
 }
 
-std::string SBS::TruncateNumber(const char *value, int decimals)
+std::string SBS::TruncateNumber(const std::string &value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
 	std::string number = value;
@@ -2967,13 +2950,13 @@ std::string SBS::DumpState()
 	output.append("Building Filename: " + BuildingFilename + "\n");
 	output.append("Building Version: " + BuildingVersion + "\n");
 	output.append("InStairwell: ");
-	output.append(std::string(BoolToString(InStairwell)).c_str());
+	output.append(std::string(BoolToString(InStairwell)));
 	output.append("\n");
 	output.append("InElevator: ");
-	output.append(std::string(BoolToString(InElevator)).c_str());
+	output.append(std::string(BoolToString(InElevator)));
 	output.append("\n");
 	output.append("InShaft: ");
-	output.append(std::string(BoolToString(InShaft)).c_str());
+	output.append(std::string(BoolToString(InShaft)));
 	output.append("\n");
 	output.append("CameraFloor: ");
 	if (camera)
@@ -2983,28 +2966,28 @@ std::string SBS::DumpState()
 	output.append(ToString(ElevatorNumber));
 	output.append("\n");
 	output.append("ElevatorSync: ");
-	output.append(std::string(BoolToString(ElevatorSync)).c_str());
+	output.append(std::string(BoolToString(ElevatorSync)));
 	output.append("\n");
 	output.append("Running Time: ");
 	output.append(TruncateNumber(running_time, 2));
 	output.append("\n");
 	output.append("BuildingsEnabled: ");
-	output.append(std::string(BoolToString(IsBuildingsEnabled)).c_str());
+	output.append(std::string(BoolToString(IsBuildingsEnabled)));
 	output.append("\n");
 	output.append("ExternalEnabled: ");
-	output.append(std::string(BoolToString(IsExternalEnabled)).c_str());
+	output.append(std::string(BoolToString(IsExternalEnabled)));
 	output.append("\n");
 	output.append("LandscapeEnabled: ");
-	output.append(std::string(BoolToString(IsLandscapeEnabled)).c_str());
+	output.append(std::string(BoolToString(IsLandscapeEnabled)));
 	output.append("\n");
 	output.append("SkyboxEnabled: ");
-	output.append(std::string(BoolToString(IsSkyboxEnabled)).c_str());
+	output.append(std::string(BoolToString(IsSkyboxEnabled)));
 	output.append("\n");
 	output.append("Verbose: ");
-	output.append(std::string(BoolToString(Verbose)).c_str());
+	output.append(std::string(BoolToString(Verbose)));
 	output.append("\n");
 	output.append("InterfloorOnTop: ");
-	output.append(std::string(BoolToString(InterfloorOnTop)).c_str());
+	output.append(std::string(BoolToString(InterfloorOnTop)));
 	output.append("\n");
 	output.append("Object Count: ");
 	output.append(ToString(ObjectCount));
@@ -3335,7 +3318,7 @@ void SBS::RemoveTrigger(Trigger *trigger)
 	}
 }
 
-std::string SBS::VerifyFile(const char *filename)
+std::string SBS::VerifyFile(const std::string &filename)
 {
 	//verify a filename
 	//if it exists, return the same filename
@@ -3387,7 +3370,7 @@ std::string SBS::VerifyFile(const char *filename)
 	return file;
 }
 
-bool SBS::FileExists(const char *filename)
+bool SBS::FileExists(const std::string &filename)
 {
 	//check to see if the specified file exists
 
@@ -3403,7 +3386,7 @@ bool SBS::FileExists(const char *filename)
 		return true;
 
 	//if a corrected filename is found, return true
-	std::string verify = VerifyFile(file.c_str());
+	std::string verify = VerifyFile(file);
 	if (verify != file)
 		return true;
 	return false;
@@ -3451,7 +3434,7 @@ void SBS::Prepare(bool report)
 		Report("Finished prepare");
 }
 
-Light* SBS::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* SBS::AddLight(const std::string &name, int type, const Ogre::Vector3 &position, const Ogre::Vector3 &direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
@@ -3488,7 +3471,7 @@ MeshObject* SBS::FindMeshObject(Ogre::MeshPtr meshwrapper)
 	return 0;
 }
 
-MeshObject* SBS::FindMeshObject(std::string name)
+MeshObject* SBS::FindMeshObject(const std::string &name)
 {
 	//find a mesh object by searching for matching wrapper
 	for (int i = 0; i < (int)meshes.size(); i++)
@@ -3499,7 +3482,7 @@ MeshObject* SBS::FindMeshObject(std::string name)
 	return 0;
 }
 
-Model* SBS::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* SBS::AddModel(const std::string &name, const std::string &filename, bool center, const Ogre::Vector3 &position, const Ogre::Vector3 &rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -3528,30 +3511,30 @@ void SBS::AddModel(Model *model)
 	ModelArray.push_back(model);
 }
 
-int SBS::GetConfigInt(std::string key, int default_value)
+int SBS::GetConfigInt(const std::string &key, int default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
-std::string SBS::GetConfigString(std::string key, std::string default_value)
+std::string SBS::GetConfigString(const std::string &key, const std::string &default_value)
 {
 	return configfile.getSetting(key, Ogre::StringUtil::BLANK, default_value);
 }
 
-bool SBS::GetConfigBool(std::string key, bool default_value)
+bool SBS::GetConfigBool(const std::string &key, bool default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
-float SBS::GetConfigFloat(std::string key, float default_value)
+float SBS::GetConfigFloat(const std::string &key, float default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }
 
-bool SBS::InBox(Ogre::Vector3 &start, Ogre::Vector3 &end, Ogre::Vector3 &test)
+bool SBS::InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test)
 {
 	//determine if a point (test) is inside the box defines by start and end vertices
 
@@ -3631,7 +3614,7 @@ void SBS::CalculateAverageTime()
 	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
 }
 
-std::string SBS::GetMountPath(const char *filename, std::string &newfilename)
+std::string SBS::GetMountPath(const std::string &filename, std::string &newfilename)
 {
 	//get mountpoint (resource group) path of given file
 	//if not found, return "General"
@@ -3665,7 +3648,7 @@ void SBS::ShowColliders(bool value)
 	camera->ShowDebugShape(value);
 }
 
-void SBS::CacheFilename(std::string filename, std::string result)
+void SBS::CacheFilename(const std::string &filename, const std::string &result)
 {
 	//caches filename information for VerifyFile function
 	VerifyResult verify;
@@ -3691,7 +3674,7 @@ void SBS::ResetLighting()
 	AmbientB = OldAmbientB;
 }
 
-Control* SBS::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* SBS::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -3701,7 +3684,7 @@ Control* SBS::AddControl(const char *name, const char *sound, const char *direct
 	return control;
 }
 
-Trigger* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* SBS::AddTrigger(const std::string &name, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
@@ -3709,7 +3692,7 @@ Trigger* SBS::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3
 	return trigger;
 }
 
-Action* SBS::AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
+Action* SBS::AddAction(const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//add a global action
 
@@ -3718,7 +3701,7 @@ Action* SBS::AddAction(const std::string name, std::vector<Object*> &action_pare
 	return action;
 }
 
-Action* SBS::AddAction(const std::string name, std::vector<Object*> &action_parents, const std::string &command)
+Action* SBS::AddAction(const std::string &name, std::vector<Object*> &action_parents, const std::string &command)
 {
 	//add a global action
 
@@ -3748,7 +3731,7 @@ int SBS::GetActionCount()
 	return (int)ActionArray.size();
 }
 
-bool SBS::AddActionParent(const std::string name, std::vector<Object*> &parents)
+bool SBS::AddActionParent(const std::string &name, std::vector<Object*> &parents)
 {
 	//add parent to actions specified by 'name'
 
@@ -3767,7 +3750,7 @@ bool SBS::AddActionParent(const std::string name, std::vector<Object*> &parents)
 	return result;
 }
 
-bool SBS::RemoveActionParent(const std::string name, std::vector<Object*> &parents)
+bool SBS::RemoveActionParent(const std::string &name, std::vector<Object*> &parents)
 {
 	//remove parent object from actions specified by 'name'
 
@@ -3803,10 +3786,11 @@ bool SBS::RemoveActionParent(std::vector<Object*> &parents)
 	return result;
 }
 
-bool SBS::RemoveAction(const std::string name)
+bool SBS::RemoveAction(std::string name)
 {
 	//remove action by name
 
+	ReplaceAll(name, " ", "");
 	bool result = false;
 	for (int i = 0; i < (int)ActionArray.size(); i++)
 	{
@@ -3853,12 +3837,11 @@ bool SBS::RemoveAction(Action *action)
 	return result;
 }
 
-Object* SBS::GetObject(const std::string name)
+Object* SBS::GetObject(std::string name)
 {
 	//get object by name
 
-	std::string name2 = name;
-	ReplaceAll(name2, " ", "");
+	ReplaceAll(name, " ", "");
 
 	for (int i = 0; i < (int)ObjectArray.size(); i++)
 	{
@@ -3866,14 +3849,14 @@ Object* SBS::GetObject(const std::string name)
 		{
 			std::string tmpname = ObjectArray[i]->GetName();
 			ReplaceAll(tmpname, " ", "");
-			if (tmpname == name2)
+			if (tmpname == name)
 				return ObjectArray[i];
 		}
 	}
 	return 0;
 }
 
-std::vector<Object*> SBS::GetObjectRange(std::string expression)
+std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 {
 	//get object by name range expression (ex. "Floors 1 to 3")
 
@@ -3964,7 +3947,7 @@ Action* SBS::GetAction(int index)
 	return 0;
 }
 
-bool SBS::RunAction(std::string name)
+bool SBS::RunAction(const std::string &name)
 {
 	//run action by name - will run multiple actions if the name is the same
 
@@ -3994,7 +3977,7 @@ bool SBS::RunAction(int index)
 	return false;
 }
 
-void SBS::AddKey(int keyid, std::string name)
+void SBS::AddKey(int keyid, const std::string &name)
 {
 	//adds key 'keyid' to the user's keyring
 	Key key;

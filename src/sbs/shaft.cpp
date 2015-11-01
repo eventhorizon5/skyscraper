@@ -68,7 +68,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfl
 
 	std::string name = "Shaft " + ToString2(number);
 
-	SetName(name.c_str());
+	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->Altitude, CenterZ);
 
 	ShaftArray.resize(endfloor - startfloor + 1);
@@ -82,7 +82,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfl
 	{
 		//Create shaft meshes
 		std::string buffer = name + ":" + ToString2(i);
-		ShaftArray[i - startfloor] = new MeshObject(this, buffer.c_str());
+		ShaftArray[i - startfloor] = new MeshObject(this, buffer);
 		ShaftArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->Altitude);
 		EnableArray[i - startfloor] = true;
 	}
@@ -908,7 +908,7 @@ Door* Shaft::AddDoor(int floor, const char *open_sound, const char *close_sound,
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string shaftnum = ToString(ShaftNumber);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Shaft " + shaftnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Shaft " + shaftnum + ":Door " + num), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object;
 }

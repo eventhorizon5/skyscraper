@@ -39,16 +39,16 @@ Floor::Floor(int number)
 	//Set floor's object number
 	Number = number;
 	std::string num = ToString2(Number);
-	SetName(std::string("Floor " + num).c_str());
+	SetName(std::string("Floor " + num));
 
 	//Create primary level mesh
-	Level = new MeshObject(this, std::string("Level " + num).c_str());
+	Level = new MeshObject(this, std::string("Level " + num));
 
 	//Create interfloor mesh
-	Interfloor = new MeshObject(this,std::string("Interfloor " + num).c_str());
+	Interfloor = new MeshObject(this,std::string("Interfloor " + num));
 
 	//Create columnframe mesh
-	ColumnFrame = new MeshObject(this, std::string("ColumnFrame " + num).c_str());
+	ColumnFrame = new MeshObject(this, std::string("ColumnFrame " + num));
 
 	//set enabled flags
 	IsEnabled = true;
@@ -651,7 +651,7 @@ Door* Floor::AddDoor(const char *open_sound, const char *close_sound, bool open_
 
 	int number = (int)DoorArray.size();
 	std::string name = "Floor " + ToString2(Number) + ":Door " + ToString2(number);
-	Door* door = new Door(this, name.c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
+	Door* door = new Door(this, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
 }

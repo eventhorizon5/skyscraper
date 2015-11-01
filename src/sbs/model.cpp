@@ -42,7 +42,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 	global = IsGlobal();
 
 	load_error = false;
-	mesh = new MeshObject(this, name.c_str(), filename.c_str(), max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
+	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (!mesh->Movable)
 	{
 		load_error = true;

@@ -29,7 +29,7 @@
 
 namespace SBS {
 
-Polygon::Polygon(const char *name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, Ogre::Plane &plane)
+Polygon::Polygon(const std::string &name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane)
 {
 	mesh = meshwrapper;
 	this->index_extents = index_extents;
@@ -160,7 +160,7 @@ void Polygon::Delete()
 	//delete polygon geometry
 
 	//delete triangles
-	mesh->ProcessSubMesh(triangles, material, name.c_str(), false);
+	mesh->ProcessSubMesh(triangles, material, name, false);
 
 	//delete related mesh vertices
 	mesh->DeleteVertices(triangles);

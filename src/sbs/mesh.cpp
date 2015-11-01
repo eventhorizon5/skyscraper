@@ -392,7 +392,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 
 			//create new polygon
 			if (newpolys.size() > 0)
-				wall->AddPolygon(name.c_str(), oldmat, newpolys, mapping, oldvector);
+				wall->AddPolygon(name, oldmat, newpolys, mapping, oldvector);
 
 			//reset search position
 			i--;
@@ -517,7 +517,7 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 	return Ogre::Plane(normal, det);
 }
 
-MeshObject::MeshObject(Object* parent, const char *name, const char *filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+MeshObject::MeshObject(Object* parent, const std::string &name, const std::string &filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
 	SetValues(parent, "Mesh", name, false);
@@ -542,11 +542,11 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 
 	Ogre::MeshPtr collidermesh;
 
-	std::string Name = "(" + ToString2(GetNumber()) + ")" + std::string(name);
+	std::string Name = "(" + ToString2(GetNumber()) + ")" + name;
 	this->name = Name;
 	std::string filename2;
 
-	if (!filename)
+	if (filename == "")
 	{
 		//create mesh
 		MeshWrapper = Ogre::MeshManager::getSingleton().createManual(Name, Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
@@ -556,15 +556,15 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 		//load mesh object from a file
 		std::string filename1 = "data/";
 		filename1.append(filename);
-		filename2 = sbs->VerifyFile(filename1.c_str());
-		std::string path = sbs->GetMountPath(filename2.c_str(), filename2);
+		filename2 = sbs->VerifyFile(filename1);
+		std::string path = sbs->GetMountPath(filename2, filename2);
 		std::string matname;
 
 		//load material file
 		try
 		{
 			matname = filename2.substr(0, filename2.length() - 5) + ".material";
-			std::string matname2 = sbs->VerifyFile(matname.c_str());
+			std::string matname2 = sbs->VerifyFile(matname);
 			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
 			sbs->Report("Loading material script " + matname2);
 			Ogre::MaterialManager::getSingleton().parseScript(stream, path);
@@ -625,7 +625,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 			try
 			{
 				std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
-				colname2 = sbs->VerifyFile(colname.c_str());
+				colname2 = sbs->VerifyFile(colname);
 				collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
 			}
 			catch (Ogre::Exception &e)
@@ -647,7 +647,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 		//MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
 
 	//create movable
-	if (!filename)
+	if (filename == "")
 		Movable = sbs->mSceneManager->createEntity(Name);
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
@@ -655,7 +655,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	GetSceneNode()->attachObject(Movable);
 
 	//rescale if a loaded model
-	if (filename)
+	if (filename != "")
 		GetSceneNode()->setScale(sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier));
 
 	//set maximum render distance
@@ -665,7 +665,7 @@ MeshObject::MeshObject(Object* parent, const char *name, const char *filename, f
 	sbs->AddMeshHandle(this);
 
 	//set up collider for model (if mesh loaded from a filename)
-	if (filename)
+	if (filename != "")
 	{
 		if (collidermesh.get())
 		{
@@ -752,7 +752,7 @@ void MeshObject::Enable(bool value, bool remove)
 	enabled = value;
 }
 
-WallObject* MeshObject::CreateWallObject(const char *name)
+WallObject* MeshObject::CreateWallObject(const std::string &name)
 {
 	//create a new wall object in the given array
 
@@ -763,7 +763,7 @@ WallObject* MeshObject::CreateWallObject(const char *name)
 	return wall;
 }
 
-bool MeshObject::ChangeTexture(const char *texture, bool matcheck, int submesh)
+bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
 {
 	//changes a texture
 	//if matcheck is true, exit if old and new textures are the same
@@ -805,7 +805,7 @@ bool MeshObject::ReplaceTexture(const std::string &oldtexture, const std::string
 	int submesh = FindMatchingSubMesh(oldtexture);
 	bool result = false;
 	if (submesh >= 0)
-		result = ChangeTexture(newtexture.c_str(), true, submesh);
+		result = ChangeTexture(newtexture, true, submesh);
 	return result;
 }
 
@@ -920,7 +920,7 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 	prepared = false; //need to re-prepare mesh
 }
 
-bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -963,7 +963,7 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	//get texture tiling information
 	float tw2 = sizing.x, th2 = sizing.y;
 	float mw, mh;
-	if (sbs->GetTextureTiling(texname.c_str(), mw, mh))
+	if (sbs->GetTextureTiling(texname, mw, mh))
 	{
 		//multiply the tiling parameters (tw and th) by
 		//the stored multipliers for that texture
@@ -983,7 +983,7 @@ bool MeshObject::PolyMesh(const char *name, const char *texture, std::vector<Ogr
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -1154,7 +1154,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	return 0;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add)
+int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, const std::string &name, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view, in order to upload data to graphics card
@@ -1351,7 +1351,7 @@ void MeshObject::Prepare(bool force)
 	MeshWrapper->_setBoundingSphereRadius(radius);
 }
 
-int MeshObject::FindMatchingSubMesh(std::string material)
+int MeshObject::FindMatchingSubMesh(const std::string &material)
 {
 	//find a submesh with a matching material
 	//returns array index
@@ -1873,7 +1873,7 @@ void MeshObject::DeleteWalls(Object *parent)
 	}
 }
 
-Ogre::Vector3 MeshObject::GetPoint(const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+Ogre::Vector3 MeshObject::GetPoint(const std::string &polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//do a line intersection with a specified wall associated with this mesh object,
 	//and return the intersection point
@@ -1881,28 +1881,26 @@ Ogre::Vector3 MeshObject::GetPoint(const char *polyname, const Ogre::Vector3 &st
 	int index = 0;
 	WallObject *wall = 0;
 
-	std::string name = polyname;
-
 	for (int i = 0; i <= 6; i++)
 	{
 		std::string newname;
 
 		if (i == 0)
-			newname = name;
+			newname = polyname;
 		if (i == 1)
-			newname = name + ":0";
+			newname = polyname + ":0";
 		if (i == 2)
-			newname = name + ":1";
+			newname = polyname + ":1";
 		if (i == 3)
-			newname = name + ":front";
+			newname = polyname + ":front";
 		if (i == 4)
-			newname = name + ":back";
+			newname = polyname + ":back";
 		if (i == 5)
-			newname = name + ":left";
+			newname = polyname + ":left";
 		if (i == 6)
-			newname = name + ":right";
+			newname = polyname + ":right";
 
-		wall = FindPolygon(newname.c_str(), index);
+		wall = FindPolygon(newname, index);
 
 		if (wall)
 			break;
@@ -1924,31 +1922,30 @@ Ogre::Vector3 MeshObject::GetPoint(const char *polyname, const Ogre::Vector3 &st
 	return Ogre::Vector3(0, 0, 0);
 }
 
-Ogre::Vector3 MeshObject::GetWallExtents(const char *name, float altitude, bool get_max)
+Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, float altitude, bool get_max)
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
 
 	std::string newname;
-	std::string name2 = name;
 	for (int i = 0; i <= 6; i++)
 	{
 		if (i == 0)
-			newname = name2;
+			newname = name;
 		if (i == 1)
-			newname = name2 + ":0";
+			newname = name + ":0";
 		if (i == 2)
-			newname = name2 + ":1";
+			newname = name + ":1";
 		if (i == 3)
-			newname = name2 + ":front";
+			newname = name + ":front";
 		if (i == 4)
-			newname = name2 + ":back";
+			newname = name + ":back";
 		if (i == 5)
-			newname = name2 + ":left";
+			newname = name + ":left";
 		if (i == 6)
-			newname = name2 + ":right";
+			newname = name + ":right";
 
 		int index = 0;
-		WallObject *wall = FindPolygon(newname.c_str(), index);
+		WallObject *wall = FindPolygon(newname, index);
 
 		if (wall)
 		{
@@ -2038,7 +2035,7 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 	return Ogre::Vector2(esmall, ebig);
 }
 
-WallObject* MeshObject::FindPolygon(const char *name, int &index)
+WallObject* MeshObject::FindPolygon(const std::string &name, int &index)
 {
 	//finds a polygon by name in all associated wall objects
 	//returns associated wall object and wall index

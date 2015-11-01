@@ -111,7 +111,7 @@ Door::Door(Object *parent, const std::string &name, const std::string &open_soun
 		Clockwise = true;
 
 	//Create mesh
-	DoorMesh = new MeshObject(this, name.c_str());
+	DoorMesh = new MeshObject(this, name);
 	Move(position);
 
 	//create sound object
@@ -126,8 +126,8 @@ Door::Door(Object *parent, const std::string &name, const std::string &open_soun
 		sbs->SetTextureFlip(1, 0, 0, 0, 0, 0); //flip texture on rear side of door
 
 	WallObject *wall;
-	wall = DoorMesh->CreateWallObject(name.c_str());
-	sbs->AddWallMain(wall, name.c_str(), texture.c_str(), thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
+	wall = DoorMesh->CreateWallObject(name);
+	sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height, height, 0, 0, tw, th, false);
 	sbs->ResetWalls();
 	sbs->ResetTextureMapping();
 

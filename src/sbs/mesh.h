@@ -81,12 +81,12 @@ public:
 		Ogre::IndexData *databuffer; //used to find the related submesh
 	};
 
-	MeshObject(Object* parent, const char *name, const char *filename = 0, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
+	MeshObject(Object* parent, const std::string &name, const std::string &filename = "", float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	~MeshObject();
 	void Enable(bool value, bool remove = true);
 	bool IsEnabled();
-	WallObject* CreateWallObject(const char *name);
-	bool ChangeTexture(const char *texture, bool matcheck = true, int submesh = 0);
+	WallObject* CreateWallObject(const std::string &name);
+	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	WallObject* FindWall(const Ogre::Vector3 &point, bool convert = true);
 	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
@@ -95,12 +95,12 @@ public:
 	void RemoveVertex(int index);
 	void AddTriangle(int submesh, TriangleType &triangle);
 	void RemoveTriangle(int submesh, int index);
-	bool PolyMesh(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles);
-	bool PolyMesh(const char *name, std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices = true);
+	bool PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles);
+	bool PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th);
-	int ProcessSubMesh(std::vector<TriangleType> &indices, std::string &material, const char *name, bool add);
-	int FindMatchingSubMesh(std::string material);
+	int ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, const std::string &name, bool add);
+	int FindMatchingSubMesh(const std::string &material);
 	void DeleteVertices(std::vector<TriangleType> &deleted_indices);
 	void Prepare(bool force = false);
 	void EnableDebugView(bool value);
@@ -113,10 +113,10 @@ public:
 	void CreateBoxCollider(float scale_multiplier);
 	void DeleteWalls();
 	void DeleteWalls(Object *parent);
-	Ogre::Vector3 GetPoint(const char *polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
-	Ogre::Vector3 GetWallExtents(const char *name, float altitude, bool get_max);
+	Ogre::Vector3 GetPoint(const std::string &polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
+	Ogre::Vector3 GetWallExtents(const std::string &name, float altitude, bool get_max);
 	Ogre::Vector2 GetExtents(int coord, bool flip_z = false);
-	WallObject* FindPolygon(const char *name, int &index);
+	WallObject* FindPolygon(const std::string &name, int &index);
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 	int GetSubmeshCount();

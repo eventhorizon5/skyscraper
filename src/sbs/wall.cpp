@@ -63,7 +63,7 @@ WallObject::~WallObject()
 	polygons.clear();
 }
 
-Polygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
+Polygon* WallObject::AddQuad(const std::string &name, const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, const Ogre::Vector3 &v4, float tw, float th, bool autosize)
 {
 	//add a quad
 
@@ -77,7 +77,7 @@ Polygon* WallObject::AddQuad(const char *name, const char *texture, const Ogre::
 	return AddPolygon(name, texture, vertices, tw, th, autosize);
 }
 
-Polygon* WallObject::AddPolygon(const char *name, const char *texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
+Polygon* WallObject::AddPolygon(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize)
 {
 	//create a generic polygon
 	std::string name2 = ProcessName(name);
@@ -85,7 +85,7 @@ Polygon* WallObject::AddPolygon(const char *name, const char *texture, std::vect
 	Ogre::Vector3 tv;
 	std::vector<Extents> index_extents;
 	std::vector<TriangleType> triangles;
-	if (!meshwrapper->PolyMesh(name2.c_str(), texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles))
+	if (!meshwrapper->PolyMesh(name2, texture, vertices, tw, th, autosize, tm, tv, index_extents, triangles))
 	{
 		sbs->ReportError("Error creating wall '" + name2 + "'");
 		return 0;
@@ -95,22 +95,22 @@ Polygon* WallObject::AddPolygon(const char *name, const char *texture, std::vect
 		return 0;
 
 	bool result;
-	std::string material = sbs->GetTextureMaterial(texture, result, true, name2.c_str());
+	std::string material = sbs->GetTextureMaterial(texture, result, true, name2);
 
 	//compute plane
 	Ogre::Plane plane = sbs->ComputePlane(vertices);
 
-	int index = CreatePolygon(triangles, index_extents, tm, tv, material, name2.c_str(), plane);
+	int index = CreatePolygon(triangles, index_extents, tm, tv, material, name2, plane);
 	return &polygons[index];
 }
 
-Polygon* WallObject::AddPolygon(const char *name, std::string material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
+Polygon* WallObject::AddPolygon(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector)
 {
 	//add a set of polygons, providing the original material and texture mapping
 	std::string name2 = ProcessName(name);
 	std::vector<Extents> index_extents;
 	std::vector<TriangleType> triangles;
-	if (!meshwrapper->PolyMesh(name2.c_str(), material, vertices, tex_matrix, tex_vector, index_extents, triangles, 0, 0))
+	if (!meshwrapper->PolyMesh(name2, material, vertices, tex_matrix, tex_vector, index_extents, triangles, 0, 0))
 	{
 		sbs->ReportError("Error creating wall '" + name2 + "'");
 		return 0;
@@ -122,24 +122,24 @@ Polygon* WallObject::AddPolygon(const char *name, std::string material, std::vec
 	//compute plane
 	Ogre::Plane plane = sbs->ComputePlane(vertices[0]);
 
-	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, material, name2.c_str(), plane);
+	int index = CreatePolygon(triangles, index_extents, tex_matrix, tex_vector, material, name2, plane);
 	return &polygons[index];
 }
 
-int WallObject::CreatePolygon(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::string material, const char *name, Ogre::Plane &plane)
+int WallObject::CreatePolygon(std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, const std::string &name, Ogre::Plane &plane)
 {
 	//create a polygon handle
 
 	std::string newname = ProcessName(name);
 
-	Polygon polygon(newname.c_str(), meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
+	Polygon polygon(newname, meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
 	polygons.push_back(polygon);
 	sbs->PolygonCount++;
 
 	return (int)polygons.size() - 1;
 }
 
-std::string WallObject::ProcessName(const char *name)
+std::string WallObject::ProcessName(const std::string &name)
 {
 	//process name for use
 	std::string name_modified = name;
@@ -205,13 +205,12 @@ Polygon* WallObject::GetPolygon(int index)
 	return 0;
 }
 
-int WallObject::FindPolygon(const char *name)
+int WallObject::FindPolygon(const std::string &name)
 {
 	//find a polygon object by name
 
 	SBS_PROFILE("WallObject::FindPolygon");
 
-	std::string name2 = name;
 	for (int i = 0; i < (int)polygons.size(); i++)
 	{
 		std::string tmpname = polygons[i].name;
@@ -221,7 +220,7 @@ int WallObject::FindPolygon(const char *name)
 			int loc = (int)tmpname.find(")");
 			tmpname.erase(0, loc + 1);
 		}
-		if (name2 == tmpname)
+		if (name == tmpname)
 			return i;
 	}
 	return -1;

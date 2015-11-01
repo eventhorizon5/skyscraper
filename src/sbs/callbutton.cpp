@@ -64,13 +64,13 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	std::string base, buffer;
 	base = "Call Panel " + ToString2(floornum) + ":" + ToString2(number);
 	SetName(base);
-	CallButtonMeshBack = new MeshObject(this, base.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshBack = new MeshObject(this, base, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = base + ":Up";
-	CallButtonMeshUp = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshUp = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	buffer = base + ":Down";
-	CallButtonMeshDown = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshDown = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
 	Number = number;
@@ -103,7 +103,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 			WallObject *wall;
 			wall = CallButtonMeshBack->CreateWallObject("Call Button Panel");
-			sbs->AddWallMain(wall, "Call Button Panel", BackTexture.c_str(), 0, x1, 0, x2, 0, BackHeight, BackHeight, 0, 0, tw, th, false);
+			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, x1, 0, x2, 0, BackHeight, BackHeight, 0, 0, tw, th, false);
 		}
 		if (Direction == "left" || Direction == "right")
 		{
@@ -116,7 +116,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 			WallObject *wall;
 			wall = CallButtonMeshBack->CreateWallObject("Call Button Panel");
-			sbs->AddWallMain(wall, "Call Button Panel", BackTexture.c_str(), 0, 0, z1, 0, z2, BackHeight, BackHeight, 0, 0, tw, th, false);
+			sbs->AddWallMain(wall, "Call Button Panel", BackTexture, 0, 0, z1, 0, z2, BackHeight, BackHeight, 0, 0, tw, th, false);
 		}
 		sbs->ResetWalls();
 	}
@@ -169,10 +169,10 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float altitude2 = BackHeight / 7;
 			WallObject *wall;
 			wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
-			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 
 			wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
-			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture.c_str(), 0, x1, offset, x2, offset, height, height, altitude2, altitude2, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
@@ -182,12 +182,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			if (floornum < topfloor)
 			{
 				wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
-				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
 				wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
-				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture.c_str(), 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
 			}
 		}
 		sbs->ResetWalls();
@@ -214,10 +214,10 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			float altitude2 = BackHeight / 7;
 			WallObject *wall;
 			wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
-			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 
 			wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
-			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture.c_str(), 0, offset, z1, offset, z2, height, height, altitude2, altitude2, 1, 1, false);
+			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude2, altitude2, 1, 1, false);
 		}
 		else
 		{
@@ -227,12 +227,12 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			if (floornum < topfloor)
 			{
 				wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
-				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 			if (floornum > bottomfloor)
 			{
 				wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
-				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture.c_str(), 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
 			}
 		}
 		sbs->ResetWalls();
@@ -405,7 +405,7 @@ void CallButton::SetLights(int up, int down)
 		if (sbs->Verbose)
 			Report("SetLights: turning on up light");
 
-		CallButtonMeshUp->ChangeTexture(UpTextureLit.c_str());
+		CallButtonMeshUp->ChangeTexture(UpTextureLit);
 		UpStatus = true;
 	}
 	if (up == 2 && CallButtonMeshUp)
@@ -413,7 +413,7 @@ void CallButton::SetLights(int up, int down)
 		if (sbs->Verbose)
 			Report("SetLights: turning off up light");
 
-		CallButtonMeshUp->ChangeTexture(UpTexture.c_str());
+		CallButtonMeshUp->ChangeTexture(UpTexture);
 		UpStatus = false;
 	}
 	if (down == 1 && CallButtonMeshDown)
@@ -421,7 +421,7 @@ void CallButton::SetLights(int up, int down)
 		if (sbs->Verbose)
 			Report("SetLights: turning on down light");
 
-		CallButtonMeshDown->ChangeTexture(DownTextureLit.c_str());
+		CallButtonMeshDown->ChangeTexture(DownTextureLit);
 		DownStatus = true;
 	}
 	if (down == 2 && CallButtonMeshDown)
@@ -429,7 +429,7 @@ void CallButton::SetLights(int up, int down)
 		if (sbs->Verbose)
 			Report("SetLights: turning off down light");
 
-		CallButtonMeshDown->ChangeTexture(DownTexture.c_str());
+		CallButtonMeshDown->ChangeTexture(DownTexture);
 		DownStatus = false;
 	}
 

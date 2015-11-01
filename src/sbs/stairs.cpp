@@ -56,7 +56,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int end
 
 	std::string name;
 	name = "Stairwell " + ToString2(number);
-	SetName(name.c_str());
+	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->GetBase(), CenterZ);
 
 	StairArray.resize(endfloor - startfloor + 1);
@@ -69,7 +69,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int end
 	{
 		//Create stairwell meshes
 		std::string buffer = name + ":" + ToString2(i);
-		StairArray[i - startfloor] = new MeshObject(this, buffer.c_str());
+		StairArray[i - startfloor] = new MeshObject(this, buffer);
 		StairArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->GetBase());
 		EnableArray[i - startfloor] = true;
 	}
@@ -495,7 +495,7 @@ Door* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sound
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string stairsnum = ToString(StairsNum);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Stairwell " + stairsnum + ":Door " + num).c_str(), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Stairwell " + stairsnum + ":Door " + num), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object;
 }

@@ -36,7 +36,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	SetValues(elevator, "ElevatorDoor", "", false);
 
 	std::string name = "Elevator Door " + ToString2(number);
-	SetName(name.c_str());
+	SetName(name);
 
 	//create a new elevator door
 	Number = number;
@@ -561,13 +561,13 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 		if (open == true)
 		{
 			//play elevator opening sound
-			doorsound->Load(OpenSound.c_str());
+			doorsound->Load(OpenSound);
 			doorsound->Play();
 		}
 		else
 		{
 			//play elevator closing sound
-			doorsound->Load(CloseSound.c_str());
+			doorsound->Load(CloseSound);
 			doorsound->Play();
 		}
 		elev->PlayMessageSound(false);
@@ -945,8 +945,8 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 			WallObject *wall = elev->ElevatorMesh->CreateWallObject("Connection");
 			name1 = "DoorF1";
 			name2 = "DoorF2";
-			sbs->CreateWallBox(wall, name1.c_str(), "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2.c_str(), "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
@@ -955,8 +955,8 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 			Ogre::Vector3 position (elev->GetPosition() - shaft->GetPosition());
 			name1 = "ShaftDoorF1";
 			name2 = "ShaftDoorF2";
-			sbs->CreateWallBox(wall, name1.c_str(), "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2.c_str(), "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(wall, name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 
 		sbs->ResetTextureMapping();
@@ -1252,12 +1252,12 @@ void ElevatorDoor::Chime(int floor, bool direction)
 	//play chime sound on specified floor
 	if (direction == false && chimesound_loaded != -1)
 	{
-		chime->Load(DownChimeSound.c_str());
+		chime->Load(DownChimeSound);
 		chimesound_loaded = -1;
 	}
 	else if (direction == true && chimesound_loaded != 1)
 	{
-		chime->Load(UpChimeSound.c_str());
+		chime->Load(UpChimeSound);
 		chimesound_loaded = 1;
 	}
 	chime->Loop(false);
@@ -1463,7 +1463,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	else
 		name = "Elevator Door " + ToString2(parent->Number);
 
-	SetValues(objparent, "DoorWrapper", name.c_str(), false);
+	SetValues(objparent, "DoorWrapper", name, false);
 
 	if (IsShaftDoor == true)
 		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
@@ -2033,7 +2033,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 		elev->Report("Doors" + GetNumberText() + ": nudge mode activated");
 		nudge_enabled = true;
 		if (nudgesound_loaded == false)
-			nudgesound->Load(NudgeSound.c_str());
+			nudgesound->Load(NudgeSound);
 		nudgesound_loaded = true;
 		nudgesound->Loop(true);
 		nudgesound->Play();
@@ -2079,7 +2079,7 @@ void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max
 	actions.push_back(full_name1);
 
 	//create new trigger
-	sensor = new Trigger(this, "Sensor", true, SensorSound.c_str(), area_min, area_max, actions);
+	sensor = new Trigger(this, "Sensor", true, SensorSound, area_min, area_max, actions);
 }
 
 bool ElevatorDoor::AreDoorsMoving(int doors, bool car_doors, bool shaft_doors)

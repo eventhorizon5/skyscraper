@@ -697,18 +697,18 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	}
 }
 
-const char* Camera::GetClickedMeshName()
+std::string Camera::GetClickedMeshName()
 {
 	//return name of last clicked mesh
 
-	return meshname.c_str();
+	return meshname;
 }
 
-const char* Camera::GetClickedWallName()
+std::string Camera::GetClickedWallName()
 {
 	//return name of last clicked polygon
 
-	return wallname.c_str();
+	return wallname;
 }
 
 int Camera::GetClickedObjectNumber()
@@ -723,16 +723,16 @@ int Camera::GetClickedObjectLine()
 	return object_line;
 }
 
-const char *Camera::GetClickedObjectCommand()
+std::string Camera::GetClickedObjectCommand()
 {
 	//return command line of last clicked object
-	return object_cmd.c_str();
+	return object_cmd;
 }
 
-const char *Camera::GetClickedObjectCommandP()
+std::string Camera::GetClickedObjectCommandP()
 {
 	//return processed command line of last clicked object
-	return object_cmd_processed.c_str();
+	return object_cmd_processed;
 }
 
 void Camera::Loop(float delta)

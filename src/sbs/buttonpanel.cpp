@@ -66,7 +66,7 @@ ButtonPanel::ButtonPanel(int elevator, int index, const std::string &texture, in
 	buffer = "Button Panel " + ToString2(elevator) + ":" + ToString2(index);
 	TrimString(buffer);
 	SetName(buffer);
-	ButtonPanelMesh = new MeshObject(this, buffer.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ButtonPanelMesh = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
 	sbs->ResetTextureMapping(true);
@@ -283,7 +283,7 @@ bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, f
 {
 	//Adds a wall with the specified dimensions
 
-	return sbs->AddWallMain(this, ButtonPanelMesh, name.c_str(), texture.c_str(), thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
+	return sbs->AddWallMain(this, ButtonPanelMesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
 Control* ButtonPanel::GetControl(int index)

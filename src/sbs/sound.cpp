@@ -332,7 +332,7 @@ bool Sound::Load(const std::string &filename, bool force)
 	Filename = filename;
 	std::string full_filename1 = "data/";
 	full_filename1.append(filename);
-	std::string full_filename = sbs->VerifyFile(full_filename1.c_str());
+	std::string full_filename = sbs->VerifyFile(full_filename1);
 
 	FMOD_RESULT result = sbs->soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
 	//FMOD_RESULT result = sbs->soundsys->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
@@ -448,7 +448,7 @@ void Sound::ProcessQueue()
 	}
 
 	//play new sound
-	Load(snd->filename.c_str());
+	Load(snd->filename);
 	Loop(snd->loop);
 	Play();
 	snd->played = true;

@@ -55,7 +55,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	light_status = false;
 
 	//create object mesh
-	ControlMesh = new MeshObject(this, name2.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(this, name2, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	sbs->TexelOverride = true;
 	WallObject *wall;
@@ -68,8 +68,8 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			y = width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name.c_str());
-		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name);
+		sbs->AddWallMain(wall, name, textures[0], 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
@@ -80,8 +80,8 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			y = -width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name.c_str());
-		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name);
+		sbs->AddWallMain(wall, name, textures[0], 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
@@ -92,8 +92,8 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			y = -width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name.c_str());
-		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name);
+		sbs->AddWallMain(wall, name, textures[0], 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
@@ -104,8 +104,8 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 			y = width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name.c_str());
-		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name);
+		sbs->AddWallMain(wall, name, textures[0], 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	sbs->TexelOverride = false;
@@ -181,7 +181,7 @@ bool Control::SetSelectPosition(int position)
 
 	current_position = position;
 
-	if (ControlMesh->ChangeTexture(TextureArray[position - 1].c_str()) == true)
+	if (ControlMesh->ChangeTexture(TextureArray[position - 1]) == true)
 		return true;
 	return false;
 }
@@ -410,7 +410,7 @@ void Control::ChangeFloorLight(int floor, bool value)
 		return;
 
 	std::string floornum = ToString(floor);
-	int index = FindActionPosition(floornum.c_str());
+	int index = FindActionPosition(floornum);
 	int index2 = FindActionPosition("off");
 	if (index > 0 && index2 > 0)
 	{

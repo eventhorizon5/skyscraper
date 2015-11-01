@@ -48,7 +48,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 
 	std::string name = "Floor Indicator " + ToString2(elevator);
 	SetName(name);
-	FloorIndicatorMesh = new MeshObject(this, name.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	FloorIndicatorMesh = new MeshObject(this, name, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	std::string texture = "Button" + sbs->GetFloor(sbs->GetElevator(elevator)->StartingFloor)->ID;
 	std::string tmpdirection = direction;
@@ -61,7 +61,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture, 0, -width / 2, 0, width / 2, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (tmpdirection == "left" || tmpdirection == "right")
 	{
@@ -70,7 +70,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 		else
 			sbs->DrawWalls(false, true, false, false, false, false);
 
-		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture.c_str(), 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
+		sbs->AddWallMain(this, FloorIndicatorMesh, "Floor Indicator", texture, 0, 0, width / 2, 0, -width / 2, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 }
@@ -127,7 +127,7 @@ void FloorIndicator::Update()
 
 	texture.insert(0, Prefix);
 
-	FloorIndicatorMesh->ChangeTexture(texture.c_str());
+	FloorIndicatorMesh->ChangeTexture(texture);
 }
 
 }

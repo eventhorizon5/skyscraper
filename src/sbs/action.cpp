@@ -579,7 +579,7 @@ bool Action::Run(Object *caller, Object *parent)
 			std::vector<Sound*> soundlist;
 
 			if (parent_type == "SBS")
-				soundlist = sbs->GetSound(command_parameters[0].c_str());
+				soundlist = sbs->GetSound(command_parameters[0]);
 			else if (parent_type == "Floor")
 			{
 				if (floor)
@@ -627,7 +627,7 @@ bool Action::Run(Object *caller, Object *parent)
 			std::vector<Sound*> soundlist;
 
 			if (parent_type == "SBS")
-				soundlist = sbs->GetSound(command_parameters[0].c_str());
+				soundlist = sbs->GetSound(command_parameters[0]);
 			else if (parent_type == "Floor")
 			{
 				if (floor)

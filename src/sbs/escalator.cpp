@@ -50,7 +50,7 @@ Escalator::Escalator(Object *parent, const std::string &name, bool run, bool run
 	//create step meshes
 	for (int i = 0; i < num_steps; i++)
 	{
-		MeshObject *mesh = new MeshObject(this, name.c_str());
+		MeshObject *mesh = new MeshObject(this, name);
 		Steps.push_back(mesh);
 	}
 
@@ -166,7 +166,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 		std::string buffer;
 
 		//create wall object
-		WallObject *wall = Steps[i]->CreateWallObject(base.c_str());
+		WallObject *wall = Steps[i]->CreateWallObject(base);
 
 		float thickness = 0;
 		if (i < num_steps - 1)
@@ -184,12 +184,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer, texture, thickness, pos + treadsize, -(width / 2), pos + treadsize, width / 2, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, pos, -(width / 2), pos + treadsize, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer, texture, 0, pos, -(width / 2), pos + treadsize, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 		if (Direction == "left")
@@ -200,12 +200,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer, texture, thickness, pos - treadsize, width / 2, pos - treadsize, -(width / 2), risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, pos - treadsize, -(width / 2), pos, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer, texture, 0, pos - treadsize, -(width / 2), pos, width / 2, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 		if (Direction == "back")
@@ -216,12 +216,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer, texture, thickness, width / 2, pos + treadsize, -(width / 2), pos + treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, -(width / 2), pos, width / 2, pos + treadsize, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos, width / 2, pos + treadsize, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 		if (Direction == "front")
@@ -232,12 +232,12 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			sbs->AddWallMain(wall, buffer.c_str(), texture.c_str(), thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
+			sbs->AddWallMain(wall, buffer, texture, thickness, -(width / 2), pos - treadsize, width / 2, pos - treadsize, risersize, risersize, risersize * (i - 1), risersize * (i - 1), tw, th, true);
 			buffer = base + "-tread";
 			if (i != num_steps)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				sbs->AddFloorMain(wall, buffer.c_str(), texture.c_str(), 0, -(width / 2), pos - treadsize, width / 2, pos, risersize * i, risersize * i, false, false, tw, th, true);
+				sbs->AddFloorMain(wall, buffer, texture, 0, -(width / 2), pos - treadsize, width / 2, pos, risersize * i, risersize * i, false, false, tw, th, true);
 			}
 		}
 	}
