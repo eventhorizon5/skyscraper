@@ -291,8 +291,8 @@ void ObjectInfo::Loop()
 
 	if (object)
 	{
-		tName->SetValue(wxString::FromAscii(object->GetName()));
-		tType->SetValue(wxString::FromAscii(object->GetType()));
+		tName->SetValue(wxString::FromAscii(object->GetName().c_str()));
+		tType->SetValue(wxString::FromAscii(object->GetType().c_str()));
 		tLineNum->SetValue(wxVariant(object->linenum).GetString());
 		tIncludeFile->SetValue(wxString::FromAscii(object->includefile.c_str()));
 		tScriptCommand->SetValue(wxString::FromAscii(object->command.c_str()));
@@ -304,8 +304,8 @@ void ObjectInfo::Loop()
 		if (parent)
 		{
 			tParent->SetValue(wxVariant(parent->GetNumber()).GetString());
-			tParentName->SetValue(wxString::FromAscii(parent->GetName()));
-			tParentType->SetValue(wxString::FromAscii(parent->GetType()));
+			tParentName->SetValue(wxString::FromAscii(parent->GetName().c_str()));
+			tParentType->SetValue(wxString::FromAscii(parent->GetType().c_str()));
 		}
 	}
 }
@@ -316,7 +316,7 @@ void ObjectInfo::PopulateTree()
 	ObjectTree->DeleteAllItems();
 
 	//populate object tree
-	wxTreeItemId id = ObjectTree->AddRoot(wxString::FromAscii(Simcore->GetName()), -1, -1, new TreeItemData(wxVariant(Simcore->GetNumber()).GetString()));
+	wxTreeItemId id = ObjectTree->AddRoot(wxString::FromAscii(Simcore->GetName().c_str()), -1, -1, new TreeItemData(wxVariant(Simcore->GetNumber()).GetString()));
 
 	//add child objects
 	AddChildren(Simcore, id);
@@ -337,7 +337,7 @@ void ObjectInfo::AddChildren(SBS::Object *parent, const wxTreeItemId& treeparent
 			if (parent->GetChild(i))
 			{
 				//add child object
-				wxTreeItemId id = ObjectTree->AppendItem(treeparent, wxString::FromAscii(parent->GetChild(i)->GetName()), -1, -1, new TreeItemData(wxVariant(parent->GetChild(i)->GetNumber()).GetString()));
+				wxTreeItemId id = ObjectTree->AppendItem(treeparent, wxString::FromAscii(parent->GetChild(i)->GetName().c_str()), -1, -1, new TreeItemData(wxVariant(parent->GetChild(i)->GetNumber()).GetString()));
 
 				//if child object has children, call recursively to add those
 				if (parent->GetChild(i)->GetChildrenCount() > 0)

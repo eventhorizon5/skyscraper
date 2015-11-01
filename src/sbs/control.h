@@ -38,7 +38,7 @@ public:
 	bool IsEnabled;
 
 	//functions
-	Control(Object *parent, const char *name, bool permanent, const char *sound, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, bool center);
+	Control(Object *parent, const std::string &name, bool permanent, const std::string &sound, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, float width, float height, bool center);
 	~Control();
 	void Enabled(bool value);
 	bool SetSelectPosition(int position);
@@ -46,14 +46,14 @@ public:
 	bool NextSelectPosition(bool check_state = true);
 	bool PreviousSelectPosition(bool check_state = true);
 	int GetSelectPosition();
-	const char* GetPositionAction(int position);
-	const char* GetSelectPositionAction();
+	std::string GetPositionAction(int position);
+	std::string GetSelectPositionAction();
 	int GetNextSelectPosition();
 	int GetPreviousSelectPosition();
 	int GetPositions();
 	void PlaySound();
-	void SetTexture(int position, const char *texture);
-	int FindActionPosition(const char *name);
+	void SetTexture(int position, const std::string &texture);
+	int FindActionPosition(const std::string &name);
 	int FindNumericActionPosition();
 	bool DoAction();
 	bool Press(bool reverse = false);

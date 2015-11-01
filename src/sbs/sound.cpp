@@ -31,7 +31,7 @@
 
 namespace SBS {
 
-Sound::Sound(Object *parent, const char *name, bool permanent)
+Sound::Sound(Object *parent, const std::string &name, bool permanent)
 {
 	//set up SBS object
 	SetValues(parent, "Sound", name, permanent);
@@ -146,7 +146,7 @@ float Sound::GetMaximumDistance()
 	return MaxDistance;
 }
 
-void Sound::SetDirection(Ogre::Vector3 direction)
+void Sound::SetDirection(const Ogre::Vector3 &direction)
 {
 	Direction = direction;
 	FMOD_VECTOR vec;
@@ -304,15 +304,14 @@ void Sound::Reset()
 	SetPlayPosition(0);
 }
 
-bool Sound::Load(const char *filename, bool force)
+bool Sound::Load(const std::string &filename, bool force)
 {
 	//exit if filename is the same
-	std::string filename_new = filename;
-	if (filename_new == Filename && force == false)
+	if (filename == Filename && force == false)
 		return false;
 
 	//exit if none specified
-	if (filename_new == "")
+	if (filename == "")
 		return false;
 
 	loaded = false;
@@ -411,7 +410,7 @@ bool Sound::ReportError(std::string message)
 	return sbs->ReportError("Sound '" + std::string(GetName()) + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
-void Sound::PlayQueued(const char *filename, bool stop, bool loop)
+void Sound::PlayQueued(const std::string &filename, bool stop, bool loop)
 {
 	//loads and plays a sound, with queuing support
 	//if "stop" is true, stops currently playing sound

@@ -83,7 +83,7 @@ Object::~Object()
 	sbs->Report("Deleted object " + ToString2(Number) + ": " + Name);
 }
 
-void Object::SetValues(Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable)
+void Object::SetValues(Object *parent, const std::string &type, const std::string &name, bool is_permanent, bool is_movable)
 {
 	//set object values
 
@@ -132,10 +132,10 @@ Object* Object::GetParent()
 	return Parent;
 }
 
-const char* Object::GetType()
+std::string Object::GetType()
 {
 	//return object type string
-	return Type.c_str();
+	return Type;
 }
 
 int Object::GetNumber()
@@ -144,13 +144,13 @@ int Object::GetNumber()
 	return Number;
 }
 
-const char* Object::GetName()
+std::string Object::GetName()
 {
 	//return object name
-	return Name.c_str();
+	return Name;
 }
 
-void Object::SetName(const char *name)
+void Object::SetName(const std::string &name)
 {
 	//set object name
 	Name = name;
@@ -309,32 +309,33 @@ Ogre::Vector3 Object::GetPosition(bool relative)
 	return sbs->ToLocal(SceneNode->getPosition());
 }
 
-void Object::SetRotation(Ogre::Vector3 rotation)
+void Object::SetRotation(const Ogre::Vector3 &rotation)
 {
 	//rotate object
 
 	if (!SceneNode)
 		return;
 
-	if (rotation.x > 359)
-		rotation.x -= 360;
-	if (rotation.y > 359)
-		rotation.y -= 360;
-	if (rotation.z > 359)
-		rotation.z -= 360;
-	if (rotation.x < 0)
-		rotation.x += 360;
-	if (rotation.y < 0)
-		rotation += 360;
-	if (rotation.z < 0)
-		rotation.z += 360;
+	Rotation = rotation;
 
-	Ogre::Quaternion x(Ogre::Degree(rotation.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(rotation.z), Ogre::Vector3::UNIT_Z);
+	if (Rotation.x > 359)
+		Rotation.x -= 360;
+	if (Rotation.y > 359)
+		Rotation.y -= 360;
+	if (Rotation.z > 359)
+		Rotation.z -= 360;
+	if (Rotation.x < 0)
+		Rotation.x += 360;
+	if (Rotation.y < 0)
+		Rotation += 360;
+	if (Rotation.z < 0)
+		Rotation.z += 360;
+
+	Ogre::Quaternion x(Ogre::Degree(Rotation.x), Ogre::Vector3::UNIT_X);
+	Ogre::Quaternion y(Ogre::Degree(Rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::Quaternion z(Ogre::Degree(Rotation.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
 	SceneNode->setOrientation(rot);
-	Rotation = rotation;
 
 	//notify about rotation
 	NotifyRotate();

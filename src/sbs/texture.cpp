@@ -389,7 +389,7 @@ bool SBS::LoadMaterial(const char *materialname, const char *name, float widthmu
 	return true;
 }
 
-void SBS::RegisterTextureInfo(const char *name, const char *material_name, const char *filename, float widthmult, float heightmult, bool enable_force, bool force_mode)
+void SBS::RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//register texture for multipliers information
 	//see TextureInfo structure for more information
@@ -414,16 +414,14 @@ void SBS::RegisterTextureInfo(const char *name, const char *material_name, const
 	textureinfo.push_back(info);
 }
 
-bool SBS::UnregisterTextureInfo(const char *name, const char *material_name)
+bool SBS::UnregisterTextureInfo(std::string name, std::string material_name)
 {
-	std::string Name = name;
-	std::string Material = material_name;
-	TrimString(Name);
-	TrimString(Material);
+	TrimString(name);
+	TrimString(material_name);
 
 	for (int i = 0; i < (int)textureinfo.size(); i++)
 	{
-		if (textureinfo[i].name == Name || (textureinfo[i].material_name == Material && textureinfo[i].material_name != ""))
+		if (textureinfo[i].name == name || (textureinfo[i].material_name == material_name && textureinfo[i].material_name != ""))
 		{
 			textureinfo.erase(textureinfo.begin() + i);
 			return true;

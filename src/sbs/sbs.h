@@ -377,8 +377,8 @@ public:
 	void RegisterControl(Control *control);
 	void UnregisterControl(Control *control);
 	Ogre::Vector2 GetEndPoint(const Ogre::Vector2 &StartPoint, float angle, float distance);
-	void RegisterTextureInfo(const char *name, const char *material_name, const char *filename, float widthmult, float heightmult, bool enable_force, bool force_mode);
-	bool UnregisterTextureInfo(const char *name, const char *material_name = "");
+	void RegisterTextureInfo(const std::string &name, const std::string &material_name, const std::string &filename, float widthmult, float heightmult, bool enable_force, bool force_mode);
+	bool UnregisterTextureInfo(std::string name, std::string material_name = "");
 	void ShowFloorList();
 	Ogre::Plane ComputePlane(std::vector<Ogre::Vector3> &vertices);
 	bool SegmentPlane(const Ogre::Vector3 &u, const Ogre::Vector3 &v, Ogre::Plane &plane, Ogre::Vector3 &isect, float &dist);

@@ -42,14 +42,14 @@ public:
 	//functions
 	Object(bool temporary = false);
 	virtual ~Object();
-	void SetValues(Object *parent, const char *type, const char *name, bool is_permanent, bool is_movable = true);
+	void SetValues(Object *parent, const std::string &type, const std::string &name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();
 	bool IsMovable();
 	Object* GetParent();
-	const char* GetType();
+	std::string GetType();
 	int GetNumber();
-	const char* GetName();
-	void SetName(const char *name);
+	std::string GetName();
+	void SetName(const std::string &name);
 	void AddChild(Object *object);
 	Object* GetChild(int index);
 	int GetChildrenCount();
@@ -68,7 +68,7 @@ public:
 	virtual Ogre::Vector3 GetPosition(bool relative = false);
 	virtual void Rotate(const Ogre::Vector3 &vector, float speed = 1.0f);
 	virtual void Rotate(float X, float Y, float Z, float speed = 1.0f);
-	virtual void SetRotation(Ogre::Vector3 rotation);
+	virtual void SetRotation(const Ogre::Vector3 &rotation);
 	virtual void SetRotation(float X, float Y, float Z);
 	virtual Ogre::Vector3 GetRotation();
 	virtual void OnMove(bool parent) {}; //called when object is moved

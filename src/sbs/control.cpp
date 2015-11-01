@@ -31,7 +31,7 @@
 
 namespace SBS {
 
-Control::Control(Object *parent, const char *name, bool permanent, const char *sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const char *direction, float width, float height, bool center)
+Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, float width, float height, bool center)
 {
 	//create a control at the specified location
 
@@ -40,10 +40,9 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	//set up SBS object
 	SetValues(parent, "Control", name, permanent);
 
-	std::string Name = name;
-	std::string Name2 = Name;
-	if ((int)Name.find("Control", 0) == -1)
-		Name2 = "Control " + Name;
+	std::string name2 = name;
+	if ((int)name.find("Control", 0) == -1)
+		name2 = "Control " + name;
 
 	ActionNames = action_names;
 	Actions = actions;
@@ -56,7 +55,7 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 	light_status = false;
 
 	//create object mesh
-	ControlMesh = new MeshObject(this, Name2.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	ControlMesh = new MeshObject(this, name2.c_str(), 0, sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	sbs->TexelOverride = true;
 	WallObject *wall;
@@ -69,8 +68,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name);
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name.c_str());
+		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "back")
 	{
@@ -81,8 +80,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name);
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name.c_str());
+		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, x, 0, y, 0, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "left")
 	{
@@ -93,8 +92,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = -width / 2;
 		}
 		sbs->DrawWalls(true, false, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name);
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name.c_str());
+		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	if (Direction == "right")
 	{
@@ -105,8 +104,8 @@ Control::Control(Object *parent, const char *name, bool permanent, const char *s
 			y = width / 2;
 		}
 		sbs->DrawWalls(false, true, false, false, false, false);
-		wall = ControlMesh->CreateWallObject(name);
-		sbs->AddWallMain(wall, name, textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
+		wall = ControlMesh->CreateWallObject(name.c_str());
+		sbs->AddWallMain(wall, name.c_str(), textures[0].c_str(), 0, 0, x, 0, y, height, height, 0, 0, 1, 1, false);
 	}
 	sbs->ResetWalls();
 	sbs->TexelOverride = false;
@@ -254,7 +253,7 @@ int Control::GetSelectPosition()
 	return current_position;
 }
 
-const char* Control::GetPositionAction(int position)
+std::string Control::GetPositionAction(int position)
 {
 	//return action's command name associated with the specified selection position
 
@@ -276,13 +275,13 @@ const char* Control::GetPositionAction(int position)
 	return "";
 }
 
-const char* Control::GetSelectPositionAction()
+std::string Control::GetSelectPositionAction()
 {
 	//return action name associated with current selection position
 	return GetPositionAction(current_position);
 }
 
-void Control::SetTexture(int position, const char *texture)
+void Control::SetTexture(int position, const std::string &texture)
 {
 	//bind a texture to a specific position
 
@@ -301,14 +300,14 @@ int Control::GetPositions()
 		return (int)Actions.size();
 }
 
-int Control::FindActionPosition(const char *name)
+int Control::FindActionPosition(const std::string &name)
 {
 	//returns the position number that the specified action name is associated with.
 	//otherwise 0 if not found
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (std::string(GetPositionAction(i)) == std::string(name))
+		if (GetPositionAction(i) == name)
 			return i;
 	}
 
@@ -322,7 +321,7 @@ int Control::FindNumericActionPosition()
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (IsNumeric(GetPositionAction(i)))
+		if (IsNumeric(GetPositionAction(i).c_str()))
 			return i;
 	}
 
@@ -374,7 +373,7 @@ bool Control::Press(bool reverse)
 		name = GetPositionAction(GetPreviousSelectPosition());
 
 	//exit without changing position if floor button is currently selected
-	if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
+	if (name == "off" && IsNumeric(GetSelectPositionAction().c_str()) == true)
 		return false;
 
 	//change to next control position

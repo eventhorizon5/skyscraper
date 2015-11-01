@@ -136,7 +136,7 @@ void ActionViewer::Loop()
 		ActionList->Clear();
 
 		for (int i = 0; i < Simcore->GetActionCount(); i++)
-			ActionList->Append(wxVariant(i + 1).GetString() + wxT(" - ") + wxString::FromAscii(Simcore->GetAction(i)->GetName()));
+			ActionList->Append(wxVariant(i + 1).GetString() + wxT(" - ") + wxString::FromAscii(Simcore->GetAction(i)->GetName().c_str()));
 	}
 }
 
@@ -161,22 +161,22 @@ void ActionViewer::On_ActionList_Select(wxCommandEvent& event)
 	SBS::Action *action = Simcore->GetAction(selection);
 	if (action)
 	{
-		tName->SetValue(wxString::FromAscii(action->GetName()));
+		tName->SetValue(wxString::FromAscii(action->GetName().c_str()));
 		tParentName->Clear();
 		tType->Clear();
 
 		for (int i = 0; i < action->GetParentCount(); i++)
 		{
 			wxString index = wxVariant((int)i + 1).GetString();
-			tParentName->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentName(i)) + wxT("\n"));
-			tType->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentType(i)) + wxT("\n"));
+			tParentName->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentName(i).c_str()) + wxT("\n"));
+			tType->AppendText(index + wxT(": ") + wxString::FromAscii(action->GetParentType(i).c_str()) + wxT("\n"));
 		}
 
-		tCommand->SetValue(wxString::FromAscii(action->GetCommandName()));
+		tCommand->SetValue(wxString::FromAscii(action->GetCommandName().c_str()));
 
 		tParameters->Clear();
 		for (int i = 0; i < action->GetParameterCount(); i++)
-			tParameters->AppendText(wxString::FromAscii(action->GetParameter(i)) + wxT("\n"));
+			tParameters->AppendText(wxString::FromAscii(action->GetParameter(i).c_str()) + wxT("\n"));
 	}
 
 }

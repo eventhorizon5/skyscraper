@@ -37,7 +37,7 @@ public:
 	bool IsEnabled;
 
 	//functions
-	Trigger(Object *parent, const char *name, bool permanent, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names);
+	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names);
 	~Trigger();
 	void Enabled(bool value);
 	bool SetSelectPosition(int position);
@@ -45,13 +45,13 @@ public:
 	bool NextSelectPosition(bool check_state = true);
 	bool PreviousSelectPosition(bool check_state = true);
 	int GetSelectPosition();
-	const char* GetPositionAction(int position);
-	const char* GetSelectPositionAction();
+	std::string GetPositionAction(int position);
+	std::string GetSelectPositionAction();
 	int GetNextSelectPosition();
 	int GetPreviousSelectPosition();
 	int GetPositions();
 	void PlaySound();
-	int FindActionPosition(const char *name);
+	int FindActionPosition(const std::string &name);
 	bool DoAction();
 	bool Check();
 	bool IsInside();

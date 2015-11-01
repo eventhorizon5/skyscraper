@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Action::Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
+Action::Action(const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
 {
 	//create an action
 
@@ -49,7 +49,7 @@ Action::Action(const std::string name, std::vector<Object*> &action_parents, con
 	parent_objects = action_parents;
 }
 
-Action::Action(const std::string name, std::vector<Object*> &action_parents, const std::string &command)
+Action::Action(const std::string &name, std::vector<Object*> &action_parents, const std::string &command)
 {
 	//create an action
 
@@ -68,14 +68,14 @@ Action::~Action()
 		sbs->Report("Deleted action '" + name + "'");
 }
 
-const char *Action::GetName()
+std::string Action::GetName()
 {
-	return name.c_str();
+	return name;
 }
 
-const char *Action::GetCommandName()
+std::string Action::GetCommandName()
 {
-	return command_name.c_str();
+	return command_name;
 }
 
 bool Action::DoAction(Object *caller)
@@ -671,7 +671,7 @@ const Object* Action::GetParent(int number)
 	return parent_objects[number];
 }
 
-const char* Action::GetParentName(int number)
+std::string Action::GetParentName(int number)
 {
 	if (number < 0 || number >= (int)parent_objects.size())
 		return "";
@@ -681,7 +681,7 @@ const char* Action::GetParentName(int number)
 	return "";
 }
 
-const char* Action::GetParentType(int number)
+std::string Action::GetParentType(int number)
 {
 	if (number < 0 || number >= (int)parent_objects.size())
 		return "";
@@ -696,10 +696,10 @@ int Action::GetParameterCount()
 	return (int)command_parameters.size();
 }
 
-const char *Action::GetParameter(int index)
+std::string Action::GetParameter(int index)
 {
 	if (index >= 0 && index < (int)command_parameters.size())
-		return command_parameters[index].c_str();
+		return command_parameters[index];
 	return "";
 }
 

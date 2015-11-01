@@ -34,14 +34,14 @@ public:
 
 	bool SetVelocity; //set sound velocity on move
 
-	Sound(Object *parent, const char *name, bool permanent);
+	Sound(Object *parent, const std::string &name, bool permanent);
 	~Sound();
 	void SetVolume(float value);
 	float GetVolume();
 	void SetDistances(float min, float max);
 	float GetMinimumDistance();
 	float GetMaximumDistance();
-	void SetDirection(Ogre::Vector3 direction);
+	void SetDirection(const Ogre::Vector3 &direction);
 	Ogre::Vector3 GetDirection();
 	void Loop(bool value);
 	bool GetLoopState();
@@ -52,14 +52,14 @@ public:
 	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
-	bool Load(const char *filename, bool force = false);
+	bool Load(const std::string &filename, bool force = false);
 	bool IsPlaying();
 	float GetPlayPosition();
 	void SetPlayPosition(float percent);
 	void SetConeSettings(float inside_angle = 360.0, float outside_angle = 360.0, float outside_volume = 1.0);
 	void SetDopplerLevel(float level);
 	bool IsLoaded();
-	void PlayQueued(const char *filename, bool stop = true, bool loop = false);
+	void PlayQueued(const std::string &filename, bool stop = true, bool loop = false);
 	void ProcessQueue();
 	void Report(std::string message);
 	bool ReportError(std::string message);

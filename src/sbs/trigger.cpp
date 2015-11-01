@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Trigger::Trigger(Object *parent, const char *name, bool permanent, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
+Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
 {
 	//create a proximity trigger at the specified location
 
@@ -168,7 +168,7 @@ int Trigger::GetSelectPosition()
 	return current_position;
 }
 
-const char* Trigger::GetPositionAction(int position)
+std::string Trigger::GetPositionAction(int position)
 {
 	//return action name associated with the specified selection position
 
@@ -187,7 +187,7 @@ const char* Trigger::GetPositionAction(int position)
 	return "";
 }
 
-const char* Trigger::GetSelectPositionAction()
+std::string Trigger::GetSelectPositionAction()
 {
 	//return action name associated with current selection position
 	return GetPositionAction(current_position);
@@ -199,14 +199,14 @@ int Trigger::GetPositions()
 	return (int)Actions.size();
 }
 
-int Trigger::FindActionPosition(const char *name)
+int Trigger::FindActionPosition(const std::string &name)
 {
 	//returns the position number that the specified action name is associated with.
 	//otherwise 0 if not found
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (std::string(GetPositionAction(i)) == std::string(name))
+		if (GetPositionAction(i) == name)
 			return i;
 	}
 
@@ -219,7 +219,7 @@ bool Trigger::DoAction()
 	//result is true if at least one action in the list succeeded
 
 	if ((int)Actions.size() == 0)
-		return sbs->ReportError("No available actions for trigger '" + std::string(GetName()) + "'");
+		return sbs->ReportError("No available actions for trigger '" + GetName() + "'");
 
 	std::vector<Action*> actionlist = sbs->GetAction(Actions[current_position - 1]);
 
@@ -262,16 +262,16 @@ bool Trigger::Check()
 		if (sbs->Verbose == true)
 		{
 			if (is_inside == true)
-				sbs->Report("Inside trigger area '" + std::string(GetName()) + "', parent '" + std::string(GetParent()->GetName()) + "'");
+				sbs->Report("Inside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 			else
-				sbs->Report("Outside trigger area '" + std::string(GetName()) + "', parent '" + std::string(GetParent()->GetName()) + "'");
+				sbs->Report("Outside trigger area '" + GetName() + "', parent '" + GetParent()->GetName() + "'");
 		}
 
 		//get action name of next position state
 		std::string name = GetPositionAction(GetNextSelectPosition());
 
 		//exit without changing position if floor button is currently selected
-		if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
+		if (name == "off" && IsNumeric(GetSelectPositionAction().c_str()) == true)
 			return false;
 
 		//change to next control position
