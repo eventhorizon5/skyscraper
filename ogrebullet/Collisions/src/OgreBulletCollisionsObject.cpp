@@ -168,10 +168,10 @@ namespace OgreBulletCollisions
     // -------------------------------------------------------------------------
     void Object::setOrientation(const Ogre::Quaternion &q)
     {
-	    /*if (update_parent == true)
-		    mRootNode->getParentSceneNode()->setOrientation(q);
-	    else*/
-		    mRootNode->setOrientation(q);
+	    if (update_parent == true)
+		    mRootNode->getParentSceneNode()->_setDerivedOrientation(q);
+
+	    mRootNode->_setDerivedOrientation(q);
     }
     // -------------------------------------------------------------------------
     void Object::setTransform(const btTransform& worldTrans)
@@ -245,7 +245,7 @@ namespace OgreBulletCollisions
 		if (update_pos == true)
 			pos = mRootNode->_getDerivedPosition();
 		if (update_rot == true)
-			quat = mRootNode->getOrientation();
+			quat = mRootNode->_getDerivedOrientation();
 
 		btTransform transform = mObject->getWorldTransform();
 		if (update_pos == true)
