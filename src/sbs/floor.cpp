@@ -39,16 +39,16 @@ Floor::Floor(int number)
 	//Set floor's object number
 	Number = number;
 	std::string num = ToString(Number);
-	SetName(std::string("Floor " + num));
+	SetName("Floor " + num);
 
 	//Create primary level mesh
-	Level = new MeshObject(this, std::string("Level " + num));
+	Level = new MeshObject(this, "Level " + num);
 
 	//Create interfloor mesh
-	Interfloor = new MeshObject(this,std::string("Interfloor " + num));
+	Interfloor = new MeshObject(this, "Interfloor " + num);
 
 	//Create columnframe mesh
-	ColumnFrame = new MeshObject(this, std::string("ColumnFrame " + num));
+	ColumnFrame = new MeshObject(this, "ColumnFrame " + num);
 
 	//set enabled flags
 	IsEnabled = true;

@@ -4471,7 +4471,8 @@ Door* Elevator::AddDoor(const std::string &open_sound, const std::string &close_
 
 	std::string elevnum = ToString(Number);
 	std::string num = ToString((int)StdDoorArray.size());
-	Door* door = new Door(this, std::string("Elevator " + elevnum + ":Door " + num), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	std::string name = "Elevator " + elevnum + ":Door " + num;
+	Door* door = new Door(this, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	StdDoorArray.push_back(door);
 	return door;
 }

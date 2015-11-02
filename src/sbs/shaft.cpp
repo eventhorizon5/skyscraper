@@ -908,7 +908,8 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string shaftnum = ToString(ShaftNumber);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Shaft " + shaftnum + ":Door " + num), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	std::string name = "Shaft " + shaftnum + ":Door " + num;
+	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object;
 }

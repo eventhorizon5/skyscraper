@@ -1133,7 +1133,7 @@ void Skyscraper::DrawBackground()
 {
 	//draw menu background
 
-	DrawImage(std::string("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png")), 0, -1, -1, false);
+	DrawImage("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png"), 0, -1, -1, false);
 
 	if (buttoncount == 0)
 	{

@@ -199,7 +199,7 @@ bool ScriptProcessor::Run()
 						else
 							replacement = "";
 
-						ReplaceAll(LineData, std::string("%param" + temp2 + "%"), replacement);
+						ReplaceAll(LineData, "%param" + temp2 + "%", replacement);
 						startpos = temp1;
 					}
 					else
@@ -264,7 +264,7 @@ bool ScriptProcessor::Run()
 						found = true;
 
 						//replace all occurrences of the variable with it's value
-						ReplaceAll(LineData, std::string("%" + temp2 + "%"), variables[i].value);
+						ReplaceAll(LineData, "%" + temp2 + "%", variables[i].value);
 						startpos = temp1;
 						break;
 					}
@@ -1964,7 +1964,7 @@ int ScriptProcessor::ProcCommands()
 		//check for existence of shaft
 		int shaftnum = ToInt(tempdata[0]);
 		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
-			return ScriptError("Invalid shaft " + std::string(tempdata[0]));
+			return ScriptError("Invalid shaft " + tempdata[0]);
 
 		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		return sNextLine;
@@ -2478,7 +2478,7 @@ int ScriptProcessor::ProcCommands()
 
 		Ogre::Vector3 isect = mesh->GetPoint(tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 
-		buffer = std::string(LineData).substr(0, temp5) + ToString(isect.x) + std::string(", ") + ToString(isect.y) + std::string(", ") + ToString(isect.z) + std::string(LineData).substr(temp4 + 1);
+		buffer = LineData.substr(0, temp5) + ToString(isect.x) + ", " + ToString(isect.y) + ", " + ToString(isect.z) + LineData.substr(temp4 + 1);
 		LineData = buffer;
 		linecheck = SetCaseCopy(LineData, false);
 		temp5 = linecheck.find("isect(", 0);
@@ -2512,7 +2512,7 @@ int ScriptProcessor::ProcCommands()
 		Ogre::Vector2 startpoint (ToFloat(tempdata[0]), ToFloat(tempdata[1]));
 		Ogre::Vector2 endpoint = Simcore->GetEndPoint(startpoint, ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 
-		buffer = std::string(LineData).substr(0, temp5) + ToString(endpoint.x) + std::string(", ") + ToString(endpoint.y) + std::string(LineData).substr(temp4 + 1);
+		buffer = LineData.substr(0, temp5) + ToString(endpoint.x) + ", " + ToString(endpoint.y) + LineData.substr(temp4 + 1);
 		LineData = buffer;
 		linecheck = SetCaseCopy(LineData, false);
 		temp5 = linecheck.find("endpoint(", 0);
@@ -2694,7 +2694,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		if (compat == true)
 		{
@@ -2751,7 +2751,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		//create model
 		SBS::Model* model;
@@ -2886,7 +2886,7 @@ int ScriptProcessor::ProcCommands()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		SBS::Control* control = Simcore->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
@@ -2924,7 +2924,7 @@ int ScriptProcessor::ProcCommands()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
@@ -3928,8 +3928,8 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(std::string("data/" + tempdata[0]));
-			CheckFile(std::string("data/" + tempdata[1]));
+			CheckFile("data/" + tempdata[0]);
+			CheckFile("data/" + tempdata[1]);
 		}
 
 		if (compat > 0 && warn_deprecated == true)
@@ -4013,8 +4013,8 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		if (compat != 1)
 		{
-			CheckFile(std::string("data/" + tempdata[1]));
-			CheckFile(std::string("data/" + tempdata[2]));
+			CheckFile("data/" + tempdata[1]);
+			CheckFile("data/" + tempdata[2]);
 		}
 
 		if (compat > 0 && warn_deprecated == true)
@@ -4063,8 +4063,8 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
-		CheckFile(std::string("data/" + tempdata[2]));
+		CheckFile("data/" + tempdata[1]);
+		CheckFile("data/" + tempdata[2]);
 
 		//create door
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
@@ -4318,7 +4318,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		if (compat == true)
 		{
@@ -4455,7 +4455,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		//create model
 		SBS::Model *model;
@@ -4509,7 +4509,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		//create model
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
@@ -4569,7 +4569,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		//create model
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
@@ -4623,7 +4623,7 @@ int ScriptProcessor::ProcFloors()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		SBS::Control* control = floor->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
@@ -4673,7 +4673,7 @@ int ScriptProcessor::ProcFloors()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
@@ -4728,7 +4728,7 @@ int ScriptProcessor::ProcFloors()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
@@ -4771,7 +4771,7 @@ int ScriptProcessor::ProcFloors()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
@@ -4804,7 +4804,7 @@ int ScriptProcessor::ProcFloors()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
@@ -4840,7 +4840,7 @@ int ScriptProcessor::ProcFloors()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
@@ -5261,7 +5261,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->GetDoor(temp3)->OpenSound = temp2;
 		return sNextLine;
@@ -5280,7 +5280,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->GetDoor(temp3)->CloseSound = temp2;
 		return sNextLine;
@@ -5299,7 +5299,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->GetDoor(temp3)->NudgeSound = temp2;
 		return sNextLine;
@@ -5314,7 +5314,7 @@ int ScriptProcessor::ProcElevators()
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpStartSound = temp2;
 		elev->CarDownStartSound = temp2;
@@ -5339,7 +5339,7 @@ int ScriptProcessor::ProcElevators()
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpMoveSound = temp2;
 		elev->CarDownMoveSound = temp2;
@@ -5364,7 +5364,7 @@ int ScriptProcessor::ProcElevators()
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpStopSound = temp2;
 		elev->CarDownStopSound = temp2;
@@ -5389,7 +5389,7 @@ int ScriptProcessor::ProcElevators()
 			ScriptWarning("Command deprecated");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarIdleSound = temp2;
 
@@ -5409,7 +5409,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpStartSound = temp2;
 		elev->CarDownStartSound = temp2;
@@ -5421,7 +5421,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpStartSound = temp2;
 		return sNextLine;
@@ -5432,7 +5432,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarDownStartSound = temp2;
 		return sNextLine;
@@ -5443,7 +5443,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpMoveSound = temp2;
 		elev->CarDownMoveSound = temp2;
@@ -5455,7 +5455,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpMoveSound = temp2;
 		return sNextLine;
@@ -5466,7 +5466,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarDownMoveSound = temp2;
 		return sNextLine;
@@ -5477,7 +5477,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpStopSound = temp2;
 		elev->CarDownStopSound = temp2;
@@ -5489,7 +5489,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarUpStopSound = temp2;
 		return sNextLine;
@@ -5500,7 +5500,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarDownStopSound = temp2;
 		return sNextLine;
@@ -5511,7 +5511,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarIdleSound = temp2;
 		return sNextLine;
@@ -5522,7 +5522,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorUpStartSound = temp2;
 		elev->MotorDownStartSound = temp2;
@@ -5534,7 +5534,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorUpStartSound = temp2;
 		return sNextLine;
@@ -5545,7 +5545,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorDownStartSound = temp2;
 		return sNextLine;
@@ -5556,7 +5556,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorUpRunSound = temp2;
 		elev->MotorDownRunSound = temp2;
@@ -5568,7 +5568,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorUpRunSound = temp2;
 		return sNextLine;
@@ -5579,7 +5579,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorDownRunSound = temp2;
 		return sNextLine;
@@ -5590,7 +5590,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorUpStopSound = temp2;
 		elev->MotorDownStopSound = temp2;
@@ -5602,7 +5602,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorUpStopSound = temp2;
 		return sNextLine;
@@ -5613,7 +5613,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorDownStopSound = temp2;
 		return sNextLine;
@@ -5624,7 +5624,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorIdleSound = temp2;
 		return sNextLine;
@@ -5643,7 +5643,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
@@ -5663,7 +5663,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->GetDoor(temp3)->UpChimeSound = temp2;
 		return sNextLine;
@@ -5682,7 +5682,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid door number");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->GetDoor(temp3)->DownChimeSound = temp2;
 		return sNextLine;
@@ -5693,7 +5693,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->AlarmSound = temp2;
 		return sNextLine;
@@ -5704,7 +5704,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->AlarmSoundStop = temp2;
 		return sNextLine;
@@ -5715,7 +5715,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->SetBeepSound(temp2);
 		return sNextLine;
@@ -5726,7 +5726,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->SetFloorSound(temp2);
 		return sNextLine;
@@ -5737,7 +5737,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->SetMessageSound(true, true, temp2);
 		return sNextLine;
@@ -5748,7 +5748,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->SetMessageSound(true, false, temp2);
 		return sNextLine;
@@ -5759,7 +5759,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->SetMessageSound(false, true, temp2);
 		return sNextLine;
@@ -5770,7 +5770,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->SetMessageSound(false, false, temp2);
 		return sNextLine;
@@ -5781,7 +5781,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->Music = temp2;
 		return sNextLine;
@@ -6091,7 +6091,7 @@ int ScriptProcessor::ProcElevators()
 		if (params == 2)
 		{
 			//check to see if file exists
-			CheckFile(std::string("data/" + tempdata[1]));
+			CheckFile("data/" + tempdata[1]);
 			//set door sound
 			elev->GetDoor(temp3)->SensorSound = tempdata[1];
 		}
@@ -6103,7 +6103,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->CarEmergencyStopSound = temp2;
 		return sNextLine;
@@ -6114,7 +6114,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Syntax error");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + temp2));
+		CheckFile("data/" + temp2);
 
 		elev->MotorEmergencyStopSound = temp2;
 		return sNextLine;
@@ -6464,7 +6464,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (compat == 0)
 		{
-			CheckFile(std::string("data/" + tempdata[1]));
+			CheckFile("data/" + tempdata[1]);
 			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 		}
 		if (compat == 1)
@@ -6572,7 +6572,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (compat == 0)
 		{
-			CheckFile(std::string("data/" + tempdata[1]));
+			CheckFile("data/" + tempdata[1]);
 			control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 		}
 		if (compat == 1)
@@ -6622,7 +6622,7 @@ int ScriptProcessor::ProcElevators()
 			return ScriptError("Invalid panel number");
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		SBS::Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 
@@ -6675,7 +6675,7 @@ int ScriptProcessor::ProcElevators()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		SBS::Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
@@ -6883,7 +6883,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		if (compat == true)
 		{
@@ -7106,8 +7106,8 @@ int ScriptProcessor::ProcElevators()
 			}
 		}
 
-		CheckFile(std::string("data/" + tempdata[0]));
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[0]);
+		CheckFile("data/" + tempdata[1]);
 
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
@@ -7167,7 +7167,7 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		//create model
 		SBS::Model *model;
@@ -7216,7 +7216,7 @@ int ScriptProcessor::ProcElevators()
 			tex_array.push_back(tempdata[temp3]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		SBS::Control* control = elev->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
@@ -7254,7 +7254,7 @@ int ScriptProcessor::ProcElevators()
 			action_array.push_back(tempdata[i]);
 
 		//check to see if file exists
-		CheckFile(std::string("data/" + tempdata[1]));
+		CheckFile("data/" + tempdata[1]);
 
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));

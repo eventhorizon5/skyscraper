@@ -402,12 +402,12 @@ bool Sound::IsLoaded()
 
 void Sound::Report(std::string message)
 {
-	sbs->Report("Sound '" + std::string(GetName()) + "', parent '" + GetParent()->GetName() + "': " + message);
+	sbs->Report("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 bool Sound::ReportError(std::string message)
 {
-	return sbs->ReportError("Sound '" + std::string(GetName()) + "', parent '" + GetParent()->GetName() + "': " + message);
+	return sbs->ReportError("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
 void Sound::PlayQueued(const std::string &filename, bool stop, bool loop)

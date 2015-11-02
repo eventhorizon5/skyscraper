@@ -1506,7 +1506,7 @@ void SBS::CreateSky(const std::string &filenamebase)
 {
 	//create skybox
 
-	Mount(std::string("sky-" + filenamebase + ".zip"), "sky");
+	Mount("sky-" + filenamebase + ".zip", "sky");
 
 	//load textures
 	SetLighting();
@@ -2631,14 +2631,13 @@ bool SBS::Mount(const std::string &filename, const std::string &path)
 {
 	//mounts a zip file into the virtual filesystem
 
-	std::string newfile = "data" + std::string("/") + filename;
+	std::string newfile = "data/" + filename;
 	std::string file = VerifyFile(newfile);
-	std::string Path = path;
 
-	Report("Mounting " + file + " as path " + Path);
+	Report("Mounting " + file + " as path " + path);
 	try
 	{
-		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", Path, true);
+		Ogre::ResourceGroupManager::getSingleton().addResourceLocation(file, "Zip", path, true);
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -2950,13 +2949,13 @@ std::string SBS::DumpState()
 	output.append("Building Filename: " + BuildingFilename + "\n");
 	output.append("Building Version: " + BuildingVersion + "\n");
 	output.append("InStairwell: ");
-	output.append(std::string(BoolToString(InStairwell)));
+	output.append(BoolToString(InStairwell));
 	output.append("\n");
 	output.append("InElevator: ");
-	output.append(std::string(BoolToString(InElevator)));
+	output.append(BoolToString(InElevator));
 	output.append("\n");
 	output.append("InShaft: ");
-	output.append(std::string(BoolToString(InShaft)));
+	output.append(BoolToString(InShaft));
 	output.append("\n");
 	output.append("CameraFloor: ");
 	if (camera)
@@ -2966,28 +2965,28 @@ std::string SBS::DumpState()
 	output.append(ToString(ElevatorNumber));
 	output.append("\n");
 	output.append("ElevatorSync: ");
-	output.append(std::string(BoolToString(ElevatorSync)));
+	output.append(BoolToString(ElevatorSync));
 	output.append("\n");
 	output.append("Running Time: ");
 	output.append(TruncateNumber(running_time, 2));
 	output.append("\n");
 	output.append("BuildingsEnabled: ");
-	output.append(std::string(BoolToString(IsBuildingsEnabled)));
+	output.append(BoolToString(IsBuildingsEnabled));
 	output.append("\n");
 	output.append("ExternalEnabled: ");
-	output.append(std::string(BoolToString(IsExternalEnabled)));
+	output.append(BoolToString(IsExternalEnabled));
 	output.append("\n");
 	output.append("LandscapeEnabled: ");
-	output.append(std::string(BoolToString(IsLandscapeEnabled)));
+	output.append(BoolToString(IsLandscapeEnabled));
 	output.append("\n");
 	output.append("SkyboxEnabled: ");
-	output.append(std::string(BoolToString(IsSkyboxEnabled)));
+	output.append(BoolToString(IsSkyboxEnabled));
 	output.append("\n");
 	output.append("Verbose: ");
-	output.append(std::string(BoolToString(Verbose)));
+	output.append(BoolToString(Verbose));
 	output.append("\n");
 	output.append("InterfloorOnTop: ");
-	output.append(std::string(BoolToString(InterfloorOnTop)));
+	output.append(BoolToString(InterfloorOnTop));
 	output.append("\n");
 	output.append("Object Count: ");
 	output.append(ToString(ObjectCount));
@@ -3619,22 +3618,21 @@ std::string SBS::GetMountPath(const std::string &filename, std::string &newfilen
 	//get mountpoint (resource group) path of given file
 	//if not found, return "General"
 
-	std::string file = filename;
 	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
-	newfilename = file;
+	newfilename = filename;
 
 	for (int i = 0; i < (int)list.size(); i++)
 	{
-		std::string check = file + "/";
+		std::string check = filename + "/";
 		if (StartsWith(check, list[i]) == true)
 		{
-			newfilename = file.substr(list[i].size() + 1);
+			newfilename = filename.substr(list[i].size() + 1);
 			return list[i];
 		}
-		check = file + "\\";
+		check = filename + "\\";
 		if (StartsWith(check, list[i]) == true)
 		{
-			newfilename = file.substr(list[i].size() + 1);
+			newfilename = filename.substr(list[i].size() + 1);
 			return list[i];
 		}
 	}

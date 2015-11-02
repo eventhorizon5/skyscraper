@@ -1508,9 +1508,9 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("x" + number), ToString(vertices[atoi(number.c_str())].x));
+						ReplaceAll(string, "x" + number, ToString(vertices[atoi(number.c_str())].x));
 					else
-						ReplaceAll(string, std::string("x" + number), "0"); //number value out of bounds
+						ReplaceAll(string, "x" + number, "0"); //number value out of bounds
 				}
 
 				//find Y component
@@ -1519,9 +1519,9 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("y" + number), ToString(vertices[atoi(number.c_str())].y));
+						ReplaceAll(string, "y" + number, ToString(vertices[atoi(number.c_str())].y));
 					else
-						ReplaceAll(string, std::string("y" + number), "0"); //number value out of bounds
+						ReplaceAll(string, "y" + number, "0"); //number value out of bounds
 				}
 
 				//find Z component
@@ -1530,9 +1530,9 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				{
 					std::string number = string.substr(location + 1);
 					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, std::string("z" + number), ToString(vertices[atoi(number.c_str())].z));
+						ReplaceAll(string, "z" + number, ToString(vertices[atoi(number.c_str())].z));
 					else
-						ReplaceAll(string, std::string("z" + number), "0"); //number value out of bounds
+						ReplaceAll(string, "z" + number, "0"); //number value out of bounds
 				}
 
 				//store values

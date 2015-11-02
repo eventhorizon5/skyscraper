@@ -495,7 +495,8 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	DoorArray[DoorArray.size() - 1].floornumber = floor;
 	std::string stairsnum = ToString(StairsNum);
 	std::string num = ToString((int)DoorArray.size() - 1);
-	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), std::string("Stairwell " + stairsnum + ":Door " + num), open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	std::string name = "Stairwell " + stairsnum + ":Door " + num;
+	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
 	floorptr = 0;
 	return DoorArray[DoorArray.size() - 1].object;
 }
