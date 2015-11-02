@@ -1170,6 +1170,10 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::st
 	Ogre::SubMesh *submesh = 0;
 	bool createnew = false;
 
+	//exit if trying to remove indices from non-existing submesh
+	if (index == -1 && add == false)
+		return -1;
+
 	//get existing submesh pointer
 	if (index == -1)
 	{
