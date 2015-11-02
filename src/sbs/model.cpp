@@ -56,12 +56,9 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 		Offset = Ogre::Vector3(vec.x, -box.getMinimum().y, -vec.z);
 	}
 
-	Move(position);
-	//SetRotation(rotation);
-
-	//move mesh object to specified offset
-	mesh->Move(Offset);
-	mesh->SetRotation(rotation);
+	//move to position and specified offset
+	Move(position + Offset);
+	SetRotation(rotation);
 }
 
 Model::~Model()

@@ -72,7 +72,8 @@ namespace OgreBulletCollisions
         mDebugShape(0),
         mShapeNode(0),
         mDebugNode(0),
-		is_static(false)
+		is_static(false),
+    	     update_parent(false)
     {
         if (init)
         {
@@ -142,26 +143,44 @@ namespace OgreBulletCollisions
     void Object::setTransform(const btVector3 &pos, const btQuaternion &quat)
     {
 		setPosition(pos);
-        mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
+		setOrientation(quat);
     }
     // -------------------------------------------------------------------------
     void Object::setPosition(const btVector3 &pos)
     {
-    	Ogre::Vector3 position (pos[0], pos[1], pos[2]);
-		mRootNode->_setDerivedPosition(position);
+	    Ogre::Vector3 position (pos[0], pos[1], pos[2]);
+	    setPosition(position);
+    }
+    // -------------------------------------------------------------------------
+    void Object::setPosition(const Ogre::Vector3 &p)
+    {
+    		if (update_parent == true)
+    			mRootNode->getParentSceneNode()->_setDerivedPosition(p);
+
+		mRootNode->_setDerivedPosition(p);
     }
     // -------------------------------------------------------------------------
     void Object::setOrientation(const btQuaternion &quat)
     {
-		mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
+	    Ogre::Quaternion q (quat.getW(),quat.getX(), quat.getY(), quat.getZ());
+	    setOrientation(q);
+    }
+    // -------------------------------------------------------------------------
+    void Object::setOrientation(const Ogre::Quaternion &q)
+    {
+	    /*if (update_parent == true)
+		    mRootNode->getParentSceneNode()->setOrientation(q);
+	    else*/
+		    mRootNode->setOrientation(q);
     }
     // -------------------------------------------------------------------------
     void Object::setTransform(const btTransform& worldTrans)
     {
 		//this sets the node's transformation based on the Bullet collider's world transformation
-    	Ogre::Vector3 position (worldTrans.getOrigin()[0], worldTrans.getOrigin()[1], worldTrans.getOrigin()[2]);
-        mRootNode->_setDerivedPosition(position);
-        mRootNode->setOrientation(worldTrans.getRotation().getW(),worldTrans.getRotation().getX(), worldTrans.getRotation().getY(), worldTrans.getRotation().getZ());
+	    Ogre::Vector3 position (worldTrans.getOrigin()[0], worldTrans.getOrigin()[1], worldTrans.getOrigin()[2]);
+
+	    setPosition(position);
+	    setOrientation(worldTrans.getRotation().getW(),worldTrans.getRotation().getX(), worldTrans.getRotation().getY(), worldTrans.getRotation().getZ());
     }
     //-----------------------------------------------------------------------
     void Object::setShape(CollisionShape *shape)
@@ -226,7 +245,7 @@ namespace OgreBulletCollisions
 		if (update_pos == true)
 			pos = mRootNode->_getDerivedPosition();
 		if (update_rot == true)
-			quat = mRootNode->_getDerivedOrientation();
+			quat = mRootNode->getOrientation();
 
 		btTransform transform = mObject->getWorldTransform();
 		if (update_pos == true)

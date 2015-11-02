@@ -47,7 +47,7 @@ namespace OgreBulletDynamics
 
     // -------------------------------------------------------------------------
     RigidBody::RigidBody(const String &name, DynamicsWorld *world, const short collisionGroup, const short collisionMask)
-        :	
+        :
         Object(name, world, false)
     {
 		mCollisionGroup = collisionGroup;
@@ -60,10 +60,10 @@ namespace OgreBulletDynamics
     {
  		if (can_move == true)
 			mShapeNode->detachObject(this);
-   }  
+   }
     // -------------------------------------------------------------------------
     void RigidBody::setShape(Ogre::SceneNode *node,
-        OgreBulletCollisions::CollisionShape *shape,                          
+        OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
         const float      bodyFriction,
         const float      bodyMass,
@@ -75,6 +75,7 @@ namespace OgreBulletDynamics
 		//can_move = true;
         can_move = false;
 		is_static = false;
+		update_parent = true;
         mRootNode = node;
 		//mShapeNode = mRootNode->createChildSceneNode(mName + "Node");
 
@@ -155,7 +156,7 @@ namespace OgreBulletDynamics
         mObject = body;
 		_notifyMoved();
         addToWorld();
-   }*/	
+   }*/
     // -------------------------------------------------------------------------
     void RigidBody::setStaticShape(OgreBulletCollisions::CollisionShape *shape,
         const float      bodyRestitution,
@@ -213,7 +214,7 @@ namespace OgreBulletDynamics
 			getBulletRigidBody()->setCollisionFlags(
 				getBulletRigidBody()->getCollisionFlags() ^ btCollisionObject::CF_KINEMATIC_OBJECT);
 		}
-	} 
+	}
     // -------------------------------------------------------------------------
     void RigidBody::setLinearVelocity( const Ogre::Vector3 &vel )
     {
@@ -313,13 +314,13 @@ namespace OgreBulletDynamics
 			setCollisionMask(mCollisionGroup, 0);
 	}
     void WheeledRigidBody::setPosition(const btVector3 &pos)
-    { 
+    {
         //should update wheels as well ?
         mRootNode->setPosition(pos[0], pos[1], pos[2]);
     };
     // -------------------------------------------------------------------------
     void WheeledRigidBody::setOrientation(const btQuaternion &quat)
-    { 
+    {
         mRootNode->setOrientation(quat.getW(),quat.getX(), quat.getY(), quat.getZ());
     };
     // -------------------------------------------------------------------------
@@ -332,7 +333,7 @@ namespace OgreBulletDynamics
     }
     // -------------------------------------------------------------------------
     void WheeledRigidBody::setTransform(const btTransform& worldTrans)
-    { 
+    {
         mRootNode->setPosition(worldTrans.getOrigin()[0], worldTrans.getOrigin()[1],worldTrans.getOrigin()[2]);
         mRootNode->setOrientation(worldTrans.getRotation().getW(),worldTrans.getRotation().getX(), worldTrans.getRotation().getY(), worldTrans.getRotation().getZ());
 
