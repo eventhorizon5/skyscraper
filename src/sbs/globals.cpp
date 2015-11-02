@@ -57,7 +57,7 @@ bool IsNumeric(char character)
 	return false;
 }
 
-bool IsNumeric(const char *string)
+bool IsNumeric(const std::string &string)
 {
 	//test to see if a string is numeric
 
@@ -65,7 +65,7 @@ bool IsNumeric(const char *string)
 	return IsNumeric(string, num);
 }
 
-bool IsNumeric(const char *string, int &number)
+bool IsNumeric(const std::string &string, int &number)
 {
 	//test to see if a string is numeric, and return number as integer
 
@@ -75,22 +75,22 @@ bool IsNumeric(const char *string, int &number)
 	return result;
 }
 
-bool IsNumeric(const char *string, float &number)
+bool IsNumeric(const std::string &string, float &number)
 {
 	//test to see if a string is numeric, and return number as float
 
 	char* end = 0;
 
 #ifdef _WIN32
-	number = (float)std::strtod(string, &end);
+	number = (float)std::strtod(string.c_str(), &end);
 #else
-	number = std::strtof(string, &end);
+	number = std::strtof(string.c_str(), &end);
 #endif
 
 	return end != 0 && *end == 0;
 }
 
-const char *BoolToString(bool item)
+std::string BoolToString(bool item)
 {
 	if (item == true)
 		return "true";
@@ -130,14 +130,6 @@ float Max3(float a, float b, float c)
 	return c;
 }
 
-const char* SetCaseCopy(const char *string, bool uppercase)
-{
-	//change case of a string
-	std::string newstring = string;
-	SetCase(newstring, uppercase);
-	return newstring.c_str();
-}
-
 std::string SetCaseCopy(std::string string, bool uppercase)
 {
 	//change case of a string
@@ -154,7 +146,7 @@ void SetCase(std::string &string, bool uppercase)
 		std::transform(string.begin(), string.end(), string.begin(), ::tolower);
 }
 
-int FindWithCase(const char *string, bool uppercase, const char *key, int offset)
+int FindWithCase(const std::string &string, bool uppercase, const std::string &key, int offset)
 {
 	//change case of a string, and return location of search key
 	std::string newstring = SetCaseCopy(string, uppercase);
@@ -171,7 +163,7 @@ void TrimString(std::string &string)
 	Ogre::StringUtil::trim(string, true, true);
 }
 
-void ReplaceAll(std::string &string, const char *original, const char *replacement)
+void ReplaceAll(std::string &string, const std::string &original, const std::string &replacement)
 {
 	//replace all occurrences of "original" with "replacement"
 
@@ -182,18 +174,18 @@ void ReplaceAll(std::string &string, const char *original, const char *replaceme
 		position = string.find(original, position);
 		if (position == string.npos)
 			break;
-		string.replace(position, strlen(original), replacement);
+		string.replace(position, strlen(original.c_str()), replacement);
 	}
 }
 
-bool StartsWith(std::string &string, const char *check_string, bool ignore_case)
+bool StartsWith(std::string &string, const std::string &check_string, bool ignore_case)
 {
 	//check if a string starts with the contents of "check_string"
 
 	int result;
 
 	if (ignore_case == true)
-		result = FindWithCase(string.c_str(), false, check_string, 0);
+		result = FindWithCase(string, false, check_string, 0);
 	else
 		result = (int)string.find(check_string, 0);
 
@@ -202,7 +194,7 @@ bool StartsWith(std::string &string, const char *check_string, bool ignore_case)
 	return false;
 }
 
-void SplitString(std::vector<std::string> &dest_array, const char *original_string, char separator)
+void SplitString(std::vector<std::string> &dest_array, const std::string &original_string, char separator)
 {
 	//split a string into an array of strings, divided by "separator"
 
@@ -239,7 +231,7 @@ void SplitString(std::vector<std::string> &dest_array, const char *original_stri
 	}
 }
 
-const char* ToString(int number)
+std::string ToString(int number)
 {
 	static char buffer[50];
 #if defined(__VISUALC__)
@@ -250,12 +242,7 @@ const char* ToString(int number)
 	return buffer;
 }
 
-std::string ToString2(int number)
-{
-	return ToString(number);
-}
-
-const char* ToString(float number)
+std::string ToString(float number)
 {
 	static char buffer[50];
 #if defined(__VISUALC__)
@@ -264,11 +251,6 @@ const char* ToString(float number)
 	snprintf(buffer, sizeof(buffer), "%g", (double)number);
 #endif
 	return buffer;
-}
-
-std::string ToString2(float number)
-{
-	return ToString(number);
 }
 
 float Log2(float number)
@@ -313,4 +295,14 @@ bool IsBoolean(std::string string)
 {
 	SetCase(string, false);
 	return (string == "true" || string == "false");
+}
+
+float ToFloat(const std::string &string)
+{
+	return atof(string.c_str());
+}
+
+int ToInt(const std::string &string)
+{
+	return atoi(string.c_str());
 }

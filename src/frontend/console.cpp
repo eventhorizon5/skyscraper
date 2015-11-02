@@ -113,7 +113,7 @@ void Console::On_bSend_Click(wxCommandEvent& event)
 		return;
 
 	//load new commands into script interpreter, and run
-	processor->LoadFromText(tCommand->GetValue().ToAscii());
+	processor->LoadFromText(std::string(tCommand->GetValue().ToAscii()));
 	if (chkEcho->GetValue() == true)
 		tConsole->AppendText(tCommand->GetValue());
 	tCommand->Clear();
@@ -129,9 +129,9 @@ void Console::On_Close(wxCloseEvent& event)
 	this->Hide();
 }
 
-void Console::Write(const char *message)
+void Console::Write(const std::string &message)
 {
-	tConsole->AppendText(wxString::FromAscii(message) + wxT("\n"));
+	tConsole->AppendText(wxString::FromAscii(message.c_str()) + wxT("\n"));
 }
 
 }

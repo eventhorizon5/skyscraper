@@ -33,16 +33,16 @@ class ScriptProcessor
 	ScriptProcessor();
 	~ScriptProcessor();
 	bool Run();
-	bool LoadDataFile(const char *filename, bool insert = false, int insert_line = 0);
-	bool LoadFromText(const char *text);
+	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
+	bool LoadFromText(const std::string &text);
 	bool ReportMissingFiles();
-	int SplitData(const char *string, int start, bool calc = true);
-	int SplitAfterEquals(const char *string, bool calc = true);
-	std::string GetAfterEquals(const char *string);
+	int SplitData(const std::string &string, int start, bool calc = true);
+	int SplitAfterEquals(const std::string &string, bool calc = true);
+	std::string GetAfterEquals(const std::string &string);
 	void Reset();
 	std::vector<std::string> *GetBuildingData();
 	int MathFunctions();
-	bool IsFunctionDefined(const char *name);
+	bool IsFunctionDefined(const std::string &name);
 
 	bool IsFinished;
 
@@ -100,8 +100,8 @@ class ScriptProcessor
 	int ScriptError(std::string message, bool warning = false);
 	int ScriptError();
 	int ScriptWarning(std::string message);
-	std::string Calc(const char *expression);
-	bool IfProc(const char *expression);
+	std::string Calc(const std::string &expression);
+	bool IfProc(const std::string &expression);
 	void StoreCommand(SBS::Object *object);
 	int ProcCommands();
 	int ProcGlobals();
@@ -109,7 +109,7 @@ class ScriptProcessor
 	int ProcElevators();
 	int ProcTextures();
 	bool FunctionProc();
-	void CheckFile(const char *filename);
+	void CheckFile(const std::string &filename);
 	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);
 
 	struct FunctionInfo

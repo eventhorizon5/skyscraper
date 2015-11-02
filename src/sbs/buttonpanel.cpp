@@ -63,7 +63,7 @@ ButtonPanel::ButtonPanel(int elevator, int index, const std::string &texture, in
 
 	//create mesh
 	std::string buffer;
-	buffer = "Button Panel " + ToString2(elevator) + ":" + ToString2(index);
+	buffer = "Button Panel " + ToString(elevator) + ":" + ToString(index);
 	TrimString(buffer);
 	SetName(buffer);
 	ButtonPanelMesh = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -147,7 +147,7 @@ Control* ButtonPanel::AddButton(const std::string &sound, const std::string &tex
 
 	textures.push_back(texture);
 	textures.push_back(texture_lit);
-	if (IsNumeric(newtype.c_str()) == true)
+	if (IsNumeric(newtype) == true)
 	{
 		names.push_back("off");
 		names.push_back(newtype);
@@ -210,7 +210,7 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 	controls.resize(controls.size() + 1);
 	int control_index = (int)controls.size() - 1;
 	std::string buffer;
-	buffer = "Button Panel " + ToString2(elevator) + ":" + ToString2(Index) + " Control " + ToString2(control_index);
+	buffer = "Button Panel " + ToString(elevator) + ":" + ToString(Index) + " Control " + ToString(control_index);
 	TrimString(buffer);
 
 	//register actions

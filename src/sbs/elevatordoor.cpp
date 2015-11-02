@@ -35,7 +35,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	//set up SBS object
 	SetValues(elevator, "ElevatorDoor", "", false);
 
-	std::string name = "Elevator Door " + ToString2(number);
+	std::string name = "Elevator Door " + ToString(number);
 	SetName(name);
 
 	//create a new elevator door
@@ -269,13 +269,13 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 		}
 		if (AreShaftDoorsOpen(floor) == true)
 		{
-			elev->Report("shaft doors" + GetNumberText() + " already open on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("shaft doors" + GetNumberText() + " already open on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			elev->Report("opening shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("opening shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			elev->Report("manually opening shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("manually opening shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
 		elev->Report("opening doors" + GetNumberText());
@@ -305,7 +305,7 @@ void ElevatorDoor::OpenDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		elev->ReportError("can't open doors" + GetNumberText() + " - no shaft doors on " + ToString2(floor));
+		elev->ReportError("can't open doors" + GetNumberText() + " - no shaft doors on " + ToString(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -382,13 +382,13 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 		}
 		if (AreShaftDoorsOpen(floor) == false && whichdoors == 3)
 		{
-			elev->ReportError("shaft doors" + GetNumberText() + " already closed on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->ReportError("shaft doors" + GetNumberText() + " already closed on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 			return;
 		}
 		else if (manual == false)
-			elev->Report("closing shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("closing shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 		else
-			elev->Report("manually closing shaft doors" + GetNumberText() + " on floor " + ToString2(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
+			elev->Report("manually closing shaft doors" + GetNumberText() + " on floor " + ToString(floor) + " (" + sbs->GetFloor(floor)->ID + ")");
 	}
 	else if (manual == false)
 		elev->Report("closing doors" + GetNumberText());
@@ -411,7 +411,7 @@ void ElevatorDoor::CloseDoors(int whichdoors, int floor, bool manual)
 	int index = GetManualIndex(floor);
 	if (whichdoors == 1 && ShaftDoorsExist(floor) == false && index == -1)
 	{
-		elev->ReportError("can't close doors" + GetNumberText() + " - no shaft doors on " + ToString2(floor));
+		elev->ReportError("can't close doors" + GetNumberText() + " - no shaft doors on " + ToString(floor));
 		OpenDoor = 0;
 		return;
 	}
@@ -432,7 +432,7 @@ void ElevatorDoor::StopDoors()
 	if (AreDoorsMoving(2) == true)
 	{
 		if (WhichDoors == 3)
-			elev->Report("stopping shaft doors" + GetNumberText() + " on floor " + ToString2(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
+			elev->Report("stopping shaft doors" + GetNumberText() + " on floor " + ToString(ShaftDoorFloor) + " (" + sbs->GetFloor(ShaftDoorFloor)->ID + ")");
 		else
 			elev->Report("stopping doors" + GetNumberText());
 
@@ -780,7 +780,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const std::string &nam
 	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "ElevatorDoor " + ToString2(elev->Number) + ":" + ToString2(Number) + ":" + Name;
+	buffer = "ElevatorDoor " + ToString(elev->Number) + ":" + ToString(Number) + ":" + Name;
 
 	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors;
@@ -806,7 +806,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 	std::string Name, buffer;
 	Name = name;
 	TrimString(Name);
-	buffer = "Elevator " + ToString2(elev->Number) + ": Shaft Door " + ToString2(Number) + ":" + ToString2(floor) + ":" + Name;
+	buffer = "Elevator " + ToString(elev->Number) + ": Shaft Door " + ToString(Number) + ":" + ToString(floor) + ":" + Name;
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
@@ -1459,9 +1459,9 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 
 	std::string name;
 	if (IsShaftDoor == true)
-		name = "Shaft Door " + ToString2(parent->Number) + ":" + ToString2(shaftdoor_floor);
+		name = "Shaft Door " + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
 	else
-		name = "Elevator Door " + ToString2(parent->Number);
+		name = "Elevator Door " + ToString(parent->Number);
 
 	SetValues(objparent, "DoorWrapper", name, false);
 
@@ -1569,7 +1569,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		old_difference = tempposition - temporigin;
 
 	//debug - show current section as function is running
-	//sbs->Report("Door section: " + ToString2(door_section));
+	//sbs->Report("Door section: " + ToString(door_section));
 
 	if (parent->door_changed == false && door_section == 0)
 	{
@@ -1797,7 +1797,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	}
 
 	//report on what section preceded the finishing code (should be 4)
-	//sbs->Report("Door section: " + ToString2(door_section));
+	//sbs->Report("Door section: " + ToString(door_section));
 
 	//place doors in positions (fixes any overrun errors)
 	Reset(open);
@@ -2063,8 +2063,8 @@ void ElevatorDoor::CheckSensor()
 void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
 {
 	//create action for elevator door
-	std::string action_name1 = "sensor " + ToString2(Number);
-	std::string action_name2 = "sensorreset " + ToString2(Number);
+	std::string action_name1 = "sensor " + ToString(Number);
+	std::string action_name2 = "sensorreset " + ToString(Number);
 	std::string full_name1 = elev->GetName() + ":" + action_name1;
 	std::string full_name2 = elev->GetName() + ":" + action_name2;
 
@@ -2226,7 +2226,7 @@ std::string ElevatorDoor::GetNumberText()
 
 	std::string doornumber;
 	if (elev->NumDoors > 1)
-		doornumber = " " + ToString2(Number);
+		doornumber = " " + ToString(Number);
 
 	return doornumber;
 }

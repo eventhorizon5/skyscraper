@@ -70,7 +70,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 
 	//create object mesh
 	std::string base, buffer;
-	base = "Directional Indicator " + ToString2(elevator) + ":" + ToString2(floor);
+	base = "Directional Indicator " + ToString(elevator) + ":" + ToString(floor);
 	buffer = base + ":Back";
 	SetName(base);
 	DirectionalMeshBack = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));

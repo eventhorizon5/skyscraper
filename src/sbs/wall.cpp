@@ -149,7 +149,7 @@ std::string WallObject::ProcessName(const std::string &name)
 		name_modified.erase(0, (int)name_modified.find(")") + 1);
 
 	//construct name
-	std::string newname = "(" + ToString2(GetNumber()) + ")" + name_modified;
+	std::string newname = "(" + ToString(GetNumber()) + ")" + name_modified;
 	return newname;
 }
 

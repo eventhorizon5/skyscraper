@@ -271,7 +271,7 @@ bool Trigger::Check()
 		std::string name = GetPositionAction(GetNextSelectPosition());
 
 		//exit without changing position if floor button is currently selected
-		if (name == "off" && IsNumeric(GetSelectPositionAction().c_str()) == true)
+		if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
 			return false;
 
 		//change to next control position
@@ -282,7 +282,7 @@ bool Trigger::Check()
 
 		//play sound if action succeeded
 		//or always if the name is numeric (elevator is on the same floor, and doors are reopened)
-		if (result == true || IsNumeric(name.c_str()))
+		if (result == true || IsNumeric(name))
 			PlaySound();
 
 		//change back to original selection if result is false

@@ -66,7 +66,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfl
 	InElevator = false;
 	ShowFloorsFull_Enabled = false;
 
-	std::string name = "Shaft " + ToString2(number);
+	std::string name = "Shaft " + ToString(number);
 
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->Altitude, CenterZ);
@@ -81,7 +81,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfl
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create shaft meshes
-		std::string buffer = name + ":" + ToString2(i);
+		std::string buffer = name + ":" + ToString(i);
 		ShaftArray[i - startfloor] = new MeshObject(this, buffer);
 		ShaftArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->Altitude);
 		EnableArray[i - startfloor] = true;
@@ -180,7 +180,7 @@ WallObject* Shaft::AddWall(int floor, const std::string &name, const std::string
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddWall: Floor " + ToString(floor) + " out of range");
 		return 0;
 	}
 
@@ -193,7 +193,7 @@ bool Shaft::AddWall(WallObject *wall, int floor, const std::string &name, const 
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
-		return ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
+		return ReportError("AddWall: Floor " + ToString(floor) + " out of range");
 
 	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
@@ -203,7 +203,7 @@ WallObject* Shaft::AddFloor(int floor, const std::string &name, const std::strin
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
 		return 0;
 	}
 
@@ -216,7 +216,7 @@ bool Shaft::AddFloor(WallObject *wall, int floor, const std::string &name, const
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
-		return ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
+		return ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
 
 	//get shaft extents
 	float altitude = sbs->GetFloor(floor)->Altitude;
@@ -437,9 +437,9 @@ bool Shaft::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			ReportError("Cut: Floor " + ToString2(floor) + " out of range");
+			ReportError("Cut: Floor " + ToString(floor) + " out of range");
 		else
-			sbs->LastError = "Cut: Floor " + ToString2(floor) + " out of range";
+			sbs->LastError = "Cut: Floor " + ToString(floor) + " out of range";
 		return false;
 	}
 
@@ -748,13 +748,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 void Shaft::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Shaft " + ToString2(ShaftNumber) + ": " + message);
+	sbs->Report("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
 bool Shaft::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Shaft " + ToString2(ShaftNumber) + ": " + message);
+	return sbs->ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
 Light* Shaft::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
@@ -862,7 +862,7 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddDoor: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddDoor: Floor " + ToString(floor) + " out of range");
 		return 0;
 	}
 

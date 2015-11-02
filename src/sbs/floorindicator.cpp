@@ -46,7 +46,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 	//move object
 	Move(CenterX, voffset, CenterZ);
 
-	std::string name = "Floor Indicator " + ToString2(elevator);
+	std::string name = "Floor Indicator " + ToString(elevator);
 	SetName(name);
 	FloorIndicatorMesh = new MeshObject(this, name, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 

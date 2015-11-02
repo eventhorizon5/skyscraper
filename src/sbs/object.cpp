@@ -80,7 +80,7 @@ Object::~Object()
 		Parent->RemoveChild(this);
 
 	sbs->UnregisterObject(Number);
-	sbs->Report("Deleted object " + ToString2(Number) + ": " + Name);
+	sbs->Report("Deleted object " + ToString(Number) + ": " + Name);
 }
 
 void Object::SetValues(Object *parent, const std::string &type, const std::string &name, bool is_permanent, bool is_movable)
@@ -98,7 +98,7 @@ void Object::SetValues(Object *parent, const std::string &type, const std::strin
 	Name = name;
 
 	//set up scene node
-	std::string node_name = "(" + ToString2(GetNumber()) + ")" + Name;
+	std::string node_name = "(" + ToString(GetNumber()) + ")" + Name;
 
 	//create scene node
 	if (sbs->mSceneManager && is_movable)
@@ -439,7 +439,7 @@ void Object::ChangeParent(Object *new_parent)
 	Parent = new_parent;
 	Parent->AddChild(this);
 
-	sbs->Report("Changed parent of object '" + ToString2(Number) + ": " + Name + "' to '" + ToString2(new_parent->GetNumber()) + ": " + new_parent->GetName() + "'");
+	sbs->Report("Changed parent of object '" + ToString(Number) + ": " + Name + "' to '" + ToString(new_parent->GetNumber()) + ": " + new_parent->GetName() + "'");
 }
 
 bool Object::IsGlobal()

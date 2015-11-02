@@ -1862,7 +1862,7 @@ void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 {
 	Simcore->DeleteColliders = true;
 	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
-	processor->LoadFromText(command.ToAscii());
+	processor->LoadFromText(std::string(command.ToAscii()));
 	this->Close();
 }
 

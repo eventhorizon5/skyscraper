@@ -161,7 +161,7 @@ private:
 	Ogre::Rectangle2D* background_rect;
 	Ogre::SceneNode* background_node;
 	std::string background_image;
-	void DrawImage(const char *filename, buttondata *button, float x, float y, bool center, const char *filename_selected = 0, const char *filename_pressed = 0);
+	void DrawImage(const std::string &filename, buttondata *button, float x, float y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
 	void Click(int index);
 	void UnloadSim();
 	void DeleteButtons();

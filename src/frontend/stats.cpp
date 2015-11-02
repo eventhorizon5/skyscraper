@@ -263,9 +263,9 @@ void Stats::Loop()
 	tTextures->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
 	tActions->SetValue(wxVariant(Simcore->GetActionCount()).GetString());
 	tSounds->SetValue(wxVariant(Simcore->GetSoundCount()).GetString());
-	tInStairwell->SetValue(wxString::FromAscii(BoolToString(Simcore->InStairwell)));
-	tInElevator->SetValue(wxString::FromAscii(BoolToString(Simcore->InElevator)));
-	tInShaft->SetValue(wxString::FromAscii(BoolToString(Simcore->InShaft)));
+	tInStairwell->SetValue(wxString::FromAscii(BoolToString(Simcore->InStairwell).c_str()));
+	tInElevator->SetValue(wxString::FromAscii(BoolToString(Simcore->InElevator).c_str()));
+	tInShaft->SetValue(wxString::FromAscii(BoolToString(Simcore->InShaft).c_str()));
 	tRunningTime->SetValue(TruncateNumber(Simcore->running_time, 2));
 	tObjects->SetValue(wxVariant(Simcore->GetObjectCount()).GetString());
 	tWalls->SetValue(wxVariant(Simcore->GetWallCount()).GetString());

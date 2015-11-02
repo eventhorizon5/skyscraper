@@ -3032,7 +3032,7 @@ bool SBS::DeleteObject(Object *object)
 			if (shaft)
 			{
 				if (shaft->IsValidFloor(floor->Number) == true)
-					return ReportError("Cannot delete floor " + ToString2(floor->Number) + " - in use by shaft " + ToString2(shaft->ShaftNumber));
+					return ReportError("Cannot delete floor " + ToString(floor->Number) + " - in use by shaft " + ToString(shaft->ShaftNumber));
 			}
 		}
 
@@ -3043,7 +3043,7 @@ bool SBS::DeleteObject(Object *object)
 			if (stairs)
 			{
 				if (stairs->IsValidFloor(floor->Number) == true)
-					return ReportError("Cannot delete floor " + ToString2(floor->Number) + " - in use by stairwell " + ToString2(stairs->StairsNum));
+					return ReportError("Cannot delete floor " + ToString(floor->Number) + " - in use by stairwell " + ToString(stairs->StairsNum));
 			}
 		}
 
@@ -3081,7 +3081,7 @@ bool SBS::DeleteObject(Object *object)
 			if (elev)
 			{
 				if (elev->AssignedShaft == shaft->ShaftNumber)
-					return ReportError("Cannot delete shaft " + ToString2(shaft->ShaftNumber) + " - in use by elevator " + ToString2(elev->Number));
+					return ReportError("Cannot delete shaft " + ToString(shaft->ShaftNumber) + " - in use by elevator " + ToString(elev->Number));
 			}
 		}
 
@@ -3513,7 +3513,7 @@ void SBS::AddModel(Model *model)
 
 int SBS::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
@@ -3524,13 +3524,13 @@ std::string SBS::GetConfigString(const std::string &key, const std::string &defa
 
 bool SBS::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
 float SBS::GetConfigFloat(const std::string &key, float default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString2(default_value));
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
 	return Ogre::StringConverter::parseReal(result);
 }
 
@@ -3626,13 +3626,13 @@ std::string SBS::GetMountPath(const std::string &filename, std::string &newfilen
 	for (int i = 0; i < (int)list.size(); i++)
 	{
 		std::string check = file + "/";
-		if (StartsWith(check, list[i].c_str()) == true)
+		if (StartsWith(check, list[i]) == true)
 		{
 			newfilename = file.substr(list[i].size() + 1);
 			return list[i];
 		}
 		check = file + "\\";
-		if (StartsWith(check, list[i].c_str()) == true)
+		if (StartsWith(check, list[i]) == true)
 		{
 			newfilename = file.substr(list[i].size() + 1);
 			return list[i];
@@ -3891,7 +3891,7 @@ std::vector<Object*> SBS::GetObjectRange(const std::string &expression)
 		TrimString(str1);
 		TrimString(str2);
 		int RangeL = 0, RangeH = 0;
-		if (!IsNumeric(str1.c_str(), RangeL) || !IsNumeric(str2.c_str(), RangeH))
+		if (!IsNumeric(str1, RangeL) || !IsNumeric(str2, RangeH))
 		{
 			ReportError("GetObjectRange: Invalid range");
 			return objects;
@@ -4099,12 +4099,12 @@ void SBS::ListVisibleMeshes()
 		if (camera->IsMeshVisible(meshes[i]) == true)
 		{
 			submeshes = meshes[i]->GetSubmeshCount();
-			Report(meshes[i]->name + "\t-\t" + ToString2(submeshes));
+			Report(meshes[i]->name + "\t-\t" + ToString(submeshes));
 			count++;
 			total += submeshes;
 		}
 	}
-	Report("Total: " + ToString2(count) + " meshes, " + ToString2(total) + " submeshes");
+	Report("Total: " + ToString(count) + " meshes, " + ToString(total) + " submeshes");
 	Report("");
 }
 

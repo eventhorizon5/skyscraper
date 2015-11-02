@@ -51,7 +51,7 @@ class Console: public wxFrame
 		wxButton* bSend;
 		wxTextCtrl* tCommand;
 		//*)
-		void Write(const char *message);
+		void Write(const std::string &message);
 
 	protected:
 

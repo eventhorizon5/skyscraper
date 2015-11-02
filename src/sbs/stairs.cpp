@@ -55,7 +55,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int end
 	ShowFullStairs = false;
 
 	std::string name;
-	name = "Stairwell " + ToString2(number);
+	name = "Stairwell " + ToString(number);
 	SetName(name);
 	SetPosition(CenterX, sbs->GetFloor(startfloor)->GetBase(), CenterZ);
 
@@ -68,7 +68,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int end
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create stairwell meshes
-		std::string buffer = name + ":" + ToString2(i);
+		std::string buffer = name + ":" + ToString(i);
 		StairArray[i - startfloor] = new MeshObject(this, buffer);
 		StairArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->GetBase());
 		EnableArray[i - startfloor] = true;
@@ -168,7 +168,7 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddStairs: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddStairs: Floor " + ToString(floor) + " out of range");
 		return 0;
 	}
 
@@ -189,7 +189,7 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 	for (int i = 1; i <= num_stairs; i++)
 	{
 		float pos = 0;
-		std::string base = Name + " " + ToString2(i);
+		std::string base = Name + " " + ToString(i);
 		std::string buffer;
 
 		float thickness = 0;
@@ -208,12 +208,12 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.c_str(), texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, pos + treadsize, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.c_str(), texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, pos, -(width / 2) + CenterZ, pos + treadsize, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "left")
@@ -224,12 +224,12 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.c_str(), texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, pos - treadsize, (width / 2) + CenterZ, pos - treadsize, -(width / 2) + CenterZ, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.c_str(), texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, pos - treadsize, -(width / 2) + CenterZ, pos, (width / 2) + CenterZ, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "back")
@@ -240,12 +240,12 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.c_str(), texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, (width / 2) + CenterX, pos + treadsize, -(width / 2) + CenterX, pos + treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.c_str(), texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos, (width / 2) + CenterX, pos + treadsize, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 		if (Direction == "front")
@@ -256,12 +256,12 @@ WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::str
 				sbs->DrawWalls(true, true, true, true, false, true);
 			else
 				sbs->DrawWalls(true, true, false, false, false, false);
-			AddWall(wall, floor, buffer.c_str(), texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
+			AddWall(wall, floor, buffer, texture, thickness, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos - treadsize, risersize, risersize, voffset + (risersize * (i - 1)), voffset + (risersize * (i - 1)), tw, th);
 			buffer = base + "-tread";
 			if (i != num_stairs)
 			{
 				sbs->DrawWalls(false, true, false, false, false, false);
-				AddFloor(wall, floor, buffer.c_str(), texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
+				AddFloor(wall, floor, buffer, texture, 0, -(width / 2) + CenterX, pos - treadsize, (width / 2) + CenterX, pos, voffset + (risersize * i), voffset + (risersize * i), false, false, tw, th);
 			}
 		}
 	}
@@ -276,7 +276,7 @@ WallObject* Stairs::AddWall(int floor, const std::string &name, const std::strin
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddWall: Floor " + ToString(floor) + " out of range");
 		return 0;
 	}
 
@@ -289,7 +289,7 @@ bool Stairs::AddWall(WallObject *wall, int floor, const std::string &name, const
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
-		return ReportError("AddWall: Floor " + ToString2(floor) + " out of range");
+		return ReportError("AddWall: Floor " + ToString(floor) + " out of range");
 
 	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
@@ -299,7 +299,7 @@ WallObject* Stairs::AddFloor(int floor, const std::string &name, const std::stri
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
 		return 0;
 	}
 
@@ -312,7 +312,7 @@ bool Stairs::AddFloor(WallObject *wall, int floor, const std::string &name, cons
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
-		return ReportError("AddFloor: Floor " + ToString2(floor) + " out of range");
+		return ReportError("AddFloor: Floor " + ToString(floor) + " out of range");
 
 	return sbs->AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, voffset1, voffset2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 }
@@ -449,7 +449,7 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
 	{
-		ReportError("AddDoor: Floor " + ToString2(floor) + " out of range");
+		ReportError("AddDoor: Floor " + ToString(floor) + " out of range");
 		return 0;
 	}
 
@@ -555,9 +555,9 @@ bool Stairs::Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogr
 	if (IsValidFloor(floor) == false)
 	{
 		if (sbs->Verbose)
-			ReportError("Cut: Floor " + ToString2(floor) + " out of range");
+			ReportError("Cut: Floor " + ToString(floor) + " out of range");
 		else
-			sbs->LastError = "Cut: Floor " + ToString2(floor) + " out of range";
+			sbs->LastError = "Cut: Floor " + ToString(floor) + " out of range";
 		return false;
 	}
 
@@ -677,13 +677,13 @@ bool Stairs::IsValidFloor(int floor)
 void Stairs::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Stairwell " + ToString2(StairsNum) + ": " + message);
+	sbs->Report("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
 bool Stairs::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Stairwell " + ToString2(StairsNum) + ": " + message);
+	return sbs->ReportError("Stairwell " + ToString(StairsNum) + ": " + message);
 }
 
 void Stairs::RemoveDoor(Door *door)

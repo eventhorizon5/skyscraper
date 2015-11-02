@@ -184,7 +184,7 @@ bool Action::Run(Object *caller, Object *parent)
 	sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");
 
 	//numeric commands for elevator floor selections
-	if (IsNumeric(command_name.c_str()) == true && elevator)
+	if (IsNumeric(command_name) == true && elevator)
 	{
 		int floor = atoi(command_name.c_str());
 		return elevator->SelectFloor(floor);
@@ -478,7 +478,7 @@ bool Action::Run(Object *caller, Object *parent)
 			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
-				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
 					return elevator->OpenDoors(param1, 3, param2, false);
 			}
 			return false;
@@ -488,7 +488,7 @@ bool Action::Run(Object *caller, Object *parent)
 			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
-				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
 				{
 					elevator->CloseDoors(param1, 3, param2, false);
 					return true;
@@ -501,7 +501,7 @@ bool Action::Run(Object *caller, Object *parent)
 			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
-				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
 					return elevator->OpenDoors(param1, 3, param2, true);
 			}
 			return false;
@@ -511,7 +511,7 @@ bool Action::Run(Object *caller, Object *parent)
 			if ((int)command_parameters.size() == 2)
 			{
 				int param1 = 0, param2 = 0;
-				if (IsNumeric(command_parameters[0].c_str(), param1) && IsNumeric(command_parameters[1].c_str(), param2))
+				if (IsNumeric(command_parameters[0], param1) && IsNumeric(command_parameters[1], param2))
 				{
 					elevator->CloseDoors(param1, 3, param2, true);
 					return true;
@@ -583,14 +583,14 @@ bool Action::Run(Object *caller, Object *parent)
 			else if (parent_type == "Floor")
 			{
 				if (floor)
-					soundlist = floor->GetSound(command_parameters[0].c_str());
+					soundlist = floor->GetSound(command_parameters[0]);
 				else
 					return false;
 			}
 			else if (parent_type == "Elevator")
 			{
 				if (elevator)
-					soundlist = elevator->GetSound(command_parameters[0].c_str());
+					soundlist = elevator->GetSound(command_parameters[0]);
 				else
 					return false;
 			}
@@ -631,14 +631,14 @@ bool Action::Run(Object *caller, Object *parent)
 			else if (parent_type == "Floor")
 			{
 				if (floor)
-					soundlist = floor->GetSound(command_parameters[0].c_str());
+					soundlist = floor->GetSound(command_parameters[0]);
 				else
 					return false;
 			}
 			else if (parent_type == "Elevator")
 			{
 				if (elevator)
-					soundlist = elevator->GetSound(command_parameters[0].c_str());
+					soundlist = elevator->GetSound(command_parameters[0]);
 				else
 					return false;
 			}

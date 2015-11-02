@@ -38,7 +38,7 @@ Floor::Floor(int number)
 
 	//Set floor's object number
 	Number = number;
-	std::string num = ToString2(Number);
+	std::string num = ToString(Number);
 	SetName(std::string("Floor " + num));
 
 	//Create primary level mesh
@@ -650,7 +650,7 @@ Door* Floor::AddDoor(const std::string &open_sound, const std::string &close_sou
 		CutAll(Ogre::Vector3(x1, GetBase(true) + voffset, z1 - 1), Ogre::Vector3(x2, GetBase(true) + voffset + height, z2 + 1), true, false);
 
 	int number = (int)DoorArray.size();
-	std::string name = "Floor " + ToString2(Number) + ":Door " + ToString2(number);
+	std::string name = "Floor " + ToString(Number) + ":Door " + ToString(number);
 	Door* door = new Door(this, name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, GetBase(true) + voffset, tw, th);
 	DoorArray.push_back(door);
 	return door;
@@ -947,13 +947,13 @@ std::vector<Sound*> Floor::GetSound(const std::string &name)
 void Floor::Report(std::string message)
 {
 	//general reporting function
-	sbs->Report("Floor " + ToString2(Number) + ": " + message);
+	sbs->Report("Floor " + ToString(Number) + ": " + message);
 }
 
 bool Floor::ReportError(std::string message)
 {
 	//general reporting function
-	return sbs->ReportError("Floor " + ToString2(Number) + ": " + message);
+	return sbs->ReportError("Floor " + ToString(Number) + ": " + message);
 }
 
 float Floor::GetBase(bool relative)
@@ -1369,16 +1369,16 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 
 	if (detailed == true)
 	{
-		sbs->Report("Number: " + ToString2(Number));
+		sbs->Report("Number: " + ToString(Number));
 		sbs->Report("ID: " + ID);
 		sbs->Report("Name: " + Name);
 		sbs->Report("Type: " + FloorType);
 		sbs->Report("Description: " + Description);
-		sbs->Report("Height: " + ToString2(Height));
-		sbs->Report("InterfloorHeight: " + ToString2(InterfloorHeight));
-		sbs->Report("FullHeight: " + ToString2(FullHeight()));
-		sbs->Report("Altitude: " + ToString2(Altitude));
-		sbs->Report("Base: " + ToString2(GetBase()));
+		sbs->Report("Height: " + ToString(Height));
+		sbs->Report("InterfloorHeight: " + ToString(InterfloorHeight));
+		sbs->Report("FullHeight: " + ToString(FullHeight()));
+		sbs->Report("Altitude: " + ToString(Altitude));
+		sbs->Report("Base: " + ToString(GetBase()));
 
 		std::vector<int> elevator_list, stairs_list, shaft_list;
 		GetElevatorList(elevator_list);
@@ -1388,7 +1388,7 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 		std::string elevs;
 		for (int i = 0; i < (int)elevator_list.size(); i++)
 		{
-			elevs += ToString2(elevator_list[i]);
+			elevs += ToString(elevator_list[i]);
 			if (i < (int)elevator_list.size() - 1)
 				elevs += ", ";
 		}
@@ -1397,7 +1397,7 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 		std::string stairs;
 		for (int i = 0; i < (int)stairs_list.size(); i++)
 		{
-			stairs += ToString2(stairs_list[i]);
+			stairs += ToString(stairs_list[i]);
 			if (i < (int)stairs_list.size() - 1)
 				stairs += ", ";
 		}
@@ -1406,7 +1406,7 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 		std::string shafts;
 		for (int i = 0; i < (int)shaft_list.size(); i++)
 		{
-			shafts += ToString2(shaft_list[i]);
+			shafts += ToString(shaft_list[i]);
 			if (i < (int)shaft_list.size() - 1)
 				shafts += ", ";
 		}
@@ -1420,7 +1420,7 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 		if (display_header == true)
 			sbs->Report("Number(ID)\t----\tName\t----\tType\t----\tHeight\t----\tIFloorHeight\t----\tAltitude\t----\tBase\t----\tDescription");
 
-		sbs->Report(ToString2(Number) + "(" + ID + ")\t----\t" + Name + "\t----\t" + FloorType + "\t----\t" + ToString2(Height) + "\t----\t" + ToString2(InterfloorHeight) + "\t----\t" + ToString2(Altitude) + "\t----\t" + ToString2(GetBase()) + "\t----\t" + Description);
+		sbs->Report(ToString(Number) + "(" + ID + ")\t----\t" + Name + "\t----\t" + FloorType + "\t----\t" + ToString(Height) + "\t----\t" + ToString(InterfloorHeight) + "\t----\t" + ToString(Altitude) + "\t----\t" + ToString(GetBase()) + "\t----\t" + Description);
 	}
 }
 

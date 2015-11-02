@@ -57,30 +57,29 @@
 
 SBSIMPEXP bool IsEven(int Number);
 SBSIMPEXP bool IsNumeric(char character);
-SBSIMPEXP bool IsNumeric(const char *string);
-SBSIMPEXP bool IsNumeric(const char *string, int &number);
-SBSIMPEXP bool IsNumeric(const char *string, float &number);
-SBSIMPEXP const char *BoolToString(bool item);
+SBSIMPEXP bool IsNumeric(const std::string &string);
+SBSIMPEXP bool IsNumeric(const std::string &string, int &number);
+SBSIMPEXP bool IsNumeric(const std::string &string, float &number);
+SBSIMPEXP std::string BoolToString(bool item);
 SBSIMPEXP float RadiansToDegrees(float radians);
 SBSIMPEXP float DegreesToRadians(float degrees);
 SBSIMPEXP float Min3(float a, float b, float c);
 SBSIMPEXP float Max3(float a, float b, float c);
-SBSIMPEXP const char* SetCaseCopy(const char *string, bool uppercase);
 SBSIMPEXP std::string SetCaseCopy(std::string string, bool uppercase);
 SBSIMPEXP void SetCase(std::string &string, bool uppercase);
-SBSIMPEXP int FindWithCase(const char *string, bool uppercase, const char *key, int offset);
+SBSIMPEXP int FindWithCase(const std::string &string, bool uppercase, const std::string &key, int offset);
 SBSIMPEXP void TrimString(std::string &string);
-SBSIMPEXP void ReplaceAll(std::string &string, const char *original, const char *replacement);
-SBSIMPEXP bool StartsWith(std::string &string, const char *check_string, bool ignore_case = false);
-SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const char *original_string, char separator);
-SBSIMPEXP const char* ToString(int number);
-SBSIMPEXP std::string ToString2(int number);
-SBSIMPEXP const char* ToString(float number);
-SBSIMPEXP std::string ToString2(float number);
+SBSIMPEXP void ReplaceAll(std::string &string, const std::string &original, const std::string &replacement);
+SBSIMPEXP bool StartsWith(std::string &string, const std::string &check_string, bool ignore_case = false);
+SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const std::string &original_string, char separator);
+SBSIMPEXP std::string ToString(int number);
+SBSIMPEXP std::string ToString(float number);
 SBSIMPEXP float Log2(float number);
 SBSIMPEXP float Round(float number, int decimal_places = 0);
 SBSIMPEXP Ogre::Vector3 Round(const Ogre::Vector3 &value, int decimal_places = 0);
 SBSIMPEXP Ogre::Vector2 Round(const Ogre::Vector2 &value, int decimal_places = 0);
 SBSIMPEXP bool IsBoolean(std::string string);
+SBSIMPEXP float ToFloat(const std::string &string);
+SBSIMPEXP int ToInt(const std::string &string);
 
 #endif

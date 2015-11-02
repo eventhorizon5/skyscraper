@@ -162,7 +162,7 @@ void Escalator::CreateSteps(const std::string &texture, const std::string &direc
 	for (int i = 1; i <= num_steps; i++)
 	{
 		float pos = 0;
-		std::string base = Name + " " + ToString2(i);
+		std::string base = Name + " " + ToString(i);
 		std::string buffer;
 
 		//create wall object

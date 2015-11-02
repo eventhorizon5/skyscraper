@@ -719,7 +719,7 @@ void Skyscraper::GetInput()
 		int faces = (int)mRoot->getRenderSystem()->_getFaceCount();
 		int vertices = (int)mRoot->getRenderSystem()->_getVertexCount();
 
-		Report("FPS: " + ToString2(Simcore->FPS) + " - Batches: " + ToString2(batches) + " - Faces: " + ToString2(faces) + " - Vertices: " + ToString2(vertices));
+		Report("FPS: " + ToString(Simcore->FPS) + " - Batches: " + ToString(batches) + " - Faces: " + ToString(faces) + " - Vertices: " + ToString(vertices));
 		wait = true;
 	}
 
@@ -1133,7 +1133,7 @@ void Skyscraper::DrawBackground()
 {
 	//draw menu background
 
-	DrawImage(std::string("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png")).c_str(), 0, -1, -1, false);
+	DrawImage(std::string("data/" + GetConfigString("Skyscraper.Frontend.Menu.Image", "menu.png")), 0, -1, -1, false);
 
 	if (buttoncount == 0)
 	{
@@ -1212,11 +1212,11 @@ void Skyscraper::DrawBackground()
 			center = GetConfigBool("Skyscraper.Frontend.Menu.Button" + number + ".Center", true);
 		}
 
-		DrawImage(b1.c_str(), &buttons[i], x, y, center, b2.c_str(), b3.c_str());
+		DrawImage(b1, &buttons[i], x, y, center, b2, b3);
 	}
 }
 
-void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, float y, bool center, const char *filename_selected, const char *filename_pressed)
+void Skyscraper::DrawImage(const std::string &filename, buttondata *button, float x, float y, bool center, const std::string &filename_selected, const std::string &filename_pressed)
 {
 	//X and Y represent the image's top-left location.
 	//values are -1 for the top left, 1 for the top right, -1 for the top, and 1 for the bottom
@@ -1229,7 +1229,7 @@ void Skyscraper::DrawImage(const char *filename, buttondata *button, float x, fl
 	std::string material = "";
 	std::string Filename = filename;
 
-	if (!filename)
+	if (filename == "")
 		return;
 
 	//exit if background has already been drawn
@@ -1680,7 +1680,7 @@ bool Skyscraper::Load()
 
 	processor->Reset();
 
-	if (!processor->LoadDataFile(BuildingFile.c_str()))
+	if (!processor->LoadDataFile(BuildingFile))
 	{
 		Unload();
 		return false;
@@ -1708,7 +1708,7 @@ bool Skyscraper::Start()
 
 	//create old sky if Caelum is turned off, or failed to initialize
 	if (sky_result == false)
-		Simcore->CreateSky(Simcore->SkyName.c_str());
+		Simcore->CreateSky(Simcore->SkyName);
 
 	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
 	Simcore->Prepare();
@@ -2026,7 +2026,7 @@ void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLeve
 	//callback function that receives OGRE log messages
 	if (console)
 	{
-		console->Write(message.c_str());
+		console->Write(message);
 		console->Update();
 	}
 }

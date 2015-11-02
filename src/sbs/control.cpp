@@ -321,7 +321,7 @@ int Control::FindNumericActionPosition()
 
 	for (int i = 1; i <= GetPositions(); i++)
 	{
-		if (IsNumeric(GetPositionAction(i).c_str()))
+		if (IsNumeric(GetPositionAction(i)))
 			return i;
 	}
 
@@ -340,7 +340,7 @@ bool Control::DoAction()
 	else if ((int)Actions.size() > 0)
 		actionlist.push_back(Actions[current_position - 1]);
 	else
-		return sbs->ReportError("No available actions for control '" + std::string(GetName()) + "'");
+		return sbs->ReportError("No available actions for control '" + GetName() + "'");
 
 	bool result = false;
 	for (int i = 0; i < (int)actionlist.size(); i++)
@@ -363,7 +363,7 @@ bool Control::Press(bool reverse)
 
 	//check lock state
 	if (IsLocked() == true)
-		return sbs->ReportError("Control '" + std::string(GetName()) + "' is locked");
+		return sbs->ReportError("Control '" + GetName() + "' is locked");
 
 	//get action name of next position state
 	std::string name;
@@ -373,7 +373,7 @@ bool Control::Press(bool reverse)
 		name = GetPositionAction(GetPreviousSelectPosition());
 
 	//exit without changing position if floor button is currently selected
-	if (name == "off" && IsNumeric(GetSelectPositionAction().c_str()) == true)
+	if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
 		return false;
 
 	//change to next control position
@@ -387,7 +387,7 @@ bool Control::Press(bool reverse)
 
 	//play sound if action succeeded
 	//or always if the name is numeric (elevator is on the same floor, and doors are reopened)
-	if (result == true || IsNumeric(name.c_str()))
+	if (result == true || IsNumeric(name))
 		PlaySound();
 
 	//change back to original selection if result is false
@@ -458,15 +458,15 @@ bool Control::ToggleLock(bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock control '" + std::string(GetName()) + "'");
+			return sbs->ReportError("Need key " + ToString(KeyID) + " to lock/unlock control '" + GetName() + "'");
 	}
 
 	Locked = !Locked;
 
 	if (Locked == true)
-		sbs->Report("Locked control '" + std::string(GetName()) + "'");
+		sbs->Report("Locked control '" + GetName() + "'");
 	else
-		sbs->Report("Unlocked control '" + std::string(GetName()) + "'");
+		sbs->Report("Unlocked control '" + GetName() + "'");
 
 	return true;
 }

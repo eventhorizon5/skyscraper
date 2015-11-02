@@ -471,13 +471,13 @@ void CameraControl::Loop()
 	txtDesiredAngle->SetValue(TruncateNumber(Simcore->camera->desired_angle_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->desired_angle_velocity.z, 2));
 	txtAngle->SetValue(TruncateNumber(Simcore->camera->angle_velocity.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->angle_velocity.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->angle_velocity.z, 2));
 	txtSpeed->SetValue(TruncateNumber(Simcore->camera->speed, 2));
-	txtMouseDown->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->MouseDown)));
+	txtMouseDown->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->MouseDown).c_str()));
 	txtStartFloor->SetValue(wxVariant((long)Simcore->camera->StartFloor).GetString());
 	txtStartPosition->SetValue(TruncateNumber(Simcore->camera->StartPositionX, 2) + wxT(", ") + TruncateNumber(Simcore->camera->StartPositionZ, 2));
-	txtGravityEnabled->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->GetGravityStatus())));
-	txtCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->CollisionsEnabled())));
-	txtReportCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->ReportCollisions)));
-	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook)));
+	txtGravityEnabled->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->GetGravityStatus()).c_str()));
+	txtCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->CollisionsEnabled()).c_str()));
+	txtReportCollisions->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->ReportCollisions).c_str()));
+	txtFreelook->SetValue(wxString::FromAscii(BoolToString(Simcore->camera->Freelook).c_str()));
 	lblPosition->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
 	lblRotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
 	txtFOV->SetValue(TruncateNumber(Simcore->camera->GetFOVAngle(), 4));

@@ -62,7 +62,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 
 	//create object mesh
 	std::string base, buffer;
-	base = "Call Panel " + ToString2(floornum) + ":" + ToString2(number);
+	base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
 	SetName(base);
 	CallButtonMeshBack = new MeshObject(this, base, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
@@ -447,7 +447,7 @@ bool CallButton::ServicesElevator(int elevator)
 		if (Elevators[i] == elevator)
 		{
 			if (sbs->Verbose)
-				Report("Services elevator " + ToString2(elevator));
+				Report("Services elevator " + ToString(elevator));
 			return true;
 		}
 	}
@@ -489,7 +489,7 @@ void CallButton::Loop(int direction)
 			if (elevator)
 			{
 				if (sbs->Verbose)
-					Report("Checking elevator " + ToString2(elevator->Number));
+					Report("Checking elevator " + ToString(elevator->Number));
 
 				//if elevator is closer than the previously checked one or we're starting the checks
 				if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
@@ -566,7 +566,7 @@ void CallButton::Loop(int direction)
 		return;
 
 	if (sbs->Verbose)
-		Report("Using elevator " + ToString2(elevator->Number));
+		Report("Using elevator " + ToString(elevator->Number));
 
 	//if closest elevator is already on the called floor, if call direction is the same, and if elevator is not idle
 	if (elevator->GetFloor() == GetFloor() && elevator->QueuePositionDirection == direction && elevator->IsIdle() == false && elevator->IsMoving == false)
@@ -613,14 +613,14 @@ void CallButton::Loop(int direction)
 void CallButton::Report(std::string message)
 {
 	//general reporting function
-	std::string msg = "Call button " + ToString2(GetFloor()) + ":" + ToString2(Number) + " - " + message;
+	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
 	sbs->Report(msg);
 }
 
 bool CallButton::ReportError(std::string message)
 {
 	//general reporting function
-	std::string msg = "Call button " + ToString2(GetFloor()) + ":" + ToString2(Number) + " - " + message;
+	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
 	return sbs->ReportError(msg);
 }
 
@@ -640,7 +640,7 @@ bool CallButton::ToggleLock(bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return ReportError("Need key " + ToString2(KeyID) + "to lock/unlock");
+			return ReportError("Need key " + ToString(KeyID) + "to lock/unlock");
 	}
 
 	Locked = !Locked;

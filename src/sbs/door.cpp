@@ -300,7 +300,7 @@ bool Door::ToggleLock(const Ogre::Vector3 &position, bool force)
 	if (KeyID != 0)
 	{
 		if (sbs->CheckKey(KeyID) == false && force == false)
-			return sbs->ReportError("Need key " + ToString2(KeyID) + " to lock/unlock door '" + GetName() + "'");
+			return sbs->ReportError("Need key " + ToString(KeyID) + " to lock/unlock door '" + GetName() + "'");
 	}
 
 	if (GetSide(position) == false)
