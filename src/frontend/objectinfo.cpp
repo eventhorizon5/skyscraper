@@ -298,7 +298,7 @@ void ObjectInfo::Loop()
 		tScriptCommand->SetValue(wxString::FromAscii(object->command.c_str()));
 		tScriptCommand2->SetValue(wxString::FromAscii(object->command_processed.c_str()));
 		tContext->SetValue(wxString::FromAscii(object->context.c_str()));
-		tPermanent->SetValue(wxString::FromAscii(BoolToString(object->IsPermanent())));
+		tPermanent->SetValue(wxString::FromAscii(BoolToString(object->IsPermanent()).c_str()));
 
 		SBS::Object *parent = object->GetParent();
 		if (parent)
