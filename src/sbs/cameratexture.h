@@ -33,9 +33,9 @@ class SBSIMPEXP CameraTexture : public Object
 public:
 
 	//functions
-	CameraTexture(Object *parent, const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation);
+	CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, float fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation);
 	~CameraTexture();
-	void LookAt(const Ogre::Vector3 point);
+	void LookAt(const Ogre::Vector3 &point);
 	void Enabled(bool value);
 
 private:

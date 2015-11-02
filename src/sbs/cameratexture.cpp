@@ -35,7 +35,7 @@
 
 namespace SBS {
 
-CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int quality, float fov, Ogre::Vector3 position, bool use_rotation, Ogre::Vector3 rotation)
+CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, float fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
 {
 	//creates a CameraTexture object
 
@@ -98,7 +98,7 @@ CameraTexture::CameraTexture(Object *parent, const char *name, bool enabled, int
 		sbs->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
 
 		if (sbs->Verbose)
-			sbs->Report("Created camera texture '" + std::string(GetName()) + "'");
+			sbs->Report("Created camera texture '" + GetName() + "'");
 	}
 	catch (Ogre::Exception &e)
 	{
@@ -127,7 +127,7 @@ CameraTexture::~CameraTexture()
 	}
 }
 
-void CameraTexture::LookAt(const Ogre::Vector3 point)
+void CameraTexture::LookAt(const Ogre::Vector3 &point)
 {
 	Ogre::Vector3 newpoint = sbs->ToRemote(point);
 	camera->lookAt(newpoint.x, newpoint.y, newpoint.z);

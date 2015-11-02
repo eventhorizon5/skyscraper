@@ -160,7 +160,7 @@ Stairs::~Stairs()
 		sbs->RemoveStairs(this);
 }
 
-WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, const char *direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
+WallObject* Stairs::AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th)
 {
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
@@ -271,7 +271,7 @@ WallObject* Stairs::AddStairs(int floor, const char *name, const char *texture, 
 	return wall;
 }
 
-WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+WallObject* Stairs::AddWall(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -285,7 +285,7 @@ WallObject* Stairs::AddWall(int floor, const char *name, const char *texture, fl
 	return wall;
 }
 
-bool Stairs::AddWall(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+bool Stairs::AddWall(WallObject *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -294,7 +294,7 @@ bool Stairs::AddWall(WallObject *wall, int floor, const char *name, const char *
 	return sbs->AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
-WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+WallObject* Stairs::AddFloor(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -308,7 +308,7 @@ WallObject* Stairs::AddFloor(int floor, const char *name, const char *texture, f
 	return wall;
 }
 
-bool Stairs::AddFloor(WallObject *wall, int floor, const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+bool Stairs::AddFloor(WallObject *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//exit with an error if floor is invalid
 	if (IsValidFloor(floor) == false)
@@ -442,7 +442,7 @@ bool Stairs::IsInStairwell(const Ogre::Vector3 &position)
 	return hit;
 }
 
-Door* Stairs::AddDoor(int floor, const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//add a door
 
@@ -763,7 +763,7 @@ void Stairs::RemoveTrigger(Trigger *trigger)
 	}*/
 }
 
-Light* Stairs::AddLight(int floor, const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* Stairs::AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
@@ -786,7 +786,7 @@ MeshObject* Stairs::GetMeshObject(int floor)
 	return StairArray[floor - startfloor];
 }
 
-Model* Stairs::AddModel(int floor, const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* Stairs::AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
 
@@ -824,7 +824,7 @@ void Stairs::AddModel(int floor, Model *model)
 	ModelArray[floor - startfloor].push_back(model);
 }
 
-Control* Stairs::AddControl(int floor, const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Stairs::AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 
@@ -839,7 +839,7 @@ Control* Stairs::AddControl(int floor, const char *name, const char *sound, cons
 	return control;
 }
 
-Trigger* Stairs::AddTrigger(int floor, const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Stairs::AddTrigger(int floor, const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//triggers are disabled for now
 
