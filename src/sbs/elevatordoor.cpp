@@ -671,7 +671,7 @@ void ElevatorDoor::MoveDoors(bool open, bool manual)
 	DoorIsRunning = false;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator position)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -713,7 +713,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoors(const char *lefttexture, const
 	return FinishDoors();
 }
 
-ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//creates a door component - finish with FinishDoor()
 
@@ -773,7 +773,7 @@ ElevatorDoor::DoorObject* ElevatorDoor::AddDoorComponent(DoorWrapper *wrapper, c
 	return door;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component; remake of AddDoors command
 
@@ -782,11 +782,11 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddDoorComponent(const char *name, cons
 	TrimString(Name);
 	buffer = "ElevatorDoor " + ToString2(elev->Number) + ":" + ToString2(Number) + ":" + Name;
 
-	AddDoorComponent(Doors, name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(Doors, name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return Doors;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a shaft door component; remake of AddShaftDoor command
 
@@ -810,11 +810,11 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 
 	Floor *floorobj = sbs->GetFloor(floor);
 
-	AddDoorComponent(ShaftDoors[index], name, buffer.c_str(), texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
+	AddDoorComponent(ShaftDoors[index], name, buffer, texture, sidetexture, thickness, direction, OpenSpeed, CloseSpeed, x1, z1, x2, z2, height, voffset, tw, th, side_tw, side_th);
 	return ShaftDoors[index];
 }
 
-void ElevatorDoor::AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void ElevatorDoor::AddShaftDoorsComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds shaft door components for all serviced floors; remake of AddShaftDoors command
 
@@ -1033,7 +1033,7 @@ bool ElevatorDoor::FinishShaftDoors(bool DoorWalls, bool TrackWalls)
 	return true;
 }
 
-bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+bool ElevatorDoor::AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoor/AddDoors function
@@ -1052,14 +1052,14 @@ bool ElevatorDoor::AddShaftDoors(const char *lefttexture, const char *righttextu
 	return true;
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float tw, float th)
 {
 	//compatibility version of AddShaftDoor; please use newer implementation instead
 
 	return AddShaftDoor(floor, lefttexture, righttexture, ShaftDoorThickness, ShaftDoorOrigin.x, ShaftDoorOrigin.z, 0, tw, th);
 }
 
-ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds a single elevator shaft door, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -1392,7 +1392,7 @@ bool ElevatorDoor::ShaftDoorsExist(int floor)
 	return false;
 }
 
-ElevatorDoor::DoorObject::DoorObject(const char *doorname, DoorWrapper *Wrapper, const char *Direction, float OpenSpeed, float CloseSpeed)
+ElevatorDoor::DoorObject::DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &Direction, float OpenSpeed, float CloseSpeed)
 {
 	name = doorname;
 	wrapper = Wrapper;
@@ -1483,7 +1483,7 @@ ElevatorDoor::DoorWrapper::~DoorWrapper()
 		parent->RemoveShaftDoor(this);
 }
 
-ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const char *doorname, const char *direction, float OpenSpeed, float CloseSpeed)
+ElevatorDoor::DoorObject* ElevatorDoor::DoorWrapper::CreateDoor(const std::string &doorname, const std::string &direction, float OpenSpeed, float CloseSpeed)
 {
 	//initialize a door component
 
@@ -2063,11 +2063,10 @@ void ElevatorDoor::CheckSensor()
 void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)
 {
 	//create action for elevator door
-	std::string elev_name = elev->GetName();
 	std::string action_name1 = "sensor " + ToString2(Number);
 	std::string action_name2 = "sensorreset " + ToString2(Number);
-	std::string full_name1 = elev_name + ":" + action_name1;
-	std::string full_name2 = elev_name + ":" + action_name2;
+	std::string full_name1 = elev->GetName() + ":" + action_name1;
+	std::string full_name2 = elev->GetName() + ":" + action_name2;
 
 	std::vector<Object*> parents;
 	parents.push_back(elev);

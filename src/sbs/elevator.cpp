@@ -2152,7 +2152,7 @@ void Elevator::FinishMove()
 	FinishedMove = true;
 }
 
-WallObject* Elevator::AddWall(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
+WallObject* Elevator::AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th)
 {
 	//Adds a wall with the specified dimensions
 
@@ -2161,7 +2161,7 @@ WallObject* Elevator::AddWall(const char *name, const char *texture, float thick
 	return wall;
 }
 
-WallObject* Elevator::AddFloor(const char *name, const char *texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+WallObject* Elevator::AddFloor(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
 	//Adds a floor with the specified dimensions and vertical offset
 
@@ -2170,7 +2170,7 @@ WallObject* Elevator::AddFloor(const char *name, const char *texture, float thic
 	return wall;
 }
 
-FloorIndicator* Elevator::AddFloorIndicator(const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator* Elevator::AddFloorIndicator(const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//Creates a floor indicator at the specified location
 
@@ -2442,7 +2442,7 @@ void Elevator::RemoveServicedFloor(int number)
 	}
 }
 
-ButtonPanel* Elevator::CreateButtonPanel(const char *texture, int rows, int columns, const char *direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
+ButtonPanel* Elevator::CreateButtonPanel(const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
 {
 	//create a new button panel object and store the pointer
 
@@ -2477,7 +2477,7 @@ float Elevator::GetJerkPosition()
 	return JerkPos;
 }
 
-void Elevator::SetFloorSkipText(const char *id)
+void Elevator::SetFloorSkipText(const std::string &id)
 {
 	//sets the text shown in the floor indicator while skipping floors (an express zone)
 
@@ -2497,10 +2497,10 @@ void Elevator::SetFloorSkipText(const char *id)
 	FloorSkipText = id;
 }
 
-const char* Elevator::GetFloorSkipText()
+std::string Elevator::GetFloorSkipText()
 {
 	//get the floor skip text
-	return FloorSkipText.c_str();
+	return FloorSkipText;
 }
 
 bool Elevator::IsServicedFloor(int floor)
@@ -3249,7 +3249,7 @@ int Elevator::GetBottomFloor()
 	return ServicedFloors[0];
 }
 
-void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create external directional indicators on all serviced floors
 
@@ -3263,7 +3263,7 @@ void Elevator::AddDirectionalIndicators(bool relative, bool active_direction, bo
 	}
 }
 
-DirectionalIndicator* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const char *BackTexture, const char *uptexture, const char *uptexture_lit, const char *downtexture, const char *downtexture_lit, float CenterX, float CenterZ, float voffset, const char *direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+DirectionalIndicator* Elevator::AddDirectionalIndicator(bool active_direction, bool single, bool vertical, const std::string &BackTexture, const std::string &uptexture, const std::string &uptexture_lit, const std::string &downtexture, const std::string &downtexture_lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
 {
 	//create a directional indicator inside the elevator
 
@@ -3637,7 +3637,7 @@ void Elevator::StopDoors(int number)
 	}
 }
 
-ElevatorDoor::DoorWrapper* Elevator::AddDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
+ElevatorDoor::DoorWrapper* Elevator::AddDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th)
 {
 	//adds elevator doors specified at a relative central position (off of elevator origin)
 	//if direction is false, doors are on the left/right side; otherwise front/back
@@ -3649,7 +3649,7 @@ ElevatorDoor::DoorWrapper* Elevator::AddDoors(int number, const char *lefttextur
 	return 0;
 }
 
-bool Elevator::AddShaftDoors(int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+bool Elevator::AddShaftDoors(int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds shaft's elevator doors specified at a relative central position (off of elevator origin)
 	//uses some parameters (width, height, direction) from AddDoors function
@@ -3661,7 +3661,7 @@ bool Elevator::AddShaftDoors(int number, const char *lefttexture, const char *ri
 	return false;
 }
 
-ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float tw, float th)
+ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float tw, float th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -3672,7 +3672,7 @@ ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const c
 		return 0;
 }
 
-ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
+ElevatorDoor::DoorWrapper* Elevator::AddShaftDoor(int floor, int number, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th)
 {
 	//adds a single elevator shaft door on the specified floor, with position and thickness parameters first specified
 	//by the SetShaftDoors command.
@@ -3934,7 +3934,7 @@ void Elevator::SetShaftDoors(int number, float thickness, float CenterX, float C
 	}
 }
 
-bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture_prefix, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset)
+bool Elevator::AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
 {
 	//adds floor signs at the specified position and direction for each serviced floor,
 	//depending on if the given door number services the floor or not (unless door_number is 0)
@@ -3983,9 +3983,9 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const char *texture
 				sbs->DrawWalls(false, true, false, false, false, false);
 
 			if (tmpdirection == "front" || tmpdirection == "back")
-				sbs->GetFloor(floor)->AddWall("Floor Sign", texture.c_str(), 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
+				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x - (width / 2), z, x + (width / 2), z, height, height, base + voffset, base + voffset, 1, 1, false);
 			else
-				sbs->GetFloor(floor)->AddWall("Floor Sign", texture.c_str(), 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
+				sbs->GetFloor(floor)->AddWall("Floor Sign", texture, 0, x, z - (width / 2), x, z + (width / 2), height, height, base + voffset, base + voffset, 1, 1, false);
 			sbs->ResetWalls();
 		}
 	}
@@ -4082,7 +4082,7 @@ void Elevator::ChangeLight(int floor, bool value)
 		PanelArray[i]->ChangeLight(floor, value);
 }
 
-void Elevator::SetBeepSound(const char *filename)
+void Elevator::SetBeepSound(const std::string &filename)
 {
 	//set sound used for floor beeps
 	if (sbs->Verbose)
@@ -4092,7 +4092,7 @@ void Elevator::SetBeepSound(const char *filename)
 	UseFloorBeeps = true;
 }
 
-void Elevator::SetFloorSound(const char *prefix)
+void Elevator::SetFloorSound(const std::string &prefix)
 {
 	//set prefix of floor sound
 	if (sbs->Verbose)
@@ -4102,7 +4102,7 @@ void Elevator::SetFloorSound(const char *prefix)
 	UseFloorSounds = true;
 }
 
-void Elevator::SetMessageSound(bool type, bool direction, const char *filename)
+void Elevator::SetMessageSound(bool type, bool direction, const std::string &filename)
 {
 	//if type is true, sets up and down messages.  If false, sets open and close messages
 	//if direction is true, set up message sound; otherwise set down message sound
@@ -4145,7 +4145,7 @@ void Elevator::SetMessageSound(bool type, bool direction, const char *filename)
 	}
 }
 
-Sound* Elevator::AddSound(const char *name, const char *filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
+Sound* Elevator::AddSound(const std::string &name, const std::string &filename, Ogre::Vector3 position, bool loop, float volume, int speed, float min_distance, float max_distance, float doppler_level, float cone_inside_angle, float cone_outside_angle, float cone_outside_volume, Ogre::Vector3 direction)
 {
 	//create a sound object
 	Sound *sound = new Sound(this, name, false);
@@ -4221,7 +4221,7 @@ bool Elevator::ReportError(std::string message)
 	return sbs->ReportError("Elevator " + ToString2(Number) + ": " + message);
 }
 
-ElevatorDoor::DoorWrapper* Elevator::AddDoorComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* Elevator::AddDoorComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds an elevator door component to the specified door at a relative central position (off of elevator origin)
 
@@ -4232,7 +4232,7 @@ ElevatorDoor::DoorWrapper* Elevator::AddDoorComponent(int number, const char *na
 	return 0;
 }
 
-ElevatorDoor::DoorWrapper* Elevator::AddShaftDoorComponent(int number, int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+ElevatorDoor::DoorWrapper* Elevator::AddShaftDoorComponent(int number, int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds a single elevator shaft door component on the specified floor
 
@@ -4242,7 +4242,7 @@ ElevatorDoor::DoorWrapper* Elevator::AddShaftDoorComponent(int number, int floor
 		return 0;
 }
 
-void Elevator::AddShaftDoorsComponent(int number, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
+void Elevator::AddShaftDoorsComponent(int number, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th)
 {
 	//adds shaft's elevator door components specified at a relative central position (off of elevator origin)
 
@@ -4435,7 +4435,7 @@ void Elevator::HoldDoors(int number, bool sensor)
 	}
 }
 
-Door* Elevator::AddDoor(const char *open_sound, const char *close_sound, bool open_state, const char *texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door* Elevator::AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
 {
 	//interface to the SBS AddDoor function
 
@@ -4981,7 +4981,7 @@ void Elevator::ResetNudgeTimer(bool start, int number)
 	}
 }
 
-Light* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
+Light* Elevator::AddLight(const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic)
 {
 	//add a global light
 
@@ -4990,7 +4990,7 @@ Light* Elevator::AddLight(const char *name, int type, Ogre::Vector3 position, Og
 	return light;
 }
 
-Model* Elevator::AddModel(const char *name, const char *filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
+Model* Elevator::AddModel(const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//add a model
 	Model* model = new Model(this, name, filename, center, position, rotation, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -5057,7 +5057,7 @@ std::string Elevator::GetFloorDisplay()
 	return value;
 }
 
-Control* Elevator::AddControl(const char *name, const char *sound, const char *direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
+Control* Elevator::AddControl(const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures)
 {
 	//add a control
 	std::vector<Action*> actionnull; //not used
@@ -5067,7 +5067,7 @@ Control* Elevator::AddControl(const char *name, const char *sound, const char *d
 	return control;
 }
 
-Trigger* Elevator::AddTrigger(const char *name, const char *sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
+Trigger* Elevator::AddTrigger(const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names)
 {
 	//add a trigger
 	Trigger* trigger = new Trigger(this, name, false, sound_file, area_min, area_max, action_names);
@@ -5080,7 +5080,7 @@ bool Elevator::ReplaceTexture(const std::string &oldtexture, const std::string &
 	return ElevatorMesh->ReplaceTexture(oldtexture, newtexture);
 }
 
-std::vector<Sound*> Elevator::GetSound(const char *name)
+std::vector<Sound*> Elevator::GetSound(const std::string &name)
 {
 	//get sound by name
 

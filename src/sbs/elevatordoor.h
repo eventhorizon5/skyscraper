@@ -41,7 +41,7 @@ public:
 	struct DoorWrapper;
 	struct DoorObject
 	{
-		DoorObject(const char *doorname, DoorWrapper *Wrapper, const char *direction, float OpenSpeed, float CloseSpeed);
+		DoorObject(const std::string &doorname, DoorWrapper *Wrapper, const std::string &direction, float OpenSpeed, float CloseSpeed);
 		~DoorObject();
 		void MoveDoors(bool open, bool manual);
 		void Move();
@@ -79,7 +79,7 @@ public:
 		DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor, int shaftdoor_floor = 0);
 		~DoorWrapper();
 
-		DoorObject* CreateDoor(const char *doorname, const char *Direction, float OpenSpeed, float CloseSpeed);
+		DoorObject* CreateDoor(const std::string &doorname, const std::string &Direction, float OpenSpeed, float CloseSpeed);
 		void Enable(bool value);
 		bool CheckDoorsOpen();
 		bool IsFinished();
@@ -135,10 +135,10 @@ public:
 	bool AreShaftDoorsClosed();
 	void Reset(bool sensor = false);
 	bool DoorsStopped();
-	DoorWrapper* AddDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
-	bool AddShaftDoors(const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
-	DoorWrapper* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float tw, float th);
-	DoorWrapper* AddShaftDoor(int floor, const char *lefttexture, const char *righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
+	DoorWrapper* AddDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float width, float height, bool direction, float tw, float th);
+	bool AddShaftDoors(const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
+	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float tw, float th);
+	DoorWrapper* AddShaftDoor(int floor, const std::string &lefttexture, const std::string &righttexture, float thickness, float CenterX, float CenterZ, float voffset, float tw, float th);
 	void Chime(int floor, bool direction);
 	void Loop();
 	void MoveSound(const Ogre::Vector3 &position, bool relative_x, bool relative_y, bool relative_z);
@@ -147,10 +147,10 @@ public:
 	void SetShaftDoors(float thickness, float CenterX, float CenterZ);
 	bool ShaftDoorsExist(int floor);
 	int GetWhichDoors();
-	DoorObject* AddDoorComponent(DoorWrapper *wrapper, const char *name, const char *meshname, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	DoorWrapper* AddDoorComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	DoorWrapper* AddShaftDoorComponent(int floor, const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
-	void AddShaftDoorsComponent(const char *name, const char *texture, const char *sidetexture, float thickness, const char *direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	DoorObject* AddDoorComponent(DoorWrapper *wrapper, const std::string &name, const std::string &meshname, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	DoorWrapper* AddDoorComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	DoorWrapper* AddShaftDoorComponent(int floor, const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
+	void AddShaftDoorsComponent(const std::string &name, const std::string &texture, const std::string &sidetexture, float thickness, const std::string &direction, float OpenSpeed, float CloseSpeed, float x1, float z1, float x2, float z2, float height, float voffset, float tw, float th, float side_tw, float side_th);
 	DoorWrapper* FinishDoors(DoorWrapper *wrapper, int floor, bool ShaftDoor, bool DoorWalls = true, bool TrackWalls = true);
 	DoorWrapper* FinishDoors(bool DoorWalls = true, bool TrackWalls = true);
 	DoorWrapper* FinishShaftDoor(int floor, bool DoorWalls = true, bool TrackWalls = true);

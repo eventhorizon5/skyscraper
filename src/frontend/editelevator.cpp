@@ -1324,7 +1324,7 @@ void editelevator::SetMainValues()
 	bDownPeak->SetValue(elevator->DownPeak);
 	bIndService->SetValue(elevator->IndependentService);
 	bInsService->SetValue(elevator->InspectionService);
-	txtSkipFloorText->SetValue(wxString::FromAscii(elevator->GetFloorSkipText()));
+	txtSkipFloorText->SetValue(wxString::FromAscii(elevator->GetFloorSkipText().c_str()));
 	txtACPFloor->SetValue(wxVariant((int)elevator->ACPFloor).GetString());
 	txtRecallFloor->SetValue(wxVariant((int)elevator->RecallFloor).GetString());
 	txtRecallAlternate->SetValue(wxVariant((int)elevator->RecallFloorAlternate).GetString());
@@ -1454,7 +1454,7 @@ void editelevator::On_bRefresh_Click(wxCommandEvent& event)
 void editelevator::On_bSetSkipFloorText_Click(wxCommandEvent& event)
 {
 	if (elevator)
-		elevator->SetFloorSkipText(txtSkipFloorText->GetValue().ToAscii());
+		elevator->SetFloorSkipText(std::string(txtSkipFloorText->GetValue().ToAscii()));
 }
 
 void editelevator::On_bSetACPFloor_Click(wxCommandEvent& event)
