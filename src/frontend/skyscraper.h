@@ -95,15 +95,15 @@ public:
 	std::string BuildingFile;
 
 	//engine related stuff
-	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = std::string(""));
+	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
 	void Render();
 	void GetInput();
-	void Report(std::string message);
-	bool ReportError(std::string message);
-	bool ReportFatalError(std::string message);
-	void ShowError(std::string message);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
+	bool ReportFatalError(const std::string &message);
+	void ShowError(const std::string &message);
 	bool Initialize();
 	void GetMenuInput();
 	void StartSound();
@@ -114,10 +114,10 @@ public:
 	void AllowResize(bool value);
 	void Unload();
 	void Quit();
-	int GetConfigInt(std::string key, int default_value);
-	std::string GetConfigString(std::string key, std::string default_value);
-	bool GetConfigBool(std::string key, bool default_value);
-	float GetConfigFloat(std::string key, float default_value);
+	int GetConfigInt(const std::string &key, int default_value);
+	std::string GetConfigString(const std::string &key, const std::string &default_value);
+	bool GetConfigBool(const std::string &key, bool default_value);
+	float GetConfigFloat(const std::string &key, float default_value);
 	bool InitSky();
 	ScriptProcessor* GetScriptProcessor();
 	void ShowConsole(bool send_button = true);

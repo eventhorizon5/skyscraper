@@ -610,14 +610,14 @@ void CallButton::Loop(int direction)
 	}
 }
 
-void CallButton::Report(std::string message)
+void CallButton::Report(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;
 	sbs->Report(msg);
 }
 
-bool CallButton::ReportError(std::string message)
+bool CallButton::ReportError(const std::string &message)
 {
 	//general reporting function
 	std::string msg = "Call button " + ToString(GetFloor()) + ":" + ToString(Number) + " - " + message;

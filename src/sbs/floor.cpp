@@ -944,13 +944,13 @@ std::vector<Sound*> Floor::GetSound(const std::string &name)
 	return soundlist;
 }
 
-void Floor::Report(std::string message)
+void Floor::Report(const std::string &message)
 {
 	//general reporting function
 	sbs->Report("Floor " + ToString(Number) + ": " + message);
 }
 
-bool Floor::ReportError(std::string message)
+bool Floor::ReportError(const std::string &message)
 {
 	//general reporting function
 	return sbs->ReportError("Floor " + ToString(Number) + ": " + message);

@@ -109,7 +109,7 @@ unsigned long TimerObject::GetCurrentTime()
 	return CurrentTime;
 }
 
-void TimerObject::Report(std::string message)
+void TimerObject::Report(const std::string &message)
 {
 	sbs->Report("Timer '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }

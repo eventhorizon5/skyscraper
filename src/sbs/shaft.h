@@ -80,8 +80,8 @@ public:
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
 	MeshObject* GetMeshObject(int floor);
-	void Report(std::string message);
-	bool ReportError(std::string message);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 	Light* AddLight(int floor, const std::string &name, int type, Ogre::Vector3 position, Ogre::Vector3 direction, float color_r, float color_g, float color_b, float spec_color_r, float spec_color_g, float spec_color_b, float spot_inner_angle, float spot_outer_angle, float spot_falloff, float att_range, float att_constant, float att_linear, float att_quadratic);
 	Model* AddModel(int floor, const std::string &name, const std::string &filename, bool center, Ogre::Vector3 position, Ogre::Vector3 rotation, float max_render_distance = 0, float scale_multiplier = 1, bool enable_physics = false, float restitution = 0, float friction = 0, float mass = 0);
 	void AddModel(int floor, Model *model);

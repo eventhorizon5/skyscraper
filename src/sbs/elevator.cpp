@@ -4209,13 +4209,13 @@ bool Elevator::BeyondDecelMarker(int direction, float destination)
 	return false;
 }
 
-void Elevator::Report(std::string message)
+void Elevator::Report(const std::string &message)
 {
 	//general reporting function
 	sbs->Report("Elevator " + ToString(Number) + ": " + message);
 }
 
-bool Elevator::ReportError(std::string message)
+bool Elevator::ReportError(const std::string &message)
 {
 	//general reporting function
 	return sbs->ReportError("Elevator " + ToString(Number) + ": " + message);

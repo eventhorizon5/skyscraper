@@ -400,12 +400,12 @@ bool Sound::IsLoaded()
 	return loaded;
 }
 
-void Sound::Report(std::string message)
+void Sound::Report(const std::string &message)
 {
 	sbs->Report("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }
 
-bool Sound::ReportError(std::string message)
+bool Sound::ReportError(const std::string &message)
 {
 	return sbs->ReportError("Sound '" + GetName() + "', parent '" + GetParent()->GetName() + "': " + message);
 }

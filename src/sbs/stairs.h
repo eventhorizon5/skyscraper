@@ -62,8 +62,8 @@ public:
 	Door* GetDoor(int number);
 	bool IsEnabledFloor(int floor);
 	bool IsValidFloor(int floor);
-	void Report(std::string message);
-	bool ReportError(std::string message);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 	void RemoveDoor(Door *door);
 	void RemoveLight(Light *light);
 	void RemoveModel(Model *model);

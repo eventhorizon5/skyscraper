@@ -38,8 +38,8 @@ public:
 	Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th);
 	~Escalator();
 	void Enabled(bool value);
-	void Report(std::string message);
-	bool ReportError(std::string message);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 	void Loop();
 
 private:

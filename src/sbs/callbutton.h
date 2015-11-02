@@ -53,8 +53,8 @@ public:
 	void SetLights(int up, int down);
 	bool ServicesElevator(int elevator);
 	void Loop(int direction);
-	void Report(std::string message);
-	bool ReportError(std::string message);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 	void SetLocked(bool value, int keyid);
 	bool IsLocked();
 	bool ToggleLock(bool force = false);

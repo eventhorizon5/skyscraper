@@ -40,7 +40,7 @@ public:
 	bool IsRunning();
 	void Check();
 	unsigned long GetCurrentTime();
-	void Report(std::string message);
+	void Report(const std::string &message);
 
 private:
 	int Interval;

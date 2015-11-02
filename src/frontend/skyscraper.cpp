@@ -950,7 +950,7 @@ void Skyscraper::GetInput()
 	}
 }
 
-void Skyscraper::Report(std::string message)
+void Skyscraper::Report(const std::string &message)
 {
 	try
 	{
@@ -963,7 +963,7 @@ void Skyscraper::Report(std::string message)
 	}
 }
 
-bool Skyscraper::ReportError(std::string message)
+bool Skyscraper::ReportError(const std::string &message)
 {
 	try
 	{
@@ -977,14 +977,14 @@ bool Skyscraper::ReportError(std::string message)
 	return false;
 }
 
-bool Skyscraper::ReportFatalError(std::string message)
+bool Skyscraper::ReportFatalError(const std::string &message)
 {
 	ReportError(message);
 	ShowError(message);
 	return false;
 }
 
-void Skyscraper::ShowError(std::string message)
+void Skyscraper::ShowError(const std::string &message)
 {
 	//show error dialog
 	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
@@ -1896,24 +1896,24 @@ const std::string Skyscraper::getOgreHandle() const
 #endif
 }
 
-int Skyscraper::GetConfigInt(std::string key, int default_value)
+int Skyscraper::GetConfigInt(const std::string &key, int default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseInt(result);
 }
 
-std::string Skyscraper::GetConfigString(std::string key, std::string default_value)
+std::string Skyscraper::GetConfigString(const std::string &key, const std::string &default_value)
 {
 	return configfile.getSetting(key, Ogre::StringUtil::BLANK, default_value);
 }
 
-bool Skyscraper::GetConfigBool(std::string key, bool default_value)
+bool Skyscraper::GetConfigBool(const std::string &key, bool default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseBool(result);
 }
 
-float Skyscraper::GetConfigFloat(std::string key, float default_value)
+float Skyscraper::GetConfigFloat(const std::string &key, float default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
 	return Ogre::StringConverter::parseReal(result);

@@ -745,13 +745,13 @@ MeshObject* Shaft::GetMeshObject(int floor)
 	return ShaftArray[floor - startfloor];
 }
 
-void Shaft::Report(std::string message)
+void Shaft::Report(const std::string &message)
 {
 	//general reporting function
 	sbs->Report("Shaft " + ToString(ShaftNumber) + ": " + message);
 }
 
-bool Shaft::ReportError(std::string message)
+bool Shaft::ReportError(const std::string &message)
 {
 	//general reporting function
 	return sbs->ReportError("Shaft " + ToString(ShaftNumber) + ": " + message);

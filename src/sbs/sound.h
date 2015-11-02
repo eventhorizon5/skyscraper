@@ -61,8 +61,8 @@ public:
 	bool IsLoaded();
 	void PlayQueued(const std::string &filename, bool stop = true, bool loop = false);
 	void ProcessQueue();
-	void Report(std::string message);
-	bool ReportError(std::string message);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 
