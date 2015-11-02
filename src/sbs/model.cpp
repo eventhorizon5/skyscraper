@@ -106,7 +106,7 @@ void Model::SetKey(int keyid)
 
 bool Model::PhysicsEnabled()
 {
-	return mesh->Movable;
+	return (mesh->Movable != 0);
 }
 
 void Model::RemoveFromParent()
