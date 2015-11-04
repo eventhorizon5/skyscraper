@@ -2890,20 +2890,6 @@ bool SBS::UnregisterObject(int number)
 	return false;
 }
 
-/*WallObject* SBS::GetWallObject(std::vector<WallObject*> &wallarray, int polygon_index)
-{
-	//returns the wall object that contains the specified polygon index
-	for (int i = 0; i < (int)wallarray.size(); i++)
-	{
-		for (int j = 0; j < (int)wallarray[i]->handles.size(); j++)
-		{
-			if (wallarray[i]->handles[j] == polygon_index)
-				return wallarray[i];
-		}
-	}
-	return 0;
-}*/
-
 std::string SBS::TruncateNumber(float value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
