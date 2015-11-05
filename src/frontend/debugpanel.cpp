@@ -40,6 +40,7 @@
 #include "elevator.h"
 #include "unix.h"
 #include "cameracontrol.h"
+#include "skycontrol.h"
 #include "console.h"
 #include "objectinfo.h"
 #include "skyscraper.h"
@@ -55,6 +56,7 @@ Stats *stats;
 ObjectInfo *objectinfo;
 Profiler *profiler;
 ActionViewer *actionviewer;
+SkyControl *skycontrol;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -290,6 +292,9 @@ DebugPanel::~DebugPanel()
 	if (actionviewer)
 		actionviewer->Destroy();
 	actionviewer = 0;
+	if (skycontrol)
+		skycontrol->Destroy();
+	skycontrol = 0;
 	dpanel = 0; //clear external pointer
 }
 
@@ -357,6 +362,7 @@ void DebugPanel::OnInit()
 	objectinfo = new ObjectInfo(dp, -1);
 	profiler = new Profiler(dp, -1);
 	actionviewer = new ActionViewer(dp, -1);
+	skycontrol = new SkyControl(dp, -1);
 
 	timer = new Timer();
 	timer->Start(40);
@@ -445,6 +451,12 @@ void DebugPanel::Timer::Notify()
 	{
 		if (actionviewer->IsShown() == true)
 			actionviewer->Loop();
+	}
+
+	if (skycontrol)
+	{
+		if (skycontrol->IsShown() == true)
+			skycontrol->Loop();
 	}
 }
 

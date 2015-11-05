@@ -39,6 +39,7 @@ class SkyControl: public wxDialog {
 
 		//(*Declarations(SkyControl)
 		//*)
+		void Loop();
 
 	protected:
 

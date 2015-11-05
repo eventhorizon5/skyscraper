@@ -22,12 +22,17 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "skycontrol.h"
-
 //(*InternalHeaders(SkyControl)
 #include <wx/string.h>
 #include <wx/intl.h>
 //*)
+
+#include "debugpanel.h"
+#include "globals.h"
+#include "sbs.h"
+#include "skyscraper.h"
+#include "unix.h"
+#include "skycontrol.h"
 
 namespace Skyscraper {
 
@@ -57,6 +62,11 @@ SkyControl::~SkyControl()
 
 void SkyControl::OnInit(wxInitDialogEvent& event)
 {
+}
+
+void SkyControl::Loop()
+{
+
 }
 
 }
