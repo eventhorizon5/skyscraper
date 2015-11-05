@@ -94,6 +94,8 @@
 		<Unit filename="../src/frontend/profilergui.cpp" />
 		<Unit filename="../src/frontend/profilergui.h" />
 		<Unit filename="../src/frontend/revmain.h" />
+		<Unit filename="../src/frontend/skycontrol.cpp" />
+		<Unit filename="../src/frontend/skycontrol.h" />
 		<Unit filename="../src/frontend/skyscraper.cpp" />
 		<Unit filename="../src/frontend/skyscraper.h" />
 		<Unit filename="../src/frontend/stackwalker.cpp" />
@@ -164,6 +166,7 @@
 		<Unit filename="../src/sbs/unix.h" />
 		<Unit filename="../src/sbs/wall.cpp" />
 		<Unit filename="../src/sbs/wall.h" />
+		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Extensions>
 			<code_completion />
 			<debugger>
@@ -186,6 +189,7 @@
 					<wxDialog wxs="wxsmith/ParameterViewer.wxs" src="../src/frontend/parameterviewer.cpp" hdr="../src/frontend/parameterviewer.h" fwddecl="0" i18n="1" name="ParameterViewer" language="CPP" />
 					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/frontend/actionviewer.cpp" hdr="../src/frontend/actionviewer.h" fwddecl="0" i18n="1" name="ActionViewer" language="CPP" />
 					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/frontend/moveobject.cpp" hdr="../src/frontend/moveobject.h" fwddecl="0" i18n="1" name="MoveObject" language="CPP" />
+					<wxDialog wxs="wxsmith/SkyControl.wxs" src="../src/frontend/skycontrol.cpp" hdr="../src/frontend/skycontrol.h" fwddecl="0" i18n="1" name="SkyControl" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />
