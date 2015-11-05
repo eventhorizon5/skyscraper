@@ -454,6 +454,23 @@ bool Skyscraper::Initialize()
 		return ReportFatalError("Error configuring render system\nDetails: " + e.getDescription());
 	}
 
+	//if using DirectX, prevent it from switching into single-point floating point mode
+	Ogre::RenderSystem *rendersystem = mRoot->getRenderSystem();
+	if (rendersystem)
+	{
+		Ogre::ConfigOptionMap& CurrentRendererOptions = mRoot->getRenderSystem()->getConfigOptions();
+		Ogre::ConfigOptionMap::iterator configItr = CurrentRendererOptions.begin();
+
+		for (; configItr != CurrentRendererOptions.end(); configItr++)
+		{
+			if ((configItr)->first == "Floating-point mode")
+			{
+				rendersystem->setConfigOption("Floating-point mode", "Consistent");
+				break;
+			}
+		}
+	}
+
 	//initialize render window
 	try
 	{
