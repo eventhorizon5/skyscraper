@@ -1022,12 +1022,7 @@ bool ScriptProcessor::IfProc(const std::string &expression)
 	} while (1 == 1);
 	//return value if none found
 	if (operators == 0)
-	{
-		if (tmpcalc == "true")
-			return true;
-		else
-			return false;
-	}
+		return ToBool(tmpcalc);
 
 	//otherwise perform comparisons
 	temp1 = tmpcalc.find("=", 1);
@@ -1100,10 +1095,7 @@ bool ScriptProcessor::IfProc(const std::string &expression)
 		else
 			return false;
 	}
-	if (tmpcalc == "true")
-		return true;
-	else
-		return false;
+	return ToBool(tmpcalc);
 }
 
 int ScriptProcessor::ScriptError(std::string message, bool warning)
@@ -3140,20 +3132,12 @@ int ScriptProcessor::ProcGlobals()
 	}
 	if (linecheck.substr(0, 10) == "collisions")
 	{
-		SetCase(temp2, false);
-		if (temp2 == "false")
-			Simcore->camera->EnableCollisions(false);
-		else
-			Simcore->camera->EnableCollisions(true);
+		Simcore->camera->EnableCollisions(ToBool(temp2));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "gravity")
 	{
-		SetCase(temp2, false);
-		if (temp2 == "false")
-			Simcore->camera->EnableGravity(false);
-		else
-			Simcore->camera->EnableGravity(true);
+		Simcore->camera->EnableGravity(ToBool(temp2));
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "camerafloor")

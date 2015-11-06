@@ -595,17 +595,11 @@ bool Action::Run(Object *caller, Object *parent)
 
 			if ((int)soundlist.size() > 0)
 			{
-				std::string loop = command_parameters[1];
-				SetCase(loop, false);
-
 				for (int i = 0; i < (int)soundlist.size(); i++)
 				{
 					if (soundlist[i])
 					{
-						if (loop == "true")
-							soundlist[i]->Loop(true);
-						else
-							soundlist[i]->Loop(false);
+						soundlist[i]->Loop(ToBool(command_parameters[1]));
 						bool result = soundlist[i]->Play();
 
 						if ((int)soundlist.size() == 1)
