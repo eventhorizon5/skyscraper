@@ -3317,7 +3317,7 @@ void SBS::RemoveTrigger(Trigger *trigger)
 	}
 }
 
-std::string SBS::VerifyFile(std::string filename)
+std::string SBS::VerifyFile(std::string filename, bool exact_check)
 {
 	//verify a filename
 	//if it exists, return the same filename
@@ -3350,11 +3350,14 @@ std::string SBS::VerifyFile(std::string filename)
 	{
 		//for the General group, check the native filesystem
 
-		if (filesystem.exists(filename) == true)
+		if (exact_check == true)
 		{
-			//if exact filename exists, cache and exit
-			CacheFilename(filename, filename);
-			return filename;
+			if (filesystem.exists(filename) == true)
+			{
+				//if exact filename exists, cache and exit
+				CacheFilename(filename, filename);
+				return filename;
+			}
 		}
 
 		//otherwise get listing of files to check
@@ -3364,11 +3367,14 @@ std::string SBS::VerifyFile(std::string filename)
 	{
 		//for other groups, check resource mount points
 
-		if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
+		if (exact_check == true)
 		{
-			//if exact filename exists, cache and exit
-			CacheFilename(filename, filename);
-			return filename;
+			if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
+			{
+				//if exact filename exists, cache and exit
+				CacheFilename(filename, filename);
+				return filename;
+			}
 		}
 
 		//otherwise get listing of files to check
@@ -3401,6 +3407,12 @@ bool SBS::FileExists(const std::string &filename)
 	std::string file = filename;
 	TrimString(file);
 
+	std::string shortname;
+	std::string group = GetMountPath(file, shortname);
+
+	if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
+		return true;
+
 #if OGRE_VERSION >= 0x00010900
 	Ogre::FileSystemArchive filesystem(".", "FileSystem", false);
 #else
@@ -3410,7 +3422,7 @@ bool SBS::FileExists(const std::string &filename)
 		return true;
 
 	//if a corrected filename is found, return true
-	std::string verify = VerifyFile(file);
+	std::string verify = VerifyFile(file, false);
 	if (verify != file)
 		return true;
 	return false;

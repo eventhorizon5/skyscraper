@@ -310,7 +310,7 @@ public:
 	void RemoveModel(Model *model);
 	void RemoveControl(Control *control);
 	void RemoveTrigger(Trigger *trigger);
-	std::string VerifyFile(std::string filename);
+	std::string VerifyFile(std::string filename, bool exact_check = true);
 	bool FileExists(const std::string &filename);
 	int GetWallCount();
 	int GetPolygonCount();
