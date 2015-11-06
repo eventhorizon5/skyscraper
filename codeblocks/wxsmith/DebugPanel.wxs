@@ -300,7 +300,7 @@
 												<label>Floor List</label>
 												<handler function="On_bFloorList_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -308,7 +308,7 @@
 												<label>Realtime Object Control</label>
 												<handler function="On_bMeshControl_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -316,7 +316,7 @@
 												<label>Camera Control</label>
 												<handler function="On_bCameraControl_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -324,7 +324,7 @@
 												<label>Elevator Editor</label>
 												<handler function="On_bEditElevator_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 										</object>
 										<object class="sizeritem">
@@ -332,7 +332,7 @@
 												<label>Control Reference</label>
 												<handler function="On_bControlReference_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -341,7 +341,7 @@
 												<label>Simulator Statistics</label>
 												<handler function="On_bStats_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -350,7 +350,7 @@
 												<label>Console</label>
 												<handler function="On_bConsole_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -367,7 +367,7 @@
 												<label>Object Manager</label>
 												<handler function="On_bObjectInfo_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -376,7 +376,7 @@
 												<label>Action Viewer</label>
 												<handler function="On_bActionViewer_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -385,7 +385,7 @@
 												<label>Sky Control</label>
 												<handler function="On_bSkyControl_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -394,7 +394,7 @@
 												<label>Profiler</label>
 												<handler function="On_bProfiler_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -403,7 +403,7 @@
 												<label>List Keys</label>
 												<handler function="On_bKeys_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -412,7 +412,7 @@
 												<label>List Textures</label>
 												<handler function="On_bTextures_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
@@ -421,7 +421,7 @@
 												<label>Floor Information</label>
 												<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
 											</object>
-											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>
 										</object>
