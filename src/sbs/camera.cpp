@@ -104,7 +104,7 @@ Camera::Camera(Ogre::Camera *camera)
 	//set up camera and scene nodes
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
-	MainCamera->setPosition(Ogre::Vector3(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0));
+	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0);
 	GetSceneNode()->attachObject(MainCamera);
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);

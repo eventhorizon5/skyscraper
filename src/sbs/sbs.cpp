@@ -3671,7 +3671,7 @@ Control* SBS::AddControl(const std::string &name, const std::string &sound, cons
 	//add a control
 	std::vector<Action*> actionnull; //not used
 	Control* control = new Control(this, name, false, sound, action_names, actionnull, textures, direction, width, height, true);
-	control->SetPosition(Ogre::Vector3(CenterX, voffset, CenterZ));
+	control->SetPosition(CenterX, voffset, CenterZ);
 	ControlArray.push_back(control);
 	return control;
 }
@@ -3977,8 +3977,7 @@ void SBS::AddKey(int keyid, const std::string &name)
 	key.name = name;
 	keys.push_back(key);
 
-	std::string id = ToString(keyid);
-	Report("Added key " + id + " (" + name + ") to keyring");
+	Report("Added key " + ToString(keyid) + " (" + name + ") to keyring");
 }
 
 bool SBS::CheckKey(int keyid)

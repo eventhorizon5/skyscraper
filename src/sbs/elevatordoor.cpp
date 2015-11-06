@@ -1843,7 +1843,7 @@ void ElevatorDoor::DoorObject::Reset(bool open)
 {
 	//reset door state in case of an internal malfunction
 
-	mesh->SetPosition(Ogre::Vector3(parent->elev->GetPosition().x, mesh->GetParent()->GetPosition().y, parent->elev->GetPosition().z));
+	mesh->SetPosition(parent->elev->GetPosition().x, mesh->GetParent()->GetPosition().y, parent->elev->GetPosition().z);
 
 	if (open == true)
 	{

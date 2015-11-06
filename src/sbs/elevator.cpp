@@ -559,7 +559,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	//move motor to top of shaft if location not specified, or to location
 	if (MotorPosition != Ogre::Vector3(0, 0, 0))
-		motorsound->SetPosition(Ogre::Vector3(MotorPosition.x + GetPosition().x, MotorPosition.y, MotorPosition.z + GetPosition().z));
+		motorsound->SetPosition(MotorPosition.x + GetPosition().x, MotorPosition.y, MotorPosition.z + GetPosition().z);
 	else
 	{
 		Floor *floor = sbs->GetFloor(GetShaft()->endfloor);
