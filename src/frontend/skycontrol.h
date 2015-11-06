@@ -27,6 +27,12 @@
 
 //(*Headers(SkyControl)
 #include <wx/dialog.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/statline.h>
+#include <wx/tglbtn.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
 //*)
 
 namespace Skyscraper {
@@ -38,18 +44,81 @@ class SkyControl: public wxDialog {
 		virtual ~SkyControl();
 
 		//(*Declarations(SkyControl)
+		wxTextCtrl* tJulian;
+		wxStaticLine* StaticLine2;
+		wxToggleButton* bSet;
+		wxButton* bSetLongitude;
+		wxTextCtrl* tDay;
+		wxTextCtrl* tHour;
+		wxTextCtrl* tMultiplier;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText10;
+		wxStaticText* StaticText3;
+		wxButton* bSetMultiplier;
+		wxStaticLine* StaticLine1;
+		wxTextCtrl* tLatitude;
+		wxStaticText* StaticText8;
+		wxTextCtrl* tLongitude;
+		wxStaticText* StaticText7;
+		wxStaticText* StaticText4;
+		wxTextCtrl* tMonth;
+		wxStaticText* StaticText5;
+		wxStaticText* StaticText2;
+		wxTextCtrl* tYear;
+		wxStaticText* StaticText6;
+		wxTextCtrl* tMagnitude;
+		wxTextCtrl* tSecond;
+		wxTextCtrl* tMinute;
+		wxStaticText* StaticText9;
+		wxButton* bSetMagnitude;
+		wxStaticText* StaticText11;
+		wxButton* bSetLatitude;
 		//*)
 		void Loop();
 
 	protected:
 
 		//(*Identifiers(SkyControl)
+		static const long ID_STATICTEXT1;
+		static const long ID_tLatitude;
+		static const long ID_bSetLatitude;
+		static const long ID_STATICTEXT2;
+		static const long ID_tLongitude;
+		static const long ID_bSetLongitude;
+		static const long ID_STATICTEXT11;
+		static const long ID_tJulian;
+		static const long ID_STATICLINE1;
+		static const long ID_STATICLINE2;
+		static const long ID_STATICTEXT3;
+		static const long ID_tYear;
+		static const long ID_STATICTEXT4;
+		static const long ID_tMonth;
+		static const long ID_STATICTEXT5;
+		static const long ID_tDay;
+		static const long ID_STATICTEXT6;
+		static const long ID_tHour;
+		static const long ID_STATICTEXT7;
+		static const long ID_tMinute;
+		static const long ID_STATICTEXT8;
+		static const long ID_tSecond;
+		static const long ID_bSet;
+		static const long ID_STATICTEXT9;
+		static const long ID_tMultiplier;
+		static const long ID_bSetMultiplier;
+		static const long ID_STATICTEXT10;
+		static const long ID_tMagnitude;
+		static const long ID_bSetMagnitude;
 		//*)
 
 	private:
 
 		//(*Handlers(SkyControl)
 		void OnInit(wxInitDialogEvent& event);
+		void On_bSetLatitude_Click(wxCommandEvent& event);
+		void On_bSetLongitude_Click(wxCommandEvent& event);
+		void On_bSet_Toggle(wxCommandEvent& event);
+		void On_bSetMultiplier_Click(wxCommandEvent& event);
+		void On_bSetMagnitude_Click(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()
