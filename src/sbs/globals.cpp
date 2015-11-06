@@ -178,7 +178,7 @@ void ReplaceAll(std::string &string, const std::string &original, const std::str
 	}
 }
 
-bool StartsWith(std::string &string, const std::string &check_string, bool ignore_case)
+bool StartsWith(const std::string &string, const std::string &check_string, bool ignore_case)
 {
 	//check if a string starts with the contents of "check_string"
 

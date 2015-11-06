@@ -3613,24 +3613,18 @@ void SBS::CalculateAverageTime()
 	average_time = (frame_times.back() - frame_times.front()) / ((unsigned long)frame_times.size() - 1);
 }
 
-std::string SBS::GetMountPath(const std::string &filename, std::string &newfilename)
+std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
 {
 	//get mountpoint (resource group) path of given file
 	//if not found, return "General"
 
 	Ogre::StringVector list = Ogre::ResourceGroupManager::getSingleton().getResourceGroups();
+	ReplaceAll(filename, "\\", "/");
 	newfilename = filename;
 
 	for (int i = 0; i < (int)list.size(); i++)
 	{
-		std::string check = filename + "/";
-		if (StartsWith(check, list[i]) == true)
-		{
-			newfilename = filename.substr(list[i].size() + 1);
-			return list[i];
-		}
-		check = filename + "\\";
-		if (StartsWith(check, list[i]) == true)
+		if (StartsWith(filename, list[i] + "/") == true)
 		{
 			newfilename = filename.substr(list[i].size() + 1);
 			return list[i];

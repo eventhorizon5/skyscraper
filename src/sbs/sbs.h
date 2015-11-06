@@ -340,7 +340,7 @@ public:
 	unsigned long GetRunTime();
 	unsigned long GetElapsedTime();
 	unsigned long GetAverageTime();
-	std::string GetMountPath(const std::string &filename, std::string &newfilename);
+	std::string GetMountPath(std::string filename, std::string &newfilename);
 	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
 	void ShowColliders(bool value);
 	void CacheFilename(const std::string &filename, const std::string &result);
