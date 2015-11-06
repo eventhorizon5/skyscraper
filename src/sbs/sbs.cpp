@@ -3317,22 +3317,33 @@ void SBS::RemoveTrigger(Trigger *trigger)
 	}
 }
 
-std::string SBS::VerifyFile(std::string filename, bool exact_check)
+std::string SBS::VerifyFile(const std::string &filename)
+{
+	bool result = false;
+	return VerifyFile(filename, result, false);
+}
+
+std::string SBS::VerifyFile(std::string filename, bool &result, bool skip_cache)
 {
 	//verify a filename
 	//if it exists, return the same filename
 	//otherwise search the related folder and find a matching filename with a different
 	//case (fixes case-sensitivity issues mainly on Linux)
 	//returns the original string if not found
+	//"result" will return if the file exists or not, but only accurately if skip_cache is true
 
 	TrimString(filename);
 	ReplaceAll(filename, "\\", "/");
+	result = false;
 
 	//check for a cached result
-	for (int i = 0; i < (int)verify_results.size(); i++)
+	if (skip_cache == false)
 	{
-		if (verify_results[i].filename == filename)
-			return verify_results[i].result;
+		for (int i = 0; i < (int)verify_results.size(); i++)
+		{
+			if (verify_results[i].filename == filename)
+				return verify_results[i].result;
+		}
 	}
 
 #if OGRE_VERSION >= 0x00010900
@@ -3350,14 +3361,12 @@ std::string SBS::VerifyFile(std::string filename, bool exact_check)
 	{
 		//for the General group, check the native filesystem
 
-		if (exact_check == true)
+		if (filesystem.exists(filename) == true)
 		{
-			if (filesystem.exists(filename) == true)
-			{
-				//if exact filename exists, cache and exit
-				CacheFilename(filename, filename);
-				return filename;
-			}
+			//if exact filename exists, cache and exit
+			CacheFilename(filename, filename);
+			result = true;
+			return filename;
 		}
 
 		//otherwise get listing of files to check
@@ -3367,14 +3376,12 @@ std::string SBS::VerifyFile(std::string filename, bool exact_check)
 	{
 		//for other groups, check resource mount points
 
-		if (exact_check == true)
+		if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
 		{
-			if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
-			{
-				//if exact filename exists, cache and exit
-				CacheFilename(filename, filename);
-				return filename;
-			}
+			//if exact filename exists, cache and exit
+			CacheFilename(filename, filename);
+			result = true;
+			return filename;
 		}
 
 		//otherwise get listing of files to check
@@ -3391,6 +3398,7 @@ std::string SBS::VerifyFile(std::string filename, bool exact_check)
 		{
 			//if match is found, cache and exit
 			CacheFilename(filename, check);
+			result = true;
 			return check;
 		}
 	}
@@ -3404,28 +3412,10 @@ bool SBS::FileExists(const std::string &filename)
 {
 	//check to see if the specified file exists
 
-	std::string file = filename;
-	TrimString(file);
+	bool result;
+	VerifyFile(filename, result, true);
 
-	std::string shortname;
-	std::string group = GetMountPath(file, shortname);
-
-	if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
-		return true;
-
-#if OGRE_VERSION >= 0x00010900
-	Ogre::FileSystemArchive filesystem(".", "FileSystem", false);
-#else
-	Ogre::FileSystemArchive filesystem(".", "FileSystem");
-#endif
-	if (filesystem.exists(file))
-		return true;
-
-	//if a corrected filename is found, return true
-	std::string verify = VerifyFile(file, false);
-	if (verify != file)
-		return true;
-	return false;
+	return result;
 }
 
 int SBS::GetWallCount()
