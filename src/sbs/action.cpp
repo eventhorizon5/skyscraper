@@ -45,7 +45,6 @@ Action::Action(const std::string &name, std::vector<Object*> &action_parents, co
 		command_parameters[i] = parameters[i];
 		TrimString(command_parameters[i]);
 	}
-	state = 0;
 	parent_objects = action_parents;
 }
 
@@ -58,7 +57,6 @@ Action::Action(const std::string &name, std::vector<Object*> &action_parents, co
 	TrimString(command_name);
 	SetCase(command_name, false);
 
-	state = 0;
 	parent_objects = action_parents;
 }
 

@@ -53,7 +53,6 @@ private:
 
 	std::string command_name;
 	std::vector<std::string> command_parameters;
-	int state;
 	std::string name;
 	std::vector<Object*> parent_objects;
 };
