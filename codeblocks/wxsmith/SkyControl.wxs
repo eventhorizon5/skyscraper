@@ -21,9 +21,7 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_tLatitude" variable="tLatitude" member="yes">
-									<style>wxTE_READONLY</style>
-								</object>
+								<object class="wxTextCtrl" name="ID_tLatitude" variable="tLatitude" member="yes" />
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -47,9 +45,7 @@
 								<option>1</option>
 							</object>
 							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_tLongitude" variable="tLongitude" member="yes">
-									<style>wxTE_READONLY</style>
-								</object>
+								<object class="wxTextCtrl" name="ID_tLongitude" variable="tLongitude" member="yes" />
 								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>
 								<option>1</option>
@@ -262,30 +258,6 @@
 									<label>Set</label>
 									<style>wxBU_EXACTFIT</style>
 									<handler function="On_bSetMultiplier_Click" entry="EVT_BUTTON" />
-								</object>
-								<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
-							<object class="sizeritem">
-								<object class="wxStaticText" name="ID_STATICTEXT10" variable="StaticText10" member="yes">
-									<label>Star Magnitude:</label>
-								</object>
-								<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
-							<object class="sizeritem">
-								<object class="wxTextCtrl" name="ID_tMagnitude" variable="tMagnitude" member="yes" />
-								<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-								<border>5</border>
-								<option>1</option>
-							</object>
-							<object class="sizeritem">
-								<object class="wxButton" name="ID_bSetMagnitude" variable="bSetMagnitude" member="yes">
-									<label>Set</label>
-									<style>wxBU_EXACTFIT</style>
-									<handler function="On_bSetMagnitude_Click" entry="EVT_BUTTON" />
 								</object>
 								<flag>wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 								<border>5</border>

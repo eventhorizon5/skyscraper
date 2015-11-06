@@ -125,6 +125,7 @@ public:
 	void CloseProgressDialog();
 	void UpdateProgress(int percent);
 	void SetFullScreen(bool enabled);
+	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
 
 private:
 	//mouse status

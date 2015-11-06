@@ -479,6 +479,14 @@ wxString TruncateNumber(float value, int decimals)
 	return number2;
 }
 
+wxString TruncateNumber(double value, int decimals)
+{
+	std::string number = Simcore->TruncateNumber(value, decimals);
+	wxString number2 = wxString::FromAscii(number.c_str());
+
+	return number2;
+}
+
 void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)
 {
 	//enables or disables gravity

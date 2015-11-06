@@ -295,6 +295,7 @@ public:
 	void SetPlanarMapping(bool flat, bool FlipX, bool FlipY, bool FlipZ, bool rotate);
 	Ogre::Vector2 CalculateSizing(const std::string &texture, const Ogre::Vector3 &v1, const Ogre::Vector3 &v2, const Ogre::Vector3 &v3, int direction, float tw, float th);
 	std::string TruncateNumber(float value, int decimals);
+	std::string TruncateNumber(double value, int decimals);
 	std::string TruncateNumber(const std::string &number, int decimals);
 	bool IsValidFloor(int floor);
 	std::string DumpState();

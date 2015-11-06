@@ -63,15 +63,14 @@ const long SkyControl::ID_bSet = wxNewId();
 const long SkyControl::ID_STATICTEXT9 = wxNewId();
 const long SkyControl::ID_tMultiplier = wxNewId();
 const long SkyControl::ID_bSetMultiplier = wxNewId();
-const long SkyControl::ID_STATICTEXT10 = wxNewId();
-const long SkyControl::ID_tMagnitude = wxNewId();
-const long SkyControl::ID_bSetMagnitude = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(SkyControl,wxDialog)
 	//(*EventTable(SkyControl)
 	//*)
 END_EVENT_TABLE()
+
+static Caelum::CaelumSystem* system;
 
 SkyControl::SkyControl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
@@ -91,13 +90,13 @@ SkyControl::SkyControl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	FlexGridSizer2 = new wxFlexGridSizer(0, 3, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Latitude:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	FlexGridSizer2->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tLatitude = new wxTextCtrl(this, ID_tLatitude, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tLatitude"));
+	tLatitude = new wxTextCtrl(this, ID_tLatitude, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tLatitude"));
 	FlexGridSizer2->Add(tLatitude, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetLatitude = new wxButton(this, ID_bSetLatitude, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLatitude"));
 	FlexGridSizer2->Add(bSetLatitude, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Longitude:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer2->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tLongitude = new wxTextCtrl(this, ID_tLongitude, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY, wxDefaultValidator, _T("ID_tLongitude"));
+	tLongitude = new wxTextCtrl(this, ID_tLongitude, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tLongitude"));
 	FlexGridSizer2->Add(tLongitude, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetLongitude = new wxButton(this, ID_bSetLongitude, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetLongitude"));
 	FlexGridSizer2->Add(bSetLongitude, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
@@ -151,12 +150,6 @@ SkyControl::SkyControl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	FlexGridSizer6->Add(tMultiplier, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bSetMultiplier = new wxButton(this, ID_bSetMultiplier, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetMultiplier"));
 	FlexGridSizer6->Add(bSetMultiplier, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
-	StaticText10 = new wxStaticText(this, ID_STATICTEXT10, _("Star Magnitude:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
-	FlexGridSizer6->Add(StaticText10, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	tMagnitude = new wxTextCtrl(this, ID_tMagnitude, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_tMagnitude"));
-	FlexGridSizer6->Add(tMagnitude, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	bSetMagnitude = new wxButton(this, ID_bSetMagnitude, _("Set"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSetMagnitude"));
-	FlexGridSizer6->Add(bSetMagnitude, 1, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3->Add(FlexGridSizer6, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer1->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	SetSizer(FlexGridSizer1);
@@ -167,8 +160,8 @@ SkyControl::SkyControl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Connect(ID_bSetLongitude,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetLongitude_Click);
 	Connect(ID_bSet,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSet_Toggle);
 	Connect(ID_bSetMultiplier,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetMultiplier_Click);
-	Connect(ID_bSetMagnitude,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetMagnitude_Click);
 	//*)
+	OnInit();
 }
 
 SkyControl::~SkyControl()
@@ -178,33 +171,112 @@ SkyControl::~SkyControl()
 }
 
 
-void SkyControl::OnInit(wxInitDialogEvent& event)
+void SkyControl::OnInit()
 {
+	system = skyscraper->GetCaelumSystem();
+
+	if (!system)
+		return;
+
+	tLatitude->SetValue(TruncateNumber(Ogre::Degree(system->getObserverLatitude()).valueDegrees(), 4));
+	tLongitude->SetValue(TruncateNumber(Ogre::Degree(system->getObserverLongitude()).valueDegrees(), 4));
+	tMultiplier->SetValue(TruncateNumber(system->getTimeScale(), 4));
 }
 
 void SkyControl::Loop()
 {
+	if (!system)
+		return;
 
+	Caelum::LongReal julian = system->getJulianDay(), second;
+	int year, month, day, hour, minute;
+	Caelum::Astronomy::getGregorianDateTimeFromJulianDay(julian, year, month, day, hour, minute, second);
+
+	if (bSet->GetValue() == false)
+	{
+		tJulian->SetValue(TruncateNumber(system->getJulianDay(), 4));
+		tYear->SetValue(wxVariant((long)year).GetString());
+		tMonth->SetValue(wxVariant((long)month).GetString());
+		tDay->SetValue(wxVariant((long)day).GetString());
+		tHour->SetValue(wxVariant((long)hour).GetString());
+		tMinute->SetValue(wxVariant((long)minute).GetString());
+		tSecond->SetValue(wxVariant((long)second).GetString());
+	}
 }
 
 void SkyControl::On_bSetLatitude_Click(wxCommandEvent& event)
 {
+	if (system)
+		system->setObserverLatitude(Ogre::Degree(atof(tLatitude->GetValue().ToAscii())));
 }
 
 void SkyControl::On_bSetLongitude_Click(wxCommandEvent& event)
 {
+	if (system)
+		system->setObserverLongitude(Ogre::Degree(atof(tLongitude->GetValue().ToAscii())));
 }
 
 void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 {
+	if (!system)
+		return;
+
+	static wxString prev_julian;
+
+	if (bSet->GetValue() == false)
+	{
+		wxString julian = tJulian->GetValue();
+		bool julian_changed = false;
+
+		if (julian != prev_julian)
+		{
+			prev_julian = julian;
+			julian_changed = true;
+		}
+
+		if (julian_changed == true)
+		{
+			system->setJulianDay(atof(julian.ToAscii()));
+			julian_changed = false;
+		}
+		else
+		{
+			int year = atoi(tYear->GetValue().ToAscii());
+			int month = atoi(tMonth->GetValue().ToAscii());
+			int day = atoi(tDay->GetValue().ToAscii());
+			int hour = atoi(tHour->GetValue().ToAscii());
+			int minute = atoi(tMinute->GetValue().ToAscii());
+			double second = atof(tSecond->GetValue().ToAscii());
+			system->getUniversalClock()->setGregorianDateTime(year, month, day, hour, minute, second);
+		}
+
+		//disable text boxes
+		tJulian->SetEditable(false);
+		tYear->SetEditable(false);
+		tMonth->SetEditable(false);
+		tDay->SetEditable(false);
+		tHour->SetEditable(false);
+		tMinute->SetEditable(false);
+		tSecond->SetEditable(false);
+	}
+	else
+	{
+		prev_julian = tJulian->GetValue();
+
+		//enable text boxes
+		tJulian->SetEditable(true);
+		tYear->SetEditable(true);
+		tMonth->SetEditable(true);
+		tDay->SetEditable(true);
+		tHour->SetEditable(true);
+		tMinute->SetEditable(true);
+		tSecond->SetEditable(true);
+	}
 }
 
 void SkyControl::On_bSetMultiplier_Click(wxCommandEvent& event)
 {
-}
-
-void SkyControl::On_bSetMagnitude_Click(wxCommandEvent& event)
-{
+	skyscraper->SkyMult = atof(tMultiplier->GetValue().ToAscii());
 }
 
 }

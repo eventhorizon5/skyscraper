@@ -52,7 +52,6 @@ class SkyControl: public wxDialog {
 		wxTextCtrl* tHour;
 		wxTextCtrl* tMultiplier;
 		wxStaticText* StaticText1;
-		wxStaticText* StaticText10;
 		wxStaticText* StaticText3;
 		wxButton* bSetMultiplier;
 		wxStaticLine* StaticLine1;
@@ -66,11 +65,9 @@ class SkyControl: public wxDialog {
 		wxStaticText* StaticText2;
 		wxTextCtrl* tYear;
 		wxStaticText* StaticText6;
-		wxTextCtrl* tMagnitude;
 		wxTextCtrl* tSecond;
 		wxTextCtrl* tMinute;
 		wxStaticText* StaticText9;
-		wxButton* bSetMagnitude;
 		wxStaticText* StaticText11;
 		wxButton* bSetLatitude;
 		//*)
@@ -105,10 +102,8 @@ class SkyControl: public wxDialog {
 		static const long ID_STATICTEXT9;
 		static const long ID_tMultiplier;
 		static const long ID_bSetMultiplier;
-		static const long ID_STATICTEXT10;
-		static const long ID_tMagnitude;
-		static const long ID_bSetMagnitude;
 		//*)
+		void OnInit();
 
 	private:
 
@@ -118,7 +113,6 @@ class SkyControl: public wxDialog {
 		void On_bSetLongitude_Click(wxCommandEvent& event);
 		void On_bSet_Toggle(wxCommandEvent& event);
 		void On_bSetMultiplier_Click(wxCommandEvent& event);
-		void On_bSetMagnitude_Click(wxCommandEvent& event);
 		//*)
 
 		DECLARE_EVENT_TABLE()

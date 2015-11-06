@@ -2904,6 +2904,20 @@ std::string SBS::TruncateNumber(float value, int decimals)
 	return buffer.str();
 }
 
+std::string SBS::TruncateNumber(double value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+
+	if ((int)value == value)
+		decimals = 0; //value is an integer
+
+	std::stringstream buffer;
+	buffer.precision(decimals);
+	buffer << std::fixed << value;
+
+	return buffer.str();
+}
+
 std::string SBS::TruncateNumber(const std::string &value, int decimals)
 {
 	//truncates the numeric value to the specified number of decimal places (does not round)
