@@ -291,124 +291,149 @@
 							<border>10</border>
 						</object>
 						<object class="sizeritem">
-							<object class="wxBoxSizer" variable="BoxSizer3" member="yes">
-								<orient>wxVERTICAL</orient>
+							<object class="wxBoxSizer" variable="BoxSizer8" member="no">
 								<object class="sizeritem">
-									<object class="wxButton" name="ID_bFloorList" variable="bFloorList" member="yes">
-										<label>Floor List</label>
-										<handler function="On_bFloorList_Click" entry="EVT_BUTTON" />
+									<object class="wxBoxSizer" variable="BoxSizer9" member="no">
+										<orient>wxVERTICAL</orient>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bFloorList" variable="bFloorList" member="yes">
+												<label>Floor List</label>
+												<handler function="On_bFloorList_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bMeshControl" variable="bMeshControl" member="yes">
+												<label>Realtime Object Control</label>
+												<handler function="On_bMeshControl_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bCameraControl" variable="bCameraControl" member="yes">
+												<label>Camera Control</label>
+												<handler function="On_bCameraControl_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bEditElevator" variable="bEditElevator" member="yes">
+												<label>Elevator Editor</label>
+												<handler function="On_bEditElevator_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bControlReference" variable="bControlReference" member="yes">
+												<label>Control Reference</label>
+												<handler function="On_bControlReference_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bStats" variable="bStats" member="yes">
+												<label>Simulator Statistics</label>
+												<handler function="On_bStats_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bConsole" variable="bConsole" member="yes">
+												<label>Console</label>
+												<handler function="On_bConsole_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
 									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bMeshControl" variable="bMeshControl" member="yes">
-										<label>Realtime Object Control</label>
-										<handler function="On_bMeshControl_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bCameraControl" variable="bCameraControl" member="yes">
-										<label>Camera Control</label>
-										<handler function="On_bCameraControl_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bEditElevator" variable="bEditElevator" member="yes">
-										<label>Elevator Editor</label>
-										<handler function="On_bEditElevator_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bControlReference" variable="bControlReference" member="yes">
-										<label>Control Reference</label>
-										<handler function="On_bControlReference_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-									<option>1</option>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bStats" variable="bStats" member="yes">
-										<label>Simulator Statistics</label>
-										<handler function="On_bStats_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-									<option>1</option>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bConsole" variable="bConsole" member="yes">
-										<label>Console</label>
-										<handler function="On_bConsole_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-									<option>1</option>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bObjectInfo" variable="bObjectInfo" member="yes">
-										<label>Object Manager</label>
-										<handler function="On_bObjectInfo_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
 									<option>1</option>
 								</object>
 								<object class="sizeritem">
-									<object class="wxButton" name="ID_bActionViewer" variable="bActionViewer" member="yes">
-										<label>Action Viewer</label>
-										<handler function="On_bActionViewer_Click" entry="EVT_BUTTON" />
+									<object class="wxBoxSizer" variable="BoxSizer10" member="no">
+										<orient>wxVERTICAL</orient>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bObjectInfo" variable="bObjectInfo" member="yes">
+												<label>Object Manager</label>
+												<handler function="On_bObjectInfo_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bActionViewer" variable="bActionViewer" member="yes">
+												<label>Action Viewer</label>
+												<handler function="On_bActionViewer_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bSkyControl" variable="bSkyControl" member="yes">
+												<label>Sky Control</label>
+												<handler function="On_bSkyControl_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bProfiler" variable="bProfiler" member="yes">
+												<label>Profiler</label>
+												<handler function="On_bProfiler_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bKeys" variable="bKeys" member="yes">
+												<label>List Keys</label>
+												<handler function="On_bKeys_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bTextures" variable="bTextures" member="yes">
+												<label>List Textures</label>
+												<handler function="On_bTextures_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bFloorInfo" variable="bFloorInfo" member="yes">
+												<label>Floor Information</label>
+												<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
 									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-									<option>1</option>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bProfiler" variable="bProfiler" member="yes">
-										<label>Profiler</label>
-										<handler function="On_bProfiler_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-									<option>1</option>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bKeys" variable="bKeys" member="yes">
-										<label>List Keys</label>
-										<handler function="On_bKeys_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-									<option>1</option>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bTextures" variable="bTextures" member="yes">
-										<label>List Textures</label>
-										<handler function="On_bTextures_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-									<border>5</border>
-									<option>1</option>
-								</object>
-								<object class="sizeritem">
-									<object class="wxButton" name="ID_bFloorInfo" variable="bFloorInfo" member="yes">
-										<label>Floor Information</label>
-										<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
-									</object>
-									<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+									<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 									<border>5</border>
 									<option>1</option>
 								</object>
 							</object>
-							<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
-							<border>10</border>
+							<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+							<border>5</border>
+							<option>1</option>
 						</object>
 					</object>
 				</object>

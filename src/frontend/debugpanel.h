@@ -92,6 +92,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bConsole;
 		static const long ID_bObjectInfo;
 		static const long ID_bActionViewer;
+		static const long ID_bSkyControl;
 		static const long ID_bProfiler;
 		static const long ID_bKeys;
 		static const long ID_bTextures;
@@ -131,14 +132,16 @@ class DebugPanel: public wxFrame
 		void On_bKeys_Click(wxCommandEvent& event);
 		void On_bTextures_Click(wxCommandEvent& event);
 		void On_bFloorInfo_Click(wxCommandEvent& event);
+		void On_bSkyControl_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
 		//(*Declarations(DebugPanel)
+		wxButton* bSkyControl;
 		wxPanel* Panel1;
 		wxStaticText* t_framerate;
-		wxBoxSizer* BoxSizer3;
 		wxCheckBox* chkCollisionDetection;
+		wxButton* bFloorList;
 		wxButton* bTextures;
 		wxStaticText* t_elevnumber;
 		wxStaticText* t_camerap;
@@ -160,7 +163,6 @@ class DebugPanel: public wxFrame
 		wxButton* bProfiler;
 		wxButton* bObjectInfo;
 		wxStaticText* t_floorname;
-		wxButton* bFloorList;
 		wxStaticText* StaticText8;
 		wxBoxSizer* BoxSizer4;
 		wxCheckBox* chkGravity;

@@ -97,6 +97,7 @@ const long DebugPanel::ID_bStats = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
 const long DebugPanel::ID_bActionViewer = wxNewId();
+const long DebugPanel::ID_bSkyControl = wxNewId();
 const long DebugPanel::ID_bProfiler = wxNewId();
 const long DebugPanel::ID_bKeys = wxNewId();
 const long DebugPanel::ID_bTextures = wxNewId();
@@ -112,7 +113,10 @@ END_EVENT_TABLE()
 DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(DebugPanel)
+	wxBoxSizer* BoxSizer10;
 	wxBoxSizer* BoxSizer11;
+	wxBoxSizer* BoxSizer9;
+	wxBoxSizer* BoxSizer8;
 
 	Create(parent, wxID_ANY, _("Simulator Control Panel"), wxDefaultPosition, wxDefaultSize, wxCAPTION|wxSYSTEM_MENU|wxCLOSE_BOX|wxMINIMIZE_BOX, _T("wxID_ANY"));
 	Move(wxPoint(10,10));
@@ -197,34 +201,40 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer5->Add(chkVerbose, 1, wxBOTTOM|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2->Add(BoxSizer5, 0, wxALL|wxALIGN_RIGHT|wxALIGN_TOP, 0);
 	BoxSizer11->Add(BoxSizer2, 0, wxTOP|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
-	BoxSizer3 = new wxBoxSizer(wxVERTICAL);
+	BoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
+	BoxSizer9 = new wxBoxSizer(wxVERTICAL);
 	bFloorList = new wxButton(Panel1, ID_bFloorList, _("Floor List"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorList"));
-	BoxSizer3->Add(bFloorList, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer9->Add(bFloorList, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bMeshControl = new wxButton(Panel1, ID_bMeshControl, _("Realtime Object Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bMeshControl"));
-	BoxSizer3->Add(bMeshControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer9->Add(bMeshControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bCameraControl = new wxButton(Panel1, ID_bCameraControl, _("Camera Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCameraControl"));
-	BoxSizer3->Add(bCameraControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer9->Add(bCameraControl, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bEditElevator = new wxButton(Panel1, ID_bEditElevator, _("Elevator Editor"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEditElevator"));
-	BoxSizer3->Add(bEditElevator, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer9->Add(bEditElevator, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bControlReference = new wxButton(Panel1, ID_bControlReference, _("Control Reference"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bControlReference"));
-	BoxSizer3->Add(bControlReference, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer9->Add(bControlReference, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bStats = new wxButton(Panel1, ID_bStats, _("Simulator Statistics"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStats"));
-	BoxSizer3->Add(bStats, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer9->Add(bStats, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bConsole = new wxButton(Panel1, ID_bConsole, _("Console"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bConsole"));
-	BoxSizer3->Add(bConsole, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer9->Add(bConsole, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer8->Add(BoxSizer9, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10 = new wxBoxSizer(wxVERTICAL);
 	bObjectInfo = new wxButton(Panel1, ID_bObjectInfo, _("Object Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bObjectInfo"));
-	BoxSizer3->Add(bObjectInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(bObjectInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bActionViewer = new wxButton(Panel1, ID_bActionViewer, _("Action Viewer"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bActionViewer"));
-	BoxSizer3->Add(bActionViewer, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(bActionViewer, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSkyControl = new wxButton(Panel1, ID_bSkyControl, _("Sky Control"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bSkyControl"));
+	BoxSizer10->Add(bSkyControl, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bProfiler = new wxButton(Panel1, ID_bProfiler, _("Profiler"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bProfiler"));
-	BoxSizer3->Add(bProfiler, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(bProfiler, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bKeys = new wxButton(Panel1, ID_bKeys, _("List Keys"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bKeys"));
-	BoxSizer3->Add(bKeys, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(bKeys, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bTextures = new wxButton(Panel1, ID_bTextures, _("List Textures"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
-	BoxSizer3->Add(bTextures, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(bTextures, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
-	BoxSizer3->Add(bFloorInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer11->Add(BoxSizer3, 0, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
+	BoxSizer10->Add(bFloorInfo, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer8->Add(BoxSizer10, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer11->Add(BoxSizer8, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	Panel1->SetSizer(BoxSizer11);
 	BoxSizer11->Fit(Panel1);
 	BoxSizer11->SetSizeHints(Panel1);
@@ -250,6 +260,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
+	Connect(ID_bSkyControl,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bSkyControl_Click);
 	Connect(ID_bProfiler,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bProfiler_Click);
 	Connect(ID_bKeys,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
 	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
@@ -572,6 +583,15 @@ void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
 
 	if (floor)
 		floor->ShowInfo();
+}
+
+void DebugPanel::On_bSkyControl_Click(wxCommandEvent& event)
+{
+	if (skycontrol)
+	{
+		skycontrol->CenterOnScreen();
+		skycontrol->Show();
+	}
 }
 
 }
