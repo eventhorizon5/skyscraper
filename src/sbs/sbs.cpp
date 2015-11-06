@@ -3513,7 +3513,7 @@ void SBS::AddModel(Model *model)
 int SBS::GetConfigInt(const std::string &key, int default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
-	return Ogre::StringConverter::parseInt(result);
+	return ToInt(result);
 }
 
 std::string SBS::GetConfigString(const std::string &key, const std::string &default_value)
@@ -3524,13 +3524,13 @@ std::string SBS::GetConfigString(const std::string &key, const std::string &defa
 bool SBS::GetConfigBool(const std::string &key, bool default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
-	return Ogre::StringConverter::parseBool(result);
+	return ToBool(result);
 }
 
 float SBS::GetConfigFloat(const std::string &key, float default_value)
 {
 	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
-	return Ogre::StringConverter::parseReal(result);
+	return ToFloat(result);
 }
 
 bool SBS::InBox(const Ogre::Vector3 &start, const Ogre::Vector3 &end, const Ogre::Vector3 &test)

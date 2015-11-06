@@ -1507,8 +1507,8 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					std::string number = string.substr(location + 1);
-					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, "x" + number, ToString(vertices[atoi(number.c_str())].x));
+					if (ToInt(number) < (int)vertices.size())
+						ReplaceAll(string, "x" + number, ToString(vertices[ToInt(number)].x));
 					else
 						ReplaceAll(string, "x" + number, "0"); //number value out of bounds
 				}
@@ -1518,8 +1518,8 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					std::string number = string.substr(location + 1);
-					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, "y" + number, ToString(vertices[atoi(number.c_str())].y));
+					if (ToInt(number) < (int)vertices.size())
+						ReplaceAll(string, "y" + number, ToString(vertices[ToInt(number)].y));
 					else
 						ReplaceAll(string, "y" + number, "0"); //number value out of bounds
 				}
@@ -1529,8 +1529,8 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (location >= 0)
 				{
 					std::string number = string.substr(location + 1);
-					if (atoi(number.c_str()) < (int)vertices.size())
-						ReplaceAll(string, "z" + number, ToString(vertices[atoi(number.c_str())].z));
+					if (ToInt(number) < (int)vertices.size())
+						ReplaceAll(string, "z" + number, ToString(vertices[ToInt(number)].z));
 					else
 						ReplaceAll(string, "z" + number, "0"); //number value out of bounds
 				}
@@ -1539,29 +1539,29 @@ bool SBS::GetTextureMapping(std::vector<Ogre::Vector3> &vertices, Ogre::Vector3 
 				if (i == 0)
 				{
 					if (j == 0)
-						v1.x = (float)atof(string.c_str());
+						v1.x = ToFloat(string);
 					if (j == 1)
-						v2.x = (float)atof(string.c_str());
+						v2.x = ToFloat(string);
 					if (j == 2)
-						v3.x = (float)atof(string.c_str());
+						v3.x = ToFloat(string);
 				}
 				if (i == 1)
 				{
 					if (j == 0)
-						v1.y = (float)atof(string.c_str());
+						v1.y = ToFloat(string);
 					if (j == 1)
-						v2.y = (float)atof(string.c_str());
+						v2.y = ToFloat(string);
 					if (j == 2)
-						v3.y = (float)atof(string.c_str());
+						v3.y = ToFloat(string);
 				}
 				if (i == 2)
 				{
 					if (j == 0)
-						v1.z = (float)atof(string.c_str());
+						v1.z = ToFloat(string);
 					if (j == 1)
-						v2.z = (float)atof(string.c_str());
+						v2.z = ToFloat(string);
 					if (j == 2)
-						v3.z = (float)atof(string.c_str());
+						v3.z = ToFloat(string);
 				}
 			}
 		}

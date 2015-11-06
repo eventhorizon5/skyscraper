@@ -306,3 +306,12 @@ int ToInt(const std::string &string)
 {
 	return atoi(string.c_str());
 }
+
+bool ToBool(std::string string)
+{
+	SetCase(string, false);
+
+	if (string == "true")
+		return true;
+	return false;
+}

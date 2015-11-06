@@ -772,7 +772,7 @@ void Camera::Loop(float delta)
 		if (name != "")
 		{
 			int index = (int)name.find(")");
-			int number = atoi(name.substr(1, index - 1).c_str());
+			int number = ToInt(name.substr(1, index - 1));
 			name.erase(name.begin(), name.begin() + index + 1);
 			std::string num = ToString(number);
 

@@ -1915,8 +1915,8 @@ const std::string Skyscraper::getOgreHandle() const
 
 int Skyscraper::GetConfigInt(const std::string &key, int default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return Ogre::StringConverter::parseInt(result);
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	return ToInt(result);
 }
 
 std::string Skyscraper::GetConfigString(const std::string &key, const std::string &default_value)
@@ -1926,14 +1926,14 @@ std::string Skyscraper::GetConfigString(const std::string &key, const std::strin
 
 bool Skyscraper::GetConfigBool(const std::string &key, bool default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return Ogre::StringConverter::parseBool(result);
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, BoolToString(default_value));
+	return ToBool(result);
 }
 
 float Skyscraper::GetConfigFloat(const std::string &key, float default_value)
 {
-	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, Ogre::StringConverter::toString(default_value));
-	return Ogre::StringConverter::parseReal(result);
+	std::string result = configfile.getSetting(key, Ogre::StringUtil::BLANK, ToString(default_value));
+	return ToFloat(result);
 }
 
 bool Skyscraper::InitSky()

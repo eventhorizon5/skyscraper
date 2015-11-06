@@ -186,7 +186,7 @@ bool Action::Run(Object *caller, Object *parent)
 	//numeric commands for elevator floor selections
 	if (IsNumeric(command_name) == true && elevator)
 	{
-		int floor = atoi(command_name.c_str());
+		int floor = ToInt(command_name);
 		return elevator->SelectFloor(floor);
 	}
 
@@ -210,14 +210,14 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int number = 0;
 				if (command_name.length() > 13)
-					number = atoi(command_name.substr(13, command_name.length() - 13).c_str());
+					number = ToInt(command_name.substr(13, command_name.length() - 13));
 				return elevator->OpenDoors(number, 2, 0, true);
 			}
 			if (StartsWith(command_name, "closeintmanual", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 14)
-					number = atoi(command_name.substr(14, command_name.length() - 14).c_str());
+					number = ToInt(command_name.substr(14, command_name.length() - 14));
 				elevator->CloseDoors(number, 2, 0, true);
 				return true;
 			}
@@ -225,14 +225,14 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int number = 0;
 				if (command_name.length() > 13)
-					number = atoi(command_name.substr(13, command_name.length() - 13).c_str());
+					number = ToInt(command_name.substr(13, command_name.length() - 13));
 				return elevator->OpenDoors(number, 3, 0, true);
 			}
 			if (StartsWith(command_name, "closeextmanual", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 14)
-					number = atoi(command_name.substr(14, command_name.length() - 14).c_str());
+					number = ToInt(command_name.substr(14, command_name.length() - 14));
 				elevator->CloseDoors(number, 3, 0, true);
 				return true;
 			}
@@ -240,14 +240,14 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int number = 0;
 				if (command_name.length() > 10)
-					number = atoi(command_name.substr(10, command_name.length() - 10).c_str());
+					number = ToInt(command_name.substr(10, command_name.length() - 10));
 				return elevator->OpenDoors(number, 1, 0, true);
 			}
 			if (StartsWith(command_name, "closemanual", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 11)
-					number = atoi(command_name.substr(11, command_name.length() - 11).c_str());
+					number = ToInt(command_name.substr(11, command_name.length() - 11));
 				elevator->CloseDoors(number, 1, 0, true);
 				return true;
 			}
@@ -255,14 +255,14 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int number = 0;
 				if (command_name.length() > 7)
-					number = atoi(command_name.substr(7, command_name.length() - 7).c_str());
+					number = ToInt(command_name.substr(7, command_name.length() - 7));
 				return elevator->OpenDoors(number, 2, 0, false);
 			}
 			if (StartsWith(command_name, "closeint", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 8)
-					number = atoi(command_name.substr(8, command_name.length() - 8).c_str());
+					number = ToInt(command_name.substr(8, command_name.length() - 8));
 				elevator->CloseDoors(number, 2, 0, false);
 				return true;
 			}
@@ -270,14 +270,14 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int number = 0;
 				if (command_name.length() > 7)
-					number = atoi(command_name.substr(7, command_name.length() - 7).c_str());
+					number = ToInt(command_name.substr(7, command_name.length() - 7));
 				return elevator->OpenDoors(number, 3, elevator->GetFloor(), false);
 			}
 			if (StartsWith(command_name, "closeext", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 8)
-					number = atoi(command_name.substr(8, command_name.length() - 8).c_str());
+					number = ToInt(command_name.substr(8, command_name.length() - 8));
 				elevator->CloseDoors(number, 3, elevator->GetFloor(), false);
 				return true;
 			}
@@ -285,14 +285,14 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int number = 0;
 				if (command_name.length() > 4)
-					number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+					number = ToInt(command_name.substr(4, command_name.length() - 4));
 				return elevator->OpenDoors(number);
 			}
 			if (StartsWith(command_name, "close", false) == true && elevator->Direction == 0)
 			{
 				int number = 0;
 				if (command_name.length() > 5)
-					number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+					number = ToInt(command_name.substr(5, command_name.length() - 5));
 				elevator->CloseDoors(number);
 				return true;
 			}
@@ -300,7 +300,7 @@ bool Action::Run(Object *caller, Object *parent)
 			{
 				int number = 0;
 				if (command_name.length() > 9)
-					number = atoi(command_name.substr(9, command_name.length() - 9).c_str());
+					number = ToInt(command_name.substr(9, command_name.length() - 9));
 				elevator->StopDoors(number);
 				return true;
 			}
@@ -428,7 +428,7 @@ bool Action::Run(Object *caller, Object *parent)
 		{
 			int number = 0;
 			if (command_name.length() > 4)
-				number = atoi(command_name.substr(4, command_name.length() - 4).c_str());
+				number = ToInt(command_name.substr(4, command_name.length() - 4));
 			elevator->HoldDoors(number);
 			return true;
 		}
@@ -436,7 +436,7 @@ bool Action::Run(Object *caller, Object *parent)
 		{
 			int number = 0;
 			if (command_name.length() > 8)
-				number = atoi(command_name.substr(8, command_name.length() - 8).c_str());
+				number = ToInt(command_name.substr(8, command_name.length() - 8));
 			elevator->EnableSensor(true, number);
 			return true;
 		}
@@ -444,7 +444,7 @@ bool Action::Run(Object *caller, Object *parent)
 		{
 			int number = 0;
 			if (command_name.length() > 9)
-				number = atoi(command_name.substr(9, command_name.length() - 9).c_str());
+				number = ToInt(command_name.substr(9, command_name.length() - 9));
 			elevator->EnableSensor(false, number);
 			return true;
 		}
@@ -452,7 +452,7 @@ bool Action::Run(Object *caller, Object *parent)
 		{
 			int number = 0;
 			if (command_name.length() > 11)
-				number = atoi(command_name.substr(11, command_name.length() - 11).c_str());
+				number = ToInt(command_name.substr(11, command_name.length() - 11));
 			elevator->ResetDoors(number, true);
 			return true;
 		}
@@ -460,7 +460,7 @@ bool Action::Run(Object *caller, Object *parent)
 		{
 			int number = 0;
 			if (command_name.length() > 6)
-				number = atoi(command_name.substr(6, command_name.length() - 6).c_str());
+				number = ToInt(command_name.substr(6, command_name.length() - 6));
 			elevator->OpenDoors(number);
 			elevator->HoldDoors(number, true);
 			return true;
@@ -469,7 +469,7 @@ bool Action::Run(Object *caller, Object *parent)
 		{
 			int number = 0;
 			if (command_name.length() > 5)
-				number = atoi(command_name.substr(5, command_name.length() - 5).c_str());
+				number = ToInt(command_name.substr(5, command_name.length() - 5));
 			elevator->ResetDoors(number);
 			return true;
 		}

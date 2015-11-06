@@ -1492,7 +1492,7 @@ int ScriptProcessor::ProcCommands()
 		if (compat == true)
 			StoreCommand(Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 		else
-			StoreCommand(Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+			StoreCommand(Simcore->AddFloor(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -1548,7 +1548,7 @@ int ScriptProcessor::ProcCommands()
 
 		//perform cut
 		for (int i = 0; i < (int)wallarray->size(); i++)
-			Simcore->Cut(wallarray->at(i), Ogre::Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]));
+			Simcore->Cut(wallarray->at(i), Ogre::Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), ToBool(tempdata[8]));
 		return sNextLine;
 	}
 
@@ -1672,7 +1672,7 @@ int ScriptProcessor::ProcCommands()
 		else
 			voffset -= altitude_shift;
 
-		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
 		return sNextLine;
 	}
 
@@ -1745,7 +1745,7 @@ int ScriptProcessor::ProcCommands()
 		else
 			voffset -= altitude_shift;
 
-		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]));
+		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
 		return sNextLine;
 	}
 
@@ -1995,7 +1995,7 @@ int ScriptProcessor::ProcCommands()
 		//determine if last parameter is a boolean, used for full floor selection on/off
 		if (IsBoolean(tempdata[params - 1]) == true)
 		{
-			if (Ogre::StringConverter::parseBool(tempdata[params - 1]) == true)
+			if (ToBool(tempdata[params - 1]) == true)
 				Simcore->GetShaft(shaftnum)->ShowFloors = 2;
 			params--;
 		}
@@ -2158,7 +2158,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->GetShaft(shaftnum)->ShowFullShaft = Ogre::StringConverter::parseBool(temp2);
+		Simcore->GetShaft(shaftnum)->ShowFullShaft = ToBool(temp2);
 		return sNextLine;
 	}
 
@@ -2284,7 +2284,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->GetStairs(stairnum)->ShowFullStairs = Ogre::StringConverter::parseBool(temp2);
+		Simcore->GetStairs(stairnum)->ShowFullStairs = ToBool(temp2);
 		return sNextLine;
 	}
 
@@ -2318,12 +2318,12 @@ int ScriptProcessor::ProcCommands()
 		if (params != 6)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->DrawWalls(Ogre::StringConverter::parseBool(tempdata[0]),
-					Ogre::StringConverter::parseBool(tempdata[1]),
-					Ogre::StringConverter::parseBool(tempdata[2]),
-					Ogre::StringConverter::parseBool(tempdata[3]),
-					Ogre::StringConverter::parseBool(tempdata[4]),
-					Ogre::StringConverter::parseBool(tempdata[5]));
+		Simcore->DrawWalls(ToBool(tempdata[0]),
+					ToBool(tempdata[1]),
+					ToBool(tempdata[2]),
+					ToBool(tempdata[3]),
+					ToBool(tempdata[4]),
+					ToBool(tempdata[5]));
 		return sNextLine;
 	}
 
@@ -2385,7 +2385,7 @@ int ScriptProcessor::ProcCommands()
 		//get text after equal sign
 		temp2 = GetAfterEquals(LineData);
 
-		Simcore->ResetTextureMapping(Ogre::StringConverter::parseBool(temp2));
+		Simcore->ResetTextureMapping(ToBool(temp2));
 		return sNextLine;
 	}
 
@@ -2400,20 +2400,20 @@ int ScriptProcessor::ProcCommands()
 
 		if (params == 4)
 		{
-			Simcore->SetPlanarMapping(Ogre::StringConverter::parseBool(tempdata[0]),
-					Ogre::StringConverter::parseBool(tempdata[1]),
-					Ogre::StringConverter::parseBool(tempdata[2]),
-					Ogre::StringConverter::parseBool(tempdata[3]), false);
+			Simcore->SetPlanarMapping(ToBool(tempdata[0]),
+					ToBool(tempdata[1]),
+					ToBool(tempdata[2]),
+					ToBool(tempdata[3]), false);
 			if (warn_deprecated == true)
 				ScriptWarning("Syntax deprecated");
 		}
 		else
 		{
-			Simcore->SetPlanarMapping(Ogre::StringConverter::parseBool(tempdata[0]),
-					Ogre::StringConverter::parseBool(tempdata[1]),
-					Ogre::StringConverter::parseBool(tempdata[2]),
-					Ogre::StringConverter::parseBool(tempdata[3]),
-					Ogre::StringConverter::parseBool(tempdata[4]));
+			Simcore->SetPlanarMapping(ToBool(tempdata[0]),
+					ToBool(tempdata[1]),
+					ToBool(tempdata[2]),
+					ToBool(tempdata[3]),
+					ToBool(tempdata[4]));
 		}
 		return sNextLine;
 	}
@@ -2430,7 +2430,7 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Syntax Error");
 		temp2 = GetAfterEquals(LineData);
 
-		ReverseAxis = Ogre::StringConverter::parseBool(temp2);
+		ReverseAxis = ToBool(temp2);
 		return sNextLine;
 	}
 
@@ -2571,8 +2571,8 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		Simcore->SetAutoSize(Ogre::StringConverter::parseBool(tempdata[0]),
-					Ogre::StringConverter::parseBool(tempdata[1]));
+		Simcore->SetAutoSize(ToBool(tempdata[0]),
+					ToBool(tempdata[1]));
 		return sNextLine;
 	}
 
@@ -2706,9 +2706,9 @@ int ScriptProcessor::ProcCommands()
 		else
 		{
 			if (partial == true)
-				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::StringConverter::parseBool(tempdata[5])));
+				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
 			else
-				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::StringConverter::parseBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
+				StoreCommand(Simcore->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
 		}
 		return sNextLine;
 	}
@@ -2756,9 +2756,9 @@ int ScriptProcessor::ProcCommands()
 		//create model
 		SBS::Model* model;
 		if (compat == true)
-			model = Simcore->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			model = Simcore->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
-			model = Simcore->AddModel(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			model = Simcore->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
@@ -3215,7 +3215,7 @@ int ScriptProcessor::ProcGlobals()
 	}
 	if (linecheck.substr(0, 15) == "interfloorontop")
 	{
-		Simcore->InterfloorOnTop = Ogre::StringConverter::parseBool(temp2);
+		Simcore->InterfloorOnTop = ToBool(temp2);
 		return sNextLine;
 	}
 	return sContinue;
@@ -3467,9 +3467,9 @@ int ScriptProcessor::ProcFloors()
 
 		//create floor
 		if (compat == true)
-			StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), true));
+			StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), true));
 		else
-			StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+			StoreCommand(floor->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -3518,7 +3518,7 @@ int ScriptProcessor::ProcFloors()
 			if (compat == true)
 				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 			else
-				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+				StoreCommand(Simcore->GetShaft(ToInt(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
 			return ScriptError("Invalid shaft");
@@ -3570,7 +3570,7 @@ int ScriptProcessor::ProcFloors()
 			if (compat == true)
 				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ReverseAxis, false, ToFloat(tempdata[10]), ToFloat(tempdata[11]), true));
 			else
-				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+				StoreCommand(Simcore->GetStairs(ToInt(tempdata[0]))->AddFloor(Current, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 		}
 		else
 			return ScriptError("Invalid stairwell");
@@ -3616,7 +3616,7 @@ int ScriptProcessor::ProcFloors()
 		if (compat == true)
 			StoreCommand(floor->AddInterfloorFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
 		else
-			StoreCommand(floor->AddInterfloorFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+			StoreCommand(floor->AddInterfloorFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -3637,7 +3637,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create wall
-		StoreCommand(floor->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		StoreCommand(floor->AddWall(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToBool(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -3730,7 +3730,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		StoreCommand(floor->ColumnWallBox(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -3750,7 +3750,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), Ogre::StringConverter::parseBool(tempdata[13])));
+		StoreCommand(floor->ColumnWallBox2(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13])));
 		return sNextLine;
 	}
 
@@ -3834,11 +3834,11 @@ int ScriptProcessor::ProcFloors()
 		//create call button
 		SBS::CallButton* callbutton = 0;
 		if (compat == 1)
-			callbutton = floor->AddCallButtons(callbutton_elevators, "", tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), Ogre::StringConverter::parseBool(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
+			callbutton = floor->AddCallButtons(callbutton_elevators, "", tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		else if (compat == 2)
-			callbutton = floor->AddCallButtons(callbutton_elevators, "", tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			callbutton = floor->AddCallButtons(callbutton_elevators, "", tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
-			callbutton = floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			callbutton = floor->AddCallButtons(callbutton_elevators, tempdata[0], tempdata[1], tempdata[2], tempdata[3], tempdata[4], tempdata[5], ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 		if (callbutton)
 		{
@@ -3945,7 +3945,7 @@ int ScriptProcessor::ProcFloors()
 		if (compat == 3)
 			door = floor->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 		if (compat == 0)
-			door = floor->AddDoor(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			door = floor->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		if (door)
 			door->SetLocked(lockvalue, keyvalue);
@@ -4032,7 +4032,7 @@ int ScriptProcessor::ProcFloors()
 			if (compat == 3)
 				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], false, tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 			if (compat == 0)
-				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(lockvalue, keyvalue);
@@ -4069,7 +4069,7 @@ int ScriptProcessor::ProcFloors()
 		//create door
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
-			SBS::Door* door = Simcore->GetShaft(ToInt(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			SBS::Door* door = Simcore->GetShaft(ToInt(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(lockvalue, keyvalue);
@@ -4129,9 +4129,9 @@ int ScriptProcessor::ProcFloors()
 			return ScriptError("Invalid elevator");
 
 		if (compat == true)
-			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), false, Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), Ogre::StringConverter::parseBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
+			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), false, ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17])));
 		else
-			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), Ogre::StringConverter::parseBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), tempdata[13], ToFloat(tempdata[14]), ToFloat(tempdata[15]), Ogre::StringConverter::parseBool(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
+			StoreCommand(floor->AddDirectionalIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), ToBool(tempdata[4]), tempdata[5], tempdata[6], tempdata[7], tempdata[8], tempdata[9], ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), tempdata[13], ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToBool(tempdata[16]), ToFloat(tempdata[17]), ToFloat(tempdata[18])));
 		return sNextLine;
 	}
 
@@ -4239,9 +4239,9 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		if (compat == false)
-			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
+			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])));
 		else
-			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), "Button", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
+			StoreCommand(floor->AddFloorIndicator(ToInt(tempdata[0]), ToBool(tempdata[1]), "Button", tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
 		return sNextLine;
 	}
 
@@ -4263,7 +4263,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+		floor->AddFillerWalls(tempdata[0], ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
 		return sNextLine;
 	}
 
@@ -4330,9 +4330,9 @@ int ScriptProcessor::ProcFloors()
 		else
 		{
 			if (partial == true)
-				StoreCommand(floor->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::StringConverter::parseBool(tempdata[5])));
+				StoreCommand(floor->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
 			else
-				StoreCommand(floor->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::StringConverter::parseBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
+				StoreCommand(floor->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
 		}
 		return sNextLine;
 	}
@@ -4411,9 +4411,9 @@ int ScriptProcessor::ProcFloors()
 		if (params == 2 || legacy == true)
 			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current));
 		else if (params == 3)
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, Ogre::StringConverter::parseBool(tempdata[2])));
+			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2])));
 		else
-			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3])));
+			StoreCommand(elev->FinishShaftDoor(ToInt(tempdata[1]), Current, ToBool(tempdata[2]), ToBool(tempdata[3])));
 		return sNextLine;
 	}
 
@@ -4460,9 +4460,9 @@ int ScriptProcessor::ProcFloors()
 		//create model
 		SBS::Model *model;
 		if (compat == true)
-			model = floor->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			model = floor->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
-			model = floor->AddModel(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			model = floor->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
@@ -4517,9 +4517,9 @@ int ScriptProcessor::ProcFloors()
 			SBS::Model *model;
 
 			if (compat == true)
-				model = Simcore->GetStairs(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				model = Simcore->GetStairs(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 			else
-				model = Simcore->GetStairs(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
+				model = Simcore->GetStairs(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 			if (setkey == true && model)
 				model->SetKey(keyvalue);
@@ -4576,9 +4576,9 @@ int ScriptProcessor::ProcFloors()
 		{
 			SBS::Model *model;
 			if (compat == true)
-				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 			else
-				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], Ogre::StringConverter::parseBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), Ogre::StringConverter::parseBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
+				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::Vector3(ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToBool(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToFloat(tempdata[15]));
 
 			if (setkey == true && model)
 				model->SetKey(keyvalue);
@@ -4870,7 +4870,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(floor->AddCameraTexture(tempdata[0], Ogre::StringConverter::parseBool(tempdata[1]), ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), Ogre::StringConverter::parseBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
+		StoreCommand(floor->AddCameraTexture(tempdata[0], ToBool(tempdata[1]), ToInt(tempdata[2]), ToFloat(tempdata[3]), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), Ogre::Vector3(ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]))));
 		return sNextLine;
 	}
 
@@ -4891,7 +4891,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//perform cut on floor
-		floor->Cut(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), false);
+		floor->Cut(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToBool(tempdata[6]), ToBool(tempdata[7]), false);
 		return sNextLine;
 	}
 
@@ -4912,7 +4912,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//perform cut on all objects related to the current floor
-		floor->CutAll(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::StringConverter::parseBool(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]));
+		floor->CutAll(Ogre::Vector3(ToFloat(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), ToBool(tempdata[6]), ToBool(tempdata[7]));
 		return sNextLine;
 	}
 
@@ -5791,7 +5791,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->MusicOn = Ogre::StringConverter::parseBool(temp2);
+		elev->MusicOn = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "musiconmove")
@@ -5799,7 +5799,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->MusicOnMove = Ogre::StringConverter::parseBool(temp2);
+		elev->MusicOnMove = ToBool(temp2);
 	}
 	if (linecheck.substr(0, 13) == "floorskiptext")
 	{
@@ -5861,63 +5861,63 @@ int ScriptProcessor::ProcElevators()
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->QueueResets = Ogre::StringConverter::parseBool(temp2);
+		elev->QueueResets = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "limitqueue")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->LimitQueue = Ogre::StringConverter::parseBool(temp2);
+		elev->LimitQueue = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 3) == "acp")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->ACP = Ogre::StringConverter::parseBool(temp2);
+		elev->ACP = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 6) == "uppeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->UpPeak = Ogre::StringConverter::parseBool(temp2);
+		elev->UpPeak = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "downpeak")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->DownPeak = Ogre::StringConverter::parseBool(temp2);
+		elev->DownPeak = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 18) == "independentservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->IndependentService = Ogre::StringConverter::parseBool(temp2);
+		elev->IndependentService = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 17) == "inspectionservice")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->InspectionService = Ogre::StringConverter::parseBool(temp2);
+		elev->InspectionService = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "fireservice1")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase1 = Ogre::StringConverter::parseInt(temp2);
+		elev->FireServicePhase1 = ToInt(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "fireservice2")
 	{
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
-		elev->FireServicePhase2 = Ogre::StringConverter::parseInt(temp2);
+		elev->FireServicePhase2 = ToInt(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 7) == "parking")
@@ -6033,7 +6033,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->AutoEnable = Ogre::StringConverter::parseBool(temp2);
+		elev->AutoEnable = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "autodoors")
@@ -6041,7 +6041,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->AutoDoors = Ogre::StringConverter::parseBool(temp2);
+		elev->AutoDoors = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 11) == "openonstart")
@@ -6049,7 +6049,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->OpenOnStart = Ogre::StringConverter::parseBool(temp2);
+		elev->OpenOnStart = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "interlocks")
@@ -6057,7 +6057,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->Interlocks = Ogre::StringConverter::parseBool(temp2);
+		elev->Interlocks = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 9) == "floorhold")
@@ -6065,7 +6065,7 @@ int ScriptProcessor::ProcElevators()
 		if (temp2check < 0)
 			return ScriptError("Syntax error");
 
-		elev->FloorHold = Ogre::StringConverter::parseBool(temp2);
+		elev->FloorHold = ToBool(temp2);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "doorsensor")
@@ -6087,7 +6087,7 @@ int ScriptProcessor::ProcElevators()
 		if (params < 1 || params > 2)
 			return ScriptError("Incorrect number of parameters");
 
-		elev->GetDoor(temp3)->EnableSensor(Ogre::StringConverter::parseBool(tempdata[0]));
+		elev->GetDoor(temp3)->EnableSensor(ToBool(tempdata[0]));
 		if (params == 2)
 		{
 			//check to see if file exists
@@ -6145,7 +6145,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		bool result = elev->CreateElevator(Ogre::StringConverter::parseBool(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]));
+		bool result = elev->CreateElevator(ToBool(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]));
 		if (result == false)
 			return ScriptError();
 		StoreCommand(elev);
@@ -6191,7 +6191,7 @@ int ScriptProcessor::ProcElevators()
 		if (compat == true)
 			StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ReverseAxis, false, ToFloat(tempdata[9]), ToFloat(tempdata[10]), true));
 		else
-			StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), Ogre::StringConverter::parseBool(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
+			StoreCommand(elev->AddFloor(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12])));
 		return sNextLine;
 	}
 
@@ -6258,9 +6258,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10])));
+			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10])));
 		else
-			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), Ogre::StringConverter::parseBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
+			StoreCommand(elev->AddDoors(ToInt(tempdata[0]), tempdata[1], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToBool(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9])));
 		return sNextLine;
 	}
 
@@ -6766,9 +6766,9 @@ int ScriptProcessor::ProcElevators()
 		}
 
 		if (compat == false)
-			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), Ogre::StringConverter::parseBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), Ogre::StringConverter::parseBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
+			elev->AddDirectionalIndicators(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), ToBool(tempdata[3]), tempdata[4], tempdata[5], tempdata[6], tempdata[7], tempdata[8], ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), tempdata[12], ToFloat(tempdata[13]), ToFloat(tempdata[14]), ToBool(tempdata[15]), ToFloat(tempdata[16]), ToFloat(tempdata[17]));
 		else
-			elev->AddDirectionalIndicators(Ogre::StringConverter::parseBool(tempdata[0]), false, Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
+			elev->AddDirectionalIndicators(ToBool(tempdata[0]), false, ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]));
 		return sNextLine;
 	}
 
@@ -6821,14 +6821,14 @@ int ScriptProcessor::ProcElevators()
 		if (compat == 0)
 		{
 			bool result;
-			result = elev->AddFloorSigns(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
+			result = elev->AddFloorSigns(ToInt(tempdata[0]), ToBool(tempdata[1]), tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 			if (result == false)
 				return ScriptError();
 		}
 		else if (compat == 1)
-			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), "Button", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			elev->AddFloorSigns(0, ToBool(tempdata[0]), "Button", tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		else if (compat == 2)
-			elev->AddFloorSigns(0, Ogre::StringConverter::parseBool(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
+			elev->AddFloorSigns(0, ToBool(tempdata[0]), tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		return sNextLine;
 	}
 
@@ -6895,9 +6895,9 @@ int ScriptProcessor::ProcElevators()
 		else
 		{
 			if (partial == true)
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::StringConverter::parseBool(tempdata[5])));
+				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5])));
 			else
-				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::StringConverter::parseBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
+				StoreCommand(elev->AddSound(tempdata[0], tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToBool(tempdata[5]), ToFloat(tempdata[6]), ToInt(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::Vector3(ToFloat(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16]))));
 		}
 		return sNextLine;
 	}
@@ -7000,9 +7000,9 @@ int ScriptProcessor::ProcElevators()
 		if (params == 1 || legacy == true)
 			StoreCommand(elev->FinishDoors(ToInt(tempdata[0])));
 		else if (params == 2)
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1])));
+			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1])));
 		else
-			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2])));
+			StoreCommand(elev->FinishDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2])));
 
 		return sNextLine;
 	}
@@ -7036,9 +7036,9 @@ int ScriptProcessor::ProcElevators()
 		if (params == 1 || legacy == true)
 			result = elev->FinishShaftDoors(ToInt(tempdata[0]));
 		else if (params == 2)
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]));
+			result = elev->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]));
 		else
-			result = elev->FinishShaftDoors(ToInt(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]));
+			result = elev->FinishShaftDoors(ToInt(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]));
 
 		if (result == false)
 			return ScriptError();
@@ -7063,7 +7063,7 @@ int ScriptProcessor::ProcElevators()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		StoreCommand(elev->AddDirectionalIndicator(Ogre::StringConverter::parseBool(tempdata[0]), Ogre::StringConverter::parseBool(tempdata[1]), Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), Ogre::StringConverter::parseBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
+		StoreCommand(elev->AddDirectionalIndicator(ToBool(tempdata[0]), ToBool(tempdata[1]), ToBool(tempdata[2]), tempdata[3], tempdata[4], tempdata[5], tempdata[6], tempdata[7], ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), tempdata[11], ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToBool(tempdata[14]), ToFloat(tempdata[15]), ToFloat(tempdata[16])));
 		return sNextLine;
 	}
 
@@ -7120,7 +7120,7 @@ int ScriptProcessor::ProcElevators()
 		else if (compat == 2)
 			door = elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]));
 		else
-			door = elev->AddDoor(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			door = elev->AddDoor(tempdata[0], tempdata[1], ToBool(tempdata[2]), tempdata[3], ToFloat(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 
 		if (door)
 			door->SetLocked(lockvalue, keyvalue);
@@ -7172,9 +7172,9 @@ int ScriptProcessor::ProcElevators()
 		//create model
 		SBS::Model *model;
 		if (compat == true)
-			model = elev->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), Ogre::StringConverter::parseBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
+			model = elev->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
-			model = elev->AddModel(tempdata[0], tempdata[1], Ogre::StringConverter::parseBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), Ogre::StringConverter::parseBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			model = elev->AddModel(tempdata[0], tempdata[1], ToBool(tempdata[2]), Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
@@ -7309,7 +7309,7 @@ int ScriptProcessor::ProcTextures()
 		if (params == 4)
 			Simcore->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		else
-			Simcore->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, Ogre::StringConverter::parseBool(tempdata[4]));
+			Simcore->LoadTexture(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -7365,7 +7365,7 @@ int ScriptProcessor::ProcTextures()
 		if (force == false)
 			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 4], ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 		else
-			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 5], ToFloat(tempdata[params - 4]), ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), true, Ogre::StringConverter::parseBool(tempdata[params - 1]));
+			Simcore->LoadAnimatedTexture(filenames, tempdata[params - 5], ToFloat(tempdata[params - 4]), ToFloat(tempdata[params - 3]), ToFloat(tempdata[params - 2]), true, ToBool(tempdata[params - 1]));
 		return sNextLine;
 	}
 
@@ -7391,9 +7391,9 @@ int ScriptProcessor::ProcTextures()
 		CheckFile(tempdata[2]);
 
 		if (params == 7)
-			Simcore->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], Ogre::StringConverter::parseBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+			Simcore->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
 		else
-			Simcore->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], Ogre::StringConverter::parseBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), true, Ogre::StringConverter::parseBool(tempdata[7]));
+			Simcore->LoadAlphaBlendTexture(tempdata[0], tempdata[1], tempdata[2], tempdata[3], ToBool(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), true, ToBool(tempdata[7]));
 		return sNextLine;
 	}
 
@@ -7415,7 +7415,7 @@ int ScriptProcessor::ProcTextures()
 		if (params == 4)
 			Simcore->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]));
 		else
-			Simcore->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, Ogre::StringConverter::parseBool(tempdata[4]));
+			Simcore->LoadMaterial(tempdata[0], tempdata[1], ToFloat(tempdata[2]), ToFloat(tempdata[3]), true, ToBool(tempdata[4]));
 		return sNextLine;
 	}
 
@@ -7450,7 +7450,7 @@ int ScriptProcessor::ProcTextures()
 			if (params == 6)
 				Simcore->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]));
 			else
-				Simcore->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, Ogre::StringConverter::parseBool(tempdata[6]));
+				Simcore->LoadTexture(temp2, temp6, ToFloat(tempdata[4]), ToFloat(tempdata[5]), true, ToBool(tempdata[6]));
 		}
 		return sNextLine;
 	}
@@ -7482,7 +7482,7 @@ int ScriptProcessor::ProcTextures()
 		if (params == 14)
 			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]));
 		else
-			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, Ogre::StringConverter::parseBool(tempdata[14]));
+			Simcore->AddTextToTexture(tempdata[0], tempdata[1], buffer, ToFloat(tempdata[3]), tempdata[4], ToInt(tempdata[5]), ToInt(tempdata[6]), ToInt(tempdata[7]), ToInt(tempdata[8]), tempdata[9], tempdata[10], ToInt(tempdata[11]), ToInt(tempdata[12]), ToInt(tempdata[13]), true, ToBool(tempdata[14]));
 		return sNextLine;
 	}
 
@@ -7528,7 +7528,7 @@ int ScriptProcessor::ProcTextures()
 			if (params == 16)
 				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]));
 			else
-				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, Ogre::StringConverter::parseBool(tempdata[16]));
+				Simcore->AddTextToTexture(tempdata[2], tempdata[3], buffer, ToFloat(tempdata[5]), tempdata[6], ToInt(tempdata[7]), ToInt(tempdata[8]), ToInt(tempdata[9]), ToInt(tempdata[10]), tempdata[11], tempdata[12], ToInt(tempdata[13]), ToInt(tempdata[14]), ToInt(tempdata[15]), true, ToBool(tempdata[16]));
 		}
 		linecheck = SetCaseCopy(LineData, false);
 		return sNextLine;
@@ -7553,7 +7553,7 @@ int ScriptProcessor::ProcTextures()
 		if (params == 8)
 			Simcore->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		else
-			Simcore->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), Ogre::StringConverter::parseBool(tempdata[8]));
+			Simcore->LoadTextureCropped(tempdata[0], tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToBool(tempdata[8]));
 		return sNextLine;
 	}
 
@@ -7575,7 +7575,7 @@ int ScriptProcessor::ProcTextures()
 		if (params == 9)
 			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]));
 		else
-			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true, Ogre::StringConverter::parseBool(tempdata[9]));
+			Simcore->AddTextureOverlay(tempdata[0], tempdata[1], tempdata[2], ToInt(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), true, ToBool(tempdata[9]));
 		return sNextLine;
 	}
 

@@ -81,5 +81,6 @@ SBSIMPEXP Ogre::Vector2 Round(const Ogre::Vector2 &value, int decimal_places = 0
 SBSIMPEXP bool IsBoolean(std::string string);
 SBSIMPEXP float ToFloat(const std::string &string);
 SBSIMPEXP int ToInt(const std::string &string);
+SBSIMPEXP bool ToBool(std::string string);
 
 #endif
