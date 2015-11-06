@@ -3317,7 +3317,7 @@ void SBS::RemoveTrigger(Trigger *trigger)
 	}
 }
 
-std::string SBS::VerifyFile(const std::string &filename)
+std::string SBS::VerifyFile(std::string filename)
 {
 	//verify a filename
 	//if it exists, return the same filename
@@ -3325,15 +3325,13 @@ std::string SBS::VerifyFile(const std::string &filename)
 	//case (fixes case-sensitivity issues mainly on Linux)
 	//returns the original string if not found
 
-	std::string file = filename;
-	TrimString(file);
-
-	ReplaceAll(file, "\\", "/");
+	TrimString(filename);
+	ReplaceAll(filename, "\\", "/");
 
 	//check for a cached result
 	for (int i = 0; i < (int)verify_results.size(); i++)
 	{
-		if (verify_results[i].filename == file)
+		if (verify_results[i].filename == filename)
 			return verify_results[i].result;
 	}
 
@@ -3342,31 +3340,58 @@ std::string SBS::VerifyFile(const std::string &filename)
 #else
 	Ogre::FileSystemArchive filesystem(".", "FileSystem");
 #endif
-	if (filesystem.exists(file))
+
+	//check for a mount point
+	Ogre::StringVectorPtr listing;
+	std::string shortname;
+	std::string group = GetMountPath(filename, shortname);
+
+	if (group == "General")
 	{
-		CacheFilename(file, file);
-		return file;
+		//for the General group, check the native filesystem
+
+		if (filesystem.exists(filename) == true)
+		{
+			//if exact filename exists, cache and exit
+			CacheFilename(filename, filename);
+			return filename;
+		}
+
+		//otherwise get listing of files to check
+		listing = filesystem.list();
+	}
+	else
+	{
+		//for other groups, check resource mount points
+
+		if (Ogre::ResourceGroupManager::getSingleton().resourceExists(group, shortname) == true)
+		{
+			//if exact filename exists, cache and exit
+			CacheFilename(filename, filename);
+			return filename;
+		}
+
+		//otherwise get listing of files to check
+		listing = Ogre::ResourceGroupManager::getSingleton().listResourceNames(group);
 	}
 
-	std::string directory;
-	int loc = (int)file.find_last_of("/");
-	directory = file.substr(0, loc + 1);
-
-	Ogre::StringVectorPtr listing = filesystem.list();
+	//go through file listing, to find a match with a different case
 	for (int i = 0; i < (int)listing->size(); i++)
 	{
 		std::string check = listing->at(i);
 		std::string checkoriginal = SetCaseCopy(check, false);
-		std::string checkfile = SetCaseCopy(file, false);
+		std::string checkfile = SetCaseCopy(filename, false);
 		if (checkoriginal == checkfile)
 		{
-			CacheFilename(file, check);
+			//if match is found, cache and exit
+			CacheFilename(filename, check);
 			return check;
 		}
 	}
 
-	CacheFilename(file, file);
-	return file;
+	//if no match is found, cache original name and exit
+	CacheFilename(filename, filename);
+	return filename;
 }
 
 bool SBS::FileExists(const std::string &filename)
