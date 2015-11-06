@@ -655,7 +655,7 @@ void Skyscraper::GetInput()
 		return;
 
 	static int wireframe;
-	static bool wait, waitcheck, colliders, b_down, c_down, boxes;
+	static bool wait, waitcheck, colliders, b_down, boxes;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
@@ -948,15 +948,13 @@ void Skyscraper::GetInput()
 		}
 
 		//model pick-up
-		if (wxGetKeyState((wxKeyCode)'C') && c_down == false)
+		if (wxGetKeyState((wxKeyCode)'C') && wait == false)
 		{
-			Simcore->camera->PickUpModel();
-			c_down = true;
-		}
-		else if (!wxGetKeyState((wxKeyCode)'C') && c_down == true)
-		{
-			Simcore->camera->DropModel();
-			c_down = false;
+			if (Simcore->camera->IsModelAttached() == false)
+				Simcore->camera->PickUpModel();
+			else
+				Simcore->camera->DropModel();
+			wait = true;
 		}
 
 		//values from old version

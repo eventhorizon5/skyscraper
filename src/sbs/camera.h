@@ -136,8 +136,9 @@ public:
 	bool IsMeshVisible(MeshObject *mesh);
 	void AttachModel(Model *model);
 	void DetachModel();
-	void PickUpModel();
+	bool PickUpModel();
 	void DropModel();
+	bool IsModelAttached();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

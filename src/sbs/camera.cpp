@@ -1105,7 +1105,7 @@ void Camera::DetachModel()
 	AttachedModel = 0;
 }
 
-void Camera::PickUpModel()
+bool Camera::PickUpModel()
 {
 	//pick up model
 	Ogre::Vector3 front, top;
@@ -1120,7 +1120,7 @@ void Camera::PickUpModel()
 	bool hit = sbs->HitBeam(ray, 1.0f, mesh, wall, hit_position);
 
 	if (hit == false)
-		return;
+		return false;
 
 	Model *model = dynamic_cast<Model*>(mesh->GetParent());
 
@@ -1128,7 +1128,10 @@ void Camera::PickUpModel()
 	{
 		model->PickUp();
 		AttachModel(model);
+		return true;
 	}
+
+	return false;
 }
 
 void Camera::DropModel()
@@ -1140,6 +1143,13 @@ void Camera::DropModel()
 		AttachedModel->Drop();
 		DetachModel();
 	}
+}
+
+bool Camera::IsModelAttached()
+{
+	if (AttachedModel)
+		return true;
+	return false;
 }
 
 }

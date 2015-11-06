@@ -1077,9 +1077,9 @@ std::string SBS::GetTextureMaterial(const std::string &name, bool &result, bool 
 	if (!material.get())
 	{
 		//if material's not found, display a warning and use a default material
-		std::string message;
 		if (report == true)
 		{
+			std::string message;
 			if (polygon_name != "")
 				message = "Texture '" + matname + "' not found for polygon '" + polygon_name + "'; using default material";
 			else
