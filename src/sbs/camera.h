@@ -166,6 +166,9 @@ private:
 	Ogre::Vector3 accum_movement;
 	bool collision_reset;
 	bool use_startdirection;
+	Ogre::Quaternion prev_orientation;
+	Ogre::Vector3 prev_position;
+
 
 	//Models
 	Model*	AttachedModel;

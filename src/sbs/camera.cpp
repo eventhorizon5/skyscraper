@@ -100,6 +100,8 @@ Camera::Camera(Ogre::Camera *camera)
 	use_startdirection = false;
 	BinocularsFOV = sbs->GetConfigFloat("Skyscraper.SBS.Camera.BinocularsFOV", 10.0f);
 	AttachedModel = 0;
+	prev_orientation = Ogre::Quaternion::ZERO;
+	prev_position = Ogre::Vector3::ZERO;
 
 	//set up camera and scene nodes
 	MainCamera = camera;
@@ -1009,6 +1011,18 @@ void Camera::Sync()
 	//sync scene node with bullet object
 	if (EnableBullet == true)
 		mCharacter->sync();
+
+	//notify on movement or rotation
+	Ogre::Vector3 position = GetSceneNode()->_getDerivedPosition();
+	Ogre::Quaternion orientation = GetSceneNode()->_getDerivedOrientation();
+
+	if (prev_position != position)
+		NotifyMove();
+	if (prev_orientation != orientation)
+		NotifyRotate();
+
+	prev_position = position;
+	prev_orientation = orientation;
 }
 
 void Camera::SetMaxRenderDistance(float value)
