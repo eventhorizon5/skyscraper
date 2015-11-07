@@ -115,6 +115,7 @@ Minus or [ - Zoom out (increase FOV angle)
 Esc - exit to main menu
 V - Toggle noclip mode (gravity and collisions off)
 B - Binoculars mode (hold down), and reset FOV to default
+C - Pick up object (physics-enabled models)
 Ctrl-R - Reload current building
 Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 
