@@ -816,6 +816,10 @@ void Camera::Loop(float delta)
 	GetDirection(front, top);
 	sbs->SetListenerDirection(front, top);
 
+	//if a model is attached, run it's loop
+	if (AttachedModel)
+		AttachedModel->Loop();
+
 	//sync camera with collider
 	Sync();
 }
