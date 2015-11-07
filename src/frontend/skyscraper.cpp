@@ -854,6 +854,11 @@ void Skyscraper::GetInput()
 				floor->Enabled(true);
 				floor->EnableGroup(true);
 			}
+
+			Simcore->EnableBuildings(true);
+			Simcore->EnableLandscape(true);
+			Simcore->EnableExternal(true);
+			Simcore->EnableSkybox(true);
 		}
 
 		if (wxGetKeyState(WXK_F7) && wait == false)
