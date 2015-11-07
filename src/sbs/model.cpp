@@ -157,7 +157,7 @@ void Model::Loop()
 	//if model is a child of a floor, and is in an elevator, switch parent to elevator
 	if (floor)
 	{
-		for (int i = 1; i < sbs->Elevators(); i++)
+		for (int i = 1; i <= sbs->Elevators(); i++)
 		{
 			Elevator *elev = sbs->GetElevator(i);
 
