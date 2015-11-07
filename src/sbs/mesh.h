@@ -121,6 +121,7 @@ public:
 	void OnRotate(bool parent);
 	int GetSubmeshCount();
 	bool IsVisible(Ogre::Camera *camera);
+	bool IsPhysical();
 
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container
@@ -134,7 +135,7 @@ public:
 
 private:
 	bool enabled;
-	bool IsPhysical;
+	bool is_physical;
 	float restitution, friction, mass;
 	bool prepared;
 	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);

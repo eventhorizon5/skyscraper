@@ -1126,9 +1126,12 @@ bool Camera::PickUpModel()
 
 	if (model)
 	{
-		model->PickUp();
-		AttachModel(model);
-		return true;
+		if (model->IsPhysical() == true)
+		{
+			model->PickUp();
+			AttachModel(model);
+			return true;
+		}
 	}
 
 	return false;

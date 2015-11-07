@@ -527,7 +527,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	mShape = 0;
 	Movable = 0;
 	prepared = false;
-	IsPhysical = enable_physics;
+	is_physical = enable_physics;
 	this->restitution = restitution;
 	this->friction = friction;
 	this->mass = mass;
@@ -535,7 +535,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	MeshGeometry.reserve(128); //reserve vertex space
 
 	//use box collider if physics should be enabled
-	if (IsPhysical == true)
+	if (is_physical == true)
 		tricollider = false;
 	else
 		tricollider = true;
@@ -618,7 +618,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 		}
 
 		//load collider model if physics is disabled
-		if (IsPhysical == false)
+		if (is_physical == false)
 		{
 			std::string colname2;
 
@@ -1661,7 +1661,7 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 		std::string name = node->getName();
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		if (IsPhysical == false)
+		if (IsPhysical() == false)
 			mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		else
 			mBody->setShape(node, shape, restitution, friction, mass);
@@ -2101,6 +2101,11 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 	Ogre::AxisAlignedBox global_box (pos + min, pos + max);
 
 	return camera->isVisible(global_box);
+}
+
+bool MeshObject::IsPhysical()
+{
+	return is_physical;
 }
 
 }

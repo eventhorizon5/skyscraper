@@ -101,9 +101,9 @@ void Model::SetKey(int keyid)
 	KeyID = keyid;
 }
 
-bool Model::PhysicsEnabled()
+bool Model::IsPhysical()
 {
-	return (mesh->Movable != 0);
+	return mesh->IsPhysical();
 }
 
 void Model::RemoveFromParent()
