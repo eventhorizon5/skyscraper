@@ -182,7 +182,7 @@ void Object::RemoveChild(Object *object)
 			if (children[i] == object)
 			{
 				children.erase(children.begin() + i);
-				return;
+				break;
 			}
 		}
 	}
@@ -430,14 +430,16 @@ void Object::ChangeParent(Object *new_parent)
 	if (new_parent == Parent)
 		return;
 
-	//remove this scenenode from parent
-	if (SceneNode)
-		SceneNode->getParent()->removeChild(SceneNode);
+	//get original positioning
+	Ogre::Vector3 pos = GetPosition();
 
 	//switch parent
 	Parent->RemoveChild(this);
 	Parent = new_parent;
 	Parent->AddChild(this);
+
+	//restore absolute positioning
+	SetPosition(pos);
 
 	sbs->Report("Changed parent of object '" + ToString(Number) + ": " + Name + "' to '" + ToString(new_parent->GetNumber()) + ": " + new_parent->GetName() + "'");
 }
