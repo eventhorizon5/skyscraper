@@ -1152,4 +1152,41 @@ bool Camera::IsModelAttached()
 	return false;
 }
 
+void Camera::ResetState()
+{
+	//reset camera position and state
+	Floor *floor = sbs->GetFloor(CurrentFloor);
+	if (floor)
+	{
+		floor->Enabled(false);
+		floor->EnableGroup(false);
+	}
+
+	EnableGravity(true);
+	EnableCollisions(true);
+	SetToStartPosition(true);
+	SetToStartRotation();
+	SetToDefaultFOV();
+
+	floor = sbs->GetFloor(StartFloor);
+	if (floor)
+	{
+		floor->Enabled(true);
+		floor->EnableGroup(true);
+	}
+
+	sbs->EnableBuildings(true);
+	sbs->EnableLandscape(true);
+	sbs->EnableExternal(true);
+	sbs->EnableSkybox(true);
+}
+
+void Camera::ResetView()
+{
+	//reset rotation/direction and FOV of camera
+	SetToStartDirection();
+	SetToStartRotation();
+	SetToDefaultFOV();
+}
+
 }

@@ -662,6 +662,8 @@ void Skyscraper::GetInput()
 	// First get elapsed time from the virtual clock.
 	current_time = Simcore->GetRunTime();
 
+	SBS::Camera *camera = Simcore->camera;
+
 	//speed limit certain keys
 	if (wait == true)
 	{
@@ -678,8 +680,8 @@ void Skyscraper::GetInput()
 	}
 
 	//fix for the camera velocities due to the non-event driven key system
-	Simcore->camera->desired_velocity = Ogre::Vector3(0, 0, 0);
-	Simcore->camera->desired_angle_velocity = Ogre::Vector3(0, 0, 0);
+	camera->desired_velocity = Ogre::Vector3(0, 0, 0);
+	camera->desired_angle_velocity = Ogre::Vector3(0, 0, 0);
 
 	//get old mouse coordinates
 	old_mouse_x = Simcore->mouse_x;
@@ -694,15 +696,15 @@ void Skyscraper::GetInput()
 	float height = window->GetClientSize().GetHeight();
 
 	//if mouse coordinates changed, and we're in freelook mode, rotate camera
-	if (Simcore->camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
+	if (camera->Freelook == true && (old_mouse_x != Simcore->mouse_x || old_mouse_y != Simcore->mouse_y))
 	{
 		window->WarpPointer(width / 2, height / 2);
 		Ogre::Vector3 rotational;
-		rotational.x = Simcore->camera->Freelook_speed * -((float)(Simcore->mouse_y - (height / 2))) / (height * 2);
-		rotational.y = Simcore->camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2);
+		rotational.x = camera->Freelook_speed * -((float)(Simcore->mouse_y - (height / 2))) / (height * 2);
+		rotational.y = camera->Freelook_speed * -((width / 2) - (float)Simcore->mouse_x) / (width * 2);
 		rotational.z = 0;
-		Simcore->camera->desired_angle_velocity = rotational;
-		Simcore->camera->angle_velocity = rotational;
+		camera->desired_angle_velocity = rotational;
+		camera->angle_velocity = rotational;
 	}
 
 	//check if the user clicked on an object, and process it
@@ -711,15 +713,15 @@ void Skyscraper::GetInput()
 	if ((left == true || right == true) && MouseDown == false)
 	{
 		MouseDown = true;
-		Simcore->camera->MouseDown = MouseDown;
-		Simcore->camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), right);
+		camera->MouseDown = MouseDown;
+		camera->ClickedObject(wxGetKeyState(WXK_SHIFT), wxGetKeyState(WXK_CONTROL), wxGetKeyState(WXK_ALT), right);
 	}
 
 	//reset mouse state
 	if (left == false && right == false)
 	{
 		MouseDown = false;
-		Simcore->camera->MouseDown = MouseDown;
+		camera->MouseDown = MouseDown;
 	}
 
 	if (wxGetKeyState(WXK_ESCAPE))
@@ -740,10 +742,10 @@ void Skyscraper::GetInput()
 		wait = true;
 	}
 
-	Simcore->camera->speed = 1;
-	float speed_normal = Simcore->camera->cfg_speed;
-	float speed_fast = Simcore->camera->cfg_speedfast;
-	float speed_slow = Simcore->camera->cfg_speedslow;
+	camera->speed = 1;
+	float speed_normal = camera->cfg_speed;
+	float speed_fast = camera->cfg_speedfast;
+	float speed_slow = camera->cfg_speedslow;
 
 	//crash test
 	if (wxGetKeyState(WXK_CONTROL) && wxGetKeyState(WXK_ALT) && wxGetKeyState((wxKeyCode)'C'))
@@ -756,109 +758,84 @@ void Skyscraper::GetInput()
 			Reload = true;
 			return;
 		}
-		Simcore->camera->speed = speed_slow;
+		camera->speed = speed_slow;
 	}
 	else if (wxGetKeyState(WXK_SHIFT))
-		Simcore->camera->speed = speed_fast;
+		camera->speed = speed_fast;
 
 	if (wxGetKeyState(WXK_ALT))
 	{
 		//strafe movement
 		if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
-			Simcore->camera->Strafe(speed_normal);
+			camera->Strafe(speed_normal);
 		if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
-			Simcore->camera->Strafe(-speed_normal);
+			camera->Strafe(-speed_normal);
 		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
-			Simcore->camera->Float(speed_normal);
+			camera->Float(speed_normal);
 		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
-			Simcore->camera->Float(-speed_normal);
+			camera->Float(-speed_normal);
 		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
-			Simcore->camera->Spin(speed_normal);
+			camera->Spin(speed_normal);
 		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
-			Simcore->camera->Spin(-speed_normal);
+			camera->Spin(-speed_normal);
 	}
 	else
 	{
 		if (wxGetKeyState((wxKeyCode)'V') && wait == false)
 		{
-			if (Simcore->camera->GetGravityStatus() == false)
+			if (camera->GetGravityStatus() == false)
 			{
-				Simcore->camera->EnableGravity(true);
-				Simcore->camera->EnableCollisions(true);
+				camera->EnableGravity(true);
+				camera->EnableCollisions(true);
 				Report("Gravity and collision detection on");
 			}
 			else
 			{
-				Simcore->camera->EnableGravity(false);
-				Simcore->camera->EnableCollisions(false);
+				camera->EnableGravity(false);
+				camera->EnableCollisions(false);
 				Report("Gravity and collision detection off");
 			}
 			wait = true;
 		}
-		if (Simcore->camera->Freelook == false)
+		if (camera->Freelook == false)
 		{
 			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
-				Simcore->camera->Turn(speed_normal);
+				camera->Turn(speed_normal);
 			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
-				Simcore->camera->Turn(-speed_normal);
+				camera->Turn(-speed_normal);
 		}
 		else
 		{
 			if (wxGetKeyState(WXK_RIGHT) || wxGetKeyState((wxKeyCode)'D'))
-				Simcore->camera->Strafe(speed_normal);
+				camera->Strafe(speed_normal);
 			if (wxGetKeyState(WXK_LEFT) || wxGetKeyState((wxKeyCode)'A'))
-				Simcore->camera->Strafe(-speed_normal);
+				camera->Strafe(-speed_normal);
 		}
 		if (wxGetKeyState(WXK_PAGEUP) || wxGetKeyState((wxKeyCode)'P'))
-			Simcore->camera->Look(speed_normal);
+			camera->Look(speed_normal);
 		if (wxGetKeyState(WXK_PAGEDOWN) || wxGetKeyState((wxKeyCode)'L'))
-			Simcore->camera->Look(-speed_normal);
+			camera->Look(-speed_normal);
 		if (wxGetKeyState(WXK_UP) || wxGetKeyState((wxKeyCode)'W'))
-			Simcore->camera->Step(speed_normal);
+			camera->Step(speed_normal);
 		if (wxGetKeyState(WXK_DOWN) || wxGetKeyState((wxKeyCode)'S'))
-			Simcore->camera->Step(-speed_normal);
+			camera->Step(-speed_normal);
 		if (wxGetKeyState(WXK_SPACE) && wait == false)
 		{
-			if (Simcore->camera->IsOnGround() == true)
+			if (camera->IsOnGround() == true)
 			{
-				Simcore->camera->Jump();
+				camera->Jump();
 				wait = true;
 			}
 		}
 		if (wxGetKeyState(WXK_F3))
 		{
-			//reset view
-			Simcore->camera->SetToStartDirection();
-			Simcore->camera->SetToStartRotation();
-			Simcore->camera->SetToDefaultFOV();
+			//reset rotation/direction and FOV of camera
+			camera->ResetView();
 		}
 		if (wxGetKeyState(WXK_F6))
 		{
 			//reset camera position and state
-			SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
-			if (floor)
-			{
-				floor->Enabled(false);
-				floor->EnableGroup(false);
-			}
-
-			Simcore->camera->EnableGravity(true);
-			Simcore->camera->EnableCollisions(true);
-			Simcore->camera->SetToStartPosition(true);
-			Simcore->camera->SetToStartRotation();
-			Simcore->camera->SetToDefaultFOV();
-
-			floor = Simcore->GetFloor(Simcore->camera->StartFloor);
-			if (floor)
-			{
-				floor->Enabled(true);
-				floor->EnableGroup(true);
-			}
-
-			Simcore->EnableBuildings(true);
-			Simcore->EnableLandscape(true);
-			Simcore->EnableExternal(true);
-			Simcore->EnableSkybox(true);
+			camera->ResetState();
 		}
 
 		if (wxGetKeyState(WXK_F7) && wait == false)
@@ -875,18 +852,18 @@ void Skyscraper::GetInput()
 			if (wireframe == 0)
 			{
 				Simcore->EnableSkybox(false);
-				Simcore->camera->SetViewMode(1);
+				camera->SetViewMode(1);
 				wireframe = 1;
 			}
 			else if (wireframe == 1)
 			{
-				Simcore->camera->SetViewMode(2);
+				camera->SetViewMode(2);
 				wireframe = 2;
 			}
 			else if (wireframe == 2)
 			{
 				Simcore->EnableSkybox(true);
-				Simcore->camera->SetViewMode(0);
+				camera->SetViewMode(0);
 				wireframe = 0;
 			}
 			wait = true;
@@ -906,8 +883,8 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_F5) && wait == false)
 		{
 			//toggle freelook mode
-			Simcore->camera->Freelook = !Simcore->camera->Freelook;
-			if (Simcore->camera->Freelook == true)
+			camera->Freelook = !camera->Freelook;
+			if (camera->Freelook == true)
 				window->SetCursor(wxCURSOR_CROSS);
 			else
 				window->SetCursor(wxNullCursor);
@@ -930,43 +907,43 @@ void Skyscraper::GetInput()
 		if (wxGetKeyState(WXK_NUMPAD_SUBTRACT) || wxGetKeyState((wxKeyCode)'['))
 		{
 			//increase FOV angle
-			float angle = Simcore->camera->GetFOVAngle() + Simcore->camera->cfg_zoomspeed;
-			Simcore->camera->SetFOVAngle(angle);
+			float angle = camera->GetFOVAngle() + camera->cfg_zoomspeed;
+			camera->SetFOVAngle(angle);
 		}
 		if (wxGetKeyState(WXK_NUMPAD_ADD) || wxGetKeyState((wxKeyCode)']'))
 		{
 			//decrease FOV angle
-			float angle = Simcore->camera->GetFOVAngle() - Simcore->camera->cfg_zoomspeed;
-			Simcore->camera->SetFOVAngle(angle);
+			float angle = camera->GetFOVAngle() - camera->cfg_zoomspeed;
+			camera->SetFOVAngle(angle);
 		}
 
 		//binoculars
 		if (wxGetKeyState((wxKeyCode)'B') && b_down == false)
 		{
-			Simcore->camera->Binoculars(true);
+			camera->Binoculars(true);
 			b_down = true;
 		}
 		else if (!wxGetKeyState((wxKeyCode)'B') && b_down == true)
 		{
-			Simcore->camera->Binoculars(false);
+			camera->Binoculars(false);
 			b_down = false;
 		}
 
 		//model pick-up
 		if (wxGetKeyState((wxKeyCode)'C') && wait == false)
 		{
-			if (Simcore->camera->IsModelAttached() == false)
-				Simcore->camera->PickUpModel();
+			if (camera->IsModelAttached() == false)
+				camera->PickUpModel();
 			else
-				Simcore->camera->DropModel();
+				camera->DropModel();
 			wait = true;
 		}
 
 		//values from old version
 		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
-			Simcore->camera->Float(speed_normal);
+			camera->Float(speed_normal);
 		if (wxGetKeyState(WXK_END) || wxGetKeyState((wxKeyCode)'K'))
-			Simcore->camera->Float(-speed_normal);
+			camera->Float(-speed_normal);
 	}
 }
 

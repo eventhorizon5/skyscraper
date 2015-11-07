@@ -139,6 +139,8 @@ public:
 	bool PickUpModel();
 	void DropModel();
 	bool IsModelAttached();
+	void ResetState();
+	void ResetView();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
