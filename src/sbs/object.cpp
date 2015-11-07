@@ -433,6 +433,11 @@ void Object::ChangeParent(Object *new_parent)
 	//get original positioning
 	Ogre::Vector3 pos = GetPosition();
 
+	//get original orientation
+	Ogre::Quaternion q;
+	if (SceneNode)
+		q = SceneNode->_getDerivedOrientation();
+
 	//switch parent
 	Parent->RemoveChild(this);
 	Parent = new_parent;
@@ -440,6 +445,13 @@ void Object::ChangeParent(Object *new_parent)
 
 	//restore absolute positioning
 	SetPosition(pos);
+
+	//restore orientation
+	if (SceneNode)
+	{
+		SceneNode->_setDerivedOrientation(q);
+		NotifyRotate();
+	}
 
 	sbs->Report("Changed parent of object '" + ToString(Number) + ": " + Name + "' to '" + ToString(new_parent->GetNumber()) + ": " + new_parent->GetName() + "'");
 }
