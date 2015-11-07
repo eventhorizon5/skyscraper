@@ -61,23 +61,22 @@ Object::~Object()
 
 	//clean up scene node
 	if (SceneNode)
-	{
 		SceneNode->detachAllObjects();
 
-		if (sbs->FastDelete == false)
-		{
-			SceneNode->getParent()->removeChild(SceneNode);
+	if (sbs->FastDelete == false)
+	{
+		//unregister this object from parent
+		if (Parent && sbs->FastDelete == false)
+			Parent->RemoveChild(this);
+
+		//delete scene node
+		if (SceneNode)
 			sbs->mSceneManager->destroySceneNode(SceneNode);
-		}
 	}
 
 	//if fastdelete is enabled, don't unregister (just delete)
 	if (sbs->FastDelete == true || Temporary == true)
 		return;
-
-	//unregister this object from parent
-	if (Parent)
-		Parent->RemoveChild(this);
 
 	sbs->UnregisterObject(Number);
 	sbs->Report("Deleted object " + ToString(Number) + ": " + Name);
