@@ -76,20 +76,20 @@ public:
 	//functions
 	Camera(Ogre::Camera *camera);
 	~Camera();
-	void SetPosition(const Ogre::Vector3 &vector);
-	void SetDirection(const Ogre::Vector3 &vector);
-	void SetRotation(Ogre::Vector3 vector);
-	Ogre::Vector3 GetPosition();
+	void SetPosition(const Ogre::Vector3 &position);
+	void SetDirection(const Ogre::Vector3 &direction);
+	void SetRotation(const Ogre::Vector3 &rotation);
+	Ogre::Vector3 GetPosition(bool relative = false);
 	void GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top);
 	Ogre::Vector3 GetRotation();
 	void UpdateCameraFloor();
 	bool Move(Ogre::Vector3 vector, float speed = 1.0f, bool flip = true);
 	bool MovePosition(Ogre::Vector3 vector, float speed = 1.0f);
-	void Rotate(const Ogre::Vector3 &vector, float speed = 1.0f);
-	void RotateLocal(const Ogre::Vector3 &vector, float speed = 1.0f);
-	void SetStartDirection(const Ogre::Vector3 &vector);
+	void Rotate(const Ogre::Vector3 &position, float speed = 1.0f);
+	void RotateLocal(const Ogre::Vector3 &position, float speed = 1.0f);
+	void SetStartDirection(const Ogre::Vector3 &direction);
 	Ogre::Vector3 GetStartDirection();
-	void SetStartRotation(const Ogre::Vector3 &vector);
+	void SetStartRotation(const Ogre::Vector3 &rotation);
 	Ogre::Vector3 GetStartRotation();
 	void SetToStartPosition(bool disable_current_floor);
 	void SetToStartDirection();
@@ -158,7 +158,7 @@ private:
 	int lastfloor;
 	bool lastfloorset;
 	float FOV; //default FOV angle
-	Ogre::Vector3 rotation;
+	Ogre::Vector3 Rotation;
 	bool Collisions; //collision detection status
 	bool RotationStopped;
 	bool MovementStopped;

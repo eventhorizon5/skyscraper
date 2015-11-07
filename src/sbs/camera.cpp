@@ -153,29 +153,30 @@ Camera::~Camera()
 	sbs->mSceneManager->destroySceneNode(nodename);
 }
 
-void Camera::SetPosition(const Ogre::Vector3 &vector)
+void Camera::SetPosition(const Ogre::Vector3 &position)
 {
 	//sets the camera to an absolute position in 3D space
 	if (EnableBullet == true)
 	{
-		mCharacter->setPosition(sbs->ToRemote(vector) - MainCamera->getPosition());
+		mCharacter->setPosition(sbs->ToRemote(position) - MainCamera->getPosition());
 		mCharacter->updateTransform(true, false, false);
 	}
 	else
-		MainCamera->setPosition(sbs->ToRemote(vector));
+		MainCamera->setPosition(sbs->ToRemote(position));
 }
 
-void Camera::SetDirection(const Ogre::Vector3 &vector)
+void Camera::SetDirection(const Ogre::Vector3 &direction)
 {
 	//sets the camera's direction to an absolute position
-	//MainCamera->lookAt(sbs->ToRemote(vector));
+	//MainCamera->lookAt(sbs->ToRemote(direction));
 }
 
-void Camera::SetRotation(Ogre::Vector3 vector)
+void Camera::SetRotation(const Ogre::Vector3 &rotation)
 {
 	//sets the camera's rotation in degrees
 
 	//keep rotation within 360 degree boundaries
+	Ogre::Vector3 vector = rotation;
 	if (vector.x > 359)
 		vector.x -= 360;
 	if (vector.x < 0)
@@ -194,7 +195,7 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	Ogre::Quaternion z(Ogre::Degree(vector.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion camrot = x * z;
 	Ogre::Quaternion bodyrot = y;
-	rotation = vector;
+	Rotation = vector;
 	MainCamera->setOrientation(camrot);
 	if (EnableBullet == true)
 	{
@@ -203,9 +204,10 @@ void Camera::SetRotation(Ogre::Vector3 vector)
 	}
 }
 
-Ogre::Vector3 Camera::GetPosition()
+Ogre::Vector3 Camera::GetPosition(bool relative)
 {
 	//returns the camera's current position
+	//"relative" value is ignored for camera object
 
 	return sbs->ToLocal(GetSceneNode()->getPosition() + MainCamera->getPosition());
 }
@@ -229,7 +231,7 @@ Ogre::Vector3 Camera::GetRotation()
 {
 	//returns the camera's current rotation
 
-	return rotation;
+	return Rotation;
 }
 
 void Camera::UpdateCameraFloor()
@@ -296,48 +298,48 @@ bool Camera::MovePosition(Ogre::Vector3 vector, float speed)
 	return true;
 }
 
-void Camera::Rotate(const Ogre::Vector3 &vector, float speed)
+void Camera::Rotate(const Ogre::Vector3 &rotation, float speed)
 {
 	//rotates the camera in a relative amount in world space
 
-	Ogre::Vector3 rot = GetRotation() + (vector * speed);
+	Ogre::Vector3 rot = GetRotation() + (rotation * speed);
 	SetRotation(rot);
 }
 
-void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
+void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
 {
 	//rotates the camera in a relative amount in local camera space
 
-	if (RotationStopped == true && vector == Ogre::Vector3::ZERO)
+	if (RotationStopped == true && rotation == Ogre::Vector3::ZERO)
 		return;
 
 	RotationStopped = false;
 
-	if (vector == Ogre::Vector3::ZERO)
+	if (rotation == Ogre::Vector3::ZERO)
 		RotationStopped = true;
 
 	//convert rotation values to degrees
-	float xdeg = Ogre::Math::RadiansToDegrees(vector.x) * speed; //X axis (up/down)
-	float ydeg = Ogre::Math::RadiansToDegrees(vector.y) * speed; //Y axis (left/right)
-	float zdeg = Ogre::Math::RadiansToDegrees(vector.z) * speed; //Z axis (clockwise/counterclockwise)
-	rotation.x += xdeg;
-	rotation.y += ydeg;
-	rotation.z += zdeg;
+	float xdeg = Ogre::Math::RadiansToDegrees(rotation.x) * speed; //X axis (up/down)
+	float ydeg = Ogre::Math::RadiansToDegrees(rotation.y) * speed; //Y axis (left/right)
+	float zdeg = Ogre::Math::RadiansToDegrees(rotation.z) * speed; //Z axis (clockwise/counterclockwise)
+	Rotation.x += xdeg;
+	Rotation.y += ydeg;
+	Rotation.z += zdeg;
 
-	if (rotation.x > 359)
-		rotation.x -= 360;
-	if (rotation.y > 359)
-		rotation.y -= 360;
-	if (rotation.z > 359)
-		rotation.z -= 360;
-	if (rotation.x < 0)
-		rotation.x += 360;
-	if (rotation.y < 0)
-		rotation.y += 360;
-	if (rotation.z < 0)
-		rotation.z += 360;
+	if (Rotation.x > 359)
+		Rotation.x -= 360;
+	if (Rotation.y > 359)
+		Rotation.y -= 360;
+	if (Rotation.z > 359)
+		Rotation.z -= 360;
+	if (Rotation.x < 0)
+		Rotation.x += 360;
+	if (Rotation.y < 0)
+		Rotation.y += 360;
+	if (Rotation.z < 0)
+		Rotation.z += 360;
 
-	Ogre::Quaternion rot(Ogre::Degree(rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
+	Ogre::Quaternion rot(Ogre::Degree(Rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
 	if (EnableBullet == true)
 	{
 		//rotate character collider
@@ -352,9 +354,9 @@ void Camera::RotateLocal(const Ogre::Vector3 &vector, float speed)
 		MainCamera->setOrientation(rot);
 }
 
-void Camera::SetStartDirection(const Ogre::Vector3 &vector)
+void Camera::SetStartDirection(const Ogre::Vector3 &direction)
 {
-	StartDirection = vector;
+	StartDirection = direction;
 	use_startdirection = true;
 }
 
@@ -363,9 +365,9 @@ Ogre::Vector3 Camera::GetStartDirection()
 	return StartDirection;
 }
 
-void Camera::SetStartRotation(const Ogre::Vector3 &vector)
+void Camera::SetStartRotation(const Ogre::Vector3 &rotation)
 {
-	StartRotation = vector;
+	StartRotation = rotation;
 }
 
 Ogre::Vector3 Camera::GetStartRotation()
