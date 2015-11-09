@@ -37,8 +37,6 @@ using namespace OgreBulletCollisions;
 using namespace Ogre;
 
 //------------------------------------------------------------------------------------------------
-bool DebugLines::_materials_created = false;
-//------------------------------------------------------------------------------------------------
 DebugLines::DebugLines() : SimpleRenderable()
 {
 	mRenderOp.vertexData = new Ogre::VertexData();
@@ -49,7 +47,17 @@ DebugLines::DebugLines() : SimpleRenderable()
 	mRenderOp.useIndexes = false;
     _drawn = false;
 
-    if (!_materials_created)
+    bool materials_created = false;
+    bool group_exists = ResourceGroupManager::getSingletonPtr()->resourceGroupExists("OgreBulletCollisions");
+
+    if (group_exists == true)
+    {
+    	MaterialPtr test = MaterialManager::getSingleton().getByName("OgreBulletCollisionsDebugLines/Enabled", "OgreBulletCollisions");
+    	if (!test.isNull())
+    		materials_created = true;
+    }
+
+    if (!materials_created)
     {
         StringVector resourceGroups = ResourceGroupManager::getSingletonPtr()->getResourceGroups();
 
@@ -96,8 +104,6 @@ DebugLines::DebugLines() : SimpleRenderable()
 		blue->getTechnique(0)->getPass(0)->setAmbient(0,0,1);
 		blue->getTechnique(0)->getPass(0)->setShininess(110);
 		blue->getTechnique(0)->getPass(0)->setDepthBias(1.0f);
-
-        _materials_created = true;
     }
     setCastShadows (false);
     this->setMaterial("OgreBulletCollisionsDebugLines/Enabled");
@@ -120,7 +126,7 @@ void DebugLines::clear()
 }
 //------------------------------------------------------------------------------------------------
 DebugLines::~DebugLines(void)
-{ 
+{
     clear();
 
     delete mRenderOp.vertexData;
@@ -128,9 +134,9 @@ DebugLines::~DebugLines(void)
 //------------------------------------------------------------------------------------------------
 void DebugLines::draw()
 {
-    if (_drawn || _points.empty()) 
+    if (_drawn || _points.empty())
         return;
-    else 
+    else
         _drawn = true;
 
     // Initialization stuff
@@ -162,7 +168,7 @@ void DebugLines::draw()
 			mRenderOp.vertexData->vertexCount,
 			HardwareBuffer::HBU_DYNAMIC_WRITE_ONLY_DISCARDABLE);
 
-		bind->setBinding(0, vbuf); 
+		bind->setBinding(0, vbuf);
 	}
 
     // Drawing stuff
