@@ -79,7 +79,7 @@ bool TimerObject::IsRunning()
 	return Running;
 }
 
-void TimerObject::Check()
+void TimerObject::Loop()
 {
 	if (Running == false)
 		return;

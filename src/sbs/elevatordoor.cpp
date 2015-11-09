@@ -1260,7 +1260,7 @@ void ElevatorDoor::Chime(int floor, bool direction)
 		chime->Load(UpChimeSound);
 		chimesound_loaded = 1;
 	}
-	chime->Loop(false);
+	chime->SetLoopState(false);
 	chime->SetPositionY(sbs->GetFloor(floor)->GetBase() + Doors->Height);
 	chime->Play();
 }
@@ -2035,7 +2035,7 @@ void ElevatorDoor::EnableNudgeMode(bool value)
 		if (nudgesound_loaded == false)
 			nudgesound->Load(NudgeSound);
 		nudgesound_loaded = true;
-		nudgesound->Loop(true);
+		nudgesound->SetLoopState(true);
 		nudgesound->Play();
 		CloseDoors();
 	}
@@ -2057,7 +2057,7 @@ bool ElevatorDoor::GetNudgeStatus()
 void ElevatorDoor::CheckSensor()
 {
 	if (GetSensorStatus(false) == true && sensor && (AreDoorsOpen() == true || AreDoorsMoving() == true))
-		sensor->Check();
+		sensor->Loop();
 }
 
 void ElevatorDoor::CreateSensor(Ogre::Vector3 &area_min, Ogre::Vector3 &area_max)

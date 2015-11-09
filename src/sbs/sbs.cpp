@@ -607,7 +607,7 @@ void SBS::MainLoop()
 			for (int i = 1; i <= Elevators(); i++)
 			{
 				if (GetElevator(i))
-					GetElevator(i)->MonitorLoop();
+					GetElevator(i)->Loop();
 			}
 
 			//check if the user is in an elevator
@@ -651,7 +651,7 @@ void SBS::MainLoop()
 		for (int i = 0; i < (int)TriggerArray.size(); i++)
 		{
 			if (TriggerArray[i])
-				TriggerArray[i]->Check();
+				TriggerArray[i]->Loop();
 		}
 
 		//process models
@@ -2605,7 +2605,7 @@ void SBS::ProcessTimers()
 	for (int i = 0; i < (int)timercallbacks.size(); i++)
 	{
 		if (timercallbacks[i])
-			timercallbacks[i]->Check();
+			timercallbacks[i]->Loop();
 	}
 }
 
@@ -2732,7 +2732,7 @@ Sound* SBS::AddSound(const std::string &name, const std::string &filename, const
 	sound->SetDopplerLevel(doppler_level);
 	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
-	sound->Loop(loop);
+	sound->SetLoopState(loop);
 	if (loop && IsRunning == true)
 		sound->Play();
 

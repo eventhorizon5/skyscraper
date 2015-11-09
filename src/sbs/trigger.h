@@ -53,7 +53,7 @@ public:
 	void PlaySound();
 	int FindActionPosition(const std::string &name);
 	bool DoAction();
-	bool Check();
+	void Loop();
 	bool IsInside();
 
 private:

@@ -71,13 +71,15 @@ public:
 	virtual void SetRotation(const Ogre::Vector3 &rotation);
 	virtual void SetRotation(float X, float Y, float Z);
 	virtual Ogre::Vector3 GetRotation();
-	virtual void OnMove(bool parent) {}; //called when object is moved
-	virtual void OnRotate(bool parent) {}; //called when object is rotated
+	virtual void OnMove(bool parent) {} //called when object is moved
+	virtual void OnRotate(bool parent) {} //called when object is rotated
 	void NotifyMove(bool parent = false);
 	void NotifyRotate(bool parent = false);
-	virtual void ResetState() {}; //resets the internal state of an object
+	virtual void ResetState() {} //resets the internal state of an object
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
+	virtual void Init() {} //pre-runloop (first-run) object initialization
+	virtual void Loop() {} //object runloop
 
 	template <typename T> bool IsType()
 	{

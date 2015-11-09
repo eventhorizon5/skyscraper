@@ -243,7 +243,7 @@ int Control::GetPreviousSelectPosition()
 void Control::PlaySound()
 {
 	//play associated button sound
-	sound->Loop(false);
+	sound->SetLoopState(false);
 	sound->Play();
 }
 

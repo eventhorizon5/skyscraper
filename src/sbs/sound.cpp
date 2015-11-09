@@ -169,7 +169,7 @@ void Sound::SetConeSettings(float inside_angle, float outside_angle, float outsi
 		channel->set3DConeSettings(inside_angle, outside_angle, outside_volume);
 }
 
-void Sound::Loop(bool value)
+void Sound::SetLoopState(bool value)
 {
 	SoundLoop = value;
 	if (channel)
@@ -282,7 +282,7 @@ bool Sound::Play(bool reset)
 		SetVolume(Volume);
 		SetDistances(MinDistance, MaxDistance);
 		SetDirection(Direction);
-		Loop(SoundLoop);
+		SetLoopState(SoundLoop);
 		SetSpeed(Speed);
 		SetDopplerLevel(doppler_level);
 		if (position_queued == true)
@@ -449,7 +449,7 @@ void Sound::ProcessQueue()
 
 	//play new sound
 	Load(snd->filename);
-	Loop(snd->loop);
+	SetLoopState(snd->loop);
 	Play();
 	snd->played = true;
 }

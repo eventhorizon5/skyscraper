@@ -599,7 +599,7 @@ bool Action::Run(Object *caller, Object *parent)
 				{
 					if (soundlist[i])
 					{
-						soundlist[i]->Loop(ToBool(command_parameters[1]));
+						soundlist[i]->SetLoopState(ToBool(command_parameters[1]));
 						bool result = soundlist[i]->Play();
 
 						if ((int)soundlist.size() == 1)

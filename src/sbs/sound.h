@@ -43,7 +43,7 @@ public:
 	float GetMaximumDistance();
 	void SetDirection(const Ogre::Vector3 &direction);
 	Ogre::Vector3 GetDirection();
-	void Loop(bool value);
+	void SetLoopState(bool value);
 	bool GetLoopState();
 	void Pause();
 	bool IsPaused();

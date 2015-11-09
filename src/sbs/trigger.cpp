@@ -158,7 +158,7 @@ int Trigger::GetPreviousSelectPosition()
 void Trigger::PlaySound()
 {
 	//play associated sound
-	sound->Loop(false);
+	sound->SetLoopState(false);
 	sound->Play();
 }
 
@@ -238,7 +238,7 @@ bool Trigger::DoAction()
 	return result;
 }
 
-bool Trigger::Check()
+void Trigger::Loop()
 {
 	//check for action; should be called in a loop by the parent object
 
@@ -272,7 +272,7 @@ bool Trigger::Check()
 
 		//exit without changing position if floor button is currently selected
 		if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
-			return false;
+			return;
 
 		//change to next control position
 		NextSelectPosition();
@@ -288,10 +288,7 @@ bool Trigger::Check()
 		//change back to original selection if result is false
 		if (result == false)
 			PreviousSelectPosition();
-
-		return result;
 	}
-	return false;
 }
 
 bool Trigger::IsInside()

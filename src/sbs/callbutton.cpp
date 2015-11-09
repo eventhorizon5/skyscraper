@@ -338,7 +338,7 @@ bool CallButton::Call(bool direction)
 		return ReportError("No valid elevators found");
 
 	//play sound
-	sound->Loop(false);
+	sound->SetLoopState(false);
 	sound->Play();
 
 	//turn on button lights

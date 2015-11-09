@@ -139,7 +139,7 @@ void Escalator::Loop()
 
 	if (sound->IsPlaying() == false)
 	{
-		sound->Loop(true);
+		sound->SetLoopState(true);
 		sound->Play();
 	}
 }

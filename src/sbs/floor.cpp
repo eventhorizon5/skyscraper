@@ -783,7 +783,7 @@ void Floor::Loop()
 	for (int i = 0; i < (int)TriggerArray.size(); i++)
 	{
 		if (TriggerArray[i])
-			TriggerArray[i]->Check();
+			TriggerArray[i]->Loop();
 	}
 
 	for (int i = 0; i < (int)EscalatorArray.size(); i++)
@@ -917,7 +917,7 @@ Sound* Floor::AddSound(const std::string &name, const std::string &filename, Ogr
 	sound->SetDopplerLevel(doppler_level);
 	sound->SetConeSettings(cone_inside_angle, cone_outside_angle, cone_outside_volume);
 	sound->Load(filename);
-	sound->Loop(loop);
+	sound->SetLoopState(loop);
 	if (loop && sbs->IsRunning == true && sbs->camera->CurrentFloor == Number)
 		sound->Play();
 
