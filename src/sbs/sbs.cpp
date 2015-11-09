@@ -3662,9 +3662,16 @@ std::string SBS::GetMountPath(std::string filename, std::string &newfilename)
 
 void SBS::ShowColliders(bool value)
 {
-	if (mWorld)
-		mWorld->setShowDebugShapes(value);
-	camera->ShowDebugShape(value);
+	try
+	{
+		if (mWorld)
+			mWorld->setShowDebugShapes(value);
+		camera->ShowDebugShape(value);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportError("Error enabling/disabling collider shapes\n" + e.getDescription());
+	}
 }
 
 void SBS::CacheFilename(const std::string &filename, const std::string &result)
