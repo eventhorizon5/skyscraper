@@ -54,6 +54,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 		Ogre::AxisAlignedBox box = mesh->MeshWrapper.get()->getBounds();
 		Ogre::Vector3 vec = box.getCenter();
 		Offset = Ogre::Vector3(vec.x, -box.getMinimum().y, -vec.z);
+		Offset *= scale_multiplier;
 	}
 
 	//move to position and specified offset
