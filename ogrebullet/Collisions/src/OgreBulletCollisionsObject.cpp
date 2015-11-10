@@ -166,8 +166,9 @@ namespace OgreBulletCollisions
 
    			//get offset of this node relative to parent, and adjust parent according to that offset
    			Ogre::Vector3 offset = mRootNode->_getDerivedPosition() - mesh_node->_getDerivedPosition();
+   			Ogre::Vector3 offset_top = mesh_node->_getDerivedPosition() - object_node->_getDerivedPosition();
 
-   			object_node->_setDerivedPosition(p - offset); //object scenenode
+   			object_node->_setDerivedPosition(p - offset - offset_top); //object scenenode
    			mesh_node->_setDerivedPosition(p - offset); //mesh scenenode
    		}
 
