@@ -185,8 +185,8 @@ Cut Landscape, -20, -1, -20, 20, 1, 20, false, true
 <EndFloor>
 
 <Floor 0>
-    AddModel Couch, couch.mesh, true, 18, 0, -5, 0, 90, 0, 0, 1, false, 0, 0, 0
-    AddModel Couch, couch.mesh, true, 0, 0, -18, 0, 180, 0, 0, 1, true, 0.1, 0.5, 0.1
+    AddModel Couch, couch.mesh, true, 18.8, 0, -5, 0, 90, 0, 0, 0.6, false, 0, 0, 0
+    AddModel Couch, couch.mesh, true, 0, 0, -18.8, 0, 180, 0, 0, 0.6, true, 0.1, 0.5, 0.1
 
     SetKey 1
     AddModel Key, key.mesh, true, -10, 0, 0, 0, 90, 0, 0, 3, false, 0, 0, 0
