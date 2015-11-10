@@ -154,8 +154,22 @@ namespace OgreBulletCollisions
     // -------------------------------------------------------------------------
     void Object::setPosition(const Ogre::Vector3 &p)
     {
-    		if (update_parent == true)
-    			mRootNode->getParentSceneNode()->_setDerivedPosition(p);
+   		if (update_parent == true)
+   		{
+   			Ogre::SceneNode *mesh_node = mRootNode->getParentSceneNode(); //mesh (parent) scene node
+   			if (!mesh_node)
+   				return;
+
+   			Ogre::SceneNode *object_node = mesh_node->getParentSceneNode(); //SBS object scene node (mesh parent)
+   			if (!object_node)
+   				return;
+
+   			//get offset of this node relative to parent, and adjust parent according to that offset
+   			Ogre::Vector3 offset = mRootNode->_getDerivedPosition() - mesh_node->_getDerivedPosition();
+
+   			object_node->_setDerivedPosition(p - offset); //object scenenode
+   			mesh_node->_setDerivedPosition(p - offset); //mesh scenenode
+   		}
 
 		mRootNode->_setDerivedPosition(p);
     }
@@ -169,7 +183,18 @@ namespace OgreBulletCollisions
     void Object::setOrientation(const Ogre::Quaternion &q)
     {
 	    if (update_parent == true)
-		    mRootNode->getParentSceneNode()->_setDerivedOrientation(q);
+	    {
+   			Ogre::SceneNode *mesh_node = mRootNode->getParentSceneNode(); //mesh (parent) scene node
+   			if (!mesh_node)
+   				return;
+
+   			Ogre::SceneNode *object_node = mesh_node->getParentSceneNode(); //SBS object scene node (mesh parent)
+   			if (!object_node)
+   				return;
+
+		    object_node->_setDerivedOrientation(q);
+		    mesh_node->_setDerivedOrientation(q);
+	    }
 
 	    mRootNode->_setDerivedOrientation(q);
     }

@@ -533,6 +533,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	this->mass = mass;
 	no_collider = false;
 	MeshGeometry.reserve(128); //reserve vertex space
+	collider_node = 0;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -1565,10 +1566,9 @@ void MeshObject::CreateCollider()
 
 		//finalize shape
 		shape->Finish();
-		std::string name = MeshWrapper->getName();
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
-		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		mBody = new OgreBulletDynamics::RigidBody(MeshWrapper->getName(), sbs->mWorld);
 		mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 
@@ -1627,10 +1627,9 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 
 		//finalize shape
 		shape->Finish();
-		std::string name = node->getName();
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
-		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		mBody = new OgreBulletDynamics::RigidBody(node->getName(), sbs->mWorld);
 		mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
 		mShape = shape;
 	}
@@ -1648,9 +1647,7 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	if (mBody)
 		return;
 
-	Ogre::SceneNode *node = GetSceneNode();
-
-	if (!node)
+	if (!GetSceneNode())
 		return;
 
 	try
@@ -1658,13 +1655,16 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 		//initialize collider shape
 		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
-		std::string name = node->getName();
 
-		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
+		//create a new scene node for this collider, and center the collider accordingly
+		Ogre::Vector3 collider_center = MeshWrapper->getBounds().getCenter();
+		collider_node = GetSceneNode()->createChildSceneNode(name + " collider", collider_center);
+
+		mBody = new OgreBulletDynamics::RigidBody(collider_node->getName(), sbs->mWorld);
 		if (IsPhysical() == false)
-			mBody->setStaticShape(node, shape, 0.1f, 0.5f, false);
+			mBody->setStaticShape(collider_node, shape, 0.1f, 0.5f, false);
 		else
-			mBody->setShape(node, shape, restitution, friction, mass);
+			mBody->setShape(collider_node, shape, restitution, friction, mass);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -2059,12 +2059,18 @@ WallObject* MeshObject::FindPolygon(const std::string &name, int &index)
 
 void MeshObject::OnMove(bool parent)
 {
+	if (collider_node)
+		collider_node->needUpdate();
+
 	if (mBody)
 		mBody->updateTransform(true, false, false);
 }
 
 void MeshObject::OnRotate(bool parent)
 {
+	if (collider_node)
+		collider_node->needUpdate();
+
 	if (mBody)
 	{
 		if (parent == true)
