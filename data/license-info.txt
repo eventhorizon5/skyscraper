@@ -79,6 +79,6 @@ sounds:
 
 models:
 -key.mesh originally Key.skp by 50210, from the Sketchup 3D Warehouse
--couch.mesh originally "modern sofa.skp" from the Sketchup 3D Warehouse
+-couch.mesh originally "modern sofa.skp" by Lori Bozievich, from the Sketchup 3D Warehouse
 -swimmingpool.mesh originally "swimming pool" by 1, at www.3dxtras.com
 
