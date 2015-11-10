@@ -221,10 +221,10 @@ public:
 	std::string GetTextureMaterial(const std::string &name, bool &result, bool report = true, const std::string &polygon_name = "");
 	Elevator* NewElevator(int number);
 	Floor* NewFloor(int number);
-	int Elevators();
-	int TotalFloors(); //all floors including basements
-	int Shafts();
-	int StairsNum();
+	int GetElevatorCount();
+	int GetTotalFloors(); //all floors including basements
+	int GetShaftCount();
+	int GetStairsCount();
 	Floor* GetFloor(int number);
 	Elevator* GetElevator(int number);
 	Shaft* GetShaft(int number);

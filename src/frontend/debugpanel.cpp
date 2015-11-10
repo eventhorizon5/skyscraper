@@ -362,7 +362,7 @@ void DebugPanel::OnInit()
 	chkAutoShafts->SetValue(Simcore->AutoShafts);
 	chkAutoStairs->SetValue(Simcore->AutoStairs);
 	chkVerbose->SetValue(Simcore->Verbose);
-	if (Simcore->Elevators() > 0)
+	if (Simcore->GetElevatorCount() > 0)
 		chkRandom->SetValue(Simcore->GetElevator(1)->RandomActivity);
 
 	mc = new MeshControl(dp, -1);
@@ -395,7 +395,7 @@ void DebugPanel::Timer::Notify()
 		if (floor)
 			dp->t_floorname->SetLabel(wxString::FromAscii(floor->Name.c_str()));
 
-		if (Simcore->Elevators() > 0)
+		if (Simcore->GetElevatorCount() > 0)
 		{
 			dp->bEditElevator->Enable(true);
 			dp->t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
@@ -547,9 +547,9 @@ void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 
 void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
 {
-	if (Simcore->Elevators() > 0)
+	if (Simcore->GetElevatorCount() > 0)
 	{
-		for (int i = 1; i <= Simcore->Elevators(); i++)
+		for (int i = 1; i <= Simcore->GetElevatorCount(); i++)
 		{
 			if (Simcore->GetElevator(i))
 				Simcore->GetElevator(i)->RandomActivity = chkRandom->GetValue();

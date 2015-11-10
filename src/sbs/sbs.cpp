@@ -489,7 +489,7 @@ bool SBS::Start()
 	EnableSkybox(true);
 
 	//turn off floors
-	for (int i = 0; i < TotalFloors(); i++)
+	for (int i = 0; i < GetTotalFloors(); i++)
 		FloorArray[i].object->Enabled(false);
 
 	//initialize objects (cascades down through entire object tree)
@@ -586,7 +586,7 @@ void SBS::MainLoop()
 		//run elevator handlers
 		if (ProcessElevators == true)
 		{
-			for (int i = 1; i <= Elevators(); i++)
+			for (int i = 1; i <= GetElevatorCount(); i++)
 			{
 				if (GetElevator(i))
 					GetElevator(i)->Loop();
@@ -597,14 +597,14 @@ void SBS::MainLoop()
 		}
 
 		//run shaft loops
-		for (int i = 1; i <= Shafts(); i++)
+		for (int i = 1; i <= GetShaftCount(); i++)
 		{
 			if (GetShaft(i))
 				GetShaft(i)->Loop();
 		}
 
 		//run stairwell loops
-		for (int i = 1; i <= StairsNum(); i++)
+		for (int i = 1; i <= GetStairsCount(); i++)
 		{
 			if (GetStairs(i))
 				GetStairs(i)->Loop();
@@ -1559,7 +1559,7 @@ int SBS::GetFloorNumber(float altitude, int lastfloor, bool checklastfloor)
 {
 	//Returns floor number located at a specified altitude
 
-	if (TotalFloors() == 0)
+	if (GetTotalFloors() == 0)
 		return 0;
 
 	//check to see if altitude is below bottom floor
@@ -1743,25 +1743,25 @@ Floor* SBS::NewFloor(int number)
 	return floor.object;
 }
 
-int SBS::Elevators()
+int SBS::GetElevatorCount()
 {
 	//return the number of elevators
 	return (int)ElevatorArray.size();
 }
 
-int SBS::TotalFloors()
+int SBS::GetTotalFloors()
 {
-	//return the number of floors
+	//return the number of floors, including basements
 	return (int)FloorArray.size();
 }
 
-int SBS::Shafts()
+int SBS::GetShaftCount()
 {
 	//return the number of shafts
 	return (int)ShaftArray.size();
 }
 
-int SBS::StairsNum()
+int SBS::GetStairsCount()
 {
 	//return the number of stairs
 	return (int)StairsArray.size();
@@ -1840,7 +1840,7 @@ Elevator* SBS::GetElevator(int number)
 {
 	//return pointer to elevator object
 
-	if (number < 1 || number > Elevators())
+	if (number < 1 || number > GetElevatorCount())
 		return 0;
 
 	if (getelevator_number == number && getelevator_result)
@@ -1885,7 +1885,7 @@ Shaft* SBS::GetShaft(int number)
 {
 	//return pointer to shaft object
 
-	if (number < 1 || number > Shafts())
+	if (number < 1 || number > GetShaftCount())
 		return 0;
 
 	if (getshaft_number == number && getshaft_result)
@@ -1930,7 +1930,7 @@ Stairs* SBS::GetStairs(int number)
 {
 	//return pointer to stairs object
 
-	if (number < 1 || number > StairsNum())
+	if (number < 1 || number > GetStairsCount())
 		return 0;
 
 	if (getstairs_number == number && getstairs_result)

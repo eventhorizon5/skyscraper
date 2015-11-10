@@ -5866,7 +5866,7 @@ void Elevator::ResetShaftDoors(int floor)
 	//this might not be needed, due to addition of full-shaft enable check to
 	//floor object's EnableGroup function, needs testing
 
-	for (int i = 1; i <= sbs->Shafts(); i++)
+	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
 		Shaft *shaft = sbs->GetShaft(i);
 		if (shaft)

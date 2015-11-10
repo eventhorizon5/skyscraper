@@ -199,27 +199,16 @@ void MeshControl::On_chkFloor_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkElevators_Click(wxCommandEvent& event)
 {
-	if (chkElevators->GetValue() == true)
+	for (int i = 1; i <= Simcore->GetElevatorCount(); i++)
 	{
-		for (int i = 1; i <= Simcore->Elevators(); i++)
-		{
-			if (Simcore->GetElevator(i))
-				Simcore->GetElevator(i)->Enabled(true);
-		}
-	}
-	else
-	{
-		for (int i = 1; i <= Simcore->Elevators(); i++)
-		{
-			if (Simcore->GetElevator(i))
-				Simcore->GetElevator(i)->Enabled(false);
-		}
+		if (Simcore->GetElevator(i))
+			Simcore->GetElevator(i)->Enabled(chkElevators->GetValue());
 	}
 }
 
 void MeshControl::On_chkShafts_Click(wxCommandEvent& event)
 {
-	for (int i = 1; i <= Simcore->Shafts(); i++)
+	for (int i = 1; i <= Simcore->GetShaftCount(); i++)
 	{
 		if (Simcore->GetShaft(i))
 			Simcore->GetShaft(i)->Enabled(Simcore->camera->CurrentFloor, chkShafts->GetValue(), true);
@@ -228,7 +217,7 @@ void MeshControl::On_chkShafts_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkStairs_Click(wxCommandEvent& event)
 {
-	for (int i = 1; i <= Simcore->StairsNum(); i++)
+	for (int i = 1; i <= Simcore->GetStairsCount(); i++)
 	{
 		if (Simcore->GetStairs(i))
 			Simcore->GetStairs(i)->Enabled(Simcore->camera->CurrentFloor, chkStairs->GetValue());
@@ -246,7 +235,7 @@ void MeshControl::On_chkAllFloors_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkAllShafts_Click(wxCommandEvent& event)
 {
-	for (int i = 1; i <= Simcore->Shafts(); i++)
+	for (int i = 1; i <= Simcore->GetShaftCount(); i++)
 	{
 		for (int j = -Simcore->Basements; j <= Simcore->Floors; j++)
 		{
@@ -258,7 +247,7 @@ void MeshControl::On_chkAllShafts_Click(wxCommandEvent& event)
 
 void MeshControl::On_chkAllStairs_Click(wxCommandEvent& event)
 {
-	for (int i = 1; i <= Simcore->StairsNum(); i++)
+	for (int i = 1; i <= Simcore->GetStairsCount(); i++)
 	{
 		for (int j = -Simcore->Basements; j <= Simcore->Floors; j++)
 		{

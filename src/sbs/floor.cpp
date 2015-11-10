@@ -504,14 +504,14 @@ void Floor::CutAll(const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cu
 	Cut(start, end, cutwalls, cutfloors, false);
 
 	//cut shafts
-	for (int i = 1; i <= sbs->Shafts(); i++)
+	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
 		if (sbs->GetShaft(i))
 			sbs->GetShaft(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
 	}
 
 	//cut stairs
-	for (int i = 1; i <= sbs->StairsNum(); i++)
+	for (int i = 1; i <= sbs->GetStairsCount(); i++)
 	{
 		if (sbs->GetStairs(i))
 			sbs->GetStairs(i)->Cut(false, Number, start, end, cutwalls, cutfloors);
@@ -578,7 +578,7 @@ void Floor::EnableGroup(bool value)
 				}
 
 				//enable shafts and stairs for other floor
-				for (int j = 1; j <= sbs->Shafts(); j++)
+				for (int j = 1; j <= sbs->GetShaftCount(); j++)
 				{
 					Shaft *shaft = sbs->GetShaft(j);
 					if (shaft)
@@ -587,7 +587,7 @@ void Floor::EnableGroup(bool value)
 							shaft->Enabled(Group[i], value, true);
 					}
 				}
-				for (int j = 1; j <= sbs->StairsNum(); j++)
+				for (int j = 1; j <= sbs->GetStairsCount(); j++)
 				{
 					Stairs *stairs = sbs->GetStairs(j);
 					if (stairs)
@@ -1428,7 +1428,7 @@ void Floor::GetElevatorList(std::vector<int> &listing)
 {
 	//return a list of elevators that service this floor
 
-	for (int i = 1; i <= sbs->Elevators(); i++)
+	for (int i = 1; i <= sbs->GetElevatorCount(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(i);
 		if (elev)
@@ -1443,7 +1443,7 @@ void Floor::GetStairsList(std::vector<int> &listing)
 {
 	//return a list of stairwells that span this floor
 
-	for (int i = 1; i <= sbs->StairsNum(); i++)
+	for (int i = 1; i <= sbs->GetStairsCount(); i++)
 	{
 		Stairs *stairs = sbs->GetStairs(i);
 		if (stairs)
@@ -1458,7 +1458,7 @@ void Floor::GetShaftList(std::vector<int> &listing)
 {
 	//return a list of shafts that span this floor
 
-	for (int i = 1; i <= sbs->Shafts(); i++)
+	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
 		Shaft *shaft = sbs->GetShaft(i);
 		if (shaft)

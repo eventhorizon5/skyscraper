@@ -272,9 +272,9 @@ void Stats::Loop()
 	tPolygons->SetValue(wxVariant(Simcore->GetPolygonCount()).GetString());
 	tFloors->SetValue(wxVariant(Simcore->Floors).GetString());
 	tBasements->SetValue(wxVariant(Simcore->Basements).GetString());
-	tElevators->SetValue(wxVariant(Simcore->Elevators()).GetString());
-	tShafts->SetValue(wxVariant(Simcore->Shafts()).GetString());
-	tStairs->SetValue(wxVariant(Simcore->StairsNum()).GetString());
+	tElevators->SetValue(wxVariant(Simcore->GetElevatorCount()).GetString());
+	tShafts->SetValue(wxVariant(Simcore->GetShaftCount()).GetString());
+	tStairs->SetValue(wxVariant(Simcore->GetStairsCount()).GetString());
 }
 
 }

@@ -544,7 +544,7 @@ breakpoint:
 				ScriptError("Invalid elevator");
 				goto Error;
 			}
-			if (Current < 1 || Current > Simcore->Elevators() + 1)
+			if (Current < 1 || Current > Simcore->GetElevatorCount() + 1)
 			{
 				ScriptError("Invalid elevator");
 				goto Error;
@@ -1955,7 +1955,7 @@ int ScriptProcessor::ProcCommands()
 
 		//check for existence of shaft
 		int shaftnum = ToInt(tempdata[0]);
-		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
 			return ScriptError("Invalid shaft " + tempdata[0]);
 
 		Simcore->GetShaft(shaftnum)->CutFloors(true, Ogre::Vector2(ToFloat(tempdata[1]), ToFloat(tempdata[2])), Ogre::Vector2(ToFloat(tempdata[3]), ToFloat(tempdata[4])), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
@@ -1975,7 +1975,7 @@ int ScriptProcessor::ProcCommands()
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
 
-		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
 			return ScriptError("Invalid shaft number");
 
 		int params = SplitAfterEquals(LineData, false);
@@ -2038,7 +2038,7 @@ int ScriptProcessor::ProcCommands()
 		TrimString(str);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
-		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
 			return ScriptError("Invalid shaft number");
 		Simcore->GetShaft(shaftnum)->ShowInterfloors = true;
 
@@ -2091,7 +2091,7 @@ int ScriptProcessor::ProcCommands()
 		TrimString(str);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
-		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
 			return ScriptError("Invalid shaft number");
 		Simcore->GetShaft(shaftnum)->ShowOutside = true;
 
@@ -2144,7 +2144,7 @@ int ScriptProcessor::ProcCommands()
 		TrimString(str);
 		if (!IsNumeric(str, shaftnum))
 			return ScriptError("Invalid shaft number");
-		if (shaftnum < 1 || shaftnum > Simcore->Shafts())
+		if (shaftnum < 1 || shaftnum > Simcore->GetShaftCount())
 			return ScriptError("Invalid shaft number");
 
 		//get text after equal sign
@@ -2215,7 +2215,7 @@ int ScriptProcessor::ProcCommands()
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
 
-		if (stairnum < 1 || stairnum > Simcore->StairsNum())
+		if (stairnum < 1 || stairnum > Simcore->GetStairsCount())
 			return ScriptError("Invalid stairwell number");
 
 		Simcore->GetStairs(stairnum)->ShowFloors = true;
@@ -2270,7 +2270,7 @@ int ScriptProcessor::ProcCommands()
 		TrimString(str);
 		if (!IsNumeric(str, stairnum))
 			return ScriptError("Invalid stairwell number");
-		if (stairnum < 1 || stairnum > Simcore->StairsNum())
+		if (stairnum < 1 || stairnum > Simcore->GetStairsCount())
 			return ScriptError("Invalid stairwell number");
 
 		//get text after equal sign
@@ -3754,7 +3754,7 @@ int ScriptProcessor::ProcFloors()
 			int elevnumber;
 			if (!IsNumeric(tempdata[line], elevnumber))
 				return ScriptError("Invalid elevator number");
-			if (elevnumber < 1 || elevnumber > Simcore->Elevators())
+			if (elevnumber < 1 || elevnumber > Simcore->GetElevatorCount())
 				return ScriptError("Invalid elevator number");
 			callbutton_elevators[line] = elevnumber;
 		}

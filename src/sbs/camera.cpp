@@ -402,7 +402,7 @@ void Camera::CheckElevator()
 
 	SBS_PROFILE("Camera::CheckElevator");
 
-	for (int i = 1; i <= sbs->Elevators(); i++)
+	for (int i = 1; i <= sbs->GetElevatorCount(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(i);
 
@@ -427,7 +427,7 @@ void Camera::CheckShaft()
 		return;
 
 	SBS_PROFILE("Camera::CheckShaft");
-	for (int i = 1; i <= sbs->Shafts(); i++)
+	for (int i = 1; i <= sbs->GetShaftCount(); i++)
 	{
 		Shaft *shaft = sbs->GetShaft(i);
 
@@ -446,7 +446,7 @@ void Camera::CheckStairwell()
 		return;
 
 	SBS_PROFILE("Camera::CheckStairwell");
-	for (int i = 1; i <= sbs->StairsNum(); i++)
+	for (int i = 1; i <= sbs->GetStairsCount(); i++)
 	{
 		Stairs *stairs = sbs->GetStairs(i);
 
