@@ -4151,8 +4151,8 @@ bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObj
 	if (!object)
 		return false;
 
-	//get name of collision object's parent scenenode (which is the same name as the mesh object)
-	std::string meshname = object->getRootNode()->getName();
+	//get name of collision object's grandparent scenenode (which is the same name as the mesh object)
+	std::string meshname = object->getRootNode()->getParentSceneNode()->getName();
 
 	//get hit/intersection position
 	hit_position = sbs->ToLocal(callback.getCollisionPoint());

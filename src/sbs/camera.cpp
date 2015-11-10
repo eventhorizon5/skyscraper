@@ -1131,7 +1131,10 @@ bool Camera::PickUpModel()
 	Ogre::Vector3 front, top;
 	GetDirection(front, top);
 
-	Ogre::Ray ray (sbs->ToRemote(GetPosition() - Ogre::Vector3(0, GetHeight() - 1, 0)), sbs->ToRemote(front, false));
+	//do a raycast from the collider's position, in the forward direction
+	Ogre::Vector3 position = GetPosition();
+	position.y += -GetHeight() + 1.0f;
+	Ogre::Ray ray (sbs->ToRemote(position), sbs->ToRemote(front, false));
 
 	Ogre::Vector3 hit_position;
 	MeshObject *mesh = 0;
