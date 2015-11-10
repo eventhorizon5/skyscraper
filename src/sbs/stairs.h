@@ -76,7 +76,7 @@ public:
 	Control* AddControl(int floor, const std::string &name, const std::string &sound, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
 	Trigger* AddTrigger(int floor, const std::string &name, const std::string &sound_file, Ogre::Vector3 &area_min, Ogre::Vector3 &area_max, std::vector<std::string> &action_names);
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
-	void Init();
+	void OnInit();
 	void AddShowFloor(int floor);
 	void RemoveShowFloor(int floor);
 	bool IsShowFloor(int floor);

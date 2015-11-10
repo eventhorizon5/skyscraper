@@ -465,4 +465,28 @@ bool Object::IsGlobal()
 	return (Parent->GetNumber() == 0);
 }
 
+void Object::Init()
+{
+	//initialize object
+
+	//call custom object initialization code
+	OnInit();
+
+	//initialize children
+	InitChildren();
+}
+
+void Object::InitChildren()
+{
+	//initialize child objects
+
+	int count = GetChildrenCount();
+
+	if (count == 0)
+		return;
+
+	for (int i = 0; i < count; i++)
+			children[i]->Init();
+}
+
 }

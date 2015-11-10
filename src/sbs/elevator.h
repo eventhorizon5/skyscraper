@@ -300,7 +300,7 @@ public:
 	float GetDestinationOffset(int floor);
 	void MoveObjects(float offset);
 	void SetFloor(int floor);
-	void Init();
+	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
 	int AvailableForCall(int floor, int direction);
 	bool SelectFloor(int floor);

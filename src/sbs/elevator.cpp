@@ -5158,7 +5158,7 @@ float Elevator::GetDestinationOffset(int floor)
 	return 0.0f;
 }
 
-void Elevator::Init()
+void Elevator::OnInit()
 {
 	//startup elevator initialization
 

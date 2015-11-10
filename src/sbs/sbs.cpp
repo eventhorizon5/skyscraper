@@ -492,26 +492,8 @@ bool SBS::Start()
 	for (int i = 0; i < TotalFloors(); i++)
 		FloorArray[i].object->Enabled(false);
 
-	//init shafts
-	for (int i = 0; i < Shafts(); i++)
-	{
-		if (ShaftArray[i].object)
-			ShaftArray[i].object->Init();
-	}
-
-	//init stairwells
-	for (int i = 0; i < StairsNum(); i++)
-	{
-		if (StairsArray[i].object)
-			StairsArray[i].object->Init();
-	}
-
-	//init elevators
-	for (int i = 0; i < Elevators(); i++)
-	{
-		if (ElevatorArray[i].object)
-			ElevatorArray[i].object->Init();
-	}
+	//initialize objects (cascades down through entire object tree)
+	Init();
 
 	//play looping global sounds
 	for (int i = 0; i < (int)sounds.size(); i++)

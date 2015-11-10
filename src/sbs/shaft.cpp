@@ -845,7 +845,7 @@ void Shaft::ReplaceTexture(const std::string &oldtexture, const std::string &new
         	GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
 }
 
-void Shaft::Init()
+void Shaft::OnInit()
 {
 	//startup initialization of shafts
 

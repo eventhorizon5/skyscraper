@@ -78,7 +78,8 @@ public:
 	virtual void ResetState() {} //resets the internal state of an object
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
-	virtual void Init() {} //pre-runloop (first-run) object initialization
+	void Init(); //pre-runloop (first-run) object initialization
+	virtual void OnInit() {} //called when object is initialized
 	virtual void Loop() {} //object runloop
 
 	template <typename T> bool IsType()
@@ -95,6 +96,7 @@ public:
 
 private:
 	void NotifyChildren(bool move, bool rotate);
+	void InitChildren();
 
 	bool Permanent; //is object permanent?
 	Object *Parent; //parent object

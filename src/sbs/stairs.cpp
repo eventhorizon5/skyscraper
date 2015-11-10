@@ -862,7 +862,7 @@ void Stairs::ReplaceTexture(const std::string &oldtexture, const std::string &ne
 		GetMeshObject(i)->ReplaceTexture(oldtexture, newtexture);
 }
 
-void Stairs::Init()
+void Stairs::OnInit()
 {
 	//startup initialization of stairs
 	EnableWholeStairwell(false);
