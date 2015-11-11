@@ -30,7 +30,7 @@
     CameraRotation = 0, 0, 0
     InterfloorOnTop = true
     Coordinates = 37.788, -122.4
-    DateTime = 2442402.4583
+    DateTime = 2442402.3333
 <EndGlobals>
 
 SetPlanarMapping true, false, false, false
