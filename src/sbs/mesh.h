@@ -110,7 +110,7 @@ public:
 	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
 	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents);
 	void CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices);
-	void CreateBoxCollider(float scale_multiplier);
+	void CreateBoxCollider();
 	void DeleteWalls();
 	void DeleteWalls(Object *parent);
 	Ogre::Vector3 GetPoint(const std::string &polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end);
@@ -122,6 +122,7 @@ public:
 	int GetSubmeshCount();
 	bool IsVisible(Ogre::Camera *camera);
 	bool IsPhysical();
+	Ogre::Vector3 GetOffset();
 
 	Ogre::MeshPtr MeshWrapper; //mesh
 	std::vector<Geometry> MeshGeometry; //mesh geometry (vertices/texels/normals) container

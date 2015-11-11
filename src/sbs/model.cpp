@@ -50,13 +50,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 	}
 
 	if (center == true)
-	{
-		Ogre::AxisAlignedBox box = mesh->MeshWrapper.get()->getBounds();
-		box.scale(Ogre::Vector3(scale_multiplier));
-		Ogre::Vector3 vec = box.getCenter();
-		Ogre::Vector3 min = box.getMinimum();
-		Offset = Ogre::Vector3(vec.x, -box.getMinimum().y, -vec.z);
-	}
+		Offset = mesh->GetOffset();
 
 	//move to position and specified offset
 	Move(position);

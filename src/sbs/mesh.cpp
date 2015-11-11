@@ -684,7 +684,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 		else
 		{
 			//create generic box collider if separate mesh collider isn't available
-			CreateBoxCollider(sbs->ToRemote(scale_multiplier));
+			CreateBoxCollider();
 		}
 	}
 }
@@ -1643,7 +1643,7 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 	}
 }
 
-void MeshObject::CreateBoxCollider(float scale_multiplier)
+void MeshObject::CreateBoxCollider()
 {
 	//set up a box collider for full extents of a mesh
 
@@ -1657,7 +1657,8 @@ void MeshObject::CreateBoxCollider(float scale_multiplier)
 	try
 	{
 		//initialize collider shape
-		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale_multiplier;
+		float scale = GetSceneNode()->getScale().y;
+		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 
 		//create a new scene node for this collider, and center the collider accordingly
@@ -2116,6 +2117,18 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 bool MeshObject::IsPhysical()
 {
 	return is_physical;
+}
+
+Ogre::Vector3 MeshObject::GetOffset()
+{
+	//for models, return bounding box offset value, used to center the mesh
+
+	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+	box.scale(GetSceneNode()->getScale());
+	Ogre::Vector3 vec = box.getCenter();
+	Ogre::Vector3 min = box.getMinimum();
+	Ogre::Vector3 offset (vec.x, -box.getMinimum().y, -vec.z);
+	return sbs->ToLocal(offset);
 }
 
 }

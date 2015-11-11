@@ -3435,7 +3435,7 @@ void SBS::Prepare(bool report)
 		if (meshes[i]->tricollider == true)
 			meshes[i]->CreateCollider();
 		else
-			meshes[i]->CreateBoxCollider(1);
+			meshes[i]->CreateBoxCollider();
 	}
 
 	if (report == true)
