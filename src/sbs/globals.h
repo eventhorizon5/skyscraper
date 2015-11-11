@@ -60,6 +60,7 @@ SBSIMPEXP bool IsNumeric(char character);
 SBSIMPEXP bool IsNumeric(const std::string &string);
 SBSIMPEXP bool IsNumeric(const std::string &string, int &number);
 SBSIMPEXP bool IsNumeric(const std::string &string, float &number);
+SBSIMPEXP bool IsNumeric(const std::string &string, double &number);
 SBSIMPEXP std::string BoolToString(bool item);
 SBSIMPEXP float RadiansToDegrees(float radians);
 SBSIMPEXP float DegreesToRadians(float degrees);

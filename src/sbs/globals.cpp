@@ -90,6 +90,17 @@ bool IsNumeric(const std::string &string, float &number)
 	return end != 0 && *end == 0;
 }
 
+bool IsNumeric(const std::string &string, double &number)
+{
+	//test to see if a string is numeric, and return number as float
+
+	char* end = 0;
+
+	number = std::strtod(string.c_str(), &end);
+
+	return end != 0 && *end == 0;
+}
+
 std::string BoolToString(bool item)
 {
 	if (item == true)

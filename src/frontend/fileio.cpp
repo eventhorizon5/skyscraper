@@ -3202,6 +3202,29 @@ int ScriptProcessor::ProcGlobals()
 		Simcore->InterfloorOnTop = ToBool(temp2);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 8) == "location")
+	{
+		temp3 = temp2.find(",", 0);
+		float latitude, longitude;
+		std::string str1 = temp2.substr(0, temp3);
+		std::string str2 = temp2.substr(temp3 + 1);
+		TrimString(str1);
+		TrimString(str2);
+		if (!IsNumeric(str1, latitude) || !IsNumeric(str2, longitude))
+			return ScriptError("Invalid latitude");
+
+		skyscraper->SetLocation(latitude, longitude);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 8) == "datetime")
+	{
+		double data;
+		if (!IsNumeric(temp2, data))
+			return ScriptError("Invalid Julian date/time");
+
+		skyscraper->SetDateTime(data);
+		return sNextLine;
+	}
 	return sContinue;
 }
 

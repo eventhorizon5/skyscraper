@@ -127,6 +127,11 @@ bool Skyscraper::OnInit(void)
 	override_collisions = false;
 	override_gravity = false;
 	override_freelook = false;
+	new_location = false;
+	new_time = false;
+	latitude = 0.0f;
+	longitude = 0.0f;
+	datetime = 0.0;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -1977,38 +1982,51 @@ bool Skyscraper::InitSky()
 		ReportFatalError("Error initializing Caelum");
 	}
 
-	//attach caelum to running viewport
-	if (mCaelumSystem)
-	{
-		try
-		{
-			mCaelumSystem->attachViewport(mCamera->getViewport());
-			mCaelumSystem->setAutoNotifyCameraChanged(false);
-			mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.FogMultiplier", 0.1f) / 1000);
-			if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
-				mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
-			mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
-
-			//fix sky rotation
-			Ogre::Quaternion rot(Ogre::Degree(180.0f), Ogre::Vector3::UNIT_Y);
-			mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
-			mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
-		}
-		catch (Ogre::Exception &e)
-		{
-			ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription());
-		}
-		catch (...)
-		{
-			ReportFatalError("Error setting Caelum parameters");
-		}
-	}
-	else
+	if (!mCaelumSystem)
 		return false;
+
+	//attach caelum to running viewport
+	try
+	{
+		mCaelumSystem->attachViewport(mCamera->getViewport());
+		mCaelumSystem->setAutoNotifyCameraChanged(false);
+		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.FogMultiplier", 0.1f) / 1000);
+		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
+			mCaelumSystem->setManageSceneFog(Ogre::FOG_NONE);
+		mCaelumSystem->setManageAmbientLight(GetConfigBool("Skyscraper.Frontend.ModifyAmbient", false));
+
+		//fix sky rotation
+		Ogre::Quaternion rot(Ogre::Degree(180.0f), Ogre::Vector3::UNIT_Y);
+		mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
+		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportFatalError("Error setting Caelum parameters:\nDetails: " + e.getDescription());
+	}
+	catch (...)
+	{
+		ReportFatalError("Error setting Caelum parameters");
+	}
 
 	//set sky time multiplier if not already set
 	if (SkyMult == 0)
 		SkyMult = mCaelumSystem->getTimeScale();
+
+	//set location if specified
+	if (new_location == true)
+	{
+		mCaelumSystem->setObserverLatitude(Ogre::Degree(latitude));
+		mCaelumSystem->setObserverLongitude(Ogre::Degree(longitude));
+		new_location = false;
+	}
+
+	//set date/time if specified
+	if (new_time == true)
+	{
+		mCaelumSystem->setJulianDay(datetime);
+		new_time = false;
+	}
 
 	return true;
 }
@@ -2062,6 +2080,19 @@ void Skyscraper::SetFullScreen(bool enabled)
 
 	FullScreen = enabled;
 	window->ShowFullScreen(FullScreen);
+}
+
+void Skyscraper::SetLocation(float latitude, float longitude)
+{
+	this->latitude = latitude;
+	this->longitude = longitude;
+	new_location = true;
+}
+
+void Skyscraper::SetDateTime(double julian_date_time)
+{
+	datetime = julian_date_time;
+	new_time = true;
 }
 
 }

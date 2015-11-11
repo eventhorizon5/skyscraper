@@ -126,6 +126,8 @@ public:
 	void UpdateProgress(int percent);
 	void SetFullScreen(bool enabled);
 	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
+	void SetLocation(float latitude, float longitude);
+	void SetDateTime(double julian_date_time);
 
 private:
 	//mouse status
@@ -174,6 +176,10 @@ private:
 	bool showconsole;
 	bool raised;
 	wxProgressDialog *progdialog;
+
+	bool new_location, new_time;
+	float latitude, longitude;
+	double datetime;
 };
 
 class MainScreen : public wxFrame
