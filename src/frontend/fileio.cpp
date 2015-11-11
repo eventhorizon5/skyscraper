@@ -3202,7 +3202,7 @@ int ScriptProcessor::ProcGlobals()
 		Simcore->InterfloorOnTop = ToBool(temp2);
 		return sNextLine;
 	}
-	if (linecheck.substr(0, 8) == "location")
+	if (linecheck.substr(0, 11) == "coordinates")
 	{
 		temp3 = temp2.find(",", 0);
 		float latitude, longitude;
