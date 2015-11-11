@@ -379,7 +379,7 @@
     <ClInclude Include="..\src\frontend\objectinfo.h" />
     <ClInclude Include="..\src\frontend\parameterviewer.h" />
     <ClInclude Include="..\src\frontend\profilergui.h" />
-    <ClCompile Include="..\src\frontend\skycontrol.h" />
+    <ClInclude Include="..\src\frontend\skycontrol.h" />
     <ClInclude Include="..\src\frontend\skyscraper.h" />
     <ClInclude Include="..\src\frontend\stackwalker.h" />
     <ClInclude Include="..\src\frontend\stats.h" />
