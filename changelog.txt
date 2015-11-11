@@ -1,5 +1,57 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-set location and date/time for Triton Center and Glass Tower buildings
+-added Coordinates and DateTime global options
+-resized couches to be more realistic
+-model offset needs to be adjusted according to the scale multiplier
+-for models, box colliders are now centered properly, and use a separate scene node to make it work
+-SBS now calls a cascading init on all objects from the Start() function
+-renamed any standard object runloops to Loop()
+-renamed Sound's Loop() function to SetLoopState
+-made standard inherited OnInit and Loop object functions
+-OgreBullet should be checking for existence of resource group and loaded names directly instead of keeping a file-based existence flag.  This fixes an issue where debug colliders (F7 key) would not enable when reloading a building.
+-camera object needs to run loops of attached models
+-camera needs to run NotifyMove and NotifyRotate functions, to properly update carried objects (child objects)
+-object destructor was removing scenenode from parent twice, causing a crash - I reworked the code in this function
+-moved functionality of camera's view and state resets (F3 and F6) into camera class
+-re-enable main system meshes when doing a position reset (F6)
+-restore absolute positioning and orientation of object scenenode when changing parent object
+-fixed issue in RemoveChild function, that caused the scene node removal portion to be skipped
+-consolidated FileExists function code into VerifyFile function
+-overhaul of VerifyFile function, to check for files within mount points properly
+-cleanup and fix of GetMountPath function
+-have functions use SBS conversion functions instead of others
+-added ToBool function
+-removed Sky Time Multiplier from Camera Control window
+-new arrangement for control panel buttons
+-added Sky Controller dialog
+-prevent DirectX on 32-bit Windows from switching into single-point floating point precision, which was causing the Bullet-related bounce issues
+-model meshes now update parent (main) object scenenode on physics-related position update
+-don't try to create a new submesh when deleting indices
+-added ToFloat and ToInt global functions
+-consolidated global functions; ToString2 is now just ToString
+-input string in RemoveAction function needs to have whitespace removed for compatibility
+-switched from c-strings to std::strings for function parameters and return types
+-DeleteObject function can delete generic object directly, instead of recasting
+-added new ConvertTo function to Object
+-added template-based IsType() function to Object
+-removed object's "raw_object" value, which is no longer needed due to previous change
+-objects now use static_cast or dynamic_cast instead of c-style casts
+-fixed bad return in FindWallIntersect function
+-consolidated camera's mesh hit beam code into main SBS object
+-code cleanups
+-added support for picking up models
+-mesh HitBeam function should be converting direction to remote Ogre value, without a rescale
+-objects can now report if they are global objects (children of engine object)
+-added ability for non-global physics-enabled models to be moved into elevators, and to move along with the elevator, by dynamically changing parent object of model from floor to elevator, and vice versa
+-added Shaft, Stairs and Model runloops
+-added functions for dynamic removal/addition of models
+-added ability for objects to switch parents
+-IsInElevator function now optionally sets CameraOffset value
+-added check for model's physics state
+-added debugging options file for Visual C++
+-updated project files for Visual C++ 2015
+-rewrote GIF control extension detection code; fixes additional transparency issues.  The previous code was not ensuring that the three values were adjacent, and was matching for non-adjacent values, causing malfunctions.
 -functions that create new sim objects should return full type, instead of just a generic object
 -removed unnecessary conversion in Freelook mode code
 -have camera only disable camera gravity value, instead of physics gravity also
