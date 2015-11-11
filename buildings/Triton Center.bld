@@ -2181,7 +2181,7 @@ Cut Landscape, -340.5, -1, -603, 400, 1, 321.5, false, true
 
     DrawWalls = true, true, false, false, false, false
 
-    AddModel Couch, couch.mesh, true, 0, 0, -65, 0, 180, 0, 10000, 1, true, 0.1, 0.5, 0.1
+    AddModel Couch, couch.mesh, true, 0, 0, -65, 0, 180, 0, 10000, 0.7, true, 0.1, 0.5, 0.1
 <EndFloor>
 
 <Floor 144>
