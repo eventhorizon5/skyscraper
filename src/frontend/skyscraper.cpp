@@ -1120,12 +1120,8 @@ void Skyscraper::Loop()
 
 		Reload = false;
 
-		//force a resizing of a window to fix some rendering issues after a reload
-#if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-		mRenderWindow->resize(window->GetClientSize().GetWidth() - 10, window->GetClientSize().GetHeight() - 10);
-		mRenderWindow->resize(window->GetClientSize().GetWidth(), window->GetClientSize().GetHeight());
-		mRenderWindow->windowMovedOrResized();
-#endif
+		//refresh viewport to prevent rendering issues
+		mViewport->_updateDimensions();
 	}
 
 	//SBS::ProfileManager::dumpAll();
@@ -1985,7 +1981,7 @@ bool Skyscraper::InitSky()
 	//attach caelum to running viewport
 	try
 	{
-		mCaelumSystem->attachViewport(mCamera->getViewport());
+		mCaelumSystem->attachViewport(mViewport);
 		mCaelumSystem->setAutoNotifyCameraChanged(false);
 		mCaelumSystem->setSceneFogDensityMultiplier(GetConfigFloat("Skyscraper.Frontend.FogMultiplier", 0.1f) / 1000);
 		if (GetConfigBool("Skyscraper.Frontend.EnableFog", true) == false)
