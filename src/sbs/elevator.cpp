@@ -2241,6 +2241,9 @@ void Elevator::Enabled(bool value)
 
 	//interior directional indicators
 	EnableDirectionalIndicators(value);
+
+	if (value == false)
+		EnableObjects(false);
 }
 
 void Elevator::EnableObjects(bool value)
@@ -2329,6 +2332,9 @@ bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 
 	//SBS_PROFILE("Elevator::IsInElevator");
 	bool inelevator = false;
+
+	if (IsEnabled == false)
+		return false;
 
 	//if last position is the same as new, return previous result
 	if ((position.x >= (lastposition.x - 0.01)) &&
@@ -5397,7 +5403,10 @@ bool Elevator::Check(Ogre::Vector3 position)
 {
 	//check to see if user (camera) is in the elevator
 
-	if (IsInElevator(position, true) == true)
+	if (IsEnabled == false)
+		return false;
+
+	if (IsInElevator(position, true) == true && IsEnabled)
 	{
 		if (InElevator() == false)
 		{
