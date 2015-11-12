@@ -1568,7 +1568,8 @@ void MeshObject::CreateCollider()
 		shape->Finish();
 
 		//create a collider scene node
-		collider_node = GetSceneNode()->createChildSceneNode(name + " collider");
+		if (!collider_node)
+			collider_node = GetSceneNode()->createChildSceneNode(name + " collider");
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
@@ -1630,7 +1631,8 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 		shape->Finish();
 
 		//create a collider scene node
-		collider_node = GetSceneNode()->createChildSceneNode(name + " collider");
+		if (!collider_node)
+			collider_node = GetSceneNode()->createChildSceneNode(name + " collider");
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
@@ -1663,7 +1665,8 @@ void MeshObject::CreateBoxCollider()
 
 		//create a new scene node for this collider, and center the collider accordingly
 		Ogre::Vector3 collider_center = MeshWrapper->getBounds().getCenter();
-		collider_node = GetSceneNode()->createChildSceneNode(name + " collider", collider_center);
+		if (!collider_node)
+			collider_node = GetSceneNode()->createChildSceneNode(name + " collider", collider_center);
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical() == false)
