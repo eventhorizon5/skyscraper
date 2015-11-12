@@ -36,13 +36,6 @@ class SBSIMPEXP CallButton : public Object
 {
 public:
 
-	std::vector<int> Elevators; //elevators this call button set is assigned to
-	int Number; //call button index number (on the specified floor)
-	std::string Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
-	bool IsEnabled;
-	bool UpStatus; //status of up light
-	bool DownStatus; //status of down light
-
 	//functions
 	CallButton(std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th);
 	~CallButton();
@@ -52,7 +45,7 @@ public:
 	void DownLight(bool value);
 	void SetLights(int up, int down);
 	bool ServicesElevator(int elevator);
-	void Loop(int direction);
+	void Loop();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void SetLocked(bool value, int keyid);
@@ -62,14 +55,29 @@ public:
 	void FireService(int value);
 	int GetFloor();
 	void SetLightsGroup(int up, int down);
+	bool AddElevator(int elevator);
+	bool RemoveElevator(int elevator);
+	bool GetUpStatus() { return UpStatus; }
+	bool GetDownStatus() { return DownStatus; }
+	bool IsEnabled() { return is_enabled; }
 
 private:
+	void Process(int direction);
+
 	MeshObject* CallButtonMeshBack; //call button mesh object
 	MeshObject* CallButtonMeshUp; //call button mesh object
 	MeshObject* CallButtonMeshDown; //call button mesh object
 
 	std::string UpTexture, UpTextureLit;
 	std::string DownTexture, DownTextureLit;
+	std::string Direction; //direction the buttons face; either 'front', 'back', 'left', or 'right'
+
+	int Number; //call button index number (on the specified floor)
+	bool UpStatus; //status of up light
+	bool DownStatus; //status of down light
+	bool is_enabled;
+
+	std::vector<int> Elevators; //elevators this call button set is assigned to
 
 	Floor *floor; //floor this call button set is on
 	Sound *sound; //sound object

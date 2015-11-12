@@ -44,7 +44,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	//set up SBS object
 	SetValues(floor, "CallButton", "", false);
 
-	IsEnabled = true;
+	is_enabled = true;
 	Elevators.resize(elevators.size());
 	for (size_t i = 0; i < elevators.size(); i++)
 		Elevators[i] = elevators[i];
@@ -288,13 +288,13 @@ CallButton::~CallButton()
 void CallButton::Enabled(bool value)
 {
 	//turns call buttons on/off
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	CallButtonMeshBack->Enable(value);
 	CallButtonMeshUp->Enable(value);
 	CallButtonMeshDown->Enable(value);
-	IsEnabled = value;
+	is_enabled = value;
 
 	if (sbs->Verbose)
 	{
@@ -454,15 +454,35 @@ bool CallButton::ServicesElevator(int elevator)
 	return false;
 }
 
-void CallButton::Loop(int direction)
+void CallButton::Loop()
 {
-	//call button main loop
 	//this function runs for every registered call button via callback
+
+	//process up calls
+	Process(1);
+
+	//process down calls
+	Process(-1);
+}
+
+void CallButton::Process(int direction)
+{
+	//process call button
 	//direction is the call direction to process
+
+	SBS_PROFILE("CallButton::Process");
+
+	//unregister callback if inactive
+	if (UpStatus == false && DownStatus == false)
+	{
+		if (sbs->Verbose)
+			Report("Unregistering callback");
+		sbs->UnregisterCallButtonCallback(this);
+		return;
+	}
 
 	//first exit if no call button is not processing a call for the current direction
 	//or if a call has already been processed
-	SBS_PROFILE("CallButton::Loop");
 	if ((UpStatus == false && direction == 1) || (ProcessedUp == true && direction == 1))
 		return;
 	if ((DownStatus == false && direction == -1) || (ProcessedDown == true && direction == -1))
@@ -476,56 +496,40 @@ void CallButton::Loop(int direction)
 
 	int count = (int)Elevators.size();
 
-	if (count > 1)
+	//exit if no elevators are associated
+	if (count == 0)
+		return;
+
+	//search through elevator list
+	if (sbs->Verbose && count > 1)
+		Report("Finding nearest available elevator...");
+
+	//check each elevator associated with this call button to find the closest available one
+	for (int i = 0; i < count; i++)
 	{
-		//search through elevator list if call button serves more than 1 elevator
-		if (sbs->Verbose)
-			Report("Finding nearest available elevator...");
-
-		//check each elevator associated with this call button to find the closest available one
-		for (int i = 0; i < count; i++)
-		{
-			Elevator *elevator = sbs->GetElevator(Elevators[i]);
-			if (elevator)
-			{
-				if (sbs->Verbose)
-					Report("Checking elevator " + ToString(elevator->Number));
-
-				//if elevator is closer than the previously checked one or we're starting the checks
-				if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
-				{
-					//see if elevator is available for the call
-					int result = elevator->AvailableForCall(GetFloor(), direction);
-
-					if (result == 1) //available
-					{
-						if (sbs->Verbose)
-							Report("Marking - closest so far");
-						closest = abs(elevator->GetFloor() - GetFloor());
-						closest_elev = i;
-						check = true;
-					}
-					else if (result == 2) //keep track of elevators that won't service the call
-						errors++;
-				}
-			}
-		}
-	}
-	else
-	{
-		//set elevator to first elevator if call button only serves one, only if elevator is available for the call
-		Elevator *elevator = sbs->GetElevator(Elevators[0]);
+		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
 		{
-			int result = elevator->AvailableForCall(GetFloor(), direction);
+			if (sbs->Verbose)
+				Report("Checking elevator " + ToString(elevator->Number));
 
-			if (result == 1) //available
+			//if elevator is closer than the previously checked one or we're starting the checks
+			if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
 			{
-				closest_elev = 0;
-				check = true;
+				//see if elevator is available for the call
+				int result = elevator->AvailableForCall(GetFloor(), direction);
+
+				if (result == 1) //available
+				{
+					if (sbs->Verbose && count > 1)
+						Report("Marking - closest so far");
+					closest = abs(elevator->GetFloor() - GetFloor());
+					closest_elev = i;
+					check = true;
+				}
+				else if (result == 2) //elevator won't service the call
+					errors++;
 			}
-			else if (result == 2) //elevator won't service the call
-				errors = 1;
 		}
 	}
 
@@ -533,7 +537,13 @@ void CallButton::Loop(int direction)
 	{
 		//exit if all elevators are in a service mode or return errors
 
-		Report("All elevators unavailable due to service modes or errors");
+		std::string item;
+		if (count > 1)
+			item = "All elevators";
+		else
+			item = "Elevator";
+
+		Report(item + " unavailable due to service modes or errors");
 
 		//turn off button lights
 		if (direction == 1)
@@ -600,14 +610,6 @@ void CallButton::Loop(int direction)
 	else
 		//otherwise add a route entry to this floor
 		elevator->AddRoute(GetFloor(), direction, 1);
-
-	//unregister callback if inactive
-	if (UpStatus == false && DownStatus == false)
-	{
-		if (sbs->Verbose)
-			Report("Unregistering callback");
-		sbs->UnregisterCallButtonCallback(this);
-	}
 }
 
 void CallButton::Report(const std::string &message)
@@ -698,6 +700,35 @@ void CallButton::SetLightsGroup(int up, int down)
 	{
 		floor->CallButtonArray[buttons[i]]->SetLights(up, down);
 	}
+}
+
+bool CallButton::AddElevator(int elevator)
+{
+	//add an elevator to this call button
+
+	for (int i = 0; i < (int)Elevators.size(); i++)
+	{
+		if (Elevators[i] == elevator)
+			return false;
+	}
+
+	Elevators.push_back(elevator);
+	return true;
+}
+
+bool CallButton::RemoveElevator(int elevator)
+{
+	//remove an elevator from this call button
+
+	for (int i = 0; i < (int)Elevators.size(); i++)
+	{
+		if (Elevators[i] == elevator)
+		{
+			Elevators.erase(Elevators.begin() + i);
+			return true;
+		}
+	}
+	return false;
 }
 
 }

@@ -2551,21 +2551,16 @@ void SBS::ProcessCallButtons()
 {
 	//process all registered call buttons
 
-	//the up and down sections need to be processed separately due to the removal of callbacks
-	//during the run of each
-
 	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
 	{
-		//process up calls
-		if (buttoncallbacks[i])
-			buttoncallbacks[i]->Loop(1);
-	}
+		int size = (int)buttoncallbacks.size();
 
-	for (int i = 0; i < (int)buttoncallbacks.size(); i++)
-	{
-		//process down calls
 		if (buttoncallbacks[i])
-			buttoncallbacks[i]->Loop(-1);
+			buttoncallbacks[i]->Loop();
+
+		//if a callback was removed, reset position
+		if (size != (int)buttoncallbacks.size())
+			i--;
 	}
 }
 

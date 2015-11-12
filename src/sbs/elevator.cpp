@@ -5198,8 +5198,8 @@ bool Elevator::GetCallButtonStatus(int floor, bool &Up, bool &Down)
 			CallButton *button =  sbs->GetFloor(floor)->CallButtonArray[buttons[0]];
 			if (button)
 			{
-				Up = button->UpStatus;
-				Down = button->DownStatus;
+				Up = button->GetUpStatus();
+				Down = button->GetDownStatus();
 				return true;
 			}
 		}

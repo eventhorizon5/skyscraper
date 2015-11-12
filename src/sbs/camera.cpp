@@ -626,9 +626,9 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 				{
 					//if shift is held, change button status instead
 					if (direction == "Up")
-						callbutton->UpLight(!callbutton->UpStatus);
+						callbutton->UpLight(!callbutton->GetUpStatus());
 					else
-						callbutton->DownLight(!callbutton->DownStatus);
+						callbutton->DownLight(!callbutton->GetDownStatus());
 				}
 				else
 				{
