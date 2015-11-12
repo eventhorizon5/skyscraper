@@ -1712,9 +1712,6 @@ bool Skyscraper::Start()
 	if (sky_result == false)
 		Simcore->CreateSky(Simcore->SkyName);
 
-	//have SBS prepare objects for use (upload geometry data to graphics card, etc)
-	Simcore->Prepare();
-
 	//switch to fullscreen mode if specified
 	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
 		SetFullScreen(true);

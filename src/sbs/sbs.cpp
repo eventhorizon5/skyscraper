@@ -477,6 +477,9 @@ bool SBS::Start()
 {
 	//Post-init startup code goes here, before the runloop
 
+	//prepare 3D geometry for use
+	Prepare();
+
 	//free text texture memory
 	for (int i = 0; i < (int)textureboxes.size(); i++)
 		free(textureboxes[i].buffer);
