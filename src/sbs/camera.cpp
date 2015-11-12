@@ -753,8 +753,11 @@ void Camera::Loop(float delta)
 		if (EnableBullet == true)
 		{
 			if (mCharacter->getLastCollision())
-				if (mCharacter->getLastCollision()->getRootNode())
-					LastHitMesh = mCharacter->getLastCollision()->getRootNode()->getName();
+			{
+				Ogre::SceneNode *node = mCharacter->getLastCollision()->getRootNode();
+				if (node)
+					LastHitMesh = node->getParentSceneNode()->getName();
+			}
 		}
 	}
 
