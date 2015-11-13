@@ -314,6 +314,10 @@ bool Sound::Load(const std::string &filename, bool force)
 	if (filename == "")
 		return false;
 
+	//exit if mp3 file specified
+	if (FindWithCase(filename, false, ".mp3", (int)filename.size() - 4) > 0)
+		return false;
+
 	loaded = false;
 
 	//clear old object references

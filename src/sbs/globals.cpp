@@ -161,7 +161,7 @@ int FindWithCase(const std::string &string, bool uppercase, const std::string &k
 {
 	//change case of a string, and return location of search key
 	std::string newstring = SetCaseCopy(string, uppercase);
-	int loc = (int)newstring.find(newstring, offset);
+	int loc = (int)newstring.find(key, offset);
 	if (loc == std::string::npos)
 		return -1;
 	else
