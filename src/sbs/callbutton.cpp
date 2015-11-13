@@ -61,16 +61,11 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	ProcessedDown = false;
 
 	//create object mesh
-	std::string base, buffer;
-	base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
+	std::string base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
 	SetName(base);
 	CallButtonMeshBack = new MeshObject(this, base, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
-
-	buffer = base + ":Up";
-	CallButtonMeshUp = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
-
-	buffer = base + ":Down";
-	CallButtonMeshDown = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshUp = new MeshObject(this, base + ":Up", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	CallButtonMeshDown = new MeshObject(this, base + ":Down", "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//set variables
 	Number = number;
@@ -312,10 +307,7 @@ bool CallButton::Call(bool direction)
 
 	//check lock state
 	if (IsLocked() == true)
-	{
-		ReportError("Call button is locked");
-		return false;
-	}
+		return ReportError("Call button is locked");
 
 	//exit if call has already been made
 	if (direction == true && UpStatus == true)

@@ -62,11 +62,10 @@ ButtonPanel::ButtonPanel(int elevator, int index, const std::string &texture, in
 	Height = ((Rows + 1) * SpacingY) + (Rows * ButtonHeight);
 
 	//create mesh
-	std::string buffer;
-	buffer = "Button Panel " + ToString(elevator) + ":" + ToString(index);
-	TrimString(buffer);
-	SetName(buffer);
-	ButtonPanelMesh = new MeshObject(this, buffer, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
+	std::string name = "Button Panel " + ToString(elevator) + ":" + ToString(index);
+	TrimString(name);
+	SetName(name);
+	ButtonPanelMesh = new MeshObject(this, name, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
 
 	//create panel back
 	sbs->ResetTextureMapping(true);
@@ -209,9 +208,8 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 	//create control object
 	controls.resize(controls.size() + 1);
 	int control_index = (int)controls.size() - 1;
-	std::string buffer;
-	buffer = "Button Panel " + ToString(elevator) + ":" + ToString(Index) + " Control " + ToString(control_index);
-	TrimString(buffer);
+	std::string name = "Button Panel " + ToString(elevator) + ":" + ToString(Index) + " Control " + ToString(control_index);
+	TrimString(name);
 
 	//register actions
 	std::vector<Action*> actions;
@@ -235,7 +233,7 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 			actions.push_back(off_action);
 	}
 
-	Control *control = controls[control_index] = new Control(this, buffer, false, sound, actionsnull, actions, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, false);
+	Control *control = controls[control_index] = new Control(this, name, false, sound, actionsnull, actions, textures, Direction, ButtonWidth * bwidth, ButtonHeight * bheight, false);
 
 	//move control
 	controls[control_index]->Move(position);
@@ -251,9 +249,6 @@ void ButtonPanel::DeleteButton(int row, int column)
 void ButtonPanel::Press(int index)
 {
 	//Press selected button
-
-	if (index == -1)
-		return;
 
 	//exit if index is invalid
 	if (index < 0 || index > (int)controls.size() - 1)
