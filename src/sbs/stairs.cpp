@@ -678,7 +678,7 @@ void Stairs::RemoveDoor(Door *door)
 		{
 			if (DoorArray[i][j] == door)
 			{
-				DoorArray[i].erase(DoorArray[i].begin() + i);
+				DoorArray[i].erase(DoorArray[i].begin() + j);
 				return;
 			}
 		}
@@ -694,7 +694,7 @@ void Stairs::RemoveLight(Light *light)
 		{
 			if (lights[i][j] == light)
 			{
-				lights[i].erase(lights[i].begin() + i);
+				lights[i].erase(lights[i].begin() + j);
 				return;
 			}
 		}
@@ -710,7 +710,7 @@ void Stairs::RemoveModel(Model *model)
 		{
 			if (ModelArray[i][j] == model)
 			{
-				ModelArray[i].erase(ModelArray[i].begin() + i);
+				ModelArray[i].erase(ModelArray[i].begin() + j);
 				return;
 			}
 		}
@@ -726,7 +726,7 @@ void Stairs::RemoveControl(Control *control)
 		{
 			if (ControlArray[i][j] == control)
 			{
-				ControlArray[i].erase(ControlArray[i].begin() + i);
+				ControlArray[i].erase(ControlArray[i].begin() + j);
 				return;
 			}
 		}
@@ -742,7 +742,7 @@ void Stairs::RemoveTrigger(Trigger *trigger)
 		{
 			if (TriggerArray[i][j] == trigger)
 			{
-				TriggerArray[i].erase(TriggerArray[i].begin() + i);
+				TriggerArray[i].erase(TriggerArray[i].begin() + j);
 				return;
 			}
 		}
