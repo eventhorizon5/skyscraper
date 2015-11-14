@@ -81,8 +81,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfl
 	for (int i = startfloor; i <= endfloor; i++)
 	{
 		//Create shaft meshes
-		std::string buffer = name + ":" + ToString(i);
-		ShaftArray[i - startfloor] = new MeshObject(this, buffer);
+		ShaftArray[i - startfloor] = new MeshObject(this, name + ":" + ToString(i));
 		ShaftArray[i - startfloor]->SetPositionY(sbs->GetFloor(i)->Altitude);
 		EnableArray[i - startfloor] = true;
 	}

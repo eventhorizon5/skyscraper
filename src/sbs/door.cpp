@@ -271,7 +271,7 @@ void Door::MoveDoor()
 		rotation = 0;
 	}
 
-	SetRotation(Ogre::Vector3(0, rotation, 0));
+	SetRotation(0, rotation, 0);
 }
 
 void Door::SetLocked(int side, int keyid)

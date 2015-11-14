@@ -60,7 +60,7 @@ Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 po
 
 		SetColor(color_r, color_g, color_b, spec_color_r, spec_color_g, spec_color_b);
 		Move(position);
-		light->setDirection(direction * Ogre::Vector3(1, 1, -1));
+		light->setDirection(sbs->ToRemote(direction, false));
 		if (Type == 2)
 			light->setSpotlightRange(Ogre::Degree(spot_inner_angle), Ogre::Degree(spot_outer_angle), spot_falloff);
 		light->setAttenuation(sbs->ToRemote(att_range), att_constant, att_linear, att_quadratic);
