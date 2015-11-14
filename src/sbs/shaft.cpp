@@ -73,6 +73,7 @@ Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfl
 
 	ShaftArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
+	DoorArray.resize(endfloor - startfloor + 1);
 	lights.resize(endfloor - startfloor + 1);
 	ModelArray.resize(endfloor - startfloor + 1);
 	ControlArray.resize(endfloor - startfloor + 1);
@@ -150,12 +151,15 @@ Shaft::~Shaft()
 	//delete doors
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
-		if (DoorArray[i].object)
+		for (int j = 0; j < (int)DoorArray[i].size(); j++)
 		{
-			DoorArray[i].object->parent_deleting = true;
-			delete DoorArray[i].object;
+			if (DoorArray[i][j])
+			{
+				DoorArray[i][j]->parent_deleting = true;
+				delete DoorArray[i][j];
+			}
+			DoorArray[i][j] = 0;
 		}
-		DoorArray[i].object = 0;
 	}
 
 	//delete mesh array objects
@@ -239,57 +243,36 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 	if (IsEnabledFloor(floor) != value && floor >= startfloor && floor <= endfloor && EnableCheck == false)
 	{
 		//turns shaft on/off for a specific floor
-		if (value == true)
+
+		GetMeshObject(floor)->Enable(value);
+		EnableArray[floor - startfloor] = value;
+
+		//doors
+		for (size_t i = 0; i < DoorArray[floor - startfloor].size(); i++)
 		{
-			GetMeshObject(floor)->Enable(value);
-			EnableArray[floor - startfloor] = true;
-
-			//controls
-			for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
-			{
-				if (ControlArray[floor - startfloor][i])
-					ControlArray[floor - startfloor][i]->Enabled(true);
-			}
-
-			//triggers
-			/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
-			{
-				if (TriggerArray[floor - startfloor][i])
-					TriggerArray[floor - startfloor][i]->Enabled(true);
-			}*/
-
-			//models
-			for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
-			{
-				if (ModelArray[floor - startfloor][i])
-					ModelArray[floor - startfloor][i]->Enable(true);
-			}
+			if (DoorArray[floor - startfloor][i])
+				DoorArray[floor - startfloor][i]->Enabled(value);
 		}
-		else
+
+		//controls
+		for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
 		{
-			GetMeshObject(floor)->Enable(value);
-			EnableArray[floor - startfloor] = false;
+			if (ControlArray[floor - startfloor][i])
+				ControlArray[floor - startfloor][i]->Enabled(value);
+		}
 
-			//controls
-			for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
-			{
-				if (ControlArray[floor - startfloor][i])
-					ControlArray[floor - startfloor][i]->Enabled(false);
-			}
+		//triggers
+		/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
+		{
+			if (TriggerArray[floor - startfloor][i])
+				TriggerArray[floor - startfloor][i]->Enabled(value);
+		}*/
 
-			//triggers
-			/*for (size_t i = 0; i < TriggerArray[floor - startfloor].size(); i++)
-			{
-				if (TriggerArray[floor - startfloor][i])
-					TriggerArray[floor - startfloor][i]->Enabled(false);
-			}*/
-
-			//models
-			for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
-			{
-				if (ModelArray[floor - startfloor][i])
-					ModelArray[floor - startfloor][i]->Enable(false);
-			}
+		//models
+		for (size_t i = 0; i < ModelArray[floor - startfloor].size(); i++)
+		{
+			if (ModelArray[floor - startfloor][i])
+				ModelArray[floor - startfloor][i]->Enable(value);
 		}
 
 		if (EnableShaftDoors == true)
@@ -903,48 +886,29 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject("Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
-	DoorArray.resize(DoorArray.size() + 1);
-	DoorArray[DoorArray.size() - 1].floornumber = floor;
-	std::string shaftnum = ToString(ShaftNumber);
-	std::string num = ToString((int)DoorArray.size() - 1);
-	std::string name = "Shaft " + shaftnum + ":Door " + num;
-	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	int index = floor - startfloor;
+	std::string num = ToString((int)DoorArray[index].size());
+	std::string name = "Shaft " + ToString(ShaftNumber) + ":Door " + ToString(floor) + ":" + num;
+
+	Door* door = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, floorptr->GetBase(true) + voffset, tw, th);
+	DoorArray[index].push_back(door);
+
 	floorptr = 0;
-	return DoorArray[DoorArray.size() - 1].object;
-}
-
-void Shaft::EnableDoor(int floor, bool value)
-{
-	//turn on door(s) on the specified floor
-
-	for (int i = 0; i < (int)DoorArray.size(); i++)
-	{
-		if (DoorArray[i].floornumber == floor && DoorArray[i].object)
-			DoorArray[i].object->Enabled(value);
-	}
-}
-
-Door* Shaft::GetDoor(int number)
-{
-	//get door object
-	if (number < (int)DoorArray.size())
-	{
-		if (DoorArray[number].object)
-			return DoorArray[number].object;
-	}
-
-	return 0;
+	return door;
 }
 
 void Shaft::RemoveDoor(Door *door)
 {
-	//remove a door from the array (this does not delete the object)
+	//remove a door reference (this does not delete the object)
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
-		if (DoorArray[i].object == door)
+		for (int j = 0; j < (int)DoorArray[i].size(); j++)
 		{
-			DoorArray.erase(DoorArray.begin() + i);
-			return;
+			if (DoorArray[i][j] == door)
+			{
+				DoorArray[i].erase(DoorArray[i].begin() + i);
+				return;
+			}
 		}
 	}
 }

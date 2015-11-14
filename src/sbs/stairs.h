@@ -58,8 +58,6 @@ public:
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset);
 	bool Cut(bool relative, int floor, const Ogre::Vector3 &start, const Ogre::Vector3 &end, bool cutwalls, bool cutfloors, int checkwallnumber = 0);
 	void EnableRange(int floor, int range, bool value);
-	void EnableDoor(int floor, bool value);
-	Door* GetDoor(int number);
 	bool IsEnabledFloor(int floor);
 	bool IsValidFloor(int floor);
 	void Report(const std::string &message);
@@ -88,12 +86,13 @@ private:
 	std::vector<bool> EnableArray;
 	std::vector<int> ShowFloorsList; //list of floors to enable while inside the stairwell
 
-	std::vector<DoorMap> DoorArray; //door object array
-
 	int lastfloor;
 	bool lastfloorset;
 
-	//lights
+	//Doors
+	std::vector<std::vector<Door*> > DoorArray;
+
+	//Lights
 	std::vector<std::vector<Light*> > lights;
 
 	//Models

@@ -61,6 +61,7 @@ Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int end
 
 	StairArray.resize(endfloor - startfloor + 1);
 	EnableArray.resize(endfloor - startfloor + 1);
+	DoorArray.resize(endfloor - startfloor + 1);
 	ModelArray.resize(endfloor - startfloor + 1);
 	ControlArray.resize(endfloor - startfloor + 1);
 	//TriggerArray.resize(endfloor - startfloor + 1);
@@ -135,12 +136,15 @@ Stairs::~Stairs()
 	//delete doors
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
-		if (DoorArray[i].object)
+		for (int j = 0; j < (int)DoorArray[i].size(); j++)
 		{
-			DoorArray[i].object->parent_deleting = true;
-			delete DoorArray[i].object;
+			if (DoorArray[i][j])
+			{
+				DoorArray[i][j]->parent_deleting = true;
+				delete DoorArray[i][j];
+			}
+			DoorArray[i][j] = 0;
 		}
-		DoorArray[i].object = 0;
 	}
 
 	//delete mesh array objects
@@ -326,6 +330,13 @@ void Stairs::Enabled(int floor, bool value)
 		GetMeshObject(floor)->Enable(value);
 		EnableArray[floor - startfloor] = value;
 
+		//doors
+		for (size_t i = 0; i < DoorArray[floor - startfloor].size(); i++)
+		{
+			if (DoorArray[floor - startfloor][i])
+				DoorArray[floor - startfloor][i]->Enabled(value);
+		}
+
 		//controls
 		for (size_t i = 0; i < ControlArray[floor - startfloor].size(); i++)
 		{
@@ -346,9 +357,6 @@ void Stairs::Enabled(int floor, bool value)
 			if (ModelArray[floor - startfloor][i])
 				ModelArray[floor - startfloor][i]->Enable(value);
 		}
-
-		//enable/disable door
-		EnableDoor(floor, value);
 	}
 }
 
@@ -490,14 +498,15 @@ Door* Stairs::AddDoor(int floor, const std::string &open_sound, const std::strin
 	WallObject *wall = GetMeshObject(floor)->CreateWallObject("Connection Walls");
 	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
 
-	DoorArray.resize(DoorArray.size() + 1);
-	DoorArray[DoorArray.size() - 1].floornumber = floor;
-	std::string stairsnum = ToString(StairsNum);
-	std::string num = ToString((int)DoorArray.size() - 1);
-	std::string name = "Stairwell " + stairsnum + ":Door " + num;
-	DoorArray[DoorArray.size() - 1].object = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	int index = floor - startfloor;
+	std::string num = ToString((int)DoorArray[index].size());
+	std::string name = "Stairwell " + ToString(StairsNum) + ":Door " + ToString(floor) + ":" + num;
+
+	Door* door = new Door(GetMeshObject(floor), name, open_sound, close_sound, open_state, texture, thickness, direction, speed, CenterX, CenterZ, width, height, voffset, tw, th);
+	DoorArray[index].push_back(door);
+
 	floorptr = 0;
-	return DoorArray[DoorArray.size() - 1].object;
+	return door;
 }
 
 void Stairs::CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset)
@@ -627,32 +636,6 @@ void Stairs::EnableRange(int floor, int range, bool value)
 	}
 }
 
-void Stairs::EnableDoor(int floor, bool value)
-{
-	//turn on door(s) on the specified floor
-
-	for (int i = 0; i < (int)DoorArray.size(); i++)
-	{
-		if (DoorArray[i].object)
-		{
-			if (DoorArray[i].floornumber == floor && DoorArray[i].object)
-				DoorArray[i].object->Enabled(value);
-		}
-	}
-}
-
-Door* Stairs::GetDoor(int number)
-{
-	//get door object
-	if (number < (int)DoorArray.size())
-	{
-		if (DoorArray[number].object)
-			return DoorArray[number].object;
-	}
-
-	return 0;
-}
-
 bool Stairs::IsEnabledFloor(int floor)
 {
 	if (floor >= startfloor && floor <= endfloor)
@@ -688,13 +671,16 @@ bool Stairs::ReportError(const std::string &message)
 
 void Stairs::RemoveDoor(Door *door)
 {
-	//remove a door from the array (this does not delete the object)
+	//remove a door reference (this does not delete the object)
 	for (int i = 0; i < (int)DoorArray.size(); i++)
 	{
-		if (DoorArray[i].object == door)
+		for (int j = 0; j < (int)DoorArray[i].size(); j++)
 		{
-			DoorArray.erase(DoorArray.begin() + i);
-			return;
+			if (DoorArray[i][j] == door)
+			{
+				DoorArray[i].erase(DoorArray[i].begin() + i);
+				return;
+			}
 		}
 	}
 }

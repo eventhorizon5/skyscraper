@@ -68,12 +68,6 @@ private:
 	int KeyID;
 };
 
-struct DoorMap
-{
-	int floornumber; //associated floor number
-	Door *object; //door object reference
-};
-
 }
 
 #endif

@@ -90,8 +90,6 @@ public:
 	void ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	void OnInit();
 	Door* AddDoor(int floor, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
-	void EnableDoor(int floor, bool value);
-	Door* GetDoor(int number);
 	void RemoveDoor(Door *door);
 	void Check(Ogre::Vector3 position, int current_floor);
 	void Loop();
@@ -104,8 +102,6 @@ private:
 	std::vector<int> ShowOutsideList; //list of floors that the outside should be enabled on
 	std::vector<int> ShowInterfloorsList; //list of interfloors to enable while inside the shaft/elevator
 
-	std::vector<DoorMap> DoorArray; //door object array
-
 	//cache objects for IsInShaft()
 	Ogre::Vector3 lastposition;
 	bool lastcheckresult;
@@ -113,7 +109,10 @@ private:
 	bool InElevator;
 	bool ShowFloorsFull_Enabled;
 
-	//lights
+	//Doors
+	std::vector<std::vector<Door*> > DoorArray;
+
+	//Lights
 	std::vector<std::vector<Light*> > lights;
 
 	//Models
