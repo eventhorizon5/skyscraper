@@ -36,7 +36,7 @@ public:
 	virtual ~TimerObject();
 	void Start(int milliseconds = -1, bool oneshot = false);
 	void Stop();
-	virtual void Notify();
+	virtual void Notify() {}
 	bool IsRunning();
 	void Loop();
 	unsigned long GetCurrentTime();

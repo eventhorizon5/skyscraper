@@ -181,9 +181,7 @@ bool Control::SetSelectPosition(int position)
 
 	current_position = position;
 
-	if (ControlMesh->ChangeTexture(TextureArray[position - 1]) == true)
-		return true;
-	return false;
+	return ControlMesh->ChangeTexture(TextureArray[position - 1]);
 }
 
 bool Control::ChangeSelectPosition(int position)

@@ -99,11 +99,6 @@ void TimerObject::Loop()
 	}
 }
 
-void TimerObject::Notify()
-{
-
-}
-
 unsigned long TimerObject::GetCurrentTime()
 {
 	return CurrentTime;
