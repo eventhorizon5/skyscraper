@@ -1565,10 +1565,7 @@ void Skyscraper::StartSound()
 		return;
 
 	if (GetConfigBool("Skyscraper.Frontend.IntroMusic", true) == false)
-	{
-		DisableSound = true;
 		return;
-	}
 
 	std::string filename = GetConfigString("Skyscraper.Frontend.IntroMusicFile", "intro.ogg");
 	std::string filename_full = "data/" + filename;
