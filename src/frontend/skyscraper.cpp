@@ -1664,6 +1664,10 @@ bool Skyscraper::Load()
 	sleep(2);
 #endif
 
+	//disable sound in engine if disabled in frontend
+	if (DisableSound == true)
+		Simcore->DisableSound = true;
+
 	//initialize simulator
 	Simcore->Initialize(mCamera);
 
