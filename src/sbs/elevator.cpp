@@ -1249,15 +1249,16 @@ void Elevator::Loop()
 	//play car idle sound if in elevator, or if doors open
 	if (CarIdleSound != "")
 	{
-		if (idlesound->IsLoaded() == false)
-			idlesound->Load(CarIdleSound);
-
 		if (idlesound->IsPlaying() == false && Fan == true)
 		{
 			if (InElevator() == true || AreDoorsOpen() == true || AreDoorsMoving(0, true, false) != 0)
 			{
 				if (sbs->Verbose)
 					Report("playing car idle sound");
+
+				if (idlesound->IsLoaded() == false)
+					idlesound->Load(CarIdleSound);
+
 				idlesound->SetLoopState(true);
 				idlesound->Play();
 			}
@@ -1281,14 +1282,15 @@ void Elevator::Loop()
 
 	if (MotorIdleSound != "")
 	{
-		if (motoridlesound->IsLoaded() == false)
-			motoridlesound->Load(MotorIdleSound);
-
 		//play motor idle sound
 		if (motoridlesound->IsPlaying() == false && Running == true)
 		{
 			if (sbs->Verbose)
 				Report("playing motor idle sound");
+
+			if (motoridlesound->IsLoaded() == false)
+				motoridlesound->Load(MotorIdleSound);
+
 			motoridlesound->SetLoopState(true);
 			motoridlesound->Play();
 		}
@@ -1305,9 +1307,6 @@ void Elevator::Loop()
 	//play music sound if in elevator, or if doors open
 	if (Music != "")
 	{
-		if (musicsound->IsLoaded() == false)
-			musicsound->Load(Music);
-
 		if (musicsound->IsPlaying() == false && MusicOn == true && ((MusicOnMove == true && IsMoving == true) || MusicOnMove == false))
 		{
 			if (InServiceMode() == false)
@@ -1316,6 +1315,9 @@ void Elevator::Loop()
 				{
 					if (sbs->Verbose)
 						Report("playing music");
+
+					if (musicsound->IsLoaded() == false)
+						musicsound->Load(Music);
 
 					musicsound->SetLoopState(true);
 					musicsound->Play(false);
