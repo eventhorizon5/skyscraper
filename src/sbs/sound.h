@@ -65,6 +65,7 @@ public:
 	bool ReportError(const std::string &message);
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
+	void Unload();
 
 private:
 

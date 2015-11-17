@@ -59,10 +59,7 @@ Sound::~Sound()
 {
 	if (sbs->DisableSound == false)
 	{
-		Stop();
-		sound->release();
-		//delete sound;
-		sound = 0;
+		Unload();
 		sbs->DecrementSoundCount();
 	}
 
@@ -456,6 +453,19 @@ void Sound::ProcessQueue()
 	SetLoopState(snd->loop);
 	Play();
 	snd->played = true;
+}
+
+void Sound::Unload()
+{
+	Stop();
+	channel = 0;
+
+	//delete sound;
+	if (sound)
+		sound->release();
+	sound = 0;
+
+	loaded = false;
 }
 
 }
