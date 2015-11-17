@@ -1266,7 +1266,7 @@ bool ScriptProcessor::ReportMissingFiles()
 	{
 		sort(nonexistent_files.begin(), nonexistent_files.end());
 		for (int i = 0; i < (int)nonexistent_files.size(); i++)
-			Simcore->Report(nonexistent_files[i]);
+			Simcore->Report("Missing file: " + nonexistent_files[i]);
 
 		//create text window
 		TextWindow *twindow = new TextWindow(NULL, -1);
