@@ -1,5 +1,20 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-fixed console reporting of missing files
+-added sound unload function
+-don't load main elevator sounds on first loop run, load right before playing
+-if sound is disabled in frontend, sound in engine should also be disabled properly
+-object removal functions in Shaft and Stairs objects were using a wrong index value
+-reworked object array method for Door objects, in stairwell and shaft objects
+-reject mp3 files on load
+-fixed FindWithCase function
+-reworked and cleaned up call button code
+-fixed an issue in call button processing that prevented engine callbacks from being removed
+-don't run elevator checks if elevator is disabled
+-disable objects when disabling elevator
+-don't try to create a collider scenenode if it already exists
+-made a proper fix for an issue involving graphics corruption on Windows after a reload.  The viewport needs to be updated properly on a reload.
+-SBS should call Prepare() on engine start, not frontend
 -set location and date/time for Triton Center and Glass Tower buildings
 -added Coordinates and DateTime global options
 -resized couches to be more realistic
