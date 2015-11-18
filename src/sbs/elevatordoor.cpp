@@ -882,7 +882,6 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 			DoorDirection = true;
 		wrapper->Width = x2 - x1;
 		wrapper->Thickness = z2 - z1;
-		wrapper->Shift = x2 - (wrapper->Width / 2);
 	}
 	else
 	{
@@ -890,7 +889,6 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 			DoorDirection = false;
 		wrapper->Width = z2 - z1;
 		wrapper->Thickness = x2 - x1;
-		wrapper->Shift = z2 - (wrapper->Width / 2);
 	}
 	wrapper->Height = y2 - y1;
 	if (y2 < y1)
@@ -1449,7 +1447,6 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	Height = 0;
 	Thickness = 0;
 	IsShaftDoor = shaftdoor;
-	Shift = 0;
 	voffset = 0;
 	floor = shaftdoor_floor;
 
@@ -1523,7 +1520,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 
 	//first get position and origin of door, and adjust values to reflect the "edge" of the door
 	SBS_PROFILE("ElevatorDoor::DoorObject::MoveDoors");
-	float tempposition, temporigin;
+	float tempposition;
 
 	if (finished == true)
 		return;
@@ -1531,32 +1528,20 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	if (direction > 1)
 	{
 		if (parent->DoorDirection == false)
-		{
-			tempposition = mesh->GetPosition().z + wrapper->Shift;
-			temporigin = wrapper->GetPosition().z + wrapper->Shift;
-		}
+			tempposition = mesh->GetPosition(true).z;
 		else
-		{
-			tempposition = mesh->GetPosition().x + wrapper->Shift;
-			temporigin = wrapper->GetPosition().x + wrapper->Shift;
-		}
+			tempposition = mesh->GetPosition(true).x;
 	}
 	else
-	{
-		tempposition = mesh->GetPosition().y;
-		if (wrapper->IsShaftDoor == false)
-			temporigin = parent->elev->GetPosition().y;
-		else
-			temporigin = 0;
-	}
+		tempposition = mesh->GetPosition(true).y;
 
 	//get distance from starting point
-	float difference = fabsf(tempposition - temporigin);
+	float difference = fabsf(tempposition);
 
 	if (old_difference != 0 && manual == true && recheck_difference == true)
 	{
 		//check if the position went beyond 0
-		if ((tempposition - temporigin > 0 && old_difference < 0) || (tempposition - temporigin < 0 && old_difference > 0))
+		if ((tempposition > 0 && old_difference < 0) || (tempposition < 0 && old_difference > 0))
 			sign_changed = true;
 	}
 
@@ -1566,7 +1551,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		old_difference = 0;
 	}
 	else
-		old_difference = tempposition - temporigin;
+		old_difference = tempposition;
 
 	//debug - show current section as function is running
 	//sbs->Report("Door section: " + ToString(door_section));
@@ -1583,6 +1568,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		if (manual == false)
 		{
 			float speed;
+
 			if (open == true)
 				speed = open_speed;
 			else
@@ -1599,22 +1585,26 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				//is from the edge of the door frame)
 				float width;
 				float mainwidth = wrapper->Width / 2;
+
 				if (parent->DoorDirection == false)
 				{
 					width = fabsf(extents_max.z - extents_min.z);
+
 					if (direction == 2)
-						offset = mainwidth + (extents_min.z - wrapper->Shift);
+						offset = mainwidth + extents_min.z;
 					else
-						offset = mainwidth - (extents_max.z - wrapper->Shift);
+						offset = mainwidth - extents_max.z;
 				}
 				else
 				{
 					width = fabsf(extents_max.x - extents_min.x);
+
 					if (direction == 2)
-						offset = mainwidth + (extents_min.x - wrapper->Shift);
+						offset = mainwidth + extents_min.x;
 					else
-						offset = mainwidth - (extents_max.x - wrapper->Shift);
+						offset = mainwidth - extents_max.x;
 				}
+
 				float newwidth = width + offset;
 				marker1 = newwidth / 4;
 				marker2 = (mainwidth + (width - mainwidth)) - marker1 + offset;
@@ -1623,20 +1613,12 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float height = fabsf(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
+
 				if (direction == 0)
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = wrapper->Height - extents_max.y;
-					else
-						offset = wrapper->Height - (extents_max.y - wrapper->GetPosition().y);
-				}
+					offset = wrapper->Height - extents_max.y;
 				else
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = extents_min.y;
-					else
-						offset = extents_min.y - wrapper->GetPosition().y;
-				}
+					offset = extents_min.y;
+
 				float newheight = height + offset;
 				marker1 = newheight / 4;
 				marker2 = (mainheight + (height - mainheight)) - marker1 + offset;
@@ -1651,21 +1633,24 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float width;
 				float mainwidth = wrapper->Width / 2;
+
 				if (parent->DoorDirection == false)
 				{
 					width = fabsf(extents_max.z - extents_min.z);
+
 					if (direction == 2)
-						offset = mainwidth + (extents_min.z - wrapper->Shift);
+						offset = mainwidth + extents_min.z;
 					else
-						offset = mainwidth - (extents_max.z - wrapper->Shift);
+						offset = mainwidth - extents_max.z;
 				}
 				else
 				{
 					width = fabsf(extents_max.x - extents_min.x);
+
 					if (direction == 2)
-						offset = mainwidth + (extents_min.x - wrapper->Shift);
+						offset = mainwidth + extents_min.x;
 					else
-						offset = mainwidth - (extents_max.x - wrapper->Shift);
+						offset = mainwidth - extents_max.x;
 				}
 				marker1 = 0;
 				marker2 = mainwidth + (width - mainwidth) + offset;
@@ -1674,20 +1659,12 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 			{
 				float height = fabsf(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
+
 				if (direction == 0)
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = wrapper->Height - extents_max.y;
-					else
-						offset = wrapper->Height - (extents_max.y - wrapper->GetPosition().y);
-				}
+					offset = wrapper->Height - extents_max.y;
 				else
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = extents_min.y;
-					else
-						offset = extents_min.y - wrapper->GetPosition().y;
-				}
+					offset = extents_min.y;
+
 				marker1 = 0;
 				marker2 = mainheight + (height - mainheight) + offset;
 			}
@@ -1706,6 +1683,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		{
 			//relocate marker 1 to the door's current position, in order to stop it
 			float offset = marker1 - difference;
+
 			if (difference >= marker1)
 				//place marker at door position
 				marker1 = difference;
@@ -1717,6 +1695,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		{
 			//relocate marker 2 to the door's current position, in order to stop it
 			float offset = difference - marker2;
+
 			if (difference <= marker2)
 				//place marker at door position
 				marker2 = difference;
@@ -1735,6 +1714,7 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 		if ((difference <= marker1 && open == true) || (difference >= marker2 && open == false))
 		{
 			accelerating = true;
+
 			if (parent->door_changed == false)
 			{
 				//normal door acceleration

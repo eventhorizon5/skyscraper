@@ -96,7 +96,6 @@ public:
 		float Thickness;
 		ElevatorDoor *parent;
 		bool IsShaftDoor;
-		float Shift;
 		float voffset;
 		int floor;
 	};
