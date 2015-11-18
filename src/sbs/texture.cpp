@@ -112,7 +112,7 @@ bool SBS::LoadTexture(const std::string &filename, const std::string &name, floa
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
-	if (sbs->Verbose)
+	if (Verbose)
 		Report("Loaded texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
@@ -175,7 +175,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::str
 			return ReportError("Error loading texture " + filenames2[i] + "\n" + e.getDescription());
 		}
 
-		if (sbs->Verbose)
+		if (Verbose)
 			Report("Loaded texture " + filenames2[i]);
 	}
 
@@ -223,7 +223,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::str
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
-	if (sbs->Verbose)
+	if (Verbose)
 		Report("Loaded animated texture " + matname);
 
 	return true;
@@ -352,7 +352,7 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
 
-	if (sbs->Verbose)
+	if (Verbose)
 		Report("Loaded alpha blended texture '" + filename2 + "' as '" + matname + "'");
 
 	return true;
@@ -383,7 +383,7 @@ bool SBS::LoadMaterial(const std::string &materialname, const std::string &name,
 	//add texture multipliers
 	RegisterTextureInfo(name, materialname, "", widthmult, heightmult, enable_force, force_mode);
 
-	if (sbs->Verbose)
+	if (Verbose)
 		Report("Loaded material " + matname);
 
 	return true;
@@ -561,7 +561,7 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	if (sbs->Verbose)
+	if (Verbose)
 		Report("Loaded cropped texture '" + filename2 + "' as '" + Name + "'");
 
 	//add texture multipliers
@@ -833,25 +833,19 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 		}
 		catch (Ogre::Exception &e)
 		{
-			sbs->ReportError("Error loading font " + fontname + "\n" + e.getDescription());
-			return false;
+			return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
 		}
 	}
 
 	//get original texture
 	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
 	if (ptr.isNull())
-	{
-		ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
-		return false;
-	}
+		return ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
+
 	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
 	Ogre::TexturePtr background = Ogre::TextureManager::getSingleton().getByName(texname);
 	if (background.isNull())
-	{
-		ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
-		return false;
-	}
+		return ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
 
 	bool has_alpha = background->hasAlpha();
 
@@ -935,7 +929,7 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
 
-	if (sbs->Verbose)
+	if (Verbose)
 		Report("AddTextToTexture: created texture '" + Name + "'");
 
 	CacheFilename(Name, Name);
@@ -953,35 +947,29 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 
 	//get original texture
 	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
+
 	if (ptr.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
-		return false;
-	}
+		return ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
+
 	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
 	Ogre::TexturePtr image1 = Ogre::TextureManager::getSingleton().getByName(texname);
+
 	if (image1.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
-		return false;
-	}
+		return ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
 
 	bool has_alpha = image1->hasAlpha();
 
 	//get overlay texture
 	ptr = Ogre::MaterialManager::getSingleton().getByName(Overlay);
+
 	if (ptr.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
-		return false;
-	}
+		return ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
+
 	texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
 	Ogre::TexturePtr image2 = Ogre::TextureManager::getSingleton().getByName(texname);
+
 	if (image2.isNull())
-	{
-		ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
-		return false;
-	}
+		return ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
 
 	//set default values if specified
 	if (x == -1)
@@ -1035,7 +1023,7 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
-	if (sbs->Verbose)
+	if (Verbose)
 		Report("AddTextureOverlay: created texture '" + Name + "'");
 
 	//add texture multipliers
@@ -1910,8 +1898,7 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, i
 	}
 	catch (Ogre::Exception &e)
 	{
-		sbs->ReportError("Error loading font " + font->getName() + "\n" + e.getDescription());
-		return false;
+		return ReportError("Error loading font " + font->getName() + "\n" + e.getDescription());
 	}
 
 	TexturePtr fontTexture = (TexturePtr)TextureManager::getSingleton().getByName(font->getMaterial()->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName());
