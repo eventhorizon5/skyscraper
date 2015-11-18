@@ -4134,10 +4134,10 @@ bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObj
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 
 	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, sbs->mWorld, max_distance);
+	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, mWorld, max_distance);
 
 	//check for collision
-	sbs->mWorld->launchRay(callback);
+	mWorld->launchRay(callback);
 
 	//exit if no collision
 	if (callback.doesCollide() == false)
@@ -4153,10 +4153,10 @@ bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObj
 	std::string meshname = object->getRootNode()->getParentSceneNode()->getName();
 
 	//get hit/intersection position
-	hit_position = sbs->ToLocal(callback.getCollisionPoint());
+	hit_position = ToLocal(callback.getCollisionPoint());
 
 	//get associated mesh object
-	mesh = sbs->FindMeshObject(meshname);
+	mesh = FindMeshObject(meshname);
 	if (!mesh)
 		return false;
 
