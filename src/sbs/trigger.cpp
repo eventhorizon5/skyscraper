@@ -38,7 +38,7 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 	SetValues(parent, "Trigger", name, permanent);
 
 	Actions = action_names;
-	IsEnabled = true;
+	is_enabled = true;
 	current_position = 1;
 	this->area_min = area_min;
 	this->area_max = area_max;
@@ -83,10 +83,10 @@ void Trigger::Enabled(bool value)
 {
 	//enable or disable trigger
 
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
-	IsEnabled = value;
+	is_enabled = value;
 }
 
 bool Trigger::SetSelectPosition(int position)
@@ -241,6 +241,9 @@ bool Trigger::DoAction()
 void Trigger::Loop()
 {
 	//check for action; should be called in a loop by the parent object
+
+	if (is_enabled == false)
+		return;
 
 	Ogre::Vector3 cam = sbs->camera->GetPosition();
 	bool changed = false;

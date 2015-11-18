@@ -38,7 +38,7 @@ DirectionalIndicator::DirectionalIndicator(Object *parent, int elevator, int flo
 	//set up SBS object
 	SetValues(parent, "DirectionalIndicator", "", false);
 
-	IsEnabled = true;
+	is_enabled = true;
 	this->elevator = elevator;
 	this->floor = floor;
 	Direction = direction;
@@ -310,7 +310,7 @@ void DirectionalIndicator::Enabled(bool value)
 {
 	//turns panel on/off
 
-	if (value == IsEnabled)
+	if (value == is_enabled)
 		return;
 
 	DirectionalMeshBack->Enable(value);
@@ -321,7 +321,7 @@ void DirectionalIndicator::Enabled(bool value)
 	if (DirectionalMesh)
 		DirectionalMesh->Enable(value);
 
-	IsEnabled = value;
+	is_enabled = value;
 }
 
 void DirectionalIndicator::UpLight(bool value)

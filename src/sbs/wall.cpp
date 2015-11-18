@@ -306,4 +306,9 @@ MeshObject* WallObject::GetMesh()
 	return meshwrapper;
 }
 
+void WallObject::SetParentArray(std::vector<WallObject*> &array)
+{
+	parent_array = &array;
+}
+
 }

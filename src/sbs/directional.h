@@ -37,7 +37,6 @@ public:
 	int elevator; //elevator this indicator is assigned to
 	int floor; //floor the indicator is on
 	std::string Direction; //direction the indicator faces; either 'front', 'back', 'left', or 'right'
-	bool IsEnabled; //true if indicator is currently enabled
 	std::string UpTextureUnlit; //unlit up texture
 	std::string UpTextureLit; //lit up texture
 	std::string DownTextureUnlit; //unlit down texture
@@ -55,12 +54,15 @@ public:
 	void UpLight(bool value);
 	void DownLight(bool value);
 	void SetLights(int up, int down);
+	bool IsEnabled() { return is_enabled; }
 
 private:
 	MeshObject* DirectionalMeshBack; //indicator mesh back object
 	MeshObject* DirectionalMeshUp; //indicator mesh up object
 	MeshObject* DirectionalMeshDown; //indicator mesh down object
 	MeshObject* DirectionalMesh; //indicator mesh single object
+
+	bool is_enabled; //true if indicator is currently enabled
 
 	//shut-off timer
 	class Timer : public TimerObject

@@ -33,7 +33,6 @@ class SBSIMPEXP FloorIndicator : public Object
 public:
 
 	int elev; //elevator this indicator is assigned to
-	bool IsEnabled;
 	std::string Prefix; //texture name prefix
 
 	//functions
@@ -41,9 +40,11 @@ public:
 	~FloorIndicator();
 	void Enabled(bool value);
 	void Update();
+	bool IsEnabled() { return is_enabled; }
 
 private:
 	MeshObject* FloorIndicatorMesh; //indicator mesh object
+	bool is_enabled;
 };
 
 }

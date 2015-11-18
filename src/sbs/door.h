@@ -39,7 +39,6 @@ public:
 	bool IsMoving; //is door moving?
 	bool OpenDoor; //open or close door?
 	bool Clockwise; //if door should rotate clockwise
-	bool IsEnabled;
 	float Speed; //rotation speed
 	std::string OpenSound; //opening sound
 	std::string CloseSound; //closing sound
@@ -56,6 +55,7 @@ public:
 	bool IsLocked(const Ogre::Vector3 &position);
 	bool ToggleLock(const Ogre::Vector3 &position, bool force = false);
 	int GetKeyID();
+	bool IsEnabled() { return is_enabled; }
 
 private:
 	MeshObject* DoorMesh; //door mesh
@@ -63,6 +63,7 @@ private:
 	//sound object
 	Sound *sound;
 
+	bool is_enabled;
 	float rotation;
 	int Locked;
 	int KeyID;

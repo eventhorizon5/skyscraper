@@ -47,7 +47,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	ActionNames = action_names;
 	Actions = actions;
 	Direction = direction;
-	IsEnabled = true;
+	is_enabled = true;
 	TextureArray = textures;
 	current_position = 1;
 	Locked = false;
@@ -165,11 +165,11 @@ void Control::Enabled(bool value)
 {
 	//enable or disable control
 
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	ControlMesh->Enable(value);
-	IsEnabled = value;
+	is_enabled = value;
 }
 
 bool Control::SetSelectPosition(int position)

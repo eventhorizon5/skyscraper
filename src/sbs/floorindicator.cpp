@@ -39,7 +39,7 @@ FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &
 	//set up SBS object
 	SetValues(parent, "FloorIndicator", "", false);
 
-	IsEnabled = true;
+	is_enabled = true;
 	elev = elevator;
 	Prefix = texture_prefix;
 
@@ -100,11 +100,11 @@ void FloorIndicator::Enabled(bool value)
 {
 	//turns indicator on/off
 
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	FloorIndicatorMesh->Enable(value);
-	IsEnabled = value;
+	is_enabled = value;
 }
 
 void FloorIndicator::Update()

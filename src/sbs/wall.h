@@ -51,9 +51,7 @@ public:
 	bool IntersectsWall(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, bool convert = true);
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 	MeshObject* GetMesh();
-
-	//parent array
-	std::vector<WallObject*> *parent_array;
+	void SetParentArray(std::vector<WallObject*> &array);
 
 private:
 	//mesh wrapper
@@ -61,6 +59,9 @@ private:
 
 	//polygon array
 	std::vector<Polygon> polygons;
+
+	//pointer to parent array
+	std::vector<WallObject*> *parent_array;
 };
 
 }

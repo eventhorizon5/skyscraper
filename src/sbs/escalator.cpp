@@ -39,7 +39,7 @@ Escalator::Escalator(Object *parent, const std::string &name, bool run, bool run
 	//set up SBS object
 	SetValues(parent, "Escalator", name, false);
 
-	IsEnabled = true;
+	is_enabled = true;
 	Run = run;
 	RunDirection = run_direction;
 	sbs->IncrementEscalatorCount();
@@ -102,7 +102,7 @@ void Escalator::Enabled(bool value)
 {
 	//enable or disable escalator
 
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	for (int i = 0; i < (int)Steps.size(); i++)
@@ -111,7 +111,7 @@ void Escalator::Enabled(bool value)
 	if (value == false && sound->IsPlaying() == true)
 		sound->Stop();
 
-	IsEnabled = value;
+	is_enabled = value;
 }
 
 void Escalator::Report(const std::string &message)
@@ -130,7 +130,7 @@ void Escalator::Loop()
 {
 	//run loop
 
-	if (!IsEnabled || !Run)
+	if (!IsEnabled() || !Run)
 	{
 		if (sound->IsPlaying() == true)
 			sound->Stop();

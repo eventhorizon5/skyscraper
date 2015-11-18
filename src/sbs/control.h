@@ -35,7 +35,6 @@ class SBSIMPEXP Control : public Object
 {
 public:
 	std::string Direction;
-	bool IsEnabled;
 
 	//functions
 	Control(Object *parent, const std::string &name, bool permanent, const std::string &sound, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, float width, float height, bool center);
@@ -64,6 +63,7 @@ public:
 	bool ToggleLock(bool force = false);
 	int GetKeyID();
 	void RemoveAction(Action *action);
+	bool IsEnabled() { return is_enabled; }
 
 private:
 	MeshObject* ControlMesh; //control mesh object
@@ -76,6 +76,7 @@ private:
 	bool Locked;
 	int KeyID;
 	bool light_status; //light on/off value, used for floor buttons
+	bool is_enabled;
 
 };
 

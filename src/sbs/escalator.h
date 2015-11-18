@@ -31,7 +31,6 @@ namespace SBS {
 class SBSIMPEXP Escalator : public Object
 {
 public:
-	bool IsEnabled;
 	bool Run;
 	bool RunDirection;
 
@@ -41,10 +40,12 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	void Loop();
+	bool IsEnabled() { return is_enabled; }
 
 private:
 	std::vector<MeshObject*> Steps;
 	Sound *sound; //sound object
+	bool is_enabled;
 
 	void CreateSteps(const std::string &texture, const std::string &direction, float width, float risersize, float treadsize, float tw, float th);
 };

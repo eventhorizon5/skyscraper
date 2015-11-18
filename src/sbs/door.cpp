@@ -49,7 +49,7 @@ Door::Door(Object *parent, const std::string &name, const std::string &open_soun
 	//set up SBS object
 	SetValues(parent, "Door", name, false);
 
-	IsEnabled = true;
+	is_enabled = true;
 	Direction = direction;
 	OpenState = false;
 	IsMoving = false;
@@ -227,11 +227,11 @@ bool Door::IsOpen()
 
 void Door::Enabled(bool value)
 {
-	if (IsEnabled == value)
+	if (is_enabled == value)
 		return;
 
 	DoorMesh->Enable(value);
-	IsEnabled = value;
+	is_enabled = value;
 }
 
 void Door::MoveDoor()

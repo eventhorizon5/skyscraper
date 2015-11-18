@@ -34,7 +34,6 @@ namespace SBS {
 class SBSIMPEXP Trigger : public Object
 {
 public:
-	bool IsEnabled;
 
 	//functions
 	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, const std::vector<std::string> &action_names);
@@ -55,12 +54,14 @@ public:
 	bool DoAction();
 	void Loop();
 	bool IsInside();
+	bool IsEnabled() { return is_enabled; }
 
 private:
 	Ogre::Vector3 area_min;
 	Ogre::Vector3 area_max;
 	int current_position; //current trigger position
 	bool is_inside;
+	bool is_enabled;
 	std::vector<std::string> Actions; //trigger actions
 
 	Sound *sound; //sound object
