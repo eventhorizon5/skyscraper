@@ -81,6 +81,40 @@ caelum_sky_system DefaultSky: DefaultBase
     }
 }
 
+caelum_sky_system Cloudy: DefaultBase
+{
+    cloud_system
+    {
+        cloud_layer
+        {
+            height 5000
+            coverage 0.3
+        }
+        cloud_layer
+        {
+            height 1400
+            coverage 0.75
+        }
+    }
+}
+
+caelum_sky_system Overcast: DefaultBase
+{
+    cloud_system
+    {
+        cloud_layer
+        {
+            height 5000
+            coverage 0.3
+        }
+        cloud_layer
+        {
+            height 1800
+            coverage 1.0
+        }
+    }
+}
+
 // Test overriding stars to make them big and puffy.
 caelum_sky_system BigPuffyStars: DefaultBase
 {
