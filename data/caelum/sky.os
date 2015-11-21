@@ -75,8 +75,7 @@ caelum_sky_system DefaultSky: DefaultBase
     {
         cloud_layer
         {
-	    //height for 5000 feet (amount times SBS multiplier, usually 4)
-	    height 1250
+	    height 5000
             coverage 0.3
         }
     }

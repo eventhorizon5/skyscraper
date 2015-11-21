@@ -156,7 +156,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 	}
 	DeleteColliders = false;
 	soundcount = 0;
-	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 5);
+	UnitScale = GetConfigFloat("Skyscraper.SBS.UnitScale", 4);
 	Verbose = GetConfigBool("Skyscraper.SBS.Verbose", false);
 	InterfloorOnTop = false;
 	DefaultMapper = GetConfigInt("Skyscraper.SBS.TextureMapper", 0);

@@ -1993,6 +1993,11 @@ bool Skyscraper::InitSky()
 		Ogre::Quaternion rot(Ogre::Degree(180.0f), Ogre::Vector3::UNIT_Y);
 		mCaelumSystem->getCaelumGroundNode()->setOrientation(rot);
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
+
+		//have sky use SBS scaling factor
+		float scale = 1 / Simcore->UnitScale;
+		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
+		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
 	}
 	catch (Ogre::Exception &e)
 	{
