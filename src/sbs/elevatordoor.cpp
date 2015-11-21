@@ -1531,23 +1531,15 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 	if (direction > 1)
 	{
 		if (parent->DoorDirection == false)
-		{
-			tempposition = mesh->GetPosition().z + wrapper->Shift;
-			temporigin = wrapper->GetPosition().z + wrapper->Shift;
-		}
+			tempposition = mesh->GetPosition(true).z + wrapper->Shift;
 		else
-		{
-			tempposition = mesh->GetPosition().x + wrapper->Shift;
-			temporigin = wrapper->GetPosition().x + wrapper->Shift;
-		}
+			tempposition = mesh->GetPosition(true).x + wrapper->Shift;
+		temporigin = wrapper->Shift;
 	}
 	else
 	{
-		tempposition = mesh->GetPosition().y;
-		if (wrapper->IsShaftDoor == false)
-			temporigin = parent->elev->GetPosition().y;
-		else
-			temporigin = 0;
+		tempposition = mesh->GetPosition(true).y;
+		temporigin = 0;
 	}
 
 	//get distance from starting point
@@ -1624,19 +1616,10 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = fabsf(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = wrapper->Height - extents_max.y;
-					else
-						offset = wrapper->Height - (extents_max.y - wrapper->GetPosition().y);
-				}
+					offset = wrapper->Height - extents_max.y;
 				else
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = extents_min.y;
-					else
-						offset = extents_min.y - wrapper->GetPosition().y;
-				}
+					offset = extents_min.y;
+
 				float newheight = height + offset;
 				marker1 = newheight / 4;
 				marker2 = (mainheight + (height - mainheight)) - marker1 + offset;
@@ -1675,19 +1658,10 @@ void ElevatorDoor::DoorObject::MoveDoors(bool open, bool manual)
 				float height = fabsf(extents_max.y - extents_min.y);
 				float mainheight = wrapper->Height / 2;
 				if (direction == 0)
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = wrapper->Height - extents_max.y;
-					else
-						offset = wrapper->Height - (extents_max.y - wrapper->GetPosition().y);
-				}
+					offset = wrapper->Height - extents_max.y;
 				else
-				{
-					if (wrapper->IsShaftDoor == false)
-						offset = extents_min.y;
-					else
-						offset = extents_min.y - wrapper->GetPosition().y;
-				}
+					offset = extents_min.y;
+
 				marker1 = 0;
 				marker2 = mainheight + (height - mainheight) + offset;
 			}
