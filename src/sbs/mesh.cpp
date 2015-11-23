@@ -576,14 +576,14 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 				while(!stream->eof())
 				{
 					std::string line = stream->getLine();
-					Ogre::StringUtil::trim(line);
-					if (Ogre::StringUtil::startsWith(line, "material"))
+					TrimString(line);
+					if (StartsWith(line, "material", true) == true)
 					{
 						Ogre::vector<Ogre::String>::type vec = Ogre::StringUtil::split(line," \t:");
 						for (Ogre::vector<Ogre::String>::type::iterator it = vec.begin(); it < vec.end(); ++it)
 						{
 							std::string match = (*it);
-							Ogre::StringUtil::trim(match);
+							TrimString(match);
 							if (!match.empty())
 							{
 								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
