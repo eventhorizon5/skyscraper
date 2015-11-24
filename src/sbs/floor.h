@@ -35,6 +35,7 @@
 #include "trigger.h"
 #include "cameratexture.h"
 #include "escalator.h"
+#include "timer.h"
 
 namespace SBS {
 
@@ -62,6 +63,8 @@ public:
 	std::vector<int> Group; //floor group
 	bool EnabledGroup; //true if floor was enabled as part of a group, not directly
 	int EnabledGroup_Floor; //number of floor that enabled this floor as part of it's own group
+	int RandomProbability; //probability ratio of random calls, starting with 1 - higher is less frequent
+	float RandomFrequency; //speed in seconds to make each random call
 
 	//functions
 	Floor(int number);
@@ -126,6 +129,7 @@ public:
 	void GetElevatorList(std::vector<int> &listing);
 	void GetStairsList(std::vector<int> &listing);
 	void GetShaftList(std::vector<int> &listing);
+	void EnableRandomActivity(bool value);
 
 private:
 	//sound objects
@@ -154,6 +158,23 @@ private:
 
 	//Escalators
 	std::vector<Escalator*> EscalatorArray;
+
+	//random call timer
+	class Timer : public TimerObject
+	{
+	public:
+		Floor *parent;
+		Timer(const std::string &name, Floor *parent) : TimerObject(parent, name, false)
+		{
+			this->parent = parent;
+		}
+		virtual void Notify();
+	};
+
+	//random call timer object
+	Timer *random_timer;
+
+	bool RandomActivity; //enables/disables random call activity
 };
 
 }

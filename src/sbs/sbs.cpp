@@ -4169,14 +4169,27 @@ bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObj
 	return true;
 }
 
-void SBS::EnableRandomActivity(bool value)
+void SBS::EnableRandomActivity(bool value, bool elevators, bool floors)
 {
-	//enable random activity on all elevators
+	//enable random activity on all elevators and floors (call buttons)
 
-	for (int i = 0; i < (int)ElevatorArray.size(); i++)
+	if (elevators == true)
 	{
-		if (ElevatorArray[i].object)
-			ElevatorArray[i].object->RandomActivity = value;
+		for (int i = 1; i <= GetElevatorCount(); i++)
+		{
+			if (GetElevator(i))
+				GetElevator(i)->RandomActivity = value;
+		}
+	}
+
+	if (floors == true)
+	{
+		for (int i = -Basements; i < Floors; i++)
+		{
+			Floor *floor = GetFloor(i);
+			if (floor)
+				floor->EnableRandomActivity(value);
+		}
 	}
 }
 

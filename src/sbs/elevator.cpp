@@ -4330,13 +4330,11 @@ void Elevator::Timer::Notify()
 			RandomGen rnd_main(time(0) + elevator->Number);
 			RandomGen rnd_floor(sbs->GetRunTime() + elevator->Number);
 
-			int num, floor;
+			int num = 0, floor;
 
 			//get call probability
 			if (elevator->RandomProbability > 1)
 				num = rnd_main.Get(elevator->RandomProbability - 1);
-			else
-				num = 0;
 
 			//get call floor
 			int index = rnd_floor.Get(elevator->ServicedFloors.size());
