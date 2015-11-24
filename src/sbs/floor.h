@@ -164,7 +164,7 @@ private:
 	{
 	public:
 		Floor *parent;
-		Timer(const std::string &name, Floor *parent) : TimerObject(parent, name, false)
+		Timer(const std::string &name, Floor *parent) : TimerObject(parent, name)
 		{
 			this->parent = parent;
 		}

@@ -32,7 +32,7 @@ class SBSIMPEXP TimerObject : public Object
 {
 public:
 
-	TimerObject(Object *parent, const std::string &name, bool permanent);
+	TimerObject(Object *parent, const std::string &name, bool permanent = true);
 	virtual ~TimerObject();
 	void Start(int milliseconds = -1, bool oneshot = false);
 	void Stop();

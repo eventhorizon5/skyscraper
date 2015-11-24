@@ -69,7 +69,7 @@ private:
 	{
 	public:
 		DirectionalIndicator *indicator;
-		Timer(const std::string &name, DirectionalIndicator *parent) : TimerObject(parent, name, false)
+		Timer(const std::string &name, DirectionalIndicator *parent) : TimerObject(parent, name)
 		{
 			indicator = parent;
 		}
