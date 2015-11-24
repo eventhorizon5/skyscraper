@@ -30,10 +30,10 @@
 
 namespace SBS {
 
-TimerObject::TimerObject(Object *parent, const std::string &name, bool permanent)
+TimerObject::TimerObject(Object *parent, const std::string &name)
 {
 	//set up SBS object
-	SetValues(parent, "Timer", name, permanent);
+	SetValues(parent, "Timer", name, true);
 
 	Interval = 0;
 	OneShot = false;

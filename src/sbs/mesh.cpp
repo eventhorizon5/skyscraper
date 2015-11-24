@@ -520,7 +520,7 @@ Ogre::Plane SBS::ComputePlane(std::vector<Ogre::Vector3> &vertices)
 MeshObject::MeshObject(Object* parent, const std::string &name, const std::string &filename, float max_render_distance, float scale_multiplier, bool enable_physics, float restitution, float friction, float mass)
 {
 	//set up SBS object
-	SetValues(parent, "Mesh", name, false);
+	SetValues(parent, "Mesh", name, true);
 
 	enabled = true;
 	mBody = 0;
