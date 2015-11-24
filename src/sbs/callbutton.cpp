@@ -59,6 +59,8 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 	DownStatus = false;
 	ProcessedUp = false;
 	ProcessedDown = false;
+	UpExists = false;
+	DownExists = false;
 
 	//create object mesh
 	std::string base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
@@ -165,9 +167,11 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			WallObject *wall;
 			wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+			UpExists = true;
 
 			wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude2, altitude2, 1, 1, false);
+			DownExists = true;
 		}
 		else
 		{
@@ -178,11 +182,13 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			{
 				wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+				UpExists = true;
 			}
 			if (floornum > bottomfloor)
 			{
 				wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, x1, offset, x2, offset, height, height, altitude, altitude, 1, 1, false);
+				DownExists = true;
 			}
 		}
 		sbs->ResetWalls();
@@ -210,9 +216,11 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			WallObject *wall;
 			wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 			sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+			UpExists = true;
 
 			wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 			sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude2, altitude2, 1, 1, false);
+			DownExists = true;
 		}
 		else
 		{
@@ -223,11 +231,13 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 			{
 				wall = CallButtonMeshUp->CreateWallObject("Call Button Up");
 				sbs->AddWallMain(wall, "Call Button Up", UpButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+				UpExists = true;
 			}
 			if (floornum > bottomfloor)
 			{
 				wall = CallButtonMeshDown->CreateWallObject("Call Button Down");
 				sbs->AddWallMain(wall, "Call Button Down", DownButtonTexture, 0, offset, z1, offset, z2, height, height, altitude, altitude, 1, 1, false);
+				DownExists = true;
 			}
 		}
 		sbs->ResetWalls();
@@ -308,6 +318,12 @@ bool CallButton::Call(bool direction)
 	//check lock state
 	if (IsLocked() == true)
 		return ReportError("Call button is locked");
+
+	//exit if direction not possible
+	if (direction == true && UpExists == false)
+		return false;
+	if (direction == false && DownExists == false)
+		return false;
 
 	//exit if call has already been made
 	if (direction == true && UpStatus == true)

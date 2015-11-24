@@ -86,6 +86,8 @@ private:
 	bool ProcessedDown;
 	bool Locked;
 	int KeyID;
+	bool UpExists; //does up button exist?
+	bool DownExists; //does down button exist?
 };
 
 }
