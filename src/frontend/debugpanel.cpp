@@ -547,14 +547,7 @@ void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 
 void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
 {
-	if (Simcore->GetElevatorCount() > 0)
-	{
-		for (int i = 1; i <= Simcore->GetElevatorCount(); i++)
-		{
-			if (Simcore->GetElevator(i))
-				Simcore->GetElevator(i)->RandomActivity = chkRandom->GetValue();
-		}
-	}
+	Simcore->EnableRandomActivity(chkRandom->GetValue());
 }
 
 void DebugPanel::On_bProfiler_Click(wxCommandEvent& event)
