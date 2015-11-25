@@ -37,6 +37,7 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent)
 	SetValues(parent, "Sound", name, permanent);
 
 	//first set default values
+	system = sbs->GetSoundSystem();
 	Position = 0;
 	Volume = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Volume", 1.0);
 	MaxDistance = sbs->GetConfigFloat("Skyscraper.SBS.Sound.MaxDistance", 10000.0);
@@ -50,16 +51,16 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent)
 	channel = 0;
 	default_speed = 0;
 	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
-	loaded = false;
 	position_queued = false;
 	SetVelocity = false;
 }
 
 Sound::~Sound()
 {
-	if (sbs->GetSoundSystem())
+	if (system)
 	{
-		Unload();
+		Stop();
+		channel = 0;
 		sbs->DecrementSoundCount();
 	}
 
@@ -254,14 +255,19 @@ bool Sound::IsValid()
 bool Sound::Play(bool reset)
 {
 	//exit if sound is disabled
-	if (!sbs->GetSoundSystem())
+	if (!system)
 		return false;
 
-	if (!loaded)
+	if (!sound)
 	{
-		if (sbs->Verbose)
-			ReportError("No sound loaded");
-		return false;
+		sound = system->GetSoundData(Filename);
+
+		if (!sound)
+		{
+			if (sbs->Verbose)
+				ReportError("No sound loaded");
+			return false;
+		}
 	}
 
 	if (sbs->Verbose)
@@ -270,9 +276,9 @@ bool Sound::Play(bool reset)
 	if (!IsValid())
 	{
 		//prepare sound (and keep paused)
-		FMOD_RESULT result = sbs->GetSoundSystem()->GetFmodSystem()->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
+		channel = system->Prepare(sound);
 
-		if (result != FMOD_OK || !channel)
+		if (!channel)
 			return false;
 
 		//get default speed value
@@ -308,44 +314,23 @@ void Sound::Reset()
 bool Sound::Load(const std::string &filename, bool force)
 {
 	//exit if sound is disabled
-	if (!sbs->GetSoundSystem())
+	if (!system)
 		return false;
 
 	//exit if filename is the same
 	if (filename == Filename && force == false)
 		return false;
 
-	//exit if none specified
-	if (filename == "")
-		return false;
-
-	//exit if mp3 file specified
-	if (FindWithCase(filename, false, ".mp3", (int)filename.size() - 4) > 0)
-		return false;
-
-	loaded = false;
-
 	//clear old object references
-	if (channel)
-		channel->stop();
+	Stop();
 	channel = 0;
+
+	//have sound system load sound file
+	sound = system->Load(filename);
+
 	if (sound)
-		sound->release();
-	sound = 0;
-
-	//load new sound
-	Filename = filename;
-	std::string full_filename1 = "data/";
-	full_filename1.append(filename);
-	std::string full_filename = sbs->VerifyFile(full_filename1);
-
-	FMOD_RESULT result = sbs->GetSoundSystem()->GetFmodSystem()->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
-	//FMOD_RESULT result = sbs->GetSoundSystem()->GetFmodSystem()->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
-	if (result != FMOD_OK)
-		return ReportError("Can't load file '" + Filename + "'");
-
-	loaded = true;
-	return true;
+		return true;
+	return false;
 }
 
 float Sound::GetPlayPosition()
@@ -359,8 +344,7 @@ float Sound::GetPlayPosition()
 		return -1;
 
 	//get length of sound in milliseconds
-	unsigned int length;
-	sound->getLength(&length, FMOD_TIMEUNIT_MS);
+	unsigned int length = system->GetLength(sound);
 
 	//get sound position in milliseconds
 	unsigned int position;
@@ -379,8 +363,7 @@ void Sound::SetPlayPosition(float percent)
 	if (channel)
 	{
 		//get length of sound in milliseconds
-		unsigned int length;
-		sound->getLength(&length, FMOD_TIMEUNIT_MS);
+		unsigned int length = system->GetLength(sound);
 
 		unsigned int position = (unsigned int)(percent * length);
 		channel->setPosition(position, FMOD_TIMEUNIT_MS);
@@ -402,7 +385,7 @@ void Sound::SetDopplerLevel(float level)
 
 bool Sound::IsLoaded()
 {
-	return loaded;
+	return (sound != 0);
 }
 
 void Sound::Report(const std::string &message)
@@ -457,19 +440,6 @@ void Sound::ProcessQueue()
 	SetLoopState(snd->loop);
 	Play();
 	snd->played = true;
-}
-
-void Sound::Unload()
-{
-	Stop();
-	channel = 0;
-
-	//delete sound;
-	if (sound)
-		sound->release();
-	sound = 0;
-
-	loaded = false;
 }
 
 }

@@ -34,12 +34,29 @@ class SBSIMPEXP SoundSystem : public Object
 {
 public:
 
+	struct SBSIMPEXP SoundData
+	{
+		SoundData();
+		~SoundData();
+		FMOD::Sound* sound; //sound data object
+		std::string filename; //filename of sound file
+		std::vector<FMOD::Channel*> channels; //associated channels
+	};
+
 	SoundSystem(FMOD::System *fmodsystem);
 	~SoundSystem();
 	void SetListenerPosition(const Ogre::Vector3 &position);
 	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
 	void Loop();
 	FMOD::System *GetFmodSystem() { return soundsys; } //temporary for transition
+	void Cleanup();
+	unsigned int GetLength(SoundData *sound);
+	SoundData* Load(const std::string &filename);
+	bool IsLoaded(std::string filename);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
+	FMOD::Channel* Prepare(SoundData *data);
+	SoundData* GetSoundData(std::string filename);
 
 private:
 
@@ -52,6 +69,8 @@ private:
 	FMOD_VECTOR listener_forward;
 	FMOD_VECTOR listener_up;
 
+	//sound array
+	std::vector<SoundData*> sounds;
 };
 
 }
