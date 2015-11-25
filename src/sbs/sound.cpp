@@ -59,9 +59,13 @@ Sound::~Sound()
 {
 	if (system)
 	{
-		Stop();
-		channel = 0;
-		sbs->DecrementSoundCount();
+		if (sbs->FastDelete == false)
+		{
+			Unload();
+			sbs->DecrementSoundCount();
+		}
+		else
+			Stop();
 	}
 
 	//unregister from parent
@@ -321,9 +325,8 @@ bool Sound::Load(const std::string &filename, bool force)
 	if (filename == Filename && force == false)
 		return false;
 
-	//clear old object references
-	Stop();
-	channel = 0;
+	//clear existing channel
+	Unload();
 
 	//have sound system load sound file
 	sound = system->Load(filename);
@@ -440,6 +443,16 @@ void Sound::ProcessQueue()
 	SetLoopState(snd->loop);
 	Play();
 	snd->played = true;
+}
+
+void Sound::Unload()
+{
+	//stop and unload the sound channel
+
+	Stop();
+	if (sound)
+		sound->RemoveChannel(channel);
+	channel = 0;
 }
 
 }

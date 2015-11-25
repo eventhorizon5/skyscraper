@@ -38,6 +38,7 @@ public:
 	{
 		SoundData();
 		~SoundData();
+		void RemoveChannel(FMOD::Channel* channel);
 		FMOD::Sound* sound; //sound data object
 		std::string filename; //filename of sound file
 		std::vector<FMOD::Channel*> channels; //associated channels
@@ -55,7 +56,7 @@ public:
 	bool IsLoaded(std::string filename);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	FMOD::Channel* Prepare(SoundData *data);
+	FMOD::Channel* Prepare(SoundData *sound);
 	SoundData* GetSoundData(std::string filename);
 
 private:
