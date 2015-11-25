@@ -26,16 +26,31 @@
 #ifndef _SBS_SOUNDSYSTEM_H
 #define _SBS_SOUNDSYSTEM_H
 
+#include <fmod.hpp>
+
 namespace SBS {
 
-class SBSIMPEXP SoundSystem
+class SBSIMPEXP SoundSystem : public Object
 {
 public:
 
-	SoundSystem();
+	SoundSystem(FMOD::System *fmodsystem);
 	~SoundSystem();
+	void SetListenerPosition(const Ogre::Vector3 &position);
+	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
+	void Loop();
+	FMOD::System *GetFmodSystem() { return soundsys; } //temporary for transition
 
 private:
+
+	//FMOD system
+	FMOD::System *soundsys;
+
+	//listener sound objects
+	FMOD_VECTOR listener_position;
+	FMOD_VECTOR listener_velocity;
+	FMOD_VECTOR listener_forward;
+	FMOD_VECTOR listener_up;
 
 };
 

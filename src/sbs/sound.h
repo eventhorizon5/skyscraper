@@ -26,6 +26,8 @@
 #ifndef _SBS_SOUND_H
 #define _SBS_SOUND_H
 
+#include "soundsystem.h"
+
 namespace SBS {
 
 class SBSIMPEXP Sound : public Object

@@ -30,14 +30,81 @@
 
 namespace SBS {
 
-SoundSystem::SoundSystem()
+SoundSystem::SoundSystem(FMOD::System *fmodsystem)
 {
+	SetValues(sbs, "SoundSystem", "Sound System", true, false);
 
+	soundsys = fmodsystem;
+
+	listener_position.x = 0;
+	listener_position.y = 0;
+	listener_position.z = 0;
+	listener_velocity.x = 0;
+	listener_velocity.y = 0;
+	listener_velocity.z = 0;
+	listener_forward.x = 0;
+	listener_forward.y = 0;
+	listener_forward.z = 0;
+	listener_up.x = 0;
+	listener_up.y = 0;
+	listener_up.z = 0;
+
+	//set up sound options (mainly to set sound distance factor to feet instead of meters)
+	soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
 }
 
 SoundSystem::~SoundSystem()
 {
 
+}
+
+void SoundSystem::Loop()
+{
+	//update sound
+	if (sbs->enable_advanced_profiling == false)
+		ProfileManager::Start_Profile("Sound");
+	else
+		ProfileManager::Start_Profile("FMOD");
+	soundsys->update();
+	ProfileManager::Stop_Profile();
+}
+
+void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
+{
+	//set position of sound listener object
+
+	unsigned int timing;
+	if (sbs->SmoothFrames > 0)
+		timing = sbs->GetAverageTime();
+	else
+		timing = sbs->GetElapsedTime();
+
+	//calculate sound velocity
+	if (timing > 0)
+	{
+		listener_velocity.x = (position.x - listener_position.x) * (1000 / timing);
+		listener_velocity.y = (position.y - listener_position.y) * (1000 / timing);
+		listener_velocity.z = (position.z - listener_position.z) * (1000 / timing);
+	}
+
+	listener_position.x = position.x;
+	listener_position.y = position.y;
+	listener_position.z = position.z;
+
+	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
+}
+
+void SoundSystem::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
+{
+	//set direction of sound listener object
+	listener_forward.x = front.x;
+	listener_forward.y = front.y;
+	listener_forward.z = front.z;
+	listener_up.x = top.x;
+	listener_up.y = top.y;
+	listener_up.z = top.z;
+
+	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
 }

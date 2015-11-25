@@ -124,7 +124,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 	start_time = 0;
 	running_time = 0;
 	InShaft = false;
-	DisableSound = false;
 	MapIndex.resize(3);
 	MapUV.resize(3);
 	OldMapIndex.resize(3);
@@ -171,18 +170,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 	current_virtual_time = 0;
 	elapsed_time = 0;
 	average_time = 0;
-	listener_position.x = 0;
-	listener_position.y = 0;
-	listener_position.z = 0;
-	listener_velocity.x = 0;
-	listener_velocity.y = 0;
-	listener_velocity.z = 0;
-	listener_forward.x = 0;
-	listener_forward.y = 0;
-	listener_forward.z = 0;
-	listener_up.x = 0;
-	listener_up.y = 0;
-	listener_up.z = 0;
 	timer = new Ogre::Timer();
 	AmbientR = 1;
 	AmbientG = 1;
@@ -218,15 +205,14 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 	External = 0;
 	Landscape = 0;
 	mWorld = 0;
-	soundsys = 0;
+	soundsystem = 0;
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
 
-	//disable sound if system is not available
-	if (!fmodsystem)
-		DisableSound = true;
-	soundsys = fmodsystem;
+	//create sound system object if sound is enabled
+	if (fmodsystem)
+		soundsystem = new SoundSystem(fmodsystem);
 
 	//Print SBS banner
 	PrintBanner();
@@ -236,10 +222,6 @@ void SBS::Initialize(Ogre::Camera *camera)
 {
 	//set default texture map values
 	ResetTextureMapping(true);
-
-	//set up sound options (mainly to set sound distance factor to feet instead of meters)
-	if (DisableSound == false)
-		soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
 
 	//set up physics
 	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true);
@@ -433,6 +415,11 @@ SBS::~SBS()
 	}
 	Buildings = 0;
 
+	//delete sound system
+	if (soundsystem)
+		delete soundsystem;
+	soundsystem = 0;
+
 	//delete physics objects
 	if (mWorld)
 	{
@@ -567,12 +554,8 @@ void SBS::MainLoop()
 	camera->Sync();
 
 	//update sound
-	if (enable_advanced_profiling == false)
-		ProfileManager::Start_Profile("Sound");
-	else
-		ProfileManager::Start_Profile("FMOD");
-	soundsys->update();
-	ProfileManager::Stop_Profile();
+	if (soundsystem)
+		soundsystem->Loop();
 
 	elapsed += remaining_delta;
 
@@ -2136,46 +2119,6 @@ void SBS::ResetDoorwayWalls()
 	wall_extents_x = 0;
 	wall_extents_y = 0;
 	wall_extents_z = 0;
-}
-
-void SBS::SetListenerPosition(const Ogre::Vector3 &position)
-{
-	//set position of sound listener object
-
-	unsigned int timing;
-	if (SmoothFrames > 0)
-		timing = GetAverageTime();
-	else
-		timing = GetElapsedTime();
-
-	//calculate sound velocity
-	if (timing > 0)
-	{
-		listener_velocity.x = (position.x - listener_position.x) * (1000 / timing);
-		listener_velocity.y = (position.y - listener_position.y) * (1000 / timing);
-		listener_velocity.z = (position.z - listener_position.z) * (1000 / timing);
-	}
-
-	listener_position.x = position.x;
-	listener_position.y = position.y;
-	listener_position.z = position.z;
-
-	if (DisableSound == false)
-		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
-}
-
-void SBS::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
-{
-	//set direction of sound listener object
-	listener_forward.x = front.x;
-	listener_forward.y = front.y;
-	listener_forward.z = front.z;
-	listener_up.x = top.x;
-	listener_up.y = top.y;
-	listener_up.z = top.z;
-
-	if (DisableSound == false)
-		soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
 
 WallObject* SBS::AddWall(const std::string &meshname, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)

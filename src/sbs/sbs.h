@@ -33,7 +33,6 @@
 #include <OgreFont.h>
 #include <OgreTimer.h>
 #include <OgreSceneManager.h>
-#include <fmod.hpp>
 
 //fix naming collision on Windows
 #undef GetObject
@@ -109,9 +108,6 @@ public:
 	Ogre::Root* mRoot;
 	Ogre::SceneManager* mSceneManager;
 
-	//FMOD objects
-	FMOD::System *soundsys;
-
 	//SBS version
 	std::string version;
 	std::string version_state;
@@ -159,7 +155,6 @@ public:
 	bool TextureOverride; //if enabled, overrides textures with ones set with SetTextureOverride()
 	bool FlipTexture; //if enabled, flips textures according to parameters set in SetTextureFlip()
 	std::string SkyName; //base filename of sky texture pack
-	bool DisableSound; //disable sound system if true
 	bool DeleteColliders; //true if system should delete mesh colliders on each modification
 	float UnitScale; //scale of 3D positions; this value equals 1 3D unit
 	bool Verbose; //set to true to enable verbose mode
@@ -244,8 +239,6 @@ public:
 	float MetersToFeet(float meters); //converts meters to feet
 	float FeetToMeters(float feet); //converts feet to meters
 	void AddDoorwayWalls(WallObject *wallobject, const std::string &texture, float tw, float th);
-	void SetListenerPosition(const Ogre::Vector3 &position);
-	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);
 	void SetTextureOverride(const std::string &mainneg, const std::string &mainpos, const std::string &sideneg, const std::string &sidepos, const std::string &top, const std::string &bottom);
 	void SetTextureFlip(int mainneg, int mainpos, int sideneg, int sidepos, int top, int bottom);
 	WallObject* AddWall(const std::string &meshname, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th);
@@ -392,6 +385,7 @@ public:
 	void DecrementEscalatorCount();
 	bool HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value, bool elevators = true, bool floors = true);
+	SoundSystem* GetSoundSystem() { return soundsystem; }
 
 	//Meshes
 	MeshObject* Buildings;
@@ -526,11 +520,8 @@ private:
 	int texturecount;
 	int materialcount;
 
-	//listener sound objects
-	FMOD_VECTOR listener_position;
-	FMOD_VECTOR listener_velocity;
-	FMOD_VECTOR listener_forward;
-	FMOD_VECTOR listener_up;
+	//sound system
+	SoundSystem *soundsystem;
 
 	//meshes
 	std::vector<MeshObject*> meshes;

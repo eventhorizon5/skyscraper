@@ -57,7 +57,7 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent)
 
 Sound::~Sound()
 {
-	if (sbs->DisableSound == false)
+	if (sbs->GetSoundSystem())
 	{
 		Unload();
 		sbs->DecrementSoundCount();
@@ -253,6 +253,10 @@ bool Sound::IsValid()
 
 bool Sound::Play(bool reset)
 {
+	//exit if sound is disabled
+	if (!sbs->GetSoundSystem())
+		return false;
+
 	if (!loaded)
 	{
 		if (sbs->Verbose)
@@ -266,7 +270,7 @@ bool Sound::Play(bool reset)
 	if (!IsValid())
 	{
 		//prepare sound (and keep paused)
-		FMOD_RESULT result = sbs->soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
+		FMOD_RESULT result = sbs->GetSoundSystem()->GetFmodSystem()->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
 
 		if (result != FMOD_OK || !channel)
 			return false;
@@ -303,6 +307,10 @@ void Sound::Reset()
 
 bool Sound::Load(const std::string &filename, bool force)
 {
+	//exit if sound is disabled
+	if (!sbs->GetSoundSystem())
+		return false;
+
 	//exit if filename is the same
 	if (filename == Filename && force == false)
 		return false;
@@ -325,18 +333,14 @@ bool Sound::Load(const std::string &filename, bool force)
 		sound->release();
 	sound = 0;
 
-	//exit if sound is disabled
-	if (sbs->DisableSound == true)
-		return false;
-
 	//load new sound
 	Filename = filename;
 	std::string full_filename1 = "data/";
 	full_filename1.append(filename);
 	std::string full_filename = sbs->VerifyFile(full_filename1);
 
-	FMOD_RESULT result = sbs->soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
-	//FMOD_RESULT result = sbs->soundsys->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
+	FMOD_RESULT result = sbs->GetSoundSystem()->GetFmodSystem()->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
+	//FMOD_RESULT result = sbs->GetSoundSystem()->GetFmodSystem()->createStream(Filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &sound); //streamed version
 	if (result != FMOD_OK)
 		return ReportError("Can't load file '" + Filename + "'");
 
