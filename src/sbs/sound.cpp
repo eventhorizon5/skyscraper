@@ -452,6 +452,7 @@ void Sound::Unload()
 	Stop();
 	if (sound)
 		sound->RemoveChannel(channel);
+	sound = 0;
 	channel = 0;
 }
 
