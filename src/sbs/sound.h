@@ -73,9 +73,13 @@ private:
 
 	bool IsValid();
 
-	//sound data
-	FMOD::Sound *sound;
+	//sound channel
 	FMOD::Channel *channel;
+
+	//associated sound data
+	SoundSystem::SoundData *sound;
+
+	SoundSystem *system;
 
 	// sound parameters
 	Ogre::Vector3 Position;
@@ -90,7 +94,6 @@ private:
 	std::string Filename;
 	float default_speed;
 	float doppler_level;
-	bool loaded;
 	bool position_queued;
 
 	struct SBSIMPEXP SoundEntry

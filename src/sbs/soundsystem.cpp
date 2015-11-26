@@ -55,7 +55,8 @@ SoundSystem::SoundSystem(FMOD::System *fmodsystem)
 
 SoundSystem::~SoundSystem()
 {
-
+	for (int i = 0; i < (int)sounds.size(); i++)
+		delete sounds[i];
 }
 
 void SoundSystem::Loop()
@@ -105,6 +106,158 @@ void SoundSystem::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::V
 	listener_up.z = top.z;
 
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
+}
+
+void SoundSystem::Cleanup()
+{
+	//unloads sounds that are not associated with any channels
+
+	for (int i = 0; i < (int)sounds.size(); i++)
+	{
+		if (sounds[i]->channels.size() == 0)
+		{
+			if (sounds[i]->sound)
+				sounds[i]->sound->release();
+
+			delete sounds[i];
+			sounds.erase(sounds.begin() + i);
+			i--;
+		}
+	}
+}
+
+unsigned int SoundSystem::GetLength(SoundData *sound)
+{
+	//get length of sound in milliseconds
+
+	if (!sound)
+		return 0;
+
+	unsigned int length;
+	sound->sound->getLength(&length, FMOD_TIMEUNIT_MS);
+	return length;
+}
+
+SoundSystem::SoundData* SoundSystem::Load(const std::string &filename)
+{
+	//load a sound file from specified filename
+
+	//exit if none specified
+	if (filename == "")
+		return 0;
+
+	//exit if mp3 file specified
+	if (FindWithCase(filename, false, ".mp3", (int)filename.size() - 4) > 0)
+		return 0;
+
+	//return existing data element if file is already loaded
+	SoundData *existing = GetSoundData(filename);
+	if (existing)
+		return existing;
+
+	//create new SoundData element
+	SoundData *data = new SoundData();
+	data->filename = SetCaseCopy(filename, false);
+
+	//load new sound
+	std::string full_filename1 = "data/";
+	full_filename1.append(filename);
+	std::string full_filename = sbs->VerifyFile(full_filename1);
+
+	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &data->sound);
+	//FMOD_RESULT result = soundsys->createStream(full_filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &data.sound); //streamed version
+	if (result != FMOD_OK)
+	{
+		ReportError("Can't load file '" + filename + "'");
+		return 0;
+	}
+
+	//add sound element to array
+	sounds.push_back(data);
+
+	return data;
+}
+
+bool SoundSystem::IsLoaded(std::string filename)
+{
+	//return true if a specific file is already loaded
+
+	SetCase(filename, false);
+	for (int i = 0; i < (int)sounds.size(); i++)
+	{
+		std::string check = sounds[i]->filename;
+
+		if (check == filename)
+			return true;
+	}
+	return false;
+}
+
+FMOD::Channel* SoundSystem::Prepare(SoundData *sound)
+{
+	//prepare a sound for play - this allocates a channel
+
+	if (!sound)
+		return 0;
+
+	FMOD::Channel *channel = 0;
+	FMOD_RESULT result = soundsys->playSound(FMOD_CHANNEL_FREE, sound->sound, true, &channel);
+
+	if (result != FMOD_OK || !channel)
+		return 0;
+
+	sound->channels.push_back(channel);
+
+	return channel;
+}
+
+SoundSystem::SoundData* SoundSystem::GetSoundData(std::string filename)
+{
+	//get sound data element for related filename
+
+	SetCase(filename, false);
+	for (int i = 0; i < (int)sounds.size(); i++)
+	{
+		if (sounds[i]->filename == filename)
+			return sounds[i];
+	}
+	return 0;
+}
+
+void SoundSystem::Report(const std::string &message)
+{
+	sbs->Report("Sound System: " + message);
+}
+
+bool SoundSystem::ReportError(const std::string &message)
+{
+	return sbs->ReportError("Sound System: " + message);
+}
+
+SoundSystem::SoundData::SoundData()
+{
+	sound = 0;
+}
+
+SoundSystem::SoundData::~SoundData()
+{
+	if (sound)
+		sound->release();
+	sound = 0;
+}
+
+void SoundSystem::SoundData::RemoveChannel(FMOD::Channel* channel)
+{
+	//remove a channel entry
+
+	for (int i = 0; i < (int)channels.size(); i++)
+	{
+		if (channels[i] == channel)
+		{
+			channels.erase(channels.begin() + i);
+			return;
+		}
+	}
 }
 
 }
