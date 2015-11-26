@@ -422,7 +422,7 @@ void Sound::PlayQueued(const std::string &filename, bool stop, bool loop)
 
 void Sound::ProcessQueue()
 {
-	//if using the PlayQueued function, use this function to processed queued sounds
+	//if using the PlayQueued function, use this function to process queued sounds
 
 	if (queue.empty())
 		return;
