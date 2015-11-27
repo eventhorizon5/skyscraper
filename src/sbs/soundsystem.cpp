@@ -260,4 +260,18 @@ void SoundSystem::SoundData::RemoveChannel(FMOD::Channel* channel)
 	}
 }
 
+int SoundSystem::GetPlayingCount()
+{
+	//get number of playing channels
+
+	int num;
+	soundsys->getChannelsPlaying(&num);
+	return num;
+}
+
+int SoundSystem::GetSoundCount()
+{
+	return (int)sounds.size();
+}
+
 }

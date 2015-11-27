@@ -58,6 +58,8 @@ public:
 	bool ReportError(const std::string &message);
 	FMOD::Channel* Prepare(SoundData *sound);
 	SoundData* GetSoundData(std::string filename);
+	int GetPlayingCount();
+	int GetSoundCount();
 
 private:
 
