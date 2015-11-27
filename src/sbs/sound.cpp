@@ -300,6 +300,14 @@ bool Sound::Play(bool reset)
 			SetPlayPosition(Percent);
 		position_queued = false;
 	}
+	else
+	{
+		//prepare sound from existing channel (and keep paused)
+		FMOD::Channel *result = system->Prepare(sound, channel);
+
+		if (!result)
+			return false;
+	}
 
 	if (reset == true)
 		Reset();
