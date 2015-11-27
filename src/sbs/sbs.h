@@ -587,6 +587,9 @@ private:
 	Stairs* getstairs_result;
 	int getstairs_number;
 	std::string prev_material;
+
+	//file listing cache
+	Ogre::StringVectorPtr filesystem_listing;
 };
 
 	extern SBS *sbs; //singleton pointer
