@@ -616,7 +616,12 @@ bool Skyscraper::Initialize()
 				int minor = (version >> 8) & 255;
 				int rev = version & 255;
 
-				Report("Sound initialized: FMOD version " + ToString(major) + "." + ToString(minor) + "." + ToString(rev));
+				std::string name;
+				if (major == 1)
+					name = "FMOD Studio";
+				else
+					name = "FMOD Ex";
+				Report("Sound initialized: " + name + " version " + ToString(major) + "." + ToString(minor) + "." + ToString(rev));
 			}
 		}
 	}
