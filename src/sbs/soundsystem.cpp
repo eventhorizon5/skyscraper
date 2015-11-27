@@ -193,20 +193,31 @@ bool SoundSystem::IsLoaded(std::string filename)
 	return false;
 }
 
-FMOD::Channel* SoundSystem::Prepare(SoundData *sound)
+FMOD::Channel* SoundSystem::Prepare(SoundData *sound, FMOD::Channel *channel)
 {
-	//prepare a sound for play - this allocates a channel
+	//prepare a sound for play
+	//this allocates a channel, unless an existing channel is specified
 
 	if (!sound)
 		return 0;
 
-	FMOD::Channel *channel = 0;
-	FMOD_RESULT result = soundsys->playSound(FMOD_CHANNEL_FREE, sound->sound, true, &channel);
+	bool reuse = false;
 
-	if (result != FMOD_OK || !channel)
+	if (channel)
+		reuse = true;
+
+	FMOD_RESULT result;
+
+	if (reuse == false)
+		result = soundsys->playSound(FMOD_CHANNEL_FREE, sound->sound, true, &channel);
+	else
+		result = soundsys->playSound(FMOD_CHANNEL_REUSE, sound->sound, true, &channel);
+
+	if (result != FMOD_OK)
 		return 0;
 
-	sound->channels.push_back(channel);
+	if (reuse == false)
+		sound->channels.push_back(channel);
 
 	return channel;
 }
