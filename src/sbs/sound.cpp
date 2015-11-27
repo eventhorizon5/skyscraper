@@ -255,6 +255,7 @@ bool Sound::IsValid()
 	{
 		if (sound)
 			sound->RemoveChannel(channel);
+		channel = 0;
 		return false;
 	}
 	return true;
@@ -327,7 +328,7 @@ void Sound::Reset()
 	SetPlayPosition(0);
 }
 
-bool Sound::Load(const std::string &filename, bool force)
+bool Sound::Load(const std::string &filename, bool force, bool stop)
 {
 	//exit if sound is disabled
 	if (!system)
@@ -336,6 +337,9 @@ bool Sound::Load(const std::string &filename, bool force)
 	//exit if filename is the same
 	if (filename == Filename && force == false)
 		return false;
+
+	if (stop == true)
+		Stop();
 
 	//have sound system load sound file
 	sound = system->Load(filename);

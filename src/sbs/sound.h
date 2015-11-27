@@ -54,7 +54,7 @@ public:
 	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
-	bool Load(const std::string &filename, bool force = false);
+	bool Load(const std::string &filename, bool force = false, bool stop = true);
 	bool IsPlaying();
 	float GetPlayPosition();
 	void SetPlayPosition(float percent);
