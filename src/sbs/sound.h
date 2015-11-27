@@ -78,6 +78,7 @@ private:
 
 	//associated sound data
 	SoundSystem::SoundData *sound;
+	SoundSystem::SoundData *prev_sound;
 
 	SoundSystem *system;
 

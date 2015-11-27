@@ -48,6 +48,7 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent)
 	Percent = 0;
 	sbs->IncrementSoundCount();
 	sound = 0;
+	prev_sound = 0;
 	channel = 0;
 	default_speed = 0;
 	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
@@ -282,10 +283,11 @@ bool Sound::Play(bool reset)
 	if (sbs->Verbose)
 		Report("Playing");
 
-	if (!IsValid())
+	if (!IsValid() || sound != prev_sound)
 	{
 		//prepare sound (and keep paused)
 		channel = system->Prepare(sound);
+		prev_sound = sound;
 
 		if (!channel)
 			return false;
