@@ -56,7 +56,7 @@ public:
 	bool IsLoaded(std::string filename);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	FMOD::Channel* Prepare(SoundData *sound, FMOD::Channel *channel = 0);
+	FMOD::Channel* Prepare(SoundData *sound);
 	SoundData* GetSoundData(std::string filename);
 	int GetPlayingCount();
 	int GetSoundCount();
