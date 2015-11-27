@@ -48,7 +48,6 @@ Sound::Sound(Object *parent, const std::string &name, bool permanent)
 	Percent = 0;
 	sbs->IncrementSoundCount();
 	sound = 0;
-	prev_sound = 0;
 	channel = 0;
 	default_speed = 0;
 	doppler_level = sbs->GetConfigFloat("Skyscraper.SBS.Sound.Doppler", 0.0);
@@ -283,11 +282,10 @@ bool Sound::Play(bool reset)
 	if (sbs->Verbose)
 		Report("Playing");
 
-	if (!IsValid() || sound != prev_sound)
+	if (!IsValid())
 	{
 		//prepare sound (and keep paused)
 		channel = system->Prepare(sound);
-		prev_sound = sound;
 
 		if (!channel)
 			return false;
@@ -322,7 +320,7 @@ void Sound::Reset()
 	SetPlayPosition(0);
 }
 
-bool Sound::Load(const std::string &filename, bool force, bool stop)
+bool Sound::Load(const std::string &filename, bool force)
 {
 	//exit if sound is disabled
 	if (!system)
@@ -332,11 +330,12 @@ bool Sound::Load(const std::string &filename, bool force, bool stop)
 	if (filename == Filename && force == false)
 		return false;
 
-	if (stop == true)
-		Stop();
+	//clear current references
+	Unload();
 
 	//have sound system load sound file
 	sound = system->Load(filename);
+	Filename = filename;
 
 	if (sound)
 		return true;

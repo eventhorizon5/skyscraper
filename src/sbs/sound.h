@@ -54,7 +54,7 @@ public:
 	void Reset();
 	void SetSpeed(int percent);
 	int GetSpeed();
-	bool Load(const std::string &filename, bool force = false, bool stop = true);
+	bool Load(const std::string &filename, bool force = false);
 	bool IsPlaying();
 	float GetPlayPosition();
 	void SetPlayPosition(float percent);
@@ -78,7 +78,6 @@ private:
 
 	//associated sound data
 	SoundSystem::SoundData *sound;
-	SoundSystem::SoundData *prev_sound;
 
 	SoundSystem *system;
 
