@@ -20,11 +20,11 @@ FIND_PATH(FMOD_INCLUDE_DIR
   /opt/local/include
   /opt/csw/include
   /opt/include
-  PATH_SUFFIXES fmodex
+  PATH_SUFFIXES fmod fmodex
 )
 
 FIND_LIBRARY(FMOD_LIBRARY
-  NAMES fmodex libfmodex fmodex64 libfmodex64
+  NAMES fmod libfmod fmodex libfmodex fmodex64 libfmodex64
   PATHS
   $ENV{FMOD_DIR}/lib
   /usr/local/lib

@@ -608,7 +608,16 @@ bool Skyscraper::Initialize()
 				DisableSound = true;
 			}
 			else
-				Report("Sound initialized");
+			{
+				//get FMOD version information
+				unsigned int version;
+				soundsys->getVersion(&version);
+				int major = version >> 16;
+				int minor = (version >> 8) & 255;
+				int rev = version & 255;
+
+				Report("Sound initialized: FMOD version " + ToString(major) + "." + ToString(minor) + "." + ToString(rev));
+			}
 		}
 	}
 	else
@@ -1571,14 +1580,23 @@ void Skyscraper::StartSound()
 	std::string filename_full = "data/" + filename;
 
 	//load new sound
-	FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
+#if (FMOD_VERSION >> 16 == 4)
+		FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &sound);
+#else
+		FMOD_RESULT result = soundsys->createSound(filename_full.c_str(), (FMOD_MODE)(FMOD_2D | FMOD_ACCURATETIME | FMOD_LOOP_NORMAL), 0, &sound);
+#endif
 	if (result != FMOD_OK)
 	{
 		ReportError("Can't load file '" + filename_full + "'");
 		return;
 	}
 
+#if (FMOD_VERSION >> 16 == 4)
 	result = soundsys->playSound(FMOD_CHANNEL_FREE, sound, true, &channel);
+#else
+	result = soundsys->playSound(sound, 0, true, &channel);
+#endif
+
 	if (result != FMOD_OK)
 	{
 		ReportError("Error playing " + filename);

@@ -164,8 +164,14 @@ SoundSystem::SoundData* SoundSystem::Load(const std::string &filename)
 	full_filename1.append(filename);
 	std::string full_filename = sbs->VerifyFile(full_filename1);
 
+#if (FMOD_VERSION >> 16 == 4)
 	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_SOFTWARE | FMOD_LOOP_NORMAL), 0, &data->sound);
 	//FMOD_RESULT result = soundsys->createStream(full_filename.c_str(), (FMOD_MODE)(FMOD_SOFTWARE | FMOD_3D), 0, &data.sound); //streamed version
+#else
+	FMOD_RESULT result = soundsys->createSound(full_filename.c_str(), (FMOD_MODE)(FMOD_3D | FMOD_ACCURATETIME | FMOD_LOOP_NORMAL), 0, &data->sound);
+	//FMOD_RESULT result = soundsys->createStream(full_filename.c_str(), (FMOD_MODE)(FMOD_3D), 0, &data.sound); //streamed version
+#endif
+
 	if (result != FMOD_OK)
 	{
 		ReportError("Can't load file '" + filename + "'");
@@ -201,7 +207,11 @@ FMOD::Channel* SoundSystem::Prepare(SoundData *sound)
 		return 0;
 
 	FMOD::Channel *channel = 0;
+#if (FMOD_VERSION >> 16 == 4)
 	FMOD_RESULT result = soundsys->playSound(FMOD_CHANNEL_FREE, sound->sound, true, &channel);
+#else
+	FMOD_RESULT result = soundsys->playSound(sound->sound, 0, true, &channel);
+#endif
 
 	if (result != FMOD_OK || !channel)
 		return 0;
