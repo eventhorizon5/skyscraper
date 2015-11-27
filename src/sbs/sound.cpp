@@ -252,7 +252,11 @@ bool Sound::IsValid()
 	bool playing;
 	FMOD_RESULT result = channel->isPlaying(&playing);
 	if (result == FMOD_ERR_INVALID_HANDLE || result == FMOD_ERR_CHANNEL_STOLEN)
+	{
+		if (sound)
+			sound->RemoveChannel(channel);
 		return false;
+	}
 	return true;
 }
 
@@ -332,9 +336,6 @@ bool Sound::Load(const std::string &filename, bool force)
 	//exit if filename is the same
 	if (filename == Filename && force == false)
 		return false;
-
-	//clear existing channel
-	Unload();
 
 	//have sound system load sound file
 	sound = system->Load(filename);
