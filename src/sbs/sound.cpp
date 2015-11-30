@@ -254,7 +254,7 @@ bool Sound::IsValid()
 	if (result == FMOD_ERR_INVALID_HANDLE || result == FMOD_ERR_CHANNEL_STOLEN)
 	{
 		if (sound)
-			sound->RemoveHandle(this);
+			sound->RemoveChannel(channel);
 		channel = 0;
 		return false;
 	}
