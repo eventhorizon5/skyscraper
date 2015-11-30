@@ -114,7 +114,7 @@ void SoundSystem::Cleanup()
 
 	for (int i = 0; i < (int)sounds.size(); i++)
 	{
-		if (sounds[i]->channels.size() == 0)
+		if (sounds[i]->handles.size() == 0)
 		{
 			if (sounds[i]->sound)
 				sounds[i]->sound->release();
@@ -199,24 +199,22 @@ bool SoundSystem::IsLoaded(std::string filename)
 	return false;
 }
 
-FMOD::Channel* SoundSystem::Prepare(SoundData *sound)
+FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 {
 	//prepare a sound for play - this allocates a channel
 
-	if (!sound)
+	if (!data)
 		return 0;
 
 	FMOD::Channel *channel = 0;
 #if (FMOD_VERSION >> 16 == 4)
 	FMOD_RESULT result = soundsys->playSound(FMOD_CHANNEL_FREE, sound->sound, true, &channel);
 #else
-	FMOD_RESULT result = soundsys->playSound(sound->sound, 0, true, &channel);
+	FMOD_RESULT result = soundsys->playSound(data->sound, 0, true, &channel);
 #endif
 
 	if (result != FMOD_OK || !channel)
 		return 0;
-
-	sound->channels.push_back(channel);
 
 	return channel;
 }
@@ -256,15 +254,27 @@ SoundSystem::SoundData::~SoundData()
 	sound = 0;
 }
 
-void SoundSystem::SoundData::RemoveChannel(FMOD::Channel* channel)
+void SoundSystem::SoundData::AddHandle(Sound *handle)
 {
-	//remove a channel entry
+	//add a sound object handle
 
-	for (int i = 0; i < (int)channels.size(); i++)
+	for (int i = 0; i < (int)handles.size(); i++)
 	{
-		if (channels[i] == channel)
+		if (handles[i] == handle)
+			return;
+	}
+	handles.push_back(handle);
+}
+
+void SoundSystem::SoundData::RemoveHandle(Sound *handle)
+{
+	//remove a sound object handle
+
+	for (int i = 0; i < (int)handles.size(); i++)
+	{
+		if (handles[i] == handle)
 		{
-			channels.erase(channels.begin() + i);
+			handles.erase(handles.begin() + i);
 			return;
 		}
 	}

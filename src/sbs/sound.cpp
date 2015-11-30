@@ -254,7 +254,7 @@ bool Sound::IsValid()
 	if (result == FMOD_ERR_INVALID_HANDLE || result == FMOD_ERR_CHANNEL_STOLEN)
 	{
 		if (sound)
-			sound->RemoveChannel(channel);
+			sound->RemoveHandle(this);
 		channel = 0;
 		return false;
 	}
@@ -289,6 +289,8 @@ bool Sound::Play(bool reset)
 
 		if (!channel)
 			return false;
+
+		sound->AddHandle(this);
 
 		//get default speed value
 		channel->getFrequency(&default_speed);
@@ -457,7 +459,7 @@ void Sound::Unload()
 
 	Stop();
 	if (sound)
-		sound->RemoveChannel(channel);
+		sound->RemoveHandle(this);
 	sound = 0;
 	channel = 0;
 }

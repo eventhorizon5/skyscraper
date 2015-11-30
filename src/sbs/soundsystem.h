@@ -30,6 +30,8 @@
 
 namespace SBS {
 
+class Sound;
+
 class SBSIMPEXP SoundSystem : public Object
 {
 public:
@@ -38,10 +40,11 @@ public:
 	{
 		SoundData();
 		~SoundData();
-		void RemoveChannel(FMOD::Channel* channel);
+		void AddHandle(Sound *handle);
+		void RemoveHandle(Sound *handle);
 		FMOD::Sound* sound; //sound data object
 		std::string filename; //filename of sound file
-		std::vector<FMOD::Channel*> channels; //associated channels
+		std::vector<Sound*> handles; //associated sound objects
 	};
 
 	SoundSystem(FMOD::System *fmodsystem);
@@ -56,7 +59,7 @@ public:
 	bool IsLoaded(std::string filename);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
-	FMOD::Channel* Prepare(SoundData *sound);
+	FMOD::Channel* Prepare(SoundData *data);
 	SoundData* GetSoundData(std::string filename);
 	int GetPlayingCount();
 	int GetSoundCount();
@@ -72,7 +75,7 @@ private:
 	FMOD_VECTOR listener_forward;
 	FMOD_VECTOR listener_up;
 
-	//sound array
+	//sound data array
 	std::vector<SoundData*> sounds;
 };
 
