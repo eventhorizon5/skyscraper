@@ -116,9 +116,6 @@ void SoundSystem::Cleanup()
 	{
 		if (sounds[i]->handles.size() == 0)
 		{
-			if (sounds[i]->sound)
-				sounds[i]->sound->release();
-
 			delete sounds[i];
 			sounds.erase(sounds.begin() + i);
 			i--;
