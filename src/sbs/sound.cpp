@@ -277,6 +277,7 @@ bool Sound::Play(bool reset)
 				ReportError("No sound loaded");
 			return false;
 		}
+		sound->AddHandle(this);
 	}
 
 	if (sbs->Verbose)
@@ -336,10 +337,12 @@ bool Sound::Load(const std::string &filename, bool force)
 	//have sound system load sound file
 	sound = system->Load(filename);
 	Filename = filename;
-	sound->AddHandle(this);
 
 	if (sound)
+	{
+		sound->AddHandle(this);
 		return true;
+	}
 	return false;
 }
 
