@@ -54,7 +54,7 @@ public:
 	void Loop();
 	FMOD::System *GetFmodSystem() { return soundsys; } //temporary for transition
 	void Cleanup();
-	unsigned int GetLength(SoundData *sound);
+	unsigned int GetLength(SoundData *data);
 	SoundData* Load(const std::string &filename);
 	bool IsLoaded(std::string filename);
 	void Report(const std::string &message);

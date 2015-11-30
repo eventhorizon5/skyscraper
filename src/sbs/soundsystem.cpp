@@ -123,15 +123,15 @@ void SoundSystem::Cleanup()
 	}
 }
 
-unsigned int SoundSystem::GetLength(SoundData *sound)
+unsigned int SoundSystem::GetLength(SoundData *data)
 {
 	//get length of sound in milliseconds
 
-	if (!sound)
+	if (!data)
 		return 0;
 
 	unsigned int length;
-	sound->sound->getLength(&length, FMOD_TIMEUNIT_MS);
+	data->sound->getLength(&length, FMOD_TIMEUNIT_MS);
 	return length;
 }
 
