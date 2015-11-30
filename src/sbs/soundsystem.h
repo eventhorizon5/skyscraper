@@ -42,6 +42,7 @@ public:
 		~SoundData();
 		void AddHandle(Sound *handle);
 		void RemoveHandle(Sound *handle);
+		int GetHandleCount() { return (int)handles.size(); }
 		FMOD::Sound* sound; //sound data object
 		std::string filename; //filename of sound file
 		std::vector<Sound*> handles; //associated sound objects
@@ -63,6 +64,7 @@ public:
 	SoundData* GetSoundData(std::string filename);
 	int GetPlayingCount();
 	int GetSoundCount();
+	void ShowLoadedSounds();
 
 private:
 

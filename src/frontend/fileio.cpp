@@ -3069,6 +3069,14 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//ShowLoadedSounds command
+	if (linecheck.substr(0, 16) == "showloadedsounds")
+	{
+		if (Simcore->GetSoundSystem())
+			Simcore->GetSoundSystem()->ShowLoadedSounds();
+		return sNextLine;
+	}
+
 	//Print command
 	if (linecheck.substr(0, 5) == "print")
 	{

@@ -112,7 +112,7 @@ void SoundSystem::Cleanup()
 {
 	//unloads sounds that are not associated with any channels
 
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		if (sounds[i]->handles.size() == 0)
 		{
@@ -186,7 +186,7 @@ bool SoundSystem::IsLoaded(std::string filename)
 	//return true if a specific file is already loaded
 
 	SetCase(filename, false);
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		std::string check = sounds[i]->filename;
 
@@ -221,7 +221,7 @@ SoundSystem::SoundData* SoundSystem::GetSoundData(std::string filename)
 	//get sound data element for related filename
 
 	SetCase(filename, false);
-	for (int i = 0; i < (int)sounds.size(); i++)
+	for (int i = 0; i < GetSoundCount(); i++)
 	{
 		if (sounds[i]->filename == filename)
 			return sounds[i];
@@ -255,7 +255,7 @@ void SoundSystem::SoundData::AddHandle(Sound *handle)
 {
 	//add a sound object handle
 
-	for (int i = 0; i < (int)handles.size(); i++)
+	for (int i = 0; i < GetHandleCount(); i++)
 	{
 		if (handles[i] == handle)
 			return;
@@ -267,7 +267,7 @@ void SoundSystem::SoundData::RemoveHandle(Sound *handle)
 {
 	//remove a sound object handle
 
-	for (int i = 0; i < (int)handles.size(); i++)
+	for (int i = 0; i < GetHandleCount(); i++)
 	{
 		if (handles[i] == handle)
 		{
@@ -289,6 +289,16 @@ int SoundSystem::GetPlayingCount()
 int SoundSystem::GetSoundCount()
 {
 	return (int)sounds.size();
+}
+
+void SoundSystem::ShowLoadedSounds()
+{
+	sbs->Report("\n--- Loaded Sounds ---\n");
+	sbs->Report("Filename\t----\tSound Objects");
+	for (int i = 0; i < GetSoundCount(); i++)
+	{
+		sbs->Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()));
+	}
 }
 
 }
