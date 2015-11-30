@@ -213,6 +213,8 @@ FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 	if (result != FMOD_OK || !channel)
 		return 0;
 
+	data->AddChannel(channel);
+
 	return channel;
 }
 
@@ -255,6 +257,9 @@ void SoundSystem::SoundData::AddHandle(Sound *handle)
 {
 	//add a sound object handle
 
+	if (handle == 0)
+		return;
+
 	for (int i = 0; i < GetHandleCount(); i++)
 	{
 		if (handles[i] == handle)
@@ -267,11 +272,47 @@ void SoundSystem::SoundData::RemoveHandle(Sound *handle)
 {
 	//remove a sound object handle
 
+	if (handle == 0)
+		return;
+
 	for (int i = 0; i < GetHandleCount(); i++)
 	{
 		if (handles[i] == handle)
 		{
 			handles.erase(handles.begin() + i);
+			RemoveChannel(handle->GetChannel());
+			return;
+		}
+	}
+}
+
+void SoundSystem::SoundData::AddChannel(FMOD::Channel *channel)
+{
+	//add a sound channel
+
+	if (channel == 0)
+		return;
+
+	for (int i = 0; i < GetChannelCount(); i++)
+	{
+		if (channels[i] == channel)
+			return;
+	}
+	channels.push_back(channel);
+}
+
+void SoundSystem::SoundData::RemoveChannel(FMOD::Channel *channel)
+{
+	//remove a sound channel
+
+	if (channel == 0)
+		return;
+
+	for (int i = 0; i < GetChannelCount(); i++)
+	{
+		if (channels[i] == channel)
+		{
+			channels.erase(channels.begin() + i);
 			return;
 		}
 	}
@@ -294,10 +335,10 @@ int SoundSystem::GetSoundCount()
 void SoundSystem::ShowLoadedSounds()
 {
 	sbs->Report("\n--- Loaded Sounds ---\n");
-	sbs->Report("Filename\t----\tSound Objects");
+	sbs->Report("Filename\t----\tSound Objects\t----\tChannels");
 	for (int i = 0; i < GetSoundCount(); i++)
 	{
-		sbs->Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()));
+		sbs->Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()) + "\t----\t" + ToString(sounds[i]->GetChannelCount()));
 	}
 	sbs->Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
 }

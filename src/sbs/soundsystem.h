@@ -43,9 +43,13 @@ public:
 		void AddHandle(Sound *handle);
 		void RemoveHandle(Sound *handle);
 		int GetHandleCount() { return (int)handles.size(); }
+		void AddChannel(FMOD::Channel *channel);
+		void RemoveChannel(FMOD::Channel *channel);
+		int GetChannelCount() { return (int)channels.size(); }
 		FMOD::Sound* sound; //sound data object
 		std::string filename; //filename of sound file
 		std::vector<Sound*> handles; //associated sound objects
+		std::vector<FMOD::Channel*> channels; //associated sound channels
 	};
 
 	SoundSystem(FMOD::System *fmodsystem);

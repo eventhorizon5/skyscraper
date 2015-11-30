@@ -68,6 +68,7 @@ public:
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
 	void Unload();
+	FMOD::Channel* GetChannel() { return channel; }
 
 private:
 

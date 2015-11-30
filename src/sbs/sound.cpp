@@ -290,8 +290,6 @@ bool Sound::Play(bool reset)
 		if (!channel)
 			return false;
 
-		sound->AddHandle(this);
-
 		//get default speed value
 		channel->getFrequency(&default_speed);
 
@@ -338,6 +336,7 @@ bool Sound::Load(const std::string &filename, bool force)
 	//have sound system load sound file
 	sound = system->Load(filename);
 	Filename = filename;
+	sound->AddHandle(this);
 
 	if (sound)
 		return true;
