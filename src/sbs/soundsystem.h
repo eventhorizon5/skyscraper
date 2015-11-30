@@ -65,6 +65,7 @@ public:
 	int GetPlayingCount();
 	int GetSoundCount();
 	void ShowLoadedSounds();
+	void ShowPlayingSounds();
 
 private:
 

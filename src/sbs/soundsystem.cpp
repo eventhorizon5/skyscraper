@@ -299,6 +299,28 @@ void SoundSystem::ShowLoadedSounds()
 	{
 		sbs->Report(sounds[i]->filename + "\t----\t" + ToString(sounds[i]->GetHandleCount()));
 	}
+	sbs->Report("\nTotal loaded sounds: " + ToString(GetSoundCount()));
+}
+
+void SoundSystem::ShowPlayingSounds()
+{
+	sbs->Report("\n--- Playing Sounds ---\n");
+	for (int i = 0; i < GetSoundCount(); i++)
+	{
+		bool first = true;
+		for (int j = 0; j < sounds[i]->GetHandleCount(); j++)
+		{
+			if (sounds[i]->handles[j]->IsPlaying() == true)
+			{
+				if (first == true)
+					sbs->Report(sounds[i]->filename + ":");
+				first = false;
+				Sound *sound = sounds[i]->handles[j];
+				sbs->Report("\t" + sound->GetName() + "\t----\tParent: " + sound->GetParent()->GetName());
+			}
+		}
+	}
+	sbs->Report("\nTotal playing sounds: " + ToString(GetPlayingCount()));
 }
 
 }
