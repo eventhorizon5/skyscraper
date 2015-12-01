@@ -32,7 +32,6 @@ class SBSIMPEXP Light : public Object
 {
 public:
 
-	std::string Name;
 	int Type;
 
 	//functions
