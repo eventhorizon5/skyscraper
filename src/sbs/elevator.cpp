@@ -1190,7 +1190,7 @@ void Elevator::Loop()
 
 	//set random lobby level if not set
 	if (RandomLobbySet == false)
-		SetRandomLobby(GetBottomFloor());
+		SetRandomLobby(RecallFloor);
 
 	//perform first-run tasks
 	if (FirstRun == true && Running == true)
