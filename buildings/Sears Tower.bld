@@ -2446,6 +2446,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone 1 Express (supposed to be double-deckers, but that functionality isn't implemented yet in SBS)
 <Elevator 1>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2458,6 +2459,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 2>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2470,6 +2472,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 3>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2482,6 +2485,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 4>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2550,6 +2554,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 5>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2562,6 +2567,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 6>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2574,6 +2580,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 7>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2586,6 +2593,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 8>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2656,6 +2664,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone 2 Express (supposed to be double-deckers, but that functionality isn't implemented yet)
 <Elevator 9>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2668,6 +2677,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 10>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2680,6 +2690,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 11>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2750,6 +2761,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 12>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2762,6 +2774,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 13>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2774,6 +2787,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 14>
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -2846,6 +2860,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone1 Locals 3-10 
 <Elevator 15>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -2857,6 +2872,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 16>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -2868,6 +2884,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 17>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -2943,6 +2960,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 18>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -2954,6 +2972,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 19>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -2965,6 +2984,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 20>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3041,6 +3061,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone1 Locals 10-17
 <Elevator 21>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3052,6 +3073,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 22>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3063,6 +3085,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 23>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3138,6 +3161,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 24>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3149,6 +3173,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 25>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3160,6 +3185,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 26>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3236,6 +3262,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone1 Locals 17-23
 <Elevator 27>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3247,6 +3274,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 28>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3258,6 +3286,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 29>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3332,6 +3361,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 30>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3343,6 +3373,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 31>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3354,6 +3385,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 32>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3429,6 +3461,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone1 Locals 23-28
 <Elevator 33>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3440,6 +3473,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 34>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3451,6 +3485,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 35>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3524,6 +3559,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 36>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3535,6 +3571,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 37>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3609,6 +3646,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone2 Locals 35 - 42
 <Elevator 38>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3620,6 +3658,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 39>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3631,6 +3670,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 40>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3706,6 +3746,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 41>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3717,6 +3758,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 42>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3728,6 +3770,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 43>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3804,6 +3847,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone2 Locals 42 - 49
 <Elevator 44>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3815,6 +3859,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 45>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3826,6 +3871,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 46>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3901,6 +3947,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 47>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3912,6 +3959,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 48>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3923,6 +3971,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 49>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3999,6 +4048,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone2 Locals 49-57
 <Elevator 50>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4010,6 +4060,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 51>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4021,6 +4072,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 52>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4097,6 +4149,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 53>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4108,6 +4161,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 54>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4119,6 +4173,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 55>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4196,6 +4251,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone2 Locals 58-63
 <Elevator 56>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4207,6 +4263,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 57>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4218,6 +4275,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 58>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4291,6 +4349,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 59>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4302,6 +4361,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 60>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4376,6 +4436,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone3 Locals 68-74
 <Elevator 61>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4387,6 +4448,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 62>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4461,6 +4523,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 63>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4472,6 +4535,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 64>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4547,6 +4611,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone3 Locals 75-81
 <Elevator 65>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4558,6 +4623,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 66>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4632,6 +4698,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 67>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4643,6 +4710,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 68>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4718,6 +4786,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone3 Locals 82-87
 <Elevator 69>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4729,6 +4798,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 70>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4802,6 +4872,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 71>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4813,6 +4884,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 72>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4887,6 +4959,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Zone3 Locals 90-102
 <Elevator 73>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4898,6 +4971,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 74>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4982,6 +5056,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 75>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4993,6 +5068,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 76>
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5078,6 +5154,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Upper service elevator (90-106)
 <Elevator 77>
+    Type = 2
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5161,6 +5238,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 
 #Skydeck express elevators
 <Elevator 78>
+    Type = 1
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
@@ -5173,6 +5251,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevator>
 
 <Elevator 79>
+    Type = 1
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
@@ -5241,6 +5320,7 @@ ShaftCut 33, -4.28, -4.658, 4.28 - 0.33, 4.658, 0, 5
 <EndElevators>
 
 <Elevator 80>
+    Type = 3
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2

@@ -3614,6 +3614,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Zone1 Locals 27-37
 <Elevator 1>
     Name = Zone 1 Local 3:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3626,6 +3627,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 2>
     Name = Zone 1 Local 3:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3638,6 +3640,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 3>
     Name = Zone 1 Local 3:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3724,6 +3727,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 4>
     Name = Zone 1 Local 3:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3736,6 +3740,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 5>
     Name = Zone 1 Local 3:5
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3748,6 +3753,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 6>
     Name = Zone 1 Local 3:6
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3836,6 +3842,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Zone1 Locals 15-26
 <Elevator 7>
     Name = Zone 1 Local 2:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3848,6 +3855,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 8>
     Name = Zone 1 Local 2:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3860,6 +3868,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 9>
     Name = Zone 1 Local 2:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3946,6 +3955,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 10>
     Name = Zone 1 Local 2:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3958,6 +3968,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 11>
     Name = Zone 1 Local 2:5
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -3970,6 +3981,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 12>
     Name = Zone 1 Local 2:6
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4059,6 +4071,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Zone1 Locals 2-14
 <Elevator 13>
     Name = Zone 1 Local 1:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4071,6 +4084,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 14>
     Name = Zone 1 Local 1:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4083,6 +4097,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 15>
     Name = Zone 1 Local 1:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4170,6 +4185,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 16>
     Name = Zone 1 Local 1:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4182,6 +4198,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 17>
     Name = Zone 1 Local 1:5
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4194,6 +4211,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 18>
     Name = Zone 1 Local 1:6
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4284,6 +4302,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Express
 <Elevator 19>
     Name = Zone 2 Express 1
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4297,6 +4316,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 20>
     Name = Zone 2 Express 2
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4310,6 +4330,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 21>
     Name = Zone 2 Express 3
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4384,6 +4405,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 22>
     Name = Zone 2 Express 4
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4397,6 +4419,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 23>
     Name = Zone 2 Express 5
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4410,6 +4433,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 24>
     Name = Zone 2 Express 6
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4487,6 +4511,7 @@ DrawWalls = true, true, false, false, false, false
 #Parking, LL and Mezzanine elevators
 <Elevator 25>
     Name = Concourse 1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4501,6 +4526,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 26>
     Name = Concourse 2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4583,6 +4609,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 27>
     Name = Concourse 3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4597,6 +4624,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 28>
     Name = Concourse 4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -4682,6 +4710,7 @@ DrawWalls = true, true, false, false, false, false
 #Residential Express
 <Elevator 29>
     Name = Residential Express 1
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4695,6 +4724,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 30>
     Name = Residential Express 2
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4769,6 +4799,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 31>
     Name = Residential Express 3
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4782,6 +4813,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 32>
     Name = Residential Express 4
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4859,6 +4891,7 @@ DrawWalls = true, true, false, false, false, false
 #Upper Express
 <Elevator 33>
     Name = Upper Express 1
+    Type = 1
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
@@ -4872,6 +4905,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 34>
     Name = Upper Express 2
+    Type = 1
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
@@ -4950,6 +4984,7 @@ DrawWalls = true, true, false, false, false, false
 #Hotel Express
 <Elevator 35>
     Name = Hotel Express 1
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -4963,6 +4998,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 36>
     Name = Hotel Express 2
+    Type = 1
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -5040,6 +5076,7 @@ DrawWalls = true, true, false, false, false, false
 #Skydeck Express
 <Elevator 37>
     Name = Skydeck Express
+    Type = 1
     Speed = 30
     Acceleration = 0.1
     Deceleration = 0.1
@@ -5115,6 +5152,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Zone2 locals 41-50
 <Elevator 38>
     Name = Zone 2 Local 1:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5127,6 +5165,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 39>
     Name = Zone 2 Local 1:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5139,6 +5178,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 40>
     Name = Zone 2 Local 1:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5151,6 +5191,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 41>
     Name = Zone 2 Local 1:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5236,6 +5277,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Zone2 locals 61-70
 <Elevator 42>
     Name = Zone 2 Local 3:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5248,6 +5290,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 43>
     Name = Zone 2 Local 3:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5260,6 +5303,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 44>
     Name = Zone 2 Local 3:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5272,6 +5316,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 45>
     Name = Zone 2 Local 3:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5359,6 +5404,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Zone2 locals 51-60
 <Elevator 46>
     Name = Zone 2 Local 2:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5371,6 +5417,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 47>
     Name = Zone 2 Local 2:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5383,6 +5430,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 48>
     Name = Zone 2 Local 2:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5395,6 +5443,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 49>
     Name = Zone 2 Local 2:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5483,6 +5532,7 @@ DrawWalls = true, true, false, false, false, false
 #Office Zone2 locals 71-78
 <Elevator 50>
     Name = Zone 2 Local 4:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5495,6 +5545,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 51>
     Name = Zone 2 Local 4:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5507,6 +5558,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 52>
     Name = Zone 2 Local 4:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5519,6 +5571,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 53>
     Name = Zone 2 Local 4:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5605,6 +5658,7 @@ DrawWalls = true, true, false, false, false, false
 #Hotel locals 82-99
 <Elevator 54>
     Name = Hotel Local 1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5617,6 +5671,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 55>
     Name = Hotel Local 2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5709,6 +5764,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 56>
     Name = Hotel Local 3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5721,6 +5777,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 57>
     Name = Hotel Local 4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5814,6 +5871,7 @@ DrawWalls = true, true, false, false, false, false
 #Pool express
 <Elevator 58>
     Name = Pool Express
+    Type = 1
     Speed = 16
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5892,6 +5950,7 @@ DrawWalls = true, true, false, false, false, false
 #Residential locals
 <Elevator 59>
     Name = Residential Local 2:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5926,6 +5985,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 60>
     Name = Residential Local 1:1
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -5938,6 +5998,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 61>
     Name = Residential Local 1:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6031,6 +6092,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 62>
     Name = Residential Local 2:2
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6043,6 +6105,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 63>
     Name = Residential Local 2:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6055,6 +6118,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 64>
     Name = Residential Local 1:3
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6067,6 +6131,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 65>
     Name = Residential Local 1:4
+    Type = 0
     Speed = 12
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6186,6 +6251,7 @@ DrawWalls = true, true, false, false, false, false
 #Service Elevators
 <Elevator 66>
     Name = Upper Service
+    Type = 2
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -6324,6 +6390,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 67>
     Name = Lower Service
+    Type = 2
     Speed = 21
     Acceleration = 0.3
     Deceleration = 0.3
@@ -6491,6 +6558,7 @@ DrawWalls = true, true, false, false, false, false
 #Freight Elevator
 <Elevator 68>
     Name = Freight
+    Type = 3
     Speed = 15
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6728,6 +6796,7 @@ DrawWalls = true, true, false, false, false, false
 #Hotel Service
 <Elevator 69>
     Name = Hotel Service 1
+    Type = 2
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6740,6 +6809,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 70>
     Name = Hotel Service 2
+    Type = 2
     Speed = 14
     Acceleration = 0.2
     Deceleration = 0.2
@@ -6833,6 +6903,7 @@ DrawWalls = true, true, false, false, false, false
 #Residential service
 <Elevator 71>
     Name = Residential Service
+    Type = 2
     Speed = 16
     Acceleration = 0.3
     Deceleration = 0.3

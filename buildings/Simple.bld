@@ -248,6 +248,8 @@ DrawWalls = true, true, false, false, false, false
     #standard elevator; 7 feet wide, 6 feet deep
     
     #First specify parameters
+    Name = My Elevator
+    Type = 0  #type 0 is for a standard passenger/local elevator
     Speed = 5
     Acceleration = 0.2
     Deceleration = 0.2

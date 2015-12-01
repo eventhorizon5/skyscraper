@@ -1981,6 +1981,7 @@ ShaftCut 3, -4, -4.125 + 0.33, 4, 4.125, 0, 5
 DrawWalls = true, true, false, false, false, false
 
 <Elevator 1>
+    Type = 1
     Speed = 20
     Acceleration = 0.1
     Deceleration = 0.1
@@ -1993,6 +1994,7 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevator 2>
+    Type = 1
     Speed = 20
     Acceleration = 0.1
     Deceleration = 0.1
@@ -2005,6 +2007,7 @@ DrawWalls = true, true, false, false, false, false
 <EndElevator>
 
 <Elevator 3>
+    Type = 1
     Speed = 20
     Acceleration = 0.1
     Deceleration = 0.1
@@ -2110,6 +2113,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 4>
     #standard elevator; 7 feet wide, 6 feet deep
+    Type = 2
     Speed = 25
     Acceleration = 0.2
     Deceleration = 0.2
@@ -2196,6 +2200,7 @@ DrawWalls = true, true, false, false, false, false
 
 <Elevator 5>
     #standard elevator; 7 feet wide, 6 feet deep
+    Type = 2
     Speed = 25
     Acceleration = 0.2
     Deceleration = 0.2

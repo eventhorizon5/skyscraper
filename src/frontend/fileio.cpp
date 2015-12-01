@@ -5021,6 +5021,15 @@ int ScriptProcessor::ProcElevators()
 		elev->Name = temp2;
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 4) == "type")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+		std::string str = Calc(temp2);
+		if (!IsNumeric(str, elev->Type))
+			return ScriptError("Invalid value");
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 5) == "speed")
 	{
 		if (temp2check < 0)

@@ -45,6 +45,7 @@ class SBSIMPEXP Elevator : public Object
 public:
 	int Number; //elevator number
 	std::string Name; //elevator name
+	int Type; //type of elevator; 0=standard, 1=express, 2=service, 3=freight
 	int NumDoors; //number of elevator doors
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction

@@ -46,6 +46,7 @@ Elevator::Elevator(int number)
 
 	//init variables
 	Name = "";
+	Type = 0;
 	QueuePositionDirection = 0;
 	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
