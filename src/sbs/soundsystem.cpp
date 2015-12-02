@@ -205,7 +205,7 @@ FMOD::Channel* SoundSystem::Prepare(SoundData *data)
 
 	FMOD::Channel *channel = 0;
 #if (FMOD_VERSION >> 16 == 4)
-	FMOD_RESULT result = soundsys->playSound(FMOD_CHANNEL_FREE, sound->sound, true, &channel);
+	FMOD_RESULT result = soundsys->playSound(FMOD_CHANNEL_FREE, data->sound, true, &channel);
 #else
 	FMOD_RESULT result = soundsys->playSound(data->sound, 0, true, &channel);
 #endif
