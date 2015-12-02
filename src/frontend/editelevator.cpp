@@ -1050,6 +1050,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetParkingDelay,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetParkingDelay_Click);
 	Connect(ID_bSetNudgeTimer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetNudgeTimer_Click);
 	//*)
+	Simcore = 0;
 	OnInit();
 }
 
@@ -1163,6 +1164,8 @@ void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
 
 void editelevator::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	last_elevator = 0;
 	floor_number = 0;
 

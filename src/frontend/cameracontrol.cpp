@@ -430,6 +430,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bSetFOV_Click);
 	Connect(ID_bResetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bResetFOV_Click);
 	//*)
+	Simcore = 0;
 	OnInit();
 }
 
@@ -441,6 +442,8 @@ CameraControl::~CameraControl()
 
 void CameraControl::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
 	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());
 	hold_vector = Ogre::Vector3(0, 0, 0);

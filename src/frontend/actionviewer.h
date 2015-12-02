@@ -59,6 +59,7 @@ class ActionViewer: public wxDialog
 		wxButton* bOK;
 		wxTextCtrl* tParentName;
 		//*)
+		SBS::SBS *Simcore;
 		void Loop();
 
 	protected:

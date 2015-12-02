@@ -251,6 +251,7 @@ ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxStrin
 	objecttype = object_type;
 	objectparent = object_parent;
 	create = createobject;
+	Simcore = 0;
 	Setup();
 }
 
@@ -263,6 +264,8 @@ ParameterViewer::~ParameterViewer()
 bool ParameterViewer::Setup()
 {
 	//set up parameter dialog
+
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
 
 	if (create == true)
 	{
@@ -1861,7 +1864,7 @@ void ParameterViewer::On_bCancel_Click(wxCommandEvent& event)
 void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 {
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
+	ScriptProcessor *processor = skyscraper->GetActiveEngine()->GetScriptProcessor();
 	processor->LoadFromText(std::string(command.ToAscii()));
 	this->Close();
 }

@@ -50,8 +50,9 @@
 
 namespace Skyscraper {
 
-ScriptProcessor::ScriptProcessor()
+ScriptProcessor::ScriptProcessor(SBS::SBS *instance)
 {
+	Simcore = instance;
 	Reset();
 }
 

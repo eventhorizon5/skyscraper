@@ -112,6 +112,8 @@ class MeshControl: public wxDialog
 
 	private:
 
+		SBS::SBS *Simcore;
+
 		DECLARE_EVENT_TABLE()
 };
 

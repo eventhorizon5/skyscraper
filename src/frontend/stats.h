@@ -160,6 +160,8 @@ class Stats: public wxDialog
 		void On_bOK_Click(wxCommandEvent& event);
 		//*)
 
+		SBS::SBS *Simcore;
+
 		DECLARE_EVENT_TABLE()
 };
 

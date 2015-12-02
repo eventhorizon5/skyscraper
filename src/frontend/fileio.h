@@ -29,8 +29,8 @@ namespace Skyscraper {
 
 class ScriptProcessor
 {
-	public:
-	ScriptProcessor();
+public:
+	ScriptProcessor(SBS::SBS *instance);
 	~ScriptProcessor();
 	bool Run();
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
@@ -46,7 +46,9 @@ class ScriptProcessor
 
 	bool IsFinished;
 
-	private:
+private:
+
+	SBS::SBS *Simcore;
 
 	struct FunctionData
 	{

@@ -210,6 +210,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	changed = false;
 	lastcount = 0;
 	deleted = false;
+	Simcore = 0;
 }
 
 ObjectInfo::~ObjectInfo()
@@ -236,6 +237,9 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 
 void ObjectInfo::Loop()
 {
+	if (!Simcore)
+		Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	if (Simcore->GetObjectCount() != lastcount)
 	{
 		lastcount = Simcore->GetObjectCount();
@@ -413,7 +417,7 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	twindow->Center();
 	twindow->SetTitle(wxT("Current Script"));
 	twindow->Show(true);
-	std::vector<std::string> *data = skyscraper->GetScriptProcessor()->GetBuildingData();
+	std::vector<std::string> *data = skyscraper->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
 	for (int i = 0; i < (int)data->size(); i++)
 			twindow->tMain->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));
 	twindow->tMain->SetInsertionPoint(0);

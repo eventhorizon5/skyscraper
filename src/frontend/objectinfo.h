@@ -140,6 +140,7 @@ class ObjectInfo: public wxDialog
 		void AddChildren(SBS::Object *parent, const wxTreeItemId& treeparent);
 		bool changed;
 		int lastcount;
+		SBS::SBS *Simcore;
 
 		DECLARE_EVENT_TABLE()
 };

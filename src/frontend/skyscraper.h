@@ -44,6 +44,8 @@ int main (int argc, char* argv[]);
 
 namespace Skyscraper {
 
+class EngineContext;
+
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
 public:
@@ -85,7 +87,7 @@ public:
 	bool override_freelook;
 	int SkyMult; //sky time multiplier
 
-	unsigned int elapsed_time, current_time;
+	unsigned int current_time;
 
 	void Loop();
 	virtual bool OnInit(void);
@@ -119,7 +121,6 @@ public:
 	bool GetConfigBool(const std::string &key, bool default_value);
 	float GetConfigFloat(const std::string &key, float default_value);
 	bool InitSky();
-	ScriptProcessor* GetScriptProcessor();
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog();
 	void CloseProgressDialog();
@@ -128,6 +129,7 @@ public:
 	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
 	void SetLocation(float latitude, float longitude);
 	void SetDateTime(double julian_date_time);
+	EngineContext* GetActiveEngine() { return active_engine; }
 
 private:
 	//mouse status
@@ -137,9 +139,6 @@ private:
 	FMOD::System *soundsys;
 	FMOD::Sound *sound;
 	FMOD::Channel *channel;
-
-	//script processor
-	ScriptProcessor* processor;
 
 	//button locations
 	struct buttondata
@@ -180,6 +179,9 @@ private:
 	bool new_location, new_time;
 	float latitude, longitude;
 	double datetime;
+
+	EngineContext *active_engine;
+	std::vector<EngineContext*> engines;
 };
 
 class MainScreen : public wxFrame
@@ -202,7 +204,22 @@ public:
 	DECLARE_EVENT_TABLE()
 };
 
-extern SBS::SBS *Simcore; //external pointer to the SBS engine
+class EngineContext
+{
+public:
+
+	EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem);
+	~EngineContext();
+	ScriptProcessor* GetScriptProcessor();
+	SBS::SBS *GetSystem() { return Simcore; }
+
+private:
+
+	ScriptProcessor* processor; //script processor
+	SBS::SBS *Simcore; //sim engine instance
+
+};
+
 extern Skyscraper *skyscraper;
 extern DebugPanel *dpanel;
 

@@ -43,6 +43,9 @@
 #include <wx/timer.h>
 #include <wx/variant.h>
 
+#include "globals.h"
+#include "sbs.h"
+
 namespace Skyscraper {
 
 class DebugPanel: public wxFrame
@@ -102,10 +105,12 @@ class DebugPanel: public wxFrame
 		class Timer : public wxTimer
 		{
 			public:
-			Timer() { };
+			Timer(SBS::SBS *engine) { Simcore = engine; };
 			virtual void Notify();
+			SBS::SBS *Simcore;
 		};
 		Timer *timer;
+		SBS::SBS *Simcore;
 
 	protected:
 

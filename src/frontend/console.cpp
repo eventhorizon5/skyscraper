@@ -22,12 +22,12 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "console.h"
 #include "globals.h"
 #include "sbs.h"
 #include "unix.h"
 #include "fileio.h"
 #include "skyscraper.h"
+#include "console.h"
 
 //(*InternalHeaders(Console)
 #include <wx/string.h>
@@ -93,6 +93,7 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 	Connect(ID_bSend,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Console::On_bSend_Click);
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&Console::On_Close);
 	//*)
+	Simcore = 0;
 }
 
 Console::~Console()
@@ -104,10 +105,15 @@ Console::~Console()
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
 	if (!Simcore)
-		return;
+	{
+		if (skyscraper->GetActiveEngine())
+			Simcore = skyscraper->GetActiveEngine()->GetSystem();
+		else
+			return;
+	}
 
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = skyscraper->GetScriptProcessor();
+	ScriptProcessor *processor = skyscraper->GetActiveEngine()->GetScriptProcessor();
 
 	if (!processor)
 		return;

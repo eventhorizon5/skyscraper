@@ -28,8 +28,6 @@
 //*)
 #include "debugpanel.h"
 #include "meshcontrol.h"
-#include "globals.h"
-#include "sbs.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
@@ -150,6 +148,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAllColumnFrames,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllColumnFrames_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
+	Simcore = 0;
 	OnInit();
 }
 
@@ -160,6 +159,8 @@ MeshControl::~MeshControl()
 
 void MeshControl::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	chkElevators->SetValue(true);
 }
 

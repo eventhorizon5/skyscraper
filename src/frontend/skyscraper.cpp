@@ -57,7 +57,6 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
 
-SBS::SBS *Simcore;
 Skyscraper *skyscraper;
 DebugPanel *dpanel;
 MainScreen *window;
@@ -132,6 +131,7 @@ bool Skyscraper::OnInit(void)
 	latitude = 0.0f;
 	longitude = 0.0f;
 	datetime = 0.0;
+	active_engine = 0;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -167,7 +167,7 @@ bool Skyscraper::OnInit(void)
 		return ReportError("Error initializing frontend");
 
 	//load script processor
-	processor = new ScriptProcessor();
+	//processor = new ScriptProcessor();
 
 	//set sky name
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
@@ -211,9 +211,9 @@ int Skyscraper::OnExit()
 		delete mCaelumSystem;
 
 	//unload script processor
-	if (processor)
+	/*if (processor)
 		delete processor;
-	processor = 0;
+	processor = 0;*/
 
 	//cleanup sound
 	StopSound();
@@ -264,12 +264,18 @@ void Skyscraper::UnloadSim()
 	if (console)
 		console->bSend->Enable(false);
 
-	//delete simulator object
-	if (Simcore)
+	//delete simulator instance
+	if (active_engine)
 	{
-		delete Simcore;
-		Simcore = 0;
-		Report("SBS unloaded\n");
+		for (int i = 0; i < (int)engines.size(); i++)
+		{
+			if (engines[i] == active_engine)
+			{
+				engines.erase(engines.begin() + i);
+				delete active_engine;
+				active_engine = 0;
+			}
+		}
 	}
 }
 
@@ -673,10 +679,17 @@ void Skyscraper::GetInput()
 	if (window->Active == false)
 		return;
 
+	//exit if no active engine instance
+	if (!active_engine)
+		return;
+
 	static int wireframe;
 	static bool wait, waitcheck, colliders, b_down, boxes;
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
+
+	//get SBS instance
+	SBS::SBS *Simcore = active_engine->GetSystem();
 
 	// First get elapsed time from the virtual clock.
 	current_time = Simcore->GetRunTime();
@@ -1027,8 +1040,12 @@ void Skyscraper::Loop()
 	}
 
 	//main simulator loop
-	if (!Simcore)
+
+	if (!active_engine)
 		return;
+
+	SBS::SBS *Simcore = active_engine->GetSystem();
+	ScriptProcessor *processor = active_engine->GetScriptProcessor();
 
 	//run script processor
 	if (processor)
@@ -1667,9 +1684,10 @@ bool Skyscraper::Load()
 
 	IsLoading = true;
 
-	//Create simulator object
-	Simcore = new SBS::SBS(mSceneMgr, soundsys);
-	SBS::SBS *Simcore2 = new SBS::SBS(mSceneMgr, soundsys);
+	//Create simulator instance
+	active_engine = new EngineContext(mSceneMgr, soundsys);
+	SBS::SBS *Simcore = active_engine->GetSystem();
+	ScriptProcessor *processor = active_engine->GetScriptProcessor();
 
 	//refresh console to fix banner message on Linux
 	if (console)
@@ -1714,6 +1732,11 @@ bool Skyscraper::Load()
 bool Skyscraper::Start()
 {
 	//start simulator
+
+	if (!active_engine)
+		return false;
+
+	SBS::SBS *Simcore = active_engine->GetSystem();
 
 	//close progress dialog
 	if (progdialog)
@@ -1939,6 +1962,9 @@ bool Skyscraper::InitSky()
 {
 	//initialize sky
 
+	if (!active_engine)
+		return false;
+
 	//ensure graphics card and render system are capable of Caelum's shaders
 	if (Renderer == "Direct3D9")
 	{
@@ -2015,7 +2041,7 @@ bool Skyscraper::InitSky()
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 
 		//have sky use SBS scaling factor
-		float scale = 1 / Simcore->UnitScale;
+		float scale = 1 / active_engine->GetSystem()->UnitScale;
 		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
 		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
 	}
@@ -2048,11 +2074,6 @@ bool Skyscraper::InitSky()
 	}
 
 	return true;
-}
-
-ScriptProcessor* Skyscraper::GetScriptProcessor()
-{
-	return processor;
 }
 
 void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage)
@@ -2112,6 +2133,35 @@ void Skyscraper::SetDateTime(double julian_date_time)
 {
 	datetime = julian_date_time;
 	new_time = true;
+}
+
+EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
+{
+	//Create simulator object
+	Simcore = new SBS::SBS(mSceneManager, fmodsystem);
+
+	//load script processor
+	processor = new ScriptProcessor(Simcore);
+}
+
+EngineContext::~EngineContext()
+{
+	if (Simcore)
+	{
+		delete Simcore;
+		Simcore = 0;
+		skyscraper->Report("SBS unloaded\n");
+	}
+
+	//unload script processor
+	if (processor)
+		delete processor;
+	processor = 0;
+}
+
+ScriptProcessor* EngineContext::GetScriptProcessor()
+{
+	return processor;
 }
 
 }

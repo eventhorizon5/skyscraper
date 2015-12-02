@@ -267,6 +267,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	//*)
 	dp = this;
+	Simcore = 0;
 	OnInit();
 }
 
@@ -354,6 +355,8 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 
 void DebugPanel::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	//set check boxes
 	chkCollisionDetection->SetValue(Simcore->camera->CollisionsEnabled());
 	chkGravity->SetValue(Simcore->camera->GetGravityStatus());
@@ -375,7 +378,7 @@ void DebugPanel::OnInit()
 	actionviewer = new ActionViewer(dp, -1);
 	skycontrol = new SkyControl(dp, -1);
 
-	timer = new Timer();
+	timer = new Timer(Simcore);
 	timer->Start(40);
 }
 
@@ -473,7 +476,7 @@ void DebugPanel::Timer::Notify()
 
 wxString TruncateNumber(float value, int decimals)
 {
-	std::string number = Simcore->TruncateNumber(value, decimals);
+	std::string number = dp->Simcore->TruncateNumber(value, decimals);
 	wxString number2 = wxString::FromAscii(number.c_str());
 
 	return number2;
@@ -481,7 +484,7 @@ wxString TruncateNumber(float value, int decimals)
 
 wxString TruncateNumber(double value, int decimals)
 {
-	std::string number = Simcore->TruncateNumber(value, decimals);
+	std::string number = dp->Simcore->TruncateNumber(value, decimals);
 	wxString number2 = wxString::FromAscii(number.c_str());
 
 	return number2;
