@@ -50,7 +50,7 @@ Object::Object(Object *parent, bool temporary)
 		if (parent)
 			Number = sbs->RegisterObject(this);
 		else
-			Number = 0; //root object
+			Number = (int)ObjectArray.size(); //root object
 	}
 }
 

@@ -1669,6 +1669,7 @@ bool Skyscraper::Load()
 
 	//Create simulator object
 	Simcore = new SBS::SBS(mSceneMgr, soundsys);
+	SBS::SBS *Simcore2 = new SBS::SBS(mSceneMgr, soundsys);
 
 	//refresh console to fix banner message on Linux
 	if (console)

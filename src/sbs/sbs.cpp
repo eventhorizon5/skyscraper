@@ -39,6 +39,8 @@
 
 namespace SBS {
 
+std::vector<Object*> ObjectArray;
+
 SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0)
 {
 	sbs = this;
@@ -427,7 +429,7 @@ SBS::~SBS()
 	}
 	mWorld = 0;
 
-	ObjectArray.clear();
+	//ObjectArray.clear();
 	verify_results.clear();
 
 	if (timer)

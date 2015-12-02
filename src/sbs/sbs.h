@@ -445,7 +445,7 @@ private:
 	int DefaultMapper; //default texture mapper
 
 	//global object array (only pointers to actual objects)
-	std::vector<Object*> ObjectArray;
+	//std::vector<Object*> ObjectArray;
 
 	//object arrays
 	std::vector<FloorMap> FloorArray; //floor object array
@@ -593,6 +593,8 @@ private:
 	Ogre::StringVectorPtr filesystem_listing;
 };
 
+	//global object array (only pointers to actual objects)
+	extern std::vector<Object*> ObjectArray;
 }
 
 #endif
