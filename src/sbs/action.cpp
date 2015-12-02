@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Action::Action(SBS *root, const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters)
+Action::Action(Object *parent, const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters) : ObjectBase(parent)
 {
 	//create an action
 
@@ -38,7 +38,6 @@ Action::Action(SBS *root, const std::string &name, std::vector<Object*> &action_
 	this->name = name;
 	TrimString(command_name);
 	SetCase(command_name, false);
-	sbs = root;
 
 	command_parameters.resize(parameters.size());
 	for (int i = 0; i < (int)parameters.size(); i++)
@@ -49,7 +48,7 @@ Action::Action(SBS *root, const std::string &name, std::vector<Object*> &action_
 	parent_objects = action_parents;
 }
 
-Action::Action(SBS *root, const std::string &name, std::vector<Object*> &action_parents, const std::string &command)
+Action::Action(Object *parent, const std::string &name, std::vector<Object*> &action_parents, const std::string &command) : ObjectBase(parent)
 {
 	//create an action
 
@@ -57,7 +56,6 @@ Action::Action(SBS *root, const std::string &name, std::vector<Object*> &action_
 	this->name = name;
 	TrimString(command_name);
 	SetCase(command_name, false);
-	sbs = root;
 
 	parent_objects = action_parents;
 }

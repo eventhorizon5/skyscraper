@@ -28,7 +28,7 @@
 
 namespace SBS {
 
-class SBSIMPEXP Polygon
+class SBSIMPEXP Polygon : public ObjectBase
 {
 public:
 	MeshObject* mesh;
@@ -45,7 +45,7 @@ public:
 	std::string material; //polygon material
 	std::string name; //polygon names
 
-	Polygon(SBS *root, const std::string &name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
+	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
 	~Polygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();
@@ -56,9 +56,6 @@ public:
 	bool IntersectSegmentPlane(std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float *pr, Ogre::Vector3 &normal);
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 	void Delete();
-
-private:
-	SBS *sbs;
 };
 
 }
