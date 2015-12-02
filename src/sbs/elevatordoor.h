@@ -76,7 +76,7 @@ public:
 	//wrapper that represents the entire set of doors
 	struct DoorWrapper : public Object
 	{
-		DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor, int shaftdoor_floor = 0);
+		DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor = 0);
 		~DoorWrapper();
 
 		DoorObject* CreateDoor(const std::string &doorname, const std::string &Direction, float OpenSpeed, float CloseSpeed);

@@ -76,7 +76,7 @@ ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
 	DoorDirection = false;
 
 	//create main door object
-	Doors = new DoorWrapper(this, false);
+	Doors = new DoorWrapper(this, this, false);
 
 	//create timers
 	timer = new Timer("Door Close Timer", this, elev, 0);
@@ -801,7 +801,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::AddShaftDoorComponent(int floor, const 
 
 	//create shaft door wrapper if not already created
 	if (!ShaftDoors[index])
-		ShaftDoors[index] = new DoorWrapper(this, true, floor);
+		ShaftDoors[index] = new DoorWrapper(elev->GetShaft()->GetMeshObject(floor), this, true, floor);
 
 	std::string Name, buffer;
 	Name = name;
@@ -1440,9 +1440,9 @@ ElevatorDoor::DoorObject::~DoorObject()
 	mesh = 0;
 }
 
-ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoor, int shaftdoor_floor)
+ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor)
 {
-	parent = parentobject;
+	parent = door_object;
 	Open = false;
 	Enabled = true;
 	Width = 0;
@@ -1453,17 +1453,13 @@ ElevatorDoor::DoorWrapper::DoorWrapper(ElevatorDoor *parentobject, bool shaftdoo
 	voffset = 0;
 	floor = shaftdoor_floor;
 
-	Object *objparent = parent;
-	if (IsShaftDoor == true)
-		objparent = parent->elev->GetShaft()->GetMeshObject(floor);
-
 	std::string name;
 	if (IsShaftDoor == true)
 		name = "Shaft Door " + ToString(parent->Number) + ":" + ToString(shaftdoor_floor);
 	else
 		name = "Elevator Door " + ToString(parent->Number);
 
-	SetValues(objparent, "DoorWrapper", name, false);
+	SetValues(parent_obj, "DoorWrapper", name, false);
 
 	if (IsShaftDoor == true)
 		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
