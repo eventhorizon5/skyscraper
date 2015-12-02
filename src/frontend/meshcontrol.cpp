@@ -37,8 +37,6 @@
 
 namespace Skyscraper {
 
-MeshControl *p; //self pointer
-
 //(*IdInit(MeshControl)
 const long MeshControl::ID_chkExternal = wxNewId();
 const long MeshControl::ID_chkBuildings = wxNewId();
@@ -152,7 +150,6 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAllColumnFrames,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllColumnFrames_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
-	p = this;
 	OnInit();
 }
 
@@ -168,7 +165,7 @@ void MeshControl::OnInit()
 
 void MeshControl::On_bOk_Click(wxCommandEvent& event)
 {
-	p->Hide();
+	Hide();
 }
 
 void MeshControl::On_chkSky_Click(wxCommandEvent& event)
