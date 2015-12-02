@@ -244,7 +244,7 @@ void SplitString(std::vector<std::string> &dest_array, const std::string &origin
 
 std::string ToString(int number)
 {
-	static char buffer[50];
+	char buffer[50];
 #if defined(__VISUALC__)
 	_snprintf_s(buffer, sizeof(buffer), 13, "%d", number);
 #else
@@ -255,7 +255,7 @@ std::string ToString(int number)
 
 std::string ToString(float number)
 {
-	static char buffer[50];
+	char buffer[50];
 #if defined(__VISUALC__)
 	_snprintf_s(buffer, sizeof(buffer), 13, "%g", number);
 #else
