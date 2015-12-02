@@ -29,7 +29,7 @@
 
 namespace SBS {
 
-Polygon::Polygon(SBS *root, const std::string &name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane)
+Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane) : ObjectBase(parent)
 {
 	mesh = meshwrapper;
 	this->index_extents = index_extents;
@@ -39,7 +39,6 @@ Polygon::Polygon(SBS *root, const std::string &name, MeshObject *meshwrapper, st
 	this->plane = plane;
 	this->triangles = triangles;
 	this->name = name;
-	sbs = root;
 }
 
 Polygon::~Polygon()

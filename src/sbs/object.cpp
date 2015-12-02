@@ -29,10 +29,24 @@
 
 namespace SBS {
 
-Object::Object(Object *parent, bool temporary)
+ObjectBase::ObjectBase(Object *parent)
+{
+	Parent = parent;
+	sbs = 0;
+
+	if (parent)
+		sbs = parent->GetRoot();
+}
+
+Object* ObjectBase::GetParent()
+{
+	//return parent object
+	return Parent;
+}
+
+Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
 {
 	Permanent = false;
-	Parent = parent;
 	linenum = 0;
 	Number = -1;
 	Temporary = temporary;
@@ -40,9 +54,6 @@ Object::Object(Object *parent, bool temporary)
 	SceneNode = 0;
 	Rotation = Ogre::Vector3::ZERO;
 	values_set = false;
-
-	if (parent)
-		sbs = parent->GetRoot();
 
 	//register object with engine
 	if (temporary == false)
@@ -125,12 +136,6 @@ bool Object::IsPermanent()
 bool Object::IsMovable()
 {
 	return SceneNode != 0;
-}
-
-Object* Object::GetParent()
-{
-	//return parent object
-	return Parent;
 }
 
 const std::string& Object::GetType()
