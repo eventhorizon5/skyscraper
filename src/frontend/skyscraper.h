@@ -130,6 +130,8 @@ public:
 	void SetLocation(float latitude, float longitude);
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
+	void CreateEngine();
+	bool DeleteEngine(EngineContext *engine);
 
 private:
 	//mouse status

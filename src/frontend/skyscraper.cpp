@@ -265,18 +265,7 @@ void Skyscraper::UnloadSim()
 		console->bSend->Enable(false);
 
 	//delete simulator instance
-	if (active_engine)
-	{
-		for (int i = 0; i < (int)engines.size(); i++)
-		{
-			if (engines[i] == active_engine)
-			{
-				engines.erase(engines.begin() + i);
-				delete active_engine;
-				active_engine = 0;
-			}
-		}
-	}
+	DeleteEngine(active_engine);
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -1685,7 +1674,8 @@ bool Skyscraper::Load()
 	IsLoading = true;
 
 	//Create simulator instance
-	active_engine = new EngineContext(mSceneMgr, soundsys);
+	CreateEngine();
+
 	SBS::SBS *Simcore = active_engine->GetSystem();
 	ScriptProcessor *processor = active_engine->GetScriptProcessor();
 
@@ -2133,6 +2123,29 @@ void Skyscraper::SetDateTime(double julian_date_time)
 {
 	datetime = julian_date_time;
 	new_time = true;
+}
+
+void Skyscraper::CreateEngine()
+{
+	active_engine = new EngineContext(mSceneMgr, soundsys);
+	engines.push_back(active_engine);
+}
+
+bool Skyscraper::DeleteEngine(EngineContext *engine)
+{
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i] == engine)
+		{
+			engines.erase(engines.begin() + i);
+			delete engine;
+
+			if (active_engine == engine)
+				active_engine = 0;
+			return true;
+		}
+	}
+	return false;
 }
 
 EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
