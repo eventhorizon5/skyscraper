@@ -33,20 +33,16 @@
 
 namespace SBS {
 
-ButtonPanel::ButtonPanel(int elevator, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th)
+ButtonPanel::ButtonPanel(Elevator *elevator, int index, const std::string &texture, int rows, int columns, const std::string &direction, float CenterX, float CenterZ, float buttonwidth, float buttonheight, float spacingX, float spacingY, float voffset, float tw, float th) : Object(elevator)
 {
 	//Create an elevator button panel
 	//index is for specifying multiple panels within the same elevator
 
-	Elevator *elev = sbs->GetElevator(elevator);
-	if (!elev)
-		return;
-
 	//set up SBS object
-	SetValues(elev, "ButtonPanel", "", false);
+	SetValues("ButtonPanel", "", false);
 
 	IsEnabled = true;
-	this->elevator = elevator;
+	this->elevator = elevator->Number;
 	Index = index;
 	Direction = direction;
 	ButtonWidth = buttonwidth;
@@ -62,7 +58,7 @@ ButtonPanel::ButtonPanel(int elevator, int index, const std::string &texture, in
 	Height = ((Rows + 1) * SpacingY) + (Rows * ButtonHeight);
 
 	//create mesh
-	std::string name = "Button Panel " + ToString(elevator) + ":" + ToString(index);
+	std::string name = "Button Panel " + ToString(this->elevator) + ":" + ToString(index);
 	TrimString(name);
 	SetName(name);
 	ButtonPanelMesh = new MeshObject(this, name, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));

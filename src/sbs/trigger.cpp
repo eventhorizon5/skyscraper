@@ -30,12 +30,12 @@
 
 namespace SBS {
 
-Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, const std::vector<std::string> &action_names)
+Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, const std::vector<std::string> &action_names) : Object(parent)
 {
 	//create a proximity trigger at the specified location
 
 	//set up SBS object
-	SetValues(parent, "Trigger", name, permanent);
+	SetValues("Trigger", name, permanent);
 
 	Actions = action_names;
 	is_enabled = true;

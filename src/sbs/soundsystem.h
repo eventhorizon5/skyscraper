@@ -52,7 +52,7 @@ public:
 		std::vector<FMOD::Channel*> channels; //associated sound channels
 	};
 
-	SoundSystem(FMOD::System *fmodsystem);
+	SoundSystem(Object *parent, FMOD::System *fmodsystem);
 	~SoundSystem();
 	void SetListenerPosition(const Ogre::Vector3 &position);
 	void SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top);

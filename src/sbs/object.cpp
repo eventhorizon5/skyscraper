@@ -29,10 +29,10 @@
 
 namespace SBS {
 
-Object::Object(bool temporary)
+Object::Object(Object *parent, bool temporary)
 {
 	Permanent = false;
-	Parent = 0;
+	Parent = parent;
 	linenum = 0;
 	Number = -1;
 	Temporary = temporary;
@@ -41,10 +41,13 @@ Object::Object(bool temporary)
 	Rotation = Ogre::Vector3::ZERO;
 	values_set = false;
 
+	if (parent)
+		sbs = parent->GetRoot();
+
 	//register object with engine
 	if (temporary == false)
 	{
-		if (sbs)
+		if (parent)
 			Number = sbs->RegisterObject(this);
 		else
 			Number = 0; //root object
@@ -82,7 +85,7 @@ Object::~Object()
 	sbs->Report("Deleted object " + ToString(Number) + ": " + Name);
 }
 
-void Object::SetValues(Object *parent, const std::string &type, const std::string &name, bool is_permanent, bool is_movable)
+void Object::SetValues(const std::string &type, const std::string &name, bool is_permanent, bool is_movable)
 {
 	//set object values
 
@@ -91,7 +94,6 @@ void Object::SetValues(Object *parent, const std::string &type, const std::strin
 		return;
 
 	values_set = true;
-	Parent = parent;
 	Permanent = is_permanent;
 	Type = type;
 	Name = name;

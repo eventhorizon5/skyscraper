@@ -31,14 +31,14 @@
 
 namespace SBS {
 
-Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, float width, float height, bool center)
+Control::Control(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const std::vector<std::string> &action_names, const std::vector<Action*> &actions, std::vector<std::string> &textures, const std::string &direction, float width, float height, bool center) : Object(parent)
 {
 	//create a control at the specified location
 
 	//actions can either be given as a name list (dynamic action lists) or pointer list (static action lists) - don't use both
 
 	//set up SBS object
-	SetValues(parent, "Control", name, permanent);
+	SetValues("Control", name, permanent);
 
 	std::string name2 = name;
 	if ((int)name.find("Control", 0) == -1)

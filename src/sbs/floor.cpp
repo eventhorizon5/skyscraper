@@ -32,10 +32,10 @@
 
 namespace SBS {
 
-Floor::Floor(int number)
+Floor::Floor(Object *parent, int number) : Object(parent)
 {
 	//set up SBS object
-	SetValues(sbs, "Floor", "", false);
+	SetValues("Floor", "", false);
 
 	//Set floor's object number
 	Number = number;
@@ -483,7 +483,7 @@ CallButton* Floor::AddCallButtons(std::vector<int> &elevators, const std::string
 
 	//create call button
 	int Current = (int)CallButtonArray.size();
-	CallButton *button = new CallButton(elevators, Number, Current, sound_file, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
+	CallButton *button = new CallButton(this, elevators, Number, Current, sound_file, BackTexture, UpButtonTexture, UpButtonTexture_Lit, DownButtonTexture, DownButtonTexture_Lit, CenterX, CenterZ, voffset, direction, BackWidth, BackHeight, ShowBack, tw, th);
 	CallButtonArray.push_back(button);
 	return button;
 }

@@ -451,11 +451,11 @@ void DebugPanel::Timer::Notify()
 	{
 		if (profiler->IsShown() == true)
 		{
-			Simcore->enable_profiling = true;
+			SBS::enable_profiling = true;
 			profiler->Loop();
 		}
 		else
-			Simcore->enable_profiling = false;
+			SBS::enable_profiling = false;
 	}
 
 	if (actionviewer)

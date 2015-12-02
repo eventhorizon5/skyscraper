@@ -35,14 +35,14 @@
 
 namespace SBS {
 
-CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, float fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation)
+CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabled, int quality, float fov, const Ogre::Vector3 &position, bool use_rotation, const Ogre::Vector3 &rotation) : Object(parent)
 {
 	//creates a CameraTexture object
 
 	//if use_rotation is true, the rotation vector is a standard rotation, otherwise that vector represents a point in space to look at
 
 	//set up SBS object
-	SetValues(parent, "CameraTexture", name, false);
+	SetValues("CameraTexture", name, false);
 
 	unsigned int texture_size = 256;
 	if (quality == 2)

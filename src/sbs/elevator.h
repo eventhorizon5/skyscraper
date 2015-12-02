@@ -160,7 +160,7 @@ public:
 	MeshObject* ElevatorMesh; //elevator mesh object
 
 	//functions
-	Elevator(int number);
+	Elevator(Object *parent, int number);
 	~Elevator();
 	bool CreateElevator(bool relative, float x, float z, int floor);
 	bool AddRoute(int floor, int direction, int call_type);

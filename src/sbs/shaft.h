@@ -49,7 +49,7 @@ public:
 	bool ShowInterfloors; //true if interfloors should be shown while inside the shaft/elevator
 	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
 
-	Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
+	Shaft(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	~Shaft();
 	WallObject* AddWall(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
 	bool AddWall(WallObject *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);

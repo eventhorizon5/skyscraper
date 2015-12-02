@@ -83,7 +83,7 @@ void Profiler::Loop()
 		SBS::ProfileManager::CleanupMemory();
 
 	advanced = chkAdvanced->GetValue();
-	Simcore->enable_advanced_profiling = advanced;
+	SBS::enable_advanced_profiling = advanced;
 	SBS::ProfileIterator* profileIterator = 0;
 	profileIterator = SBS::ProfileManager::Get_Iterator();
 

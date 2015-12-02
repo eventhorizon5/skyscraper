@@ -70,6 +70,9 @@ namespace OgreBulletCollisions {
 
 namespace SBS {
 
+extern bool SBSIMPEXP enable_profiling; //enable general profiling
+extern bool SBSIMPEXP enable_advanced_profiling;
+
 //global functions
 
 struct SBSIMPEXP FloorMap
@@ -164,8 +167,6 @@ public:
 	std::string LastNotification; //most recent notification message, from Report()
 	int WallCount; //wall object count
 	int PolygonCount; //wall polygon object count
-	bool enable_profiling; //enable general profiling
-	bool enable_advanced_profiling;
 	unsigned int SmoothFrames;
 	bool RenderOnStartup; //render objects on startup
 
@@ -592,7 +593,6 @@ private:
 	Ogre::StringVectorPtr filesystem_listing;
 };
 
-	extern SBS *sbs; //singleton pointer
 }
 
 #endif

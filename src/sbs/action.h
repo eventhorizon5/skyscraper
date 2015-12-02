@@ -32,8 +32,8 @@ class SBSIMPEXP Action
 {
 public:
 	//functions
-	Action(const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
-	Action(const std::string &name, std::vector<Object*> &action_parents, const std::string &command);
+	Action(SBS *root, const std::string &name, std::vector<Object*> &action_parents, const std::string &command, const std::vector<std::string> &parameters);
+	Action(SBS *root, const std::string &name, std::vector<Object*> &action_parents, const std::string &command);
 	~Action();
 	bool DoAction(Object *caller);
 	std::string GetName();
@@ -55,6 +55,7 @@ private:
 	std::vector<std::string> command_parameters;
 	std::string name;
 	std::vector<Object*> parent_objects;
+	SBS *sbs;
 };
 
 }

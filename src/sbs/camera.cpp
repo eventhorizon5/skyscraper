@@ -39,10 +39,10 @@ namespace SBS {
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
 
-Camera::Camera(Ogre::Camera *camera)
+Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 {
 	//set up SBS object
-	SetValues(sbs, "Camera", "Camera", true);
+	SetValues("Camera", "Camera", true);
 
 	//init variables
 	CurrentFloor = 0;

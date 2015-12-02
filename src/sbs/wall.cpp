@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Object(temporary)
+WallObject::WallObject(MeshObject* wrapper, Object *proxy, bool temporary) : Object(wrapper, temporary)
 {
 	//wall object constructor
 	meshwrapper = wrapper;
@@ -132,7 +132,7 @@ int WallObject::CreatePolygon(std::vector<TriangleType> &triangles, std::vector<
 
 	std::string newname = ProcessName(name);
 
-	Polygon polygon(newname, meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
+	Polygon polygon(sbs, newname, meshwrapper, triangles, index_extents, tex_matrix, tex_vector, material, plane);
 	polygons.push_back(polygon);
 	sbs->PolygonCount++;
 

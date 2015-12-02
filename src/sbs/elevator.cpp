@@ -36,10 +36,10 @@
 
 namespace SBS {
 
-Elevator::Elevator(int number)
+Elevator::Elevator(Object *parent, int number) : Object(parent)
 {
 	//set up SBS object
-	SetValues(sbs, "Elevator", "", false);
+	SetValues("Elevator", "", false);
 
 	//set elevator number
 	Number = number;
@@ -2460,7 +2460,7 @@ ButtonPanel* Elevator::CreateButtonPanel(const std::string &texture, int rows, i
 	if (sbs->Verbose)
 		Report("creating button panel " + ToString(index + 1));
 
-	ButtonPanel* panel = new ButtonPanel(Number, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
+	ButtonPanel* panel = new ButtonPanel(this, index + 1, texture, rows, columns, direction, CenterX, CenterZ, buttonwidth, buttonheight, spacingX, spacingY, voffset, tw, th);
 	PanelArray.push_back(panel);
 	return panel;
 }

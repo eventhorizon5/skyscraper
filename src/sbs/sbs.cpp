@@ -39,9 +39,7 @@
 
 namespace SBS {
 
-SBS *sbs; //singleton pointer
-
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -54,7 +52,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 	RegisterObject(this);
 
 	//set up SBS object
-	SetValues(0, "SBS", "SBS", true);
+	SetValues("SBS", "SBS", true);
 
 	mRoot = Ogre::Root::getSingletonPtr();
 
@@ -212,7 +210,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)
-		soundsystem = new SoundSystem(fmodsystem);
+		soundsystem = new SoundSystem(this, fmodsystem);
 
 	//Print SBS banner
 	PrintBanner();
@@ -256,7 +254,7 @@ void SBS::Initialize(Ogre::Camera *camera)
 	//Landscape->tricollider = false;
 
 	//create camera object
-	this->camera = new Camera(camera);
+	this->camera = new Camera(this, camera);
 }
 
 SBS::~SBS()
@@ -1651,7 +1649,7 @@ Shaft* SBS::CreateShaft(int number, float CenterX, float CenterZ, int _startfloo
 
 	ShaftMap shaft;
 	shaft.number = number;
-	shaft.object = new Shaft(number, CenterX, CenterZ, _startfloor, _endfloor);
+	shaft.object = new Shaft(this, number, CenterX, CenterZ, _startfloor, _endfloor);
 	ShaftArray.push_back(shaft);
 	return shaft.object;
 }
@@ -1691,7 +1689,7 @@ Stairs* SBS::CreateStairwell(int number, float CenterX, float CenterZ, int _star
 
 	StairsMap stairs;
 	stairs.number = number;
-	stairs.object = new Stairs(number, CenterX, CenterZ, _startfloor, _endfloor);
+	stairs.object = new Stairs(this, number, CenterX, CenterZ, _startfloor, _endfloor);
 	StairsArray.push_back(stairs);
 	return stairs.object;
 }
@@ -1705,7 +1703,7 @@ Elevator* SBS::NewElevator(int number)
 
 	ElevatorMap elev;
 	elev.number = number;
-	elev.object = new Elevator(number);
+	elev.object = new Elevator(this, number);
 	ElevatorArray.push_back(elev);
 	return elev.object;
 }
@@ -1719,7 +1717,7 @@ Floor* SBS::NewFloor(int number)
 
 	FloorMap floor;
 	floor.number = number;
-	floor.object = new Floor(number);
+	floor.object = new Floor(this, number);
 	FloorArray.push_back(floor);
 
 	if (number < 0)
@@ -3647,7 +3645,7 @@ Action* SBS::AddAction(const std::string &name, std::vector<Object*> &action_par
 {
 	//add a global action
 
-	Action *action = new Action(name, action_parents, command, parameters);
+	Action *action = new Action(this, name, action_parents, command, parameters);
 	ActionArray.push_back(action);
 	return action;
 }
@@ -3656,7 +3654,7 @@ Action* SBS::AddAction(const std::string &name, std::vector<Object*> &action_par
 {
 	//add a global action
 
-	Action *action = new Action(name, action_parents, command);
+	Action *action = new Action(this, name, action_parents, command);
 	ActionArray.push_back(action);
 	return action;
 }

@@ -44,7 +44,7 @@ public:
 	bool ShowFloors; //true if floors should be shown while inside the stairwell; floor list in ShowFloorsList
 	bool ShowFullStairs; //if true, always show full stairwell instead of only a selected range
 
-	Stairs(int number, float CenterX, float CenterZ, int startfloor, int endfloor);
+	Stairs(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	~Stairs();
 	WallObject* AddStairs(int floor, const std::string &name, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_stairs, float voffset, float tw, float th);
 	WallObject* AddWall(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);

@@ -32,12 +32,12 @@
 
 namespace SBS {
 
-FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
+FloorIndicator::FloorIndicator(Object *parent, int elevator, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset) : Object(parent)
 {
 	//creates a new floor indicator at the specified position
 
 	//set up SBS object
-	SetValues(parent, "FloorIndicator", "", false);
+	SetValues("FloorIndicator", "", false);
 
 	is_enabled = true;
 	elev = elevator;

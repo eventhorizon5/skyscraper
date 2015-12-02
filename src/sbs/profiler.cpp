@@ -8,6 +8,9 @@ static oClock gProfileClock;
 
 namespace SBS {
 
+bool SBSIMPEXP enable_profiling; //enable general profiling
+bool SBSIMPEXP enable_advanced_profiling;
+
 /*
 
 ***************************************************************************************************
@@ -221,9 +224,7 @@ unsigned long int			ProfileManager::ResetTime = 0;
  *=============================================================================================*/
 void	ProfileManager::Start_Profile( const char * name )
 {
-	if (!sbs)
-		return;
-	if (sbs->enable_profiling == false)
+	if (enable_profiling == false)
 		return;
 
 	if (name != CurrentNode->Get_Name()) {
@@ -239,9 +240,7 @@ void	ProfileManager::Start_Profile( const char * name )
  *=============================================================================================*/
 void	ProfileManager::Stop_Profile( void )
 {
-	if (!sbs)
-		return;
-	if (sbs->enable_profiling == false)
+	if (enable_profiling == false)
 		return;
 
 	// Return will indicate whether we should back up to our parent (we may
@@ -259,9 +258,7 @@ void	ProfileManager::Stop_Profile( void )
  *=============================================================================================*/
 void	ProfileManager::Reset( void )
 {
-	if (!sbs)
-		return;
-	if (sbs->enable_profiling == false)
+	if (enable_profiling == false)
 		return;
 
 	gProfileClock.reset();
@@ -277,9 +274,7 @@ void	ProfileManager::Reset( void )
  *=============================================================================================*/
 void ProfileManager::Increment_Frame_Counter( void )
 {
-	if (!sbs)
-		return;
-	if (sbs->enable_profiling == false)
+	if (enable_profiling == false)
 		return;
 
 	FrameCounter++;
@@ -301,9 +296,7 @@ float ProfileManager::Get_Time_Since_Reset( void )
 
 void ProfileManager::dumpRecursive(std::string &output, ProfileIterator* profileIterator, int spacing)
 {
-	if (!sbs)
-		return;
-	if (sbs->enable_profiling == false)
+	if (enable_profiling == false)
 		return;
 
 	profileIterator->First();
@@ -371,18 +364,14 @@ void ProfileManager::dumpAll()
 ProfileSample::ProfileSample( const char * name, bool advanced )
 {
 	is_advanced = advanced;
-	if (!sbs)
-		return;
-	if (is_advanced == true && sbs->enable_advanced_profiling == false)
+	if (is_advanced == true && enable_advanced_profiling == false)
 		return;
 	ProfileManager::Start_Profile( name );
 }
 
 ProfileSample::~ProfileSample( void )
 {
-	if (!sbs)
-		return;
-	if (is_advanced == true && sbs->enable_advanced_profiling == false)
+	if (is_advanced == true && enable_advanced_profiling == false)
 		return;
 	ProfileManager::Stop_Profile();
 }

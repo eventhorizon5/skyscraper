@@ -28,6 +28,8 @@
 
 namespace SBS {
 
+class SBS;
+
 class SBSIMPEXP Object
 {
 public:
@@ -40,9 +42,9 @@ public:
 	bool parent_deleting; //true if object's parent is deleting object
 
 	//functions
-	Object(bool temporary = false);
+	Object(Object *parent, bool temporary = false);
 	virtual ~Object();
-	void SetValues(Object *parent, const std::string &type, const std::string &name, bool is_permanent, bool is_movable = true);
+	void SetValues(const std::string &type, const std::string &name, bool is_permanent, bool is_movable = true);
 	bool IsPermanent();
 	bool IsMovable();
 	Object* GetParent();
@@ -81,6 +83,7 @@ public:
 	void Init(); //pre-runloop (first-run) object initialization
 	virtual void OnInit() {} //called when object is initialized
 	virtual void Loop() {} //object runloop
+	SBS* GetRoot() { return sbs; }
 
 	template <typename T> bool IsType()
 	{
@@ -93,6 +96,9 @@ public:
 		//convert object to the given type, if possible.  Returns 0 on failure
 		return dynamic_cast<T*>(this);
 	}
+
+protected:
+	SBS *sbs; //engine root
 
 private:
 	void NotifyChildren(bool move, bool rotate);

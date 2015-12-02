@@ -31,13 +31,13 @@
 
 namespace SBS {
 
-Shaft::Shaft(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
+Shaft::Shaft(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor) : Object(parent)
 {
 	//creates a shaft in the location specified by CenterX and CenterZ
 	//and that spans the floor range specified by startfloor and endfloor
 
 	//set up SBS object
-	SetValues(sbs, "Shaft", "", false);
+	SetValues("Shaft", "", false);
 
 	ShaftNumber = number;
 	this->startfloor = startfloor;

@@ -31,7 +31,7 @@
 
 namespace SBS {
 
-Door::Door(Object *parent, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th)
+Door::Door(Object *parent, const std::string &name, const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th) : Object(parent)
 {
 	//creates a door
 	//wall cuts must be performed by the calling (parent) function
@@ -47,7 +47,7 @@ Door::Door(Object *parent, const std::string &name, const std::string &open_soun
 	//8 = faces back, opens front
 
 	//set up SBS object
-	SetValues(parent, "Door", name, false);
+	SetValues("Door", name, false);
 
 	is_enabled = true;
 	Direction = direction;

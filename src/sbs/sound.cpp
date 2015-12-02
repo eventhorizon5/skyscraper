@@ -31,10 +31,10 @@
 
 namespace SBS {
 
-Sound::Sound(Object *parent, const std::string &name, bool permanent)
+Sound::Sound(Object *parent, const std::string &name, bool permanent) : Object(parent)
 {
 	//set up SBS object
-	SetValues(parent, "Sound", name, permanent);
+	SetValues("Sound", name, permanent);
 
 	//first set default values
 	system = sbs->GetSoundSystem();

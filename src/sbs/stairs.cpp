@@ -31,13 +31,13 @@
 
 namespace SBS {
 
-Stairs::Stairs(int number, float CenterX, float CenterZ, int startfloor, int endfloor)
+Stairs::Stairs(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor) : Object(parent)
 {
 	//creates a stairwell in the location specified by CenterX and CenterZ
 	//and that spans the floor range specified by startfloor and endfloor
 
 	//set up SBS object
-	SetValues(sbs, "Stairs", "", false);
+	SetValues("Stairs", "", false);
 
 	StairsNum = number;
 	this->startfloor = startfloor;

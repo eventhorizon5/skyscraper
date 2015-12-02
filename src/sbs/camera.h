@@ -74,7 +74,7 @@ public:
 	float BinocularsFOV; //binoculars mode FOV
 
 	//functions
-	Camera(Ogre::Camera *camera);
+	Camera(Object *parent, Ogre::Camera *camera);
 	~Camera();
 	void SetPosition(const Ogre::Vector3 &position);
 	void SetDirection(const Ogre::Vector3 &direction);

@@ -30,9 +30,9 @@
 
 namespace SBS {
 
-SoundSystem::SoundSystem(FMOD::System *fmodsystem)
+SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(parent)
 {
-	SetValues(sbs, "SoundSystem", "Sound System", true, false);
+	SetValues("SoundSystem", "Sound System", true, false);
 
 	soundsys = fmodsystem;
 
@@ -62,7 +62,7 @@ SoundSystem::~SoundSystem()
 void SoundSystem::Loop()
 {
 	//update sound
-	if (sbs->enable_advanced_profiling == false)
+	if (enable_advanced_profiling == false)
 		ProfileManager::Start_Profile("Sound");
 	else
 		ProfileManager::Start_Profile("FMOD");

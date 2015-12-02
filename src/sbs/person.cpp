@@ -30,12 +30,12 @@
 
 namespace SBS {
 
-Person::Person(Object *parent, const std::string &name)
+Person::Person(Object *parent, const std::string &name) : Object(parent)
 {
 	//creates a person object, used for random traffic simulations
 
 	//set up SBS object
-	SetValues(parent, "Person", name, false);
+	SetValues("Person", name, false);
 
 	floor = 0;
 }

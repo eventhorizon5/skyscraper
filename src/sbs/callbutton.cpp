@@ -33,7 +33,7 @@
 
 namespace SBS {
 
-CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th)
+CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum, int number, const std::string &sound_file, const std::string &BackTexture, const std::string &UpButtonTexture, const std::string &UpButtonTexture_Lit, const std::string &DownButtonTexture, const std::string &DownButtonTexture_Lit, float CenterX, float CenterZ, float voffset, const std::string &direction, float BackWidth, float BackHeight, bool ShowBack, float tw, float th) : Object(parent)
 {
 	//create a set of call buttons
 
@@ -42,7 +42,7 @@ CallButton::CallButton(std::vector<int> &elevators, int floornum, int number, co
 		return;
 
 	//set up SBS object
-	SetValues(floor, "CallButton", "", false);
+	SetValues("CallButton", "", false);
 
 	is_enabled = true;
 	Elevators.resize(elevators.size());

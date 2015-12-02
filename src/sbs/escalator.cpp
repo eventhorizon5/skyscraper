@@ -30,14 +30,14 @@
 
 namespace SBS {
 
-Escalator::Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th)
+Escalator::Escalator(Object *parent, const std::string &name, bool run, bool run_direction, const std::string &sound_file, const std::string &texture, const std::string &direction, float CenterX, float CenterZ, float width, float risersize, float treadsize, int num_steps, float voffset, float tw, float th) : Object(parent)
 {
 	//create a new escalator object
 	//num_stairs is subtracted by 1 since it includes the floor platform above, but not below
 	//direction is where the stair base is - front, back, left, or right.
 
 	//set up SBS object
-	SetValues(parent, "Escalator", name, false);
+	SetValues("Escalator", name, false);
 
 	is_enabled = true;
 	Run = run;

@@ -30,10 +30,10 @@
 
 namespace SBS {
 
-ElevatorDoor::ElevatorDoor(int number, Elevator* elevator)
+ElevatorDoor::ElevatorDoor(int number, Elevator* elevator) : Object(elevator)
 {
 	//set up SBS object
-	SetValues(elevator, "ElevatorDoor", "", false);
+	SetValues("ElevatorDoor", "", false);
 
 	std::string name = "Elevator Door " + ToString(number);
 	SetName(name);
@@ -1440,7 +1440,7 @@ ElevatorDoor::DoorObject::~DoorObject()
 	mesh = 0;
 }
 
-ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor)
+ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_object, bool shaftdoor, int shaftdoor_floor) : Object(parent_obj)
 {
 	parent = door_object;
 	Open = false;
@@ -1459,7 +1459,7 @@ ElevatorDoor::DoorWrapper::DoorWrapper(Object *parent_obj, ElevatorDoor *door_ob
 	else
 		name = "Elevator Door " + ToString(parent->Number);
 
-	SetValues(parent_obj, "DoorWrapper", name, false);
+	SetValues("DoorWrapper", name, false);
 
 	if (IsShaftDoor == true)
 		SetPosition(parent->elev->GetPosition().x, GetPosition().y + sbs->GetFloor(floor)->GetBase(true), parent->elev->GetPosition().z);
@@ -1777,7 +1777,7 @@ void ElevatorDoor::DoorObject::Move()
 {
 	//move elevator doors
 
-	float speed = active_speed * sbs->delta;
+	float speed = active_speed * parent->GetRoot()->delta;
 
 	//up movement
 	if (direction == 0)
