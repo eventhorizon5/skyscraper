@@ -455,7 +455,7 @@ Ogre::Vector3 SBS::GetPolygonDirection(std::vector<Ogre::Vector3> &polygon)
 	//convert to remote values for precision compatibility with Alpha 7 and earlier
 	std::vector<Ogre::Vector3> newpoly;
 	for (int i = 0; i < (int)polygon.size(); i++)
-		newpoly.push_back(Ogre::Vector3(ToRemote(polygon[i].x), ToRemote(polygon[i].y), ToRemote(polygon[i].z)));
+		newpoly.push_back(ToRemote(polygon[i], true, false));
 
 	float D = 0;
 	Ogre::Vector3 normal = ComputeNormal(newpoly, D);

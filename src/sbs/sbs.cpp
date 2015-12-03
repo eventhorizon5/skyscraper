@@ -2718,7 +2718,7 @@ Ogre::Vector2 SBS::ToLocal(const Ogre::Vector2& remote_value)
 	return remote_value * UnitScale;
 }
 
-Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale)
+Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale, bool flip_z)
 {
 	//convert remote (OGRE) vertex positions to local (SBS) positions
 	//also convert Z value to OGRE's right-hand coordinate system
@@ -2726,7 +2726,12 @@ Ogre::Vector3 SBS::ToLocal(const Ogre::Vector3& remote_value, bool rescale)
 	Ogre::Vector3 newvalue;
 	newvalue.x = remote_value.x;
 	newvalue.y = remote_value.y;
-	newvalue.z = -remote_value.z; //flip z value for OGRE's right-hand coordinate system
+
+	if (flip_z == true)
+		newvalue.z = -remote_value.z; //flip z value for OGRE's right-hand coordinate system
+	else
+		newvalue.z = remote_value.z;
+
 	if (rescale == true)
 		return newvalue * UnitScale;
 	else
@@ -2753,14 +2758,19 @@ Ogre::Vector2 SBS::ToRemote(const Ogre::Vector2& local_value)
 	return local_value / UnitScale;
 }
 
-Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale)
+Ogre::Vector3 SBS::ToRemote(const Ogre::Vector3& local_value, bool rescale, bool flip_z)
 {
 	//convert local (SBS) vertex positions to remote (OGRE) positions
 
 	Ogre::Vector3 newvalue;
 	newvalue.x = local_value.x;
 	newvalue.y = local_value.y;
-	newvalue.z = -local_value.z; //flip z value for OGRE's right-hand coordinate system
+
+	if (flip_z == true)
+		newvalue.z = -local_value.z; //flip z value for OGRE's right-hand coordinate system
+	else
+		newvalue.z = local_value.z;
+
 	if (rescale == true)
 		return (newvalue / UnitScale);
 	else
