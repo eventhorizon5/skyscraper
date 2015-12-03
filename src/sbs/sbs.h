@@ -275,10 +275,10 @@ public:
 	void DecrementSoundCount();
 	float ToLocal(float remote_value);
 	Ogre::Vector2 ToLocal(const Ogre::Vector2& remote_value);
-	Ogre::Vector3 ToLocal(const Ogre::Vector3& remote_value, bool rescale = true);
+	Ogre::Vector3 ToLocal(const Ogre::Vector3& remote_value, bool rescale = true, bool flip_z = true);
 	float ToRemote(float local_value);
 	Ogre::Vector2 ToRemote(const Ogre::Vector2& local_value);
-	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true);
+	Ogre::Vector3 ToRemote(const Ogre::Vector3& local_value, bool rescale = true, bool flip_z = true);
 	int GetObjectCount();
 	Object* GetObject(int number);
 	Object* GetObject(std::string name);
