@@ -132,6 +132,7 @@ public:
 	EngineContext* GetActiveEngine() { return active_engine; }
 	void CreateEngine();
 	bool DeleteEngine(EngineContext *engine);
+	int GetEngineCount() { return (int)engines.size(); }
 
 private:
 	//mouse status

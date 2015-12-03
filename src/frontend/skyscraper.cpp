@@ -960,6 +960,14 @@ void Skyscraper::GetInput()
 			wait = true;
 		}
 
+		//temporary engine switch test
+		if (wxGetKeyState((wxKeyCode)'L'))
+		{
+			SelectBuilding();
+			Load();
+			return;
+		}
+
 		//values from old version
 		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
 			camera->Float(speed_normal);
@@ -1666,7 +1674,8 @@ bool Skyscraper::Load()
 	//load simulator and data file
 
 	//clear scene
-	mSceneMgr->clearScene();
+	if (GetEngineCount() == 0)
+		mSceneMgr->clearScene();
 
 	//clear screen
 	mRenderWindow->update();
