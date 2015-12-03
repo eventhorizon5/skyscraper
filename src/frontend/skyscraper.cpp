@@ -1166,9 +1166,6 @@ void Skyscraper::Loop()
 		}
 
 		Reload = false;
-
-		//refresh viewport to prevent rendering issues
-		mViewport->_updateDimensions();
 	}
 
 	//SBS::ProfileManager::dumpAll();
@@ -1743,6 +1740,9 @@ bool Skyscraper::Load()
 
 	//create progress dialog
 	CreateProgressDialog();
+
+	//refresh viewport to prevent rendering issues
+	mViewport->_updateDimensions();
 
 	return true;
 }
