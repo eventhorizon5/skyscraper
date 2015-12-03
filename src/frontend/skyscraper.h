@@ -133,6 +133,7 @@ public:
 	void CreateEngine();
 	bool DeleteEngine(EngineContext *engine);
 	int GetEngineCount() { return (int)engines.size(); }
+	EngineContext* FindActiveEngine();
 
 private:
 	//mouse status
@@ -215,6 +216,7 @@ public:
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
+	bool IsCameraActive();
 
 private:
 

@@ -1084,6 +1084,17 @@ void Skyscraper::Loop()
 		processor->ReportMissingFiles();
 	}
 
+	//make sure active engine is the one the camera is active in
+	if (active_engine->IsCameraActive() == false)
+	{
+		active_engine = FindActiveEngine();
+
+		if (!active_engine)
+			return;
+
+		Simcore = active_engine->GetSystem();
+	}
+
 	//process internal clock
 	Simcore->AdvanceClock();
 	if (IsRunning == true)
@@ -2157,6 +2168,18 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 	return false;
 }
 
+EngineContext* Skyscraper::FindActiveEngine()
+{
+	//find engine instance with an active camera
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->IsCameraActive() == true)
+			return engines[i];
+	}
+	return 0;
+}
+
 EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
 {
 	//Create simulator object
@@ -2184,6 +2207,11 @@ EngineContext::~EngineContext()
 ScriptProcessor* EngineContext::GetScriptProcessor()
 {
 	return processor;
+}
+
+bool EngineContext::IsCameraActive()
+{
+	return Simcore->camera->IsActive();
 }
 
 }

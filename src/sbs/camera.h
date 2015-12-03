@@ -141,6 +141,7 @@ public:
 	bool IsModelAttached();
 	void ResetState();
 	void ResetView();
+	bool IsActive() { return (MainCamera != 0); }
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
