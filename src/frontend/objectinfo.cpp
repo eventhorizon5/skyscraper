@@ -210,7 +210,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	changed = false;
 	lastcount = 0;
 	deleted = false;
-	Simcore = 0;
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
 }
 
 ObjectInfo::~ObjectInfo()
@@ -237,9 +237,6 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 
 void ObjectInfo::Loop()
 {
-	if (!Simcore)
-		Simcore = skyscraper->GetActiveEngine()->GetSystem();
-
 	if (Simcore->GetObjectCount() != lastcount)
 	{
 		lastcount = Simcore->GetObjectCount();

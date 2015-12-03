@@ -1793,7 +1793,8 @@ bool Skyscraper::Start()
 	//load control panel
 	if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
 	{
-		dpanel = new DebugPanel(NULL, -1);
+		if (!dpanel)
+			dpanel = new DebugPanel(NULL, -1);
 		dpanel->Show(true);
 		dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 	}
