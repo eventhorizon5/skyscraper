@@ -1741,9 +1741,6 @@ bool Skyscraper::Load()
 	//create progress dialog
 	CreateProgressDialog();
 
-	//refresh viewport to prevent rendering issues
-	mViewport->_updateDimensions();
-
 	return true;
 }
 
@@ -1806,6 +1803,9 @@ bool Skyscraper::Start()
 		dpanel->Show(true);
 		dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 	}
+
+	//refresh viewport to prevent rendering issues
+	mViewport->_updateDimensions();
 
 	//run simulation
 	Report("Running simulation...");
