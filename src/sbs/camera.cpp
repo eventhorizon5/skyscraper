@@ -163,7 +163,7 @@ Camera::~Camera()
 	if (MainCamera)
 		GetSceneNode()->detachObject(MainCamera);
 
-	if (GetSceneNode()->getChild(0))
+	if (GetSceneNode()->numChildren() > 0)
 	{
 		std::string nodename = GetSceneNode()->getChild(0)->getName();
 		sbs->mSceneManager->destroySceneNode(nodename);
@@ -981,12 +981,10 @@ void Camera::InterpolateMovement(float delta)
 
 void Camera::SetGravity(float gravity, bool save_value, bool camera_only)
 {
-	if (!MainCamera)
-		return;
-
 	if (save_value == true)
 		Gravity = gravity;
-	if (EnableBullet == true)
+
+	if (EnableBullet == true && MainCamera)
 	{
 		if (camera_only == false)
 			sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
@@ -1343,6 +1341,12 @@ void Camera::ResetView()
 	SetToStartDirection();
 	SetToStartRotation();
 	SetToDefaultFOV();
+}
+
+void Camera::Refresh()
+{
+	if (mCharacter)
+		mCharacter->resetLastCollision();
 }
 
 }

@@ -169,7 +169,7 @@ private:
 	std::string background_image;
 	void DrawImage(const std::string &filename, buttondata *button, float x, float y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
 	void Click(int index);
-	void UnloadSim();
+	void UnloadSim(bool all = true);
 	void DeleteButtons();
 	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
 

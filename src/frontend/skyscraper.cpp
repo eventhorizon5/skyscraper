@@ -166,9 +166,6 @@ bool Skyscraper::OnInit(void)
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
 
-	//load script processor
-	//processor = new ScriptProcessor();
-
 	//set sky name
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
@@ -210,11 +207,6 @@ int Skyscraper::OnExit()
 	if (mCaelumSystem)
 		delete mCaelumSystem;
 
-	//unload script processor
-	/*if (processor)
-		delete processor;
-	processor = 0;*/
-
 	//cleanup sound
 	StopSound();
 	if (soundsys)
@@ -241,7 +233,7 @@ int Skyscraper::OnExit()
 	return wxApp::OnExit();
 }
 
-void Skyscraper::UnloadSim()
+void Skyscraper::UnloadSim(bool all)
 {
 	//delete control panel object
 	if(dpanel)
@@ -264,8 +256,17 @@ void Skyscraper::UnloadSim()
 	if (console)
 		console->bSend->Enable(false);
 
-	//delete simulator instance
-	DeleteEngine(active_engine);
+	//delete simulator instances
+	if (all == false)
+		DeleteEngine(active_engine);
+	else
+	{
+		for (int i = 0; i < (int)engines.size(); i++)
+		{
+			delete engines[i];
+		}
+		engines.clear();
+	}
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -968,6 +969,13 @@ void Skyscraper::GetInput()
 			return;
 		}
 
+		//temporary engine kill test
+		if (wxGetKeyState((wxKeyCode)'K'))
+		{
+			DeleteEngine(engines[1]);
+			return;
+		}
+
 		//values from old version
 		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
 			camera->Float(speed_normal);
@@ -1148,7 +1156,7 @@ void Skyscraper::Loop()
 		IsRunning = false;
 		IsLoading = false;
 		Pause = false;
-		UnloadSim();
+		UnloadSim(false);
 
 		if (Load() == false)
 		{
@@ -2163,6 +2171,8 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 
 			if (active_engine == engine)
 				active_engine = 0;
+			else
+				active_engine->GetSystem()->camera->Refresh();
 			return true;
 		}
 	}

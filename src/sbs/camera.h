@@ -142,6 +142,7 @@ public:
 	void ResetState();
 	void ResetView();
 	bool IsActive() { return (MainCamera != 0); }
+	void Refresh();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
