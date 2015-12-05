@@ -739,4 +739,15 @@ bool CallButton::RemoveElevator(int elevator)
 	return false;
 }
 
+void CallButton::ElevatorArrived(int number, bool direction)
+{
+	//notify call button about an elevator arrival
+	//this also turns off the related direction light
+
+	if (direction == true)
+		UpLight(false);
+	else
+		DownLight(false);
+}
+
 }

@@ -2097,8 +2097,8 @@ void Elevator::FinishMove()
 			//get status of call buttons before switching off
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
 
-			//disable call button lights
-			SetCallButtons(GotoFloor, GetArrivalDirection(GotoFloor), false);
+			//notify call buttons of arrival (which also disables call button lights)
+			NotifyCallButtons(GotoFloor, GetArrivalDirection(GotoFloor));
 		}
 
 		//reset queues if specified
@@ -4028,6 +4028,30 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 			else
 				button->DownLight(value);
 		}
+	}
+}
+
+void Elevator::NotifyCallButtons(int floor, bool direction)
+{
+	//notifies call buttons on specified floor of an elevator arrival
+	//for direction, true is up and false is down
+
+	//get call buttons associated with this elevator
+	if (sbs->Verbose)
+		Report("SetCallButtons: getting associated call buttons");
+
+	if (!sbs->GetFloor(floor))
+		return;
+
+	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
+
+	for (int i = 0; i < (int)buttons.size(); i++)
+	{
+		CallButton *button = 0;
+		if ((int)sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
+			button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
+		if (button)
+			button->ElevatorArrived(Number, direction);
 	}
 }
 

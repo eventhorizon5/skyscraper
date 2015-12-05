@@ -60,6 +60,7 @@ public:
 	bool GetUpStatus() { return UpStatus; }
 	bool GetDownStatus() { return DownStatus; }
 	bool IsEnabled() { return is_enabled; }
+	void ElevatorArrived(int number, bool direction);
 
 private:
 	void Process(int direction);

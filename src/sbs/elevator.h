@@ -335,6 +335,7 @@ public:
 	bool PeakWaiting();
 	bool OnRecallFloor();
 	std::vector<Floor*> GetLobbies();
+	void NotifyCallButtons(int floor, bool direction);
 
 private:
 
