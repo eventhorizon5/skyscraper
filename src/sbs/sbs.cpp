@@ -4142,27 +4142,31 @@ bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObj
 	return true;
 }
 
-void SBS::EnableRandomActivity(bool value, bool elevators, bool floors)
+void SBS::EnableRandomActivity(bool value)
 {
-	//enable random activity on all elevators and floors (call buttons)
+	//enable random activity, by creating random people
 
-	if (elevators == true)
+	if (value == true && RandomPeople.empty() == true)
 	{
-		for (int i = 1; i <= GetElevatorCount(); i++)
+		//create regular people
+		for (int i = 0; i < 99; i++)
 		{
-			if (GetElevator(i))
-				GetElevator(i)->RandomActivity = value;
+			Person *person = sbs->CreatePerson("Person " + ToString(i + 1), false);
+			RandomPeople.push_back(person);
 		}
+
+		//create a service person
+		int i = 99;
+		Person *person = sbs->CreatePerson("Person " + ToString(i + 1), true);
+		RandomPeople.push_back(person);
 	}
-
-	if (floors == true)
+	else if (value == false)
 	{
-		for (int i = -Basements; i < Floors; i++)
+		for (int i = 0; i < (int)RandomPeople.size(); i++)
 		{
-			Floor *floor = GetFloor(i);
-			if (floor)
-				floor->EnableRandomActivity(value);
+			delete RandomPeople[i];
 		}
+		RandomPeople.clear();
 	}
 }
 
@@ -4385,12 +4389,13 @@ std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int Start
 	return result;
 }
 
-void SBS::CreatePerson(const std::string &name, bool service_access)
+Person* SBS::CreatePerson(const std::string &name, bool service_access)
 {
 	//create a person
 
 	Person *person = new Person(this, name, service_access);
 	PersonArray.push_back(person);
+	return person;
 }
 
 void SBS::RemovePerson(Person *person)

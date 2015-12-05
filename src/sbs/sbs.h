@@ -386,12 +386,12 @@ public:
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
 	bool HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
-	void EnableRandomActivity(bool value, bool elevators = true, bool floors = true);
+	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem() { return soundsystem; }
 	bool IsObjectValid(Object* object, std::string type = "");
 	bool IsActionValid(Action* action);
 	std::vector<Elevator*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
-	void CreatePerson(const std::string &name, bool service_access = false);
+	Person* CreatePerson(const std::string &name, bool service_access = false);
 	void RemovePerson(Person *person);
 
 	//Meshes
@@ -546,6 +546,9 @@ private:
 
 	//person objects
 	std::vector<Person*> PersonArray;
+
+	//temporary people for random activity
+	std::vector<Person*> RandomPeople;
 
 	int ObjectCount; //number of simulator objects
 
