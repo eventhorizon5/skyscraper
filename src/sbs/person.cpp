@@ -51,7 +51,8 @@ Person::Person(Object *parent, const std::string &name, bool service_access) : O
 
 Person::~Person()
 {
-
+	if (sbs->FastDelete == false && parent_deleting == false)
+		sbs->RemovePerson(this);
 }
 
 void Person::GotoFloor(int floor)

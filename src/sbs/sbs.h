@@ -390,6 +390,8 @@ public:
 	SoundSystem* GetSoundSystem() { return soundsystem; }
 	bool IsObjectValid(Object* object, std::string type = "");
 	std::vector<Elevator*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
+	void CreatePerson(const std::string &name, bool service_access = false);
+	void RemovePerson(Person *person);
 
 	//Meshes
 	MeshObject* Buildings;

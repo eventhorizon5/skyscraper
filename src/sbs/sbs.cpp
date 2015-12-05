@@ -3050,6 +3050,8 @@ bool SBS::DeleteObject(Object *object)
 	}
 	else if (type == "Escalator")
 		deleted = true;
+	else if (type == "Person")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -4314,6 +4316,28 @@ std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int Start
 	}
 
 	return result;
+}
+
+void SBS::CreatePerson(const std::string &name, bool service_access)
+{
+	//create a person
+
+	Person *person = new Person(this, name, service_access);
+	PersonArray.push_back(person);
+}
+
+void SBS::RemovePerson(Person *person)
+{
+	//remove a person (does not delete the object)
+
+	for (int i = 0; i < (int)PersonArray.size(); i++)
+	{
+		if (PersonArray[i] == person)
+		{
+			PersonArray.erase(PersonArray.begin() + i);
+			return;
+		}
+	}
 }
 
 }
