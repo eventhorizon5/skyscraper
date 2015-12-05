@@ -265,6 +265,17 @@ SBS::~SBS()
 
 	FastDelete = true;
 
+	//delete people
+	for (int i = 0; i < (int)PersonArray.size(); i++)
+	{
+		if (PersonArray[i])
+		{
+			PersonArray[i]->parent_deleting = true;
+			delete PersonArray[i];
+		}
+		PersonArray[i] = 0;
+	}
+
 	//delete controls
 	for (int i = 0; i < (int)ControlArray.size(); i++)
 	{
