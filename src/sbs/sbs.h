@@ -67,6 +67,7 @@ namespace OgreBulletCollisions {
 #include "escalator.h"
 #include "action.h"
 #include "timer.h"
+#include "person.h"
 
 namespace SBS {
 
@@ -539,6 +540,9 @@ private:
 
 	//global triggers
 	std::vector<Trigger*> TriggerArray;
+
+	//person objects
+	std::vector<Person*> PersonArray;
 
 	int ObjectCount; //number of simulator objects
 

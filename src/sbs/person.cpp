@@ -39,12 +39,14 @@ Person::Person(Object *parent, const std::string &name, bool service_access) : O
 	SetValues("Person", name, false);
 
 	current_floor = 0;
+	dest_floor = 0;
 	this->service_access = service_access;
+	call_made = false;
 
 	RandomGen rnd_dest(time(0) + GetNumber());
-	int dest_floor = rnd_dest.Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
+	int floor = rnd_dest.Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
 
-	GotoFloor(dest_floor);
+	GotoFloor(floor);
 }
 
 Person::~Person()
@@ -55,11 +57,12 @@ Person::~Person()
 void Person::GotoFloor(int floor)
 {
 	Floor *floor_obj = sbs->GetFloor(current_floor);
+	dest_floor = floor;
 
 	if (!floor_obj)
 		return;
 
-	std::vector<Elevator*> route = sbs->GetRouteToFloor(current_floor, floor, service_access);
+	route = sbs->GetRouteToFloor(current_floor, dest_floor, service_access);
 
 	if (route.empty() == false)
 	{
@@ -67,10 +70,46 @@ void Person::GotoFloor(int floor)
 
 		if (button)
 		{
-			if (floor > current_floor)
+			if (dest_floor > current_floor)
 				button->Call(true);
 			else
 				button->Call(false);
+
+			call_made = true;
+		}
+	}
+}
+
+void Person::Loop()
+{
+	if (route.empty() == true)
+		return;
+
+	Floor *floor_obj = sbs->GetFloor(current_floor);
+
+	if (!floor_obj)
+		return;
+
+	CallButton *button = floor_obj->GetCallButton(route[0]->Number);
+
+	if (call_made == true && button)
+	{
+		int number = 0;
+		bool direction = false;
+		bool status = button->GetElevatorArrived(number, direction);
+
+		bool direction_valid = ((dest_floor > current_floor && direction == true) || (dest_floor < current_floor && direction == false) || dest_floor == current_floor);
+
+		if (status == true && direction_valid == true)
+		{
+			//if elevator has arrived at the called floor, press related floor button
+
+			call_made = false;
+			Elevator *elevator = sbs->GetElevator(number);
+			bool result = elevator->SelectFloor(dest_floor);
+
+			//erase first route entry
+			route.erase(route.begin());
 		}
 	}
 }

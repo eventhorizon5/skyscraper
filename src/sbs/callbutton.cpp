@@ -61,6 +61,8 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	ProcessedDown = false;
 	UpExists = false;
 	DownExists = false;
+	elevator_arrived = -1;
+	elevator_direction = false;
 
 	//create object mesh
 	std::string base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
@@ -360,6 +362,9 @@ bool CallButton::Call(bool direction)
 		ProcessedUp = false;
 	else
 		ProcessedDown = false;
+
+	//reset elevator arrival state
+	elevator_arrived = -1;
 
 	//register callback for this button
 	if (sbs->Verbose)
@@ -744,10 +749,26 @@ void CallButton::ElevatorArrived(int number, bool direction)
 	//notify call button about an elevator arrival
 	//this also turns off the related direction light
 
+	if ((UpStatus == true && direction == true) || (DownStatus == true && direction == false))
+	{
+		elevator_arrived = number;
+		elevator_direction = direction;
+	}
+
 	if (direction == true)
 		UpLight(false);
 	else
 		DownLight(false);
+}
+
+bool CallButton::GetElevatorArrived(int &number, bool &direction)
+{
+	number = elevator_arrived;
+	direction = elevator_direction;
+
+	if (number > -1)
+		return true;
+	return false;
 }
 
 }

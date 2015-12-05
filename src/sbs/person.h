@@ -36,11 +36,15 @@ public:
 	Person(Object *parent, const std::string &name, bool service_access = false);
 	~Person();
 	void GotoFloor(int floor);
+	void Loop();
 
 private:
 
 	int current_floor;
+	int dest_floor;
 	bool service_access;
+	bool call_made;
+	std::vector<Elevator*> route;
 };
 
 }

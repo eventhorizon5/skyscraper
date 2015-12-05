@@ -627,6 +627,13 @@ void SBS::MainLoop()
 				ModelArray[i]->Loop();
 		}
 
+		//process people
+		for (int i = 0; i < (int)PersonArray.size(); i++)
+		{
+			if (PersonArray[i])
+				PersonArray[i]->Loop();
+		}
+
 		elapsed -= delta;
 	}
 	remaining_delta = elapsed;
