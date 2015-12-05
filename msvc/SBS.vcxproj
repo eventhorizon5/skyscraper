@@ -289,6 +289,7 @@
     <ClCompile Include="..\src\sbs\polygon.cpp" />
     <ClCompile Include="..\src\sbs\profiler.cpp" />
     <ClCompile Include="..\src\sbs\random.cpp" />
+    <ClCompile Include="..\src\sbs\route.cpp" />
     <ClCompile Include="..\src\sbs\sbs.cpp" />
     <ClCompile Include="..\src\sbs\shaft.cpp" />
     <ClCompile Include="..\src\sbs\sound.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="..\src\sbs\polygon.h" />
     <ClInclude Include="..\src\sbs\profiler.h" />
     <ClInclude Include="..\src\sbs\random.h" />
+    <ClInclude Include="..\src\sbs\route.h" />
     <ClInclude Include="..\src\sbs\sbs.h" />
     <ClInclude Include="..\src\sbs\shaft.h" />
     <ClInclude Include="..\src\sbs\sound.h" />

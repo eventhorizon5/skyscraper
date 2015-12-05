@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Scalable Building Simulator - Person Object
+	Scalable Building Simulator - Routing Objects
 	The Skyscraper Project - Version 1.10 Alpha
 	Copyright (C)2004-2015 Ryan Thoryk
 	http://www.skyscrapersim.com
@@ -23,37 +23,21 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#ifndef _SBS_PERSON_H
-#define _SBS_PERSON_H
-
-#include "elevator.h"
-#include "route.h"
+#ifndef _SBS_ROUTE_H
+#define _SBS_ROUTE_H
 
 namespace SBS {
 
-class SBSIMPEXP Person : public Object
+class SBSIMPEXP ElevatorRoute
 {
 public:
-
-	//functions
-	Person(Object *parent, const std::string &name, bool service_access = false);
-	~Person();
-	void GotoFloor(int floor);
-	void Loop();
+	ElevatorRoute(Elevator *elevator, int floor_selection);
+	~ElevatorRoute() {}
+	Elevator *elevator;
+	int floor_selection;
 
 private:
 
-	struct RouteEntry
-	{
-		ElevatorRoute* elevator_route;
-		bool call_made;
-		bool floor_selected;
-	};
-
-	int current_floor;
-	int dest_floor;
-	bool service_access;
-	std::vector<RouteEntry> route;
 };
 
 }

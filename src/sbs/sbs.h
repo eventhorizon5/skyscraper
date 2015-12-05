@@ -68,6 +68,7 @@ namespace OgreBulletCollisions {
 #include "action.h"
 #include "timer.h"
 #include "person.h"
+#include "route.h"
 
 namespace SBS {
 
@@ -390,7 +391,7 @@ public:
 	SoundSystem* GetSoundSystem() { return soundsystem; }
 	bool IsObjectValid(Object* object, std::string type = "");
 	bool IsActionValid(Action* action);
-	std::vector<Elevator*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
+	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(const std::string &name, bool service_access = false);
 	void RemovePerson(Person *person);
 
@@ -468,8 +469,8 @@ private:
 	void BackupMapping();
 	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
 	void CalculateAverageTime();
-	std::vector<Elevator*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false, bool recursion = false);
-	Elevator* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	std::vector<ElevatorRoute*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false, bool recursion = false);
+	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

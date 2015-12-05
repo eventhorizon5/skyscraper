@@ -37,6 +37,7 @@
 #include "escalator.h"
 #include "elevator.h"
 #include "timer.h"
+#include "route.h"
 
 namespace SBS {
 
@@ -131,7 +132,7 @@ public:
 	void GetStairsList(std::vector<int> &listing);
 	void GetShaftList(std::vector<int> &listing);
 	void EnableRandomActivity(bool value);
-	Elevator* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
+	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
 
 private:
 	//sound objects

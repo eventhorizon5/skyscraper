@@ -4244,7 +4244,7 @@ bool SBS::IsActionValid(Action *action)
 	return false;
 }
 
-std::vector<Elevator*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access)
+std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access)
 {
 	//get a path from a starting floor to a desination floor, as a list of elevators to ride
 	//if service_access is true, include service elevators in checks
@@ -4252,7 +4252,7 @@ std::vector<Elevator*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFl
 	//this function uses designated skylobbies to connect elevators;
 	//connection floors must have a type of "Lobby" or "Skylobby"
 
-	std::vector<Elevator*> result;
+	std::vector<ElevatorRoute*> result;
 
 	Floor *start_floor = GetFloor(StartingFloor);
 	Floor *dest_floor = GetFloor(DestinationFloor);
@@ -4261,13 +4261,14 @@ std::vector<Elevator*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFl
 		return result;
 
 	//check all express and local elevators if they directly serve destination floor
-
-	Elevator *elev = GetDirectRoute(start_floor, DestinationFloor, service_access);
-
-	if (elev)
 	{
-		result.push_back(elev);
-		return result;
+		ElevatorRoute *route = GetDirectRoute(start_floor, DestinationFloor, service_access);
+
+		if (route)
+		{
+			result.push_back(route);
+			return result;
+		}
 	}
 
 	//otherwise check express elevator floors, to see if any have a direct route
@@ -4304,33 +4305,33 @@ std::vector<Elevator*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFl
 	return result;
 }
 
-Elevator* SBS::GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access)
+ElevatorRoute* SBS::GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access)
 {
-	Elevator *elev = 0;
+	ElevatorRoute *route;
 
 	if (service_access == true)
 	{
-		elev = floor->GetDirectRoute(DestinationFloor, "Service");
-		if (elev)
-			return elev;
+		route = floor->GetDirectRoute(DestinationFloor, "Service");
+		if (route)
+			return route;
 	}
 
-	elev = floor->GetDirectRoute(DestinationFloor, "Express");
-	if (elev)
-		return elev;
+	route = floor->GetDirectRoute(DestinationFloor, "Express");
+	if (route)
+		return route;
 
-	elev = floor->GetDirectRoute(DestinationFloor, "Local");
-	if (elev)
-		return elev;
+	route = floor->GetDirectRoute(DestinationFloor, "Local");
+	if (route)
+		return route;
 
-	return 0;
+	return route;
 }
 
-std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access, bool recursion)
+std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access, bool recursion)
 {
 	//get a route to a destination floor, via elevator serviced floors
 
-	std::vector<Elevator*> result;
+	std::vector<ElevatorRoute*> result;
 
 	Floor *start_floor = GetFloor(StartingFloor);
 
@@ -4354,11 +4355,13 @@ std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int Start
 				{
 					if (recursion == true)
 					{
-						std::vector<Elevator*> result2 = GetIndirectRoute(ElevatorType, number, DestinationFloor, service_access);
+						std::vector<ElevatorRoute*> result2 = GetIndirectRoute(ElevatorType, number, DestinationFloor, service_access);
 
 						if (result2.empty() == false)
 						{
-							result.push_back(elev);
+							ElevatorRoute *first = new ElevatorRoute(elev, number);
+							result.push_back(first);
+
 							for (int i = 0; i < (int)result2.size(); i++)
 							{
 								result.push_back(result2[i]);
@@ -4371,12 +4374,13 @@ std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int Start
 						Floor *floor = sbs->GetFloor(number);
 						if (floor)
 						{
-							Elevator *elev2 = GetDirectRoute(floor, DestinationFloor, service_access);
+							ElevatorRoute *result2 = GetDirectRoute(floor, DestinationFloor, service_access);
 
-							if (elev2)
+							if (result2)
 							{
-								result.push_back(elev);
-								result.push_back(elev2);
+								ElevatorRoute *first = new ElevatorRoute(elev, number);
+								result.push_back(first);
+								result.push_back(result2);
 								return result;
 							}
 						}

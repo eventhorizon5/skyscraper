@@ -1537,7 +1537,7 @@ void Floor::Timer::Notify()
 	}
 }
 
-Elevator* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorType)
+ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorType)
 {
 	//return elevator if this floor has a direct elevator connection to another floor,
 	//based on the given elevator type
@@ -1554,7 +1554,10 @@ Elevator* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorType)
 			std::string type = SetCaseCopy(elev->Type, false);
 			bool serviced = elev->IsServicedFloor(DestinationFloor);
 			if (serviced == true && type == ElevatorType)
-				return elev;
+			{
+				ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
+				return route;
+			}
 		}
 	}
 
