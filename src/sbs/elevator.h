@@ -450,7 +450,7 @@ private:
 	std::vector<Trigger*> TriggerArray;
 
 	//elevator misc internals
-	bool ElevatorIsRunning;
+	bool MovementRunning;
 	int oldfloor;
 	int lastfloor;
 	bool lastfloorset;

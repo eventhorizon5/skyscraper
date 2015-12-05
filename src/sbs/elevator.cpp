@@ -75,7 +75,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ErrorOffset = 0;
 	JerkRate = 0;
 	JerkPos = 0;
-	ElevatorIsRunning = false;
+	MoveRunning = false;
 	oldfloor = 0;
 	IsMoving = false;
 	lastfloor = 0;
@@ -1453,7 +1453,7 @@ void Elevator::MoveElevatorToFloor()
 	if (WaitForTimer == true)
 		return;
 
-	if (ElevatorIsRunning == false)
+	if (MovementRunning == false)
 	{
 		if (Running == false)
 		{
@@ -1464,7 +1464,7 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->Verbose)
 			Report("starting elevator movement procedure");
 
-		ElevatorIsRunning = true;
+		MovementRunning = true;
 		FinishedMove = false;
 		std::string dir_string;
 
@@ -1486,7 +1486,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Destination floor does not exist");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			DeleteActiveRoute();
 			return;
 		}
@@ -1496,7 +1496,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			DeleteActiveRoute();
 			return;
 		}
@@ -1506,7 +1506,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Elevator already on specified floor");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			SkipFloorSound = true; //don't play floor announcement if on same floor
 			DeleteActiveRoute();
 			goto finish; //skip main processing and run cleanup section
@@ -1517,7 +1517,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Doors must be closed before moving when interlocks are enabled");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			Direction = 0;
 			DeleteActiveRoute();
 			return;
@@ -1564,7 +1564,7 @@ void Elevator::MoveElevatorToFloor()
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
-					ElevatorIsRunning = false;
+					MovementRunning = false;
 					DeleteActiveRoute();
 					return;
 				}
@@ -1579,7 +1579,7 @@ void Elevator::MoveElevatorToFloor()
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
-					ElevatorIsRunning = false;
+					MovementRunning = false;
 					DeleteActiveRoute();
 					return;
 				}
@@ -1990,7 +1990,7 @@ finish:
 	Destination = 0;
 	DistanceToTravel = 0;
 	ElevatorStart = 0;
-	ElevatorIsRunning = false;
+	MovementRunning = false;
 	MoveElevator = false;
 	IsMoving = false;
 	Leveling = false;
