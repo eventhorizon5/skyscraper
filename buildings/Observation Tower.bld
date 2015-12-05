@@ -525,7 +525,7 @@ ShowFullShaft 3 = true
 <EndFloors>
 
 <Elevator 1>
-    Type = 0
+    Type = Local
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
@@ -587,7 +587,7 @@ ShowFullShaft 3 = true
 <EndElevator>
 
 <Elevator 2>
-    Type = 0
+    Type = Local
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2
@@ -649,7 +649,7 @@ ShowFullShaft 3 = true
 <EndElevator>
 
 <Elevator 3>
-    Type = 0
+    Type = Local
     Speed = 20
     Acceleration = 0.2
     Deceleration = 0.2

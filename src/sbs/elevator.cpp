@@ -46,7 +46,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 
 	//init variables
 	Name = "";
-	Type = 0;
+	Type = "Local";
 	QueuePositionDirection = 0;
 	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
