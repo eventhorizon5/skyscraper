@@ -4002,35 +4002,6 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const std::string &
 	return true;
 }
 
-void Elevator::SetCallButtons(int floor, bool direction, bool value)
-{
-	//sets light status of all associated call buttons on the specified floor
-	//for direction, true is up and false is down
-
-	//get call buttons associated with this elevator
-	if (sbs->Verbose)
-		Report("SetCallButtons: getting associated call buttons");
-
-	if (!sbs->GetFloor(floor))
-		return;
-
-	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
-
-	for (int i = 0; i < (int)buttons.size(); i++)
-	{
-		CallButton *button = 0;
-		if ((int)sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
-			button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
-		if (button)
-		{
-			if (direction == true)
-				button->UpLight(value);
-			else
-				button->DownLight(value);
-		}
-	}
-}
-
 void Elevator::NotifyCallButtons(int floor, bool direction)
 {
 	//notifies call buttons on specified floor of an elevator arrival
@@ -4038,7 +4009,7 @@ void Elevator::NotifyCallButtons(int floor, bool direction)
 
 	//get call buttons associated with this elevator
 	if (sbs->Verbose)
-		Report("SetCallButtons: getting associated call buttons");
+		Report("NotifyCallButtons: getting associated call buttons");
 
 	if (!sbs->GetFloor(floor))
 		return;

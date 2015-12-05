@@ -242,7 +242,7 @@ public:
 	void EnableDoors(bool value);
 	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
 	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
-	void SetCallButtons(int floor, bool direction, bool value);
+	void NotifyCallButtons(int floor, bool direction);
 	bool IsIdle();
 	void ResetQueue(bool up, bool down);
 	void SetBeepSound(const std::string &filename);
@@ -335,7 +335,6 @@ public:
 	bool PeakWaiting();
 	bool OnRecallFloor();
 	std::vector<Floor*> GetLobbies();
-	void NotifyCallButtons(int floor, bool direction);
 
 private:
 
