@@ -4268,7 +4268,34 @@ std::vector<Elevator*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFl
 
 	//otherwise check express elevator floors, to see if any have a direct route
 
+	if (service_access == true)
+	{
+		result = GetIndirectRoute("Service", StartingFloor, DestinationFloor, service_access);
+
+		if (result.empty() == false)
+			return result;
+	}
+
 	result = GetIndirectRoute("Express", StartingFloor, DestinationFloor, service_access);
+
+	if (result.empty() == false)
+		return result;
+
+
+	//check routes with two express elevators in between
+
+	if (service_access == true)
+	{
+		result = GetIndirectRoute("Service", StartingFloor, DestinationFloor, service_access, true);
+
+		if (result.empty() == false)
+			return result;
+	}
+
+	result = GetIndirectRoute("Express", StartingFloor, DestinationFloor, service_access, true);
+
+	if (result.empty() == false)
+		return result;
 
 	return result;
 }
@@ -4295,7 +4322,7 @@ Elevator* SBS::GetDirectRoute(Floor *floor, int DestinationFloor, bool service_a
 	return 0;
 }
 
-std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access)
+std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access, bool recursion)
 {
 	//get a route to a destination floor, via elevator serviced floors
 
@@ -4321,16 +4348,33 @@ std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int Start
 
 				if (number != StartingFloor)
 				{
-					Floor *floor = sbs->GetFloor(number);
-					if (floor)
+					if (recursion == true)
 					{
-						Elevator *elev2 = GetDirectRoute(floor, DestinationFloor, service_access);
+						std::vector<Elevator*> result2 = GetIndirectRoute(ElevatorType, number, DestinationFloor, service_access);
 
-						if (elev2)
+						if (result2.empty() == false)
 						{
 							result.push_back(elev);
-							result.push_back(elev2);
+							for (int i = 0; i < (int)result2.size(); i++)
+							{
+								result.push_back(result2[i]);
+							}
 							return result;
+						}
+					}
+					else
+					{
+						Floor *floor = sbs->GetFloor(number);
+						if (floor)
+						{
+							Elevator *elev2 = GetDirectRoute(floor, DestinationFloor, service_access);
+
+							if (elev2)
+							{
+								result.push_back(elev);
+								result.push_back(elev2);
+								return result;
+							}
 						}
 					}
 				}
