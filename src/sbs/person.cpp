@@ -24,25 +24,55 @@
 */
 
 #include "globals.h"
+#include "random.h"
 #include "sbs.h"
 #include "unix.h"
 #include "person.h"
 
 namespace SBS {
 
-Person::Person(Object *parent, const std::string &name) : Object(parent)
+Person::Person(Object *parent, const std::string &name, bool service_access) : Object(parent)
 {
 	//creates a person object, used for random traffic simulations
 
 	//set up SBS object
 	SetValues("Person", name, false);
 
-	floor = 0;
+	current_floor = 0;
+	this->service_access = service_access;
+
+	RandomGen rnd_dest(time(0) + GetNumber());
+	int dest_floor = rnd_dest.Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
+
+	GotoFloor(dest_floor);
 }
 
 Person::~Person()
 {
 
+}
+
+void Person::GotoFloor(int floor)
+{
+	Floor *floor_obj = sbs->GetFloor(current_floor);
+
+	if (!floor_obj)
+		return;
+
+	std::vector<Elevator*> route = sbs->GetRouteToFloor(current_floor, floor, service_access);
+
+	if (route.empty() == false)
+	{
+		CallButton *button = floor_obj->GetCallButton(route[0]->Number);
+
+		if (button)
+		{
+			if (floor > current_floor)
+				button->Call(true);
+			else
+				button->Call(false);
+		}
+	}
 }
 
 }

@@ -1440,9 +1440,11 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 	}
 }
 
-void Floor::GetElevatorList(std::vector<int> &listing)
+void Floor::GetElevatorList(std::vector<int> &listing, std::string type)
 {
 	//return a list of elevators that service this floor
+
+	SetCase(type, false);
 
 	for (int i = 1; i <= sbs->GetElevatorCount(); i++)
 	{
@@ -1450,7 +1452,10 @@ void Floor::GetElevatorList(std::vector<int> &listing)
 		if (elev)
 		{
 			if (elev->IsServicedFloor(Number) == true)
-				listing.push_back(elev->Number);
+			{
+				if (type == "" || type == SetCaseCopy(elev->Type, false))
+					listing.push_back(elev->Number);
+			}
 		}
 	}
 }
@@ -1530,6 +1535,30 @@ void Floor::Timer::Notify()
 				button->Call(true);
 		}
 	}
+}
+
+Elevator* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorType)
+{
+	//return elevator if this floor has a direct elevator connection to another floor,
+	//based on the given elevator type
+
+	SetCase(ElevatorType, false);
+	std::vector<int> list;
+	GetElevatorList(list);
+
+	for (int i = 0; i < (int)list.size(); i++)
+	{
+		Elevator *elev = sbs->GetElevator(list[i]);
+		if (elev)
+		{
+			std::string type = SetCaseCopy(elev->Type, false);
+			bool serviced = elev->IsServicedFloor(DestinationFloor);
+			if (serviced == true && type == ElevatorType)
+				return elev;
+		}
+	}
+
+	return 0;
 }
 
 }

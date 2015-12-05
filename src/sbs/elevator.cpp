@@ -46,7 +46,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 
 	//init variables
 	Name = "";
-	Type = 0;
+	Type = "Local";
 	QueuePositionDirection = 0;
 	LastQueueDirection = 0;
 	LastQueueFloor[0] = 0;
@@ -2097,8 +2097,8 @@ void Elevator::FinishMove()
 			//get status of call buttons before switching off
 			GetCallButtonStatus(GotoFloor, UpCall, DownCall);
 
-			//disable call button lights
-			SetCallButtons(GotoFloor, GetArrivalDirection(GotoFloor), false);
+			//notify call buttons of arrival (which also disables call button lights)
+			NotifyCallButtons(GotoFloor, GetArrivalDirection(GotoFloor));
 		}
 
 		//reset queues if specified
@@ -4028,6 +4028,30 @@ void Elevator::SetCallButtons(int floor, bool direction, bool value)
 			else
 				button->DownLight(value);
 		}
+	}
+}
+
+void Elevator::NotifyCallButtons(int floor, bool direction)
+{
+	//notifies call buttons on specified floor of an elevator arrival
+	//for direction, true is up and false is down
+
+	//get call buttons associated with this elevator
+	if (sbs->Verbose)
+		Report("SetCallButtons: getting associated call buttons");
+
+	if (!sbs->GetFloor(floor))
+		return;
+
+	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
+
+	for (int i = 0; i < (int)buttons.size(); i++)
+	{
+		CallButton *button = 0;
+		if ((int)sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
+			button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
+		if (button)
+			button->ElevatorArrived(Number, direction);
 	}
 }
 
@@ -5988,6 +6012,31 @@ bool Elevator::OnRecallFloor()
 	}
 
 	return 0;
+}
+
+std::vector<Floor*> Elevator::GetLobbies()
+{
+	//returns a list of lobbies/skylobbies that service this elevator
+
+	std::vector<Floor*> list;
+
+	for (int i = 0; i < GetServicedFloorCount(); i++)
+	{
+		int num = GetServicedFloor(i);
+
+		Floor *floor = sbs->GetFloor(num);
+		if (floor)
+		{
+			std::string type = SetCaseCopy(floor->FloorType, false);
+			if (type == "lobby" || type == "skylobby")
+				list.push_back(floor);
+		}
+	}
+
+	if (list.size() == 0 && sbs->GetFloor(RecallFloor))
+		list.push_back(sbs->GetFloor(RecallFloor));
+
+	return list;
 }
 
 }

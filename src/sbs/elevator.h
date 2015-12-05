@@ -45,7 +45,7 @@ class SBSIMPEXP Elevator : public Object
 public:
 	int Number; //elevator number
 	std::string Name; //elevator name
-	int Type; //type of elevator; 0=standard, 1=express, 2=service, 3=freight
+	std::string Type; //type of elevator: standard, express, service, freight
 	int NumDoors; //number of elevator doors
 	bool Created; //has elevator been created with the CreateElevator function?
 	int QueuePositionDirection; //queue processing direction
@@ -334,6 +334,8 @@ public:
 	void ResetDoorState(int number = 0);
 	bool PeakWaiting();
 	bool OnRecallFloor();
+	std::vector<Floor*> GetLobbies();
+	void NotifyCallButtons(int floor, bool direction);
 
 private:
 

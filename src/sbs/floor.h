@@ -35,6 +35,7 @@
 #include "trigger.h"
 #include "cameratexture.h"
 #include "escalator.h"
+#include "elevator.h"
 #include "timer.h"
 
 namespace SBS {
@@ -126,10 +127,11 @@ public:
 	std::vector<Sound*> GetSound(const std::string &name);
 	void SetAltitude(float altitude);
 	void ShowInfo(bool detailed = true, bool display_header = true);
-	void GetElevatorList(std::vector<int> &listing);
+	void GetElevatorList(std::vector<int> &listing, std::string type = "");
 	void GetStairsList(std::vector<int> &listing);
 	void GetShaftList(std::vector<int> &listing);
 	void EnableRandomActivity(bool value);
+	Elevator* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
 
 private:
 	//sound objects

@@ -33,12 +33,14 @@ class SBSIMPEXP Person : public Object
 public:
 
 	//functions
-	Person(Object *parent, const std::string &name);
+	Person(Object *parent, const std::string &name, bool service_access = false);
 	~Person();
+	void GotoFloor(int floor);
 
 private:
 
-	int floor;
+	int current_floor;
+	bool service_access;
 };
 
 }
