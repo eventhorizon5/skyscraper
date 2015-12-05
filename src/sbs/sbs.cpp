@@ -2414,7 +2414,7 @@ bool SBS::UnregisterDoorCallback(Door *door)
 
 bool SBS::RegisterCallButtonCallback(CallButton *button)
 {
-	//register a door object for callbacks (used for door movement)
+	//register a call button object for callbacks (used for the object loop)
 
 	if (!button)
 		return false;
