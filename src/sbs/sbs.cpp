@@ -4234,7 +4234,7 @@ bool SBS::IsActionValid(Action *action)
 
 	for (int i = 0; i < (int)ActionArray.size(); i++)
 	{
-		if (ActionArray[i] == static_cast<Action*>(action))
+		if (ActionArray[i] == action)
 			return true;
 	}
 	return false;
