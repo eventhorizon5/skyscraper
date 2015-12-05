@@ -4150,9 +4150,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 {
 	//test if an object is valid
 
-	SetCase(type, false);
-
-	if (type == "floor")
+	if (type == "Floor")
 	{
 		for (int i = 0; i < (int)FloorArray.size(); i++)
 		{
@@ -4160,7 +4158,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 				return true;
 		}
 	}
-	else if (type == "elevator")
+	else if (type == "Elevator")
 	{
 		for (int i = 0; i < (int)ElevatorArray.size(); i++)
 		{
@@ -4168,7 +4166,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 				return true;
 		}
 	}
-	else if (type == "shaft")
+	else if (type == "Shaft")
 	{
 		for (int i = 0; i < (int)ShaftArray.size(); i++)
 		{
@@ -4176,7 +4174,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 				return true;
 		}
 	}
-	else if (type == "stairs")
+	else if (type == "Stairs")
 	{
 		for (int i = 0; i < (int)StairsArray.size(); i++)
 		{
@@ -4184,7 +4182,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 				return true;
 		}
 	}
-	else if (type == "mesh")
+	else if (type == "Mesh")
 	{
 		for (int i = 0; i < (int)meshes.size(); i++)
 		{
@@ -4192,7 +4190,7 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 				return true;
 		}
 	}
-	else if (type == "control")
+	else if (type == "Control")
 	{
 		for (int i = 0; i < (int)control_index.size(); i++)
 		{
