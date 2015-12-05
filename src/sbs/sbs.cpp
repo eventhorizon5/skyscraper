@@ -4146,4 +4146,16 @@ void SBS::EnableRandomActivity(bool value, bool elevators, bool floors)
 	}
 }
 
+bool SBS::IsValid(Object *object)
+{
+	//test if an object is valid
+
+	for (int i = 0; i < (int)ObjectArray.size(); i++)
+	{
+		if (ObjectArray[i] == object)
+			return true;
+	}
+	return false;
+}
+
 }
