@@ -389,6 +389,7 @@ public:
 	void EnableRandomActivity(bool value, bool elevators = true, bool floors = true);
 	SoundSystem* GetSoundSystem() { return soundsystem; }
 	bool IsObjectValid(Object* object, std::string type = "");
+	bool IsActionValid(Action* action);
 	std::vector<Elevator*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	void CreatePerson(const std::string &name, bool service_access = false);
 	void RemovePerson(Person *person);

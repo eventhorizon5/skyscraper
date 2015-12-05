@@ -4228,6 +4228,18 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 	return false;
 }
 
+bool SBS::IsActionValid(Action *action)
+{
+	//test if an action is valid
+
+	for (int i = 0; i < (int)ActionArray.size(); i++)
+	{
+		if (ActionArray[i] == static_cast<Action*>(action))
+			return true;
+	}
+	return false;
+}
+
 std::vector<Elevator*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access)
 {
 	//get a path from a starting floor to a desination floor, as a list of elevators to ride
