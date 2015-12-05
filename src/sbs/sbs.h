@@ -388,6 +388,7 @@ public:
 	void EnableRandomActivity(bool value, bool elevators = true, bool floors = true);
 	SoundSystem* GetSoundSystem() { return soundsystem; }
 	bool IsObjectValid(Object* object, std::string type = "");
+	std::vector<Elevator*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -463,6 +464,8 @@ private:
 	void BackupMapping();
 	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
 	void CalculateAverageTime();
+	std::vector<Elevator*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false);
+	Elevator* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

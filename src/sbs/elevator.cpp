@@ -5990,4 +5990,29 @@ bool Elevator::OnRecallFloor()
 	return 0;
 }
 
+std::vector<Floor*> Elevator::GetLobbies()
+{
+	//returns a list of lobbies/skylobbies that service this elevator
+
+	std::vector<Floor*> list;
+
+	for (int i = 0; i < GetServicedFloorCount(); i++)
+	{
+		int num = GetServicedFloor(i);
+
+		Floor *floor = sbs->GetFloor(num);
+		if (floor)
+		{
+			std::string type = SetCaseCopy(floor->FloorType, false);
+			if (type == "lobby" || type == "skylobby")
+				list.push_back(floor);
+		}
+	}
+
+	if (list.size() == 0 && sbs->GetFloor(RecallFloor))
+		list.push_back(sbs->GetFloor(RecallFloor));
+
+	return list;
+}
+
 }
