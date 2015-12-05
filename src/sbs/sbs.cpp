@@ -4146,10 +4146,62 @@ void SBS::EnableRandomActivity(bool value, bool elevators, bool floors)
 	}
 }
 
-bool SBS::IsValid(Object *object)
+bool SBS::IsObjectValid(Object *object, std::string type)
 {
 	//test if an object is valid
 
+	SetCase(type, false);
+
+	if (type == "floor")
+	{
+		for (int i = 0; i < (int)FloorArray.size(); i++)
+		{
+			if (FloorArray[i].object == static_cast<Floor*>(object))
+				return true;
+		}
+	}
+	else if (type == "elevator")
+	{
+		for (int i = 0; i < (int)ElevatorArray.size(); i++)
+		{
+			if (ElevatorArray[i].object == static_cast<Elevator*>(object))
+				return true;
+		}
+	}
+	else if (type == "shaft")
+	{
+		for (int i = 0; i < (int)ShaftArray.size(); i++)
+		{
+			if (ShaftArray[i].object == static_cast<Shaft*>(object))
+				return true;
+		}
+	}
+	else if (type == "stairs")
+	{
+		for (int i = 0; i < (int)StairsArray.size(); i++)
+		{
+			if (StairsArray[i].object == static_cast<Stairs*>(object))
+				return true;
+		}
+	}
+	else if (type == "mesh")
+	{
+		for (int i = 0; i < (int)meshes.size(); i++)
+		{
+			if (meshes[i] == static_cast<MeshObject*>(object))
+				return true;
+		}
+	}
+	else if (type == "control")
+	{
+		for (int i = 0; i < (int)control_index.size(); i++)
+		{
+			if (control_index[i] == static_cast<Control*>(object))
+				return true;
+		}
+	}
+
+	//do a slow full scan of the object array for all other objects
 	for (int i = 0; i < (int)ObjectArray.size(); i++)
 	{
 		if (ObjectArray[i] == object)

@@ -387,7 +387,7 @@ public:
 	bool HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value, bool elevators = true, bool floors = true);
 	SoundSystem* GetSoundSystem() { return soundsystem; }
-	bool IsValid(Object* object);
+	bool IsObjectValid(Object* object, std::string type = "");
 
 	//Meshes
 	MeshObject* Buildings;
