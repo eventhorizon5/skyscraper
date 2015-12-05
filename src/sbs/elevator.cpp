@@ -75,7 +75,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ErrorOffset = 0;
 	JerkRate = 0;
 	JerkPos = 0;
-	MoveRunning = false;
+	MovementRunning = false;
 	oldfloor = 0;
 	IsMoving = false;
 	lastfloor = 0;
@@ -6008,6 +6008,13 @@ std::vector<Floor*> Elevator::GetLobbies()
 		list.push_back(sbs->GetFloor(RecallFloor));
 
 	return list;
+}
+
+bool Elevator::IsStopped()
+{
+	//true if elevator has stopped without reaching a floor, usually due to an emergency stop
+
+	return (IsMoving == false && OnFloor == false && FinishedMove == true);
 }
 
 }
