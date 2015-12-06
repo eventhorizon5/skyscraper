@@ -40,16 +40,33 @@ Person::Person(Object *parent, const std::string &name, int floor, bool service_
 	current_floor = floor;
 	dest_floor = 0;
 	this->service_access = service_access;
+	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Person.RandomProbability", 20);
+	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Person.RandomFrequency", 5);
 
 	//initialize random number generators
 	rnd_time = new RandomGen(time(0) + GetNumber());
 	rnd_dest = new RandomGen(time(0) + GetNumber() + 1);
+
+	//create timer
+	random_timer = new Timer("Random Timer", this);
+
+	//enable timer
+	random_timer->Start(int(RandomFrequency * 1000), false);
 
 	Report("On floor " +  ToString(current_floor));
 }
 
 Person::~Person()
 {
+	//delete timer
+	if (random_timer)
+	{
+		random_timer->parent_deleting = true;
+		delete random_timer;
+	}
+	random_timer = 0;
+
+	//delete routes
 	if (route.empty() == false)
 	{
 		for (int i = 0; i < (int)route.size(); i++)
@@ -58,6 +75,7 @@ Person::~Person()
 		}
 	}
 
+	//delete random number generators
 	if (rnd_time)
 		delete rnd_time;
 	rnd_time = 0;
@@ -117,14 +135,6 @@ void Person::GotoFloor(int floor)
 
 void Person::Loop()
 {
-	if (RouteActive() == false)
-	{
-		int probability = 1000;
-		int result = (int)rnd_time->Get(probability - 1);
-		if (result == 0)
-			GotoFloor(GetRandomFloor());
-	}
-
 	ProcessRoute();
 }
 
@@ -222,6 +232,18 @@ bool Person::ReportError(const std::string &message)
 {
 	//general reporting function
 	return sbs->ReportError("Person " + GetName() + ": " + message);
+}
+
+void Person::Timer::Notify()
+{
+	//timer for random destination activity
+
+	if (parent->RouteActive() == true)
+		return;
+
+	int result = (int)parent->rnd_time->Get(parent->RandomProbability - 1);
+	if (result == 0)
+		parent->GotoFloor(parent->GetRandomFloor());
 }
 
 }

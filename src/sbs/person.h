@@ -36,6 +36,8 @@ class SBSIMPEXP Person : public Object
 {
 public:
 
+	RandomGen *rnd_time, *rnd_dest;
+
 	//functions
 	Person(Object *parent, const std::string &name, int floor, bool service_access = false);
 	~Person();
@@ -61,7 +63,23 @@ private:
 	bool service_access;
 	std::vector<RouteEntry> route;
 
-	RandomGen *rnd_time, *rnd_dest;
+	//random call timer
+	class Timer : public TimerObject
+	{
+	public:
+		Person *parent;
+		Timer(const std::string &name, Person *parent) : TimerObject(parent, name)
+		{
+			this->parent = parent;
+		}
+		virtual void Notify();
+	};
+
+	//random call timer object
+	Timer *random_timer;
+
+	int RandomProbability; //probability ratio of random activity, starting with 1 - higher is less frequent
+	float RandomFrequency; //speed in seconds to make each random action
 };
 
 }
