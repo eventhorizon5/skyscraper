@@ -139,9 +139,29 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::string ElevatorType, int 
 
 		if (elev)
 		{
-			for (int j = 0; j < elev->GetServicedFloorCount(); j++)
+			//floor list needs to be checked in the direction opposite of the travel direction,
+			//if the checked elevator doesn't go beyond the destination floor
+
+			std::vector<int> floor_list;
+			if ((DestinationFloor > StartingFloor && elev->GetTopFloor() < DestinationFloor) ||
+					(DestinationFloor < StartingFloor && elev->GetBottomFloor() < DestinationFloor))
 			{
-				int number = elev->GetServicedFloor(j);
+				for (int j = elev->GetServicedFloorCount() - 1; j >= 0; j--)
+				{
+					floor_list.push_back(elev->GetServicedFloor(j));
+				}
+			}
+			else
+			{
+				for (int j = 0; j < elev->GetServicedFloorCount(); j++)
+				{
+					floor_list.push_back(elev->GetServicedFloor(j));
+				}
+			}
+
+			for (int j = 0; j < (int)floor_list.size(); j++)
+			{
+				int number = floor_list[j];
 
 				if (number != StartingFloor)
 				{
