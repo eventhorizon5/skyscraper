@@ -28,6 +28,7 @@
 
 #include "elevator.h"
 #include "route.h"
+#include "random.h"
 
 namespace SBS {
 
@@ -59,6 +60,8 @@ private:
 	int dest_floor;
 	bool service_access;
 	std::vector<RouteEntry> route;
+
+	RandomGen *rnd_time, *rnd_dest;
 };
 
 }

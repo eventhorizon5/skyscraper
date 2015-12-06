@@ -24,7 +24,6 @@
 */
 
 #include "globals.h"
-#include "random.h"
 #include "sbs.h"
 #include "unix.h"
 #include "person.h"
@@ -42,6 +41,10 @@ Person::Person(Object *parent, const std::string &name, int floor, bool service_
 	dest_floor = 0;
 	this->service_access = service_access;
 
+	//initialize random number generators
+	rnd_time = new RandomGen(time(0) + GetNumber());
+	rnd_dest = new RandomGen(time(0) + GetNumber() + 1);
+
 	Report("On floor " +  ToString(current_floor));
 }
 
@@ -55,14 +58,21 @@ Person::~Person()
 		}
 	}
 
+	if (rnd_time)
+		delete rnd_time;
+	rnd_time = 0;
+
+	if (rnd_dest)
+		delete rnd_dest;
+	rnd_dest = 0;
+
 	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemovePerson(this);
 }
 
 int Person::GetRandomFloor()
 {
-	RandomGen rnd_dest(time(0) + GetNumber());
-	return (int)rnd_dest.Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
+	return (int)rnd_dest->Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
 }
 
 void Person::GotoFloor(int floor)
@@ -109,9 +119,8 @@ void Person::Loop()
 {
 	if (RouteActive() == false)
 	{
-		int probability = 10;
-		RandomGen rnd_time(time(0) + GetNumber());
-		int result = (int)rnd_time.Get(probability - 1);
+		int probability = 1000;
+		int result = (int)rnd_time->Get(probability - 1);
 		if (result == 0)
 			GotoFloor(GetRandomFloor());
 	}
