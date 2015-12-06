@@ -197,6 +197,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	EscalatorCount = 0;
+	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 
 	camera = 0;
 	Buildings = 0;
@@ -508,6 +509,10 @@ bool SBS::Start()
 	camera->SetToStartPosition(false); //also turns on start floor
 	camera->SetToStartDirection();
 	camera->SetToStartRotation();
+
+	//enable random activity if specified
+	if (RandomActivity == true)
+		EnableRandomActivity(true);
 
 	IsRunning = true;
 
@@ -4168,6 +4173,8 @@ void SBS::EnableRandomActivity(bool value)
 		}
 		RandomPeople.clear();
 	}
+
+	RandomActivity = value;
 }
 
 bool SBS::IsObjectValid(Object *object, std::string type)

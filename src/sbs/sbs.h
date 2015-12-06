@@ -171,6 +171,7 @@ public:
 	int PolygonCount; //wall polygon object count
 	unsigned int SmoothFrames;
 	bool RenderOnStartup; //render objects on startup
+	bool RandomActivity; //random activity is enabled
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
