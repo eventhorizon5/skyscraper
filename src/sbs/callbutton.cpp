@@ -619,11 +619,8 @@ void CallButton::Process(int direction)
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
-		//turn off button lights
-		if (direction == 1)
-			UpLight(false);
-		else
-			DownLight(false);
+		//update arrival information
+		elevator->NotifyCallButtons(GetFloor(), direction);
 
 		if (direction == -1)
 		{

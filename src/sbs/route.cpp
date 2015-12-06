@@ -135,7 +135,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::string ElevatorType, int 
 
 	for (int i = 0; i < (int)list.size(); i++)
 	{
-		Elevator *elev = sbs->GetElevator(list[i]);
+		Elevator *elev = GetElevator(list[i]);
 
 		if (elev)
 		{
@@ -163,7 +163,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::string ElevatorType, int 
 					}
 					else
 					{
-						Floor *floor = sbs->GetFloor(number);
+						Floor *floor = GetFloor(number);
 						if (floor)
 						{
 							ElevatorRoute *result2 = GetDirectRoute(floor, DestinationFloor, service_access);

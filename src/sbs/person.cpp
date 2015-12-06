@@ -67,16 +67,26 @@ int Person::GetRandomFloor()
 
 void Person::GotoFloor(int floor)
 {
+	//exit if a route is already active
+	if (RouteActive() == true)
+		return;
+
 	Floor *floor_obj = sbs->GetFloor(current_floor);
 	dest_floor = floor;
 
-	if (!floor_obj)
+	if (!floor_obj || floor == current_floor)
 		return;
 
 	Report("Heading to floor " + ToString(floor));
 
 	//get route to floor, as a list of elevators
 	std::vector<ElevatorRoute*> elevators = sbs->GetRouteToFloor(current_floor, dest_floor, service_access);
+
+	if (elevators.empty() == true)
+	{
+		Report("No route found to floor " + ToString(dest_floor));
+		return;
+	}
 
 	if (sbs->Verbose == true)
 		Report("Routing table:");
@@ -156,7 +166,7 @@ void Person::ProcessRoute()
 			return;
 
 		bool status = button->GetElevatorArrived(number, direction);
-		bool direction_valid = ((dest_floor > current_floor && direction == true) || (dest_floor < current_floor && direction == false) || dest_floor == current_floor);
+		bool direction_valid = ((floor_selection > current_floor && direction == true) || (floor_selection < current_floor && direction == false) || floor_selection == current_floor);
 
 		if (status == true && direction_valid == true)
 		{
@@ -165,7 +175,8 @@ void Person::ProcessRoute()
 			Report("Pressing elevator button for floor " + ToString(floor_selection));
 
 			Elevator *elevator = sbs->GetElevator(number);
-			route[0].floor_selected = elevator->SelectFloor(floor_selection);
+			elevator->SelectFloor(floor_selection);
+			route[0].floor_selected = true;
 		}
 	}
 	else

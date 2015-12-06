@@ -4149,15 +4149,15 @@ void SBS::EnableRandomActivity(bool value)
 	if (value == true && RandomPeople.empty() == true)
 	{
 		//create regular people
-		for (int i = 0; i < 99; i++)
+		for (int i = 0; i < GetTotalFloors(); i++)
 		{
-			Person *person = sbs->CreatePerson("Person " + ToString(i + 1), false);
+			Person *person = CreatePerson("Random " + ToString(i + 1), 0, false);
 			RandomPeople.push_back(person);
 		}
 
 		//create a service person
-		int i = 99;
-		Person *person = sbs->CreatePerson("Person " + ToString(i + 1), true);
+		int i = GetTotalFloors();
+		Person *person = CreatePerson("Random " + ToString(i + 1), 0, true);
 		RandomPeople.push_back(person);
 	}
 	else if (value == false)
@@ -4244,11 +4244,11 @@ bool SBS::IsActionValid(Action *action)
 	return false;
 }
 
-Person* SBS::CreatePerson(const std::string &name, bool service_access)
+Person* SBS::CreatePerson(const std::string &name, int floor, bool service_access)
 {
 	//create a person
 
-	Person *person = new Person(this, name, service_access);
+	Person *person = new Person(this, name, floor, service_access);
 	PersonArray.push_back(person);
 	return person;
 }

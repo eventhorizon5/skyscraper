@@ -392,7 +392,7 @@ public:
 	bool IsObjectValid(Object* object, std::string type = "");
 	bool IsActionValid(Action* action);
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
-	Person* CreatePerson(const std::string &name, bool service_access = false);
+	Person* CreatePerson(const std::string &name, int floor, bool service_access = false);
 	void RemovePerson(Person *person);
 
 	//Meshes
