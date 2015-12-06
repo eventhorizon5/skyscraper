@@ -126,9 +126,6 @@ public:
 	float LevelingOpen; //leveling door open offset
 	bool WaitForDoors; //set to true for the MoveElevatorToFloor() function to wait for the doors to close before running
 	int ActiveDirection; //variant of Direction that doesn't change during slowdown
-	bool RandomActivity; //enables/disables random call activity
-	int RandomProbability; //probability ratio of random calls, starting with 1 - higher is less frequent
-	float RandomFrequency; //speed in seconds to make each random call
 	bool Fan; //fan enabled status
 	int NotifyEarly; //perform arrival notification earlier (0 for normal, 1 for at start of leveling, 2 for at start of decel)
 	bool Notified; //true if arrival notification has been performed
@@ -242,7 +239,7 @@ public:
 	void EnableDoors(bool value);
 	void SetShaftDoors(int number, float thickness, float CenterX, float CenterZ);
 	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
-	void SetCallButtons(int floor, bool direction, bool value);
+	void NotifyCallButtons(int floor, bool direction);
 	bool IsIdle();
 	void ResetQueue(bool up, bool down);
 	void SetBeepSound(const std::string &filename);
@@ -262,8 +259,6 @@ public:
 	ElevatorDoor::DoorWrapper* FinishShaftDoor(int number, int floor, bool DoorWalls = true, bool TrackWalls = true);
 	bool FinishShaftDoors(int number, bool DoorWalls = true, bool TrackWalls = true);
 	ButtonPanel* GetPanel(int index);
-	int GetRandomLobby();
-	void SetRandomLobby(int floor);
 	void PressFloorButton(int floor);
 	bool IsQueued(int floor);
 	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
@@ -335,7 +330,7 @@ public:
 	bool PeakWaiting();
 	bool OnRecallFloor();
 	std::vector<Floor*> GetLobbies();
-	void NotifyCallButtons(int floor, bool direction);
+	bool IsStopped();
 
 private:
 
@@ -344,7 +339,7 @@ private:
 	{
 	public:
 		Elevator *elevator;
-		int type; //0 = parking timer, 1 = random timer, 2 = arrival, 3 = departure
+		int type; //0 = parking timer, 1 = arrival/departure
 		Timer(const std::string &name, Elevator *parent, int Type) : TimerObject(parent, name)
 		{
 			elevator = parent;
@@ -373,9 +368,6 @@ private:
 	//parking timer object
 	Timer *parking_timer;
 
-	//random call timer object
-	Timer *random_timer;
-
 	//arrival and departure delay timers
 	Timer *arrival_delay;
 	Timer *departure_delay;
@@ -396,7 +388,6 @@ private:
 	int ActiveCallDirection; //direction of active call (that the elevator's currently responding too)
 	int ActiveCallType; //type of active call (0 = car, 1 = hall, 2 = system)
 	bool FirstRun; //used for setting first-run items in the run loop
-	int RandomLobby; //lobby level of elevator to use for random predictions
 	bool Running; //is elevator in run mode?
 	bool UpQueueEmpty;
 	bool DownQueueEmpty;
@@ -451,7 +442,7 @@ private:
 	std::vector<Trigger*> TriggerArray;
 
 	//elevator misc internals
-	bool ElevatorIsRunning;
+	bool MovementRunning;
 	int oldfloor;
 	int lastfloor;
 	bool lastfloorset;
@@ -465,7 +456,6 @@ private:
 	Ogre::Vector3 elevposition;
 	float tmpDecelJerk;
 	bool FinishedMove;
-	bool RandomLobbySet;
 	bool SoundsQueued;
 	bool DirMessageSound; //true if a directional message sound is queued, to prevent repeats
 	bool DoorMessageSound; //true if a door message sound is queued, to prevent repeats

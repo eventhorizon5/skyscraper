@@ -365,8 +365,7 @@ void DebugPanel::OnInit()
 	chkAutoShafts->SetValue(Simcore->AutoShafts);
 	chkAutoStairs->SetValue(Simcore->AutoStairs);
 	chkVerbose->SetValue(Simcore->Verbose);
-	if (Simcore->GetElevatorCount() > 0)
-		chkRandom->SetValue(Simcore->GetElevator(1)->RandomActivity);
+	chkRandom->SetValue(Simcore->RandomActivity);
 
 	mc = new MeshControl(dp, -1);
 	ee = new editelevator(dp, -1);

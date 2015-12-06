@@ -61,6 +61,9 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	ProcessedDown = false;
 	UpExists = false;
 	DownExists = false;
+	ActiveElevator = 0;
+	elevator_arrived = -1;
+	elevator_direction = false;
 
 	//create object mesh
 	std::string base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
@@ -361,6 +364,9 @@ bool CallButton::Call(bool direction)
 	else
 		ProcessedDown = false;
 
+	//reset elevator arrival state
+	elevator_arrived = -1;
+
 	//register callback for this button
 	if (sbs->Verbose)
 		Report("Registering callback");
@@ -489,18 +495,39 @@ void CallButton::Process(int direction)
 		return;
 	}
 
+	//if active elevator becomes unavailable during call wait, reprocess call
+	bool reprocess = false;
+	if (ActiveElevator > 0 && ((ProcessedUp == true && direction == 1) || (ProcessedDown == true && direction == -1)))
+	{
+		Elevator *elev = sbs->GetElevator(ActiveElevator);
+		if (elev->InServiceMode() == true || elev->IsRunning() == false || elev->IsStopped() == true)
+		{
+			reprocess = true;
+
+			//reset processed state
+			if (direction == 1)
+				ProcessedUp = false;
+			else
+				ProcessedDown = false;
+		}
+	}
+
 	//first exit if no call button is not processing a call for the current direction
 	//or if a call has already been processed
-	if ((UpStatus == false && direction == 1) || (ProcessedUp == true && direction == 1))
-		return;
-	if ((DownStatus == false && direction == -1) || (ProcessedDown == true && direction == -1))
-		return;
+	if (reprocess == false)
+	{
+		if ((UpStatus == false && direction == 1) || (ProcessedUp == true && direction == 1))
+			return;
+		if ((DownStatus == false && direction == -1) || (ProcessedDown == true && direction == -1))
+			return;
+	}
 
 	//initialize values
 	int closest = 0;
 	int closest_elev = 0;
 	bool check = false;
 	int errors = 0;
+	ActiveElevator = 0;
 
 	int count = (int)Elevators.size();
 
@@ -592,11 +619,8 @@ void CallButton::Process(int direction)
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");
 
-		//turn off button lights
-		if (direction == 1)
-			UpLight(false);
-		else
-			DownLight(false);
+		//update arrival information
+		elevator->NotifyCallButtons(GetFloor(), direction);
 
 		if (direction == -1)
 		{
@@ -616,8 +640,11 @@ void CallButton::Process(int direction)
 		elevator->OpenDoors();
 	}
 	else
+	{
 		//otherwise add a route entry to this floor
 		elevator->AddRoute(GetFloor(), direction, 1);
+		ActiveElevator = elevator->Number;
+	}
 }
 
 void CallButton::Report(const std::string &message)
@@ -744,10 +771,26 @@ void CallButton::ElevatorArrived(int number, bool direction)
 	//notify call button about an elevator arrival
 	//this also turns off the related direction light
 
+	if ((UpStatus == true && direction == true) || (DownStatus == true && direction == false))
+	{
+		elevator_arrived = number;
+		elevator_direction = direction;
+	}
+
 	if (direction == true)
 		UpLight(false);
 	else
 		DownLight(false);
+}
+
+bool CallButton::GetElevatorArrived(int &number, bool &direction)
+{
+	number = elevator_arrived;
+	direction = elevator_direction;
+
+	if (number > -1)
+		return true;
+	return false;
 }
 
 }

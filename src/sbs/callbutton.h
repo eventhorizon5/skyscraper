@@ -61,6 +61,7 @@ public:
 	bool GetDownStatus() { return DownStatus; }
 	bool IsEnabled() { return is_enabled; }
 	void ElevatorArrived(int number, bool direction);
+	bool GetElevatorArrived(int &number, bool &direction);
 
 private:
 	void Process(int direction);
@@ -77,6 +78,8 @@ private:
 	bool UpStatus; //status of up light
 	bool DownStatus; //status of down light
 	bool is_enabled;
+	int elevator_arrived;
+	bool elevator_direction;
 
 	std::vector<int> Elevators; //elevators this call button set is assigned to
 
@@ -89,6 +92,7 @@ private:
 	int KeyID;
 	bool UpExists; //does up button exist?
 	bool DownExists; //does down button exist?
+	int ActiveElevator; //elevator the call button is waiting for
 };
 
 }

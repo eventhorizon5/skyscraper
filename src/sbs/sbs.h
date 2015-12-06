@@ -67,6 +67,8 @@ namespace OgreBulletCollisions {
 #include "escalator.h"
 #include "action.h"
 #include "timer.h"
+#include "person.h"
+#include "route.h"
 
 namespace SBS {
 
@@ -169,6 +171,7 @@ public:
 	int PolygonCount; //wall polygon object count
 	unsigned int SmoothFrames;
 	bool RenderOnStartup; //render objects on startup
+	bool RandomActivity; //random activity is enabled
 
 	//mouse coordinates
 	int mouse_x, mouse_y;
@@ -385,10 +388,13 @@ public:
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
 	bool HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
-	void EnableRandomActivity(bool value, bool elevators = true, bool floors = true);
+	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem() { return soundsystem; }
 	bool IsObjectValid(Object* object, std::string type = "");
-	std::vector<Elevator*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
+	bool IsActionValid(Action* action);
+	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
+	Person* CreatePerson(const std::string &name, int floor, bool service_access = false);
+	void RemovePerson(Person *person);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -464,8 +470,8 @@ private:
 	void BackupMapping();
 	bool WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify = 'l', char vert_justify = 't', bool wordwrap = true);
 	void CalculateAverageTime();
-	std::vector<Elevator*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false);
-	Elevator* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
+	std::vector<ElevatorRoute*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false, bool recursion = false);
+	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
@@ -539,6 +545,12 @@ private:
 
 	//global triggers
 	std::vector<Trigger*> TriggerArray;
+
+	//person objects
+	std::vector<Person*> PersonArray;
+
+	//temporary people for random activity
+	std::vector<Person*> RandomPeople;
 
 	int ObjectCount; //number of simulator objects
 

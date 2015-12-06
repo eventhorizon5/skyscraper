@@ -25,7 +25,6 @@
 
 #include <OgreBulletCollisionsRay.h>
 #include "globals.h"
-#include "random.h"
 #include "sbs.h"
 #include "elevator.h"
 #include "camera.h"
@@ -75,7 +74,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	ErrorOffset = 0;
 	JerkRate = 0;
 	JerkPos = 0;
-	ElevatorIsRunning = false;
+	MovementRunning = false;
 	oldfloor = 0;
 	IsMoving = false;
 	lastfloor = 0;
@@ -141,11 +140,6 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	FinishedMove = false;
 	WaitForDoors = false;
 	ActiveDirection = 0;
-	RandomActivity = sbs->GetConfigBool("Skyscraper.SBS.Elevator.RandomActivity", false);
-	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Elevator.RandomProbability", 10);
-	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Elevator.RandomFrequency", 3);
-	RandomLobby = 0;
-	RandomLobbySet = false;
 	carsound = 0;
 	idlesound = 0;
 	motorsound = 0;
@@ -206,9 +200,8 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
-	random_timer = new Timer("Random Timer", this, 1);
-	arrival_delay = new Timer("Arrival Delay Timer", this, 2);
-	departure_delay = new Timer("Departure Delay Timer", this,3);
+	arrival_delay = new Timer("Arrival Delay Timer", this, 1);
+	departure_delay = new Timer("Departure Delay Timer", this, 1);
 
 	//create object meshes
 	std::string name = "Elevator " + ToString(Number);
@@ -275,13 +268,6 @@ Elevator::~Elevator()
 		delete parking_timer;
 	}
 	parking_timer = 0;
-
-	if (random_timer)
-	{
-		random_timer->parent_deleting = true;
-		delete random_timer;
-	}
-	random_timer = 0;
 
 	if (arrival_delay)
 	{
@@ -1189,10 +1175,6 @@ void Elevator::Loop()
 		musicsound->SetPositionRelative(MusicPosition);
 	}
 
-	//set random lobby level if not set
-	if (RandomLobbySet == false)
-		SetRandomLobby(RecallFloor);
-
 	//perform first-run tasks
 	if (FirstRun == true && Running == true)
 	{
@@ -1390,10 +1372,6 @@ void Elevator::Loop()
 	if (parking_timer->IsRunning() == false && ParkingDelay > 0 && Running == true && IsIdle() == true && InServiceMode() == false && AutoDoors == true)
 		parking_timer->Start(int(ParkingDelay * 1000), true);
 
-	//enable random call timer
-	if (random_timer->IsRunning() == false && RandomActivity == true && Running == true && InServiceMode() == false && AutoDoors == true)
-		random_timer->Start(int(RandomFrequency * 1000), false);
-
 	if (IsEnabled == true)
 	{
 		//process triggers
@@ -1453,7 +1431,7 @@ void Elevator::MoveElevatorToFloor()
 	if (WaitForTimer == true)
 		return;
 
-	if (ElevatorIsRunning == false)
+	if (MovementRunning == false)
 	{
 		if (Running == false)
 		{
@@ -1464,7 +1442,7 @@ void Elevator::MoveElevatorToFloor()
 		if (sbs->Verbose)
 			Report("starting elevator movement procedure");
 
-		ElevatorIsRunning = true;
+		MovementRunning = true;
 		FinishedMove = false;
 		std::string dir_string;
 
@@ -1486,7 +1464,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Destination floor does not exist");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			DeleteActiveRoute();
 			return;
 		}
@@ -1496,7 +1474,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Destination floor not in ServicedFloors list");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			DeleteActiveRoute();
 			return;
 		}
@@ -1506,7 +1484,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Elevator already on specified floor");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			SkipFloorSound = true; //don't play floor announcement if on same floor
 			DeleteActiveRoute();
 			goto finish; //skip main processing and run cleanup section
@@ -1517,7 +1495,7 @@ void Elevator::MoveElevatorToFloor()
 		{
 			ReportError("Doors must be closed before moving when interlocks are enabled");
 			MoveElevator = false;
-			ElevatorIsRunning = false;
+			MovementRunning = false;
 			Direction = 0;
 			DeleteActiveRoute();
 			return;
@@ -1564,7 +1542,7 @@ void Elevator::MoveElevatorToFloor()
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
-					ElevatorIsRunning = false;
+					MovementRunning = false;
 					DeleteActiveRoute();
 					return;
 				}
@@ -1579,7 +1557,7 @@ void Elevator::MoveElevatorToFloor()
 					Destination = 0;
 					Direction = 0;
 					MoveElevator = false;
-					ElevatorIsRunning = false;
+					MovementRunning = false;
 					DeleteActiveRoute();
 					return;
 				}
@@ -1990,7 +1968,7 @@ finish:
 	Destination = 0;
 	DistanceToTravel = 0;
 	ElevatorStart = 0;
-	ElevatorIsRunning = false;
+	MovementRunning = false;
 	MoveElevator = false;
 	IsMoving = false;
 	Leveling = false;
@@ -4002,35 +3980,6 @@ bool Elevator::AddFloorSigns(int door_number, bool relative, const std::string &
 	return true;
 }
 
-void Elevator::SetCallButtons(int floor, bool direction, bool value)
-{
-	//sets light status of all associated call buttons on the specified floor
-	//for direction, true is up and false is down
-
-	//get call buttons associated with this elevator
-	if (sbs->Verbose)
-		Report("SetCallButtons: getting associated call buttons");
-
-	if (!sbs->GetFloor(floor))
-		return;
-
-	std::vector<int> buttons = sbs->GetFloor(floor)->GetCallButtons(Number);
-
-	for (int i = 0; i < (int)buttons.size(); i++)
-	{
-		CallButton *button = 0;
-		if ((int)sbs->GetFloor(floor)->CallButtonArray.size() > buttons[i])
-			button = sbs->GetFloor(floor)->CallButtonArray[buttons[i]];
-		if (button)
-		{
-			if (direction == true)
-				button->UpLight(value);
-			else
-				button->DownLight(value);
-		}
-	}
-}
-
 void Elevator::NotifyCallButtons(int floor, bool direction)
 {
 	//notifies call buttons on specified floor of an elevator arrival
@@ -4038,7 +3987,7 @@ void Elevator::NotifyCallButtons(int floor, bool direction)
 
 	//get call buttons associated with this elevator
 	if (sbs->Verbose)
-		Report("SetCallButtons: getting associated call buttons");
+		Report("NotifyCallButtons: getting associated call buttons");
 
 	if (!sbs->GetFloor(floor))
 		return;
@@ -4348,32 +4297,6 @@ void Elevator::Timer::Notify()
 	}
 	else if (type == 1)
 	{
-		//random call timer
-
-		if (elevator->RandomActivity == true && elevator->InServiceMode() == false)
-		{
-			RandomGen rnd_main(time(0) + elevator->Number);
-			RandomGen rnd_floor(sbs->GetRunTime() + elevator->Number);
-
-			int num = 0, floor;
-
-			//get call probability
-			if (elevator->RandomProbability > 1)
-				num = rnd_main.Get(elevator->RandomProbability - 1);
-
-			//get call floor
-			int index = rnd_floor.Get(elevator->ServicedFloors.size());
-			floor = elevator->ServicedFloors[index];
-
-			//if probability number matched, press selected floor button
-			if (num == 0 && elevator->IsQueued(floor) == false && floor != elevator->GetFloor())
-				elevator->PressFloorButton(floor);
-		}
-		else if (elevator->InServiceMode() == true)
-			Stop(); //stop timer if in service mode
-	}
-	else if (type > 1)
-	{
 		//arrival and departure timers
 		elevator->WaitForTimer = false;
 	}
@@ -4387,19 +4310,6 @@ ButtonPanel* Elevator::GetPanel(int index)
 		return 0;
 
 	return PanelArray[index - 1];
-}
-
-int Elevator::GetRandomLobby()
-{
-	//return random lobby floor value
-	return RandomLobby;
-}
-
-void Elevator::SetRandomLobby(int floor)
-{
-	//set random lobby floor
-	RandomLobby = floor;
-	RandomLobbySet = true;
 }
 
 void Elevator::PressFloorButton(int floor)
@@ -6037,6 +5947,13 @@ std::vector<Floor*> Elevator::GetLobbies()
 		list.push_back(sbs->GetFloor(RecallFloor));
 
 	return list;
+}
+
+bool Elevator::IsStopped()
+{
+	//true if elevator has stopped without reaching a floor, usually due to an emergency stop
+
+	return (IsMoving == false && OnFloor == false && FinishedMove == true);
 }
 
 }

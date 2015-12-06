@@ -199,6 +199,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0
 	SmoothFrames = GetConfigInt("Skyscraper.SBS.SmoothFrames", 200);
 	RenderOnStartup = GetConfigBool("Skyscraper.SBS.RenderOnStartup", false);
 	EscalatorCount = 0;
+	RandomActivity = GetConfigBool("Skyscraper.SBS.RandomActivity", false);
 
 	camera = 0;
 	Buildings = 0;
@@ -266,6 +267,17 @@ SBS::~SBS()
 	Report("Deleting simulator objects...");
 
 	FastDelete = true;
+
+	//delete people
+	for (int i = 0; i < (int)PersonArray.size(); i++)
+	{
+		if (PersonArray[i])
+		{
+			PersonArray[i]->parent_deleting = true;
+			delete PersonArray[i];
+		}
+		PersonArray[i] = 0;
+	}
 
 	//delete controls
 	for (int i = 0; i < (int)ControlArray.size(); i++)
@@ -500,6 +512,10 @@ bool SBS::Start()
 	camera->SetToStartDirection();
 	camera->SetToStartRotation();
 
+	//enable random activity if specified
+	if (RandomActivity == true)
+		EnableRandomActivity(true);
+
 	IsRunning = true;
 
 	return true;
@@ -627,6 +643,13 @@ void SBS::MainLoop()
 		{
 			if (ModelArray[i])
 				ModelArray[i]->Loop();
+		}
+
+		//process people
+		for (int i = 0; i < (int)PersonArray.size(); i++)
+		{
+			if (PersonArray[i])
+				PersonArray[i]->Loop();
 		}
 
 		elapsed -= delta;
@@ -3045,6 +3068,8 @@ bool SBS::DeleteObject(Object *object)
 	}
 	else if (type == "Escalator")
 		deleted = true;
+	else if (type == "Person")
+		deleted = true;
 
 	//delete object
 	if (deleted == true)
@@ -4124,28 +4149,34 @@ bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObj
 	return true;
 }
 
-void SBS::EnableRandomActivity(bool value, bool elevators, bool floors)
+void SBS::EnableRandomActivity(bool value)
 {
-	//enable random activity on all elevators and floors (call buttons)
+	//enable random activity, by creating random people
 
-	if (elevators == true)
+	if (value == true && RandomPeople.empty() == true)
 	{
-		for (int i = 1; i <= GetElevatorCount(); i++)
+		//create regular people
+		for (int i = 0; i < GetTotalFloors(); i++)
 		{
-			if (GetElevator(i))
-				GetElevator(i)->RandomActivity = value;
+			Person *person = CreatePerson("Random " + ToString(i + 1), 0, false);
+			RandomPeople.push_back(person);
 		}
+
+		//create a service person
+		int i = GetTotalFloors();
+		Person *person = CreatePerson("Random " + ToString(i + 1), 0, true);
+		RandomPeople.push_back(person);
+	}
+	else if (value == false)
+	{
+		for (int i = 0; i < (int)RandomPeople.size(); i++)
+		{
+			delete RandomPeople[i];
+		}
+		RandomPeople.clear();
 	}
 
-	if (floors == true)
-	{
-		for (int i = -Basements; i < Floors; i++)
-		{
-			Floor *floor = GetFloor(i);
-			if (floor)
-				floor->EnableRandomActivity(value);
-		}
-	}
+	RandomActivity = value;
 }
 
 bool SBS::IsObjectValid(Object *object, std::string type)
@@ -4210,105 +4241,39 @@ bool SBS::IsObjectValid(Object *object, std::string type)
 	return false;
 }
 
-std::vector<Elevator*> SBS::GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access)
+bool SBS::IsActionValid(Action *action)
 {
-	//get a path from a starting floor to a desination floor, as a list of elevators to ride
-	//if service_access is true, include service elevators in checks
+	//test if an action is valid
 
-	//this function uses designated skylobbies to connect elevators;
-	//connection floors must have a type of "Lobby" or "Skylobby"
-
-	std::vector<Elevator*> result;
-
-	Floor *start_floor = GetFloor(StartingFloor);
-	Floor *dest_floor = GetFloor(DestinationFloor);
-
-	if (!start_floor || !dest_floor || start_floor == dest_floor)
-		return result;
-
-	//check all express and local elevators if they directly serve destination floor
-
-	Elevator *elev = GetDirectRoute(start_floor, DestinationFloor, service_access);
-
-	if (elev)
+	for (int i = 0; i < (int)ActionArray.size(); i++)
 	{
-		result.push_back(elev);
-		return result;
+		if (ActionArray[i] == action)
+			return true;
 	}
-
-	//otherwise check express elevator floors, to see if any have a direct route
-
-	result = GetIndirectRoute("Express", StartingFloor, DestinationFloor, service_access);
-
-	return result;
+	return false;
 }
 
-Elevator* SBS::GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access)
+Person* SBS::CreatePerson(const std::string &name, int floor, bool service_access)
 {
-	Elevator *elev = 0;
+	//create a person
 
-	if (service_access == true)
-	{
-		elev = floor->GetDirectRoute(DestinationFloor, "Service");
-		if (elev)
-			return elev;
-	}
-
-	elev = floor->GetDirectRoute(DestinationFloor, "Express");
-	if (elev)
-		return elev;
-
-	elev = floor->GetDirectRoute(DestinationFloor, "Local");
-	if (elev)
-		return elev;
-
-	return 0;
+	Person *person = new Person(this, name, floor, service_access);
+	PersonArray.push_back(person);
+	return person;
 }
 
-std::vector<Elevator*> SBS::GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access)
+void SBS::RemovePerson(Person *person)
 {
-	//get a route to a destination floor, via elevator serviced floors
+	//remove a person (does not delete the object)
 
-	std::vector<Elevator*> result;
-
-	Floor *start_floor = GetFloor(StartingFloor);
-
-	if (!start_floor)
-		return result;
-
-	std::vector<int> list;
-	start_floor->GetElevatorList(list, ElevatorType);
-
-	for (int i = 0; i < (int)list.size(); i++)
+	for (int i = 0; i < (int)PersonArray.size(); i++)
 	{
-		Elevator *elev = sbs->GetElevator(list[i]);
-
-		if (elev)
+		if (PersonArray[i] == person)
 		{
-			for (int j = 0; j < elev->GetServicedFloorCount(); j++)
-			{
-				int number = elev->GetServicedFloor(j);
-
-				if (number != StartingFloor)
-				{
-					Floor *floor = sbs->GetFloor(number);
-					if (floor)
-					{
-						Elevator *elev2 = GetDirectRoute(floor, DestinationFloor, service_access);
-
-						if (elev2)
-						{
-							result.push_back(elev);
-							result.push_back(elev2);
-							return result;
-						}
-					}
-				}
-			}
+			PersonArray.erase(PersonArray.begin() + i);
+			return;
 		}
 	}
-
-	return result;
 }
 
 }

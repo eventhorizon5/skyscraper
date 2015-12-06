@@ -24,7 +24,6 @@
 */
 
 #include "globals.h"
-#include "random.h"
 #include "sbs.h"
 #include "floor.h"
 #include "camera.h"
@@ -67,26 +66,11 @@ Floor::Floor(Object *parent, int number) : Object(parent)
 	InterfloorHeight = 0;
 	EnabledGroup = false;
 	EnabledGroup_Floor = 0;
-	RandomActivity = sbs->GetConfigBool("Skyscraper.SBS.Floor.RandomActivity", false);
-	RandomProbability = sbs->GetConfigInt("Skyscraper.SBS.Floor.RandomProbability", 10);
-	RandomFrequency = sbs->GetConfigFloat("Skyscraper.SBS.Floor.RandomFrequency", 3);
-
-	//create timer
-	random_timer = new Timer("Random Timer", this);
-	EnableRandomActivity(RandomActivity);
 }
 
 Floor::~Floor()
 {
 	//Destructor
-
-	//delete timer
-	if (random_timer)
-	{
-		random_timer->parent_deleting = true;
-		delete random_timer;
-	}
-	random_timer = 0;
 
 	//delete escalators
 	for (int i = 0; i < (int)EscalatorArray.size(); i++)
@@ -1490,54 +1474,7 @@ void Floor::GetShaftList(std::vector<int> &listing)
 	}
 }
 
-void Floor::EnableRandomActivity(bool value)
-{
-	//enable random activity timer, for call buttons
-
-	if (random_timer->IsRunning() == false && value == true)
-		random_timer->Start(int(RandomFrequency * 1000), false);
-	else if (value == false)
-		random_timer->Stop();
-
-	RandomActivity = value;
-}
-
-void Floor::Timer::Notify()
-{
-	//timer for random hall calls
-
-	if (parent->CallButtonArray.size() == 0)
-		return;
-
-	RandomGen rnd_main(time(0) + parent->Number);
-	RandomGen rnd_button(time(0) + parent->Number + parent->CallButtonArray.size());
-	RandomGen rnd_direction(sbs->GetRunTime() + parent->Number);
-
-	//get call probability
-	int num = 0;
-	if (parent->RandomProbability > 1)
-		num = rnd_main.Get(parent->RandomProbability - 1);
-
-	//get call button number
-	int number = rnd_button.Get(parent->CallButtonArray.size());
-
-	//get call direction
-	int direction = rnd_direction.Get(2);
-
-	if (num == 0)
-	{
-		CallButton *button = parent->CallButtonArray[number];
-		if (button)
-		{
-			if (direction == 0)
-				button->Call(false);
-			else
-				button->Call(true);
-		}
-	}
-}
-
-Elevator* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorType)
+ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorType)
 {
 	//return elevator if this floor has a direct elevator connection to another floor,
 	//based on the given elevator type
@@ -1554,7 +1491,10 @@ Elevator* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorType)
 			std::string type = SetCaseCopy(elev->Type, false);
 			bool serviced = elev->IsServicedFloor(DestinationFloor);
 			if (serviced == true && type == ElevatorType)
-				return elev;
+			{
+				ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
+				return route;
+			}
 		}
 	}
 
