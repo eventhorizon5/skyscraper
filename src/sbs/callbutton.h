@@ -92,6 +92,7 @@ private:
 	int KeyID;
 	bool UpExists; //does up button exist?
 	bool DownExists; //does down button exist?
+	int ActiveElevator; //elevator the call button is waiting for
 };
 
 }
