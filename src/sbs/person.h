@@ -36,12 +36,15 @@ class SBSIMPEXP Person : public Object
 public:
 
 	//functions
-	Person(Object *parent, const std::string &name, bool service_access = false);
+	Person(Object *parent, const std::string &name, int floor, bool service_access = false);
 	~Person();
 	void GotoFloor(int floor);
 	void Loop();
+	void ProcessRoute();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
+	int GetRandomFloor();
+	bool RouteActive() { return !route.empty(); }
 
 private:
 

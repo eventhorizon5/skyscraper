@@ -31,27 +31,38 @@
 
 namespace SBS {
 
-Person::Person(Object *parent, const std::string &name, bool service_access) : Object(parent)
+Person::Person(Object *parent, const std::string &name, int floor, bool service_access) : Object(parent)
 {
 	//creates a person object, used for random traffic simulations
 
 	//set up SBS object
 	SetValues("Person", name, false);
 
-	current_floor = 0;
+	current_floor = floor;
 	dest_floor = 0;
 	this->service_access = service_access;
 
-	RandomGen rnd_dest(time(0) + GetNumber());
-	int floor = rnd_dest.Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
-
-	GotoFloor(floor);
+	Report("On floor " +  ToString(current_floor));
 }
 
 Person::~Person()
 {
+	if (route.empty() == false)
+	{
+		for (int i = 0; i < (int)route.size(); i++)
+		{
+			delete route[i].elevator_route;
+		}
+	}
+
 	if (sbs->FastDelete == false && parent_deleting == false)
 		sbs->RemovePerson(this);
+}
+
+int Person::GetRandomFloor()
+{
+	RandomGen rnd_dest(time(0) + GetNumber());
+	return (int)rnd_dest.Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
 }
 
 void Person::GotoFloor(int floor)
@@ -86,7 +97,21 @@ void Person::GotoFloor(int floor)
 
 void Person::Loop()
 {
-	if (route.empty() == true)
+	if (RouteActive() == false)
+	{
+		int probability = 10;
+		RandomGen rnd_time(time(0) + GetNumber());
+		int result = (int)rnd_time.Get(probability - 1);
+		if (result == 0)
+			GotoFloor(GetRandomFloor());
+	}
+
+	ProcessRoute();
+}
+
+void Person::ProcessRoute()
+{
+	if (RouteActive() == false)
 		return;
 
 	Floor *floor_obj = sbs->GetFloor(current_floor);
