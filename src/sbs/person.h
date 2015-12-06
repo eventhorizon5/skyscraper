@@ -40,6 +40,8 @@ public:
 	~Person();
 	void GotoFloor(int floor);
 	void Loop();
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 private:
 

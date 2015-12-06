@@ -62,12 +62,20 @@ void Person::GotoFloor(int floor)
 	if (!floor_obj)
 		return;
 
+	Report("Heading to floor " + ToString(floor));
+
 	//get route to floor, as a list of elevators
 	std::vector<ElevatorRoute*> elevators = sbs->GetRouteToFloor(current_floor, dest_floor, service_access);
+
+	if (sbs->Verbose == true)
+		Report("Routing table:");
 
 	//create a new route table entry for each elevator in list
 	for (int i = 0; i < (int)elevators.size(); i++)
 	{
+		if (sbs->Verbose == true)
+			Report(ToString(i) + ": Elevator " + ToString(elevators[i]->elevator->Number) + " - floor selection " + ToString(elevators[i]->floor_selection) + " - elevator name: " + elevators[i]->elevator->Name);
+
 		RouteEntry route_entry;
 		route_entry.elevator_route = elevators[i];
 		route_entry.call_made = false;
@@ -88,9 +96,8 @@ void Person::Loop()
 
 	Elevator *elevator = route[0].elevator_route->elevator;
 	int floor_selection = route[0].elevator_route->floor_selection;
-	CallButton *button = floor_obj->GetCallButton(elevator->Number);
 
-	if (!button || !elevator)
+	if (!elevator)
 		return;
 
 	//if a call has not been made, press first elevator's associated call button
@@ -100,6 +107,8 @@ void Person::Loop()
 
 		if (button)
 		{
+			Report("Pressing call button for elevator " + ToString(elevator->Number));
+
 			if (floor_selection > current_floor)
 				button->Call(true);
 			else
@@ -115,15 +124,21 @@ void Person::Loop()
 	{
 		int number = 0;
 		bool direction = false;
-		bool status = button->GetElevatorArrived(number, direction);
 
+		CallButton *button = floor_obj->GetCallButton(elevator->Number);
+
+		if (!button)
+			return;
+
+		bool status = button->GetElevatorArrived(number, direction);
 		bool direction_valid = ((dest_floor > current_floor && direction == true) || (dest_floor < current_floor && direction == false) || dest_floor == current_floor);
 
 		if (status == true && direction_valid == true)
 		{
 			//if elevator has arrived at the called floor, press related floor button
 
-			route[0].call_made = false;
+			Report("Pressing elevator button for floor " + ToString(floor_selection));
+
 			Elevator *elevator = sbs->GetElevator(number);
 			route[0].floor_selected = elevator->SelectFloor(floor_selection);
 		}
@@ -134,12 +149,34 @@ void Person::Loop()
 
 		if (elevator->OnFloor == true && elevator->GetFloor() == floor_selection)
 		{
+			std::string floor_status;
+
+			if (floor_selection == dest_floor)
+				floor_status = "destination";
+			else
+				floor_status = "intermediate";
+
+			Report("Arrived at " + floor_status + " floor " + ToString(floor_selection));
+			current_floor = floor_selection;
+
 			//erase first route entry
 			delete route[0].elevator_route;
 			route.erase(route.begin());
 			return;
 		}
 	}
+}
+
+void Person::Report(const std::string &message)
+{
+	//general reporting function
+	sbs->Report("Person " + GetName() + ": " + message);
+}
+
+bool Person::ReportError(const std::string &message)
+{
+	//general reporting function
+	return sbs->ReportError("Person " + GetName() + ": " + message);
 }
 
 }
