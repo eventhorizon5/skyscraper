@@ -41,12 +41,15 @@ public:
 	virtual ~ObjectBase() {};
 	Object* GetParent();
 	SBS* GetRoot() { return sbs; }
+	void SetName(const std::string &name);
+	const std::string& GetName();
 
 protected:
 	SBS *sbs; //engine root
 
 private:
 	Object *Parent; //parent object
+	std::string Name; //object name
 };
 
 class SBSIMPEXP Object : public ObjectBase
@@ -68,8 +71,6 @@ public:
 	bool IsMovable();
 	const std::string& GetType();
 	int GetNumber();
-	const std::string& GetName();
-	void SetName(const std::string &name);
 	void AddChild(Object *object);
 	Object* GetChild(int index);
 	int GetChildrenCount();
@@ -122,7 +123,6 @@ private:
 	std::string Type; //object type
 	int Number; //object identifier
 	bool Temporary; //true if object can be deleted during runtime
-	std::string Name; //object name
 	std::vector<Object*> children; //object's children
 	Ogre::SceneNode *SceneNode; //node in scene graph
 	Ogre::Vector3 Rotation; //rotation vector

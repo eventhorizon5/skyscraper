@@ -213,7 +213,7 @@ int WallObject::FindPolygon(const std::string &name)
 
 	for (int i = 0; i < (int)polygons.size(); i++)
 	{
-		std::string tmpname = polygons[i].name;
+		std::string tmpname = polygons[i].GetName();
 		if ((int)tmpname.find("(") == 0)
 		{
 			//strip object number

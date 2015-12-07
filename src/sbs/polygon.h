@@ -43,7 +43,6 @@ public:
 	Ogre::Vector3 t_vector;
 
 	std::string material; //polygon material
-	std::string name; //polygon names
 
 	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
 	~Polygon();

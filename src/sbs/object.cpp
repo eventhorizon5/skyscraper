@@ -44,6 +44,18 @@ Object* ObjectBase::GetParent()
 	return Parent;
 }
 
+const std::string& ObjectBase::GetName()
+{
+	//return object name
+	return Name;
+}
+
+void ObjectBase::SetName(const std::string &name)
+{
+	//set object name
+	Name = name;
+}
+
 Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
 {
 	Permanent = false;
@@ -148,18 +160,6 @@ int Object::GetNumber()
 {
 	//return object's global numeric identifier
 	return Number;
-}
-
-const std::string& Object::GetName()
-{
-	//return object name
-	return Name;
-}
-
-void Object::SetName(const std::string &name)
-{
-	//set object name
-	Name = name;
 }
 
 void Object::AddChild(Object *object)

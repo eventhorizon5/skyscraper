@@ -36,7 +36,6 @@ public:
 	Action(Object *parent, const std::string &name, std::vector<Object*> &action_parents, const std::string &command);
 	~Action();
 	bool DoAction(Object *caller);
-	std::string GetName();
 	std::string GetCommandName();
 	const Object *GetParent(int number);
 	std::string GetParentName(int number);
@@ -53,7 +52,6 @@ private:
 
 	std::string command_name;
 	std::vector<std::string> command_parameters;
-	std::string name;
 	std::vector<Object*> parent_objects;
 };
 
