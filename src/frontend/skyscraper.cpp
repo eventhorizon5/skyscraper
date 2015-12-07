@@ -964,8 +964,8 @@ void Skyscraper::GetInput()
 		//temporary engine switch test
 		if (wxGetKeyState((wxKeyCode)'L'))
 		{
-			SelectBuilding();
-			Load();
+			if (SelectBuilding() == true)
+				Load();
 			return;
 		}
 
