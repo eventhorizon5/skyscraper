@@ -1,9 +1,22 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Skyscraper", "Skyscraper.vcxproj", "{899501B5-1571-4301-B4D0-5FAADAE2A607}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SBS", "SBS.vcxproj", "{1164EB58-F768-469D-9AC2-8A940B3B1BFD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A} = {791F594F-FF44-49D1-A882-FF4DB0DCD92A}
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE} = {022634CE-F06A-4F71-AA07-3CE7BB1841AE}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OgreBulletCollisions", "..\ogrebullet\OgreBulletCollisions.vcxproj", "{791F594F-FF44-49D1-A882-FF4DB0DCD92A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OgreBulletDynamics", "..\ogrebullet\OgreBulletDynamics.vcxproj", "{022634CE-F06A-4F71-AA07-3CE7BB1841AE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A} = {791F594F-FF44-49D1-A882-FF4DB0DCD92A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +42,22 @@ Global
 		{1164EB58-F768-469D-9AC2-8A940B3B1BFD}.Release|Win32.Build.0 = Release|Win32
 		{1164EB58-F768-469D-9AC2-8A940B3B1BFD}.Release|x64.ActiveCfg = Release|x64
 		{1164EB58-F768-469D-9AC2-8A940B3B1BFD}.Release|x64.Build.0 = Release|x64
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|Win32.Build.0 = Debug|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|x64.ActiveCfg = Debug|x64
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Debug|x64.Build.0 = Debug|x64
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|Win32.ActiveCfg = Release|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|Win32.Build.0 = Release|Win32
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|x64.ActiveCfg = Release|x64
+		{791F594F-FF44-49D1-A882-FF4DB0DCD92A}.Release|x64.Build.0 = Release|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|Win32.Build.0 = Debug|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|x64.ActiveCfg = Debug|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Debug|x64.Build.0 = Debug|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|Win32.ActiveCfg = Release|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|Win32.Build.0 = Release|Win32
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|x64.ActiveCfg = Release|x64
+		{022634CE-F06A-4F71-AA07-3CE7BB1841AE}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
