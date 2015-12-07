@@ -1659,6 +1659,10 @@ bool Skyscraper::Load()
 {
 	//load simulator and data file
 
+	//exit if no building specified
+	if (BuildingFile == "")
+		return false;
+
 	//clear scene
 	mSceneMgr->clearScene();
 
