@@ -35,7 +35,7 @@ Action::Action(Object *parent, const std::string &name, std::vector<Object*> &ac
 	//create an action
 
 	command_name = command;
-	this->name = name;
+	SetName(name);
 	TrimString(command_name);
 	SetCase(command_name, false);
 
@@ -53,7 +53,7 @@ Action::Action(Object *parent, const std::string &name, std::vector<Object*> &ac
 	//create an action
 
 	command_name = command;
-	this->name = name;
+	SetName(name);
 	TrimString(command_name);
 	SetCase(command_name, false);
 
@@ -63,12 +63,7 @@ Action::Action(Object *parent, const std::string &name, std::vector<Object*> &ac
 Action::~Action()
 {
 	if (sbs->FastDelete == false)
-		sbs->Report("Deleted action '" + name + "'");
-}
-
-std::string Action::GetName()
-{
-	return name;
+		sbs->Report("Deleted action '" + GetName() + "'");
 }
 
 std::string Action::GetCommandName()
@@ -179,7 +174,7 @@ bool Action::Run(Object *caller, Object *parent)
 	std::string parent_type = parent->GetType();
 
 	//report the action used
-	sbs->Report("Action '" + name + "': object '" + parent_name + "' using command '" + command_name + "'");
+	sbs->Report("Action '" + GetName() + "': object '" + parent_name + "' using command '" + command_name + "'");
 
 	//numeric commands for elevator floor selections
 	if (IsNumeric(command_name) == true && elevator)

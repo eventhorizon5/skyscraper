@@ -181,7 +181,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 					Classify(2, temppoly, end.z) != 2)
 			{
 				if (Verbose)
-					Report("Cutting polygon '" + polygon->name + "'");
+					Report("Cutting polygon '" + polygon->GetName() + "'");
 
 				extentsx = GetExtents(temppoly, 1);
 				extentsy = GetExtents(temppoly, 2);
@@ -377,7 +377,7 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 			std::string oldmat;
 			Ogre::Vector3 oldvector;
 			Ogre::Matrix3 mapping;
-			std::string name = polygon->name;
+			std::string name = polygon->GetName();
 
 			if (newpolys.size() > 0)
 			{

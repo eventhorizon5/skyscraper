@@ -38,7 +38,7 @@ Polygon::Polygon(Object *parent, const std::string &name, MeshObject *meshwrappe
 	this->material = material;
 	this->plane = plane;
 	this->triangles = triangles;
-	this->name = name;
+	SetName(name);
 }
 
 Polygon::~Polygon()
@@ -160,7 +160,7 @@ void Polygon::Delete()
 	//delete polygon geometry
 
 	//delete triangles
-	mesh->ProcessSubMesh(triangles, material, name, false);
+	mesh->ProcessSubMesh(triangles, material, GetName(), false);
 
 	//delete related mesh vertices
 	mesh->DeleteVertices(triangles);
