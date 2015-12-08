@@ -130,7 +130,7 @@ public:
 	void SetLocation(float latitude, float longitude);
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
-	void CreateEngine();
+	void CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
@@ -212,7 +212,7 @@ class EngineContext
 {
 public:
 
-	EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem);
+	EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }

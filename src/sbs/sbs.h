@@ -178,7 +178,7 @@ public:
 	int mouse_x, mouse_y;
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem);
+	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	~SBS();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);

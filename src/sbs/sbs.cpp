@@ -41,7 +41,7 @@ namespace SBS {
 
 std::vector<Object*> ObjectArray;
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -210,6 +210,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
+
+	//move to specified position
+	Move(position);
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)

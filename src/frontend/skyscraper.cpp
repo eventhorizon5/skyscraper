@@ -268,7 +268,7 @@ void Skyscraper::UnloadSim(bool all)
 		engines.clear();
 	}
 
-	if (engines.empty() == true)
+	if (GetEngineCount() == 0)
 	{
 		//do a full clear of Ogre objects if all engines have been unloaded
 
@@ -1723,8 +1723,12 @@ bool Skyscraper::Load()
 
 	IsLoading = true;
 
+	//move instance to an offset for testing
+	float offsetval = (GetEngineCount() - 1) * 300;
+	Ogre::Vector3 offset (offsetval, 0, offsetval);
+
 	//Create simulator instance
-	CreateEngine();
+	CreateEngine(offset);
 
 	SBS::SBS *Simcore = active_engine->GetSystem();
 	ScriptProcessor *processor = active_engine->GetScriptProcessor();
@@ -1742,10 +1746,6 @@ bool Skyscraper::Load()
 #else
 	sleep(2);
 #endif
-
-	//move instance to an offset for testing
-	float offset = (GetEngineCount() - 1) * 300;
-	Simcore->Move(offset, 0, offset);
 
 	//initialize simulator
 	Simcore->Initialize(mCamera);
@@ -2183,9 +2183,9 @@ void Skyscraper::SetDateTime(double julian_date_time)
 	new_time = true;
 }
 
-void Skyscraper::CreateEngine()
+void Skyscraper::CreateEngine(const Ogre::Vector3 &position)
 {
-	active_engine = new EngineContext(mSceneMgr, soundsys);
+	active_engine = new EngineContext(mSceneMgr, soundsys, position);
 	engines.push_back(active_engine);
 }
 
@@ -2220,10 +2220,10 @@ EngineContext* Skyscraper::FindActiveEngine()
 	return 0;
 }
 
-EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem)
+EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position)
 {
 	//Create simulator object
-	Simcore = new SBS::SBS(mSceneManager, fmodsystem);
+	Simcore = new SBS::SBS(mSceneManager, fmodsystem, position);
 
 	//load script processor
 	processor = new ScriptProcessor(Simcore);
