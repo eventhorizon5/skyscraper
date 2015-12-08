@@ -58,7 +58,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
 		//create and set up camera
-		camera = sbs->mSceneManager->createCamera(name);
+		camera = sbs->mSceneManager->createCamera(GetSceneNode()->GetFullName());
 		camera->setNearClipDistance(0.1f);
 		camera->setFarClipDistance(0.0f);
 		camera->setAspectRatio(1.0f);
@@ -67,7 +67,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		GetSceneNode()->AttachObject(camera);
 
 		//set camera position and rotation
-		SetPosition(sbs->ToRemote(position));
+		SetPosition(position);
 		if (use_rotation == true)
 			SetRotation(rotation);
 		else
