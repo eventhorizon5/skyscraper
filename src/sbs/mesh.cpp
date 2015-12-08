@@ -697,6 +697,9 @@ MeshObject::~MeshObject()
 	//delete wall objects
 	DeleteWalls();
 
+	delete collider_node;
+	collider_node = 0;
+
 	if (sbs->FastDelete == false)
 	{
 		sbs->DeleteMeshHandle(this);
