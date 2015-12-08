@@ -51,7 +51,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 
 SceneNode::~SceneNode()
 {
-	if (sbs->FastDelete == false)
+	if (sbs->FastDelete == false && node)
 		sbs->mSceneManager->destroySceneNode(node);
 }
 
@@ -171,7 +171,8 @@ Ogre::Vector3 SceneNode::GetRotation()
 void SceneNode::Update()
 {
 	//sync positioning
-	node->needUpdate();
+	if (node)
+		node->needUpdate();
 }
 
 Ogre::Quaternion SceneNode::GetOrientation()
@@ -209,12 +210,14 @@ void SceneNode::Move(const Ogre::Vector3 &vector, float speed)
 
 void SceneNode::AttachObject(Ogre::MovableObject *object)
 {
-	node->attachObject(object);
+	if (node && object)
+		node->attachObject(object);
 }
 
 void SceneNode::DetachObject(Ogre::MovableObject *object)
 {
-	node->detachObject(object);
+	if (node && object)
+		node->detachObject(object);
 }
 
 float SceneNode::GetScale()
