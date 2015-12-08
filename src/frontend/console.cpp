@@ -104,13 +104,10 @@ Console::~Console()
 
 void Console::On_bSend_Click(wxCommandEvent& event)
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	if (!Simcore)
-	{
-		if (skyscraper->GetActiveEngine())
-			Simcore = skyscraper->GetActiveEngine()->GetSystem();
-		else
-			return;
-	}
+		return;
 
 	Simcore->DeleteColliders = true;
 	ScriptProcessor *processor = skyscraper->GetActiveEngine()->GetScriptProcessor();

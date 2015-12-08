@@ -452,6 +452,10 @@ void CameraControl::OnInit()
 
 void CameraControl::Loop()
 {
+	//if active engine has changed, refresh values
+	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		OnInit();
+
 	Ogre::Vector3 direction_front, direction_top;
 	Simcore->camera->GetDirection(direction_front, direction_top);
 	txtDirectionFront->SetValue(TruncateNumber(direction_front.x, 2) + wxT(", ") + TruncateNumber(direction_front.y, 2) + wxT(", ") + TruncateNumber(direction_front.z, 2));

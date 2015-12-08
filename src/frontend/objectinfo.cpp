@@ -203,14 +203,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
 	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
 	//*)
-	//OnInit();
-	oldobject = -1;
-	oldcamobject = -1;
-	createobject = 0;
-	changed = false;
-	lastcount = 0;
-	deleted = false;
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	OnInit();
 }
 
 ObjectInfo::~ObjectInfo()
@@ -229,6 +222,16 @@ ObjectInfo::~ObjectInfo()
 	moveobject = 0;
 }
 
+void ObjectInfo::OnInit()
+{
+	oldobject = -1;
+	oldcamobject = -1;
+	createobject = 0;
+	changed = false;
+	lastcount = 0;
+	deleted = false;
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+}
 
 void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 {
@@ -237,6 +240,10 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 
 void ObjectInfo::Loop()
 {
+	//if active engine has changed, refresh values
+	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		OnInit();
+
 	if (Simcore->GetObjectCount() != lastcount)
 	{
 		lastcount = Simcore->GetObjectCount();

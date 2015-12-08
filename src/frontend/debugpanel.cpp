@@ -268,6 +268,17 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	//*)
 	dp = this;
 	Simcore = 0;
+	mc = 0;
+	ee = 0;
+	cc = 0;
+	kd = 0;
+	stats = 0;
+	objectinfo = 0;
+	profiler = 0;
+	actionviewer = 0;
+	skycontrol = 0;
+	timer = 0;
+
 	OnInit();
 }
 
@@ -357,6 +368,9 @@ void DebugPanel::OnInit()
 {
 	Simcore = skyscraper->GetActiveEngine()->GetSystem();
 
+	if (!Simcore)
+		return;
+
 	//set check boxes
 	chkCollisionDetection->SetValue(Simcore->camera->CollisionsEnabled());
 	chkGravity->SetValue(Simcore->camera->GetGravityStatus());
@@ -367,15 +381,27 @@ void DebugPanel::OnInit()
 	chkVerbose->SetValue(Simcore->Verbose);
 	chkRandom->SetValue(Simcore->RandomActivity);
 
-	mc = new MeshControl(dp, -1);
-	ee = new editelevator(dp, -1);
-	cc = new CameraControl(dp, -1);
-	kd = new KeyDialog(dp, -1);
-	stats = new Stats(dp, -1);
-	objectinfo = new ObjectInfo(dp, -1);
-	profiler = new Profiler(dp, -1);
-	actionviewer = new ActionViewer(dp, -1);
-	skycontrol = new SkyControl(dp, -1);
+	if (!mc)
+		mc = new MeshControl(dp, -1);
+	if (!ee)
+		ee = new editelevator(dp, -1);
+	if (!cc)
+		cc = new CameraControl(dp, -1);
+	if (!kd)
+		kd = new KeyDialog(dp, -1);
+	if (!stats)
+		stats = new Stats(dp, -1);
+	if (!objectinfo)
+		objectinfo = new ObjectInfo(dp, -1);
+	if (!profiler)
+		profiler = new Profiler(dp, -1);
+	if (!actionviewer)
+		actionviewer = new ActionViewer(dp, -1);
+	if (!skycontrol)
+		skycontrol = new SkyControl(dp, -1);
+
+	if (timer)
+		delete timer;
 
 	timer = new Timer(Simcore);
 	timer->Start(40);
@@ -383,6 +409,9 @@ void DebugPanel::OnInit()
 
 void DebugPanel::Timer::Notify()
 {
+	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		dp->OnInit(); //reinitialize if active engine has changed
+
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 
 	if (dp)
