@@ -101,7 +101,7 @@ void Sound::OnMove(bool parent)
 		vel.z = (GetPosition().z - Position.z) * (1000 / sbs->GetElapsedTime());
 	}
 
-	Position = GetPosition();
+	Position = node->GetEngineOffset() + GetPosition();
 	Velocity.x = vel.x;
 	Velocity.y = vel.y;
 	Velocity.z = vel.z;
