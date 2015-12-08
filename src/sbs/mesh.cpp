@@ -694,19 +694,21 @@ MeshObject::~MeshObject()
 	//delete wall objects
 	DeleteWalls();
 
-	if (sbs->FastDelete == false)
-	{
-		sbs->DeleteMeshHandle(this);
-		Ogre::MeshManager::getSingleton().remove(name);
-		MeshWrapper.setNull();
+	delete collider_node;
+	collider_node = 0;
 
-		if (Movable)
-		{
-			GetSceneNode()->DetachObject(Movable);
-			sbs->mSceneManager->destroyEntity(Movable);
-		}
-		Movable = 0;
+	if (sbs->FastDelete == false)
+		sbs->DeleteMeshHandle(this);
+
+	Ogre::MeshManager::getSingleton().remove(name);
+	MeshWrapper.setNull();
+
+	if (Movable)
+	{
+		GetSceneNode()->DetachObject(Movable);
+		sbs->mSceneManager->destroyEntity(Movable);
 	}
+	Movable = 0;
 }
 
 void MeshObject::Enable(bool value, bool remove)

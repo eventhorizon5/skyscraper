@@ -51,7 +51,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 
 SceneNode::~SceneNode()
 {
-	if (sbs->FastDelete == false && node)
+	if (node)
 		sbs->mSceneManager->destroySceneNode(node);
 }
 

@@ -115,12 +115,13 @@ CameraTexture::~CameraTexture()
 		sbs->mSceneManager->destroyCamera(camera);
 	}
 
+	Ogre::ResourcePtr matwrapper = material;
+	Ogre::MaterialManager::getSingleton().remove(matwrapper);
+	Ogre::ResourcePtr texwrapper = texture;
+	Ogre::TextureManager::getSingleton().remove(texwrapper);
+
 	if (sbs->FastDelete == false)
 	{
-		Ogre::ResourcePtr matwrapper = material;
-		Ogre::MaterialManager::getSingleton().remove(matwrapper);
-		Ogre::ResourcePtr texwrapper = texture;
-		Ogre::TextureManager::getSingleton().remove(texwrapper);
 		sbs->UnregisterTextureInfo(GetName());
 		sbs->DecrementTextureCount();
 		sbs->DecrementMaterialCount();
