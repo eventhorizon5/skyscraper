@@ -2289,6 +2289,8 @@ EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fm
 
 	//load script processor
 	processor = new ScriptProcessor(Simcore);
+
+	instance = instance_number;
 }
 
 EngineContext::~EngineContext()
@@ -2297,7 +2299,7 @@ EngineContext::~EngineContext()
 	{
 		delete Simcore;
 		Simcore = 0;
-		skyscraper->Report("SBS unloaded\n");
+		skyscraper->Report("SBS instance " + ToString(instance) + " unloaded\n");
 	}
 
 	//unload script processor

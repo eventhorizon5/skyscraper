@@ -227,6 +227,7 @@ private:
 
 	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
+	int instance; //instance number
 
 };
 
