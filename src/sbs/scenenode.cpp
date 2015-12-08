@@ -57,18 +57,24 @@ SceneNode::~SceneNode()
 
 void SceneNode::DetachAllObjects()
 {
+	//detach all movable objects from this scene node
+
 	if (node)
 		node->detachAllObjects();
 }
 
 void SceneNode::AddChild(SceneNode *scenenode)
 {
+	//add a child scene node
+
 	if (node && scenenode && scenenode->GetRawSceneNode())
 		node->addChild(scenenode->GetRawSceneNode());
 }
 
 void SceneNode::RemoveChild(SceneNode *scenenode)
 {
+	//remove a child scene node
+
 	if (node && scenenode)
 	{
 		Ogre::SceneNode *rawnode = scenenode->GetRawSceneNode();
@@ -79,6 +85,9 @@ void SceneNode::RemoveChild(SceneNode *scenenode)
 
 void SceneNode::AddToSceneRoot()
 {
+	//add this scene node to scene manager root scene node
+	//this is for the SBS engine (top) scene node only
+
 	if (node)
 		sbs->mSceneManager->getRootSceneNode()->addChild(node);
 }
@@ -133,6 +142,7 @@ Ogre::Vector3 SceneNode::GetPosition(bool relative)
 void SceneNode::SetRotation(const Ogre::Vector3 &rotation)
 {
 	//set rotation of scene node in degrees
+	//this sets the rotation of all three vectors
 
 	if (!node)
 		return;
@@ -164,6 +174,7 @@ void SceneNode::SetRotation(const Ogre::Vector3 &rotation)
 Ogre::Vector3 SceneNode::GetRotation()
 {
 	//get rotation of scene node in degrees
+	//this returns the rotation of all three vectors
 
 	return Rotation;
 }
@@ -171,6 +182,9 @@ Ogre::Vector3 SceneNode::GetRotation()
 void SceneNode::Update()
 {
 	//sync positioning
+	//this mainly needs to be called on child scenenodes of a parent that has moved/rotated,
+	//to recalculate offsets
+
 	if (node)
 		node->needUpdate();
 }
@@ -199,6 +213,8 @@ void SceneNode::SetOrientation(const Ogre::Quaternion &q)
 
 void SceneNode::Move(const Ogre::Vector3 &vector, float speed)
 {
+	//move this scene node
+
 	if (!node)
 		return;
 
@@ -210,18 +226,24 @@ void SceneNode::Move(const Ogre::Vector3 &vector, float speed)
 
 void SceneNode::AttachObject(Ogre::MovableObject *object)
 {
+	//attach a movable object to this node
+
 	if (node && object)
 		node->attachObject(object);
 }
 
 void SceneNode::DetachObject(Ogre::MovableObject *object)
 {
+	//detach a movable object from this node
+
 	if (node && object)
 		node->detachObject(object);
 }
 
 float SceneNode::GetScale()
 {
+	//get scaling factor
+
 	if (node)
 		return node->getScale().x;
 	return 0.0f;
@@ -229,6 +251,8 @@ float SceneNode::GetScale()
 
 void SceneNode::SetScale(float scale)
 {
+	//set scaling factor
+
 	if (!node)
 		return;
 
@@ -238,6 +262,8 @@ void SceneNode::SetScale(float scale)
 
 SceneNode* SceneNode::CreateChild(std::string name, const Ogre::Vector3 &offset)
 {
+	//create a raw child scenenode, at the specified offset
+
 	if (!node || !GetParent())
 		return 0;
 
@@ -250,6 +276,8 @@ SceneNode* SceneNode::CreateChild(std::string name, const Ogre::Vector3 &offset)
 
 std::string SceneNode::GetFullName()
 {
+	//get full name of a scene node, which includes object ID information
+
 	if (!node)
 		return "";
 
