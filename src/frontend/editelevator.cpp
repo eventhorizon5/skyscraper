@@ -1168,6 +1168,8 @@ void editelevator::OnInit()
 
 	last_elevator = 0;
 	floor_number = 0;
+	last_door = -1;
+	last_elevator_count = 0;
 
 	if (Simcore->GetElevatorCount() > 0)
 	{
@@ -1183,8 +1185,10 @@ void editelevator::OnInit()
 
 void editelevator::Loop()
 {
-	static int last_door;
-	static int last_elevator_count;
+	//if active engine has changed, refresh values
+	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		OnInit();
+
 	int elev_num;
 	int door_num;
 	int elevator_count;

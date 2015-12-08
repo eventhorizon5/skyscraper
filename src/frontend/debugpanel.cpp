@@ -446,18 +446,7 @@ void DebugPanel::Timer::Notify()
 	if (mc)
 	{
 		if (mc->IsShown() == true)
-		{
-			if (floor)
-			{
-				mc->chkFloor->SetValue(floor->IsEnabled);
-				mc->chkColumnFrame->SetValue(floor->IsColumnFrameEnabled);
-				mc->chkInterfloor->SetValue(floor->IsInterfloorEnabled);
-			}
-			mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
-			mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
-			mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
-			mc->chkExternal->SetValue(Simcore->IsExternalEnabled);
-		}
+			mc->Loop();
 	}
 
 	if (cc)

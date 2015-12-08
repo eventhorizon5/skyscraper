@@ -164,6 +164,25 @@ void MeshControl::OnInit()
 	chkElevators->SetValue(true);
 }
 
+void MeshControl::Loop()
+{
+	//if active engine has changed, refresh values
+	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		OnInit();
+
+	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+	if (floor)
+	{
+		chkFloor->SetValue(floor->IsEnabled);
+		chkColumnFrame->SetValue(floor->IsColumnFrameEnabled);
+		chkInterfloor->SetValue(floor->IsInterfloorEnabled);
+	}
+	chkSky->SetValue(Simcore->IsSkyboxEnabled);
+	chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
+	chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
+	chkExternal->SetValue(Simcore->IsExternalEnabled);
+}
+
 void MeshControl::On_bOk_Click(wxCommandEvent& event)
 {
 	Hide();

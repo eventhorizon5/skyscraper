@@ -66,6 +66,7 @@ class MeshControl: public wxDialog
 		static const long ID_chkAllColumnFrames;
 		static const long ID_bOk;
 		//*)
+		void Loop();
 
 	protected:
 
