@@ -179,7 +179,7 @@ void Camera::SetPosition(const Ogre::Vector3 &position)
 
 	if (EnableBullet == true)
 	{
-		mCharacter->setPosition(sbs->ToRemote(position) - MainCamera->getPosition());
+		GetSceneNode()->SetPosition(position - sbs->ToLocal(MainCamera->getPosition()));
 		mCharacter->updateTransform(true, false, false);
 	}
 	else

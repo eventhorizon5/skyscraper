@@ -1722,6 +1722,10 @@ bool Skyscraper::Load()
 	sleep(2);
 #endif
 
+	//move instance to an offset for testing
+	float offset = (GetEngineCount() - 1) * 300;
+	Simcore->Move(offset, 0, offset);
+
 	//initialize simulator
 	Simcore->Initialize(mCamera);
 
