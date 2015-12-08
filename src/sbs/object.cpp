@@ -164,8 +164,8 @@ void Object::AddChild(Object *object)
 		if (node)
 			node->AddChild(object->GetSceneNode());
 		else if (object->GetSceneNode())
-			//if parent doesn't have a scenenode, but child does, add child to root node
-			object->GetSceneNode()->AddToSceneRoot();
+			//if parent doesn't have a scenenode, but child does, add child to engine root node
+			sbs->GetSceneNode()->AddChild(object->GetSceneNode());
 	}
 }
 

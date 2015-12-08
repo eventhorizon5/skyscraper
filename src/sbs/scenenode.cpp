@@ -83,15 +83,6 @@ void SceneNode::RemoveChild(SceneNode *scenenode)
 	}
 }
 
-void SceneNode::AddToSceneRoot()
-{
-	//add this scene node to scene manager root scene node
-	//this is for the SBS engine (top) scene node only
-
-	if (node)
-		sbs->mSceneManager->getRootSceneNode()->addChild(node);
-}
-
 void SceneNode::ShowBoundingBox(bool value)
 {
 	//show scene node's 3D bounding box
