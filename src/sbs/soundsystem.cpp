@@ -66,7 +66,18 @@ void SoundSystem::Loop()
 		ProfileManager::Start_Profile("Sound");
 	else
 		ProfileManager::Start_Profile("FMOD");
+
+	//sync sound listener object to camera position
+	SetListenerPosition(sbs->camera->GetPosition());
+
+	//set direction of listener to camera's direction
+	Ogre::Vector3 front, top;
+	sbs->camera->GetDirection(front, top);
+	SetListenerDirection(front, top);
+
+	//update FMOD
 	soundsys->update();
+
 	ProfileManager::Stop_Profile();
 }
 

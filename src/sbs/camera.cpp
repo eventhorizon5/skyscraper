@@ -859,18 +859,6 @@ void Camera::Loop(float delta)
 		}
 	}
 
-	SoundSystem* soundsystem = sbs->GetSoundSystem();
-	if (soundsystem)
-	{
-		//sync sound listener object to camera position
-		soundsystem->SetListenerPosition(GetPosition());
-
-		//set direction of listener to camera's direction
-		Ogre::Vector3 front, top;
-		GetDirection(front, top);
-		soundsystem->SetListenerDirection(front, top);
-	}
-
 	//if a model is attached, run it's loop
 	if (AttachedModel)
 		AttachedModel->Loop();
