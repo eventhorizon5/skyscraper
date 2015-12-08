@@ -234,7 +234,13 @@ void Object::Move(const Ogre::Vector3 &vector, float speed)
 {
 	//move an object
 
-	SetPosition(GetPosition() + (vector * speed));
+	if (!node)
+		return;
+
+	node->Move(vector, speed);
+
+	//notify about movement
+	NotifyMove();
 }
 
 void Object::Move(float X, float Y, float Z, float speed)
