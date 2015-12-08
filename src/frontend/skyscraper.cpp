@@ -2213,7 +2213,7 @@ void Skyscraper::SetDateTime(double julian_date_time)
 
 void Skyscraper::CreateEngine(const Ogre::Vector3 &position)
 {
-	active_engine = new EngineContext(mSceneMgr, soundsys, position);
+	active_engine = new EngineContext(mSceneMgr, soundsys, GetEngineCount(), position);
 	engines.push_back(active_engine);
 }
 
@@ -2277,10 +2277,10 @@ void Skyscraper::RunEngines()
 	}
 }
 
-EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position)
+EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position)
 {
 	//Create simulator object
-	Simcore = new SBS::SBS(mSceneManager, fmodsystem, position);
+	Simcore = new SBS::SBS(mSceneManager, fmodsystem, instance_number, position);
 
 	//load script processor
 	processor = new ScriptProcessor(Simcore);

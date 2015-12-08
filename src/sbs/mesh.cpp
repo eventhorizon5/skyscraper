@@ -180,9 +180,6 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 					Classify(2, temppoly, start.z) != 1 &&
 					Classify(2, temppoly, end.z) != 2)
 			{
-				if (Verbose)
-					Report("Cutting polygon '" + polygon->GetName() + "'");
-
 				extentsx = GetExtents(temppoly, 1);
 				extentsy = GetExtents(temppoly, 2);
 				extentsz = GetExtents(temppoly, 3);
@@ -543,7 +540,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 
 	Ogre::MeshPtr collidermesh;
 
-	std::string Name = "(" + ToString(GetNumber()) + ")" + name;
+	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
 	std::string filename2;
 
@@ -1091,7 +1088,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	trimesh = 0;
 
 	//create submesh and set material
-	ProcessSubMesh(triangles, material, name, true);
+	ProcessSubMesh(triangles, material, true);
 
 	MeshWrapper->load();
 
@@ -1155,7 +1152,7 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	return 0;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, const std::string &name, bool add)
+int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view, in order to upload data to graphics card
@@ -1181,7 +1178,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::st
 		createnew = true;
 
 		//create submesh
-		submesh = MeshWrapper->createSubMesh(name);
+		submesh = MeshWrapper->createSubMesh(GetSceneNode()->GetFullName() + ":" + ToString((int)Submeshes.size()));
 		submesh->useSharedVertices = true;
 		Submeshes.push_back(submesh);
 		index = (int)Submeshes.size() - 1;

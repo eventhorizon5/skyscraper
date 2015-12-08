@@ -40,7 +40,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 		return;
 
 	//set up scene node
-	std::string node_name = "(" + ToString(parent->GetNumber()) + ")" + name;
+	std::string node_name = ToString(sbs->InstanceNumber) + ":(" + ToString(parent->GetNumber()) + ")" + name;
 
 	node = sbs->mSceneManager->createSceneNode(node_name);
 

@@ -42,7 +42,6 @@ public:
 	void DeletePolygons(bool recreate_collider = true);
 	void DeletePolygon(int index, bool recreate_colliders);
 	void DeleteVertices(std::vector<int> &deleted_indices);
-	std::string ProcessName(const std::string &name);
 	int GetPolygonCount();
 	Polygon* GetPolygon(int index);
 	int FindPolygon(const std::string &name);

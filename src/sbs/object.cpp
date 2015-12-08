@@ -72,7 +72,7 @@ Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
 		if (parent)
 			Number = sbs->RegisterObject(this);
 		else
-			Number = (int)ObjectArray.size(); //root object
+			Number = 0; //root object
 	}
 }
 

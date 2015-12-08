@@ -39,9 +39,7 @@
 
 namespace SBS {
 
-std::vector<Object*> ObjectArray;
-
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -52,6 +50,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre
 	//root object needs to self-register
 	ObjectCount = 0;
 	RegisterObject(this);
+	InstanceNumber = instance_number;
 
 	//set up SBS object
 	SetValues("SBS", "SBS", true);
@@ -444,7 +443,7 @@ SBS::~SBS()
 	}
 	mWorld = 0;
 
-	//ObjectArray.clear();
+	ObjectArray.clear();
 	verify_results.clear();
 
 	if (timer)
