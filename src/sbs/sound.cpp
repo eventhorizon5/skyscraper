@@ -87,7 +87,9 @@ Sound::~Sound()
 
 void Sound::OnMove(bool parent)
 {
-	FMOD_VECTOR pos = {GetPosition().x, GetPosition().y, GetPosition().z};
+	Ogre::Vector3 offset = node->GetEngineOffset();
+
+	FMOD_VECTOR pos = {GetPosition().x + offset.x, GetPosition().y + offset.y, GetPosition().z + offset.z};
 	FMOD_VECTOR vel;
 	vel.x = 0;
 	vel.y = 0;
@@ -101,7 +103,7 @@ void Sound::OnMove(bool parent)
 		vel.z = (GetPosition().z - Position.z) * (1000 / sbs->GetElapsedTime());
 	}
 
-	Position = node->GetEngineOffset() + GetPosition();
+	Position = GetPosition();
 	Velocity.x = vel.x;
 	Velocity.y = vel.y;
 	Velocity.z = vel.z;
