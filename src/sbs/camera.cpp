@@ -105,6 +105,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	MainCamera = 0;
 	Gravity = 0;
 	GravityStatus = false;
+	FirstAttach = false;
 
 	//set up camera and scene nodes
 
@@ -1347,17 +1348,21 @@ bool Camera::Attach(Ogre::Camera *camera)
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
 
-	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
+	//move camera to start location
+	if (FirstAttach == false)
+	{
+		EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
-	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
-	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
+		SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
+		GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
+
+		SetToStartPosition(false); //also turns on start floor
+		SetToStartDirection();
+		SetToStartRotation();
+		FirstAttach = true;
+	}
 
 	Refresh();
-
-	//move camera to start location
-	SetToStartPosition(false); //also turns on start floor
-	SetToStartDirection();
-	SetToStartRotation();
 
 	return true;
 }

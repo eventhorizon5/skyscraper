@@ -72,6 +72,7 @@ public:
 	Ogre::Vector3 HitPosition; //last hit position
 	bool EnableBullet;
 	float BinocularsFOV; //binoculars mode FOV
+	bool FirstAttach;
 
 	//functions
 	Camera(Object *parent);
