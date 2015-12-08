@@ -101,7 +101,7 @@ public:
 	void destroyRenderWindow();
 	const std::string getOgreHandle() const;
 	void Render();
-	void GetInput();
+	void GetInput(EngineContext *engine);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	bool ReportFatalError(const std::string &message);
@@ -173,6 +173,7 @@ private:
 	void UnloadSim(bool all = true);
 	void DeleteButtons();
 	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
+	void RunEngines();
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
@@ -218,6 +219,7 @@ public:
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
 	bool IsCameraActive();
+	void Run();
 
 private:
 

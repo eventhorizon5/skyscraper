@@ -682,7 +682,7 @@ bool Skyscraper::Initialize()
 	return true;
 }
 
-void Skyscraper::GetInput()
+void Skyscraper::GetInput(EngineContext *engine)
 {
 	SBS::SBS_PROFILE_MAIN("GetInput");
 
@@ -700,7 +700,7 @@ void Skyscraper::GetInput()
 	static int old_mouse_x, old_mouse_y;
 
 	//get SBS instance
-	SBS::SBS *Simcore = active_engine->GetSystem();
+	SBS::SBS *Simcore = engine->GetSystem();
 
 	// First get elapsed time from the virtual clock.
 	current_time = Simcore->GetRunTime();
@@ -1166,22 +1166,8 @@ void Skyscraper::Loop()
 		Simcore = active_engine->GetSystem();
 	}
 
-	//process internal clock
-	Simcore->AdvanceClock();
-	if (IsRunning == true)
-		Simcore->CalculateFrameRate();
-
-	if (IsLoading == false)
-	{
-		//run SBS main loop
-		Simcore->MainLoop();
-
-		//get input
-		GetInput();
-
-		//process camera loop
-		Simcore->CameraLoop();
-	}
+	//run sim engine instances
+	RunEngines();
 
 	//update Caelum
 	if (mCaelumSystem)
@@ -2283,6 +2269,14 @@ void Skyscraper::SetActiveEngine(int index)
 	active_engine->GetSystem()->AttachCamera(mCamera);
 }
 
+void Skyscraper::RunEngines()
+{
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		engines[i]->Run();
+	}
+}
+
 EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position)
 {
 	//Create simulator object
@@ -2315,6 +2309,27 @@ ScriptProcessor* EngineContext::GetScriptProcessor()
 bool EngineContext::IsCameraActive()
 {
 	return Simcore->camera->IsActive();
+}
+
+void EngineContext::Run()
+{
+	//process internal clock
+	Simcore->AdvanceClock();
+	if (skyscraper->IsRunning == true)
+		Simcore->CalculateFrameRate();
+
+	if (skyscraper->IsLoading == false)
+	{
+		//run SBS main loop
+		Simcore->MainLoop();
+
+		//get input
+		if (IsCameraActive() == true)
+			skyscraper->GetInput(this);
+
+		//process camera loop
+		Simcore->CameraLoop();
+	}
 }
 
 }
