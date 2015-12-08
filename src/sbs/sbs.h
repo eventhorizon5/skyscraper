@@ -69,6 +69,7 @@ namespace OgreBulletCollisions {
 #include "timer.h"
 #include "person.h"
 #include "route.h"
+#include "scenenode.h"
 
 namespace SBS {
 

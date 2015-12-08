@@ -63,8 +63,7 @@ Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
 	Number = -1;
 	Temporary = temporary;
 	parent_deleting = false;
-	SceneNode = 0;
-	Rotation = Ogre::Vector3::ZERO;
+	node = 0;
 	values_set = false;
 
 	//register object with engine
@@ -86,19 +85,20 @@ Object::~Object()
 		return;
 
 	//clean up scene node
-	if (SceneNode)
-		SceneNode->detachAllObjects();
+	if (node)
+		node->DetachAllObjects();
 
 	if (sbs->FastDelete == false)
 	{
 		//unregister this object from parent
 		if (Parent && sbs->FastDelete == false)
 			Parent->RemoveChild(this);
-
-		//delete scene node
-		if (SceneNode)
-			sbs->mSceneManager->destroySceneNode(SceneNode);
 	}
+
+	//delete scene node
+	if (node)
+		delete node;
+	node = 0;
 
 	//if fastdelete is enabled, don't unregister (just delete)
 	if (sbs->FastDelete == true || Temporary == true)
@@ -121,18 +121,9 @@ void Object::SetValues(const std::string &type, const std::string &name, bool is
 	Type = type;
 	Name = name;
 
-	//set up scene node
-	std::string node_name = "(" + ToString(GetNumber()) + ")" + Name;
-
-	//create scene node
-	if (sbs->mSceneManager && is_movable)
-	{
-		SceneNode = sbs->mSceneManager->createSceneNode(node_name);
-
-		//attach scene node to root, if no parent exists (for engine root object)
-		if (!Parent)
-			sbs->mSceneManager->getRootSceneNode()->addChild(SceneNode);
-	}
+	//create scene node object
+	if (is_movable == true)
+		node = new SceneNode(this, Name);
 
 	//register as child object if object has a valid parent
 	if (Parent)
@@ -147,7 +138,7 @@ bool Object::IsPermanent()
 
 bool Object::IsMovable()
 {
-	return SceneNode != 0;
+	return node != 0;
 }
 
 const std::string& Object::GetType()
@@ -170,11 +161,11 @@ void Object::AddChild(Object *object)
 	//add child's scene node
 	if (object->GetSceneNode())
 	{
-		if (SceneNode)
-			SceneNode->addChild(object->GetSceneNode());
-		else
+		if (node)
+			node->AddChild(object->GetSceneNode());
+		else if (object->GetSceneNode())
 			//if parent doesn't have a scenenode, but child does, add child to root node
-			sbs->mSceneManager->getRootSceneNode()->addChild(object->GetSceneNode());
+			object->GetSceneNode()->AddToSceneRoot();
 	}
 }
 
@@ -194,8 +185,8 @@ void Object::RemoveChild(Object *object)
 	}
 
 	//remove child's scene node
-	if (SceneNode && object->GetSceneNode())
-		SceneNode->removeChild(object->GetSceneNode());
+	if (node)
+		node->RemoveChild(object->GetSceneNode());
 }
 
 Object* Object::GetChild(int index)
@@ -213,9 +204,9 @@ int Object::GetChildrenCount()
 	return (int)children.size();
 }
 
-Ogre::SceneNode* Object::GetSceneNode()
+SceneNode* Object::GetSceneNode()
 {
-	return SceneNode;
+	return node;
 }
 
 void Object::SetNumber(int number)
@@ -235,15 +226,21 @@ void Object::ShowBoundingBox(bool value)
 {
 	//show object's 3D bounding box
 
-	if (SceneNode)
-		SceneNode->showBoundingBox(value);
+	if (node)
+		node->ShowBoundingBox(value);
 }
 
 void Object::Move(const Ogre::Vector3 &vector, float speed)
 {
 	//move an object
 
-	SetPosition(GetPosition() + (vector * speed));
+	if (!node)
+		return;
+
+	node->Move(vector, speed);
+
+	//notify about movement
+	NotifyMove();
 }
 
 void Object::Move(float X, float Y, float Z, float speed)
@@ -256,11 +253,10 @@ void Object::SetPosition(const Ogre::Vector3 &position)
 {
 	//set position of object
 
-	if (!SceneNode)
+	if (!node)
 		return;
 
-	Ogre::Vector3 pos = sbs->ToRemote(position);
-	SceneNode->_setDerivedPosition(pos);
+	node->SetPosition(position);
 
 	//notify about movement
 	NotifyMove();
@@ -271,11 +267,10 @@ void Object::SetPositionRelative(const Ogre::Vector3 &position)
 	//set position of object
 	//position is relative of parent object
 
-	if (!SceneNode)
+	if (!node)
 		return;
 
-	Ogre::Vector3 pos = sbs->ToRemote(position);
-	SceneNode->setPosition(pos);
+	node->SetPositionRelative(position);
 
 	//notify about movement
 	NotifyMove();
@@ -306,42 +301,20 @@ Ogre::Vector3 Object::GetPosition(bool relative)
 	//get position of object
 	//if relative is true, position is relative of parent object
 
-	if (!SceneNode)
+	if (!node)
 		return Ogre::Vector3::ZERO;
 
-	if (relative == false)
-		return sbs->ToLocal(SceneNode->_getDerivedPosition());
-
-	return sbs->ToLocal(SceneNode->getPosition());
+	return node->GetPosition(relative);
 }
 
 void Object::SetRotation(const Ogre::Vector3 &rotation)
 {
 	//rotate object
 
-	if (!SceneNode)
+	if (!node)
 		return;
 
-	Rotation = rotation;
-
-	if (Rotation.x > 359)
-		Rotation.x -= 360;
-	if (Rotation.y > 359)
-		Rotation.y -= 360;
-	if (Rotation.z > 359)
-		Rotation.z -= 360;
-	if (Rotation.x < 0)
-		Rotation.x += 360;
-	if (Rotation.y < 0)
-		Rotation += 360;
-	if (Rotation.z < 0)
-		Rotation.z += 360;
-
-	Ogre::Quaternion x(Ogre::Degree(Rotation.x), Ogre::Vector3::UNIT_X);
-	Ogre::Quaternion y(Ogre::Degree(Rotation.y), Ogre::Vector3::NEGATIVE_UNIT_Y);
-	Ogre::Quaternion z(Ogre::Degree(Rotation.z), Ogre::Vector3::UNIT_Z);
-	Ogre::Quaternion rot = x * y * z;
-	SceneNode->setOrientation(rot);
+	node->SetRotation(rotation);
 
 	//notify about rotation
 	NotifyRotate();
@@ -357,7 +330,7 @@ void Object::Rotate(const Ogre::Vector3 &vector, float speed)
 {
 	//rotates object in a relative amount
 
-	Ogre::Vector3 rot = Rotation + (vector * speed);
+	Ogre::Vector3 rot = GetRotation() + (vector * speed);
 	SetRotation(rot);
 }
 
@@ -371,10 +344,18 @@ Ogre::Vector3 Object::GetRotation()
 {
 	//get rotation of object
 
-	if (!SceneNode)
+	if (!node)
 		return Ogre::Vector3::ZERO;
 
-	return Rotation;
+	return node->GetRotation();
+}
+
+Ogre::Quaternion Object::GetOrientation()
+{
+	if (!node)
+		return Ogre::Quaternion::ZERO;
+
+	return node->GetOrientation();
 }
 
 void Object::NotifyMove(bool parent)
@@ -382,11 +363,11 @@ void Object::NotifyMove(bool parent)
 	//notify about a move
 	//if parent is true, this function was called from a parent object
 
-	if (!SceneNode)
+	if (!node)
 		return;
 
 	//sync positioning, for child scene nodes
-	SceneNode->needUpdate();
+	node->Update();
 
 	OnMove(parent);
 	NotifyChildren(true, false);
@@ -397,11 +378,11 @@ void Object::NotifyRotate(bool parent)
 	//notify about a rotate
 	//if parent is true, this function was called from a parent object
 
-	if (!SceneNode)
+	if (!node)
 		return;
 
 	//sync positioning, for child scene nodes
-	SceneNode->needUpdate();
+	node->Update();
 
 	OnRotate(parent);
 	NotifyChildren(false, true);
@@ -441,8 +422,8 @@ void Object::ChangeParent(Object *new_parent)
 
 	//get original orientation
 	Ogre::Quaternion q;
-	if (SceneNode)
-		q = SceneNode->_getDerivedOrientation();
+	if (node)
+		q = node->GetOrientation();
 
 	//switch parent
 	Parent->RemoveChild(this);
@@ -453,9 +434,9 @@ void Object::ChangeParent(Object *new_parent)
 	SetPosition(pos);
 
 	//restore orientation
-	if (SceneNode)
+	if (node)
 	{
-		SceneNode->_setDerivedOrientation(q);
+		node->SetOrientation(q);
 		NotifyRotate();
 	}
 

@@ -130,7 +130,7 @@ public:
 	std::vector<Ogre::SubMesh*> Submeshes; //submeshes (per-material mesh)
 	std::vector<WallObject*> Walls; //associated wall (polygon container) objects
 
-	Ogre::SceneNode *collider_node; //collider scenenode for box collider offsets
+	SceneNode *collider_node; //collider scenenode for box collider offsets
 
 	Ogre::Entity *Movable;
 	OgreBulletDynamics::RigidBody* mBody;
