@@ -448,24 +448,6 @@ SBS::~SBS()
 		delete timer;
 	timer = 0;
 
-	//remove all meshes
-	Ogre::MeshManager::getSingleton().removeAll();
-
-	//remove all materials
-	Ogre::MaterialManager::getSingleton().removeAll();
-	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
-	materialcount = 0;
-
-	//remove all fonts
-	Ogre::FontManager::getSingleton().removeAll();
-
-	//remove all textures
-	Ogre::TextureManager::getSingleton().removeAll();
-	texturecount = 0;
-
-	//clear scene manager
-	mSceneManager->clearScene();
-
 	//clear self reference
 	sbs = 0;
 

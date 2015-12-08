@@ -267,6 +267,27 @@ void Skyscraper::UnloadSim(bool all)
 		}
 		engines.clear();
 	}
+
+	if (engines.empty() == true)
+	{
+		//do a full clear of Ogre objects if all engines have been unloaded
+
+		//remove all meshes
+		Ogre::MeshManager::getSingleton().removeAll();
+
+		//remove all materials
+		Ogre::MaterialManager::getSingleton().removeAll();
+		Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
+
+		//remove all fonts
+		Ogre::FontManager::getSingleton().removeAll();
+
+		//remove all textures
+		Ogre::TextureManager::getSingleton().removeAll();
+
+		//clear scene manager
+		mSceneMgr->clearScene();
+	}
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
