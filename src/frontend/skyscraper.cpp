@@ -2284,13 +2284,14 @@ void Skyscraper::RunEngines()
 
 EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position)
 {
+	instance = instance_number;
+	skyscraper->Report("\nStarting instance " + ToString(instance) + "...");
+
 	//Create simulator object
-	Simcore = new SBS::SBS(mSceneManager, fmodsystem, instance_number, position);
+	Simcore = new SBS::SBS(mSceneManager, fmodsystem, instance, position);
 
 	//load script processor
 	processor = new ScriptProcessor(Simcore);
-
-	instance = instance_number;
 }
 
 EngineContext::~EngineContext()
@@ -2299,7 +2300,7 @@ EngineContext::~EngineContext()
 	{
 		delete Simcore;
 		Simcore = 0;
-		skyscraper->Report("SBS instance " + ToString(instance) + " unloaded\n");
+		skyscraper->Report("\nSBS instance " + ToString(instance) + " unloaded\n");
 	}
 
 	//unload script processor
