@@ -132,6 +132,7 @@ bool Skyscraper::OnInit(void)
 	longitude = 0.0f;
 	datetime = 0.0;
 	active_engine = 0;
+	engine_to_delete = 0;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -993,7 +994,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 		//temporary engine kill test
 		if (wxGetKeyState((wxKeyCode)'K'))
 		{
-			DeleteEngine(engines[1]);
+			engine_to_delete = engines[GetEngineCount() - 1];
 			return;
 		}
 
@@ -1168,6 +1169,11 @@ void Skyscraper::Loop()
 
 	//run sim engine instances
 	RunEngines();
+
+	//delete an engine if requested
+	if (engine_to_delete != 0)
+		DeleteEngine(engine_to_delete);
+	engine_to_delete = 0;
 
 	//update Caelum
 	if (mCaelumSystem)
@@ -2228,10 +2234,9 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 
 			if (active_engine == engine)
 			{
+				active_engine = 0;
 				if (GetEngineCount() > 0)
 					SetActiveEngine(0);
-				else
-					active_engine = 0;
 			}
 			else
 				active_engine->GetSystem()->camera->Refresh();

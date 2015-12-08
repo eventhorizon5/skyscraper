@@ -188,6 +188,8 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
+
+	EngineContext *engine_to_delete;
 };
 
 class MainScreen : public wxFrame
