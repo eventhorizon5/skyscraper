@@ -87,7 +87,7 @@ Sound::~Sound()
 
 void Sound::OnMove(bool parent)
 {
-	Ogre::Vector3 offset = node->GetEngineOffset();
+	Ogre::Vector3 offset = GetSceneNode()->GetEngineOffset();
 
 	FMOD_VECTOR pos = {GetPosition().x + offset.x, GetPosition().y + offset.y, GetPosition().z + offset.z};
 	FMOD_VECTOR vel;
