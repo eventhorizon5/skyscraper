@@ -1752,7 +1752,7 @@ bool Skyscraper::Load()
 	IsLoading = true;
 
 	//move instance to an offset for testing
-	float offsetval = (GetEngineCount() - 1) * 300;
+	float offsetval = GetEngineCount() * 300;
 	Ogre::Vector3 offset (offsetval, 0, offsetval);
 
 	//Create simulator instance
