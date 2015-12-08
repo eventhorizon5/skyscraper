@@ -37,7 +37,6 @@ public:
 	Ogre::SceneNode* GetRawSceneNode() { return node; }
 	void AddChild(SceneNode *scenenode);
 	void RemoveChild(SceneNode *scenenode);
-	void AddToSceneRoot();
 	void ShowBoundingBox(bool value);
 	void SetPosition(const Ogre::Vector3 &position);
 	void SetPositionRelative(const Ogre::Vector3 &position);
