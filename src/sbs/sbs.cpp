@@ -222,7 +222,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre
 	PrintBanner();
 }
 
-void SBS::Initialize(Ogre::Camera *camera)
+void SBS::Initialize()
 {
 	//set default texture map values
 	ResetTextureMapping(true);
@@ -260,7 +260,7 @@ void SBS::Initialize(Ogre::Camera *camera)
 	//Landscape->tricollider = false;
 
 	//create camera object
-	this->camera = new Camera(this, camera);
+	this->camera = new Camera(this);
 }
 
 SBS::~SBS()
@@ -457,7 +457,7 @@ SBS::~SBS()
 	Report("Exiting");
 }
 
-bool SBS::Start()
+bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
@@ -492,10 +492,8 @@ bool SBS::Start()
 		}
 	}
 
-	//move camera to start location
-	camera->SetToStartPosition(false); //also turns on start floor
-	camera->SetToStartDirection();
-	camera->SetToStartRotation();
+	//attach camera object
+	AttachCamera(camera);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
@@ -4259,6 +4257,18 @@ void SBS::RemovePerson(Person *person)
 			return;
 		}
 	}
+}
+
+bool SBS::AttachCamera(Ogre::Camera *camera)
+{
+	if (camera)
+		return this->camera->Attach(camera);
+	return false;
+}
+
+bool SBS::DetachCamera()
+{
+	return camera->Detach();
 }
 
 }

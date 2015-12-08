@@ -74,7 +74,7 @@ public:
 	float BinocularsFOV; //binoculars mode FOV
 
 	//functions
-	Camera(Object *parent, Ogre::Camera *camera);
+	Camera(Object *parent);
 	~Camera();
 	void SetPosition(const Ogre::Vector3 &position);
 	void SetDirection(const Ogre::Vector3 &direction);
@@ -143,6 +143,8 @@ public:
 	void ResetView();
 	bool IsActive() { return (MainCamera != 0); }
 	void Refresh();
+	bool Attach(Ogre::Camera *camera);
+	bool Detach();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

@@ -196,8 +196,8 @@ public:
 	bool ScaleTexture(const std::string &name, float x_scale, float y_scale);
 	bool TransformTexture(const std::string &name, const std::string &type, const std::string &wave_type, float base, float frequency, float phase, float amplitude);
 	float AutoSize(float n1, float n2, bool iswidth, float offset, bool enable_force, bool force_mode);
-	void Initialize(Ogre::Camera *camera);
-	bool Start();
+	void Initialize();
+	bool Start(Ogre::Camera *camera = 0);
 	void CreateSky(const std::string &filenamebase);
 	bool AddWallMain(WallObject* wallobject, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
 	bool AddWallMain(Object *parent, MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th, bool autosize);
@@ -396,6 +396,8 @@ public:
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(const std::string &name, int floor, bool service_access = false);
 	void RemovePerson(Person *person);
+	bool AttachCamera(Ogre::Camera *camera);
+	bool DetachCamera();
 
 	//Meshes
 	MeshObject* Buildings;

@@ -997,6 +997,48 @@ void Skyscraper::GetInput()
 			return;
 		}
 
+		//temporary engine selection test
+		if (wxGetKeyState((wxKeyCode)'1'))
+		{
+			SetActiveEngine(0);
+		}
+		if (wxGetKeyState((wxKeyCode)'2'))
+		{
+			SetActiveEngine(1);
+		}
+		if (wxGetKeyState((wxKeyCode)'3'))
+		{
+			SetActiveEngine(2);
+		}
+		if (wxGetKeyState((wxKeyCode)'4'))
+		{
+			SetActiveEngine(3);
+		}
+		if (wxGetKeyState((wxKeyCode)'5'))
+		{
+			SetActiveEngine(4);
+		}
+		if (wxGetKeyState((wxKeyCode)'6'))
+		{
+			SetActiveEngine(5);
+		}
+		if (wxGetKeyState((wxKeyCode)'7'))
+		{
+			SetActiveEngine(6);
+		}
+		if (wxGetKeyState((wxKeyCode)'8'))
+		{
+			SetActiveEngine(7);
+		}
+		if (wxGetKeyState((wxKeyCode)'9'))
+		{
+			SetActiveEngine(8);
+		}
+		if (wxGetKeyState((wxKeyCode)'0'))
+		{
+			SetActiveEngine(9);
+		}
+
 		//values from old version
 		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
 			camera->Float(speed_normal);
@@ -1748,7 +1790,7 @@ bool Skyscraper::Load()
 #endif
 
 	//initialize simulator
-	Simcore->Initialize(mCamera);
+	Simcore->Initialize();
 
 	//load building data file
 	Report("\nLoading building data from " + BuildingFile + "...\n");
@@ -1809,7 +1851,7 @@ bool Skyscraper::Start()
 	}
 
 	//start simulation
-	if (!Simcore->Start())
+	if (!Simcore->Start(mCamera))
 		return ReportError("Error starting simulator\n");
 
 	//set to saved position if reloading building
@@ -2199,7 +2241,12 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 			delete engine;
 
 			if (active_engine == engine)
-				active_engine = 0;
+			{
+				if (GetEngineCount() > 0)
+					SetActiveEngine(0);
+				else
+					active_engine = 0;
+			}
 			else
 				active_engine->GetSystem()->camera->Refresh();
 			return true;
@@ -2218,6 +2265,22 @@ EngineContext* Skyscraper::FindActiveEngine()
 			return engines[i];
 	}
 	return 0;
+}
+
+void Skyscraper::SetActiveEngine(int index)
+{
+	//set an engine instance to be active
+
+	if (index < 0 || index > GetEngineCount() - 1)
+		return;
+
+	//detach camera from current engine
+	if (active_engine)
+		active_engine->GetSystem()->DetachCamera();
+
+	//switch context to new engine instance
+	active_engine = engines[index];
+	active_engine->GetSystem()->AttachCamera(mCamera);
 }
 
 EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position)

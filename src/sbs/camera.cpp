@@ -39,7 +39,7 @@ namespace SBS {
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
 
-Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
+Camera::Camera(Object *parent) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Camera", "Camera", true);
@@ -102,19 +102,11 @@ Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 	AttachedModel = 0;
 	prev_orientation = Ogre::Quaternion::ZERO;
 	prev_position = Ogre::Vector3::ZERO;
+	MainCamera = 0;
+	Gravity = 0;
+	GravityStatus = false;
 
 	//set up camera and scene nodes
-	MainCamera = 0;
-
-	if (camera->isAttached() == false)
-	{
-		MainCamera = camera;
-		MainCamera->setNearClipDistance(0.1f);
-		MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0);
-		GetSceneNode()->AttachObject(MainCamera);
-	}
-	SetFOVAngle(FOV);
-	SetMaxRenderDistance(FarClip);
 
 	//set up collider character
 	float width = cfg_legs_width / 2;
@@ -127,22 +119,15 @@ Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 	mCharacter = 0;
 	mShape = 0;
 
-	if (MainCamera)
-	{
-		mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
-		EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
+	mCharacter = new OgreBulletDynamics::CharacterController(GetSceneNode()->GetFullName() + " Character", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 
-		//create debug shape
-		mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Ogre::Vector3::UNIT_Y);
-		mCharacter->setShape(mShape);
+	//create debug shape
+	mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Ogre::Vector3::UNIT_Y);
+	mCharacter->setShape(mShape);
 
-		//other movement options
-		mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
-		mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65f)));
-	}
-
-	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
-	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
+	//other movement options
+	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
+	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65f)));
 }
 
 Camera::~Camera()
@@ -160,8 +145,8 @@ Camera::~Camera()
 	if (mCharacter)
 		delete mCharacter;
 
-	if (MainCamera)
-		GetSceneNode()->DetachObject(MainCamera);
+	//detach the camera
+	Detach();
 
 	if (GetSceneNode()->GetRawSceneNode()->numChildren() > 0)
 	{
@@ -1347,6 +1332,48 @@ void Camera::Refresh()
 {
 	if (mCharacter)
 		mCharacter->resetLastCollision();
+}
+
+bool Camera::Attach(Ogre::Camera *camera)
+{
+	if (camera->isAttached() == true)
+		return false;
+
+	MainCamera = camera;
+	MainCamera->setNearClipDistance(0.1f);
+	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0);
+	GetSceneNode()->AttachObject(MainCamera);
+
+	SetFOVAngle(FOV);
+	SetMaxRenderDistance(FarClip);
+
+	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
+
+	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
+	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
+
+	Refresh();
+
+	//move camera to start location
+	SetToStartPosition(false); //also turns on start floor
+	SetToStartDirection();
+	SetToStartRotation();
+
+	return true;
+}
+
+bool Camera::Detach()
+{
+	if (!MainCamera)
+		return false;
+
+	if (MainCamera->isAttached() == false)
+		return false;
+
+	GetSceneNode()->DetachObject(MainCamera);
+	MainCamera = 0;
+
+	return true;
 }
 
 }
