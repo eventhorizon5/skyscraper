@@ -48,7 +48,7 @@ Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 po
 	try
 	{
 		light = sbs->mSceneManager->createLight(name);
-		GetSceneNode()->attachObject(light);
+		GetSceneNode()->AttachObject(light);
 
 		if (type == 0)
 			light->setType(Ogre::Light::LT_POINT);
@@ -73,7 +73,7 @@ Light::Light(Object *parent, const std::string &name, int type, Ogre::Vector3 po
 Light::~Light()
 {
 	if (light)
-		GetSceneNode()->detachObject(light);
+		GetSceneNode()->DetachObject(light);
 	sbs->mSceneManager->destroyLight(GetName());
 
 	//unregister from parent

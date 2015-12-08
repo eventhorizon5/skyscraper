@@ -292,6 +292,7 @@
     <ClCompile Include="..\src\sbs\random.cpp" />
     <ClCompile Include="..\src\sbs\route.cpp" />
     <ClCompile Include="..\src\sbs\sbs.cpp" />
+    <ClCompile Include="..\src\sbs\scenenode.cpp" />
     <ClCompile Include="..\src\sbs\shaft.cpp" />
     <ClCompile Include="..\src\sbs\sound.cpp" />
     <ClCompile Include="..\src\sbs\soundsystem.cpp" />
@@ -328,6 +329,7 @@
     <ClInclude Include="..\src\sbs\random.h" />
     <ClInclude Include="..\src\sbs\route.h" />
     <ClInclude Include="..\src\sbs\sbs.h" />
+    <ClInclude Include="..\src\sbs\scenenode.h" />
     <ClInclude Include="..\src\sbs\shaft.h" />
     <ClInclude Include="..\src\sbs\sound.h" />
     <ClInclude Include="..\src\sbs\soundsystem.h" />

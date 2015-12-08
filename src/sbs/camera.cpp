@@ -107,7 +107,7 @@ Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 	MainCamera = camera;
 	MainCamera->setNearClipDistance(0.1f);
 	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0);
-	GetSceneNode()->attachObject(MainCamera);
+	GetSceneNode()->AttachObject(MainCamera);
 	SetFOVAngle(FOV);
 	SetMaxRenderDistance(FarClip);
 
@@ -119,7 +119,7 @@ Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 	float height = (cfg_body_height + cfg_legs_height - 0.5f) - (width * 2);
 	float step_height = cfg_legs_height - 0.5f;
 
-	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, GetSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
+	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
 
 	//create debug shape
@@ -149,9 +149,9 @@ Camera::~Camera()
 		delete mCharacter;
 
 	if (MainCamera)
-		GetSceneNode()->detachObject(MainCamera);
+		GetSceneNode()->DetachObject(MainCamera);
 
-	std::string nodename = GetSceneNode()->getChild(0)->getName();
+	std::string nodename = GetSceneNode()->GetRawSceneNode()->getChild(0)->getName();
 	sbs->mSceneManager->destroySceneNode(nodename);
 }
 
@@ -211,7 +211,7 @@ Ogre::Vector3 Camera::GetPosition(bool relative)
 	//returns the camera's current position
 	//"relative" value is ignored for camera object
 
-	return sbs->ToLocal(GetSceneNode()->getPosition() + MainCamera->getPosition());
+	return GetSceneNode()->GetPosition() + sbs->ToLocal(MainCamera->getPosition());
 }
 
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
@@ -1024,8 +1024,8 @@ void Camera::Sync()
 		mCharacter->sync();
 
 	//notify on movement or rotation
-	Ogre::Vector3 position = GetSceneNode()->_getDerivedPosition();
-	Ogre::Quaternion orientation = GetSceneNode()->_getDerivedOrientation();
+	Ogre::Vector3 position = sbs->ToRemote(GetPosition());
+	Ogre::Quaternion orientation = GetOrientation();
 
 	if (prev_position != position)
 		NotifyMove();

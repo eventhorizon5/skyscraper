@@ -30,6 +30,7 @@ namespace SBS {
 
 class SBS;
 class Object;
+class SceneNode;
 
 //ObjectBase is used for lightweight objects, and core of Object
 class SBSIMPEXP ObjectBase
@@ -75,7 +76,7 @@ public:
 	Object* GetChild(int index);
 	int GetChildrenCount();
 	void RemoveChild(Object *object);
-	Ogre::SceneNode* GetSceneNode();
+	SceneNode* GetSceneNode();
 	void SetNumber(int number);
 	bool IsTemporary();
 	void ShowBoundingBox(bool value);
@@ -92,6 +93,7 @@ public:
 	virtual void SetRotation(const Ogre::Vector3 &rotation);
 	virtual void SetRotation(float X, float Y, float Z);
 	virtual Ogre::Vector3 GetRotation();
+	Ogre::Quaternion GetOrientation();
 	virtual void OnMove(bool parent) {} //called when object is moved
 	virtual void OnRotate(bool parent) {} //called when object is rotated
 	void NotifyMove(bool parent = false);
@@ -124,8 +126,7 @@ private:
 	int Number; //object identifier
 	bool Temporary; //true if object can be deleted during runtime
 	std::vector<Object*> children; //object's children
-	Ogre::SceneNode *SceneNode; //node in scene graph
-	Ogre::Vector3 Rotation; //rotation vector
+	SceneNode *node; //node in scene graph
 	bool values_set;
 };
 

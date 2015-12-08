@@ -653,11 +653,11 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	else
 		Movable = sbs->mSceneManager->createEntity(filename2);
 	//Movable->setCastShadows(true);
-	GetSceneNode()->attachObject(Movable);
+	GetSceneNode()->AttachObject(Movable);
 
 	//rescale if a loaded model
 	if (filename != "")
-		GetSceneNode()->setScale(sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier), sbs->ToRemote(scale_multiplier));
+		GetSceneNode()->SetScale(scale_multiplier);
 
 	//set maximum render distance
 	if (max_render_distance > 0)
@@ -705,7 +705,7 @@ MeshObject::~MeshObject()
 
 		if (Movable)
 		{
-			GetSceneNode()->detachObject(Movable);
+			GetSceneNode()->DetachObject(Movable);
 			sbs->mSceneManager->destroyEntity(Movable);
 		}
 		Movable = 0;
@@ -723,9 +723,9 @@ void MeshObject::Enable(bool value, bool remove)
 
 	//attach or detach from scenegraph
 	if (value == false)
-		GetSceneNode()->detachObject(Movable);
+		GetSceneNode()->DetachObject(Movable);
 	else
-		GetSceneNode()->attachObject(Movable);
+		GetSceneNode()->AttachObject(Movable);
 
 	//enable or disable collision detection
 	if (mBody)
@@ -1102,8 +1102,8 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	//if a mesh was attached and was empty, it needs to be reattached to be visible
 	if (count == 0 && IsEnabled() == true)
 	{
-		GetSceneNode()->detachObject(Movable);
-		GetSceneNode()->attachObject(Movable);
+		GetSceneNode()->DetachObject(Movable);
+		GetSceneNode()->AttachObject(Movable);
 	}
 
 	if (sbs->RenderOnStartup == true)
@@ -1533,9 +1533,7 @@ void MeshObject::CreateCollider()
 	if (mBody)
 		return;
 
-	Ogre::SceneNode *node = GetSceneNode();
-
-	if (!node)
+	if (!GetSceneNode())
 		return;
 
 	//exit if mesh is empty
@@ -1569,11 +1567,11 @@ void MeshObject::CreateCollider()
 
 		//create a collider scene node
 		if (!collider_node)
-			collider_node = GetSceneNode()->createChildSceneNode(name + " collider");
+			collider_node = GetSceneNode()->CreateChild(GetName() + " collider");
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(collider_node, shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
 		mShape = shape;
 
 		if (sbs->DeleteColliders == true)
@@ -1632,11 +1630,11 @@ void MeshObject::CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vert
 
 		//create a collider scene node
 		if (!collider_node)
-			collider_node = GetSceneNode()->createChildSceneNode(name + " collider");
+			collider_node = GetSceneNode()->CreateChild(GetName() + " collider");
 
 		//physics is not supported on triangle meshes; use CreateBoxCollider instead
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
-		mBody->setStaticShape(collider_node, shape, 0.1f, 0.5f, false);
+		mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -1659,20 +1657,20 @@ void MeshObject::CreateBoxCollider()
 	try
 	{
 		//initialize collider shape
-		float scale = GetSceneNode()->getScale().y;
+		float scale = GetSceneNode()->GetScale();
 		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 
 		//create a new scene node for this collider, and center the collider accordingly
-		Ogre::Vector3 collider_center = MeshWrapper->getBounds().getCenter();
+		Ogre::Vector3 collider_center = sbs->ToLocal(MeshWrapper->getBounds().getCenter());
 		if (!collider_node)
-			collider_node = GetSceneNode()->createChildSceneNode(name + " collider", collider_center);
+			collider_node = GetSceneNode()->CreateChild(GetName() + " collider", collider_center);
 
 		mBody = new OgreBulletDynamics::RigidBody(name, sbs->mWorld);
 		if (IsPhysical() == false)
-			mBody->setStaticShape(collider_node, shape, 0.1f, 0.5f, false);
+			mBody->setStaticShape(collider_node->GetRawSceneNode(), shape, 0.1f, 0.5f, false);
 		else
-			mBody->setShape(collider_node, shape, restitution, friction, mass);
+			mBody->setShape(collider_node->GetRawSceneNode(), shape, restitution, friction, mass);
 		mShape = shape;
 	}
 	catch (Ogre::Exception &e)
@@ -2068,7 +2066,7 @@ WallObject* MeshObject::FindPolygon(const std::string &name, int &index)
 void MeshObject::OnMove(bool parent)
 {
 	if (collider_node)
-		collider_node->needUpdate();
+		collider_node->Update();
 
 	if (mBody)
 		mBody->updateTransform(true, false, false);
@@ -2077,7 +2075,7 @@ void MeshObject::OnMove(bool parent)
 void MeshObject::OnRotate(bool parent)
 {
 	if (collider_node)
-		collider_node->needUpdate();
+		collider_node->Update();
 
 	if (mBody)
 	{
@@ -2127,7 +2125,7 @@ Ogre::Vector3 MeshObject::GetOffset()
 	//for models, return bounding box offset value, used to center the mesh
 
 	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
-	box.scale(GetSceneNode()->getScale());
+	box.scale(GetSceneNode()->GetRawSceneNode()->getScale());
 	Ogre::Vector3 vec = box.getCenter();
 	Ogre::Vector3 min = box.getMinimum();
 	Ogre::Vector3 offset (vec.x, -box.getMinimum().y, -vec.z);

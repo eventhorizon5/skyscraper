@@ -64,7 +64,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		camera->setAspectRatio(1.0f);
 
 		//attach camera to scene node
-		GetSceneNode()->attachObject(camera);
+		GetSceneNode()->AttachObject(camera);
 
 		//set camera position and rotation
 		SetPosition(sbs->ToRemote(position));
@@ -111,7 +111,7 @@ CameraTexture::~CameraTexture()
 	renderTexture->removeAllViewports();
 	if (camera)
 	{
-		GetSceneNode()->detachObject(camera);
+		GetSceneNode()->DetachObject(camera);
 		sbs->mSceneManager->destroyCamera(camera);
 	}
 
