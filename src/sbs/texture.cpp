@@ -133,7 +133,7 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 	std::string blend_filename2 = VerifyFile(blend_filename);
 
 	//load texture
-	bool has_alpha = false, has_alpha2 = false, has_alpha3 = false;
+	bool has_alpha = false, has_alpha2 = false;
 	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
 	if (mTex.isNull())
@@ -148,7 +148,7 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 	std::string specular_texturename = mTex->getName();
 
 	//load blend texture
-	mTex = LoadTexture(blend_filename2, mipmaps, has_alpha3, use_alpha_color, alpha_color);
+	mTex = LoadTexture(blend_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
 	if (mTex.isNull())
 		return ReportError("Error loading texture" + blend_filename2);
@@ -160,8 +160,8 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 
 	//bind texture to material
 	BindTextureToMaterial(mMat, texturename, has_alpha);
-	Ogre::TextureUnitState* spec_state = BindTextureToMaterial(mMat, specular_texturename, has_alpha2);
-	Ogre::TextureUnitState* blend_state = BindTextureToMaterial(mMat, blend_texturename, has_alpha3);
+	Ogre::TextureUnitState* spec_state = BindTextureToMaterial(mMat, specular_texturename, false);
+	Ogre::TextureUnitState* blend_state = BindTextureToMaterial(mMat, blend_texturename, false);
 
 	if (spec_state)
 		spec_state->setColourOperation(Ogre::LBO_ALPHA_BLEND);
@@ -187,21 +187,13 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 bool SBS::LoadMaterial(const std::string &materialname, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//set verbosity level
-	Ogre::MaterialManager::getSingleton().setVerbose(Verbose);
 	Ogre::MaterialPtr mMat;
 	std::string matname = materialname;
 
-	try
-	{
-		mMat = GetMaterialByName(matname, "Materials");
+	mMat = GetMaterialByName(matname, "Materials");
 
-		if (mMat.isNull())
-			return ReportError("Error loading material " + matname);
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading material " + matname + "\n" + e.getDescription());
-	}
+	if (mMat.isNull())
+		return false;
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
@@ -226,17 +218,14 @@ void SBS::RegisterTextureInfo(const std::string &name, const std::string &materi
 		heightmult = 1.0f;
 
 	TextureInfo info;
-	info.name = name;
-	info.material_name = material_name;
-	info.filename = filename;
+	info.name = TrimStringCopy(name);
+	info.material_name = TrimStringCopy(material_name);
+	info.filename = TrimStringCopy(filename);
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
 
-	TrimString(info.name);
-	TrimString(info.material_name);
-	TrimString(info.filename);
 	textureinfo.push_back(info);
 }
 
@@ -260,7 +249,7 @@ bool SBS::UnloadTexture(const std::string &name, const std::string &group)
 {
 	//unloads a texture
 
-	Ogre::ResourcePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name, group);
+	Ogre::ResourcePtr wrapper = GetTextureByName(name, group);
 	if (wrapper.isNull())
 		return false;
 	Ogre::TextureManager::getSingleton().remove(wrapper);
@@ -357,12 +346,11 @@ bool SBS::RotateTexture(const std::string &name, float angle)
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set rotation
 	if (state)
@@ -387,12 +375,11 @@ bool SBS::RotateAnimTexture(const std::string &name, float speed)
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set rotation animation
 	if (state)
@@ -417,12 +404,11 @@ bool SBS::ScrollTexture(const std::string &name, float x_offset, float y_offset)
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set scrolling value
 	if (state)
@@ -447,12 +433,11 @@ bool SBS::ScrollAnimTexture(const std::string &name, float x_speed, float y_spee
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set scrolling animation
 	if (state)
@@ -477,12 +462,11 @@ bool SBS::ScaleTexture(const std::string &name, float x_scale, float y_scale)
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set scale
 	if (state)
@@ -512,12 +496,11 @@ bool SBS::TransformTexture(const std::string &name, const std::string &type, con
 	//get material name
 	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set transform
 	if (state)
@@ -604,8 +587,8 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	if (ptr.isNull())
 		return ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
 
-	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr background = Ogre::TextureManager::getSingleton().getByName(texname);
+	std::string texname = GetTextureName(ptr);
+	Ogre::TexturePtr background = GetTextureByName(texname);
 	if (background.isNull())
 		return ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
 
@@ -693,8 +676,8 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 	if (ptr.isNull())
 		return ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
 
-	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr image1 = Ogre::TextureManager::getSingleton().getByName(texname);
+	std::string texname = GetTextureName(ptr);
+	Ogre::TexturePtr image1 = GetTextureByName(texname);
 
 	if (image1.isNull())
 		return ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
@@ -707,8 +690,8 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 	if (ptr.isNull())
 		return ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
 
-	texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr image2 = Ogre::TextureManager::getSingleton().getByName(texname);
+	texname = GetTextureName(ptr);
+	Ogre::TexturePtr image2 = GetTextureByName(texname);
 
 	if (image2.isNull())
 		return ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
@@ -1618,7 +1601,11 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, i
 		return ReportError("Error loading font " + font->getName() + "\n" + e.getDescription());
 	}
 
-	TexturePtr fontTexture = (TexturePtr)TextureManager::getSingleton().getByName(font->getMaterial()->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName());
+	std::string texname = GetTextureName(font->getMaterial());
+	TexturePtr fontTexture = GetTextureByName(texname);
+
+	if (fontTexture.isNull())
+		return false;
 
 	//output glyph map to file
 	//SaveTexture(fontTexture, "test.png");
@@ -1964,6 +1951,28 @@ Ogre::TextureUnitState* SBS::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::
 		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 	return state;
+}
+
+Ogre::TextureUnitState* SBS::GetTextureUnitState(Ogre::MaterialPtr mMat)
+{
+	//get first texture unit state
+	return mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
+}
+
+std::string SBS::GetTextureName(Ogre::MaterialPtr mMat)
+{
+	std::string texname = "";
+
+	Ogre::TextureUnitState *state = GetTextureUnitState(mMat);
+	if (state)
+		texname = GetTextureUnitState(mMat)->getTextureName();
+
+	return texname;
+}
+
+Ogre::TexturePtr SBS::GetTextureByName(const std::string &name, const std::string &group)
+{
+	return Ogre::TextureManager::getSingleton().getByName(name, group);
 }
 
 }

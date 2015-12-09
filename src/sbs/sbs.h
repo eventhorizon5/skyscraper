@@ -481,6 +481,9 @@ private:
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
 	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
 	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
+	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
+	std::string GetTextureName(Ogre::MaterialPtr mMat);
+	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;
