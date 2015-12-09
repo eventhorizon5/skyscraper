@@ -2309,7 +2309,7 @@ EngineContext::~EngineContext()
 	{
 		delete Simcore;
 		Simcore = 0;
-		skyscraper->Report("\nSBS instance " + ToString(instance) + " unloaded\n");
+		skyscraper->Report("\nSBS instance " + ToString(instance) + " unloaded");
 	}
 
 	//unload script processor
