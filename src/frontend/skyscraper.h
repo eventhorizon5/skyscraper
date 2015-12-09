@@ -86,6 +86,7 @@ public:
 	bool override_gravity;
 	bool override_freelook;
 	int SkyMult; //sky time multiplier
+	bool raised;
 
 	unsigned int current_time;
 
@@ -130,7 +131,7 @@ public:
 	void SetLocation(float latitude, float longitude);
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
-	void CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
+	EngineContext* CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
@@ -173,13 +174,13 @@ private:
 	void UnloadSim(bool all = true);
 	void DeleteButtons();
 	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
-	void RunEngines();
+	bool RunEngines();
+	void HandleEngineShutdown();
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
 	Ogre::LogManager* logger;
 	bool showconsole;
-	bool raised;
 	wxProgressDialog *progdialog;
 
 	bool new_location, new_time;
@@ -188,8 +189,6 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
-
-	EngineContext *engine_to_delete;
 };
 
 class MainScreen : public wxFrame
@@ -221,14 +220,17 @@ public:
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
 	bool IsCameraActive();
-	void Run();
+	bool Run();
+	void Shutdown();
+	bool GetShutdownState() { return shutdown; }
 
 private:
 
 	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
-
+	unsigned long finish_time;
+	bool shutdown;
 };
 
 extern Skyscraper *skyscraper;

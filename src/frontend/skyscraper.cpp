@@ -132,7 +132,6 @@ bool Skyscraper::OnInit(void)
 	longitude = 0.0f;
 	datetime = 0.0;
 	active_engine = 0;
-	engine_to_delete = 0;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -995,7 +994,8 @@ void Skyscraper::GetInput(EngineContext *engine)
 		//temporary engine kill test
 		if (wxGetKeyState((wxKeyCode)'K') && wait == false)
 		{
-			engine_to_delete = engines[GetEngineCount() - 1];
+			EngineContext *engine = engines[GetEngineCount() - 1];
+			engine->Shutdown();
 			wait = true;
 			return;
 		}
@@ -1099,8 +1099,6 @@ void Skyscraper::Loop()
 	SBS::ProfileManager::Reset();
 	SBS::ProfileManager::Increment_Frame_Counter();
 
-	static unsigned long finish_time;
-
 	//main menu routine
 	if (IsRunning == false && IsLoading == false)
 	{
@@ -1112,51 +1110,19 @@ void Skyscraper::Loop()
 
 	//main simulator loop
 
+	//run sim engine instances
+	bool result = RunEngines();
+
+	//delete an engine if requested
+	HandleEngineShutdown();
+
+	if (result == false)
+		return;
+
 	if (!active_engine)
 		return;
 
 	SBS::SBS *Simcore = active_engine->GetSystem();
-	ScriptProcessor *processor = active_engine->GetScriptProcessor();
-
-	//run script processor
-	if (processor)
-	{
-		bool result = processor->Run();
-
-		if (IsLoading == true)
-		{
-			if (result == false)
-			{
-				ReportError("Error processing building\n");
-				Unload();
-				return;
-			}
-			else if (processor->IsFinished == true)
-			{
-				Start();
-				finish_time = Simcore->GetCurrentTime();
-			}
-
-			if (Simcore->RenderOnStartup == false)
-				return;
-		}
-		else if (processor->IsFinished == true && result == true)
-		{
-			Simcore->Prepare(false);
-			Simcore->DeleteColliders = false;
-		}
-	}
-	else
-		return;
-
-	//force window raise on startup, and report on missing files, if any
-	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && IsLoading == false)
-	{
-		window->Raise();
-		raised = true;
-
-		processor->ReportMissingFiles();
-	}
 
 	//make sure active engine is the one the camera is active in
 	if (active_engine->IsCameraActive() == false)
@@ -1168,14 +1134,6 @@ void Skyscraper::Loop()
 
 		Simcore = active_engine->GetSystem();
 	}
-
-	//run sim engine instances
-	RunEngines();
-
-	//delete an engine if requested
-	if (engine_to_delete != 0)
-		DeleteEngine(engine_to_delete);
-	engine_to_delete = 0;
 
 	//update Caelum
 	if (mCaelumSystem)
@@ -1764,10 +1722,11 @@ bool Skyscraper::Load()
 	Ogre::Vector3 offset (offsetval, 0, offsetval);
 
 	//Create simulator instance
-	CreateEngine(offset);
+	EngineContext* engine = CreateEngine(offset);
+	active_engine = engine;
 
-	SBS::SBS *Simcore = active_engine->GetSystem();
-	ScriptProcessor *processor = active_engine->GetScriptProcessor();
+	SBS::SBS *Simcore = engine->GetSystem();
+	ScriptProcessor *processor = engine->GetScriptProcessor();
 
 	//refresh console to fix banner message on Linux
 	if (console)
@@ -1799,7 +1758,13 @@ bool Skyscraper::Load()
 
 	if (!processor->LoadDataFile(BuildingFile))
 	{
-		Unload();
+		BuildingFile = "";
+		IsLoading = false;
+
+		if (GetEngineCount() == 1)
+			Unload();
+		else
+			DeleteEngine(engine);
 		return false;
 	}
 
@@ -2219,10 +2184,11 @@ void Skyscraper::SetDateTime(double julian_date_time)
 	new_time = true;
 }
 
-void Skyscraper::CreateEngine(const Ogre::Vector3 &position)
+EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position)
 {
-	active_engine = new EngineContext(mSceneMgr, soundsys, GetEngineCount(), position);
-	engines.push_back(active_engine);
+	EngineContext* engine = new EngineContext(mSceneMgr, soundsys, GetEngineCount(), position);
+	engines.push_back(engine);
+	return engine;
 }
 
 bool Skyscraper::DeleteEngine(EngineContext *engine)
@@ -2261,7 +2227,7 @@ EngineContext* Skyscraper::FindActiveEngine()
 		if (engines[i]->IsCameraActive() == true)
 			return engines[i];
 	}
-	return 0;
+	return active_engine;
 }
 
 void Skyscraper::SetActiveEngine(int index)
@@ -2283,16 +2249,34 @@ void Skyscraper::SetActiveEngine(int index)
 	active_engine->GetSystem()->AttachCamera(mCamera);
 }
 
-void Skyscraper::RunEngines()
+bool Skyscraper::RunEngines()
+{
+	bool result = true;
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->Run() == false)
+			result = false;
+	}
+	return result;
+}
+
+void Skyscraper::HandleEngineShutdown()
 {
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		engines[i]->Run();
+		if (engines[i]->GetShutdownState() == true)
+		{
+			DeleteEngine(engines[i]);
+			i--;
+		}
 	}
 }
 
 EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position)
 {
+	finish_time = 0;
+	shutdown = false;
+
 	instance = instance_number;
 	skyscraper->Report("\nStarting instance " + ToString(instance) + "...");
 
@@ -2328,8 +2312,55 @@ bool EngineContext::IsCameraActive()
 	return Simcore->camera->IsActive();
 }
 
-void EngineContext::Run()
+void EngineContext::Shutdown()
 {
+	//request a shutdown
+
+	shutdown = true;
+}
+
+bool EngineContext::Run()
+{
+	//run script processor
+	if (processor)
+	{
+		bool result = processor->Run();
+
+		if (skyscraper->IsLoading == true)
+		{
+			if (result == false)
+			{
+				skyscraper->ReportError("Error processing building\n");
+				Shutdown();
+				return false;
+			}
+			else if (processor->IsFinished == true)
+			{
+				skyscraper->Start();
+				finish_time = Simcore->GetCurrentTime();
+			}
+
+			if (Simcore->RenderOnStartup == false)
+				return false;
+		}
+		else if (processor->IsFinished == true && result == true)
+		{
+			Simcore->Prepare(false);
+			Simcore->DeleteColliders = false;
+		}
+	}
+	else
+		return false;
+
+	//force window raise on startup, and report on missing files, if any
+	if (Simcore->GetCurrentTime() - finish_time > 0 && skyscraper->raised == false && skyscraper->IsLoading == false)
+	{
+		window->Raise();
+		skyscraper->raised = true;
+
+		processor->ReportMissingFiles();
+	}
+
 	//process internal clock
 	Simcore->AdvanceClock();
 	if (skyscraper->IsRunning == true)
@@ -2347,6 +2378,8 @@ void EngineContext::Run()
 		//process camera loop
 		Simcore->CameraLoop();
 	}
+
+	return true;
 }
 
 }
