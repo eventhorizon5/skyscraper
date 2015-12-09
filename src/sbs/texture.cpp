@@ -37,48 +37,16 @@ namespace SBS {
 
 bool SBS::LoadTexture(const std::string &filename, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	//first verify the filename
 	std::string filename2 = VerifyFile(filename);
 
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
-
-	//load the texture
-	std::string path = GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename;
+	//load texture
 	bool has_alpha = false;
+	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	if (use_alpha_color == false)
-	{
-		mTex = LoadTexture(filename2, path, mipmaps);
-
-		if (mTex.isNull())
-			return ReportError("Error loading texture" + filename2);
-		texturename = mTex->getName();
-		has_alpha = mTex->hasAlpha();
-	}
-	else
-	{
-		try
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-		catch (Ogre::Exception &e)
-		{
-			return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-		}
-	}
+	if (mTex.isNull())
+		return false;
+	std::string texturename = mTex->getName();
 
 	//create a new material
 	std::string matname = name;
@@ -99,9 +67,6 @@ bool SBS::LoadTexture(const std::string &filename, const std::string &name, floa
 
 bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, float duration, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	std::vector<std::string> filenames2;
 
 	int num_frames = (int)filenames.size();
@@ -117,41 +82,17 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::str
 
 	for (int i = 0; i < (int)filenames2.size(); i++)
 	{
-		//determine if the file is a GIF image, to force keycolor alpha
-		std::string extension = filenames2[i].substr(filenames2[i].size() - 3);
-		SetCase(extension, false);
-		if (extension == "gif")
-			use_alpha_color = true;
+		bool has_alpha2 = false;
 
-		// Load the texture
-		std::string path = GetMountPath(filenames2[i], filenames2[i]);
-		Ogre::TexturePtr mTex;
-		std::string texturename;
+		//load texture
+		Ogre::TexturePtr mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
-		if (use_alpha_color == false)
-		{
-			mTex = LoadTexture(filenames2[i], path, mipmaps);
+		if (mTex.isNull())
+			return false;
+		std::string texturename = mTex->getName();
 
-			if (mTex.isNull())
-				return ReportError("Error loading texture" + filenames2[i]);
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
-		}
-		else
-		{
-			try
-			{
-				//load based on chroma key for alpha
-
-				texturename = "kc_" + filenames2[i];
-				loadChromaKeyedTexture(filenames2[i], path, texturename, Ogre::ColourValue::White);
-				has_alpha = true;
-			}
-			catch (Ogre::Exception &e)
-			{
-				return ReportError("Error loading texture " + filenames2[i] + "\n" + e.getDescription());
-			}
-		}
+		if (has_alpha2 == true)
+			has_alpha = true;
 
 		if (Verbose)
 			Report("Loaded texture " + filenames2[i]);
@@ -188,64 +129,32 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::str
 
 bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	//first verify the filenames
 	std::string filename2 = VerifyFile(filename);
 	std::string specular_filename2 = VerifyFile(specular_filename);
 	std::string blend_filename2 = VerifyFile(blend_filename);
 
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
+	//load texture
+	bool has_alpha = false, has_alpha2 = false, has_alpha3 = false;
+	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	// Load the texture
-	std::string path = GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename, specular_texturename, blend_texturename;
-	bool has_alpha = false;
-
-	if (use_alpha_color == false)
-	{
-		mTex = LoadTexture(filename2, path, mipmaps);
-
-		if (mTex.isNull())
-			return ReportError("Error loading texture" + filename2);
-		texturename = mTex->getName();
-		has_alpha = mTex->hasAlpha();
-	}
-	else
-	{
-		try
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-		catch (Ogre::Exception &e)
-		{
-			return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-		}
-	}
+	if (mTex.isNull())
+		return false;
+	std::string texturename = mTex->getName();
 
 	//load specular texture
-	mTex = LoadTexture(specular_filename2, path, mipmaps);
+	mTex = LoadTexture(specular_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
 	if (mTex.isNull())
 		return ReportError("Error loading texture" + specular_filename2);
-	specular_texturename = mTex->getName();
+	std::string specular_texturename = mTex->getName();
 
 	//load blend texture
-	mTex = LoadTexture(blend_filename2, path, mipmaps);
+	mTex = LoadTexture(blend_filename2, mipmaps, has_alpha3, use_alpha_color, alpha_color);
 
 	if (mTex.isNull())
 		return ReportError("Error loading texture" + blend_filename2);
-	blend_texturename = mTex->getName();
+	std::string blend_texturename = mTex->getName();
 
 	//create a new material
 	std::string matname = name;
@@ -254,8 +163,8 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 
 	//bind texture to material
 	BindTextureToMaterial(mMat, texturename, has_alpha);
-	Ogre::TextureUnitState* spec_state = BindTextureToMaterial(mMat, specular_texturename, has_alpha);
-	Ogre::TextureUnitState* blend_state = BindTextureToMaterial(mMat, blend_texturename, has_alpha);
+	Ogre::TextureUnitState* spec_state = BindTextureToMaterial(mMat, specular_texturename, has_alpha2);
+	Ogre::TextureUnitState* blend_state = BindTextureToMaterial(mMat, blend_texturename, has_alpha3);
 
 	if (spec_state)
 		spec_state->setColourOperation(Ogre::LBO_ALPHA_BLEND);
@@ -384,48 +293,16 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 	int mipmaps = -1;
 	bool use_alpha_color = false;
 
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	//first verify the filename
 	std::string filename2 = VerifyFile(filename);
 
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
-
-	// Load the texture
-	std::string path = GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename;
+	//load texture
 	bool has_alpha = false;
+	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	if (use_alpha_color == false)
-	{
-		mTex = LoadTexture(filename2, path, mipmaps);
-
-		if (mTex.isNull())
-			return ReportError("Error loading texture" + filename2);
-		texturename = mTex->getName();
-		has_alpha = mTex->hasAlpha();
-	}
-	else
-	{
-		try
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-		catch (Ogre::Exception &e)
-		{
-			return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-		}
-	}
+	if (mTex.isNull())
+		return false;
+	std::string texturename = mTex->getName();
 
 	std::string Name = name;
 	std::string Filename = filename;
@@ -1623,7 +1500,7 @@ std::string SBS::ListTextures(bool show_filename)
  @return
      Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename)
  */
-void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
+Ogre::TexturePtr SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
 {
 	using namespace Ogre;
 	using std::fabs;
@@ -1734,8 +1611,9 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	chromaKeyedImg.loadDynamicImage(pixelData, width, height, 1, PF_A8R8G8B8, true);
 	// You could save the chroma keyed image at this point for caching:
 	// chromaKeyedImg.save(resName);
-	TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
+	Ogre::TexturePtr mTex = TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
 	IncrementTextureCount();
+	return mTex;
 }
 
 bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
@@ -2011,17 +1889,59 @@ void SBS::DecrementMaterialCount()
 	materialcount--;
 }
 
-Ogre::TexturePtr SBS::LoadTexture(const std::string &filename, const std::string &path, int mipmaps)
+Ogre::TexturePtr SBS::LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
+	//set verbosity level
+	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
+
+	std::string filename2 = filename;
+
+	//determine if the file is a GIF image, to force keycolor alpha
+	std::string extension = filename2.substr(filename.size() - 3);
+	SetCase(extension, false);
+	if (extension == "gif")
+		use_alpha_color = true;
+
+	//load the texture
+	std::string path = GetMountPath(filename2, filename2);
 	Ogre::TexturePtr mTex;
+	std::string texturename;
+	has_alpha = false;
+
 	try
 	{
-		mTex = Ogre::TextureManager::getSingleton().load(filename, path, Ogre::TEX_TYPE_2D, mipmaps);
-		IncrementTextureCount();
+		if (use_alpha_color == false)
+		{
+			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+			IncrementTextureCount();
+
+			if (mTex.isNull())
+			{
+				ReportError("Error loading texture" + filename2);
+				return mTex;
+			}
+			texturename = mTex->getName();
+			has_alpha = mTex->hasAlpha();
+		}
+		else
+		{
+			//load based on chroma key for alpha
+
+			texturename = "kc_" + filename2;
+			mTex = loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
+
+			if (mTex.isNull())
+			{
+				ReportError("Error loading texture" + filename2);
+				return mTex;
+			}
+			has_alpha = true;
+		}
 	}
 	catch (Ogre::Exception &e)
 	{
-		ReportError("Error loading texture " + filename + "\n" + e.getDescription());
+		ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+		return mTex;
 	}
 
 	return mTex;

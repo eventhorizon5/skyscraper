@@ -341,7 +341,7 @@ public:
 	unsigned long GetElapsedTime();
 	unsigned long GetAverageTime();
 	std::string GetMountPath(std::string filename, std::string &newfilename);
-	void loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
+	Ogre::TexturePtr loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol = Ogre::ColourValue::Black, int numMipmaps = -1, float threshold = 0.003f);
 	void ShowColliders(bool value);
 	void CacheFilename(const std::string &filename, const std::string &result);
 	void ResetDoorwayWalls();
@@ -477,7 +477,7 @@ private:
 	void CalculateAverageTime();
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false, bool recursion = false);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
-	Ogre::TexturePtr LoadTexture(const std::string &filename, const std::string &path, int mipmaps);
+	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
 	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
 	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
