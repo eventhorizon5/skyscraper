@@ -53,7 +53,8 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 	try
 	{
 		//create a new render texture
-		texture = Ogre::TextureManager::getSingleton().createManual(name, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
+		std::string texturename = ToString(sbs->InstanceNumber) + ":" + name;
+		texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, texture_size, texture_size, 0, Ogre::PF_R8G8B8, Ogre::TU_RENDERTARGET);
 		sbs->IncrementTextureCount();
 		renderTexture = texture->getBuffer()->getRenderTarget();
 
@@ -81,7 +82,7 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 
 		//create a new material
 		material = sbs->CreateMaterial(name, "General");
-		sbs->BindTextureToMaterial(material, name, false);
+		sbs->BindTextureToMaterial(material, texturename, false);
 
 		//add texture multipliers
 		sbs->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);

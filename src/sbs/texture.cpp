@@ -262,7 +262,7 @@ bool SBS::UnloadMaterial(const std::string &name, const std::string &group)
 {
 	//unloads a material
 
-	Ogre::ResourcePtr wrapper = GetMaterialByName(name, group);
+	Ogre::ResourcePtr wrapper = GetMaterialByName(ToString(InstanceNumber) + ":" + name, group);
 	if (wrapper.isNull())
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
@@ -288,7 +288,6 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 
 	if (mTex.isNull())
 		return false;
-	std::string texturename = mTex->getName();
 
 	std::string Name = name;
 	std::string Filename = filename;
@@ -309,7 +308,8 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
@@ -321,7 +321,7 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, Name, has_alpha);
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (Verbose)
 		Report("Loaded cropped texture '" + filename2 + "' as '" + Name + "'");
@@ -603,7 +603,8 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	int height = (int)background->getHeight();
 
 	//create new empty texture
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//get new texture dimensions, if it was resized
@@ -649,7 +650,7 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, Name, has_alpha);
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
@@ -712,7 +713,8 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
@@ -726,7 +728,7 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	BindTextureToMaterial(mMat, Name, has_alpha);
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (Verbose)
 		Report("AddTextureOverlay: created texture '" + Name + "'");
@@ -1921,7 +1923,7 @@ Ogre::MaterialPtr SBS::CreateMaterial(const std::string &name, const std::string
 		UnregisterTextureInfo(name);
 
 	//create new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(name, path);
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(ToString(InstanceNumber) + ":" + name, path);
 	IncrementMaterialCount();
 	mMat->setLightingEnabled(false);
 	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
@@ -1934,7 +1936,7 @@ Ogre::MaterialPtr SBS::CreateMaterial(const std::string &name, const std::string
 
 Ogre::MaterialPtr SBS::GetMaterialByName(const std::string &name, const std::string &group)
 {
-	return Ogre::MaterialManager::getSingleton().getByName(name, group);
+	return Ogre::MaterialManager::getSingleton().getByName(ToString(InstanceNumber) + ":" + name, group);
 }
 
 Ogre::TextureUnitState* SBS::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)

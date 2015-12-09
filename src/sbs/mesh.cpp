@@ -583,7 +583,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 							TrimString(match);
 							if (!match.empty())
 							{
-								Ogre::MaterialPtr materialPtr = sbs->GetMaterialByName(match, path);
+								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
 								if (!materialPtr.isNull())
 								{
 									sbs->Report("Loading material " + match);
@@ -772,13 +772,15 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	std::string material = texture;
 	TrimString(material);
 
+	std::string full_name = ToString(sbs->InstanceNumber) + ":" + material;
+
 	if (MeshWrapper->getNumSubMeshes() == 0)
 		return false;
 
 	//exit if old and new materials are the same
 	if (matcheck == true)
 	{
-		if (MeshWrapper->getSubMesh(submesh)->getMaterialName() == material)
+		if (MeshWrapper->getSubMesh(submesh)->getMaterialName() == full_name)
 			return false;
 	}
 
@@ -791,7 +793,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	}
 
 	//set material if valid
-	MeshWrapper->getSubMesh(submesh)->setMaterialName(material);
+	MeshWrapper->getSubMesh(submesh)->setMaterialName(full_name);
 
 	//apply changes (refresh mesh state)
 	MeshWrapper->_dirtyState();
@@ -1233,7 +1235,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::st
 	}
 
 	//bind material
-	submesh->setMaterialName(material);
+	submesh->setMaterialName(ToString(sbs->InstanceNumber) + ":" + material);
 
 	delete [] indexarray;
 	return index;
@@ -1360,9 +1362,11 @@ int MeshObject::FindMatchingSubMesh(const std::string &material)
 	//find a submesh with a matching material
 	//returns array index
 
+	std::string full_name = ToString(sbs->InstanceNumber) + ":" + material;
+
 	for (int i = 0; i < (int)Submeshes.size(); i++)
 	{
-		if (Submeshes[i]->getMaterialName() == material)
+		if (Submeshes[i]->getMaterialName() == full_name)
 			return i;
 	}
 	return -1;
