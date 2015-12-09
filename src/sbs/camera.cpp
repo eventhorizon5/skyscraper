@@ -804,7 +804,14 @@ void Camera::Loop(float delta)
 			{
 				Ogre::SceneNode *node = mCharacter->getLastCollision()->getRootNode();
 				if (node)
-					LastHitMesh = node->getParentSceneNode()->getName();
+				{
+					std::string name = node->getParentSceneNode()->getName();
+
+					//strip of engine instance number
+					int index = (int)name.find(":(");
+					name.erase(name.begin(), name.begin() + index + 1);
+					LastHitMesh = name;
+				}
 			}
 		}
 	}
