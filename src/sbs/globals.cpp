@@ -174,7 +174,7 @@ void TrimString(std::string &string)
 	Ogre::StringUtil::trim(string, true, true);
 }
 
-std::string TrimString(std::string string)
+std::string TrimStringCopy(std::string string)
 {
 	//trim whitespace from string
 	Ogre::StringUtil::trim(string, true, true);
