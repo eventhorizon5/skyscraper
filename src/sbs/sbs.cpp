@@ -4270,4 +4270,26 @@ bool SBS::DetachCamera()
 	return camera->Detach();
 }
 
+std::string SBS::ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number)
+{
+	//if given a full object ID name (such as "0:(4)Landscape"),
+	//return base name and parse out instance number and object number
+
+	//if strip_number is false, leave object number identifier in string
+
+	//get and strip off engine instance number
+	int index = (int)name.find(":(");
+	instance = ToInt(name.substr(0, index));
+	name.erase(name.begin(), name.begin() + index + 1);
+
+	//get and optionally strip off object number
+	index = (int)name.find(")");
+	object_number = ToInt(name.substr(1, index - 1));
+
+	if (strip_number == true)
+		name.erase(name.begin(), name.begin() + index + 1);
+
+	return name;
+}
+
 }

@@ -399,6 +399,7 @@ public:
 	void RemovePerson(Person *person);
 	bool AttachCamera(Ogre::Camera *camera);
 	bool DetachCamera();
+	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
 
 	//Meshes
 	MeshObject* Buildings;

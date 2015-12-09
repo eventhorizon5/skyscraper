@@ -106,6 +106,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	Gravity = 0;
 	GravityStatus = false;
 	FirstAttach = false;
+	LastHitMeshNumber = -1;
 
 	//set up camera and scene nodes
 
@@ -805,12 +806,14 @@ void Camera::Loop(float delta)
 				Ogre::SceneNode *node = mCharacter->getLastCollision()->getRootNode();
 				if (node)
 				{
-					std::string name = node->getParentSceneNode()->getName();
+					int instance = 0, number = 0;
+					std::string name = sbs->ProcessFullName(node->getParentSceneNode()->getName(), instance, number, false);
 
-					//strip of engine instance number
-					int index = (int)name.find(":(");
-					name.erase(name.begin(), name.begin() + index + 1);
-					LastHitMesh = name;
+					if (instance == sbs->InstanceNumber)
+					{
+						LastHitMesh = name;
+						LastHitMeshNumber = number;
+					}
 				}
 			}
 		}
@@ -829,17 +832,10 @@ void Camera::Loop(float delta)
 		if (ReportCollisions == true)
 			sbs->Report(LastHitMesh);
 
-		std::string name = LastHitMesh;
-
-		if (name != "")
+		if (LastHitMesh != "")
 		{
-			int index = (int)name.find(")");
-			int number = ToInt(name.substr(1, index - 1));
-			name.erase(name.begin(), name.begin() + index + 1);
-			std::string num = ToString(number);
-
 			//get SBS object
-			Object *obj = sbs->GetObject(number);
+			Object *obj = sbs->GetObject(LastHitMeshNumber);
 
 			//get original object (parent object of mesh)
 			if (obj)

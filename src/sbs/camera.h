@@ -67,6 +67,7 @@ public:
 	bool MouseDown; //mouse status
 	bool ReportCollisions; //if true, print collisions on console
 	std::string LastHitMesh; //name of last hit mesh
+	int LastHitMeshNumber; //object number of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	float Freelook_speed; //freelook speed
 	Ogre::Vector3 HitPosition; //last hit position
