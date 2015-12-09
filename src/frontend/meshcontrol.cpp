@@ -167,8 +167,13 @@ void MeshControl::OnInit()
 void MeshControl::Loop()
 {
 	//if active engine has changed, refresh values
-	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
-		OnInit();
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
 
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 	if (floor)

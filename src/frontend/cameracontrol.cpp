@@ -453,8 +453,13 @@ void CameraControl::OnInit()
 void CameraControl::Loop()
 {
 	//if active engine has changed, refresh values
-	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
-		OnInit();
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
 
 	Ogre::Vector3 direction_front, direction_top;
 	Simcore->camera->GetDirection(direction_front, direction_top);

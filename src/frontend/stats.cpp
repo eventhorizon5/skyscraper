@@ -263,8 +263,13 @@ void Stats::OnInit()
 void Stats::Loop()
 {
 	//if active engine has changed, refresh values
-	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
-		OnInit();
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
 
 	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());
 	tTextures->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());

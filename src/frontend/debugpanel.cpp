@@ -409,8 +409,13 @@ void DebugPanel::OnInit()
 
 void DebugPanel::Timer::Notify()
 {
-	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
-		dp->OnInit(); //reinitialize if active engine has changed
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			dp->OnInit(); //reinitialize if active engine has changed
+	}
+	else
+		return;
 
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 

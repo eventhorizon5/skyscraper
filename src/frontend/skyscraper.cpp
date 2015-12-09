@@ -984,17 +984,19 @@ void Skyscraper::GetInput(EngineContext *engine)
 		}
 
 		//temporary engine switch test
-		if (wxGetKeyState((wxKeyCode)'L'))
+		if (wxGetKeyState((wxKeyCode)'L') && wait == false)
 		{
 			if (SelectBuilding() == true)
 				Load();
+			wait = true;
 			return;
 		}
 
 		//temporary engine kill test
-		if (wxGetKeyState((wxKeyCode)'K'))
+		if (wxGetKeyState((wxKeyCode)'K') && wait == false)
 		{
 			engine_to_delete = engines[GetEngineCount() - 1];
+			wait = true;
 			return;
 		}
 
@@ -2225,6 +2227,10 @@ void Skyscraper::CreateEngine(const Ogre::Vector3 &position)
 
 bool Skyscraper::DeleteEngine(EngineContext *engine)
 {
+	//don't delete if only one engine is active
+	if (engines.size() == 1)
+		return false;
+
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
 		if (engines[i] == engine)
@@ -2263,6 +2269,9 @@ void Skyscraper::SetActiveEngine(int index)
 	//set an engine instance to be active
 
 	if (index < 0 || index > GetEngineCount() - 1)
+		return;
+
+	if (active_engine == engines[index])
 		return;
 
 	//detach camera from current engine

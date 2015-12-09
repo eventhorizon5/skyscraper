@@ -241,8 +241,13 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 void ObjectInfo::Loop()
 {
 	//if active engine has changed, refresh values
-	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
-		OnInit();
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
 
 	if (Simcore->GetObjectCount() != lastcount)
 	{

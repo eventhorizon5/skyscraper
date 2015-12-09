@@ -1186,8 +1186,13 @@ void editelevator::OnInit()
 void editelevator::Loop()
 {
 	//if active engine has changed, refresh values
-	if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
-		OnInit();
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
 
 	int elev_num;
 	int door_num;

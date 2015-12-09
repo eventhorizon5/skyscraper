@@ -248,6 +248,9 @@ void MoveObject::OnInit()
 
 void MoveObject::Loop()
 {
+	if (!skyscraper->GetActiveEngine())
+		return;
+
 	object = Simcore->GetObject(object_num);
 
 	if (object)
