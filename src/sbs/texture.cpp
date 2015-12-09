@@ -49,8 +49,7 @@ bool SBS::LoadTexture(const std::string &filename, const std::string &name, floa
 	std::string texturename = mTex->getName();
 
 	//create a new material
-	std::string matname = name;
-	TrimString(matname);
+	std::string matname = TrimStringCopy(name);
 	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind texture to material
@@ -99,8 +98,7 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::str
 	}
 
 	//create a new material
-	std::string matname = name;
-	TrimString(matname);
+	std::string matname = TrimStringCopy(name);
 	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind first texture to material
@@ -157,8 +155,7 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 	std::string blend_texturename = mTex->getName();
 
 	//create a new material
-	std::string matname = name;
-	TrimString(matname);
+	std::string matname = TrimStringCopy(name);
 	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind texture to material
@@ -351,8 +348,7 @@ bool SBS::RotateTexture(const std::string &name, float angle)
 	//set a fixed rotation value for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
@@ -382,8 +378,7 @@ bool SBS::RotateAnimTexture(const std::string &name, float speed)
 	//set a rotation animation for a texture - speed is in revolutions per second
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
@@ -413,8 +408,7 @@ bool SBS::ScrollTexture(const std::string &name, float x_offset, float y_offset)
 	//set a fixed scroll amount for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
@@ -444,8 +438,7 @@ bool SBS::ScrollAnimTexture(const std::string &name, float x_speed, float y_spee
 	//set a scroll animation for a texture - speed is in revolutions per second
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
@@ -475,8 +468,7 @@ bool SBS::ScaleTexture(const std::string &name, float x_scale, float y_scale)
 	//set a fixed scale amount for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
@@ -506,15 +498,12 @@ bool SBS::TransformTexture(const std::string &name, const std::string &type, con
 	//set a transformation type for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
-	std::string xform_type = type;
-	TrimString(xform_type);
+	std::string xform_type = TrimStringCopy(type);
 	SetCase(xform_type, false);
-	std::string wave = wave_type;
-	TrimString(wave);
+	std::string wave = TrimStringCopy(wave_type);
 	SetCase(wave, false);
 
 	if (!result)
@@ -579,12 +568,9 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 
 	std::string hAlign = h_align;
 	std::string vAlign = v_align;
-	std::string Name = name;
-	std::string Origname = origname;
-	std::string Text = text;
-	TrimString(Text);
-	TrimString(Name);
-	TrimString(Origname);
+	std::string Name = TrimStringCopy(name);
+	std::string Origname = TrimStringCopy(origname);
+	std::string Text = TrimStringCopy(text);
 
 	std::string font_filename2 = VerifyFile(font_filename);
 
@@ -1442,18 +1428,12 @@ void SBS::SetTextureOverride(const std::string &mainneg, const std::string &main
 {
 	//set override textures and enable override
 
-	mainnegtex = mainneg;
-	TrimString(mainnegtex);
-	mainpostex = mainpos;
-	TrimString(mainpostex);
-	sidenegtex = sideneg;
-	TrimString(sidenegtex);
-	sidepostex = sidepos;
-	TrimString(sidepostex);
-	toptex = top;
-	TrimString(toptex);
-	bottomtex = bottom;
-	TrimString(bottomtex);
+	mainnegtex = TrimStringCopy(mainneg);
+	mainpostex = TrimStringCopy(mainpos);
+	sidenegtex = TrimStringCopy(sideneg);
+	sidepostex = TrimStringCopy(sidepos);
+	toptex = TrimStringCopy(top);
+	bottomtex = TrimStringCopy(bottom);
 	TextureOverride = true;
 }
 
