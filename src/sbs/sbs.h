@@ -400,6 +400,12 @@ public:
 	bool AttachCamera(Ogre::Camera *camera);
 	bool DetachCamera();
 	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
+	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
+	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
+	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
+	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
+	std::string GetTextureName(Ogre::MaterialPtr mMat);
+	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -478,12 +484,6 @@ private:
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false, bool recursion = false);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
-	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
-	Ogre::MaterialPtr GetMaterialByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
-	Ogre::TextureUnitState* BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha);
-	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
-	std::string GetTextureName(Ogre::MaterialPtr mMat);
-	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

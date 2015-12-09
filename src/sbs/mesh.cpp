@@ -583,7 +583,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 							TrimString(match);
 							if (!match.empty())
 							{
-								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
+								Ogre::MaterialPtr materialPtr = sbs->GetMaterialByName(match, path);
 								if (!materialPtr.isNull())
 								{
 									sbs->Report("Loading material " + match);
@@ -783,7 +783,7 @@ bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int su
 	}
 
 	//get new material
-	Ogre::MaterialPtr newmat = Ogre::MaterialManager::getSingleton().getByName(material, "General");
+	Ogre::MaterialPtr newmat = sbs->GetMaterialByName(material, "General");
 	if (!newmat.get())
 	{
 		sbs->ReportError("ChangeTexture: Invalid texture '" + material + "'");

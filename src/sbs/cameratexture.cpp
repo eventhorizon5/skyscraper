@@ -79,20 +79,9 @@ CameraTexture::CameraTexture(Object *parent, const std::string &name, bool enabl
 		renderTexture->getViewport(0)->setBackgroundColour(Ogre::ColourValue::Black);
 		Enabled(true);
 
-		//unload material if already loaded
-		if (sbs->UnloadMaterial(name, "General") == true)
-			sbs->UnregisterTextureInfo(name);
-
 		//create a new material
-		material = Ogre::MaterialManager::getSingleton().create(name, "General");
-		sbs->IncrementMaterialCount();
-		material->setLightingEnabled(false);
-
-		//bind texture to material
-		material->getTechnique(0)->getPass(0)->createTextureUnitState(name);
-
-		//show only clockwise side of material
-		material->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+		material = sbs->CreateMaterial(name, "General");
+		sbs->BindTextureToMaterial(material, name, false);
 
 		//add texture multipliers
 		sbs->RegisterTextureInfo(name, "", "", 1.0f, 1.0f, false, false);
