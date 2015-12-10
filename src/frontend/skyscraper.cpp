@@ -1672,6 +1672,13 @@ bool Skyscraper::Load(const std::string &filename)
 	EngineContext* engine = CreateEngine(offset);
 	active_engine = engine;
 
+	//refresh console to fix banner message on Linux
+	if (console)
+	{
+		console->Refresh();
+		console->Update();
+	}
+
 	//have instance load building
 	bool result = engine->Load(filename);
 
@@ -2072,8 +2079,8 @@ void Skyscraper::UpdateProgress()
 		current_percent += engines[i]->GetProgress();
 	}
 
-	float final = current_percent / total_percent;
-	progdialog->Update((int)final);
+	int final = ((float)current_percent / (float)total_percent) * 100;
+	progdialog->Update(final);
 }
 
 void Skyscraper::SetFullScreen(bool enabled)
@@ -2185,8 +2192,8 @@ void Skyscraper::HandleEngineShutdown()
 	{
 		if (engines[i]->GetShutdownState() == true)
 		{
-			DeleteEngine(engines[i]);
-			i--;
+			if (DeleteEngine(engines[i]) == true)
+				i--;
 		}
 	}
 }
