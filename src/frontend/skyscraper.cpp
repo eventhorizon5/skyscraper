@@ -958,7 +958,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 		}
 
 		//temporary engine switch test
-		if (wxGetKeyState((wxKeyCode)'L') && wait == false)
+		if (wxGetKeyState((wxKeyCode)';') && wait == false)
 		{
 			Load(SelectBuilding());
 			wait = true;
