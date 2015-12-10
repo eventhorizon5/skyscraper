@@ -75,6 +75,7 @@ public:
 	bool FullScreen;
 	bool Shutdown;
 	int SkyMult; //sky time multiplier
+	bool concurrent_loads; //set to true for buildings to be loaded while another sim is active and rendering
 
 	void Loop();
 	virtual bool OnInit(void);

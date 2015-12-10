@@ -123,6 +123,7 @@ bool Skyscraper::OnInit(void)
 	longitude = 0.0f;
 	datetime = 0.0;
 	active_engine = 0;
+	concurrent_loads = false;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -1088,7 +1089,7 @@ void Skyscraper::Loop()
 	//delete an engine if requested
 	HandleEngineShutdown();
 
-	if (result == false)
+	if (result == false && (concurrent_loads == false || GetEngineCount() == 1))
 		return;
 
 	if (!active_engine)
@@ -2061,6 +2062,9 @@ void Skyscraper::CloseProgressDialog()
 
 void Skyscraper::UpdateProgress()
 {
+	if (!progdialog)
+		return;
+
 	int total_percent = (int)engines.size() * 100;
 	int current_percent = 0;
 
@@ -2164,11 +2168,17 @@ bool Skyscraper::RunEngines()
 	bool result = true;
 	bool isloading = IsEngineLoading();
 
+	if (concurrent_loads == true && isloading == true)
+	{
+		//refresh viewport to prevent rendering issues
+		mViewport->_updateDimensions();
+	}
+
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
 		//process engine run loops, and also prevent other instances from running if
 		//one or more engines are loading
-		if (isloading == false || engines[i]->IsLoading() == true)
+		if (concurrent_loads == true || isloading == false || engines[i]->IsLoading() == true)
 		{
 			if (engines[i]->Run() == false)
 				result = false;
