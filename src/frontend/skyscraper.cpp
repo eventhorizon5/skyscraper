@@ -2162,16 +2162,36 @@ void Skyscraper::SetActiveEngine(int index)
 bool Skyscraper::RunEngines()
 {
 	bool result = true;
+	bool isloading = IsEngineLoading();
+
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i]->Run() == false)
-			result = false;
+		//process engine run loops, and also prevent other instances from running if
+		//one or more engines are loading
+		if (isloading == false || engines[i]->IsLoading() == true)
+		{
+			if (engines[i]->Run() == false)
+				result = false;
+		}
 
 		//start engine if loading is finished
 		if (engines[i]->IsLoadingFinished() == true)
 		{
 			Start(engines[i]);
 		}
+	}
+	return result;
+}
+
+bool Skyscraper::IsEngineLoading()
+{
+	//return true if an engine is loading
+
+	bool result = false;
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->IsLoading() == true)
+			result = true;
 	}
 	return result;
 }

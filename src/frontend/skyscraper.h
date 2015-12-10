@@ -120,6 +120,7 @@ public:
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
 	void SetActiveEngine(int index);
+	bool IsEngineLoading();
 	void RaiseWindow();
 	void RefreshConsole();
 
