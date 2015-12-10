@@ -1095,25 +1095,16 @@ void Skyscraper::Loop()
 	if (!active_engine)
 		return;
 
-	SBS::SBS *Simcore = active_engine->GetSystem();
-
 	//make sure active engine is the one the camera is active in
 	if (active_engine->IsCameraActive() == false)
-	{
 		active_engine = FindActiveEngine();
-
-		if (!active_engine)
-			return;
-
-		Simcore = active_engine->GetSystem();
-	}
 
 	//update Caelum
 	if (mCaelumSystem)
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
 		mCaelumSystem->setTimeScale(SkyMult);
-		mCaelumSystem->updateSubcomponents(float(Simcore->GetElapsedTime()) / 1000);
+		mCaelumSystem->updateSubcomponents(float(active_engine->GetSystem()->GetElapsedTime()) / 1000);
 	}
 
 	//render graphics
@@ -1671,7 +1662,9 @@ bool Skyscraper::Load(const std::string &filename)
 
 	//Create simulator instance
 	EngineContext* engine = CreateEngine(offset);
-	active_engine = engine;
+
+	if (!active_engine)
+		active_engine = engine;
 
 	//have instance load building
 	bool result = engine->Load(filename);
