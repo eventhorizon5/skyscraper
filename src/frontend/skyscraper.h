@@ -35,6 +35,7 @@
 #include "Caelum.h"
 #include "fileio.h"
 #include "debugpanel.h"
+#include "enginecontext.h"
 
 #if OGRE_VERSION >= 0x00010900
 #include <OgreOverlaySystem.h>
@@ -43,8 +44,6 @@
 int main (int argc, char* argv[]);
 
 namespace Skyscraper {
-
-class EngineContext;
 
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
@@ -121,6 +120,7 @@ public:
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
 	void SetActiveEngine(int index);
+	void RaiseWindow();
 
 private:
 	//mouse status
@@ -195,63 +195,6 @@ public:
 	bool InLoop;
 
 	DECLARE_EVENT_TABLE()
-};
-
-class EngineContext
-{
-public:
-
-	bool Reload;
-
-	EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
-	~EngineContext();
-	ScriptProcessor* GetScriptProcessor();
-	SBS::SBS *GetSystem() { return Simcore; }
-	bool IsCameraActive();
-	bool Run();
-	void Shutdown();
-	bool GetShutdownState() { return shutdown; }
-	bool Load(std::string filename);
-	bool IsLoading() { return loading; }
-	bool IsRunning() { return running; }
-	void DoReload();
-	std::string GetFilename();
-	bool Start(Ogre::Camera *camera);
-	void Report(const std::string &message);
-	bool ReportError(const std::string &message);
-	bool ReportFatalError(const std::string &message);
-	bool IsLoadingFinished();
-	void UpdateProgress(int percent);
-	int GetProgress() { return progress; }
-
-private:
-
-	void StartSim();
-	void UnloadSim();
-
-	Skyscraper* frontend; //frontend
-	ScriptProcessor* processor; //script processor
-	SBS::SBS *Simcore; //sim engine instance
-	int instance; //instance number
-	unsigned long finish_time;
-	bool shutdown;
-	bool loading;
-	bool running;
-	bool raised;
-	int progress;
-
-	//override information
-	bool PositionOverride;
-	Ogre::Vector3 override_position;
-	Ogre::Vector3 override_rotation;
-	int override_floor;
-	bool override_collisions;
-	bool override_gravity;
-	bool override_freelook;
-
-	Ogre::SceneManager* mSceneManager;
-	FMOD::System *fmodsystem;
-	Ogre::Vector3 position;
 };
 
 extern Skyscraper *skyscraper;
