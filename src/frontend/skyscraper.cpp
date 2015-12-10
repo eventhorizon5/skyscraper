@@ -233,7 +233,7 @@ int Skyscraper::OnExit()
 	return wxApp::OnExit();
 }
 
-void Skyscraper::UnloadSim(bool all)
+void Skyscraper::UnloadSim()
 {
 	//delete control panel object
 	if(dpanel)
@@ -257,37 +257,29 @@ void Skyscraper::UnloadSim(bool all)
 		console->bSend->Enable(false);
 
 	//delete simulator instances
-	if (all == false)
-		DeleteEngine(active_engine);
-	else
+	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		for (int i = 0; i < (int)engines.size(); i++)
-		{
-			delete engines[i];
-		}
-		engines.clear();
+		delete engines[i];
 	}
+	engines.clear();
 
-	if (GetEngineCount() == 0)
-	{
-		//do a full clear of Ogre objects if all engines have been unloaded
+	//do a full clear of Ogre objects
 
-		//remove all meshes
-		Ogre::MeshManager::getSingleton().removeAll();
+	//remove all meshes
+	Ogre::MeshManager::getSingleton().removeAll();
 
-		//remove all materials
-		Ogre::MaterialManager::getSingleton().removeAll();
-		Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
+	//remove all materials
+	Ogre::MaterialManager::getSingleton().removeAll();
+	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
 
-		//remove all fonts
-		Ogre::FontManager::getSingleton().removeAll();
+	//remove all fonts
+	Ogre::FontManager::getSingleton().removeAll();
 
-		//remove all textures
-		Ogre::TextureManager::getSingleton().removeAll();
+	//remove all textures
+	Ogre::TextureManager::getSingleton().removeAll();
 
-		//clear scene manager
-		mSceneMgr->clearScene();
-	}
+	//clear scene manager
+	mSceneMgr->clearScene();
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -686,12 +678,11 @@ void Skyscraper::GetInput(EngineContext *engine)
 {
 	SBS::SBS_PROFILE_MAIN("GetInput");
 
-	//quit if main window isn't selected
-	if (window->Active == false)
+	if (!engine)
 		return;
 
-	//exit if no active engine instance
-	if (!active_engine)
+	//quit if main window isn't selected
+	if (window->Active == false)
 		return;
 
 	static int wireframe;
@@ -1107,8 +1098,6 @@ void Skyscraper::Loop()
 		Render();
 		return;
 	}
-
-	//main simulator loop
 
 	//run sim engine instances
 	bool result = RunEngines();
@@ -1774,39 +1763,42 @@ bool Skyscraper::Load()
 	return true;
 }
 
-bool Skyscraper::Start()
+bool Skyscraper::Start(EngineContext *engine)
 {
 	//start simulator
 
-	if (!active_engine)
+	if (!engine)
 		return false;
 
-	SBS::SBS *Simcore = active_engine->GetSystem();
+	SBS::SBS *Simcore = engine->GetSystem();
 
 	//close progress dialog
 	if (progdialog)
 		progdialog->Destroy();
 	progdialog = 0;
 
-	//the sky needs to be created before Prepare() is called
-	bool sky_result = false;
-	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
-		sky_result = InitSky();
-
-	//create old sky if Caelum is turned off, or failed to initialize
-	if (sky_result == false)
-		Simcore->CreateSky(Simcore->SkyName);
-
-	//switch to fullscreen mode if specified
-	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
-		SetFullScreen(true);
-
-	//resize main window
-	if (FullScreen == false)
+	if (GetEngineCount() == 1)
 	{
-		window->SetBackgroundColour(*wxBLACK);
-		window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
-		window->Center();
+		//the sky needs to be created before Prepare() is called
+		bool sky_result = false;
+		if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+			sky_result = InitSky(engine);
+
+		//create old sky if Caelum is turned off, or failed to initialize
+		if (sky_result == false)
+			Simcore->CreateSky(Simcore->SkyName);
+
+		//switch to fullscreen mode if specified
+		if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
+			SetFullScreen(true);
+
+		//resize main window
+		if (FullScreen == false)
+		{
+			window->SetBackgroundColour(*wxBLACK);
+			window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
+			window->Center();
+		}
 	}
 
 	//start simulation
@@ -1826,12 +1818,15 @@ bool Skyscraper::Start()
 	}
 
 	//load control panel
-	if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+	if (GetEngineCount() == 1)
 	{
-		if (!dpanel)
-			dpanel = new DebugPanel(NULL, -1);
-		dpanel->Show(true);
-		dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+		if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+		{
+			if (!dpanel)
+				dpanel = new DebugPanel(NULL, -1);
+			dpanel->Show(true);
+			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+		}
 	}
 
 	//refresh viewport to prevent rendering issues
@@ -1861,7 +1856,8 @@ void Skyscraper::AllowResize(bool value)
 
 void Skyscraper::Unload()
 {
-	//unload sim
+	//unload to main menu
+
 	BuildingFile = "";
 	IsRunning = false;
 	IsLoading = false;
@@ -2007,11 +2003,11 @@ float Skyscraper::GetConfigFloat(const std::string &key, float default_value)
 	return ToFloat(result);
 }
 
-bool Skyscraper::InitSky()
+bool Skyscraper::InitSky(EngineContext *engine)
 {
 	//initialize sky
 
-	if (!active_engine)
+	if (!engine)
 		return false;
 
 	//ensure graphics card and render system are capable of Caelum's shaders
@@ -2090,7 +2086,7 @@ bool Skyscraper::InitSky()
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 
 		//have sky use SBS scaling factor
-		float scale = 1 / active_engine->GetSystem()->UnitScale;
+		float scale = 1 / engine->GetSystem()->UnitScale;
 		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
 		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
 	}
@@ -2210,7 +2206,7 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 				if (GetEngineCount() > 0)
 					SetActiveEngine(0);
 			}
-			else
+			else if (active_engine)
 				active_engine->GetSystem()->camera->Refresh();
 			return true;
 		}
@@ -2336,7 +2332,7 @@ bool EngineContext::Run()
 			}
 			else if (processor->IsFinished == true)
 			{
-				skyscraper->Start();
+				skyscraper->Start(this);
 				finish_time = Simcore->GetCurrentTime();
 			}
 

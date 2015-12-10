@@ -113,7 +113,7 @@ public:
 	void StopSound();
 	bool SelectBuilding();
 	bool Load();
-	bool Start();
+	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void Unload();
 	void Quit();
@@ -121,7 +121,7 @@ public:
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
 	bool GetConfigBool(const std::string &key, bool default_value);
 	float GetConfigFloat(const std::string &key, float default_value);
-	bool InitSky();
+	bool InitSky(EngineContext *engine);
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog();
 	void CloseProgressDialog();
@@ -171,7 +171,7 @@ private:
 	std::string background_image;
 	void DrawImage(const std::string &filename, buttondata *button, float x, float y, bool center, const std::string &filename_selected = "", const std::string &filename_pressed = "");
 	void Click(int index);
-	void UnloadSim(bool all = true);
+	void UnloadSim();
 	void DeleteButtons();
 	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
 	bool RunEngines();
