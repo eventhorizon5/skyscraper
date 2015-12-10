@@ -2157,6 +2157,12 @@ bool Skyscraper::RunEngines()
 	{
 		if (engines[i]->Run() == false)
 			result = false;
+
+		//start engine if loading is finished
+		if (engines[i]->IsLoadingFinished() == true)
+		{
+			Start(engines[i]);
+		}
 	}
 	return result;
 }
@@ -2257,7 +2263,7 @@ bool EngineContext::Run()
 			}
 			else if (processor->IsFinished == true)
 			{
-				skyscraper->Start(this);
+				//building has finished loading
 				finish_time = Simcore->GetCurrentTime();
 			}
 
@@ -2461,6 +2467,14 @@ void EngineContext::Report(const std::string &message)
 bool EngineContext::ReportError(const std::string &message)
 {
 	return skyscraper->ReportError(message);
+}
+
+bool EngineContext::IsLoadingFinished()
+{
+	if (!processor)
+		return false;
+
+	return (loading == true && processor->IsFinished == true);
 }
 
 }

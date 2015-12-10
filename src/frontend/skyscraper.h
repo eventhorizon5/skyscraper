@@ -219,6 +219,7 @@ public:
 	bool Start(Ogre::Camera *camera);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
+	bool IsLoadingFinished();
 
 private:
 
