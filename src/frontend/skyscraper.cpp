@@ -1124,7 +1124,7 @@ void Skyscraper::Loop()
 		Shutdown = false;
 		//if showmenu is true, unload simulator and return to main menu
 		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			Unload();
+			UnloadToMenu();
 		//otherwise exit app
 		else
 			Quit();
@@ -1678,11 +1678,14 @@ bool Skyscraper::Load(const std::string &filename)
 	if (result == false)
 	{
 		if (GetEngineCount() == 1)
-			Unload();
+			UnloadToMenu();
 		else
 			DeleteEngine(engine);
 		return false;
 	}
+
+	//create progress dialog
+	skyscraper->CreateProgressDialog(filename);
 
 	return true;
 }
@@ -1763,7 +1766,7 @@ void Skyscraper::AllowResize(bool value)
 	window->Refresh();
 }
 
-void Skyscraper::Unload()
+void Skyscraper::UnloadToMenu()
 {
 	//unload to main menu
 
@@ -2059,9 +2062,18 @@ void Skyscraper::CloseProgressDialog()
 	progdialog = 0;
 }
 
-void Skyscraper::UpdateProgress(int percent)
+void Skyscraper::UpdateProgress()
 {
-	progdialog->Update(percent);
+	int total_percent = (int)engines.size() * 100;
+	int current_percent = 0;
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		current_percent += engines[i]->GetProgress();
+	}
+
+	float final = current_percent / total_percent;
+	progdialog->Update((int)final);
 }
 
 void Skyscraper::SetFullScreen(bool enabled)
@@ -2087,7 +2099,7 @@ void Skyscraper::SetDateTime(double julian_date_time)
 
 EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position)
 {
-	EngineContext* engine = new EngineContext(mSceneMgr, soundsys, GetEngineCount(), position);
+	EngineContext* engine = new EngineContext(this, mSceneMgr, soundsys, GetEngineCount(), position);
 	engines.push_back(engine);
 	return engine;
 }
@@ -2193,8 +2205,9 @@ void Skyscraper::HandleReload()
 	}
 }
 
-EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position)
+EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position)
 {
+	this->frontend = frontend;
 	finish_time = 0;
 	shutdown = false;
 	loading = false;
@@ -2211,6 +2224,7 @@ EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fm
 	Simcore = 0;
 	processor = 0;
 	raised = false;
+	progress = 0;
 
 	instance = instance_number;
 	Report("\nStarting instance " + ToString(instance) + "...");
@@ -2300,7 +2314,7 @@ bool EngineContext::Run()
 
 		//get input
 		if (IsCameraActive() == true)
-			skyscraper->GetInput(this);
+			frontend->GetInput(this);
 
 		//process camera loop
 		Simcore->CameraLoop();
@@ -2355,9 +2369,6 @@ bool EngineContext::Load(std::string filename)
 		return false;
 	}
 
-	//create progress dialog
-	skyscraper->CreateProgressDialog(filename);
-
 	return true;
 }
 
@@ -2411,7 +2422,7 @@ void EngineContext::StartSim()
 
 	//load script processor
 	if (!processor)
-		processor = new ScriptProcessor(Simcore);
+		processor = new ScriptProcessor(this);
 }
 
 void EngineContext::UnloadSim()
@@ -2461,12 +2472,19 @@ bool EngineContext::Start(Ogre::Camera *camera)
 
 void EngineContext::Report(const std::string &message)
 {
-	skyscraper->Report(message);
+	frontend->Report(message);
 }
 
 bool EngineContext::ReportError(const std::string &message)
 {
-	return skyscraper->ReportError(message);
+	return frontend->ReportError(message);
+}
+
+bool EngineContext::ReportFatalError(const std::string &message)
+{
+	ReportError(message);
+	frontend->ShowError(message);
+	return false;
 }
 
 bool EngineContext::IsLoadingFinished()
@@ -2475,6 +2493,14 @@ bool EngineContext::IsLoadingFinished()
 		return false;
 
 	return (loading == true && processor->IsFinished == true);
+}
+
+void EngineContext::UpdateProgress(int percent)
+{
+	//update progress bar
+
+	progress = percent;
+	frontend->UpdateProgress();
 }
 
 }

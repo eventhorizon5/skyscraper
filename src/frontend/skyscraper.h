@@ -100,7 +100,7 @@ public:
 	bool Load(const std::string &filename);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
-	void Unload();
+	void UnloadToMenu();
 	void Quit();
 	int GetConfigInt(const std::string &key, int default_value);
 	std::string GetConfigString(const std::string &key, const std::string &default_value);
@@ -110,7 +110,7 @@ public:
 	void ShowConsole(bool send_button = true);
 	void CreateProgressDialog(const std::string &message);
 	void CloseProgressDialog();
-	void UpdateProgress(int percent);
+	void UpdateProgress();
 	void SetFullScreen(bool enabled);
 	inline Caelum::CaelumSystem* GetCaelumSystem() { return mCaelumSystem; };
 	void SetLocation(float latitude, float longitude);
@@ -203,7 +203,7 @@ public:
 
 	bool Reload;
 
-	EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
+	EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
@@ -219,13 +219,17 @@ public:
 	bool Start(Ogre::Camera *camera);
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
+	bool ReportFatalError(const std::string &message);
 	bool IsLoadingFinished();
+	void UpdateProgress(int percent);
+	int GetProgress() { return progress; }
 
 private:
 
 	void StartSim();
 	void UnloadSim();
 
+	Skyscraper* frontend; //frontend
 	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
@@ -234,6 +238,7 @@ private:
 	bool loading;
 	bool running;
 	bool raised;
+	int progress;
 
 	//override information
 	bool PositionOverride;
