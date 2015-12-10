@@ -1672,13 +1672,6 @@ bool Skyscraper::Load(const std::string &filename)
 	EngineContext* engine = CreateEngine(offset);
 	active_engine = engine;
 
-	//refresh console to fix banner message on Linux
-	if (console)
-	{
-		console->Refresh();
-		console->Update();
-	}
-
 	//have instance load building
 	bool result = engine->Load(filename);
 
@@ -1690,9 +1683,6 @@ bool Skyscraper::Load(const std::string &filename)
 			DeleteEngine(engine);
 		return false;
 	}
-
-	//create progress dialog
-	skyscraper->CreateProgressDialog(filename);
 
 	return true;
 }
@@ -2215,6 +2205,15 @@ void Skyscraper::HandleReload()
 void Skyscraper::RaiseWindow()
 {
 	window->Raise();
+}
+
+void Skyscraper::RefreshConsole()
+{
+	if (console)
+	{
+		console->Refresh();
+		console->Update();
+	}
 }
 
 }

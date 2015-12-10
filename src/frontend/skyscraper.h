@@ -121,6 +121,7 @@ public:
 	EngineContext* FindActiveEngine();
 	void SetActiveEngine(int index);
 	void RaiseWindow();
+	void RefreshConsole();
 
 private:
 	//mouse status

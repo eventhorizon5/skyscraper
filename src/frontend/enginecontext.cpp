@@ -161,6 +161,9 @@ bool EngineContext::Load(std::string filename)
 
 	loading = true;
 
+	//refresh console to fix banner message on Linux
+	frontend->RefreshConsole();
+
 	//Pause for 2 seconds
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 	Sleep(2000);
@@ -186,6 +189,9 @@ bool EngineContext::Load(std::string filename)
 		loading = false;
 		return false;
 	}
+
+	//create progress dialog
+	frontend->CreateProgressDialog(filename);
 
 	return true;
 }
