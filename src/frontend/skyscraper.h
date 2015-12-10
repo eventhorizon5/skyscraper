@@ -70,21 +70,12 @@ public:
 	std::string Renderer;
 
 	bool IsRunning;
-	bool IsLoading;
 	bool StartupRunning;
 	bool Pause; //pause simulator
 	bool DisableSound;
 	bool IntroMusic;
 	bool FullScreen;
 	bool Shutdown;
-	bool Reload;
-	bool PositionOverride;
-	Ogre::Vector3 override_position;
-	Ogre::Vector3 override_rotation;
-	int override_floor;
-	bool override_collisions;
-	bool override_gravity;
-	bool override_freelook;
 	int SkyMult; //sky time multiplier
 	bool raised;
 
@@ -176,6 +167,7 @@ private:
 	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
 	bool RunEngines();
 	void HandleEngineShutdown();
+	void HandleReload();
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
@@ -215,6 +207,8 @@ class EngineContext
 {
 public:
 
+	bool Reload;
+
 	EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
@@ -223,14 +217,38 @@ public:
 	bool Run();
 	void Shutdown();
 	bool GetShutdownState() { return shutdown; }
+	bool Load(std::string filename);
+	bool IsLoading() { return loading; }
+	bool IsRunning() { return running; }
+	void DoReload();
+	std::string GetFilename();
+	bool Start(Ogre::Camera *camera);
 
 private:
+
+	void StartSim();
+	void UnloadSim();
 
 	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
 	unsigned long finish_time;
 	bool shutdown;
+	bool loading;
+	bool running;
+
+	//override information
+	bool PositionOverride;
+	Ogre::Vector3 override_position;
+	Ogre::Vector3 override_rotation;
+	int override_floor;
+	bool override_collisions;
+	bool override_gravity;
+	bool override_freelook;
+
+	Ogre::SceneManager* mSceneManager;
+	FMOD::System *fmodsystem;
+	Ogre::Vector3 position;
 };
 
 extern Skyscraper *skyscraper;

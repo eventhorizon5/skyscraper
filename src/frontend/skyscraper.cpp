@@ -96,13 +96,10 @@ bool Skyscraper::OnInit(void)
 	skyscraper = this;
 	MouseDown = false;
 	IsRunning = false;
-	IsLoading = false;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
 	Shutdown = false;
-	PositionOverride = false;
-	Reload = false;
 #if OGRE_VERSION >= 0x00010900
 	mOverlaySystem = 0;
 #endif
@@ -122,10 +119,6 @@ bool Skyscraper::OnInit(void)
 	raised = false;
 	soundsys = 0;
 	progdialog = 0;
-	override_floor = 0;
-	override_collisions = false;
-	override_gravity = false;
-	override_freelook = false;
 	new_location = false;
 	new_time = false;
 	latitude = 0.0f;
@@ -178,7 +171,7 @@ bool Skyscraper::OnInit(void)
 	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
 	{
 		//draw background
-		DrawBackground();
+		//DrawBackground();
 		StartupRunning = true;
 		StartSound();
 	}
@@ -358,11 +351,11 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 	{
 		InLoop = true;
 
-		if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true || skyscraper->IsLoading == true)
-			skyscraper->Loop(); //run simulator loop
-
 		if (skyscraper->Pause == false)
+		{
+			skyscraper->Loop(); //run simulator loop
 			event.RequestMore(); //request more idles
+		}
 
 		InLoop = false;
 	}
@@ -789,7 +782,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 	{
 		if (wxGetKeyState((wxKeyCode)'R'))
 		{
-			Reload = true;
+			engine->Reload = true;
 			return;
 		}
 		camera->speed = speed_slow;
@@ -1091,7 +1084,7 @@ void Skyscraper::Loop()
 	SBS::ProfileManager::Increment_Frame_Counter();
 
 	//main menu routine
-	if (IsRunning == false && IsLoading == false)
+	if (StartupRunning == true)
 	{
 		DrawBackground();
 		GetMenuInput();
@@ -1147,30 +1140,8 @@ void Skyscraper::Loop()
 			Quit();
 	}
 
-	//reload building if requested
-	if (Reload == true)
-	{
-		PositionOverride = true;
-		override_position = Simcore->camera->GetPosition();
-		override_rotation = Simcore->camera->GetRotation();
-		override_floor = Simcore->camera->CurrentFloor;
-		override_collisions = Simcore->camera->CollisionsEnabled();
-		override_gravity = Simcore->camera->GetGravityStatus();
-		override_freelook = Simcore->camera->Freelook;
-		IsRunning = false;
-		IsLoading = false;
-		Pause = false;
-		UnloadSim(false);
-
-		if (Load() == false)
-		{
-			PositionOverride = false;
-			Reload = false;
-			return;
-		}
-
-		Reload = false;
-	}
+	//handle a building reload
+	HandleReload();
 
 	//SBS::ProfileManager::dumpAll();
 }
@@ -1485,10 +1456,6 @@ void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
-	//exit if simulator is loading
-	if (IsLoading == true)
-		return;
-
 	//exit if there aren't any buttons
 	if (!buttons || buttoncount == 0)
 		return;
@@ -1693,6 +1660,8 @@ bool Skyscraper::Load()
 {
 	//load simulator and data file
 
+	StartupRunning = false;
+
 	//exit if no building specified
 	if (BuildingFile == "")
 		return false;
@@ -1704,8 +1673,6 @@ bool Skyscraper::Load()
 	//clear screen
 	mRenderWindow->update();
 
-	IsLoading = true;
-
 	//move instance to an offset for testing
 	float offsetval = GetEngineCount() * 300;
 	Ogre::Vector3 offset (offsetval, 0, offsetval);
@@ -1714,41 +1681,12 @@ bool Skyscraper::Load()
 	EngineContext* engine = CreateEngine(offset);
 	active_engine = engine;
 
-	SBS::SBS *Simcore = engine->GetSystem();
-	ScriptProcessor *processor = engine->GetScriptProcessor();
+	//have instance load building
+	bool result = engine->Load(BuildingFile);
 
-	//refresh console to fix banner message on Linux
-	if (console)
-	{
-		console->Refresh();
-		console->Update();
-	}
-
-	//Pause for 2 seconds
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Sleep(2000);
-#else
-	sleep(2);
-#endif
-
-	//initialize simulator
-	Simcore->Initialize();
-
-	//load building data file
-	Report("\nLoading building data from " + BuildingFile + "...\n");
-	Simcore->BuildingFilename = BuildingFile;
-
-	if (Reload == false)
-		BuildingFile.insert(0, "buildings/");
-
-	//load script processor object and load building
-
-	processor->Reset();
-
-	if (!processor->LoadDataFile(BuildingFile))
+	if (result == false)
 	{
 		BuildingFile = "";
-		IsLoading = false;
 
 		if (GetEngineCount() == 1)
 			Unload();
@@ -1756,9 +1694,6 @@ bool Skyscraper::Load()
 			DeleteEngine(engine);
 		return false;
 	}
-
-	//create progress dialog
-	CreateProgressDialog();
 
 	return true;
 }
@@ -1802,20 +1737,8 @@ bool Skyscraper::Start(EngineContext *engine)
 	}
 
 	//start simulation
-	if (!Simcore->Start(mCamera))
-		return ReportError("Error starting simulator\n");
-
-	//set to saved position if reloading building
-	if (PositionOverride == true)
-	{
-		PositionOverride = false;
-		Simcore->camera->SetPosition(override_position);
-		Simcore->camera->SetRotation(override_rotation);
-		Simcore->camera->GotoFloor(override_floor, true);
-		Simcore->camera->EnableCollisions(override_collisions);
-		Simcore->camera->EnableGravity(override_gravity);
-		Simcore->camera->Freelook = override_freelook;
-	}
+	if (!engine->Start(mCamera))
+		return false;
 
 	//load control panel
 	if (GetEngineCount() == 1)
@@ -1836,8 +1759,6 @@ bool Skyscraper::Start(EngineContext *engine)
 	Report("Running simulation...");
 	StopSound();
 	IsRunning = true;
-	IsLoading = false;
-	StartupRunning = false;
 	if (console)
 		console->bSend->Enable(true);
 	return true;
@@ -1860,7 +1781,6 @@ void Skyscraper::Unload()
 
 	BuildingFile = "";
 	IsRunning = false;
-	IsLoading = false;
 	Pause = false;
 	raised = false;
 	UnloadSim();
@@ -2268,34 +2188,49 @@ void Skyscraper::HandleEngineShutdown()
 	}
 }
 
+void Skyscraper::HandleReload()
+{
+	//reload building if requested
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->Reload == true)
+		{
+			IsRunning = false;
+			Pause = false;
+
+			engines[i]->DoReload();
+		}
+	}
+}
+
 EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position)
 {
 	finish_time = 0;
 	shutdown = false;
+	loading = false;
+	running = false;
+	Reload = false;
+	PositionOverride = false;
+	override_floor = 0;
+	override_collisions = false;
+	override_gravity = false;
+	override_freelook = false;
+	this->mSceneManager = mSceneManager;
+	this->fmodsystem = fmodsystem;
+	this->position = position;
+	Simcore = 0;
+	processor = 0;
 
 	instance = instance_number;
 	skyscraper->Report("\nStarting instance " + ToString(instance) + "...");
 
-	//Create simulator object
-	Simcore = new SBS::SBS(mSceneManager, fmodsystem, instance, position);
-
-	//load script processor
-	processor = new ScriptProcessor(Simcore);
+	StartSim();
 }
 
 EngineContext::~EngineContext()
 {
-	if (Simcore)
-	{
-		delete Simcore;
-		Simcore = 0;
-		skyscraper->Report("\nSBS instance " + ToString(instance) + " unloaded");
-	}
-
-	//unload script processor
-	if (processor)
-		delete processor;
-	processor = 0;
+	UnloadSim();
 }
 
 ScriptProcessor* EngineContext::GetScriptProcessor()
@@ -2305,6 +2240,9 @@ ScriptProcessor* EngineContext::GetScriptProcessor()
 
 bool EngineContext::IsCameraActive()
 {
+	if (!Simcore)
+		return false;
+
 	return Simcore->camera->IsActive();
 }
 
@@ -2317,12 +2255,15 @@ void EngineContext::Shutdown()
 
 bool EngineContext::Run()
 {
+	if (!Simcore)
+		return false;
+
 	//run script processor
 	if (processor)
 	{
 		bool result = processor->Run();
 
-		if (skyscraper->IsLoading == true)
+		if (loading == true)
 		{
 			if (result == false)
 			{
@@ -2349,7 +2290,7 @@ bool EngineContext::Run()
 		return false;
 
 	//force window raise on startup, and report on missing files, if any
-	if (Simcore->GetCurrentTime() - finish_time > 0 && skyscraper->raised == false && skyscraper->IsLoading == false)
+	if (Simcore->GetCurrentTime() - finish_time > 0 && skyscraper->raised == false && loading == false)
 	{
 		window->Raise();
 		skyscraper->raised = true;
@@ -2362,7 +2303,7 @@ bool EngineContext::Run()
 	if (skyscraper->IsRunning == true)
 		Simcore->CalculateFrameRate();
 
-	if (skyscraper->IsLoading == false)
+	if (loading == false)
 	{
 		//run SBS main loop
 		Simcore->MainLoop();
@@ -2374,6 +2315,155 @@ bool EngineContext::Run()
 		//process camera loop
 		Simcore->CameraLoop();
 	}
+
+	return true;
+}
+
+bool EngineContext::Load(std::string filename)
+{
+	//load simulator and data file
+
+	if (!Simcore || !processor)
+		return false;
+
+	//exit if no building specified
+	if (filename == "")
+		return false;
+
+	loading = true;
+
+	//refresh console to fix banner message on Linux
+	if (console)
+	{
+		console->Refresh();
+		console->Update();
+	}
+
+	//Pause for 2 seconds
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	Sleep(2000);
+#else
+	sleep(2);
+#endif
+
+	//initialize simulator
+	Simcore->Initialize();
+
+	//load building data file
+	skyscraper->Report("\nLoading building data from " + filename + "...\n");
+	Simcore->BuildingFilename = filename;
+
+	filename.insert(0, "buildings/");
+
+	//load script processor object and load building
+
+	processor->Reset();
+
+	if (!processor->LoadDataFile(filename))
+	{
+		loading = false;
+		return false;
+	}
+
+	//create progress dialog
+	skyscraper->CreateProgressDialog();
+
+	return true;
+}
+
+void EngineContext::DoReload()
+{
+	//reload the current building
+
+	if (!Simcore)
+		return;
+
+	PositionOverride = true;
+
+	//store camera state information
+	std::string filename = Simcore->BuildingFilename;
+	override_position = Simcore->camera->GetPosition();
+	override_rotation = Simcore->camera->GetRotation();
+	override_floor = Simcore->camera->CurrentFloor;
+	override_collisions = Simcore->camera->CollisionsEnabled();
+	override_gravity = Simcore->camera->GetGravityStatus();
+	override_freelook = Simcore->camera->Freelook;
+
+	//unload current simulator
+	UnloadSim();
+
+	//start a new simulator
+	StartSim();
+
+	//load building file
+	if (Load(filename) == false)
+	{
+		PositionOverride = false;
+		Reload = false;
+		return;
+	}
+
+	Reload = false;
+}
+
+std::string EngineContext::GetFilename()
+{
+	if (Simcore)
+		return Simcore->BuildingFilename;
+	return "";
+}
+
+void EngineContext::StartSim()
+{
+	//Create simulator object
+	if (!Simcore)
+		Simcore = new SBS::SBS(mSceneManager, fmodsystem, instance, position);
+
+	//load script processor
+	if (!processor)
+		processor = new ScriptProcessor(Simcore);
+}
+
+void EngineContext::UnloadSim()
+{
+	if (Simcore)
+	{
+		delete Simcore;
+		skyscraper->Report("\nSBS instance " + ToString(instance) + " unloaded");
+	}
+	Simcore = 0;
+
+	//unload script processor
+	if (processor)
+		delete processor;
+	processor = 0;
+
+	loading = false;
+	running = false;
+}
+
+bool EngineContext::Start(Ogre::Camera *camera)
+{
+	if (!Simcore)
+		return false;
+
+	if (!Simcore->Start(camera))
+		return skyscraper->ReportError("Error starting simulator\n");
+
+	//set to saved position if reloading building
+	if (PositionOverride == true)
+	{
+		PositionOverride = false;
+		Simcore->camera->SetPosition(override_position);
+		Simcore->camera->SetRotation(override_rotation);
+		Simcore->camera->GotoFloor(override_floor, true);
+		Simcore->camera->EnableCollisions(override_collisions);
+		Simcore->camera->EnableGravity(override_gravity);
+		Simcore->camera->Freelook = override_freelook;
+	}
+
+	loading = false;
+	running = true;
 
 	return true;
 }
