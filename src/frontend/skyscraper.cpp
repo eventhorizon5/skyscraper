@@ -95,7 +95,6 @@ bool Skyscraper::OnInit(void)
 	version_frontend = version + ".0." + version_rev;
 	skyscraper = this;
 	MouseDown = false;
-	IsRunning = false;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
@@ -170,8 +169,6 @@ bool Skyscraper::OnInit(void)
 	//show menu
 	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
 	{
-		//draw background
-		//DrawBackground();
 		StartupRunning = true;
 		StartSound();
 	}
@@ -295,8 +292,6 @@ MainScreen::~MainScreen()
 void MainScreen::OnIconize(wxIconizeEvent& event)
 {
 	//pause simulator while minimized
-	if (skyscraper->IsRunning == false)
-		return;
 
 	skyscraper->Pause = event.IsIconized();
 
@@ -1758,7 +1753,6 @@ bool Skyscraper::Start(EngineContext *engine)
 	//run simulation
 	Report("Running simulation...");
 	StopSound();
-	IsRunning = true;
 	if (console)
 		console->bSend->Enable(true);
 	return true;
@@ -1780,7 +1774,6 @@ void Skyscraper::Unload()
 	//unload to main menu
 
 	BuildingFile = "";
-	IsRunning = false;
 	Pause = false;
 	raised = false;
 	UnloadSim();
@@ -2196,9 +2189,7 @@ void Skyscraper::HandleReload()
 	{
 		if (engines[i]->Reload == true)
 		{
-			IsRunning = false;
 			Pause = false;
-
 			engines[i]->DoReload();
 		}
 	}
@@ -2300,7 +2291,7 @@ bool EngineContext::Run()
 
 	//process internal clock
 	Simcore->AdvanceClock();
-	if (skyscraper->IsRunning == true)
+	if (running == true)
 		Simcore->CalculateFrameRate();
 
 	if (loading == false)

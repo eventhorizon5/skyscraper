@@ -69,7 +69,6 @@ public:
 	std::string SkyName;
 	std::string Renderer;
 
-	bool IsRunning;
 	bool StartupRunning;
 	bool Pause; //pause simulator
 	bool DisableSound;
