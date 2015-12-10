@@ -1690,11 +1690,6 @@ bool Skyscraper::Start(EngineContext *engine)
 
 	SBS::SBS *Simcore = engine->GetSystem();
 
-	//close progress dialog
-	if (progdialog)
-		progdialog->Destroy();
-	progdialog = 0;
-
 	if (GetEngineCount() == 1)
 	{
 		//the sky needs to be created before Prepare() is called
@@ -1722,6 +1717,10 @@ bool Skyscraper::Start(EngineContext *engine)
 	//start simulation
 	if (!engine->Start(mCamera))
 		return false;
+
+	//close progress dialog if no engines are loading
+	if (IsEngineLoading() == false)
+		CloseProgressDialog();
 
 	//load control panel
 	if (GetEngineCount() == 1)
@@ -2042,7 +2041,15 @@ void Skyscraper::ShowConsole(bool send_button)
 
 void Skyscraper::CreateProgressDialog(const std::string &message)
 {
-	progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(message.c_str()), 100, window);
+	if (!progdialog)
+		progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(message.c_str()), 100, window);
+	else
+	{
+		wxString msg = progdialog->GetMessage();
+		msg += "\n";
+		msg += message.c_str();
+		progdialog->Update(progdialog->GetValue(), msg);
+	}
 }
 
 void Skyscraper::CloseProgressDialog()
@@ -2145,6 +2152,10 @@ void Skyscraper::SetActiveEngine(int index)
 		return;
 
 	if (active_engine == engines[index])
+		return;
+
+	//don't switch to engine if it's loading
+	if (engines[index]->IsLoading() == true)
 		return;
 
 	//detach camera from current engine
