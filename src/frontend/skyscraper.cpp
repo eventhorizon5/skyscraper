@@ -2207,7 +2207,7 @@ EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fm
 	raised = false;
 
 	instance = instance_number;
-	skyscraper->Report("\nStarting instance " + ToString(instance) + "...");
+	Report("\nStarting instance " + ToString(instance) + "...");
 
 	StartSim();
 }
@@ -2251,7 +2251,7 @@ bool EngineContext::Run()
 		{
 			if (result == false)
 			{
-				skyscraper->ReportError("Error processing building\n");
+				ReportError("Error processing building\n");
 				Shutdown();
 				return false;
 			}
@@ -2334,7 +2334,7 @@ bool EngineContext::Load(std::string filename)
 	Simcore->Initialize();
 
 	//load building data file
-	skyscraper->Report("\nLoading building data from " + filename + "...\n");
+	Report("\nLoading building data from " + filename + "...\n");
 	Simcore->BuildingFilename = filename;
 
 	filename.insert(0, "buildings/");
@@ -2413,7 +2413,7 @@ void EngineContext::UnloadSim()
 	if (Simcore)
 	{
 		delete Simcore;
-		skyscraper->Report("\nSBS instance " + ToString(instance) + " unloaded");
+		Report("\nSBS instance " + ToString(instance) + " unloaded");
 	}
 	Simcore = 0;
 
@@ -2433,7 +2433,7 @@ bool EngineContext::Start(Ogre::Camera *camera)
 		return false;
 
 	if (!Simcore->Start(camera))
-		return skyscraper->ReportError("Error starting simulator\n");
+		return ReportError("Error starting simulator\n");
 
 	//set to saved position if reloading building
 	if (PositionOverride == true)
@@ -2451,6 +2451,16 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	running = true;
 
 	return true;
+}
+
+void EngineContext::Report(const std::string &message)
+{
+	skyscraper->Report(message);
+}
+
+bool EngineContext::ReportError(const std::string &message)
+{
+	return skyscraper->ReportError(message);
 }
 
 }

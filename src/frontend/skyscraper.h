@@ -217,6 +217,8 @@ public:
 	void DoReload();
 	std::string GetFilename();
 	bool Start(Ogre::Camera *camera);
+	void Report(const std::string &message);
+	bool ReportError(const std::string &message);
 
 private:
 
