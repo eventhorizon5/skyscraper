@@ -5166,8 +5166,8 @@ int Elevator::AvailableForCall(int floor, int direction)
 				//and if it's not in any service mode
 				if (InServiceMode() == false)
 				{
-					//and if no queue changes are pending
-					if (QueuePending == false)
+					//and if no queue changes are pending, unless doors are open on the same floor as call
+					if (QueuePending == false || ((AreDoorsOpen() == true || AreDoorsOpening() == true) && GetFloor() == floor))
 					{
 						//and if elevator either has limitqueue off, or has limitqueue on and queue direction is the same
 						if (LimitQueue == false || (LimitQueue == true && (QueuePositionDirection == direction || QueuePositionDirection == 0)))
