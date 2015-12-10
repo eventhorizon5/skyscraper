@@ -118,6 +118,7 @@ public:
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
+	void DeleteEngines();
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
 	void SetActiveEngine(int index);

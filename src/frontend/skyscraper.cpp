@@ -243,12 +243,7 @@ void Skyscraper::UnloadSim()
 	if (console)
 		console->bSend->Enable(false);
 
-	//delete simulator instances
-	for (int i = 0; i < (int)engines.size(); i++)
-	{
-		delete engines[i];
-	}
-	engines.clear();
+	DeleteEngines();
 
 	//do a full clear of Ogre objects
 
@@ -2130,6 +2125,17 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 		}
 	}
 	return false;
+}
+
+void Skyscraper::DeleteEngines()
+{
+	//delete simulator instances
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		delete engines[i];
+	}
+	engines.clear();
+	active_engine = 0;
 }
 
 EngineContext* Skyscraper::FindActiveEngine()
