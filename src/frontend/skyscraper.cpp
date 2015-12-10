@@ -115,7 +115,6 @@ bool Skyscraper::OnInit(void)
 	buttoncount = 0;
 	logger = 0;
 	console = 0;
-	raised = false;
 	soundsys = 0;
 	progdialog = 0;
 	new_location = false;
@@ -162,9 +161,9 @@ bool Skyscraper::OnInit(void)
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	//autoload a building file if specified
-	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
-	if (BuildingFile != "")
-		return Load();
+	std::string filename = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
+	if (filename != "")
+		return Load(filename);
 
 	//show menu
 	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
@@ -175,10 +174,7 @@ bool Skyscraper::OnInit(void)
 	else
 	{
 		//or show building selection window if ShowMenu is false
-		if (SelectBuilding() == true)
-			return Load();
-		else
-			return false;
+		return Load(SelectBuilding());
 	}
 
 	return true;
@@ -682,7 +678,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 	SBS::SBS *Simcore = engine->GetSystem();
 
 	// First get elapsed time from the virtual clock.
-	current_time = Simcore->GetRunTime();
+	unsigned int current_time = Simcore->GetRunTime();
 
 	SBS::Camera *camera = Simcore->camera;
 
@@ -964,8 +960,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 		//temporary engine switch test
 		if (wxGetKeyState((wxKeyCode)'L') && wait == false)
 		{
-			if (SelectBuilding() == true)
-				Load();
+			Load(SelectBuilding());
 			wait = true;
 			return;
 		}
@@ -1507,28 +1502,29 @@ void Skyscraper::Click(int index)
 	//user clicked a button
 
 	std::string number = ToString(index + 1);
+	std::string filename = "";
 
 	if (index == 0)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
 	if (index == 1)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
 	if (index == 2)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
 	if (index == 3)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
 	if (index > 3)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".File", "");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".File", "");
 
-	if (BuildingFile == "")
+	if (filename == "")
 	{
 		//show file selection dialog
-		SelectBuilding();
+		filename = SelectBuilding();
 	}
 
-	if (BuildingFile != "")
+	if (filename != "")
 	{
 		DeleteButtons();
-		Load();
+		Load(filename);
 	}
 }
 
@@ -1619,10 +1615,10 @@ void Skyscraper::StopSound()
 	sound = 0;
 }
 
-bool Skyscraper::SelectBuilding()
+std::string Skyscraper::SelectBuilding()
 {
 	//choose a building from a script file
-	BuildingFile = "";
+	std::string filename = "";
 	srand (time (0));
 
 	//set building file
@@ -1635,30 +1631,30 @@ bool Skyscraper::SelectBuilding()
 		delete Selector;
 		Selector = 0;
 		//quit
-		return false;
+		return "";
 	}
 
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-	BuildingFile = Selector->GetFilename().mb_str().data();
+	filename = Selector->GetFilename().mb_str().data();
 	#else
-	BuildingFile = Selector->GetFilename();
+	filename = Selector->GetFilename();
 	#endif
 
 	//delete dialog
 	delete Selector;
 	Selector = 0;
 
-	return true;
+	return filename;
 }
 
-bool Skyscraper::Load()
+bool Skyscraper::Load(const std::string &filename)
 {
 	//load simulator and data file
 
 	StartupRunning = false;
 
 	//exit if no building specified
-	if (BuildingFile == "")
+	if (filename == "")
 		return false;
 
 	//clear scene
@@ -1677,12 +1673,10 @@ bool Skyscraper::Load()
 	active_engine = engine;
 
 	//have instance load building
-	bool result = engine->Load(BuildingFile);
+	bool result = engine->Load(filename);
 
 	if (result == false)
 	{
-		BuildingFile = "";
-
 		if (GetEngineCount() == 1)
 			Unload();
 		else
@@ -1773,9 +1767,7 @@ void Skyscraper::Unload()
 {
 	//unload to main menu
 
-	BuildingFile = "";
 	Pause = false;
-	raised = false;
 	UnloadSim();
 
 	//cleanup sound
@@ -2054,9 +2046,9 @@ void Skyscraper::ShowConsole(bool send_button)
 	console->bSend->Enable(send_button);
 }
 
-void Skyscraper::CreateProgressDialog()
+void Skyscraper::CreateProgressDialog(const std::string &message)
 {
-	progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(BuildingFile.c_str()), 100, window);
+	progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(message.c_str()), 100, window);
 }
 
 void Skyscraper::CloseProgressDialog()
@@ -2212,6 +2204,7 @@ EngineContext::EngineContext(Ogre::SceneManager* mSceneManager, FMOD::System *fm
 	this->position = position;
 	Simcore = 0;
 	processor = 0;
+	raised = false;
 
 	instance = instance_number;
 	skyscraper->Report("\nStarting instance " + ToString(instance) + "...");
@@ -2281,10 +2274,10 @@ bool EngineContext::Run()
 		return false;
 
 	//force window raise on startup, and report on missing files, if any
-	if (Simcore->GetCurrentTime() - finish_time > 0 && skyscraper->raised == false && loading == false)
+	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && loading == false)
 	{
 		window->Raise();
-		skyscraper->raised = true;
+		raised = true;
 
 		processor->ReportMissingFiles();
 	}
@@ -2357,7 +2350,7 @@ bool EngineContext::Load(std::string filename)
 	}
 
 	//create progress dialog
-	skyscraper->CreateProgressDialog();
+	skyscraper->CreateProgressDialog(filename);
 
 	return true;
 }
@@ -2431,6 +2424,7 @@ void EngineContext::UnloadSim()
 
 	loading = false;
 	running = false;
+	raised = false;
 }
 
 bool EngineContext::Start(Ogre::Camera *camera)

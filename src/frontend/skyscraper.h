@@ -76,16 +76,11 @@ public:
 	bool FullScreen;
 	bool Shutdown;
 	int SkyMult; //sky time multiplier
-	bool raised;
-
-	unsigned int current_time;
 
 	void Loop();
 	virtual bool OnInit(void);
 	virtual int OnExit(void);
 	void DrawBackground();
-
-	std::string BuildingFile;
 
 	//engine related stuff
 	Ogre::RenderWindow* CreateRenderWindow(const Ogre::NameValuePairList* miscParams = 0, const std::string& windowName = "");
@@ -101,8 +96,8 @@ public:
 	void GetMenuInput();
 	void StartSound();
 	void StopSound();
-	bool SelectBuilding();
-	bool Load();
+	std::string SelectBuilding();
+	bool Load(const std::string &filename);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void Unload();
@@ -113,7 +108,7 @@ public:
 	float GetConfigFloat(const std::string &key, float default_value);
 	bool InitSky(EngineContext *engine);
 	void ShowConsole(bool send_button = true);
-	void CreateProgressDialog();
+	void CreateProgressDialog(const std::string &message);
 	void CloseProgressDialog();
 	void UpdateProgress(int percent);
 	void SetFullScreen(bool enabled);
@@ -235,6 +230,7 @@ private:
 	bool shutdown;
 	bool loading;
 	bool running;
+	bool raised;
 
 	//override information
 	bool PositionOverride;
