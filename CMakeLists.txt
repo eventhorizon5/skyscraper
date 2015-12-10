@@ -1,7 +1,11 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8)
  
 project(Skyscraper)
  
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  set (CMAKE_CXX_FLAGS "-fPIC -DBT_USE_DOUBLE_PRECISION ${CMAKE_CXX_FLAGS}")
+endif ()
+
 if(UNIX)
 	set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/tools/cmake;${CMAKE_MODULE_PATH}")
 	if(NOT APPLE)
