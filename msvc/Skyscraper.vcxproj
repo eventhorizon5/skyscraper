@@ -354,6 +354,7 @@
     <ClCompile Include="..\src\frontend\debugpanel.cpp" />
     <ClCompile Include="..\src\frontend\editelevator.cpp" />
     <ClCompile Include="..\src\frontend\enginecontext.cpp" />
+    <ClCompile Include="..\src\frontend\enginemanager.cpp" />
     <ClCompile Include="..\src\frontend\fileio.cpp" />
     <ClCompile Include="..\src\frontend\keydialog.cpp" />
     <ClCompile Include="..\src\frontend\meshcontrol.cpp" />
@@ -375,6 +376,7 @@
     <ClInclude Include="..\src\frontend\debugpanel.h" />
     <ClInclude Include="..\src\frontend\editelevator.h" />
     <ClInclude Include="..\src\frontend\enginecontext.h" />
+    <ClInclude Include="..\src\frontend\enginemanager.h" />
     <ClInclude Include="..\src\frontend\fileio.h" />
     <ClInclude Include="..\src\frontend\keydialog.h" />
     <ClInclude Include="..\src\frontend\meshcontrol.h" />

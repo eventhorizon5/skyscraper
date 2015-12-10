@@ -346,6 +346,15 @@
 											<option>1</option>
 										</object>
 										<object class="sizeritem">
+											<object class="wxButton" name="ID_bEngineManager" variable="bEngineManager" member="yes">
+												<label>Engine Manager</label>
+												<handler function="On_bEngineManager_Click" entry="EVT_BUTTON" />
+											</object>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="sizeritem">
 											<object class="wxButton" name="ID_bConsole" variable="bConsole" member="yes">
 												<label>Console</label>
 												<handler function="On_bConsole_Click" entry="EVT_BUTTON" />
@@ -421,6 +430,11 @@
 												<label>Floor Information</label>
 												<handler function="On_bFloorInfo_Click" entry="EVT_BUTTON" />
 											</object>
+											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+											<border>5</border>
+											<option>1</option>
+										</object>
+										<object class="spacer">
 											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>

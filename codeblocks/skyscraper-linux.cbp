@@ -79,6 +79,8 @@
 		<Unit filename="../src/frontend/debugpanel.h" />
 		<Unit filename="../src/frontend/editelevator.cpp" />
 		<Unit filename="../src/frontend/editelevator.h" />
+		<Unit filename="../src/frontend/enginemanager.cpp" />
+		<Unit filename="../src/frontend/enginemanager.h" />
 		<Unit filename="../src/frontend/fileio.cpp" />
 		<Unit filename="../src/frontend/fileio.h" />
 		<Unit filename="../src/frontend/keydialog.cpp" />
@@ -166,6 +168,7 @@
 		<Unit filename="../src/sbs/unix.h" />
 		<Unit filename="../src/sbs/wall.cpp" />
 		<Unit filename="../src/sbs/wall.h" />
+		<Unit filename="wxsmith/EngineManager.wxs" />
 		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Extensions>
 			<code_completion />
@@ -190,6 +193,7 @@
 					<wxDialog wxs="wxsmith/ActionViewer.wxs" src="../src/frontend/actionviewer.cpp" hdr="../src/frontend/actionviewer.h" fwddecl="0" i18n="1" name="ActionViewer" language="CPP" />
 					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/frontend/moveobject.cpp" hdr="../src/frontend/moveobject.h" fwddecl="0" i18n="1" name="MoveObject" language="CPP" />
 					<wxDialog wxs="wxsmith/SkyControl.wxs" src="../src/frontend/skycontrol.cpp" hdr="../src/frontend/skycontrol.h" fwddecl="0" i18n="1" name="SkyControl" language="CPP" />
+					<wxDialog wxs="wxsmith/EngineManager.wxs" src="../src/frontend/enginemanager.cpp" hdr="../src/frontend/enginemanager.h" fwddecl="0" i18n="1" name="EngineManager" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />

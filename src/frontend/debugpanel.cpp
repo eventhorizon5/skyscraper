@@ -43,6 +43,7 @@
 #include "skycontrol.h"
 #include "console.h"
 #include "objectinfo.h"
+#include "enginemanager.h"
 #include "skyscraper.h"
 
 namespace Skyscraper {
@@ -57,6 +58,7 @@ ObjectInfo *objectinfo;
 Profiler *profiler;
 ActionViewer *actionviewer;
 SkyControl *skycontrol;
+EngineManager *emanager;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -94,6 +96,7 @@ const long DebugPanel::ID_bCameraControl = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
 const long DebugPanel::ID_bControlReference = wxNewId();
 const long DebugPanel::ID_bStats = wxNewId();
+const long DebugPanel::ID_bEngineManager = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
 const long DebugPanel::ID_bActionViewer = wxNewId();
@@ -215,6 +218,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer9->Add(bControlReference, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bStats = new wxButton(Panel1, ID_bStats, _("Simulator Statistics"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStats"));
 	BoxSizer9->Add(bStats, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bEngineManager = new wxButton(Panel1, ID_bEngineManager, _("Engine Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEngineManager"));
+	BoxSizer9->Add(bEngineManager, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bConsole = new wxButton(Panel1, ID_bConsole, _("Console"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bConsole"));
 	BoxSizer9->Add(bConsole, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer9, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -233,6 +238,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bTextures, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(-1,-1,1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -257,6 +263,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
 	Connect(ID_bControlReference,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bControlReference_Click);
 	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
+	Connect(ID_bEngineManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEngineManager_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
@@ -277,6 +284,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	profiler = 0;
 	actionviewer = 0;
 	skycontrol = 0;
+	emanager = 0;
 	timer = 0;
 
 	OnInit();
@@ -318,6 +326,9 @@ DebugPanel::~DebugPanel()
 	if (skycontrol)
 		skycontrol->Destroy();
 	skycontrol = 0;
+	if (emanager)
+		emanager->Destroy();
+	emanager = 0;
 	dpanel = 0; //clear external pointer
 }
 
@@ -399,6 +410,8 @@ void DebugPanel::OnInit()
 		actionviewer = new ActionViewer(dp, -1);
 	if (!skycontrol)
 		skycontrol = new SkyControl(dp, -1);
+	if (!emanager)
+		emanager = new EngineManager(dp, -1);
 
 	if (timer)
 		delete timer;
@@ -493,6 +506,12 @@ void DebugPanel::Timer::Notify()
 	{
 		if (skycontrol->IsShown() == true)
 			skycontrol->Loop();
+	}
+
+	if (emanager)
+	{
+		if (emanager->IsShown() == true)
+			emanager->Loop();
 	}
 }
 
@@ -617,6 +636,15 @@ void DebugPanel::On_bSkyControl_Click(wxCommandEvent& event)
 	{
 		skycontrol->CenterOnScreen();
 		skycontrol->Show();
+	}
+}
+
+void DebugPanel::On_bEngineManager_Click(wxCommandEvent& event)
+{
+	if (emanager)
+	{
+		emanager->CenterOnScreen();
+		emanager->Show();
 	}
 }
 
