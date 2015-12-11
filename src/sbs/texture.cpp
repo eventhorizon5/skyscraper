@@ -1936,7 +1936,13 @@ Ogre::MaterialPtr SBS::CreateMaterial(const std::string &name, const std::string
 
 Ogre::MaterialPtr SBS::GetMaterialByName(const std::string &name, const std::string &group)
 {
-	return Ogre::MaterialManager::getSingleton().getByName(ToString(InstanceNumber) + ":" + name, group);
+	Ogre::MaterialPtr ptr;
+
+	if (Ogre::ResourceGroupManager::getSingleton().resourceGroupExists(group) == false)
+		return ptr;
+
+	ptr = Ogre::MaterialManager::getSingleton().getByName(ToString(InstanceNumber) + ":" + name, group);
+	return ptr;
 }
 
 Ogre::TextureUnitState* SBS::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
@@ -1974,7 +1980,13 @@ std::string SBS::GetTextureName(Ogre::MaterialPtr mMat)
 
 Ogre::TexturePtr SBS::GetTextureByName(const std::string &name, const std::string &group)
 {
-	return Ogre::TextureManager::getSingleton().getByName(name, group);
+	Ogre::TexturePtr ptr;
+
+	if (Ogre::ResourceGroupManager::getSingleton().resourceGroupExists(group) == false)
+		return ptr;
+
+	ptr = Ogre::TextureManager::getSingleton().getByName(name, group);
+	return ptr;
 }
 
 }
