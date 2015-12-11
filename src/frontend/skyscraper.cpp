@@ -2041,6 +2041,10 @@ void Skyscraper::ShowConsole(bool send_button)
 
 void Skyscraper::CreateProgressDialog(const std::string &message)
 {
+	//don't create progress dialog if concurrent loading is enabled
+	if (ConcurrentLoads == true)
+		return;
+
 	if (!progdialog)
 		progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(message.c_str()), 100, window);
 	else
