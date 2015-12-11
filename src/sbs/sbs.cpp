@@ -443,6 +443,10 @@ SBS::~SBS()
 	}
 	mWorld = 0;
 
+	//delete materials
+	UnloadMaterials();
+	textureinfo.clear();
+
 	ObjectArray.clear();
 	verify_results.clear();
 

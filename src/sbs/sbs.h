@@ -484,6 +484,7 @@ private:
 	std::vector<ElevatorRoute*> GetIndirectRoute(std::string ElevatorType, int StartingFloor, int DestinationFloor, bool service_access = false, bool recursion = false);
 	ElevatorRoute* GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access = false);
 	Ogre::TexturePtr LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color = false, Ogre::ColourValue alpha_color = Ogre::ColourValue::Black);
+	void UnloadMaterials();
 
 	//doorway data
 	bool wall1a, wall1b, wall2a, wall2b;

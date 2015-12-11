@@ -1989,4 +1989,14 @@ Ogre::TexturePtr SBS::GetTextureByName(const std::string &name, const std::strin
 	return ptr;
 }
 
+void SBS::UnloadMaterials()
+{
+	//delete all registered materials
+
+	for (int i = 0; i < (int)textureinfo.size(); i++)
+	{
+		Ogre::MaterialManager::getSingleton().remove(ToString(InstanceNumber) + ":" + textureinfo[i].name);
+	}
+}
+
 }
