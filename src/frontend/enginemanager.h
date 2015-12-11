@@ -26,8 +26,13 @@
 #define ENGINEMANAGER_H
 
 //(*Headers(EngineManager)
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/statline.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
 #include <wx/listbox.h>
 //*)
 
@@ -41,23 +46,59 @@ class EngineManager: public wxDialog
 		virtual ~EngineManager();
 
 		//(*Declarations(EngineManager)
-		wxListBox* ListBox1;
+		wxButton* bSetActive;
+		wxTextCtrl* tState;
+		wxStaticLine* StaticLine2;
+		wxTextCtrl* tPosition;
+		wxCheckBox* chkCLoads;
+		wxButton* bShutdown;
+		wxTextCtrl* tActive;
+		wxStaticText* StaticText1;
+		wxButton* bOk;
+		wxButton* bReload;
+		wxStaticText* StaticText4;
+		wxListBox* EngineList;
+		wxStaticText* StaticText2;
+		wxCheckBox* chkRender;
+		wxButton* bLoad;
 		//*)
 		void Loop();
 
 	protected:
 
 		//(*Identifiers(EngineManager)
-		static const long ID_LISTBOX1;
+		static const long ID_EngineList;
+		static const long ID_STATICTEXT4;
+		static const long ID_tPosition;
+		static const long ID_STATICTEXT1;
+		static const long ID_tActive;
+		static const long ID_STATICTEXT2;
+		static const long ID_tState;
+		static const long ID_STATICLINE2;
+		static const long ID_CLoads;
+		static const long ID_chkRender;
+		static const long ID_bSetActive;
+		static const long ID_bReload;
+		static const long ID_bLoad;
+		static const long ID_bShutdown;
+		static const long ID_bOk;
 		//*)
 		void OnInit();
 
 	private:
 
 		//(*Handlers(EngineManager)
+		void On_bSetActive_Click(wxCommandEvent& event);
+		void On_bLoad_Click(wxCommandEvent& event);
+		void On_bReload_Click(wxCommandEvent& event);
+		void On_bShutdown_Click(wxCommandEvent& event);
+		void On_chkCLoads_Click(wxCommandEvent& event);
+		void On_chkRender_Click(wxCommandEvent& event);
+		void On_bOk_Click(wxCommandEvent& event);
 		//*)
 
-		SBS::SBS *Simcore;
+		EngineContext *engine;
+		int lastcount;
 
 		DECLARE_EVENT_TABLE()
 };

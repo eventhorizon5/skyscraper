@@ -75,7 +75,8 @@ public:
 	bool FullScreen;
 	bool Shutdown;
 	int SkyMult; //sky time multiplier
-	bool concurrent_loads; //set to true for buildings to be loaded while another sim is active and rendering
+	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
+	bool RenderOnStartup; //override SBS engine setting with same name
 
 	void Loop();
 	virtual bool OnInit(void);
@@ -116,6 +117,7 @@ public:
 	void SetLocation(float latitude, float longitude);
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
+	EngineContext* GetEngine(int index);
 	EngineContext* CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();

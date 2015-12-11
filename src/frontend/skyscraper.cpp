@@ -123,7 +123,8 @@ bool Skyscraper::OnInit(void)
 	longitude = 0.0f;
 	datetime = 0.0;
 	active_engine = 0;
-	concurrent_loads = false;
+	ConcurrentLoads = false;
+	RenderOnStartup = false;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -1084,7 +1085,7 @@ void Skyscraper::Loop()
 	//delete an engine if requested
 	HandleEngineShutdown();
 
-	if (result == false && (concurrent_loads == false || GetEngineCount() == 1))
+	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
 		return;
 
 	if (!active_engine)
@@ -1673,6 +1674,10 @@ bool Skyscraper::Load(const std::string &filename)
 		return false;
 	}
 
+	//override SBS startup render option, if specified
+	if (RenderOnStartup == true)
+		engine->GetSystem()->RenderOnStartup = true;
+
 	return true;
 }
 
@@ -2178,7 +2183,7 @@ bool Skyscraper::RunEngines()
 	bool result = true;
 	bool isloading = IsEngineLoading();
 
-	if (concurrent_loads == true && isloading == true)
+	if (ConcurrentLoads == true && isloading == true)
 	{
 		//refresh viewport to prevent rendering issues
 		mViewport->_updateDimensions();
@@ -2188,7 +2193,7 @@ bool Skyscraper::RunEngines()
 	{
 		//process engine run loops, and also prevent other instances from running if
 		//one or more engines are loading
-		if (concurrent_loads == true || isloading == false || engines[i]->IsLoading() == true)
+		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
 		{
 			if (engines[i]->Run() == false)
 				result = false;
@@ -2240,6 +2245,16 @@ void Skyscraper::HandleReload()
 			engines[i]->DoReload();
 		}
 	}
+}
+
+EngineContext* Skyscraper::GetEngine(int index)
+{
+	//get an engine by index number
+
+	if (index < 0 || index > (int)engines.size())
+		return 0;
+
+	return engines[index];
 }
 
 void Skyscraper::RaiseWindow()

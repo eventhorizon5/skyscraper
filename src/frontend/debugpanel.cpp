@@ -43,8 +43,8 @@
 #include "skycontrol.h"
 #include "console.h"
 #include "objectinfo.h"
-#include "enginemanager.h"
 #include "skyscraper.h"
+#include "enginemanager.h"
 
 namespace Skyscraper {
 
