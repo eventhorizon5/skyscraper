@@ -50,7 +50,7 @@ Person::Person(Object *parent, const std::string &name, int floor, bool service_
 	//create timer
 	random_timer = new Timer("Random Timer", this);
 
-	Report("On floor " +  ToString(current_floor));
+	SetFloor(floor);
 }
 
 Person::~Person()
@@ -254,8 +254,11 @@ void Person::Timer::Notify()
 
 void Person::SetFloor(int value)
 {
-	if (IsRouteActive() == false)
-		current_floor = value;
+	if (IsRouteActive() == true)
+		return;
+
+	current_floor = value;
+	Report("On floor " +  ToString(current_floor));
 }
 
 void Person::Stop()
