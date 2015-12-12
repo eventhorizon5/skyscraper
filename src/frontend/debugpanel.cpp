@@ -290,6 +290,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	actionviewer = 0;
 	skycontrol = 0;
 	emanager = 0;
+	pmanager = 0;
 	timer = 0;
 
 	OnInit();
@@ -334,6 +335,9 @@ DebugPanel::~DebugPanel()
 	if (emanager)
 		emanager->Destroy();
 	emanager = 0;
+	if (pmanager)
+		pmanager->Destroy();
+	pmanager = 0;
 	dpanel = 0; //clear external pointer
 }
 
@@ -417,6 +421,8 @@ void DebugPanel::OnInit()
 		skycontrol = new SkyControl(dp, -1);
 	if (!emanager)
 		emanager = new EngineManager(dp, -1);
+	if (!pmanager)
+		pmanager = new PeopleManager(dp, -1);
 
 	if (timer)
 		delete timer;
@@ -517,6 +523,12 @@ void DebugPanel::Timer::Notify()
 	{
 		if (emanager->IsShown() == true)
 			emanager->Loop();
+	}
+
+	if (pmanager)
+	{
+		if (pmanager->IsShown() == true)
+			pmanager->Loop();
 	}
 }
 
