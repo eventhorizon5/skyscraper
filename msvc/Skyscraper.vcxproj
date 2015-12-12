@@ -361,6 +361,7 @@
     <ClCompile Include="..\src\frontend\moveobject.cpp" />
     <ClCompile Include="..\src\frontend\objectinfo.cpp" />
     <ClCompile Include="..\src\frontend\parameterviewer.cpp" />
+    <ClCompile Include="..\src\frontend\peoplemanager.cpp" />
     <ClCompile Include="..\src\frontend\profilergui.cpp" />
     <ClCompile Include="..\src\frontend\skycontrol.cpp" />
     <ClCompile Include="..\src\frontend\skyscraper.cpp" />
@@ -383,6 +384,7 @@
     <ClInclude Include="..\src\frontend\moveobject.h" />
     <ClInclude Include="..\src\frontend\objectinfo.h" />
     <ClInclude Include="..\src\frontend\parameterviewer.h" />
+    <ClInclude Include="..\src\frontend\peoplemanager.h" />
     <ClInclude Include="..\src\frontend\profilergui.h" />
     <ClInclude Include="..\src\frontend\skycontrol.h" />
     <ClInclude Include="..\src\frontend\skyscraper.h" />

@@ -406,6 +406,8 @@ public:
 	Ogre::TextureUnitState* GetTextureUnitState(Ogre::MaterialPtr mMat);
 	std::string GetTextureName(Ogre::MaterialPtr mMat);
 	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
+	int GetPersonCount() { return (int)PersonArray.size(); }
+	Person* GetPerson(int number);
 
 	//Meshes
 	MeshObject* Buildings;

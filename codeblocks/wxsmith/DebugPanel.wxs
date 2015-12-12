@@ -434,7 +434,11 @@
 											<border>5</border>
 											<option>1</option>
 										</object>
-										<object class="spacer">
+										<object class="sizeritem">
+											<object class="wxButton" name="ID_bPeopleManager" variable="bPeopleManager" member="yes">
+												<label>People Manager</label>
+												<handler function="On_bPeopleManager_Click" entry="EVT_BUTTON" />
+											</object>
 											<flag>wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
 											<border>5</border>
 											<option>1</option>

@@ -93,6 +93,8 @@
 		<Unit filename="../src/frontend/objectinfo.h" />
 		<Unit filename="../src/frontend/parameterviewer.cpp" />
 		<Unit filename="../src/frontend/parameterviewer.h" />
+		<Unit filename="../src/frontend/peoplemanager.cpp" />
+		<Unit filename="../src/frontend/peoplemanager.h" />
 		<Unit filename="../src/frontend/profilergui.cpp" />
 		<Unit filename="../src/frontend/profilergui.h" />
 		<Unit filename="../src/frontend/revmain.h" />
@@ -169,6 +171,7 @@
 		<Unit filename="../src/sbs/wall.cpp" />
 		<Unit filename="../src/sbs/wall.h" />
 		<Unit filename="wxsmith/EngineManager.wxs" />
+		<Unit filename="wxsmith/PeopleManager.wxs" />
 		<Unit filename="wxsmith/SkyControl.wxs" />
 		<Extensions>
 			<code_completion />
@@ -194,6 +197,7 @@
 					<wxDialog wxs="wxsmith/MoveObject.wxs" src="../src/frontend/moveobject.cpp" hdr="../src/frontend/moveobject.h" fwddecl="0" i18n="1" name="MoveObject" language="CPP" />
 					<wxDialog wxs="wxsmith/SkyControl.wxs" src="../src/frontend/skycontrol.cpp" hdr="../src/frontend/skycontrol.h" fwddecl="0" i18n="1" name="SkyControl" language="CPP" />
 					<wxDialog wxs="wxsmith/EngineManager.wxs" src="../src/frontend/enginemanager.cpp" hdr="../src/frontend/enginemanager.h" fwddecl="0" i18n="1" name="EngineManager" language="CPP" />
+					<wxDialog wxs="wxsmith/PeopleManager.wxs" src="../src/frontend/peoplemanager.cpp" hdr="../src/frontend/peoplemanager.h" fwddecl="0" i18n="1" name="PeopleManager" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />

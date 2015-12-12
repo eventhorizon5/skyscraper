@@ -45,6 +45,7 @@
 #include "objectinfo.h"
 #include "skyscraper.h"
 #include "enginemanager.h"
+#include "peoplemanager.h"
 
 namespace Skyscraper {
 
@@ -59,6 +60,7 @@ Profiler *profiler;
 ActionViewer *actionviewer;
 SkyControl *skycontrol;
 EngineManager *emanager;
+PeopleManager *pmanager;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -105,6 +107,7 @@ const long DebugPanel::ID_bProfiler = wxNewId();
 const long DebugPanel::ID_bKeys = wxNewId();
 const long DebugPanel::ID_bTextures = wxNewId();
 const long DebugPanel::ID_bFloorInfo = wxNewId();
+const long DebugPanel::ID_bPeopleManager = wxNewId();
 const long DebugPanel::ID_PANEL1 = wxNewId();
 //*)
 
@@ -238,7 +241,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bTextures, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	BoxSizer10->Add(-1,-1,1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bPeopleManager = new wxButton(Panel1, ID_bPeopleManager, _("People Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bPeopleManager"));
+	BoxSizer10->Add(bPeopleManager, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -272,6 +276,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bKeys,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bKeys_Click);
 	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
 	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
+	Connect(ID_bPeopleManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bPeopleManager_Click);
 	//*)
 	dp = this;
 	Simcore = 0;
@@ -648,4 +653,14 @@ void DebugPanel::On_bEngineManager_Click(wxCommandEvent& event)
 	}
 }
 
+void DebugPanel::On_bPeopleManager_Click(wxCommandEvent& event)
+{
+	if (pmanager)
+	{
+		pmanager->CenterOnScreen();
+		pmanager->Show();
+	}
 }
+
+}
+

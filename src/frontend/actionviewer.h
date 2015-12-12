@@ -59,7 +59,6 @@ class ActionViewer: public wxDialog
 		wxButton* bOK;
 		wxTextCtrl* tParentName;
 		//*)
-		SBS::SBS *Simcore;
 		void Loop();
 
 	protected:
@@ -89,6 +88,7 @@ class ActionViewer: public wxDialog
 		void On_ActionList_Select(wxCommandEvent& event);
 		void On_bDelete_Click(wxCommandEvent& event);
 		//*)
+		SBS::SBS *Simcore;
 		int lastcount;
 
 		DECLARE_EVENT_TABLE()
