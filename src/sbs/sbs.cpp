@@ -4146,6 +4146,9 @@ void SBS::EnableRandomActivity(bool value)
 		for (int i = 0; i < GetTotalFloors(); i++)
 		{
 			Person *person = CreatePerson("Random " + ToString(i + 1), 0, false);
+
+			//enable random activity on the person
+			person->EnableRandomActivity(true);
 		}
 
 		//create a service person
