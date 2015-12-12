@@ -1123,7 +1123,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	if (IsInclude == true)
 		error += "in included file " + IncludeFile + " ";
 
-	error += "on line " + ToString(LineNumber) + ": " + message + "\nSection: " + ToString(Section) + "\nContext: " + Context;
+	error += "on line " + ToString(LineNumber) + ": " + message + "\n\nFilename: " + engine->GetFilename() + "\nContext: " + Context;
 
 	if (InFunction == 0)
 		error += "\nLine Text: " + LineData;
@@ -1136,6 +1136,9 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 
 		error += "\nFunction call line: " + ToString(FunctionLine) + "\nLine Text: " + LineData;
 	}
+
+	if (skyscraper->GetEngineCount() > 1)
+		error += "\nEngine context: " + ToString(engine->GetNumber());
 
 	engine->ReportError(error);
 

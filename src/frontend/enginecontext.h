@@ -55,6 +55,7 @@ public:
 	bool IsLoadingFinished();
 	void UpdateProgress(int percent);
 	int GetProgress() { return progress; }
+	int GetNumber() { return instance; }
 
 private:
 
