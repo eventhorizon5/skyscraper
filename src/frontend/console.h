@@ -71,6 +71,8 @@ class Console: public wxFrame
 		void On_Close(wxCloseEvent& event);
 		//*)
 
+		SBS::SBS *Simcore;
+
 		DECLARE_EVENT_TABLE()
 };
 

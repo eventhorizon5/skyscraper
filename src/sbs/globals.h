@@ -70,6 +70,7 @@ SBSIMPEXP std::string SetCaseCopy(std::string string, bool uppercase);
 SBSIMPEXP void SetCase(std::string &string, bool uppercase);
 SBSIMPEXP int FindWithCase(const std::string &string, bool uppercase, const std::string &key, int offset);
 SBSIMPEXP void TrimString(std::string &string);
+SBSIMPEXP std::string TrimStringCopy(std::string string);
 SBSIMPEXP void ReplaceAll(std::string &string, const std::string &original, const std::string &replacement);
 SBSIMPEXP bool StartsWith(const std::string &string, const std::string &check_string, bool ignore_case = false);
 SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const std::string &original_string, char separator);

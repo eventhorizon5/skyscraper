@@ -39,7 +39,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -50,6 +50,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0
 	//root object needs to self-register
 	ObjectCount = 0;
 	RegisterObject(this);
+	InstanceNumber = instance_number;
 
 	//set up SBS object
 	SetValues("SBS", "SBS", true);
@@ -209,6 +210,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0
 	if (UnitScale <= 0)
 		UnitScale = 1;
 
+	//move to specified position
+	Move(position);
+
 	//create sound system object if sound is enabled
 	if (fmodsystem)
 		soundsystem = new SoundSystem(this, fmodsystem);
@@ -217,7 +221,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem) : Object(0
 	PrintBanner();
 }
 
-void SBS::Initialize(Ogre::Camera *camera)
+void SBS::Initialize()
 {
 	//set default texture map values
 	ResetTextureMapping(true);
@@ -255,7 +259,7 @@ void SBS::Initialize(Ogre::Camera *camera)
 	//Landscape->tricollider = false;
 
 	//create camera object
-	this->camera = new Camera(this, camera);
+	this->camera = new Camera(this);
 }
 
 SBS::~SBS()
@@ -439,6 +443,10 @@ SBS::~SBS()
 	}
 	mWorld = 0;
 
+	//delete materials
+	UnloadMaterials();
+	textureinfo.clear();
+
 	ObjectArray.clear();
 	verify_results.clear();
 
@@ -446,31 +454,13 @@ SBS::~SBS()
 		delete timer;
 	timer = 0;
 
-	//remove all meshes
-	Ogre::MeshManager::getSingleton().removeAll();
-
-	//remove all materials
-	Ogre::MaterialManager::getSingleton().removeAll();
-	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
-	materialcount = 0;
-
-	//remove all fonts
-	Ogre::FontManager::getSingleton().removeAll();
-
-	//remove all textures
-	Ogre::TextureManager::getSingleton().removeAll();
-	texturecount = 0;
-
-	//clear scene manager
-	mSceneManager->clearScene();
-
 	//clear self reference
 	sbs = 0;
 
 	Report("Exiting");
 }
 
-bool SBS::Start()
+bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
@@ -505,10 +495,8 @@ bool SBS::Start()
 		}
 	}
 
-	//move camera to start location
-	camera->SetToStartPosition(false); //also turns on start floor
-	camera->SetToStartDirection();
-	camera->SetToStartRotation();
+	//attach camera object
+	AttachCamera(camera);
 
 	//enable random activity if specified
 	if (RandomActivity == true)
@@ -4272,6 +4260,40 @@ void SBS::RemovePerson(Person *person)
 			return;
 		}
 	}
+}
+
+bool SBS::AttachCamera(Ogre::Camera *camera)
+{
+	if (camera)
+		return this->camera->Attach(camera);
+	return false;
+}
+
+bool SBS::DetachCamera()
+{
+	return camera->Detach();
+}
+
+std::string SBS::ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number)
+{
+	//if given a full object ID name (such as "0:(4)Landscape"),
+	//return base name and parse out instance number and object number
+
+	//if strip_number is false, leave object number identifier in string
+
+	//get and strip off engine instance number
+	int index = (int)name.find(":(");
+	instance = ToInt(name.substr(0, index));
+	name.erase(name.begin(), name.begin() + index + 1);
+
+	//get and optionally strip off object number
+	index = (int)name.find(")");
+	object_number = ToInt(name.substr(1, index - 1));
+
+	if (strip_number == true)
+		name.erase(name.begin(), name.begin() + index + 1);
+
+	return name;
 }
 
 }

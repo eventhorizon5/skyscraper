@@ -27,10 +27,12 @@
 
 namespace Skyscraper {
 
+class EngineContext;
+
 class ScriptProcessor
 {
-	public:
-	ScriptProcessor();
+public:
+	ScriptProcessor(EngineContext *instance);
 	~ScriptProcessor();
 	bool Run();
 	bool LoadDataFile(const std::string &filename, bool insert = false, int insert_line = 0);
@@ -46,7 +48,10 @@ class ScriptProcessor
 
 	bool IsFinished;
 
-	private:
+private:
+
+	SBS::SBS *Simcore;
+	EngineContext *engine;
 
 	struct FunctionData
 	{

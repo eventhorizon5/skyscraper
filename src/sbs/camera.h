@@ -67,14 +67,16 @@ public:
 	bool MouseDown; //mouse status
 	bool ReportCollisions; //if true, print collisions on console
 	std::string LastHitMesh; //name of last hit mesh
+	int LastHitMeshNumber; //object number of last hit mesh
 	bool Freelook; //freelook (mouselook) is enabled/disabled
 	float Freelook_speed; //freelook speed
 	Ogre::Vector3 HitPosition; //last hit position
 	bool EnableBullet;
 	float BinocularsFOV; //binoculars mode FOV
+	bool FirstAttach;
 
 	//functions
-	Camera(Object *parent, Ogre::Camera *camera);
+	Camera(Object *parent);
 	~Camera();
 	void SetPosition(const Ogre::Vector3 &position);
 	void SetDirection(const Ogre::Vector3 &direction);
@@ -141,6 +143,10 @@ public:
 	bool IsModelAttached();
 	void ResetState();
 	void ResetView();
+	bool IsActive() { return (MainCamera != 0); }
+	void Refresh();
+	bool Attach(Ogre::Camera *camera);
+	bool Detach();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera

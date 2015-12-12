@@ -57,7 +57,6 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
 
-SBS::SBS *Simcore;
 Skyscraper *skyscraper;
 DebugPanel *dpanel;
 MainScreen *window;
@@ -96,14 +95,10 @@ bool Skyscraper::OnInit(void)
 	version_frontend = version + ".0." + version_rev;
 	skyscraper = this;
 	MouseDown = false;
-	IsRunning = false;
-	IsLoading = false;
 	StartupRunning = false;
 	Pause = false;
 	FullScreen = false;
 	Shutdown = false;
-	PositionOverride = false;
-	Reload = false;
 #if OGRE_VERSION >= 0x00010900
 	mOverlaySystem = 0;
 #endif
@@ -120,18 +115,16 @@ bool Skyscraper::OnInit(void)
 	buttoncount = 0;
 	logger = 0;
 	console = 0;
-	raised = false;
 	soundsys = 0;
 	progdialog = 0;
-	override_floor = 0;
-	override_collisions = false;
-	override_gravity = false;
-	override_freelook = false;
 	new_location = false;
 	new_time = false;
 	latitude = 0.0f;
 	longitude = 0.0f;
 	datetime = 0.0;
+	active_engine = 0;
+	ConcurrentLoads = false;
+	RenderOnStartup = false;
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -166,32 +159,24 @@ bool Skyscraper::OnInit(void)
 	if (!Initialize())
 		return ReportError("Error initializing frontend");
 
-	//load script processor
-	processor = new ScriptProcessor();
-
 	//set sky name
 	SkyName = GetConfigString("Skyscraper.Frontend.SkyName", "DefaultSky");
 
 	//autoload a building file if specified
-	BuildingFile = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
-	if (BuildingFile != "")
-		return Load();
+	std::string filename = GetConfigString("Skyscraper.Frontend.AutoLoad", "");
+	if (filename != "")
+		return Load(filename);
 
 	//show menu
 	if (GetConfigBool("Skyscraper.Frontend.Menu.Show", true) == true)
 	{
-		//draw background
-		DrawBackground();
 		StartupRunning = true;
 		StartSound();
 	}
 	else
 	{
 		//or show building selection window if ShowMenu is false
-		if (SelectBuilding() == true)
-			return Load();
-		else
-			return false;
+		return Load(SelectBuilding());
 	}
 
 	return true;
@@ -209,11 +194,6 @@ int Skyscraper::OnExit()
 	//delete Caelum
 	if (mCaelumSystem)
 		delete mCaelumSystem;
-
-	//unload script processor
-	if (processor)
-		delete processor;
-	processor = 0;
 
 	//cleanup sound
 	StopSound();
@@ -264,13 +244,25 @@ void Skyscraper::UnloadSim()
 	if (console)
 		console->bSend->Enable(false);
 
-	//delete simulator object
-	if (Simcore)
-	{
-		delete Simcore;
-		Simcore = 0;
-		Report("SBS unloaded\n");
-	}
+	DeleteEngines();
+
+	//do a full clear of Ogre objects
+
+	//remove all meshes
+	Ogre::MeshManager::getSingleton().removeAll();
+
+	//remove all materials
+	Ogre::MaterialManager::getSingleton().removeAll();
+	Ogre::MaterialManager::getSingleton().initialise();  //restore default materials
+
+	//remove all fonts
+	Ogre::FontManager::getSingleton().removeAll();
+
+	//remove all textures
+	Ogre::TextureManager::getSingleton().removeAll();
+
+	//clear scene manager
+	mSceneMgr->clearScene();
 }
 
 MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
@@ -293,8 +285,6 @@ MainScreen::~MainScreen()
 void MainScreen::OnIconize(wxIconizeEvent& event)
 {
 	//pause simulator while minimized
-	if (skyscraper->IsRunning == false)
-		return;
 
 	skyscraper->Pause = event.IsIconized();
 
@@ -349,11 +339,11 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 	{
 		InLoop = true;
 
-		if ((skyscraper->IsRunning == true && skyscraper->Pause == false) || skyscraper->StartupRunning == true || skyscraper->IsLoading == true)
-			skyscraper->Loop(); //run simulator loop
-
 		if (skyscraper->Pause == false)
+		{
+			skyscraper->Loop(); //run simulator loop
 			event.RequestMore(); //request more idles
+		}
 
 		InLoop = false;
 	}
@@ -665,9 +655,12 @@ bool Skyscraper::Initialize()
 	return true;
 }
 
-void Skyscraper::GetInput()
+void Skyscraper::GetInput(EngineContext *engine)
 {
 	SBS::SBS_PROFILE_MAIN("GetInput");
+
+	if (!engine)
+		return;
 
 	//quit if main window isn't selected
 	if (window->Active == false)
@@ -678,8 +671,11 @@ void Skyscraper::GetInput()
 	static unsigned int old_time;
 	static int old_mouse_x, old_mouse_y;
 
+	//get SBS instance
+	SBS::SBS *Simcore = engine->GetSystem();
+
 	// First get elapsed time from the virtual clock.
-	current_time = Simcore->GetRunTime();
+	unsigned int current_time = Simcore->GetRunTime();
 
 	SBS::Camera *camera = Simcore->camera;
 
@@ -774,7 +770,7 @@ void Skyscraper::GetInput()
 	{
 		if (wxGetKeyState((wxKeyCode)'R'))
 		{
-			Reload = true;
+			engine->Reload = true;
 			return;
 		}
 		camera->speed = speed_slow;
@@ -958,6 +954,65 @@ void Skyscraper::GetInput()
 			wait = true;
 		}
 
+		//temporary engine switch test
+		if (wxGetKeyState((wxKeyCode)';') && wait == false)
+		{
+			Load(SelectBuilding());
+			wait = true;
+			return;
+		}
+
+		//temporary engine kill test
+		if (wxGetKeyState((wxKeyCode)'K') && wait == false)
+		{
+			EngineContext *engine = engines[GetEngineCount() - 1];
+			engine->Shutdown();
+			wait = true;
+			return;
+		}
+
+		//temporary engine selection test
+		if (wxGetKeyState((wxKeyCode)'1'))
+		{
+			SetActiveEngine(0);
+		}
+		if (wxGetKeyState((wxKeyCode)'2'))
+		{
+			SetActiveEngine(1);
+		}
+		if (wxGetKeyState((wxKeyCode)'3'))
+		{
+			SetActiveEngine(2);
+		}
+		if (wxGetKeyState((wxKeyCode)'4'))
+		{
+			SetActiveEngine(3);
+		}
+		if (wxGetKeyState((wxKeyCode)'5'))
+		{
+			SetActiveEngine(4);
+		}
+		if (wxGetKeyState((wxKeyCode)'6'))
+		{
+			SetActiveEngine(5);
+		}
+		if (wxGetKeyState((wxKeyCode)'7'))
+		{
+			SetActiveEngine(6);
+		}
+		if (wxGetKeyState((wxKeyCode)'8'))
+		{
+			SetActiveEngine(7);
+		}
+		if (wxGetKeyState((wxKeyCode)'9'))
+		{
+			SetActiveEngine(8);
+		}
+		if (wxGetKeyState((wxKeyCode)'0'))
+		{
+			SetActiveEngine(9);
+		}
+
 		//values from old version
 		if (wxGetKeyState(WXK_HOME) || wxGetKeyState((wxKeyCode)'O'))
 			camera->Float(speed_normal);
@@ -1015,10 +1070,8 @@ void Skyscraper::Loop()
 	SBS::ProfileManager::Reset();
 	SBS::ProfileManager::Increment_Frame_Counter();
 
-	static unsigned long finish_time;
-
 	//main menu routine
-	if (IsRunning == false && IsLoading == false)
+	if (StartupRunning == true)
 	{
 		DrawBackground();
 		GetMenuInput();
@@ -1026,73 +1079,28 @@ void Skyscraper::Loop()
 		return;
 	}
 
-	//main simulator loop
-	if (!Simcore)
+	//run sim engine instances
+	bool result = RunEngines();
+
+	//delete an engine if requested
+	HandleEngineShutdown();
+
+	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
 		return;
 
-	//run script processor
-	if (processor)
-	{
-		bool result = processor->Run();
-
-		if (IsLoading == true)
-		{
-			if (result == false)
-			{
-				ReportError("Error processing building\n");
-				Unload();
-				return;
-			}
-			else if (processor->IsFinished == true)
-			{
-				Start();
-				finish_time = Simcore->GetCurrentTime();
-			}
-
-			if (Simcore->RenderOnStartup == false)
-				return;
-		}
-		else if (processor->IsFinished == true && result == true)
-		{
-			Simcore->Prepare(false);
-			Simcore->DeleteColliders = false;
-		}
-	}
-	else
+	if (!active_engine)
 		return;
 
-	//force window raise on startup, and report on missing files, if any
-	if (Simcore->GetCurrentTime() - finish_time > 0 && raised == false && IsLoading == false)
-	{
-		window->Raise();
-		raised = true;
-
-		processor->ReportMissingFiles();
-	}
-
-	//process internal clock
-	Simcore->AdvanceClock();
-	if (IsRunning == true)
-		Simcore->CalculateFrameRate();
-
-	if (IsLoading == false)
-	{
-		//run SBS main loop
-		Simcore->MainLoop();
-
-		//get input
-		GetInput();
-
-		//process camera loop
-		Simcore->CameraLoop();
-	}
+	//make sure active engine is the one the camera is active in
+	if (active_engine->IsCameraActive() == false)
+		active_engine = FindActiveEngine();
 
 	//update Caelum
 	if (mCaelumSystem)
 	{
 		mCaelumSystem->notifyCameraChanged(mCamera);
 		mCaelumSystem->setTimeScale(SkyMult);
-		mCaelumSystem->updateSubcomponents(float(Simcore->GetElapsedTime()) / 1000);
+		mCaelumSystem->updateSubcomponents(float(active_engine->GetSystem()->GetElapsedTime()) / 1000);
 	}
 
 	//render graphics
@@ -1104,39 +1112,14 @@ void Skyscraper::Loop()
 		Shutdown = false;
 		//if showmenu is true, unload simulator and return to main menu
 		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			Unload();
+			UnloadToMenu();
 		//otherwise exit app
 		else
 			Quit();
 	}
 
-	//reload building if requested
-	if (Reload == true)
-	{
-		PositionOverride = true;
-		override_position = Simcore->camera->GetPosition();
-		override_rotation = Simcore->camera->GetRotation();
-		override_floor = Simcore->camera->CurrentFloor;
-		override_collisions = Simcore->camera->CollisionsEnabled();
-		override_gravity = Simcore->camera->GetGravityStatus();
-		override_freelook = Simcore->camera->Freelook;
-		IsRunning = false;
-		IsLoading = false;
-		Pause = false;
-		UnloadSim();
-
-		if (Load() == false)
-		{
-			PositionOverride = false;
-			Reload = false;
-			return;
-		}
-
-		Reload = false;
-
-		//refresh viewport to prevent rendering issues
-		mViewport->_updateDimensions();
-	}
+	//handle a building reload
+	HandleReload();
 
 	//SBS::ProfileManager::dumpAll();
 }
@@ -1451,10 +1434,6 @@ void Skyscraper::GetMenuInput()
 {
 	//input handler for main menu
 
-	//exit if simulator is loading
-	if (IsLoading == true)
-		return;
-
 	//exit if there aren't any buttons
 	if (!buttons || buttoncount == 0)
 		return;
@@ -1511,28 +1490,29 @@ void Skyscraper::Click(int index)
 	//user clicked a button
 
 	std::string number = ToString(index + 1);
+	std::string filename = "";
 
 	if (index == 0)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button1.File", "Triton Center.bld");
 	if (index == 1)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button2.File", "Glass Tower.bld");
 	if (index == 2)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button3.File", "Sears Tower.bld");
 	if (index == 3)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button4.File", "Simple.bld");
 	if (index > 3)
-		BuildingFile = GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".File", "");
+		filename = GetConfigString("Skyscraper.Frontend.Menu.Button" + number + ".File", "");
 
-	if (BuildingFile == "")
+	if (filename == "")
 	{
 		//show file selection dialog
-		SelectBuilding();
+		filename = SelectBuilding();
 	}
 
-	if (BuildingFile != "")
+	if (filename != "")
 	{
 		DeleteButtons();
-		Load();
+		Load(filename);
 	}
 }
 
@@ -1623,10 +1603,10 @@ void Skyscraper::StopSound()
 	sound = 0;
 }
 
-bool Skyscraper::SelectBuilding()
+std::string Skyscraper::SelectBuilding()
 {
 	//choose a building from a script file
-	BuildingFile = "";
+	std::string filename = "";
 	srand (time (0));
 
 	//set building file
@@ -1639,141 +1619,127 @@ bool Skyscraper::SelectBuilding()
 		delete Selector;
 		Selector = 0;
 		//quit
-		return false;
+		return "";
 	}
 
 	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-	BuildingFile = Selector->GetFilename().mb_str().data();
+	filename = Selector->GetFilename().mb_str().data();
 	#else
-	BuildingFile = Selector->GetFilename();
+	filename = Selector->GetFilename();
 	#endif
 
 	//delete dialog
 	delete Selector;
 	Selector = 0;
 
-	return true;
+	return filename;
 }
 
-bool Skyscraper::Load()
+bool Skyscraper::Load(const std::string &filename)
 {
 	//load simulator and data file
 
+	StartupRunning = false;
+
 	//exit if no building specified
-	if (BuildingFile == "")
+	if (filename == "")
 		return false;
 
 	//clear scene
-	mSceneMgr->clearScene();
+	if (GetEngineCount() == 0)
+		mSceneMgr->clearScene();
 
 	//clear screen
 	mRenderWindow->update();
 
-	IsLoading = true;
+	//move instance to an offset for testing
+	float offsetval = GetEngineCount() * 300;
+	Ogre::Vector3 offset (offsetval, 0, offsetval);
 
-	//Create simulator object
-	Simcore = new SBS::SBS(mSceneMgr, soundsys);
+	//Create simulator instance
+	EngineContext* engine = CreateEngine(offset);
 
-	//refresh console to fix banner message on Linux
-	if (console)
+	if (!active_engine)
+		active_engine = engine;
+
+	//have instance load building
+	bool result = engine->Load(filename);
+
+	if (result == false)
 	{
-		console->Refresh();
-		console->Update();
-	}
-
-	//Pause for 2 seconds
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Sleep(2000);
-#else
-	sleep(2);
-#endif
-
-	//initialize simulator
-	Simcore->Initialize(mCamera);
-
-	//load building data file
-	Report("\nLoading building data from " + BuildingFile + "...\n");
-	Simcore->BuildingFilename = BuildingFile;
-
-	if (Reload == false)
-		BuildingFile.insert(0, "buildings/");
-
-	//load script processor object and load building
-
-	processor->Reset();
-
-	if (!processor->LoadDataFile(BuildingFile))
-	{
-		Unload();
+		if (GetEngineCount() == 1)
+			UnloadToMenu();
+		else
+			DeleteEngine(engine);
 		return false;
 	}
 
-	//create progress dialog
-	CreateProgressDialog();
+	//override SBS startup render option, if specified
+	if (RenderOnStartup == true)
+		engine->GetSystem()->RenderOnStartup = true;
 
 	return true;
 }
 
-bool Skyscraper::Start()
+bool Skyscraper::Start(EngineContext *engine)
 {
 	//start simulator
 
-	//close progress dialog
-	if (progdialog)
-		progdialog->Destroy();
-	progdialog = 0;
+	if (!engine)
+		return false;
 
-	//the sky needs to be created before Prepare() is called
-	bool sky_result = false;
-	if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
-		sky_result = InitSky();
+	SBS::SBS *Simcore = engine->GetSystem();
 
-	//create old sky if Caelum is turned off, or failed to initialize
-	if (sky_result == false)
-		Simcore->CreateSky(Simcore->SkyName);
-
-	//switch to fullscreen mode if specified
-	if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
-		SetFullScreen(true);
-
-	//resize main window
-	if (FullScreen == false)
+	if (GetEngineCount() == 1)
 	{
-		window->SetBackgroundColour(*wxBLACK);
-		window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
-		window->Center();
+		//the sky needs to be created before Prepare() is called
+		bool sky_result = false;
+		if (GetConfigBool("Skyscraper.Frontend.Caelum", true) == true)
+			sky_result = InitSky(engine);
+
+		//create old sky if Caelum is turned off, or failed to initialize
+		if (sky_result == false)
+			Simcore->CreateSky(Simcore->SkyName);
+
+		//switch to fullscreen mode if specified
+		if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)
+			SetFullScreen(true);
+
+		//resize main window
+		if (FullScreen == false)
+		{
+			window->SetBackgroundColour(*wxBLACK);
+			window->SetClientSize(GetConfigInt("Skyscraper.Frontend.ScreenWidth", 800), GetConfigInt("Skyscraper.Frontend.ScreenHeight", 600));
+			window->Center();
+		}
 	}
 
 	//start simulation
-	if (!Simcore->Start())
-		return ReportError("Error starting simulator\n");
+	if (!engine->Start(mCamera))
+		return false;
 
-	//set to saved position if reloading building
-	if (PositionOverride == true)
-	{
-		PositionOverride = false;
-		Simcore->camera->SetPosition(override_position);
-		Simcore->camera->SetRotation(override_rotation);
-		Simcore->camera->GotoFloor(override_floor, true);
-		Simcore->camera->EnableCollisions(override_collisions);
-		Simcore->camera->EnableGravity(override_gravity);
-		Simcore->camera->Freelook = override_freelook;
-	}
+	//close progress dialog if no engines are loading
+	if (IsEngineLoading() == false)
+		CloseProgressDialog();
 
 	//load control panel
-	if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+	if (GetEngineCount() == 1)
 	{
-		dpanel = new DebugPanel(NULL, -1);
-		dpanel->Show(true);
-		dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+		if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
+		{
+			if (!dpanel)
+				dpanel = new DebugPanel(NULL, -1);
+			dpanel->Show(true);
+			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
+		}
 	}
+
+	//refresh viewport to prevent rendering issues
+	mViewport->_updateDimensions();
 
 	//run simulation
 	Report("Running simulation...");
 	StopSound();
-	IsRunning = true;
-	IsLoading = false;
-	StartupRunning = false;
 	if (console)
 		console->bSend->Enable(true);
 	return true;
@@ -1790,14 +1756,11 @@ void Skyscraper::AllowResize(bool value)
 	window->Refresh();
 }
 
-void Skyscraper::Unload()
+void Skyscraper::UnloadToMenu()
 {
-	//unload sim
-	BuildingFile = "";
-	IsRunning = false;
-	IsLoading = false;
+	//unload to main menu
+
 	Pause = false;
-	raised = false;
 	UnloadSim();
 
 	//cleanup sound
@@ -1938,9 +1901,12 @@ float Skyscraper::GetConfigFloat(const std::string &key, float default_value)
 	return ToFloat(result);
 }
 
-bool Skyscraper::InitSky()
+bool Skyscraper::InitSky(EngineContext *engine)
 {
 	//initialize sky
+
+	if (!engine)
+		return false;
 
 	//ensure graphics card and render system are capable of Caelum's shaders
 	if (Renderer == "Direct3D9")
@@ -2018,7 +1984,7 @@ bool Skyscraper::InitSky()
 		mCaelumSystem->getCaelumCameraNode()->setOrientation(rot);
 
 		//have sky use SBS scaling factor
-		float scale = 1 / Simcore->UnitScale;
+		float scale = 1 / engine->GetSystem()->UnitScale;
 		mCaelumSystem->getCaelumGroundNode()->setScale(scale, scale, scale);
 		mCaelumSystem->getCaelumCameraNode()->setScale(scale, scale, scale);
 	}
@@ -2053,11 +2019,6 @@ bool Skyscraper::InitSky()
 	return true;
 }
 
-ScriptProcessor* Skyscraper::GetScriptProcessor()
-{
-	return processor;
-}
-
 void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage)
 {
 	//callback function that receives OGRE log messages
@@ -2078,9 +2039,24 @@ void Skyscraper::ShowConsole(bool send_button)
 	console->bSend->Enable(send_button);
 }
 
-void Skyscraper::CreateProgressDialog()
+void Skyscraper::CreateProgressDialog(const std::string &message)
 {
-	progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(BuildingFile.c_str()), 100, window);
+	//don't create progress dialog if concurrent loading is enabled, and one engine is already running
+	if (GetEngineCount() > 1 && ConcurrentLoads == true)
+	{
+		if (GetEngine(0)->IsRunning() == true)
+			return;
+	}
+
+	if (!progdialog)
+		progdialog = new wxProgressDialog(wxT("Loading..."), wxString::FromAscii(message.c_str()), 100, window);
+	else
+	{
+		wxString msg = progdialog->GetMessage();
+		msg += "\n";
+		msg += message.c_str();
+		progdialog->Update(progdialog->GetValue(), msg);
+	}
 }
 
 void Skyscraper::CloseProgressDialog()
@@ -2091,9 +2067,21 @@ void Skyscraper::CloseProgressDialog()
 	progdialog = 0;
 }
 
-void Skyscraper::UpdateProgress(int percent)
+void Skyscraper::UpdateProgress()
 {
-	progdialog->Update(percent);
+	if (!progdialog)
+		return;
+
+	int total_percent = (int)engines.size() * 100;
+	int current_percent = 0;
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		current_percent += engines[i]->GetProgress();
+	}
+
+	int final = ((float)current_percent / (float)total_percent) * 100;
+	progdialog->Update(final);
 }
 
 void Skyscraper::SetFullScreen(bool enabled)
@@ -2115,6 +2103,179 @@ void Skyscraper::SetDateTime(double julian_date_time)
 {
 	datetime = julian_date_time;
 	new_time = true;
+}
+
+EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position)
+{
+	EngineContext* engine = new EngineContext(this, mSceneMgr, soundsys, GetEngineCount(), position);
+	engines.push_back(engine);
+	return engine;
+}
+
+bool Skyscraper::DeleteEngine(EngineContext *engine)
+{
+	//don't delete if only one engine is active
+	if (engines.size() == 1)
+		return false;
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i] == engine)
+		{
+			engines.erase(engines.begin() + i);
+			delete engine;
+
+			if (active_engine == engine)
+			{
+				active_engine = 0;
+				if (GetEngineCount() > 0)
+					SetActiveEngine(0);
+			}
+			else if (active_engine)
+				active_engine->GetSystem()->camera->Refresh();
+			return true;
+		}
+	}
+	return false;
+}
+
+void Skyscraper::DeleteEngines()
+{
+	//delete simulator instances
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		delete engines[i];
+	}
+	engines.clear();
+	active_engine = 0;
+}
+
+EngineContext* Skyscraper::FindActiveEngine()
+{
+	//find engine instance with an active camera
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->IsCameraActive() == true)
+			return engines[i];
+	}
+	return active_engine;
+}
+
+void Skyscraper::SetActiveEngine(int index)
+{
+	//set an engine instance to be active
+
+	if (index < 0 || index > GetEngineCount() - 1)
+		return;
+
+	if (active_engine == engines[index])
+		return;
+
+	//don't switch to engine if it's loading
+	if (engines[index]->IsLoading() == true)
+		return;
+
+	//detach camera from current engine
+	if (active_engine)
+		active_engine->GetSystem()->DetachCamera();
+
+	//switch context to new engine instance
+	active_engine = engines[index];
+	active_engine->GetSystem()->AttachCamera(mCamera);
+}
+
+bool Skyscraper::RunEngines()
+{
+	bool result = true;
+	bool isloading = IsEngineLoading();
+
+	if (ConcurrentLoads == true && isloading == true)
+	{
+		//refresh viewport to prevent rendering issues
+		mViewport->_updateDimensions();
+	}
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		//process engine run loops, and also prevent other instances from running if
+		//one or more engines are loading
+		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
+		{
+			if (engines[i]->Run() == false)
+				result = false;
+		}
+
+		//start engine if loading is finished
+		if (engines[i]->IsLoadingFinished() == true)
+		{
+			Start(engines[i]);
+		}
+	}
+	return result;
+}
+
+bool Skyscraper::IsEngineLoading()
+{
+	//return true if an engine is loading
+
+	bool result = false;
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->IsLoading() == true)
+			result = true;
+	}
+	return result;
+}
+
+void Skyscraper::HandleEngineShutdown()
+{
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->GetShutdownState() == true)
+		{
+			if (DeleteEngine(engines[i]) == true)
+				i--;
+		}
+	}
+}
+
+void Skyscraper::HandleReload()
+{
+	//reload building if requested
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->Reload == true)
+		{
+			Pause = false;
+			engines[i]->DoReload();
+		}
+	}
+}
+
+EngineContext* Skyscraper::GetEngine(int index)
+{
+	//get an engine by index number
+
+	if (index < 0 || index > (int)engines.size())
+		return 0;
+
+	return engines[index];
+}
+
+void Skyscraper::RaiseWindow()
+{
+	window->Raise();
+}
+
+void Skyscraper::RefreshConsole()
+{
+	if (console)
+	{
+		console->Refresh();
+		console->Update();
+	}
 }
 
 }

@@ -80,17 +80,13 @@ Object::~Object()
 {
 	//remove object from engine
 
-	//exit if at end of engine deletion
-	if (!sbs)
-		return;
-
 	//clean up scene node
 	if (node)
 		node->DetachAllObjects();
 
-	if (sbs->FastDelete == false)
+	//unregister this object from parent
+	if (sbs)
 	{
-		//unregister this object from parent
 		if (Parent && sbs->FastDelete == false)
 			Parent->RemoveChild(this);
 	}
@@ -99,6 +95,10 @@ Object::~Object()
 	if (node)
 		delete node;
 	node = 0;
+
+	//exit if at end of engine deletion
+	if (!sbs)
+		return;
 
 	//if fastdelete is enabled, don't unregister (just delete)
 	if (sbs->FastDelete == true || Temporary == true)

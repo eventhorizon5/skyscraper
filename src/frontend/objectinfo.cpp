@@ -203,13 +203,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
 	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
 	//*)
-	//OnInit();
-	oldobject = -1;
-	oldcamobject = -1;
-	createobject = 0;
-	changed = false;
-	lastcount = 0;
-	deleted = false;
+	OnInit();
 }
 
 ObjectInfo::~ObjectInfo()
@@ -228,6 +222,16 @@ ObjectInfo::~ObjectInfo()
 	moveobject = 0;
 }
 
+void ObjectInfo::OnInit()
+{
+	oldobject = -1;
+	oldcamobject = -1;
+	createobject = 0;
+	changed = false;
+	lastcount = 0;
+	deleted = false;
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+}
 
 void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 {
@@ -236,6 +240,15 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 
 void ObjectInfo::Loop()
 {
+	//if active engine has changed, refresh values
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
+
 	if (Simcore->GetObjectCount() != lastcount)
 	{
 		lastcount = Simcore->GetObjectCount();
@@ -413,7 +426,7 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	twindow->Center();
 	twindow->SetTitle(wxT("Current Script"));
 	twindow->Show(true);
-	std::vector<std::string> *data = skyscraper->GetScriptProcessor()->GetBuildingData();
+	std::vector<std::string> *data = skyscraper->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
 	for (int i = 0; i < (int)data->size(); i++)
 			twindow->tMain->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));
 	twindow->tMain->SetInsertionPoint(0);

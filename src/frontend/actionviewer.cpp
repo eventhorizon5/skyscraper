@@ -22,8 +22,6 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
-#include "actionviewer.h"
-
 //(*InternalHeaders(ActionViewer)
 #include <wx/string.h>
 #include <wx/intl.h>
@@ -34,6 +32,7 @@
 #include "sbs.h"
 #include "action.h"
 #include "skyscraper.h"
+#include "actionviewer.h"
 
 namespace Skyscraper {
 
@@ -120,6 +119,7 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	//*)
 
 	lastcount = 0;
+	Simcore = 0;
 }
 
 ActionViewer::~ActionViewer()
@@ -130,6 +130,19 @@ ActionViewer::~ActionViewer()
 
 void ActionViewer::Loop()
 {
+	if (skyscraper->GetActiveEngine())
+	{
+		SBS::SBS *active = skyscraper->GetActiveEngine()->GetSystem();
+		if (Simcore != active)
+		{
+			//if active engine has changed, refresh values
+			Simcore = active;
+			lastcount = 0;
+		}
+	}
+	else
+		return;
+
 	if (Simcore->GetActionCount() != lastcount)
 	{
 		lastcount = Simcore->GetActionCount();

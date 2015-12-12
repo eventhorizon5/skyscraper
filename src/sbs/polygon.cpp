@@ -160,7 +160,7 @@ void Polygon::Delete()
 	//delete polygon geometry
 
 	//delete triangles
-	mesh->ProcessSubMesh(triangles, material, GetName(), false);
+	mesh->ProcessSubMesh(triangles, material, false);
 
 	//delete related mesh vertices
 	mesh->DeleteVertices(triangles);

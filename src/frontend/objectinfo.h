@@ -122,7 +122,7 @@ class ObjectInfo: public wxDialog
 		static const long ID_STATICTEXT9;
 		static const long ID_tScriptCommand2;
 		//*)
-		//void OnInit();
+		void OnInit();
 
 	private:
 
@@ -140,6 +140,7 @@ class ObjectInfo: public wxDialog
 		void AddChildren(SBS::Object *parent, const wxTreeItemId& treeparent);
 		bool changed;
 		int lastcount;
+		SBS::SBS *Simcore;
 
 		DECLARE_EVENT_TABLE()
 };

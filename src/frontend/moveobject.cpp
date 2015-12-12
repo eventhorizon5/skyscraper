@@ -231,6 +231,7 @@ MoveObject::MoveObject(wxWindow* parent,wxWindowID id, int object_number)
 	//*)
 	object_num = object_number;
 	object = 0;
+	Simcore = 0;
 	OnInit();
 }
 
@@ -241,11 +242,15 @@ MoveObject::~MoveObject()
 
 void MoveObject::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
 	hold_vector = Ogre::Vector3(0, 0, 0);
 }
 
 void MoveObject::Loop()
 {
+	if (!skyscraper->GetActiveEngine())
+		return;
+
 	object = Simcore->GetObject(object_num);
 
 	if (object)

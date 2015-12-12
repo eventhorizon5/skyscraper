@@ -228,6 +228,7 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Stats::On_bOK_Click);
 	//*)
+	Simcore = 0;
 	OnInit();
 }
 
@@ -245,6 +246,8 @@ void Stats::On_bOK_Click(wxCommandEvent& event)
 
 void Stats::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	tFrontendVersion->SetValue(wxString::FromAscii(skyscraper->version_frontend.c_str()));
 	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version.c_str()));
 	tPlatform->SetValue(wxString::FromAscii(skyscraper->Platform.c_str()));
@@ -259,6 +262,15 @@ void Stats::OnInit()
 
 void Stats::Loop()
 {
+	//if active engine has changed, refresh values
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
+
 	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());
 	tTextures->SetValue(wxVariant(Simcore->GetMaterialCount()).GetString());
 	tActions->SetValue(wxVariant(Simcore->GetActionCount()).GetString());

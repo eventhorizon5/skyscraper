@@ -99,7 +99,7 @@ public:
 	bool PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th);
-	int ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, const std::string &name, bool add);
+	int ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, bool add);
 	int FindMatchingSubMesh(const std::string &material);
 	void DeleteVertices(std::vector<TriangleType> &deleted_indices);
 	void Prepare(bool force = false);

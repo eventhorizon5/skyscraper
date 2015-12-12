@@ -37,77 +37,23 @@ namespace SBS {
 
 bool SBS::LoadTexture(const std::string &filename, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	//first verify the filename
 	std::string filename2 = VerifyFile(filename);
 
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
-
-	//load the texture
-	std::string path = GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename;
+	//load texture
 	bool has_alpha = false;
+	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	try
-	{
-		if (use_alpha_color == false)
-		{
-			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-			IncrementTextureCount();
-
-			if (mTex.isNull())
-				return ReportError("Error loading texture" + filename2);
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
-		}
-		else
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-	}
-
-	//unload material if already loaded
-	if (UnloadMaterial(name, "General") == true)
-		UnregisterTextureInfo(name);
+	if (mTex.isNull())
+		return false;
+	std::string texturename = mTex->getName();
 
 	//create a new material
-	std::string matname = name;
-	TrimString(matname);
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
-	IncrementMaterialCount();
-	mMat->setLightingEnabled(false);
-	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	std::string matname = TrimStringCopy(name);
+	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	if (has_alpha == true)
-	{
-		//mMat->setDepthWriteEnabled(false);
-		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", filename, widthmult, heightmult, enable_force, force_mode);
@@ -120,9 +66,6 @@ bool SBS::LoadTexture(const std::string &filename, const std::string &name, floa
 
 bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::string &name, float duration, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	std::vector<std::string> filenames2;
 
 	int num_frames = (int)filenames.size();
@@ -138,77 +81,30 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::str
 
 	for (int i = 0; i < (int)filenames2.size(); i++)
 	{
-		//determine if the file is a GIF image, to force keycolor alpha
-		std::string extension = filenames2[i].substr(filenames2[i].size() - 3);
-		SetCase(extension, false);
-		if (extension == "gif")
-			use_alpha_color = true;
+		bool has_alpha2 = false;
 
-		// Load the texture
-		std::string path = GetMountPath(filenames2[i], filenames2[i]);
-		Ogre::TexturePtr mTex;
-		std::string texturename;
+		//load texture
+		Ogre::TexturePtr mTex = LoadTexture(filenames2[i], mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
-		try
-		{
-			if (use_alpha_color == false)
-			{
-				mTex = Ogre::TextureManager::getSingleton().load(filenames2[i], path, Ogre::TEX_TYPE_2D, mipmaps);
-				IncrementTextureCount();
+		if (mTex.isNull())
+			return false;
+		std::string texturename = mTex->getName();
 
-				if (mTex.isNull())
-					return ReportError("Error loading texture" + filenames2[i]);
-				texturename = mTex->getName();
-				has_alpha = mTex->hasAlpha();
-			}
-			else
-			{
-				//load based on chroma key for alpha
-
-				texturename = "kc_" + filenames2[i];
-				loadChromaKeyedTexture(filenames2[i], path, texturename, Ogre::ColourValue::White);
-				has_alpha = true;
-			}
-		}
-		catch (Ogre::Exception &e)
-		{
-			return ReportError("Error loading texture " + filenames2[i] + "\n" + e.getDescription());
-		}
+		if (has_alpha2 == true)
+			has_alpha = true;
 
 		if (Verbose)
 			Report("Loaded texture " + filenames2[i]);
 	}
 
-	//unload material if already loaded
-	if (UnloadMaterial(name, "General") == true)
-		UnregisterTextureInfo(name);
-
 	//create a new material
-	std::string matname = name;
-	TrimString(matname);
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
-	IncrementMaterialCount();
-	mMat->setLightingEnabled(false);
-	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	std::string matname = TrimStringCopy(name);
+	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind first texture to material
-	Ogre::TextureUnitState* state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(filenames2[0]);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	if (has_alpha == true)
-	{
-		//mMat->setDepthWriteEnabled(false);
-		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}
+	Ogre::TextureUnitState* state = BindTextureToMaterial(mMat, filenames2[0], has_alpha);
 
 	//apply animation texture list
-
 	if (state)
 	{
 		std::string *namelist = new std::string[num_frames];
@@ -231,98 +127,41 @@ bool SBS::LoadAnimatedTexture(std::vector<std::string> filenames, const std::str
 
 bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &specular_filename, const std::string &blend_filename, const std::string &name, bool spherical, float widthmult, float heightmult, bool enable_force, bool force_mode, int mipmaps, bool use_alpha_color, Ogre::ColourValue alpha_color)
 {
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	//first verify the filenames
 	std::string filename2 = VerifyFile(filename);
 	std::string specular_filename2 = VerifyFile(specular_filename);
 	std::string blend_filename2 = VerifyFile(blend_filename);
 
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
+	//load texture
+	bool has_alpha = false, has_alpha2 = false;
+	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	// Load the texture
-	std::string path = GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename, specular_texturename, blend_texturename;
-	bool has_alpha = false;
-
-	try
-	{
-		if (use_alpha_color == false)
-		{
-			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-			IncrementTextureCount();
-
-			if (mTex.isNull())
-				return ReportError("Error loading texture" + filename2);
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
-		}
-		else
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-	}
+	if (mTex.isNull())
+		return false;
+	std::string texturename = mTex->getName();
 
 	//load specular texture
-	try
-	{
-		mTex = Ogre::TextureManager::getSingleton().load(specular_filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-		IncrementTextureCount();
+	mTex = LoadTexture(specular_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
-		if (mTex.isNull())
-			return ReportError("Error loading texture" + specular_filename2);
-		specular_texturename = mTex->getName();
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading texture " + specular_filename2 + "\n" + e.getDescription());
-	}
+	if (mTex.isNull())
+		return ReportError("Error loading texture" + specular_filename2);
+	std::string specular_texturename = mTex->getName();
 
 	//load blend texture
-	try
-	{
-		mTex = Ogre::TextureManager::getSingleton().load(blend_filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-		IncrementTextureCount();
+	mTex = LoadTexture(blend_filename2, mipmaps, has_alpha2, use_alpha_color, alpha_color);
 
-		if (mTex.isNull())
-			return ReportError("Error loading texture" + blend_filename2);
-		blend_texturename = mTex->getName();
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading texture " + blend_filename2 + "\n" + e.getDescription());
-	}
-
-	//unload material if already loaded
-	if (UnloadMaterial(name, "General") == true)
-		UnregisterTextureInfo(name);
+	if (mTex.isNull())
+		return ReportError("Error loading texture" + blend_filename2);
+	std::string blend_texturename = mTex->getName();
 
 	//create a new material
-	std::string matname = name;
-	TrimString(matname);
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(matname, "General");
-	IncrementMaterialCount();
-	mMat->setLightingEnabled(false);
-	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	std::string matname = TrimStringCopy(name);
+	Ogre::MaterialPtr mMat = CreateMaterial(matname, "General");
 
 	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texturename);
-	Ogre::TextureUnitState* spec_state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(specular_texturename);
-	Ogre::TextureUnitState* blend_state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(blend_texturename);
+	BindTextureToMaterial(mMat, texturename, has_alpha);
+	Ogre::TextureUnitState* spec_state = BindTextureToMaterial(mMat, specular_texturename, false);
+	Ogre::TextureUnitState* blend_state = BindTextureToMaterial(mMat, blend_texturename, false);
 
 	if (spec_state)
 		spec_state->setColourOperation(Ogre::LBO_ALPHA_BLEND);
@@ -334,19 +173,6 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 			blend_state->setEnvironmentMap(true, Ogre::TextureUnitState::ENV_CURVED);
 		else
 			blend_state->setEnvironmentMap(true, Ogre::TextureUnitState::ENV_PLANAR);
-	}
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	if (has_alpha == true)
-	{
-		//mMat->setDepthWriteEnabled(false);
-		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
 	}
 
 	//add texture multipliers
@@ -361,21 +187,13 @@ bool SBS::LoadAlphaBlendTexture(const std::string &filename, const std::string &
 bool SBS::LoadMaterial(const std::string &materialname, const std::string &name, float widthmult, float heightmult, bool enable_force, bool force_mode)
 {
 	//set verbosity level
-	Ogre::MaterialManager::getSingleton().setVerbose(Verbose);
 	Ogre::MaterialPtr mMat;
 	std::string matname = materialname;
 
-	try
-	{
-		mMat = Ogre::MaterialManager::getSingleton().getByName(matname, "Materials");
+	mMat = GetMaterialByName(matname, "Materials");
 
-		if (mMat.isNull())
-			return ReportError("Error loading material " + matname);
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading material " + matname + "\n" + e.getDescription());
-	}
+	if (mMat.isNull())
+		return false;
 
 	//show only clockwise side of material
 	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
@@ -400,17 +218,14 @@ void SBS::RegisterTextureInfo(const std::string &name, const std::string &materi
 		heightmult = 1.0f;
 
 	TextureInfo info;
-	info.name = name;
-	info.material_name = material_name;
-	info.filename = filename;
+	info.name = TrimStringCopy(name);
+	info.material_name = TrimStringCopy(material_name);
+	info.filename = TrimStringCopy(filename);
 	info.widthmult = widthmult;
 	info.heightmult = heightmult;
 	info.enable_force = enable_force;
 	info.force_mode = force_mode;
 
-	TrimString(info.name);
-	TrimString(info.material_name);
-	TrimString(info.filename);
 	textureinfo.push_back(info);
 }
 
@@ -434,7 +249,7 @@ bool SBS::UnloadTexture(const std::string &name, const std::string &group)
 {
 	//unloads a texture
 
-	Ogre::ResourcePtr wrapper = Ogre::TextureManager::getSingleton().getByName(name, group);
+	Ogre::ResourcePtr wrapper = GetTextureByName(name, group);
 	if (wrapper.isNull())
 		return false;
 	Ogre::TextureManager::getSingleton().remove(wrapper);
@@ -447,7 +262,7 @@ bool SBS::UnloadMaterial(const std::string &name, const std::string &group)
 {
 	//unloads a material
 
-	Ogre::ResourcePtr wrapper = Ogre::MaterialManager::getSingleton().getByName(name, group);
+	Ogre::ResourcePtr wrapper = GetMaterialByName(ToString(InstanceNumber) + ":" + name, group);
 	if (wrapper.isNull())
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
@@ -464,49 +279,15 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 	int mipmaps = -1;
 	bool use_alpha_color = false;
 
-	//set verbosity level
-	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
-
 	//first verify the filename
 	std::string filename2 = VerifyFile(filename);
 
-	//determine if the file is a GIF image, to force keycolor alpha
-	std::string extension = filename2.substr(filename2.size() - 3);
-	SetCase(extension, false);
-	if (extension == "gif")
-		use_alpha_color = true;
-
-	// Load the texture
-	std::string path = GetMountPath(filename2, filename2);
-	Ogre::TexturePtr mTex;
-	std::string texturename;
+	//load texture
 	bool has_alpha = false;
+	Ogre::TexturePtr mTex = LoadTexture(filename2, mipmaps, has_alpha, use_alpha_color, alpha_color);
 
-	try
-	{
-		if (use_alpha_color == false)
-		{
-			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
-			IncrementTextureCount();
-
-			if (mTex.isNull())
-				return ReportError("Error loading texture" + filename2);
-			texturename = mTex->getName();
-			has_alpha = mTex->hasAlpha();
-		}
-		else
-		{
-			//load based on chroma key for alpha
-
-			texturename = "kc_" + filename2;
-			loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
-			has_alpha = true;
-		}
-	}
-	catch (Ogre::Exception &e)
-	{
-		return ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
-	}
+	if (mTex.isNull())
+		return false;
 
 	std::string Name = name;
 	std::string Filename = filename;
@@ -527,7 +308,8 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
@@ -535,31 +317,11 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 	Ogre::Box dest (0, 0, width, height);
 	new_texture->getBuffer()->blit(mTex->getBuffer(), source, dest);
 
-	//unload material if already loaded
-	if (UnloadMaterial(name, "General") == true)
-		UnregisterTextureInfo(name);
-
 	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
-	IncrementMaterialCount();
-	mMat->setLightingEnabled(false);
-	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	if (has_alpha == true)
-	{
-		//mMat->setDepthWriteEnabled(false);
-		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (Verbose)
 		Report("Loaded cropped texture '" + filename2 + "' as '" + Name + "'");
@@ -575,22 +337,20 @@ bool SBS::RotateTexture(const std::string &name, float angle)
 	//set a fixed rotation value for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
 		return ReportError("RotateTexture: invalid texture " + texname + "\n");
 
 	//get material name
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().getByName(material);
+	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set rotation
 	if (state)
@@ -606,22 +366,20 @@ bool SBS::RotateAnimTexture(const std::string &name, float speed)
 	//set a rotation animation for a texture - speed is in revolutions per second
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
 		return ReportError("RotateAnimTexture: invalid texture " + texname + "\n");
 
 	//get material name
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().getByName(material);
+	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set rotation animation
 	if (state)
@@ -637,22 +395,20 @@ bool SBS::ScrollTexture(const std::string &name, float x_offset, float y_offset)
 	//set a fixed scroll amount for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
 		return ReportError("ScrollTexture: invalid texture " + texname + "\n");
 
 	//get material name
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().getByName(material);
+	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set scrolling value
 	if (state)
@@ -668,22 +424,20 @@ bool SBS::ScrollAnimTexture(const std::string &name, float x_speed, float y_spee
 	//set a scroll animation for a texture - speed is in revolutions per second
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
 		return ReportError("ScrollAnimTexture: invalid texture " + texname + "\n");
 
 	//get material name
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().getByName(material);
+	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set scrolling animation
 	if (state)
@@ -699,22 +453,20 @@ bool SBS::ScaleTexture(const std::string &name, float x_scale, float y_scale)
 	//set a fixed scale amount for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
 	if (!result)
 		return ReportError("ScaleTexture: invalid texture " + texname + "\n");
 
 	//get material name
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().getByName(material);
+	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set scale
 	if (state)
@@ -730,29 +482,25 @@ bool SBS::TransformTexture(const std::string &name, const std::string &type, con
 	//set a transformation type for a texture
 
 	bool result;
-	std::string texname = name;
-	TrimString(texname);
+	std::string texname = TrimStringCopy(name);
 	std::string material = GetTextureMaterial(name, result, false);
 
-	std::string xform_type = type;
-	TrimString(xform_type);
+	std::string xform_type = TrimStringCopy(type);
 	SetCase(xform_type, false);
-	std::string wave = wave_type;
-	TrimString(wave);
+	std::string wave = TrimStringCopy(wave_type);
 	SetCase(wave, false);
 
 	if (!result)
 		return ReportError("TransformTexture: invalid texture " + texname + "\n");
 
 	//get material name
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().getByName(material);
+	Ogre::MaterialPtr mMat = GetMaterialByName(material);
 
-	//get first texture unit state
-	Ogre::TextureUnitState* state;
-	if (!mMat.isNull())
-		state = mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
-	else
+	if (mMat.isNull())
 		return false;
+
+	//get texture unit state
+	Ogre::TextureUnitState* state = GetTextureUnitState(mMat);
 
 	//set transform
 	if (state)
@@ -803,12 +551,9 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 
 	std::string hAlign = h_align;
 	std::string vAlign = v_align;
-	std::string Name = name;
-	std::string Origname = origname;
-	std::string Text = text;
-	TrimString(Text);
-	TrimString(Name);
-	TrimString(Origname);
+	std::string Name = TrimStringCopy(name);
+	std::string Origname = TrimStringCopy(origname);
+	std::string Text = TrimStringCopy(text);
 
 	std::string font_filename2 = VerifyFile(font_filename);
 
@@ -838,12 +583,12 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	}
 
 	//get original texture
-	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
+	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
 	if (ptr.isNull())
 		return ReportError("AddTextToTexture: Invalid original material '" + Origname + "'");
 
-	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr background = Ogre::TextureManager::getSingleton().getByName(texname);
+	std::string texname = GetTextureName(ptr);
+	Ogre::TexturePtr background = GetTextureByName(texname);
 	if (background.isNull())
 		return ReportError("AddTextToTexture: Invalid original texture '" + texname + "'");
 
@@ -858,7 +603,8 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	int height = (int)background->getHeight();
 
 	//create new empty texture
-	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//get new texture dimensions, if it was resized
@@ -900,31 +646,11 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	if (result == false)
 		return false;
 
-	//unload material if already loaded
-	if (UnloadMaterial(name, "General") == true)
-		UnregisterTextureInfo(name);
-
 	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
-	IncrementMaterialCount();
-	mMat->setLightingEnabled(false);
-	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	if (has_alpha == true)
-	{
-		//mMat->setDepthWriteEnabled(false);
-		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	//add texture multipliers
 	RegisterTextureInfo(name, "", "", widthmult, heightmult, enable_force, force_mode);
@@ -946,13 +672,13 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 	std::string Overlay = overlay_texture;
 
 	//get original texture
-	Ogre::MaterialPtr ptr = Ogre::MaterialManager::getSingleton().getByName(Origname);
+	Ogre::MaterialPtr ptr = GetMaterialByName(Origname);
 
 	if (ptr.isNull())
 		return ReportError("AddTextureOverlay: Invalid original material '" + Origname + "'");
 
-	std::string texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr image1 = Ogre::TextureManager::getSingleton().getByName(texname);
+	std::string texname = GetTextureName(ptr);
+	Ogre::TexturePtr image1 = GetTextureByName(texname);
 
 	if (image1.isNull())
 		return ReportError("AddTextureOverlay: Invalid original texture '" + texname + "'");
@@ -960,13 +686,13 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 	bool has_alpha = image1->hasAlpha();
 
 	//get overlay texture
-	ptr = Ogre::MaterialManager::getSingleton().getByName(Overlay);
+	ptr = GetMaterialByName(Overlay);
 
 	if (ptr.isNull())
 		return ReportError("AddTextureOverlay: Invalid overlay material '" + Overlay + "'");
 
-	texname = ptr->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName();
-	Ogre::TexturePtr image2 = Ogre::TextureManager::getSingleton().getByName(texname);
+	texname = GetTextureName(ptr);
+	Ogre::TexturePtr image2 = GetTextureByName(texname);
 
 	if (image2.isNull())
 		return ReportError("AddTextureOverlay: Invalid overlay texture '" + texname + "'");
@@ -987,7 +713,8 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(Name, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
+	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
 	//copy source and overlay images onto new image
@@ -997,31 +724,11 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 	new_texture->getBuffer()->blit(image1->getBuffer(), source_full, source_full);
 	new_texture->getBuffer()->blit(image2->getBuffer(), overlay, source);
 
-	//unload material if already loaded
-	if (UnloadMaterial(name, "General") == true)
-		UnregisterTextureInfo(name);
-
 	//create a new material
-	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(Name, "General");
-	IncrementMaterialCount();
-	mMat->setLightingEnabled(false);
-	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
 
 	//bind texture to material
-	mMat->getTechnique(0)->getPass(0)->createTextureUnitState(Name);
-
-	//show only clockwise side of material
-	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
-
-	//enable alpha blending for related textures
-	if (has_alpha == true)
-	{
-		//mMat->setDepthWriteEnabled(false);
-		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
-
-		//enable hard alpha for alpha mask values 128 and above
-		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
-	}
+	BindTextureToMaterial(mMat, texturename, has_alpha);
 
 	if (Verbose)
 		Report("AddTextureOverlay: created texture '" + Name + "'");
@@ -1060,7 +767,7 @@ std::string SBS::GetTextureMaterial(const std::string &name, bool &result, bool 
 			}
 		}
 	}
-	Ogre::MaterialPtr material = Ogre::MaterialManager::getSingleton().getByName(matname);
+	Ogre::MaterialPtr material = GetMaterialByName(matname);
 
 	if (!material.get())
 	{
@@ -1706,18 +1413,12 @@ void SBS::SetTextureOverride(const std::string &mainneg, const std::string &main
 {
 	//set override textures and enable override
 
-	mainnegtex = mainneg;
-	TrimString(mainnegtex);
-	mainpostex = mainpos;
-	TrimString(mainpostex);
-	sidenegtex = sideneg;
-	TrimString(sidenegtex);
-	sidepostex = sidepos;
-	TrimString(sidepostex);
-	toptex = top;
-	TrimString(toptex);
-	bottomtex = bottom;
-	TrimString(bottomtex);
+	mainnegtex = TrimStringCopy(mainneg);
+	mainpostex = TrimStringCopy(mainpos);
+	sidenegtex = TrimStringCopy(sideneg);
+	sidepostex = TrimStringCopy(sidepos);
+	toptex = TrimStringCopy(top);
+	bottomtex = TrimStringCopy(bottom);
 	TextureOverride = true;
 }
 
@@ -1764,7 +1465,7 @@ std::string SBS::ListTextures(bool show_filename)
  @return
      Returns the name of the texture resource the generated texture can be addressed by (is prefix+filename)
  */
-void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
+Ogre::TexturePtr SBS::loadChromaKeyedTexture(const std::string& filename, const std::string& resGroup, const std::string& name, const Ogre::ColourValue& keyCol, int numMipmaps, float threshold)
 {
 	using namespace Ogre;
 	using std::fabs;
@@ -1875,8 +1576,9 @@ void SBS::loadChromaKeyedTexture(const std::string& filename, const std::string&
 	chromaKeyedImg.loadDynamicImage(pixelData, width, height, 1, PF_A8R8G8B8, true);
 	// You could save the chroma keyed image at this point for caching:
 	// chromaKeyedImg.save(resName);
-	TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
+	Ogre::TexturePtr mTex = TextureManager::getSingleton().loadImage(name, resGroup, chromaKeyedImg, TEX_TYPE_2D, numMipmaps);
 	IncrementTextureCount();
+	return mTex;
 }
 
 bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, int destLeft, int destTop, int destRight, int destBottom, Ogre::FontPtr font, const Ogre::ColourValue &color, char justify, char vert_justify, bool wordwrap)
@@ -1901,7 +1603,11 @@ bool SBS::WriteToTexture(const std::string &str, Ogre::TexturePtr destTexture, i
 		return ReportError("Error loading font " + font->getName() + "\n" + e.getDescription());
 	}
 
-	TexturePtr fontTexture = (TexturePtr)TextureManager::getSingleton().getByName(font->getMaterial()->getTechnique(0)->getPass(0)->getTextureUnitState(0)->getTextureName());
+	std::string texname = GetTextureName(font->getMaterial());
+	TexturePtr fontTexture = GetTextureByName(texname);
+
+	if (fontTexture.isNull())
+		return false;
 
 	//output glyph map to file
 	//SaveTexture(fontTexture, "test.png");
@@ -2150,6 +1856,147 @@ void SBS::IncrementMaterialCount()
 void SBS::DecrementMaterialCount()
 {
 	materialcount--;
+}
+
+Ogre::TexturePtr SBS::LoadTexture(const std::string &filename, int mipmaps, bool &has_alpha, bool use_alpha_color, Ogre::ColourValue alpha_color)
+{
+	//set verbosity level
+	Ogre::TextureManager::getSingleton().setVerbose(Verbose);
+
+	std::string filename2 = filename;
+
+	//determine if the file is a GIF image, to force keycolor alpha
+	std::string extension = filename2.substr(filename.size() - 3);
+	SetCase(extension, false);
+	if (extension == "gif")
+		use_alpha_color = true;
+
+	//load the texture
+	std::string path = GetMountPath(filename2, filename2);
+	Ogre::TexturePtr mTex;
+	std::string texturename;
+	has_alpha = false;
+
+	try
+	{
+		if (use_alpha_color == false)
+		{
+			mTex = Ogre::TextureManager::getSingleton().load(filename2, path, Ogre::TEX_TYPE_2D, mipmaps);
+			IncrementTextureCount();
+
+			if (mTex.isNull())
+			{
+				ReportError("Error loading texture" + filename2);
+				return mTex;
+			}
+			texturename = mTex->getName();
+			has_alpha = mTex->hasAlpha();
+		}
+		else
+		{
+			//load based on chroma key for alpha
+
+			texturename = "kc_" + filename2;
+			mTex = loadChromaKeyedTexture(filename2, path, texturename, Ogre::ColourValue::White);
+
+			if (mTex.isNull())
+			{
+				ReportError("Error loading texture" + filename2);
+				return mTex;
+			}
+			has_alpha = true;
+		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		ReportError("Error loading texture " + filename2 + "\n" + e.getDescription());
+		return mTex;
+	}
+
+	return mTex;
+}
+
+Ogre::MaterialPtr SBS::CreateMaterial(const std::string &name, const std::string &path)
+{
+	//unload material if already loaded
+	if (UnloadMaterial(name, path) == true)
+		UnregisterTextureInfo(name);
+
+	//create new material
+	Ogre::MaterialPtr mMat = Ogre::MaterialManager::getSingleton().create(ToString(InstanceNumber) + ":" + name, path);
+	IncrementMaterialCount();
+	mMat->setLightingEnabled(false);
+	//mMat->setAmbient(AmbientR, AmbientG, AmbientB);
+
+	//show only clockwise side of material
+	mMat->setCullingMode(Ogre::CULL_ANTICLOCKWISE);
+
+	return mMat;
+}
+
+Ogre::MaterialPtr SBS::GetMaterialByName(const std::string &name, const std::string &group)
+{
+	Ogre::MaterialPtr ptr;
+
+	if (Ogre::ResourceGroupManager::getSingleton().resourceGroupExists(group) == false)
+		return ptr;
+
+	ptr = Ogre::MaterialManager::getSingleton().getByName(ToString(InstanceNumber) + ":" + name, group);
+	return ptr;
+}
+
+Ogre::TextureUnitState* SBS::BindTextureToMaterial(Ogre::MaterialPtr mMat, std::string texture_name, bool has_alpha)
+{
+	Ogre::TextureUnitState *state = mMat->getTechnique(0)->getPass(0)->createTextureUnitState(texture_name);
+
+	//enable alpha blending for related textures
+	if (has_alpha == true)
+	{
+		//mMat->setDepthWriteEnabled(false);
+		//mMat->setSceneBlending(Ogre::SBT_TRANSPARENT_ALPHA);
+
+		//enable hard alpha for alpha mask values 128 and above
+		mMat->getTechnique(0)->getPass(0)->setAlphaRejectSettings(Ogre::CMPF_GREATER_EQUAL, 128);
+	}
+	return state;
+}
+
+Ogre::TextureUnitState* SBS::GetTextureUnitState(Ogre::MaterialPtr mMat)
+{
+	//get first texture unit state
+	return mMat->getTechnique(0)->getPass(0)->getTextureUnitState(0);
+}
+
+std::string SBS::GetTextureName(Ogre::MaterialPtr mMat)
+{
+	std::string texname = "";
+
+	Ogre::TextureUnitState *state = GetTextureUnitState(mMat);
+	if (state)
+		texname = GetTextureUnitState(mMat)->getTextureName();
+
+	return texname;
+}
+
+Ogre::TexturePtr SBS::GetTextureByName(const std::string &name, const std::string &group)
+{
+	Ogre::TexturePtr ptr;
+
+	if (Ogre::ResourceGroupManager::getSingleton().resourceGroupExists(group) == false)
+		return ptr;
+
+	ptr = Ogre::TextureManager::getSingleton().getByName(name, group);
+	return ptr;
+}
+
+void SBS::UnloadMaterials()
+{
+	//delete all registered materials
+
+	for (int i = 0; i < (int)textureinfo.size(); i++)
+	{
+		Ogre::MaterialManager::getSingleton().remove(ToString(InstanceNumber) + ":" + textureinfo[i].name);
+	}
 }
 
 }

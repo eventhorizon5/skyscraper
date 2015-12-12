@@ -39,7 +39,7 @@ namespace SBS {
 #undef SMALL_EPSILON
 #define SMALL_EPSILON 0.000001f
 
-Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
+Camera::Camera(Object *parent) : Object(parent)
 {
 	//set up SBS object
 	SetValues("Camera", "Camera", true);
@@ -102,14 +102,13 @@ Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 	AttachedModel = 0;
 	prev_orientation = Ogre::Quaternion::ZERO;
 	prev_position = Ogre::Vector3::ZERO;
+	MainCamera = 0;
+	Gravity = 0;
+	GravityStatus = false;
+	FirstAttach = false;
+	LastHitMeshNumber = -1;
 
 	//set up camera and scene nodes
-	MainCamera = camera;
-	MainCamera->setNearClipDistance(0.1f);
-	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0);
-	GetSceneNode()->AttachObject(MainCamera);
-	SetFOVAngle(FOV);
-	SetMaxRenderDistance(FarClip);
 
 	//set up collider character
 	float width = cfg_legs_width / 2;
@@ -119,8 +118,10 @@ Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 	float height = (cfg_body_height + cfg_legs_height - 0.5f) - (width * 2);
 	float step_height = cfg_legs_height - 0.5f;
 
-	mCharacter = new OgreBulletDynamics::CharacterController("CameraCollider", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
-	EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
+	mCharacter = 0;
+	mShape = 0;
+
+	mCharacter = new OgreBulletDynamics::CharacterController(GetSceneNode()->GetFullName() + " Character", sbs->mWorld, GetSceneNode()->GetRawSceneNode(), sbs->ToRemote(width), sbs->ToRemote(height), sbs->ToRemote(step_height));
 
 	//create debug shape
 	mShape = new OgreBulletCollisions::CapsuleCollisionShape(sbs->ToRemote(width), sbs->ToRemote(height), Ogre::Vector3::UNIT_Y);
@@ -129,8 +130,6 @@ Camera::Camera(Object *parent, Ogre::Camera *camera) : Object(parent)
 	//other movement options
 	mCharacter->setJumpSpeed(sbs->ToRemote(cfg_jumpspeed));
 	mCharacter->setFallSpeed(sbs->ToRemote(sbs->GetConfigFloat("Skyscraper.SBS.Camera.FallSpeed", 177.65f)));
-	SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
-	GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
 }
 
 Camera::~Camera()
@@ -148,19 +147,26 @@ Camera::~Camera()
 	if (mCharacter)
 		delete mCharacter;
 
-	if (MainCamera)
-		GetSceneNode()->DetachObject(MainCamera);
+	//detach the camera
+	Detach();
 
-	std::string nodename = GetSceneNode()->GetRawSceneNode()->getChild(0)->getName();
-	sbs->mSceneManager->destroySceneNode(nodename);
+	if (GetSceneNode()->GetRawSceneNode()->numChildren() > 0)
+	{
+		std::string nodename = GetSceneNode()->GetRawSceneNode()->getChild(0)->getName();
+		sbs->mSceneManager->destroySceneNode(nodename);
+	}
 }
 
 void Camera::SetPosition(const Ogre::Vector3 &position)
 {
 	//sets the camera to an absolute position in 3D space
+
+	if (!MainCamera)
+		return;
+
 	if (EnableBullet == true)
 	{
-		mCharacter->setPosition(sbs->ToRemote(position) - MainCamera->getPosition());
+		GetSceneNode()->SetPosition(position - sbs->ToLocal(MainCamera->getPosition()));
 		mCharacter->updateTransform(true, false, false);
 	}
 	else
@@ -170,12 +176,19 @@ void Camera::SetPosition(const Ogre::Vector3 &position)
 void Camera::SetDirection(const Ogre::Vector3 &direction)
 {
 	//sets the camera's direction to an absolute position
+
+	if (!MainCamera)
+		return;
+
 	//MainCamera->lookAt(sbs->ToRemote(direction));
 }
 
 void Camera::SetRotation(const Ogre::Vector3 &rotation)
 {
 	//sets the camera's rotation in degrees
+
+	if (!MainCamera)
+		return;
 
 	//keep rotation within 360 degree boundaries
 	Ogre::Vector3 vector = rotation;
@@ -211,12 +224,18 @@ Ogre::Vector3 Camera::GetPosition(bool relative)
 	//returns the camera's current position
 	//"relative" value is ignored for camera object
 
+	if (!MainCamera)
+		return Ogre::Vector3::ZERO;
+
 	return GetSceneNode()->GetPosition() + sbs->ToLocal(MainCamera->getPosition());
 }
 
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 {
 	//returns the camera's current direction in front and top vectors
+
+	if (!MainCamera)
+		return;
 
 	Ogre::Quaternion dir = MainCamera->getDerivedOrientation();
 
@@ -238,6 +257,9 @@ Ogre::Vector3 Camera::GetRotation()
 
 void Camera::UpdateCameraFloor()
 {
+	if (!MainCamera)
+		return;
+
 	int newlastfloor;
 
 	if (lastfloorset == true)
@@ -259,6 +281,9 @@ void Camera::UpdateCameraFloor()
 bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 {
 	//moves the camera in a relative amount specified by a vector
+
+	if (!MainCamera)
+		return false;
 
 	if (MovementStopped == true && vector == Ogre::Vector3::ZERO)
 		return false;
@@ -293,6 +318,9 @@ bool Camera::MovePosition(Ogre::Vector3 vector, float speed)
 {
 	//moves the camera in a relative amount, using SetPosition, instead of character movement
 
+	if (!MainCamera)
+		return false;
+
 	if (vector == Ogre::Vector3::ZERO)
 		return false;
 
@@ -304,6 +332,9 @@ void Camera::Rotate(const Ogre::Vector3 &rotation, float speed)
 {
 	//rotates the camera in a relative amount in world space
 
+	if (!MainCamera)
+		return;
+
 	Ogre::Vector3 rot = GetRotation() + (rotation * speed);
 	SetRotation(rot);
 }
@@ -311,6 +342,9 @@ void Camera::Rotate(const Ogre::Vector3 &rotation, float speed)
 void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
 {
 	//rotates the camera in a relative amount in local camera space
+
+	if (!MainCamera)
+		return;
 
 	if (RotationStopped == true && rotation == Ogre::Vector3::ZERO)
 		return;
@@ -402,6 +436,9 @@ void Camera::CheckElevator()
 
 	SBS_PROFILE("Camera::CheckElevator");
 
+	if (!MainCamera)
+		return;
+
 	for (int i = 1; i <= sbs->GetElevatorCount(); i++)
 	{
 		Elevator *elevator = sbs->GetElevator(i);
@@ -423,6 +460,9 @@ void Camera::CheckShaft()
 {
 	//check to see if user (camera) is in a shaft
 
+	if (!MainCamera)
+		return;
+
 	if (sbs->AutoShafts == false)
 		return;
 
@@ -441,6 +481,9 @@ void Camera::CheckShaft()
 void Camera::CheckStairwell()
 {
 	//check to see if user (camera) is in a stairwell
+
+	if (!MainCamera)
+		return;
 
 	if (sbs->AutoStairs == false)
 		return;
@@ -461,6 +504,9 @@ void Camera::CheckStairwell()
 void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 {
 	//get mesh object that the user clicked on, and perform related work
+
+	if (!MainCamera)
+		return;
 
 	Ogre::Vector3 pos = GetPosition();
 
@@ -743,6 +789,9 @@ void Camera::Loop(float delta)
 {
 	SBS_PROFILE_MAIN("Camera Loop");
 
+	if (!MainCamera)
+		return;
+
 	if (collision_reset == true && EnableBullet == true)
 		mCharacter->resetCollisions();
 	collision_reset = false;
@@ -756,7 +805,16 @@ void Camera::Loop(float delta)
 			{
 				Ogre::SceneNode *node = mCharacter->getLastCollision()->getRootNode();
 				if (node)
-					LastHitMesh = node->getParentSceneNode()->getName();
+				{
+					int instance = 0, number = 0;
+					std::string name = sbs->ProcessFullName(node->getParentSceneNode()->getName(), instance, number, false);
+
+					if (instance == sbs->InstanceNumber)
+					{
+						LastHitMesh = name;
+						LastHitMeshNumber = number;
+					}
+				}
 			}
 		}
 	}
@@ -774,17 +832,10 @@ void Camera::Loop(float delta)
 		if (ReportCollisions == true)
 			sbs->Report(LastHitMesh);
 
-		std::string name = LastHitMesh;
-
-		if (name != "")
+		if (LastHitMesh != "")
 		{
-			int index = (int)name.find(")");
-			int number = ToInt(name.substr(1, index - 1));
-			name.erase(name.begin(), name.begin() + index + 1);
-			std::string num = ToString(number);
-
 			//get SBS object
-			Object *obj = sbs->GetObject(number);
+			Object *obj = sbs->GetObject(LastHitMeshNumber);
 
 			//get original object (parent object of mesh)
 			if (obj)
@@ -809,18 +860,6 @@ void Camera::Loop(float delta)
 				}
 			}
 		}
-	}
-
-	SoundSystem* soundsystem = sbs->GetSoundSystem();
-	if (soundsystem)
-	{
-		//sync sound listener object to camera position
-		soundsystem->SetListenerPosition(GetPosition());
-
-		//set direction of listener to camera's direction
-		Ogre::Vector3 front, top;
-		GetDirection(front, top);
-		soundsystem->SetListenerDirection(front, top);
 	}
 
 	//if a model is attached, run it's loop
@@ -851,6 +890,9 @@ void Camera::Float(float speed)
 
 void Camera::Jump()
 {
+	if (!MainCamera)
+		return;
+
 	//velocity.y = cfg_jumpspeed;
 	//desired_velocity.y = 0.0f;
 	if (mCharacter->getGravity() != 0 && EnableBullet == true)
@@ -918,7 +960,8 @@ void Camera::SetGravity(float gravity, bool save_value, bool camera_only)
 {
 	if (save_value == true)
 		Gravity = gravity;
-	if (EnableBullet == true)
+
+	if (EnableBullet == true && MainCamera)
 	{
 		if (camera_only == false)
 			sbs->mWorld->setGravity(Ogre::Vector3(0, sbs->ToRemote(-gravity), 0));
@@ -933,6 +976,9 @@ float Camera::GetGravity()
 
 void Camera::EnableGravity(bool value)
 {
+	if (!MainCamera)
+		return;
+
 	if (value == true)
 		SetGravity(Gravity);
 	else
@@ -954,6 +1000,10 @@ bool Camera::GetGravityStatus()
 void Camera::SetFOVAngle(float angle)
 {
 	//set camera FOV angle
+
+	if (!MainCamera)
+		return;
+
 	if (angle > 0 && angle < 179.63)
 	{
 		float ratio = MainCamera->getAspectRatio();
@@ -963,6 +1013,9 @@ void Camera::SetFOVAngle(float angle)
 
 float Camera::GetFOVAngle()
 {
+	if (!MainCamera)
+		return 0.0f;
+
 	return MainCamera->getFOVy().valueDegrees() * MainCamera->getAspectRatio();
 }
 
@@ -986,6 +1039,9 @@ void Camera::SetViewMode(int mode)
 	//1 - wireframe mode
 	//2 - point mode
 
+	if (!MainCamera)
+		return;
+
 	if (mode == 0)
 		MainCamera->setPolygonMode(Ogre::PM_SOLID);
 	if (mode == 1)
@@ -996,6 +1052,9 @@ void Camera::SetViewMode(int mode)
 
 void Camera::EnableCollisions(bool value)
 {
+	if (!MainCamera)
+		return;
+
 	if (value == Collisions)
 		return;
 
@@ -1011,6 +1070,9 @@ bool Camera::CollisionsEnabled()
 
 bool Camera::IsOnGround()
 {
+	if (!MainCamera)
+		return false;
+
 	if (EnableBullet == true)
 		return mCharacter->onGround();
 	else
@@ -1020,6 +1082,10 @@ bool Camera::IsOnGround()
 void Camera::Sync()
 {
 	//sync scene node with bullet object
+
+	if (!MainCamera)
+		return;
+
 	if (EnableBullet == true)
 		mCharacter->sync();
 
@@ -1039,6 +1105,10 @@ void Camera::Sync()
 void Camera::SetMaxRenderDistance(float value)
 {
 	//set distance of camera's far clipping plane - set to 0 for infinite
+
+	if (!MainCamera)
+		return;
+
 	MainCamera->setFarClipDistance(sbs->ToRemote(value));
 	FarClip = value;
 }
@@ -1050,12 +1120,18 @@ float Camera::GetMaxRenderDistance()
 
 void Camera::ShowDebugShape(bool value)
 {
+	if (!MainCamera)
+		return;
+
 	if (EnableBullet == true)
 		mCharacter->showDebugShape(value);
 }
 
 void Camera::MoveCharacter()
 {
+	if (!MainCamera)
+		return;
+
 	if (EnableBullet == true)
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
@@ -1072,6 +1148,9 @@ void Camera::ResetCollisions()
 void Camera::GotoFloor(int floor, bool disable_current)
 {
 	//have camera warp to specified floor
+
+	if (!MainCamera)
+		return;
 
 	if (sbs->IsValidFloor(floor) == true)
 	{
@@ -1098,6 +1177,9 @@ void Camera::Binoculars(bool value)
 {
 	//enable or disable binoculars mode
 
+	if (!MainCamera)
+		return;
+
 	if (value == true)
 		SetFOVAngle(BinocularsFOV);
 	else
@@ -1108,7 +1190,7 @@ bool Camera::IsMeshVisible(MeshObject *mesh)
 {
 	//returns if a mesh object is visible in the camera's view frustum or not
 
-	if (!mesh)
+	if (!mesh || !MainCamera)
 		return false;
 
 	return mesh->IsVisible(MainCamera);
@@ -1196,6 +1278,10 @@ bool Camera::IsModelAttached()
 void Camera::ResetState()
 {
 	//reset camera position and state
+
+	if (!MainCamera)
+		return;
+
 	Floor *floor = sbs->GetFloor(CurrentFloor);
 	if (floor)
 	{
@@ -1225,9 +1311,65 @@ void Camera::ResetState()
 void Camera::ResetView()
 {
 	//reset rotation/direction and FOV of camera
+
+	if (!MainCamera)
+		return;
+
 	SetToStartDirection();
 	SetToStartRotation();
 	SetToDefaultFOV();
+}
+
+void Camera::Refresh()
+{
+	if (mCharacter)
+		mCharacter->resetLastCollision();
+}
+
+bool Camera::Attach(Ogre::Camera *camera)
+{
+	if (camera->isAttached() == true)
+		return false;
+
+	MainCamera = camera;
+	MainCamera->setNearClipDistance(0.1f);
+	MainCamera->setPosition(0, sbs->ToRemote((cfg_body_height + cfg_legs_height + 0.5f) / 2), 0);
+	GetSceneNode()->AttachObject(MainCamera);
+
+	SetFOVAngle(FOV);
+	SetMaxRenderDistance(FarClip);
+
+	//move camera to start location
+	if (FirstAttach == false)
+	{
+		EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
+
+		SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
+		GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
+
+		SetToStartPosition(false); //also turns on start floor
+		SetToStartDirection();
+		SetToStartRotation();
+		FirstAttach = true;
+	}
+
+	Refresh();
+
+	return true;
+}
+
+bool Camera::Detach()
+{
+	if (!MainCamera)
+		return false;
+
+	if (MainCamera->isAttached() == false)
+		return false;
+
+	GetSceneNode()->DetachObject(MainCamera);
+	MainCamera = 0;
+
+	return true;
 }
 
 }

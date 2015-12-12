@@ -40,7 +40,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 		return;
 
 	//set up scene node
-	std::string node_name = "(" + ToString(parent->GetNumber()) + ")" + name;
+	std::string node_name = ToString(sbs->InstanceNumber) + ":(" + ToString(parent->GetNumber()) + ")" + name;
 
 	node = sbs->mSceneManager->createSceneNode(node_name);
 
@@ -51,7 +51,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 
 SceneNode::~SceneNode()
 {
-	if (sbs->FastDelete == false && node)
+	if (node)
 		sbs->mSceneManager->destroySceneNode(node);
 }
 
@@ -98,8 +98,8 @@ void SceneNode::SetPosition(const Ogre::Vector3 &position)
 	if (!node)
 		return;
 
-	Ogre::Vector3 pos = sbs->ToRemote(position);
-	node->_setDerivedPosition(pos);
+	Ogre::Vector3 pos = GetEngineOffset() + position;
+	node->_setDerivedPosition(sbs->ToRemote(pos));
 	Update();
 }
 
@@ -125,7 +125,7 @@ Ogre::Vector3 SceneNode::GetPosition(bool relative)
 		return Ogre::Vector3::ZERO;
 
 	if (relative == false)
-		return sbs->ToLocal(node->_getDerivedPosition());
+		return sbs->ToLocal(node->_getDerivedPosition()) - GetEngineOffset();
 
 	return sbs->ToLocal(node->getPosition());
 }
@@ -273,6 +273,16 @@ std::string SceneNode::GetFullName()
 		return "";
 
 	return node->getName();
+}
+
+Ogre::Vector3 SceneNode::GetEngineOffset()
+{
+	//get position offset of SBS engine root
+
+	Ogre::Vector3 offset = Ogre::Vector3::ZERO;
+	if (sbs->GetSceneNode() != this)
+		offset = sbs->GetPosition();
+	return offset;
 }
 
 }

@@ -657,6 +657,10 @@ class editelevator: public wxDialog
 
 	private:
 
+		SBS::SBS *Simcore;
+		int last_door;
+		int last_elevator_count;
+
 		DECLARE_EVENT_TABLE()
 };
 

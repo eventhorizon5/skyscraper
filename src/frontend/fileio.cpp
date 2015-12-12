@@ -50,8 +50,13 @@
 
 namespace Skyscraper {
 
-ScriptProcessor::ScriptProcessor()
+ScriptProcessor::ScriptProcessor(EngineContext *instance)
 {
+	if (!instance)
+		return;
+
+	engine = instance;
+	Simcore = instance->GetSystem();
 	Reset();
 }
 
@@ -217,8 +222,8 @@ bool ScriptProcessor::Run()
 			if (marker > progress_marker)
 			{
 				progress_marker = marker;
-				skyscraper->Report(percent_s + "%");
-				skyscraper->UpdateProgress(percent);
+				engine->Report(percent_s + "%");
+				engine->UpdateProgress(percent);
 			}
 		}
 
@@ -290,7 +295,7 @@ bool ScriptProcessor::Run()
 			}
 			Section = 1;
 			Context = "Globals";
-			skyscraper->Report("Processing globals...");
+			engine->Report("Processing globals...");
 			goto Nextline;
 		}
 		if (linecheck == "<endglobals>")
@@ -302,14 +307,14 @@ bool ScriptProcessor::Run()
 			}
 			Section = 0;
 			Context = "None";
-			skyscraper->Report("Finished globals");
+			engine->Report("Finished globals");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 5) == "<end>")
 		{
 			Section = 0;
 			Context = "None";
-			skyscraper->Report("Exiting building script");
+			engine->Report("Exiting building script");
 			IsFinished = true;
 			show_percent = false;
 			line = (int)BuildingData.size(); //jump to end of script
@@ -319,7 +324,7 @@ bool ScriptProcessor::Run()
 		{
 			//breakpoint function for debugging scripts
 breakpoint:
-			skyscraper->Report("Script breakpoint reached");
+			engine->Report("Script breakpoint reached");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 8) == "<include")
@@ -345,7 +350,7 @@ breakpoint:
 			bool result = LoadDataFile(filename, true, line);
 			if (result == false)
 				goto Error;
-			skyscraper->Report("Inserted file " + includefile);
+			engine->Report("Inserted file " + includefile);
 
 			line--;
 			goto Nextline;
@@ -375,7 +380,7 @@ breakpoint:
 			bool defined = IsFunctionDefined(function);
 
 			if (defined == true)
-				skyscraper->Report("Function '" + function + "' already defined");
+				engine->Report("Function '" + function + "' already defined");
 			else
 			{
 				//store function info in array
@@ -396,7 +401,7 @@ breakpoint:
 			}
 
 			if (defined == false)
-				skyscraper->Report("Defined function " + function);
+				engine->Report("Defined function " + function);
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 10) == "<textures>")
@@ -408,7 +413,7 @@ breakpoint:
 			}
 			Section = 5;
 			Context = "Textures";
-			skyscraper->Report("Processing textures...");
+			engine->Report("Processing textures...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 13) == "<endtextures>")
@@ -421,7 +426,7 @@ breakpoint:
 			Simcore->FreeTextureImages();
 			Section = 0;
 			Context = "None";
-			skyscraper->Report("Finished textures");
+			engine->Report("Finished textures");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 13) == "<endfunction>" && InFunction > 0)
@@ -462,7 +467,7 @@ breakpoint:
 			Context = "Floor range " + ToString(RangeL) + " to " + ToString(RangeH);
 			Current = RangeL;
 			RangeStart = line;
-			skyscraper->Report("Processing floors " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
+			engine->Report("Processing floors " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 7) == "<floor ")
@@ -483,7 +488,7 @@ breakpoint:
 				goto Error;
 			}
 			Context = "Floor " + ToString(Current);
-			skyscraper->Report("Processing floor " + ToString(Current) + "...");
+			engine->Report("Processing floor " + ToString(Current) + "...");
 			goto Nextline;
 		}
 		if (linecheck == "<endfloor>" && RangeL == RangeH)
@@ -495,7 +500,7 @@ breakpoint:
 			}
 			Section = 0;
 			Context = "None";
-			skyscraper->Report("Finished floor");
+			engine->Report("Finished floor");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 10) == "<elevators")
@@ -524,7 +529,7 @@ breakpoint:
 			Context = "Elevator range " + ToString(RangeL) + " to " + ToString(RangeH);
 			Current = RangeL;
 			RangeStart = line;
-			skyscraper->Report("Processing elevators " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
+			engine->Report("Processing elevators " + ToString(RangeL) + " to " + ToString(RangeH) + "...");
 			goto Nextline;
 		}
 		if (linecheck.substr(0, 10) == "<elevator ")
@@ -550,7 +555,7 @@ breakpoint:
 				goto Error;
 			}
 			Context = "Elevator " + ToString(Current);
-			skyscraper->Report("Processing elevator " + ToString(Current) + "...");
+			engine->Report("Processing elevator " + ToString(Current) + "...");
 			goto Nextline;
 		}
 		if (linecheck == "<endelevator>" && RangeL == RangeH)
@@ -562,7 +567,7 @@ breakpoint:
 			}
 			Section = 0;
 			Context = "None";
-			skyscraper->Report("Finished elevator");
+			engine->Report("Finished elevator");
 			goto Nextline;
 		}
 
@@ -766,7 +771,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	if (Simcore->FileExists(Filename) == false)
 	{
 		if (insert == false)
-			skyscraper->ReportFatalError("Error loading building file:\nFile '" + Filename + "' does not exist");
+			engine->ReportFatalError("Error loading building file:\nFile '" + Filename + "' does not exist");
 		else
 			ScriptError("File not found");
 		return false;
@@ -791,7 +796,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	{
 		std::string msg = "Error loading building file\nDetails: " + e.getDescription();
 		if (insert == false)
-			skyscraper->ReportFatalError(msg);
+			engine->ReportFatalError(msg);
 		else
 			ScriptError(msg);
 		return false;
@@ -802,7 +807,7 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 	{
 		std::string msg = "Error loading building file";
 		if (insert == false)
-			skyscraper->ReportFatalError(msg);
+			engine->ReportFatalError(msg);
 		else
 			ScriptError(msg);
 		return false;
@@ -1132,7 +1137,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		error += "\nFunction call line: " + ToString(FunctionLine) + "\nLine Text: " + LineData;
 	}
 
-	skyscraper->ReportError(error);
+	engine->ReportError(error);
 
 	//show error dialog
 	if (warning == false)
@@ -1592,7 +1597,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		if (Simcore->Verbose == true)
-			skyscraper->Report("Variable '" + str + "' set to " + value);
+			engine->Report("Variable '" + str + "' set to " + value);
 		return sNextLine;
 	}
 
@@ -3092,7 +3097,7 @@ int ScriptProcessor::ProcCommands()
 		buffer = Calc(LineData.substr(5));
 
 		//print line
-		skyscraper->Report(buffer);
+		engine->Report(buffer);
 
 		return sNextLine;
 	}

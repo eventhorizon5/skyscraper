@@ -174,6 +174,13 @@ void TrimString(std::string &string)
 	Ogre::StringUtil::trim(string, true, true);
 }
 
+std::string TrimStringCopy(std::string string)
+{
+	//trim whitespace from string
+	Ogre::StringUtil::trim(string, true, true);
+	return string;
+}
+
 void ReplaceAll(std::string &string, const std::string &original, const std::string &replacement)
 {
 	//replace all occurrences of "original" with "replacement"

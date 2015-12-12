@@ -44,6 +44,7 @@
 #include "console.h"
 #include "objectinfo.h"
 #include "skyscraper.h"
+#include "enginemanager.h"
 
 namespace Skyscraper {
 
@@ -57,6 +58,7 @@ ObjectInfo *objectinfo;
 Profiler *profiler;
 ActionViewer *actionviewer;
 SkyControl *skycontrol;
+EngineManager *emanager;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();
@@ -94,6 +96,7 @@ const long DebugPanel::ID_bCameraControl = wxNewId();
 const long DebugPanel::ID_bEditElevator = wxNewId();
 const long DebugPanel::ID_bControlReference = wxNewId();
 const long DebugPanel::ID_bStats = wxNewId();
+const long DebugPanel::ID_bEngineManager = wxNewId();
 const long DebugPanel::ID_bConsole = wxNewId();
 const long DebugPanel::ID_bObjectInfo = wxNewId();
 const long DebugPanel::ID_bActionViewer = wxNewId();
@@ -215,6 +218,8 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer9->Add(bControlReference, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bStats = new wxButton(Panel1, ID_bStats, _("Simulator Statistics"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bStats"));
 	BoxSizer9->Add(bStats, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bEngineManager = new wxButton(Panel1, ID_bEngineManager, _("Engine Manager"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bEngineManager"));
+	BoxSizer9->Add(bEngineManager, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bConsole = new wxButton(Panel1, ID_bConsole, _("Console"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bConsole"));
 	BoxSizer9->Add(bConsole, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer9, 1, wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -233,6 +238,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	BoxSizer10->Add(bTextures, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	bFloorInfo = new wxButton(Panel1, ID_bFloorInfo, _("Floor Information"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bFloorInfo"));
 	BoxSizer10->Add(bFloorInfo, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer10->Add(-1,-1,1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer8->Add(BoxSizer10, 1, wxLEFT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer11->Add(BoxSizer8, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 10);
 	Panel1->SetSizer(BoxSizer11);
@@ -257,6 +263,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bEditElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEditElevator_Click);
 	Connect(ID_bControlReference,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bControlReference_Click);
 	Connect(ID_bStats,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bStats_Click);
+	Connect(ID_bEngineManager,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bEngineManager_Click);
 	Connect(ID_bConsole,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bConsole_Click);
 	Connect(ID_bObjectInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bObjectInfo_Click);
 	Connect(ID_bActionViewer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bActionViewer_Click);
@@ -267,6 +274,19 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	//*)
 	dp = this;
+	Simcore = 0;
+	mc = 0;
+	ee = 0;
+	cc = 0;
+	kd = 0;
+	stats = 0;
+	objectinfo = 0;
+	profiler = 0;
+	actionviewer = 0;
+	skycontrol = 0;
+	emanager = 0;
+	timer = 0;
+
 	OnInit();
 }
 
@@ -306,6 +326,9 @@ DebugPanel::~DebugPanel()
 	if (skycontrol)
 		skycontrol->Destroy();
 	skycontrol = 0;
+	if (emanager)
+		emanager->Destroy();
+	emanager = 0;
 	dpanel = 0; //clear external pointer
 }
 
@@ -354,6 +377,11 @@ void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 
 void DebugPanel::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
+	if (!Simcore)
+		return;
+
 	//set check boxes
 	chkCollisionDetection->SetValue(Simcore->camera->CollisionsEnabled());
 	chkGravity->SetValue(Simcore->camera->GetGravityStatus());
@@ -364,22 +392,44 @@ void DebugPanel::OnInit()
 	chkVerbose->SetValue(Simcore->Verbose);
 	chkRandom->SetValue(Simcore->RandomActivity);
 
-	mc = new MeshControl(dp, -1);
-	ee = new editelevator(dp, -1);
-	cc = new CameraControl(dp, -1);
-	kd = new KeyDialog(dp, -1);
-	stats = new Stats(dp, -1);
-	objectinfo = new ObjectInfo(dp, -1);
-	profiler = new Profiler(dp, -1);
-	actionviewer = new ActionViewer(dp, -1);
-	skycontrol = new SkyControl(dp, -1);
+	if (!mc)
+		mc = new MeshControl(dp, -1);
+	if (!ee)
+		ee = new editelevator(dp, -1);
+	if (!cc)
+		cc = new CameraControl(dp, -1);
+	if (!kd)
+		kd = new KeyDialog(dp, -1);
+	if (!stats)
+		stats = new Stats(dp, -1);
+	if (!objectinfo)
+		objectinfo = new ObjectInfo(dp, -1);
+	if (!profiler)
+		profiler = new Profiler(dp, -1);
+	if (!actionviewer)
+		actionviewer = new ActionViewer(dp, -1);
+	if (!skycontrol)
+		skycontrol = new SkyControl(dp, -1);
+	if (!emanager)
+		emanager = new EngineManager(dp, -1);
 
-	timer = new Timer();
+	if (timer)
+		delete timer;
+
+	timer = new Timer(Simcore);
 	timer->Start(40);
 }
 
 void DebugPanel::Timer::Notify()
 {
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			dp->OnInit(); //reinitialize if active engine has changed
+	}
+	else
+		return;
+
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 
 	if (dp)
@@ -414,18 +464,7 @@ void DebugPanel::Timer::Notify()
 	if (mc)
 	{
 		if (mc->IsShown() == true)
-		{
-			if (floor)
-			{
-				mc->chkFloor->SetValue(floor->IsEnabled);
-				mc->chkColumnFrame->SetValue(floor->IsColumnFrameEnabled);
-				mc->chkInterfloor->SetValue(floor->IsInterfloorEnabled);
-			}
-			mc->chkSky->SetValue(Simcore->IsSkyboxEnabled);
-			mc->chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
-			mc->chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
-			mc->chkExternal->SetValue(Simcore->IsExternalEnabled);
-		}
+			mc->Loop();
 	}
 
 	if (cc)
@@ -468,11 +507,17 @@ void DebugPanel::Timer::Notify()
 		if (skycontrol->IsShown() == true)
 			skycontrol->Loop();
 	}
+
+	if (emanager)
+	{
+		if (emanager->IsShown() == true)
+			emanager->Loop();
+	}
 }
 
 wxString TruncateNumber(float value, int decimals)
 {
-	std::string number = Simcore->TruncateNumber(value, decimals);
+	std::string number = dp->Simcore->TruncateNumber(value, decimals);
 	wxString number2 = wxString::FromAscii(number.c_str());
 
 	return number2;
@@ -480,7 +525,7 @@ wxString TruncateNumber(float value, int decimals)
 
 wxString TruncateNumber(double value, int decimals)
 {
-	std::string number = Simcore->TruncateNumber(value, decimals);
+	std::string number = dp->Simcore->TruncateNumber(value, decimals);
 	wxString number2 = wxString::FromAscii(number.c_str());
 
 	return number2;
@@ -591,6 +636,15 @@ void DebugPanel::On_bSkyControl_Click(wxCommandEvent& event)
 	{
 		skycontrol->CenterOnScreen();
 		skycontrol->Show();
+	}
+}
+
+void DebugPanel::On_bEngineManager_Click(wxCommandEvent& event)
+{
+	if (emanager)
+	{
+		emanager->CenterOnScreen();
+		emanager->Show();
 	}
 }
 

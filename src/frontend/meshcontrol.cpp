@@ -28,8 +28,6 @@
 //*)
 #include "debugpanel.h"
 #include "meshcontrol.h"
-#include "globals.h"
-#include "sbs.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
@@ -150,6 +148,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_chkAllColumnFrames,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&MeshControl::On_chkAllColumnFrames_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
+	Simcore = 0;
 	OnInit();
 }
 
@@ -160,7 +159,33 @@ MeshControl::~MeshControl()
 
 void MeshControl::OnInit()
 {
+	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+
 	chkElevators->SetValue(true);
+}
+
+void MeshControl::Loop()
+{
+	//if active engine has changed, refresh values
+	if (skyscraper->GetActiveEngine())
+	{
+		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+			OnInit();
+	}
+	else
+		return;
+
+	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
+	if (floor)
+	{
+		chkFloor->SetValue(floor->IsEnabled);
+		chkColumnFrame->SetValue(floor->IsColumnFrameEnabled);
+		chkInterfloor->SetValue(floor->IsInterfloorEnabled);
+	}
+	chkSky->SetValue(Simcore->IsSkyboxEnabled);
+	chkLandscape->SetValue(Simcore->IsLandscapeEnabled);
+	chkBuildings->SetValue(Simcore->IsBuildingsEnabled);
+	chkExternal->SetValue(Simcore->IsExternalEnabled);
 }
 
 void MeshControl::On_bOk_Click(wxCommandEvent& event)

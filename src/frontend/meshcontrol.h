@@ -66,6 +66,7 @@ class MeshControl: public wxDialog
 		static const long ID_chkAllColumnFrames;
 		static const long ID_bOk;
 		//*)
+		void Loop();
 
 	protected:
 
@@ -111,6 +112,8 @@ class MeshControl: public wxDialog
 		//*)
 
 	private:
+
+		SBS::SBS *Simcore;
 
 		DECLARE_EVENT_TABLE()
 };

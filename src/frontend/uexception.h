@@ -102,8 +102,6 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	twindow->Show(true);
 
 	//stop simulator
-	skyscraper->IsRunning = false;
-	skyscraper->StartupRunning = false;
 	skyscraper->Pause = true;
 
 	//print exception notice
@@ -127,11 +125,12 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 		twindow->tMain->WriteText(wxT("\nSimulator State Dump\n--------------------------\n"));
 		twindow->tMain->WriteText(wxString("Platform: " + skyscraper->Platform + "\n"));
 		twindow->tMain->WriteText(wxString("Frontend version: " + skyscraper->version_frontend + "\n"));
-	}
 
-	//print out simulator state
-	if (Simcore)
-		twindow->tMain->WriteText(wxString(Simcore->DumpState()));
+		//print out simulator state
+		EngineContext *context = skyscraper->GetActiveEngine();
+		if (context)
+			twindow->tMain->WriteText(wxString(context->GetSystem()->DumpState()));
+	}
 
 	//print instructions
 	twindow->tMain->WriteText(wxT("\n--------------------------\n"));

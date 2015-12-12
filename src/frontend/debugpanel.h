@@ -43,6 +43,9 @@
 #include <wx/timer.h>
 #include <wx/variant.h>
 
+#include "globals.h"
+#include "sbs.h"
+
 namespace Skyscraper {
 
 class DebugPanel: public wxFrame
@@ -89,6 +92,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bEditElevator;
 		static const long ID_bControlReference;
 		static const long ID_bStats;
+		static const long ID_bEngineManager;
 		static const long ID_bConsole;
 		static const long ID_bObjectInfo;
 		static const long ID_bActionViewer;
@@ -102,10 +106,12 @@ class DebugPanel: public wxFrame
 		class Timer : public wxTimer
 		{
 			public:
-			Timer() { };
+			Timer(SBS::SBS *engine) { Simcore = engine; };
 			virtual void Notify();
+			SBS::SBS *Simcore;
 		};
 		Timer *timer;
+		SBS::SBS *Simcore;
 
 	protected:
 
@@ -133,10 +139,12 @@ class DebugPanel: public wxFrame
 		void On_bTextures_Click(wxCommandEvent& event);
 		void On_bFloorInfo_Click(wxCommandEvent& event);
 		void On_bSkyControl_Click(wxCommandEvent& event);
+		void On_bEngineManager_Click(wxCommandEvent& event);
 		//*)
 		void OnInit();
 
 		//(*Declarations(DebugPanel)
+		wxButton* bEngineManager;
 		wxButton* bSkyControl;
 		wxPanel* Panel1;
 		wxStaticText* t_framerate;
@@ -200,3 +208,4 @@ wxString TruncateNumber(double value, int decimals);
 }
 
 #endif
+

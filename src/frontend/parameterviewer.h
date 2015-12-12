@@ -160,6 +160,8 @@ class ParameterViewer: public wxDialog
 
 		bool Setup();
 
+		SBS::SBS *Simcore;
+
 		DECLARE_EVENT_TABLE()
 };
 
