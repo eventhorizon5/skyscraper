@@ -85,7 +85,7 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 	Panel1->SetSizer(FlexGridSizer3);
 	FlexGridSizer3->Fit(Panel1);
 	FlexGridSizer3->SetSizeHints(Panel1);
-	FlexGridSizer1->Add(Panel1, 1, wxEXPAND|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	FlexGridSizer1->Add(Panel1, 1, wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
@@ -138,3 +138,4 @@ void Console::Write(const std::string &message)
 }
 
 }
+

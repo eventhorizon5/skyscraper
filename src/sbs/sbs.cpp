@@ -4140,27 +4140,32 @@ void SBS::EnableRandomActivity(bool value)
 {
 	//enable random activity, by creating random people
 
-	if (value == true && RandomPeople.empty() == true)
+	if (value == true)
 	{
 		//create regular people
 		for (int i = 0; i < GetTotalFloors(); i++)
 		{
 			Person *person = CreatePerson("Random " + ToString(i + 1), 0, false);
-			RandomPeople.push_back(person);
 		}
 
 		//create a service person
 		int i = GetTotalFloors();
 		Person *person = CreatePerson("Random " + ToString(i + 1), 0, true);
-		RandomPeople.push_back(person);
+
+		//enable random activity on the person
+		person->EnableRandomActivity(true);
 	}
 	else if (value == false)
 	{
-		for (int i = 0; i < (int)RandomPeople.size(); i++)
+		for (int i = 0; i < (int)PersonArray.size(); i++)
 		{
-			delete RandomPeople[i];
+			if (PersonArray[i]->IsRandomActivityEnabled() == true)
+			{
+				Person *person = PersonArray[i];
+				delete person;
+				i--;
+			}
 		}
-		RandomPeople.clear();
 	}
 
 	RandomActivity = value;
@@ -4247,6 +4252,14 @@ Person* SBS::CreatePerson(const std::string &name, int floor, bool service_acces
 	Person *person = new Person(this, name, floor, service_access);
 	PersonArray.push_back(person);
 	return person;
+}
+
+Person* SBS::CreatePerson()
+{
+	//create a person with automatic values
+
+	int number = GetPersonCount() + 1;
+	return CreatePerson("Person " + ToString(number), 0);
 }
 
 void SBS::RemovePerson(Person *person)

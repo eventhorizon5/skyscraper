@@ -130,6 +130,7 @@ EngineManager::EngineManager(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
+	Center();
 
 	Connect(ID_CLoads,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkCLoads_Click);
 	Connect(ID_chkRender,wxEVT_COMMAND_CHECKBOX_CLICKED,(wxObjectEventFunction)&EngineManager::On_chkRender_Click);
@@ -169,8 +170,13 @@ void EngineManager::Loop()
 		{
 			EngineList->Append(wxVariant(i).GetString() + wxT(" - ") + wxString::FromAscii(skyscraper->GetEngine(i)->GetFilename().c_str()));
 		}
-		EngineList->SetSelection(0);
+
+		if (count > 0)
+			EngineList->SetSelection(0);
 	}
+
+	if (count == 0)
+		return;
 
 	int selection = EngineList->GetSelection();
 	engine = skyscraper->GetEngine(selection);

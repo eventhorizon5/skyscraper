@@ -26,10 +26,10 @@
 #define PROFILERGUI_H
 
 //(*Headers(Profiler)
-#include <wx/sizer.h>
-#include <wx/stattext.h>
 #include <wx/checkbox.h>
 #include <wx/dialog.h>
+#include <wx/sizer.h>
+#include <wx/stattext.h>
 //*)
 
 namespace Skyscraper {
@@ -43,8 +43,8 @@ class Profiler: public wxDialog
 		void Loop();
 
 		//(*Declarations(Profiler)
-		wxStaticText* txtMain;
 		wxCheckBox* chkAdvanced;
+		wxStaticText* txtMain;
 		//*)
 
 	protected:
@@ -66,3 +66,4 @@ class Profiler: public wxDialog
 }
 
 #endif
+

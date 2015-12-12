@@ -111,6 +111,7 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	SetSizer(BoxSizer1);
 	BoxSizer1->Fit(this);
 	BoxSizer1->SetSizeHints(this);
+	Center();
 
 	Connect(ID_ActionList,wxEVT_COMMAND_LISTBOX_SELECTED,(wxObjectEventFunction)&ActionViewer::On_ActionList_Select);
 	Connect(ID_bDelete,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ActionViewer::On_bDelete_Click);
@@ -206,3 +207,4 @@ void ActionViewer::On_bDelete_Click(wxCommandEvent& event)
 }
 
 }
+

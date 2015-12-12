@@ -396,6 +396,7 @@ public:
 	bool IsActionValid(Action* action);
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(const std::string &name, int floor, bool service_access = false);
+	Person* CreatePerson();
 	void RemovePerson(Person *person);
 	bool AttachCamera(Ogre::Camera *camera);
 	bool DetachCamera();
@@ -563,9 +564,6 @@ private:
 
 	//person objects
 	std::vector<Person*> PersonArray;
-
-	//temporary people for random activity
-	std::vector<Person*> RandomPeople;
 
 	int ObjectCount; //number of simulator objects
 

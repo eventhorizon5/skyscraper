@@ -214,7 +214,7 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	tPlatform = new wxTextCtrl(this, ID_tPlatform, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPlatform"));
 	FlexGridSizer2->Add(tPlatform, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Renderer:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
-	FlexGridSizer2->Add(StaticText2, 1, wxLEFT|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(StaticText2, 1, wxLEFT|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
 	tRenderer = new wxTextCtrl(this, ID_tRenderer, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tRenderer"));
 	FlexGridSizer2->Add(tRenderer, 1, wxLEFT|wxEXPAND|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -225,6 +225,7 @@ Stats::Stats(wxWindow* parent,wxWindowID id)
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
+	Center();
 
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&Stats::On_bOK_Click);
 	//*)
@@ -290,3 +291,4 @@ void Stats::Loop()
 }
 
 }
+

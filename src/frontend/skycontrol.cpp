@@ -155,6 +155,7 @@ SkyControl::SkyControl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	SetSizer(FlexGridSizer1);
 	FlexGridSizer1->Fit(this);
 	FlexGridSizer1->SetSizeHints(this);
+	Center();
 
 	Connect(ID_bSetLatitude,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetLatitude_Click);
 	Connect(ID_bSetLongitude,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetLongitude_Click);
@@ -280,3 +281,4 @@ void SkyControl::On_bSetMultiplier_Click(wxCommandEvent& event)
 }
 
 }
+

@@ -47,7 +47,15 @@ public:
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
 	int GetRandomFloor();
-	bool RouteActive() { return !route.empty(); }
+	bool IsRouteActive() { return !route.empty(); }
+	bool IsRandomActivityEnabled() { return random_timer->IsRunning(); }
+	void EnableRandomActivity(bool value);
+	void SetFloor(int value);
+	int GetFloor() { return current_floor; }
+	int GetDestinationFloor() { return dest_floor; }
+	void SetServiceAccess(bool value) { service_access = value; }
+	bool GetServiceAccess() { return service_access; }
+	void Stop();
 
 private:
 

@@ -215,7 +215,7 @@ ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxStrin
 	bCancel = new wxButton(this, ID_bCancel, _("Cancel"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bCancel"));
 	BoxSizer1->Add(bCancel, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bTextures = new wxButton(this, ID_bTextures, _("List Textures"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bTextures"));
-	BoxSizer1->Add(bTextures, 1, wxALL|wxALIGN_TOP|wxALIGN_BOTTOM, 5);
+	BoxSizer1->Add(bTextures, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bOK = new wxButton(this, ID_bOK, _("OK"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bOK"));
 	BoxSizer1->Add(bOK, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(BoxSizer1, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
@@ -2014,3 +2014,4 @@ void ParameterViewer::On_bTextures_Click(wxCommandEvent& event)
 }
 
 }
+

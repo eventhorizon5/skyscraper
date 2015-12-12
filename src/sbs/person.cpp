@@ -50,9 +50,6 @@ Person::Person(Object *parent, const std::string &name, int floor, bool service_
 	//create timer
 	random_timer = new Timer("Random Timer", this);
 
-	//enable timer
-	random_timer->Start(int(RandomFrequency * 1000), false);
-
 	Report("On floor " +  ToString(current_floor));
 }
 
@@ -67,13 +64,7 @@ Person::~Person()
 	random_timer = 0;
 
 	//delete routes
-	if (route.empty() == false)
-	{
-		for (int i = 0; i < (int)route.size(); i++)
-		{
-			delete route[i].elevator_route;
-		}
-	}
+	Stop();
 
 	//delete random number generators
 	if (rnd_time)
@@ -88,6 +79,21 @@ Person::~Person()
 		sbs->RemovePerson(this);
 }
 
+void Person::EnableRandomActivity(bool value)
+{
+	//enable or disable timer
+	if (value == true)
+	{
+		random_timer->Start(int(RandomFrequency * 1000), false);
+		Report("Random activity enabled");
+	}
+	else
+	{
+		random_timer->Stop();
+		Report("Random activity disabled");
+	}
+}
+
 int Person::GetRandomFloor()
 {
 	return (int)rnd_dest->Get(sbs->GetTotalFloors() - 1) - sbs->Basements;
@@ -96,7 +102,7 @@ int Person::GetRandomFloor()
 void Person::GotoFloor(int floor)
 {
 	//exit if a route is already active
-	if (RouteActive() == true)
+	if (IsRouteActive() == true)
 		return;
 
 	Floor *floor_obj = sbs->GetFloor(current_floor);
@@ -140,7 +146,7 @@ void Person::Loop()
 
 void Person::ProcessRoute()
 {
-	if (RouteActive() == false)
+	if (IsRouteActive() == false)
 		return;
 
 	Floor *floor_obj = sbs->GetFloor(current_floor);
@@ -238,12 +244,32 @@ void Person::Timer::Notify()
 {
 	//timer for random destination activity
 
-	if (parent->RouteActive() == true)
+	if (parent->IsRouteActive() == true)
 		return;
 
 	int result = (int)parent->rnd_time->Get(parent->RandomProbability - 1);
 	if (result == 0)
 		parent->GotoFloor(parent->GetRandomFloor());
+}
+
+void Person::SetFloor(int value)
+{
+	if (IsRouteActive() == false)
+		current_floor = value;
+}
+
+void Person::Stop()
+{
+	//stop route if active
+
+	//delete routes
+	if (route.empty() == false)
+	{
+		for (int i = 0; i < (int)route.size(); i++)
+		{
+			delete route[i].elevator_route;
+		}
+	}
 }
 
 }

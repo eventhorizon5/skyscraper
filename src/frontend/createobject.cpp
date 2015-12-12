@@ -149,7 +149,7 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	bAddShaftModel = new wxButton(this, ID_bAddShaftModel, _("Shaft Model"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddShaftModel"));
 	GridSizer1->Add(bAddShaftModel, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	bAddShaftStdDoor = new wxButton(this, ID_bAddShaftStdDoor, _("Shaft Standard Door"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bAddShaftStdDoor"));
-	GridSizer1->Add(bAddShaftStdDoor, 1, wxALL|wxEXPAND|wxALIGN_TOP, 5);
+	GridSizer1->Add(bAddShaftStdDoor, 1, wxALL|wxEXPAND|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer2->Add(GridSizer1, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	FlexGridSizer1->Add(StaticBoxSizer2, 1, wxALL|wxALIGN_LEFT|wxALIGN_TOP, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Elevators"));
@@ -516,3 +516,4 @@ void CreateObject::On_bAddShaftStdDoor_Click(wxCommandEvent& event)
 }
 
 }
+
