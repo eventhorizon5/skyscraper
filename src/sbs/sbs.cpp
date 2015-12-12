@@ -4248,21 +4248,18 @@ bool SBS::IsActionValid(Action *action)
 	return false;
 }
 
-Person* SBS::CreatePerson(const std::string &name, int floor, bool service_access)
+Person* SBS::CreatePerson(std::string name, int floor, bool service_access)
 {
 	//create a person
 
+	if (name == "")
+	{
+		int number = GetPersonCount() + 1;
+		name = "Person " + ToString(number);
+	}
 	Person *person = new Person(this, name, floor, service_access);
 	PersonArray.push_back(person);
 	return person;
-}
-
-Person* SBS::CreatePerson()
-{
-	//create a person with automatic values
-
-	int number = GetPersonCount() + 1;
-	return CreatePerson("Person " + ToString(number), 0);
 }
 
 void SBS::RemovePerson(Person *person)
