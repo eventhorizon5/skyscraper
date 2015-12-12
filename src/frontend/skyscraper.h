@@ -127,6 +127,7 @@ public:
 	bool IsEngineLoading();
 	void RaiseWindow();
 	void RefreshConsole();
+	void RefreshViewport();
 
 private:
 	//mouse status

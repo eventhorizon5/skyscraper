@@ -98,6 +98,7 @@ bool EngineContext::Run()
 			{
 				ReportError("Error processing building\n");
 				Shutdown();
+				frontend->CloseProgressDialog();
 				return false;
 			}
 			else if (processor->IsFinished == true)

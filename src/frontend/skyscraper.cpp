@@ -1085,6 +1085,18 @@ void Skyscraper::Loop()
 	//delete an engine if requested
 	HandleEngineShutdown();
 
+	//exit if full shutdown request received
+	if (Shutdown == true)
+	{
+		Shutdown = false;
+		//if showmenu is true, unload simulator and return to main menu
+		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
+			UnloadToMenu();
+		//otherwise exit app
+		else
+			Quit();
+	}
+
 	if (result == false && (ConcurrentLoads == false || GetEngineCount() == 1))
 		return;
 
@@ -1105,18 +1117,6 @@ void Skyscraper::Loop()
 
 	//render graphics
 	Render();
-
-	//exit if shutdown request received
-	if (Shutdown == true)
-	{
-		Shutdown = false;
-		//if showmenu is true, unload simulator and return to main menu
-		if (GetConfigBool("Skyscraper.Frontend.ShowMenu", true) == true)
-			UnloadToMenu();
-		//otherwise exit app
-		else
-			Quit();
-	}
 
 	//handle a building reload
 	HandleReload();
@@ -1734,8 +1734,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		}
 	}
 
-	//refresh viewport to prevent rendering issues
-	mViewport->_updateDimensions();
+	RefreshViewport();
 
 	//run simulation
 	Report("Running simulation...");
@@ -2114,9 +2113,7 @@ EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position)
 
 bool Skyscraper::DeleteEngine(EngineContext *engine)
 {
-	//don't delete if only one engine is active
-	if (engines.size() == 1)
-		return false;
+	//delete a specified sim engine instance
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
@@ -2128,6 +2125,7 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 			if (active_engine == engine)
 			{
 				active_engine = 0;
+				Shutdown = true; //exit to main menu if all engines have been deleted
 				if (GetEngineCount() > 0)
 					SetActiveEngine(0);
 			}
@@ -2141,7 +2139,8 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 
 void Skyscraper::DeleteEngines()
 {
-	//delete simulator instances
+	//delete all sim emgine instances
+
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
 		delete engines[i];
@@ -2191,10 +2190,7 @@ bool Skyscraper::RunEngines()
 	bool isloading = IsEngineLoading();
 
 	if (ConcurrentLoads == true && isloading == true)
-	{
-		//refresh viewport to prevent rendering issues
-		mViewport->_updateDimensions();
-	}
+		RefreshViewport();
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
@@ -2235,7 +2231,10 @@ void Skyscraper::HandleEngineShutdown()
 		if (engines[i]->GetShutdownState() == true)
 		{
 			if (DeleteEngine(engines[i]) == true)
+			{
+				RefreshViewport();
 				i--;
+			}
 		}
 	}
 }
@@ -2276,6 +2275,12 @@ void Skyscraper::RefreshConsole()
 		console->Refresh();
 		console->Update();
 	}
+}
+
+void Skyscraper::RefreshViewport()
+{
+	//refresh viewport to prevent rendering issues
+	mViewport->_updateDimensions();
 }
 
 }
