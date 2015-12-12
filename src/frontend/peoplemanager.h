@@ -67,6 +67,7 @@ class PeopleManager: public wxDialog
 		wxTextCtrl* tFloor;
 		wxListBox* PersonList;
 		wxCheckBox* chkRandom;
+		wxTextCtrl* tStatus;
 		//*)
 		void Loop();
 
@@ -89,6 +90,7 @@ class PeopleManager: public wxDialog
 		static const long ID_STATICLINE1;
 		static const long ID_STATICLINE2;
 		static const long ID_STATICLINE3;
+		static const long ID_tStatus;
 		static const long ID_chkRandom;
 		static const long ID_chkService;
 		static const long ID_bNew;
@@ -115,6 +117,7 @@ class PeopleManager: public wxDialog
 		SBS::Person *person;
 		int floor;
 		int dest_floor;
+		std::string status;
 
 		DECLARE_EVENT_TABLE()
 };

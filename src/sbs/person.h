@@ -56,13 +56,14 @@ public:
 	void SetServiceAccess(bool value) { service_access = value; }
 	bool GetServiceAccess() { return service_access; }
 	void Stop();
+	std::string GetStatus();
 
 private:
 
 	struct RouteEntry
 	{
 		ElevatorRoute* elevator_route;
-		bool call_made;
+		int call_made;
 		bool floor_selected;
 	};
 

@@ -133,7 +133,7 @@ void Person::GotoFloor(int floor)
 
 		RouteEntry route_entry;
 		route_entry.elevator_route = elevators[i];
-		route_entry.call_made = false;
+		route_entry.call_made = 0;
 		route_entry.floor_selected = false;
 		route.push_back(route_entry);
 	}
@@ -161,7 +161,7 @@ void Person::ProcessRoute()
 		return;
 
 	//if a call has not been made, press first elevator's associated call button
-	if (route[0].call_made == false)
+	if (route[0].call_made == 0)
 	{
 		CallButton *button = floor_obj->GetCallButton(elevator->Number);
 
@@ -170,11 +170,15 @@ void Person::ProcessRoute()
 			Report("Pressing call button for elevator " + ToString(elevator->Number));
 
 			if (floor_selection > current_floor)
+			{
 				button->Call(true);
+				route[0].call_made = 1;
+			}
 			else
+			{
 				button->Call(false);
-
-			route[0].call_made = true;
+				route[0].call_made = -1;
+			}
 		}
 		return;
 	}
@@ -273,6 +277,28 @@ void Person::Stop()
 			delete route[i].elevator_route;
 		}
 	}
+}
+
+std::string Person::GetStatus()
+{
+	//return a string describing the person's status
+
+	if (IsRouteActive() == false)
+		return "Idle on floor " + ToString(current_floor);
+
+	Elevator *elevator = route[0].elevator_route->elevator;
+	int floor_selection = route[0].elevator_route->floor_selection;
+
+	if (route[0].floor_selected == true && elevator)
+		return "Pressed " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+
+	if (route[0].call_made == 1)
+		return "Call button Up pressed";
+
+	if (route[0].call_made == -1)
+		return "Call button Down pressed";
+
+	return "";
 }
 
 }

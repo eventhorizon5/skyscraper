@@ -96,12 +96,12 @@ class DebugPanel: public wxFrame
 		static const long ID_bConsole;
 		static const long ID_bObjectInfo;
 		static const long ID_bActionViewer;
+		static const long ID_bPeopleManager;
 		static const long ID_bSkyControl;
 		static const long ID_bProfiler;
 		static const long ID_bKeys;
 		static const long ID_bTextures;
 		static const long ID_bFloorInfo;
-		static const long ID_bPeopleManager;
 		static const long ID_PANEL1;
 		//*)
 		class Timer : public wxTimer

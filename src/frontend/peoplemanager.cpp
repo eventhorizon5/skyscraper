@@ -49,6 +49,7 @@ const long PeopleManager::ID_bStop = wxNewId();
 const long PeopleManager::ID_STATICLINE1 = wxNewId();
 const long PeopleManager::ID_STATICLINE2 = wxNewId();
 const long PeopleManager::ID_STATICLINE3 = wxNewId();
+const long PeopleManager::ID_tStatus = wxNewId();
 const long PeopleManager::ID_chkRandom = wxNewId();
 const long PeopleManager::ID_chkService = wxNewId();
 const long PeopleManager::ID_bNew = wxNewId();
@@ -114,7 +115,9 @@ PeopleManager::PeopleManager(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	FlexGridSizer2->Add(StaticLine2, 1, wxTOP|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticLine3 = new wxStaticLine(this, ID_STATICLINE3, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE3"));
 	FlexGridSizer2->Add(StaticLine3, 1, wxTOP|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer3->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer3->Add(FlexGridSizer2, 1, wxTOP|wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tStatus = new wxTextCtrl(this, ID_tStatus, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tStatus"));
+	FlexGridSizer3->Add(tStatus, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer2 = new wxBoxSizer(wxVERTICAL);
 	chkRandom = new wxCheckBox(this, ID_chkRandom, _("Random Activity"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkRandom"));
 	chkRandom->SetValue(false);
@@ -220,6 +223,12 @@ void PeopleManager::Loop()
 	{
 		dest_floor = person->GetDestinationFloor();
 		tDestination->SetValue(wxVariant((int)dest_floor).GetString());
+	}
+
+	if (person->GetStatus() != status)
+	{
+		status = person->GetStatus();
+		tStatus->SetValue(wxString::FromAscii(status.c_str()));
 	}
 }
 
