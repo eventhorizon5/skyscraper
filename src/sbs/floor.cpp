@@ -1490,7 +1490,9 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 		{
 			std::string type = SetCaseCopy(elev->Type, false);
 			bool serviced = elev->IsServicedFloor(DestinationFloor);
-			if (serviced == true && type == ElevatorType)
+			CallButton *button = GetCallButton(elev->Number);
+
+			if (serviced == true && type == ElevatorType && button)
 			{
 				ElevatorRoute* route = new ElevatorRoute(elev, DestinationFloor);
 				return route;
