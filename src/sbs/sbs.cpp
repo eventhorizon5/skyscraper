@@ -2887,6 +2887,7 @@ std::string SBS::DumpState()
 	//dump basic simulator state to a string
 
 	std::string output = "SBS version: " + version + "\n";
+	output.append("Instance number: " + ToString(InstanceNumber) + "\n");
 	output.append("Building Name: " + BuildingName + "\n");
 	output.append("Building Filename: " + BuildingFilename + "\n");
 	output.append("Building Version: " + BuildingVersion + "\n");
