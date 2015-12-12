@@ -277,6 +277,7 @@ void Person::Stop()
 			delete route[i].elevator_route;
 		}
 	}
+	route.clear();
 }
 
 std::string Person::GetStatus()
