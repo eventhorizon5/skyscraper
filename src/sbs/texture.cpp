@@ -262,7 +262,7 @@ bool SBS::UnloadMaterial(const std::string &name, const std::string &group)
 {
 	//unloads a material
 
-	Ogre::ResourcePtr wrapper = GetMaterialByName(ToString(InstanceNumber) + ":" + name, group);
+	Ogre::ResourcePtr wrapper = GetMaterialByName(name, group);
 	if (wrapper.isNull())
 		return false;
 	Ogre::MaterialManager::getSingleton().remove(wrapper);
