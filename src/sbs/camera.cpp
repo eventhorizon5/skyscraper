@@ -1352,6 +1352,11 @@ bool Camera::Attach(Ogre::Camera *camera)
 		SetToStartRotation();
 		FirstAttach = true;
 	}
+	else
+	{
+		//re-apply rotation
+		SetRotation(Rotation);
+	}
 
 	Refresh();
 
