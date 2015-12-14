@@ -48,6 +48,7 @@ SoundSystem::SoundSystem(Object *parent, FMOD::System *fmodsystem) : Object(pare
 	listener_up.x = 0;
 	listener_up.y = 0;
 	listener_up.z = 0;
+	Position = Ogre::Vector3::ZERO;
 
 	//set up sound options (mainly to set sound distance factor to feet instead of meters)
 	soundsys->set3DSettings(1.0f, 3.28f, 1.0f);
@@ -68,7 +69,8 @@ void SoundSystem::Loop()
 		ProfileManager::Start_Profile("FMOD");
 
 	//sync sound listener object to camera position
-	SetListenerPosition(sbs->camera->GetPosition());
+	if (sbs->camera->IsActive() == true)
+		SetListenerPosition(sbs->camera->GetPosition());
 
 	//set direction of listener to camera's direction
 	Ogre::Vector3 front, top;
@@ -94,14 +96,17 @@ void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
 	//calculate sound velocity
 	if (timing > 0)
 	{
-		listener_velocity.x = (position.x - listener_position.x) * (1000 / timing);
-		listener_velocity.y = (position.y - listener_position.y) * (1000 / timing);
-		listener_velocity.z = (position.z - listener_position.z) * (1000 / timing);
+		listener_velocity.x = (position.x - Position.x) * (1000 / timing);
+		listener_velocity.y = (position.y - Position.y) * (1000 / timing);
+		listener_velocity.z = (position.z - Position.z) * (1000 / timing);
 	}
 
-	listener_position.x = position.x;
-	listener_position.y = position.y;
-	listener_position.z = position.z;
+	Position = position;
+	Ogre::Vector3 offset = sbs->camera->GetSceneNode()->GetEngineOffset();
+
+	listener_position.x = position.x + offset.x;
+	listener_position.y = position.y + offset.y;
+	listener_position.z = position.z + offset.z;
 
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }

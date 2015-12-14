@@ -84,6 +84,8 @@ private:
 
 	//sound data array
 	std::vector<SoundData*> sounds;
+
+	Ogre::Vector3 Position;
 };
 
 }
