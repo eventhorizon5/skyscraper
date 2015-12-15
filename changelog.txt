@@ -1,5 +1,38 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-new People Manager dialog
+-script errors now show the engine context number of the error, if more than one engine is running
+-script errors now show the building filename instead of the section number, which isn't needed due to the script context string
+-new Engine Contexts system, along with the Engine Manager dialog, which allows multiple buildings to be loaded and run in parallel
+-elevators should continue checking elevator availability in a QueuePending stage, if the elevator is on the same floor as the call, and the doors are open or opening/closing.  This lets the elevator take the call and re-open in that situation
+-objects without parent scenenodes should attach to engine scenenode, not scene root node
+-moved scenenode-related code out into separate SceneNode object
+-added OgreBullet project files to main solution, to simplify building process on Windows.  The separate OgreBullet solution is no longer needed.
+-make sure building is specified before trying to load building
+-call buttons should update arrival notification if elevator is on same floor and opened
+-call buttons should reprocess call if the elevator that is handling the active call becomes unavailable during movement
+-Random Activity now uses the new people code, and the old functionality has been removed
+-added routing functions, for Person object to find an elevator route to a floor
+-have elevators notify call buttons on arrival
+-added object validity functions
+-switched to FMOD Studio for sound
+-ToRemote/ToLocal functions should support turning off the Z-flip (for rescaling only)
+-created ObjectBase class for lightweight objects (currently Actions and Polygons)
+-removed singleton pointer and properly propagate and store engine pointer, through object parent parameters
+-added Person object
+-added elevator type parameter, and added to main building files
+-added ShowLoadedSounds and ShowPlayingSounds script commands
+-cache file listing in VerifyFile function, to fix a major performance bottleneck when a building is missing lots of files along with a large data folder existing
+-print FMOD version number on initialization
+-new Sound System code, which provides more efficient sound management
+-timers and meshes should be permanent by default
+-call buttons should reject call if related button does not exist
+-added Cloudy and Overcast sky types
+-have Caelum use SBS scaling factor
+-converted elevator door movement to relative positioning; also fixes an issue with vertically-moving shaft doors from working properly
+-cleanups for HitBeam function
+-converted elevator door movement to relative positioning; also fixes an issue with vertically-moving shaft doors from working properly
+-sound support should not be switched off when IntroMusic is set to false in the INI file
 -fixed console reporting of missing files
 -added sound unload function
 -don't load main elevator sounds on first loop run, load right before playing
