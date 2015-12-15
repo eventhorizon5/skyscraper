@@ -162,16 +162,6 @@ bool EngineContext::Load(std::string filename)
 
 	loading = true;
 
-	//refresh console to fix banner message on Linux
-	frontend->RefreshConsole();
-
-	//Pause for 2 seconds
-#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-	Sleep(2000);
-#else
-	sleep(2);
-#endif
-
 	//initialize simulator
 	Simcore->Initialize();
 
@@ -248,6 +238,19 @@ void EngineContext::StartSim()
 	//load script processor
 	if (!processor)
 		processor = new ScriptProcessor(this);
+
+	//refresh console to fix banner message on Linux
+	frontend->RefreshConsole();
+
+	//Pause for 2 seconds
+	if (frontend->ConcurrentLoads == false)
+	{
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+		Sleep(2000);
+#else
+		sleep(2);
+#endif
+	}
 }
 
 void EngineContext::UnloadSim()
