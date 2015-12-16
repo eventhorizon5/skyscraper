@@ -4312,7 +4312,7 @@ std::string SBS::ProcessFullName(std::string name, int &instance, int &object_nu
 
 Person* SBS::GetPerson(int number)
 {
-	if (number < 0 || number > (int)PersonArray.size())
+	if (number < 0 || number > (int)PersonArray.size() - 1)
 		return 0;
 
 	return PersonArray[number];

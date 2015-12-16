@@ -176,7 +176,6 @@ void PeopleManager::Loop()
 		{
 			//if active engine has changed, refresh values
 			Simcore = active;
-			lastcount = 0;
 		}
 	}
 	else
