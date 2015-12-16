@@ -52,6 +52,7 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 	if (!start_floor || !dest_floor || start_floor == dest_floor)
 		return result;
 
+	//Direct check
 	//check all express and local elevators if they directly serve destination floor
 	{
 		ElevatorRoute *route = GetDirectRoute(start_floor, DestinationFloor, service_access);
@@ -63,7 +64,9 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 		}
 	}
 
-	//otherwise check express elevator floors, to see if any have a direct route
+
+	//Indirect checks
+	//check express (or service) elevator floors, to see if any have a direct route
 
 	if (service_access == true)
 	{
@@ -79,7 +82,8 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 		return result;
 
 
-	//check routes with two express elevators in between
+	//Recursive indirect checks
+	//check routes with two express (or service) elevators in between
 
 	if (service_access == true)
 	{
@@ -90,6 +94,15 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 	}
 
 	result = GetIndirectRoute("Express", StartingFloor, DestinationFloor, service_access, true);
+
+	if (result.empty() == false)
+		return result;
+
+
+	//if all of those failed, do more intensive checks on local elevators
+	//check to see if there's a route with a local elevator in between
+
+	result = GetIndirectRoute("Local", StartingFloor, DestinationFloor, service_access);
 
 	if (result.empty() == false)
 		return result;
