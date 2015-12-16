@@ -2125,12 +2125,16 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 			if (active_engine == engine)
 			{
 				active_engine = 0;
-				Shutdown = true; //exit to main menu if all engines have been deleted
 				if (GetEngineCount() > 0)
 					SetActiveEngine(0);
 			}
 			else if (active_engine)
 				active_engine->GetSystem()->camera->Refresh();
+
+			//exit to main menu if all engines have been deleted
+			if (engines.empty() == true)
+				Shutdown = true;
+
 			return true;
 		}
 	}
