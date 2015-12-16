@@ -201,11 +201,18 @@ void Person::ProcessRoute()
 		{
 			//if elevator has arrived at the called floor, press related floor button
 
-			Report("Pressing elevator button for floor " + ToString(floor_selection));
-
 			Elevator *elevator = sbs->GetElevator(number);
-			elevator->SelectFloor(floor_selection);
-			route[0].floor_selected = true;
+			if (elevator)
+			{
+				//wait for elevator doors to open before pressing button
+				if (elevator->AreDoorsOpen() == true)
+				{
+					Report("Pressing elevator button for floor " + ToString(floor_selection));
+
+					elevator->SelectFloor(floor_selection);
+					route[0].floor_selected = true;
+				}
+			}
 		}
 	}
 	else
