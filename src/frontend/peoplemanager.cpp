@@ -169,6 +169,8 @@ PeopleManager::~PeopleManager()
 
 void PeopleManager::Loop()
 {
+	bool reset = false;
+
 	if (skyscraper->GetActiveEngine())
 	{
 		SBS::SBS *active = skyscraper->GetActiveEngine()->GetSystem();
@@ -197,6 +199,7 @@ void PeopleManager::Loop()
 			tName->SetValue(wxString::FromAscii(person->GetName().c_str()));
 			chkRandom->SetValue(person->IsRandomActivityEnabled());
 			chkService->SetValue(person->GetServiceAccess());
+			reset = true;
 		}
 	}
 	else
@@ -212,19 +215,19 @@ void PeopleManager::Loop()
 	else
 		tRouteActive->SetValue("False");
 
-	if (person->GetFloor() != floor)
+	if (person->GetFloor() != floor || reset == true)
 	{
 		floor = person->GetFloor();
 		tFloor->SetValue(wxVariant((int)floor).GetString());
 	}
 
-	if (person->GetDestinationFloor() != dest_floor)
+	if (person->GetDestinationFloor() != dest_floor || reset == true)
 	{
 		dest_floor = person->GetDestinationFloor();
 		tDestination->SetValue(wxVariant((int)dest_floor).GetString());
 	}
 
-	if (person->GetStatus() != status)
+	if (person->GetStatus() != status || reset == true)
 	{
 		status = person->GetStatus();
 		tStatus->SetValue(wxString::FromAscii(status.c_str()));
