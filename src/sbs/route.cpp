@@ -92,10 +92,10 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 		return result;
 
 	//check routes with two elevators in between, including locals
-	result = GetIndirectRoute(StartingFloor, DestinationFloor, true, service_access, true);
+	/*result = GetIndirectRoute(StartingFloor, DestinationFloor, true, service_access, true);
 
 	if (result.empty() == false)
-		return result;
+		return result;*/
 
 	return result;
 }
