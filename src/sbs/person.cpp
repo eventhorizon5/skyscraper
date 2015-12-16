@@ -105,11 +105,15 @@ void Person::GotoFloor(int floor)
 	if (IsRouteActive() == true)
 		return;
 
-	Floor *floor_obj = sbs->GetFloor(current_floor);
-	dest_floor = floor;
-
-	if (!floor_obj || floor == current_floor)
+	//verify floors
+	if (!sbs->GetFloor(current_floor) || !sbs->GetFloor(floor))
 		return;
+
+	//make sure we're going to a different floor
+	if (floor == current_floor)
+		return;
+
+	dest_floor = floor;
 
 	Report("Heading to floor " + ToString(floor));
 
@@ -266,6 +270,9 @@ void Person::Timer::Notify()
 void Person::SetFloor(int value)
 {
 	if (IsRouteActive() == true)
+		return;
+
+	if (!sbs->GetFloor(value))
 		return;
 
 	current_floor = value;
