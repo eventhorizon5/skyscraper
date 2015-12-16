@@ -126,7 +126,7 @@ public:
 	std::vector<Sound*> GetSound(const std::string &name);
 	void SetAltitude(float altitude);
 	void ShowInfo(bool detailed = true, bool display_header = true);
-	void GetElevatorList(std::vector<int> &listing, std::string type = "");
+	void GetElevatorList(std::vector<int> &listing, bool get_locals = true, bool get_express = true, bool get_service = true);
 	void GetStairsList(std::vector<int> &listing);
 	void GetShaftList(std::vector<int> &listing);
 	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);

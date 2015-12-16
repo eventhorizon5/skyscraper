@@ -1424,20 +1424,26 @@ void Floor::ShowInfo(bool detailed, bool display_header)
 	}
 }
 
-void Floor::GetElevatorList(std::vector<int> &listing, std::string type)
+void Floor::GetElevatorList(std::vector<int> &listing, bool get_locals, bool get_express, bool get_service)
 {
 	//return a list of elevators that service this floor
-
-	SetCase(type, false);
 
 	for (int i = 1; i <= sbs->GetElevatorCount(); i++)
 	{
 		Elevator *elev = sbs->GetElevator(i);
 		if (elev)
 		{
+			std::string type = SetCaseCopy(elev->Type, false);
+
 			if (elev->IsServicedFloor(Number) == true)
 			{
-				if (type == "" || type == SetCaseCopy(elev->Type, false))
+				if (get_locals == true && type == "local")
+					listing.push_back(elev->Number);
+
+				else if (get_express == true && type == "express")
+					listing.push_back(elev->Number);
+
+				else if (get_service == true && type == "service")
 					listing.push_back(elev->Number);
 			}
 		}
