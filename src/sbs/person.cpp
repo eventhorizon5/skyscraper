@@ -298,7 +298,19 @@ std::string Person::GetStatus()
 	int floor_selection = route[0].elevator_route->floor_selection;
 
 	if (route[0].floor_selected == true && elevator)
-		return "Pressed " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+	{
+		if (elevator->AreDoorsOpen() == true)
+			return "Pressed " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+		else
+		{
+			std::string direction;
+			if (route[0].call_made == 1)
+				direction = "Up";
+			else
+				direction = "Down";
+			return direction + " to floor " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+		}
+	}
 
 	if (route[0].call_made == 1)
 		return "Call button Up pressed";
