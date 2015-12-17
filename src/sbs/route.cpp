@@ -69,11 +69,40 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 	}
 
 	//Indirect check
-	return GetIndirectRoute(checked_floors, StartingFloor, DestinationFloor, service_access, 1);
+	std::vector<ElevatorRoute*> route = GetIndirectRoute(checked_floors, StartingFloor, DestinationFloor, service_access, 1);
+
+	if (route.empty() == false)
+		return route;
+
+	//if indirect check fails, get a list of floors that are connected to the destination floor by
+	//the elevators that serve that floor, and check those floors individually to see if they are accessible
+	std::vector<int> connected = dest_floor->GetDirectFloors(false);
+
+	for (int i = 0; i < (int)connected.size(); i++)
+	{
+		checked_floors.clear();
+		route = GetIndirectRoute(checked_floors, StartingFloor, connected[i], service_access, 1);
+
+		if (route.empty() == false)
+		{
+			//append direct route
+			Floor *floor = GetFloor(connected[i]);
+			ElevatorRoute *endroute = GetDirectRoute(floor, DestinationFloor, service_access);
+
+			if (endroute)
+				route.push_back(endroute);
+			return route;
+		}
+	}
+
+	return route;
 }
 
 ElevatorRoute* SBS::GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access)
 {
+	if (!floor)
+		return 0;
+
 	ElevatorRoute *route;
 
 	if (service_access == true)

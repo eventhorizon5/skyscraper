@@ -130,6 +130,7 @@ public:
 	void GetStairsList(std::vector<int> &listing);
 	void GetShaftList(std::vector<int> &listing);
 	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
+	std::vector<int> GetDirectFloors(bool include_service);
 
 private:
 	//sound objects

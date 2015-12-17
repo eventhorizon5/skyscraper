@@ -1509,4 +1509,48 @@ ElevatorRoute* Floor::GetDirectRoute(int DestinationFloor, std::string ElevatorT
 	return 0;
 }
 
+std::vector<int> Floor::GetDirectFloors(bool include_service)
+{
+	//return a list of floors that can be directly accessed by the elevators that service this floor
+
+	std::vector<int> list, result;
+	GetElevatorList(list);
+
+	for (int i = 0; i < (int)list.size(); i++)
+	{
+		Elevator *elev = sbs->GetElevator(list[i]);
+		if (elev)
+		{
+			std::string type = SetCaseCopy(elev->Type, false);
+			if (include_service == false && type == "service")
+				continue;
+
+			for (int j = 0; j < elev->GetServicedFloorCount(); j++)
+			{
+				int floor = elev->GetServicedFloor(j);
+
+				//skip this floor
+				if (floor == Number)
+					continue;
+
+				bool found = false;
+				for (int k = 0; k < (int)result.size(); k++)
+				{
+					//make sure floor is not already in result list
+					if (result[k] == floor)
+					{
+						found = true;
+						break;
+					}
+				}
+
+				if (found == false)
+					result.push_back(floor);
+			}
+		}
+	}
+
+	return result;
+}
+
 }
