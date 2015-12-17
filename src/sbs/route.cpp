@@ -69,7 +69,7 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 	}
 
 	//Indirect check
-	return GetIndirectRoute(checked_floors, StartingFloor, DestinationFloor, service_access, 4);
+	return GetIndirectRoute(checked_floors, StartingFloor, DestinationFloor, service_access, 1);
 }
 
 ElevatorRoute* SBS::GetDirectRoute(Floor *floor, int DestinationFloor, bool service_access)
@@ -210,7 +210,7 @@ std::vector<ElevatorRoute*> SBS::GetIndirectRoute(std::vector<int> &checked_floo
 		else
 		{
 			if (locals_checked == true && recurse == true)
-				return GetIndirectRoute(checked_floors, StartingFloor, DestinationFloor, service_access, --recursion_levels);
+				return result;
 
 			//if still going, check local elevators
 
