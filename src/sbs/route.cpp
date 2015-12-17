@@ -41,8 +41,10 @@ std::vector<ElevatorRoute*> SBS::GetRouteToFloor(int StartingFloor, int Destinat
 	//get a path from a starting floor to a desination floor, as a list of elevators to ride
 	//if service_access is true, include service elevators in checks
 
-	//this function uses designated skylobbies to connect elevators;
-	//connection floors must have a type of "Lobby" or "Skylobby"
+	//these function prioritize service elevators (if specified) and express elevators over local elevators
+
+	//for pathfinding to work properly, express and service elevators
+	//need to have their Type parameter set properly.
 
 	std::vector<ElevatorRoute*> result;
 
