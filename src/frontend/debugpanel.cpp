@@ -424,10 +424,14 @@ void DebugPanel::OnInit()
 	if (!pmanager)
 		pmanager = new PeopleManager(dp, -1);
 
-	if (timer)
-		delete timer;
+	if (!timer)
+		timer = new Timer(Simcore);
+	else
+	{
+		timer->Stop();
+		timer->Simcore = Simcore;
+	}
 
-	timer = new Timer(Simcore);
 	timer->Start(40);
 }
 
