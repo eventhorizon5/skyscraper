@@ -229,6 +229,8 @@ void Person::ProcessRoute()
 
 			if (floor_selection == dest_floor)
 				floor_status = "destination";
+			else if (route[0].call_made == 2)
+				floor_status = "recall";
 			else
 				floor_status = "intermediate";
 
@@ -256,7 +258,10 @@ void Person::ProcessRoute()
 				//if fire phase 1 mode is enabled, change floor selection to recall floor
 				//in order to exit the elevator at the recall floor
 				if (floor_selection != elevator->GetActiveRecallFloor())
+				{
 					route[0].elevator_route->floor_selection = elevator->GetActiveRecallFloor();
+					route[0].call_made = 2;
+				}
 				return;
 			}
 			else
@@ -338,12 +343,17 @@ std::string Person::GetStatus()
 			return "Pressed " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
 		else
 		{
-			std::string direction;
-			if (route[0].call_made == 1)
-				direction = "Up";
+			if (route[0].call_made != 2)
+			{
+				std::string direction;
+				if (route[0].call_made == 1)
+					direction = "Up";
+				else
+					direction = "Down";
+				return direction + " to floor " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+			}
 			else
-				direction = "Down";
-			return direction + " to floor " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+				return "Proceeding to recall floor";
 		}
 	}
 
