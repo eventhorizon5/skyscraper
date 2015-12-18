@@ -169,21 +169,28 @@ void Person::ProcessRoute()
 	{
 		CallButton *button = floor_obj->GetCallButton(elevator->Number);
 
+		bool result = false;
+
 		if (button)
 		{
 			Report("Pressing call button for elevator " + ToString(elevator->Number));
 
 			if (floor_selection > current_floor)
 			{
-				button->Call(true);
+				result = button->Call(true);
 				route[0].call_made = 1;
 			}
 			else
 			{
-				button->Call(false);
+				result = button->Call(false);
 				route[0].call_made = -1;
 			}
 		}
+
+		//stop route if call can't be made
+		if (result == false)
+			Stop();
+
 		return;
 	}
 

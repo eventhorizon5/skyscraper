@@ -330,9 +330,15 @@ bool CallButton::Call(bool direction)
 
 	//exit if call has already been made
 	if (direction == true && UpStatus == true)
-		return ReportError("Up call has already been made");
+	{
+		Report("Up call has already been made");
+		return true;
+	}
 	if (direction == false && DownStatus == true)
-		return ReportError("Down call has already been made");
+	{
+		Report("Down call has already been made");
+		return true;
+	}
 
 	//check to make sure elevator objects are valid
 	bool isvalid = false;
