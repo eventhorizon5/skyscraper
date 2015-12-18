@@ -263,7 +263,7 @@ void Person::ProcessRoute()
 	{
 		//wait for the elevator to arrive at the selected floor
 
-		if (elevator->OnFloor == true && elevator->GetFloor() == floor_selection)
+		if (elevator->OnFloor == true && elevator->GetFloor() == floor_selection && elevator->AreDoorsOpen() == true)
 		{
 			std::string floor_status;
 
