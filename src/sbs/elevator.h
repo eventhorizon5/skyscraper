@@ -259,7 +259,7 @@ public:
 	ElevatorDoor::DoorWrapper* FinishShaftDoor(int number, int floor, bool DoorWalls = true, bool TrackWalls = true);
 	bool FinishShaftDoors(int number, bool DoorWalls = true, bool TrackWalls = true);
 	ButtonPanel* GetPanel(int index);
-	void PressFloorButton(int floor);
+	Control* GetFloorButton(int floor);
 	bool IsQueued(int floor);
 	Door* AddDoor(const std::string &open_sound, const std::string &close_sound, bool open_state, const std::string &texture, float thickness, int direction, float speed, float CenterX, float CenterZ, float width, float height, float voffset, float tw, float th);
 	Door* GetStdDoor(int number);

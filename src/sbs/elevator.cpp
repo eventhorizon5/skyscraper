@@ -4312,30 +4312,28 @@ ButtonPanel* Elevator::GetPanel(int index)
 	return PanelArray[index - 1];
 }
 
-void Elevator::PressFloorButton(int floor)
+Control* Elevator::GetFloorButton(int floor)
 {
-	//press a floor button
+	//get a floor button
 
 	if (Running == false)
 	{
 		ReportError("Elevator not running");
-		return;
+		return 0;
 	}
 
 	Control *control = 0;
 
-	if (PanelArray.size() > 0)
+	if (PanelArray.empty() == false)
 	{
 		for (int i = 0; i < (int)PanelArray.size(); i++)
 		{
 			control = PanelArray[i]->GetFloorButton(floor);
 			if (control)
-			{
-				control->Press();
-				return;
-			}
+				return control;
 		}
 	}
+	return 0;
 }
 
 bool Elevator::IsQueued(int floor)

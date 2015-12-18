@@ -221,8 +221,22 @@ void Person::ProcessRoute()
 				{
 					Report("Pressing elevator button for floor " + ToString(floor_selection));
 
-					elevator->SelectFloor(floor_selection);
-					route[0].floor_selected = true;
+					Control *control = elevator->GetFloorButton(floor_selection);
+
+					if (control)
+					{
+						if (control->IsLocked() == false)
+						{
+							//press floor button
+							control->Press();
+							route[0].floor_selected = true;
+							return;
+						}
+					}
+
+					//stop route if floor button is locked, or does not exist
+					Stop();
+					return;
 				}
 			}
 		}
