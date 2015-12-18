@@ -235,10 +235,38 @@ void Person::ProcessRoute()
 			Report("Arrived at " + floor_status + " floor " + ToString(floor_selection));
 			current_floor = floor_selection;
 
-			//erase first route entry
-			delete route[0].elevator_route;
-			route.erase(route.begin());
-			return;
+			if (elevator->FireServicePhase1 != 1)
+			{
+				//erase first route entry
+				delete route[0].elevator_route;
+				route.erase(route.begin());
+				return;
+			}
+			else
+			{
+				//if fire phase 1 is enabled, stop all routes and exit
+				Stop();
+				return;
+			}
+		}
+		else if (elevator->InServiceMode() == true)
+		{
+			if (elevator->FireServicePhase1 == 1)
+			{
+				//if fire phase 1 mode is enabled, change floor selection to recall floor
+				//in order to exit the elevator at the recall floor
+				if (floor_selection != elevator->GetActiveRecallFloor())
+					route[0].elevator_route->floor_selection = elevator->GetActiveRecallFloor();
+				return;
+			}
+			else
+			{
+				//otherwise exit at current floor and try another elevator
+				current_floor = elevator->GetFloor();
+				route[0].floor_selected = false;
+				route[0].call_made = 0;
+				return;
+			}
 		}
 	}
 }

@@ -329,6 +329,7 @@ public:
 	void ResetDoorState(int number = 0);
 	bool PeakWaiting();
 	bool OnRecallFloor();
+	int GetActiveRecallFloor();
 	std::vector<Floor*> GetLobbies();
 	bool IsStopped();
 

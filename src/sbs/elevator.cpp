@@ -5921,7 +5921,17 @@ bool Elevator::OnRecallFloor()
 			return true;
 	}
 
-	return 0;
+	return false;
+}
+
+int Elevator::GetActiveRecallFloor()
+{
+	//returns floor number of recall floor that's available
+
+	if (RecallUnavailable == true)
+		return RecallFloorAlternate;
+
+	return RecallFloor;
 }
 
 std::vector<Floor*> Elevator::GetLobbies()
