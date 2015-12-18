@@ -2628,7 +2628,7 @@ bool Elevator::EnableACP(bool value)
 	{
 		if (sbs->Verbose)
 			ReportError("EnableACP: mode is the same");
-		return false;
+		return true;
 	}
 
 	if (value == true)
@@ -2663,7 +2663,7 @@ bool Elevator::EnableUpPeak(bool value)
 	{
 		if (sbs->Verbose)
 			ReportError("EnableUpPeak: mode is the same");
-		return false;
+		return true;
 	}
 
 	if (value == true)
@@ -2711,7 +2711,7 @@ bool Elevator::EnableDownPeak(bool value)
 	{
 		if (sbs->Verbose)
 			ReportError("EnableDownPeak: mode is the same");
-		return false;
+		return true;
 	}
 
 	if (value == true)
@@ -2759,7 +2759,7 @@ bool Elevator::EnableIndependentService(bool value)
 	{
 		if (sbs->Verbose)
 			ReportError("EnableIndependentService: mode is the same");
-		return false;
+		return true;
 	}
 
 	if (value == true)
@@ -2805,7 +2805,7 @@ bool Elevator::EnableInspectionService(bool value)
 	{
 		if (sbs->Verbose)
 			ReportError("EnableInspectionService: mode is the same");
-		return false;
+		return true;
 	}
 
 	if (value == true)
@@ -2880,7 +2880,7 @@ bool Elevator::EnableFireService1(int value)
 	{
 		if (sbs->Verbose)
 			ReportError("EnableFireService1: mode is the same");
-		return false;
+		return true;
 	}
 
 	//exit if in inspection mode
@@ -2972,7 +2972,7 @@ bool Elevator::EnableFireService2(int value, bool force)
 	{
 		if (sbs->Verbose)
 			ReportError("EnableFireService2: mode is the same");
-		return false;
+		return true;
 	}
 
 	if (value >= 0 && value <= 2)
