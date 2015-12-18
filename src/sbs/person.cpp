@@ -189,7 +189,10 @@ void Person::ProcessRoute()
 
 		//stop route if call can't be made
 		if (result == false)
+		{
+			Report("Can't press call button for elevator " +  ToString(elevator->Number));
 			Stop();
+		}
 
 		return;
 	}
@@ -216,6 +219,9 @@ void Person::ProcessRoute()
 			Elevator *elevator = sbs->GetElevator(number);
 			if (elevator)
 			{
+				//have elevator route use arrived elevator
+				route[0].elevator_route->elevator = elevator;
+
 				//wait for elevator doors to open before pressing button
 				if (elevator->AreDoorsOpen() == true)
 				{
@@ -235,6 +241,7 @@ void Person::ProcessRoute()
 					}
 
 					//stop route if floor button is locked, or does not exist
+					Report("Can't press elevator button for floor " + ToString(floor_selection));
 					Stop();
 					return;
 				}
@@ -275,14 +282,13 @@ void Person::ProcessRoute()
 				//erase first route entry
 				delete route[0].elevator_route;
 				route.erase(route.begin());
-				return;
 			}
 			else
 			{
 				//if fire phase 1 is enabled, stop all routes and exit
 				Stop();
-				return;
 			}
+			return;
 		}
 		else if (elevator->InServiceMode() == true)
 		{
@@ -295,7 +301,6 @@ void Person::ProcessRoute()
 					route[0].elevator_route->floor_selection = elevator->GetActiveRecallFloor();
 					route[0].call_made = 2;
 				}
-				return;
 			}
 			else
 			{
@@ -303,8 +308,8 @@ void Person::ProcessRoute()
 				current_floor = elevator->GetFloor();
 				route[0].floor_selected = false;
 				route[0].call_made = 0;
-				return;
 			}
+			return;
 		}
 	}
 }
