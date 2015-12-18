@@ -54,14 +54,11 @@ public:
 	~ButtonPanel();
 	Control* AddButton(const std::string &sound, const std::string &texture, const std::string &texture_lit, int row, int column, const std::string &type, float width, float height, float hoffset = 0, float voffset = 0);
 	Control* AddControl(const std::string &sound, int row, int column, float bwidth, float bheight, float hoffset, float voffset, std::vector<std::string> &action_names, std::vector<std::string> &textures);
-	void DeleteButton(int row, int column);
-	void Press(int index);
 	void Enabled(bool value);
 	bool AddWall(const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height1, float height2, float voffset1, float voffset2, float tw, float th);
-	Control* GetControl(int index);
 	void ChangeLight(int floor, bool value);
 	void ChangeAllLights(bool value);
-	int GetFloorButtonIndex(int floor);
+	Control* GetFloorButton(int floor);
 	void RemoveControl(Control *control);
 
 private:

@@ -4322,16 +4322,16 @@ void Elevator::PressFloorButton(int floor)
 		return;
 	}
 
-	int index = 0;
+	Control *control = 0;
 
 	if (PanelArray.size() > 0)
 	{
 		for (int i = 0; i < (int)PanelArray.size(); i++)
 		{
-			index = PanelArray[i]->GetFloorButtonIndex(floor);
-			if (index >= 0)
+			control = PanelArray[i]->GetFloorButton(floor);
+			if (control)
 			{
-				PanelArray[i]->Press(index);
+				control->Press();
 				return;
 			}
 		}

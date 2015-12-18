@@ -237,23 +237,6 @@ Control* ButtonPanel::AddControl(const std::string &sound, int row, int column, 
 	return control;
 }
 
-void ButtonPanel::DeleteButton(int row, int column)
-{
-
-}
-
-void ButtonPanel::Press(int index)
-{
-	//Press selected button
-
-	//exit if index is invalid
-	if (index < 0 || index > (int)controls.size() - 1)
-		return;
-
-	//press button
-	controls[index]->Press();
-}
-
 void ButtonPanel::Enabled(bool value)
 {
 	//enable or disable button panel
@@ -277,12 +260,6 @@ bool ButtonPanel::AddWall(const std::string &name, const std::string &texture, f
 	return sbs->AddWallMain(this, ButtonPanelMesh, name, texture, thickness, x1, z1, x2, z2, height1, height2, voffset1, voffset2, tw, th, true);
 }
 
-Control* ButtonPanel::GetControl(int index)
-{
-	//return pointer to control object
-	return controls[index];
-}
-
 void ButtonPanel::ChangeLight(int floor, bool value)
 {
 	//change light status for all buttons that call the specified floor
@@ -303,21 +280,21 @@ void ButtonPanel::ChangeAllLights(bool value)
 	}
 }
 
-int ButtonPanel::GetFloorButtonIndex(int floor)
+Control* ButtonPanel::GetFloorButton(int floor)
 {
-	//return the index number of a floor button
+	//return the first control found for the specified floor
 
 	std::string floornum = ToString(floor);
 
-	if (controls.size() > 0)
+	if (controls.empty() == false)
 	{
 		for (int i = 0; i < (int)controls.size(); i++)
 		{
-			if (controls[i]->FindActionPosition(floornum))
-				return i;
+			if (controls[i]->FindActionPosition(floornum) > 0)
+				return controls[i];
 		}
 	}
-	return -1;
+	return 0;
 }
 
 void ButtonPanel::RemoveControl(Control *control)
