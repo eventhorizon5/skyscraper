@@ -372,7 +372,7 @@ bool Control::Press(bool reverse)
 
 	//exit without changing position if floor button is currently selected
 	if (name == "off" && IsNumeric(GetSelectPositionAction()) == true)
-		return false;
+		return true;
 
 	//change to next control position
 	if (reverse == false)
