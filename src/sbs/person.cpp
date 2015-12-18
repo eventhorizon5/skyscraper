@@ -313,6 +313,11 @@ void Person::ProcessRoute()
 			}
 			return;
 		}
+		else if (elevator->IsMoving == true)
+		{
+			if (current_floor != elevator->GetFloor())
+				current_floor = elevator->GetFloor();
+		}
 	}
 }
 
