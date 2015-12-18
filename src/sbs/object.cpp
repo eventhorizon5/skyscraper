@@ -367,7 +367,8 @@ void Object::NotifyMove(bool parent)
 		return;
 
 	//sync positioning, for child scene nodes
-	node->Update();
+	if (parent == true)
+		node->Update();
 
 	OnMove(parent);
 	NotifyChildren(true, false);
@@ -382,7 +383,8 @@ void Object::NotifyRotate(bool parent)
 		return;
 
 	//sync positioning, for child scene nodes
-	node->Update();
+	if (parent == true)
+		node->Update();
 
 	OnRotate(parent);
 	NotifyChildren(false, true);

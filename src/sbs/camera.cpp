@@ -1094,9 +1094,15 @@ void Camera::Sync()
 	Ogre::Quaternion orientation = GetOrientation();
 
 	if (prev_position != position)
+	{
+		GetSceneNode()->Update();
 		NotifyMove();
+	}
 	if (prev_orientation != orientation)
+	{
+		GetSceneNode()->Update();
 		NotifyRotate();
+	}
 
 	prev_position = position;
 	prev_orientation = orientation;
