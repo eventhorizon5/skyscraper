@@ -198,8 +198,9 @@ void Person::ProcessRoute()
 		if (!button)
 			return;
 
+		bool call_direction = (floor_selection > current_floor);
 		bool status = button->GetElevatorArrived(number, direction);
-		bool direction_valid = ((floor_selection > current_floor && direction == true) || (floor_selection < current_floor && direction == false) || floor_selection == current_floor);
+		bool direction_valid = (call_direction == direction);
 
 		if (status == true && direction_valid == true)
 		{
@@ -217,6 +218,17 @@ void Person::ProcessRoute()
 					route[0].floor_selected = true;
 				}
 			}
+		}
+		else if (status == false)
+		{
+			//if call has become invalid, stop route
+			if ((call_direction == true && button->GetUpStatus() == false) ||
+					(call_direction == false && button->GetDownStatus() == false))
+			{
+				Stop();
+				return;
+			}
+
 		}
 	}
 	else
