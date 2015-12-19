@@ -5979,6 +5979,11 @@ void Elevator::CancelHallCall(int floor, int direction)
 	}
 
 	DeleteRoute(floor, direction);
+
+	//if queue is empty, stop elevator
+	if ((direction == 1 && UpQueue.size() == 0) ||
+			(direction == -1 && DownQueue.size() == 0))
+		Stop();
 }
 
 }
