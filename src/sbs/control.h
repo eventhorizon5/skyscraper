@@ -64,6 +64,7 @@ public:
 	int GetKeyID();
 	void RemoveAction(Action *action);
 	bool IsEnabled() { return is_enabled; }
+	bool GetLightStatus() { return light_status; }
 
 private:
 	MeshObject* ControlMesh; //control mesh object
