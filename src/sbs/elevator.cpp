@@ -5964,4 +5964,20 @@ bool Elevator::IsStopped()
 	return (IsMoving == false && OnFloor == false && FinishedMove == true);
 }
 
+void Elevator::CancelHallCall(int floor, int direction)
+{
+	//delete a route if the route is a hall call response, and no floor button has been pressed
+
+	Control *control = GetFloorButton(floor);
+
+	if (control)
+	{
+		//exit if a floor button has been pressed
+		if (control->GetLightStatus() == true)
+			return;
+	}
+
+	DeleteRoute(floor, direction);
+}
+
 }

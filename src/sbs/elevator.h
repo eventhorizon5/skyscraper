@@ -332,6 +332,7 @@ public:
 	int GetActiveRecallFloor();
 	std::vector<Floor*> GetLobbies();
 	bool IsStopped();
+	void CancelHallCall(int floor, int direction);
 
 private:
 
