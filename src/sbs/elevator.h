@@ -298,7 +298,7 @@ public:
 	void SetFloor(int floor);
 	void OnInit();
 	bool GetCallButtonStatus(int floor, bool &Up, bool &Down);
-	int AvailableForCall(int floor, int direction);
+	int AvailableForCall(int floor, int direction, bool report_on_failure = true);
 	bool SelectFloor(int floor);
 	bool Check(Ogre::Vector3 position);
 	int GetNearestServicedFloor();
