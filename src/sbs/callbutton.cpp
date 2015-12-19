@@ -519,22 +519,49 @@ void CallButton::Process(int direction)
 	}
 
 	//first exit if no call button is not processing a call for the current direction
-	//or if a call has already been processed
 	if (reprocess == false)
 	{
-		if ((UpStatus == false && direction == 1) || (ProcessedUp == true && direction == 1))
-			return;
-		if ((DownStatus == false && direction == -1) || (ProcessedDown == true && direction == -1))
+		if (UpStatus == false && DownStatus == false)
+			ActiveElevator = 0;
+
+		if ((UpStatus == false && direction == 1) || (DownStatus == false && direction == -1))
 			return;
 	}
-
-	ActiveElevator = 0;
 
 	//get closest elevator
 	int closest = FindClosestElevator(direction);
 
 	//if none found, exit
 	if (closest == -1)
+		return;
+
+	//if a closer elevator has been found than the elevator actively serving the call,
+	//reprocess the call
+	if (ActiveElevator > 0 && Elevators[closest] != ActiveElevator)
+	{
+		//make sure elevator is idle before continuing
+		Elevator *newelevator = sbs->GetElevator(Elevators[closest]);
+		if (newelevator->IsIdle() == true)
+		{
+			Elevator *elevator = sbs->GetElevator(ActiveElevator);
+			if (elevator)
+				elevator->CancelHallCall(GetFloor(), direction);
+
+			if (sbs->Verbose)
+				Report("Switching to closer elevator " + ToString(newelevator->Number));
+
+			//reset processed state
+			if (direction == 1)
+				ProcessedUp = false;
+			else
+				ProcessedDown = false;
+		}
+	}
+
+	//exit if a call has already been processed
+	if (ProcessedUp == true && direction == 1)
+		return;
+	if (ProcessedDown == true && direction == -1)
 		return;
 
 	//change processed state
@@ -544,10 +571,6 @@ void CallButton::Process(int direction)
 		ProcessedDown = true;
 
 	Elevator* elevator = sbs->GetElevator(Elevators[closest]);
-
-	//if selected elevator is in a service mode, exit
-	if (elevator->InServiceMode() == true)
-		return;
 
 	if (sbs->Verbose)
 		Report("Using elevator " + ToString(elevator->Number));
@@ -742,6 +765,12 @@ int CallButton::FindClosestElevator(int direction)
 	int closest_elev = 0;
 	bool check = false;
 	int errors = 0;
+	int result = 0;
+
+	//if an elevator is already servicing the call, set recheck to true
+	bool recheck = false;
+	if (ActiveElevator > 0)
+		recheck = true;
 
 	int count = (int)Elevators.size();
 
@@ -750,7 +779,7 @@ int CallButton::FindClosestElevator(int direction)
 		return -1;
 
 	//search through elevator list
-	if (sbs->Verbose && count > 1)
+	if (sbs->Verbose && count > 1 && recheck == false)
 		Report("Finding nearest available elevator...");
 
 	//check each elevator associated with this call button to find the closest available one
@@ -759,18 +788,21 @@ int CallButton::FindClosestElevator(int direction)
 		Elevator *elevator = sbs->GetElevator(Elevators[i]);
 		if (elevator)
 		{
-			if (sbs->Verbose)
+			if (sbs->Verbose && recheck == false)
 				Report("Checking elevator " + ToString(elevator->Number));
 
 			//if elevator is closer than the previously checked one or we're starting the checks
 			if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
 			{
 				//see if elevator is available for the call
-				int result = elevator->AvailableForCall(GetFloor(), direction);
+				if (recheck == true && elevator->Number == ActiveElevator)
+					result = 1; //if rechecking elevators, consider the active one
+				else
+					result = elevator->AvailableForCall(GetFloor(), direction, !recheck);
 
 				if (result == 1) //available
 				{
-					if (sbs->Verbose && count > 1)
+					if (sbs->Verbose && count > 1 && recheck == false)
 						Report("Marking - closest so far");
 					closest = abs(elevator->GetFloor() - GetFloor());
 					closest_elev = i;

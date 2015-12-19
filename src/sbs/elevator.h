@@ -191,7 +191,7 @@ public:
 	float GetJerkPosition();
 	void SetFloorSkipText(const std::string &id);
 	std::string GetFloorSkipText();
-	bool IsServicedFloor(int floor);
+	bool IsServicedFloor(int floor, bool report = true);
 	bool InServiceMode();
 	bool Go(int floor, bool hold = false);
 	bool EnableACP(bool value);

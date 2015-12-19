@@ -2490,20 +2490,20 @@ std::string Elevator::GetFloorSkipText()
 	return FloorSkipText;
 }
 
-bool Elevator::IsServicedFloor(int floor)
+bool Elevator::IsServicedFloor(int floor, bool report)
 {
 	//returns true if floor is in serviced floor list, otherwise false
 
 	int index = GetFloorIndex(floor);
 	if (index == -1)
 	{
-		if (sbs->Verbose)
+		if (sbs->Verbose && report == true)
 			Report("Floor " + ToString(floor) + " is not a serviced floor");
 		return false;
 	}
 	else
 	{
-		if (sbs->Verbose)
+		if (sbs->Verbose && report == true)
 			Report("Floor " + ToString(floor) + " is a serviced floor");
 		return true;
 	}
@@ -5154,7 +5154,7 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 	//2 - unavailable due to a service mode or error
 
 	//if floor is a serviced floor
-	if (IsServicedFloor(floor) == true)
+	if (IsServicedFloor(floor, report_on_failure) == true)
 	{
 		//if direction doesn't go beyond elevator's range
 		if ((direction == 1 && floor < GetTopFloor()) || (direction == -1 && floor > GetBottomFloor()))
