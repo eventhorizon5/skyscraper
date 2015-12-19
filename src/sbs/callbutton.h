@@ -62,6 +62,7 @@ public:
 	bool IsEnabled() { return is_enabled; }
 	void ElevatorArrived(int number, bool direction);
 	bool GetElevatorArrived(int &number, bool &direction);
+	int FindClosestElevator(int direction);
 
 private:
 	void Process(int direction);

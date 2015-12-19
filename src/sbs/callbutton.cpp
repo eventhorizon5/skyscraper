@@ -528,81 +528,14 @@ void CallButton::Process(int direction)
 			return;
 	}
 
-	//initialize values
-	int closest = 0;
-	int closest_elev = 0;
-	bool check = false;
-	int errors = 0;
 	ActiveElevator = 0;
 
-	int count = (int)Elevators.size();
+	//get closest elevator
+	int closest = FindClosestElevator(direction);
 
-	//exit if no elevators are associated
-	if (count == 0)
+	//if none found, exit
+	if (closest == -1)
 		return;
-
-	//search through elevator list
-	if (sbs->Verbose && count > 1)
-		Report("Finding nearest available elevator...");
-
-	//check each elevator associated with this call button to find the closest available one
-	for (int i = 0; i < count; i++)
-	{
-		Elevator *elevator = sbs->GetElevator(Elevators[i]);
-		if (elevator)
-		{
-			if (sbs->Verbose)
-				Report("Checking elevator " + ToString(elevator->Number));
-
-			//if elevator is closer than the previously checked one or we're starting the checks
-			if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
-			{
-				//see if elevator is available for the call
-				int result = elevator->AvailableForCall(GetFloor(), direction);
-
-				if (result == 1) //available
-				{
-					if (sbs->Verbose && count > 1)
-						Report("Marking - closest so far");
-					closest = abs(elevator->GetFloor() - GetFloor());
-					closest_elev = i;
-					check = true;
-				}
-				else if (result == 2) //elevator won't service the call
-					errors++;
-			}
-		}
-	}
-
-	if (errors == count)
-	{
-		//exit if all elevators are in a service mode or return errors
-
-		std::string item;
-		if (count > 1)
-			item = "All elevators";
-		else
-			item = "Elevator";
-
-		Report(item + " unavailable due to service modes or errors");
-
-		//turn off button lights
-		if (direction == 1)
-			UpLight(false);
-		else
-			DownLight(false);
-
-		return;
-	}
-
-	if (check == false)
-	{
-		//exit if no elevator found
-
-		if (sbs->Verbose)
-			Report("No elevator found");
-		return;
-	}
 
 	//change processed state
 	if (direction == 1)
@@ -610,7 +543,7 @@ void CallButton::Process(int direction)
 	else
 		ProcessedDown = true;
 
-	Elevator* elevator = sbs->GetElevator(Elevators[closest_elev]);
+	Elevator* elevator = sbs->GetElevator(Elevators[closest]);
 
 	//if selected elevator is in a service mode, exit
 	if (elevator->InServiceMode() == true)
@@ -800,6 +733,86 @@ bool CallButton::GetElevatorArrived(int &number, bool &direction)
 	if (number > -1)
 		return true;
 	return false;
+}
+
+int CallButton::FindClosestElevator(int direction)
+{
+	//initialize values
+	int closest = 0;
+	int closest_elev = 0;
+	bool check = false;
+	int errors = 0;
+
+	int count = (int)Elevators.size();
+
+	//exit if no elevators are associated
+	if (count == 0)
+		return -1;
+
+	//search through elevator list
+	if (sbs->Verbose && count > 1)
+		Report("Finding nearest available elevator...");
+
+	//check each elevator associated with this call button to find the closest available one
+	for (int i = 0; i < count; i++)
+	{
+		Elevator *elevator = sbs->GetElevator(Elevators[i]);
+		if (elevator)
+		{
+			if (sbs->Verbose)
+				Report("Checking elevator " + ToString(elevator->Number));
+
+			//if elevator is closer than the previously checked one or we're starting the checks
+			if (abs(elevator->GetFloor() - GetFloor()) < closest || check == false)
+			{
+				//see if elevator is available for the call
+				int result = elevator->AvailableForCall(GetFloor(), direction);
+
+				if (result == 1) //available
+				{
+					if (sbs->Verbose && count > 1)
+						Report("Marking - closest so far");
+					closest = abs(elevator->GetFloor() - GetFloor());
+					closest_elev = i;
+					check = true;
+				}
+				else if (result == 2) //elevator won't service the call
+					errors++;
+			}
+		}
+	}
+
+	if (errors == count)
+	{
+		//exit if all elevators are in a service mode or return errors
+
+		std::string item;
+		if (count > 1)
+			item = "All elevators";
+		else
+			item = "Elevator";
+
+		Report(item + " unavailable due to service modes or errors");
+
+		//turn off button lights
+		if (direction == 1)
+			UpLight(false);
+		else
+			DownLight(false);
+
+		return -1;
+	}
+
+	if (check == false)
+	{
+		//exit if no elevator found
+
+		if (sbs->Verbose)
+			Report("No elevator found");
+		return -1;
+	}
+
+	return closest_elev;
 }
 
 }
