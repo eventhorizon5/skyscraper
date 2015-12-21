@@ -722,6 +722,8 @@ bool Elevator::DeleteRoute(int floor, int direction)
 			DownQueueEmpty = true;
 	}
 
+	HandleDequeue(direction);
+
 	//turn off button lights
 	if (sbs->Verbose)
 		Report("DeleteRoute: turning off button lights for floor " + ToString(floor));
@@ -4024,12 +4026,14 @@ void Elevator::ResetQueue(bool up, bool down)
 		if (sbs->Verbose)
 			Report("QueueReset: resetting up queue");
 		UpQueue.clear();
+		HandleDequeue(1);
 	}
 	if (down == true)
 	{
 		if (sbs->Verbose)
 			Report("QueueReset: resetting down queue");
 		DownQueue.clear();
+		HandleDequeue(-1);
 	}
 
 	ResetLights();
@@ -5979,11 +5983,26 @@ void Elevator::CancelHallCall(int floor, int direction)
 	}
 
 	DeleteRoute(floor, direction);
+}
 
-	//if queue is empty, stop elevator
-	if ((direction == 1 && UpQueue.size() == 0) ||
-			(direction == -1 && DownQueue.size() == 0))
-		Stop();
+void Elevator::HandleDequeue(int direction)
+{
+	//handle elevator behavior on dequeue
+
+	//if active queue is empty, stop elevator
+	if (MoveElevator == true && EmergencyStop == 0)
+	{
+		if ((direction == 1 && UpQueue.size() == 0) ||
+				(direction == -1 && DownQueue.size() == 0))
+			Stop();
+	}
+
+	//reset active call status if queues are empty
+	if (DownQueue.empty() == true && UpQueue.empty() == true)
+	{
+		ActiveCallFloor = 0;
+		ActiveCallDirection = 0;
+	}
 }
 
 }

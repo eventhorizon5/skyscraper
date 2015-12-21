@@ -404,6 +404,7 @@ private:
 	void PlayStartingSounds();
 	void PlayStoppingSounds(bool emergency = false);
 	void PlayMovingSounds();
+	void HandleDequeue(int direction);
 
 	//sound objects
 	Sound *carsound;
