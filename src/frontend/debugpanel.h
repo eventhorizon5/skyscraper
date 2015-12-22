@@ -105,6 +105,7 @@ class DebugPanel: public wxFrame
 		static const long ID_PANEL1;
 		//*)
 		void EnableTimer(bool value);
+		void Loop();
 		class Timer : public wxTimer
 		{
 			public:

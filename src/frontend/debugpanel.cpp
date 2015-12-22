@@ -343,27 +343,32 @@ DebugPanel::~DebugPanel()
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)
 {
-	Simcore->camera->EnableCollisions(chkCollisionDetection->GetValue());
+	if (Simcore)
+		Simcore->camera->EnableCollisions(chkCollisionDetection->GetValue());
 }
 
 void DebugPanel::On_chkFrameLimiter_Click(wxCommandEvent& event)
 {
-	Simcore->FrameLimiter = chkFrameLimiter->GetValue();
+	if (Simcore)
+		Simcore->FrameLimiter = chkFrameLimiter->GetValue();
 }
 
 void DebugPanel::On_chkProcessElevators_Click(wxCommandEvent& event)
 {
-	Simcore->ProcessElevators = chkProcessElevators->GetValue();
+	if (Simcore)
+		Simcore->ProcessElevators = chkProcessElevators->GetValue();
 }
 
 void DebugPanel::On_chkAutoShafts_Click(wxCommandEvent& event)
 {
-	Simcore->AutoShafts = chkAutoShafts->GetValue();
+	if (Simcore)
+		Simcore->AutoShafts = chkAutoShafts->GetValue();
 }
 
 void DebugPanel::On_bFloorList_Click(wxCommandEvent& event)
 {
-	Simcore->ShowFloorList();
+	if (Simcore)
+		Simcore->ShowFloorList();
 }
 
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
@@ -435,12 +440,12 @@ void DebugPanel::OnInit()
 	EnableTimer(true);
 }
 
-void DebugPanel::Timer::Notify()
+void DebugPanel::Loop()
 {
 	if (skyscraper->GetActiveEngine())
 	{
 		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
-			dp->OnInit(); //reinitialize if active engine has changed
+			OnInit(); //reinitialize if active engine has changed
 	}
 	else
 		return;
@@ -449,25 +454,25 @@ void DebugPanel::Timer::Notify()
 
 	if (dp)
 	{
-		dp->t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
-		dp->t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
-		dp->t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID.c_str()) + wxT(")"));
-		dp->t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName().c_str()));
-		dp->t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
-		dp->t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
-		dp->t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
+		t_camerap->SetLabel(TruncateNumber(Simcore->camera->GetPosition().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetPosition().z, 2));
+		t_rotation->SetLabel(TruncateNumber(Simcore->camera->GetRotation().x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->GetRotation().z, 2));
+		t_camerafloor->SetLabel(wxVariant((long)Simcore->camera->CurrentFloor).GetString() + wxT(" (") + wxString::FromAscii(Simcore->camera->CurrentFloorID.c_str()) + wxT(")"));
+		t_object->SetLabel(wxString::FromAscii(Simcore->camera->GetClickedMeshName().c_str()));
+		t_framerate->SetLabel(TruncateNumber(Simcore->FPS, 2));
+		t_collision->SetLabel(wxString::FromAscii(Simcore->camera->LastHitMesh.c_str()));
+		t_clickposition->SetLabel(TruncateNumber(Simcore->camera->HitPosition.x, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.y, 2) + wxT(", ") + TruncateNumber(Simcore->camera->HitPosition.z, 2));
 		if (floor)
-			dp->t_floorname->SetLabel(wxString::FromAscii(floor->Name.c_str()));
+			t_floorname->SetLabel(wxString::FromAscii(floor->Name.c_str()));
 
 		if (Simcore->GetElevatorCount() > 0)
 		{
-			dp->bEditElevator->Enable(true);
-			dp->t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
+			bEditElevator->Enable(true);
+			t_elevnumber->SetLabel(wxVariant((long)Simcore->ElevatorNumber).GetString());
 			if (Simcore->GetElevator(Simcore->ElevatorNumber))
-				dp->t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
+				t_elevfloor->SetLabel(wxVariant((long)Simcore->GetElevator(Simcore->ElevatorNumber)->GetFloor()).GetString());
 		}
 		else
-			dp->bEditElevator->Enable(false);
+			bEditElevator->Enable(false);
 	}
 
 	if (ee)
@@ -536,6 +541,11 @@ void DebugPanel::Timer::Notify()
 	}
 }
 
+void DebugPanel::Timer::Notify()
+{
+	dp->Loop();
+}
+
 wxString TruncateNumber(float value, int decimals)
 {
 	std::string number = dp->Simcore->TruncateNumber(value, decimals);
@@ -555,12 +565,14 @@ wxString TruncateNumber(double value, int decimals)
 void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)
 {
 	//enables or disables gravity
-	Simcore->camera->EnableGravity(chkGravity->GetValue());
+	if (Simcore)
+		Simcore->camera->EnableGravity(chkGravity->GetValue());
 }
 
 void DebugPanel::On_chkAutoStairs_Click(wxCommandEvent& event)
 {
-	Simcore->AutoStairs = chkAutoStairs->GetValue();
+	if (Simcore)
+		Simcore->AutoStairs = chkAutoStairs->GetValue();
 }
 
 void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
@@ -597,7 +609,8 @@ void DebugPanel::On_bConsole_Click(wxCommandEvent& event)
 
 void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
 {
-	Simcore->Verbose = chkVerbose->GetValue();
+	if (Simcore)
+		Simcore->Verbose = chkVerbose->GetValue();
 }
 
 void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
@@ -612,7 +625,8 @@ void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 
 void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
 {
-	Simcore->EnableRandomActivity(chkRandom->GetValue());
+	if (Simcore)
+		Simcore->EnableRandomActivity(chkRandom->GetValue());
 }
 
 void DebugPanel::On_bProfiler_Click(wxCommandEvent& event)
@@ -635,16 +649,21 @@ void DebugPanel::On_bActionViewer_Click(wxCommandEvent& event)
 
 void DebugPanel::On_bKeys_Click(wxCommandEvent& event)
 {
-	Simcore->ListKeys();
+	if (Simcore)
+		Simcore->ListKeys();
 }
 
 void DebugPanel::On_bTextures_Click(wxCommandEvent& event)
 {
-	Simcore->Report("\n" + Simcore->ListTextures(true));
+	if (Simcore)
+		Simcore->Report("\n" + Simcore->ListTextures(true));
 }
 
 void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
 {
+	if (!Simcore)
+		return;
+
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);
 
 	if (floor)
