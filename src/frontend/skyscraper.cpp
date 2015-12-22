@@ -125,6 +125,7 @@ bool Skyscraper::OnInit(void)
 	active_engine = 0;
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
+	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
@@ -271,6 +272,7 @@ MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaul
 	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);
+	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
 }
 
 MainScreen::~MainScreen()
