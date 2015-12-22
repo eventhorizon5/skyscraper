@@ -109,9 +109,10 @@ class DebugPanel: public wxFrame
 		class Timer : public wxTimer
 		{
 			public:
-			Timer(SBS::SBS *engine) { Simcore = engine; };
+			Timer(DebugPanel* parent, SBS::SBS *engine) { dp = parent; Simcore = engine; };
 			virtual void Notify();
 			SBS::SBS *Simcore;
+			DebugPanel* dp;
 		};
 		Timer *timer;
 		SBS::SBS *Simcore;

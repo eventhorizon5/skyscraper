@@ -49,7 +49,6 @@
 
 namespace Skyscraper {
 
-DebugPanel *dp; //self pointer
 MeshControl *mc;
 editelevator *ee;
 CameraControl *cc;
@@ -278,7 +277,6 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bTextures,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bTextures_Click);
 	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	//*)
-	dp = this;
 	Simcore = 0;
 	mc = 0;
 	ee = 0;
@@ -374,7 +372,7 @@ void DebugPanel::On_bFloorList_Click(wxCommandEvent& event)
 void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
 {
 	if (!mc)
-		mc = new MeshControl(dp, -1);
+		mc = new MeshControl(this, -1);
 
 	mc->CenterOnScreen();
 	mc->Show();
@@ -383,7 +381,7 @@ void DebugPanel::On_bMeshControl_Click(wxCommandEvent& event)
 void DebugPanel::On_bEditElevator_Click(wxCommandEvent& event)
 {
 	if (!ee)
-		ee = new editelevator(dp, -1);
+		ee = new editelevator(this, -1);
 
 	ee->CenterOnScreen();
 	ee->Show();
@@ -407,10 +405,11 @@ void DebugPanel::OnInit()
 	chkRandom->SetValue(Simcore->RandomActivity);
 
 	if (!timer)
-		timer = new Timer(Simcore);
+		timer = new Timer(this, Simcore);
 	else
 	{
 		EnableTimer(false);
+		timer->dp = this;
 		timer->Simcore = Simcore;
 	}
 
@@ -517,7 +516,8 @@ void DebugPanel::Loop()
 
 void DebugPanel::Timer::Notify()
 {
-	dp->Loop();
+	if (dp)
+		dp->Loop();
 }
 
 wxString TruncateNumber(float value, int decimals)
@@ -552,7 +552,7 @@ void DebugPanel::On_chkAutoStairs_Click(wxCommandEvent& event)
 void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
 {
 	if (!cc)
-		cc = new CameraControl(dp, -1);
+		cc = new CameraControl(this, -1);
 
 	cc->CenterOnScreen();
 	cc->Show();
@@ -561,7 +561,7 @@ void DebugPanel::On_bCameraControl_Click(wxCommandEvent& event)
 void DebugPanel::On_bControlReference_Click(wxCommandEvent& event)
 {
 	if (!kd)
-		kd = new KeyDialog(dp, -1);
+		kd = new KeyDialog(this, -1);
 
 	kd->CenterOnScreen();
 	kd->Show();
@@ -570,7 +570,7 @@ void DebugPanel::On_bControlReference_Click(wxCommandEvent& event)
 void DebugPanel::On_bStats_Click(wxCommandEvent& event)
 {
 	if (!stats)
-		stats = new Stats(dp, -1);
+		stats = new Stats(this, -1);
 
 	stats->CenterOnScreen();
 	stats->Show();
@@ -590,7 +590,7 @@ void DebugPanel::On_chkVerbose_Click(wxCommandEvent& event)
 void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 {
 	if (!objectinfo)
-		objectinfo = new ObjectInfo(dp, -1);
+		objectinfo = new ObjectInfo(this, -1);
 
 	objectinfo->PopulateTree();
 	objectinfo->CenterOnScreen();
@@ -606,7 +606,7 @@ void DebugPanel::On_chkRandom_Click(wxCommandEvent& event)
 void DebugPanel::On_bProfiler_Click(wxCommandEvent& event)
 {
 	if (!profiler)
-		profiler = new Profiler(dp, -1);
+		profiler = new Profiler(this, -1);
 
 	profiler->CenterOnScreen();
 	profiler->Show();
@@ -615,7 +615,7 @@ void DebugPanel::On_bProfiler_Click(wxCommandEvent& event)
 void DebugPanel::On_bActionViewer_Click(wxCommandEvent& event)
 {
 	if (!actionviewer)
-		actionviewer = new ActionViewer(dp, -1);
+		actionviewer = new ActionViewer(this, -1);
 
 	actionviewer->CenterOnScreen();
 	actionviewer->Show();
@@ -647,7 +647,7 @@ void DebugPanel::On_bFloorInfo_Click(wxCommandEvent& event)
 void DebugPanel::On_bSkyControl_Click(wxCommandEvent& event)
 {
 	if (!skycontrol)
-		skycontrol = new SkyControl(dp, -1);
+		skycontrol = new SkyControl(this, -1);
 
 	skycontrol->CenterOnScreen();
 	skycontrol->Show();
@@ -656,7 +656,7 @@ void DebugPanel::On_bSkyControl_Click(wxCommandEvent& event)
 void DebugPanel::On_bEngineManager_Click(wxCommandEvent& event)
 {
 	if (!emanager)
-		emanager = new EngineManager(dp, -1);
+		emanager = new EngineManager(this, -1);
 
 	emanager->CenterOnScreen();
 	emanager->Show();
@@ -665,7 +665,7 @@ void DebugPanel::On_bEngineManager_Click(wxCommandEvent& event)
 void DebugPanel::On_bPeopleManager_Click(wxCommandEvent& event)
 {
 	if (!pmanager)
-		pmanager = new PeopleManager(dp, -1);
+		pmanager = new PeopleManager(this, -1);
 
 	pmanager->CenterOnScreen();
 	pmanager->Show();
