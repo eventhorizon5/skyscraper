@@ -225,11 +225,7 @@ void Skyscraper::UnloadSim()
 {
 	//delete control panel object
 	if(dpanel)
-	{
-		if(dpanel->timer)
-			dpanel->timer->Stop();
 		delete dpanel;
-	}
 	dpanel = 0;
 
 	if (mCaelumSystem)
@@ -320,10 +316,8 @@ void MainScreen::OnClose(wxCloseEvent& event)
 	}
 
 	if(dpanel)
-	{
-		if(dpanel->timer)
-			dpanel->timer->Stop();
-	}
+		dpanel->EnableTimer(false);
+
 	wxGetApp().Exit();
 }
 
@@ -1780,10 +1774,8 @@ void Skyscraper::Quit()
 {
 	//exit app
 	if(dpanel)
-	{
-		if(dpanel->timer)
-			dpanel->timer->Stop();
-	}
+		dpanel->EnableTimer(false);
+
 	wxGetApp().Exit();
 }
 
@@ -2056,6 +2048,10 @@ void Skyscraper::CreateProgressDialog(const std::string &message)
 		msg += message.c_str();
 		progdialog->Update(progdialog->GetValue(), msg);
 	}
+
+	//stop control panel timer
+	if (dpanel)
+		dpanel->EnableTimer(false);
 }
 
 void Skyscraper::CloseProgressDialog()
@@ -2064,6 +2060,10 @@ void Skyscraper::CloseProgressDialog()
 	if (progdialog)
 		progdialog->Destroy();
 	progdialog = 0;
+
+	//start control panel timer
+	if (dpanel)
+		dpanel->EnableTimer(true);
 }
 
 void Skyscraper::UpdateProgress()

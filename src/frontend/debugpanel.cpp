@@ -301,7 +301,7 @@ DebugPanel::~DebugPanel()
 	//delete timer;
 	if (timer)
 	{
-		timer->Stop();
+		EnableTimer(false);
 		delete timer;
 	}
 	timer = 0;
@@ -428,11 +428,11 @@ void DebugPanel::OnInit()
 		timer = new Timer(Simcore);
 	else
 	{
-		timer->Stop();
+		EnableTimer(false);
 		timer->Simcore = Simcore;
 	}
 
-	timer->Start(40);
+	EnableTimer(true);
 }
 
 void DebugPanel::Timer::Notify()
@@ -676,6 +676,17 @@ void DebugPanel::On_bPeopleManager_Click(wxCommandEvent& event)
 		pmanager->CenterOnScreen();
 		pmanager->Show();
 	}
+}
+
+void DebugPanel::EnableTimer(bool value)
+{
+	if (!timer)
+		return;
+
+	if (value == true)
+		timer->Start(40);
+	else
+		timer->Stop();
 }
 
 }

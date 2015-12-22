@@ -104,6 +104,7 @@ class DebugPanel: public wxFrame
 		static const long ID_bFloorInfo;
 		static const long ID_PANEL1;
 		//*)
+		void EnableTimer(bool value);
 		class Timer : public wxTimer
 		{
 			public:
