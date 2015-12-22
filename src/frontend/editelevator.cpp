@@ -38,9 +38,6 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-Elevator *elevator;
-ElevatorDoor *door;
-
 //(*IdInit(editelevator)
 const long editelevator::ID_tElevator = wxNewId();
 const long editelevator::ID_sNumber = wxNewId();
@@ -1054,6 +1051,8 @@ editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 	//*)
 	Simcore = 0;
 	debugpanel = parent;
+	elevator = 0;
+	door = 0;
 	OnInit();
 }
 

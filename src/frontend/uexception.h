@@ -16,6 +16,7 @@
 namespace Skyscraper {
 
 TextWindow *twindow = 0;
+Skyscraper *skyscraper = 0;
 
 class StackWalkerToConsole : public StackWalker
 {
@@ -102,7 +103,8 @@ static LONG __stdcall CrashHandlerExceptionFilter(EXCEPTION_POINTERS* pExPtrs)
 	twindow->Show(true);
 
 	//stop simulator
-	skyscraper->Pause = true;
+	if (skyscraper)
+		skyscraper->Pause = true;
 
 	//print exception notice
 	CHAR lString[500];
@@ -161,6 +163,11 @@ static void InitUnhandledExceptionFilter()
 		PreventSetUnhandledExceptionFilter();
 		s_bUnhandledExeptionFilterSet = TRUE;
 	}
+}
+
+static void UnhandledExceptionSetRoot(Skyscraper *root)
+{
+	skyscraper = root;
 }
 
 }

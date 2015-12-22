@@ -661,6 +661,8 @@ class editelevator: public wxDialog
 		DebugPanel *debugpanel;
 		int last_door;
 		int last_elevator_count;
+		SBS::Elevator *elevator;
+		SBS::ElevatorDoor *door;
 
 		DECLARE_EVENT_TABLE()
 };

@@ -36,8 +36,6 @@
 
 namespace Skyscraper {
 
-ParameterViewer *viewer;
-
 //(*IdInit(CreateObject)
 const long CreateObject::ID_bLoadTexture = wxNewId();
 const long CreateObject::ID_bFloor = wxNewId();
@@ -201,6 +199,7 @@ CreateObject::CreateObject(DebugPanel *root, wxWindow* parent,wxWindowID id,cons
 	Connect(ID_bShaft,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bShaft_Click);
 	//*)
 	panel = root;
+	viewer = 0;
 }
 
 CreateObject::~CreateObject()

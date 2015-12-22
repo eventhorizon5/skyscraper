@@ -123,6 +123,10 @@ bool Skyscraper::OnInit(void)
 	RenderOnStartup = false;
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
+#if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
+	UnhandledExceptionSetRoot(this);
+#endif
+
 	//set locale to default for conversion functions
 #ifdef OGRE_DEFAULT_LOCALE
 	setlocale(LC_ALL, OGRE_DEFAULT_LOCALE);

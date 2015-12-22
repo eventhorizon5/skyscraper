@@ -30,6 +30,7 @@
 #include <wx/sizer.h>
 #include <wx/button.h>
 //*)
+#include "parameterviewer.h"
 
 namespace Skyscraper {
 
@@ -147,6 +148,7 @@ class CreateObject: public wxDialog
 		void On_bAddShaftStdDoor_Click(wxCommandEvent& event);
 		//*)
 		DebugPanel *panel;
+		ParameterViewer *viewer;
 
 		DECLARE_EVENT_TABLE()
 };
