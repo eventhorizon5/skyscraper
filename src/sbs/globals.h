@@ -55,6 +55,10 @@
 	#define SBSIMPEXP_DATA(type)
 #endif
 
+namespace SBS {
+
+const float pi = 3.14159265f;
+
 SBSIMPEXP bool IsEven(int Number);
 SBSIMPEXP bool IsNumeric(char character);
 SBSIMPEXP bool IsNumeric(const std::string &string);
@@ -84,5 +88,10 @@ SBSIMPEXP bool IsBoolean(std::string string);
 SBSIMPEXP float ToFloat(const std::string &string);
 SBSIMPEXP int ToInt(const std::string &string);
 SBSIMPEXP bool ToBool(std::string string);
+SBSIMPEXP std::string TruncateNumber(float value, int decimals);
+SBSIMPEXP std::string TruncateNumber(double value, int decimals);
+SBSIMPEXP std::string TruncateNumber(const std::string &number, int decimals);
+
+}
 
 #endif

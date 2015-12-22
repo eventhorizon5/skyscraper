@@ -34,6 +34,8 @@
 #include "unix.h"
 #include "cameracontrol.h"
 
+using namespace SBS;
+
 namespace Skyscraper {
 
 //(*IdInit(CameraControl)

@@ -32,6 +32,8 @@
 #include "sbs.h"
 #include "skyscraper.h"
 
+using namespace SBS;
+
 namespace Skyscraper {
 
 //(*IdInit(Stats)

@@ -569,7 +569,7 @@ bool Elevator::CreateElevator(bool relative, float x, float z, int floor)
 
 	Created = true;
 
-	Report("created at " + sbs->TruncateNumber(position.x, 4) + ", " + sbs->TruncateNumber(position.z, 4) + ", " + ToString(floor));
+	Report("created at " + TruncateNumber(position.x, 4) + ", " + TruncateNumber(position.z, 4) + ", " + ToString(floor));
 	return true;
 }
 

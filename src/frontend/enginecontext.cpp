@@ -28,6 +28,8 @@
 #include "enginecontext.h"
 #include "unix.h"
 
+using namespace SBS;
+
 namespace Skyscraper {
 
 EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position)

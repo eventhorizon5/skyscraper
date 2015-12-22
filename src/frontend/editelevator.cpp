@@ -34,10 +34,12 @@
 #include "unix.h"
 #include "skyscraper.h"
 
+using namespace SBS;
+
 namespace Skyscraper {
 
-SBS::Elevator *elevator;
-SBS::ElevatorDoor *door;
+Elevator *elevator;
+ElevatorDoor *door;
 
 //(*IdInit(editelevator)
 const long editelevator::ID_tElevator = wxNewId();
@@ -1491,7 +1493,7 @@ void editelevator::On_Fire1Off_Select(wxCommandEvent& event)
 {
 	if (elevator)
 	{
-		SBS::CallButton *callbutton = elevator->GetPrimaryCallButton();
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
 		if (callbutton)
 			callbutton->FireService(0);
 	}
@@ -1501,7 +1503,7 @@ void editelevator::On_Fire1On_Select(wxCommandEvent& event)
 {
 	if (elevator)
 	{
-		SBS::CallButton *callbutton = elevator->GetPrimaryCallButton();
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
 		if (callbutton)
 			callbutton->FireService(1);
 	}
@@ -1511,7 +1513,7 @@ void editelevator::On_Fire1Bypass_Select(wxCommandEvent& event)
 {
 	if (elevator)
 	{
-		SBS::CallButton *callbutton = elevator->GetPrimaryCallButton();
+		CallButton *callbutton = elevator->GetPrimaryCallButton();
 		if (callbutton)
 			callbutton->FireService(2);
 	}

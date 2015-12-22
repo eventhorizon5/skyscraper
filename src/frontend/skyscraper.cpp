@@ -42,6 +42,8 @@
    #include "GL/glx.h"
 #endif
 
+using namespace SBS;
+
 namespace Skyscraper {
 
 IMPLEMENT_APP_NO_MAIN(Skyscraper)
@@ -371,7 +373,7 @@ void MainScreen::OnLeaveWindow(wxMouseEvent& event)
 
 void Skyscraper::Render()
 {
-	SBS::SBS_PROFILE_MAIN("Render");
+	SBS_PROFILE_MAIN("Render");
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
@@ -653,7 +655,7 @@ bool Skyscraper::Initialize()
 
 void Skyscraper::GetInput(EngineContext *engine)
 {
-	SBS::SBS_PROFILE_MAIN("GetInput");
+	SBS_PROFILE_MAIN("GetInput");
 
 	if (!engine)
 		return;
@@ -673,7 +675,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 	// First get elapsed time from the virtual clock.
 	unsigned int current_time = Simcore->GetRunTime();
 
-	SBS::Camera *camera = Simcore->camera;
+	Camera *camera = Simcore->camera;
 
 	//speed limit certain keys
 	if (wait == true)
@@ -1063,8 +1065,8 @@ void Skyscraper::Loop()
 {
 	//Main simulator loop
 
-	SBS::ProfileManager::Reset();
-	SBS::ProfileManager::Increment_Frame_Counter();
+	ProfileManager::Reset();
+	ProfileManager::Increment_Frame_Counter();
 
 	//main menu routine
 	if (StartupRunning == true)
@@ -1117,7 +1119,7 @@ void Skyscraper::Loop()
 	//handle a building reload
 	HandleReload();
 
-	//SBS::ProfileManager::dumpAll();
+	//ProfileManager::dumpAll();
 }
 
 void Skyscraper::DrawBackground()

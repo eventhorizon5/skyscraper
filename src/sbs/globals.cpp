@@ -35,7 +35,7 @@
 #include "unix.h"
 #include "globals.h"
 
-const float pi = 3.14159265f;
+namespace SBS {
 
 bool IsEven(int Number)
 {
@@ -332,4 +332,47 @@ bool ToBool(std::string string)
 	if (string == "true")
 		return true;
 	return false;
+}
+
+std::string TruncateNumber(float value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+
+	if ((int)value == value)
+		decimals = 0; //value is an integer
+
+	std::stringstream buffer;
+	buffer.precision(decimals);
+	buffer << std::fixed << value;
+
+	return buffer.str();
+}
+
+std::string TruncateNumber(double value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+
+	if ((int)value == value)
+		decimals = 0; //value is an integer
+
+	std::stringstream buffer;
+	buffer.precision(decimals);
+	buffer << std::fixed << value;
+
+	return buffer.str();
+}
+
+std::string TruncateNumber(const std::string &value, int decimals)
+{
+	//truncates the numeric value to the specified number of decimal places (does not round)
+	std::string number = value;
+
+	if (decimals < 1)
+		return number;
+	number.erase((int)number.find(".") + decimals + 1);
+	if (number.at(number.length() - 1) == '.')
+		number = number.substr(0, number.length() - 1); //strip of extra decimal point if even
+	return number;
+}
+
 }

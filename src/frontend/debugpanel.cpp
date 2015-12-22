@@ -522,7 +522,7 @@ void DebugPanel::Timer::Notify()
 
 wxString TruncateNumber(float value, int decimals)
 {
-	std::string number = dp->Simcore->TruncateNumber(value, decimals);
+	std::string number = SBS::TruncateNumber(value, decimals);
 	wxString number2 = wxString::FromAscii(number.c_str());
 
 	return number2;
@@ -530,7 +530,7 @@ wxString TruncateNumber(float value, int decimals)
 
 wxString TruncateNumber(double value, int decimals)
 {
-	std::string number = dp->Simcore->TruncateNumber(value, decimals);
+	std::string number = SBS::TruncateNumber(value, decimals);
 	wxString number2 = wxString::FromAscii(number.c_str());
 
 	return number2;

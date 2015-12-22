@@ -48,6 +48,8 @@
 #define sRecalc 5
 #define sSkipReset 6
 
+using namespace SBS;
+
 namespace Skyscraper {
 
 ScriptProcessor::ScriptProcessor(EngineContext *instance)
@@ -1365,7 +1367,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		SBS::MeshObject* tmpMesh;
+		MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1535,7 +1537,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		std::vector<SBS::WallObject*> *wallarray;
+		std::vector<WallObject*> *wallarray;
 
 		if (buffer == "external")
 			wallarray = &Simcore->External->Walls;
@@ -1622,7 +1624,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		SBS::MeshObject* tmpMesh;
+		MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1694,7 +1696,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		SBS::MeshObject* tmpMesh;
+		MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1764,7 +1766,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		SBS::MeshObject* tmpMesh;
+		MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1825,7 +1827,7 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		SBS::MeshObject* tmpMesh;
+		MeshObject* tmpMesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
@@ -1932,7 +1934,7 @@ int ScriptProcessor::ProcCommands()
 		if (endfloor > Simcore->Floors - 1)
 			return ScriptError("Invalid ending floor");
 
-		SBS::Shaft *shaft;
+		Shaft *shaft;
 		if (compat == true)
 			shaft = Simcore->CreateShaft(ToInt(tempdata[0]), ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToInt(tempdata[4]), ToInt(tempdata[5]));
 		else
@@ -2178,7 +2180,7 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		SBS::Stairs *stairs = Simcore->CreateStairwell(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]));
+		Stairs *stairs = Simcore->CreateStairwell(ToInt(tempdata[0]), ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToInt(tempdata[3]), ToInt(tempdata[4]));
 		if (!stairs)
 			return ScriptError();
 
@@ -2462,7 +2464,7 @@ int ScriptProcessor::ProcCommands()
 		buffer = tempdata[0];
 		SetCase(buffer, false);
 
-		SBS::MeshObject *mesh = 0;
+		MeshObject *mesh = 0;
 		if (buffer == "floor" && Simcore->GetFloor(Current))
 			mesh = Simcore->GetFloor(Current)->Level;
 		else if (buffer == "elevator" && Simcore->GetElevator(Current))
@@ -2536,7 +2538,7 @@ int ScriptProcessor::ProcCommands()
 
 		float offset = 0;
 
-		SBS::MeshObject *mesh = 0;
+		MeshObject *mesh = 0;
 		if (buffer == "floor" && Simcore->GetFloor(Current))
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
@@ -2754,7 +2756,7 @@ int ScriptProcessor::ProcCommands()
 		CheckFile("data/" + tempdata[1]);
 
 		//create model
-		SBS::Model* model;
+		Model* model;
 		if (compat == true)
 			model = Simcore->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
@@ -2776,7 +2778,7 @@ int ScriptProcessor::ProcCommands()
 		if (params < 3)
 			return ScriptError("Incorrect number of parameters");
 
-		std::vector<SBS::Object*> objects;
+		std::vector<Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
@@ -2814,7 +2816,7 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		std::vector<SBS::Object*> objects;
+		std::vector<Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
@@ -2838,7 +2840,7 @@ int ScriptProcessor::ProcCommands()
 		if (params != 2)
 			return ScriptError("Incorrect number of parameters");
 
-		std::vector<SBS::Object*> objects;
+		std::vector<Object*> objects;
 		std::string tmpname = tempdata[1];
 		SetCase(tmpname, false);
 		if (tmpname == "global")
@@ -2888,7 +2890,7 @@ int ScriptProcessor::ProcCommands()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		SBS::Control* control = Simcore->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = Simcore->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -3056,7 +3058,7 @@ int ScriptProcessor::ProcCommands()
 			if (!IsNumeric(buffer, num))
 				return ScriptError("Invalid value: " + buffer);
 
-			SBS::Floor *floor = Simcore->GetFloor(num);
+			Floor *floor = Simcore->GetFloor(num);
 			if (floor)
 				floor->ShowInfo();
 		}
@@ -3256,7 +3258,7 @@ int ScriptProcessor::ProcFloors()
 {
 	//process floors
 
-	SBS::Floor *floor = Simcore->GetFloor(Current);
+	Floor *floor = Simcore->GetFloor(Current);
 
 	//exit with error if floor is invalid
 	if (!floor)
@@ -3863,7 +3865,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//create call button
-		SBS::CallButton* callbutton = 0;
+		CallButton* callbutton = 0;
 		if (compat == 1)
 			callbutton = floor->AddCallButtons(callbutton_elevators, "", tempdata[0], tempdata[1], tempdata[1], tempdata[2], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToBool(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
 		else if (compat == 2)
@@ -3967,7 +3969,7 @@ int ScriptProcessor::ProcFloors()
 			ScriptWarning("Syntax deprecated");
 
 		//create door
-		SBS::Door* door;
+		Door* door;
 
 		if (compat == 1)
 			door = floor->AddDoor("", "", false, tempdata[0], ToFloat(tempdata[1]), ToInt(tempdata[2]), 0, ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
@@ -4054,7 +4056,7 @@ int ScriptProcessor::ProcFloors()
 		//create door
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
-			SBS::Door* door;
+			Door* door;
 
 			if (compat == 1)
 				door = Simcore->GetStairs(ToInt(tempdata[0]))->AddDoor(Current, "", "", false, tempdata[1], ToFloat(tempdata[2]), ToInt(tempdata[3]), 0, ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]));
@@ -4100,7 +4102,7 @@ int ScriptProcessor::ProcFloors()
 		//create door
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
-			SBS::Door* door = Simcore->GetShaft(ToInt(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
+			Door* door = Simcore->GetShaft(ToInt(tempdata[0]))->AddDoor(Current, tempdata[1], tempdata[2], ToBool(tempdata[3]), tempdata[4], ToFloat(tempdata[5]), ToInt(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 
 			if (door)
 				door->SetLocked(lockvalue, keyvalue);
@@ -4396,7 +4398,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		SBS::Elevator *elev = Simcore->GetElevator(ToInt(tempdata[0]));
+		Elevator *elev = Simcore->GetElevator(ToInt(tempdata[0]));
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
@@ -4435,7 +4437,7 @@ int ScriptProcessor::ProcFloors()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		SBS::Elevator *elev = Simcore->GetElevator(ToInt(tempdata[0]));
+		Elevator *elev = Simcore->GetElevator(ToInt(tempdata[0]));
 		if (!elev)
 			return ScriptError("Invalid elevator");
 
@@ -4489,7 +4491,7 @@ int ScriptProcessor::ProcFloors()
 		CheckFile("data/" + tempdata[1]);
 
 		//create model
-		SBS::Model *model;
+		Model *model;
 		if (compat == true)
 			model = floor->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
@@ -4545,7 +4547,7 @@ int ScriptProcessor::ProcFloors()
 		//create model
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
-			SBS::Model *model;
+			Model *model;
 
 			if (compat == true)
 				model = Simcore->GetStairs(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
@@ -4605,7 +4607,7 @@ int ScriptProcessor::ProcFloors()
 		//create model
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
-			SBS::Model *model;
+			Model *model;
 			if (compat == true)
 				model = Simcore->GetShaft(ToInt(tempdata[0]))->AddModel(Current, tempdata[1], tempdata[2], false, Ogre::Vector3(ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5])), Ogre::Vector3(ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8])), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]), ToFloat(tempdata[14]));
 			else
@@ -4656,7 +4658,7 @@ int ScriptProcessor::ProcFloors()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		SBS::Control* control = floor->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = floor->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -4708,7 +4710,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
 		{
-			SBS::Control* control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), action_array, tex_array);
+			Control* control = Simcore->GetShaft(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), action_array, tex_array);
 
 			if (control)
 			{
@@ -4763,7 +4765,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
 		{
-			SBS::Control* control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), action_array, tex_array);
+			Control* control = Simcore->GetStairs(ToInt(tempdata[0]))->AddControl(Current, tempdata[1], tempdata[2], tempdata[3], ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), action_array, tex_array);
 
 			if (control)
 			{
@@ -5016,7 +5018,7 @@ int ScriptProcessor::ProcElevators()
 	int temp2check = LineData.find("=", 0);
 	temp2 = GetAfterEquals(LineData);
 
-	SBS::Elevator *elev = Simcore->GetElevator(Current);
+	Elevator *elev = Simcore->GetElevator(Current);
 
 	//create a lowercase string of the line
 	std::string linecheck = SetCaseCopy(LineData, false);
@@ -6498,7 +6500,7 @@ int ScriptProcessor::ProcElevators()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		SBS::Control* control;
+		Control* control;
 
 		if (compat == 0)
 		{
@@ -6606,7 +6608,7 @@ int ScriptProcessor::ProcElevators()
 		if (compat > 0 && warn_deprecated == true)
 			ScriptWarning("Syntax deprecated");
 
-		SBS::Control* control;
+		Control* control;
 
 		if (compat == 0)
 		{
@@ -6662,7 +6664,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		SBS::Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
+		Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddButton(tempdata[1], tempdata[2], tempdata[3], ToInt(tempdata[4]), ToInt(tempdata[5]), tempdata[6], ToFloat(tempdata[7]), ToFloat(tempdata[8]), hoffset, voffset);
 
 		if (control)
 		{
@@ -6715,7 +6717,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		SBS::Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = elev->GetPanel(ToInt(tempdata[0]))->AddControl(tempdata[1], ToInt(tempdata[2]), ToInt(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -7151,7 +7153,7 @@ int ScriptProcessor::ProcElevators()
 			ScriptWarning("Syntax deprecated");
 
 		//create door
-		SBS::Door* door;
+		Door* door;
 
 		if (compat == 1)
 			door = elev->AddDoor(tempdata[0], tempdata[1], false, tempdata[2], ToFloat(tempdata[3]), ToInt(tempdata[4]), 0, ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]));
@@ -7208,7 +7210,7 @@ int ScriptProcessor::ProcElevators()
 		CheckFile("data/" + tempdata[1]);
 
 		//create model
-		SBS::Model *model;
+		Model *model;
 		if (compat == true)
 			model = elev->AddModel(tempdata[0], tempdata[1], false, Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])), ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToBool(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
 		else
@@ -7256,7 +7258,7 @@ int ScriptProcessor::ProcElevators()
 		//check to see if file exists
 		CheckFile("data/" + tempdata[1]);
 
-		SBS::Control* control = elev->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
+		Control* control = elev->AddControl(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), action_array, tex_array);
 
 		if (control)
 		{
@@ -7901,7 +7903,7 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 			float first = ToFloat(one);
 			float second = ToFloat(two);
 			float tmpnum = first + second;
-			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
 		}
@@ -7927,7 +7929,7 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 				return tmpcalc;
 			}
 			float tmpnum = first / second;
-			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
 		}
@@ -7947,7 +7949,7 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 			float first = ToFloat(one);
 			float second = ToFloat(two);
 			float tmpnum = first * second;
-			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
 		}
@@ -7967,7 +7969,7 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 			float first = ToFloat(one);
 			float second = ToFloat(two);
 			float tmpnum = powf(first, second);
-			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
 		}
@@ -7987,7 +7989,7 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 			float first = ToFloat(one);
 			float second = ToFloat(two);
 			float tmpnum = first - second;
-			tmpcalc = Simcore->TruncateNumber(tmpnum, 6);
+			tmpcalc = TruncateNumber(tmpnum, 6);
 			TrimString(tmpcalc);
 			return tmpcalc;
 		}
@@ -8000,7 +8002,7 @@ std::string ScriptProcessor::Calc(const std::string &expression)
 	return tmpcalc;
 }
 
-void ScriptProcessor::StoreCommand(SBS::Object *object)
+void ScriptProcessor::StoreCommand(Object *object)
 {
 	//store command and line info in object
 
@@ -8735,7 +8737,7 @@ int ScriptProcessor::MathFunctions()
 		if (value <= 0)
 			return ScriptError("Invalid value: " + tempdata);
 
-		SBS::RandomGen rnd(time(0));
+		RandomGen rnd(time(0));
 		result = rnd.Get(value);
 		LineData = LineData.substr(0, start) + ToString(result) + LineData.substr(last + 1);
 	}

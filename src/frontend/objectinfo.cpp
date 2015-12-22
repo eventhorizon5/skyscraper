@@ -38,6 +38,8 @@
 #include "textwindow.h"
 #include "moveobject.h"
 
+using namespace SBS;
+
 namespace Skyscraper {
 
 CreateObject *createobject;
@@ -288,7 +290,7 @@ void ObjectInfo::Loop()
 		return;
 
 	oldobject = number;
-	SBS::Object *object = Simcore->GetObject(number);
+	Object *object = Simcore->GetObject(number);
 	tNumber->SetValue(wxVariant(number).GetString());
 	tLineNum->Clear();
 	tIncludeFile->Clear();
@@ -313,7 +315,7 @@ void ObjectInfo::Loop()
 		tContext->SetValue(wxString::FromAscii(object->context.c_str()));
 		tPermanent->SetValue(wxString::FromAscii(BoolToString(object->IsPermanent()).c_str()));
 
-		SBS::Object *parent = object->GetParent();
+		Object *parent = object->GetParent();
 		if (parent)
 		{
 			tParent->SetValue(wxVariant(parent->GetNumber()).GetString());
@@ -337,7 +339,7 @@ void ObjectInfo::PopulateTree()
 	ObjectTree->Expand(id);
 }
 
-void ObjectInfo::AddChildren(SBS::Object *parent, const wxTreeItemId& treeparent)
+void ObjectInfo::AddChildren(Object *parent, const wxTreeItemId& treeparent)
 {
 	if (!parent)
 		return;
@@ -466,7 +468,7 @@ void ObjectInfo::On_bReset_Click(wxCommandEvent& event)
 	int number = atoi(num.ToAscii());
 
 	//call SBS to reset object state
-	SBS::Object *obj = Simcore->GetObject(number);
+	Object *obj = Simcore->GetObject(number);
 	if (obj)
 		obj->ResetState();
 }
