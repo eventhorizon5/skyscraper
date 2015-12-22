@@ -105,8 +105,11 @@ void Person::GotoFloor(int floor)
 	if (IsRouteActive() == true)
 		return;
 
+	Floor *origfloor = sbs->GetFloor(current_floor);
+	Floor *newfloor = sbs->GetFloor(floor);
+
 	//verify floors
-	if (!sbs->GetFloor(current_floor) || !sbs->GetFloor(floor))
+	if (!origfloor || !newfloor)
 		return;
 
 	//make sure we're going to a different floor
@@ -115,14 +118,14 @@ void Person::GotoFloor(int floor)
 
 	dest_floor = floor;
 
-	Report("Heading to floor " + ToString(floor));
+	Report("Heading to floor " + newfloor->ID);
 
 	//get route to floor, as a list of elevators
 	std::vector<ElevatorRoute*> elevators = sbs->GetRouteToFloor(current_floor, dest_floor, service_access);
 
 	if (elevators.empty() == true)
 	{
-		Report("No route found to floor " + ToString(dest_floor));
+		Report("No route found to floor " + newfloor->ID);
 		return;
 	}
 
@@ -227,7 +230,12 @@ void Person::ProcessRoute()
 				//wait for elevator doors to open before pressing button
 				if (elevator->AreDoorsOpen() == true)
 				{
-					Report("Pressing elevator button for floor " + ToString(floor_selection));
+					Floor *floor = sbs->GetFloor(floor_selection);
+
+					if (!floor)
+						return;
+
+					Report("Pressing elevator button for floor " + floor->ID);
 
 					Control *control = elevator->GetFloorButton(floor_selection);
 
@@ -243,7 +251,7 @@ void Person::ProcessRoute()
 					}
 
 					//stop route if floor button is locked, or does not exist
-					Report("Can't press elevator button for floor " + ToString(floor_selection));
+					Report("Can't press elevator button for floor " + floor->ID);
 					Stop();
 					return;
 				}
@@ -276,7 +284,11 @@ void Person::ProcessRoute()
 			else
 				floor_status = "intermediate";
 
-			Report("Arrived at " + floor_status + " floor " + ToString(floor_selection));
+			Floor *floor = sbs->GetFloor(floor_selection);
+			if (!floor)
+				return;
+
+			Report("Arrived at " + floor_status + " floor " + floor->ID);
 			current_floor = floor_selection;
 
 			if (elevator->FireServicePhase1 != 1)
@@ -377,15 +389,25 @@ std::string Person::GetStatus()
 	//return a string describing the person's status
 
 	if (IsRouteActive() == false)
-		return "Idle on floor " + ToString(current_floor);
+	{
+		Floor *floor = sbs->GetFloor(current_floor);
+		if (!floor)
+			return "";
+
+		return "Idle on floor " + floor->ID;
+	}
 
 	Elevator *elevator = route[0].elevator_route->elevator;
 	int floor_selection = route[0].elevator_route->floor_selection;
 
+	Floor *floor = sbs->GetFloor(floor_selection);
+	if (!floor)
+		return "";
+
 	if (route[0].floor_selected == true && elevator)
 	{
 		if (elevator->AreDoorsOpen() == true)
-			return "Pressed " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+			return "Pressed " + floor->ID + " in elevator " + ToString(elevator->Number);
 		else
 		{
 			if (route[0].call_made != 2)
@@ -395,7 +417,7 @@ std::string Person::GetStatus()
 					direction = "Up";
 				else
 					direction = "Down";
-				return direction + " to floor " + ToString(floor_selection) + " in elevator " + ToString(elevator->Number);
+				return direction + " to floor " + floor->ID + " in elevator " + ToString(elevator->Number);
 			}
 			else
 				return "Proceeding to recall floor";
