@@ -45,6 +45,8 @@ int main (int argc, char* argv[]);
 
 namespace Skyscraper {
 
+class DebugPanel;
+
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
 public:

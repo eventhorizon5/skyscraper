@@ -45,6 +45,19 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "skyscraper.h"
+
+#include "meshcontrol.h"
+#include "editelevator.h"
+#include "keydialog.h"
+#include "profilergui.h"
+#include "stats.h"
+#include "actionviewer.h"
+#include "cameracontrol.h"
+#include "skycontrol.h"
+#include "objectinfo.h"
+#include "enginemanager.h"
+#include "peoplemanager.h"
 
 namespace Skyscraper {
 
@@ -204,6 +217,18 @@ class DebugPanel: public wxFrame
 		//*)
 
 	private:
+
+		MeshControl *mc;
+		editelevator *ee;
+		CameraControl *cc;
+		KeyDialog *kd;
+		Stats *stats;
+		ObjectInfo *objectinfo;
+		Profiler *profiler;
+		ActionViewer *actionviewer;
+		SkyControl *skycontrol;
+		EngineManager *emanager;
+		PeopleManager *pmanager;
 
 		DECLARE_EVENT_TABLE()
 };

@@ -27,39 +27,13 @@
 #include <wx/intl.h>
 //*)
 #include "debugpanel.h"
-#include "meshcontrol.h"
-#include "editelevator.h"
-#include "keydialog.h"
-#include "profilergui.h"
-#include "stats.h"
-#include "actionviewer.h"
-#include "globals.h"
-#include "sbs.h"
 #include "camera.h"
 #include "floor.h"
 #include "elevator.h"
 #include "unix.h"
-#include "cameracontrol.h"
-#include "skycontrol.h"
 #include "console.h"
-#include "objectinfo.h"
-#include "skyscraper.h"
-#include "enginemanager.h"
-#include "peoplemanager.h"
 
 namespace Skyscraper {
-
-MeshControl *mc;
-editelevator *ee;
-CameraControl *cc;
-KeyDialog *kd;
-Stats *stats;
-ObjectInfo *objectinfo;
-Profiler *profiler;
-ActionViewer *actionviewer;
-SkyControl *skycontrol;
-EngineManager *emanager;
-PeopleManager *pmanager;
 
 //(*IdInit(DebugPanel)
 const long DebugPanel::ID_STATICTEXT1 = wxNewId();

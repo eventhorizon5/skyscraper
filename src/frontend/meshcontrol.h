@@ -42,7 +42,6 @@ namespace Skyscraper {
 
 class MeshControl: public wxDialog
 {
-	friend class DebugPanel::Timer;
 	public:
 
 		MeshControl(wxWindow* parent,wxWindowID id = -1);
