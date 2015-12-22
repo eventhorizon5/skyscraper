@@ -33,18 +33,11 @@
 #include "sbs.h"
 #include "skyscraper.h"
 #include "objectinfo.h"
-#include "createobject.h"
-#include "parameterviewer.h"
 #include "textwindow.h"
-#include "moveobject.h"
 
 using namespace SBS;
 
 namespace Skyscraper {
-
-CreateObject *createobject;
-ParameterViewer *modifyobject;
-MoveObject *moveobject;
 
 //(*IdInit(ObjectInfo)
 const long ObjectInfo::ID_ObjectTree = wxNewId();
@@ -206,6 +199,9 @@ ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
 	//*)
 	panel = parent;
+	createobject = 0;
+	modifyobject = 0;
+	moveobject = 0;
 	OnInit();
 }
 
@@ -229,7 +225,6 @@ void ObjectInfo::OnInit()
 {
 	oldobject = -1;
 	oldcamobject = -1;
-	createobject = 0;
 	changed = false;
 	lastcount = 0;
 	deleted = false;

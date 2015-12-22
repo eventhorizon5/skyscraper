@@ -34,6 +34,9 @@
 #include <wx/textctrl.h>
 #include <wx/treectrl.h>
 //*)
+#include "createobject.h"
+#include "parameterviewer.h"
+#include "moveobject.h"
 
 namespace Skyscraper {
 
@@ -142,6 +145,10 @@ class ObjectInfo: public wxDialog
 		int lastcount;
 		SBS::SBS *Simcore;
 		DebugPanel *panel;
+
+		CreateObject *createobject;
+		ParameterViewer *modifyobject;
+		MoveObject *moveobject;
 
 		DECLARE_EVENT_TABLE()
 };
