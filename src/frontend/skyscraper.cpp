@@ -665,7 +665,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 	static int old_mouse_x, old_mouse_y;
 
 	//get SBS instance
-	SBS::SBS *Simcore = engine->GetSystem();
+	::SBS::SBS *Simcore = engine->GetSystem();
 
 	// First get elapsed time from the virtual clock.
 	unsigned int current_time = Simcore->GetRunTime();
@@ -1681,7 +1681,7 @@ bool Skyscraper::Start(EngineContext *engine)
 	if (!engine)
 		return false;
 
-	SBS::SBS *Simcore = engine->GetSystem();
+	::SBS::SBS *Simcore = engine->GetSystem();
 
 	if (GetEngineCount() == 1)
 	{

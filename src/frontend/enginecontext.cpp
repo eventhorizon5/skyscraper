@@ -236,7 +236,7 @@ void EngineContext::StartSim()
 {
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new SBS::SBS(mSceneManager, fmodsystem, instance, position);
+		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position);
 
 	//load script processor
 	if (!processor)
