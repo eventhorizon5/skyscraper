@@ -42,7 +42,7 @@ class PeopleManager: public wxDialog
 {
 	public:
 
-		PeopleManager(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		PeopleManager(DebugPanel* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~PeopleManager();
 
 		//(*Declarations(PeopleManager)
@@ -113,6 +113,7 @@ class PeopleManager: public wxDialog
 		//*)
 		void BuildList(bool restore_selection = false);
 		SBS::SBS *Simcore;
+		DebugPanel *panel;
 		int lastcount;
 		SBS::Person *person;
 		int floor;

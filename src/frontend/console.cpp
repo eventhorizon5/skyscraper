@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "unix.h"
 #include "fileio.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "console.h"
 
@@ -49,7 +50,7 @@ BEGIN_EVENT_TABLE(Console,wxFrame)
 	//*)
 END_EVENT_TABLE()
 
-Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+Console::Console(Skyscraper *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(Console)
 	wxFlexGridSizer* FlexGridSizer1;
@@ -94,6 +95,7 @@ Console::Console(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize&
 	Connect(wxID_ANY,wxEVT_CLOSE_WINDOW,(wxObjectEventFunction)&Console::On_Close);
 	//*)
 	Simcore = 0;
+	skyscraper = root;
 }
 
 Console::~Console()

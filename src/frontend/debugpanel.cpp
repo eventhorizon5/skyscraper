@@ -89,7 +89,7 @@ BEGIN_EVENT_TABLE(DebugPanel,wxFrame)
 	//*)
 END_EVENT_TABLE()
 
-DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
+DebugPanel::DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id)
 {
 	//(*Initialize(DebugPanel)
 	wxBoxSizer* BoxSizer10;
@@ -252,6 +252,7 @@ DebugPanel::DebugPanel(wxWindow* parent,wxWindowID id)
 	Connect(ID_bFloorInfo,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&DebugPanel::On_bFloorInfo_Click);
 	//*)
 	Simcore = 0;
+	skyscraper = root;
 	mc = 0;
 	ee = 0;
 	cc = 0;
@@ -310,7 +311,6 @@ DebugPanel::~DebugPanel()
 	if (pmanager)
 		pmanager->Destroy();
 	pmanager = 0;
-	dpanel = 0; //clear external pointer
 }
 
 void DebugPanel::On_chkCollisionDetection_Click(wxCommandEvent& event)

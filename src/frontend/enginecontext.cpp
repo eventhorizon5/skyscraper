@@ -24,6 +24,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "enginecontext.h"
 #include "unix.h"

@@ -39,7 +39,7 @@ class ParameterViewer: public wxDialog
 {
 	public:
 
-		ParameterViewer(wxWindow* parent, wxString object_type, wxString object_parent, bool createobject, wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		ParameterViewer(DebugPanel* root, wxWindow* parent, wxString object_type, wxString object_parent, bool createobject, wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~ParameterViewer();
 
 		//(*Declarations(ParameterViewer)
@@ -161,6 +161,7 @@ class ParameterViewer: public wxDialog
 		bool Setup();
 
 		SBS::SBS *Simcore;
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };

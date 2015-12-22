@@ -36,6 +36,7 @@
 #include "fileio.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
+#include "console.h"
 
 #if OGRE_VERSION >= 0x00010900
 #include <OgreOverlaySystem.h>
@@ -46,6 +47,7 @@ int main (int argc, char* argv[]);
 namespace Skyscraper {
 
 class DebugPanel;
+class MainScreen;
 
 class Skyscraper : public wxApp, public Ogre::LogListener
 {
@@ -178,6 +180,15 @@ private:
 	bool showconsole;
 	wxProgressDialog *progdialog;
 
+	//control panel
+	DebugPanel *dpanel;
+
+	//main window
+	MainScreen *window;
+
+	//console window
+	Console *console;
+
 	bool new_location, new_time;
 	float latitude, longitude;
 	double datetime;
@@ -189,7 +200,7 @@ private:
 class MainScreen : public wxFrame
 {
 public:
-	MainScreen(int width, int height);
+	MainScreen(Skyscraper *parent, int width, int height);
 	virtual ~MainScreen();
 	void OnIconize(wxIconizeEvent& event);
 	void OnSize(wxSizeEvent& event);
@@ -202,12 +213,10 @@ public:
 	void OnLeaveWindow(wxMouseEvent& event);
 	bool Active;
 	bool InLoop;
+	Skyscraper *frontend;
 
 	DECLARE_EVENT_TABLE()
 };
-
-extern Skyscraper *skyscraper;
-extern DebugPanel *dpanel;
 
 DECLARE_APP(Skyscraper)
 

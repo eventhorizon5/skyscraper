@@ -37,7 +37,7 @@ class CreateObject: public wxDialog
 {
 	public:
 
-		CreateObject(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		CreateObject(DebugPanel *root, wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~CreateObject();
 
 		//(*Declarations(CreateObject)
@@ -146,6 +146,7 @@ class CreateObject: public wxDialog
 		void On_bAddShaftModel_Click(wxCommandEvent& event);
 		void On_bAddShaftStdDoor_Click(wxCommandEvent& event);
 		//*)
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };

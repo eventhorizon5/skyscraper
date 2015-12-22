@@ -141,7 +141,7 @@ BEGIN_EVENT_TABLE(CameraControl,wxDialog)
 //*)
 END_EVENT_TABLE()
 
-CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
+CameraControl::CameraControl(DebugPanel* parent,wxWindowID id)
 {
 	//(*Initialize(CameraControl)
 	wxStaticBoxSizer* StaticBoxSizer2;
@@ -433,6 +433,7 @@ CameraControl::CameraControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bResetFOV,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CameraControl::On_bResetFOV_Click);
 	//*)
 	Simcore = 0;
+	panel = parent;
 	OnInit();
 }
 
@@ -444,7 +445,7 @@ CameraControl::~CameraControl()
 
 void CameraControl::OnInit()
 {
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
 
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
 	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());
@@ -455,9 +456,9 @@ void CameraControl::OnInit()
 void CameraControl::Loop()
 {
 	//if active engine has changed, refresh values
-	if (skyscraper->GetActiveEngine())
+	if (panel->GetRoot()->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		if (Simcore != panel->GetRoot()->GetActiveEngine()->GetSystem())
 			OnInit();
 	}
 	else

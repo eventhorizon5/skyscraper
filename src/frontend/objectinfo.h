@@ -41,7 +41,7 @@ class ObjectInfo: public wxDialog
 {
 	public:
 
-		ObjectInfo(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		ObjectInfo(DebugPanel* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~ObjectInfo();
 
 		//(*Declarations(ObjectInfo)
@@ -141,6 +141,7 @@ class ObjectInfo: public wxDialog
 		bool changed;
 		int lastcount;
 		SBS::SBS *Simcore;
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };

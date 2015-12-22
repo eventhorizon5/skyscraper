@@ -87,7 +87,7 @@ BEGIN_EVENT_TABLE(ObjectInfo,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+ObjectInfo::ObjectInfo(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(ObjectInfo)
 	wxFlexGridSizer* FlexGridSizer1;
@@ -205,6 +205,7 @@ ObjectInfo::ObjectInfo(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Connect(ID_bOK,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bOK_Click);
 	Connect(ID_bSave,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&ObjectInfo::On_bSave_Click);
 	//*)
+	panel = parent;
 	OnInit();
 }
 
@@ -232,7 +233,7 @@ void ObjectInfo::OnInit()
 	changed = false;
 	lastcount = 0;
 	deleted = false;
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
 }
 
 void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
@@ -243,9 +244,9 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 void ObjectInfo::Loop()
 {
 	//if active engine has changed, refresh values
-	if (skyscraper->GetActiveEngine())
+	if (panel->GetRoot()->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		if (Simcore != panel->GetRoot()->GetActiveEngine()->GetSystem())
 			OnInit();
 	}
 	else
@@ -391,7 +392,7 @@ void ObjectInfo::On_bDelete_Click(wxCommandEvent& event)
 void ObjectInfo::On_bCreate_Click(wxCommandEvent& event)
 {
 	if (!createobject)
-		createobject = new CreateObject(this, -1);
+		createobject = new CreateObject(panel, this, -1);
 	if (createobject)
 		createobject->Show();
 }
@@ -399,7 +400,7 @@ void ObjectInfo::On_bCreate_Click(wxCommandEvent& event)
 void ObjectInfo::On_bModify_Click(wxCommandEvent& event)
 {
 	if (!modifyobject)
-		modifyobject = new ParameterViewer(this, tType->GetValue(), tParentType->GetValue(), false, -1);
+		modifyobject = new ParameterViewer(panel, this, tType->GetValue(), tParentType->GetValue(), false, -1);
 	if (modifyobject)
 		modifyobject->Show();
 }
@@ -428,7 +429,7 @@ void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)
 	twindow->Center();
 	twindow->SetTitle(wxT("Current Script"));
 	twindow->Show(true);
-	std::vector<std::string> *data = skyscraper->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
+	std::vector<std::string> *data = panel->GetRoot()->GetActiveEngine()->GetScriptProcessor()->GetBuildingData();
 	for (int i = 0; i < (int)data->size(); i++)
 			twindow->tMain->WriteText(wxString::FromAscii(data->at(i).c_str()) + wxT("\n"));
 	twindow->tMain->SetInsertionPoint(0);
@@ -451,7 +452,7 @@ void ObjectInfo::On_bMove_Click(wxCommandEvent& event)
 		delete moveobject;
 	moveobject = 0;
 
-	moveobject = new MoveObject(this, -1, number);
+	moveobject = new MoveObject(panel, this, -1, number);
 	moveobject->Show();
 }
 

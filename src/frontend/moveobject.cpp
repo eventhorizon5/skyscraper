@@ -84,7 +84,7 @@ BEGIN_EVENT_TABLE(MoveObject,wxDialog)
 //*)
 END_EVENT_TABLE()
 
-MoveObject::MoveObject(wxWindow* parent,wxWindowID id, int object_number)
+MoveObject::MoveObject(DebugPanel* root, wxWindow* parent,wxWindowID id, int object_number)
 {
 	//(*Initialize(MoveObject)
 	wxStaticBoxSizer* StaticBoxSizer2;
@@ -232,6 +232,7 @@ MoveObject::MoveObject(wxWindow* parent,wxWindowID id, int object_number)
 	object_num = object_number;
 	object = 0;
 	Simcore = 0;
+	panel = root;
 	OnInit();
 }
 
@@ -242,13 +243,13 @@ MoveObject::~MoveObject()
 
 void MoveObject::OnInit()
 {
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
 	hold_vector = Ogre::Vector3(0, 0, 0);
 }
 
 void MoveObject::Loop()
 {
-	if (!skyscraper->GetActiveEngine())
+	if (!panel->GetRoot()->GetActiveEngine())
 		return;
 
 	object = Simcore->GetObject(object_num);

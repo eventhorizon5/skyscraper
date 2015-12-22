@@ -39,6 +39,7 @@ public:
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
+	Skyscraper *GetFrontend() { return frontend; }
 	bool IsCameraActive();
 	bool Run();
 	void Shutdown();

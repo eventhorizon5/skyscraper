@@ -66,7 +66,7 @@ class DebugPanel: public wxFrame
 	friend class Timer;
 	public:
 
-		DebugPanel(wxWindow* parent,wxWindowID id = -1);
+		DebugPanel(Skyscraper *root, wxWindow* parent,wxWindowID id = -1);
 		virtual ~DebugPanel();
 
 		//(*Identifiers(DebugPanel)
@@ -119,6 +119,7 @@ class DebugPanel: public wxFrame
 		//*)
 		void EnableTimer(bool value);
 		void Loop();
+		Skyscraper* GetRoot() { return skyscraper; }
 		class Timer : public wxTimer
 		{
 			public:
@@ -129,6 +130,7 @@ class DebugPanel: public wxFrame
 		};
 		Timer *timer;
 		SBS::SBS *Simcore;
+		Skyscraper* skyscraper;
 
 	protected:
 

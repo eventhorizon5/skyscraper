@@ -40,7 +40,7 @@ class ActionViewer: public wxDialog
 {
 	public:
 
-		ActionViewer(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		ActionViewer(DebugPanel* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~ActionViewer();
 
 		//(*Declarations(ActionViewer)
@@ -89,6 +89,7 @@ class ActionViewer: public wxDialog
 		void On_bDelete_Click(wxCommandEvent& event);
 		//*)
 		SBS::SBS *Simcore;
+		DebugPanel *panel;
 		int lastcount;
 
 		DECLARE_EVENT_TABLE()

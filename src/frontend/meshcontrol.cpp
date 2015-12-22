@@ -59,7 +59,7 @@ BEGIN_EVENT_TABLE(MeshControl,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
+MeshControl::MeshControl(DebugPanel* parent,wxWindowID id)
 {
 	//(*Initialize(MeshControl)
 	wxStaticBoxSizer* StaticBoxSizer2;
@@ -149,6 +149,7 @@ MeshControl::MeshControl(wxWindow* parent,wxWindowID id)
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&MeshControl::On_bOk_Click);
 	//*)
 	Simcore = 0;
+	panel = parent;
 	OnInit();
 }
 
@@ -159,7 +160,7 @@ MeshControl::~MeshControl()
 
 void MeshControl::OnInit()
 {
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
 
 	chkElevators->SetValue(true);
 }
@@ -167,9 +168,9 @@ void MeshControl::OnInit()
 void MeshControl::Loop()
 {
 	//if active engine has changed, refresh values
-	if (skyscraper->GetActiveEngine())
+	if (panel->GetRoot()->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		if (Simcore != panel->GetRoot()->GetActiveEngine()->GetSystem())
 			OnInit();
 	}
 	else

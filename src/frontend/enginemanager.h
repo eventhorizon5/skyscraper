@@ -42,7 +42,7 @@ class EngineManager: public wxDialog
 {
 	public:
 
-		EngineManager(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		EngineManager(DebugPanel* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~EngineManager();
 
 		//(*Declarations(EngineManager)
@@ -98,6 +98,7 @@ class EngineManager: public wxDialog
 		//*)
 
 		EngineContext *engine;
+		DebugPanel *panel;
 		int lastcount;
 
 		DECLARE_EVENT_TABLE()

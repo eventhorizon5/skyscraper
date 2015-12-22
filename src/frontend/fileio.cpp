@@ -30,6 +30,7 @@
 #include <stdlib.h>
 #include <cmath>
 #include "fileio.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "camera.h"
 #include "floor.h"
@@ -104,7 +105,7 @@ void ScriptProcessor::Reset()
 	setkey = false;
 	keyvalue = 0;
 	lockvalue = 0;
-	warn_deprecated = skyscraper->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
+	warn_deprecated = engine->GetFrontend()->GetConfigBool("Skyscraper.Frontend.WarnDeprecated", false);
 	show_percent = true;
 	InWhile = false;
 	IsFinished = false;
@@ -1139,7 +1140,7 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 		error += "\nFunction call line: " + ToString(FunctionLine) + "\nLine Text: " + LineData;
 	}
 
-	if (skyscraper->GetEngineCount() > 1)
+	if (engine->GetFrontend()->GetEngineCount() > 1)
 		error += "\nEngine context: " + ToString(engine->GetNumber());
 
 	engine->ReportError(error);
@@ -3153,7 +3154,7 @@ int ScriptProcessor::ProcGlobals()
 	}
 	if (linecheck.substr(0, 10) == "dynamicsky")
 	{
-		skyscraper->SkyName = temp2;
+		engine->GetFrontend()->SkyName = temp2;
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 10) == "collisions")
@@ -3239,7 +3240,7 @@ int ScriptProcessor::ProcGlobals()
 		if (!IsNumeric(str1, latitude) || !IsNumeric(str2, longitude))
 			return ScriptError("Invalid latitude");
 
-		skyscraper->SetLocation(latitude, longitude);
+		engine->GetFrontend()->SetLocation(latitude, longitude);
 		return sNextLine;
 	}
 	if (linecheck.substr(0, 8) == "datetime")
@@ -3248,7 +3249,7 @@ int ScriptProcessor::ProcGlobals()
 		if (!IsNumeric(temp2, data))
 			return ScriptError("Invalid Julian date/time");
 
-		skyscraper->SetDateTime(data);
+		engine->GetFrontend()->SetDateTime(data);
 		return sNextLine;
 	}
 	return sContinue;

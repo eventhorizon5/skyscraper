@@ -72,7 +72,7 @@ END_EVENT_TABLE()
 
 static Caelum::CaelumSystem* system;
 
-SkyControl::SkyControl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(SkyControl)
 	wxStaticBoxSizer* StaticBoxSizer2;
@@ -162,6 +162,7 @@ SkyControl::SkyControl(wxWindow* parent,wxWindowID id,const wxPoint& pos,const w
 	Connect(ID_bSet,wxEVT_COMMAND_TOGGLEBUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSet_Toggle);
 	Connect(ID_bSetMultiplier,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetMultiplier_Click);
 	//*)
+	panel = parent;
 	OnInit();
 }
 
@@ -174,7 +175,7 @@ SkyControl::~SkyControl()
 
 void SkyControl::OnInit()
 {
-	system = skyscraper->GetCaelumSystem();
+	system = panel->GetRoot()->GetCaelumSystem();
 
 	if (!system)
 		return;
@@ -277,7 +278,7 @@ void SkyControl::On_bSet_Toggle(wxCommandEvent& event)
 
 void SkyControl::On_bSetMultiplier_Click(wxCommandEvent& event)
 {
-	skyscraper->SkyMult = atof(tMultiplier->GetValue().ToAscii());
+	panel->GetRoot()->SkyMult = atof(tMultiplier->GetValue().ToAscii());
 }
 
 }

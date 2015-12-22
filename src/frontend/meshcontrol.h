@@ -44,7 +44,7 @@ class MeshControl: public wxDialog
 {
 	public:
 
-		MeshControl(wxWindow* parent,wxWindowID id = -1);
+		MeshControl(DebugPanel* parent,wxWindowID id = -1);
 		virtual ~MeshControl();
 
 		//(*Identifiers(MeshControl)
@@ -113,6 +113,7 @@ class MeshControl: public wxDialog
 	private:
 
 		SBS::SBS *Simcore;
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };

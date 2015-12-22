@@ -33,6 +33,7 @@
 #include "sbs.h"
 #include "unix.h"
 #include "fileio.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "objectinfo.h"
 #include "textwindow.h"
@@ -95,7 +96,7 @@ BEGIN_EVENT_TABLE(ParameterViewer,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxString object_parent, bool createobject, wxWindowID id,const wxPoint& pos,const wxSize& size)
+ParameterViewer::ParameterViewer(DebugPanel* root, wxWindow* parent, wxString object_type, wxString object_parent, bool createobject, wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(ParameterViewer)
 	wxFlexGridSizer* FlexGridSizer1;
@@ -252,6 +253,7 @@ ParameterViewer::ParameterViewer(wxWindow* parent, wxString object_type, wxStrin
 	objectparent = object_parent;
 	create = createobject;
 	Simcore = 0;
+	panel = root;
 	Setup();
 }
 
@@ -265,7 +267,7 @@ bool ParameterViewer::Setup()
 {
 	//set up parameter dialog
 
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
 
 	if (create == true)
 	{
@@ -1864,7 +1866,7 @@ void ParameterViewer::On_bCancel_Click(wxCommandEvent& event)
 void ParameterViewer::On_bOK_Click(wxCommandEvent& event)
 {
 	Simcore->DeleteColliders = true;
-	ScriptProcessor *processor = skyscraper->GetActiveEngine()->GetScriptProcessor();
+	ScriptProcessor *processor = panel->GetRoot()->GetActiveEngine()->GetScriptProcessor();
 	processor->LoadFromText(std::string(command.ToAscii()));
 	this->Close();
 }

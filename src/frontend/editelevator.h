@@ -43,7 +43,7 @@ class editelevator: public wxDialog
 {
 	friend class Timer;
 	public:
-		editelevator(wxWindow* parent,wxWindowID id = -1);
+		editelevator(DebugPanel* parent,wxWindowID id = -1);
 		virtual ~editelevator();
 
 		//(*Identifiers(editelevator)
@@ -658,6 +658,7 @@ class editelevator: public wxDialog
 	private:
 
 		SBS::SBS *Simcore;
+		DebugPanel *debugpanel;
 		int last_door;
 		int last_elevator_count;
 

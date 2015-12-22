@@ -62,7 +62,7 @@ BEGIN_EVENT_TABLE(PeopleManager,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-PeopleManager::PeopleManager(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+PeopleManager::PeopleManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(PeopleManager)
 	wxFlexGridSizer* FlexGridSizer1;
@@ -159,6 +159,7 @@ PeopleManager::PeopleManager(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	person = 0;
 	floor = -1;
 	dest_floor = -1;
+	panel = parent;
 }
 
 PeopleManager::~PeopleManager()
@@ -171,9 +172,9 @@ void PeopleManager::Loop()
 {
 	bool reset = false;
 
-	if (skyscraper->GetActiveEngine())
+	if (panel->GetRoot()->GetActiveEngine())
 	{
-		SBS::SBS *active = skyscraper->GetActiveEngine()->GetSystem();
+		SBS::SBS *active = panel->GetRoot()->GetActiveEngine()->GetSystem();
 		if (Simcore != active)
 		{
 			//if active engine has changed, refresh values

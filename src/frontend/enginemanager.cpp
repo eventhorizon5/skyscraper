@@ -55,7 +55,7 @@ BEGIN_EVENT_TABLE(EngineManager,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-EngineManager::EngineManager(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(EngineManager)
 	wxFlexGridSizer* FlexGridSizer1;
@@ -140,6 +140,7 @@ EngineManager::EngineManager(wxWindow* parent,wxWindowID id,const wxPoint& pos,c
 	Connect(ID_bShutdown,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bShutdown_Click);
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bOk_Click);
 	//*)
+	panel = parent;
 	OnInit();
 }
 
@@ -154,13 +155,13 @@ void EngineManager::OnInit()
 	lastcount = 0;
 	engine = 0;
 
-	chkCLoads->SetValue(skyscraper->ConcurrentLoads);
-	chkRender->SetValue(skyscraper->RenderOnStartup);
+	chkCLoads->SetValue(panel->GetRoot()->ConcurrentLoads);
+	chkRender->SetValue(panel->GetRoot()->RenderOnStartup);
 }
 
 void EngineManager::Loop()
 {
-	int count = skyscraper->GetEngineCount();
+	int count = panel->GetRoot()->GetEngineCount();
 	if (count != lastcount)
 	{
 		lastcount = count;
@@ -168,7 +169,7 @@ void EngineManager::Loop()
 
 		for (int i = 0; i < count; i++)
 		{
-			EngineList->Append(wxVariant(i).GetString() + wxT(" - ") + wxString::FromAscii(skyscraper->GetEngine(i)->GetFilename().c_str()));
+			EngineList->Append(wxVariant(i).GetString() + wxT(" - ") + wxString::FromAscii(panel->GetRoot()->GetEngine(i)->GetFilename().c_str()));
 		}
 
 		if (count > 0)
@@ -179,7 +180,7 @@ void EngineManager::Loop()
 		return;
 
 	int selection = EngineList->GetSelection();
-	engine = skyscraper->GetEngine(selection);
+	engine = panel->GetRoot()->GetEngine(selection);
 
 	if (engine)
 	{
@@ -210,12 +211,12 @@ void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
 	int selection = EngineList->GetSelection();
 
 	if (selection >= 0)
-		skyscraper->SetActiveEngine(selection);
+		panel->GetRoot()->SetActiveEngine(selection);
 }
 
 void EngineManager::On_bLoad_Click(wxCommandEvent& event)
 {
-	skyscraper->Load(skyscraper->SelectBuilding());
+	panel->GetRoot()->Load(panel->GetRoot()->SelectBuilding());
 }
 
 void EngineManager::On_bReload_Click(wxCommandEvent& event)
@@ -224,7 +225,7 @@ void EngineManager::On_bReload_Click(wxCommandEvent& event)
 
 	if (selection >= 0)
 	{
-		EngineContext *engine = skyscraper->GetEngine(selection);
+		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
 
 		if (engine)
 			engine->Reload = true;
@@ -237,7 +238,7 @@ void EngineManager::On_bShutdown_Click(wxCommandEvent& event)
 
 	if (selection >= 0)
 	{
-		EngineContext *engine = skyscraper->GetEngine(selection);
+		EngineContext *engine = panel->GetRoot()->GetEngine(selection);
 
 		if (engine)
 			engine->Shutdown();
@@ -246,12 +247,12 @@ void EngineManager::On_bShutdown_Click(wxCommandEvent& event)
 
 void EngineManager::On_chkCLoads_Click(wxCommandEvent& event)
 {
-	skyscraper->ConcurrentLoads = chkCLoads->GetValue();
+	panel->GetRoot()->ConcurrentLoads = chkCLoads->GetValue();
 }
 
 void EngineManager::On_chkRender_Click(wxCommandEvent& event)
 {
-	skyscraper->RenderOnStartup = chkRender->GetValue();
+	panel->GetRoot()->RenderOnStartup = chkRender->GetValue();
 }
 
 void EngineManager::On_bOk_Click(wxCommandEvent& event)

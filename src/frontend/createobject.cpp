@@ -30,6 +30,7 @@
 
 #include "globals.h"
 #include "sbs.h"
+#include "debugpanel.h"
 #include "parameterviewer.h"
 #include "createobject.h"
 
@@ -76,7 +77,7 @@ BEGIN_EVENT_TABLE(CreateObject,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+CreateObject::CreateObject(DebugPanel *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(CreateObject)
 	wxStaticBoxSizer* StaticBoxSizer2;
@@ -199,6 +200,7 @@ CreateObject::CreateObject(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 	Connect(ID_bElevator,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bElevator_Click);
 	Connect(ID_bShaft,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&CreateObject::On_bShaft_Click);
 	//*)
+	panel = root;
 }
 
 CreateObject::~CreateObject()
@@ -216,7 +218,7 @@ void CreateObject::On_bLoadTexture_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("Load"), wxT("Texture"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("Load"), wxT("Texture"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -226,7 +228,7 @@ void CreateObject::On_bFloor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("Floor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("Floor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -236,7 +238,7 @@ void CreateObject::On_bElevator_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("Elevator"), wxT("Elevator"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("Elevator"), wxT("Elevator"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -246,7 +248,7 @@ void CreateObject::On_bShaft_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("Shaft"), wxT("Shaft"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("Shaft"), wxT("Shaft"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -256,7 +258,7 @@ void CreateObject::On_bAddFloor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddFloor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddFloor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -266,7 +268,7 @@ void CreateObject::On_bAddWall_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddWall"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddWall"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -276,7 +278,7 @@ void CreateObject::On_bAddInterfloorFloor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddInterfloorFloor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddInterfloorFloor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -286,7 +288,7 @@ void CreateObject::On_bAddInterfloorWall_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddInterfloorWall"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddInterfloorWall"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -296,7 +298,7 @@ void CreateObject::On_bAddShaftFloor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddShaftFloor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddShaftFloor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -306,7 +308,7 @@ void CreateObject::On_bAddShaftWall_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddShaftWall"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddShaftWall"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -316,7 +318,7 @@ void CreateObject::On_bAddFloorIndicator_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddFloorIndicator"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddFloorIndicator"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -326,7 +328,7 @@ void CreateObject::On_bAddShaftDoor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddShaftDoor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddShaftDoor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -336,7 +338,7 @@ void CreateObject::On_bAddDirectionalIndicator_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddDirectionalIndicator"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddDirectionalIndicator"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -346,7 +348,7 @@ void CreateObject::On_bAddStairsDoor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddStairsDoor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddStairsDoor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -356,7 +358,7 @@ void CreateObject::On_bAddDoor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddDoor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddDoor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -366,7 +368,7 @@ void CreateObject::On_bAddStairs_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddStairs"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddStairs"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -376,7 +378,7 @@ void CreateObject::On_bCreateCallButtons_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("CreateCallButtons"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("CreateCallButtons"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -386,7 +388,7 @@ void CreateObject::On_bColumnWallBox2_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("ColumnWallBox2"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("ColumnWallBox2"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -396,7 +398,7 @@ void CreateObject::On_bColumnWallBox_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("ColumnWallBox"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("ColumnWallBox"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -406,7 +408,7 @@ void CreateObject::On_bAddStairsWall_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddStairsWall"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddStairsWall"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -416,7 +418,7 @@ void CreateObject::On_bAddStairsFloor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddStairsFloor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddStairsFloor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -426,7 +428,7 @@ void CreateObject::On_bFloorCut_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("Cut"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("Cut"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -436,7 +438,7 @@ void CreateObject::On_bFloorCutAll_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("CutAll"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("CutAll"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -446,7 +448,7 @@ void CreateObject::On_bAddFillerWalls_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddFillerWalls"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddFillerWalls"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -456,7 +458,7 @@ void CreateObject::On_bFloorAddSound_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddSound"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddSound"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -466,7 +468,7 @@ void CreateObject::On_bShaftDoorComponent_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddShaftDoorComponent"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddShaftDoorComponent"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -476,7 +478,7 @@ void CreateObject::On_bFinishShaftDoor_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("FinishShaftDoor"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("FinishShaftDoor"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -486,7 +488,7 @@ void CreateObject::On_bFloorAddModel_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddModel"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddModel"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -496,7 +498,7 @@ void CreateObject::On_bAddStairsModel_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddStairsModel"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddStairsModel"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }
@@ -506,7 +508,7 @@ void CreateObject::On_bAddShaftModel_Click(wxCommandEvent& event)
 	if (viewer)
 		delete viewer;
 	viewer = 0;
-	viewer = new ParameterViewer(this, wxT("AddShaftModel"), wxT("Floor"), true, -1);
+	viewer = new ParameterViewer(panel, this, wxT("AddShaftModel"), wxT("Floor"), true, -1);
 	viewer->Show();
 	this->Hide();
 }

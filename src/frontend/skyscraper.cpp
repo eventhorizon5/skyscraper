@@ -29,8 +29,8 @@
 #include <locale>
 #include "globals.h"
 #include "sbs.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
-#include "console.h"
 #include "unix.h"
 #include "revmain.h"
 
@@ -58,11 +58,6 @@ BEGIN_EVENT_TABLE(MainScreen, wxFrame)
   EVT_ENTER_WINDOW(MainScreen::OnEnterWindow)
   EVT_LEAVE_WINDOW(MainScreen::OnLeaveWindow)
 END_EVENT_TABLE()
-
-Skyscraper *skyscraper;
-DebugPanel *dpanel;
-MainScreen *window;
-Console *console;
 
 }
 
@@ -95,7 +90,6 @@ bool Skyscraper::OnInit(void)
 	version_rev = SVN_REVSTR;
 	version_state = "Alpha";
 	version_frontend = version + ".0." + version_rev;
-	skyscraper = this;
 	MouseDown = false;
 	StartupRunning = false;
 	Pause = false;
@@ -153,7 +147,7 @@ bool Skyscraper::OnInit(void)
 		ShowConsole(false);
 
 	//Create main window and set size from INI file defaults
-	window = new MainScreen(GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
+	window = new MainScreen(this, GetConfigInt("Skyscraper.Frontend.MenuWidth", 640), GetConfigInt("Skyscraper.Frontend.MenuHeight", 480));
 	//AllowResize(false);
 	window->ShowWindow();
 	window->CenterOnScreen();
@@ -213,7 +207,6 @@ int Skyscraper::OnExit()
 	if (window)
 		window->Destroy();
 	window = 0;
-	skyscraper = 0;
 
 #if OGRE_VERSION >= 0x00010900
 	delete mOverlaySystem;
@@ -264,14 +257,15 @@ void Skyscraper::UnloadSim()
 	mSceneMgr->clearScene();
 }
 
-MainScreen::MainScreen(int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
+MainScreen::MainScreen(Skyscraper *parent, int width, int height) : wxFrame(0, -1, wxT(""), wxDefaultPosition, wxDefaultSize, wxDEFAULT_FRAME_STYLE)
 {
+	frontend = parent;
 	Active = false;
 	InLoop = false;
 	Center();
 	wxString title;
 	title = wxT("Skyscraper 1.10 Alpha");
-	//title = wxT("Skyscraper " + skyscraper->version + " " + skyscraper->version_state);
+	//title = wxT("Skyscraper " + frontend->version + " " + frontend->version_state);
 	SetTitle(title);
 	SetClientSize(width, height);
 	SetExtraStyle(wxWS_EX_PROCESS_IDLE);
@@ -286,41 +280,38 @@ void MainScreen::OnIconize(wxIconizeEvent& event)
 {
 	//pause simulator while minimized
 
-	skyscraper->Pause = event.IsIconized();
+	frontend->Pause = event.IsIconized();
 
-	if (skyscraper->Pause == true)
-		skyscraper->Report("Pausing simulator...");
+	if (frontend->Pause == true)
+		frontend->Report("Pausing simulator...");
 	else
-		skyscraper->Report("Resuming simulator...");
+		frontend->Report("Resuming simulator...");
 }
 
 void MainScreen::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-	if (skyscraper->mRenderWindow)
+	if (frontend->mRenderWindow)
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_LINUX
-		skyscraper->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
+		frontend->mRenderWindow->resize(this->GetClientSize().GetWidth(), this->GetClientSize().GetHeight());
 #endif
-		skyscraper->mRenderWindow->windowMovedOrResized();
+		frontend->mRenderWindow->windowMovedOrResized();
 	}
-	if (skyscraper->mCamera)
-		skyscraper->mCamera->setAspectRatio(Ogre::Real(skyscraper->mViewport->getActualWidth()) / Ogre::Real(skyscraper->mViewport->getActualHeight()));
+	if (frontend->mCamera)
+		frontend->mCamera->setAspectRatio(Ogre::Real(frontend->mViewport->getActualWidth()) / Ogre::Real(frontend->mViewport->getActualHeight()));
 }
 
 void MainScreen::OnClose(wxCloseEvent& event)
 {
-	if (skyscraper)
+	if (frontend)
 	{
-		if (skyscraper->StartupRunning == false)
+		if (frontend->StartupRunning == false)
 		{
 			int result = wxMessageBox(wxT("Are you sure you want to exit?"), wxT("Skyscraper"), wxYES_NO | wxCENTER);
 			if (result == wxNO)
 				return;
 		}
 	}
-
-	if(dpanel)
-		dpanel->EnableTimer(false);
 
 	wxGetApp().Exit();
 }
@@ -337,9 +328,9 @@ void MainScreen::OnIdle(wxIdleEvent& event)
 	{
 		InLoop = true;
 
-		if (skyscraper->Pause == false)
+		if (frontend->Pause == false)
 		{
-			skyscraper->Loop(); //run simulator loop
+			frontend->Loop(); //run simulator loop
 			event.RequestMore(); //request more idles
 		}
 
@@ -351,8 +342,8 @@ void MainScreen::OnPaint(wxPaintEvent& event)
 {
 	wxPaintDC dc(this);
 
-	//if (skyscraper->mRenderWindow)
-		//skyscraper->mRenderWindow->update(true);
+	//if (frontend->mRenderWindow)
+		//frontend->mRenderWindow->update(true);
 }
 
 void MainScreen::OnActivate(wxActivateEvent &event)
@@ -379,8 +370,8 @@ void Skyscraper::Render()
 	mRoot->renderOneFrame();
 
 #if defined(__WXGTK__)
-	if (skyscraper->mRenderWindow)
-		skyscraper->mRenderWindow->update(true);
+	if (mRenderWindow)
+		mRenderWindow->update(true);
 #endif
 }
 
@@ -889,7 +880,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 		if (wxGetKeyState(WXK_F12) && !dpanel)
 		{
 			//show control panel if closed
-			dpanel = new DebugPanel(NULL, -1);
+			dpanel = new DebugPanel(this, NULL, -1);
 			dpanel->Show(true);
 			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 		}
@@ -1726,7 +1717,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
 		{
 			if (!dpanel)
-				dpanel = new DebugPanel(NULL, -1);
+				dpanel = new DebugPanel(this, NULL, -1);
 			dpanel->Show(true);
 			dpanel->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ControlPanelX", 10), GetConfigInt("Skyscraper.Frontend.ControlPanelY", 25)));
 		}
@@ -2027,7 +2018,7 @@ void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLeve
 void Skyscraper::ShowConsole(bool send_button)
 {
 	if (!console)
-		console = new Console(window, -1);
+		console = new Console(this, window, -1);
 	console->Show();
 	console->Raise();
 	console->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ConsoleX", 10), GetConfigInt("Skyscraper.Frontend.ConsoleY", 25)));

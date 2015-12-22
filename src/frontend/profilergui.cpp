@@ -26,6 +26,7 @@
 #include "sbs.h"
 #include "profilergui.h"
 #include "profiler.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 
 //(*InternalHeaders(Profiler)

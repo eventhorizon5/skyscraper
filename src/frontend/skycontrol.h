@@ -40,7 +40,7 @@ namespace Skyscraper {
 class SkyControl: public wxDialog {
 	public:
 
-		SkyControl(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		SkyControl(DebugPanel* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~SkyControl();
 
 		//(*Declarations(SkyControl)
@@ -114,6 +114,7 @@ class SkyControl: public wxDialog {
 		void On_bSet_Toggle(wxCommandEvent& event);
 		void On_bSetMultiplier_Click(wxCommandEvent& event);
 		//*)
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };

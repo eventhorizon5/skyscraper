@@ -39,7 +39,7 @@ class Stats: public wxDialog
 {
 	public:
 
-		Stats(wxWindow* parent,wxWindowID id=wxID_ANY);
+		Stats(DebugPanel* parent,wxWindowID id=wxID_ANY);
 		virtual ~Stats();
 
 		//(*Declarations(Stats)
@@ -161,6 +161,7 @@ class Stats: public wxDialog
 		//*)
 
 		SBS::SBS *Simcore;
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };

@@ -300,7 +300,7 @@ BEGIN_EVENT_TABLE(editelevator,wxDialog)
 //*)
 END_EVENT_TABLE()
 
-editelevator::editelevator(wxWindow* parent,wxWindowID id)
+editelevator::editelevator(DebugPanel* parent,wxWindowID id)
 {
 	//(*Initialize(editelevator)
 	wxFlexGridSizer* FlexGridSizer8;
@@ -1053,6 +1053,7 @@ editelevator::editelevator(wxWindow* parent,wxWindowID id)
 	Connect(ID_bSetNudgeTimer,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&editelevator::On_bSetNudgeTimer_Click);
 	//*)
 	Simcore = 0;
+	debugpanel = parent;
 	OnInit();
 }
 
@@ -1166,7 +1167,7 @@ void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
 
 void editelevator::OnInit()
 {
-	Simcore = skyscraper->GetActiveEngine()->GetSystem();
+	Simcore = debugpanel->GetRoot()->GetActiveEngine()->GetSystem();
 
 	last_elevator = 0;
 	floor_number = 0;
@@ -1188,9 +1189,9 @@ void editelevator::OnInit()
 void editelevator::Loop()
 {
 	//if active engine has changed, refresh values
-	if (skyscraper->GetActiveEngine())
+	if (debugpanel->GetRoot()->GetActiveEngine())
 	{
-		if (Simcore != skyscraper->GetActiveEngine()->GetSystem())
+		if (Simcore != debugpanel->GetRoot()->GetActiveEngine()->GetSystem())
 			OnInit();
 	}
 	else

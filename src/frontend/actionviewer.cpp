@@ -31,6 +31,7 @@
 #include "globals.h"
 #include "sbs.h"
 #include "action.h"
+#include "debugpanel.h"
 #include "skyscraper.h"
 #include "actionviewer.h"
 
@@ -58,7 +59,7 @@ BEGIN_EVENT_TABLE(ActionViewer,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+ActionViewer::ActionViewer(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(ActionViewer)
 	wxFlexGridSizer* FlexGridSizer1;
@@ -121,6 +122,7 @@ ActionViewer::ActionViewer(wxWindow* parent,wxWindowID id,const wxPoint& pos,con
 
 	lastcount = 0;
 	Simcore = 0;
+	panel = parent;
 }
 
 ActionViewer::~ActionViewer()
@@ -131,9 +133,9 @@ ActionViewer::~ActionViewer()
 
 void ActionViewer::Loop()
 {
-	if (skyscraper->GetActiveEngine())
+	if (panel->GetRoot()->GetActiveEngine())
 	{
-		SBS::SBS *active = skyscraper->GetActiveEngine()->GetSystem();
+		SBS::SBS *active = panel->GetRoot()->GetActiveEngine()->GetSystem();
 		if (Simcore != active)
 		{
 			//if active engine has changed, refresh values

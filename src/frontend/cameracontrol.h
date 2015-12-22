@@ -42,7 +42,7 @@ class CameraControl: public wxDialog
 {
 	public:
 
-		CameraControl(wxWindow* parent,wxWindowID id = -1);
+		CameraControl(DebugPanel* parent,wxWindowID id = -1);
 		virtual ~CameraControl();
 
 		//(*Identifiers(CameraControl)
@@ -281,6 +281,7 @@ class CameraControl: public wxDialog
 	private:
 
 		SBS::SBS *Simcore;
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };
