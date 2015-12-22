@@ -228,7 +228,7 @@ void ObjectInfo::OnInit()
 	changed = false;
 	lastcount = 0;
 	deleted = false;
-	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetSystem();
 }
 
 void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
@@ -239,12 +239,10 @@ void ObjectInfo::On_bOK_Click(wxCommandEvent& event)
 void ObjectInfo::Loop()
 {
 	//if active engine has changed, refresh values
-	if (panel->GetRoot()->GetActiveEngine())
-	{
-		if (Simcore != panel->GetRoot()->GetActiveEngine()->GetSystem())
-			OnInit();
-	}
-	else
+	if (Simcore != panel->GetSystem())
+		OnInit();
+
+	if (!Simcore)
 		return;
 
 	if (Simcore->GetObjectCount() != lastcount)

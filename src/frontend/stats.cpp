@@ -250,7 +250,7 @@ void Stats::On_bOK_Click(wxCommandEvent& event)
 
 void Stats::OnInit()
 {
-	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetSystem();
 
 	tFrontendVersion->SetValue(wxString::FromAscii(panel->GetRoot()->version_frontend.c_str()));
 	tSBSVersion->SetValue(wxString::FromAscii(Simcore->version.c_str()));
@@ -267,12 +267,10 @@ void Stats::OnInit()
 void Stats::Loop()
 {
 	//if active engine has changed, refresh values
-	if (panel->GetRoot()->GetActiveEngine())
-	{
-		if (Simcore != panel->GetRoot()->GetActiveEngine()->GetSystem())
-			OnInit();
-	}
-	else
+	if (Simcore != panel->GetSystem())
+		OnInit();
+
+	if (!Simcore)
 		return;
 
 	tMeshes->SetValue(wxVariant(Simcore->GetMeshCount()).GetString());

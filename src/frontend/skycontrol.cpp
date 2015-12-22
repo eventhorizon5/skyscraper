@@ -70,8 +70,6 @@ BEGIN_EVENT_TABLE(SkyControl,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-static Caelum::CaelumSystem* system;
-
 SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(SkyControl)
@@ -163,6 +161,7 @@ SkyControl::SkyControl(DebugPanel* parent,wxWindowID id,const wxPoint& pos,const
 	Connect(ID_bSetMultiplier,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&SkyControl::On_bSetMultiplier_Click);
 	//*)
 	panel = parent;
+	system = 0;
 	OnInit();
 }
 

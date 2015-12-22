@@ -445,7 +445,7 @@ CameraControl::~CameraControl()
 
 void CameraControl::OnInit()
 {
-	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetSystem();
 
 	txtGravity->SetValue(TruncateNumber(Simcore->camera->GetGravity(), 4));
 	txtFreelookSpeed->SetValue(wxVariant((long)Simcore->camera->Freelook_speed).GetString());
@@ -456,12 +456,10 @@ void CameraControl::OnInit()
 void CameraControl::Loop()
 {
 	//if active engine has changed, refresh values
-	if (panel->GetRoot()->GetActiveEngine())
-	{
-		if (Simcore != panel->GetRoot()->GetActiveEngine()->GetSystem())
-			OnInit();
-	}
-	else
+	if (Simcore != panel->GetSystem())
+		OnInit();
+
+	if (!Simcore)
 		return;
 
 	Ogre::Vector3 direction_front, direction_top;

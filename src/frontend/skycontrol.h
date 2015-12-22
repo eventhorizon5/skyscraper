@@ -115,6 +115,7 @@ class SkyControl: public wxDialog {
 		void On_bSetMultiplier_Click(wxCommandEvent& event);
 		//*)
 		DebugPanel *panel;
+		Caelum::CaelumSystem* system;
 
 		DECLARE_EVENT_TABLE()
 };

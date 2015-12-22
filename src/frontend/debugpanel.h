@@ -120,6 +120,7 @@ class DebugPanel: public wxFrame
 		void EnableTimer(bool value);
 		void Loop();
 		Skyscraper* GetRoot() { return skyscraper; }
+		SBS::SBS* GetSystem() { return Simcore; }
 		class Timer : public wxTimer
 		{
 			public:

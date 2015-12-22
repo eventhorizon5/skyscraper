@@ -160,7 +160,7 @@ MeshControl::~MeshControl()
 
 void MeshControl::OnInit()
 {
-	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetSystem();
 
 	chkElevators->SetValue(true);
 }
@@ -168,12 +168,10 @@ void MeshControl::OnInit()
 void MeshControl::Loop()
 {
 	//if active engine has changed, refresh values
-	if (panel->GetRoot()->GetActiveEngine())
-	{
-		if (Simcore != panel->GetRoot()->GetActiveEngine()->GetSystem())
-			OnInit();
-	}
-	else
+	if (Simcore != panel->GetSystem())
+		OnInit();
+
+	if (!Simcore)
 		return;
 
 	SBS::Floor *floor = Simcore->GetFloor(Simcore->camera->CurrentFloor);

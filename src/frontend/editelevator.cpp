@@ -1166,7 +1166,7 @@ void editelevator::On_bDumpQueues_Click(wxCommandEvent& event)
 
 void editelevator::OnInit()
 {
-	Simcore = debugpanel->GetRoot()->GetActiveEngine()->GetSystem();
+	Simcore = debugpanel->GetSystem();
 
 	last_elevator = 0;
 	floor_number = 0;
@@ -1188,12 +1188,10 @@ void editelevator::OnInit()
 void editelevator::Loop()
 {
 	//if active engine has changed, refresh values
-	if (debugpanel->GetRoot()->GetActiveEngine())
-	{
-		if (Simcore != debugpanel->GetRoot()->GetActiveEngine()->GetSystem())
-			OnInit();
-	}
-	else
+	if (Simcore != debugpanel->GetSystem())
+		OnInit();
+
+	if (!Simcore)
 		return;
 
 	int elev_num;

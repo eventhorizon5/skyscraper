@@ -267,7 +267,7 @@ bool ParameterViewer::Setup()
 {
 	//set up parameter dialog
 
-	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetSystem();
 
 	if (create == true)
 	{

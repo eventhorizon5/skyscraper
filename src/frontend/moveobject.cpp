@@ -243,7 +243,7 @@ MoveObject::~MoveObject()
 
 void MoveObject::OnInit()
 {
-	Simcore = panel->GetRoot()->GetActiveEngine()->GetSystem();
+	Simcore = panel->GetSystem();
 	hold_vector = Ogre::Vector3(0, 0, 0);
 }
 

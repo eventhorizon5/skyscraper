@@ -172,16 +172,13 @@ void PeopleManager::Loop()
 {
 	bool reset = false;
 
-	if (panel->GetRoot()->GetActiveEngine())
+	if (Simcore != panel->GetSystem())
 	{
-		SBS::SBS *active = panel->GetRoot()->GetActiveEngine()->GetSystem();
-		if (Simcore != active)
-		{
-			//if active engine has changed, refresh values
-			Simcore = active;
-		}
+		//if active engine has changed, refresh values
+		Simcore = panel->GetSystem();
 	}
-	else
+
+	if (!Simcore)
 		return;
 
 	BuildList();

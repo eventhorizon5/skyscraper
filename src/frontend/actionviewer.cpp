@@ -133,17 +133,14 @@ ActionViewer::~ActionViewer()
 
 void ActionViewer::Loop()
 {
-	if (panel->GetRoot()->GetActiveEngine())
+	if (Simcore != panel->GetSystem())
 	{
-		SBS::SBS *active = panel->GetRoot()->GetActiveEngine()->GetSystem();
-		if (Simcore != active)
-		{
-			//if active engine has changed, refresh values
-			Simcore = active;
-			lastcount = 0;
-		}
+		//if active engine has changed, refresh values
+		Simcore = panel->GetSystem();
+		lastcount = 0;
 	}
-	else
+
+	if (!Simcore)
 		return;
 
 	if (Simcore->GetActionCount() != lastcount)
