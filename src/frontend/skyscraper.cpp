@@ -113,6 +113,9 @@ bool Skyscraper::OnInit(void)
 	console = 0;
 	soundsys = 0;
 	progdialog = 0;
+	dpanel = 0;
+	window = 0;
+	console = 0;
 	new_location = false;
 	new_time = false;
 	latitude = 0.0f;
@@ -121,6 +124,7 @@ bool Skyscraper::OnInit(void)
 	active_engine = 0;
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
+
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -2022,7 +2026,7 @@ void Skyscraper::messageLogged(const Ogre::String &message, Ogre::LogMessageLeve
 void Skyscraper::ShowConsole(bool send_button)
 {
 	if (!console)
-		console = new Console(this, window, -1);
+		console = new Console(this, NULL, -1);
 	console->Show();
 	console->Raise();
 	console->SetPosition(wxPoint(GetConfigInt("Skyscraper.Frontend.ConsoleX", 10), GetConfigInt("Skyscraper.Frontend.ConsoleY", 25)));
