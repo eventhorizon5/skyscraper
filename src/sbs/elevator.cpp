@@ -5983,11 +5983,6 @@ void Elevator::CancelHallCall(int floor, int direction)
 	}
 
 	DeleteRoute(floor, direction);
-}
-
-void Elevator::HandleDequeue(int direction)
-{
-	//handle elevator behavior on dequeue
 
 	//if active queue is empty, stop elevator
 	if (MoveElevator == true && EmergencyStop == 0)
@@ -5996,6 +5991,11 @@ void Elevator::HandleDequeue(int direction)
 				(direction == -1 && DownQueue.size() == 0))
 			Stop();
 	}
+}
+
+void Elevator::HandleDequeue(int direction)
+{
+	//handle elevator behavior on dequeue
 
 	//reset active call status if queues are empty
 	if (DownQueue.empty() == true && UpQueue.empty() == true)

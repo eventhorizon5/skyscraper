@@ -1,5 +1,39 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-(Elevator Editor) Active Hall Direction box now shows the direction text along with the call type
+-(Elevator Editor) combined Door Height and Door Width boxes into a single Door Size
+-(Elevator Editor) added Type box
+-(Elevator Editor) removed the Origin box (no longer used)
+-(Bullet) updated with a minor initialization fix
+-person object should use floor ID text instead of number
+-cleanups of Object Information window - this also fixes some serious object initialization bugs
+-cleaned up singleton variables in frontend; moved them into the object classes
+-control panel windows should be created on-demand (performance improvement)
+-have only main screen handle idle events - this and the previous change should result in minor performance improvements
+-pause the control panel's timer when the progress bar is visible (performance improvement)
+-when taking over a hall call, if elevator's routes are empty, stop the elevator when cancelling the hall call response
+-added support for elevators that are closer and become available during an active hall call, to take over the call response.
+-added function (C++) to cancel an elevator's hall call response route, if no related floor button has been pressed
+-added function (C++) to return control/button light status
+-in the control panel, timer object should be reinitialized, not deleted and recreated from the OnInit call in the timer notify function.  This fixes an issue where the timer object was deleted and then code continued to run in it's Notify function
+-fixed an issue where elevator service mode controls would get stuck if an elevator was switched into a different service mode, while the controls were set.  This change has the elevator mode setting functions succeed instead of fail, if the mode is the same.
+-person should update their Current Floor setting while riding in an elevator
+-have person wait until doors are open before exiting elevator
+-more status reporting for Person object
+-have person stop route if hall call fails
+-if a person presses a call button, and the call status becomes invalid while they're waiting (the button light switches off), have them stop their route
+-if a person is in an elevator that switches into a service mode, have them exit that elevator and try the hall call again
+-if fire phase 1 mode is enabled while a person is in an elevator, have them exit at the recall floor instead of their original destination, and cancel all routes
+-(Triton Center) motor position fixes
+-added GetDirectFloors function (C++), along with code to find some routes that would fail with previous tests
+-have route functions keep track of direct connections; this improves performance
+-added an indirect local elevator check, if a person needs to take a local elevator before reaching direct route elevators
+-shutdown fix - the system was exiting to the main menu if the active engine was shut down, when it's supposed to switch to another engine
+-fix to properly reset values in People Manager window, when selecting a different person
+-if person is riding in elevator, show riding status
+-for Person object, wait for elevator doors to open before pressing floor button
+-fix person list refreshing when switching engines
+-array size fix for GetPerson function - fixes a crash when the list only contains 1 person, and the user switches to a different engine
 -new People Manager dialog
 -script errors now show the engine context number of the error, if more than one engine is running
 -script errors now show the building filename instead of the section number, which isn't needed due to the script context string
