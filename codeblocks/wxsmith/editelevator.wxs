@@ -485,7 +485,6 @@
 												<object class="wxTextCtrl" name="ID_txtType" variable="txtType" member="yes">
 													<size>75,-1</size>
 													<tooltip>Type</tooltip>
-													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
 												<border>5</border>
