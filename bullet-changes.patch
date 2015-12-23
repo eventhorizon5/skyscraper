@@ -21,8 +21,16 @@ diff -urN bullet.orig/src/BulletCollision/NarrowPhaseCollision/btGjkPairDetector
  
 diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.cpp bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.cpp
 --- bullet.orig/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2015-03-26 13:15:36.992897379 -0500
-+++ bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2015-03-26 21:23:50.991426488 -0500
-@@ -187,7 +187,7 @@
++++ bullet.new/src/BulletDynamics/Character/btKinematicCharacterController.cpp	2015-12-22 17:59:06.345343465 -0600
+@@ -136,6 +136,7 @@
+        m_upAxis = upAxis;
+        m_addedMargin = 0.02;
+        m_walkDirection.setValue(0,0,0);
++       m_normalizedDirection.setValue(0,0,0);
+        m_useGhostObjectSweepTest = true;
+        m_ghostObject = ghostObject;
+        m_stepHeight = stepHeight;
+@@ -187,7 +188,7 @@
  
  	collisionWorld->getDispatcher()->dispatchAllCollisionPairs(m_ghostObject->getOverlappingPairCache(), collisionWorld->getDispatchInfo(), collisionWorld->getDispatcher());
  
@@ -31,7 +39,7 @@ diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterControlle
  	
  	btScalar maxPen = btScalar(0.0);
  	for (int i = 0; i < m_ghostObject->getOverlappingPairCache()->getNumOverlappingPairs(); i++)
-@@ -234,10 +234,13 @@
+@@ -234,10 +235,13 @@
  			//manifold->clearManifold();
  		}
  	}
@@ -49,7 +57,7 @@ diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterControlle
  	return penetration;
  }
  
-@@ -338,17 +341,19 @@
+@@ -338,17 +342,19 @@
  	btScalar distance2 = (m_currentPosition-m_targetPosition).length2();
  //	printf("distance2=%f\n",distance2);
  
@@ -72,7 +80,7 @@ diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterControlle
  	while (fraction > btScalar(0.01) && maxIter-- > 0)
  	{
  		start.setOrigin (m_currentPosition);
-@@ -607,24 +612,9 @@
+@@ -607,24 +613,9 @@
  void btKinematicCharacterController::preStep (  btCollisionWorld* collisionWorld)
  {
  	
@@ -97,7 +105,7 @@ diff -urN bullet.orig/src/BulletDynamics/Character/btKinematicCharacterControlle
  }
  
  #include <stdio.h>
-@@ -768,3 +758,20 @@
+@@ -768,3 +759,20 @@
  {
  	m_interpolateUp = value;
  }
