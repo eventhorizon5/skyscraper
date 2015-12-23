@@ -476,6 +476,30 @@
 												<flag>wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
+													<label>Type:</label>
+												</object>
+												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_txtType" variable="txtType" member="yes">
+													<size>75,-1</size>
+													<tooltip>Type</tooltip>
+													<style>wxTE_READONLY</style>
+												</object>
+												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
+												<border>5</border>
+											</object>
+											<object class="sizeritem">
+												<object class="wxButton" name="ID_bSetType" variable="bSetType" member="yes">
+													<label>Set</label>
+													<style>wxBU_EXACTFIT</style>
+													<handler function="On_bSetType_Click" entry="EVT_BUTTON" />
+												</object>
+												<flag>wxALL|wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL</flag>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT4" variable="StaticText4" member="yes">
 													<label>Enabled:</label>
 												</object>
@@ -528,33 +552,14 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT8" variable="StaticText8" member="yes">
-													<label>DWidth:</label>
+													<label>DoorSize:</label>
 												</object>
 												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
-												<object class="wxTextCtrl" name="ID_txtDoorWidth" variable="txtDoorWidth" member="yes">
+												<object class="wxTextCtrl" name="ID_txtDoorSize" variable="txtDoorSize" member="yes">
 													<size>75,-1</size>
 													<tooltip>Door Width</tooltip>
-													<style>wxTE_READONLY</style>
-												</object>
-												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
-												<border>5</border>
-											</object>
-											<object class="spacer">
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_TOP</flag>
-											</object>
-											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_STATICTEXT9" variable="StaticText9" member="yes">
-													<label>DHeight:</label>
-												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-											</object>
-											<object class="sizeritem">
-												<object class="wxTextCtrl" name="ID_txtDoorHeight" variable="txtDoorHeight" member="yes">
-													<pos>-1,75</pos>
-													<size>75,-1</size>
-													<tooltip>Door Height</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
@@ -853,7 +858,7 @@
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtActiveCallDirection" variable="txtActiveCallDirection" member="yes">
 													<size>75,-1</size>
-													<tooltip>Active Call Direction</tooltip>
+													<tooltip>Active Call Direction and Type</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -1331,29 +1336,15 @@
 												<border>5</border>
 											</object>
 											<object class="sizeritem">
-												<object class="wxStaticText" name="ID_STATICTEXT16" variable="StaticText16" member="yes">
-													<label>Origin:</label>
-												</object>
-												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-											</object>
-											<object class="sizeritem">
-												<object class="wxTextCtrl" name="ID_txtOrigin" variable="txtOrigin" member="yes">
-													<size>100,-1</size>
-													<style>wxTE_READONLY</style>
-												</object>
-												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
-												<border>5</border>
-											</object>
-											<object class="sizeritem">
 												<object class="wxStaticText" name="ID_STATICTEXT17" variable="StaticText17" member="yes">
-													<label>OriginFlr:</label>
+													<label>StartFlr:</label>
 												</object>
 												<flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_txtOriginFloor" variable="txtOriginFloor" member="yes">
 													<size>100,-1</size>
-													<tooltip>Origin Floor</tooltip>
+													<tooltip>Starting Floor</tooltip>
 													<style>wxTE_READONLY</style>
 												</object>
 												<flag>wxLEFT|wxRIGHT|wxALIGN_LEFT|wxALIGN_TOP</flag>
