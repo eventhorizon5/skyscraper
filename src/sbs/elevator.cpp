@@ -197,6 +197,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	DirMessageSound = false;
 	DoorMessageSound = false;
 	ControlPressActive = false;
+	ManualStop = false;
 
 	//create timers
 	parking_timer = new Timer("Parking Timer", this, 0);
@@ -1446,6 +1447,7 @@ void Elevator::MoveElevatorToFloor()
 
 		MovementRunning = true;
 		FinishedMove = false;
+		ManualStop = false;
 		std::string dir_string;
 
 		Notified = false;
@@ -2016,11 +2018,11 @@ void Elevator::FinishMove()
 {
 	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
+	if (IsManuallyStopped() == true)
+		GotoFloor = GetFloor();
+
 	if (EmergencyStop == 0 || IsManuallyStopped() == true)
 	{
-		if (IsManuallyStopped() == true)
-			GotoFloor = GetFloor();
-
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
 		Report("arrived at floor " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
@@ -2127,6 +2129,7 @@ void Elevator::FinishMove()
 	ElevatorFloor = GotoFloor;
 
 	EmergencyStop = 0;
+	ManualStop = false;
 	SkipFloorSound = false;
 	Parking = false;
 	FinishedMove = true;
@@ -5464,6 +5467,7 @@ void Elevator::Up()
 	{
 		//stop movement
 		ManualMove = 0;
+		ManualStop = true;
 		Stop();
 	}
 }
@@ -5494,6 +5498,7 @@ void Elevator::Down()
 	{
 		//stop movement
 		ManualMove = 0;
+		ManualStop = true;
 		Stop();
 	}
 }
@@ -6001,7 +6006,7 @@ bool Elevator::IsManuallyStopped()
 {
 	//this will return true if elevator is stopped within 18 inches of the nearest landing
 
-	return (InServiceMode() == false && EmergencyStop == 1 && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5);
+	return (InServiceMode() == false && ManualStop == true && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5);
 }
 
 }

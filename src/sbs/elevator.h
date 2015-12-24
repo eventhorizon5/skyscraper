@@ -398,6 +398,7 @@ private:
 	bool DownCall;
 	bool QueuePending; //true if either queue has changed, and needs to be processed
 	int GoActiveFloor; //associated floor number for GoActive flag
+	bool ManualStop; //true if elevator has been manually stopped
 
 	//functions
 	void MoveElevatorToFloor();
