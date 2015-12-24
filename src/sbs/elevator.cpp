@@ -1981,7 +1981,7 @@ finish:
 	tmpDecelJerk = 0;
 
 	//dequeue floor route
-	if (IsManuallyStopped() == false)
+	if (EmergencyStop == 0 && IsManuallyStopped() == false)
 		DeleteActiveRoute();
 
 	if (FinishedMove == false)
