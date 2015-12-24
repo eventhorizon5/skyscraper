@@ -405,6 +405,8 @@ public:
 	Ogre::TexturePtr GetTextureByName(const std::string &name, const std::string &group = Ogre::ResourceGroupManager::AUTODETECT_RESOURCE_GROUP_NAME);
 	int GetPersonCount() { return (int)PersonArray.size(); }
 	Person* GetPerson(int number);
+	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
+	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
 
 	//Meshes
 	MeshObject* Buildings;

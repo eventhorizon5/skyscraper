@@ -315,7 +315,7 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 	//copy source and overlay images onto new image
 	Ogre::Box source (x, y, x + width, y + height);
 	Ogre::Box dest (0, 0, width, height);
-	new_texture->getBuffer()->blit(mTex->getBuffer(), source, dest);
+	CopyTexture(mTex, new_texture, source, dest);
 
 	//create a new material
 	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
@@ -622,7 +622,7 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 		y2 = height - 1;
 
 	//draw original image onto new texture
-	texture->getBuffer()->blit(background->getBuffer());
+	CopyTexture(background, texture);
 
 	TrimString(hAlign);
 	TrimString(vAlign);
@@ -721,8 +721,8 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 	Ogre::Box source (x, y, x + width, y + height);
 	Ogre::Box source_full (0, 0, image1->getWidth(), image1->getHeight());
 	Ogre::Box overlay (0, 0, image2->getWidth(), image2->getHeight());
-	new_texture->getBuffer()->blit(image1->getBuffer(), source_full, source_full);
-	new_texture->getBuffer()->blit(image2->getBuffer(), overlay, source);
+	CopyTexture(image1, new_texture, source_full, source_full);
+	CopyTexture(image2, new_texture, overlay, source);
 
 	//create a new material
 	Ogre::MaterialPtr mMat = CreateMaterial(Name, "General");
@@ -1997,6 +1997,29 @@ void SBS::UnloadMaterials()
 	{
 		Ogre::MaterialManager::getSingleton().remove(ToString(InstanceNumber) + ":" + textureinfo[i].name);
 	}
+}
+
+void SBS::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination)
+{
+	//copy a source texture onto a destination texture using the full sizes
+
+	Ogre::Box srcbox (0, 0, 0, source->getWidth(), source->getHeight(), source->getDepth());
+	Ogre::Box dstbox (0, 0, 0, destination->getWidth(), destination->getHeight(), destination->getDepth());
+
+	CopyTexture(source, destination, srcbox, dstbox);
+}
+
+void SBS::CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox)
+{
+	//copy a source texture onto a destination texture using specified sizes
+
+	Ogre::HardwarePixelBufferSharedPtr buffer = source->getBuffer();
+
+	buffer->lock(srcBox, Ogre::HardwareBuffer::HBL_READ_ONLY);
+	const Ogre::PixelBox &pb = buffer->getCurrentLock();
+
+	destination->getBuffer()->blitFromMemory(pb, dstBox);
+	buffer->unlock();
 }
 
 }
