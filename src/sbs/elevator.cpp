@@ -1978,6 +1978,10 @@ finish:
 	motorsound->Stop();
 	tmpDecelJerk = 0;
 
+	//dequeue floor route
+	if (IsManuallyStopped() == false)
+		DeleteActiveRoute();
+
 	if (FinishedMove == false)
 		FinishMove();
 }
@@ -2012,21 +2016,14 @@ void Elevator::FinishMove()
 {
 	//post-move operations, such as chimes, opening doors, indicator updates, etc
 
-	//manualstop is true if elevator is stopped within 18 inches of the nearest landing
-	bool manualstop = (InServiceMode() == false && EmergencyStop == 1 && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5);
-
-	if (EmergencyStop == 0 || manualstop == true)
+	if (EmergencyStop == 0 || IsManuallyStopped() == true)
 	{
-		if (manualstop == true)
+		if (IsManuallyStopped() == true)
 			GotoFloor = GetFloor();
 
 		//the elevator is now stopped on a valid floor; set OnFloor to true
 		OnFloor = true;
 		Report("arrived at floor " + ToString(GotoFloor) + " (" + sbs->GetFloor(GotoFloor)->ID + ")");
-
-		//dequeue floor route
-		if (manualstop == false)
-			DeleteActiveRoute();
 	}
 
 	//turn off interior directional indicators
@@ -2037,7 +2034,7 @@ void Elevator::FinishMove()
 	if (sbs->GetFloor(sbs->camera->CurrentFloor))
 		sbs->GetFloor(sbs->camera->CurrentFloor)->UpdateDirectionalIndicators(Number);
 
-	if ((EmergencyStop == 0 || manualstop == true) && InspectionService == false)
+	if ((EmergencyStop == 0 || IsManuallyStopped() == true) && InspectionService == false)
 	{
 		//update floor indicators on current camera floor
 		if (sbs->GetFloor(sbs->camera->CurrentFloor))
@@ -2086,9 +2083,9 @@ void Elevator::FinishMove()
 		{
 			//if last entry in current queue, reset opposite queue
 			if (QueuePositionDirection == 1 && UpQueue.size() == 0 && DownQueue.size() > 0)
-				ResetQueue(false, true);
+				ResetQueue(false, true, false);
 			else if (QueuePositionDirection == -1 && DownQueue.size() == 0 && UpQueue.size() > 0)
-				ResetQueue(true, false);
+				ResetQueue(true, false, false);
 		}
 
 		//reverse queues if at either top or bottom of serviced floors
@@ -2582,11 +2579,7 @@ void Elevator::GoToRecallFloor()
 		return;
 	}
 
-	//stop elevator if moving
-	if (IsMoving == true)
-		Stop();
-
-	//reset queues
+	//reset queues (this will also stop the elevator)
 	ResetQueue(true, true);
 
 	if (OnRecallFloor() == true)
@@ -2779,7 +2772,7 @@ bool Elevator::EnableIndependentService(bool value)
 		EnableACP(false);
 		EnableUpPeak(false);
 		EnableDownPeak(false);
-		ResetQueue(true, true);
+		ResetQueue(true, true); //this will also stop the elevator
 		HoldDoors(); //turn off door timers
 		ResetNudgeTimer(false); //switch off nudge timer
 		SetDirectionalIndicators(ElevatorFloor, false, false); //switch off directional indicators on current floor
@@ -2818,12 +2811,10 @@ bool Elevator::EnableInspectionService(bool value)
 		EnableIndependentService(false);
 		EnableFireService1(0);
 		EnableFireService2(0, true);
-		ResetQueue(true, true);
+		ResetQueue(true, true); //this will also stop the elevator
 		HoldDoors(); //turn off door timers
 		ResetNudgeTimer(false); //switch off nudge timer
 		SetDirectionalIndicators(ElevatorFloor, false, false); //switch off directional indicators on current floor
-		if (IsMoving == true)
-			Stop();
 		Report("Inspection Service mode enabled");
 		InspectionService = true;
 	}
@@ -2988,7 +2979,7 @@ bool Elevator::EnableFireService2(int value, bool force)
 		EnableUpPeak(false);
 		EnableDownPeak(false);
 		EnableIndependentService(false);
-		ResetQueue(true, true);
+		ResetQueue(true, true); //this will also stop the elevator
 		HoldDoors(); //disable all door timers
 		ResetNudgeTimer(false); //switch off nudge timer
 		if (value == 1)
@@ -4015,9 +4006,10 @@ bool Elevator::IsIdle()
 		return false;
 }
 
-void Elevator::ResetQueue(bool up, bool down)
+void Elevator::ResetQueue(bool up, bool down, bool stop_if_empty)
 {
 	//reset queues
+	//if stop_if_empty is true, the elevator will stop when the related queue is empty
 
 	QueuePending = false;
 
@@ -4026,14 +4018,14 @@ void Elevator::ResetQueue(bool up, bool down)
 		if (sbs->Verbose)
 			Report("QueueReset: resetting up queue");
 		UpQueue.clear();
-		HandleDequeue(1);
+		HandleDequeue(1, stop_if_empty);
 	}
 	if (down == true)
 	{
 		if (sbs->Verbose)
 			Report("QueueReset: resetting down queue");
 		DownQueue.clear();
-		HandleDequeue(-1);
+		HandleDequeue(-1, stop_if_empty);
 	}
 
 	ResetLights();
@@ -5983,19 +5975,19 @@ void Elevator::CancelHallCall(int floor, int direction)
 	}
 
 	DeleteRoute(floor, direction);
+}
 
-	//if active queue is empty, stop elevator
-	if (MoveElevator == true && EmergencyStop == 0)
+void Elevator::HandleDequeue(int direction, bool stop_if_empty)
+{
+	//handle elevator behavior on dequeue
+	//if stop_if_empty is true, this will stop the elevator if the related queue is empty
+
+	if (stop_if_empty == true && MoveElevator == true && EmergencyStop == 0)
 	{
 		if ((direction == 1 && UpQueue.size() == 0) ||
 				(direction == -1 && DownQueue.size() == 0))
 			Stop();
 	}
-}
-
-void Elevator::HandleDequeue(int direction)
-{
-	//handle elevator behavior on dequeue
 
 	//reset active call status if queues are empty
 	if (DownQueue.empty() == true && UpQueue.empty() == true)
@@ -6003,6 +5995,13 @@ void Elevator::HandleDequeue(int direction)
 		ActiveCallFloor = 0;
 		ActiveCallDirection = 0;
 	}
+}
+
+bool Elevator::IsManuallyStopped()
+{
+	//this will return true if elevator is stopped within 18 inches of the nearest landing
+
+	return (InServiceMode() == false && EmergencyStop == 1 && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5);
 }
 
 }

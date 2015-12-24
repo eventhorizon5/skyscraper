@@ -241,7 +241,7 @@ public:
 	bool AddFloorSigns(int door_number, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset);
 	void NotifyCallButtons(int floor, bool direction);
 	bool IsIdle();
-	void ResetQueue(bool up, bool down);
+	void ResetQueue(bool up, bool down, bool stop_if_empty = true);
 	void SetBeepSound(const std::string &filename);
 	void SetFloorSound(const std::string &prefix);
 	void SetMessageSound(bool type, bool direction, const std::string &filename);
@@ -333,6 +333,7 @@ public:
 	std::vector<Floor*> GetLobbies();
 	bool IsStopped();
 	void CancelHallCall(int floor, int direction);
+	bool IsManuallyStopped();
 
 private:
 
@@ -404,7 +405,7 @@ private:
 	void PlayStartingSounds();
 	void PlayStoppingSounds(bool emergency = false);
 	void PlayMovingSounds();
-	void HandleDequeue(int direction);
+	void HandleDequeue(int direction, bool stop_if_empty = true);
 
 	//sound objects
 	Sound *carsound;
