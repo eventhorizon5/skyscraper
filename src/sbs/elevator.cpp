@@ -2585,7 +2585,7 @@ void Elevator::GoToRecallFloor()
 	//reset queues (this will also stop the elevator)
 	ResetQueue(true, true);
 
-	if (OnRecallFloor() == true)
+	if (OnRecallFloor() == true && IsLeveled() == true)
 	{
 		if (RecallUnavailable == false)
 			Report("On recall floor");
