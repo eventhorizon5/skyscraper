@@ -180,6 +180,7 @@ Elevator::Elevator(Object *parent, int number) : Object(parent)
 	AutoDoors = sbs->GetConfigBool("Skyscraper.SBS.Elevator.AutoDoors", true);
 	OpenOnStart = sbs->GetConfigBool("Skyscraper.SBS.Elevator.OpenOnStart", false);
 	ManualMove = 0;
+	ManualMoveHold = false;
 	doorhold_direction = 0;
 	doorhold_whichdoors = 0;
 	doorhold_floor = 0;
@@ -1332,10 +1333,13 @@ void Elevator::Loop()
 		Alarm();
 
 	//process up/down buttons
-	if (ManualMove == 1)
-		Up();
-	if (ManualMove == -1)
-		Down();
+	if (ManualMoveHold == true)
+	{
+		if (ManualMove == 1)
+			Up();
+		if (ManualMove == -1)
+			Down();
+	}
 
 	//process door open/close holds
 	if (doorhold_direction > 0)
@@ -5441,18 +5445,53 @@ bool Elevator::IsLeveled()
 	return false;
 }
 
-void Elevator::Up()
+bool Elevator::Up()
 {
 	//move elevator up (manual)
 	//this function also stops the up movement when button is depressed
 
+	if (ManualMove == 0)
+	{
+		ManualMoveHold = true;
+		return Up(true);
+	}
+	else if (ManualMove == 1 && sbs->camera->MouseDown == false)
+	{
+		ManualMoveHold = false;
+		return Up(false);
+	}
+	return false;
+}
+
+bool Elevator::Down()
+{
+	//move elevator down (manual)
+	//this function also stops the down movement when button is depressed
+
+	if (ManualMove == 0)
+	{
+		ManualMoveHold = true;
+		return Down(true);
+	}
+	else if (ManualMove == -1 && sbs->camera->MouseDown == false)
+	{
+		ManualMoveHold = false;
+		return Down(false);
+	}
+	return false;
+}
+
+bool Elevator::Up(bool value)
+{
+	//move elevator up (manual)
+
 	if (Running == false)
 	{
 		ReportError("Elevator not running");
-		return;
+		return false;
 	}
 
-	if (ManualMove == 0)
+	if (ManualMove == 0 && value == true)
 	{
 		ManualMove = 1;
 
@@ -5461,26 +5500,27 @@ void Elevator::Up()
 		MoveElevator = true;
 		if (sbs->Verbose)
 			Report("Up: moving elevator");
-		return;
+		return true;
 	}
-	else if (ManualMove == 1 && sbs->camera->MouseDown == false)
+	else if (value == false && ManualMove != 0)
 	{
 		//stop movement
 		ManualMove = 0;
 		ManualStop = true;
 		Stop();
+		return true;
 	}
+	return false;
 }
 
-void Elevator::Down()
+bool Elevator::Down(bool value)
 {
 	//move elevator down (manual)
-	//this function also stops the down movement when button is depressed
 
 	if (Running == false)
 	{
 		ReportError("Elevator not running");
-		return;
+		return false;
 	}
 
 	if (ManualMove == 0)
@@ -5492,15 +5532,17 @@ void Elevator::Down()
 		MoveElevator = true;
 		if (sbs->Verbose)
 			Report("Up: moving elevator");
-		return;
+		return true;
 	}
-	else if (ManualMove == -1 && sbs->camera->MouseDown == false)
+	else if (value == false && ManualMove != 0)
 	{
 		//stop movement
 		ManualMove = 0;
 		ManualStop = true;
 		Stop();
+		return true;
 	}
+	return false;
 }
 
 Shaft* Elevator::GetShaft()

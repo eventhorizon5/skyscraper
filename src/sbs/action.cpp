@@ -161,6 +161,8 @@ bool Action::Run(Object *caller, Object *parent)
 	//SensorOn
 	//SensorOff
 	//SensorReset
+	//UpToggle
+	//DownToggle
 
 	Elevator *elevator = dynamic_cast<Elevator*>(parent);
 	Floor *floor = dynamic_cast<Floor*>(parent);
@@ -364,13 +366,33 @@ bool Action::Run(Object *caller, Object *parent)
 			return true;
 		}
 		if (command_name == "upon")
-			return elevator->SetUpButton(true);
+		{
+			if (elevator->InspectionService == true)
+				return elevator->SetUpButton(true);
+			else
+				return elevator->Up(true);
+		}
 		if (command_name == "upoff")
-			return elevator->SetUpButton(false);
+		{
+			if (elevator->InspectionService == true)
+				return elevator->SetUpButton(false);
+			else
+				return elevator->Up(false);
+		}
 		if (command_name == "downon")
-			return elevator->SetDownButton(true);
+		{
+			if (elevator->InspectionService == true)
+				return elevator->SetDownButton(true);
+			else
+				return elevator->Down(true);
+		}
 		if (command_name == "downoff")
-			return elevator->SetDownButton(false);
+		{
+			if (elevator->InspectionService == true)
+				return elevator->SetDownButton(false);
+			else
+				return elevator->Down(false);
+		}
 		if (command_name == "goon")
 			return elevator->SetGoButton(true);
 		if (command_name == "gooff")
@@ -378,15 +400,9 @@ bool Action::Run(Object *caller, Object *parent)
 		if (command_name == "return")
 			return elevator->ReturnToNearestFloor();
 		if (command_name == "up")
-		{
-			elevator->Up();
-			return true;
-		}
+			return elevator->Up();
 		if (command_name == "down")
-		{
-			elevator->Down();
-			return true;
-		}
+			return elevator->Down();
 		if (command_name == "interlockson")
 		{
 			elevator->Interlocks = true;

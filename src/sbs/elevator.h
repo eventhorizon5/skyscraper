@@ -145,6 +145,7 @@ public:
 	bool AutoDoors; //true if doors should be automatic (automatically open when reaching destination and refuse to open if off floor)
 	bool OpenOnStart; //true if doors should automatically open on simulator start
 	int ManualMove; //0 if manual movement is off; -1 for down, 1 for up
+	bool ManualMoveHold; //true if ManualMove is in hold mode
 	bool Interlocks; //lock doors during movement
 	bool GoActive; //true if go function is in use (mouse hold is active)
 	bool FloorHold; //true if floor buttons need to be held for the elevator to proceed to the floor (modern manual mode)
@@ -304,8 +305,10 @@ public:
 	int GetNearestServicedFloor();
 	bool ReturnToNearestFloor();
 	bool IsLeveled();
-	void Up();
-	void Down();
+	bool Up();
+	bool Down();
+	bool Up(bool value);
+	bool Down(bool value);
 	Shaft* GetShaft();
 	CallButton* GetPrimaryCallButton();
 	int GetActiveCallFloor();
