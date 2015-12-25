@@ -1302,6 +1302,34 @@ void editelevator::Loop()
 	txtManualMove->SetValue(wxVariant((long)elevator->ManualMove).GetString());
 	txtMusicPosition->SetValue(TruncateNumber(elevator->MusicPosition.x, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.y, 2) + wxT(", ") + TruncateNumber(elevator->MusicPosition.z, 2));
 
+	//changeable values
+	if (chkVisible->GetValue() != elevator->IsEnabled)
+		chkVisible->SetValue(elevator->IsEnabled);
+	if (chkRun->GetValue() != elevator->IsRunning())
+		chkRun->SetValue(elevator->IsRunning());
+	if (bACPMode->GetValue() != elevator->ACP)
+		bACPMode->SetValue(elevator->ACP);
+	if (bUpPeak->GetValue() != elevator->UpPeak)
+		bUpPeak->SetValue(elevator->UpPeak);
+	if (bDownPeak->GetValue() != elevator->DownPeak)
+		bDownPeak->SetValue(elevator->DownPeak);
+	if (bIndService->GetValue() != elevator->IndependentService)
+		bIndService->SetValue(elevator->IndependentService);
+	if (bInsService->GetValue() != elevator->InspectionService)
+		bInsService->SetValue(elevator->InspectionService);
+	if (elevator->FireServicePhase2 == 0 && Fire2Off->GetValue() == false)
+		Fire2Off->SetValue(true);
+	if (elevator->FireServicePhase2 == 1 && Fire2On->GetValue() == false)
+		Fire2On->SetValue(true);
+	if (elevator->FireServicePhase2 == 2 && Fire2Hold->GetValue() == false)
+		Fire2Hold->SetValue(true);
+	if (elevator->FireServicePhase1 == 0 && Fire1Off->GetValue() == false)
+		Fire1Off->SetValue(true);
+	if (elevator->FireServicePhase1 == 1 && Fire1On->GetValue() == false)
+		Fire1On->SetValue(true);
+ 	if (elevator->FireServicePhase1 == 2 && Fire1Bypass->GetValue() == false)
+		Fire1Bypass->SetValue(true);
+
 	//set call direction/type value
 	{
 		std::string direction = "", type;
@@ -1349,13 +1377,6 @@ void editelevator::SetMainValues()
 	txtDeceleration->SetValue(TruncateNumber(elevator->Deceleration, 4));
 	txtAccelJerk->SetValue(TruncateNumber(elevator->AccelJerk, 4));
 	txtDecelJerk->SetValue(TruncateNumber(elevator->DecelJerk, 4));
-	chkVisible->SetValue(elevator->IsEnabled);
-	chkRun->SetValue(elevator->IsRunning());
-	bACPMode->SetValue(elevator->ACP);
-	bUpPeak->SetValue(elevator->UpPeak);
-	bDownPeak->SetValue(elevator->DownPeak);
-	bIndService->SetValue(elevator->IndependentService);
-	bInsService->SetValue(elevator->InspectionService);
 	txtSkipFloorText->SetValue(wxString::FromAscii(elevator->GetFloorSkipText().c_str()));
 	txtACPFloor->SetValue(wxVariant((int)elevator->ACPFloor).GetString());
 	txtRecallFloor->SetValue(wxVariant((int)elevator->RecallFloor).GetString());
@@ -1369,18 +1390,6 @@ void editelevator::SetMainValues()
 	txtDepartureDelay->SetValue(TruncateNumber(elevator->DepartureDelay, 4));
 	txtArrivalDelay->SetValue(TruncateNumber(elevator->ArrivalDelay, 4));
 	txtInspectionSpeed->SetValue(TruncateNumber(elevator->InspectionSpeed, 4));
-	if (elevator->FireServicePhase2 == 0)
-		Fire2Off->SetValue(true);
-	if (elevator->FireServicePhase2 == 1)
-		Fire2On->SetValue(true);
-	if (elevator->FireServicePhase2 == 2)
-		Fire2Hold->SetValue(true);
-	if (elevator->FireServicePhase1 == 0)
-		Fire1Off->SetValue(true);
-	if (elevator->FireServicePhase1 == 1)
-		Fire1On->SetValue(true);
-	if (elevator->FireServicePhase1 == 2)
-		Fire1Bypass->SetValue(true);
 }
 
 void editelevator::On_chkVisible_Click(wxCommandEvent& event)
@@ -1428,37 +1437,25 @@ void editelevator::On_bChime_Click(wxCommandEvent& event)
 void editelevator::On_bACPMode_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
-	{
 		elevator->EnableACP(bACPMode->GetValue());
-		SetMainValues();
-	}
 }
 
 void editelevator::On_bUpPeak_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
-	{
 		elevator->EnableUpPeak(bUpPeak->GetValue());
-		SetMainValues();
-	}
 }
 
 void editelevator::On_bDownPeak_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
-	{
 		elevator->EnableDownPeak(bDownPeak->GetValue());
-		SetMainValues();
-	}
 }
 
 void editelevator::On_bIndService_Toggle(wxCommandEvent& event)
 {
 	if (elevator)
-	{
 		elevator->EnableIndependentService(bIndService->GetValue());
-		SetMainValues();
-	}
 }
 
 void editelevator::On_bInsService_Toggle(wxCommandEvent& event)
@@ -1474,7 +1471,6 @@ void editelevator::On_bInsService_Toggle(wxCommandEvent& event)
 			bUp->SetValue(false);
 			bDown->SetValue(false);
 		}
-		SetMainValues();
 	}
 }
 
