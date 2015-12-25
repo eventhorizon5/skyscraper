@@ -334,6 +334,7 @@ public:
 	bool IsStopped();
 	void CancelHallCall(int floor, int direction);
 	bool IsManuallyStopped();
+	bool IsOnFloor(int floor);
 
 private:
 

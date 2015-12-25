@@ -591,7 +591,7 @@ void CallButton::Process(int direction)
 		Report("Using elevator " + ToString(elevator->Number));
 
 	//if closest elevator is already on the called floor
-	if (elevator->GetFloor() == GetFloor() && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0) && elevator->IsLeveled() == true && elevator->IsMoving == false)
+	if (elevator->IsOnFloor(GetFloor()) && (elevator->QueuePositionDirection == direction || elevator->QueuePositionDirection == 0))
 	{
 		if (sbs->Verbose)
 			Report("Elevator active on current floor - opening");

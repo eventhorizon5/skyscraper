@@ -5910,21 +5910,10 @@ bool Elevator::OnRecallFloor()
 	//returns true if on the standard recall floor and normal recall is available
 	//returns true if on the alternate recall floor and normal recall is unavailable
 
-	if (IsLeveled() == false)
-		return false;
-
 	if (RecallUnavailable == false)
-	{
-		if (GetFloor() == RecallFloor)
-			return true;
-	}
-	else
-	{
-		if (GetFloor() == RecallFloorAlternate)
-			return true;
-	}
+		return IsOnFloor(RecallFloor);
 
-	return false;
+	return IsOnFloor(RecallFloorAlternate);
 }
 
 int Elevator::GetActiveRecallFloor()
@@ -6010,6 +5999,16 @@ bool Elevator::IsManuallyStopped()
 	//this will return true if elevator is stopped within 18 inches of the nearest landing
 
 	return (InServiceMode() == false && ManualStop == true && fabsf(GetDestinationAltitude(GetFloor()) - GetPosition().y) < 1.5);
+}
+
+bool Elevator::IsOnFloor(int floor)
+{
+	//return true if the elevator is on and leveled on the specified floor
+
+	if (GetFloor() == floor && IsLeveled() == true && IsMoving == false)
+		return true;
+
+	return false;
 }
 
 }
