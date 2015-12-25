@@ -117,7 +117,6 @@ V - Toggle noclip mode (gravity and collisions off)
 B - Binoculars mode (hold down), and reset FOV to default
 C - Pick up object (physics-enabled models)
 ; - (semicolon) - Load an additional building
-k - Shut down (unload) current building
 1 to 0 - (number keys) - Switch active camera to engine instance number (ex. 2 for building engine 2)
 Ctrl-R - Reload current building
 Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers

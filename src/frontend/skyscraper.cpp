@@ -951,19 +951,10 @@ void Skyscraper::GetInput(EngineContext *engine)
 			wait = true;
 		}
 
-		//temporary engine switch test
+		//load a new additional building
 		if (wxGetKeyState((wxKeyCode)';') && wait == false)
 		{
 			Load(SelectBuilding());
-			wait = true;
-			return;
-		}
-
-		//temporary engine kill test
-		if (wxGetKeyState((wxKeyCode)'K') && wait == false)
-		{
-			EngineContext *engine = engines[GetEngineCount() - 1];
-			engine->Shutdown();
 			wait = true;
 			return;
 		}
