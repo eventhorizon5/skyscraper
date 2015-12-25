@@ -5183,8 +5183,8 @@ int Elevator::AvailableForCall(int floor, int direction, bool report_on_failure)
 										//current floor and called up, or on the same floor and not moving, or idle
 										if ((GetFloor() > floor && direction == -1) || (GetFloor() < floor && direction == 1) || (GetFloor() == floor && MoveElevator == false) || IsIdle())
 										{
-											//and if it's either going the same direction as the call, on either the highest/lowest (terminal) floor, or idle
-											if (QueuePositionDirection == direction || IsIdle())
+											//and if it's either going the same direction as the call, or queue is not active, or idle
+											if (QueuePositionDirection == direction || QueuePositionDirection == 0 || IsIdle())
 											{
 												if (sbs->Verbose)
 													Report("Available for call");
