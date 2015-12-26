@@ -5491,7 +5491,7 @@ bool Elevator::Up(bool value)
 		return false;
 	}
 
-	if (ManualMove == 0 && value == true)
+	if (ManualMove == 0 && value == true && IsMoving == false)
 	{
 		ManualMove = 1;
 
@@ -5523,7 +5523,7 @@ bool Elevator::Down(bool value)
 		return false;
 	}
 
-	if (ManualMove == 0)
+	if (ManualMove == 0 && value == true && IsMoving == false)
 	{
 		ManualMove = -1;
 
