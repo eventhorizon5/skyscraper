@@ -55,6 +55,7 @@ public:
 	void Loop();
 	bool IsInside();
 	bool IsEnabled() { return is_enabled; }
+	void GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max);
 
 private:
 	Ogre::Vector3 area_min;

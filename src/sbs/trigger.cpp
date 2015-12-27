@@ -301,4 +301,12 @@ bool Trigger::IsInside()
 	return is_inside;
 }
 
+void Trigger::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max)
+{
+	//get bounds information for this trigger
+
+	min = area_min;
+	max = area_max;
+}
+
 }

@@ -179,7 +179,7 @@ public:
 	int mouse_x, mouse_y;
 
 	//public functions
-	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
+	SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	~SBS();
 	void Report(const std::string &message);
 	bool ReportError(const std::string &message);
@@ -407,6 +407,8 @@ public:
 	Person* GetPerson(int number);
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination);
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
+	bool IsInside();
+	bool GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max);
 
 	//Meshes
 	MeshObject* Buildings;
@@ -618,6 +620,9 @@ private:
 
 	//file listing cache
 	Ogre::StringVectorPtr filesystem_listing;
+
+	//sim engine area trigger
+	Trigger *area_trigger;
 };
 
 }

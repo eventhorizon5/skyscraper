@@ -39,7 +39,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -206,12 +206,20 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Landscape = 0;
 	mWorld = 0;
 	soundsystem = 0;
+	area_trigger = 0;
 
 	if (UnitScale <= 0)
 		UnitScale = 1;
 
 	//move to specified position
 	Move(position);
+
+	//create main engine area trigger
+	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO)
+	{
+		std::vector<std::string> empty_names;
+		area_trigger = new Trigger(this, "Main", true, "", area_min, area_max, empty_names);
+	}
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)
@@ -433,6 +441,11 @@ SBS::~SBS()
 	if (soundsystem)
 		delete soundsystem;
 	soundsystem = 0;
+
+	//delete main area trigger
+	if (area_trigger)
+		delete area_trigger;
+	area_trigger = 0;
 
 	//delete physics objects
 	if (mWorld)
@@ -4275,6 +4288,30 @@ Person* SBS::GetPerson(int number)
 		return 0;
 
 	return PersonArray[number];
+}
+
+bool SBS::IsInside()
+{
+	//return true if the user is inside the sim engine's area
+
+	if (area_trigger)
+		return area_trigger->IsInside();
+
+	//if no trigger is defined, user is always inside the area
+	return true;
+}
+
+bool SBS::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max)
+{
+	if (area_trigger)
+	{
+		area_trigger->GetBounds(min, max);
+		return true;
+	}
+
+	min = Ogre::Vector3::ZERO;
+	max = Ogre::Vector3::ZERO;
+	return false;
 }
 
 }
