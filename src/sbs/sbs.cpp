@@ -745,6 +745,10 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 	Ogre::Vector3 v7 = v3;
 	Ogre::Vector3 v8 = v4;
 
+	//exit if outside of the engine boundaries
+	if (IsInside(v1) == false && IsInside(v2) == false && IsInside(v3) == false && IsInside(v4) == false)
+		return false;
+
 	//expand to specified thickness
 	if (axis == 1)
 	{
@@ -1050,6 +1054,10 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 	Ogre::Vector3 v6 = v2;
 	Ogre::Vector3 v7 = v3;
 	Ogre::Vector3 v8 = v4;
+
+	//exit if outside of the engine boundaries
+	if (IsInside(v1) == false && IsInside(v2) == false && IsInside(v3) == false && IsInside(v4) == false)
+		return false;
 
 	//expand to specified thickness
 	if (floor_orientation == 0)
@@ -4312,6 +4320,17 @@ bool SBS::IsInside()
 		return area_trigger->IsInside();
 
 	//if no trigger is defined, user is always inside the area
+	return true;
+}
+
+bool SBS::IsInside(Ogre::Vector3 &position)
+{
+	//return true if the specified position is inside the sim engine's area
+
+	if (area_trigger)
+		return area_trigger->IsInside(position);
+
+	//if no trigger is defined, position is always inside the area
 	return true;
 }
 

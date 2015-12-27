@@ -247,7 +247,7 @@ void Trigger::Loop()
 
 	Ogre::Vector3 cam = sbs->camera->GetPosition();
 	bool changed = false;
-	if (cam > (GetPosition() + area_min) && cam < (GetPosition() + area_max))
+	if (IsInside(cam) == true)
 	{
 		if (is_inside == false)
 			changed = true;
@@ -301,12 +301,31 @@ bool Trigger::IsInside()
 	return is_inside;
 }
 
-void Trigger::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max)
+bool Trigger::IsInside(Ogre::Vector3 &position)
+{
+	//return true if the given absolute position is inside the boundaries of this trigger
+
+	Ogre::Vector3 min, max;
+	GetBounds(min, max);
+
+	if (position > min && position < max)
+		return true;
+
+	return false;
+}
+
+void Trigger::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max, bool relative)
 {
 	//get bounds information for this trigger
 
 	min = area_min;
 	max = area_max;
+
+	if (relative == false)
+	{
+		min += GetPosition();
+		max += GetPosition();
+	}
 }
 
 }

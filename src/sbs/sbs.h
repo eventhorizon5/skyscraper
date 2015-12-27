@@ -409,6 +409,7 @@ public:
 	void CopyTexture(Ogre::TexturePtr source, Ogre::TexturePtr destination, const Ogre::Box &srcBox, const Ogre::Box &dstBox);
 	bool IsInside();
 	bool GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max);
+	bool IsInside(Ogre::Vector3 &position);
 
 	//Meshes
 	MeshObject* Buildings;
