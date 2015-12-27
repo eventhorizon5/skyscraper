@@ -2135,4 +2135,31 @@ Ogre::Vector3 MeshObject::GetOffset()
 	return sbs->ToLocal(offset);
 }
 
+void MeshObject::Cut(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors, int checkwallnumber, bool reset_check)
+{
+	//cut all walls in this mesh object
+
+	for (int i = 0; i < (int)Walls.size(); i++)
+		sbs->Cut(Walls[i], start, end, cutwalls, cutfloors, checkwallnumber, reset_check);
+}
+
+void MeshObject::CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool cutwalls, bool cutfloors)
+{
+	float limit = 1000000;
+
+	Ogre::Vector3 left_min (start.x, -limit, -limit);
+	Ogre::Vector3 left_max (start.x, limit, limit);
+	Ogre::Vector3 right_min (end.x, -limit, -limit);
+	Ogre::Vector3 right_max (end.x, limit, limit);
+	Ogre::Vector3 front_min (-limit, -limit, start.z);
+	Ogre::Vector3 front_max (limit, limit, start.z);
+	Ogre::Vector3 back_min (-limit, -limit, end.z);
+	Ogre::Vector3 back_max (limit, -limit, end.z);
+
+	Cut(left_min, left_max, cutwalls, cutfloors);
+	Cut(right_min, left_max, cutwalls, cutfloors);
+	Cut(front_min, left_max, cutwalls, cutfloors);
+	Cut(back_min, left_max, cutwalls, cutfloors);
+}
+
 }

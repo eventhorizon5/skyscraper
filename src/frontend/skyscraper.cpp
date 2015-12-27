@@ -2098,9 +2098,9 @@ void Skyscraper::SetDateTime(double julian_date_time)
 	new_time = true;
 }
 
-EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position)
+EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(this, mSceneMgr, soundsys, GetEngineCount(), position);
+	EngineContext* engine = new EngineContext(this, mSceneMgr, soundsys, GetEngineCount(), position, area_min, area_max);
 	engines.push_back(engine);
 	return engine;
 }

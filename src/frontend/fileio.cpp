@@ -1538,20 +1538,19 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		std::vector<WallObject*> *wallarray;
+		MeshObject *mesh = 0;
 
 		if (buffer == "external")
-			wallarray = &Simcore->External->Walls;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			wallarray = &Simcore->Landscape->Walls;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			wallarray = &Simcore->Buildings->Walls;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
 		//perform cut
-		for (int i = 0; i < (int)wallarray->size(); i++)
-			Simcore->Cut(wallarray->at(i), Ogre::Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), ToBool(tempdata[8]));
+		mesh->Cut(Ogre::Vector3(ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3])), Ogre::Vector3(ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6])), ToBool(tempdata[7]), ToBool(tempdata[8]));
 		return sNextLine;
 	}
 

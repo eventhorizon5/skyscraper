@@ -122,7 +122,7 @@ public:
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int index);
-	EngineContext* CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO);
+	EngineContext* CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount() { return (int)engines.size(); }

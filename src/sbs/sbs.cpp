@@ -477,6 +477,15 @@ bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
+	//cut landscape and buildings for engine bounds if needed
+	if (area_trigger)
+	{
+		Ogre::Vector3 min, max;
+		area_trigger->GetBounds(min, max);
+		Landscape->CutOutsideBounds(min, max, true, true);
+		Buildings->CutOutsideBounds(min, max, true, true);
+	}
+
 	//prepare 3D geometry for use
 	Prepare();
 
