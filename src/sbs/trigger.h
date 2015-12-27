@@ -59,7 +59,7 @@ public:
 	Ogre::AxisAlignedBox GetBounds(bool relative = false);
 	Ogre::Vector3 GetMin() { return area_box.getMinimum(); }
 	Ogre::Vector3 GetMax() { return area_box.getMaximum(); }
-	bool Contains(const Ogre::AxisAlignedBox &other);
+	bool IsOutside(Ogre::Vector3 v1, Ogre::Vector3 v2);
 
 private:
 	Ogre::AxisAlignedBox area_box;

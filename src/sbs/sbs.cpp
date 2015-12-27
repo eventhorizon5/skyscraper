@@ -758,12 +758,13 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 	Ogre::Vector3 v8 = v4;
 
 	//exit if outside of the engine boundaries
-	/*Ogre::Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
-	Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v2;
-	Ogre::Vector3 v3x = wallobject->GetMesh()->GetPosition() + v3;
-	Ogre::Vector3 v4x = wallobject->GetMesh()->GetPosition() + v4;
-	if (IsInside(v1x) == false && IsInside(v2x) == false && IsInside(v3x) == false && IsInside(v4x) == false)
-		return false;*/
+	if (area_trigger)
+	{
+		Ogre::Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
+		Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
+		if (area_trigger->IsOutside(v1x, v2x) == true)
+			return false;
+	}
 
 	//expand to specified thickness
 	if (axis == 1)
@@ -1072,16 +1073,13 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 	Ogre::Vector3 v8 = v4;
 
 	//exit if outside of the engine boundaries
-	/*if (area_trigger)
+	if (area_trigger)
 	{
 		Ogre::Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
-		Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v2;
-		Ogre::Vector3 v3x = wallobject->GetMesh()->GetPosition() + v3;
-		Ogre::Vector3 v4x = wallobject->GetMesh()->GetPosition() + v4;
-		Ogre::AxisAlignedBox box (v1x, v2x, v3x, v4x);
-		if (area_trigger->Contains(box) == false)
+		Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v3;
+		if (area_trigger->IsOutside(v1x, v2x) == true)
 			return false;
-	}*/
+	}
 
 	//expand to specified thickness
 	if (floor_orientation == 0)

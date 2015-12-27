@@ -310,7 +310,7 @@ bool Trigger::IsInside()
 
 bool Trigger::IsInside(Ogre::Vector3 &position)
 {
-	//return true if the given absolute position is inside the boundaries of this trigger
+	//return true if the given absolute position is inside the trigger area
 
 	return area_box.contains(position - GetPosition());
 }
@@ -331,10 +331,23 @@ Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 	return Ogre::AxisAlignedBox(min, max);
 }
 
-bool Trigger::Contains(const Ogre::AxisAlignedBox &other)
+bool Trigger::IsOutside(Ogre::Vector3 v1, Ogre::Vector3 v2)
 {
-	Ogre::AxisAlignedBox box = GetBounds();
-	return box.contains(other);
+	//return true if the given rectangle is outside of the trigger area
+
+	v1 -= GetPosition();
+	v2 -= GetPosition();
+	Ogre::Vector3 min = area_box.getMinimum();
+	Ogre::Vector3 max = area_box.getMaximum();
+
+	if ((v1.x < min.x && v2.x < min.x) ||
+		(v1.y < min.y && v2.y < min.y) ||
+		(v1.z < min.z && v2.z < min.z) ||
+		(v1.x > max.x && v2.x > max.x) ||
+		(v1.y > max.y && v2.y > max.y) ||
+		(v1.z > max.z && v2.z > max.z))
+		return true;
+	return false;
 }
 
 }
