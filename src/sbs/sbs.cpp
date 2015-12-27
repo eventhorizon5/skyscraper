@@ -217,8 +217,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	//create main engine area trigger
 	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO)
 	{
-		std::vector<std::string> empty_names;
-		area_trigger = new Trigger(this, "Boundary Trigger", true, "", area_min, area_max, empty_names);
+		std::vector<std::string> names;
+		names.push_back("Off");
+		area_trigger = new Trigger(this, "System Boundary", true, "", area_min, area_max, names);
 	}
 
 	//create sound system object if sound is enabled
@@ -235,7 +236,14 @@ void SBS::Initialize()
 	ResetTextureMapping(true);
 
 	//set up physics
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(Ogre::Vector3(-10000, -10000, -10000), Ogre::Vector3(10000, 10000, 10000)), Ogre::Vector3(0, 0, 0), true);
+	Ogre::Vector3 min, max;
+	GetBounds(min, max);
+	if (min == Ogre::Vector3::ZERO && max == Ogre::Vector3::ZERO)
+	{
+		min = Ogre::Vector3(-10000, -10000, -10000);
+		max = Ogre::Vector3(10000, 10000, 10000);
+	}
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(min, max), Ogre::Vector3(0, 0, 0), true);
 	mWorld->setAllowedCcdPenetration(0);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
@@ -481,8 +489,8 @@ bool SBS::Start(Ogre::Camera *camera)
 	if (area_trigger)
 	{
 		Report("Cutting outside boundaries...");
-		Ogre::Vector3 min, max;
-		area_trigger->GetBounds(min, max);
+		Ogre::Vector3 min = area_trigger->GetMin();
+		Ogre::Vector3 max = area_trigger->GetMax();
 		Landscape->CutOutsideBounds(min, max, true, true);
 		Buildings->CutOutsideBounds(min, max, true, true);
 		External->CutOutsideBounds(min, max, true, true);
@@ -750,8 +758,12 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 	Ogre::Vector3 v8 = v4;
 
 	//exit if outside of the engine boundaries
-	if (IsInside(v1) == false && IsInside(v2) == false && IsInside(v3) == false && IsInside(v4) == false)
-		return false;
+	/*Ogre::Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
+	Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v2;
+	Ogre::Vector3 v3x = wallobject->GetMesh()->GetPosition() + v3;
+	Ogre::Vector3 v4x = wallobject->GetMesh()->GetPosition() + v4;
+	if (IsInside(v1x) == false && IsInside(v2x) == false && IsInside(v3x) == false && IsInside(v4x) == false)
+		return false;*/
 
 	//expand to specified thickness
 	if (axis == 1)
@@ -1060,8 +1072,16 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 	Ogre::Vector3 v8 = v4;
 
 	//exit if outside of the engine boundaries
-	if (IsInside(v1) == false && IsInside(v2) == false && IsInside(v3) == false && IsInside(v4) == false)
-		return false;
+	/*if (area_trigger)
+	{
+		Ogre::Vector3 v1x = wallobject->GetMesh()->GetPosition() + v1;
+		Ogre::Vector3 v2x = wallobject->GetMesh()->GetPosition() + v2;
+		Ogre::Vector3 v3x = wallobject->GetMesh()->GetPosition() + v3;
+		Ogre::Vector3 v4x = wallobject->GetMesh()->GetPosition() + v4;
+		Ogre::AxisAlignedBox box (v1x, v2x, v3x, v4x);
+		if (area_trigger->Contains(box) == false)
+			return false;
+	}*/
 
 	//expand to specified thickness
 	if (floor_orientation == 0)
@@ -4342,7 +4362,8 @@ bool SBS::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max)
 {
 	if (area_trigger)
 	{
-		area_trigger->GetBounds(min, max);
+		min = area_trigger->GetMin();
+		max = area_trigger->GetMax();
 		return true;
 	}
 

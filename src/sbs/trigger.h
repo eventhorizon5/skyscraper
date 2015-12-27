@@ -56,13 +56,13 @@ public:
 	bool IsInside();
 	bool IsInside(Ogre::Vector3 &position);
 	bool IsEnabled() { return is_enabled; }
-	void GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max, bool relative = false);
-	Ogre::Vector3 GetMin() { return area_min; }
-	Ogre::Vector3 GetMax() { return area_max; }
+	Ogre::AxisAlignedBox GetBounds(bool relative = false);
+	Ogre::Vector3 GetMin() { return area_box.getMinimum(); }
+	Ogre::Vector3 GetMax() { return area_box.getMaximum(); }
+	bool Contains(const Ogre::AxisAlignedBox &other);
 
 private:
-	Ogre::Vector3 area_min;
-	Ogre::Vector3 area_max;
+	Ogre::AxisAlignedBox area_box;
 	int current_position; //current trigger position
 	bool is_inside;
 	bool is_enabled;

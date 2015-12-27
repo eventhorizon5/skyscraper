@@ -40,8 +40,7 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 	Actions = action_names;
 	is_enabled = true;
 	current_position = 1;
-	this->area_min = area_min;
-	this->area_max = area_max;
+	area_box = Ogre::AxisAlignedBox(area_min, area_max);
 	is_inside = false;
 	sound = 0;
 
@@ -313,27 +312,29 @@ bool Trigger::IsInside(Ogre::Vector3 &position)
 {
 	//return true if the given absolute position is inside the boundaries of this trigger
 
-	Ogre::Vector3 min, max;
-	GetBounds(min, max);
-
-	if (position > min && position < max)
-		return true;
-
-	return false;
+	return area_box.contains(position - GetPosition());
 }
 
-void Trigger::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max, bool relative)
+Ogre::AxisAlignedBox Trigger::GetBounds(bool relative)
 {
 	//get bounds information for this trigger
 
-	min = area_min;
-	max = area_max;
+	Ogre::Vector3 min = area_box.getMinimum();
+	Ogre::Vector3 max = area_box.getMaximum();
 
 	if (relative == false)
 	{
 		min += GetPosition();
 		max += GetPosition();
 	}
+
+	return Ogre::AxisAlignedBox(min, max);
+}
+
+bool Trigger::Contains(const Ogre::AxisAlignedBox &other)
+{
+	Ogre::AxisAlignedBox box = GetBounds();
+	return box.contains(other);
 }
 
 }
