@@ -480,10 +480,15 @@ bool SBS::Start(Ogre::Camera *camera)
 	//cut landscape and buildings for engine bounds if needed
 	if (area_trigger)
 	{
+		Report("Cutting outside boundaries...");
 		Ogre::Vector3 min, max;
 		area_trigger->GetBounds(min, max);
 		Landscape->CutOutsideBounds(min, max, true, true);
 		Buildings->CutOutsideBounds(min, max, true, true);
+		External->CutOutsideBounds(min, max, true, true);
+
+		for (int i = 0; i < (int)FloorArray.size(); i++)
+			FloorArray[i].object->Level->CutOutsideBounds(min, max, true, true);
 	}
 
 	//prepare 3D geometry for use
