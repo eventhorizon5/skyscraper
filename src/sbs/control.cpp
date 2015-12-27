@@ -53,6 +53,7 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	Locked = false;
 	KeyID = 0;
 	light_status = false;
+	sound = 0;
 
 	//create object mesh
 	ControlMesh = new MeshObject(this, name2, "", sbs->GetConfigFloat("Skyscraper.SBS.MaxSmallRenderDistance", 100));
@@ -111,8 +112,11 @@ Control::Control(Object *parent, const std::string &name, bool permanent, const 
 	sbs->TexelOverride = false;
 
 	//create sound object
-	sound = new Sound(this, name, true);
-	sound->Load(sound_file);
+	if (sound_file != "")
+	{
+		sound = new Sound(this, name, true);
+		sound->Load(sound_file);
+	}
 
 	//register control
 	sbs->RegisterControl(this);
@@ -241,8 +245,12 @@ int Control::GetPreviousSelectPosition()
 void Control::PlaySound()
 {
 	//play associated button sound
-	sound->SetLoopState(false);
-	sound->Play();
+
+	if (sound)
+	{
+		sound->SetLoopState(false);
+		sound->Play();
+	}
 }
 
 int Control::GetSelectPosition()

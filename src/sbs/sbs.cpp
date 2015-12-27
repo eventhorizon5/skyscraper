@@ -218,7 +218,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO)
 	{
 		std::vector<std::string> empty_names;
-		area_trigger = new Trigger(this, "Main", true, "", area_min, area_max, empty_names);
+		area_trigger = new Trigger(this, "Boundary Trigger", true, "", area_min, area_max, empty_names);
 	}
 
 	//create sound system object if sound is enabled
@@ -671,6 +671,10 @@ void SBS::MainLoop()
 
 	//process timers
 	ProcessTimers();
+
+	//process engine boundary trigger
+	if (area_trigger)
+		area_trigger->Loop();
 
 	ProfileManager::Stop_Profile();
 }

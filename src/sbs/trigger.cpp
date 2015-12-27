@@ -43,10 +43,14 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 	this->area_min = area_min;
 	this->area_max = area_max;
 	is_inside = false;
+	sound = 0;
 
 	//create sound object
-	sound = new Sound(this, name, true);
-	sound->Load(sound_file);
+	if (sound_file != "")
+	{
+		sound = new Sound(this, name, true);
+		sound->Load(sound_file);
+	}
 }
 
 Trigger::~Trigger()
@@ -158,8 +162,12 @@ int Trigger::GetPreviousSelectPosition()
 void Trigger::PlaySound()
 {
 	//play associated sound
-	sound->SetLoopState(false);
-	sound->Play();
+
+	if (sound)
+	{
+		sound->SetLoopState(false);
+		sound->Play();
+	}
 }
 
 int Trigger::GetSelectPosition()
