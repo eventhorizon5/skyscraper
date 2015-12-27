@@ -67,6 +67,7 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	elevator_arrived_down = -1;
 	elevator_direction_up = false;
 	elevator_direction_down = false;
+	sound = 0;
 
 	//create object mesh
 	std::string base = "Call Panel " + ToString(floornum) + ":" + ToString(number);
@@ -84,8 +85,11 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	KeyID = 0;
 
 	//create sound object
-	sound = new Sound(this, "Call Button Sound", true);
-	sound->Load(sound_file);
+	if (sound_file != "")
+	{
+		sound = new Sound(this, "Call Button Sound", true);
+		sound->Load(sound_file);
+	}
 
 	sbs->ResetTextureMapping(true);
 
@@ -358,8 +362,11 @@ bool CallButton::Call(bool direction)
 		return ReportError("No valid elevators found");
 
 	//play sound
-	sound->SetLoopState(false);
-	sound->Play();
+	if (sound)
+	{
+		sound->SetLoopState(false);
+		sound->Play();
+	}
 
 	//turn on button lights
 	if (direction == true)

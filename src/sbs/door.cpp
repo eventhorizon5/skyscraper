@@ -61,6 +61,7 @@ Door::Door(Object *parent, const std::string &name, const std::string &open_soun
 	Speed = speed;
 	Locked = 0;
 	KeyID = 0;
+	sound = 0;
 
 	//set speed to default value if invalid
 	if (Speed <= 0)
@@ -115,7 +116,8 @@ Door::Door(Object *parent, const std::string &name, const std::string &open_soun
 	Move(position);
 
 	//create sound object
-	sound = new Sound(this, "DoorSound", true);
+	if (open_sound != "" || close_sound != "")
+		sound = new Sound(this, "DoorSound", true);
 
 	//create door
 	sbs->DrawWalls(true, true, true, true, true, true);
@@ -192,7 +194,7 @@ bool Door::Open(Ogre::Vector3 &position, bool playsound, bool force)
 	if (IsMoving == false)
 		OpenDoor = true;
 
-	if (playsound == true)
+	if (playsound == true && sound)
 	{
 		sound->Load(OpenSound);
 		sound->Play();
@@ -212,7 +214,7 @@ void Door::Close(bool playsound)
 	if (IsMoving == false)
 		OpenDoor = false;
 
-	if (playsound == true)
+	if (playsound == true && sound)
 	{
 		sound->Load(CloseSound);
 		sound->Play();
