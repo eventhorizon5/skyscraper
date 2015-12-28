@@ -80,6 +80,7 @@ SBSIMPEXP bool StartsWith(const std::string &string, const std::string &check_st
 SBSIMPEXP void SplitString(std::vector<std::string> &dest_array, const std::string &original_string, char separator);
 SBSIMPEXP std::string ToString(int number);
 SBSIMPEXP std::string ToString(float number);
+SBSIMPEXP std::string ToString(double number);
 SBSIMPEXP float Log2(float number);
 SBSIMPEXP float Round(float number, int decimal_places = 0);
 SBSIMPEXP Ogre::Vector3 Round(const Ogre::Vector3 &value, int decimal_places = 0);
