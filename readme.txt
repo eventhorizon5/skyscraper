@@ -126,7 +126,6 @@ Ctrl-Alt-C - Crash program (throw exception) - used for testing handlers
 -elevator shaft doors can be manually opened and closed by holding down the Shift key and clicking on them - note that this only works when the interlocks are released, which can be done in the elevator editor by clicking "Set" next to "Interlocks" on the related elevator
 -polygons (wall/floor sides) and other objects can be deleted by holding down both Ctrl and Alt, and clicking on the object
 -doors, controls/buttons, and call buttons can be locked/unlocked by holding down both the Ctrl and Shift keys while clicking on the side to lock, if you have the associated key
--call button light status can be changed by shift-clicking the related button
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

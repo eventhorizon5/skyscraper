@@ -668,14 +668,6 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 					//if ctrl and shift are held, toggle lock
 					callbutton->ToggleLock();
 				}
-				else if (shift == true)
-				{
-					//if shift is held, change button status instead
-					if (direction == "Up")
-						callbutton->UpLight(!callbutton->GetUpStatus());
-					else
-						callbutton->DownLight(!callbutton->GetDownStatus());
-				}
 				else
 				{
 					//press button
