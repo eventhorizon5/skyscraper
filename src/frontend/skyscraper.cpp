@@ -124,6 +124,7 @@ bool Skyscraper::OnInit(void)
 	active_engine = 0;
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
+	shift = Ogre::Vector3::ZERO;
 
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
@@ -2102,6 +2103,10 @@ EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position, const Ogr
 {
 	EngineContext* engine = new EngineContext(this, mSceneMgr, soundsys, GetEngineCount(), position, area_min, area_max);
 	engines.push_back(engine);
+
+	//adjust for shift factor if needed
+	engine->GetSystem()->Move(shift);
+
 	return engine;
 }
 
@@ -2299,6 +2304,8 @@ void Skyscraper::CenterEngine(int index)
 	{
 		engines[i]->GetSystem()->Move(-offset);
 	}
+
+	shift -= offset;
 }
 
 }

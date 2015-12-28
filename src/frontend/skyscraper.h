@@ -196,6 +196,8 @@ private:
 
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
+
+	Ogre::Vector3 shift; //view shift amount, used for CenterEngine function
 };
 
 class MainScreen : public wxFrame
