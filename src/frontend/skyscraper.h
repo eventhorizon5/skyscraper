@@ -132,6 +132,7 @@ public:
 	void RaiseWindow();
 	void RefreshConsole();
 	void RefreshViewport();
+	void CenterEngine(int index);
 
 private:
 	//mouse status

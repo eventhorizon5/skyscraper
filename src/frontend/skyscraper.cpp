@@ -2180,6 +2180,9 @@ void Skyscraper::SetActiveEngine(int index)
 	//switch context to new engine instance
 	active_engine = engines[index];
 	active_engine->GetSystem()->AttachCamera(mCamera);
+
+	//center new engine instance
+	CenterEngine(index);
 }
 
 bool Skyscraper::RunEngines()
@@ -2279,6 +2282,23 @@ void Skyscraper::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 	mViewport->_updateDimensions();
+}
+
+void Skyscraper::CenterEngine(int index)
+{
+	//shift the engines so that the specified engine is in the center
+
+	EngineContext *engine = GetEngine(index);
+
+	if (!engine)
+		return;
+
+	Ogre::Vector3 offset = engine->GetSystem()->GetPosition();
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		engines[i]->GetSystem()->Move(-offset);
+	}
 }
 
 }
