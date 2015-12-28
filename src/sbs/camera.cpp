@@ -165,12 +165,11 @@ void Camera::SetPosition(const Ogre::Vector3 &position)
 		return;
 
 	if (EnableBullet == true)
-	{
 		GetSceneNode()->SetPosition(position - sbs->ToLocal(MainCamera->getPosition()));
-		mCharacter->updateTransform(true, false, false);
-	}
 	else
 		MainCamera->setPosition(sbs->ToRemote(position));
+
+	OnMove(false);
 }
 
 void Camera::SetDirection(const Ogre::Vector3 &direction)
@@ -212,11 +211,11 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	Ogre::Quaternion bodyrot = y;
 	Rotation = vector;
 	MainCamera->setOrientation(camrot);
+
 	if (EnableBullet == true)
-	{
 		mCharacter->setOrientation(bodyrot);
-		mCharacter->updateTransform(false, true, false);
-	}
+
+	OnRotate(false);
 }
 
 Ogre::Vector3 Camera::GetPosition(bool relative)
@@ -380,7 +379,6 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
 	{
 		//rotate character collider
 		mCharacter->setOrientation(rot);
-		mCharacter->updateTransform(false, true, false);
 
 		//rotate camera
 		MainCamera->pitch(Ogre::Degree(xdeg));
@@ -388,6 +386,8 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
 	}
 	else
 		MainCamera->setOrientation(rot);
+
+	OnRotate(false);
 }
 
 void Camera::SetStartDirection(const Ogre::Vector3 &direction)
@@ -1381,6 +1381,18 @@ bool Camera::Detach()
 	MainCamera = 0;
 
 	return true;
+}
+
+void Camera::OnMove(bool parent)
+{
+	if (EnableBullet == true)
+		mCharacter->updateTransform(true, false, false);
+}
+
+void Camera::OnRotate(bool parent)
+{
+	if (EnableBullet == true)
+		mCharacter->updateTransform(false, true, false);
 }
 
 }

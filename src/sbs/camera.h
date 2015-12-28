@@ -147,6 +147,8 @@ public:
 	void Refresh();
 	bool Attach(Ogre::Camera *camera);
 	bool Detach();
+	void OnMove(bool parent);
+	void OnRotate(bool parent);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
