@@ -2216,7 +2216,15 @@ bool Skyscraper::RunEngines()
 		//one or more engines are loading
 		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
 		{
-			if (engines[i]->IsLoadingFinished() == false)
+			bool run = true;
+			if (i > 0 && ConcurrentLoads == false)
+			{
+				//if concurrent loads is off, skip running if previous engine is not finished loading
+				if (engines[i - 1]->IsLoadingFinished() == false)
+					run = false;
+			}
+
+			if (engines[i]->IsLoadingFinished() == false && run == true)
 			{
 				if (engines[i]->Run() == false)
 					result = false;
@@ -2228,10 +2236,11 @@ bool Skyscraper::RunEngines()
 		{
 			if (active_engine)
 			{
-				//exit if loading multiple buildings on startup
+				//exit if active engine is still loading
 				if (active_engine->IsLoading() == true && active_engine->IsLoadingFinished() == false)
 					continue;
 
+				//exit if active engine is finished, but other buildings are still loading
 				if (active_engine->IsLoadingFinished() == true && isloading == true)
 					continue;
 			}
