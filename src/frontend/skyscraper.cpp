@@ -1773,6 +1773,9 @@ void Skyscraper::UnloadToMenu()
 	window->SetClientSize(GetConfigInt("Skyscraper.Frontend.Menu.Width", 640), GetConfigInt("Skyscraper.Frontend.Menu.Height", 480));
 	window->Center();
 
+	ConcurrentLoads = false;
+	RenderOnStartup = false;
+
 	StartSound();
 	StartupRunning = true;
 }
@@ -2220,7 +2223,7 @@ bool Skyscraper::RunEngines()
 			if (i > 0 && ConcurrentLoads == false)
 			{
 				//if concurrent loads is off, skip running if previous engine is not finished loading
-				if (engines[i - 1]->IsLoadingFinished() == false)
+				if (engines[i - 1]->IsLoading() == true && engines[i - 1]->IsLoadingFinished() == false)
 					run = false;
 			}
 
