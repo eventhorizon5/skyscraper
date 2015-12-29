@@ -407,11 +407,11 @@ true</font></p>
 <p align="left"><strong>16. DateTime</strong> - set UTC date/time on startup (in Julian value), for sky system<br>
 <font face="Courier New, Courier, mono" size="2">DateTime = 2457197.1254</font></p>
 
-<p align="left"><strong>17. Position</strong> - set the 3D position of this building, used when loading multiple buildings<br>
+<p align="left"><strong>17. Position</strong> - set the 3D position of this building, used when loading multiple buildings.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Position = <em>X, Y, Z</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Position = 100, 0, 100</font></p>
 
-<p align="left"><strong>18. Bounds</strong> - set the 3D boundaries of this building, used when loading multiple buildings.  If both Y values are 0, the Y values are set to be unlimited<br>
+<p align="left"><strong>18. Bounds</strong> - set the 3D boundaries of this building, used when loading multiple buildings.  If both Y values are 0, the Y values are set to be unlimited.  If loading multiple buildings, this parameter needs to be set for the first building (the one that loads the others), in order to properly set it's boundaries.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Bounds = <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Bounds = -100, 0, -100, 100, 0, 100</font></p>
 
