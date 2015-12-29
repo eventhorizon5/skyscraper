@@ -236,14 +236,8 @@ void SBS::Initialize()
 	ResetTextureMapping(true);
 
 	//set up physics
-	Ogre::Vector3 min, max;
-	GetBounds(min, max);
-	if (min == Ogre::Vector3::ZERO && max == Ogre::Vector3::ZERO)
-	{
-		min = Ogre::Vector3(-10000, -10000, -10000);
-		max = Ogre::Vector3(10000, 10000, 10000);
-	}
-	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, Ogre::AxisAlignedBox(min, max), Ogre::Vector3(0, 0, 0), true);
+	Ogre::AxisAlignedBox box (Ogre::Vector3::ZERO, Ogre::Vector3::ZERO);
+	mWorld = new OgreBulletDynamics::DynamicsWorld(mSceneManager, box, Ogre::Vector3::ZERO, true);
 	mWorld->setAllowedCcdPenetration(0);
 
 	/*debugDrawer = new OgreBulletCollisions::DebugDrawer();
