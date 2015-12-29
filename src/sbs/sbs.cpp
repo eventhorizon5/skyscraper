@@ -211,6 +211,12 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	if (UnitScale <= 0)
 		UnitScale = 1;
 
+	//Print SBS banner
+	PrintBanner();
+
+	//add instance number to reports
+	InstancePrompt = ToString(InstanceNumber) + "> ";
+
 	//move to specified position
 	Move(position);
 
@@ -220,9 +226,6 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	//create sound system object if sound is enabled
 	if (fmodsystem)
 		soundsystem = new SoundSystem(this, fmodsystem);
-
-	//Print SBS banner
-	PrintBanner();
 }
 
 void SBS::Initialize()
@@ -519,7 +522,8 @@ bool SBS::Start(Ogre::Camera *camera)
 
 void SBS::PrintBanner()
 {
-	Report("\n Scalable Building Simulator " + version + " " + version_state);
+	Report("");
+	Report(" Scalable Building Simulator " + version + " " + version_state);
 	Report(" Copyright (C)2004-2015 Ryan Thoryk");
 	Report(" This software comes with ABSOLUTELY NO WARRANTY. This is free");
 	Report(" software, and you are welcome to redistribute it under certain");
@@ -1199,13 +1203,13 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 
 void SBS::Report(const std::string &message)
 {
-	Ogre::LogManager::getSingleton().logMessage(message);
+	Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message);
 	LastNotification = message;
 }
 
 bool SBS::ReportError(const std::string &message)
 {
-	Ogre::LogManager::getSingleton().logMessage(message, Ogre::LML_CRITICAL);
+	Ogre::LogManager::getSingleton().logMessage(InstancePrompt + message, Ogre::LML_CRITICAL);
 	LastError = message;
 	return false;
 }

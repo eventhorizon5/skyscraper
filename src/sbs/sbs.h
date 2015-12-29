@@ -627,6 +627,9 @@ private:
 
 	//sim engine area trigger
 	Trigger *area_trigger;
+
+	//instance prompt string
+	std::string InstancePrompt;
 };
 
 }
