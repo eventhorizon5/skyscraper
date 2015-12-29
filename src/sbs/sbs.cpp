@@ -485,20 +485,6 @@ bool SBS::Start(Ogre::Camera *camera)
 {
 	//Post-init startup code goes here, before the runloop
 
-	//cut landscape and buildings for engine bounds if needed
-	if (area_trigger)
-	{
-		Report("Cutting outside boundaries...");
-		Ogre::Vector3 min = area_trigger->GetMin();
-		Ogre::Vector3 max = area_trigger->GetMax();
-		Landscape->CutOutsideBounds(min, max, true, true);
-		Buildings->CutOutsideBounds(min, max, true, true);
-		External->CutOutsideBounds(min, max, true, true);
-
-		for (int i = 0; i < (int)FloorArray.size(); i++)
-			FloorArray[i].object->Level->CutOutsideBounds(min, max, true, true);
-	}
-
 	//prepare 3D geometry for use
 	Prepare();
 
@@ -4368,6 +4354,32 @@ bool SBS::GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max)
 	min = Ogre::Vector3::ZERO;
 	max = Ogre::Vector3::ZERO;
 	return false;
+}
+
+void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bool floors)
+{
+	//cut landscape and buildings for engine bounds if needed
+	//run this function before calling Start()
+
+	if (!area_trigger)
+		return;
+
+	Report("Cutting outside boundaries...");
+	Ogre::Vector3 min = area_trigger->GetMin();
+	Ogre::Vector3 max = area_trigger->GetMax();
+
+	if (landscape == true)
+		Landscape->CutOutsideBounds(min, max, true, true);
+	if (buildings == true)
+		Buildings->CutOutsideBounds(min, max, true, true);
+	if (external == true)
+		External->CutOutsideBounds(min, max, true, true);
+
+	if (floors == true)
+	{
+		for (int i = 0; i < (int)FloorArray.size(); i++)
+			FloorArray[i].object->Level->CutOutsideBounds(min, max, true, true);
+	}
 }
 
 }

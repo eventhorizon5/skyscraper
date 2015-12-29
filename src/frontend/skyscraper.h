@@ -81,6 +81,7 @@ public:
 	int SkyMult; //sky time multiplier
 	bool ConcurrentLoads; //set to true for buildings to be loaded while another sim is active and rendering
 	bool RenderOnStartup; //override SBS engine setting with same name
+	bool CutLandscape, CutBuildings, CutExternal, CutFloors;
 
 	void Loop();
 	virtual bool OnInit(void);
@@ -102,7 +103,7 @@ public:
 	void StartSound();
 	void StopSound();
 	std::string SelectBuilding();
-	bool Load(const std::string &filename);
+	bool Load(const std::string &filename, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();

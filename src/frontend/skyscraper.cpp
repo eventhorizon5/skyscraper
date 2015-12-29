@@ -125,6 +125,10 @@ bool Skyscraper::OnInit(void)
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
 	shift = Ogre::Vector3::ZERO;
+	CutLandscape = true;
+	CutBuildings = true;
+	CutExternal = false;
+	CutFloors = false;
 
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
@@ -1624,7 +1628,7 @@ std::string Skyscraper::SelectBuilding()
 	return filename;
 }
 
-bool Skyscraper::Load(const std::string &filename)
+bool Skyscraper::Load(const std::string &filename, const Ogre::Vector3 &position, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -1642,11 +1646,15 @@ bool Skyscraper::Load(const std::string &filename)
 	mRenderWindow->update();
 
 	//move instance to an offset for testing
-	float offsetval = GetEngineCount() * 300;
-	Ogre::Vector3 offset (offsetval, 0, offsetval);
+	Ogre::Vector3 offset = Ogre::Vector3::ZERO;
+	if (GetEngineCount() > 0 && position == Ogre::Vector3::ZERO)
+	{
+		float offsetval = GetEngineCount() * 300;
+		offset = Ogre::Vector3(offsetval, 0, offsetval);
+	}
 
 	//Create simulator instance
-	EngineContext* engine = CreateEngine(offset);
+	EngineContext* engine = CreateEngine(position + offset, area_min, area_max);
 
 	if (!active_engine)
 		active_engine = engine;

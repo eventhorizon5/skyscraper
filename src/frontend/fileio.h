@@ -113,6 +113,7 @@ private:
 	int ProcFloors();
 	int ProcElevators();
 	int ProcTextures();
+	int ProcBuildings();
 	bool FunctionProc();
 	void CheckFile(const std::string &filename);
 	void GetLineInformation(bool CheckFunctionCall, int &LineNumber, int &FunctionLine, bool &IsInclude, std::string &IncludeFile, bool &IsIncludeFunction, std::string &IncludeFunctionFile);

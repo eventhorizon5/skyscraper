@@ -282,6 +282,10 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	if (!Simcore)
 		return false;
 
+	//cut outside sim boundaries if specified
+	Simcore->CutOutsideBoundaries(frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+
+	//start simulator
 	if (!Simcore->Start(camera))
 		return ReportError("Error starting simulator\n");
 

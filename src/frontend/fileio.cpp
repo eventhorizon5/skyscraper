@@ -573,6 +573,30 @@ breakpoint:
 			engine->Report("Finished elevator");
 			goto Nextline;
 		}
+		if (linecheck.substr(0, 11) == "<buildings>")
+		{
+			if (Section > 0)
+			{
+				ScriptError("Already within a section");
+				goto Error;
+			}
+			Section = 3;
+			Context = "Buildings";
+			engine->Report("Loading other buildings...");
+			goto Nextline;
+		}
+		if (linecheck.substr(0, 14) == "<endbuildings>")
+		{
+			if (Section != 3)
+			{
+				ScriptError("Not in buildings section");
+				goto Error;
+			}
+			Section = 0;
+			Context = "None";
+			engine->Report("Finished loading other buildings");
+			goto Nextline;
+		}
 
 
 		//////////////////////////
@@ -705,6 +729,10 @@ checkfloors:
 recalc:
 			returncode = ProcFloors();
 		}
+
+		//Process external buildings
+		else if (Section == 3)
+			returncode = ProcBuildings();
 
 		//process elevators
 		else if (Section == 4)
@@ -7749,6 +7777,99 @@ int ScriptProcessor::ProcTextures()
 		}
 
 		Simcore->TransformTexture(tempdata[0], tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		return sNextLine;
+	}
+
+	return sContinue;
+}
+
+int ScriptProcessor::ProcBuildings()
+{
+	//Load additional buildings
+
+	//IF/While statement stub (continue to global commands for processing)
+	if (SetCaseCopy(LineData.substr(0, 2), false) == "if" || SetCaseCopy(LineData.substr(0, 5), false) == "while")
+		return sContinue;
+
+	//process math functions
+	if (MathFunctions() == sError)
+		return sError;
+
+	//process functions
+	if (FunctionProc() == true)
+		return sNextLine;
+
+	//get text after equal sign
+	int temp2check = LineData.find("=", 0);
+	temp2 = GetAfterEquals(LineData);
+
+	//create a lowercase string of the line
+	std::string linecheck = SetCaseCopy(LineData, false);
+
+	//parameters
+	if (linecheck.substr(0, 15) == "concurrentloads")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		engine->GetFrontend()->ConcurrentLoads = ToBool(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "cutlandscape")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		engine->GetFrontend()->CutLandscape = ToBool(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 12) == "cutbuildings")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		engine->GetFrontend()->CutBuildings = ToBool(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 11) == "cutexternal")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		engine->GetFrontend()->CutExternal = ToBool(temp2);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 9) == "cutfloors")
+	{
+		if (temp2check < 0)
+			return ScriptError("Syntax error");
+
+		engine->GetFrontend()->CutFloors = ToBool(temp2);
+		return sNextLine;
+	}
+
+	//Load command
+	if (linecheck.substr(0, 4) == "load")
+	{
+		//get data
+		int params = SplitData(LineData, 5, false);
+
+		if (params != 10)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 1; i <= 9; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+		//CheckFile(tempdata[0]);
+
+		Ogre::Vector3 position (ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
+		Ogre::Vector3 min (ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
+		Ogre::Vector3 max (ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+
+		engine->GetFrontend()->Load(tempdata[0], position, min, max);
 		return sNextLine;
 	}
 

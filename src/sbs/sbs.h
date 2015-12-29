@@ -410,6 +410,7 @@ public:
 	bool IsInside();
 	bool GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max);
 	bool IsInside(Ogre::Vector3 &position);
+	void CutOutsideBoundaries(bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
 
 	//Meshes
 	MeshObject* Buildings;
