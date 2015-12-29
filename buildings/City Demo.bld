@@ -4,14 +4,22 @@
 #Skyscraper buildings, each running in a separate sim engine.
 
 <Buildings>
-    Load Observation Tower.bld, -440.5, 0, 0, -100, 0, -100, 100, 0, 100
-    Load Glass Tower.bld, 0, 0, 871.5, -500, 0, -550, 300, 0, 250
-    Load Sears Tower.bld, 550, 0, 0, -150, 0, -150, 150, 0, 150
+    Load Observation Tower.bld, -440.5, 0, 0, -100000, 0, -100000, 100, 0, 321.5
+    Load Glass Tower.bld, 0, 0, 871.5, -100000, 0, -550, 100000, 0, 100000
+    Load Sears Tower.bld, 550, 0, 0, -150, 0, -100000, 100000, 0, 321.5
+
+    #Boundaries exactly around each building:
+    #Load Observation Tower.bld, -440.5, 0, 0, -100, 0, -100, 100, 0, 100
+    #Load Glass Tower.bld, 0, 0, 871.5, -500, 0, -550, 300, 0, 250
+    #Load Sears Tower.bld, 550, 0, 0, -150, 0, -150, 150, 0, 150
 <EndBuildings>
 
 #Set the Triton Centers boundaries
 <Globals>
-    Bounds = -340.5, 0, -603, 400, 0, 321.5
+    Bounds = -340.5, 0, -100000, 400, 0, 321.5
+
+    #Boundary exactly around it
+    #Bounds = -340.5, 0, -603, 400, 0, 321.5
 <EndGlobals>
 
 #Include the Triton Center building file
