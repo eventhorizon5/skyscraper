@@ -3279,6 +3279,53 @@ int ScriptProcessor::ProcGlobals()
 		engine->GetFrontend()->SetDateTime(data);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 8) == "position")
+	{
+		int params = SplitAfterEquals(LineData);
+		if (params != 3)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 2; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		Ogre::Vector3 position;
+		position.x = ToFloat(tempdata[0]);
+		position.y = ToFloat(tempdata[1]);
+		position.z = ToFloat(tempdata[2]);
+
+		if (Simcore->GetPosition() == Ogre::Vector3::ZERO)
+			Simcore->Move(position);
+		return sNextLine;
+	}
+	if (linecheck.substr(0, 6) == "bounds")
+	{
+		int params = SplitAfterEquals(LineData);
+		if (params != 6)
+			return ScriptError("Incorrect number of parameters");
+
+		//check numeric values
+		for (int i = 0; i <= 5; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		Ogre::Vector3 min, max;
+		min.x = ToFloat(tempdata[0]);
+		min.y = ToFloat(tempdata[1]);
+		min.z = ToFloat(tempdata[2]);
+		max.x = ToFloat(tempdata[3]);
+		max.y = ToFloat(tempdata[4]);
+		max.z = ToFloat(tempdata[5]);
+
+		if (Simcore->HasBounds() == false)
+			Simcore->SetBounds(min, max);
+		return sNextLine;
+	}
 	return sContinue;
 }
 
@@ -7854,20 +7901,39 @@ int ScriptProcessor::ProcBuildings()
 		//get data
 		int params = SplitData(LineData, 5, false);
 
-		if (params != 10)
+		if (params != 1 || params != 4 || params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
-		for (int i = 1; i <= 9; i++)
+		if (params > 1)
 		{
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
+			for (int i = 1; i <= params - 1; i++)
+			{
+				if (!IsNumeric(tempdata[i]))
+					return ScriptError("Invalid value: " + tempdata[i]);
+			}
 		}
 		//CheckFile(tempdata[0]);
 
-		Ogre::Vector3 position (ToFloat(tempdata[1]), ToFloat(tempdata[2]), ToFloat(tempdata[3]));
-		Ogre::Vector3 min (ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]));
-		Ogre::Vector3 max (ToFloat(tempdata[7]), ToFloat(tempdata[8]), ToFloat(tempdata[9]));
+		Ogre::Vector3 position (Ogre::Vector3::ZERO);
+		Ogre::Vector3 min (Ogre::Vector3::ZERO);
+		Ogre::Vector3 max (Ogre::Vector3::ZERO);
+
+		if (params == 4)
+		{
+			position.x = ToFloat(tempdata[1]);
+			position.y = ToFloat(tempdata[2]);
+			position.z = ToFloat(tempdata[3]);
+		}
+		if (params == 10)
+		{
+			min.x = ToFloat(tempdata[4]);
+			min.y = ToFloat(tempdata[5]);
+			min.z = ToFloat(tempdata[6]);
+			max.x = ToFloat(tempdata[7]);
+			max.y = ToFloat(tempdata[8]);
+			max.z = ToFloat(tempdata[9]);
+		}
 
 		engine->GetFrontend()->Load(tempdata[0], position, min, max);
 		return sNextLine;

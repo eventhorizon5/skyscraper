@@ -411,6 +411,8 @@ public:
 	bool GetBounds(Ogre::Vector3 &min, Ogre::Vector3 &max);
 	bool IsInside(Ogre::Vector3 &position);
 	void CutOutsideBoundaries(bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
+	void SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max);
+	bool HasBounds() { return (area_trigger != 0); }
 
 	//Meshes
 	MeshObject* Buildings;

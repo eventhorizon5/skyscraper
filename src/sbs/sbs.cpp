@@ -215,12 +215,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Move(position);
 
 	//create main engine area trigger
-	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO)
-	{
-		std::vector<std::string> names;
-		names.push_back("Off");
-		area_trigger = new Trigger(this, "System Boundary", true, "", area_min, area_max, names);
-	}
+	SetBounds(area_min, area_max);
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)
@@ -4373,6 +4368,16 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 	{
 		for (int i = 0; i < (int)FloorArray.size(); i++)
 			FloorArray[i].object->Level->CutOutsideBounds(min, max, true, true);
+	}
+}
+
+void SBS::SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+{
+	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO && !area_trigger)
+	{
+		std::vector<std::string> names;
+		names.push_back("Off");
+		area_trigger = new Trigger(this, "System Boundary", true, "", area_min, area_max, names);
 	}
 }
 
