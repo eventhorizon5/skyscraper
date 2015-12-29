@@ -41,6 +41,8 @@ also allow the user to view the building in 3D as it's being created.</p>
 
 <p align="center"><a href="#Functions">Predefined Functions</a></p>
 
+<p align="center"><a href="#Buildings">Buildings Section</a></p>
+
 <p align="center"><a href="#Example">Example Building</a></p>
 
 <p align="left"> </p>
@@ -404,6 +406,14 @@ true</font></p>
 
 <p align="left"><strong>16. DateTime</strong> - set UTC date/time on startup (in Julian value), for sky system<br>
 <font face="Courier New, Courier, mono" size="2">DateTime = 2457197.1254</font></p>
+
+<p align="left"><strong>17. Position</strong> - set the 3D position of this building, used when loading multiple buildings<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Position = <em>X, Y, Z</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">Position = 100, 0, 100</font></p>
+
+<p align="left"><strong>18. Bounds</strong> - set the 3D boundaries of this building, used when loading multiple buildings.  If both Y values are 0, the Y values are set to be unlimited<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Bounds = <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">Bounds = -100, 0, -100, 100, 0, 100</font></p>
 
 <p align="left"> </p>
 
@@ -3400,7 +3410,45 @@ is_shaft_door</em>)</font></p>
 
 <p align="left"> </p>
 
-<p align="left"><strong><font size="+1"><a name="Example"></a>10. Small Example
+<div align="center">
+<p align="left"><strong><font size="+1"><a name="Buildings"></a>10. The
+<em>Buildings</em> Section</font></strong></p>
+
+<p align="left">The <em>Buildings</em> section allows you to load additional buildings, into separate simulation engines, and have them all be visible and usable in the same scene.  This section is small, and mainly exists to provide clarity in scripts.  Additional buildings also have their own script interpreters, so their scripts (and things such as includes) are completely isolated from each other.<br>
+<br>The section starts with this header:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;Buildings&gt;</font></p>
+
+<p align="left">and ends with this footer:<br>
+<font face="Courier New, Courier, mono" size="2">&lt;EndBuildings&gt;</font></p>
+
+<p align="left"><strong>Parameters (all are optional):</strong></p>
+
+<p align="left"><strong>1. ConcurrentLoads</strong> - if this is set to true, load all buildings simultaneously.  Default is false<br>
+Example: <font face="Courier New, Courier, mono" size="2">ConcurrentLoads = true</font></p>
+
+<p align="left"><strong>2. CutLandscape</strong> - if this is set to true, cut the Landscape mesh of buildings, discarding the area outside of the building's set boundaries.  Default is true<br>
+<font face="Courier New, Courier, mono" size="2">CutLandscape = true</font><br>
+
+<p align="left"><strong>3. CutBuildings</strong> - if this is set to true, cut the Buildings mesh of buildings, discarding the area outside of the building's set boundaries.  Default is true<br>
+<font face="Courier New, Courier, mono" size="2">CutBuildings = true</font><br>
+
+<p align="left"><strong>4. CutExternal</strong> - if this is set to true, cut the External mesh of buildings, discarding the area outside of the building's set boundaries.  Default is false, since this may have an unnecessary performance impact<br>
+<font face="Courier New, Courier, mono" size="2">CutExternal = true</font><br>
+
+<p align="left"><strong>5. CutFloors</strong> - if this is set to true, cut the Floors meshes of buildings, discarding the area outside of the building's set boundaries.  Default is false, since this may have an unnecessary performance impact<br>
+<font face="Courier New, Courier, mono" size="2">CutFloors = true</font><br>
+
+<p align="left"><strong>Commands:</strong></p>
+
+<p align="left"><strong>1. Load</strong> - load a building, creating a new Engine Context (script interpreter and sim engine pair) for it.  This command requires a building filename to be specified, and optionally allows the position to be set (which overrides the Position value in that building's Globals section), and also the bounds values (which also overrides the building's Bounds value).  The Bounds values are used to determine the position limits of what are considered that building, where if a building has a position X value of 200, and the MinX is -100 and MaxX is 100, the global positions of 100X to 300X are "inside" that building's space (200 - 100, and 200 + 100).<br><br>
+Syntax: <font face="Courier New, Courier, mono" size="2">Load <em>filename</em>[, <em>X, Y, Z</em>][, <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em>]</font><br>
+Example 1: <font face="Courier New, Courier, mono" size="2">Load Simple.bld</font><br>
+Example 2: <font face="Courier New, Courier, mono" size="2">Load Simple.bld, 200, 0, 200</font><br>
+Example 3: <font face="Courier New, Courier, mono" size="2">Load Simple.bld, 200, 0, 200, -100, 0, -100, 100, 0, 100</font><br>
+
+<p align="left"> </p>
+
+<p align="left"><strong><font size="+1"><a name="Example"></a>11. Small Example
 Building</font></strong></p>
 
 <p align="left">To see an example of a small simplistic building in code, look
