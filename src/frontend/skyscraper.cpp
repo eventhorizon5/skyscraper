@@ -1100,6 +1100,10 @@ void Skyscraper::Loop()
 	if (active_engine->IsCameraActive() == false)
 		active_engine = FindActiveEngine();
 
+	//exit if active engine is loading
+	if (active_engine->IsLoading() == true)
+		return;
+
 	//update Caelum
 	if (mCaelumSystem)
 	{
@@ -1687,7 +1691,7 @@ bool Skyscraper::Start(EngineContext *engine)
 
 	::SBS::SBS *Simcore = engine->GetSystem();
 
-	if (GetEngineCount() == 1)
+	if (engine == active_engine)
 	{
 		//the sky needs to be created before Prepare() is called
 		bool sky_result = false;
@@ -1720,7 +1724,7 @@ bool Skyscraper::Start(EngineContext *engine)
 		CloseProgressDialog();
 
 	//load control panel
-	if (GetEngineCount() == 1)
+	if (engine == active_engine)
 	{
 		if (GetConfigBool("Skyscraper.Frontend.ShowControlPanel", true) == true)
 		{
