@@ -205,19 +205,15 @@ void Person::ProcessRoute()
 	//if a call has been made, wait for an elevator to arrive to press floor button
 	if (route[0].floor_selected == false)
 	{
-		int number = 0;
-		bool direction = false;
-
 		CallButton *button = route[0].callbutton;
 
 		if (!button)
 			return;
 
-		bool call_direction = (floor_selection > current_floor);
-		bool status = button->GetElevatorArrived(number, direction);
-		bool direction_valid = (call_direction == direction);
+		bool direction = (floor_selection > current_floor);
+		int number = button->GetElevatorArrived(direction);
 
-		if (status == true && direction_valid == true)
+		if (number > 0)
 		{
 			//if elevator has arrived at the called floor, press related floor button
 
@@ -257,11 +253,11 @@ void Person::ProcessRoute()
 				}
 			}
 		}
-		else if (status == false)
+		else
 		{
 			//if call has become invalid, stop route
-			if ((call_direction == true && button->GetUpStatus() == false) ||
-					(call_direction == false && button->GetDownStatus() == false))
+			if ((direction == true && button->GetUpStatus() == false) ||
+					(direction == false && button->GetDownStatus() == false))
 			{
 				Stop();
 				return;

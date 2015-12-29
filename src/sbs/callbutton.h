@@ -61,7 +61,7 @@ public:
 	bool GetDownStatus() { return DownStatus; }
 	bool IsEnabled() { return is_enabled; }
 	void ElevatorArrived(int number, bool direction);
-	bool GetElevatorArrived(int &number, bool &direction);
+	int GetElevatorArrived(bool direction);
 	int FindClosestElevator(int direction);
 
 private:
@@ -80,9 +80,7 @@ private:
 	bool DownStatus; //status of down light
 	bool is_enabled;
 	int elevator_arrived_up;
-	bool elevator_direction_up;
 	int elevator_arrived_down;
-	bool elevator_direction_down;
 
 	std::vector<int> Elevators; //elevators this call button set is assigned to
 

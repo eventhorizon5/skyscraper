@@ -63,10 +63,8 @@ CallButton::CallButton(Object *parent, std::vector<int> &elevators, int floornum
 	DownExists = false;
 	ActiveElevatorUp = 0;
 	ActiveElevatorDown = 0;
-	elevator_arrived_up = -1;
-	elevator_arrived_down = -1;
-	elevator_direction_up = false;
-	elevator_direction_down = false;
+	elevator_arrived_up = 0;
+	elevator_arrived_down = 0;
 	sound = 0;
 
 	//create object mesh
@@ -382,9 +380,9 @@ bool CallButton::Call(bool direction)
 
 	//reset elevator arrival state
 	if (direction == 1)
-		elevator_arrived_up = -1;
+		elevator_arrived_up = 0;
 	else
-		elevator_arrived_down = -1;
+		elevator_arrived_down = 0;
 
 	//register callback for this button
 	if (sbs->Verbose)
@@ -763,15 +761,9 @@ void CallButton::ElevatorArrived(int number, bool direction)
 	//this also turns off the related direction light
 
 	if (UpStatus == true && direction == true)
-	{
 		elevator_arrived_up = number;
-		elevator_direction_up = direction;
-	}
 	else if (DownStatus == true && direction == false)
-	{
 		elevator_arrived_down = number;
-		elevator_direction_down = direction;
-	}
 
 	if (direction == true)
 		UpLight(false);
@@ -779,22 +771,15 @@ void CallButton::ElevatorArrived(int number, bool direction)
 		DownLight(false);
 }
 
-bool CallButton::GetElevatorArrived(int &number, bool &direction)
+int CallButton::GetElevatorArrived(bool direction)
 {
-	if (direction == true)
-	{
-		number = elevator_arrived_up;
-		direction = elevator_direction_up;
-	}
-	else
-	{
-		number = elevator_arrived_down;
-		direction = elevator_direction_down;
-	}
+	//return the number of the elevator that has arrived, for the specified direction
+	//return 0 if no elevator has arrived yet
 
-	if (number > -1)
-		return true;
-	return false;
+	if (direction == true)
+		return elevator_arrived_up;
+
+	return elevator_arrived_down;
 }
 
 int CallButton::FindClosestElevator(int direction)
