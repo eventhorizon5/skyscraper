@@ -59,6 +59,9 @@ EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneMan
 	instance = instance_number;
 	Report("\nStarting instance " + ToString(instance) + "...");
 
+	//add instance number to reports
+	InstancePrompt = ToString(instance) + "> ";
+
 	StartSim();
 }
 
@@ -309,18 +312,18 @@ bool EngineContext::Start(Ogre::Camera *camera)
 
 void EngineContext::Report(const std::string &message)
 {
-	frontend->Report(message);
+	frontend->Report(InstancePrompt + message);
 }
 
 bool EngineContext::ReportError(const std::string &message)
 {
-	return frontend->ReportError(message);
+	return frontend->ReportError(InstancePrompt + message);
 }
 
 bool EngineContext::ReportFatalError(const std::string &message)
 {
-	ReportError(message);
-	frontend->ShowError(message);
+	ReportError(InstancePrompt + message);
+	frontend->ShowError(InstancePrompt + message);
 	return false;
 }
 

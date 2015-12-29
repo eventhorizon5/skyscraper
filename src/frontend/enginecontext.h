@@ -73,6 +73,7 @@ private:
 	bool running;
 	bool raised;
 	int progress;
+	std::string InstancePrompt;
 
 	//override information
 	bool PositionOverride;
