@@ -30,7 +30,7 @@
 
 namespace SBS {
 
-Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, const std::vector<std::string> &action_names) : Object(parent)
+Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Ogre::Vector3 area_min, Ogre::Vector3 area_max, const std::vector<std::string> &action_names) : Object(parent)
 {
 	//create a proximity trigger at the specified location
 
@@ -40,6 +40,11 @@ Trigger::Trigger(Object *parent, const std::string &name, bool permanent, const 
 	Actions = action_names;
 	is_enabled = true;
 	current_position = 1;
+	if (area_min.y == 0 && area_max.y == 0)
+	{
+		area_min.y = -999999.0;
+		area_max.y = 999999.0;
+	}
 	area_box = Ogre::AxisAlignedBox(area_min, area_max);
 	is_inside = false;
 	sound = 0;

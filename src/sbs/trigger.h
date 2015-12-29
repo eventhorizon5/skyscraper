@@ -36,7 +36,7 @@ class SBSIMPEXP Trigger : public Object
 public:
 
 	//functions
-	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max, const std::vector<std::string> &action_names);
+	Trigger(Object *parent, const std::string &name, bool permanent, const std::string &sound_file, Ogre::Vector3 area_min, Ogre::Vector3 area_max, const std::vector<std::string> &action_names);
 	~Trigger();
 	void Enabled(bool value);
 	bool SetSelectPosition(int position);
