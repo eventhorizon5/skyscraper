@@ -1357,6 +1357,7 @@ bool Camera::Attach(Ogre::Camera *camera)
 	}
 
 	Refresh();
+	Sync();
 
 	return true;
 }
