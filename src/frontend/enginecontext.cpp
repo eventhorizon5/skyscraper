@@ -247,8 +247,8 @@ void EngineContext::StartSim()
 	//refresh console to fix banner message on Linux
 	frontend->RefreshConsole();
 
-	//Pause for 2 seconds
-	if (frontend->ConcurrentLoads == false)
+	//Pause for 2 seconds, if first instance
+	if (instance == 0)
 	{
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 		Sleep(2000);
