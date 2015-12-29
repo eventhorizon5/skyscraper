@@ -16,7 +16,7 @@
 #This code loads 3 additional Simple buildings, each at a different location
 <Buildings>
     Load Simple.bld, 200, 0, 200, -100, 0, -100, 100, 0, 100
-    Load Simple.bld, 300, 50, 300, -100, 0, -100, 100, 0, 100
+    Load Simple.bld, 400, 50, 400, -100, 0, -100, 100, 0, 100
     Load Simple.bld, -200, 0, -200, -100, 0, -100, 100, 0, 100
 <EndBuildings>
 
