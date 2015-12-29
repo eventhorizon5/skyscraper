@@ -7901,7 +7901,7 @@ int ScriptProcessor::ProcBuildings()
 		//get data
 		int params = SplitData(LineData, 5, false);
 
-		if (params != 1 || params != 4 || params != 10)
+		if (params != 1 && params != 4 && params != 10)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7919,7 +7919,7 @@ int ScriptProcessor::ProcBuildings()
 		Ogre::Vector3 min (Ogre::Vector3::ZERO);
 		Ogre::Vector3 max (Ogre::Vector3::ZERO);
 
-		if (params == 4)
+		if (params > 1)
 		{
 			position.x = ToFloat(tempdata[1]);
 			position.y = ToFloat(tempdata[2]);
