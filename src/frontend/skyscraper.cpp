@@ -1613,24 +1613,17 @@ std::string Skyscraper::SelectBuilding()
 	//set building file
 	//wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
 	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
-	int result = Selector->ShowModal();
-	if (result == wxID_CANCEL)
+	if (Selector->ShowModal() == wxID_OK)
 	{
-		//delete dialog
-		delete Selector;
-		Selector = 0;
-		//quit
-		return "";
+		#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
+		filename = Selector->GetFilename().mb_str().data();
+		#else
+		filename = Selector->GetFilename();
+		#endif
 	}
 
-	#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-	filename = Selector->GetFilename().mb_str().data();
-	#else
-	filename = Selector->GetFilename();
-	#endif
-
 	//delete dialog
-	delete Selector;
+	Selector->Destroy();
 	Selector = 0;
 
 	return filename;
