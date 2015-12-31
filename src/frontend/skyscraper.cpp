@@ -199,6 +199,10 @@ int Skyscraper::OnExit()
 	//cleanup
 	Report("Cleaning up...");
 
+	if (progdialog)
+		progdialog->Destroy();
+	progdialog = 0;
+
 	UnloadSim();
 
 	//delete Caelum
