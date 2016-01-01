@@ -37,6 +37,10 @@ struct CameraState
 	bool collisions;
 	bool gravity;
 	bool freelook;
+	Ogre::Vector3 desired_velocity;
+	Ogre::Vector3 velocity;
+	Ogre::Vector3 desired_angle_velocity;
+	Ogre::Vector3 angle_velocity;
 };
 
 class EngineContext

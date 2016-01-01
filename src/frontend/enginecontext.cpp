@@ -342,6 +342,10 @@ CameraState EngineContext::GetCameraState()
 	state.collisions = Simcore->camera->CollisionsEnabled();
 	state.gravity = Simcore->camera->GetGravityStatus();
 	state.freelook = Simcore->camera->Freelook;
+	state.desired_velocity = Simcore->camera->desired_velocity;
+	state.velocity = Simcore->camera->velocity;
+	state.desired_angle_velocity = Simcore->camera->desired_angle_velocity;
+	state.angle_velocity = Simcore->camera->angle_velocity;
 	return state;
 }
 
@@ -357,6 +361,10 @@ void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 	Simcore->camera->EnableCollisions(state.collisions);
 	Simcore->camera->EnableGravity(state.gravity);
 	Simcore->camera->Freelook = state.freelook;
+	Simcore->camera->desired_velocity = state.desired_velocity;
+	Simcore->camera->velocity = state.velocity;
+	Simcore->camera->desired_angle_velocity = state.desired_angle_velocity;
+	Simcore->camera->angle_velocity = state.angle_velocity;
 }
 
 bool EngineContext::IsInside()
