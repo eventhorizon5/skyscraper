@@ -4324,7 +4324,7 @@ bool SBS::IsInside()
 	return true;
 }
 
-bool SBS::IsInside(Ogre::Vector3 &position)
+bool SBS::IsInside(const Ogre::Vector3 &position)
 {
 	//return true if the specified position is inside the sim engine's area
 

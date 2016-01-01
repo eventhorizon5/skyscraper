@@ -42,10 +42,10 @@ EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneMan
 	running = false;
 	Reload = false;
 	PositionOverride = false;
-	override_floor = 0;
-	override_collisions = false;
-	override_gravity = false;
-	override_freelook = false;
+	reload_state.floor = 0;
+	reload_state.collisions = false;
+	reload_state.gravity = false;
+	reload_state.freelook = false;
 	this->mSceneManager = mSceneManager;
 	this->fmodsystem = fmodsystem;
 	this->position = position;
@@ -206,12 +206,7 @@ void EngineContext::DoReload()
 
 	//store camera state information
 	std::string filename = Simcore->BuildingFilename;
-	override_position = Simcore->camera->GetPosition();
-	override_rotation = Simcore->camera->GetRotation();
-	override_floor = Simcore->camera->CurrentFloor;
-	override_collisions = Simcore->camera->CollisionsEnabled();
-	override_gravity = Simcore->camera->GetGravityStatus();
-	override_freelook = Simcore->camera->Freelook;
+	reload_state = GetCameraState();
 
 	//unload current simulator
 	UnloadSim();
@@ -296,12 +291,7 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	if (PositionOverride == true)
 	{
 		PositionOverride = false;
-		Simcore->camera->SetPosition(override_position);
-		Simcore->camera->SetRotation(override_rotation);
-		Simcore->camera->GotoFloor(override_floor, true);
-		Simcore->camera->EnableCollisions(override_collisions);
-		Simcore->camera->EnableGravity(override_gravity);
-		Simcore->camera->Freelook = override_freelook;
+		SetCameraState(reload_state);
 	}
 
 	loading = false;
@@ -341,6 +331,52 @@ void EngineContext::UpdateProgress(int percent)
 
 	progress = percent;
 	frontend->UpdateProgress();
+}
+
+CameraState EngineContext::GetCameraState()
+{
+	CameraState state;
+	state.position = Simcore->camera->GetPosition() + Simcore->GetPosition();
+	state.rotation = Simcore->camera->GetRotation();
+	state.floor = Simcore->camera->CurrentFloor;
+	state.collisions = Simcore->camera->CollisionsEnabled();
+	state.gravity = Simcore->camera->GetGravityStatus();
+	state.freelook = Simcore->camera->Freelook;
+	return state;
+}
+
+void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
+{
+	if (!Simcore)
+		return;
+
+	if (set_floor == true)
+		Simcore->camera->GotoFloor(state.floor, true);
+	Simcore->camera->SetPosition(state.position - Simcore->GetPosition());
+	Simcore->camera->SetRotation(state.rotation);
+	Simcore->camera->EnableCollisions(state.collisions);
+	Simcore->camera->EnableGravity(state.gravity);
+	Simcore->camera->Freelook = state.freelook;
+}
+
+bool EngineContext::IsInside()
+{
+	//return true if user is inside the boundaries of this engine context
+
+	if (!Simcore)
+		return false;
+
+	return Simcore->IsInside();
+}
+
+bool EngineContext::IsInside(const Ogre::Vector3 &position)
+{
+	//return true if user is inside the boundaries of this engine context
+
+	if (!Simcore)
+		return false;
+
+	return Simcore->IsInside(position - Simcore->GetPosition());
 }
 
 }

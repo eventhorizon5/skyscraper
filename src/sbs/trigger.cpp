@@ -313,7 +313,7 @@ bool Trigger::IsInside()
 	return is_inside;
 }
 
-bool Trigger::IsInside(Ogre::Vector3 &position)
+bool Trigger::IsInside(const Ogre::Vector3 &position)
 {
 	//return true if the given absolute position is inside the trigger area
 

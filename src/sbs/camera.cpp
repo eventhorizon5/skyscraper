@@ -223,10 +223,12 @@ Ogre::Vector3 Camera::GetPosition(bool relative)
 	//returns the camera's current position
 	//"relative" value is ignored for camera object
 
-	if (!MainCamera)
-		return Ogre::Vector3::ZERO;
+	Ogre::Vector3 cameraposition = Ogre::Vector3::ZERO;
 
-	return GetSceneNode()->GetPosition() + sbs->ToLocal(MainCamera->getPosition());
+	if (MainCamera)
+		cameraposition = sbs->ToLocal(MainCamera->getPosition());
+
+	return GetSceneNode()->GetPosition() + cameraposition;
 }
 
 void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)

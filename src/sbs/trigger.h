@@ -54,7 +54,7 @@ public:
 	bool DoAction();
 	void Loop();
 	bool IsInside();
-	bool IsInside(Ogre::Vector3 &position);
+	bool IsInside(const Ogre::Vector3 &position);
 	bool IsEnabled() { return is_enabled; }
 	Ogre::AxisAlignedBox GetBounds(bool relative = false);
 	Ogre::Vector3 GetMin() { return area_box.getMinimum(); }

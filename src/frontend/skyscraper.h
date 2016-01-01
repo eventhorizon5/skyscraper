@@ -128,7 +128,7 @@ public:
 	void DeleteEngines();
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int index);
+	void SetActiveEngine(int index, bool center_engine = true);
 	bool IsEngineLoading();
 	void RaiseWindow();
 	void RefreshConsole();
@@ -173,6 +173,7 @@ private:
 	void DeleteButtons();
 	void messageLogged(const Ogre::String &message, Ogre::LogMessageLevel lml, bool maskDebug, const Ogre::String &logName, bool &skipThisMessage);
 	bool RunEngines();
+	void SwitchEngines();
 	void HandleEngineShutdown();
 	void HandleReload();
 
