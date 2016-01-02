@@ -363,4 +363,26 @@ bool EngineContext::IsInside(const Ogre::Vector3 &position)
 	return Simcore->IsInside(position - Simcore->GetPosition());
 }
 
+void EngineContext::DetachCamera(bool reset_building)
+{
+	Simcore->DetachCamera();
+
+	if (reset_building == true)
+		Simcore->ResetBuilding();
+}
+
+void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)
+{
+	Simcore->AttachCamera(camera, init_state);
+
+	//reset camera position if camera is outside of the engine's area when attaching
+	if (IsInside() == false)
+		Simcore->camera->SetToStartPosition(true);
+}
+
+void EngineContext::RefreshCamera()
+{
+	Simcore->camera->Refresh();
+}
+
 }

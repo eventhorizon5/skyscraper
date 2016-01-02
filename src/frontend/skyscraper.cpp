@@ -2143,7 +2143,7 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 					SetActiveEngine(0);
 			}
 			else if (active_engine)
-				active_engine->GetSystem()->camera->Refresh();
+				active_engine->RefreshCamera();
 
 			//exit to main menu if all engines have been deleted
 			if (engines.empty() == true)
@@ -2195,18 +2195,13 @@ void Skyscraper::SetActiveEngine(int index, bool center_engine, bool switch_engi
 
 	//detach camera from current engine
 	if (active_engine)
-	{
-		active_engine->GetSystem()->DetachCamera();
-
-		if (switch_engines == true)
-			active_engine->GetSystem()->ResetBuilding();
-	}
+		active_engine->DetachCamera(switch_engines);
 
 	Report("Setting engine " + ToString(index) + " as active");
 
 	//switch context to new engine instance
 	active_engine = engines[index];
-	active_engine->GetSystem()->AttachCamera(mCamera, !switch_engines);
+	active_engine->AttachCamera(mCamera, !switch_engines);
 
 	//center new engine instance
 	if (center_engine == true)

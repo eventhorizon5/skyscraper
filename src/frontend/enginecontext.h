@@ -61,6 +61,9 @@ public:
 	void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
 	bool IsInside();
 	bool IsInside(const Ogre::Vector3 &position);
+	void DetachCamera(bool reset_building = false);
+	void AttachCamera(Ogre::Camera *camera, bool init_state = true);
+	void RefreshCamera();
 
 private:
 
