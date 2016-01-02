@@ -2202,6 +2202,8 @@ void Skyscraper::SetActiveEngine(int index, bool center_engine, bool switch_engi
 			active_engine->GetSystem()->ResetBuilding();
 	}
 
+	Report("Setting engine " + ToString(index) + " as active");
+
 	//switch context to new engine instance
 	active_engine = engines[index];
 	active_engine->GetSystem()->AttachCamera(mCamera, !switch_engines);
