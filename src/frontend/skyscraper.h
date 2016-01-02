@@ -128,7 +128,7 @@ public:
 	void DeleteEngines();
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int index, bool center_engine = true);
+	void SetActiveEngine(int index, bool center_engine = true, bool switch_engines = false);
 	bool IsEngineLoading();
 	void RaiseWindow();
 	void RefreshConsole();
@@ -200,6 +200,8 @@ private:
 	std::vector<EngineContext*> engines;
 
 	Ogre::Vector3 shift; //view shift amount, used for CenterEngine function
+
+	bool switch_retry;
 };
 
 class MainScreen : public wxFrame

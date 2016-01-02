@@ -394,7 +394,7 @@ public:
 	std::vector<ElevatorRoute*> GetRouteToFloor(int StartingFloor, int DestinationFloor, bool service_access = false);
 	Person* CreatePerson(std::string name = "", int floor = 0, bool service_access = false);
 	void RemovePerson(Person *person);
-	bool AttachCamera(Ogre::Camera *camera);
+	bool AttachCamera(Ogre::Camera *camera, bool init_state = true);
 	bool DetachCamera();
 	std::string ProcessFullName(std::string name, int &instance, int &object_number, bool strip_number = false);
 	Ogre::MaterialPtr CreateMaterial(const std::string &name, const std::string &path);
@@ -413,6 +413,7 @@ public:
 	void CutOutsideBoundaries(bool landscape = true, bool buildings = true, bool external = false, bool floors = false);
 	void SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max);
 	bool HasBounds() { return (area_trigger != 0); }
+	void ResetBuilding();
 
 	//Meshes
 	MeshObject* Buildings;

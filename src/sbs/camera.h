@@ -145,7 +145,7 @@ public:
 	void ResetView();
 	bool IsActive() { return (MainCamera != 0); }
 	void Refresh();
-	bool Attach(Ogre::Camera *camera);
+	bool Attach(Ogre::Camera *camera, bool init_state = true);
 	bool Detach();
 	void OnMove(bool parent);
 	void OnRotate(bool parent);

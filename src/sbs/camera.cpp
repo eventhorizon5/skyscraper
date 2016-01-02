@@ -1326,7 +1326,7 @@ void Camera::Refresh()
 		mCharacter->resetLastCollision();
 }
 
-bool Camera::Attach(Ogre::Camera *camera)
+bool Camera::Attach(Ogre::Camera *camera, bool init_state)
 {
 	if (camera->isAttached() == true)
 		return false;
@@ -1342,20 +1342,23 @@ bool Camera::Attach(Ogre::Camera *camera)
 	//move camera to start location
 	if (FirstAttach == false)
 	{
-		EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
-
 		SetGravity(sbs->GetConfigFloat("Skyscraper.SBS.Camera.Gravity", 32.1719f), true, false); // 9.806 m/s/s
-		GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
 
-		SetToStartPosition(false); //also turns on start floor
-		SetToStartDirection();
-		SetToStartRotation();
+		if (init_state == true)
+		{
+			GravityStatus = sbs->GetConfigBool("Skyscraper.SBS.Camera.GravityStatus", true);
+			EnableCollisions(sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableCollisions", true));
+			SetToStartPosition(false); //also turns on start floor
+			SetToStartDirection();
+			SetToStartRotation();
+		}
 		FirstAttach = true;
 	}
 	else
 	{
 		//re-apply rotation
-		SetRotation(Rotation);
+		if (init_state == true)
+			SetRotation(Rotation);
 	}
 
 	Refresh();

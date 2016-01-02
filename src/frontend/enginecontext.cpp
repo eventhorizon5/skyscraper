@@ -354,9 +354,12 @@ void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 	if (!Simcore)
 		return;
 
+	Ogre::Vector3 position = state.position - Simcore->GetPosition();
 	if (set_floor == true)
 		Simcore->camera->GotoFloor(state.floor, true);
-	Simcore->camera->SetPosition(state.position - Simcore->GetPosition());
+	else
+		Simcore->camera->GotoFloor(Simcore->GetFloorNumber(state.position.y));
+	Simcore->camera->SetPosition(position);
 	Simcore->camera->SetRotation(state.rotation);
 	Simcore->camera->EnableCollisions(state.collisions);
 	Simcore->camera->EnableGravity(state.gravity);

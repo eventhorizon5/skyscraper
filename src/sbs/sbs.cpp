@@ -485,15 +485,8 @@ bool SBS::Start(Ogre::Camera *camera)
 		free(textureboxes[i].buffer);
 	textureboxes.clear();
 
-	//turn on main objects
-	EnableBuildings(true);
-	EnableLandscape(true);
-	EnableExternal(true);
-	EnableSkybox(true);
-
-	//turn off floors
-	for (int i = 0; i < GetTotalFloors(); i++)
-		FloorArray[i].object->Enabled(false);
+	//reset building state
+	ResetBuilding();
 
 	//initialize objects (cascades down through entire object tree)
 	Init();
@@ -4271,10 +4264,10 @@ void SBS::RemovePerson(Person *person)
 	}
 }
 
-bool SBS::AttachCamera(Ogre::Camera *camera)
+bool SBS::AttachCamera(Ogre::Camera *camera, bool init_state)
 {
 	if (camera)
-		return this->camera->Attach(camera);
+		return this->camera->Attach(camera, init_state);
 	return false;
 }
 
@@ -4383,6 +4376,21 @@ void SBS::SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max
 		names.push_back("Off");
 		area_trigger = new Trigger(this, "System Boundary", true, "", area_min, area_max, names);
 	}
+}
+
+void SBS::ResetBuilding()
+{
+	//reset building to original state
+
+	//turn on main objects
+	EnableBuildings(true);
+	EnableLandscape(true);
+	EnableExternal(true);
+	EnableSkybox(true);
+
+	//turn off floors
+	for (int i = 0; i < GetTotalFloors(); i++)
+		FloorArray[i].object->Enabled(false);
 }
 
 }

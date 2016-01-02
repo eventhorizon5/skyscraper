@@ -129,6 +129,7 @@ bool Skyscraper::OnInit(void)
 	CutBuildings = true;
 	CutExternal = false;
 	CutFloors = false;
+	switch_retry = false;
 
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
@@ -2179,7 +2180,7 @@ EngineContext* Skyscraper::FindActiveEngine()
 	return active_engine;
 }
 
-void Skyscraper::SetActiveEngine(int index, bool center_engine)
+void Skyscraper::SetActiveEngine(int index, bool center_engine, bool switch_engines)
 {
 	//set an engine instance to be active
 
@@ -2195,11 +2196,16 @@ void Skyscraper::SetActiveEngine(int index, bool center_engine)
 
 	//detach camera from current engine
 	if (active_engine)
+	{
 		active_engine->GetSystem()->DetachCamera();
+
+		if (switch_engines == true)
+			active_engine->GetSystem()->ResetBuilding();
+	}
 
 	//switch context to new engine instance
 	active_engine = engines[index];
-	active_engine->GetSystem()->AttachCamera(mCamera);
+	active_engine->GetSystem()->AttachCamera(mCamera, !switch_engines);
 
 	//center new engine instance
 	if (center_engine == true)
@@ -2352,8 +2358,12 @@ void Skyscraper::SwitchEngines()
 	if (!active_engine)
 		return;
 
-	if (active_engine->IsInside() == true)
+	if (active_engine->IsInside() == true || switch_retry == true)
+	{
+		if (switch_retry == true)
+			switch_retry = false;
 		return;
+	}
 
 	//get previous engine's camera state
 	CameraState state = active_engine->GetCameraState();
@@ -2365,13 +2375,15 @@ void Skyscraper::SwitchEngines()
 		if (engines[i]->IsInside(state.position) == true && engines[i]->IsCameraActive() == false)
 		{
 			//switch to new engine
-			SetActiveEngine(i, false);
+			SetActiveEngine(i, false, true);
 
 			//apply camera state to new engine
 			engines[i]->SetCameraState(state, false);
 
 			//center engine after applying camera state
 			CenterEngine(i);
+
+			switch_retry = true;
 		}
 	}
 }
