@@ -129,7 +129,6 @@ bool Skyscraper::OnInit(void)
 	CutBuildings = true;
 	CutExternal = false;
 	CutFloors = false;
-	switch_retry = false;
 
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
@@ -2358,12 +2357,8 @@ void Skyscraper::SwitchEngines()
 	if (!active_engine)
 		return;
 
-	if (active_engine->IsInside() == true || switch_retry == true)
-	{
-		if (switch_retry == true)
-			switch_retry = false;
+	if (active_engine->IsInside() == true)
 		return;
-	}
 
 	//get previous engine's camera state
 	CameraState state = active_engine->GetCameraState();
@@ -2382,8 +2377,6 @@ void Skyscraper::SwitchEngines()
 
 			//center engine after applying camera state
 			CenterEngine(i);
-
-			switch_retry = true;
 		}
 	}
 }

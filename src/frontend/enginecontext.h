@@ -29,20 +29,6 @@ namespace Skyscraper {
 
 class Skyscraper;
 
-struct CameraState
-{
-	Ogre::Vector3 position;
-	Ogre::Vector3 rotation;
-	int floor;
-	bool collisions;
-	bool gravity;
-	bool freelook;
-	Ogre::Vector3 desired_velocity;
-	Ogre::Vector3 velocity;
-	Ogre::Vector3 desired_angle_velocity;
-	Ogre::Vector3 angle_velocity;
-};
-
 class EngineContext
 {
 public:
@@ -71,8 +57,8 @@ public:
 	void UpdateProgress(int percent);
 	int GetProgress() { return progress; }
 	int GetNumber() { return instance; }
-	CameraState GetCameraState();
-	void SetCameraState(const CameraState &state, bool set_floor = true);
+	SBS::CameraState GetCameraState();
+	void SetCameraState(const SBS::CameraState &state, bool set_floor = true);
 	bool IsInside();
 	bool IsInside(const Ogre::Vector3 &position);
 
@@ -95,7 +81,7 @@ private:
 
 	//override information
 	bool PositionOverride;
-	CameraState reload_state;
+	SBS::CameraState reload_state;
 
 	Ogre::SceneManager* mSceneManager;
 	FMOD::System *fmodsystem;

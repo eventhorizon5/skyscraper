@@ -200,8 +200,6 @@ private:
 	std::vector<EngineContext*> engines;
 
 	Ogre::Vector3 shift; //view shift amount, used for CenterEngine function
-
-	bool switch_retry;
 };
 
 class MainScreen : public wxFrame

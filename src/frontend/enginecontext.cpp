@@ -335,39 +335,12 @@ void EngineContext::UpdateProgress(int percent)
 
 CameraState EngineContext::GetCameraState()
 {
-	CameraState state;
-	state.position = Simcore->camera->GetPosition() + Simcore->GetPosition();
-	state.rotation = Simcore->camera->GetRotation();
-	state.floor = Simcore->camera->CurrentFloor;
-	state.collisions = Simcore->camera->CollisionsEnabled();
-	state.gravity = Simcore->camera->GetGravityStatus();
-	state.freelook = Simcore->camera->Freelook;
-	state.desired_velocity = Simcore->camera->desired_velocity;
-	state.velocity = Simcore->camera->velocity;
-	state.desired_angle_velocity = Simcore->camera->desired_angle_velocity;
-	state.angle_velocity = Simcore->camera->angle_velocity;
-	return state;
+	return Simcore->camera->GetCameraState();
 }
 
 void EngineContext::SetCameraState(const CameraState &state, bool set_floor)
 {
-	if (!Simcore)
-		return;
-
-	Ogre::Vector3 position = state.position - Simcore->GetPosition();
-	if (set_floor == true)
-		Simcore->camera->GotoFloor(state.floor, true);
-	else
-		Simcore->camera->GotoFloor(Simcore->GetFloorNumber(state.position.y));
-	Simcore->camera->SetPosition(position);
-	Simcore->camera->SetRotation(state.rotation);
-	Simcore->camera->EnableCollisions(state.collisions);
-	Simcore->camera->EnableGravity(state.gravity);
-	Simcore->camera->Freelook = state.freelook;
-	Simcore->camera->desired_velocity = state.desired_velocity;
-	Simcore->camera->velocity = state.velocity;
-	Simcore->camera->desired_angle_velocity = state.desired_angle_velocity;
-	Simcore->camera->angle_velocity = state.angle_velocity;
+	Simcore->camera->SetCameraState(state, set_floor);
 }
 
 bool EngineContext::IsInside()

@@ -1393,4 +1393,46 @@ void Camera::OnRotate(bool parent)
 		mCharacter->updateTransform(false, true, false);
 }
 
+CameraState Camera::GetCameraState()
+{
+	//returns camera state info
+	//the position value is in a global/absolute scene format, not engine-relative
+
+	CameraState state;
+	state.position = GetPosition() + sbs->GetPosition();
+	state.rotation = GetRotation();
+	state.floor = CurrentFloor;
+	state.collisions = CollisionsEnabled();
+	state.gravity = GetGravityStatus();
+	state.freelook = Freelook;
+	state.desired_velocity = desired_velocity;
+	state.velocity = velocity;
+	state.desired_angle_velocity = desired_angle_velocity;
+	state.angle_velocity = angle_velocity;
+	state.accum_movement = accum_movement;
+	return state;
+}
+
+void Camera::SetCameraState(const CameraState &state, bool set_floor)
+{
+	//sets camera state
+	//the position value is in a global/absolute scene format, not engine-relative
+
+	Ogre::Vector3 position = state.position - sbs->GetPosition();
+	if (set_floor == true)
+		GotoFloor(state.floor, true);
+	else
+		GotoFloor(sbs->GetFloorNumber(state.position.y));
+	SetPosition(position);
+	SetRotation(state.rotation);
+	EnableCollisions(state.collisions);
+	EnableGravity(state.gravity);
+	Freelook = state.freelook;
+	desired_velocity = state.desired_velocity;
+	velocity = state.velocity;
+	desired_angle_velocity = state.desired_angle_velocity;
+	angle_velocity = state.angle_velocity;
+	accum_movement = state.accum_movement;
+}
+
 }

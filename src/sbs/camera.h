@@ -28,6 +28,21 @@
 
 namespace SBS {
 
+struct SBSIMPEXP CameraState
+{
+	Ogre::Vector3 position;
+	Ogre::Vector3 rotation;
+	int floor;
+	bool collisions;
+	bool gravity;
+	bool freelook;
+	Ogre::Vector3 desired_velocity;
+	Ogre::Vector3 velocity;
+	Ogre::Vector3 desired_angle_velocity;
+	Ogre::Vector3 angle_velocity;
+	Ogre::Vector3 accum_movement;
+};
+
 class SBSIMPEXP Camera : public Object
 {
 public:
@@ -149,6 +164,8 @@ public:
 	bool Detach();
 	void OnMove(bool parent);
 	void OnRotate(bool parent);
+	CameraState GetCameraState();
+	void SetCameraState(const CameraState &state, bool set_floor = true);
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -176,7 +193,6 @@ private:
 	bool use_startdirection;
 	Ogre::Quaternion prev_orientation;
 	Ogre::Vector3 prev_position;
-
 
 	//Models
 	Model*	AttachedModel;
