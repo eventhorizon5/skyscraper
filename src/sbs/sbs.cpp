@@ -1216,7 +1216,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 		return ReportError("Invalid coordinates for wall '" + name + "'");
 
 	bool x_thickness = false, z_thickness = false;
-	std::string NewName;
+	std::string NewName, texture2 = texture;
 
 	if (x1 != x2)
 		x_thickness = true;
@@ -1246,16 +1246,23 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 
 		if (x_thickness == true)
 		{
+			if (TextureOverride == true)
+				texture2 = mainnegtex;
+
 			wallobject->AddQuad( //front
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x1, voffset, z1),
 					Ogre::Vector3(x2, voffset, z1),
 					Ogre::Vector3(x2, voffset + height_in, z1),
 					Ogre::Vector3(x1, voffset + height_in, z1), tw, th, autosize);
+
+			if (TextureOverride == true)
+				texture2 = mainpostex;
+
 			wallobject->AddQuad( //back
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x2, voffset, z2),
 					Ogre::Vector3(x1, voffset, z2),
 					Ogre::Vector3(x1, voffset + height_in, z2),
@@ -1263,16 +1270,23 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 		}
 		if (z_thickness == true)
 		{
+			if (TextureOverride == true)
+				texture2 = sidepostex;
+
 			wallobject->AddQuad( //right
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x2, voffset, z1),
 					Ogre::Vector3(x2, voffset, z2),
 					Ogre::Vector3(x2, voffset + height_in, z2),
 					Ogre::Vector3(x2, voffset + height_in, z1), tw, th, autosize);
+
+			if (TextureOverride == true)
+				texture2 = sidenegtex;
+
 			wallobject->AddQuad( //left
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x1, voffset, z2),
 					Ogre::Vector3(x1, voffset, z1),
 					Ogre::Vector3(x1, voffset + height_in, z1),
@@ -1282,19 +1296,26 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 		{
 			if (bottom == true)
 			{
+				if (TextureOverride == true)
+					texture2 = bottomtex;
+
 				wallobject->AddQuad( //bottom
 						NewName,
-						texture,
+						texture2,
 						Ogre::Vector3(x1, voffset, z2),
 						Ogre::Vector3(x2, voffset, z2),
 						Ogre::Vector3(x2, voffset, z1),
 						Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
 			}
+
 			if (top == true)
 			{
+				if (TextureOverride == true)
+					texture2 = toptex;
+
 				wallobject->AddQuad( //top
 						NewName,
-						texture,
+						texture2,
 						Ogre::Vector3(x1, voffset + height_in, z1),
 						Ogre::Vector3(x2, voffset + height_in, z1),
 						Ogre::Vector3(x2, voffset + height_in, z1),
@@ -1310,16 +1331,23 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 
 		if (x_thickness == true)
 		{
+			if (TextureOverride == true)
+				texture2 = mainnegtex;
+
 			wallobject->AddQuad( //front
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x1, voffset + height_in, z1),
 					Ogre::Vector3(x2, voffset + height_in, z1),
 					Ogre::Vector3(x2, voffset, z1),
 					Ogre::Vector3(x1, voffset, z1), tw, th, autosize);
+
+			if (TextureOverride == true)
+				texture2 = mainpostex;
+
 			wallobject->AddQuad( //back
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x2, voffset + height_in, z2),
 					Ogre::Vector3(x1, voffset + height_in, z2),
 					Ogre::Vector3(x1, voffset, z2),
@@ -1327,16 +1355,23 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 		}
 		if (z_thickness == true)
 		{
+			if (TextureOverride == true)
+				texture2 = sidepostex;
+
 			wallobject->AddQuad( //right
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x2, voffset + height_in, z1),
 					Ogre::Vector3(x2, voffset + height_in, z2),
 					Ogre::Vector3(x2, voffset, z2),
 					Ogre::Vector3(x2, voffset, z1), tw, th, autosize);
+
+			if (TextureOverride == true)
+				texture2 = sidenegtex;
+
 			wallobject->AddQuad( //left
 					NewName,
-					texture,
+					texture2,
 					Ogre::Vector3(x1, voffset + height_in, z2),
 					Ogre::Vector3(x1, voffset + height_in, z1),
 					Ogre::Vector3(x1, voffset, z1),
@@ -1346,9 +1381,12 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 		{
 			if (bottom == true)
 			{
+				if (TextureOverride == true)
+					texture2 = bottomtex;
+
 				wallobject->AddQuad( //bottom
 						NewName,
-						texture,
+						texture2,
 						Ogre::Vector3(x1, voffset, z1),
 						Ogre::Vector3(x2, voffset, z1),
 						Ogre::Vector3(x2, voffset, z2),
@@ -1356,9 +1394,12 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			}
 			if (top == true)
 			{
+				if (TextureOverride == true)
+					texture2 = toptex;
+
 				wallobject->AddQuad( //top
 						NewName,
-						texture,
+						texture2,
 						Ogre::Vector3(x1, voffset + height_in, z2),
 						Ogre::Vector3(x2, voffset + height_in, z2),
 						Ogre::Vector3(x2, voffset + height_in, z1),
