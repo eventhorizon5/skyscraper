@@ -390,18 +390,18 @@ void Swap(int &first, int &second)
 {
 	//swap values
 
-	int tmpx = first;
+	int temp = first;
 	first = second;
-	second = tmpx;
+	second = temp;
 }
 
 void Swap(float &first, float &second)
 {
 	//swap values
 
-	float tmpx = first;
+	float temp = first;
 	first = second;
-	second = tmpx;
+	second = temp;
 }
 
 }
