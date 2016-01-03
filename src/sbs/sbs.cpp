@@ -1318,7 +1318,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 						texture2,
 						Ogre::Vector3(x1, voffset + height_in, z1),
 						Ogre::Vector3(x2, voffset + height_in, z1),
-						Ogre::Vector3(x2, voffset + height_in, z1),
+						Ogre::Vector3(x2, voffset + height_in, z2),
 						Ogre::Vector3(x1, voffset + height_in, z2), tw, th, autosize);
 			}
 		}
@@ -1414,15 +1414,10 @@ bool SBS::CreateWallBox2(WallObject* wallobject, const std::string &name, const 
 {
 	//create 4 walls from a central point
 
-	float x1;
-	float x2;
-	float z1;
-	float z2;
-
-	x1 = CenterX - (WidthX / 2);
-	x2 = CenterX + (WidthX / 2);
-	z1 = CenterZ - (LengthZ / 2);
-	z2 = CenterZ + (LengthZ / 2);
+	float x1 = CenterX - (WidthX / 2);
+	float x2 = CenterX + (WidthX / 2);
+	float z1 = CenterZ - (LengthZ / 2);
+	float z2 = CenterZ + (LengthZ / 2);
 
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
