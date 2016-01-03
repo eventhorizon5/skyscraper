@@ -386,4 +386,22 @@ std::string TruncateNumber(const std::string &value, int decimals)
 	return number;
 }
 
+void Swap(int &first, int &second)
+{
+	//swap values
+
+	int tmpx = first;
+	first = second;
+	second = tmpx;
+}
+
+void Swap(float &first, float &second)
+{
+	//swap values
+
+	float tmpx = first;
+	first = second;
+	second = tmpx;
+}
+
 }

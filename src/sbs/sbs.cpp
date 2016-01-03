@@ -704,18 +704,10 @@ bool SBS::AddWallMain(WallObject* wallobject, const std::string &name, const std
 	if ((x1 > x2 && axis == 1) || (z1 < z2 && axis == 2))
 	{
 		//reverse coordinates
-		float temp = x1;
-		x1 = x2;
-		x2 = temp;
-		temp = z1;
-		z1 = z2;
-		z2 = temp;
-		temp = altitude1;
-		altitude1 = altitude2;
-		altitude2 = temp;
-		temp = height_in1;
-		height_in1 = height_in2;
-		height_in2 = temp;
+		Swap(x1, x2);
+		Swap(z1, z2);
+		Swap(altitude1, altitude2);
+		Swap(height_in1, height_in2);
 	}
 
 	//map coordinates
@@ -937,7 +929,6 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 		return ReportError("Invalid coordinates for floor '" + name + "'");
 
 	//convert to clockwise coordinates
-	float temp;
 
 	//determine axis of floor
 	int axis = 0;
@@ -954,60 +945,29 @@ bool SBS::AddFloorMain(WallObject* wallobject, const std::string &name, const st
 
 		if (x1 > x2)
 		{
-			temp = x1;
-			x1 = x2;
-			x2 = temp;
+			Swap(x1, x2);
 
 			if (reverse_axis == true)
-			{
-				temp = altitude1;
-				altitude1 = altitude2;
-				altitude2 = temp;
-			}
+				Swap(altitude1, altitude2);
 		}
 		if (z1 > z2)
 		{
-			temp = z1;
-			z1 = z2;
-			z2 = temp;
+			Swap(z1, z2);
 
 			if (reverse_axis == false)
-			{
-				temp = altitude1;
-				altitude1 = altitude2;
-				altitude2 = temp;
-			}
+				Swap(altitude1, altitude2);
 		}
 	}
 	else
 	{
 		//legacy (broken) behavior, for compatibility with previous versions
 
-		if (x1 > x2 && axis == 1)
+		if ((x1 > x2 && axis == 1) || (z1 > z2 && axis == 2))
 		{
-			//reverse coordinates if the difference between x coordinates is greater
-			temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = z1;
-			z1 = z2;
-			z2 = temp;
-			temp = altitude1;
-			altitude1 = altitude2;
-			altitude2 = temp;
-		}
-		if (z1 > z2 && axis == 2)
-		{
-			//reverse coordinates if the difference between z coordinates is greater
-			temp = x1;
-			x1 = x2;
-			x2 = temp;
-			temp = z1;
-			z1 = z2;
-			z2 = temp;
-			temp = altitude1;
-			altitude1 = altitude2;
-			altitude2 = temp;
+			//reverse coordinates if the difference between x or z coordinates is greater
+			Swap(x1, x2);
+			Swap(z1, z2);
+			Swap(altitude1, altitude2);
 		}
 	}
 
@@ -1225,17 +1185,10 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 
 	//swap values if the first is greater than the second
 	if (x1 > x2)
-	{
-		float tmpx = x1;
-		x1 = x2;
-		x2 = tmpx;
-	}
+		Swap(x1, x2);
+
 	if (z1 > z2)
-	{
-		float tmpz = z1;
-		z1 = z2;
-		z2 = tmpz;
-	}
+		Swap(z1, z2);
 
 	if (inside == true)
 	{

@@ -92,6 +92,8 @@ SBSIMPEXP bool ToBool(std::string string);
 SBSIMPEXP std::string TruncateNumber(float value, int decimals);
 SBSIMPEXP std::string TruncateNumber(double value, int decimals);
 SBSIMPEXP std::string TruncateNumber(const std::string &number, int decimals);
+SBSIMPEXP void Swap(int &first, int &second);
+SBSIMPEXP void Swap(float &first, float &second);
 
 }
 
