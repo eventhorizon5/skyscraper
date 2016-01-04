@@ -575,10 +575,6 @@ breakpoint:
 		}
 		if (linecheck.substr(0, 11) == "<buildings>")
 		{
-			//ignore this section if not primary engine
-			if (engine->GetNumber() != 0)
-				goto Nextline;
-
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
@@ -591,10 +587,6 @@ breakpoint:
 		}
 		if (linecheck.substr(0, 14) == "<endbuildings>")
 		{
-			//ignore this section if not primary engine
-			if (engine->GetNumber() != 0)
-				goto Nextline;
-
 			if (Section != 3)
 			{
 				ScriptError("Not in buildings section");
