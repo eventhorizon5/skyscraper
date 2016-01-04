@@ -158,8 +158,7 @@ void SceneNode::SetRotation(const Ogre::Vector3 &rotation)
 	Ogre::Quaternion z(Ogre::Degree(Rotation.z), Ogre::Vector3::UNIT_Z);
 	Ogre::Quaternion rot = x * y * z;
 
-	node->setOrientation(rot);
-	Update();
+	SetOrientation(rot, true);
 }
 
 Ogre::Vector3 SceneNode::GetRotation()
