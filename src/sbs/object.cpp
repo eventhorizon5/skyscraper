@@ -425,7 +425,7 @@ void Object::ChangeParent(Object *new_parent)
 	//get original orientation
 	Ogre::Quaternion q;
 	if (node)
-		q = node->GetOrientation(false);
+		q = node->GetOrientation();
 
 	//switch parent
 	Parent->RemoveChild(this);
@@ -438,7 +438,7 @@ void Object::ChangeParent(Object *new_parent)
 	//restore orientation
 	if (node)
 	{
-		node->SetOrientation(q, false);
+		node->SetOrientation(q);
 		NotifyRotate();
 	}
 

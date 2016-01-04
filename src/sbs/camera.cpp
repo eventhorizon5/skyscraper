@@ -1085,7 +1085,7 @@ void Camera::Sync()
 
 	//notify on movement or rotation
 	Ogre::Vector3 position = sbs->ToRemote(GetPosition());
-	Ogre::Quaternion orientation = GetOrientation(false);
+	Ogre::Quaternion orientation = GetOrientation();
 
 	if (prev_position != position)
 	{

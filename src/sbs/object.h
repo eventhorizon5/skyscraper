@@ -93,7 +93,7 @@ public:
 	virtual void SetRotation(const Ogre::Vector3 &rotation);
 	virtual void SetRotation(float X, float Y, float Z);
 	virtual Ogre::Vector3 GetRotation();
-	Ogre::Quaternion GetOrientation(bool relative = true);
+	Ogre::Quaternion GetOrientation(bool relative = false);
 	virtual void OnMove(bool parent) {} //called when object is moved
 	virtual void OnRotate(bool parent) {} //called when object is rotated
 	void NotifyMove(bool parent = false);
