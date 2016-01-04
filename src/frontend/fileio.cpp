@@ -7909,11 +7909,11 @@ int ScriptProcessor::ProcBuildings()
 		{
 			for (int i = 1; i <= params - 1; i++)
 			{
+				tempdata[i] = Calc(tempdata[i]);
 				if (!IsNumeric(tempdata[i]))
 					return ScriptError("Invalid value: " + tempdata[i]);
 			}
 		}
-		//CheckFile(tempdata[0]);
 
 		Ogre::Vector3 position (Ogre::Vector3::ZERO);
 		Ogre::Vector3 min (Ogre::Vector3::ZERO);

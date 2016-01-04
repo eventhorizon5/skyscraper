@@ -312,8 +312,8 @@ bool EngineContext::ReportError(const std::string &message)
 
 bool EngineContext::ReportFatalError(const std::string &message)
 {
-	ReportError(InstancePrompt + message);
-	frontend->ShowError(InstancePrompt + message);
+	ReportError(message);
+	frontend->ShowError(message);
 	return false;
 }
 
