@@ -350,12 +350,12 @@ Ogre::Vector3 Object::GetRotation()
 	return node->GetRotation();
 }
 
-Ogre::Quaternion Object::GetOrientation()
+Ogre::Quaternion Object::GetOrientation(bool relative)
 {
 	if (!node)
 		return Ogre::Quaternion::ZERO;
 
-	return node->GetOrientation();
+	return node->GetOrientation(relative);
 }
 
 void Object::NotifyMove(bool parent)
@@ -425,7 +425,7 @@ void Object::ChangeParent(Object *new_parent)
 	//get original orientation
 	Ogre::Quaternion q;
 	if (node)
-		q = node->GetOrientation();
+		q = node->GetOrientation(false);
 
 	//switch parent
 	Parent->RemoveChild(this);
@@ -438,7 +438,7 @@ void Object::ChangeParent(Object *new_parent)
 	//restore orientation
 	if (node)
 	{
-		node->SetOrientation(q);
+		node->SetOrientation(q, false);
 		NotifyRotate();
 	}
 

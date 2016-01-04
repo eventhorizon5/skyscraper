@@ -180,24 +180,32 @@ void SceneNode::Update()
 		node->needUpdate();
 }
 
-Ogre::Quaternion SceneNode::GetOrientation()
+Ogre::Quaternion SceneNode::GetOrientation(bool relative)
 {
 	//return raw orientation
 
 	if (node)
-		return node->_getDerivedOrientation();
+	{
+		if (relative == false)
+			return node->_getDerivedOrientation();
+		else
+			return node->getOrientation();
+	}
 
 	return Ogre::Quaternion::ZERO;
 }
 
-void SceneNode::SetOrientation(const Ogre::Quaternion &q)
+void SceneNode::SetOrientation(const Ogre::Quaternion &q, bool relative)
 {
 	//set raw orientation
 
 	if (!node)
 		return;
 
-	node->_setDerivedOrientation(q);
+	if (relative == false)
+		node->_setDerivedOrientation(q);
+	else
+		node->setOrientation(q);
 
 	Update();
 }

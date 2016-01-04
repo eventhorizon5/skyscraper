@@ -44,8 +44,8 @@ public:
 	void SetRotation(const Ogre::Vector3 &rotation);
 	Ogre::Vector3 GetRotation();
 	void Update();
-	Ogre::Quaternion GetOrientation();
-	void SetOrientation(const Ogre::Quaternion &q);
+	Ogre::Quaternion GetOrientation(bool relative = true);
+	void SetOrientation(const Ogre::Quaternion &q, bool relative = true);
 	void Move(const Ogre::Vector3 &vector, float speed = 1.0f);
 	void DetachAllObjects();
 	void AttachObject(Ogre::MovableObject *object);

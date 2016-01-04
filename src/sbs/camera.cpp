@@ -300,7 +300,7 @@ bool Camera::Move(Ogre::Vector3 vector, float speed, bool flip)
 	Ogre::Quaternion orientation;
 
 	if (EnableBullet == true)
-		orientation = mCharacter->getRootNode()->getOrientation();
+		orientation = GetOrientation();
 	else
 		orientation = MainCamera->getOrientation();
 
@@ -1085,7 +1085,7 @@ void Camera::Sync()
 
 	//notify on movement or rotation
 	Ogre::Vector3 position = sbs->ToRemote(GetPosition());
-	Ogre::Quaternion orientation = GetOrientation();
+	Ogre::Quaternion orientation = GetOrientation(false);
 
 	if (prev_position != position)
 	{
