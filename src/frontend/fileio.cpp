@@ -575,6 +575,10 @@ breakpoint:
 		}
 		if (linecheck.substr(0, 11) == "<buildings>")
 		{
+			//skip this section if reloading
+			if (engine->IsReloading() == true)
+				goto Nextline;
+
 			if (Section > 0)
 			{
 				ScriptError("Already within a section");
@@ -587,6 +591,10 @@ breakpoint:
 		}
 		if (linecheck.substr(0, 14) == "<endbuildings>")
 		{
+			//skip this section if reloading
+			if (engine->IsReloading() == true)
+				goto Nextline;
+
 			if (Section != 3)
 			{
 				ScriptError("Not in buildings section");

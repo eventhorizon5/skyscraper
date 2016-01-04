@@ -40,8 +40,8 @@ EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneMan
 	shutdown = false;
 	loading = false;
 	running = false;
+	reloading = false;
 	Reload = false;
-	PositionOverride = false;
 	reload_state.floor = 0;
 	reload_state.collisions = false;
 	reload_state.gravity = false;
@@ -202,7 +202,7 @@ void EngineContext::DoReload()
 	if (!Simcore)
 		return;
 
-	PositionOverride = true;
+	reloading = true;
 
 	//store camera state information
 	std::string filename = Simcore->BuildingFilename;
@@ -217,7 +217,7 @@ void EngineContext::DoReload()
 	//load building file
 	if (Load(filename) == false)
 	{
-		PositionOverride = false;
+		reloading = false;
 		Reload = false;
 		return;
 	}
@@ -288,9 +288,9 @@ bool EngineContext::Start(Ogre::Camera *camera)
 		return ReportError("Error starting simulator\n");
 
 	//set to saved position if reloading building
-	if (PositionOverride == true)
+	if (reloading == true)
 	{
-		PositionOverride = false;
+		reloading = false;
 		SetCameraState(reload_state);
 	}
 

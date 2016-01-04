@@ -47,6 +47,7 @@ public:
 	bool Load(std::string filename);
 	bool IsLoading() { return loading; }
 	bool IsRunning() { return running; }
+	bool IsReloading() { return reloading; }
 	void DoReload();
 	std::string GetFilename();
 	bool Start(Ogre::Camera *camera);
@@ -78,12 +79,12 @@ private:
 	bool shutdown;
 	bool loading;
 	bool running;
+	bool reloading;
 	bool raised;
 	int progress;
 	std::string InstancePrompt;
 
 	//override information
-	bool PositionOverride;
 	SBS::CameraState reload_state;
 
 	Ogre::SceneManager* mSceneManager;
