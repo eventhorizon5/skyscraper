@@ -130,9 +130,9 @@ Ogre::Vector3 SceneNode::GetPosition(bool relative)
 	if (relative == false)
 	{
 		if (IsRoot() == false)
-			return sbs->ToLocal(sbs->GetOrientation().Inverse() * node->_getDerivedPosition()) - GetEngineOffset();
+			return sbs->ToLocal(sbs->GetOrientation().Inverse() * node->_getDerivedPosition()) - sbs->GetPosition();
 		else
-			return sbs->ToLocal(node->_getDerivedPosition()) - GetEngineOffset();
+			return sbs->ToLocal(node->_getDerivedPosition());
 	}
 
 	return sbs->ToLocal(node->getPosition());

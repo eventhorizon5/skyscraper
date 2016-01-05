@@ -414,6 +414,8 @@ public:
 	void SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max);
 	bool HasBounds() { return (area_trigger != 0); }
 	void ResetBuilding();
+	Ogre::Vector3 ToGlobal(const Ogre::Vector3 &position);
+	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
 
 	//Meshes
 	MeshObject* Buildings;

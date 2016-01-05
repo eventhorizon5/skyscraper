@@ -4385,4 +4385,18 @@ void SBS::ResetBuilding()
 		FloorArray[i].object->Enabled(false);
 }
 
+Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
+{
+	//convert an engine-relative position to a global (scene) position
+
+	return (sbs->GetOrientation().Inverse() * position) + GetPosition();
+}
+
+Ogre::Vector3 SBS::FromGlobal(const Ogre::Vector3 &position)
+{
+	//convert a global (scene) position to an engine-relative position
+
+	return (sbs->GetOrientation() * position) - GetPosition();
+}
+
 }
