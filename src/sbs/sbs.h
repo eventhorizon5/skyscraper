@@ -416,6 +416,8 @@ public:
 	void ResetBuilding();
 	Ogre::Vector3 ToGlobal(const Ogre::Vector3 &position);
 	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
+	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
+	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
 
 	//Meshes
 	MeshObject* Buildings;

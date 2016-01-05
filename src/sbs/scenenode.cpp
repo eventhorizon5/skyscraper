@@ -196,7 +196,7 @@ Ogre::Quaternion SceneNode::GetOrientation(bool relative)
 		if (relative == false)
 		{
 			if (IsRoot() == false)
-				return sbs->GetOrientation().Inverse() * node->_getDerivedOrientation();
+				return sbs->FromGlobal(node->_getDerivedOrientation());
 			else
 				return node->_getDerivedOrientation();
 		}
@@ -217,7 +217,7 @@ void SceneNode::SetOrientation(const Ogre::Quaternion &q, bool relative)
 	if (relative == false)
 	{
 		if (IsRoot() == false)
-			node->_setDerivedOrientation(sbs->GetOrientation() * q);
+			node->_setDerivedOrientation(sbs->ToGlobal(q));
 		else
 			node->_setDerivedOrientation(q);
 	}

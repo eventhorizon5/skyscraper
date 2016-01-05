@@ -4399,4 +4399,14 @@ Ogre::Vector3 SBS::FromGlobal(const Ogre::Vector3 &position)
 	return (sbs->GetOrientation() * position) - GetPosition();
 }
 
+Ogre::Quaternion SBS::ToGlobal(const Ogre::Quaternion &orientation)
+{
+	return (GetOrientation() * orientation);
+}
+
+Ogre::Quaternion SBS::FromGlobal(const Ogre::Quaternion &orientation)
+{
+	return (GetOrientation().Inverse() * orientation);
+}
+
 }

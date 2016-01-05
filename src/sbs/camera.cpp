@@ -213,7 +213,7 @@ void Camera::SetRotation(const Ogre::Vector3 &rotation)
 	MainCamera->setOrientation(camrot);
 
 	if (EnableBullet == true)
-		mCharacter->setOrientation(sbs->GetOrientation() * bodyrot);
+		mCharacter->setOrientation(sbs->ToGlobal(bodyrot));
 
 	OnRotate(false);
 }
@@ -238,7 +238,7 @@ void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
 	if (!MainCamera)
 		return;
 
-	Ogre::Quaternion dir = sbs->GetOrientation().Inverse() * MainCamera->getDerivedOrientation();
+	Ogre::Quaternion dir = sbs->FromGlobal(MainCamera->getDerivedOrientation());
 
 	front = dir.zAxis();
 	front.x = -front.x; //convert to left-hand coordinate system
@@ -380,7 +380,7 @@ void Camera::RotateLocal(const Ogre::Vector3 &rotation, float speed)
 	if (EnableBullet == true)
 	{
 		//rotate character collider
-		mCharacter->setOrientation(sbs->GetOrientation() * rot);
+		mCharacter->setOrientation(sbs->ToGlobal(rot));
 
 		//rotate camera
 		MainCamera->pitch(Ogre::Degree(xdeg));
