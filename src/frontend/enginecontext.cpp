@@ -360,7 +360,7 @@ bool EngineContext::IsInside(const Ogre::Vector3 &position)
 	if (!Simcore)
 		return false;
 
-	return Simcore->IsInside(position - Simcore->GetPosition());
+	return Simcore->IsInside((Simcore->GetOrientation() * position) - Simcore->GetPosition());
 }
 
 void EngineContext::DetachCamera(bool reset_building)

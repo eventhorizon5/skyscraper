@@ -1390,6 +1390,9 @@ void Camera::OnMove(bool parent)
 
 void Camera::OnRotate(bool parent)
 {
+	if (parent == true)
+		OnMove(parent); //update position if parent object has been rotated
+
 	if (EnableBullet == true)
 		mCharacter->updateTransform(false, true, false);
 }
