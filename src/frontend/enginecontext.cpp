@@ -360,11 +360,13 @@ bool EngineContext::IsInside(const Ogre::Vector3 &position)
 	if (!Simcore)
 		return false;
 
-	return Simcore->IsInside((Simcore->GetOrientation() * position) - Simcore->GetPosition());
+	return Simcore->IsInside(Simcore->FromGlobal(position));
 }
 
 void EngineContext::DetachCamera(bool reset_building)
 {
+	//detach the camera from this engine
+
 	Simcore->DetachCamera();
 
 	if (reset_building == true)
@@ -373,6 +375,8 @@ void EngineContext::DetachCamera(bool reset_building)
 
 void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)
 {
+	//attach the camera to this engine
+
 	Simcore->AttachCamera(camera, init_state);
 
 	//reset camera position if camera is outside of the engine's area when attaching
@@ -383,6 +387,13 @@ void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)
 void EngineContext::RefreshCamera()
 {
 	Simcore->camera->Refresh();
+}
+
+Ogre::Vector3 EngineContext::GetCameraPosition()
+{
+	//get this engine's camera position, in global positioning
+
+	return Simcore->ToGlobal(Simcore->camera->GetPosition());
 }
 
 }

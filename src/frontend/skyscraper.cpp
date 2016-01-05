@@ -2349,31 +2349,34 @@ void Skyscraper::CenterEngine(int index)
 
 void Skyscraper::SwitchEngines()
 {
-	//automatically switch between engines when user crosses over into an engine's area
+	//automatically switch between engines when user crosses over an engine's boundary
 
 	if (!active_engine)
 		return;
 
-	if (active_engine->IsInside() == true)
-		return;
-
-	//get previous engine's camera state
-	CameraState state = active_engine->GetCameraState();
-	Ogre::Vector3 offset = active_engine->GetSystem()->GetPosition();
+	Ogre::Vector3 position = active_engine->GetCameraPosition();
 
 	//if user leaves the active engine, find the engine they moved into
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i]->IsInside(state.position) == true && engines[i]->IsCameraActive() == false)
+		if (engines[i] != active_engine)
 		{
-			//switch to new engine
-			SetActiveEngine(i, false, true);
+			if (engines[i]->IsInside(position) == true && engines[i]->IsCameraActive() == false)
+			{
+				//get previous engine's camera state
+				CameraState state = active_engine->GetCameraState();
 
-			//apply camera state to new engine
-			engines[i]->SetCameraState(state, false);
+				//switch to new engine
+				SetActiveEngine(i, false, true);
 
-			//center engine after applying camera state
-			CenterEngine(i);
+				//apply camera state to new engine
+				engines[i]->SetCameraState(state, false);
+
+				//center engine after applying camera state
+				CenterEngine(i);
+
+				break;
+			}
 		}
 	}
 }

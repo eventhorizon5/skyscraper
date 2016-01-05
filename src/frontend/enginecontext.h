@@ -65,6 +65,7 @@ public:
 	void DetachCamera(bool reset_building = false);
 	void AttachCamera(Ogre::Camera *camera, bool init_state = true);
 	void RefreshCamera();
+	Ogre::Vector3 GetCameraPosition();
 
 private:
 
