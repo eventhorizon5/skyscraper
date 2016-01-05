@@ -1404,7 +1404,7 @@ CameraState Camera::GetCameraState()
 
 	CameraState state;
 	state.position = (sbs->GetOrientation().Inverse() * GetPosition()) + sbs->GetPosition();
-	state.rotation = GetRotation();
+	state.rotation = GetRotation() + sbs->GetRotation();
 	state.floor = CurrentFloor;
 	state.collisions = CollisionsEnabled();
 	state.gravity = GetGravityStatus();
@@ -1428,7 +1428,7 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 	else
 		GotoFloor(sbs->GetFloorNumber(position.y));
 	SetPosition(position);
-	SetRotation(state.rotation);
+	SetRotation(state.rotation - sbs->GetRotation());
 	EnableCollisions(state.collisions);
 	EnableGravity(state.gravity);
 	Freelook = state.freelook;
