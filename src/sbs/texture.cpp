@@ -308,7 +308,7 @@ bool SBS::LoadTextureCropped(const std::string &filename, const std::string &nam
 		return ReportError("LoadTextureCropped: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	std::string texturename = ToString(InstanceNumber) + ":" + Name;
 	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
@@ -603,7 +603,7 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 	int height = (int)background->getHeight();
 
 	//create new empty texture
-	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	std::string texturename = ToString(InstanceNumber) + ":" + Name;
 	Ogre::TexturePtr texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, width, height, Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 
@@ -713,7 +713,7 @@ bool SBS::AddTextureOverlay(const std::string &orig_texture, const std::string &
 		return ReportError("AddTextureOverlay: invalid size for '" + Name + "'");
 
 	//create new empty texture
-	std::string texturename = ToString(sbs->InstanceNumber) + ":" + Name;
+	std::string texturename = ToString(InstanceNumber) + ":" + Name;
 	Ogre::TexturePtr new_texture = Ogre::TextureManager::getSingleton().createManual(texturename, "General", Ogre::TEX_TYPE_2D, (Ogre::uint)image1->getWidth(), (Ogre::uint)image1->getHeight(), Ogre::MIP_UNLIMITED, Ogre::PF_R8G8B8A8, Ogre::TU_STATIC|Ogre::TU_AUTOMIPMAP);
 	IncrementTextureCount();
 

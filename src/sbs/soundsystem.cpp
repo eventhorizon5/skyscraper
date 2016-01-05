@@ -102,7 +102,7 @@ void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
 	}
 
 	Position = position;
-	Ogre::Vector3 offset = sbs->camera->GetSceneNode()->GetEngineOffset();
+	Ogre::Vector3 offset = sbs->GetPosition();
 
 	listener_position.x = position.x + offset.x;
 	listener_position.y = position.y + offset.y;

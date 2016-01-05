@@ -54,7 +54,6 @@ public:
 	void SetScale(float scale);
 	SceneNode* CreateChild(std::string name, const Ogre::Vector3 &offset = Ogre::Vector3::ZERO);
 	std::string GetFullName();
-	Ogre::Vector3 GetEngineOffset();
 	bool IsRoot();
 
 private:

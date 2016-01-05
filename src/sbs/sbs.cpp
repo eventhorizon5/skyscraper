@@ -4389,23 +4389,27 @@ Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
 {
 	//convert an engine-relative position to a global (scene) position
 
-	return (sbs->GetOrientation().Inverse() * position) + GetPosition();
+	return (GetOrientation().Inverse() * position) + GetPosition();
 }
 
 Ogre::Vector3 SBS::FromGlobal(const Ogre::Vector3 &position)
 {
 	//convert a global (scene) position to an engine-relative position
 
-	return (sbs->GetOrientation() * position) - GetPosition();
+	return (GetOrientation() * position) - GetPosition();
 }
 
 Ogre::Quaternion SBS::ToGlobal(const Ogre::Quaternion &orientation)
 {
+	//convert an engine-relative orientation (rotation) to a global (scene) orientation
+
 	return (GetOrientation() * orientation);
 }
 
 Ogre::Quaternion SBS::FromGlobal(const Ogre::Quaternion &orientation)
 {
+	//convert a global (scene) orientation (rotation) to an engine-relative orientation
+
 	return (GetOrientation().Inverse() * orientation);
 }
 

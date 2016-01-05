@@ -98,11 +98,10 @@ void SceneNode::SetPosition(const Ogre::Vector3 &position)
 	if (!node)
 		return;
 
-	Ogre::Vector3 pos = GetEngineOffset() + position;
 	if (IsRoot() == false)
-		node->_setDerivedPosition(sbs->GetOrientation() * sbs->ToRemote(pos));
+		node->_setDerivedPosition(sbs->ToRemote(sbs->ToGlobal(position)));
 	else
-		node->_setDerivedPosition(sbs->ToRemote(pos));
+		node->_setDerivedPosition(sbs->ToRemote(position));
 	Update();
 }
 
@@ -129,10 +128,11 @@ Ogre::Vector3 SceneNode::GetPosition(bool relative)
 
 	if (relative == false)
 	{
+		Ogre::Vector3 pos = sbs->ToLocal(node->_getDerivedPosition());
 		if (IsRoot() == false)
-			return sbs->ToLocal(sbs->GetOrientation().Inverse() * node->_getDerivedPosition()) - sbs->GetPosition();
+			return sbs->FromGlobal(pos);
 		else
-			return sbs->ToLocal(node->_getDerivedPosition());
+			return pos;
 	}
 
 	return sbs->ToLocal(node->getPosition());
@@ -298,16 +298,6 @@ std::string SceneNode::GetFullName()
 		return "";
 
 	return node->getName();
-}
-
-Ogre::Vector3 SceneNode::GetEngineOffset()
-{
-	//get position offset of SBS engine root
-
-	Ogre::Vector3 offset = Ogre::Vector3::ZERO;
-	if (sbs->GetSceneNode() != this)
-		offset = sbs->GetPosition();
-	return offset;
 }
 
 bool SceneNode::IsRoot()
