@@ -4396,7 +4396,7 @@ Ogre::Vector3 SBS::FromGlobal(const Ogre::Vector3 &position)
 {
 	//convert a global (scene) position to an engine-relative position
 
-	return (GetOrientation() * position) - GetPosition();
+	return (GetOrientation() * (position - GetPosition()));
 }
 
 Ogre::Quaternion SBS::ToGlobal(const Ogre::Quaternion &orientation)
