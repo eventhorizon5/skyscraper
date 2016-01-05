@@ -134,6 +134,8 @@ public:
 	void RefreshConsole();
 	void RefreshViewport();
 	void CenterEngine(int index);
+	bool IsValidEngine(EngineContext *engine);
+	bool IsValidSystem(SBS::SBS *sbs);
 
 private:
 	//mouse status

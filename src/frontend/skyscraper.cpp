@@ -2378,4 +2378,30 @@ void Skyscraper::SwitchEngines()
 	}
 }
 
+bool Skyscraper::IsValidEngine(EngineContext *engine)
+{
+	if (!engine)
+		return false;
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i] == engine)
+			return true;
+	}
+	return false;
+}
+
+bool Skyscraper::IsValidSystem(SBS::SBS *sbs)
+{
+	if (!sbs)
+		return false;
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i]->GetSystem() == sbs)
+			return true;
+	}
+	return false;
+}
+
 }

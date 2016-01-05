@@ -566,7 +566,6 @@ void DebugPanel::On_bObjectInfo_Click(wxCommandEvent& event)
 	if (!objectinfo)
 		objectinfo = new ObjectInfo(this, -1);
 
-	objectinfo->PopulateTree();
 	objectinfo->CenterOnScreen();
 	objectinfo->Show();
 }

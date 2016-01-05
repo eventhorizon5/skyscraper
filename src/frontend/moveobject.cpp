@@ -252,6 +252,9 @@ void MoveObject::Loop()
 	if (!panel->GetRoot()->GetActiveEngine())
 		return;
 
+	if (panel->GetRoot()->IsValidSystem(Simcore) == false)
+		OnInit();
+
 	object = Simcore->GetObject(object_num);
 
 	if (object)
