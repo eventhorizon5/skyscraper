@@ -1400,7 +1400,7 @@ CameraState Camera::GetCameraState()
 	//the position value is in a global/absolute scene format, not engine-relative
 
 	CameraState state;
-	state.position = GetPosition() + sbs->GetPosition();
+	state.position = (sbs->GetOrientation().Inverse() * GetPosition()) + sbs->GetPosition();
 	state.rotation = GetRotation();
 	state.floor = CurrentFloor;
 	state.collisions = CollisionsEnabled();
@@ -1419,11 +1419,11 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 	//sets camera state
 	//the position value is in a global/absolute scene format, not engine-relative
 
-	Ogre::Vector3 position = state.position - sbs->GetPosition();
+	Ogre::Vector3 position = (sbs->GetOrientation() * state.position) - sbs->GetPosition();
 	if (set_floor == true)
 		GotoFloor(state.floor, true);
 	else
-		GotoFloor(sbs->GetFloorNumber(state.position.y));
+		GotoFloor(sbs->GetFloorNumber(position.y));
 	SetPosition(position);
 	SetRotation(state.rotation);
 	EnableCollisions(state.collisions);
