@@ -154,6 +154,7 @@ bool Skyscraper::OnInit(void)
 	}
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
+	center_engine = GetConfigBool("Skyscraper.Frontend.CenterEngine", true);
 
 	//create console window
 	if (showconsole == true)
@@ -2350,6 +2351,9 @@ void Skyscraper::RefreshViewport()
 void Skyscraper::CenterEngine(int index)
 {
 	//shift the engines so that the specified engine is in the center
+
+	if (center_engine == false)
+		return;
 
 	EngineContext *engine = GetEngine(index);
 
