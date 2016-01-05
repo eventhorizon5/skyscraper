@@ -99,7 +99,10 @@ void SceneNode::SetPosition(const Ogre::Vector3 &position)
 		return;
 
 	Ogre::Vector3 pos = GetEngineOffset() + position;
-	node->_setDerivedPosition(sbs->ToRemote(pos));
+	if (IsRoot() == false)
+		node->_setDerivedPosition(sbs->GetOrientation() * sbs->ToRemote(pos));
+	else
+		node->_setDerivedPosition(sbs->ToRemote(pos));
 	Update();
 }
 
@@ -125,7 +128,12 @@ Ogre::Vector3 SceneNode::GetPosition(bool relative)
 		return Ogre::Vector3::ZERO;
 
 	if (relative == false)
-		return sbs->ToLocal(node->_getDerivedPosition()) - GetEngineOffset();
+	{
+		if (IsRoot() == false)
+			return sbs->ToLocal(sbs->GetOrientation().Inverse() * node->_getDerivedPosition()) - GetEngineOffset();
+		else
+			return sbs->ToLocal(node->_getDerivedPosition()) - GetEngineOffset();
+	}
 
 	return sbs->ToLocal(node->getPosition());
 }
@@ -186,7 +194,12 @@ Ogre::Quaternion SceneNode::GetOrientation(bool relative)
 	if (node)
 	{
 		if (relative == false)
-			return node->_getDerivedOrientation();
+		{
+			if (IsRoot() == false)
+				return sbs->GetOrientation().Inverse() * node->_getDerivedOrientation();
+			else
+				return node->_getDerivedOrientation();
+		}
 		else
 			return node->getOrientation();
 	}
@@ -202,7 +215,12 @@ void SceneNode::SetOrientation(const Ogre::Quaternion &q, bool relative)
 		return;
 
 	if (relative == false)
-		node->_setDerivedOrientation(q);
+	{
+		if (IsRoot() == false)
+			node->_setDerivedOrientation(sbs->GetOrientation() * q);
+		else
+			node->_setDerivedOrientation(q);
+	}
 	else
 		node->setOrientation(q);
 
@@ -290,6 +308,11 @@ Ogre::Vector3 SceneNode::GetEngineOffset()
 	if (sbs->GetSceneNode() != this)
 		offset = sbs->GetPosition();
 	return offset;
+}
+
+bool SceneNode::IsRoot()
+{
+	 return (this == sbs->GetSceneNode());
 }
 
 }
