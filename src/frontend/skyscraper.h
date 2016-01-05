@@ -128,7 +128,7 @@ public:
 	void DeleteEngines();
 	int GetEngineCount() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int index, bool center_engine = true, bool switch_engines = false);
+	void SetActiveEngine(int index, bool switch_engines = false);
 	bool IsEngineLoading();
 	void RaiseWindow();
 	void RefreshConsole();

@@ -1122,7 +1122,7 @@ void Skyscraper::Loop()
 	//handle a building reload
 	HandleReload();
 
-	//allow user to move between engines
+	//handle behavior when a user exits an engine area
 	SwitchEngines();
 
 	//ProfileManager::dumpAll();
@@ -2179,7 +2179,7 @@ EngineContext* Skyscraper::FindActiveEngine()
 	return active_engine;
 }
 
-void Skyscraper::SetActiveEngine(int index, bool center_engine, bool switch_engines)
+void Skyscraper::SetActiveEngine(int index, bool switch_engines)
 {
 	//set an engine instance to be active
 
@@ -2189,13 +2189,29 @@ void Skyscraper::SetActiveEngine(int index, bool center_engine, bool switch_engi
 	if (active_engine == engines[index])
 		return;
 
+	//don't switch if the camera's already active in the specified engine
+	if (engines[index]->IsCameraActive() == true)
+		return;
+
 	//don't switch to engine if it's loading
 	if (engines[index]->IsLoading() == true)
 		return;
 
-	//detach camera from current engine
+	CameraState state;
+	bool state_set = false;
+
 	if (active_engine)
+	{
+		//get previous engine's camera state
+		if (switch_engines == true)
+		{
+			state = active_engine->GetCameraState();
+			state_set = true;
+		}
+
+		//detach camera from current engine
 		active_engine->DetachCamera(switch_engines);
+	}
 
 	Report("Setting engine " + ToString(index) + " as active");
 
@@ -2203,9 +2219,12 @@ void Skyscraper::SetActiveEngine(int index, bool center_engine, bool switch_engi
 	active_engine = engines[index];
 	active_engine->AttachCamera(mCamera, !switch_engines);
 
+	//apply camera state to new engine
+	if (switch_engines == true && state_set == true)
+		active_engine->SetCameraState(state, false);
+
 	//center new engine instance
-	if (center_engine == true)
-		CenterEngine(index);
+	CenterEngine(index);
 }
 
 bool Skyscraper::RunEngines()
@@ -2349,32 +2368,21 @@ void Skyscraper::CenterEngine(int index)
 
 void Skyscraper::SwitchEngines()
 {
-	//automatically switch between engines when user crosses over an engine's boundary
+	//if user is no longer inside the active engine, find a new engine to attach to
 
 	if (!active_engine)
 		return;
 
-	Ogre::Vector3 position = active_engine->GetCameraPosition();
+	if (active_engine->IsInside() == true)
+		return;
 
-	//if user leaves the active engine, find the engine they moved into
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
 		if (engines[i] != active_engine)
 		{
-			if (engines[i]->IsInside(position) == true && engines[i]->IsCameraActive() == false)
+			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
 			{
-				//get previous engine's camera state
-				CameraState state = active_engine->GetCameraState();
-
-				//switch to new engine
-				SetActiveEngine(i, false, true);
-
-				//apply camera state to new engine
-				engines[i]->SetCameraState(state, false);
-
-				//center engine after applying camera state
-				CenterEngine(i);
-
+				SetActiveEngine(i, true);
 				break;
 			}
 		}

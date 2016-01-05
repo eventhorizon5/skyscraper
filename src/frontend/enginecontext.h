@@ -66,6 +66,8 @@ public:
 	void AttachCamera(Ogre::Camera *camera, bool init_state = true);
 	void RefreshCamera();
 	Ogre::Vector3 GetCameraPosition();
+	void OnEnter();
+	void OnExit();
 
 private:
 
@@ -83,6 +85,7 @@ private:
 	bool reloading;
 	bool raised;
 	int progress;
+	bool inside;
 	std::string InstancePrompt;
 
 	//override information

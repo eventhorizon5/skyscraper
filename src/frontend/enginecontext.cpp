@@ -55,6 +55,7 @@ EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneMan
 	processor = 0;
 	raised = false;
 	progress = 0;
+	inside = false;
 
 	instance = instance_number;
 	Report("\nStarting instance " + ToString(instance) + "...");
@@ -152,6 +153,12 @@ bool EngineContext::Run()
 
 		//process camera loop
 		Simcore->CameraLoop();
+
+		//run functions if user enters or leaves this engine
+		if (inside == false && IsInside() == true)
+			OnEnter();
+		if (inside == true && IsInside() == false)
+			OnExit();
 	}
 
 	return true;
@@ -350,7 +357,11 @@ bool EngineContext::IsInside()
 	if (!Simcore)
 		return false;
 
-	return Simcore->IsInside();
+	if (!frontend->GetActiveEngine())
+		return Simcore->IsInside();
+
+	//make sure the global camera's position is actually inside this engine
+	return IsInside(frontend->GetActiveEngine()->GetCameraPosition());
 }
 
 bool EngineContext::IsInside(const Ogre::Vector3 &position)
@@ -394,6 +405,19 @@ Ogre::Vector3 EngineContext::GetCameraPosition()
 	//get this engine's camera position, in global positioning
 
 	return Simcore->ToGlobal(Simcore->camera->GetPosition());
+}
+
+void EngineContext::OnEnter()
+{
+	//switch to this engine on entry
+
+	inside = true;
+	frontend->SetActiveEngine(instance, true);
+}
+
+void EngineContext::OnExit()
+{
+	inside = false;
 }
 
 }
