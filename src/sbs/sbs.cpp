@@ -4073,12 +4073,15 @@ void SBS::DecrementEscalatorCount()
 	EscalatorCount--;
 }
 
-bool SBS::HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position)
+bool SBS::HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position)
 {
 	//use a given ray and distance, and return the nearest hit mesh and if applicable, wall object
 
+	//create a new ray that has absolute positioning, for engine offsets
+	Ogre::Ray ray2 (ray.getOrigin() + ToRemote(GetPosition()), ray.getDirection());
+
 	//get a collision callback from Bullet
-	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray, mWorld, max_distance);
+	OgreBulletCollisions::CollisionClosestRayResultCallback callback (ray2, mWorld, max_distance);
 
 	//check for collision
 	mWorld->launchRay(callback);

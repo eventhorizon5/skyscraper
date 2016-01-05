@@ -386,7 +386,7 @@ public:
 	int GetEscalatorCount();
 	void IncrementEscalatorCount();
 	void DecrementEscalatorCount();
-	bool HitBeam(Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
+	bool HitBeam(const Ogre::Ray &ray, float max_distance, MeshObject *&mesh, WallObject *&wall, Ogre::Vector3 &hit_position);
 	void EnableRandomActivity(bool value);
 	SoundSystem* GetSoundSystem() { return soundsystem; }
 	bool IsObjectValid(Object* object, std::string type = "");
