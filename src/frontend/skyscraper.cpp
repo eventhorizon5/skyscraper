@@ -2406,7 +2406,7 @@ bool Skyscraper::IsValidEngine(EngineContext *engine)
 	return false;
 }
 
-bool Skyscraper::IsValidSystem(SBS::SBS *sbs)
+bool Skyscraper::IsValidSystem(::SBS::SBS *sbs)
 {
 	if (!sbs)
 		return false;
