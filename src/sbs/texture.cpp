@@ -578,6 +578,12 @@ bool SBS::AddTextToTexture(const std::string &origname, const std::string &name,
 		}
 		catch (Ogre::Exception &e)
 		{
+			if (!font.isNull())
+			{
+				//unload texture and font, if an error occurred
+				Ogre::TextureManager::getSingleton().remove(fontname + "Texture");
+				Ogre::FontManager::getSingleton().remove(font->getHandle());
+			}
 			return ReportError("Error loading font " + fontname + "\n" + e.getDescription());
 		}
 	}
