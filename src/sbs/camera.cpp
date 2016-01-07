@@ -519,7 +519,10 @@ void Camera::ClickedObject(bool shift, bool ctrl, bool alt, bool right)
 	float x = (float)sbs->mouse_x / (float)width;
 	float y = (float)sbs->mouse_y / (float)height;
 	Ogre::Ray ray = MainCamera->getCameraToViewportRay(x, y);
-	ray.setOrigin(ray.getOrigin() - sbs->ToRemote(sbs->GetPosition()));
+
+	//convert ray's origin and direction to engine-relative values
+	ray.setOrigin(sbs->ToRemote(sbs->FromGlobal(sbs->ToLocal(ray.getOrigin()))));
+	ray.setDirection(sbs->GetOrientation().Inverse() * ray.getDirection());
 
 	MeshObject* mesh = 0;
 	WallObject* wall = 0;
