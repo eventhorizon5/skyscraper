@@ -178,6 +178,7 @@ private:
 	void SwitchEngines();
 	void HandleEngineShutdown();
 	void HandleReload();
+	void DoCenterEngines();
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
@@ -201,8 +202,11 @@ private:
 	EngineContext *active_engine;
 	std::vector<EngineContext*> engines;
 
-	Ogre::Vector3 shift; //view shift amount, used for CenterEngine function
+	Ogre::Vector3 shift; //view shift amount, used for CreateEngine function
 	bool center_engine;
+	std::queue<EngineContext*> engines_to_center;
+	Ogre::Vector3 center_offset;
+	bool switch_pending;
 };
 
 class MainScreen : public wxFrame
