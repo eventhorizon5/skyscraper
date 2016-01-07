@@ -1633,7 +1633,7 @@ std::string Skyscraper::SelectBuilding()
 	return filename;
 }
 
-bool Skyscraper::Load(const std::string &filename, const Ogre::Vector3 &position, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+bool Skyscraper::Load(const std::string &filename, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	//load simulator and data file
 
@@ -1659,7 +1659,7 @@ bool Skyscraper::Load(const std::string &filename, const Ogre::Vector3 &position
 	}
 
 	//Create simulator instance
-	EngineContext* engine = CreateEngine(position + offset, area_min, area_max);
+	EngineContext* engine = CreateEngine(position + offset, rotation, area_min, area_max);
 
 	if (!active_engine)
 		active_engine = engine;
@@ -2115,9 +2115,9 @@ void Skyscraper::SetDateTime(double julian_date_time)
 	new_time = true;
 }
 
-EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+EngineContext* Skyscraper::CreateEngine(const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(this, mSceneMgr, soundsys, GetEngineCount(), position, area_min, area_max);
+	EngineContext* engine = new EngineContext(this, mSceneMgr, soundsys, GetEngineCount(), position, rotation, area_min, area_max);
 	engines.push_back(engine);
 
 	//adjust for shift factor if needed

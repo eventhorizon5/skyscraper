@@ -103,7 +103,7 @@ public:
 	void StartSound();
 	void StopSound();
 	std::string SelectBuilding();
-	bool Load(const std::string &filename, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	bool Load(const std::string &filename, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	bool Start(EngineContext *engine);
 	void AllowResize(bool value);
 	void UnloadToMenu();
@@ -123,7 +123,7 @@ public:
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
 	EngineContext* GetEngine(int index);
-	EngineContext* CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	EngineContext* CreateEngine(const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();
 	int GetEngineCount() { return (int)engines.size(); }

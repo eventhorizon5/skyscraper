@@ -39,7 +39,7 @@
 
 namespace SBS {
 
-SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
+SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max) : Object(0)
 {
 	sbs = this;
 	this->mSceneManager = mSceneManager;
@@ -219,6 +219,9 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 
 	//move to specified position
 	Move(position);
+
+	//rotate engine
+	Rotate(0.0f, rotation, 0.0f);
 
 	//create main engine area trigger
 	SetBounds(area_min, area_max);

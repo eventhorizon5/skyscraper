@@ -3309,6 +3309,15 @@ int ScriptProcessor::ProcGlobals()
 			Simcore->Move(position);
 		return sNextLine;
 	}
+	if (linecheck.substr(0, 8) == "rotation")
+	{
+		float rotation;
+		if (!IsNumeric(temp2, rotation))
+			return ScriptError("Invalid rotation");
+
+		Simcore->Rotate(0.0f, rotation, 0.0f);
+		return sNextLine;
+	}
 	if (linecheck.substr(0, 6) == "bounds")
 	{
 		int params = SplitAfterEquals(LineData);
@@ -7909,7 +7918,7 @@ int ScriptProcessor::ProcBuildings()
 		//get data
 		int params = SplitData(LineData, 5, false);
 
-		if (params != 1 && params != 4 && params != 10)
+		if (params != 1 && params != 5 && params != 11)
 			return ScriptError("Incorrect number of parameters");
 
 		//check numeric values
@@ -7924,6 +7933,7 @@ int ScriptProcessor::ProcBuildings()
 		}
 
 		Ogre::Vector3 position (Ogre::Vector3::ZERO);
+		float rotation = 0.0f;
 		Ogre::Vector3 min (Ogre::Vector3::ZERO);
 		Ogre::Vector3 max (Ogre::Vector3::ZERO);
 
@@ -7932,18 +7942,19 @@ int ScriptProcessor::ProcBuildings()
 			position.x = ToFloat(tempdata[1]);
 			position.y = ToFloat(tempdata[2]);
 			position.z = ToFloat(tempdata[3]);
+			rotation = ToFloat(tempdata[4]);
 		}
-		if (params == 10)
+		if (params == 11)
 		{
-			min.x = ToFloat(tempdata[4]);
-			min.y = ToFloat(tempdata[5]);
-			min.z = ToFloat(tempdata[6]);
-			max.x = ToFloat(tempdata[7]);
-			max.y = ToFloat(tempdata[8]);
-			max.z = ToFloat(tempdata[9]);
+			min.x = ToFloat(tempdata[5]);
+			min.y = ToFloat(tempdata[6]);
+			min.z = ToFloat(tempdata[7]);
+			max.x = ToFloat(tempdata[8]);
+			max.y = ToFloat(tempdata[9]);
+			max.z = ToFloat(tempdata[10]);
 		}
 
-		engine->GetFrontend()->Load(tempdata[0], position, min, max);
+		engine->GetFrontend()->Load(tempdata[0], position, rotation, min, max);
 		return sNextLine;
 	}
 

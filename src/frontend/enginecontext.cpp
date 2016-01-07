@@ -33,7 +33,7 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	this->frontend = frontend;
 	finish_time = 0;
@@ -51,6 +51,7 @@ EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneMan
 	this->position = position;
 	this->area_min = area_min;
 	this->area_max = area_max;
+	this->rotation = rotation;
 	Simcore = 0;
 	processor = 0;
 	raised = false;
@@ -243,7 +244,7 @@ void EngineContext::StartSim()
 {
 	//Create simulator object
 	if (!Simcore)
-		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position, area_min, area_max);
+		Simcore = new ::SBS::SBS(mSceneManager, fmodsystem, instance, position, rotation, area_min, area_max);
 
 	//load script processor
 	if (!processor)
