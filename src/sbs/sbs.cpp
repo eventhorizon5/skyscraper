@@ -224,7 +224,8 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Rotate(0.0f, rotation, 0.0f);
 
 	//create main engine area trigger
-	SetBounds(area_min, area_max);
+	if (InstanceNumber != 0)
+		SetBounds(area_min, area_max);
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)

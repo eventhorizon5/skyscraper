@@ -415,7 +415,7 @@ Example: <font face="Courier New, Courier, mono" size="2">Position = 100, 0, 100
 Syntax: <font face="Courier New, Courier, mono" size="2">Rotation = <em>value</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Rotation = 90</font></p>
 
-<p align="left"><strong>19. Bounds</strong> - set the 3D boundaries of this building, used when loading multiple buildings.  If both Y values are 0, the Y values are set to be unlimited.  If loading multiple buildings, this parameter needs to be set for the first building (the one that loads the others), in order to properly set it's boundaries.  See the Load command in the Buildings section for more information.<br>
+<p align="left"><strong>19. Bounds</strong> - set the 3D boundaries of this building, which is only used if loading multiple buildings, and if this building is not the first (primary) building.  If both Y values are 0, the Y values are set to be unlimited.  See the Load command in the Buildings section for more information.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Bounds = <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">Bounds = -100, 0, -100, 100, 0, 100</font></p>
 
