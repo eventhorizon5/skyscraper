@@ -68,6 +68,7 @@ public:
 	Ogre::Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
+	void CutForNewEngine();
 
 private:
 

@@ -4363,6 +4363,25 @@ void SBS::CutOutsideBoundaries(bool landscape, bool buildings, bool external, bo
 	}
 }
 
+void SBS::CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max, bool landscape, bool buildings, bool external, bool floors)
+{
+	//cut landscape and buildings for specified bounds
+	//run this function before calling Start()
+
+	if (landscape == true)
+		Landscape->Cut(min, max, true, true);
+	if (buildings == true)
+		Buildings->Cut(min, max, true, true);
+	if (external == true)
+		External->Cut(min, max, true, true);
+
+	if (floors == true)
+	{
+		for (int i = 0; i < (int)FloorArray.size(); i++)
+			FloorArray[i].object->Level->Cut(min, max, true, true);
+	}
+}
+
 void SBS::SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO && !area_trigger)

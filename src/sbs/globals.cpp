@@ -141,6 +141,30 @@ float Max3(float a, float b, float c)
 	return c;
 }
 
+float Min4(float a, float b, float c, float d)
+{
+	//return smallest value
+	if (a <= b && a <= c && a <= d)
+		return a;
+	if (b <= a && b <= c && b <= d)
+		return b;
+	if (c <= a && c <= b && c <= d)
+		return c;
+	return d;
+}
+
+float Max4(float a, float b, float c, float d)
+{
+	//return largest value
+	if (a >= b && a >= c && a >= d)
+		return a;
+	if (b >= a && b >= c && b >= d)
+		return b;
+	if (c >= a && c >= b && c >= d)
+		return c;
+	return d;
+}
+
 std::string SetCaseCopy(std::string string, bool uppercase)
 {
 	//change case of a string

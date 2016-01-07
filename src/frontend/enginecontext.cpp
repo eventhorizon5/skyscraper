@@ -421,4 +421,45 @@ void EngineContext::OnExit()
 	inside = false;
 }
 
+void EngineContext::CutForNewEngine()
+{
+	//cut holes in this sim engine, for a newly loaded building, if possible
+
+	::SBS::SBS *newsimcore = frontend->GetEngine(frontend->GetEngineCount() - 1)->GetSystem();
+
+	if (newsimcore == Simcore)
+		return;
+
+	Ogre::Vector3 min, max, a, b, c, d, newmin, newmax;
+
+	//get new engine's boundaries
+	newsimcore->GetBounds(min, max);
+
+	if (min == Ogre::Vector3::ZERO && max == Ogre::Vector3::ZERO)
+		return;
+
+	//get global positions of engine's boundaries, in 4 points representing a rectangle
+	a = newsimcore->ToGlobal(Ogre::Vector3(min.x, min.y, min.z));
+	b = newsimcore->ToGlobal(Ogre::Vector3(min.x, min.y, max.z));
+	c = newsimcore->ToGlobal(Ogre::Vector3(max.x, max.y, max.z));
+	d = newsimcore->ToGlobal(Ogre::Vector3(max.x, max.y, min.z));
+
+	//convert global positions to this engine's relative positions
+	a = Simcore->FromGlobal(a);
+	b = Simcore->FromGlobal(b);
+	c = Simcore->FromGlobal(c);
+	d = Simcore->FromGlobal(d);
+
+	//get new cutting bounds (get min/max values)
+	newmin.x = Min4(a.x, b.x, c.x, d.x);
+	newmin.y = Min4(a.y, b.y, c.y, d.y);
+	newmin.z = Min4(a.z, b.z, c.z, d.z);
+	newmax.x = Max4(a.x, b.x, c.x, d.x);
+	newmax.y = Max4(a.y, b.y, c.y, d.y);
+	newmax.z = Max4(a.z, b.z, c.z, d.z);
+
+	//cut for new bounds
+	Simcore->CutInsideBoundaries(newmin, newmax, frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+}
+
 }

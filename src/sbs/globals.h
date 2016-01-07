@@ -70,6 +70,8 @@ SBSIMPEXP float RadiansToDegrees(float radians);
 SBSIMPEXP float DegreesToRadians(float degrees);
 SBSIMPEXP float Min3(float a, float b, float c);
 SBSIMPEXP float Max3(float a, float b, float c);
+SBSIMPEXP float Min4(float a, float b, float c, float d);
+SBSIMPEXP float Max4(float a, float b, float c, float d);
 SBSIMPEXP std::string SetCaseCopy(std::string string, bool uppercase);
 SBSIMPEXP void SetCase(std::string &string, bool uppercase);
 SBSIMPEXP int FindWithCase(const std::string &string, bool uppercase, const std::string &key, int offset);
