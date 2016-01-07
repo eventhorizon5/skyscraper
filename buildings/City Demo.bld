@@ -9,11 +9,17 @@
 #The Buildings section can go anywhere, but if it's placed at the end of the file,
 #it'll automatically cut the existing engine for each newly loaded building
 <Buildings>
-    #load these 3 buildings onto the Triton Center map,
+    #load these buildings onto the Triton Center map,
     #and specify their positions and rotations
     Load Observation Tower.bld, -440.5, 0, 0, 0
     Load Glass Tower.bld, 0, 0, 871.5, 0
     Load Sears Tower.bld, 550, 0, 50, -90
+    Load Simple.bld, 225, 0, -630, 0
+    Load Simple.bld, 0, 0, -630, 0
+    Load Simple.bld, 75, 0, -630, 0
+    Load Simple.bld, -75, 0, -630, 0
+    Load Simple.bld, -150, 0, -630, 0
+    Load Simple.bld, -225, 0, -630, 0
 
     #you can also specify the bounds values separately, which is mainly useful
     #for buildings that don't have a Bounds parameter specified, or if you
@@ -22,5 +28,6 @@
     #Load Observation Tower.bld, -440.5, 0, 0, 0, -100, 0, -100, 100, 0, 100
     #Load Glass Tower.bld, 0, 0, 871.5, 0, -500, 0, -550, 300, 0, 250
     #Load Sears Tower.bld, 550, 0, 50, -90, -150, 0, -150, 150, 0, 150
+    #Load Simple.bld, 0, 0, -630, 0, -25, 0, -25, 25, 0, 25
 <EndBuildings>
 
