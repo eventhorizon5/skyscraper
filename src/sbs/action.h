@@ -3,7 +3,7 @@
 /*
         Scalable Building Simulator - Action Interface Class
         The Skyscraper Project - Version 1.10 Alpha
-        Copyright (C)2004-2015 Ryan Thoryk
+        Copyright (C)2004-2016 Ryan Thoryk
         http://www.skyscrapersim.com
         http://sourceforge.net/projects/skyscraper
         Contact - ryan@tliquest.net

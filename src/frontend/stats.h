@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.10 Alpha - Statistics Dialog
-	Copyright (C)2004-2015 Ryan Thoryk
+	Copyright (C)2004-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net

@@ -2,7 +2,7 @@
 
 /*
 	Skyscraper 1.10 Alpha - Mesh Control Form
-	Copyright (C)2003-2015 Ryan Thoryk
+	Copyright (C)2003-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
 	Contact - ryan@tliquest.net
