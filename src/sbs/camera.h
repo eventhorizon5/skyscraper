@@ -97,7 +97,7 @@ public:
 	void SetDirection(const Ogre::Vector3 &direction);
 	void SetRotation(const Ogre::Vector3 &rotation);
 	Ogre::Vector3 GetPosition(bool relative = false);
-	void GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top);
+	void GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global = false);
 	Ogre::Vector3 GetRotation();
 	void UpdateCameraFloor();
 	bool Move(Ogre::Vector3 vector, float speed = 1.0f, bool flip = true);

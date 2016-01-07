@@ -87,13 +87,10 @@ Sound::~Sound()
 
 void Sound::OnMove(bool parent)
 {
-	Ogre::Vector3 offset = sbs->GetPosition();
+	Ogre::Vector3 global_position = sbs->ToGlobal(GetPosition());
 
-	FMOD_VECTOR pos = {GetPosition().x + offset.x, GetPosition().y + offset.y, GetPosition().z + offset.z};
-	FMOD_VECTOR vel;
-	vel.x = 0;
-	vel.y = 0;
-	vel.z = 0;
+	FMOD_VECTOR pos = {global_position.x, global_position.y, global_position.z};
+	FMOD_VECTOR vel = { 0, 0, 0 };
 
 	//calculate sound velocity
 	if (sbs->GetElapsedTime() > 0 && SetVelocity == true)
@@ -153,10 +150,8 @@ float Sound::GetMaximumDistance()
 void Sound::SetDirection(const Ogre::Vector3 &direction)
 {
 	Direction = direction;
-	FMOD_VECTOR vec;
-	vec.x = direction.x;
-	vec.y = direction.y;
-	vec.z = direction.z;
+	Ogre::Vector3 global_direction = sbs->GetOrientation() * direction;
+	FMOD_VECTOR vec = { global_direction.x, global_direction.y, global_direction.z };
 
 	if (channel)
 		channel->set3DConeOrientation(&vec);

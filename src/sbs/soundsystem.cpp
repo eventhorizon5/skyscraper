@@ -74,7 +74,7 @@ void SoundSystem::Loop()
 
 	//set direction of listener to camera's direction
 	Ogre::Vector3 front, top;
-	sbs->camera->GetDirection(front, top);
+	sbs->camera->GetDirection(front, top, true);
 	SetListenerDirection(front, top);
 
 	//update FMOD
@@ -102,11 +102,12 @@ void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
 	}
 
 	Position = position;
-	Ogre::Vector3 offset = sbs->GetPosition();
 
-	listener_position.x = position.x + offset.x;
-	listener_position.y = position.y + offset.y;
-	listener_position.z = position.z + offset.z;
+	Ogre::Vector3 global_position = sbs->ToGlobal(position);
+
+	listener_position.x = global_position.x;
+	listener_position.y = global_position.y;
+	listener_position.z = global_position.z;
 
 	soundsys->set3DListenerAttributes(0, &listener_position, &listener_velocity, &listener_forward, &listener_up);
 }
@@ -114,6 +115,7 @@ void SoundSystem::SetListenerPosition(const Ogre::Vector3 &position)
 void SoundSystem::SetListenerDirection(const Ogre::Vector3 &front, const Ogre::Vector3 &top)
 {
 	//set direction of sound listener object
+
 	listener_forward.x = front.x;
 	listener_forward.y = front.y;
 	listener_forward.z = front.z;

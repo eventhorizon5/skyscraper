@@ -231,14 +231,18 @@ Ogre::Vector3 Camera::GetPosition(bool relative)
 	return GetSceneNode()->GetPosition() + cameraposition;
 }
 
-void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top)
+void Camera::GetDirection(Ogre::Vector3 &front, Ogre::Vector3 &top, bool global)
 {
 	//returns the camera's current direction in front and top vectors
 
 	if (!MainCamera)
 		return;
 
-	Ogre::Quaternion dir = sbs->FromGlobal(MainCamera->getDerivedOrientation());
+	Ogre::Quaternion dir;
+	if (global == false)
+		dir = sbs->FromGlobal(MainCamera->getDerivedOrientation());
+	else
+		dir = MainCamera->getDerivedOrientation();
 
 	front = dir.zAxis();
 	front.x = -front.x; //convert to left-hand coordinate system
