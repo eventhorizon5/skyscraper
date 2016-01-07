@@ -470,7 +470,9 @@ void EngineContext::CutForNewEngine(EngineContext *new_engine)
 	newmax.z = Max4(a.z, b.z, c.z, d.z);
 
 	//cut for new bounds
+	Simcore->DeleteColliders = true;
 	Simcore->CutInsideBoundaries(newmin, newmax, frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+	Simcore->DeleteColliders = false;
 
 	if (IsRunning() == true)
 		Simcore->Prepare();
