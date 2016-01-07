@@ -1705,7 +1705,7 @@ bool Skyscraper::Start(EngineContext *engine)
 
 		//create old sky if Caelum is turned off, or failed to initialize
 		if (sky_result == false)
-			Simcore->CreateSky(Simcore->SkyName);
+			Simcore->CreateSky();
 
 		//switch to fullscreen mode if specified
 		if (GetConfigBool("Skyscraper.Frontend.FullScreen", false) == true)

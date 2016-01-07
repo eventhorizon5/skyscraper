@@ -1500,11 +1500,15 @@ void SBS::EnableSkybox(bool value)
 		IsSkyboxEnabled = true;
 }
 
-void SBS::CreateSky(const std::string &filenamebase)
+void SBS::CreateSky()
 {
 	//create skybox
 
-	Mount("sky-" + filenamebase + ".zip", "sky");
+	//only create skybox if first engine instance
+	if (InstanceNumber > 0)
+		return;
+
+	Mount("sky-" + SkyName + ".zip", "sky");
 
 	//load textures
 	SetLighting();
