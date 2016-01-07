@@ -3,17 +3,24 @@
 #This building demonstrates simulating a small city, with existing
 #Skyscraper buildings, each running in a separate sim engine.
 
-#Include the Triton Center building file
+#Include the Triton Center building file, to use as the primary building
 <Include buildings/Triton Center.bld>
-
-#Triton Center's exact boundaries, if needed
-#Bounds = -340.5, 0, -603, 400, 0, 321.5
 
 #The Buildings section can go anywhere, but if it's placed at the end of the file,
 #it'll automatically cut the existing engine for each newly loaded building
 <Buildings>
-    Load Observation Tower.bld, -440.5, 0, 0, 0, -100, 0, -100, 100, 0, 100
-    Load Glass Tower.bld, 0, 0, 871.5, 0, -500, 0, -550, 300, 0, 250
-    Load Sears Tower.bld, 550, 0, 50, -90, -150, 0, -150, 150, 0, 150
+    #load these 3 buildings onto the Triton Center map,
+    #and specify their positions and rotations
+    Load Observation Tower.bld, -440.5, 0, 0, 0
+    Load Glass Tower.bld, 0, 0, 871.5, 0
+    Load Sears Tower.bld, 550, 0, 50, -90
+
+    #you can also specify the bounds values separately, which is mainly useful
+    #for buildings that don't have a Bounds parameter specified, or if you
+    #need to override their Bounds parameter
+
+    #Load Observation Tower.bld, -440.5, 0, 0, 0, -100, 0, -100, 100, 0, 100
+    #Load Glass Tower.bld, 0, 0, 871.5, 0, -500, 0, -550, 300, 0, 250
+    #Load Sears Tower.bld, 550, 0, 50, -90, -150, 0, -150, 150, 0, 150
 <EndBuildings>
 

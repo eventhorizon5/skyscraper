@@ -24,6 +24,7 @@
     CameraPosition = 0, -60
     CameraRotation = 0, 0, 0
     Sky = noon
+    Bounds = -25, 0, -25, 25, 0, 25
 <EndGlobals>
 
 #In the above code, I named the building "My Building", and set the designer as "Me".  The HorizScale
@@ -460,4 +461,7 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
 <Floor 0>
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
+
+TextureOverride Button2, Button3, Button4, Button5, Button6, Button7
+CreateWallBox2 External, Left Antenna, Concrete, 0, -200, 10, 10, 10, 0, 0, 0, true, true, true, true
 

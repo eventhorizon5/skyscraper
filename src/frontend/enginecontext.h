@@ -35,7 +35,7 @@ public:
 
 	bool Reload;
 
-	EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
+	EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	~EngineContext();
 	ScriptProcessor* GetScriptProcessor();
 	SBS::SBS *GetSystem() { return Simcore; }
@@ -68,7 +68,9 @@ public:
 	Ogre::Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
-	void CutForNewEngine();
+	void CutForNewEngine(EngineContext *new_engine);
+	void AddChild(EngineContext *engine);
+	void RemoveChild(EngineContext *engine);
 
 private:
 
@@ -79,6 +81,7 @@ private:
 	ScriptProcessor* processor; //script processor
 	SBS::SBS *Simcore; //sim engine instance
 	int instance; //instance number
+	EngineContext *parent; //parent engine
 	unsigned long finish_time;
 	bool shutdown;
 	bool loading;
@@ -98,6 +101,9 @@ private:
 	Ogre::Vector3 area_min;
 	Ogre::Vector3 area_max;
 	float rotation;
+
+	//child engines
+	std::vector<EngineContext*> children;
 };
 
 }

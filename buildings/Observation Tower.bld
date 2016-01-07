@@ -28,6 +28,7 @@
     CameraFloor = 0
     CameraPosition = 0, -41.6
     CameraRotation = 0, 0, 0
+    Bounds = -100, 0, -100, 100, 0, 100
 <EndGlobals>
 
 <Textures>

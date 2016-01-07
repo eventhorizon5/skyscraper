@@ -33,7 +33,7 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	this->frontend = frontend;
 	finish_time = 0;
@@ -52,6 +52,7 @@ EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneMan
 	this->area_min = area_min;
 	this->area_max = area_max;
 	this->rotation = rotation;
+	this->parent = parent;
 	Simcore = 0;
 	processor = 0;
 	raised = false;
@@ -64,11 +65,17 @@ EngineContext::EngineContext(Skyscraper *frontend, Ogre::SceneManager* mSceneMan
 	//add instance number to reports
 	InstancePrompt = ToString(instance) + "> ";
 
+	if (parent)
+		parent->AddChild(this);
+
 	StartSim();
 }
 
 EngineContext::~EngineContext()
 {
+	if (frontend->IsValidEngine(parent) == true)
+		parent->RemoveChild(this);
+
 	UnloadSim();
 }
 
@@ -291,6 +298,10 @@ bool EngineContext::Start(Ogre::Camera *camera)
 	//cut outside sim boundaries if specified
 	Simcore->CutOutsideBoundaries(frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
 
+	//if this has a parent engine, cut the parent for this new engine
+	if (frontend->IsValidEngine(parent) == true)
+		parent->CutForNewEngine(this);
+
 	//start simulator
 	if (!Simcore->Start(camera))
 		return ReportError("Error starting simulator\n");
@@ -421,14 +432,14 @@ void EngineContext::OnExit()
 	inside = false;
 }
 
-void EngineContext::CutForNewEngine()
+void EngineContext::CutForNewEngine(EngineContext *new_engine)
 {
 	//cut holes in this sim engine, for a newly loaded building, if possible
 
-	::SBS::SBS *newsimcore = frontend->GetEngine(frontend->GetEngineCount() - 1)->GetSystem();
-
-	if (newsimcore == Simcore)
+	if (!new_engine || new_engine == this)
 		return;
+
+	::SBS::SBS *newsimcore = new_engine->GetSystem();
 
 	Ogre::Vector3 min, max, a, b, c, d, newmin, newmax;
 
@@ -460,6 +471,27 @@ void EngineContext::CutForNewEngine()
 
 	//cut for new bounds
 	Simcore->CutInsideBoundaries(newmin, newmax, frontend->CutLandscape, frontend->CutBuildings, frontend->CutExternal, frontend->CutFloors);
+
+	if (IsRunning() == true)
+		Simcore->Prepare();
+}
+
+void EngineContext::AddChild(EngineContext *engine)
+{
+	if (engine)
+		children.push_back(engine);
+}
+
+void EngineContext::RemoveChild(EngineContext *engine)
+{
+	for (int i = 0; i < (int)children.size(); i++)
+	{
+		if (children[i] == engine)
+		{
+			children.erase(children.begin() + i);
+			return;
+		}
+	}
 }
 
 }

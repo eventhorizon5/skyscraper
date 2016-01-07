@@ -7954,12 +7954,7 @@ int ScriptProcessor::ProcBuildings()
 			max.z = ToFloat(tempdata[10]);
 		}
 
-		bool result = engine->GetFrontend()->Load(tempdata[0], position, rotation, min, max);
-		if (result == false)
-			return sNextLine;
-
-		//try cutting the current engine for new building, if possible
-		engine->CutForNewEngine();
+		bool result = engine->GetFrontend()->Load(tempdata[0], engine, position, rotation, min, max);
 
 		return sNextLine;
 	}

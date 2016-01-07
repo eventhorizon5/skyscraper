@@ -224,8 +224,7 @@ SBS::SBS(Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instan
 	Rotate(0.0f, rotation, 0.0f);
 
 	//create main engine area trigger
-	if (InstanceNumber != 0)
-		SetBounds(area_min, area_max);
+	SetBounds(area_min, area_max);
 
 	//create sound system object if sound is enabled
 	if (fmodsystem)
@@ -4385,6 +4384,10 @@ void SBS::CutInsideBoundaries(const Ogre::Vector3 &min, const Ogre::Vector3 &max
 
 void SBS::SetBounds(const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
+	//don't set bounds if the primary engine
+	if (InstanceNumber == 0)
+		return;
+
 	if (area_min != Ogre::Vector3::ZERO && area_max != Ogre::Vector3::ZERO && !area_trigger)
 	{
 		std::vector<std::string> names;

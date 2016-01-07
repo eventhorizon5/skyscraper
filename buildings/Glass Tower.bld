@@ -31,6 +31,7 @@
     InterfloorOnTop = true
     Coordinates = 37.788, -122.4
     DateTime = 2442402.3333
+    Bounds = -500, 0, -550, 300, 0, 250
 <EndGlobals>
 
 SetPlanarMapping true, false, false, false

@@ -28,6 +28,7 @@
     CameraRotation = 0, 0, 0
     Coordinates = 41.88347, -87.62915
     DateTime = 2457197.1667
+    Bounds = -340.5, 0, -603, 400, 0, 321.5
 <EndGlobals>
 
 <Textures>
