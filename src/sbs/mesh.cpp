@@ -1319,22 +1319,53 @@ void MeshObject::Prepare(bool force)
 
 		//set up index data array
 		unsigned int isize = (unsigned int)Triangles[index].triangles.size() * 3;
-		unsigned short *mIndices = new unsigned short[isize];
+		Ogre::HardwareIndexBufferSharedPtr ibuffer;
 
-		//create array of triangle indices
-		loc = 0;
-		for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
+		//if the number of vertices is greater than what can fit in a 16-bit index, use 32-bit indexes instead
+		if (vsize > 65536)
 		{
-			mIndices[loc] = Triangles[index].triangles[i].a;
-			mIndices[loc + 1] = Triangles[index].triangles[i].b;
-			mIndices[loc + 2] = Triangles[index].triangles[i].c;
-			loc += 3;
-		}
+			//set up a 32-bit index buffer
+			unsigned int *mIndices = new unsigned int[isize];
 
-		//create index hardware buffer
-		Ogre::HardwareIndexBufferSharedPtr ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
-		ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
-		delete [] mIndices;
+			//create array of triangle indices
+			loc = 0;
+			for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
+			{
+				mIndices[loc] = Triangles[index].triangles[i].a;
+				mIndices[loc + 1] = Triangles[index].triangles[i].b;
+				mIndices[loc + 2] = Triangles[index].triangles[i].c;
+				loc += 3;
+			}
+
+			//create index hardware buffer
+			ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_32BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+
+			//write data to index buffer
+			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
+			delete [] mIndices;
+		}
+		else
+		{
+			//set up a 16-bit index buffer
+			unsigned short *mIndices = new unsigned short[isize];
+
+			//create array of triangle indices
+			loc = 0;
+			for (size_t i = 0; i < Triangles[index].triangles.size(); i++)
+			{
+				mIndices[loc] = Triangles[index].triangles[i].a;
+				mIndices[loc + 1] = Triangles[index].triangles[i].b;
+				mIndices[loc + 2] = Triangles[index].triangles[i].c;
+				loc += 3;
+			}
+
+			//create index hardware buffer
+			ibuffer = Ogre::HardwareBufferManager::getSingleton().createIndexBuffer(Ogre::HardwareIndexBuffer::IT_16BIT, isize, Ogre::HardwareBuffer::HBU_STATIC_WRITE_ONLY);
+
+			//write data to index buffer
+			ibuffer->writeData(0, ibuffer->getSizeInBytes(), mIndices, true);
+			delete [] mIndices;
+		}
 
 		//delete any old index data
 		if (submesh->indexData)
