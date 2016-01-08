@@ -124,12 +124,10 @@ bool Skyscraper::OnInit(void)
 	active_engine = 0;
 	ConcurrentLoads = false;
 	RenderOnStartup = false;
-	shift = Ogre::Vector3::ZERO;
 	CutLandscape = true;
 	CutBuildings = true;
 	CutExternal = false;
 	CutFloors = false;
-	switch_pending = false;
 
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
@@ -155,7 +153,6 @@ bool Skyscraper::OnInit(void)
 	}
 
 	showconsole = GetConfigBool("Skyscraper.Frontend.ShowConsole", true);
-	center_engine = GetConfigBool("Skyscraper.Frontend.CenterEngine", true);
 
 	//create console window
 	if (showconsole == true)
@@ -384,12 +381,6 @@ void MainScreen::OnLeaveWindow(wxMouseEvent& event)
 void Skyscraper::Render()
 {
 	SBS_PROFILE_MAIN("Render");
-
-	if (switch_pending == true)
-	{
-		switch_pending = false;
-		return;
-	}
 
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
@@ -1132,9 +1123,6 @@ void Skyscraper::Loop()
 
 	//handle behavior when a user exits an engine area
 	SwitchEngines();
-
-	//automatically center engines if needed, and do 1 engine per frame cycle
-	DoCenterEngines();
 
 	//ProfileManager::dumpAll();
 }
@@ -2134,9 +2122,6 @@ EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Ogre::Vecto
 	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, soundsys, GetEngineCount(), position, rotation, area_min, area_max);
 	engines.push_back(engine);
 
-	//adjust for shift factor if needed
-	engine->GetSystem()->Move(shift);
-
 	return engine;
 }
 
@@ -2237,11 +2222,6 @@ void Skyscraper::SetActiveEngine(int index, bool switch_engines)
 	//apply camera state to new engine
 	if (switch_engines == true && state_set == true)
 		active_engine->SetCameraState(state, false);
-
-	//center new engine instance
-	CenterEngine(index);
-
-	switch_pending = true;
 }
 
 bool Skyscraper::RunEngines()
@@ -2362,46 +2342,6 @@ void Skyscraper::RefreshViewport()
 {
 	//refresh viewport to prevent rendering issues
 	mViewport->_updateDimensions();
-}
-
-void Skyscraper::CenterEngine(int index)
-{
-	//shift the engines so that the specified engine is in the center
-
-	if (center_engine == false || engines_to_center.empty() == false)
-		return;
-
-	EngineContext *engine = GetEngine(index);
-
-	if (!engine)
-		return;
-
-	center_offset = engine->GetSystem()->GetPosition();
-
-	//add this engine to the processing queue
-	engines_to_center.push(engine);
-
-	//add all other engines to the queue
-	for (int i = 0; i < (int)engines.size(); i++)
-	{
-		if (engines[i] != engine)
-			engines_to_center.push(engines[i]);
-	}
-
-	shift -= center_offset;
-
-	//process the movement for this engine first, and queue the rest for later
-	DoCenterEngines();
-}
-
-void Skyscraper::DoCenterEngines()
-{
-	if (engines_to_center.empty() == true)
-		return;
-
-	//move first engine in list, and remove it
-	engines_to_center.front()->GetSystem()->Move(-center_offset);
-	engines_to_center.pop();
 }
 
 void Skyscraper::SwitchEngines()
