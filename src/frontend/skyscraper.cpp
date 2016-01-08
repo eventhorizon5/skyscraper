@@ -385,6 +385,12 @@ void Skyscraper::Render()
 {
 	SBS_PROFILE_MAIN("Render");
 
+	if (switch_pending == true)
+	{
+		switch_pending = false;
+		return;
+	}
+
 	// Render to the frame buffer
 	mRoot->renderOneFrame();
 
@@ -1119,10 +1125,7 @@ void Skyscraper::Loop()
 	}
 
 	//render graphics
-	if (switch_pending == false)
-		Render();
-	else
-		switch_pending = false;
+	Render();
 
 	//handle a building reload
 	HandleReload();
