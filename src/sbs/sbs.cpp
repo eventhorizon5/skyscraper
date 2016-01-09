@@ -1378,9 +1378,9 @@ bool SBS::CreateWallBox2(WallObject* wallobject, const std::string &name, const 
 	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-bool SBS::AddCustomWall(WallObject* wallobject, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+void SBS::CreatePolygon(WallObject* wallobject, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
 {
-	//Adds a wall from a specified array of 3D vectors
+	//creates a polygon in the specified wall object
 
 	std::vector<Ogre::Vector3> varray1 = varray;
 	std::vector<Ogre::Vector3> varray2;
@@ -1432,11 +1432,25 @@ bool SBS::AddCustomWall(WallObject* wallobject, const std::string &name, const s
 		NewName.append(":1");
 		wallobject->AddPolygon(NewName, texture, varray2, tw2, th2, true);
 	}
-
-	return true;
 }
 
-bool SBS::AddCustomFloor(WallObject* wallobject, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
+WallObject* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+{
+	//Adds a wall from a specified array of 3D vectors
+
+	if (!mesh)
+		return 0;
+
+	//create wall object
+	WallObject *wall = mesh->CreateWallObject(name);
+
+	//create polygon in wall object
+	CreatePolygon(wall, name, texture, varray, tw, th);
+
+	return wall;
+}
+
+WallObject* SBS::AddCustomFloor(MeshObject* mesh, const std::string &name, const std::string &texture, std::vector<Ogre::Vector2> &varray, float altitude, float tw, float th)
 {
 	//Same as AddCustomWall, with only one altitude value value
 	std::vector<Ogre::Vector3> varray3;
@@ -1449,10 +1463,10 @@ bool SBS::AddCustomFloor(WallObject* wallobject, const std::string &name, const 
 	}
 
 	//pass data on to AddCustomWall function
-	return AddCustomWall(wallobject, name, texture, varray3, tw, th);
+	return AddCustomWall(mesh, name, texture, varray3, tw, th);
 }
 
-bool SBS::AddTriangleWall(WallObject* wallobject, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
+WallObject* SBS::AddTriangleWall(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float tw, float th)
 {
 	//Adds a triangular wall with the specified dimensions
 	std::vector<Ogre::Vector3> varray;
@@ -1464,7 +1478,7 @@ bool SBS::AddTriangleWall(WallObject* wallobject, const std::string &name, const
 	varray.push_back(Ogre::Vector3(x3, y3, z3));
 
 	//pass data on to AddCustomWall function
-	return AddCustomWall(wallobject, name, texture, varray, tw, th);
+	return AddCustomWall(mesh, name, texture, varray, tw, th);
 }
 
 void SBS::EnableBuildings(bool value)
