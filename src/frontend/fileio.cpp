@@ -1410,36 +1410,24 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 		}
 		else if (buffer == "external")
-		{
 			tmpMesh = Simcore->External;
-
-			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-			else
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "landscape")
-		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "buildings")
-		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else
 			return ScriptError("Invalid object");
+
+		//create wall object
+		wall = tmpMesh->CreateWallObject(tempdata[1]);
 
 		//store command and line info in object
 		StoreCommand(wall);
@@ -1666,37 +1654,26 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 		}
 		else if (buffer == "external")
-		{
 			tmpMesh = Simcore->External;
-
-			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-			else
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "landscape")
-		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "buildings")
-		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else
 			return ScriptError("Invalid object");
 
+		//create wall object
+		wall = tmpMesh->CreateWallObject(tempdata[1]);
+
+		//store command and line info in object
 		StoreCommand(wall);
 
 		float voffset = ToFloat(tempdata[8]);
@@ -1738,37 +1715,26 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
 		{
 			return sNextLine;
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 		}
 		else if (buffer == "external")
-		{
 			tmpMesh = Simcore->External;
-
-			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-			else
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "landscape")
-		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "buildings")
-		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else
 			return ScriptError("Invalid object");
 
+		//create wall object
+		wall = tmpMesh->CreateWallObject(tempdata[1]);
+
+		//store command and line info in object
 		StoreCommand(wall);
 
 		float voffset = ToFloat(tempdata[8]);
@@ -1808,40 +1774,27 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
-		{
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "external")
-		{
 			tmpMesh = Simcore->External;
-
-			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-			else
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "landscape")
-		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "buildings")
-		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else
 			return ScriptError("Invalid object");
+
+		//create wall object
+		wall = tmpMesh->CreateWallObject(tempdata[1]);
 
 		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
 			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) - altitude_shift, ToFloat(tempdata[temp3 + 2])));
 
+		//store command and line info in object
 		StoreCommand(wall);
 
 		Simcore->AddCustomWall(wall, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
@@ -1869,35 +1822,21 @@ int ScriptProcessor::ProcCommands()
 		if (buffer == "floor")
 		{
 			tmpMesh = Simcore->GetFloor(Current)->Level;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
 			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
-		{
 			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "external")
-		{
 			tmpMesh = Simcore->External;
-
-			if (Section == 2)
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-			else
-				wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "landscape")
-		{
 			tmpMesh = Simcore->Landscape;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else if (buffer == "buildings")
-		{
 			tmpMesh = Simcore->Buildings;
-			wall = tmpMesh->CreateWallObject(tempdata[1]);
-		}
 		else
 			return ScriptError("Invalid object");
+
+		//create wall object
+		wall = tmpMesh->CreateWallObject(tempdata[1]);
 
 		float altitude = ToFloat(tempdata[params - 3]);
 		if (Section == 2)
@@ -1914,6 +1853,7 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 3; temp3 < params - 3; temp3 += 2)
 			varray.push_back(Ogre::Vector2(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1])));
 
+		//store command and line info in object
 		StoreCommand(wall);
 
 		Simcore->AddCustomFloor(wall, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
