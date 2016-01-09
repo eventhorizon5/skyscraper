@@ -1408,29 +1408,20 @@ void SBS::CreatePolygon(WallObject* wallobject, const std::string &name, const s
 		varray2 = tmppoly;
 	}
 
-	//get texture sizing info
-	float tw2 = tw, th2 = th;
-	float mw, mh;
-	if (GetTextureTiling(texture, mw, mh))
-	{
-		//multiply the tiling parameters (tw and th) by
-		//the stored multipliers for that texture
-		tw2 = tw * mw;
-		th2 = th * mh;
-	}
-
 	//add the polygons
 	if (DrawMainN == true)
 	{
 		std::string NewName = name;
-		NewName.append(":0");
-		wallobject->AddPolygon(NewName, texture, varray1, tw2, th2, true);
+		if (DrawMainP == true)
+			NewName.append(":0");
+		wallobject->AddPolygon(NewName, texture, varray1, tw, th, true);
 	}
 	if (DrawMainP == true)
 	{
 		std::string NewName = name;
-		NewName.append(":1");
-		wallobject->AddPolygon(NewName, texture, varray2, tw2, th2, true);
+		if (DrawMainN == true)
+			NewName.append(":1");
+		wallobject->AddPolygon(NewName, texture, varray2, tw, th, true);
 	}
 }
 
