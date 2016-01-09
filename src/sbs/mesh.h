@@ -86,6 +86,7 @@ public:
 	void Enable(bool value, bool remove = true);
 	bool IsEnabled();
 	WallObject* CreateWallObject(const std::string &name);
+	WallObject* GetWallByName(std::string name);
 	bool ChangeTexture(const std::string &texture, bool matcheck = true, int submesh = 0);
 	bool ReplaceTexture(const std::string &oldtexture, const std::string &newtexture);
 	WallObject* FindWall(const Ogre::Vector3 &point, bool convert = true);

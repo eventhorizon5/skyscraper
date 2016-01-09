@@ -1766,6 +1766,38 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//AddPolygon command
+	if (linecheck.substr(0, 10) == "addpolygon")
+	{
+		//get data
+		int params = SplitData(LineData, 11);
+
+		//check numeric values
+		for (int i = 4; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
+			return ScriptError("Invalid mesh object");
+
+		WallObject *wall = mesh->GetWallByName(tempdata[1]);
+
+		if (!wall)
+			return ScriptError("Invalid wall object");
+
+		std::vector<Ogre::Vector3> varray;
+		for (temp3 = 4; temp3 < params - 2; temp3 += 3)
+			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]), ToFloat(tempdata[temp3 + 2])));
+
+		Simcore->AddPolygon(wall, tempdata[2], tempdata[3], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
+
+		return sNextLine;
+	}
+
 	//AddShaft command
 	if (linecheck.substr(0, 9) == "addshaft ")
 	{
@@ -2789,6 +2821,25 @@ int ScriptProcessor::ProcCommands()
 		Ogre::Vector3 min = Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4]));
 		Ogre::Vector3 max = Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]));
 		StoreCommand(Simcore->AddTrigger(tempdata[0], tempdata[1], min, max, action_array));
+		return sNextLine;
+	}
+
+	//CreateWallObject command
+	if (linecheck.substr(0, 16) == "createwallobject")
+	{
+		//get data
+		int params = SplitData(LineData, 17);
+
+		if (params != 2)
+			return ScriptError("Incorrect number of parameters");
+
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
+			return ScriptError("Invalid object");
+
+		StoreCommand(mesh->CreateWallObject(tempdata[1]));
+
 		return sNextLine;
 	}
 

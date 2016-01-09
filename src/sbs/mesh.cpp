@@ -763,6 +763,20 @@ WallObject* MeshObject::CreateWallObject(const std::string &name)
 	return wall;
 }
 
+WallObject* MeshObject::GetWallByName(std::string name)
+{
+	//find a wall object by name
+
+	SetCase(name, false);
+
+	for (int i = 0; i < (int)Walls.size(); i++)
+	{
+		if (name == SetCaseCopy(Walls[i]->GetName(), false) == true)
+			return Walls[i];
+	}
+	return 0;
+}
+
 bool MeshObject::ChangeTexture(const std::string &texture, bool matcheck, int submesh)
 {
 	//changes a texture
