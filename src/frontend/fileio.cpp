@@ -1404,30 +1404,27 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		MeshObject* mesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
-			tmpMesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
+			mesh = Simcore->GetFloor(Current)->Level;
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
-		{
-			return sNextLine;
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		}
+			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
 		//create wall object
-		wall = tmpMesh->CreateWallObject(tempdata[1]);
+		wall = mesh->CreateWallObject(tempdata[1]);
 
 		//store command and line info in object
 		StoreCommand(wall);
@@ -1648,30 +1645,27 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		MeshObject* mesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
-			tmpMesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
+			mesh = Simcore->GetFloor(Current)->Level;
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
-		{
-			return sNextLine;
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		}
+			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
 		//create wall object
-		wall = tmpMesh->CreateWallObject(tempdata[1]);
+		wall = mesh->CreateWallObject(tempdata[1]);
 
 		//store command and line info in object
 		StoreCommand(wall);
@@ -1709,30 +1703,27 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		MeshObject* mesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
-			tmpMesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
+			mesh = Simcore->GetFloor(Current)->Level;
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
-		{
-			return sNextLine;
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		}
+			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
 		//create wall object
-		wall = tmpMesh->CreateWallObject(tempdata[1]);
+		wall = mesh->CreateWallObject(tempdata[1]);
 
 		//store command and line info in object
 		StoreCommand(wall);
@@ -1768,27 +1759,27 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		MeshObject* mesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
-			tmpMesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
+			mesh = Simcore->GetFloor(Current)->Level;
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
+			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
 		//create wall object
-		wall = tmpMesh->CreateWallObject(tempdata[1]);
+		wall = mesh->CreateWallObject(tempdata[1]);
 
 		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
@@ -1816,27 +1807,27 @@ int ScriptProcessor::ProcCommands()
 
 		buffer = tempdata[0];
 		SetCase(buffer, false);
-		MeshObject* tmpMesh;
+		MeshObject* mesh;
 		float altitude_shift = 0;
 
 		if (buffer == "floor")
 		{
-			tmpMesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = tmpMesh->GetPosition().y; //subtract altitude for new positioning model
+			mesh = Simcore->GetFloor(Current)->Level;
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
 		else if (buffer == "elevator")
-			tmpMesh = Simcore->GetElevator(Current)->ElevatorMesh;
+			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
-			tmpMesh = Simcore->External;
+			mesh = Simcore->External;
 		else if (buffer == "landscape")
-			tmpMesh = Simcore->Landscape;
+			mesh = Simcore->Landscape;
 		else if (buffer == "buildings")
-			tmpMesh = Simcore->Buildings;
+			mesh = Simcore->Buildings;
 		else
 			return ScriptError("Invalid object");
 
 		//create wall object
-		wall = tmpMesh->CreateWallObject(tempdata[1]);
+		wall = mesh->CreateWallObject(tempdata[1]);
 
 		float altitude = ToFloat(tempdata[params - 3]);
 		if (Section == 2)
