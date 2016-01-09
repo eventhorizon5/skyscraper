@@ -883,8 +883,7 @@ Door* Shaft::AddDoor(int floor, const std::string &open_sound, const std::string
 	}
 
 	//create doorway walls
-	WallObject *wall = GetMeshObject(floor)->CreateWallObject("Connection Walls");
-	sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
+	sbs->AddDoorwayWalls(GetMeshObject(floor), "Connection Walls", "ConnectionWall", 0, 0);
 
 	int index = floor - startfloor;
 	std::string num = ToString((int)DoorArray[index].size());

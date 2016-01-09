@@ -1662,12 +1662,6 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		//create wall object
-		wall = mesh->CreateWallObject(tempdata[1]);
-
-		//store command and line info in object
-		StoreCommand(wall);
-
 		float voffset = ToFloat(tempdata[8]);
 		if (Section == 2)
 		{
@@ -1679,7 +1673,11 @@ int ScriptProcessor::ProcCommands()
 		else
 			voffset -= altitude_shift;
 
-		Simcore->CreateWallBox2(wall, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
+		WallObject *wall = Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
+
+		//store command and line info in object
+		StoreCommand(wall);
+
 		return sNextLine;
 	}
 
@@ -1720,12 +1718,6 @@ int ScriptProcessor::ProcCommands()
 		else
 			return ScriptError("Invalid object");
 
-		//create wall object
-		wall = mesh->CreateWallObject(tempdata[1]);
-
-		//store command and line info in object
-		StoreCommand(wall);
-
 		float voffset = ToFloat(tempdata[8]);
 
 		if (Section == 2)
@@ -1738,7 +1730,11 @@ int ScriptProcessor::ProcCommands()
 		else
 			voffset -= altitude_shift;
 
-		Simcore->CreateWallBox(wall, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
+		WallObject *wall = Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
+
+		//store command and line info in object
+		StoreCommand(wall);
+
 		return sNextLine;
 	}
 

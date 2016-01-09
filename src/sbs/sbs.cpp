@@ -1170,13 +1170,22 @@ bool SBS::ReportError(const std::string &message)
 	return false;
 }
 
-bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+WallObject* SBS::CreateWallBox(MeshObject* mesh, const std::string &name, const std::string &texture, float x1, float x2, float z1, float z2, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls
 
+	if (!mesh)
+		return 0;
+
 	//exit if coordinates are invalid
 	if (x1 == x2 && z1 == z2)
-		return ReportError("Invalid coordinates for wall '" + name + "'");
+	{
+		ReportError("Invalid coordinates for wall '" + name + "'");
+		return 0;
+	}
+
+	//create wall object
+	WallObject *wall = mesh->CreateWallObject(name);
 
 	bool x_thickness = false, z_thickness = false;
 	std::string NewName, texture2 = texture;
@@ -1205,7 +1214,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = mainnegtex;
 
-			wallobject->AddQuad( //front
+			wall->AddQuad( //front
 					NewName,
 					texture2,
 					Ogre::Vector3(x1, voffset, z1),
@@ -1216,7 +1225,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = mainpostex;
 
-			wallobject->AddQuad( //back
+			wall->AddQuad( //back
 					NewName,
 					texture2,
 					Ogre::Vector3(x2, voffset, z2),
@@ -1229,7 +1238,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = sidepostex;
 
-			wallobject->AddQuad( //right
+			wall->AddQuad( //right
 					NewName,
 					texture2,
 					Ogre::Vector3(x2, voffset, z1),
@@ -1240,7 +1249,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = sidenegtex;
 
-			wallobject->AddQuad( //left
+			wall->AddQuad( //left
 					NewName,
 					texture2,
 					Ogre::Vector3(x1, voffset, z2),
@@ -1255,7 +1264,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 				if (TextureOverride == true)
 					texture2 = bottomtex;
 
-				wallobject->AddQuad( //bottom
+				wall->AddQuad( //bottom
 						NewName,
 						texture2,
 						Ogre::Vector3(x1, voffset, z2),
@@ -1269,7 +1278,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 				if (TextureOverride == true)
 					texture2 = toptex;
 
-				wallobject->AddQuad( //top
+				wall->AddQuad( //top
 						NewName,
 						texture2,
 						Ogre::Vector3(x1, voffset + height_in, z1),
@@ -1290,7 +1299,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = mainnegtex;
 
-			wallobject->AddQuad( //front
+			wall->AddQuad( //front
 					NewName,
 					texture2,
 					Ogre::Vector3(x1, voffset + height_in, z1),
@@ -1301,7 +1310,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = mainpostex;
 
-			wallobject->AddQuad( //back
+			wall->AddQuad( //back
 					NewName,
 					texture2,
 					Ogre::Vector3(x2, voffset + height_in, z2),
@@ -1314,7 +1323,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = sidepostex;
 
-			wallobject->AddQuad( //right
+			wall->AddQuad( //right
 					NewName,
 					texture2,
 					Ogre::Vector3(x2, voffset + height_in, z1),
@@ -1325,7 +1334,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			if (TextureOverride == true)
 				texture2 = sidenegtex;
 
-			wallobject->AddQuad( //left
+			wall->AddQuad( //left
 					NewName,
 					texture2,
 					Ogre::Vector3(x1, voffset + height_in, z2),
@@ -1340,7 +1349,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 				if (TextureOverride == true)
 					texture2 = bottomtex;
 
-				wallobject->AddQuad( //bottom
+				wall->AddQuad( //bottom
 						NewName,
 						texture2,
 						Ogre::Vector3(x1, voffset, z1),
@@ -1353,7 +1362,7 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 				if (TextureOverride == true)
 					texture2 = toptex;
 
-				wallobject->AddQuad( //top
+				wall->AddQuad( //top
 						NewName,
 						texture2,
 						Ogre::Vector3(x1, voffset + height_in, z2),
@@ -1363,10 +1372,10 @@ bool SBS::CreateWallBox(WallObject* wallobject, const std::string &name, const s
 			}
 		}
 	}
-	return true;
+	return wall;
 }
 
-bool SBS::CreateWallBox2(WallObject* wallobject, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
+WallObject* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom, bool autosize)
 {
 	//create 4 walls from a central point
 
@@ -1375,7 +1384,7 @@ bool SBS::CreateWallBox2(WallObject* wallobject, const std::string &name, const 
 	float z1 = CenterZ - (LengthZ / 2);
 	float z2 = CenterZ + (LengthZ / 2);
 
-	return CreateWallBox(wallobject, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
+	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
 void SBS::CreatePolygon(WallObject* wallobject, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
@@ -2114,16 +2123,21 @@ float SBS::FeetToMeters(float feet)
 	return feet / 3.2808399f;
 }
 
-void SBS::AddDoorwayWalls(WallObject *wallobject, const std::string &texture, float tw, float th)
+WallObject* SBS::AddDoorwayWalls(MeshObject* mesh, const std::string &wallname, const std::string &texture, float tw, float th)
 {
 	//add joining doorway polygons if needed
 
+	if (!mesh)
+		return 0;
+
 	if (wall1a == true && wall2a == true)
 	{
+		WallObject *wall = mesh->CreateWallObject(wallname);
+
 		//convert extents to relative positioning
-		Ogre::Vector2 extents_x = wall_extents_x - wallobject->GetMesh()->GetPosition().x;
-		Ogre::Vector2 extents_y = wall_extents_y - wallobject->GetMesh()->GetPosition().y;
-		Ogre::Vector2 extents_z = wall_extents_z - wallobject->GetMesh()->GetPosition().z;
+		Ogre::Vector2 extents_x = wall_extents_x - wall->GetMesh()->GetPosition().x;
+		Ogre::Vector2 extents_y = wall_extents_y - wall->GetMesh()->GetPosition().y;
+		Ogre::Vector2 extents_z = wall_extents_z - wall->GetMesh()->GetPosition().z;
 
 		//true if doorway is facing forward/backward
 		//false if doorway is facing left/right
@@ -2131,22 +2145,26 @@ void SBS::AddDoorwayWalls(WallObject *wallobject, const std::string &texture, fl
 
 		DrawWalls(false, true, false, false, false, false);
 		if (direction == true)
-			AddWallMain(wallobject, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+			AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.x, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		else
-			AddWallMain(wallobject, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+			AddWallMain(wall, "DoorwayLeft", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.x, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		ResetWalls();
 
 		DrawWalls(true, false, false, false, false, false);
 		if (direction == true)
-			AddWallMain(wallobject, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+			AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.y, extents_z.x, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 		else
-			AddWallMain(wallobject, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
+			AddWallMain(wall, "DoorwayRight", texture, 0, extents_x.x, extents_z.y, extents_x.y, extents_z.y, extents_y.y - extents_y.x, extents_y.y - extents_y.x, extents_y.x, extents_y.x, tw, th, true);
 
-		AddFloorMain(wallobject, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
+		AddFloorMain(wall, "DoorwayTop", texture, 0, extents_x.x, extents_z.x, extents_x.y, extents_z.y, extents_y.y, extents_y.y, false, false, tw, th, true);
 		ResetWalls();
 
 		ResetDoorwayWalls();
+
+		return wall;
 	}
+
+	return 0;
 }
 
 void SBS::ResetDoorwayWalls()

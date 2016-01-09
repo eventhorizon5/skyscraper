@@ -928,8 +928,7 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 		if (DoorWalls == true)
 		{
 			sbs->ResetTextureMapping(true);
-			WallObject *wall = floorobj->Level->CreateWallObject("Connection Walls");
-			sbs->AddDoorwayWalls(wall, "ConnectionWall", 0, 0);
+			sbs->AddDoorwayWalls(floorobj->Level, "Connection Walls", "ConnectionWall", 0, 0);
 			sbs->ResetTextureMapping();
 		}
 	}
@@ -942,21 +941,19 @@ ElevatorDoor::DoorWrapper* ElevatorDoor::FinishDoors(DoorWrapper *wrapper, int f
 
 		if (ShaftDoor == false)
 		{
-			WallObject *wall = elev->ElevatorMesh->CreateWallObject("Connection");
-			name1 = "DoorF1";
-			name2 = "DoorF2";
-			sbs->CreateWallBox(wall, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			name1 = "Door" + GetNumberText() + ":F1";
+			name2 = "Door" + GetNumberText() + ":F2";
+			sbs->CreateWallBox(elev->ElevatorMesh, name1, "Connection", x1, x2, z1, z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(elev->ElevatorMesh, name2, "Connection", x1, x2, z1, z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 		else
 		{
 			Shaft *shaft = elev->GetShaft();
-			WallObject *wall = shaft->GetMeshObject(floor)->CreateWallObject("Connection");
 			Ogre::Vector3 position (elev->GetPosition() - shaft->GetPosition());
-			name1 = "ShaftDoorF1";
-			name2 = "ShaftDoorF2";
-			sbs->CreateWallBox(wall, name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
-			sbs->CreateWallBox(wall, name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
+			name1 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(Number) + ":F1";
+			name2 = "ShaftDoor" + ToString(elev->Number) + ":" + ToString(Number) + ":F2";
+			sbs->CreateWallBox(shaft->GetMeshObject(floor), name1, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, -1.001f + base, 0, 0, false, true, true, true, false);
+			sbs->CreateWallBox(shaft->GetMeshObject(floor), name2, "Connection", position.x + x1, position.x + x2, position.z + z1, position.z + z2, 1, wrapper->Height + 0.001f + base, 0, 0, false, true, true, true, false);
 		}
 
 		sbs->ResetTextureMapping();

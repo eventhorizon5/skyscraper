@@ -710,18 +710,14 @@ WallObject* Floor::ColumnWallBox(const std::string &name, const std::string &tex
 {
 	//create columnframe wall box
 
-	WallObject *wall = ColumnFrame->CreateWallObject(name);
-	sbs->CreateWallBox(wall, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
-	return wall;
+	return sbs->CreateWallBox(ColumnFrame, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
 WallObject* Floor::ColumnWallBox2(const std::string &name, const std::string &texture, float CenterX, float CenterZ, float WidthX, float LengthZ, float height_in, float voffset, float tw, float th, bool inside, bool outside, bool top, bool bottom)
 {
 	//create columnframe wall box from a central location
 
-	WallObject *wall = ColumnFrame->CreateWallObject(name);
-	sbs->CreateWallBox2(wall, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
-	return wall;
+	return sbs->CreateWallBox2(ColumnFrame, name, texture, CenterX, CenterZ, WidthX, LengthZ, height_in, voffset, tw, th, inside, outside, top, bottom, true);
 }
 
 FloorIndicator* Floor::AddFloorIndicator(int elevator, bool relative, const std::string &texture_prefix, const std::string &direction, float CenterX, float CenterZ, float width, float height, float voffset)
