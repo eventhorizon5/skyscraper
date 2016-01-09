@@ -45,6 +45,7 @@ public:
 	std::vector<std::string> *GetBuildingData();
 	int MathFunctions();
 	bool IsFunctionDefined(const std::string &name);
+	SBS::MeshObject* GetMeshObject(std::string name);
 
 	bool IsFinished;
 

@@ -1402,29 +1402,19 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor" && Section == 2)
-		{
-			mesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
-		}
-		else if (buffer == "elevator" && Section == 4)
-			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		else if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
 			return ScriptError("Invalid object");
+
+		if (tempdata[0] == "floor" && Section == 2)
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 
 		float voffset1 = ToFloat(tempdata[4]);
 		float voffset2 = ToFloat(tempdata[7]);
+
 		if (Section == 2)
 		{
 			if (buffer == "floor")
@@ -1555,17 +1545,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-		MeshObject *mesh = 0;
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
 
-		if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		if (!mesh)
 			return ScriptError("Invalid object");
 
 		//perform cut
@@ -1641,31 +1623,21 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor" && Section == 2)
-		{
-			mesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
-		}
-		else if (buffer == "elevator" && Section == 4)
-			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		else if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
 			return ScriptError("Invalid object");
 
+		if (tempdata[0] == "floor" && Section == 2)
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
+
 		float voffset = ToFloat(tempdata[8]);
+
 		if (Section == 2)
 		{
-			if (buffer == "floor")
+			if (tempdata[0] == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
 			else
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
@@ -1697,32 +1669,21 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor" && Section == 2)
-		{
-			mesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
-		}
-		else if (buffer == "elevator" && Section == 4)
-			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		else if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
 			return ScriptError("Invalid object");
+
+		if (tempdata[0] == "floor" && Section == 2)
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 
 		float voffset = ToFloat(tempdata[8]);
 
 		if (Section == 2)
 		{
-			if (buffer == "floor")
+			if (tempdata[0] == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
 			else
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
@@ -1751,26 +1712,15 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor" && Section == 2)
-		{
-			mesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
-		}
-		else if (buffer == "elevator" && Section == 4)
-			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		else if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
 			return ScriptError("Invalid object");
+
+		if (tempdata[0] == "floor" && Section == 2)
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 
 		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
@@ -1797,31 +1747,21 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor" && Section == 2)
-		{
-			mesh = Simcore->GetFloor(Current)->Level;
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
-		}
-		else if (buffer == "elevator" && Section == 4)
-			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		else if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
 			return ScriptError("Invalid object");
 
+		if (tempdata[0] == "floor" && Section == 2)
+			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
+
 		float altitude = ToFloat(tempdata[params - 3]);
+
 		if (Section == 2)
 		{
-			if (buffer == "floor")
+			if (tempdata[0] == "floor")
 				altitude += Simcore->GetFloor(Current)->GetBase(true);
 			else
 				altitude += Simcore->GetFloor(Current)->GetBase();
@@ -2418,21 +2358,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
 
-		MeshObject *mesh = 0;
-		if (buffer == "floor" && Section == 2)
-			mesh = Simcore->GetFloor(Current)->Level;
-		else if (buffer == "elevator" && Section == 4)
-			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		else if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		if (!mesh)
 			return ScriptError("Invalid object");
 
 		Ogre::Vector3 isect = mesh->GetPoint(tempdata[1], Ogre::Vector3(ToFloat(tempdata[2]), ToFloat(tempdata[3]), ToFloat(tempdata[4])), Ogre::Vector3(ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7])));
@@ -2490,27 +2418,15 @@ int ScriptProcessor::ProcCommands()
 		if (!IsNumeric(tempdata[2]))
 			return ScriptError("Invalid value: " + tempdata[2]);
 
-		buffer = tempdata[0];
-		SetCase(buffer, false);
-
 		float offset = 0;
 
-		MeshObject *mesh = 0;
-		if (buffer == "floor" && Section == 2)
-		{
-			mesh = Simcore->GetFloor(Current)->Level;
-			offset = mesh->GetPosition().y;
-		}
-		else if (buffer == "elevator" && Section == 4)
-			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
-		else if (buffer == "external")
-			mesh = Simcore->External;
-		else if (buffer == "landscape")
-			mesh = Simcore->Landscape;
-		else if (buffer == "buildings")
-			mesh = Simcore->Buildings;
-		else
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
 			return ScriptError("Invalid object");
+
+		if (tempdata[0] == "floor" && Section == 2)
+			offset = mesh->GetPosition().y;
 
 		float alt = ToFloat(tempdata[2]);
 
@@ -8932,6 +8848,26 @@ bool ScriptProcessor::IsFunctionDefined(const std::string &name)
 			return true;
 	}
 	return false;
+}
+
+MeshObject* ScriptProcessor::GetMeshObject(std::string name)
+{
+	//get a system mesh object
+
+	SetCase(name, false);
+
+	if (name == "floor" && Section == 2)
+		return Simcore->GetFloor(Current)->Level;
+	else if (name == "elevator" && Section == 4)
+		return Simcore->GetElevator(Current)->ElevatorMesh;
+	else if (name == "external")
+		return Simcore->External;
+	else if (name == "landscape")
+		return Simcore->Landscape;
+	else if (name == "buildings")
+		return Simcore->Buildings;
+
+	return 0;
 }
 
 }
