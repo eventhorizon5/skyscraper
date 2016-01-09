@@ -1223,8 +1223,9 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::st
 	{
 		//reserve triangles
 		int size = (int)Triangles[index].triangles.size() + index_count;
-		if ((int)Triangles[index].triangles.capacity() < size)
-			Triangles[index].triangles.reserve(size);
+		int capacity = (int)Triangles[index].triangles.capacity();
+		if (capacity < size)
+			Triangles[index].triangles.reserve(capacity * 2);
 
 		for (int i = 0; i < index_count; i++)
 			AddTriangle(index, indexarray[i]);
