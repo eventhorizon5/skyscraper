@@ -3198,10 +3198,10 @@ the <em>sound</em> field blank for no sound to be played.</p>
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
 CreateWallObject</strong> - creates a custom wall object, in the specified mesh.
 Wall objects are used to contain a number of polygons, to represent a wall structure.
-The AddPolygon command is used with this command, to create the polygons.<br>
+The AddPolygon command is used with this command, to create the polygons.  The <em>meshname</em> parameter is the same as the <em>destobject</em> parameter in other commands, and is the mesh object to use.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> CreateWallObject
-<em>name</em></font><br>
-Example: <font face="Courier New, Courier, mono" size="2">CreateWallObject mywall</font></p>
+<em>meshname, name</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">CreateWallObject landscape, mywall</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an. AddPolygon</strong> - this is the same as the AddCustomWall command,
 but adds the custom polygon to an existing (usually custom) wall object, instead of creating an new one.
