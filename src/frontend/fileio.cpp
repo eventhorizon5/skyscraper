@@ -1435,10 +1435,7 @@ int ScriptProcessor::ProcCommands()
 		}
 
 		//create triangle wall
-		WallObject *wall = Simcore->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13]));
-
-		//store command and line info in object
-		StoreCommand(wall);
+		StoreCommand(Simcore->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 
 		return sNextLine;
 	}
@@ -1645,10 +1642,7 @@ int ScriptProcessor::ProcCommands()
 		else
 			voffset -= altitude_shift;
 
-		WallObject *wall = Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
-
-		//store command and line info in object
-		StoreCommand(wall);
+		StoreCommand(Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -1691,10 +1685,7 @@ int ScriptProcessor::ProcCommands()
 		else
 			voffset -= altitude_shift;
 
-		WallObject *wall = Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14]));
-
-		//store command and line info in object
-		StoreCommand(wall);
+		StoreCommand(Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
 		return sNextLine;
 	}
@@ -1726,10 +1717,7 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
 			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) - altitude_shift, ToFloat(tempdata[temp3 + 2])));
 
-		WallObject *wall = Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
-
-		//store command and line info in object
-		StoreCommand(wall);
+		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
 		return sNextLine;
 	}
@@ -1773,10 +1761,7 @@ int ScriptProcessor::ProcCommands()
 		for (temp3 = 3; temp3 < params - 3; temp3 += 2)
 			varray.push_back(Ogre::Vector2(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1])));
 
-		WallObject *wall = Simcore->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
-
-		//store command and line info in object
-		StoreCommand(wall);
+		StoreCommand(Simcore->AddCustomFloor(mesh, tempdata[1], tempdata[2], varray, altitude, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
 
 		return sNextLine;
 	}
@@ -8852,7 +8837,7 @@ bool ScriptProcessor::IsFunctionDefined(const std::string &name)
 
 MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 {
-	//get a system mesh object
+	//get a system mesh object, or search for a custom one by name
 
 	SetCase(name, false);
 
@@ -8867,7 +8852,7 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	else if (name == "buildings")
 		return Simcore->Buildings;
 
-	return 0;
+	return Simcore->GetMeshByName(name);
 }
 
 }

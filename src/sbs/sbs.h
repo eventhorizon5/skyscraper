@@ -420,6 +420,7 @@ public:
 	Ogre::Vector3 FromGlobal(const Ogre::Vector3 &position);
 	Ogre::Quaternion ToGlobal(const Ogre::Quaternion &orientation);
 	Ogre::Quaternion FromGlobal(const Ogre::Quaternion &orientation);
+	MeshObject* GetMeshByName(std::string name);
 
 	//Meshes
 	MeshObject* Buildings;
