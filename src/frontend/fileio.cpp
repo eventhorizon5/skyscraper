@@ -1407,12 +1407,12 @@ int ScriptProcessor::ProcCommands()
 		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor")
+		if (buffer == "floor" && Section == 2)
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
 			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
-		else if (buffer == "elevator")
+		else if (buffer == "elevator" && Section == 4)
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
 			mesh = Simcore->External;
@@ -1648,12 +1648,12 @@ int ScriptProcessor::ProcCommands()
 		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor")
+		if (buffer == "floor" && Section == 2)
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
 			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
-		else if (buffer == "elevator")
+		else if (buffer == "elevator" && Section == 4)
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
 			mesh = Simcore->External;
@@ -1706,12 +1706,12 @@ int ScriptProcessor::ProcCommands()
 		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor")
+		if (buffer == "floor" && Section == 2)
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
 			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
-		else if (buffer == "elevator")
+		else if (buffer == "elevator" && Section == 4)
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
 			mesh = Simcore->External;
@@ -1762,12 +1762,12 @@ int ScriptProcessor::ProcCommands()
 		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor")
+		if (buffer == "floor" && Section == 2)
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
 			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
-		else if (buffer == "elevator")
+		else if (buffer == "elevator" && Section == 4)
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
 			mesh = Simcore->External;
@@ -1810,12 +1810,12 @@ int ScriptProcessor::ProcCommands()
 		MeshObject* mesh;
 		float altitude_shift = 0;
 
-		if (buffer == "floor")
+		if (buffer == "floor" && Section == 2)
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
 			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 		}
-		else if (buffer == "elevator")
+		else if (buffer == "elevator" && Section == 4)
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
 			mesh = Simcore->External;
@@ -2432,9 +2432,9 @@ int ScriptProcessor::ProcCommands()
 		SetCase(buffer, false);
 
 		MeshObject *mesh = 0;
-		if (buffer == "floor" && Simcore->GetFloor(Current))
+		if (buffer == "floor" && Section == 2)
 			mesh = Simcore->GetFloor(Current)->Level;
-		else if (buffer == "elevator" && Simcore->GetElevator(Current))
+		else if (buffer == "elevator" && Section == 4)
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
 			mesh = Simcore->External;
@@ -2506,12 +2506,12 @@ int ScriptProcessor::ProcCommands()
 		float offset = 0;
 
 		MeshObject *mesh = 0;
-		if (buffer == "floor" && Simcore->GetFloor(Current))
+		if (buffer == "floor" && Section == 2)
 		{
 			mesh = Simcore->GetFloor(Current)->Level;
 			offset = mesh->GetPosition().y;
 		}
-		else if (buffer == "elevator" && Simcore->GetElevator(Current))
+		else if (buffer == "elevator" && Section == 4)
 			mesh = Simcore->GetElevator(Current)->ElevatorMesh;
 		else if (buffer == "external")
 			mesh = Simcore->External;
