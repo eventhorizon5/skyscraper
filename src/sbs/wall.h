@@ -51,6 +51,8 @@ public:
 	void Move(const Ogre::Vector3 &position, float speed = 1.0f);
 	MeshObject* GetMesh();
 	void SetParentArray(std::vector<WallObject*> &array);
+	Ogre::Vector3 GetPoint(const Ogre::Vector3 &start, const Ogre::Vector3 &end);
+	Ogre::Vector3 GetWallExtents(float altitude, bool get_max);
 
 private:
 	//mesh wrapper

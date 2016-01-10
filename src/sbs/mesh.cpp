@@ -1940,21 +1940,8 @@ Ogre::Vector3 MeshObject::GetPoint(const std::string &wallname, const Ogre::Vect
 	WallObject *wall = GetWallByName(wallname);
 
 	if (wall)
-	{
-		for (int i = 0; i < wall->GetPolygonCount(); i++)
-		{
-			//do a plane intersection with a line
-			Ogre::Vector3 isect;
-			float dist = 0;
-			std::vector<std::vector<Ogre::Vector3> > origpolys;
-			wall->GetGeometry(i, origpolys, true);
-			Ogre::Plane plane = sbs->ComputePlane(origpolys[0]);
+		return wall->GetPoint(start, end);
 
-			bool result = sbs->SegmentPlane(start, end, plane, isect, dist);
-			if (result == true)
-				return isect;
-		}
-	}
 	return Ogre::Vector3(0, 0, 0);
 }
 
@@ -1965,46 +1952,8 @@ Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, float altitude
 	WallObject *wall = GetWallByName(name);
 
 	if (wall)
-	{
-		for (int i = 0; i < wall->GetPolygonCount(); i++)
-		{
-			std::vector<std::vector<Ogre::Vector3> > origpolys;
-			wall->GetGeometry(i, origpolys, true);
+		return wall->GetWallExtents(altitude, get_max);
 
-			std::vector<Ogre::Vector3> original, tmp1, tmp2;
-			original.reserve(origpolys[0].size());
-			for (int i = 0; i < (int)origpolys[0].size(); i++)
-				original.push_back(origpolys[0][i]);
-
-			//if given altitude is outside of polygon's range, return 0
-			Ogre::Vector2 yextents = sbs->GetExtents(original, 2);
-			float tmpaltitude = altitude;
-			if (tmpaltitude < yextents.x || tmpaltitude > yextents.y)
-				return Ogre::Vector3(0, 0, 0);
-
-			//get upper
-			sbs->SplitWithPlane(1, original, tmp1, tmp2, tmpaltitude - 0.001f);
-
-			//get lower part of upper
-			sbs->SplitWithPlane(1, tmp2, original, tmp1, tmpaltitude + 0.001f);
-
-			Ogre::Vector3 result;
-			if (get_max == false)
-			{
-				//get minimum extents
-				result.x = sbs->GetExtents(original, 1).x;
-				result.z = sbs->GetExtents(original, 3).x;
-			}
-			else
-			{
-				//get maximum extents
-				result.x = sbs->GetExtents(original, 1).y;
-				result.z = sbs->GetExtents(original, 3).y;
-			}
-			result.y = altitude;
-			return result;
-		}
-	}
 	return Ogre::Vector3(0, 0, 0);
 }
 
