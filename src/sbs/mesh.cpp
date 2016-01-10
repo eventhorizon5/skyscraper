@@ -1932,51 +1932,28 @@ void MeshObject::DeleteWalls(Object *parent)
 	}
 }
 
-Ogre::Vector3 MeshObject::GetPoint(const std::string &polyname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
+Ogre::Vector3 MeshObject::GetPoint(const std::string &wallname, const Ogre::Vector3 &start, const Ogre::Vector3 &end)
 {
 	//do a line intersection with a specified wall associated with this mesh object,
 	//and return the intersection point
 
-	int index = 0;
-	WallObject *wall = 0;
-
-	for (int i = 0; i <= 6; i++)
-	{
-		std::string newname;
-
-		if (i == 0)
-			newname = polyname;
-		if (i == 1)
-			newname = polyname + ":0";
-		if (i == 2)
-			newname = polyname + ":1";
-		if (i == 3)
-			newname = polyname + ":front";
-		if (i == 4)
-			newname = polyname + ":back";
-		if (i == 5)
-			newname = polyname + ":left";
-		if (i == 6)
-			newname = polyname + ":right";
-
-		wall = FindPolygon(newname, index);
-
-		if (wall)
-			break;
-	}
+	WallObject *wall = GetWallByName(wallname);
 
 	if (wall)
 	{
-		//do a plane intersection with a line
-		Ogre::Vector3 isect;
-		float dist = 0;
-		std::vector<std::vector<Ogre::Vector3> > origpolys;
-		wall->GetGeometry(index, origpolys, true);
-		Ogre::Plane plane = sbs->ComputePlane(origpolys[0]);
+		for (int i = 0; i < wall->GetPolygonCount(); i++)
+		{
+			//do a plane intersection with a line
+			Ogre::Vector3 isect;
+			float dist = 0;
+			std::vector<std::vector<Ogre::Vector3> > origpolys;
+			wall->GetGeometry(i, origpolys, true);
+			Ogre::Plane plane = sbs->ComputePlane(origpolys[0]);
 
-		bool result = sbs->SegmentPlane(start, end, plane, isect, dist);
-		if (result == true)
-			return isect;
+			bool result = sbs->SegmentPlane(start, end, plane, isect, dist);
+			if (result == true)
+				return isect;
+		}
 	}
 	return Ogre::Vector3(0, 0, 0);
 }
@@ -1985,31 +1962,14 @@ Ogre::Vector3 MeshObject::GetWallExtents(const std::string &name, float altitude
 {
 	//return the X and Z extents of a standard wall (by name) at a specific altitude, by doing a double plane cut
 
-	std::string newname;
-	for (int i = 0; i <= 6; i++)
+	WallObject *wall = GetWallByName(name);
+
+	if (wall)
 	{
-		if (i == 0)
-			newname = name;
-		if (i == 1)
-			newname = name + ":0";
-		if (i == 2)
-			newname = name + ":1";
-		if (i == 3)
-			newname = name + ":front";
-		if (i == 4)
-			newname = name + ":back";
-		if (i == 5)
-			newname = name + ":left";
-		if (i == 6)
-			newname = name + ":right";
-
-		int index = 0;
-		WallObject *wall = FindPolygon(newname, index);
-
-		if (wall)
+		for (int i = 0; i < wall->GetPolygonCount(); i++)
 		{
 			std::vector<std::vector<Ogre::Vector3> > origpolys;
-			wall->GetGeometry(index, origpolys, true);
+			wall->GetGeometry(i, origpolys, true);
 
 			std::vector<Ogre::Vector3> original, tmp1, tmp2;
 			original.reserve(origpolys[0].size());
