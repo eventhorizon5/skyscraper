@@ -2309,6 +2309,8 @@ bool Skyscraper::IsEngineLoading()
 
 void Skyscraper::HandleEngineShutdown()
 {
+	bool deleted = false;
+
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
 		if (engines[i])
@@ -2319,8 +2321,21 @@ void Skyscraper::HandleEngineShutdown()
 				{
 					RefreshViewport();
 					i--;
+					deleted = true;
 				}
 			}
+		}
+	}
+
+	//clean up empty engine slots at the end of the list
+	if (deleted == true)
+	{
+		for (int i = (int)engines.size() - 1; i >= 0; i--)
+		{
+			if (!engines[i])
+				engines.erase(engines.begin() + i);
+			else
+				break;
 		}
 	}
 }

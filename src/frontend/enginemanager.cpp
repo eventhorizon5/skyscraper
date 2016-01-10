@@ -165,11 +165,12 @@ void EngineManager::Loop()
 	if (count != lastcount)
 	{
 		int selection = EngineList->GetSelection();
+		int size = panel->GetRoot()->GetEngineListSize();
 
 		lastcount = count;
 		EngineList->Clear();
 
-		for (int i = 0; i < panel->GetRoot()->GetEngineListSize(); i++)
+		for (int i = 0; i < size; i++)
 		{
 			EngineContext *engine = panel->GetRoot()->GetEngine(i);
 			std::string filename = "Empty";
@@ -183,7 +184,10 @@ void EngineManager::Loop()
 		if (selection == -1)
 			selection = 0;
 
-		if (count > 0 && selection < panel->GetRoot()->GetEngineListSize())
+		if (selection >= size)
+			selection = size - 1;
+
+		if (count > 0 && selection < size)
 			EngineList->SetSelection(selection);
 	}
 
