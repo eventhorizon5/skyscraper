@@ -314,7 +314,16 @@ bool EngineContext::Start(Ogre::Camera *camera)
 
 	//if this has a parent engine, cut the parent for this new engine
 	if (frontend->IsValidEngine(parent) == true)
-		parent->CutForNewEngine(this);
+		parent->CutForEngine(this);
+
+	//if this has child engines, and has reloaded, cut for the child engines
+	if (children.empty() == false && reloading == true)
+	{
+		for (int i = 0; i < (int)children.size(); i++)
+		{
+			CutForEngine(children[i]);
+		}
+	}
 
 	//start simulator
 	if (!Simcore->Start(camera))
@@ -458,14 +467,14 @@ void EngineContext::OnExit()
 	inside = false;
 }
 
-void EngineContext::CutForNewEngine(EngineContext *new_engine)
+void EngineContext::CutForEngine(EngineContext *engine)
 {
 	//cut holes in this sim engine, for a newly loaded building, if possible
 
-	if (!new_engine || new_engine == this)
+	if (!engine || engine == this)
 		return;
 
-	::SBS::SBS *newsimcore = new_engine->GetSystem();
+	::SBS::SBS *newsimcore = engine->GetSystem();
 
 	Ogre::Vector3 min, max, a, b, c, d, newmin, newmax;
 

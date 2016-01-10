@@ -70,7 +70,7 @@ public:
 	Ogre::Vector3 GetCameraPosition();
 	void OnEnter();
 	void OnExit();
-	void CutForNewEngine(EngineContext *new_engine);
+	void CutForEngine(EngineContext *engine);
 	void AddChild(EngineContext *engine);
 	void RemoveChild(EngineContext *engine);
 	void RemoveParent() { parent = 0; }
