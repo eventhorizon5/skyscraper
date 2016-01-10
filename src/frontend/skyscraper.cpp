@@ -2084,7 +2084,7 @@ void Skyscraper::UpdateProgress()
 	if (!progdialog)
 		return;
 
-	int total_percent = (int)engines.size() * 100;
+	int total_percent = GetEngineCount() * 100;
 	int current_percent = 0;
 
 	for (int i = 0; i < (int)engines.size(); i++)
@@ -2138,17 +2138,22 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 			engines[i] = 0;
 			delete engine;
 
+			int count = GetEngineCount();
+
 			if (active_engine == engine)
 			{
 				active_engine = 0;
-				if (GetEngineCount() > 0)
-					SetActiveEngine(0);
+				if (count > 0)
+				{
+					int number = GetFirstValidEngine()->GetNumber();
+					SetActiveEngine(number);
+				}
 			}
 			else if (active_engine)
 				active_engine->RefreshCamera();
 
 			//exit to main menu if all engines have been deleted
-			if (engines.empty() == true)
+			if (count == 0)
 				Shutdown = true;
 
 			return true;
