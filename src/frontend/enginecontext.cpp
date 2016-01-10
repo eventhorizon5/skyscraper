@@ -414,12 +414,24 @@ void EngineContext::AttachCamera(Ogre::Camera *camera, bool init_state)
 
 	//reset camera position if camera is outside of the engine's area when attaching
 	if (IsInside() == false)
-		Simcore->camera->SetToStartPosition(true);
+		ResetCamera();
 }
 
 void EngineContext::RefreshCamera()
 {
 	Simcore->camera->Refresh();
+}
+
+void EngineContext::ResetCamera()
+{
+	//reset camera position
+	Simcore->camera->SetToStartPosition(true);
+}
+
+void EngineContext::RevertMovement()
+{
+	//revert camera movement
+	Simcore->camera->RevertMovement();
 }
 
 Ogre::Vector3 EngineContext::GetCameraPosition()

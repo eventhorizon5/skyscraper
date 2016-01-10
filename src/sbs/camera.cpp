@@ -95,6 +95,7 @@ Camera::Camera(Object *parent) : Object(parent)
 	RotationStopped = false;
 	MovementStopped = false;
 	accum_movement = 0;
+	prev_accum_movement = 0;
 	collision_reset = false;
 	EnableBullet = sbs->GetConfigBool("Skyscraper.SBS.Camera.EnableBullet", true);
 	use_startdirection = false;
@@ -1144,6 +1145,7 @@ void Camera::MoveCharacter()
 		mCharacter->setWalkDirection(accum_movement, 1);
 	else
 		MainCamera->move(accum_movement);
+	prev_accum_movement = accum_movement;
 	accum_movement = 0;
 }
 
@@ -1444,6 +1446,11 @@ void Camera::SetCameraState(const CameraState &state, bool set_floor)
 	desired_angle_velocity = state.desired_angle_velocity;
 	angle_velocity = state.angle_velocity;
 	accum_movement = state.accum_movement;
+}
+
+void Camera::RevertMovement()
+{
+	accum_movement = -prev_accum_movement;
 }
 
 }

@@ -166,6 +166,7 @@ public:
 	void OnRotate(bool parent);
 	CameraState GetCameraState();
 	void SetCameraState(const CameraState &state, bool set_floor = true);
+	void RevertMovement();
 
 private:
 	Ogre::Camera* MainCamera; //main first-person view camera
@@ -189,6 +190,7 @@ private:
 	bool MovementStopped;
 	float FarClip;
 	Ogre::Vector3 accum_movement;
+	Ogre::Vector3 prev_accum_movement;
 	bool collision_reset;
 	bool use_startdirection;
 	Ogre::Quaternion prev_orientation;

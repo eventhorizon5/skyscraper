@@ -2398,10 +2398,14 @@ void Skyscraper::SwitchEngines()
 			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
 			{
 				SetActiveEngine(i, true);
-				break;
+				return;
 			}
 		}
 	}
+
+	//if user has stepped outside of all sim engines, revert the movement
+	//to place them back into the active engine
+	active_engine->RevertMovement();
 }
 
 bool Skyscraper::IsValidEngine(EngineContext *engine)
