@@ -3,19 +3,10 @@
 #This building demonstrates simulating a small city, with existing
 #Skyscraper buildings, each running in a separate sim engine.
 
-#Include the Triton Center building file, to use as the primary building
-<Include buildings/Triton Center.bld>
-
-#Override the camera's starting position for the demo
-<Globals>
-    CameraPosition = 115, -115
-    CameraRotation = 0, 270, 0
-<EndGlobals>
-
-#The Buildings section can go anywhere, but if it's placed at the end of the file,
-#it'll automatically cut the existing engine for each newly loaded building
+#The Buildings section should go first, so that the progress bar
+#during load can be accurately displayed
 <Buildings>
-    #load these buildings onto the Triton Center map,
+    #load these buildings onto the map,
     #and specify their positions and rotations
     Load Observation Tower.bld, -440.5, 0, 0, 0
     Load Glass Tower.bld, 0, 0, 871.5, 0
@@ -36,4 +27,13 @@
     #Load Sears Tower.bld, 550, 0, 50, -90, -150, 0, -150, 150, 0, 150
     #Load Simple.bld, 0, 0, -630, 180, -25, 0, -25, 25, 0, 25
 <EndBuildings>
+
+#Now include the Triton Center building file, to use as the primary building
+<Include buildings/Triton Center.bld>
+
+#Override the camera's starting position for the demo
+<Globals>
+    CameraPosition = 115, -115
+    CameraRotation = 0, 270, 0
+<EndGlobals>
 
