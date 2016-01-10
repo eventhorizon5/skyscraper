@@ -310,8 +310,7 @@ Ogre::Vector3 WallObject::GetWallExtents(float altitude, bool get_max)
 {
 	//return the X and Z extents of this wall object at a specific altitude, by doing a double plane cut
 
-	//for (int i = 0; i < GetPolygonCount(); i++)
-	int i = 0;
+	for (int i = 0; i < GetPolygonCount(); i++)
 	{
 		std::vector<std::vector<Ogre::Vector3> > origpolys;
 		GetGeometry(i, origpolys, true);
@@ -347,10 +346,10 @@ Ogre::Vector3 WallObject::GetWallExtents(float altitude, bool get_max)
 			result.z = sbs->GetExtents(original, 3).y;
 		}
 		result.y = altitude;
-		return result;
+		return result; //only check the first polygon for now
 	}
 
-	//return Ogre::Vector3(0, 0, 0);
+	return Ogre::Vector3(0, 0, 0);
 }
 
 }
