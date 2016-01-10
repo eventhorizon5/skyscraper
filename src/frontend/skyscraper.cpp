@@ -1658,7 +1658,7 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
-		parent = GetEngine(0);
+		parent = GetFirstValidEngine();
 
 	//Create simulator instance
 	EngineContext* engine = CreateEngine(parent, position + offset, rotation, area_min, area_max);
@@ -2048,7 +2048,7 @@ void Skyscraper::CreateProgressDialog(const std::string &message)
 	//don't create progress dialog if concurrent loading is enabled, and one engine is already running
 	if (GetEngineCount() > 1 && ConcurrentLoads == true)
 	{
-		if (GetEngine(0)->IsRunning() == true)
+		if (GetFirstValidEngine()->IsRunning() == true)
 			return;
 	}
 
@@ -2089,7 +2089,8 @@ void Skyscraper::UpdateProgress()
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		current_percent += engines[i]->GetProgress();
+		if (engines[i])
+			current_percent += engines[i]->GetProgress();
 	}
 
 	int final = ((float)current_percent / (float)total_percent) * 100;
@@ -2119,9 +2120,7 @@ void Skyscraper::SetDateTime(double julian_date_time)
 
 EngineContext* Skyscraper::CreateEngine(EngineContext *parent, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
-	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, soundsys, GetEngineCount(), position, rotation, area_min, area_max);
-	engines.push_back(engine);
-
+	EngineContext* engine = new EngineContext(parent, this, mSceneMgr, soundsys, position, rotation, area_min, area_max);
 	return engine;
 }
 
@@ -2129,11 +2128,14 @@ bool Skyscraper::DeleteEngine(EngineContext *engine)
 {
 	//delete a specified sim engine instance
 
+	if (!engine)
+		return false;
+
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
 		if (engines[i] == engine)
 		{
-			engines.erase(engines.begin() + i);
+			engines[i] = 0;
 			delete engine;
 
 			if (active_engine == engine)
@@ -2161,7 +2163,8 @@ void Skyscraper::DeleteEngines()
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		delete engines[i];
+		if (engines[i])
+			delete engines[i];
 	}
 	engines.clear();
 	active_engine = 0;
@@ -2173,28 +2176,33 @@ EngineContext* Skyscraper::FindActiveEngine()
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i]->IsCameraActive() == true)
-			return engines[i];
+		if (engines[i])
+		{
+			if (engines[i]->IsCameraActive() == true)
+				return engines[i];
+		}
 	}
 	return active_engine;
 }
 
-void Skyscraper::SetActiveEngine(int index, bool switch_engines)
+void Skyscraper::SetActiveEngine(int number, bool switch_engines)
 {
 	//set an engine instance to be active
 
-	if (index < 0 || index > GetEngineCount() - 1)
+	EngineContext *engine = GetEngine(number);
+
+	if (!engine)
 		return;
 
-	if (active_engine == engines[index])
+	if (active_engine == engine)
 		return;
 
 	//don't switch if the camera's already active in the specified engine
-	if (engines[index]->IsCameraActive() == true)
+	if (engine->IsCameraActive() == true)
 		return;
 
 	//don't switch to engine if it's loading
-	if (engines[index]->IsLoading() == true)
+	if (engine->IsLoading() == true)
 		return;
 
 	CameraState state;
@@ -2213,10 +2221,10 @@ void Skyscraper::SetActiveEngine(int index, bool switch_engines)
 		active_engine->DetachCamera(switch_engines);
 	}
 
-	Report("Setting engine " + ToString(index) + " as active");
+	Report("Setting engine " + ToString(number) + " as active");
 
 	//switch context to new engine instance
-	active_engine = engines[index];
+	active_engine = engine;
 	active_engine->AttachCamera(mCamera, !switch_engines);
 
 	//apply camera state to new engine
@@ -2234,6 +2242,9 @@ bool Skyscraper::RunEngines()
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
+		if (!engines[i])
+			continue;
+
 		//process engine run loops, and also prevent other instances from running if
 		//one or more engines are loading
 		if (ConcurrentLoads == true || isloading == false || engines[i]->IsLoading() == true)
@@ -2242,8 +2253,11 @@ bool Skyscraper::RunEngines()
 			if (i > 0 && ConcurrentLoads == false)
 			{
 				//if concurrent loads is off, skip running if previous engine is not finished loading
-				if (engines[i - 1]->IsLoading() == true && engines[i - 1]->IsLoadingFinished() == false)
-					run = false;
+				if (engines[i - 1])
+				{
+					if (engines[i - 1]->IsLoading() == true && engines[i - 1]->IsLoadingFinished() == false)
+						run = false;
+				}
 			}
 
 			if (engines[i]->IsLoadingFinished() == false && run == true)
@@ -2279,8 +2293,11 @@ bool Skyscraper::IsEngineLoading()
 	bool result = false;
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i]->IsLoading() == true && engines[i]->IsLoadingFinished() == false)
-			result = true;
+		if (engines[i])
+		{
+			if (engines[i]->IsLoading() == true && engines[i]->IsLoadingFinished() == false)
+				result = true;
+		}
 	}
 	return result;
 }
@@ -2289,12 +2306,15 @@ void Skyscraper::HandleEngineShutdown()
 {
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i]->GetShutdownState() == true)
+		if (engines[i])
 		{
-			if (DeleteEngine(engines[i]) == true)
+			if (engines[i]->GetShutdownState() == true)
 			{
-				RefreshViewport();
-				i--;
+				if (DeleteEngine(engines[i]) == true)
+				{
+					RefreshViewport();
+					i--;
+				}
 			}
 		}
 	}
@@ -2306,22 +2326,39 @@ void Skyscraper::HandleReload()
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i]->Reload == true)
+		if (engines[i])
 		{
-			Pause = false;
-			engines[i]->DoReload();
+			if (engines[i]->Reload == true)
+			{
+				Pause = false;
+				engines[i]->DoReload();
+			}
 		}
 	}
 }
 
-EngineContext* Skyscraper::GetEngine(int index)
+EngineContext* Skyscraper::GetEngine(int number)
 {
-	//get an engine by index number
+	//get an engine by instance number
 
-	if (index < 0 || index > (int)engines.size())
+	if (number < 0 || number >= (int)engines.size())
 		return 0;
 
-	return engines[index];
+	return engines[number];
+}
+
+int Skyscraper::GetEngineCount()
+{
+	//get number of valid engines
+
+	int count = 0;
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i])
+			count++;
+	}
+	return count;
 }
 
 void Skyscraper::RaiseWindow()
@@ -2356,7 +2393,7 @@ void Skyscraper::SwitchEngines()
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i] != active_engine)
+		if (engines[i] != active_engine && engines[i])
 		{
 			if (engines[i]->IsInside() == true && engines[i]->IsCameraActive() == false)
 			{
@@ -2387,10 +2424,49 @@ bool Skyscraper::IsValidSystem(::SBS::SBS *sbs)
 
 	for (int i = 0; i < (int)engines.size(); i++)
 	{
-		if (engines[i]->GetSystem() == sbs)
-			return true;
+		if (engines[i])
+		{
+			if (engines[i]->GetSystem() == sbs)
+				return true;
+		}
 	}
 	return false;
+}
+
+int Skyscraper::GetFreeInstanceNumber()
+{
+	//get an available engine instance number
+
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (!engines[i])
+			return i;
+	}
+	return (int)engines.size();
+}
+
+int Skyscraper::RegisterEngine(EngineContext *engine)
+{
+	//register an engine with the frontend, returning the assigned instance number
+
+	int number = GetFreeInstanceNumber();
+
+	if (number < (int)engines.size())
+		engines[number] = engine;
+	else
+		engines.push_back(engine);
+
+	return number;
+}
+
+EngineContext* Skyscraper::GetFirstValidEngine()
+{
+	for (int i = 0; i < (int)engines.size(); i++)
+	{
+		if (engines[i])
+			return engines[i];
+	}
+	return 0;
 }
 
 }

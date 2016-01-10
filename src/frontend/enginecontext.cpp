@@ -33,7 +33,7 @@ using namespace SBS;
 
 namespace Skyscraper {
 
-EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, int instance_number, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
+EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::SceneManager* mSceneManager, FMOD::System *fmodsystem, const Ogre::Vector3 &position, float rotation, const Ogre::Vector3 &area_min, const Ogre::Vector3 &area_max)
 {
 	this->frontend = frontend;
 	finish_time = 0;
@@ -59,7 +59,9 @@ EngineContext::EngineContext(EngineContext *parent, Skyscraper *frontend, Ogre::
 	progress = 0;
 	inside = false;
 
-	instance = instance_number;
+	//register this engine, and get it's instance number
+	instance = frontend->RegisterEngine(this);
+
 	Report("\nStarting instance " + ToString(instance) + "...");
 
 	//add instance number to reports
@@ -75,6 +77,14 @@ EngineContext::~EngineContext()
 {
 	if (frontend->IsValidEngine(parent) == true)
 		parent->RemoveChild(this);
+
+	if (children.empty() == false)
+	{
+		for (int i = 0; i < (int)children.size(); i++)
+		{
+			children[i]->RemoveParent();
+		}
+	}
 
 	UnloadSim();
 }

@@ -164,16 +164,27 @@ void EngineManager::Loop()
 	int count = panel->GetRoot()->GetEngineCount();
 	if (count != lastcount)
 	{
+		int selection = EngineList->GetSelection();
+
 		lastcount = count;
 		EngineList->Clear();
 
-		for (int i = 0; i < count; i++)
+		for (int i = 0; i < panel->GetRoot()->GetEngineListSize(); i++)
 		{
-			EngineList->Append(wxVariant(i).GetString() + wxT(" - ") + wxString::FromAscii(panel->GetRoot()->GetEngine(i)->GetFilename().c_str()));
+			EngineContext *engine = panel->GetRoot()->GetEngine(i);
+			std::string filename = "Empty";
+
+			if (engine)
+				filename = engine->GetFilename();
+
+			EngineList->Append(wxVariant(i).GetString() + wxT(" - ") + wxString::FromAscii(filename.c_str()));
 		}
 
-		if (count > 0)
-			EngineList->SetSelection(0);
+		if (selection == -1)
+			selection = 0;
+
+		if (count > 0 && selection < panel->GetRoot()->GetEngineListSize())
+			EngineList->SetSelection(selection);
 	}
 
 	if (count == 0)
@@ -203,6 +214,12 @@ void EngineManager::Loop()
 			tState->SetValue("Loading");
 		else if (engine->IsRunning() == true)
 			tState->SetValue("Running");
+	}
+	else
+	{
+		tPosition->Clear();
+		tActive->Clear();
+		tState->SetValue("Unloaded");
 	}
 }
 

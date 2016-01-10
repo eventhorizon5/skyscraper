@@ -122,19 +122,22 @@ public:
 	void SetLocation(float latitude, float longitude);
 	void SetDateTime(double julian_date_time);
 	EngineContext* GetActiveEngine() { return active_engine; }
-	EngineContext* GetEngine(int index);
+	EngineContext* GetEngine(int number);
 	EngineContext* CreateEngine(EngineContext *parent = 0, const Ogre::Vector3 &position = Ogre::Vector3::ZERO, float rotation = 0.0f, const Ogre::Vector3 &area_min = Ogre::Vector3::ZERO, const Ogre::Vector3 &area_max = Ogre::Vector3::ZERO);
 	bool DeleteEngine(EngineContext *engine);
 	void DeleteEngines();
-	int GetEngineCount() { return (int)engines.size(); }
+	int GetEngineCount();
+	int GetEngineListSize() { return (int)engines.size(); }
 	EngineContext* FindActiveEngine();
-	void SetActiveEngine(int index, bool switch_engines = false);
+	void SetActiveEngine(int number, bool switch_engines = false);
 	bool IsEngineLoading();
 	void RaiseWindow();
 	void RefreshConsole();
 	void RefreshViewport();
 	bool IsValidEngine(EngineContext *engine);
 	bool IsValidSystem(::SBS::SBS *sbs);
+	int RegisterEngine(EngineContext *engine);
+	EngineContext* GetFirstValidEngine();
 
 private:
 	//mouse status
@@ -177,6 +180,7 @@ private:
 	void SwitchEngines();
 	void HandleEngineShutdown();
 	void HandleReload();
+	int GetFreeInstanceNumber();
 
 	Ogre::ConfigFile configfile;
 	Caelum::CaelumSystem *mCaelumSystem;
