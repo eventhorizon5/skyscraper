@@ -2097,14 +2097,14 @@ Ogre::Vector2 MeshObject::GetExtents(int coord, bool flip_z)
 WallObject* MeshObject::FindPolygon(const std::string &name, int &index)
 {
 	//finds a polygon by name in all associated wall objects
-	//returns associated wall object and wall index
+	//returns associated wall object and polygon index
 
 	for (int i = 0; i < (int)Walls.size(); i++)
 	{
-		int wall = Walls[i]->FindPolygon(name);
-		if (wall > -1)
+		int polygon = Walls[i]->FindPolygon(name);
+		if (polygon > -1)
 		{
-			index = wall;
+			index = polygon;
 			return Walls[i];
 		}
 	}
