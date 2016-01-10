@@ -1387,9 +1387,12 @@ WallObject* SBS::CreateWallBox2(MeshObject* mesh, const std::string &name, const
 	return CreateWallBox(mesh, name, texture, x1, x2, z1, z2, height_in, voffset, tw, th, inside, outside, top, bottom, autosize);
 }
 
-void SBS::AddPolygon(WallObject* wallobject, const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
+void SBS::AddPolygon(WallObject* wallobject, const std::string &texture, std::vector<Ogre::Vector3> &varray, float tw, float th)
 {
 	//creates a polygon in the specified wall object
+
+	if (!wallobject)
+		return;
 
 	std::vector<Ogre::Vector3> varray1 = varray;
 	std::vector<Ogre::Vector3> varray2;
@@ -1416,6 +1419,8 @@ void SBS::AddPolygon(WallObject* wallobject, const std::string &name, const std:
 		varray1 = varray2;
 		varray2 = tmppoly;
 	}
+
+	std::string name = wallobject->GetName();
 
 	//add the polygons
 	if (DrawMainN == true)
@@ -1445,7 +1450,7 @@ WallObject* SBS::AddCustomWall(MeshObject* mesh, const std::string &name, const 
 	WallObject *wall = mesh->CreateWallObject(name);
 
 	//create polygon in wall object
-	AddPolygon(wall, name, texture, varray, tw, th);
+	AddPolygon(wall, texture, varray, tw, th);
 
 	return wall;
 }

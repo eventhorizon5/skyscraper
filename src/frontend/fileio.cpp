@@ -1773,7 +1773,7 @@ int ScriptProcessor::ProcCommands()
 		int params = SplitData(LineData, 11);
 
 		//check numeric values
-		for (int i = 4; i < params; i++)
+		for (int i = 3; i < params; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1790,10 +1790,10 @@ int ScriptProcessor::ProcCommands()
 			return ScriptError("Invalid wall object");
 
 		std::vector<Ogre::Vector3> varray;
-		for (temp3 = 4; temp3 < params - 2; temp3 += 3)
+		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
 			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]), ToFloat(tempdata[temp3 + 2])));
 
-		Simcore->AddPolygon(wall, tempdata[2], tempdata[3], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
+		Simcore->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 
 		return sNextLine;
 	}
