@@ -36,6 +36,10 @@ namespace Skyscraper {
 const long EngineManager::ID_EngineList = wxNewId();
 const long EngineManager::ID_STATICTEXT4 = wxNewId();
 const long EngineManager::ID_tPosition = wxNewId();
+const long EngineManager::ID_STATICTEXT3 = wxNewId();
+const long EngineManager::ID_tBoundsMin = wxNewId();
+const long EngineManager::ID_STATICTEXT5 = wxNewId();
+const long EngineManager::ID_tBoundsMax = wxNewId();
 const long EngineManager::ID_STATICTEXT1 = wxNewId();
 const long EngineManager::ID_tActive = wxNewId();
 const long EngineManager::ID_STATICTEXT2 = wxNewId();
@@ -75,7 +79,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer5 = new wxFlexGridSizer(0, 2, 0, 0);
 	BoxSizer8 = new wxBoxSizer(wxVERTICAL);
-	EngineList = new wxListBox(this, ID_EngineList, wxDefaultPosition, wxSize(150,150), 0, 0, 0, wxDefaultValidator, _T("ID_EngineList"));
+	EngineList = new wxListBox(this, ID_EngineList, wxDefaultPosition, wxSize(175,150), 0, 0, 0, wxDefaultValidator, _T("ID_EngineList"));
 	BoxSizer8->Add(EngineList, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer5->Add(BoxSizer8, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1 = new wxBoxSizer(wxVERTICAL);
@@ -84,14 +88,27 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Position:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
 	FlexGridSizer2->Add(StaticText4, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tPosition = new wxTextCtrl(this, ID_tPosition, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosition"));
+	tPosition->SetMinSize(wxSize(125,-1));
 	FlexGridSizer2->Add(tPosition, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Bounds Min:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+	FlexGridSizer2->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tBoundsMin = new wxTextCtrl(this, ID_tBoundsMin, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tBoundsMin"));
+	tBoundsMin->SetMinSize(wxSize(125,-1));
+	FlexGridSizer2->Add(tBoundsMin, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Bounds Max:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
+	FlexGridSizer2->Add(StaticText5, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tBoundsMax = new wxTextCtrl(this, ID_tBoundsMax, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tBoundsMax"));
+	tBoundsMax->SetMinSize(wxSize(125,-1));
+	FlexGridSizer2->Add(tBoundsMax, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Camera Active:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
 	FlexGridSizer2->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tActive = new wxTextCtrl(this, ID_tActive, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tActive"));
+	tActive->SetMinSize(wxSize(125,-1));
 	FlexGridSizer2->Add(tActive, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("State:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
 	FlexGridSizer2->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	tState = new wxTextCtrl(this, ID_tState, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tState"));
+	tState->SetMinSize(wxSize(125,-1));
 	FlexGridSizer2->Add(tState, 1, wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer4->Add(FlexGridSizer2, 1, wxBOTTOM|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
@@ -203,7 +220,17 @@ void EngineManager::Loop()
 			return;
 
 		Ogre::Vector3 position = engine->GetSystem()->GetPosition();
+		Ogre::Vector3 min, max;
+		engine->GetSystem()->GetBounds(min, max);
+
+		if (min.y <= -999999)
+			min.y = 0;
+		if (max.y >= 999999)
+			max.y = 0;
+
 		tPosition->SetValue(TruncateNumber(position.x, 2) + wxT(", ") + TruncateNumber(position.y, 2) + wxT(", ") + TruncateNumber(position.z, 2));
+		tBoundsMin->SetValue(TruncateNumber(min.x, 2) + wxT(", ") + TruncateNumber(min.y, 2) + wxT(", ") + TruncateNumber(min.z, 2));
+		tBoundsMax->SetValue(TruncateNumber(max.x, 2) + wxT(", ") + TruncateNumber(max.y, 2) + wxT(", ") + TruncateNumber(max.z, 2));
 
 		//set camera state
 		if (engine->IsCameraActive() == true)
@@ -222,6 +249,8 @@ void EngineManager::Loop()
 	else
 	{
 		tPosition->Clear();
+		tBoundsMin->Clear();
+		tBoundsMax->Clear();
 		tActive->Clear();
 		tState->SetValue("Unloaded");
 	}

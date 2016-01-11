@@ -15,7 +15,7 @@
 							<object class="sizeritem">
 								<object class="wxListBox" name="ID_EngineList" variable="EngineList" member="yes">
 									<default>-1</default>
-									<size>150,150</size>
+									<size>175,150</size>
 								</object>
 								<flag>wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL</flag>
 								<border>5</border>
@@ -45,6 +45,41 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tPosition" variable="tPosition" member="yes">
+													<minsize>125,-1</minsize>
+													<style>wxTE_READONLY|wxTE_CENTRE</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT3" variable="StaticText3" member="yes">
+													<label>Bounds Min:</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_tBoundsMin" variable="tBoundsMin" member="yes">
+													<minsize>125,-1</minsize>
+													<style>wxTE_READONLY|wxTE_CENTRE</style>
+												</object>
+												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxStaticText" name="ID_STATICTEXT5" variable="StaticText5" member="yes">
+													<label>Bounds Max:</label>
+												</object>
+												<flag>wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
+												<border>5</border>
+												<option>1</option>
+											</object>
+											<object class="sizeritem">
+												<object class="wxTextCtrl" name="ID_tBoundsMax" variable="tBoundsMax" member="yes">
+													<minsize>125,-1</minsize>
 													<style>wxTE_READONLY|wxTE_CENTRE</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -61,6 +96,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tActive" variable="tActive" member="yes">
+													<minsize>125,-1</minsize>
 													<style>wxTE_READONLY|wxTE_CENTRE</style>
 												</object>
 												<flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
@@ -77,6 +113,7 @@
 											</object>
 											<object class="sizeritem">
 												<object class="wxTextCtrl" name="ID_tState" variable="tState" member="yes">
+													<minsize>125,-1</minsize>
 													<style>wxTE_READONLY|wxTE_CENTRE</style>
 												</object>
 												<flag>wxBOTTOM|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
