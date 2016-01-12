@@ -1062,7 +1062,7 @@ bool Skyscraper::ReportFatalError(const std::string &message)
 void Skyscraper::ShowError(const std::string &message)
 {
 	//show error dialog
-	wxMessageDialog dialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+	wxMessageDialog dialog(0, wxString::FromAscii(message.c_str()), _("Skyscraper"), wxOK | wxICON_ERROR);
 	dialog.ShowModal();
 }
 
@@ -1617,7 +1617,6 @@ std::string Skyscraper::SelectBuilding()
 {
 	//choose a building from a script file
 	std::string filename = "";
-	srand (time (0));
 
 	//set building file
 	//wxFileDialog Selector (0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
