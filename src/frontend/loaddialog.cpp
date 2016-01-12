@@ -46,6 +46,10 @@ const long LoadDialog::ID_STATICLINE3 = wxNewId();
 const long LoadDialog::ID_STATICLINE4 = wxNewId();
 const long LoadDialog::ID_STATICTEXT2 = wxNewId();
 const long LoadDialog::ID_tRotation = wxNewId();
+const long LoadDialog::ID_chkCutLandscape = wxNewId();
+const long LoadDialog::ID_chkCutBuildings = wxNewId();
+const long LoadDialog::ID_chkCutExternal = wxNewId();
+const long LoadDialog::ID_chkCutFloors = wxNewId();
 const long LoadDialog::ID_STATICTEXT3 = wxNewId();
 const long LoadDialog::ID_tMinX = wxNewId();
 const long LoadDialog::ID_STATICTEXT6 = wxNewId();
@@ -75,20 +79,21 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	wxFlexGridSizer* FlexGridSizer1;
 	wxFlexGridSizer* FlexGridSizer2;
 	wxFlexGridSizer* FlexGridSizer4;
+	wxFlexGridSizer* FlexGridSizer9;
 	wxStaticBoxSizer* StaticBoxSizer3;
 	wxFlexGridSizer* FlexGridSizer6;
 	wxFlexGridSizer* FlexGridSizer3;
+	wxStaticBoxSizer* StaticBoxSizer4;
+	wxFlexGridSizer* FlexGridSizer10;
 	wxBoxSizer* BoxSizer1;
 	wxFlexGridSizer* FlexGridSizer5;
 	wxStaticBoxSizer* StaticBoxSizer1;
 
-	Create(parent, id, _("Load Building"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
-	SetClientSize(wxDefaultSize);
-	Move(wxDefaultPosition);
+	Create(parent, wxID_ANY, _("Load Building"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("wxID_ANY"));
 	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
 	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
 	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Filename"));
-	FlexGridSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
+	FlexGridSizer4 = new wxFlexGridSizer(0, 2, 0, 0);
 	tFilename = new wxTextCtrl(this, ID_tFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tFilename"));
 	tFilename->SetMinSize(wxSize(150,-1));
 	FlexGridSizer4->Add(tFilename, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
@@ -97,6 +102,7 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	StaticBoxSizer2->Add(FlexGridSizer4, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer2->Add(StaticBoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	FlexGridSizer6 = new wxFlexGridSizer(0, 2, 0, 0);
+	FlexGridSizer9 = new wxFlexGridSizer(0, 1, 0, 0);
 	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Position and Rotation"));
 	FlexGridSizer3 = new wxFlexGridSizer(0, 2, 0, 0);
 	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Center X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
@@ -120,7 +126,24 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	tRotation = new wxTextCtrl(this, ID_tRotation, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tRotation"));
 	FlexGridSizer3->Add(tRotation, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer1->Add(FlexGridSizer3, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer6->Add(StaticBoxSizer1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer9->Add(StaticBoxSizer1, 1, wxTOP|wxLEFT|wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer4 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Options"));
+	FlexGridSizer10 = new wxFlexGridSizer(0, 1, 0, 0);
+	chkCutLandscape = new wxCheckBox(this, ID_chkCutLandscape, _("Cut Landscape"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkCutLandscape"));
+	chkCutLandscape->SetValue(false);
+	FlexGridSizer10->Add(chkCutLandscape, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkCutBuildings = new wxCheckBox(this, ID_chkCutBuildings, _("Cut Buildings"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkCutBuildings"));
+	chkCutBuildings->SetValue(false);
+	FlexGridSizer10->Add(chkCutBuildings, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkCutExternal = new wxCheckBox(this, ID_chkCutExternal, _("Cut External"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkCutExternal"));
+	chkCutExternal->SetValue(false);
+	FlexGridSizer10->Add(chkCutExternal, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	chkCutFloors = new wxCheckBox(this, ID_chkCutFloors, _("Cut Floors"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_chkCutFloors"));
+	chkCutFloors->SetValue(false);
+	FlexGridSizer10->Add(chkCutFloors, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer4->Add(FlexGridSizer10, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer9->Add(StaticBoxSizer4, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(FlexGridSizer9, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Bounds"));
 	FlexGridSizer5 = new wxFlexGridSizer(0, 2, 0, 0);
 	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Min X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
@@ -152,8 +175,8 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	tMaxZ = new wxTextCtrl(this, ID_tMaxZ, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaxZ"));
 	FlexGridSizer5->Add(tMaxZ, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	StaticBoxSizer3->Add(FlexGridSizer5, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer6->Add(StaticBoxSizer3, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
-	FlexGridSizer2->Add(FlexGridSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(StaticBoxSizer3, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
+	FlexGridSizer2->Add(FlexGridSizer6, 1, wxALL|wxALIGN_TOP|wxALIGN_CENTER_HORIZONTAL, 5);
 	FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
 	bLoad = new wxButton(this, ID_bLoad, _("Load"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bLoad"));
@@ -167,6 +190,13 @@ LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wx
 	Connect(ID_bLoad,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&LoadDialog::On_bLoad_Click);
 	//*)
 	panel = root;
+
+	//set cut options
+	::Skyscraper::Skyscraper *frontend = panel->GetRoot();
+	chkCutLandscape->SetValue(frontend->CutLandscape);
+	chkCutBuildings->SetValue(frontend->CutBuildings);
+	chkCutExternal->SetValue(frontend->CutExternal);
+	chkCutFloors->SetValue(frontend->CutFloors);
 }
 
 LoadDialog::~LoadDialog()
@@ -225,7 +255,15 @@ void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 	std::string filename;
 	filename = tFilename->GetValue().ToAscii();
 
-	panel->GetRoot()->Load(filename, panel->GetRoot()->GetActiveEngine(), position, rotation, min, max);
+	::Skyscraper::Skyscraper *frontend = panel->GetRoot();
+
+	//set cut options
+	frontend->CutLandscape = chkCutLandscape->GetValue();
+	frontend->CutBuildings = chkCutBuildings->GetValue();
+	frontend->CutExternal = chkCutExternal->GetValue();
+	frontend->CutFloors = chkCutFloors->GetValue();
+
+	frontend->Load(filename, frontend->GetActiveEngine(), position, rotation, min, max);
 
 	this->Close();
 }

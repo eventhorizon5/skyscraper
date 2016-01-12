@@ -26,6 +26,7 @@
 #define LOADDIALOG_H
 
 //(*Headers(LoadDialog)
+#include <wx/checkbox.h>
 #include <wx/dialog.h>
 #include <wx/sizer.h>
 #include <wx/button.h>
@@ -50,6 +51,9 @@ class LoadDialog: public wxDialog
 		wxTextCtrl* tMinY;
 		wxStaticLine* StaticLine2;
 		wxTextCtrl* tMinZ;
+		wxCheckBox* chkCutLandscape;
+		wxCheckBox* chkCutExternal;
+		wxCheckBox* chkCutFloors;
 		wxStaticText* StaticText1;
 		wxStaticText* StaticText10;
 		wxTextCtrl* tPosX;
@@ -68,6 +72,7 @@ class LoadDialog: public wxDialog
 		wxStaticText* StaticText6;
 		wxStaticLine* StaticLine4;
 		wxTextCtrl* tPosY;
+		wxCheckBox* chkCutBuildings;
 		wxStaticText* StaticText9;
 		wxButton* bLoad;
 		wxButton* bSelect;
@@ -88,6 +93,10 @@ class LoadDialog: public wxDialog
 		static const long ID_STATICLINE4;
 		static const long ID_STATICTEXT2;
 		static const long ID_tRotation;
+		static const long ID_chkCutLandscape;
+		static const long ID_chkCutBuildings;
+		static const long ID_chkCutExternal;
+		static const long ID_chkCutFloors;
 		static const long ID_STATICTEXT3;
 		static const long ID_tMinX;
 		static const long ID_STATICTEXT6;
