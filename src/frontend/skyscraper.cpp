@@ -25,6 +25,7 @@
 #include "wx/wxprec.h"
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
+#include "wx/dir.h"
 #endif
 #include <locale>
 #include "globals.h"
@@ -1616,18 +1617,30 @@ void Skyscraper::StopSound()
 std::string Skyscraper::SelectBuilding()
 {
 	//choose a building from a script file
+
 	std::string filename = "";
 
-	//set building file
-	//wxFileDialog Selector (0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
-	wxFileDialog Selector (0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
+	//get listing of building files
+	wxArrayString filelist;
+	wxDir::GetAllFiles(_("buildings/"), &filelist, _("*.bld"), wxDIR_FILES);
+
+	//strip directory name and extension from entries
+	for (int i = 0; i < (int)filelist.size(); i++)
+	{
+		filelist[i] = filelist[i].substr(10);
+		filelist[i] = filelist[i].substr(0, filelist[i].length() - 4);
+	}
+
+	//sort list
+	filelist.Sort();
+
+	//show selection dialog window
+	wxSingleChoiceDialog Selector (0, _("Select a Building"), _("Load Building"), filelist);
+
 	if (Selector.ShowModal() == wxID_OK)
 	{
-		#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-		filename = Selector.GetFilename().mb_str().data();
-		#else
-		filename = Selector.GetFilename();
-		#endif
+		filename = Selector.GetStringSelection();
+		filename += ".bld";
 	}
 
 	return filename;
