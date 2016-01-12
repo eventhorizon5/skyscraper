@@ -494,22 +494,6 @@ void DebugPanel::Timer::Notify()
 		dp->Loop();
 }
 
-wxString TruncateNumber(float value, int decimals)
-{
-	std::string number = SBS::TruncateNumber(value, decimals);
-	wxString number2 = wxString::FromAscii(number.c_str());
-
-	return number2;
-}
-
-wxString TruncateNumber(double value, int decimals)
-{
-	std::string number = SBS::TruncateNumber(value, decimals);
-	wxString number2 = wxString::FromAscii(number.c_str());
-
-	return number2;
-}
-
 void DebugPanel::On_chkGravity_Click(wxCommandEvent& event)
 {
 	//enables or disables gravity
@@ -653,6 +637,50 @@ void DebugPanel::EnableTimer(bool value)
 		timer->Start(40);
 	else
 		timer->Stop();
+}
+
+wxString TruncateNumber(float value, int decimals)
+{
+	std::string number = SBS::TruncateNumber(value, decimals);
+	wxString number2 = wxString::FromAscii(number.c_str());
+
+	return number2;
+}
+
+wxString TruncateNumber(double value, int decimals)
+{
+	std::string number = SBS::TruncateNumber(value, decimals);
+	wxString number2 = wxString::FromAscii(number.c_str());
+
+	return number2;
+}
+
+bool IsNumeric(const wxString &string)
+{
+	std::string s;
+	s = string.ToAscii();
+	return SBS::IsNumeric(s);
+}
+
+bool IsNumeric(const wxString &string, int &number)
+{
+	std::string s;
+	s = string.ToAscii();
+	return SBS::IsNumeric(s, number);
+}
+
+bool IsNumeric(const wxString &string, float &number)
+{
+	std::string s;
+	s = string.ToAscii();
+	return SBS::IsNumeric(s, number);
+}
+
+bool IsNumeric(const wxString &string, double &number)
+{
+	std::string s;
+	s = string.ToAscii();
+	return SBS::IsNumeric(s, number);
 }
 
 }

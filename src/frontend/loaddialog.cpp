@@ -185,20 +185,42 @@ void LoadDialog::On_bSelect_Click(wxCommandEvent& event)
 
 void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
 {
-	Ogre::Vector3 position;
-	position.x = atof(tPosX->GetValue().ToAscii());
-	position.y = atof(tPosY->GetValue().ToAscii());
-	position.z = atof(tPosZ->GetValue().ToAscii());
+	Ogre::Vector3 position, min, max;
+	float rotation;
 
-	float rotation = atof(tRotation->GetValue().ToAscii());
+	//get position values
+	if (!IsNumeric(tPosX->GetValue(), position.x))
+		return;
 
-	Ogre::Vector3 min, max;
-	min.x = atof(tMinX->GetValue().ToAscii());
-	min.y = atof(tMinY->GetValue().ToAscii());
-	min.z = atof(tMinZ->GetValue().ToAscii());
-	max.x = atof(tMaxX->GetValue().ToAscii());
-	max.y = atof(tMaxY->GetValue().ToAscii());
-	max.z = atof(tMaxZ->GetValue().ToAscii());
+	if (!IsNumeric(tPosY->GetValue(), position.y))
+		return;
+
+	if (!IsNumeric(tPosZ->GetValue(), position.z))
+		return;
+
+	//get rotation
+	if (!IsNumeric(tRotation->GetValue(), rotation))
+		return;
+
+	if (!IsNumeric(tMinX->GetValue(), min.x))
+		return;
+
+	//get min bounds
+	if (!IsNumeric(tMinY->GetValue(), min.y))
+		return;
+
+	if (!IsNumeric(tMinZ->GetValue(), min.z))
+		return;
+
+	//get max bounds
+	if (!IsNumeric(tMaxX->GetValue(), max.x))
+		return;
+
+	if (!IsNumeric(tMaxY->GetValue(), max.y))
+		return;
+
+	if (!IsNumeric(tMaxZ->GetValue(), max.z))
+		return;
 
 	std::string filename;
 	filename = tFilename->GetValue().ToAscii();

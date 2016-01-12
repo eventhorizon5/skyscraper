@@ -239,6 +239,11 @@ class DebugPanel: public wxFrame
 wxString TruncateNumber(float value, int decimals);
 wxString TruncateNumber(double value, int decimals);
 
+bool IsNumeric(const wxString &string);
+bool IsNumeric(const wxString &string, int &number);
+bool IsNumeric(const wxString &string, float &number);
+bool IsNumeric(const wxString &string, double &number);
+
 }
 
 #endif
