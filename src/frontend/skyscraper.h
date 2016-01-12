@@ -36,6 +36,7 @@
 #include "fileio.h"
 #include "debugpanel.h"
 #include "enginecontext.h"
+#include "loaddialog.h"
 #include "console.h"
 
 #if OGRE_VERSION >= 0x00010900
@@ -196,6 +197,9 @@ private:
 
 	//console window
 	Console *console;
+
+	//load dialog window
+	LoadDialog *loaddialog;
 
 	bool new_location, new_time;
 	float latitude, longitude;

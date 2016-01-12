@@ -128,6 +128,7 @@ bool Skyscraper::OnInit(void)
 	CutBuildings = true;
 	CutExternal = false;
 	CutFloors = false;
+	loaddialog = 0;
 
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
 
@@ -197,6 +198,10 @@ int Skyscraper::OnExit()
 
 	//cleanup
 	Report("Cleaning up...");
+
+	if (loaddialog)
+		loaddialog->Destroy();
+	loaddialog = 0;
 
 	if (progdialog)
 		progdialog->Destroy();
@@ -962,7 +967,9 @@ void Skyscraper::GetInput(EngineContext *engine)
 		//load a new additional building
 		if (wxGetKeyState((wxKeyCode)';') && wait == false)
 		{
-			Load(SelectBuilding());
+			loaddialog = new LoadDialog(dpanel, window, -1);
+			loaddialog->CenterOnScreen();
+			loaddialog->Show();
 			wait = true;
 			return;
 		}
