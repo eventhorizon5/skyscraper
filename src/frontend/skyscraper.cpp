@@ -1636,6 +1636,8 @@ std::string Skyscraper::SelectBuilding()
 
 	//show selection dialog window
 	wxSingleChoiceDialog Selector (0, _("Select a Building"), _("Load Building"), filelist);
+	Selector.SetSize(wxSize(350, 350));
+	Selector.CenterOnScreen();
 
 	if (Selector.ShowModal() == wxID_OK)
 	{
