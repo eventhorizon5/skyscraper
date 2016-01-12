@@ -27,30 +27,97 @@
 
 //(*Headers(LoadDialog)
 #include <wx/dialog.h>
+#include <wx/sizer.h>
+#include <wx/button.h>
+#include <wx/statline.h>
+#include <wx/stattext.h>
+#include <wx/textctrl.h>
 //*)
+
+namespace Skyscraper {
 
 class LoadDialog: public wxDialog
 {
 	public:
 
-		LoadDialog(wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
+		LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id=wxID_ANY,const wxPoint& pos=wxDefaultPosition,const wxSize& size=wxDefaultSize);
 		virtual ~LoadDialog();
 
 		//(*Declarations(LoadDialog)
+		wxTextCtrl* tMaxZ;
+		wxTextCtrl* tMinX;
+		wxTextCtrl* tMaxX;
+		wxTextCtrl* tMinY;
+		wxStaticLine* StaticLine2;
+		wxTextCtrl* tMinZ;
+		wxStaticText* StaticText1;
+		wxStaticText* StaticText10;
+		wxTextCtrl* tPosX;
+		wxTextCtrl* tPosZ;
+		wxStaticText* StaticText3;
+		wxTextCtrl* tMaxY;
+		wxStaticLine* StaticLine1;
+		wxStaticText* StaticText8;
+		wxStaticLine* StaticLine3;
+		wxStaticText* StaticText7;
+		wxTextCtrl* tRotation;
+		wxStaticText* StaticText4;
+		wxStaticText* StaticText5;
+		wxStaticText* StaticText2;
+		wxTextCtrl* tFilename;
+		wxStaticText* StaticText6;
+		wxStaticLine* StaticLine4;
+		wxTextCtrl* tPosY;
+		wxStaticText* StaticText9;
+		wxButton* bLoad;
+		wxButton* bSelect;
 		//*)
 
 	protected:
 
 		//(*Identifiers(LoadDialog)
+		static const long ID_tFilename;
+		static const long ID_bSelect;
+		static const long ID_STATICTEXT1;
+		static const long ID_PosX;
+		static const long ID_STATICTEXT4;
+		static const long ID_tPosY;
+		static const long ID_STATICTEXT5;
+		static const long ID_tPosZ;
+		static const long ID_STATICLINE3;
+		static const long ID_STATICLINE4;
+		static const long ID_STATICTEXT2;
+		static const long ID_tRotation;
+		static const long ID_STATICTEXT3;
+		static const long ID_tMinX;
+		static const long ID_STATICTEXT6;
+		static const long ID_tMinY;
+		static const long ID_STATICTEXT7;
+		static const long ID_tMinZ;
+		static const long ID_STATICLINE1;
+		static const long ID_STATICLINE2;
+		static const long ID_STATICTEXT8;
+		static const long ID_tMaxX;
+		static const long ID_STATICTEXT9;
+		static const long ID_tMaxY;
+		static const long ID_STATICTEXT10;
+		static const long ID_tMaxZ;
+		static const long ID_bLoad;
 		//*)
 
 	private:
 
 		//(*Handlers(LoadDialog)
+		void On_bSelect_Click(wxCommandEvent& event);
+		void On_bLoad_Click(wxCommandEvent& event);
 		//*)
+
+		DebugPanel *panel;
 
 		DECLARE_EVENT_TABLE()
 };
+
+}
 
 #endif
 

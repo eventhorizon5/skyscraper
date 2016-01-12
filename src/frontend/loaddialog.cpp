@@ -27,9 +27,40 @@
 #include <wx/intl.h>
 //*)
 
+#include "debugpanel.h"
+#include "skyscraper.h"
 #include "loaddialog.h"
 
+namespace Skyscraper {
+
 //(*IdInit(LoadDialog)
+const long LoadDialog::ID_tFilename = wxNewId();
+const long LoadDialog::ID_bSelect = wxNewId();
+const long LoadDialog::ID_STATICTEXT1 = wxNewId();
+const long LoadDialog::ID_PosX = wxNewId();
+const long LoadDialog::ID_STATICTEXT4 = wxNewId();
+const long LoadDialog::ID_tPosY = wxNewId();
+const long LoadDialog::ID_STATICTEXT5 = wxNewId();
+const long LoadDialog::ID_tPosZ = wxNewId();
+const long LoadDialog::ID_STATICLINE3 = wxNewId();
+const long LoadDialog::ID_STATICLINE4 = wxNewId();
+const long LoadDialog::ID_STATICTEXT2 = wxNewId();
+const long LoadDialog::ID_tRotation = wxNewId();
+const long LoadDialog::ID_STATICTEXT3 = wxNewId();
+const long LoadDialog::ID_tMinX = wxNewId();
+const long LoadDialog::ID_STATICTEXT6 = wxNewId();
+const long LoadDialog::ID_tMinY = wxNewId();
+const long LoadDialog::ID_STATICTEXT7 = wxNewId();
+const long LoadDialog::ID_tMinZ = wxNewId();
+const long LoadDialog::ID_STATICLINE1 = wxNewId();
+const long LoadDialog::ID_STATICLINE2 = wxNewId();
+const long LoadDialog::ID_STATICTEXT8 = wxNewId();
+const long LoadDialog::ID_tMaxX = wxNewId();
+const long LoadDialog::ID_STATICTEXT9 = wxNewId();
+const long LoadDialog::ID_tMaxY = wxNewId();
+const long LoadDialog::ID_STATICTEXT10 = wxNewId();
+const long LoadDialog::ID_tMaxZ = wxNewId();
+const long LoadDialog::ID_bLoad = wxNewId();
 //*)
 
 BEGIN_EVENT_TABLE(LoadDialog,wxDialog)
@@ -37,18 +68,145 @@ BEGIN_EVENT_TABLE(LoadDialog,wxDialog)
 	//*)
 END_EVENT_TABLE()
 
-LoadDialog::LoadDialog(wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
+LoadDialog::LoadDialog(DebugPanel *root, wxWindow* parent,wxWindowID id,const wxPoint& pos,const wxSize& size)
 {
 	//(*Initialize(LoadDialog)
+	wxStaticBoxSizer* StaticBoxSizer2;
+	wxFlexGridSizer* FlexGridSizer1;
+	wxFlexGridSizer* FlexGridSizer2;
+	wxFlexGridSizer* FlexGridSizer4;
+	wxStaticBoxSizer* StaticBoxSizer3;
+	wxFlexGridSizer* FlexGridSizer6;
+	wxFlexGridSizer* FlexGridSizer3;
+	wxBoxSizer* BoxSizer1;
+	wxFlexGridSizer* FlexGridSizer5;
+	wxStaticBoxSizer* StaticBoxSizer1;
+
 	Create(parent, id, _("Load Building"), wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE, _T("id"));
 	SetClientSize(wxDefaultSize);
 	Move(wxDefaultPosition);
+	FlexGridSizer1 = new wxFlexGridSizer(0, 1, 0, 0);
+	FlexGridSizer2 = new wxFlexGridSizer(0, 1, 0, 0);
+	StaticBoxSizer2 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Filename"));
+	FlexGridSizer4 = new wxFlexGridSizer(0, 3, 0, 0);
+	tFilename = new wxTextCtrl(this, ID_tFilename, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY|wxTE_CENTRE, wxDefaultValidator, _T("ID_tFilename"));
+	tFilename->SetMinSize(wxSize(150,-1));
+	FlexGridSizer4->Add(tFilename, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	bSelect = new wxButton(this, ID_bSelect, _("Select"), wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT, wxDefaultValidator, _T("ID_bSelect"));
+	FlexGridSizer4->Add(bSelect, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer2->Add(FlexGridSizer4, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(StaticBoxSizer2, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6 = new wxFlexGridSizer(0, 2, 0, 0);
+	StaticBoxSizer1 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Position and Rotation"));
+	FlexGridSizer3 = new wxFlexGridSizer(0, 2, 0, 0);
+	StaticText1 = new wxStaticText(this, ID_STATICTEXT1, _("Center X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT1"));
+	FlexGridSizer3->Add(StaticText1, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tPosX = new wxTextCtrl(this, ID_PosX, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_PosX"));
+	FlexGridSizer3->Add(tPosX, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText4 = new wxStaticText(this, ID_STATICTEXT4, _("Center Y:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT4"));
+	FlexGridSizer3->Add(StaticText4, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tPosY = new wxTextCtrl(this, ID_tPosY, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosY"));
+	FlexGridSizer3->Add(tPosY, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText5 = new wxStaticText(this, ID_STATICTEXT5, _("Center Z:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT5"));
+	FlexGridSizer3->Add(StaticText5, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tPosZ = new wxTextCtrl(this, ID_tPosZ, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tPosZ"));
+	FlexGridSizer3->Add(tPosZ, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticLine3 = new wxStaticLine(this, ID_STATICLINE3, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE3"));
+	FlexGridSizer3->Add(StaticLine3, 1, wxLEFT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticLine4 = new wxStaticLine(this, ID_STATICLINE4, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE4"));
+	FlexGridSizer3->Add(StaticLine4, 1, wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText2 = new wxStaticText(this, ID_STATICTEXT2, _("Rotation:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT2"));
+	FlexGridSizer3->Add(StaticText2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tRotation = new wxTextCtrl(this, ID_tRotation, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tRotation"));
+	FlexGridSizer3->Add(tRotation, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer1->Add(FlexGridSizer3, 1, wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(StaticBoxSizer1, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3 = new wxStaticBoxSizer(wxHORIZONTAL, this, _("Bounds"));
+	FlexGridSizer5 = new wxFlexGridSizer(0, 2, 0, 0);
+	StaticText3 = new wxStaticText(this, ID_STATICTEXT3, _("Min X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT3"));
+	FlexGridSizer5->Add(StaticText3, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tMinX = new wxTextCtrl(this, ID_tMinX, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tMinX"));
+	FlexGridSizer5->Add(tMinX, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText6 = new wxStaticText(this, ID_STATICTEXT6, _("Min Y:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT6"));
+	FlexGridSizer5->Add(StaticText6, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tMinY = new wxTextCtrl(this, ID_tMinY, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tMinY"));
+	FlexGridSizer5->Add(tMinY, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText7 = new wxStaticText(this, ID_STATICTEXT7, _("Min Z:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT7"));
+	FlexGridSizer5->Add(StaticText7, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tMinZ = new wxTextCtrl(this, ID_tMinZ, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tMinZ"));
+	FlexGridSizer5->Add(tMinZ, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticLine1 = new wxStaticLine(this, ID_STATICLINE1, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE1"));
+	FlexGridSizer5->Add(StaticLine1, 1, wxLEFT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticLine2 = new wxStaticLine(this, ID_STATICLINE2, wxDefaultPosition, wxSize(10,-1), wxLI_HORIZONTAL, _T("ID_STATICLINE2"));
+	FlexGridSizer5->Add(StaticLine2, 1, wxRIGHT|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText8 = new wxStaticText(this, ID_STATICTEXT8, _("Max X:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT8"));
+	FlexGridSizer5->Add(StaticText8, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tMaxX = new wxTextCtrl(this, ID_tMaxX, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaxX"));
+	FlexGridSizer5->Add(tMaxX, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText9 = new wxStaticText(this, ID_STATICTEXT9, _("Max Y:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT9"));
+	FlexGridSizer5->Add(StaticText9, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tMaxY = new wxTextCtrl(this, ID_tMaxY, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaxY"));
+	FlexGridSizer5->Add(tMaxY, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticText10 = new wxStaticText(this, ID_STATICTEXT10, _("Max Z:"), wxDefaultPosition, wxDefaultSize, 0, _T("ID_STATICTEXT10"));
+	FlexGridSizer5->Add(StaticText10, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	tMaxZ = new wxTextCtrl(this, ID_tMaxZ, _("0"), wxDefaultPosition, wxDefaultSize, wxTE_CENTRE, wxDefaultValidator, _T("ID_tMaxZ"));
+	FlexGridSizer5->Add(tMaxZ, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	StaticBoxSizer3->Add(FlexGridSizer5, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer6->Add(StaticBoxSizer3, 1, wxALL|wxEXPAND|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer2->Add(FlexGridSizer6, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer1->Add(FlexGridSizer2, 1, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	BoxSizer1 = new wxBoxSizer(wxHORIZONTAL);
+	bLoad = new wxButton(this, ID_bLoad, _("Load"), wxDefaultPosition, wxDefaultSize, 0, wxDefaultValidator, _T("ID_bLoad"));
+	BoxSizer1->Add(bLoad, 1, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	FlexGridSizer1->Add(BoxSizer1, 1, wxBOTTOM|wxLEFT|wxRIGHT|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
+	SetSizer(FlexGridSizer1);
+	FlexGridSizer1->Fit(this);
+	FlexGridSizer1->SetSizeHints(this);
+
+	Connect(ID_bSelect,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&LoadDialog::On_bSelect_Click);
+	Connect(ID_bLoad,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&LoadDialog::On_bLoad_Click);
 	//*)
+	panel = root;
 }
 
 LoadDialog::~LoadDialog()
 {
 	//(*Destroy(LoadDialog)
 	//*)
+}
+
+
+void LoadDialog::On_bSelect_Click(wxCommandEvent& event)
+{
+	std::string filename = panel->GetRoot()->SelectBuilding();
+
+	tFilename->SetValue(wxString::FromAscii(filename.c_str()));
+}
+
+void LoadDialog::On_bLoad_Click(wxCommandEvent& event)
+{
+	Ogre::Vector3 position;
+	position.x = atof(tPosX->GetValue().ToAscii());
+	position.y = atof(tPosY->GetValue().ToAscii());
+	position.z = atof(tPosZ->GetValue().ToAscii());
+
+	float rotation = atof(tRotation->GetValue().ToAscii());
+
+	Ogre::Vector3 min, max;
+	min.x = atof(tMinX->GetValue().ToAscii());
+	min.y = atof(tMinY->GetValue().ToAscii());
+	min.z = atof(tMinZ->GetValue().ToAscii());
+	max.x = atof(tMaxX->GetValue().ToAscii());
+	max.y = atof(tMaxY->GetValue().ToAscii());
+	max.z = atof(tMaxZ->GetValue().ToAscii());
+
+	std::string filename;
+	filename = tFilename->GetValue().ToAscii();
+
+	panel->GetRoot()->Load(filename, panel->GetRoot()->GetActiveEngine(), position, rotation, min, max);
+
+	this->Close();
+}
+
 }
 

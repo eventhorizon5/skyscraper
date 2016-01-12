@@ -1648,20 +1648,12 @@ bool Skyscraper::Load(const std::string &filename, EngineContext *parent, const 
 	//clear screen
 	mRenderWindow->update();
 
-	//move instance to an offset for testing
-	Ogre::Vector3 offset = Ogre::Vector3::ZERO;
-	if (GetEngineCount() > 0 && position == Ogre::Vector3::ZERO)
-	{
-		float offsetval = GetEngineCount() * 300;
-		offset = Ogre::Vector3(offsetval, 0, offsetval);
-	}
-
 	//set parent to master engine, if not set
 	if (parent == 0 && GetEngineCount() >= 1)
 		parent = GetFirstValidEngine();
 
 	//Create simulator instance
-	EngineContext* engine = CreateEngine(parent, position + offset, rotation, area_min, area_max);
+	EngineContext* engine = CreateEngine(parent, position, rotation, area_min, area_max);
 
 	if (!active_engine)
 		active_engine = engine;

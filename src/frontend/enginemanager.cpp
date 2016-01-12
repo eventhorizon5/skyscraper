@@ -271,10 +271,8 @@ void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
 
 void EngineManager::On_bLoad_Click(wxCommandEvent& event)
 {
-	//panel->GetRoot()->Load(panel->GetRoot()->SelectBuilding());
-
 	if (!loader)
-		loader = new LoadDialog(this, -1);
+		loader = new LoadDialog(panel, this, -1);
 
 	loader->CenterOnScreen();
 	loader->Show();
