@@ -967,7 +967,8 @@ void Skyscraper::GetInput(EngineContext *engine)
 		//load a new additional building
 		if (wxGetKeyState((wxKeyCode)';') && wait == false)
 		{
-			loaddialog = new LoadDialog(dpanel, window, -1);
+			if (!loaddialog)
+				loaddialog = new LoadDialog(dpanel, window, -1);
 			loaddialog->CenterOnScreen();
 			loaddialog->Show();
 			wait = true;
