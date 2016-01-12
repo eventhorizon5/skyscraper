@@ -400,17 +400,11 @@ void ObjectInfo::On_bModify_Click(wxCommandEvent& event)
 
 void ObjectInfo::On_bSave_Click(wxCommandEvent& event)
 {
-	wxFileDialog *Selector = new wxFileDialog(0, _("Save Building Script"), _("buildings/"), _(""), _("Building files (*.bld *.txt)|*.bld;*.txt"), wxFD_SAVE);
-	int result = Selector->ShowModal();
+	wxFileDialog Selector (0, _("Save Building Script"), _("buildings/"), _(""), _("Building files (*.bld *.txt)|*.bld;*.txt"), wxFD_SAVE);
+	int result = Selector.ShowModal();
 	if (result == wxID_CANCEL)
-	{
-		//delete dialog
-		delete Selector;
-		Selector = 0;
-		//quit
 		return;
-	}
-	wxString filename = wxT("buildings/") + Selector->GetFilename();
+	wxString filename = wxT("buildings/") + Selector.GetFilename();
 }
 
 void ObjectInfo::On_bViewScript_Click(wxCommandEvent& event)

@@ -280,17 +280,11 @@ bool ParameterViewer::Setup()
 
 			tDesc->SetLabel(newlabel);
 
-			wxFileDialog *Selector = new wxFileDialog(0, _("Select a Texture"), _("data/"), _(""), _("Image files (*.jpg *.png *.gif *.tga)|*.jpg;*.png;*.gif;*.tga"), wxFD_OPEN);
-			int result = Selector->ShowModal();
+			wxFileDialog Selector (0, _("Select a Texture"), _("data/"), _(""), _("Image files (*.jpg *.png *.gif *.tga)|*.jpg;*.png;*.gif;*.tga"), wxFD_OPEN);
+			int result = Selector.ShowModal();
 			if (result == wxID_CANCEL)
-			{
-				//delete dialog
-				delete Selector;
-				Selector = 0;
-				//quit
 				return false;
-			}
-			wxString filename = wxT("data/") + Selector->GetFilename();
+			wxString filename = wxT("data/") + Selector.GetFilename();
 
 			l1->SetLabel(wxT("Filename:"));
 			t1->SetValue(filename);

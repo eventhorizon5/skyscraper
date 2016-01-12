@@ -1184,11 +1184,8 @@ int ScriptProcessor::ScriptError(std::string message, bool warning)
 	//show error dialog
 	if (warning == false)
 	{
-		wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
-		dialog->ShowModal();
-
-		delete dialog;
-		dialog = 0;
+		wxMessageDialog dialog (0, wxString::FromAscii(error.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+		dialog.ShowModal();
 	}
 	return sError;
 }

@@ -1062,9 +1062,8 @@ bool Skyscraper::ReportFatalError(const std::string &message)
 void Skyscraper::ShowError(const std::string &message)
 {
 	//show error dialog
-	wxMessageDialog *dialog = new wxMessageDialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
-	dialog->ShowModal();
-	delete dialog;
+	wxMessageDialog dialog(0, wxString::FromAscii(message.c_str()), wxString::FromAscii("Skyscraper"), wxOK | wxICON_ERROR);
+	dialog.ShowModal();
 }
 
 void Skyscraper::Loop()
@@ -1621,20 +1620,16 @@ std::string Skyscraper::SelectBuilding()
 	srand (time (0));
 
 	//set building file
-	//wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
-	wxFileDialog *Selector = new wxFileDialog(0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
-	if (Selector->ShowModal() == wxID_OK)
+	//wxFileDialog Selector (0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld;*.txt)|*.bld;*.txt"), wxFD_OPEN);
+	wxFileDialog Selector (0, _("Select a Building"), _("buildings/"), _(""), _("Building files (*.bld)|*.bld"), wxFD_OPEN);
+	if (Selector.ShowModal() == wxID_OK)
 	{
 		#if defined(wxUSE_UNICODE) && wxUSE_UNICODE
-		filename = Selector->GetFilename().mb_str().data();
+		filename = Selector.GetFilename().mb_str().data();
 		#else
-		filename = Selector->GetFilename();
+		filename = Selector.GetFilename();
 		#endif
 	}
-
-	//delete dialog
-	Selector->Destroy();
-	Selector = 0;
 
 	return filename;
 }
