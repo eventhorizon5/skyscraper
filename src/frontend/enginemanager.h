@@ -36,6 +36,8 @@
 #include <wx/listbox.h>
 //*)
 
+#include "loaddialog.h"
+
 namespace Skyscraper {
 
 class EngineManager: public wxDialog
@@ -107,6 +109,7 @@ class EngineManager: public wxDialog
 
 		EngineContext *engine;
 		DebugPanel *panel;
+		LoadDialog *loader;
 		int lastcount;
 
 		DECLARE_EVENT_TABLE()

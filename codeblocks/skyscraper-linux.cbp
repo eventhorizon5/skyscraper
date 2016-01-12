@@ -198,6 +198,7 @@
 					<wxDialog wxs="wxsmith/SkyControl.wxs" src="../src/frontend/skycontrol.cpp" hdr="../src/frontend/skycontrol.h" fwddecl="0" i18n="1" name="SkyControl" language="CPP" />
 					<wxDialog wxs="wxsmith/EngineManager.wxs" src="../src/frontend/enginemanager.cpp" hdr="../src/frontend/enginemanager.h" fwddecl="0" i18n="1" name="EngineManager" language="CPP" />
 					<wxDialog wxs="wxsmith/PeopleManager.wxs" src="../src/frontend/peoplemanager.cpp" hdr="../src/frontend/peoplemanager.h" fwddecl="0" i18n="1" name="PeopleManager" language="CPP" />
+					<wxDialog wxs="wxsmith/LoadDialog.wxs" src="../src/frontend/loaddialog.cpp" hdr="../src/frontend/loaddialog.h" fwddecl="0" i18n="1" name="LoadDialog" language="CPP" />
 				</resources>
 			</wxsmith>
 			<envvars />

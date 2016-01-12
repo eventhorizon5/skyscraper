@@ -1,7 +1,7 @@
 /* $Id$ */
 
 /*
-	Skyscraper 1.10 Alpha - People Manager Dialog
+	Skyscraper 1.10 Alpha - Engine Manager Dialog
 	Copyright (C)2003-2016 Ryan Thoryk
 	http://www.skyscrapersim.com
 	http://sourceforge.net/projects/skyscraper
@@ -158,6 +158,7 @@ EngineManager::EngineManager(DebugPanel* parent,wxWindowID id,const wxPoint& pos
 	Connect(ID_bOk,wxEVT_COMMAND_BUTTON_CLICKED,(wxObjectEventFunction)&EngineManager::On_bOk_Click);
 	//*)
 	panel = parent;
+	loader = 0;
 	OnInit();
 }
 
@@ -165,6 +166,10 @@ EngineManager::~EngineManager()
 {
 	//(*Destroy(EngineManager)
 	//*)
+
+	if (loader)
+		loader->Destroy();
+	loader = 0;
 }
 
 void EngineManager::OnInit()
@@ -266,7 +271,13 @@ void EngineManager::On_bSetActive_Click(wxCommandEvent& event)
 
 void EngineManager::On_bLoad_Click(wxCommandEvent& event)
 {
-	panel->GetRoot()->Load(panel->GetRoot()->SelectBuilding());
+	//panel->GetRoot()->Load(panel->GetRoot()->SelectBuilding());
+
+	if (!loader)
+		loader = new LoadDialog(this, -1);
+
+	loader->CenterOnScreen();
+	loader->Show();
 }
 
 void EngineManager::On_bReload_Click(wxCommandEvent& event)
