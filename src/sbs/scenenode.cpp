@@ -272,7 +272,6 @@ void SceneNode::SetScale(float scale)
 	if (!node)
 		return;
 
-	scale = sbs->ToRemote(scale);
 	node->setScale(Ogre::Vector3(scale, scale, scale));
 }
 

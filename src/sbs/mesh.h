@@ -109,7 +109,7 @@ public:
 	void DeleteCollider();
 	float HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &direction, float max_distance);
 	bool InBoundingBox(const Ogre::Vector3 &pos, bool check_y);
-	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents);
+	void GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents);
 	void CreateColliderFromModel(int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices);
 	void CreateBoxCollider();
 	void DeleteWalls();

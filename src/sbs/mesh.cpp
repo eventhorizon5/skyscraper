@@ -653,9 +653,12 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	//Movable->setCastShadows(true);
 	GetSceneNode()->AttachObject(Movable);
 
-	//rescale if a loaded model
-	if (filename != "")
+	//rescale mesh
+	//file-loaded meshes need to be converted to a remote scale, since they're not pre-scaled
+	if (filename == "")
 		GetSceneNode()->SetScale(scale_multiplier);
+	else
+		GetSceneNode()->SetScale(sbs->ToRemote(scale_multiplier));
 
 	//set maximum render distance
 	if (max_render_distance > 0)
@@ -673,7 +676,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 			Ogre::Vector3* vertices;
 			long unsigned int* indices;
 			Ogre::AxisAlignedBox box;
-			GetMeshInformation(collidermesh.getPointer(), vertex_count, vertices, index_count, indices, sbs->ToRemote(scale_multiplier), box);
+			GetMeshInformation(collidermesh.getPointer(), vertex_count, vertices, index_count, indices, box);
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
 			delete[] indices;
@@ -1603,16 +1606,30 @@ void MeshObject::CreateCollider()
 		//initialize collider shape
 		OgreBulletCollisions::TriangleMeshCollisionShape* shape = new OgreBulletCollisions::TriangleMeshCollisionShape((int)MeshGeometry.size(), tricount * 3);
 
+		float scale = GetSceneNode()->GetScale();
+
 		//add vertices to shape
 		for (int i = 0; i < (int)Submeshes.size(); i++)
 		{
 			for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 			{
-				TriangleType tri(0, 0, 0);
+				TriangleType tri;
 				tri.a = Triangles[i].triangles[j].a;
 				tri.b = Triangles[i].triangles[j].b;
 				tri.c = Triangles[i].triangles[j].c;
-				shape->AddTriangle(MeshGeometry[tri.a].vertex, MeshGeometry[tri.b].vertex, MeshGeometry[tri.c].vertex);
+
+				Ogre::Vector3 a = MeshGeometry[tri.a].vertex;
+				Ogre::Vector3 b = MeshGeometry[tri.b].vertex;
+				Ogre::Vector3 c = MeshGeometry[tri.c].vertex;
+
+				if (scale != 1.0f)
+				{
+					a *= scale;
+					b *= scale;
+					c *= scale;
+				}
+
+				shape->AddTriangle(a, b, c);
 			}
 		}
 
@@ -1786,7 +1803,7 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 	return false;
 }
 
-void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, float scale_multiplier, Ogre::AxisAlignedBox &extents)
+void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_count, Ogre::Vector3* &vertices, int &index_count, unsigned long* &indices, Ogre::AxisAlignedBox &extents)
 {
 	//read hardware buffers from a loaded model mesh, and return geometry arrays
 
@@ -1861,7 +1878,7 @@ void MeshObject::GetMeshInformation(const Ogre::Mesh* const mesh, int &vertex_co
 				posElem->baseVertexPointerToElement(vertex, &pReal);
 				Ogre::Vector3 pt(pReal[0], pReal[1], pReal[2]);
 				//vertices[current_offset + j] = (orient * (pt * scale)) + position;
-				vertices[current_offset + j] = pt * scale_multiplier;
+				vertices[current_offset + j] = pt * sbs->ToRemote(GetSceneNode()->GetScale());
 				extents.merge(vertices[current_offset + j]);
 			}
 

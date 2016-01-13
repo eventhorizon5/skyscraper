@@ -8904,7 +8904,8 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	else if (name == "buildings")
 		return Simcore->Buildings;
 
-	return Simcore->GetMeshByName(name);
+	return 0;
+	//return Simcore->GetMeshByName(name);
 }
 
 }
