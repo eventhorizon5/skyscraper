@@ -8891,6 +8891,10 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 
 	if (name == "floor" && Section == 2)
 		return Simcore->GetFloor(Current)->Level;
+	else if (name == "interfloor" && Section == 2)
+		return Simcore->GetFloor(Current)->Interfloor;
+	else if (name == "columnframe" && Section == 2)
+		return Simcore->GetFloor(Current)->ColumnFrame;
 	else if (name == "elevator" && Section == 4)
 		return Simcore->GetElevator(Current)->ElevatorMesh;
 	else if (name == "external")
