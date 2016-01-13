@@ -1298,8 +1298,8 @@ void Skyscraper::DrawImage(const std::string &filename, buttondata *button, floa
 			pass->setTextureFiltering(Ogre::TFO_NONE);
 
 			//rescale texture
-			state->setTextureScale((float)w2 / (float)w_orig, (float)h2 / (float)h_orig);
-			state->setTextureScroll(-(float(w2 - w_orig) / (float)w2) / 2.0f, -(float(h2 - h_orig) / (float)h2) / 2.0f);
+			state->setTextureScale((Ogre::Real)w2 / (Ogre::Real)w_orig, (Ogre::Real)h2 / (Ogre::Real)h_orig);
+			state->setTextureScroll(-(Ogre::Real(w2 - w_orig) / (Ogre::Real)w2) / 2.0f, -(Ogre::Real(h2 - h_orig) / (Ogre::Real)h2) / 2.0f);
 
 			if (tex->hasAlpha() == true && button)
 			{
