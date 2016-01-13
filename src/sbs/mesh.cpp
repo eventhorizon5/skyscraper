@@ -531,6 +531,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	no_collider = false;
 	MeshGeometry.reserve(128); //reserve vertex space
 	collider_node = 0;
+	Filename = filename;
 
 	//use box collider if physics should be enabled
 	if (is_physical == true)
@@ -940,6 +941,10 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
+	//exit if this mesh is a loaded file
+	if (Filename != "")
+		return sbs->ReportError("PolyMesh: Cannot create geometry in a file-loaded mesh");
+
 	//get texture material
 	std::string texname = texture;
 	bool result;
@@ -961,7 +966,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 
 	//get texture mapping coordinates
 	if (!sbs->GetTextureMapping(vertices2[0], v1, v2, v3, direction))
-		return false;
+		return sbs->ReportError("PolyMesh: Texture mapping error");
 
 	if (tw == 0)
 		tw = 1;

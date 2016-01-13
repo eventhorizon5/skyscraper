@@ -139,6 +139,8 @@ public:
 	OgreBulletDynamics::RigidBody* mBody;
 	OgreBulletCollisions::CollisionShape* mShape;
 
+	std::string Filename; //filename, if a loaded model
+
 private:
 	bool enabled;
 	bool is_physical;
