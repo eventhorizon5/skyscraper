@@ -144,15 +144,12 @@ void Model::Loop()
 {
 	//runloop, called by parent to allow for switching parents
 
-	//exit if global object
-	if (global == true)
-		return;
-
 	Floor *floor = GetParent()->ConvertTo<Floor>();
 	Elevator *elevator = GetParent()->ConvertTo<Elevator>();
+	::SBS::SBS *root = GetParent()->ConvertTo<SBS>();
 
-	//if model is a child of a floor, and is in an elevator, switch parent to elevator
-	if (floor)
+	//if model is a child of a floor or a global object, and is in an elevator, switch parent to elevator
+	if (floor || root)
 	{
 		for (int i = 1; i <= sbs->GetElevatorCount(); i++)
 		{
@@ -171,17 +168,31 @@ void Model::Loop()
 		}
 	}
 
-	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor
+	//if model is a child of an elevator, and is moved outside to a floor, switch parent to floor (or make it global)
 	else if (elevator)
 	{
-		int floornum = sbs->GetFloorNumber(GetPosition().y);
-		Floor *floor = sbs->GetFloor(floornum);
-
-		if (elevator->IsInElevator(mesh->GetPosition()) == false && floor)
+		if (elevator->IsInElevator(mesh->GetPosition()) == false)
 		{
-			RemoveFromParent();
-			ChangeParent(floor);
-			AddToParent();
+			if (global == false)
+			{
+				//switch parent back to floor object
+				int floornum = sbs->GetFloorNumber(GetPosition().y);
+				Floor *floor = sbs->GetFloor(floornum);
+
+				if (floor)
+				{
+					RemoveFromParent();
+					ChangeParent(floor);
+					AddToParent();
+				}
+			}
+			else
+			{
+				//switch parent back to engine root
+				RemoveFromParent();
+				ChangeParent(sbs);
+				AddToParent();
+			}
 		}
 	}
 }

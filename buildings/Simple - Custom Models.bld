@@ -462,15 +462,15 @@ AddAction FireServiceBypass, Elevator1, Fire1Bypass
     AddActionControl FireSwitch, switch.wav, front, 3, 6 - 4.125 - 0.33 - 0.1, 0.25, 0.25, 3.5, FireServiceOff, FireServiceBypass, FireServiceOn, Fire1Off, Fire1Bypass, Fire1On
 <EndFloor>
 
-#Create custom models, and place them on top of each other
+#Create global custom models, and place them on top of each other
 AddModel Model1, , false, 0, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 AddModel Model2, , false, 0, 5, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 AddModel Model3, , false, 0, 10, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 AddModel Model4, , false, 0, 15, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 
-#Create a separate one
-AddModel Model5, , false, -20, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 2
-
+#Create separate ones
+AddModel Model5, , false, 20, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 2
+AddModel Model6, , false, -20, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
 
 #Create a box inside Model 1
 
@@ -497,6 +497,10 @@ CreateWallBox2 Model4, My Box, Button2, 0, 0, 5, 5, 5, 0, 0, 0, false, true, tru
 TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
 CreateWallBox2 Model5, My Box, Button2, 0, 0, 10, 10, 10, 0, 0, 0, false, true, true, true
 
+#Create a box inside Model 6, and make it small enough so that it can be transported in the elevator
+
+TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
+CreateWallBox2 Model6, My Box, Button2, 0, 0, 2, 2, 2, 0, 2, 2, false, true, true, true
 
 #Create a small model on Floor 0, which can be transported in the elevator
 <Floor 0>
