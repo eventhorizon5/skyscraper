@@ -40,6 +40,7 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 	is_key = false;
 	KeyID = 0;
 	global = IsGlobal();
+	this->center = center;
 
 	load_error = false;
 	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
@@ -49,15 +50,9 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 		return;
 	}
 
-	if (center == true)
-		Offset = mesh->GetOffset();
-
 	//move to position and specified offset
 	Move(position);
 	SetRotation(rotation);
-
-	//move mesh object to specified offset
-	mesh->Move(Offset);
 }
 
 Model::~Model()
@@ -243,6 +238,17 @@ void Model::Drop()
 bool Model::IsPickedUp()
 {
 	return (GetParent() == sbs->camera);
+}
+
+void Model::OnInit()
+{
+	if (center == true)
+	{
+		Offset = mesh->GetOffset();
+
+		//move mesh object to specified offset
+		mesh->Move(Offset);
+	}
 }
 
 }
