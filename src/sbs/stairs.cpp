@@ -986,4 +986,25 @@ void Stairs::Loop()
 	}
 }
 
+Model* Stairs::GetModel(int floor, std::string name)
+{
+	//get a model by name
+
+	//exit if floor is invalid
+	if (!IsValidFloor(floor))
+		return 0;
+
+	SetCase(name, false);
+
+	int index = floor - startfloor;
+
+	for (int i = 0; i < (int)ModelArray[index].size(); i++)
+	{
+		if (SetCaseCopy(ModelArray[index][i]->GetName(), false) == name)
+			return ModelArray[index][i];
+	}
+
+	return 0;
+}
+
 }

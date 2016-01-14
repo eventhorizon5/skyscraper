@@ -80,6 +80,7 @@ public:
 	bool IsShowFloor(int floor);
 	void Check(Ogre::Vector3 position, int current_floor, int previous_floor);
 	void Loop();
+	Model* GetModel(int floor, std::string name);
 
 private:
 	std::vector<MeshObject*> StairArray; //stairwell array

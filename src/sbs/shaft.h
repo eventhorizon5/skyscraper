@@ -93,6 +93,7 @@ public:
 	void RemoveDoor(Door *door);
 	void Check(Ogre::Vector3 position, int current_floor);
 	void Loop();
+	Model* GetModel(int floor, std::string name);
 
 private:
 	std::vector<MeshObject*> ShaftArray; //shaft mesh array

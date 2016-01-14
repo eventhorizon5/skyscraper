@@ -4517,7 +4517,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		CheckFile("data/" + tempdata[2]);
 
 		//create model
 		if (Simcore->GetStairs(ToInt(tempdata[0])))
@@ -4578,7 +4578,7 @@ int ScriptProcessor::ProcFloors()
 		}
 
 		//check to see if file exists
-		CheckFile("data/" + tempdata[1]);
+		CheckFile("data/" + tempdata[2]);
 
 		//create model
 		if (Simcore->GetShaft(ToInt(tempdata[0])))
@@ -8940,7 +8940,18 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	{
 		if (Section == 2)
 		{
-			std::string num = name.substr(5);
+			//get a shaft mesh object, or a model in a shaft
+
+			std::string num, modelname;
+			int marker = (int)name.find(":");
+			if (marker > 0)
+				modelname = name.substr(marker + 1);
+
+			if (marker > 0)
+				num = name.substr(5, (int)name.length() - marker - 5 - 1);
+			else
+				num = name.substr(5);
+
 			TrimString(num);
 			int number;
 			if (!IsNumeric(num, number))
@@ -8950,7 +8961,15 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 			if (!shaft)
 				return 0;
 
-			return shaft->GetMeshObject(Current);
+			if (marker > 0)
+			{
+				Model *model = shaft->GetModel(Current, modelname);
+				if (model)
+					return model->GetMeshObject();
+				return 0;
+			}
+			else
+				return shaft->GetMeshObject(Current);
 		}
 		return 0;
 	}
@@ -8958,7 +8977,18 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	{
 		if (Section == 2)
 		{
-			std::string num = name.substr(9);
+			//get a stairwell mesh object, or a model in a stairwell
+
+			std::string num, modelname;
+			int marker = (int)name.find(":");
+			if (marker > 0)
+				modelname = name.substr(marker + 1);
+
+			if (marker > 0)
+				num = name.substr(9, (int)name.length() - marker - 5 - 1);
+			else
+				num = name.substr(9);
+
 			TrimString(num);
 			int number;
 			if (!IsNumeric(num, number))
@@ -8968,7 +8998,15 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 			if (!stairs)
 				return 0;
 
-			return stairs->GetMeshObject(Current);
+			if (marker > 0)
+			{
+				Model *model = stairs->GetModel(Current, modelname);
+				if (model)
+					return model->GetMeshObject();
+				return 0;
+			}
+			else
+				return stairs->GetMeshObject(Current);
 		}
 		return 0;
 	}

@@ -2522,16 +2522,18 @@ script.<br>
 <br>In this section, <em>Destobject</em> refers to the destination object
 to create other objects in, which can be:<br>
 <em>Floor</em> (only available within a Floor section)</em>,<br>
-<em>Interfloor</em> (only available within a Floor section),<br>
-<em>ColumnFrame</em> (only available within a Floor section),<br>
-<em>Shaft [number]</em> (only available within a Floor section),<br>
-<em>Stairwell [number]</em> (only available within a Floor section), <br>
-<em>Elevator</em> (only available within an Elevator section),<br>
+<em>Interfloor</em> (Floor section only),<br>
+<em>ColumnFrame</em> (Floor section only),<br>
+<em>Shaft [number]</em> (Floor section only),<br>
+<em>Stairwell [number]</em> (Floor section only), <br>
+<em>Elevator</em> (Elevator section only),<br>
 <em>External</em>,<br>
 <em>Landscape</em>,<br>
-<em>Buildings</em>, or<br>
-<em>(custom model name)</em><br>
-When a command is used inside a <em>Floor</em> section, the Y values specified in these commands will be offsets (relative) of the floor's base, except for <em>interfloor</em> and <em>columnframe</em> names, which use the floor's altitude instead, and custom model names, which are relative of the model's position.
+<em>Buildings</em>,<br>
+<em>(custom model name)</em>,<br>
+<em>Shaft [number]:[model name]</em> (Floor section only), or<br>
+<em>Stairwell [number]:[model name]</em> (Floor section only)<br>
+When a command is used inside a <em>Floor</em> section, the Y values specified in these commands will be offsets (relative) of the floor's base, except for <em>interfloor</em> and <em>columnframe</em> names, which use the floor's altitude instead, and custom model names, which are relative of the model's position.  A stairwell or shaft can be specified as "Shaft 1", and a custom model, such as one named "Test", can either be specified directly as "Test", or as part of a Shaft or Stairwell object, as "Shaft 1:Test".
 
 <p align="left"><br>
 <strong>a. AddTriangleWall</strong> - adds a textured triangular wall.
