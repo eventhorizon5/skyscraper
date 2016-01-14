@@ -128,6 +128,7 @@ private:
 	std::vector<Object*> children; //object's children
 	SceneNode *node; //node in scene graph
 	bool values_set;
+	bool initialized;
 };
 
 }

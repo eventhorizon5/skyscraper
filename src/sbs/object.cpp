@@ -65,6 +65,7 @@ Object::Object(Object *parent, bool temporary) : ObjectBase(parent)
 	parent_deleting = false;
 	node = 0;
 	values_set = false;
+	initialized = false;
 
 	//register object with engine
 	if (temporary == false)
@@ -460,7 +461,11 @@ void Object::Init()
 	//initialize object
 
 	//call custom object initialization code
-	OnInit();
+	if (initialized == false)
+	{
+		OnInit();
+		initialized = true;
+	}
 
 	//initialize children
 	InitChildren();

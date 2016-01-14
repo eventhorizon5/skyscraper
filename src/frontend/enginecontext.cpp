@@ -141,6 +141,7 @@ bool EngineContext::Run()
 		{
 			Simcore->Prepare(false);
 			Simcore->DeleteColliders = false;
+			Simcore->Init(); //initialize any new objects
 		}
 	}
 	else

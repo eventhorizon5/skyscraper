@@ -2672,6 +2672,7 @@ int ScriptProcessor::ProcCommands()
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
+		setkey = false;
 
 		StoreCommand(model);
 		return sNextLine;
@@ -4482,6 +4483,7 @@ int ScriptProcessor::ProcFloors()
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
+		setkey = false;
 
 		StoreCommand(model);
 		return sNextLine;
@@ -4539,6 +4541,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (setkey == true && model)
 				model->SetKey(keyvalue);
+			setkey = false;
 
 			StoreCommand(model);
 		}
@@ -4598,6 +4601,7 @@ int ScriptProcessor::ProcFloors()
 
 			if (setkey == true && model)
 				model->SetKey(keyvalue);
+			setkey = false;
 
 			StoreCommand(model);
 		}
@@ -7201,6 +7205,7 @@ int ScriptProcessor::ProcElevators()
 
 		if (setkey == true && model)
 			model->SetKey(keyvalue);
+		setkey = false;
 
 		StoreCommand(model);
 		return sNextLine;
