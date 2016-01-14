@@ -1700,6 +1700,43 @@ int ScriptProcessor::ProcCommands()
 		return sNextLine;
 	}
 
+	//AddCustomWall2 command
+	if (linecheck.substr(0, 15) == "addcustomwall2 ")
+	{
+		//get data
+		int params = SplitData(LineData, 15);
+
+		//check numeric values
+		for (int i = 3; i < params; i++)
+		{
+			if (!IsNumeric(tempdata[i]))
+				return ScriptError("Invalid value: " + tempdata[i]);
+		}
+
+		MeshObject *mesh = GetMeshObject(tempdata[0]);
+
+		if (!mesh)
+			return ScriptError("Invalid object");
+
+		float voffset = 0;
+
+		if (Section == 2)
+		{
+			if (tempdata[0] == "floor")
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+		}
+
+		std::vector<Ogre::Vector3> varray;
+		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
+			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) + voffset, ToFloat(tempdata[temp3 + 2])));
+
+		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
+
+		return sNextLine;
+	}
+
 	//AddCustomFloor command
 	if (linecheck.substr(0, 15) == "addcustomfloor ")
 	{

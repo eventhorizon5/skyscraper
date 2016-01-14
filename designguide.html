@@ -2605,14 +2605,24 @@ false</font></p>
 <em>widthx</em> and <em>lengthz</em> specify the width and length off of the
 center.<br>
 <br>
-<strong>g. AddCustomWall</strong> - creates a custom polygon (wall, floor, etc)
+<strong>g1. AddCustomWall</strong> - creates a custom polygon (wall, floor, etc)
 with any number of vertex points. For example, a triangular wall has 3 vertex
 points, and a standard wall has 4. This function allows at least 3 vertices.
-The polygon will be two-sided if the DrawWalls command's MainNegative and MainPositive parameters are true.<br>
+The polygon will be two-sided if the DrawWalls command's MainNegative and MainPositive parameters are true.
+The Y values in this command are always absolute (not relative of a floor in a floor section), for compatibility.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddCustomWall
 <em>destobject, name, texturename, x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw,
 th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddCustomWall
+external, My Wall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
+0</font></p>
+
+<p align="left"><strong>g2. AddCustomWall2</strong>
+- this command is the same as AddCustomWall, but if specified in a Floor section, the Y values are relative of the floor's base.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddCustomWall2
+<em>destobject, name, texturename, x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw,
+th</em></font><br>
+Example: <font face="Courier New, Courier, mono" size="2">AddCustomWall2
 external, My Wall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
 0</font></p>
 
