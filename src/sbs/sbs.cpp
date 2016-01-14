@@ -4472,17 +4472,18 @@ Ogre::Quaternion SBS::FromGlobal(const Ogre::Quaternion &orientation)
 	return (GetOrientation().Inverse() * orientation);
 }
 
-MeshObject* SBS::GetMeshByName(std::string name)
+Model* SBS::GetModel(std::string name)
 {
-	//get a mesh object, by name
+	//get a model by name
 
 	SetCase(name, false);
 
-	for (int i = 0; i < (int)meshes.size(); i++)
+	for (int i = 0; i < (int)ModelArray.size(); i++)
 	{
-		if (name == SetCaseCopy(meshes[i]->GetName(), false))
-			return meshes[i];
+		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
+			return ModelArray[i];
 	}
+
 	return 0;
 }
 

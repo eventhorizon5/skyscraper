@@ -6053,4 +6053,19 @@ bool Elevator::IsOnFloor(int floor)
 	return false;
 }
 
+Model* Elevator::GetModel(std::string name)
+{
+	//get a model by name
+
+	SetCase(name, false);
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
+			return ModelArray[i];
+	}
+
+	return 0;
+}
+
 }

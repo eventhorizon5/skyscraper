@@ -1549,4 +1549,19 @@ std::vector<int> Floor::GetDirectFloors(bool include_service)
 	return result;
 }
 
+Model* Floor::GetModel(std::string name)
+{
+	//get a model by name
+
+	SetCase(name, false);
+
+	for (int i = 0; i < (int)ModelArray.size(); i++)
+	{
+		if (SetCaseCopy(ModelArray[i]->GetName(), false) == name)
+			return ModelArray[i];
+	}
+
+	return 0;
+}
+
 }

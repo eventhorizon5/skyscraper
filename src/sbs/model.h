@@ -46,6 +46,7 @@ public:
 	void PickUp();
 	void Drop();
 	bool IsPickedUp();
+	MeshObject* GetMeshObject() { return mesh; }
 
 private:
 	void RemoveFromParent();

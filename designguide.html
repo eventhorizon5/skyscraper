@@ -1277,10 +1277,10 @@ the elevator section below - see that for more information) except that it's
 used for finishing a shaft door.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>26.
-AddModel</strong> - adds a 3D model to the floor. The model's
+AddModel</strong> - adds a 3D model to the floor. If a filename is specified, the model's
 textures/materials must be defined in a separate ".material" file, and a
-separate collider mesh ".collider" will be loaded. If a collider mesh isn't
-available, a simple box collider will be created.<br>
+separate collider mesh ".collider" will be loaded. In that situation, if a collider mesh isn't
+available, a simple box collider will be created.  If a filename is not specified, this command will create a new empty model, where it's name can be used as the <em>destobject</em> parameter in other commands (in the related Floor section), and a collider will be automatically created.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em> name,
 filename, center, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
 MaxRenderDistance, ScaleMultiplier, EnablePhysics, Restitution, Friction,
@@ -1298,7 +1298,7 @@ exact mesh positioning in the model file will be used. The <em>CenterY</em>
 value is relative to the current floor's base. <em>MaxRenderDistance</em>
 determines the maximum distance in feet that the object will be shown (0 means
 unlimited). <em>ScaleMultiplier</em> allows you to change the size of the
-object during the load - for example, set to 2 to double the size. Models are
+object during the load - for example, set to 2 to double the size. Model files are
 in the OGRE native mesh format. In the example, the material/texture file is
 cube.material, and the optional collider mesh file is cube.collider.
 <em>EnablePhysics</em> enables Bullet physics on the object (physics will only
@@ -2442,10 +2442,10 @@ CenterX</em>, <em>CenterZ</em>, <em>width</em>, <em>height</em>,
 the parameters. <em>CenterX</em> and <em>CenterZ</em> are relative of the
 elevator's center.</p>
 
-<p align="left"><strong>20. AddModel</strong> - adds a 3D model to the floor.
-The model's textures/materials must be defined in a separate ".material" file,
-and a separate collider mesh ".collider" will be loaded. If a collider mesh
-isn't available, a simple box collider will be created.<br>
+<p align="left"><strong>20. AddModel</strong> - adds a 3D model to the elevator.
+If a filename is specified, the model's textures/materials must be defined in a separate ".material" file,
+and a separate collider mesh ".collider" will be loaded. In that situation, if a collider mesh
+isn't available, a simple box collider will be created.  If a filename is not specified, this command will create a new empty model, where it's name can be used as the <em>destobject</em> parameter in other commands (in the related Elevator section), and a collider will be automatically created.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em> name,
 filename, center, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
 MaxRenderDistance, ScaleMultiplier, EnablePhysics, Restitution, Friction,

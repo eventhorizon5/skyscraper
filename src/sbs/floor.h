@@ -131,6 +131,7 @@ public:
 	void GetShaftList(std::vector<int> &listing);
 	ElevatorRoute* GetDirectRoute(int DestinationFloor, std::string ElevatorType);
 	std::vector<int> GetDirectFloors(bool include_service);
+	Model* GetModel(std::string name);
 
 private:
 	//sound objects

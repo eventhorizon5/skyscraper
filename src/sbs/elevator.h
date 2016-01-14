@@ -338,6 +338,7 @@ public:
 	void CancelHallCall(int floor, int direction);
 	bool IsManuallyStopped();
 	bool IsOnFloor(int floor);
+	Model* GetModel(std::string name);
 
 private:
 

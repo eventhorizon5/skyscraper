@@ -1414,12 +1414,12 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			if (buffer == "floor")
+			if (tempdata[0] == "floor")
 			{
 				voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
 				voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
 			}
-			else
+			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 			{
 				voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 				voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
@@ -1633,7 +1633,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			if (tempdata[0] == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
-			else
+			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 		}
 		else
@@ -1676,7 +1676,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			if (tempdata[0] == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
-			else
+			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 		}
 		else
@@ -1748,7 +1748,7 @@ int ScriptProcessor::ProcCommands()
 		{
 			if (tempdata[0] == "floor")
 				altitude += Simcore->GetFloor(Current)->GetBase(true);
-			else
+			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 				altitude += Simcore->GetFloor(Current)->GetBase();
 		}
 		else
@@ -8889,14 +8889,31 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 
 	SetCase(name, false);
 
-	if (name == "floor" && Section == 2)
-		return Simcore->GetFloor(Current)->Level;
-	else if (name == "interfloor" && Section == 2)
-		return Simcore->GetFloor(Current)->Interfloor;
-	else if (name == "columnframe" && Section == 2)
-		return Simcore->GetFloor(Current)->ColumnFrame;
-	else if (name == "elevator" && Section == 4)
-		return Simcore->GetElevator(Current)->ElevatorMesh;
+	//get a system mesh object
+	if (name == "floor")
+	{
+		if (Section == 2)
+			return Simcore->GetFloor(Current)->Level;
+		return 0;
+	}
+	else if (name == "interfloor")
+	{
+		if (Section == 2)
+			return Simcore->GetFloor(Current)->Interfloor;
+		return 0;
+	}
+	else if (name == "columnframe")
+	{
+		if (Section == 2)
+			return Simcore->GetFloor(Current)->ColumnFrame;
+		return 0;
+	}
+	else if (name == "elevator")
+	{
+		if (Section == 4)
+			return Simcore->GetElevator(Current)->ElevatorMesh;
+		return 0;
+	}
 	else if (name == "external")
 		return Simcore->External;
 	else if (name == "landscape")
@@ -8904,8 +8921,20 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 	else if (name == "buildings")
 		return Simcore->Buildings;
 
+	//get a custom model mesh
+
+	Model* model = 0;
+
+	if (Section == 2)
+		model = Simcore->GetFloor(Current)->GetModel(name);
+	else if (Section == 4)
+		model = Simcore->GetElevator(Current)->GetModel(name);
+	else
+		model = Simcore->GetModel(name);
+
+	if (model)
+		return model->GetMeshObject();
 	return 0;
-	//return Simcore->GetMeshByName(name);
 }
 
 }

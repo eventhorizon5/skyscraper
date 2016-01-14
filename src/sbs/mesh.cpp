@@ -1729,11 +1729,16 @@ void MeshObject::CreateBoxCollider()
 	{
 		//initialize collider shape
 		float scale = GetSceneNode()->GetScale();
-		Ogre::Vector3 bounds = MeshWrapper->getBounds().getHalfSize() * scale;
+
+		Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+		if (box.isNull() == true)
+			return;
+
+		Ogre::Vector3 bounds = box.getHalfSize() * scale;
 		OgreBulletCollisions::BoxCollisionShape* shape = new OgreBulletCollisions::BoxCollisionShape(bounds);
 
 		//create a new scene node for this collider, and center the collider accordingly
-		Ogre::Vector3 collider_center = sbs->ToLocal(MeshWrapper->getBounds().getCenter());
+		Ogre::Vector3 collider_center = sbs->ToLocal(box.getCenter());
 		if (!collider_node)
 			collider_node = GetSceneNode()->CreateChild(GetName() + " collider", collider_center);
 
@@ -1787,8 +1792,12 @@ bool MeshObject::InBoundingBox(const Ogre::Vector3 &pos, bool check_y)
 
 	Ogre::Vector3 position = sbs->ToRemote(pos - GetPosition());
 
-	Ogre::Vector3 min = MeshWrapper->getBounds().getMinimum();
-	Ogre::Vector3 max = MeshWrapper->getBounds().getMaximum();
+	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+	if (box.isNull() == true)
+		return false;
+
+	Ogre::Vector3 min = box.getMinimum();
+	Ogre::Vector3 max = box.getMaximum();
 
 	if (position.x >= min.x && position.x <= max.x && position.z >= min.z && position.z <= max.z)
 	{
@@ -2087,6 +2096,10 @@ bool MeshObject::IsVisible(Ogre::Camera *camera)
 
 	//generate a globally-positioned axis-aligned box
 	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
+
+	if (box.isNull() == true)
+		return false;
+
 	Ogre::Vector3 min = box.getMinimum();
 	Ogre::Vector3 max = box.getMaximum();
 	Ogre::Vector3 pos = sbs->ToRemote(GetPosition());
@@ -2106,6 +2119,10 @@ Ogre::Vector3 MeshObject::GetOffset()
 
 	Ogre::AxisAlignedBox box = MeshWrapper->getBounds();
 	box.scale(GetSceneNode()->GetRawSceneNode()->getScale());
+
+	if (box.isNull() == true)
+		return Ogre::Vector3::ZERO;
+
 	Ogre::Vector3 vec = box.getCenter();
 	Ogre::Vector3 min = box.getMinimum();
 	Ogre::Vector3 offset (vec.x, -box.getMinimum().y, -vec.z);
