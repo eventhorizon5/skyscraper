@@ -819,7 +819,7 @@ texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
 <em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis, texture_direction,
 tw</em>, <em>th, isexternal</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddFloor My Floor,
-brick, 0.5, -10, -10, 10, 10, 0, 0, False, False, 0, 0, False</font></p>
+Brick, 0.5, -10, -10, 10, 10, 0, 0, False, False, 0, 0, False</font></p>
 
 <p align="left"><em>Voffset1</em> and <em>voffset2</em> are the height in feet
 above the current floor's base; <em>tw</em> and <em>th</em> are to
@@ -842,7 +842,7 @@ texturename</em>, <em>thickness, x1</em>, <em>z1</em>, <em>x2</em>,
 <em>z2</em>, <em>height1</em>, <em>height2</em>, <em>voffset1</em>,
 <em>voffset2</em>, <em>tw</em>, <em>th</em>, <em>isexternal</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddWall My Wall,
-brick, 0.5, -10, -10, 10, 10, 10, 10, 0, 0, 0, 0, False</font></p>
+Brick, 0.5, -10, -10, 10, 10, 10, 10, 0, 0, 0, 0, False</font></p>
 
 <p align="left"><em>Height1</em> is the wall height in feet at the first
 coordinate set (x1 and z1), and <em>height2</em> is for the second set (x2, and
@@ -859,7 +859,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddInterfloorFloor
 <em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis, texture_direction,
 tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddInterfloorFloor My
-IFloor, brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
+IFloor, Brick, 0.5, -10, -10, 10, 10, 0, 0, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, except the
 <em>voffset</em> values are the height offset in feet above the current floor's
@@ -882,7 +882,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddShaftFloor
 <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis,
 texture_direction, tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddShaftFloor 1, My
-Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, false, 0, 0</font></p>
+Floor, Brick, 0.5, -10, -10, 10, 10, 0, 0, false, false, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, and the
 <em>number</em> value is the shaft number to use. The <em>x1</em>, <em>z1</em>,
@@ -908,7 +908,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddStairsFloor
 <em>x2</em>, <em>z2</em>, <em>voffset1</em>, <em>voffset2, reverse_axis,
 texture_direction, tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddStairsFloor 1, My
-Floor, brick, 0.5, -10, -10, 10, 10, 0, 0, false, false, 0, 0</font></p>
+Floor, Brick, 0.5, -10, -10, 10, 10, 0, 0, false, false, 0, 0</font></p>
 
 <p align="left">The parameters are the same as the AddFloor command, and the
 <em>number</em> value is the stairwell number to use</p>
@@ -933,7 +933,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">ColumnWallBox
 <em>height</em>, <em>voffset</em>, <em>tw</em>, <em>th, inside, outside, top,
 bottom </em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ColumnWallBox My Box,
-brick, -10, 10, -10, 10, 15, 0, 0, 0, true, true, true, true</font></p>
+Brick, -10, 10, -10, 10, 15, 0, 0, 0, true, true, true, true</font></p>
 
 <p align="left">For parameter information, see the CreateWallBox command above.
 In this command, the default voffset is the floor's altitude.</p>
@@ -946,7 +946,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">ColumnWallBox2
 <em>widthx</em>, <em>lengthz</em>, <em>height</em>, <em>voffset</em>,
 <em>tw</em>, <em>th</em><em>, inside, outside, top, bottom </em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">ColumnWallBox2 My
-Box, brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false, false</font></p>
+Box, Brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false, false</font></p>
 
 <p align="left">For parameter information, see the CreateWallBox2 command
 above. In this command, the default voffset is the floor's altitude.</p>
@@ -2545,7 +2545,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddTriangleWall
 <em>x2</em>, <em>y2</em>, <em>z2</em>, <em>x3</em>, <em>y3</em>, <em>z3</em>,
 <em>tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddTrianglewall
-external, My Triangle, brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0</font></p>
+external, My Triangle, Brick, 0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0</font></p>
 
 <p align="left"><strong>b. AddWall</strong> - adds a textured wall<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddWall
@@ -2553,7 +2553,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddWall
 <em>x2</em>, z2, <em>height1</em>, <em>height2</em>, <em>altitude1</em>,
 <em>altitude2</em>, <em>tw</em>, <em>th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddWall buildings,
-Wall1, brick, 0.5, -10, -10, 10, 10, 15, 15, Floor(2).Altitude,
+Wall1, Brick, 0.5, -10, -10, 10, 10, 15, 15, Floor(2).Altitude,
 Floor(2).Altitude, 0, 0</font></p>
 
 <p align="left">The command's parameters are the same as the Floor section's
@@ -2592,7 +2592,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">CreateWallBox
 <em>z1</em>, <em>z2</em>, <em>height</em>, <em>voffset</em>, <em>tw</em>,
 <em>th, inside, outside, top, bottom </em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">CreateWallBox
-external, My Box, brick, -10, 10, -10, 10, 15, 0, 0, 0, true, true, true,
+external, My Box, Brick, -10, 10, -10, 10, 15, 0, 0, 0, true, true, true,
 true</font></p>
 
 <p align="left">The parameters in this command are very similar to the ones in
@@ -2611,7 +2611,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">CreateWallBox2
 face="Courier New, Courier, mono" size="2"><em>, inside, outside, top, bottom
 </em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">CreateWallBox2
-external, My Box, brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false,
+external, My Box, Brick, 0, 0, 10, 10, 15, 0, 0, 0, false, true, false,
 false</font></p>
 
 <p align="left">The parameters are the same as the above command, except that
@@ -2629,10 +2629,10 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddCustomWall
 <em>destobject, name, texturename[, RelativeY], x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw,
 th</em></font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">AddCustomWall
-external, My Wall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0, 10, 0, 0, 0,
+external, My Wall, Brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0, 10, 0, 0, 0,
 0</font><br>
 Example 2: <font face="Courier New, Courier, mono" size="2">AddCustomWall
-external, My Wall, brick, true, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0, 10, 0, 0, 0,
+external, My Wall, Brick, true, 0, 0, 0, 0, 10, 0, 10, 10, 0, 15, 5, 0, 10, 0, 0, 0,
 0</font></p>
 
 <p align="left"><strong>h. AddCustomFloor</strong> - the same as AddCustomWall,
@@ -2642,7 +2642,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddCustomFloor
 <em>destobject, name, texturename, x1, z1, x2, z2, x3, z3, ..., altitude, tw,
 th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddCustomFloor
-external, My Wall, brick, 0, 0, 0, 10, 10, 10, 10, 0, 0, 0, 0</font></p>
+external, My Wall, Brick, 0, 0, 0, 10, 10, 10, 10, 0, 0, 0, 0</font></p>
 
 <p align="left"><strong>i. AddShaft</strong> - creates a shaft at a specified
 location and floor range<br>
@@ -3262,7 +3262,7 @@ Syntax: <font face="Courier New, Courier, mono" size="2">AddPolygon
 <em>destobject, wallname, texturename, x1, y1, z1, x2, y2, z2, x3, y3, z3, ..., tw,
 th</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">AddPolygon
-landscape, mywall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
+landscape, mywall, Brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
 0</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
