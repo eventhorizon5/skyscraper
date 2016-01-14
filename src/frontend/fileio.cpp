@@ -1674,40 +1674,22 @@ int ScriptProcessor::ProcCommands()
 		//get data
 		int params = SplitData(LineData, 14);
 
-		//check numeric values
-		for (int i = 3; i < params; i++)
+		if (params < 14)
+			return ScriptError("Incorrect number of parameters");
+
+		bool relative_option = false, relative = false;
+		if (IsNumeric(tempdata[3]) == false)
 		{
-			if (!IsNumeric(tempdata[i]))
-				return ScriptError("Invalid value: " + tempdata[i]);
+			relative_option = true;
+			relative = ToBool(tempdata[3]);
 		}
 
-		float altitude_shift = 0;
-
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
-
-		if (!mesh)
-			return ScriptError("Invalid object");
-
-		if (tempdata[0] == "floor" && Section == 2)
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
-
-		std::vector<Ogre::Vector3> varray;
-		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) - altitude_shift, ToFloat(tempdata[temp3 + 2])));
-
-		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
-
-		return sNextLine;
-	}
-
-	//AddCustomWall2 command
-	if (linecheck.substr(0, 15) == "addcustomwall2 ")
-	{
-		//get data
-		int params = SplitData(LineData, 15);
-
 		//check numeric values
-		for (int i = 3; i < params; i++)
+		int start = 3;
+		if (relative_option == true)
+			start = 4;
+
+		for (int i = start; i < params; i++)
 		{
 			if (!IsNumeric(tempdata[i]))
 				return ScriptError("Invalid value: " + tempdata[i]);
@@ -1722,14 +1704,22 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			if (tempdata[0] == "floor")
-				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
-			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
-				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+			if (relative == true)
+			{
+				if (tempdata[0] == "floor")
+					voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+				else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+					voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+			}
+			else if (relative_option == false)
+			{
+				if (tempdata[0] == "floor" && Section == 2)
+					voffset -= mesh->GetPosition().y; //subtract altitude for new positioning model
+			}
 		}
 
 		std::vector<Ogre::Vector3> varray;
-		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
+		for (temp3 = start; temp3 < params - 2; temp3 += 3)
 			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) + voffset, ToFloat(tempdata[temp3 + 2])));
 
 		StoreCommand(Simcore->AddCustomWall(mesh, tempdata[1], tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1])));
