@@ -4957,6 +4957,7 @@ int ScriptProcessor::ProcFloors()
 				Context = "None";
 				RangeL = 0;
 				RangeH = 0;
+				engine->Report("Finished floors");
 				return sNextLine;
 			}
 		}
@@ -4974,6 +4975,7 @@ int ScriptProcessor::ProcFloors()
 				Context = "None";
 				RangeL = 0;
 				RangeH = 0;
+				engine->Report("Finished floors");
 				return sNextLine;
 			}
 		}
@@ -7309,6 +7311,7 @@ int ScriptProcessor::ProcElevators()
 			Context = "None";
 			RangeL = 0;
 			RangeH = 0;
+			engine->Report("Finished elevators");
 			return sNextLine;
 		}
 	}
