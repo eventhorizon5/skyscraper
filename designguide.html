@@ -2518,14 +2518,20 @@ no sound to be played.</p>
 id="GlobalCommands"></a>8. Global Commands/Functions</font></strong></p>
 
 <p align="left">These commands and functions can be used anywhere in the
-script. In this section, <em>Destobject</em> refers to the destination object
-to create other objects in. It can be either <em>floor</em> (only available
-within a Floor section)</em>, <em>interfloor</em> (only available within a Floor section), <em>columnframe</em> (only available within a Floor section), <em>elevator</em> (only available within an Elevator
-section), <em>external</em>, <em>landscape</em>, or <em>buildings</em>.
-When the command is used inside a <em>Floor</em> section, and
-<em>Destobject</em> is not <em>floor</em>, the altitude of the current floor
-will be used, and altitude/y values specified in these commands will be offsets
-(relative) of that altitude.</p>
+script.<br>
+<br>In this section, <em>Destobject</em> refers to the destination object
+to create other objects in, which can be:<br>
+<em>Floor</em> (only available within a Floor section)</em>,<br>
+<em>Interfloor</em> (only available within a Floor section),<br>
+<em>ColumnFrame</em> (only available within a Floor section),<br>
+<em>Shaft [number]</em> (only available within a Floor section),<br>
+<em>Stairwell [number]</em> (only available within a Floor section), <br>
+<em>Elevator</em> (only available within an Elevator section),<br>
+<em>External</em>,<br>
+<em>Landscape</em>,<br>
+<em>Buildings</em>, or<br>
+<em>(custom model name)</em><br>
+When a command is used inside a <em>Floor</em> section, the Y values specified in these commands will be offsets (relative) of the floor's base, except for <em>interfloor</em> and <em>columnframe</em> names, which use the floor's altitude instead, and custom model names, which are relative of the model's position.
 
 <p align="left"><br>
 <strong>a. AddTriangleWall</strong> - adds a textured triangular wall.
@@ -2887,7 +2893,7 @@ Example: <font face="Courier New, Courier, mono" size="2">isect(external,
 wall1, 10, 10, 0, -10, 10, 0)</font></p>
 
 <p align="left"><em>Destobject</em> is the destination object to get the object
-from (floor, external, landscape, or buildings). <em>Startx</em>,
+from (see the top of this section for more info). <em>Startx</em>,
 <em>starty</em>, and <em>startz</em> make up the position of the starting
 position, and <em>endx</em>, <em>endy</em> and <em>endz</em> make up the ending
 position. The first intersection of the named object is the return value, in
@@ -3098,7 +3104,7 @@ Example: <font face="Courier New, Courier, mono" size="2">Set 2 =
 %minz%</font></p>
 
 <p align="left"><em>Destobject</em> is the destination object to get the object
-from (floor, external, landscape, or buildings). <em>Wallname </em>specifies
+from (see the top of this section for more info). <em>Wallname </em>specifies
 the name of the wall to get the extents from. Generally this should be in the
 form of "name:side", but if you leave out the "side" parameter, it'll choose
 one of the sides from a pre-defined search list. Sides of walls made from any

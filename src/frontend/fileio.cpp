@@ -8936,6 +8936,42 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 		return Simcore->Landscape;
 	else if (name == "buildings")
 		return Simcore->Buildings;
+	else if (name.substr(0, 5) == "shaft")
+	{
+		if (Section == 2)
+		{
+			std::string num = name.substr(5);
+			TrimString(num);
+			int number;
+			if (!IsNumeric(num, number))
+				return 0;
+
+			Shaft *shaft = Simcore->GetShaft(number);
+			if (!shaft)
+				return 0;
+
+			return shaft->GetMeshObject(Current);
+		}
+		return 0;
+	}
+	else if (name.substr(0, 9) == "stairwell")
+	{
+		if (Section == 2)
+		{
+			std::string num = name.substr(9);
+			TrimString(num);
+			int number;
+			if (!IsNumeric(num, number))
+				return 0;
+
+			Stairs *stairs = Simcore->GetStairs(number);
+			if (!stairs)
+				return 0;
+
+			return stairs->GetMeshObject(Current);
+		}
+		return 0;
+	}
 
 	//get a custom model mesh
 
