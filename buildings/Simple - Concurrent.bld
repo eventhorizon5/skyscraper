@@ -16,9 +16,9 @@
 #This code loads 3 additional Simple buildings, each at a different location
 <Buildings>
     ConcurrentLoads = true #this tells all the buildings to load simultaneously
-    Load Simple.bld, 200, 0, 200, -100, 0, -100, 100, 0, 100
-    Load Simple.bld, 400, 50, 400, -100, 0, -100, 100, 0, 100
-    Load Simple.bld, -200, 0, -200, -100, 0, -100, 100, 0, 100
+    Load Simple.bld, 200, 0, 200, 0, -100, 0, -100, 100, 0, 100
+    Load Simple.bld, 400, 50, 400, 0, -100, 0, -100, 100, 0, 100
+    Load Simple.bld, -200, 0, -200, 180, -100, 0, -100, 100, 0, 100
 <EndBuildings>
 
 #Then the thing you'll need to do when creating a building is define the global parameters.
