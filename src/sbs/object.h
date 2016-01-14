@@ -101,7 +101,7 @@ public:
 	virtual void ResetState() {} //resets the internal state of an object
 	void ChangeParent(Object *new_parent);
 	bool IsGlobal();
-	void Init(); //pre-runloop (first-run) object initialization
+	void Init(bool children = true); //pre-runloop (first-run) object initialization
 	virtual void OnInit() {} //called when object is initialized
 	virtual void Loop() {} //object runloop
 

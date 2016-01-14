@@ -456,7 +456,7 @@ bool Object::IsGlobal()
 	return (Parent->GetNumber() == 0);
 }
 
-void Object::Init()
+void Object::Init(bool children)
 {
 	//initialize object
 
@@ -468,7 +468,8 @@ void Object::Init()
 	}
 
 	//initialize children
-	InitChildren();
+	if (children == true)
+		InitChildren();
 }
 
 void Object::InitChildren()
