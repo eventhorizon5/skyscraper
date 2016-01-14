@@ -1399,7 +1399,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
@@ -1410,14 +1412,14 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			if (tempdata[0] == "floor")
+			if (meshname == "floor")
 			{
 				float base = Simcore->GetFloor(Current)->GetBase(true);
 				voffset1 += base;
 				voffset2 += base;
 				voffset3 += base;
 			}
-			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 			{
 				float base = Simcore->GetFloor(Current)->GetBase();
 				voffset1 += base;
@@ -1612,7 +1614,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
@@ -1621,9 +1625,9 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			if (tempdata[0] == "floor")
+			if (meshname == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
-			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 		}
 
@@ -1648,7 +1652,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
@@ -1657,9 +1663,9 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			if (tempdata[0] == "floor")
+			if (meshname == "floor")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
-			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 		}
 
@@ -1695,7 +1701,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
@@ -1706,14 +1714,14 @@ int ScriptProcessor::ProcCommands()
 		{
 			if (relative == true)
 			{
-				if (tempdata[0] == "floor")
+				if (meshname == "floor")
 					voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
-				else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+				else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 					voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 			}
 			else if (relative_option == false)
 			{
-				if (tempdata[0] == "floor" && Section == 2)
+				if (meshname == "floor" && Section == 2)
 					voffset -= mesh->GetPosition().y; //subtract altitude for new positioning model
 			}
 		}
@@ -1740,7 +1748,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
@@ -1749,9 +1759,9 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			if (tempdata[0] == "floor")
+			if (meshname == "floor")
 				altitude += Simcore->GetFloor(Current)->GetBase(true);
-			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 				altitude += Simcore->GetFloor(Current)->GetBase();
 		}
 
@@ -1777,7 +1787,9 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
 
 		if (!mesh)
 			return ScriptError("Invalid mesh object");
@@ -1791,9 +1803,9 @@ int ScriptProcessor::ProcCommands()
 
 		if (Section == 2)
 		{
-			if (tempdata[0] == "floor")
+			if (meshname == "floor")
 				voffset += Simcore->GetFloor(Current)->GetBase(true);
-			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+			else if (meshname == "external" || meshname == "landscape" || meshname == "buildings")
 				voffset += Simcore->GetFloor(Current)->GetBase();
 		}
 
@@ -2445,12 +2457,14 @@ int ScriptProcessor::ProcCommands()
 
 		float offset = 0;
 
-		MeshObject *mesh = GetMeshObject(tempdata[0]);
+		std::string meshname = SetCaseCopy(tempdata[0], false);
+
+		MeshObject *mesh = GetMeshObject(meshname);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
 
-		if (tempdata[0] == "floor" && Section == 2)
+		if (meshname == "floor" && Section == 2)
 			offset = mesh->GetPosition().y;
 
 		float alt = ToFloat(tempdata[2]);
