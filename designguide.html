@@ -2456,7 +2456,7 @@ MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font></p>
 <p align="left">The <em>Center</em> value is either true or false, and
 determines if the loaded model should be automatically centered, otherwise the
 exact mesh positioning in the model file will be used. The <em>CenterY</em>
-value is relative to the current floor's base. <em>MaxRenderDistance</em>
+value is relative to the current elevator's base. <em>MaxRenderDistance</em>
 determines the maximum distance in feet that the object will be shown (0 means
 unlimited). <em>ScaleMultiplier</em> allows you to change the size of the
 object during the load - for example, set to 2 to double the size. Models are
@@ -3196,6 +3196,36 @@ consecutive action when the users enters/leaves. The <em>X</em>, <em>Y</em> and
 the <em>sound</em> field blank for no sound to be played.</p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"><strong>am.
+AddModel</strong> - adds a global 3D model. If a filename is specified, the model's
+textures/materials must be defined in a separate ".material" file, and a
+separate collider mesh ".collider" will be loaded. In that situation, if a collider mesh isn't
+available, a simple box collider will be created.  If a filename is not specified, this command will create a new empty model, where it's name can be used as the <em>destobject</em> parameter in other commands, and a collider will be automatically created.<br>
+Syntax: <font face="Courier New, Courier, mono" size="2">AddModel<em> name,
+filename, center, CenterX, CenterY, CenterZ, RotationX, RotationY, RotationZ,
+MaxRenderDistance, ScaleMultiplier, EnablePhysics, Restitution, Friction,
+Mass</em><em><br>
+</em></font>Example:<font face="Courier New, Courier, mono" size="2"> AddModel
+MyModel, cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, false, 0, 0, 0</font><br>
+Example:<font face="Courier New, Courier, mono" size="2"> AddModel MyModel,
+cube.mesh, true, 0, 0, 0, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1</font></p>
+
+<p></p>
+
+<p align="left">The <em>Center</em> value is either true or false, and
+determines if the loaded model should be automatically centered, otherwise the
+exact mesh positioning in the model file will be used.
+<em>MaxRenderDistance</em>
+determines the maximum distance in feet that the object will be shown (0 means
+unlimited). <em>ScaleMultiplier</em> allows you to change the size of the
+object during the load - for example, set to 2 to double the size. Model files are
+in the OGRE native mesh format. In the example, the material/texture file is
+cube.material, and the optional collider mesh file is cube.collider.
+<em>EnablePhysics</em> enables Bullet physics on the object (physics will only
+work if you don't provide a collider mesh), and <em>Restitution</em>,
+<em>Friction</em> and <em>Mass</em> determine the physical properties of the
+object.</p>
+
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an.
 CreateWallObject</strong> - creates a custom wall object, in the specified mesh object.
 Wall objects are used to contain a number of polygons, to represent a wall structure, and are normally automatically created by other commands.
 The AddPolygon command is used with this command, to create the polygons.<br>
@@ -3203,7 +3233,7 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> CreateWallObject
 <em>destobject, name</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">CreateWallObject landscape, mywall</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>an. AddPolygon</strong> - this is the same as the AddCustomWall command,
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao. AddPolygon</strong> - this is the same as the AddCustomWall command,
 but adds the custom polygon to an existing (usually custom) wall object, instead of creating a new one.
 The example below adds the polygon to the Landscape mesh object, to the custom-created "mywall" Wall Object,
 which was created with the CreateWallObject command.  The polygon will be two-sided if the DrawWalls command's MainNegative and MainPositive parameters are true.<br>
@@ -3214,7 +3244,7 @@ Example: <font face="Courier New, Courier, mono" size="2">AddPolygon
 landscape, mywall, brick, 0, 0, 0, 0, 10, 0, 10, 10, 0, 10, 0, 10, 0,
 0</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ao.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
 SetKey</strong> - specifies that the next created model will be a key. The
 model will be tagged with a specific key ID number, and when clicked, the key
 ID will be added to the user's keyring and the model will be deleted. The value
@@ -3223,7 +3253,7 @@ Syntax:<font face="Courier New, Courier, mono" size="2"> SetKey
 <em>keyid</em></font><br>
 Example: <font face="Courier New, Courier, mono" size="2">SetKey 1</font></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ap.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
 SetLock</strong> - sets the lock and key parameters for subsequent doors,
 controls/buttons, and call buttons that are created.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> SetLock
@@ -3248,7 +3278,7 @@ If <em>keyid</em> is 0, no key is needed to lock or unlock. To reset to the
 defaults, use 0 for the <em>locked</em> setting and 0 for <em>keyid</em>.<br>
 </p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aq.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
 Print</strong> - prints the contents of a line to the console. This command
 will still convert variables and even math expressions, and output the
 results.<br>
@@ -3258,7 +3288,7 @@ Example: <font face="Courier New, Courier, mono" size="2">Print 1+1</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ar.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>as.
 Delete</strong> - deletes an object. This command is normally used after a
 building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Delete
@@ -3267,7 +3297,7 @@ Example: <font face="Courier New, Courier, mono" size="2">Delete 12</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>as.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>at.
 RunAction</strong> - runs an action by name. This command is normally used
 after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">RunAction
@@ -3277,7 +3307,7 @@ myaction</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>at.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>au.
 AddActionParent</strong> - adds a parent object to an existing action. See the
 AddAction command for details on parent objects<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">AddActionParent
@@ -3289,7 +3319,7 @@ myaction, Floors 2 to 5</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>au.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>av.
 RemoveActionParent</strong> - removes a parent object from an existing action.
 See the AddAction command for details on parent objects. This command is
 normally used after a building has loaded.<br>
@@ -3302,7 +3332,7 @@ myaction, Floors 2 to 5</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>av.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>aw.
 GotoFloor</strong> - jumps the user to the specified floor. This command is
 normally used after a building has loaded.<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">GotoFloor
@@ -3311,7 +3341,7 @@ Example: <font face="Courier New, Courier, mono" size="2">GotoFloor 3</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p align="left"><strong>aw. EndPoint</strong> - the EndPoint function
+<p align="left"><strong>ax. EndPoint</strong> - the EndPoint function
 calculates endpoint coordinates given a starting point, direction (angle in
 degrees), and distance.<br>
 Syntax:<font face="Courier New, Courier, mono" size="2"> endpoint(<em>startx,
@@ -3322,7 +3352,7 @@ Result: <font face="Courier New, Courier, mono" size="2">-150, 130</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ax.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ay.
 FloorInfo</strong> - show information on all floors or optionally a specified floor<br>
 Syntax: <font face="Courier New, Courier, mono" size="2">FloorInfo
 <em>[number]</em></font><br>
@@ -3330,22 +3360,22 @@ Example: <font face="Courier New, Courier, mono" size="2">FloorInfo 3</font></p>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ay.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>az.
 ListTextures</strong> - list the loaded texture names (materials) and filenames<br>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>az.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ba.
 ListVisibleMeshes</strong> - list the mesh objects currently visible by the camera<br>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>ba.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bb.
 ShowLoadedSounds</strong> - show the sounds currently loaded in the sound system, and the number of associated sound objects for each one<br>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
 
-<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bb.
+<p style="text-align:left;margin-left:0;margin-right:auto;"><strong>bc.
 ShowPlayingSounds</strong> - show the sounds currently playing in the sound system, with each filename followed by a listing of playing sound objects<br>
 
 <p style="text-align:left;margin-left:0;margin-right:auto;"></p>
