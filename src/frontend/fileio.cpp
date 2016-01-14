@@ -1399,40 +1399,35 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		float altitude_shift = 0;
-
 		MeshObject *mesh = GetMeshObject(tempdata[0]);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
 
-		if (tempdata[0] == "floor" && Section == 2)
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
-
 		float voffset1 = ToFloat(tempdata[4]);
 		float voffset2 = ToFloat(tempdata[7]);
+		float voffset3 = ToFloat(tempdata[10]);
 
 		if (Section == 2)
 		{
 			if (tempdata[0] == "floor")
 			{
-				voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
-				voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase(true));
+				float base = Simcore->GetFloor(Current)->GetBase(true);
+				voffset1 += base;
+				voffset2 += base;
+				voffset3 += base;
 			}
 			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 			{
-				voffset1 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
-				voffset2 += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
+				float base = Simcore->GetFloor(Current)->GetBase();
+				voffset1 += base;
+				voffset2 += base;
+				voffset3 += base;
 			}
-		}
-		else
-		{
-			voffset1 -= altitude_shift;
-			voffset2 -= altitude_shift;
 		}
 
 		//create triangle wall
-		StoreCommand(Simcore->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
+		StoreCommand(Simcore->AddTriangleWall(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), voffset1, ToFloat(tempdata[5]), ToFloat(tempdata[6]), voffset2, ToFloat(tempdata[8]), ToFloat(tempdata[9]), voffset3, ToFloat(tempdata[11]), ToFloat(tempdata[12]), ToFloat(tempdata[13])));
 
 		return sNextLine;
 	}
@@ -1617,15 +1612,10 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		float altitude_shift = 0;
-
 		MeshObject *mesh = GetMeshObject(tempdata[0]);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
-
-		if (tempdata[0] == "floor" && Section == 2)
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 
 		float voffset = ToFloat(tempdata[8]);
 
@@ -1636,8 +1626,6 @@ int ScriptProcessor::ProcCommands()
 			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 		}
-		else
-			voffset -= altitude_shift;
 
 		StoreCommand(Simcore->CreateWallBox2(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
@@ -1660,15 +1648,10 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		float altitude_shift = 0;
-
 		MeshObject *mesh = GetMeshObject(tempdata[0]);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
-
-		if (tempdata[0] == "floor" && Section == 2)
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 
 		float voffset = ToFloat(tempdata[8]);
 
@@ -1679,8 +1662,6 @@ int ScriptProcessor::ProcCommands()
 			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 				voffset += Ogre::Real(Simcore->GetFloor(Current)->GetBase());
 		}
-		else
-			voffset -= altitude_shift;
 
 		StoreCommand(Simcore->CreateWallBox(mesh, tempdata[1], tempdata[2], ToFloat(tempdata[3]), ToFloat(tempdata[4]), ToFloat(tempdata[5]), ToFloat(tempdata[6]), ToFloat(tempdata[7]), voffset, ToFloat(tempdata[9]), ToFloat(tempdata[10]), ToBool(tempdata[11]), ToBool(tempdata[12]), ToBool(tempdata[13]), ToBool(tempdata[14])));
 
@@ -1732,15 +1713,10 @@ int ScriptProcessor::ProcCommands()
 				return ScriptError("Invalid value: " + tempdata[i]);
 		}
 
-		float altitude_shift = 0;
-
 		MeshObject *mesh = GetMeshObject(tempdata[0]);
 
 		if (!mesh)
 			return ScriptError("Invalid object");
-
-		if (tempdata[0] == "floor" && Section == 2)
-			altitude_shift = mesh->GetPosition().y; //subtract altitude for new positioning model
 
 		float altitude = ToFloat(tempdata[params - 3]);
 
@@ -1751,8 +1727,6 @@ int ScriptProcessor::ProcCommands()
 			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
 				altitude += Simcore->GetFloor(Current)->GetBase();
 		}
-		else
-			altitude -= altitude_shift;
 
 		std::vector<Ogre::Vector2> varray;
 		for (temp3 = 3; temp3 < params - 3; temp3 += 2)
