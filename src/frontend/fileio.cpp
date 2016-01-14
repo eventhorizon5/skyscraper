@@ -1760,9 +1760,19 @@ int ScriptProcessor::ProcCommands()
 		if (!wall)
 			return ScriptError("Invalid wall object");
 
+		float voffset = 0.0f;
+
+		if (Section == 2)
+		{
+			if (tempdata[0] == "floor")
+				voffset += Simcore->GetFloor(Current)->GetBase(true);
+			else if (tempdata[0] == "external" || tempdata[0] == "landscape" || tempdata[0] == "buildings")
+				voffset += Simcore->GetFloor(Current)->GetBase();
+		}
+
 		std::vector<Ogre::Vector3> varray;
 		for (temp3 = 3; temp3 < params - 2; temp3 += 3)
-			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]), ToFloat(tempdata[temp3 + 2])));
+			varray.push_back(Ogre::Vector3(ToFloat(tempdata[temp3]), ToFloat(tempdata[temp3 + 1]) + voffset, ToFloat(tempdata[temp3 + 2])));
 
 		Simcore->AddPolygon(wall, tempdata[2], varray, ToFloat(tempdata[params - 2]), ToFloat(tempdata[params - 1]));
 
