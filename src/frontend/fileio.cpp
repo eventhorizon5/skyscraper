@@ -932,22 +932,6 @@ bool ScriptProcessor::LoadFromText(const std::string &text)
 
 	//feed each line of text into the script array
 
-	//allocate needed space
-	int needed_size = BuildingData.size() + textarray.size();
-	if (BuildingData.capacity() < needed_size)
-	{
-		if (needed_size < (BuildingData.capacity() * 2))
-		{
-			BuildingData.reserve(BuildingData.capacity() * 2);
-			BuildingDataOrig.reserve(BuildingDataOrig.capacity() * 2);
-		}
-		else
-		{
-			BuildingData.reserve(needed_size);
-			BuildingDataOrig.reserve(needed_size);
-		}
-	}
-
 	for (int i = 0; i < (int)textarray.size(); i++)
 	{
 		//append data to building array

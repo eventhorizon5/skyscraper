@@ -118,6 +118,12 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 
 	std::vector<Ogre::Vector3> temppoly, temppoly2, temppoly3, temppoly4, temppoly5, worker;
 
+	temppoly.reserve(32);
+	temppoly2.reserve(32);
+	temppoly3.reserve(32);
+	temppoly4.reserve(32);
+	temppoly5.reserve(32);
+
 	bool polycheck = false;
 
 	if (reset_check == true)
@@ -167,8 +173,6 @@ void SBS::Cut(WallObject *wall, Ogre::Vector3 start, Ogre::Vector3 end, bool cut
 			bool polycheck2 = false;
 
 			//copy source polygon vertices
-			if (temppoly.capacity() < origpolys[j].size())
-				temppoly.reserve(origpolys[j].size());
 			for (int k = 0; k < (int)origpolys[j].size(); k++)
 				temppoly.push_back(origpolys[j][k]);
 
