@@ -856,14 +856,11 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 
 	Ogre::DataStreamPtr file(new Ogre::MemoryDataStream(Filename, filedata, true, true));
 
+	std::vector<std::string> insert_data;
+	insert_data.reserve(512);
+
 	while (file->eof() == false)
 	{
-		if (BuildingData.capacity() <= BuildingData.size() + 1)
-		{
-			BuildingData.reserve(BuildingData.capacity() * 2);
-			BuildingDataOrig.reserve(BuildingDataOrig.capacity() * 2);
-		}
-
 		//push next line of data onto the tail end of the BuildingData array
 		std::string line = file->getLine(true);
 		if (insert == false)
@@ -874,14 +871,17 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 		}
 		else
 		{
-			//otherwise insert data into building array
-			BuildingData.insert(BuildingData.begin() + location, line);
-			location++;
+			//otherwise add data to new array, and insert into buildings array later
+			insert_data.push_back(line);
 		}
 	}
 
 	if (insert == true)
 	{
+		//insert new building data into array
+		BuildingData.insert(BuildingData.begin() + location, insert_data.begin(), insert_data.end());
+		location += (int)insert_data.size();
+
 		int end = location - 1;
 		int lines = end - insert_line;
 		int parent = -1;
