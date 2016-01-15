@@ -94,6 +94,8 @@ void ScriptProcessor::Reset()
 	setshaftdoors = false;
 	BuildingData.clear();
 	BuildingDataOrig.clear();
+	BuildingData.reserve(1024);
+	BuildingDataOrig.reserve(1024);
 	MinExtent = 0;
 	MaxExtent = 0;
 	InFunction = 0;
@@ -856,6 +858,12 @@ bool ScriptProcessor::LoadDataFile(const std::string &filename, bool insert, int
 
 	while (file->eof() == false)
 	{
+		if (BuildingData.capacity() <= BuildingData.size() + 1)
+		{
+			BuildingData.reserve(BuildingData.capacity() * 2);
+			BuildingDataOrig.reserve(BuildingDataOrig.capacity() * 2);
+		}
+
 		//push next line of data onto the tail end of the BuildingData array
 		std::string line = file->getLine(true);
 		if (insert == false)
@@ -923,8 +931,23 @@ bool ScriptProcessor::LoadFromText(const std::string &text)
 	SplitString(textarray, text, '\n');
 
 	//feed each line of text into the script array
-	BuildingData.reserve(BuildingData.size() + textarray.size());
-	BuildingDataOrig.reserve(BuildingDataOrig.size() + textarray.size());
+
+	//allocate needed space
+	int needed_size = BuildingData.size() + textarray.size();
+	if (BuildingData.capacity() < needed_size)
+	{
+		if (needed_size < (BuildingData.capacity() * 2))
+		{
+			BuildingData.reserve(BuildingData.capacity() * 2);
+			BuildingDataOrig.reserve(BuildingDataOrig.capacity() * 2);
+		}
+		else
+		{
+			BuildingData.reserve(needed_size);
+			BuildingDataOrig.reserve(needed_size);
+		}
+	}
+
 	for (int i = 0; i < (int)textarray.size(); i++)
 	{
 		//append data to building array
