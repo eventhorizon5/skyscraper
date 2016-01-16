@@ -45,7 +45,7 @@ SceneNode::SceneNode(Object *parent, std::string name) : ObjectBase(parent)
 	node = sbs->mSceneManager->createSceneNode(node_name);
 
 	//attach scene node to root, if no parent exists (for engine root object)
-	if (!parent->GetParent())
+	if (!parent->GetParent() && !parent->GetSceneNode())
 		sbs->mSceneManager->getRootSceneNode()->addChild(node);
 }
 
