@@ -2183,45 +2183,27 @@ void SBS::ResetDoorwayWalls()
 	wall_extents_z = 0;
 }
 
-WallObject* SBS::AddWall(const std::string &meshname, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
+WallObject* SBS::AddWall(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float height_in1, float height_in2, float altitude1, float altitude2, float tw, float th)
 {
-	//meshname can either be:
-	//external, landscape, or buildings
+	//Adds a wall with the specified dimensions, to the specified mesh object
 
-	//Adds a wall with the specified dimensions
-	std::string mesh = meshname;
-	TrimString(mesh);
-	SetCase(mesh, false);
+	if (!mesh)
+		return 0;
 
-	WallObject *wall = 0;
-	if (mesh == "external")
-		wall = External->CreateWallObject(name);
-	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(name);
-	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(name);
+	WallObject *wall = mesh->CreateWallObject(name);
 
 	AddWallMain(wall, name, texture, thickness, x1, z1, x2, z2, height_in1, height_in2, altitude1, altitude2, tw, th, true);
 	return wall;
 }
 
-WallObject* SBS::AddFloor(const std::string &meshname, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
+WallObject* SBS::AddFloor(MeshObject* mesh, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float altitude1, float altitude2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior)
 {
-	//meshname can either be:
-	//external, landscape, or buildings
+	//Adds a floor with the specified dimensions and vertical offset, to the specified mesh object
 
-	//Adds a floor with the specified dimensions and vertical offset
-	std::string mesh = meshname;
-	TrimString(mesh);
-	SetCase(mesh, false);
+	if (!mesh)
+		return 0;
 
-	WallObject *wall = 0;
-	if (mesh == "external")
-		wall = External->CreateWallObject(name);
-	if (mesh == "buildings")
-		wall = Buildings->CreateWallObject(name);
-	if (mesh == "landscape")
-		wall = Landscape->CreateWallObject(name);
+	WallObject *wall = mesh->CreateWallObject(name);
 
 	AddFloorMain(wall, name, texture, thickness, x1, z1, x2, z2, altitude1, altitude2, reverse_axis, texture_direction, tw, th, true, legacy_behavior);
 	return wall;
