@@ -17,7 +17,7 @@
 <Buildings>
     ConcurrentLoads = true #this tells all the buildings to load simultaneously
     Load Simple.bld, 200, 0, 200, 0
-    Load Simple.bld, 400, 50, 400, 0
+    Load Simple.bld, 400, 50, 400, 0, -75, -10, -75, 75, 150, 75  #since this building is raised up, override the bounds to set altitude limits, so you can walk under it
     Load Simple.bld, -200, 0, -200, 180
 <EndBuildings>
 
