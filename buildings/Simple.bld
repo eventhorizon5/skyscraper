@@ -24,7 +24,7 @@
     CameraPosition = 0, -60
     CameraRotation = 0, 0, 0
     Sky = noon
-    Bounds = -25, 0, -25, 25, 0, 25
+    Bounds = -75, 0, -75, 75, 0, 75
 <EndGlobals>
 
 #In the above code, I named the building "My Building", and set the designer as "Me".

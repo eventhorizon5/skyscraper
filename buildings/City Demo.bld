@@ -11,12 +11,14 @@
     Load Observation Tower.bld, -440.5, 0, 0, 0
     Load Glass Tower.bld, 0, 0, 871.5, 0
     Load Sears Tower.bld, 550, 0, 50, -90
-    Load Simple.bld, 225, 0, -630, 180
-    Load Simple.bld, 0, 0, -630, 180
-    Load Simple.bld, 75, 0, -630, 180
-    Load Simple.bld, -75, 0, -630, 180
-    Load Simple.bld, -150, 0, -630, 180
-    Load Simple.bld, -225, 0, -630, 180
+
+    #add some Simple buildings, with modified boundaries
+    Load Simple.bld, 225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 0, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, 75, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -75, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -150, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
+    Load Simple.bld, -225, 0, -628, 180, -37.5, 0, -25, 37.5, 0, 25
 
     #you can also specify the bounds values separately, which is mainly useful
     #for buildings that don't have a Bounds parameter specified, or if you
@@ -25,7 +27,7 @@
     #Load Observation Tower.bld, -440.5, 0, 0, 0, -100, 0, -100, 100, 0, 100
     #Load Glass Tower.bld, 0, 0, 871.5, 0, -500, 0, -550, 300, 0, 250
     #Load Sears Tower.bld, 550, 0, 50, -90, -150, 0, -150, 150, 0, 150
-    #Load Simple.bld, 0, 0, -630, 180, -25, 0, -25, 25, 0, 25
+    #Load Simple.bld, 0, 0, -630, 180, -75, 0, -75, 75, 0, 75
 <EndBuildings>
 
 #Now include the Triton Center building file, to use as the primary building
