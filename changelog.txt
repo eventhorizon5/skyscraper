@@ -1,5 +1,88 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-when inserting another script file, script should be loaded and inserted as a single block, instead of calling insert() for each line, which causes performance problems
+-preallocate memory for script file data
+-Floor or Elevator script section loops should report when they're finished
+-global models can now be transported in elevators, since they now properly change parents
+-added "Simple - Custom Models" building
+-fixed issue where AddShaftModel and AddStairsModel commands were doing a file check for the wrong parameter, causing false error messages
+-added support for custom models to be specified as a "DestObject" value, in global/floor/elevator sections, and even as part of a shaft or stairwell.
+-added the ability to use the floor's Interfloor and ColumnFrame meshes, and also Shaft and Stairwell meshes as a script "destobject"
+-added a "RelativeY" option to the AddCustomWall command, to allow for relative Y offsets in a floor section, making it compatible with other similar commands
+-SetKey state wasn't being properly reset in the script interpreter
+-objects created after the simulator start should be initialized properly
+-added model centering code to OnInit function, to support custom model centering
+-fixed an issue where AddTriangleWall wasn't adding the floor's offset to the 3rd Y value
+-added support for creating custom models
+-added scaling support for SBS geometry meshes
+-prevent run of geometry processor if the mesh is a loaded model, and added more error message details
+-fixed menu screen button corruption with double-precision Ogre
+-replaced the old file selection dialog with a simplified building list dialog, which also fixes Mac issues associated with the old dialog
+-modal windows should be created on the stack instead (fix for some object memory leaks)
+-added Load Building dialog for the Engine Manager
+-added bounds views to Engine Manager dialog
+-clean up empty engine slots at the end of the list, when deleting an engine
+-GetPoint and GetWallExtents functions should iterate through all wall polygons, instead of searching by name
+-fixed a matching issue with the FindPolygon function, and moved their code into the Wall object
+-engines should re-cut for child engines on reload
+-moved RenderOnStartup override into Engine Context, to allow the option when reloading a building
+-if a user walks outside of all engine boundaries, revert their movement so they stay within the active engine
+-lots of fixes to support deleting engines.  The system now keeps instance slots open when an engine is deleted, which can be reused later.
+-fixed a major vector preallocation bug in the ProcessSubMesh function, causing severe slowdowns with EG881's Landscapes test
+-added CreateWallObject and AddPolygon script commands
+-have CreateWallBox and AddDoorwayWalls functions automatically create wall objects
+-fixed an issue where the AddCustomWall, AddCustomFloor and AddTriangleWall commands were double-adjusting the stored per-texture sizing info.  This bug appeared during the CS 1.8 development, and so is not present in Alpha 7.
+-made new AddPolygon function, and moved the AddCustomWall functionality into it
+-the AddTriangleWall, CreateWallBox and CreateWallBox2 commands weren't working properly when Elevator meshes were specified, due to being disabled from a Genmesh transition in 2010.
+-Prepare() function should create 32-bit index buffers if the number of vertices goes outside of the 16-bit range, and especially to prevent a short integer overflow (fix for EG881's 'Landscapes' test)
+-only have the primary engine create the old skybox
+-have sound system properly handle engine offsets and rotations
+-added parent/child support for engines, and added the ability for a parent engine to be cut for a child engine's bounds
+-Font code needs to unload the generated texture and font, if an error occurs during font load. This fixes a crash that happens if a missing font's file is added after building load, and the building is reloaded.
+-switch to other engines when entering their bounds, instead of waiting to leave the active engine's bounds
+-added ToGlobal and FromGlobal functions (C++)
+-fixed crashes in the Object Manager and Move Object windows, which were caused by the SBS pointer not being updated properly when a building is reloaded
+-HitBeam function fixes for engine offsets
+-added support for rotating SBS engines
+-added support for relative orientations
+-skip Buildings script section when reloading building
+-added Swap functions (C++)
+-fixed top interior wall of CreateWallBox function, which wasn't displaying properly (this bug appeared during the Ogre transition)
+-added Texture Override support to the CreateWallBox commands
+-reset camera position if attaching to an engine where the engine's camera is outside of it's bounds
+-report when setting an active engine
+-added building resets when moving between buildings
+-added support for exporting and importing the camera state, to reapply camera settings when walking between engines
+-added support for walking between engines, with automatic context switching
+-make sure progress dialog is deleted on shutdown
+-sync camera when attachin
+-added "City Demo" building.
+-have SBS engine and Engine Contexts report instance numbers on console
+-only pause for SBS banner for the first instance
+-if concurrent loading is off, make sure buildings load in order properly
+-added the "Simple - Multiple Buildings" and "Simple - Concurrent" multi-building demos.
+-added Position and Bounds script global commands
+-added Buildings section to the script interpreter, for loading multiple buildings
+-if trigger's Y values are both 0, essentially ignore the Y factors when testing for proximity
+-add double type to ToString function - now builds with Ogre in double-precision mode
+-removed the shift-click call button status change
+-when the sim engine is moved, the camera needs to update itself properly so that it can move along with it
+-sound objects in controls, triggers, callbuttons and doors are now only created if a sound file is specified
+-discard wall objects that are created outside of engine boundaries
+-added position-based IsInside function to Trigger object
+-added support for cutting outside engine bounds
+-added bounds variables and main proximity trigger to engine
+-have manual modes not allow new movement if the elevator is already moving - fixes an issue where the elevator would suddenly come to a standstill if the direction button was pressed while stopping
+-removed 'k' engine shutdown key assignment
+-added support for manual elevator up/down movement switches, which use the same UpOn/UpOff and DownOn/DownOff commands as Inspection Mode, along with a demo building based on the original Simple Manual
+-status indicators in the Elevator Editor window should update when the mode is changed, instead of when the -values are refreshed or changed from the window
+-added the IsOnFloor and OnRecallFloor functions
+-some fixes for issues with elevator Peak modes causing doors to fully close and re-open when call buttons are pressed
+-(Regression fix for rev 4066) - properly reset Active Elevator variable when call button is no longer active
+-(Regression fix for rev 4066) - call buttons should have separate Active Elevator variables for each call direction
+-fixed an issue where an elevator wouldn't stop and open on the recall floor, if on that floor but not leveled
+-elevators should have a separate status flag for manual stops, to prevent a conflict with the new stop-on-dequeue feature
+-added CopyTexture functions, that use new code for blitting texture data, fixing issues with flickering and darker textures when loading additional buildings
 -(Elevator Editor) Active Hall Direction box now shows the direction text along with the call type
 -(Elevator Editor) combined Door Height and Door Width boxes into a single Door Size
 -(Elevator Editor) added Type box
