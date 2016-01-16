@@ -466,25 +466,26 @@ AddModel Model1, , false, 0, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 AddModel Model2, , false, 0, 5, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 AddModel Model3, , false, 0, 10, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 AddModel Model4, , false, 0, 15, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
+AddModel Model5, , false, 0, 20, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 1
 
 #Create separate ones
-AddModel Model5, , false, 20, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 2
-AddModel Model6, , false, -20, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
+AddModel Model6, , false, 20, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 2
+AddModel Model7, , false, -20, 0, -40, 0, 0, 0, 0, 1, true, 0.1, 0.5, 0.1
 
 #Create a box inside Model 1
 
 TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
-CreateWallBox2 Model1, My Box, Button2, 0, 0, 5, 5, 5, 0, 0, 0, false, true, true, true
+CreateWallBox2 Model1, My Box, Button2, 0, 0, 1, 1, 5, 0, 0, 0, false, true, true, true
 
 #Create a box inside Model 2
 
 TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
-CreateWallBox2 Model2, My Box, Button2, 0, 0, 5, 5, 5, 0, 0, 0, false, true, true, true
+CreateWallBox2 Model2, My Box, Button2, 0, 0, 5, 1, 5, 0, 0, 0, false, true, true, true
 
 #Create a box inside Model 3
 
 TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
-CreateWallBox2 Model3, My Box, Button2, 0, 0, 5, 5, 5, 0, 0, 0, false, true, true, true
+CreateWallBox2 Model3, My Box, Button2, 0, 0, 1, 5, 5, 0, 0, 0, false, true, true, true
 
 #Create a box inside Model 4
 
@@ -494,12 +495,17 @@ CreateWallBox2 Model4, My Box, Button2, 0, 0, 5, 5, 5, 0, 0, 0, false, true, tru
 #Create a box inside Model 5
 
 TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
-CreateWallBox2 Model5, My Box, Button2, 0, 0, 10, 10, 10, 0, 0, 0, false, true, true, true
+CreateWallBox2 Model5, My Box, Button2, 0, 0, 1, 1, 20, 0, 0, 0, false, true, true, true
 
-#Create a box inside Model 6, and make it small enough so that it can be transported in the elevator
+#Create a box inside Model 6
 
 TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
-CreateWallBox2 Model6, My Box, Button2, 0, 0, 2, 2, 2, 0, 2, 2, false, true, true, true
+CreateWallBox2 Model6, My Box, Button2, 0, 0, 10, 10, 10, 0, 0, 0, false, true, true, true
+
+#Create a box inside Model 7, and make it small enough so that it can be transported in the elevator
+
+TextureOverride Button1, Button2, Button3, Button4, Button5, Button6
+CreateWallBox2 Model7, My Box, Button2, 0, 0, 2, 2, 2, 0, 2, 2, false, true, true, true
 
 #Create a small model on Floor 0, which can be transported in the elevator
 <Floor 0>

@@ -1,5 +1,7 @@
 Version 1.10 (2.0 Alpha 10)
 -------------------------
+-have Global AddWall/AddFloor commands use a specified mesh object directly instead of processing a string internally - this also fixes a crash if no valid mesh was found in the functions.
+-have AddGround also draw underside of landscape
 -when inserting another script file, script should be loaded and inserted as a single block, instead of calling insert() for each line, which causes performance problems
 -preallocate memory for script file data
 -Floor or Elevator script section loops should report when they're finished
