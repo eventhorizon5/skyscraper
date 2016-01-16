@@ -2279,7 +2279,7 @@ WallObject* SBS::AddGround(const std::string &name, const std::string &texture, 
 			else
 				sizez = (float)tile_z;
 
-			DrawWalls(false, true, false, false, false, false);
+			DrawWalls(true, true, false, false, false, false);
 			AddFloorMain(wall, name, texture, 0, i, j, i + sizex, j + sizez, altitude, altitude, false, false, 1, 1, false);
 			ResetWalls(false);
 		}
