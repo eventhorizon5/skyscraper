@@ -93,7 +93,6 @@ public:
 	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
 	void RescaleVertices(float multiplier);
 	void AddVertex(Geometry &vertex_geom);
-	void RemoveVertex(int index);
 	void AddTriangle(int submesh, TriangleType &triangle);
 	void RemoveTriangle(int submesh, int index);
 	bool PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles);

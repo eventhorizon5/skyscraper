@@ -912,20 +912,6 @@ void MeshObject::AddVertex(Geometry &vertex_geom)
 	prepared = false; //need to re-prepare mesh
 }
 
-void MeshObject::RemoveVertex(int index)
-{
-	//remove a vertex from the mesh
-
-	if (index < 0 || index >= (int)MeshGeometry.size())
-		return;
-
-	MeshGeometry.erase(MeshGeometry.begin() + index);
-
-	//TODO: reindex triangles here
-
-	prepared = false; //need to re-prepare mesh
-}
-
 void MeshObject::AddTriangle(int submesh, TriangleType &triangle)
 {
 	//add a triangle to the mesh
