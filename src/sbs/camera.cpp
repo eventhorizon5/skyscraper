@@ -1096,12 +1096,12 @@ void Camera::Sync()
 	Ogre::Vector3 position = sbs->ToRemote(GetPosition());
 	Ogre::Quaternion orientation = GetOrientation();
 
-	if (prev_position != position)
+	if (prev_position.positionEquals(position) == false)
 	{
 		GetSceneNode()->Update();
 		NotifyMove();
 	}
-	if (prev_orientation != orientation)
+	if (prev_orientation.orientationEquals(orientation) == false)
 	{
 		GetSceneNode()->Update();
 		NotifyRotate();

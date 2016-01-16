@@ -329,13 +329,7 @@ bool Shaft::IsInShaft(const Ogre::Vector3 &position)
 	//SBS_PROFILE("Shaft::IsInShaft");
 
 	//if last position is the same as new, return previous result
-	if ((position.x >= (lastposition.x - 0.01)) &&
-		(position.y >= (lastposition.y - 0.01)) &&
-		(position.z >= (lastposition.z - 0.01)) &&
-		(position.x <= (lastposition.x + 0.01)) &&
-		(position.y <= (lastposition.y + 0.01)) &&
-		(position.z <= (lastposition.z + 0.01)) &&
-		checkfirstrun == false)
+	if (position.positionEquals(lastposition) == true && checkfirstrun == false)
 		return lastcheckresult;
 
 	checkfirstrun = false;
