@@ -27,8 +27,7 @@
     Bounds = -25, 0, -25, 25, 0, 25
 <EndGlobals>
 
-#In the above code, I named the building "My Building", and set the designer as "Me".  The HorizScale
-#parameter is optional, and it's there to experiment with (see the script guide for more info on that).
+#In the above code, I named the building "My Building", and set the designer as "Me".
 #I'm also telling the camera to start on the first floor with the CameraFloor parameter.  In Skyscraper,
 #floor 0 is the first floor, floor 1 is the second, etc, and by setting the floor to "0" in that parameter,
 #I'm setting it to the first floor.  Floors were numbered that way in order to make the numbering between

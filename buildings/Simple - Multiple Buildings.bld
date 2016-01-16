@@ -15,9 +15,9 @@
 
 #This code loads 3 additional Simple buildings, each at a different location
 <Buildings>
-    Load Simple.bld, 200, 0, 200, 0, -100, 0, -100, 100, 0, 100
-    Load Simple.bld, 400, 50, 400, 0, -100, 0, -100, 100, 0, 100
-    Load Simple.bld, -200, 0, -200, 180, -100, 0, -100, 100, 0, 100
+    Load Simple.bld, 200, 0, 200, 0
+    Load Simple.bld, 400, 50, 400, 0
+    Load Simple.bld, -200, 0, -200, 180
 <EndBuildings>
 
 #Then the thing you'll need to do when creating a building is define the global parameters.
@@ -31,12 +31,9 @@
     CameraPosition = 0, -60
     CameraRotation = 0, 0, 0
     Sky = noon
-    Position = 0, 0, 0 #this building should be in the center, while the others loaded above should be in different locations
-    Bounds = -100, 0, -100, 100, 0, 100 #set the boundaries of this building, so that it'll work with the other buildings
 <EndGlobals>
 
-#In the above code, I named the building "My Building", and set the designer as "Me".  The HorizScale
-#parameter is optional, and it's there to experiment with (see the script guide for more info on that).
+#In the above code, I named the building "My Building", and set the designer as "Me".
 #I'm also telling the camera to start on the first floor with the CameraFloor parameter.  In Skyscraper,
 #floor 0 is the first floor, floor 1 is the second, etc, and by setting the floor to "0" in that parameter,
 #I'm setting it to the first floor.  Floors were numbered that way in order to make the numbering between
