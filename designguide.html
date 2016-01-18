@@ -3516,11 +3516,12 @@ Example: <font face="Courier New, Courier, mono" size="2">ConcurrentLoads = true
 
 <p align="left"><strong>Commands:</strong></p>
 
-<p align="left"><strong>1. Load</strong> - load a building, creating a new Engine Context (script interpreter and sim engine pair) for it.  This command requires a building filename to be specified, and optionally allows the position to be set (which overrides the Position value in that building's Globals section), the rotation (Y axis, which is left/right) in degrees to be set, and the bounds values to be set (which also overrides the building's Bounds value).  For the rotation value, if "90" is specified, the building is rotated so that it faces the right.  If the value is "270" or "-90", the building faces the left.  The Bounds values are used to determine the position limits of what are considered that building, where if a building has a position X value of 200, and the MinX is -100 and MaxX is 100, the global positions of 100X to 300X are "inside" that building's space (200 - 100, and 200 + 100).<br><br>
+<p align="left"><strong>1. Load</strong> - load a building, creating a new Engine Context (script interpreter and sim engine pair) for it.  This command requires a building filename to be specified, and optionally allows the position to be set (which overrides the Position value in that building's Globals section), the rotation (Y axis, which is left/right) in degrees to be set, and the bounds values to be set (which also overrides the building's Bounds value).  For the rotation value, if "90" is specified, the building is rotated so that it faces the right.  If the value is "270" or "-90", the building faces the left.  The Bounds values are used to determine the position limits of what are considered that building, where if a building has a position X value of 200, and the MinX is -100 and MaxX is 100, the global positions of 100X to 300X are "inside" that building's space (200 - 100, and 200 + 100).  Subfolders are supported, so a filename of "myfolder/mybuilding.bld" will load the building file at "buildings/myfolder/mybuilding.bld".<br><br>
 Syntax: <font face="Courier New, Courier, mono" size="2">Load <em>filename</em>[, <em>X, Y, Z, Rotation</em>][, <em>MinX, MinY, MinZ, MaxX, MaxY, MaxZ</em>]</font><br>
 Example 1: <font face="Courier New, Courier, mono" size="2">Load Simple.bld</font><br>
 Example 2: <font face="Courier New, Courier, mono" size="2">Load Simple.bld, 200, 0, 200, 0</font><br>
 Example 3: <font face="Courier New, Courier, mono" size="2">Load Simple.bld, 200, 0, 200, 0, -100, 0, -100, 100, 0, 100</font><br>
+Example 4: <font face="Courier New, Courier, mono" size="2">Load myfolder/mybuilding.bld</font><br>
 
 <p align="left"> </p>
 
