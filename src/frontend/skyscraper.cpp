@@ -2112,6 +2112,15 @@ void Skyscraper::SetFullScreen(bool enabled)
 
 	FullScreen = enabled;
 	window->ShowFullScreen(FullScreen);
+
+#if defined(__WXMSW__)
+	//in Windows, enable double-buffering when switching to fullscreen
+	//to fix framerate drop issues
+	if (enabled == true)
+		window->SetDoubleBuffered(true);
+	else
+		window->SetDoubleBuffered(false);
+#endif
 }
 
 void Skyscraper::SetLocation(float latitude, float longitude)
