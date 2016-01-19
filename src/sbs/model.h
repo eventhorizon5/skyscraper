@@ -48,6 +48,7 @@ public:
 	bool IsPickedUp();
 	MeshObject* GetMeshObject() { return mesh; }
 	void OnInit();
+	bool IsCustom() { return custom; }
 
 private:
 	void RemoveFromParent();
@@ -59,6 +60,7 @@ private:
 	int KeyID;
 	bool global;
 	bool center;
+	bool custom;
 };
 
 }

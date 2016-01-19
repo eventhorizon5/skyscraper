@@ -9003,7 +9003,10 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 			{
 				Model *model = shaft->GetModel(Current, modelname);
 				if (model)
-					return model->GetMeshObject();
+				{
+					if (model->IsCustom() == true)
+						return model->GetMeshObject();
+				}
 				return 0;
 			}
 			else
@@ -9040,7 +9043,10 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 			{
 				Model *model = stairs->GetModel(Current, modelname);
 				if (model)
-					return model->GetMeshObject();
+				{
+					if (model->IsCustom() == true)
+						return model->GetMeshObject();
+				}
 				return 0;
 			}
 			else
@@ -9061,7 +9067,10 @@ MeshObject* ScriptProcessor::GetMeshObject(std::string name)
 		model = Simcore->GetModel(name);
 
 	if (model)
-		return model->GetMeshObject();
+	{
+		if (model->IsCustom() == true)
+			return model->GetMeshObject();
+	}
 	return 0;
 }
 

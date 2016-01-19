@@ -42,6 +42,11 @@ Model::Model(Object *parent, const std::string &name, const std::string &filenam
 	global = IsGlobal();
 	this->center = center;
 
+	if (filename == "")
+		custom = true;
+	else
+		custom = false;
+
 	load_error = false;
 	mesh = new MeshObject(this, name, filename, max_render_distance, scale_multiplier, enable_physics, restitution, friction, mass);
 	if (!mesh->Movable)
