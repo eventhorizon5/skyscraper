@@ -826,7 +826,7 @@ void MeshObject::AddVertex(Geometry &vertex_geom)
 	prepared = false; //need to re-prepare mesh
 }
 
-void MeshObject::AddTriangle(int submesh, TriangleType &triangle)
+void MeshObject::AddTriangle(int submesh, Triangle &triangle)
 {
 	//add a triangle to the mesh
 	Triangles[submesh].triangles.push_back(triangle);
@@ -844,7 +844,7 @@ void MeshObject::RemoveTriangle(int submesh, int index)
 	prepared = false; //need to re-prepare mesh
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles)
 {
 	//create custom mesh geometry, apply a texture map and material, and return the created submesh
 
@@ -911,7 +911,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &texture, s
 	return PolyMesh(name, material, vertices2, t_matrix, t_vector, mesh_indices, triangles, tw2, th2, false);
 }
 
-bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices)
+bool MeshObject::PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, float tw, float th, bool convert_vertices)
 {
 	//create custom geometry, apply a texture map and material, and return the created submesh
 	//tw and th are only used when overriding texel map
@@ -949,7 +949,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 		//this method also somewhat works with non-planar polygons
 		trimesh[i].triangles.reserve(vertices2[i].size() - 2);
 		for (int j = 2; j < (int)vertices2[i].size(); j++)
-			trimesh[i].triangles.push_back(TriangleType(0, j - 1, j));
+			trimesh[i].triangles.push_back(Triangle(0, j - 1, j));
 	}
 
 	//set up geometry array
@@ -1004,7 +1004,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 			triangles.reserve(trimesh[i].triangles.size());
 		for (int j = 0; j < (int)trimesh[i].triangles.size(); j++)
 		{
-			TriangleType tri = trimesh[i].triangles[j];
+			Triangle tri = trimesh[i].triangles[j];
 			tri.a += count + location;
 			tri.b += count + location;
 			tri.c += count + location;
@@ -1082,13 +1082,13 @@ Ogre::Vector2* MeshObject::GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &t
 	return 0;
 }
 
-int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, bool add)
+int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string &material, bool add)
 {
 	//processes submeshes for new or removed geometry
 	//the Prepare() function must be called when the mesh is ready to view, in order to upload data to graphics card
 
 	int index_count = (int)indices.size();
-	TriangleType *indexarray = new TriangleType[index_count];
+	Triangle *indexarray = new Triangle[index_count];
 
 	for (int i = 0; i < index_count; i++)
 		indexarray[i] = indices[i];
@@ -1147,7 +1147,7 @@ int MeshObject::ProcessSubMesh(std::vector<TriangleType> &indices, const std::st
 		//remove triangles
 		for (int i = 0; i < (int)Triangles[index].triangles.size(); i++)
 		{
-			TriangleType *triangle = &Triangles[index].triangles[i];
+			Triangle *triangle = &Triangles[index].triangles[i];
 			for (int j = 0; j < index_count; j++)
 			{
 				if (triangle->a == indexarray[j].a && triangle->b == indexarray[j].b && triangle->c == indexarray[j].c)
@@ -1330,7 +1330,7 @@ int MeshObject::FindMatchingSubMesh(const std::string &material)
 	return -1;
 }
 
-void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
+void MeshObject::DeleteVertices(std::vector<Triangle> &deleted_indices)
 {
 	//delete related mesh vertices using provided index array
 	//then reindex all mesh triangle indices in all submeshes.
@@ -1403,7 +1403,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 		{
 			//check if triangle indices are valid
 			if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
-				indiceslist->triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+				indiceslist->triangles.push_back(Triangle(elements[element], elements[element + 1], elements[element + 2]));
 			element += 3;
 		}
 		delete [] elements;
@@ -1455,7 +1455,7 @@ void MeshObject::DeleteVertices(std::vector<TriangleType> &deleted_indices)
 			{
 				//check if triangle indices are valid
 				if (elements[element] >= 0 || elements[element + 1] >= 0 || elements[element + 2] >= 0)
-					poly->triangles.push_back(TriangleType(elements[element], elements[element + 1], elements[element + 2]));
+					poly->triangles.push_back(Triangle(elements[element], elements[element + 1], elements[element + 2]));
 				element += 3;
 			}
 
@@ -1517,7 +1517,7 @@ void MeshObject::CreateCollider()
 		{
 			for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 			{
-				TriangleType tri;
+				Triangle tri;
 				tri.a = Triangles[i].triangles[j].a;
 				tri.b = Triangles[i].triangles[j].b;
 				tri.c = Triangles[i].triangles[j].c;

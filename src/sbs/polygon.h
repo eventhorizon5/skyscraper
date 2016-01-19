@@ -32,7 +32,7 @@ class SBSIMPEXP Polygon : public ObjectBase
 {
 public:
 	MeshObject* mesh;
-	std::vector<TriangleType> triangles;
+	std::vector<Triangle> triangles;
 	Ogre::Plane plane;
 
 	//array holding index extents, to get original geometry
@@ -44,7 +44,7 @@ public:
 
 	std::string material; //polygon material
 
-	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<TriangleType> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
+	Polygon(Object *parent, const std::string &name, MeshObject *meshwrapper, std::vector<Triangle> &triangles, std::vector<Extents> &index_extents, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, const std::string &material, Ogre::Plane &plane);
 	~Polygon();
 	void GetTextureMapping(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector);
 	Ogre::SubMesh* GetSubMesh();

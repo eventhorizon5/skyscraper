@@ -30,16 +30,16 @@ namespace SBS {
 
 class WallObject;
 
-struct TriangleType
+struct Triangle
 {
 	unsigned int a, b, c;
-	TriangleType(unsigned int a, unsigned int b, unsigned int c)
+	Triangle(unsigned int a, unsigned int b, unsigned int c)
 	{
 		this->a = a;
 		this->b = b;
 		this->c = c;
 	}
-	TriangleType()
+	Triangle()
 	{
 		this->a = 0;
 		this->b = 0;
@@ -77,7 +77,7 @@ public:
 	struct TriangleIndices
 	{
 		//per-submesh triangle indices
-		std::vector<TriangleType> triangles; //triangle data, in A B C values
+		std::vector<Triangle> triangles; //triangle data, in A B C values
 		Ogre::IndexData *databuffer; //used to find the related submesh
 	};
 
@@ -93,15 +93,15 @@ public:
 	WallObject* FindWallIntersect(const Ogre::Vector3 &start, const Ogre::Vector3 &end, Ogre::Vector3 &isect, float &distance, Ogre::Vector3 &normal, bool convert = true, bool rescale = true);
 	void RescaleVertices(float multiplier);
 	void AddVertex(Geometry &vertex_geom);
-	void AddTriangle(int submesh, TriangleType &triangle);
+	void AddTriangle(int submesh, Triangle &triangle);
 	void RemoveTriangle(int submesh, int index);
-	bool PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles);
-	bool PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<TriangleType> &triangles, float tw, float th, bool convert_vertices = true);
+	bool PolyMesh(const std::string &name, const std::string &texture, std::vector<Ogre::Vector3> &vertices, float tw, float th, bool autosize, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles);
+	bool PolyMesh(const std::string &name, const std::string &material, std::vector<std::vector<Ogre::Vector3> > &vertices, Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<Extents> &mesh_indices, std::vector<Triangle> &triangles, float tw, float th, bool convert_vertices = true);
 	bool ComputeTextureMap(Ogre::Matrix3 &t_matrix, Ogre::Vector3 &t_vector, std::vector<Ogre::Vector3> &vertices, const Ogre::Vector3 &p1, const Ogre::Vector2 &uv1, const Ogre::Vector3 &p2, const Ogre::Vector2 &uv2, const Ogre::Vector3 &p3, const Ogre::Vector2 &uv3);
 	Ogre::Vector2* GetTexels(Ogre::Matrix3 &tex_matrix, Ogre::Vector3 &tex_vector, std::vector<std::vector<Ogre::Vector3> > &vertices, float tw, float th);
-	int ProcessSubMesh(std::vector<TriangleType> &indices, const std::string &material, bool add);
+	int ProcessSubMesh(std::vector<Triangle> &indices, const std::string &material, bool add);
 	int FindMatchingSubMesh(const std::string &material);
-	void DeleteVertices(std::vector<TriangleType> &deleted_indices);
+	void DeleteVertices(std::vector<Triangle> &deleted_indices);
 	void Prepare(bool force = false);
 	void EnableDebugView(bool value);
 	void CreateCollider();
@@ -150,7 +150,7 @@ private:
 
 	struct TriangleMesh
 	{
-		std::vector<TriangleType> triangles; //triangles have a, b and c components (each a vertex index)
+		std::vector<Triangle> triangles; //triangles have a, b and c components (each a vertex index)
 		std::vector<Ogre::Vector3> vertices; //vertices have x, y and z components
 	};
 };
