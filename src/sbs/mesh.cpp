@@ -935,17 +935,12 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	Ogre::Vector2 *table = GetTexels(tex_matrix, tex_vector, vertices2, tw, th);
 
 	//triangulate mesh
-	TriangleMesh *trimesh = new TriangleMesh[vertices2.size()];
+	TriangleIndices *trimesh = new TriangleIndices[vertices2.size()];
 	int trimesh_size = (int)vertices2.size();
 
 	for (int i = 0; i < trimesh_size; i++)
 	{
-		//first fill triangle mesh with polygon's vertices
-		trimesh[i].vertices.reserve(vertices2[i].size());
-		for (int j = 0; j < (int)vertices2[i].size(); j++)
-			trimesh[i].vertices.push_back(vertices2[i][j]);
-
-		//then do a (very) simple triangulation
+		//do a (very) simple triangulation
 		//this method also somewhat works with non-planar polygons
 		trimesh[i].triangles.reserve(vertices2[i].size() - 2);
 		for (int j = 2; j < (int)vertices2[i].size(); j++)
@@ -958,7 +953,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	//initialize geometry arrays
 	int size = 0;
 	for (int i = 0; i < trimesh_size; i++)
-		size += (int)trimesh[i].vertices.size();
+		size += (int)vertices2[i].size();
 	mesh_geometry = new Geometry[size];
 
 	//get number of existing vertices
@@ -973,9 +968,9 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 	for (int i = 0; i < trimesh_size; i++)
 	{
 		int min = count + k;
-		for (int j = 0; j < (int)trimesh[i].vertices.size(); j++)
+		for (int j = 0; j < (int)vertices2[i].size(); j++)
 		{
-			mesh_geometry[k].normal = mesh_geometry[k].vertex = trimesh[i].vertices[j];
+			mesh_geometry[k].normal = mesh_geometry[k].vertex = vertices2[i][j];
 			mesh_geometry[k].normal.normalise();
 			mesh_geometry[k].texel = table[k];
 
@@ -1008,7 +1003,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 			tri += count + location;
 			triangles.push_back(tri);
 		}
-		location += (int)trimesh[i].vertices.size();
+		location += (int)vertices2[i].size();
 	}
 
 	//delete trimesh array

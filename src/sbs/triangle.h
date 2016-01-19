@@ -23,6 +23,8 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 
+//triangles have a, b and c components (each a vertex index)
+
 #ifndef _SBS_TRIANGLE_H
 #define _SBS_TRIANGLE_H
 

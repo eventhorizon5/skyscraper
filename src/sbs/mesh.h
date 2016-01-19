@@ -132,12 +132,6 @@ private:
 	bool prepared;
 	bool ComputeTextureSpace(Ogre::Matrix3 &m, Ogre::Vector3 &v, const Ogre::Vector3 &v_orig, const Ogre::Vector3 &v1, float len1, const Ogre::Vector3 &v2, float len2);
 	bool LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh);
-
-	struct TriangleMesh
-	{
-		std::vector<Triangle> triangles; //triangles have a, b and c components (each a vertex index)
-		std::vector<Ogre::Vector3> vertices; //vertices have x, y and z components
-	};
 };
 
 }
