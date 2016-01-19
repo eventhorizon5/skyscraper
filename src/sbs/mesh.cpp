@@ -547,7 +547,6 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 
 	std::string Name = GetSceneNode()->GetFullName();
 	this->name = Name;
-	std::string filename2;
 
 	if (filename == "")
 	{
@@ -556,104 +555,19 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 	}
 	else
 	{
-		//load mesh object from a file
-		std::string filename1 = "data/";
-		filename1.append(filename);
-		filename2 = sbs->VerifyFile(filename1);
-		std::string path = sbs->GetMountPath(filename2, filename2);
-		std::string matname;
+		//load mesh from a file
+		bool result = LoadFromFile(filename, collidermesh);
 
-		//load material file
-		try
-		{
-			matname = filename2.substr(0, filename2.length() - 5) + ".material";
-			std::string matname2 = sbs->VerifyFile(matname);
-			Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
-			sbs->Report("Loading material script " + matname2);
-			Ogre::MaterialManager::getSingleton().parseScript(stream, path);
-
-			if(!stream.isNull())
-			{
-				stream->seek(0);
-				while(!stream->eof())
-				{
-					std::string line = stream->getLine();
-					TrimString(line);
-					if (StartsWith(line, "material", true) == true)
-					{
-						Ogre::vector<Ogre::String>::type vec = Ogre::StringUtil::split(line," \t:");
-						for (Ogre::vector<Ogre::String>::type::iterator it = vec.begin(); it < vec.end(); ++it)
-						{
-							std::string match = (*it);
-							TrimString(match);
-							if (!match.empty())
-							{
-								Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
-								if (!materialPtr.isNull())
-								{
-									sbs->Report("Loading material " + match);
-									//materialPtr->compile();
-									materialPtr->load();
-									materialPtr->setLightingEnabled(false);
-									//materialPtr->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
-								}
-							}
-						}
-					}
-				}
-				stream->close();
-			}
-		}
-		catch (Ogre::Exception &e)
-		{
-			sbs->ReportError("Error loading material file " + matname + "\n" + e.getDescription());
-		}
-
-		//load model
-		try
-		{
-			MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
-		}
-		catch (Ogre::Exception &e)
-		{
-			sbs->ReportError("Error loading model " + filename2 + "\n" + e.getDescription());
+		if (result == false)
 			return;
-		}
-
-		//load collider model if physics is disabled
-		if (is_physical == false)
-		{
-			std::string colname2;
-
-			try
-			{
-				std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
-				colname2 = sbs->VerifyFile(colname);
-				collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
-			}
-			catch (Ogre::Exception &e)
-			{
-				sbs->ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
-			}
-		}
 	}
 
 	//exit if mesh wrapper wasn't created
 	if (!MeshWrapper.get())
 		return;
 
-	//set render priority to "object" by default
-	//MeshWrapper->SetRenderPriority(sbs->engine->GetObjectRenderPriority());
-
-	//create a default material (otherwise the system complains if a mesh is used without a material)
-	//if (!MeshWrapper->GetMeshObject()->GetMaterialWrapper())
-		//MeshWrapper->GetMeshObject()->SetMaterialWrapper(sbs->engine->GetMaterialList()->FindByName("Default"));
-
-	//create movable
-	if (filename == "")
-		Movable = sbs->mSceneManager->createEntity(Name);
-	else
-		Movable = sbs->mSceneManager->createEntity(filename2);
+	//create and attach movable
+	Movable = sbs->mSceneManager->createEntity(MeshWrapper);
 	//Movable->setCastShadows(true);
 	GetSceneNode()->AttachObject(Movable);
 
@@ -2144,6 +2058,93 @@ void MeshObject::CutOutsideBounds(Ogre::Vector3 start, Ogre::Vector3 end, bool c
 	Cut(right_min, right_max, cutwalls, cutfloors);
 	Cut(front_min, front_max, cutwalls, cutfloors);
 	Cut(back_min, back_max, cutwalls, cutfloors);
+}
+
+bool MeshObject::LoadFromFile(const std::string &filename, Ogre::MeshPtr &collidermesh)
+{
+	//load mesh object from a file
+
+	std::string filename1 = "data/";
+	filename1.append(filename);
+	std::string filename2 = sbs->VerifyFile(filename1);
+	std::string path = sbs->GetMountPath(filename2, filename2);
+	std::string matname;
+
+	//load material file
+	try
+	{
+		matname = filename2.substr(0, filename2.length() - 5) + ".material";
+		std::string matname2 = sbs->VerifyFile(matname);
+		Ogre::DataStreamPtr stream = Ogre::ResourceGroupManager::getSingleton().openResource(matname2, path);
+		sbs->Report("Loading material script " + matname2);
+		Ogre::MaterialManager::getSingleton().parseScript(stream, path);
+
+		if(!stream.isNull())
+		{
+			stream->seek(0);
+			while(!stream->eof())
+			{
+				std::string line = stream->getLine();
+				TrimString(line);
+				if (StartsWith(line, "material", true) == true)
+				{
+					Ogre::vector<Ogre::String>::type vec = Ogre::StringUtil::split(line," \t:");
+					for (Ogre::vector<Ogre::String>::type::iterator it = vec.begin(); it < vec.end(); ++it)
+					{
+						std::string match = (*it);
+						TrimString(match);
+						if (!match.empty())
+						{
+							Ogre::MaterialPtr materialPtr = Ogre::MaterialManager::getSingleton().getByName(match, path);
+							if (!materialPtr.isNull())
+							{
+								sbs->Report("Loading material " + match);
+								//materialPtr->compile();
+								materialPtr->load();
+								materialPtr->setLightingEnabled(false);
+								//materialPtr->setAmbient(sbs->AmbientR, sbs->AmbientG, sbs->AmbientB);
+							}
+						}
+					}
+				}
+			}
+			stream->close();
+		}
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error loading material file " + matname + "\n" + e.getDescription());
+	}
+
+	//load model
+	try
+	{
+		MeshWrapper = Ogre::MeshManager::getSingleton().load(filename2, path);
+	}
+	catch (Ogre::Exception &e)
+	{
+		sbs->ReportError("Error loading model " + filename2 + "\n" + e.getDescription());
+		return false;
+	}
+
+	//load collider model if physics is disabled
+	if (is_physical == false)
+	{
+		std::string colname2;
+
+		try
+		{
+			std::string colname = filename2.substr(0, filename2.length() - 5) + ".collider";
+			colname2 = sbs->VerifyFile(colname);
+			collidermesh = Ogre::MeshManager::getSingleton().load(colname2, path);
+		}
+		catch (Ogre::Exception &e)
+		{
+			sbs->ReportError("No collider model for " + colname2 + "\n" + e.getDescription());
+		}
+	}
+
+	return true;
 }
 
 }
