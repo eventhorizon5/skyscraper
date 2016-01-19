@@ -42,7 +42,7 @@ public:
 	bool InsideStairwell; //true if user/camera is in the stairwell
 	bool IsEnabled; //true if the entire stairwell has been enabled
 	bool ShowFloors; //true if floors should be shown while inside the stairwell; floor list in ShowFloorsList
-	bool ShowFullStairs; //if true, always show full stairwell instead of only a selected range
+	bool ShowFullStairs; //if true, always show full stairwell while inside instead of only a selected range
 
 	Stairs(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	~Stairs();

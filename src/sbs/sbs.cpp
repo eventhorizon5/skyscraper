@@ -4424,6 +4424,14 @@ void SBS::ResetBuilding()
 	//turn off floors
 	for (int i = 0; i < GetTotalFloors(); i++)
 		FloorArray[i].object->Enabled(false);
+
+	//turn off shafts
+	for (int i = 0; i < (int)ShaftArray.size(); i++)
+		ShaftArray[i].object->EnableWholeShaft(false, true, true);
+
+	//turn off stairwells
+	for (int i = 0; i < (int)StairsArray.size(); i++)
+		StairsArray[i].object->EnableWholeStairwell(false, true);
 }
 
 Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)

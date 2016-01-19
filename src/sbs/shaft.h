@@ -47,7 +47,7 @@ public:
 	int ShowFloors; //determines if floors should be shown while inside the shaft/elevator; 0 is off, 1 shows a portion at a time, 2 shows all in list - floor list in ShowFloorsList
 	bool ShowOutside; //true if outside should be shown while inside the shaft/elevator; floor list in ShowOutsideList
 	bool ShowInterfloors; //true if interfloors should be shown while inside the shaft/elevator
-	bool ShowFullShaft; //if true, always show full shaft during elevator movement instead of only a selected range
+	bool ShowFullShaft; //if true, always show full shaft instead of only a selected range
 
 	Shaft(Object *parent, int number, float CenterX, float CenterZ, int startfloor, int endfloor);
 	~Shaft();
