@@ -5104,9 +5104,6 @@ void Elevator::OnInit()
 
 	bool enable_elevators = sbs->GetConfigBool("Skyscraper.SBS.Elevator.IsEnabled", true);
 
-	//turn on shaft doors
-	ShaftDoorsEnabled(0, sbs->camera->StartFloor, true);
-
 	//disable objects
 	EnableObjects(false);
 	if (enable_elevators == false)

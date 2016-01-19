@@ -4432,6 +4432,9 @@ void SBS::ResetBuilding()
 	//turn off stairwells
 	for (int i = 0; i < (int)StairsArray.size(); i++)
 		StairsArray[i].object->EnableWholeStairwell(false, true);
+
+	//turn off elevators
+	EnableElevators(false);
 }
 
 Ogre::Vector3 SBS::ToGlobal(const Ogre::Vector3 &position)
@@ -4475,6 +4478,21 @@ Model* SBS::GetModel(std::string name)
 	}
 
 	return 0;
+}
+
+void SBS::EnableElevators(bool value)
+{
+	//turn off elevators, if the related shaft is only partially shown
+
+	for (int i = 0; i < (int)ElevatorArray.size(); i++)
+	{
+		Shaft *shaft = ElevatorArray[i].object->GetShaft();
+
+		if (value == false)
+			value = shaft->ShowFullShaft;
+
+		ElevatorArray[i].object->Enabled(value);
+	}
 }
 
 }
