@@ -139,6 +139,7 @@ public:
 	bool IsValidSystem(::SBS::SBS *sbs);
 	int RegisterEngine(EngineContext *engine);
 	EngineContext* GetFirstValidEngine();
+	void EnableSky(bool value);
 
 private:
 	//mouse status

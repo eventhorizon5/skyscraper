@@ -877,7 +877,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 			//toggle wireframe mode
 			if (wireframe == 0)
 			{
-				Simcore->EnableSkybox(false);
+				EnableSky(false);
 				camera->SetViewMode(1);
 				wireframe = 1;
 			}
@@ -888,7 +888,7 @@ void Skyscraper::GetInput(EngineContext *engine)
 			}
 			else if (wireframe == 2)
 			{
-				Simcore->EnableSkybox(true);
+				EnableSky(true);
 				camera->SetViewMode(0);
 				wireframe = 0;
 			}
@@ -2509,6 +2509,22 @@ EngineContext* Skyscraper::GetFirstValidEngine()
 			return engines[i];
 	}
 	return 0;
+}
+
+void Skyscraper::EnableSky(bool value)
+{
+	//enable or disable sky system
+
+	//enable/disable old skybox system in engine 0
+	if (GetEngine(0))
+		GetEngine(0)->GetSystem()->EnableSkybox(value);
+
+	//enable/disable Caelum sky system
+	if (mCaelumSystem)
+	{
+		mCaelumSystem->getCaelumGroundNode()->setVisible(value);
+		mCaelumSystem->getCaelumCameraNode()->setVisible(value);
+	}
 }
 
 }
