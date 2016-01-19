@@ -307,6 +307,9 @@ void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 {
 	//turn on/off entire shaft
 
+	if (value == false && ShowFullShaft == true)
+		return;
+
 	if (force == true)
 		IsEnabled = !value;
 
