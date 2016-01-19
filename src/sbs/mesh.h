@@ -26,26 +26,11 @@
 #ifndef _SBS_MESH_H
 #define _SBS_MESH_H
 
+#include "triangle.h"
+
 namespace SBS {
 
 class WallObject;
-
-struct Triangle
-{
-	unsigned int a, b, c;
-	Triangle(unsigned int a, unsigned int b, unsigned int c)
-	{
-		this->a = a;
-		this->b = b;
-		this->c = c;
-	}
-	Triangle()
-	{
-		this->a = 0;
-		this->b = 0;
-		this->c = 0;
-	}
-};
 
 struct Extents
 {

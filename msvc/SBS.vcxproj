@@ -335,6 +335,7 @@
     <ClInclude Include="..\src\sbs\soundsystem.h" />
     <ClInclude Include="..\src\sbs\stairs.h" />
     <ClInclude Include="..\src\sbs\timer.h" />
+    <ClInclude Include="..\src\sbs\triangle.h" />
     <ClInclude Include="..\src\sbs\trigger.h" />
     <ClInclude Include="..\src\sbs\unix.h" />
     <ClInclude Include="..\src\sbs\wall.h" />

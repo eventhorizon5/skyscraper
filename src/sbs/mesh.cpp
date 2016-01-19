@@ -1005,9 +1005,7 @@ bool MeshObject::PolyMesh(const std::string &name, const std::string &material, 
 		for (int j = 0; j < (int)trimesh[i].triangles.size(); j++)
 		{
 			Triangle tri = trimesh[i].triangles[j];
-			tri.a += count + location;
-			tri.b += count + location;
-			tri.c += count + location;
+			tri += count + location;
 			triangles.push_back(tri);
 		}
 		location += (int)trimesh[i].vertices.size();
@@ -1147,10 +1145,10 @@ int MeshObject::ProcessSubMesh(std::vector<Triangle> &indices, const std::string
 		//remove triangles
 		for (int i = 0; i < (int)Triangles[index].triangles.size(); i++)
 		{
-			Triangle *triangle = &Triangles[index].triangles[i];
+			Triangle &triangle = Triangles[index].triangles[i];
 			for (int j = 0; j < index_count; j++)
 			{
-				if (triangle->a == indexarray[j].a && triangle->b == indexarray[j].b && triangle->c == indexarray[j].c)
+				if (triangle == indexarray[j])
 				{
 					//delete match
 					RemoveTriangle(index, i);
@@ -1517,10 +1515,7 @@ void MeshObject::CreateCollider()
 		{
 			for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 			{
-				Triangle tri;
-				tri.a = Triangles[i].triangles[j].a;
-				tri.b = Triangles[i].triangles[j].b;
-				tri.c = Triangles[i].triangles[j].c;
+				const Triangle &tri = Triangles[i].triangles[j];
 
 				Ogre::Vector3 a = MeshGeometry[tri.a].vertex;
 				Ogre::Vector3 b = MeshGeometry[tri.b].vertex;
@@ -1674,10 +1669,11 @@ float MeshObject::HitBeam(const Ogre::Vector3 &origin, const Ogre::Vector3 &dire
 	{
 		for (int j = 0; j < (int)Triangles[i].triangles.size(); j++)
 		{
+			const Triangle &tri = Triangles[i].triangles[j];
 			Ogre::Vector3 tri_a, tri_b, tri_c;
-			tri_a = MeshGeometry[Triangles[i].triangles[j].a].vertex;
-			tri_b = MeshGeometry[Triangles[i].triangles[j].b].vertex;
-			tri_c = MeshGeometry[Triangles[i].triangles[j].c].vertex;
+			tri_a = MeshGeometry[tri.a].vertex;
+			tri_b = MeshGeometry[tri.b].vertex;
+			tri_c = MeshGeometry[tri.c].vertex;
 
 			std::pair<bool, float> result = Ogre::Math::intersects(ray, tri_a, tri_b, tri_c);
 			if (result.first == true)
