@@ -598,7 +598,7 @@ MeshObject::MeshObject(Object* parent, const std::string &name, const std::strin
 			CreateColliderFromModel(vertex_count, vertices, index_count, indices);
 			delete[] vertices;
 			delete[] indices;
-			Ogre::MeshManager::getSingleton().remove(collidermesh->getName());
+			Ogre::MeshManager::getSingleton().remove(collidermesh->getHandle());
 		}
 		else
 		{
@@ -622,7 +622,7 @@ MeshObject::~MeshObject()
 	if (sbs->FastDelete == false)
 		sbs->DeleteMeshHandle(this);
 
-	Ogre::MeshManager::getSingleton().remove(name);
+	Ogre::MeshManager::getSingleton().remove(MeshWrapper->getHandle());
 	MeshWrapper.setNull();
 
 	if (Movable)

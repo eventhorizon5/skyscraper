@@ -105,10 +105,8 @@ CameraTexture::~CameraTexture()
 		sbs->mSceneManager->destroyCamera(camera);
 	}
 
-	Ogre::ResourcePtr matwrapper = material;
-	Ogre::MaterialManager::getSingleton().remove(matwrapper);
-	Ogre::ResourcePtr texwrapper = texture;
-	Ogre::TextureManager::getSingleton().remove(texwrapper);
+	Ogre::MaterialManager::getSingleton().remove(material->getHandle());
+	Ogre::TextureManager::getSingleton().remove(texture->getHandle());
 
 	if (sbs->FastDelete == false)
 	{
