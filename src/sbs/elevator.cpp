@@ -2300,14 +2300,6 @@ void Elevator::EnableObjects(bool value)
 	}
 }
 
-bool Elevator::IsElevator(Ogre::MeshPtr test)
-{
-	if (test == ElevatorMesh->MeshWrapper)
-		return true;
-
-	return false;
-}
-
 bool Elevator::IsInElevator(const Ogre::Vector3 &position, bool camera)
 {
 	//determine if the given 3D position is inside the elevator

@@ -177,7 +177,6 @@ public:
 	void DumpQueues();
 	void Enabled(bool value);
 	void EnableObjects(bool value);
-	bool IsElevator(Ogre::MeshPtr test);
 	bool IsInElevator(const Ogre::Vector3 &position, bool camera = false);
 	float GetElevatorStart();
 	float GetDestination();

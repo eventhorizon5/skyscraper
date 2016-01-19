@@ -56,7 +56,6 @@ public:
 	WallObject* AddFloor(int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	bool AddFloor(WallObject *wall, int floor, const std::string &name, const std::string &texture, float thickness, float x1, float z1, float x2, float z2, float voffset1, float voffset2, bool reverse_axis, bool texture_direction, float tw, float th, bool legacy_behavior = false);
 	void Enabled(int floor, bool value, bool EnableShaftDoors);
-	bool IsShaft(Ogre::MeshPtr test);
 	void EnableWholeShaft(bool value, bool EnableShaftDoors, bool force = false);
 	bool IsInShaft(const Ogre::Vector3 &position);
 	void CutFloors(bool relative, const Ogre::Vector2 &start, const Ogre::Vector2 &end, float startvoffset, float endvoffset);

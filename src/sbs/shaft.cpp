@@ -293,16 +293,6 @@ void Shaft::Enabled(int floor, bool value, bool EnableShaftDoors)
 	}
 }
 
-bool Shaft::IsShaft(Ogre::MeshPtr test)
-{
-	for (size_t i = 0; i < ShaftArray.size(); i++)
-	{
-		if (test == ShaftArray[i]->MeshWrapper)
-			return true;
-	}
-	return false;
-}
-
 void Shaft::EnableWholeShaft(bool value, bool EnableShaftDoors, bool force)
 {
 	//turn on/off entire shaft
